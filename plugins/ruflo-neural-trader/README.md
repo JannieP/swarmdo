@@ -79,6 +79,7 @@ claude mcp add neural-trader -- npx neural-trader mcp start
 | `trader-risk` | `/trader-risk [--symbol AAPL]` | VaR, position sizing, circuit breaker status |
 | `trader-cloud-backtest` | `/trader cloud backtest <strategy> --symbol SPY` | Dispatch a heavy backtest / training / sweep to an Anthropic Managed Agent cloud container ([ADR-117](../../v3/docs/adr/ADR-117-neural-trader-managed-agent-backtests.md)) |
 | `trader-portfolio-cg` | `/trader-portfolio-cg [--portfolio-id ID]` | Conjugate-Gradient mean-variance solve via `mcp__ruflo-sublinear__solve` — 40-60× faster than the legacy Neumann path ([ADR-126 Phase 3](../../v3/docs/adr/ADR-126-neural-trader-substrate-integration.md), [ADR-123 Wedge 8](../../v3/docs/adr/ADR-123-sublinear-integration.md)) |
+| `trader-explain` | `/trader-explain <signalId> [--top-k 10] [--seed 42]` | Regulator-grade feature attribution via single-entry PageRank — ranks the top-K features that drove an LSTM/Transformer signal; reproducible across runs ([ADR-126 Phase 6](../../v3/docs/adr/ADR-126-neural-trader-substrate-integration.md)) |
 
 ## Commands
 
@@ -235,6 +236,67 @@ node plugins/ruflo-neural-trader/benchmarks/portfolio-cg.bench.mjs
 
 # Run the contract smoke:
 node scripts/smoke-neural-trader-portfolio-cg.mjs
+```
+
+### Feature attribution (ADR-126 Phase 6 / ADR-123 single-entry PR)
+
+The new `trader-explain` skill closes the regulator-grade interpretability gap that LSTM / Transformer trading signals leave by default. Given a `signalId`, it builds a feature-contribution graph (nodes = features, edges = co-attention weights, source = signal output) and runs **single-entry forward-push PageRank** to produce a top-K ranked list of the features that most influenced the model's prediction.
+
+**When to use it**: any time a trading signal needs an audit trail — pre-trade risk review, regulator filings under the EU AI Act (Article 13 — transparency for high-risk AI) or SEC Reg-AI interpretability guidance, post-mortem of a stop-loss event, or input to the `risk-analyst` before a paper→live promotion. Call `/trader-explain <signalId>` (or pass `--top-k 10 --seed 42` to control ranking depth + reproducibility).
+
+**Output**: a `SignedAttributionArtifact` written to the canonical `trading-analysis` namespace, plus a markdown summary surfaced to the agent. The artifact is Ed25519-signed using the same scheme as Phase 4 backtest artifacts — the verifier pins to a trusted public key (CWE-347 / #1922), so downstream consumers can refuse any tampered or unsigned artifact.
+
+```ts
+// Schema — plugins/ruflo-neural-trader/src/signed-attribution.ts
+interface SignedAttributionArtifact {
+  schema: 'ruflo-neural-trader-attribution/v1';
+  signalId: string;
+  modelId: string;                         // e.g. 'lstm-v3', 'transformer-attn8h-v2'
+  features: Array<{
+    name: string;                          // e.g. 'rsi_14', 'attention_head_3', 'price_close_t-7'
+    score: number;                         // PageRank score in [0, 1]
+    rank: number;                          // 1-indexed
+  }>;
+  graphMetadata: {
+    nodeCount: number;
+    edgeCount: number;
+    pageRankIterations: number;
+    seed: number;                          // load-bearing — same seed → same ordering
+  };
+  generatedAt: string;
+  witnessPublicKey: string;
+  witnessSignature: string;
+}
+```
+
+Example markdown surfaced to the agent:
+
+```
+## Feature attribution for signal `sig-momentum-spy-20260519-001` (model: transformer-attn8h-v2)
+
+| Rank | Feature              | Score |
+|------|----------------------|-------|
+| 1    | rsi_14               | 0.42  |
+| 2    | attention_head_3     | 0.21  |
+| 3    | price_close_t-7      | 0.13  |
+| 4    | macd_signal          | 0.09  |
+
+- PageRank iterations: 18
+- Graph: 17 nodes, 42 edges
+- Seed: 42 (reproducible — same seed → same ordering)
+- Path: local | mcp
+- Signature: ed25519:abcd…
+```
+
+**Reproducibility guarantee**: two runs with the same `signalId` + same `--seed` produce byte-identical rank ordering. Asserted by `scripts/smoke-neural-trader-feature-attribution.mjs` (the smoke runs the local seeded PageRank twice and compares scores element-wise).
+
+**Local fallback**: when `mcp__ruflo-sublinear__page-rank-entry` is not registered in the runtime, the skill falls through to a ~30-LOC seeded power-iteration kernel that ships in `src/signed-attribution.mjs`. Same math, same ordering for the same seed. The native-WASM path picks up automatically once `ruflo-sublinear` lands on the IPFS registry.
+
+**`--explain` fallback**: if the installed `neural-trader` build doesn't yet expose `--predict --explain --json`, the skill degrades to a z-score-magnitude heuristic over the signal's input vector and tags the artifact `attribution_method: "input-zscore-fallback"` so downstream consumers can filter it out for regulator-facing reports.
+
+```bash
+# Run the smoke yourself:
+node scripts/smoke-neural-trader-feature-attribution.mjs
 ```
 
 ## Verification

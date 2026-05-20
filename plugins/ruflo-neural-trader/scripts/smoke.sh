@@ -17,9 +17,9 @@ if [[ "$v" != "0.2.0" ]]; then bad "expected 0.2.0, got '$v'"; else
   [[ -z "$miss" ]] && ok || bad "missing keywords:$miss"
 fi
 
-step "2. all 8 skills present with valid frontmatter (6 base + trader-cloud-backtest ADR-117 + trader-portfolio-cg ADR-126 Phase 3)"
+step "2. all 9 skills present with valid frontmatter (6 base + trader-cloud-backtest ADR-117 + trader-portfolio-cg ADR-126 Phase 3 + trader-explain ADR-126 Phase 6)"
 miss=""
-for s in trader-backtest trader-portfolio trader-regime trader-risk trader-signal trader-train trader-cloud-backtest trader-portfolio-cg; do
+for s in trader-backtest trader-portfolio trader-regime trader-risk trader-signal trader-train trader-cloud-backtest trader-portfolio-cg trader-explain; do
   f="$ROOT/skills/$s/SKILL.md"
   [[ -f "$f" ]] || { miss="$miss missing-$s"; continue; }
   for k in 'name:' 'description:' 'allowed-tools:'; do

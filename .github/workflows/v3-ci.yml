@@ -61,6 +61,13 @@ on:
       - 'plugins/ruflo-neural-trader/agents/risk-analyst.md'
       - 'plugins/ruflo-neural-trader/agents/backtest-engineer.md'
       - 'scripts/smoke-neural-trader-pipeline.mjs'
+      # Neural-trader feature attribution (#2068, ADR-126 Phase 6) —
+      # regulator-grade interpretability via single-entry PageRank.
+      # Same signing scheme as Phase 4; ranking is seed-reproducible.
+      - 'plugins/ruflo-neural-trader/src/signed-attribution.ts'
+      - 'plugins/ruflo-neural-trader/src/signed-attribution.mjs'
+      - 'plugins/ruflo-neural-trader/skills/trader-explain/**'
+      - 'scripts/smoke-neural-trader-feature-attribution.mjs'
       # Plugin-registry CWE-347 regression smoke (#1922) — `discovery.ts`
       # signature verifier + the smoke fixture must stay in lockstep.
       - 'v3/@claude-flow/cli/src/plugins/store/discovery.ts'
@@ -110,6 +117,11 @@ on:
       - 'plugins/ruflo-neural-trader/agents/risk-analyst.md'
       - 'plugins/ruflo-neural-trader/agents/backtest-engineer.md'
       - 'scripts/smoke-neural-trader-pipeline.mjs'
+      # Neural-trader feature attribution (#2068, ADR-126 Phase 6)
+      - 'plugins/ruflo-neural-trader/src/signed-attribution.ts'
+      - 'plugins/ruflo-neural-trader/src/signed-attribution.mjs'
+      - 'plugins/ruflo-neural-trader/skills/trader-explain/**'
+      - 'scripts/smoke-neural-trader-feature-attribution.mjs'
       # Plugin-registry CWE-347 regression (#1922)
       - 'v3/@claude-flow/cli/src/plugins/store/discovery.ts'
       - 'v3/@claude-flow/cli/src/transfer/ipfs/client.ts'
@@ -811,6 +823,62 @@ jobs:
 
       - name: Run pipeline risk-gate smoke
         run: node scripts/smoke-neural-trader-pipeline.mjs
+
+  neural-trader-feature-attribution-smoke:
+    # Regression guard for ruvnet/ruflo#2068 — ADR-126 Phase 6.
+    #
+    # Phase 6 ships regulator-grade feature attribution for LSTM /
+    # Transformer trading signals. Given a `signalId`, the `trader-explain`
+    # skill builds a feature-contribution graph, runs single-entry forward-
+    # push PageRank from the signal output node (via
+    # `mcp__ruflo-sublinear__page-rank-entry` when registered, local seeded
+    # power-iteration fallback otherwise), and stores the top-K ranked
+    # features as a `SignedAttributionArtifact` (the Phase 4 signing
+    # scheme — same Ed25519 + CWE-347 trusted-pin pattern).
+    #
+    # Three load-bearing artifacts must stay in lockstep:
+    #   1. `src/signed-attribution.ts` — the typed signer/verifier/PR
+    #      contract.
+    #   2. `src/signed-attribution.mjs` — the runtime mirror imported by
+    #      the smoke + skill harnesses (zero build step).
+    #   3. `skills/trader-explain/SKILL.md` — the call site that builds
+    #      the graph + signs the result + persists to `trading-analysis`.
+    #
+    # The smoke runs three layers:
+    #   [1/3] STATIC CONTRACT — TS/MJS export shape, verifier pins to
+    #         trustedPublicKey (CWE-347), graphMetadata.seed is part of
+    #         the typed shape, skill writes to `trading-analysis`, skill
+    #         documents the local fallback + the --explain fallback.
+    #   [2/3] CRYPTO ROUND-TRIP — Ed25519 signing fixture, tampered
+    #         feature score fails, tampered seed fails (seed is signed-in),
+    #         swapped served pubkey still verifies (pin is real).
+    #   [3/3] REPRODUCIBILITY — same seed → byte-identical PageRank
+    #         scores + identical top-K ordering. Different seed → scores
+    #         differ (proves the seed is load-bearing, not dead weight).
+    #         Mass conservation: scores sum to ~1.
+    #
+    # If a future PR breaks any of these properties — drops the verify
+    # call, removes the seed from graphMetadata, reverts the seeded
+    # initializer, drops the local fallback, or rewrites the skill
+    # without the `trading-analysis` namespace — this smoke catches it
+    # before merge.
+    name: neural-trader feature attribution smoke (#2068, ADR-126 Phase 6)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install root deps (for @noble/ed25519)
+        run: npm install --legacy-peer-deps --no-audit --no-fund --ignore-scripts
+
+      - name: Run feature attribution smoke
+        run: node scripts/smoke-neural-trader-feature-attribution.mjs
 
   plugin-registry-signature-smoke:
     # Regression guard for ruvnet/ruflo#1922 (CWE-347 — improper verification
