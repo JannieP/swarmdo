@@ -1170,11 +1170,19 @@ Analyze the above codebase context and provide your response following the forma
       // writes the prompt and closes stdin atomically — the EOF still
       // unblocks `claude --print` (the original concern in #1395) but no
       // shell tokenization touches the prompt.
+      // #2098B / #2093 — `claude --print` can spawn grandchildren (MCP
+      // server stdio bridges, plugin tools). When the head times out a
+      // plain `child.kill()` only signals the head; grandchildren get
+      // reparented to init and survive — the symptom @maxstefanakis1114
+      // diagnosed as a 5-second redispatch + subprocess-table growth.
+      // `detached: true` puts the child in its own process group so we
+      // can signal the whole tree with `process.kill(-pid, sig)`.
       const child = spawn('claude', ['--print'], {
         cwd: this.projectRoot,
         env,
         stdio: ['pipe', 'pipe', 'pipe'],
         windowsHide: true, // Prevent phantom console windows on Windows
+        detached: process.platform !== 'win32',
       });
       try {
         child.stdin?.end(prompt);
@@ -1183,14 +1191,23 @@ Analyze the above codebase context and provide your response following the forma
         // will surface the real cause.
       }
 
+      // Kill the whole process group on POSIX, fall back to the child on
+      // Windows (where setsid-style detach isn't available the same way).
+      const killTree = (signal: NodeJS.Signals) => {
+        if (process.platform !== 'win32' && typeof child.pid === 'number') {
+          try { process.kill(-child.pid, signal); return; } catch { /* fall through */ }
+        }
+        try { child.kill(signal); } catch { /* already dead */ }
+      };
+
       // Setup timeout
       const timeoutHandle = setTimeout(() => {
         if (this.processPool.has(options.executionId)) {
-          child.kill('SIGTERM');
+          killTree('SIGTERM');
           // Give it a moment to terminate gracefully
           setTimeout(() => {
             if (!child.killed) {
-              child.kill('SIGKILL');
+              killTree('SIGKILL');
             }
           }, 5000);
         }
@@ -1265,7 +1282,7 @@ Analyze the above codebase context and provide your response following the forma
         if (!this.processPool.has(options.executionId)) return;
 
         resolved = true;
-        child.kill('SIGTERM');
+        killTree('SIGTERM');
         cleanup();
 
         resolve({

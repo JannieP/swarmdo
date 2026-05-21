@@ -187,7 +187,13 @@ const initAction = async (ctx: CommandContext): Promise<CommandResult> => {
   const full = ctx.flags.full as boolean;
   const skipClaude = ctx.flags['skip-claude'] as boolean;
   const onlyClaude = ctx.flags['only-claude'] as boolean;
-  const noGlobal = ctx.flags['no-global'] as boolean;
+  // #2098A — the parser handles `--no-foo` by stripping the prefix and
+  // storing `flags.foo = false` (parser.ts:291-294), not by storing
+  // `flags['no-foo'] = true`. So `--no-global` lands as
+  // `ctx.flags.global === false`. The old read of `flags['no-global']`
+  // was always undefined and silently no-op'd — every user with the flag
+  // set still got `~/.claude/CLAUDE.md` modified. Read the real key.
+  const noGlobal = ctx.flags['no-global'] === true || ctx.flags['global'] === false;
   const allAgents = ctx.flags['all-agents'] as boolean;
   const codexMode = ctx.flags.codex as boolean;
   const dualMode = ctx.flags.dual as boolean;

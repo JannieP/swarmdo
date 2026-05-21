@@ -221,6 +221,10 @@ export const agentTools: MCPTool[] = [
       properties: {
         agentType: { type: 'string', description: 'Type of agent to spawn' },
         agentId: { type: 'string', description: 'Optional custom agent ID' },
+        // #2085 — accept swarmId so spawned agents register in the
+        // swarm.agents array that swarm_status reports. Omit to register
+        // with the most-recently-created swarm.
+        swarmId: { type: 'string', description: 'Optional swarm to register the agent with (defaults to most-recent swarm)' },
         config: { type: 'object', description: 'Agent configuration' },
         domain: { type: 'string', description: 'Agent domain' },
         model: {
@@ -274,6 +278,35 @@ export const agentTools: MCPTool[] = [
 
       store.agents[agentId] = agent;
       saveAgentStore(store);
+
+      // #2085 — also push to the swarm store's agents array so that
+      // swarm_status reports the new agent. Without this, agent_spawn
+      // and swarm_status read/write separate stores and agents added
+      // post-init never show up in swarm_status.agents — confirmed for
+      // all topologies (hierarchical, mesh, etc.).
+      try {
+        const { loadSwarmStore: _loadSwarmStore, saveSwarmStore: _saveSwarmStore } =
+          await import('./swarm-tools.js');
+        const swarmStore = _loadSwarmStore();
+        let targetSwarmId = (input.swarmId as string) || '';
+        if (!targetSwarmId) {
+          // Default to the most-recently-created swarm.
+          const all = Object.values(swarmStore.swarms);
+          const latest = all.sort(
+            (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          )[0];
+          targetSwarmId = latest?.swarmId || '';
+        }
+        if (targetSwarmId && swarmStore.swarms[targetSwarmId]) {
+          const swarm = swarmStore.swarms[targetSwarmId];
+          if (!Array.isArray(swarm.agents)) swarm.agents = [];
+          // Idempotent — don't duplicate if agent_spawn is retried.
+          if (!swarm.agents.includes(agentId)) {
+            swarm.agents.push(agentId);
+            _saveSwarmStore(swarmStore);
+          }
+        }
+      } catch { /* swarm store unavailable — agent still registered globally */ }
 
       // Record agent in graph database (ADR-087, best-effort)
       try {
