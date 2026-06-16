@@ -25,7 +25,7 @@
 //   2  config error or audit failure
 
 import { spawnSync } from 'node:child_process';
-import { runHarness, emitDegradedJsonAndExit } from './_harness.mjs';
+import { runHarness, runMetaharness, emitDegradedJsonAndExit } from './_harness.mjs';
 
 const SEVERITY_RANK = { clean: 0, low: 1, medium: 2, high: 3 };
 const NS = process.env.OIA_AUDIT_NAMESPACE || 'metaharness-audit';
@@ -45,8 +45,13 @@ const ARGS = (() => {
   return a;
 })();
 
-function runOne(args, label) {
-  const r = runHarness(args);
+// iter 47 — the `harness` and `metaharness` CLIs both have `score` /
+// `genome` subcommands but with DIFFERENT output schemas. For the
+// fingerprint to be consumable by _similarity.mjs (which expects the
+// metaharness CLI shape: harnessFit/compileConfidence/agent_topology),
+// we need to dispatch to runMetaharness for score+genome, not runHarness.
+function runOne(args, label, engine = 'harness') {
+  const r = engine === 'metaharness' ? runMetaharness(args) : runHarness(args);
   return {
     label,
     exitCode: r.exitCode,
@@ -84,11 +89,13 @@ function main() {
   const oia = runOne(['oia-manifest', ARGS.path], 'oia-manifest');
   const tm = runOne(['threat-model', ARGS.path], 'threat-model');
   const mcp = runOne(['mcp-scan', ARGS.path], 'mcp-scan');
-  // iter 38 — bundle score + genome so audit-trend can compute structural
-  // distance via _similarity.mjs (ADR-152 §3.1 dep). Both are pure-read
-  // and degrade gracefully like the other three.
-  const score = runOne(['score', ARGS.path], 'score');
-  const genome = runOne(['genome', ARGS.path], 'genome');
+  // iter 38 + iter 47 — bundle score + genome so audit-trend can compute
+  // structural distance via _similarity.mjs. Both use the `metaharness`
+  // CLI (not `harness`) because the two binaries have different schemas
+  // for the same subcommand names; only the metaharness CLI emits the
+  // shape similarity() expects (harnessFit/agent_topology/etc).
+  const score = runOne(['score', ARGS.path], 'score', 'metaharness');
+  const genome = runOne(['genome', ARGS.path], 'genome', 'metaharness');
 
   // If all FIVE say "metaharness not available", surface the degraded
   // payload exactly once and exit 0 (architectural constraint #3).

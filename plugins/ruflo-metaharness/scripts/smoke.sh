@@ -191,6 +191,31 @@ grep -q "execCli(\[\s*'-y'\s*,\s*'metaharness@latest'" "$F" 2>/dev/null || \
 grep -q "cwd: opts" "$F" || miss="$miss no-cwd-passthrough"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
+step "17z10. end-to-end pipeline roundtrip (iter 47 — caught iter-38 schema bug)"
+F="$ROOT/scripts/test-pipeline-roundtrip.mjs"
+miss=""
+[[ -x "$F" ]] || miss="$miss not-executable"
+node --check "$F" 2>/dev/null || miss="$miss syntax-error"
+# Five stages (anti-shrink guard)
+for stage in 'Stage 1' 'Stage 2' 'Stage 3' 'Stage 4' 'Stage 5'; do
+  grep -q "$stage" "$F" || miss="$miss missing-${stage// /-}"
+done
+# Asserts the critical invariant: self-roundtrip overall === 1
+grep -q "self-roundtrip overall === 1" "$F" 2>/dev/null || miss="$miss no-self-match-assert"
+# Distinguishes "test cannot run" (exit 2) from "test failed" (exit 1)
+grep -q "process.exit(2)" "$F" 2>/dev/null || miss="$miss no-cannot-run-exit"
+# oia-audit fix is in place: dispatches metaharness for score+genome
+OIA="$ROOT/scripts/oia-audit.mjs"
+grep -q "score', 'metaharness'" "$OIA" 2>/dev/null || miss="$miss no-metaharness-engine-score"
+grep -q "genome', 'metaharness'" "$OIA" 2>/dev/null || miss="$miss no-metaharness-engine-genome"
+grep -q "runMetaharness" "$OIA" 2>/dev/null || miss="$miss no-runMetaharness-import"
+# Runtime: the roundtrip test must pass when metaharness is installed,
+# or exit 2 (test-cannot-run) when it isn't. Both are smoke-green.
+node "$F" >/dev/null 2>&1
+CODE=$?
+[[ "$CODE" == "0" || "$CODE" == "2" ]] || miss="$miss roundtrip-test-failed:$CODE"
+[[ -z "$miss" ]] && ok || bad "$miss"
+
 step "17z9. MCP success-semantic footnote + audit_trend file inputs (iter 46)"
 miss=""
 WRAPPER="$ROOT/../../v3/@claude-flow/cli/src/mcp-tools/metaharness-tools.ts"
