@@ -25,7 +25,7 @@ keeping ruflo independently operational at all times.
 If a PR breaks any of these four rules, it is a breaking change and
 needs its own ADR.
 
-## Skills (5 — what each does, when to invoke)
+## Skills (6 — what each does, when to invoke)
 
 | Skill | Role | Invoke when |
 |---|---|---|
@@ -33,6 +33,7 @@ needs its own ADR.
 | `harness-genome` | 7-section categorical report | Pre-mint architecture review; drift detection over time |
 | `harness-mcp-scan` | Static MCP security findings | Every PR; enterprise security review |
 | `harness-threat-model` | Categorized threat report | Pre-launch review; periodic OIA-audit cadence |
+| `harness-oia-audit` | Composite weekly audit worker (iter 7) | Cron-scheduled; bundles oia+threat+mcp into one timestamped record in `metaharness-audit` namespace |
 | `harness-mint` | Scaffold a custom harness | User wants to fork; ALWAYS dry-run first, never write to project root |
 
 ## Tools (subprocess-only, no library imports)

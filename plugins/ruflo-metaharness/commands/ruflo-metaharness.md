@@ -31,6 +31,13 @@ shared helper; no library imports on ruflo's boot path.
 3. Output suitable for sharing with security/infosec team
 4. Will be auto-fired by the Phase-2 oia-audit background worker on a schedule
 
+**`harness oia-audit [--path .] [--dry-run] [--alert-on-worst clean|low|medium|high] [--format table|json]`** -- Phase-2 composite worker (ADR-150). Bundles oia-manifest + threat-model + mcp-scan into one timestamped audit record, stores in `metaharness-audit` memory namespace.
+1. Run `node plugins/ruflo-metaharness/scripts/oia-audit.mjs`
+2. Composite worst-severity = max(threatModel.worst, mcpScan.findings.severity)
+3. `--alert-on-worst high` exits 1 when composite ≥ high — CI weekly drift gate
+4. `--dry-run` skips memory persistence — useful for local checks
+5. Designed for cron schedule: weekly snapshot enables audit drift tracking via memory diff
+
 **`harness mint --name <id> --template <vertical:coding|minimal|…> [--host claude-code|codex|…] [--target /abs/path] [--confirm] [--format table|json]`** -- Scaffold a custom AI agent harness. DRY-RUN by default; --confirm required to write.
 1. Run `node plugins/ruflo-metaharness/scripts/mint.mjs --name <id> --template <id> --host <id>`
 2. **Safety**: refuses to write to the calling repo root or any path inside it; defaults to `/tmp/ruflo-mint-<ts>-<name>/`

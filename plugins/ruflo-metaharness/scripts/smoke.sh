@@ -20,9 +20,9 @@ else
   [[ -z "$miss" ]] && ok || bad "missing keywords:$miss"
 fi
 
-step "2. all five skills present with valid frontmatter"
+step "2. all six skills present with valid frontmatter"
 miss=""
-for s in harness-score harness-genome harness-mint harness-mcp-scan harness-threat-model; do
+for s in harness-score harness-genome harness-mint harness-mcp-scan harness-threat-model harness-oia-audit; do
   f="$ROOT/skills/$s/SKILL.md"
   [[ -f "$f" ]] || { miss="$miss missing-$s"; continue; }
   for k in 'name:' 'description:' 'allowed-tools:'; do
@@ -169,6 +169,27 @@ const od = j.optionalDependencies || {};
 if (!od.metaharness) { console.error('missing metaharness in optionalDependencies'); process.exit(1); }
 if (j.dependencies && j.dependencies.metaharness) { console.error('metaharness leaked into dependencies'); process.exit(1); }
 " 2>/dev/null && ok || bad "ruflo wrapper missing metaharness optionalDep"
+
+step "17c. oia-audit composite worker (Phase 2 — iter 7)"
+F="$ROOT/scripts/oia-audit.mjs"
+miss=""
+[[ -x "$F" ]] || miss="$miss not-executable"
+node --check "$F" 2>/dev/null || miss="$miss syntax-error"
+grep -q "runHarness" "$F" || miss="$miss no-runner"
+# All three component invocations
+grep -q "oia-manifest" "$F" || miss="$miss no-oia-manifest"
+grep -q "threat-model" "$F" || miss="$miss no-threat-model"
+grep -q "mcp-scan" "$F" || miss="$miss no-mcp-scan"
+# Composite severity computation
+grep -q "compositeWorst\|composite.*Worst" "$F" || miss="$miss no-composite-severity"
+grep -q "SEVERITY_RANK" "$F" || miss="$miss no-severity-rank"
+# Memory persistence (default behavior, --dry-run to skip)
+grep -q "metaharness-audit" "$F" || miss="$miss no-namespace"
+grep -q "memory.*store" "$F" || miss="$miss no-memory-store"
+# Alert exit code
+grep -q "alert-on-worst" "$F" || miss="$miss no-alert-flag"
+grep -q "process.exit(1)" "$F" || miss="$miss no-fail-closed"
+[[ -z "$miss" ]] && ok || bad "$miss"
 
 step "17b. harness type in plugin registry (Phase 2 — iter 6)"
 F="$ROOT/../../v3/@claude-flow/cli/src/plugins/store/types.ts"
