@@ -118,7 +118,7 @@ export async function dispatchPendingTasks(opts: DispatchOptions = {}): Promise<
   const autoAssign = opts.autoAssign ?? true;
   const executor = opts.executor ?? ((input) => executeAgentTask(input));
 
-  const store = loadTaskStore();
+  const store = loadTaskStore(cwd);
   const all = Object.values(store.tasks);
   const pending = all.filter(t => t.status === 'pending' || t.status === 'in_progress');
 
@@ -155,7 +155,7 @@ export async function dispatchPendingTasks(opts: DispatchOptions = {}): Promise<
     task.status = 'in_progress';
     task.startedAt = task.startedAt ?? new Date().toISOString();
     if (!task.assignedTo.includes(agentId)) task.assignedTo.push(agentId);
-    saveTaskStore(store);
+    saveTaskStore(store, cwd);
 
     const startedAt = Date.now();
     summary.dispatched++;
@@ -182,7 +182,7 @@ export async function dispatchPendingTasks(opts: DispatchOptions = {}): Promise<
       summary.failed++;
       summary.outcomes.push({ taskId: task.taskId, agentId, status: 'failed', reason: result.error, durationMs });
     }
-    saveTaskStore(store);
+    saveTaskStore(store, cwd);
   }
 
   return summary;

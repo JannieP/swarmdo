@@ -34,24 +34,27 @@ export interface TaskStore {
   version: string;
 }
 
-function getTaskDir(): string {
-  return join(getProjectCwd(), STORAGE_DIR, TASK_DIR);
+function getTaskDir(cwd?: string): string {
+  return join(cwd ?? getProjectCwd(), STORAGE_DIR, TASK_DIR);
 }
 
-function getTaskPath(): string {
-  return join(getTaskDir(), TASK_FILE);
+function getTaskPath(cwd?: string): string {
+  return join(getTaskDir(cwd), TASK_FILE);
 }
 
-function ensureTaskDir(): void {
-  const dir = getTaskDir();
+function ensureTaskDir(cwd?: string): void {
+  const dir = getTaskDir(cwd);
   if (!existsSync(dir)) {
     mkdirSync(dir, { recursive: true });
   }
 }
 
-export function loadTaskStore(): TaskStore {
+// `cwd` is optional and defaults to getProjectCwd() — existing callers are
+// unchanged. The task dispatcher (Move 6') passes an explicit cwd so the task
+// store and the agent store always resolve to the SAME project root.
+export function loadTaskStore(cwd?: string): TaskStore {
   try {
-    const path = getTaskPath();
+    const path = getTaskPath(cwd);
     if (existsSync(path)) {
       const data = readFileSync(path, 'utf-8');
       return JSON.parse(data);
@@ -62,9 +65,9 @@ export function loadTaskStore(): TaskStore {
   return { tasks: {}, version: '3.0.0' };
 }
 
-export function saveTaskStore(store: TaskStore): void {
-  ensureTaskDir();
-  writeFileSync(getTaskPath(), JSON.stringify(store, null, 2), 'utf-8');
+export function saveTaskStore(store: TaskStore, cwd?: string): void {
+  ensureTaskDir(cwd);
+  writeFileSync(getTaskPath(cwd), JSON.stringify(store, null, 2), 'utf-8');
 }
 
 export const taskTools: MCPTool[] = [
