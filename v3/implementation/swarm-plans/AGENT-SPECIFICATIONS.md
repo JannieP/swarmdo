@@ -402,7 +402,7 @@ unification_plan:
   target_architecture:
     primary: AgentDB (from agentic-flow@alpha)
     features:
-      - 150x-12,500x faster search (HNSW)
+      - ~1.9x-4.7x measured faster search (HNSW)
       - Unified query interface
       - Automatic persistence
       - Cross-agent memory sharing
@@ -585,12 +585,12 @@ integration_scope:
       - Batch learning mode
 
     Flash_Attention:
-      - 2.49x-7.47x speedup
+      - unverified (no benchmark) speedup
       - 50-75% memory reduction
       - 8 attention mechanisms
 
     AgentDB:
-      - 150x-12,500x faster search
+      - ~1.9x-4.7x measured faster search
       - HNSW indexing
       - Multi-database coordination
 
@@ -839,7 +839,7 @@ benchmark_suite:
       - Agent spawn latency
 
     memory_operations:
-      - Vector search (target: 150x improvement)
+      - Vector search (target: ~4.7x measured improvement)
       - Memory write throughput
       - Cache hit rates
 
@@ -849,7 +849,7 @@ benchmark_suite:
       - Consensus achievement time
 
     attention_mechanisms:
-      - Flash attention (target: 2.49x-7.47x)
+      - Flash attention (target: unverified (no benchmark))
       - Multi-head attention
       - Linear attention
 
@@ -859,8 +859,8 @@ benchmark_suite:
       - Model update frequency
 
   targets:
-    performance_gain: 2.49x-7.47x (Flash Attention)
-    search_improvement: 150x-12,500x (AgentDB)
+    performance_gain: unverified (no benchmark) (Flash Attention)
+    search_improvement: ~1.9x-4.7x measured (AgentDB)
     memory_reduction: 50-75%
     startup_time: <500ms
 

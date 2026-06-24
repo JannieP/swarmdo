@@ -21,9 +21,9 @@ Created two new core classes that bridge Rufflo's DDD agent architecture with ag
 - Message passing and communication
 
 **Performance Benefits**:
-- Flash Attention: 2.49x-7.47x speedup for context processing
+- Flash Attention: unverified (no benchmark) speedup for context processing
 - SONA Learning: <0.05ms adaptation for real-time learning
-- AgentDB: 150x-12,500x faster memory/pattern search
+- AgentDB: ~1.9x-4.7x measured faster memory/pattern search
 
 **Code Stats**:
 - **799 lines** of production code
@@ -212,9 +212,9 @@ v3/@rufflo/integration/src/
 - Event-driven communication
 
 ✅ **Performance targets**
-- Flash Attention delegation: 2.49x-7.47x speedup
+- Flash Attention delegation: unverified (no benchmark) speedup
 - SONA learning: <0.05ms adaptation
-- AgentDB search: 150x-12,500x improvement
+- AgentDB search: ~1.9x-4.7x measured improvement
 
 ## Usage Examples
 

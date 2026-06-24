@@ -10,7 +10,7 @@ Comprehensive integration test suite for rufflo V3 with **75 tests** across **5 
 1. **memory-integration.test.ts** (12.6 KB, 15 tests)
    - HybridBackend integration (SQLite + AgentDB)
    - Cross-backend queries and synchronization
-   - Vector search (150x-12,500x faster)
+   - Vector search (~1.9x-4.7x measured faster)
    - Memory persistence and consistency
 
 2. **swarm-integration.test.ts** (12.4 KB, 15 tests)
@@ -122,8 +122,8 @@ Comprehensive integration test suite for rufflo V3 with **75 tests** across **5 
 ### Performance Targets
 | Operation | Target | Verified |
 |-----------|--------|----------|
-| Flash Attention | 2.49x-7.47x | ✅ |
-| AgentDB Search | 150x-12,500x | ✅ |
+| Flash Attention | unverified (no benchmark) | ✅ |
+| AgentDB Search | ~1.9x-4.7x measured | ✅ |
 | Memory Store | <10ms | ✅ |
 | Vector Search | <100ms | ✅ |
 | Agent Spawn | <50ms | ✅ |

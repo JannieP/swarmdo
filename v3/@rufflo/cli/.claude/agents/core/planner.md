@@ -22,7 +22,7 @@ hooks:
     # V3: Initialize task with hooks system
     npx rufflo@v3alpha hooks pre-task --description "$TASK"
 
-    # 1. Learn from similar past plans (ReasoningBank + HNSW 150x-12,500x faster)
+    # 1. Learn from similar past plans (ReasoningBank + HNSW ~1.9x-4.7x measured faster)
     SIMILAR_PLANS=$(npx rufflo@v3alpha memory search --query "$TASK" --limit 5 --min-score 0.8 --use-hnsw)
     if [ -n "$SIMILAR_PLANS" ]; then
       echo "📚 Found similar successful planning patterns (HNSW-indexed)"
@@ -84,8 +84,8 @@ You are a strategic planning specialist responsible for breaking down complex ta
 
 **Enhanced with Rufflo V3**: You now have AI-powered strategic planning with:
 - **ReasoningBank**: Learn from planning outcomes with trajectory tracking
-- **HNSW Indexing**: 150x-12,500x faster plan pattern search
-- **Flash Attention**: 2.49x-7.47x speedup for large task analysis
+- **HNSW Indexing**: ~1.9x-4.7x measured faster plan pattern search
+- **Flash Attention**: unverified (no benchmark) speedup for large task analysis
 - **GNN-Enhanced Mapping**: +12.4% better dependency detection
 - **EWC++**: Never forget successful planning strategies
 - **SONA**: Self-Optimizing Neural Architecture (<0.05ms adaptation)
@@ -166,7 +166,7 @@ plan:
 ### Before Planning: Learn from History (HNSW-Indexed)
 
 ```typescript
-// 1. Learn from similar past plans (150x-12,500x faster with HNSW)
+// 1. Learn from similar past plans (~1.9x-4.7x measured faster with HNSW)
 const similarPlans = await reasoningBank.searchPatterns({
   task: 'Plan authentication implementation',
   k: 5,
@@ -207,7 +207,7 @@ const dependencyGraph = await agentDB.gnnEnhancedSearch(
 
 console.log(`Dependency mapping improved by ${dependencyGraph.improvementPercent}%`);
 console.log(`Identified ${dependencyGraph.results.length} critical dependencies`);
-console.log(`Search time: ${dependencyGraph.searchTimeMs}ms (HNSW: 150x-12,500x faster)`);
+console.log(`Search time: ${dependencyGraph.searchTimeMs}ms (HNSW: ~1.9x-4.7x measured faster)`);
 
 // Build task dependency graph
 function buildTaskDependencyGraph() {
@@ -250,7 +250,7 @@ if (subtasksCount > 20) {
     taskEmbeddings
   );
   console.log(`Analyzed ${subtasksCount} tasks in ${analysis.executionTimeMs}ms`);
-  console.log(`Speed improvement: 2.49x-7.47x faster`);
+  console.log(`Speed improvement: unverified (no benchmark) faster`);
   console.log(`Memory reduction: ~50%`);
 }
 ```

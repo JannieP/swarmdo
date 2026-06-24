@@ -172,7 +172,7 @@ Each extension deploys as an independent Cloud Run service:
 All extensions connect to a shared Cloud SQL instance with the RuVector extension:
 - **Instance**: `conveyor-ruvector-db`
 - **Database**: `conveyor_ai`
-- **Performance**: 150x-12,500x faster vector search via HNSW indexing
+- **Performance**: ~1.9x-4.7x measured faster vector search via HNSW indexing
 
 ### 2. Secret Manager
 

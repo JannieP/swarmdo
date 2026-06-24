@@ -8,7 +8,7 @@ Rufflo v3 represents a complete architectural overhaul that builds on **agentic-
 
 | Objective | Target | Impact |
 |-----------|--------|--------|
-| **Performance** | 2.49x-7.47x speedup | Flash Attention integration |
+| **Performance** | unverified (no benchmark) speedup | Flash Attention integration |
 | **Quality** | +55% improvement | SONA adaptive learning |
 | **Cost** | 60-70% savings | Intelligent LLM routing |
 | **Codebase** | 40% smaller | 130k → 78k lines |
@@ -162,8 +162,8 @@ const adminPassword = crypto.randomBytes(32).toString('hex');
 | Feature | Capability | Improvement |
 |---------|-----------|-------------|
 | **SONA Learning** | Sub-millisecond adaptive | +55% quality |
-| **Flash Attention** | 8 attention mechanisms | 2.49x-7.47x speedup |
-| **AgentDB** | 150x-12,500x search | HNSW indexing |
+| **Flash Attention** | 8 attention mechanisms | unverified (no benchmark) speedup |
+| **AgentDB** | ~1.9x-4.7x measured search | HNSW indexing |
 | **66 Agents** | Pre-built specialists | Full coverage |
 | **213 MCP Tools** | Complete toolset | Enterprise ready |
 | **9 RL Algorithms** | PPO, MCTS, Q-Learning | Continuous learning |
@@ -623,7 +623,7 @@ version: 3.0.0
 category: core
 agentic-flow:
   sona-profile: research      # +55% quality
-  attention: flash            # 2.49x-7.47x speedup
+  attention: flash            # unverified (no benchmark) speedup
   learning: enabled
   reflexion: enabled
 capabilities:

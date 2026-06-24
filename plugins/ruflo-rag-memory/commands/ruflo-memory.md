@@ -4,7 +4,7 @@ description: SOTA memory CRUD — store, search (hybrid/graph-rag/dense), retrie
 ---
 $ARGUMENTS
 
-Memory operations with HNSW-indexed vector search (150x-12,500x faster).
+Memory operations with HNSW-indexed vector search (~1.9x-4.7x measured faster).
 
 Parse $ARGUMENTS to determine the operation:
 

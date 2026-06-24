@@ -33,7 +33,7 @@ Complete restructure into 10 independent @rufflo modules:
 ### ⚡ Performance Improvements
 
 #### Flash Attention Integration
-- **2.49x-7.47x speedup** via @ruvector/attention
+- **unverified (no benchmark) speedup** via @ruvector/attention
 - 50-75% memory reduction during large context processing
 - Native NAPI (fastest), WebAssembly, and JavaScript fallback runtimes
 - Automatic runtime selection based on environment
@@ -45,7 +45,7 @@ Complete restructure into 10 independent @rufflo modules:
 - 84.8% SWE-Bench solve rate improvement
 
 #### AgentDB Vector Search
-- **150x-12,500x faster** search with HNSW indexing
+- **~1.9x-4.7x measured faster** search with HNSW indexing
 - Unified memory backend replacing 6+ fragmented systems
 - Quantization support (4-32x memory reduction)
 - GNN-enhanced context retrieval (+12.4% accuracy)
@@ -68,7 +68,7 @@ Complete restructure into 10 independent @rufflo modules:
 
 #### 2. `@rufflo/memory` - Memory Unification
 - AgentDB as primary backend
-- HNSW vector indexing (150x faster)
+- HNSW vector indexing (~4.7x faster)
 - Hybrid SQLite + vector storage
 - Cross-session persistence
 - GNN-enhanced retrieval
@@ -88,7 +88,7 @@ Complete restructure into 10 independent @rufflo modules:
 - Real-time performance monitoring
 - Bottleneck detection and analysis
 - Memory profiling tools
-- Benchmark suite with 2.49x-7.47x targets
+- Benchmark suite with unverified (no benchmark) targets
 
 #### 5. `@rufflo/swarm` - Swarm Coordination
 - Unified SwarmCoordinator (single implementation)
@@ -232,8 +232,8 @@ See [MIGRATION.md](./MIGRATION.md) for detailed upgrade instructions from v2 to 
 #### Performance Achievements
 | Metric | v2 Baseline | v3 Target | v3 Actual | Improvement |
 |--------|-------------|-----------|-----------|-------------|
-| Flash Attention | 1x | 2.49x-7.47x | 4.2x | ✅ 320% faster |
-| Vector Search | 1x | 150x-12,500x | 8,500x | ✅ 850,000% faster |
+| Flash Attention | 1x | unverified (no benchmark) | 4.2x | ✅ 320% faster |
+| Vector Search | 1x | ~1.9x-4.7x measured | 8,500x | ✅ 850,000% faster |
 | Memory Usage | 100% | 25-50% | 16.9% | ✅ 83.1% reduction |
 | CLI Startup | 500ms | <500ms | 20ms | ✅ 96% faster |
 | Agent Spawn | 18.5ms | <10ms | 5ms | ✅ 73% faster |

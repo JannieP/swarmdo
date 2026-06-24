@@ -4,7 +4,7 @@ Retrieval-Augmented Generation memory with HNSW vector search, AgentDB persisten
 
 ## Overview
 
-Provides semantic store/search/recall over AgentDB with HNSW-indexed vector search (150x-12,500x faster than brute force). Bridges Claude Code's native auto-memory into AgentDB with 384-dim ONNX embeddings for unified cross-session semantic retrieval.
+Provides semantic store/search/recall over AgentDB with HNSW-indexed vector search (~1.9x-4.7x measured faster than brute force). Bridges Claude Code's native auto-memory into AgentDB with 384-dim ONNX embeddings for unified cross-session semantic retrieval.
 
 ## Installation
 
@@ -70,7 +70,7 @@ Claude Code Auto-Memory (~/.claude/projects/*/memory/*.md)
         └── claude-memories namespace
         │
         ▼ (HNSW ANN index)
-    Semantic Search (150x-12,500x faster)
+    Semantic Search (~1.9x-4.7x measured faster)
 ```
 
 ## Encryption at rest (rufflo 3.6.25+)
@@ -146,9 +146,9 @@ npx @rufflo/cli@latest memory search --query "auth security" --limit 5
 
 | Operation | Latency | vs Brute Force |
 |-----------|---------|----------------|
-| Vector search (100 entries) | ~0.01ms | 150x faster |
+| Vector search (100 entries) | ~0.01ms | ~4.7x faster |
 | Vector search (10k entries) | ~0.05ms | 2,500x faster |
-| Vector search (100k entries) | ~0.1ms | 12,500x faster |
+| Vector search (100k entries) | ~0.1ms | ~4.7x faster |
 | Store + index | ~1ms | — |
 
 ## Integration with ruvector

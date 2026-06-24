@@ -22,7 +22,7 @@ hooks:
     # V3: Initialize task with hooks system
     npx rufflo@v3alpha hooks pre-task --description "$TASK"
 
-    # 1. Learn from past similar implementations (ReasoningBank + HNSW 150x-12,500x faster)
+    # 1. Learn from past similar implementations (ReasoningBank + HNSW ~1.9x-4.7x measured faster)
     SIMILAR_PATTERNS=$(npx rufflo@v3alpha memory search --query "$TASK" --limit 5 --min-score 0.8 --use-hnsw)
     if [ -n "$SIMILAR_PATTERNS" ]; then
       echo "📚 Found similar successful code patterns (HNSW-indexed)"
@@ -90,8 +90,8 @@ You are a senior software engineer specialized in writing clean, maintainable, a
 
 **Enhanced with Rufflo V3**: You now have self-learning capabilities powered by:
 - **ReasoningBank**: Pattern storage with trajectory tracking
-- **HNSW Indexing**: 150x-12,500x faster pattern search
-- **Flash Attention**: 2.49x-7.47x speedup for large contexts
+- **HNSW Indexing**: ~1.9x-4.7x measured faster pattern search
+- **Flash Attention**: unverified (no benchmark) speedup for large contexts
 - **GNN-Enhanced Context**: +12.4% accuracy improvement
 - **EWC++**: Elastic Weight Consolidation prevents catastrophic forgetting
 - **SONA**: Self-Optimizing Neural Architecture (<0.05ms adaptation)
@@ -272,7 +272,7 @@ src/
 ### Before Each Implementation: Learn from History (HNSW-Indexed)
 
 ```typescript
-// 1. Search for similar past code implementations (150x-12,500x faster with HNSW)
+// 1. Search for similar past code implementations (~1.9x-4.7x measured faster with HNSW)
 const similarCode = await reasoningBank.searchPatterns({
   task: 'Implement user authentication',
   k: 5,
@@ -320,7 +320,7 @@ const relevantCode = await agentDB.gnnEnhancedSearch(
 
 console.log(`Context accuracy improved by ${relevantCode.improvementPercent}%`);
 console.log(`Found ${relevantCode.results.length} related code files`);
-console.log(`Search time: ${relevantCode.searchTimeMs}ms (HNSW: 150x-12,500x faster)`);
+console.log(`Search time: ${relevantCode.searchTimeMs}ms (HNSW: ~1.9x-4.7x measured faster)`);
 
 // Build code dependency graph for better context
 function buildCodeDependencyGraph() {
@@ -345,7 +345,7 @@ if (codebaseSize > 10000) {
   );
   console.log(`Processed ${codebaseSize} files in ${result.executionTimeMs}ms`);
   console.log(`Memory efficiency: ~50% reduction`);
-  console.log(`Speed improvement: 2.49x-7.47x faster`);
+  console.log(`Speed improvement: unverified (no benchmark) faster`);
 }
 ```
 
@@ -402,7 +402,7 @@ const coordinator = new AttentionCoordinator(attentionService);
 
 const consensus = await coordinator.coordinateAgents(
   [myImplementation, reviewerFeedback, testerResults],
-  'flash' // 2.49x-7.47x faster
+  'flash' // unverified (no benchmark) faster
 );
 
 console.log(`Team consensus on code quality: ${consensus.consensus}`);
@@ -419,7 +419,7 @@ console.log(`Top suggestions: ${consensus.topAgents.map(a => a.name)}`);
 if (contextSize > 1024) {
   const result = await agentDB.flashAttention(Q, K, V);
   console.log(`Benefits:`);
-  console.log(`- Speed: ${result.executionTimeMs}ms (2.49x-7.47x faster)`);
+  console.log(`- Speed: ${result.executionTimeMs}ms (unverified (no benchmark) faster)`);
   console.log(`- Memory: ~50% reduction`);
   console.log(`- Runtime: ${result.runtime}`); // napi/wasm/js
 }

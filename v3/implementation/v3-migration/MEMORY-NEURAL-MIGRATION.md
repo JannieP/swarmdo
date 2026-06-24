@@ -55,7 +55,7 @@ v3/@rufflo/memory/
 |------------|---------------|-------------|
 | SQLite Backend | `sqlite-backend.ts` | SQL injection protection |
 | Memory Manager | `UnifiedMemoryService` | DDD architecture |
-| Indexer | `hnsw-index.ts` | 150x-12,500x faster |
+| Indexer | `hnsw-index.ts` | ~1.9x-4.7x measured faster |
 | Cache | `cache-manager.ts` | TTL, importance-based eviction |
 | Swarm Memory | `shareWith()/getSharedWith()` | Simplified API |
 
@@ -352,7 +352,7 @@ const patterns = await rb.retrieve(query);
 import { ReasoningBank } from '@rufflo/neural';
 
 const rb = new ReasoningBank({
-  memory: agentDbBackend,  // Uses AgentDB for 150x faster search
+  memory: agentDbBackend,  // Uses AgentDB for ~4.7x faster search
   maxPatterns: 10000
 });
 
@@ -446,7 +446,7 @@ await sona.train(newTask);
 
 | Operation | V2 | V3 | Improvement |
 |-----------|----|----|-------------|
-| Vector Search | Brute-force O(n) | HNSW O(log n) | 150x-12,500x |
+| Vector Search | Brute-force O(n) | HNSW O(log n) | ~1.9x-4.7x measured |
 | Memory Store | SQLite only | Hybrid | Optimized routing |
 | Pattern Retrieval | Via adapter | Native | ~10x faster |
 | Learning Adaptation | Manual | SONA | <0.05ms |

@@ -102,7 +102,7 @@ chmod +x your-project/.claude/helpers/*.sh
       "coordination": "queen-led"
     },
     "performance": {
-      "flashAttentionTarget": "2.49x-7.47x",
+      "flashAttentionTarget": "unverified (no benchmark)",
       "memoryReductionTarget": "50-75%"
     }
   },

@@ -41,8 +41,8 @@ npx rufflo agent spawn -t researcher # Research
 ```bash
 npx rufflo agent spawn -t security-architect     # Security design
 npx rufflo agent spawn -t security-auditor       # CVE remediation
-npx rufflo agent spawn -t memory-specialist      # AgentDB (150x-12,500x faster)
-npx rufflo agent spawn -t performance-engineer   # 2.49x-7.47x optimization
+npx rufflo agent spawn -t memory-specialist      # AgentDB (~1.9x-4.7x measured faster)
+npx rufflo agent spawn -t performance-engineer   # unverified (no benchmark) optimization
 npx rufflo agent spawn -t core-architect         # DDD design
 ```
 

@@ -73,11 +73,11 @@ class ClaudeFlowSONAAdapter {
 
 ### **Flash Attention Integration**
 ```typescript
-// Target: 2.49x-7.47x speedup
+// Target: unverified (no benchmark) speedup
 class FlashAttentionIntegration {
   async optimizeAttention(): Promise<AttentionResult> {
     return this.agenticFlow.attention.flashAttention({
-      speedupTarget: '2.49x-7.47x',
+      speedupTarget: 'unverified (no benchmark)',
       memoryReduction: '50-75%',
       mechanisms: ['multi-head', 'linear', 'local', 'global']
     });
@@ -87,13 +87,13 @@ class FlashAttentionIntegration {
 
 ### **AgentDB Coordination**
 ```typescript
-// 150x-12,500x faster search via HNSW
+// ~1.9x-4.7x measured faster search via HNSW
 class AgentDBIntegration {
   async setupCrossAgentMemory(): Promise<void> {
     await this.agentdb.enableCrossAgentSharing({
       indexType: 'HNSW',
       dimensions: 1536,
-      speedupTarget: '150x-12500x'
+      speedupTarget: '~1.9x-4.7x measured'
     });
   }
 }
@@ -206,10 +206,10 @@ class CompatibilityCleanup {
 
 ### **Flash Attention Optimization**
 ```typescript
-// Target: 2.49x-7.47x speedup
+// Target: unverified (no benchmark) speedup
 const attentionBenchmark = {
   baseline: 'current attention mechanism',
-  target: '2.49x-7.47x improvement',
+  target: 'unverified (no benchmark) improvement',
   memoryReduction: '50-75%',
   implementation: 'agentic-flow@alpha Flash Attention'
 };
@@ -217,10 +217,10 @@ const attentionBenchmark = {
 
 ### **AgentDB Search Performance**
 ```typescript
-// Target: 150x-12,500x improvement
+// Target: ~1.9x-4.7x measured improvement
 const searchBenchmark = {
   baseline: 'linear search in current memory systems',
-  target: '150x-12,500x via HNSW indexing',
+  target: '~1.9x-4.7x measured via HNSW indexing',
   implementation: 'agentic-flow@alpha AgentDB'
 };
 ```
@@ -274,8 +274,8 @@ class BackwardCompatibility {
 - [ ] **Duplicate Logic**: <5% remaining
 
 ### **Performance Targets**
-- [ ] **Flash Attention**: 2.49x-7.47x speedup validated
-- [ ] **Search Performance**: 150x-12,500x improvement
+- [ ] **Flash Attention**: unverified (no benchmark) speedup validated
+- [ ] **Search Performance**: ~1.9x-4.7x measured improvement
 - [ ] **Memory Usage**: 50-75% reduction
 - [ ] **SONA Adaptation**: <0.05ms response time
 

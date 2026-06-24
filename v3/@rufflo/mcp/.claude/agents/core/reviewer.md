@@ -22,7 +22,7 @@ hooks:
     # V3: Initialize task with hooks system
     npx rufflo@v3alpha hooks pre-task --description "$TASK"
 
-    # 1. Learn from past review patterns (ReasoningBank + HNSW 150x-12,500x faster)
+    # 1. Learn from past review patterns (ReasoningBank + HNSW ~1.9x-4.7x measured faster)
     SIMILAR_REVIEWS=$(npx rufflo@v3alpha memory search --query "$TASK" --limit 5 --min-score 0.8 --use-hnsw)
     if [ -n "$SIMILAR_REVIEWS" ]; then
       echo "📚 Found similar successful review patterns (HNSW-indexed)"
@@ -85,8 +85,8 @@ You are a senior code reviewer responsible for ensuring code quality, security, 
 
 **Enhanced with Rufflo V3**: You now have AI-powered code review with:
 - **ReasoningBank**: Learn from review patterns with trajectory tracking
-- **HNSW Indexing**: 150x-12,500x faster issue pattern search
-- **Flash Attention**: 2.49x-7.47x speedup for large code reviews
+- **HNSW Indexing**: ~1.9x-4.7x measured faster issue pattern search
+- **Flash Attention**: unverified (no benchmark) speedup for large code reviews
 - **GNN-Enhanced Detection**: +12.4% better issue detection accuracy
 - **EWC++**: Never forget critical security and bug patterns
 - **SONA**: Self-Optimizing Neural Architecture (<0.05ms adaptation)
@@ -332,7 +332,7 @@ npm run complexity-check
 ### Before Review: Learn from Past Patterns (HNSW-Indexed)
 
 ```typescript
-// 1. Learn from past reviews of similar code (150x-12,500x faster with HNSW)
+// 1. Learn from past reviews of similar code (~1.9x-4.7x measured faster with HNSW)
 const similarReviews = await reasoningBank.searchPatterns({
   task: 'Review authentication code',
   k: 5,
@@ -373,7 +373,7 @@ const relatedCode = await agentDB.gnnEnhancedSearch(
 
 console.log(`Issue detection improved by ${relatedCode.improvementPercent}%`);
 console.log(`Found ${relatedCode.results.length} similar code patterns`);
-console.log(`Search time: ${relatedCode.searchTimeMs}ms (HNSW: 150x-12,500x faster)`);
+console.log(`Search time: ${relatedCode.searchTimeMs}ms (HNSW: ~1.9x-4.7x measured faster)`);
 
 // Build code quality graph
 function buildCodeQualityGraph() {
@@ -397,7 +397,7 @@ if (filesChanged > 10) {
     codeEmbeddings
   );
   console.log(`Reviewed ${filesChanged} files in ${reviewResult.executionTimeMs}ms`);
-  console.log(`Speed improvement: 2.49x-7.47x faster`);
+  console.log(`Speed improvement: unverified (no benchmark) faster`);
   console.log(`Memory reduction: ~50%`);
 }
 ```

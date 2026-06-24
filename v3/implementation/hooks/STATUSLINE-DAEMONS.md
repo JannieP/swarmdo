@@ -198,7 +198,7 @@ node .claude/helpers/hooks-daemon.mjs export --format json
 ```
 ▊ Rufflo V3 ● agentic-flow@alpha  │  ⎇ v3
 ─────────────────────────────────────────────────────
-🏗️  DDD Domains    [●●●●●]  5/5    ⚡ 1.0x → 2.49x-7.47x
+🏗️  DDD Domains    [●●●●●]  5/5    ⚡ 1.0x → unverified (no benchmark)
 🤖 Swarm Agents    ◉ [ 5/15]      🟢 CVE 3/3    💾 156 patterns
 🔧 Architecture    DDD ●93%  │  Security ●CLEAN  │  Hooks ●ACTIVE
 📊 Routing         89% accuracy │  Avg 4.2ms │  1547 operations

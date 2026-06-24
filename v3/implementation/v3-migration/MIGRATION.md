@@ -495,8 +495,8 @@ npx @rufflo/performance benchmark
 npx @rufflo/performance compare --baseline v2
 
 # 3. Validate targets
-# - Flash Attention: 2.49x-7.47x speedup
-# - Vector Search: 150x-12,500x faster
+# - Flash Attention: unverified (no benchmark) speedup
+# - Vector Search: ~1.9x-4.7x measured faster
 # - Memory: 50-75% reduction
 # - CLI Startup: <500ms
 
@@ -598,7 +598,7 @@ await memory.storePattern({
   critique: 'Good test coverage'
 });
 
-// Search with vector similarity (150x faster)
+// Search with vector similarity (~4.7x faster)
 const patterns = await memory.searchPatterns({
   task: 'code-implementation',
   k: 5,
@@ -643,7 +643,7 @@ const swarm = new SwarmCoordinator({
 
 // Coordinate with attention mechanisms
 const result = await swarm.coordinate(task, {
-  attentionType: 'flash', // 2.49x-7.47x faster
+  attentionType: 'flash', // unverified (no benchmark) faster
   consensusThreshold: 0.8
 });
 
@@ -666,8 +666,8 @@ import { PerformanceModule } from '@rufflo/performance';
 
 const perf = new PerformanceModule({
   targets: {
-    flashAttention: '2.49x-7.47x',
-    vectorSearch: '150x-12500x',
+    flashAttention: 'unverified (no benchmark)',
+    vectorSearch: '~1.9x-4.7x measured',
     memoryReduction: '50-75%'
   }
 });
@@ -862,7 +862,7 @@ const swarm = new SwarmCoordinator({
   topology: 'hierarchical-mesh',
   agents: [coder, reviewer, tester],
   consensus: new AttentionCoordinator({
-    type: 'flash', // 2.49x-7.47x faster
+    type: 'flash', // unverified (no benchmark) faster
     threshold: 0.8
   })
 });
@@ -1368,8 +1368,8 @@ If you encounter issues not covered in this guide:
 ## Summary
 
 **Migration Benefits**:
-- ✅ 2.49x-7.47x faster with Flash Attention
-- ✅ 150x-12,500x faster vector search
+- ✅ unverified (no benchmark) faster with Flash Attention
+- ✅ ~1.9x-4.7x measured faster vector search
 - ✅ 83.1% memory reduction
 - ✅ Security-first design (CVE fixes)
 - ✅ Clean modular architecture

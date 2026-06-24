@@ -16,7 +16,7 @@ Vector embeddings for semantic search and pattern matching with HNSW indexing.
 | Feature | Description |
 |---------|-------------|
 | **sql.js** | Cross-platform SQLite persistent cache (WASM) |
-| **HNSW** | 150x-12,500x faster search |
+| **HNSW** | ~1.9x-4.7x measured faster search |
 | **Hyperbolic** | Poincare ball model for hierarchical data |
 | **Normalization** | L2, L1, min-max, z-score |
 | **Chunking** | Configurable overlap and size |

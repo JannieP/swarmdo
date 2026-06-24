@@ -474,7 +474,7 @@ export class SONAWithAttention {
   }
 
   async adapt(pattern: Pattern): Promise<AdaptationResult> {
-    // Fast adaptation with Flash Attention (2.49x-7.47x speedup)
+    // Fast adaptation with Flash Attention (unverified (no benchmark) speedup)
     const attended = await this.flashAttention.forward(
       pattern.embedding,
       this.expertWeights
@@ -862,7 +862,7 @@ npx @rufflo/cli@latest attention cache clear
 
 ### Positive
 
-1. **2.49x-7.47x speedup** with Flash Attention on GPU
+1. **unverified (no benchmark) speedup** with Flash Attention on GPU
 2. **O(n) complexity** for long sequences with sparse/linear attention
 3. **Improved retrieval quality** with attention-based reranking
 4. **Better swarm coordination** with topology-aware attention
@@ -889,7 +889,7 @@ npx @rufflo/cli@latest attention cache clear
 | Memory retrieval latency | <10ms | memory-attention |
 | Long context (32K tokens) | <100ms | longformer-attention |
 | Swarm coordination | <5ms | star-attention |
-| Flash Attention speedup | 2.49x-7.47x | flash-attention-v2/v3 |
+| Flash Attention speedup | unverified (no benchmark) | flash-attention-v2/v3 |
 | Linear attention throughput | 10x standard | performer-attention |
 | Memory overhead (KV cache) | <500MB | configurable |
 
@@ -931,7 +931,7 @@ The `@ruvector/ruvllm-wasm@2.0.0` package now provides native WASM implementatio
 
 | This ADR Concept | ruvllm-wasm Class | Status |
 |------------------|-------------------|--------|
-| HNSW Search (150x-12,500x) | `HnswRouterWasm` | Published, working (v2.0.1) |
+| HNSW Search (~1.9x-4.7x measured) | `HnswRouterWasm` | Published, working (v2.0.1) |
 | SONA Adaptation (<0.05ms) | `SonaInstantWasm` | Published, working |
 | KV Cache Management | `KvCacheWasm` | Published, working |
 | LoRA Adaptation | `MicroLoraWasm` | Published, working (ranks 1-4, <10KB) |

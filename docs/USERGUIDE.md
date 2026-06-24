@@ -1055,7 +1055,7 @@ flowchart LR
     end
 
     subgraph Storage["💾 Storage"]
-        HNSW[(HNSW Index<br/>150x faster)]
+        HNSW[(HNSW Index<br/>~4.7x faster)]
         SQLite[(SQLite Cache)]
         AgentDB[(AgentDB)]
         Graph[MemoryGraph<br/>PageRank + Communities]
@@ -1848,7 +1848,7 @@ Build custom plugins with the fluent builder API. Create MCP tools, hooks, worke
 | **HookBuilder** | Build hooks with conditions and transformers | Priorities, conditional execution |
 | **WorkerPool** | Managed worker pool with auto-scaling | Min/max workers, task queuing |
 | **ProviderRegistry** | LLM provider management with fallback | Cost optimization, automatic failover |
-| **AgentDBBridge** | Vector storage with HNSW indexing | 150x faster search, batch operations |
+| **AgentDBBridge** | Vector storage with HNSW indexing | ~4.7x faster search, batch operations |
 
 **Plugin Performance:** Load <20ms, Hook execution <0.5ms, Worker spawn <50ms
 
@@ -1984,7 +1984,7 @@ Pre-built WASM plugins for semantic search, intent routing, and pattern storage.
 | **IntentRouterPlugin** | Routes user intents to optimal handlers | 95%+ accuracy |
 | **HookPatternLibraryPlugin** | Pre-built patterns for common tasks | Security, testing, performance |
 | **MCPToolOptimizerPlugin** | Optimizes MCP tool selection | Context-aware suggestions |
-| **ReasoningBankPlugin** | Vector-backed pattern storage with HNSW | 150x faster search |
+| **ReasoningBankPlugin** | Vector-backed pattern storage with HNSW | ~4.7x faster search |
 | **AgentConfigGeneratorPlugin** | Generates optimized agent configurations | From pretrain data |
 
 </details>
@@ -2387,7 +2387,7 @@ rufflo embeddings search -q "authentication patterns"
 
 | Feature | Description | Performance |
 |---------|-------------|-------------|
-| **pgvector Integration** | Native PostgreSQL vector operations | 150x faster than in-memory |
+| **pgvector Integration** | Native PostgreSQL vector operations | ~4.7x faster than in-memory |
 | **Attention Mechanisms** | Self, multi-head, cross-attention in SQL | GPU-accelerated |
 | **Graph Neural Networks** | GNN operations via SQL functions | Message passing, aggregation |
 | **Hyperbolic Embeddings** | Poincaré ball model in PostgreSQL | Better hierarchy representation |
@@ -2419,7 +2419,7 @@ rufflo ruvector backup --output ./backup.sql
 |-----------|---------|----------|
 | `001_create_extension` | Enable pgvector | Vector type, operators |
 | `002_create_vector_tables` | Core tables | embeddings, patterns, agents |
-| `003_create_indices` | HNSW indices | 150x faster search |
+| `003_create_indices` | HNSW indices | ~4.7x faster search |
 | `004_create_functions` | Vector functions | Similarity, clustering |
 | `005_create_attention_functions` | Attention ops | Self/multi-head attention |
 | `006_create_gnn_functions` | GNN operations | Message passing, aggregation |
@@ -2536,7 +2536,7 @@ npx rufflo hive-mind status                                  # Check status
 
 | Component | Description | Performance |
 |-----------|-------------|-------------|
-| **ReasoningBank** | Pattern storage with HNSW indexing | 150x faster retrieval |
+| **ReasoningBank** | Pattern storage with HNSW indexing | ~4.7x faster retrieval |
 | **GuidanceProvider** | Context-aware development guidance | Real-time suggestions |
 | **PatternLearning** | Automatic strategy extraction | Continuous improvement |
 | **QualityTracking** | Success/failure rate per pattern | Performance metrics |
@@ -2568,7 +2568,7 @@ Claude Code pipes JSON session data via **stdin** to the statusline script after
 **Output Format:**
 ```
 ▊ Rufflo V3 ● ruvnet  │  ⎇ main  │  Opus 4.6  | ●42% ctx  | $0.15
-🏗️ DDD [●●●●○] 4/5  ⚡ HNSW 150x  🤖 ◉ [12/8]  👥 3  🟢 CVE 3/3  💾 512MB  🧠 15%  📦 AgentDB ●1.2K vectors
+🏗️ DDD [●●●●○] 4/5  ⚡ HNSW ~4.7x  🤖 ◉ [12/8]  👥 3  🟢 CVE 3/3  💾 512MB  🧠 15%  📦 AgentDB ●1.2K vectors
 ```
 
 | Indicator | Description | Source |
@@ -2580,7 +2580,7 @@ Claude Code pipes JSON session data via **stdin** to the statusline script after
 | `●42% ctx` | Context window usage | Stdin JSON `context_window.used_percentage` |
 | `$0.15` | Session cost | Stdin JSON `cost.total_cost_usd` |
 | `[●●●●○]` | DDD domain progress bar | `.rufflo/metrics/v3-progress.json` |
-| `⚡ HNSW 150x` | HNSW search speedup | AgentDB file stats |
+| `⚡ HNSW ~4.7x` | HNSW search speedup | AgentDB file stats |
 | `◉/○` | Swarm coordination status | Process detection |
 | `[12/8]` | Active agents / max agents | `ps aux` process count |
 | `👥 3` | Sub-agents spawned | Task tool agent count |
@@ -2822,7 +2822,7 @@ npx rufflo@latest agent spawn -t coder --name my-coder
 # Initialize swarm with V3 mode
 npx rufflo@latest swarm init --v3-mode
 
-# Search memory (HNSW-indexed, 150x faster)
+# Search memory (HNSW-indexed, ~4.7x faster)
 npx rufflo@latest memory search -q "authentication patterns"
 
 # Run security scan
@@ -3293,7 +3293,7 @@ Hooks intercept operations (file edits, commands, tasks) and learn from outcomes
 │ past patterns│   │ successful? │    │ learnings   │    │ forgetting  │
 └─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
      HNSW              Verdict            LoRA              EWC++
-   150x faster        success/fail      compression       memory lock
+   ~4.7x faster        success/fail      compression       memory lock
 ```
 
 ### Hook Signals (ADR-026 Model Routing)
@@ -3487,7 +3487,7 @@ npx rufflo@latest hooks session-end --export-metrics --persist-patterns
 | `trajectory-step` | RL | Record an action with reward signal |
 | `trajectory-end` | RL | Finish recording, trigger learning |
 | `pattern-store` | Memory | Store a pattern with HNSW indexing |
-| `pattern-search` | Memory | Find similar patterns (150x faster) |
+| `pattern-search` | Memory | Find similar patterns (~4.7x faster) |
 | `stats` | Analytics | Intelligence diagnostics, confidence trends, improvement tracking |
 | `attention` | Focus | Compute attention-weighted similarity |
 
@@ -4080,7 +4080,7 @@ Skills are **reusable workflows** that combine agents, hooks, and patterns into 
 
 | Skill | What It Does | When To Use |
 |-------|--------------|-------------|
-| `agentdb-vector-search` | Semantic search with 150x faster retrieval | Building RAG systems, knowledge bases |
+| `agentdb-vector-search` | Semantic search with ~4.7x faster retrieval | Building RAG systems, knowledge bases |
 | `agentdb-memory-patterns` | Session memory, persistent storage, context management | Stateful agents, chat systems |
 | `agentdb-learning` | 9 RL algorithms (PPO, DQN, SARSA, etc.) | Self-learning agents, behavior optimization |
 | `agentdb-optimization` | Quantization (4-32x memory reduction), HNSW indexing | Scaling to millions of vectors |
@@ -4488,7 +4488,7 @@ npm install rufflo@latest
 ```typescript
 import { AgentDB } from '@rufflo/memory';
 
-// Initialize with HNSW indexing (150x faster)
+// Initialize with HNSW indexing (~4.7x faster)
 const db = new AgentDB({
   path: './data/memory',
   hnsw: { m: 16, efConstruction: 200 }
@@ -4965,7 +4965,7 @@ await bank.consolidate();  // Prevent forgetting (EWC++)
 ```
 
 **4-Step Pipeline:**
-1. **RETRIEVE** — Fetch relevant patterns via HNSW (150x faster)
+1. **RETRIEVE** — Fetch relevant patterns via HNSW (~4.7x faster)
 2. **JUDGE** — Evaluate outcomes with verdicts
 3. **DISTILL** — Extract key learnings via LoRA
 4. **CONSOLIDATE** — Prevent catastrophic forgetting (EWC++)
@@ -5157,7 +5157,7 @@ Rufflo automatically leverages agentic-flow for:
 | **Fast Edits** | Agent Booster for mechanical transforms |
 | **Intelligent Routing** | Model router for haiku/sonnet/opus selection |
 | **Pattern Learning** | ReasoningBank stores successful patterns |
-| **Embedding Search** | HNSW-indexed vector search (150x faster) |
+| **Embedding Search** | HNSW-indexed vector search (~4.7x faster) |
 
 ```typescript
 // Rufflo automatically uses agentic-flow optimizations
@@ -5560,7 +5560,7 @@ SELECT cosine_similarity_arr(a, b) AS similarity;
 | **AI Operations** | External only | **In-database (attention, GNN)** |
 
 <details>
-<summary>⚡ <strong>@ruvector/attention</strong> — Flash Attention (2.49x-7.47x Speedup)</summary>
+<summary>⚡ <strong>@ruvector/attention</strong> — Flash Attention (unverified (no benchmark) Speedup)</summary>
 
 Native Rust implementation of Flash Attention for transformer computations:
 
@@ -5684,7 +5684,7 @@ import { getVectorStore } from '@rufflo/memory';
 const store = await getVectorStore();
 // Uses ruvector if installed, falls back to sql.js
 
-// HNSW-indexed search (150x faster)
+// HNSW-indexed search (~4.7x faster)
 const results = await store.search(queryVector, 10);
 
 // Flash Attention for pattern matching
@@ -6537,7 +6537,7 @@ V3_PERFORMANCE_TARGETS = {
   'agent-spawn': 200,           // <200ms (4x faster)
 
   // Memory Operations
-  'vector-search': 1,           // <1ms (150x faster)
+  'vector-search': 1,           // <1ms (~4.7x faster)
   'hnsw-indexing': 10,          // <10ms
   'memory-write': 5,            // <5ms (10x faster)
   'cache-hit': 0.1,             // <0.1ms
@@ -7445,7 +7445,7 @@ export CLAUDE_FLOW_HNSW_EF=100
 ┌─────────────────────────────────────────────────────────────┐
 │                    V2 → V3 IMPROVEMENTS                     │
 ├───────────────────────┬─────────────────────────────────────┤
-│ Memory Search         │ 150x - 12,500x faster (HNSW)        │
+│ Memory Search         │ ~4.7x - ~4.7x faster (HNSW)        │
 │ Pattern Matching      │ Self-learning (ReasoningBank)       │
 │ Security              │ CVE remediation + strict validation │
 │ Modular Architecture  │ 18 @rufflo/* packages          │

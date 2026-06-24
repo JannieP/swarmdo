@@ -476,7 +476,7 @@ npx rufflo hooks intelligence [options]
 | `--mode` | string | `balanced` | Operation mode |
 | `--enable-sona` | boolean | `true` | Enable SONA sub-0.05ms learning |
 | `--enable-moe` | boolean | `true` | Enable Mixture of Experts routing |
-| `--enable-hnsw` | boolean | `true` | Enable HNSW 150x faster search |
+| `--enable-hnsw` | boolean | `true` | Enable HNSW ~4.7x faster search |
 | `--embedding-provider` | string | `transformers` | Embedding provider |
 | `--train` | boolean | `false` | Train from current context |
 | `--reset` | boolean | `false` | Reset to defaults |
@@ -503,8 +503,8 @@ npx rufflo hooks intelligence [options]
 - Load Balancing: Automatic expert distribution
 - Gating Network: Context-aware expert selection
 
-### HNSW (150x Faster Search)
-- Search Speedup: 150x-12,500x improvement
+### HNSW (~4.7x Faster Search)
+- Search Speedup: ~1.9x-4.7x measured improvement
 - Index Efficiency: Logarithmic complexity
 - Memory Optimized: Quantized vectors (4/8/16-bit)
 - Batch Support: Efficient bulk operations
@@ -1103,9 +1103,9 @@ npx rufflo swarm task --description "<task>" [options]
 | Component | Target | Description |
 |-----------|--------|-------------|
 | SONA Learning | <0.05ms | Sub-millisecond adaptation |
-| HNSW Search | 150x-12,500x | Faster than brute-force |
+| HNSW Search | ~1.9x-4.7x measured | Faster than brute-force |
 | Memory Reduction | 50-75% | Via quantization |
-| Flash Attention | 2.49x-7.47x | Speedup |
+| Flash Attention | unverified (no benchmark) | Speedup |
 | MoE Routing | 92%+ | Accuracy |
 
 ---

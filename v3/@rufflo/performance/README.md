@@ -15,7 +15,7 @@
 - **Auto-Calibration** - Automatically adjusts iterations for statistical significance
 - **Regression Detection** - Compare against baselines with significance testing
 - **V3 Performance Targets** - Built-in targets for CLI, memory, swarm, and attention
-- **Flash Attention Validation** - Validate 2.49x-7.47x speedup targets
+- **Flash Attention Validation** - Validate unverified (no benchmark) speedup targets
 - **Multiple Output Formats** - Console, JSON, and programmatic access
 
 ## Installation
@@ -157,7 +157,7 @@ V3_PERFORMANCE_TARGETS = {
   'agent-spawn': 200,           // <200ms (4x faster)
 
   // Memory Operations
-  'vector-search': 1,           // <1ms (150x faster)
+  'vector-search': 1,           // <1ms (~4.7x faster)
   'hnsw-indexing': 10,          // <10ms
   'memory-write': 5,            // <5ms (10x faster)
   'cache-hit': 0.1,             // <0.1ms

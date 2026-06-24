@@ -63,8 +63,8 @@ Matrix of agent capabilities and their specializations for Rufflo V3.
 
 | Capability | Agents | Performance Gain |
 |------------|--------|------------------|
-| Flash Attention | memory-specialist, performance-engineer | 2.49x-7.47x |
-| HNSW Search | memory-specialist | 150x-12,500x |
+| Flash Attention | memory-specialist, performance-engineer | unverified (no benchmark) |
+| HNSW Search | memory-specialist | ~1.9x-4.7x measured |
 | Quantization | performance-engineer | 50-75% memory |
 | SONA Adaptation | sona-learning-optimizer | <0.05ms |
 

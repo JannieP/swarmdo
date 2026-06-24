@@ -13,8 +13,8 @@ Rufflo V3 is a next-generation AI agent coordination system built on 10 Architec
 
 V3 represents a complete architectural overhaul:
 - **10x faster testing** with Vitest
-- **150x-12,500x faster search** with HNSW indexing
-- **2.49x-7.47x Flash Attention speedup**
+- **~1.9x-4.7x measured faster search** with HNSW indexing
+- **unverified (no benchmark) Flash Attention speedup**
 - **50-75% memory reduction**
 
 ## Features
@@ -43,8 +43,8 @@ V3 represents a complete architectural overhaul:
 | Event Bus (100k events) | <50ms | ~6ms |
 | Map Lookup (100k gets) | <20ms | ~16ms |
 | Array.find vs Map O(1) | N/A | 978x speedup |
-| Flash Attention | 2.49x-7.47x | Validated |
-| AgentDB Search | 150x-12,500x | HNSW indexed |
+| Flash Attention | unverified (no benchmark) | Validated |
+| AgentDB Search | ~1.9x-4.7x measured | HNSW indexed |
 
 ## Architecture
 
@@ -219,7 +219,7 @@ const valid = await hasher.verify('password', hash);
 ```
 
 ### @rufflo/memory
-Unified memory service with AgentDB, HNSW indexing, and 150x-12,500x faster search.
+Unified memory service with AgentDB, HNSW indexing, and ~1.9x-4.7x measured faster search.
 
 ```typescript
 import { HybridMemoryRepository, HNSWIndex } from '@rufflo/memory';
@@ -436,8 +436,8 @@ pnpm test:coverage
 
 | Category | Metric | Target |
 |----------|--------|--------|
-| **Search** | AgentDB HNSW | 150x-12,500x faster |
-| **Attention** | Flash Attention | 2.49x-7.47x speedup |
+| **Search** | AgentDB HNSW | ~1.9x-4.7x measured faster |
+| **Attention** | Flash Attention | unverified (no benchmark) speedup |
 | **Memory** | Reduction | 50-75% |
 | **Code** | Total lines | <5,000 |
 | **Startup** | Cold start | <500ms |

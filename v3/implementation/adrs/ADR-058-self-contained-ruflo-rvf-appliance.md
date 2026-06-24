@@ -127,7 +127,7 @@ ruvLLM Architecture (extends @ruvector):
 ├── @ruvector/core — vector database, Q-learning router, AST analysis
 ├── @ruvector/router — ML-based intelligent task routing (~80% accuracy)
 ├── @ruvector/sona — Self-Optimizing Neural Architecture (<0.05ms)
-├── @ruvector/attention — Flash Attention (2.49x-7.47x speedup)
+├── @ruvector/attention — Flash Attention (unverified (no benchmark) speedup)
 ├── @ruvector/micro-hnsw-wasm — HNSW vector search (WASM)
 └── ruvLLM (new):
     ├── GGUF model loader (llama.cpp compatible)

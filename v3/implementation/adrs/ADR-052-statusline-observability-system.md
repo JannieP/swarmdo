@@ -109,7 +109,7 @@ Implement a layered statusline architecture:
 │  │  Output (4 lines + separators):                              │  │
 │  │  ▊ Rufflo V3  ● user  │  ⎇ branch  │  Model            │  │
 │  │  ─────────────────────────────────────────                   │  │
-│  │  🏗️  DDD Domains  [●●●●●]  5/5    ⚡ 1.0x → 2.49x-7.47x   │  │
+│  │  🏗️  DDD Domains  [●●●●●]  5/5    ⚡ 1.0x → unverified (no benchmark)   │  │
 │  │  🤖 Swarm ◉ [3/15] 👥 0   🟢 CVE 3/3  💾 2782MB            │  │
 │  │       🛡️  27% 54.7K ⊘    🧠  86%                           │  │
 │  │  🔧 Architecture  DDD ●79%  │  Security ●CLEAN              │  │

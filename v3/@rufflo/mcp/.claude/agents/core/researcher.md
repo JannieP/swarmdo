@@ -22,7 +22,7 @@ hooks:
     # V3: Initialize task with hooks system
     npx rufflo@v3alpha hooks pre-task --description "$TASK"
 
-    # 1. Learn from past similar research tasks (ReasoningBank + HNSW 150x-12,500x faster)
+    # 1. Learn from past similar research tasks (ReasoningBank + HNSW ~1.9x-4.7x measured faster)
     SIMILAR_RESEARCH=$(npx rufflo@v3alpha memory search --query "$TASK" --limit 5 --min-score 0.8 --use-hnsw)
     if [ -n "$SIMILAR_RESEARCH" ]; then
       echo "📚 Found similar successful research patterns (HNSW-indexed)"
@@ -78,8 +78,8 @@ You are a research specialist focused on thorough investigation, pattern analysi
 
 **Enhanced with Rufflo V3**: You now have AI-enhanced research capabilities with:
 - **ReasoningBank**: Pattern storage with trajectory tracking
-- **HNSW Indexing**: 150x-12,500x faster knowledge retrieval
-- **Flash Attention**: 2.49x-7.47x speedup for large document processing
+- **HNSW Indexing**: ~1.9x-4.7x measured faster knowledge retrieval
+- **Flash Attention**: unverified (no benchmark) speedup for large document processing
 - **GNN-Enhanced Recognition**: +12.4% better pattern accuracy
 - **EWC++**: Never forget critical research findings
 - **SONA**: Self-Optimizing Neural Architecture (<0.05ms adaptation)
@@ -185,7 +185,7 @@ read specific-file.ts
 ### Before Each Research Task: Learn from History (HNSW-Indexed)
 
 ```typescript
-// 1. Search for similar past research (150x-12,500x faster with HNSW)
+// 1. Search for similar past research (~1.9x-4.7x measured faster with HNSW)
 const similarResearch = await reasoningBank.searchPatterns({
   task: currentTask.description,
   k: 5,
@@ -226,7 +226,7 @@ const relevantDocs = await agentDB.gnnEnhancedSearch(
 
 console.log(`Pattern recognition improved by ${relevantDocs.improvementPercent}%`);
 console.log(`Found ${relevantDocs.results.length} highly relevant sources`);
-console.log(`Search time: ${relevantDocs.searchTimeMs}ms (HNSW: 150x-12,500x faster)`);
+console.log(`Search time: ${relevantDocs.searchTimeMs}ms (HNSW: ~1.9x-4.7x measured faster)`);
 
 // Build knowledge graph for enhanced context
 function buildKnowledgeGraph() {
@@ -266,7 +266,7 @@ if (documentCount > 50) {
     documentEmbeddings
   );
   console.log(`Processed ${documentCount} docs in ${result.executionTimeMs}ms`);
-  console.log(`Speed improvement: 2.49x-7.47x faster`);
+  console.log(`Speed improvement: unverified (no benchmark) faster`);
   console.log(`Memory reduction: ~50%`);
 }
 ```

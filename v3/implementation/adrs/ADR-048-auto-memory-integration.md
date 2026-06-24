@@ -45,7 +45,7 @@ Key characteristics:
 Claude-flow v3 has its own rich memory system (`@rufflo/memory`) backed by AgentDB with HNSW vector indexing. These two memory systems are currently disconnected:
 
 1. **Auto memory** — markdown files, loaded into system prompt, human-readable
-2. **AgentDB memory** — structured entries, vector-indexed, 150x-12,500x faster search
+2. **AgentDB memory** — structured entries, vector-indexed, ~1.9x-4.7x measured faster search
 
 Without integration, insights discovered during swarm orchestration are lost between sessions, and auto memory cannot benefit from AgentDB's semantic search capabilities.
 
@@ -192,7 +192,7 @@ Generated MEMORY.md structure:
 - See `debugging.md` for resolved issues
 
 ## Performance
-- HNSW: 150x-12,500x faster than brute-force
+- HNSW: ~1.9x-4.7x measured faster than brute-force
 - Int8 quantization: 3.92x memory reduction
 - See `performance.md` for benchmark results
 
