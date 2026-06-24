@@ -15,6 +15,7 @@ import { execSync, exec } from 'child_process';
 import { promisify } from 'util';
 import { decodeKey, isEncryptionEnabled } from '../encryption/vault.js';
 import { isEncryptedBlob } from '../encryption/vault.js';
+import { readBenchResults, type BenchResults } from '../benchmarks/bench-runner.js';
 
 // Promisified exec with proper shell and env inheritance for cross-platform support
 const execAsync = promisify(exec);
@@ -1010,6 +1011,63 @@ async function checkEncryptionAtRest(): Promise<HealthCheck> {
   };
 }
 
+// Sprint 2 Move 4 — surface MEASURED performance numbers (from
+// `.rufflo/bench-results.json`, written by `rufflo demo` / `rufflo performance
+// benchmark`) so users see honest, machine-measured figures in `doctor`
+// instead of the inflated marketing numbers the audit flagged. Never
+// fabricates — reports `warn` + a fix hint when no measurement exists yet.
+function relativeAge(iso: string | undefined): string {
+  if (!iso) return 'unknown time';
+  const then = Date.parse(iso);
+  if (Number.isNaN(then)) return 'unknown time';
+  const ms = Date.now() - then;
+  const mins = Math.round(ms / 60000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.round(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  return `${Math.round(hrs / 24)}d ago`;
+}
+
+export async function checkBenchmarkResults(cwd: string = process.cwd()): Promise<HealthCheck> {
+  const results: BenchResults | null = readBenchResults(cwd);
+  if (!results) {
+    return {
+      name: 'Perf Benchmarks',
+      status: 'warn',
+      message: 'no measured numbers yet (.rufflo/bench-results.json absent)',
+      fix: 'rufflo demo   # or: rufflo performance benchmark',
+    };
+  }
+
+  const parts: string[] = [];
+  const hnsw = results.hnsw?.entries?.[0];
+  if (hnsw && typeof hnsw.speedup === 'number') {
+    parts.push(`HNSW ${hnsw.speedup}x@N=${hnsw.n ?? '?'} (recall@10 ${hnsw.recallAt10 ?? '?'})`);
+  }
+  const backend = results.embeddingBackend && typeof (results.embeddingBackend as Record<string, unknown>).backend === 'string'
+    ? String((results.embeddingBackend as Record<string, unknown>).backend)
+    : null;
+  if (backend) parts.push(`embeddings: ${backend}`);
+
+  const age = relativeAge(results.persistedAt as string | undefined);
+
+  if (parts.length === 0) {
+    return {
+      name: 'Perf Benchmarks',
+      status: 'warn',
+      message: `measured ${age} but no HNSW/embedding figures captured`,
+      fix: 'rufflo performance benchmark   # re-run the authoritative harness',
+    };
+  }
+
+  return {
+    name: 'Perf Benchmarks',
+    status: 'pass',
+    message: `${parts.join(' · ')} (measured ${age})`,
+  };
+}
+
 // Format health check result
 function formatCheck(check: HealthCheck): string {
   const icon = check.status === 'pass' ? output.success('✓') :
@@ -1043,7 +1101,7 @@ export const doctorCommand: Command = {
     {
       name: 'component',
       short: 'c',
-      description: 'Check specific component (version, node, npm, config, daemon, memory, api, git, mcp, claude, disk, typescript, agentic-flow, encryption, federation, metaharness)',
+      description: 'Check specific component (version, node, npm, config, daemon, memory, api, git, mcp, claude, disk, typescript, agentic-flow, encryption, federation, metaharness, benchmarks)',
       type: 'string'
     },
     {
@@ -1094,6 +1152,7 @@ export const doctorCommand: Command = {
       checkFederationBreaker, // ADR-097 Phase 4
       checkMetaharness, // ADR-150 — MetaHarness upstream package
       checkMetaharnessIntegration, // iter 45 — rufflo-side integration layer
+      checkBenchmarkResults, // Sprint 2 Move 4 — surface measured perf numbers
     ];
 
     const componentMap: Record<string, () => Promise<HealthCheck>> = {
@@ -1117,6 +1176,8 @@ export const doctorCommand: Command = {
       'federation': checkFederationBreaker, // ADR-097 Phase 4
       'metaharness': checkMetaharness, // ADR-150 — upstream package
       'metaharness-integration': checkMetaharnessIntegration, // iter 45 — rufflo-side
+      'benchmarks': checkBenchmarkResults, // Sprint 2 Move 4
+      'perf': checkBenchmarkResults,
     };
 
     let checksToRun = allChecks;
