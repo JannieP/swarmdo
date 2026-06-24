@@ -99,8 +99,11 @@ describe('Neural Tools (neural-tools)', () => {
     // Must be a non-empty string indicating which embedding backend is active
     expect(typeof provider).toBe('string');
     expect(provider.length).toBeGreaterThan(0);
-    // Must match one of the known provider tiers or fallback
-    const knownProviders = /agentic-flow|onnx|mock|hash|fallback|reasoningbank|none/i;
+    // Must match one of the known provider tiers or fallback. `ruvector` /
+    // `@rufflo/embeddings` is the Tier-0 bundled-ONNX backend (neural-tools.ts
+    // line ~49) — it was missing from this allowlist, so the test failed
+    // wherever ruvector's native ONNX IS available and becomes the active tier.
+    const knownProviders = /agentic-flow|onnx|mock|hash|fallback|reasoningbank|none|ruvector|@rufflo\/embeddings/i;
     expect(provider).toMatch(knownProviders);
   });
 });
