@@ -116,7 +116,12 @@ export class CLI {
         return;
       }
 
-      if (flags.noColor) {
+      // `--no-color` is intercepted by the parser's generic `--no-<flag>`
+      // negation handler, which yields `flags.color === false` (NOT
+      // `flags.noColor`). The registered `no-color` option path yields
+      // `flags.noColor`. Honor BOTH so `rufflo --no-color` actually disables
+      // color regardless of which path the parser took.
+      if (flags.noColor || flags.color === false) {
         this.output.setColorEnabled(false);
       }
 
