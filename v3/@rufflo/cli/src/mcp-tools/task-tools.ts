@@ -14,7 +14,7 @@ const STORAGE_DIR = '.rufflo';
 const TASK_DIR = 'tasks';
 const TASK_FILE = 'store.json';
 
-interface TaskRecord {
+export interface TaskRecord {
   taskId: string;
   type: string;
   description: string;
@@ -29,7 +29,7 @@ interface TaskRecord {
   result?: Record<string, unknown>;
 }
 
-interface TaskStore {
+export interface TaskStore {
   tasks: Record<string, TaskRecord>;
   version: string;
 }
@@ -49,7 +49,7 @@ function ensureTaskDir(): void {
   }
 }
 
-function loadTaskStore(): TaskStore {
+export function loadTaskStore(): TaskStore {
   try {
     const path = getTaskPath();
     if (existsSync(path)) {
@@ -62,7 +62,7 @@ function loadTaskStore(): TaskStore {
   return { tasks: {}, version: '3.0.0' };
 }
 
-function saveTaskStore(store: TaskStore): void {
+export function saveTaskStore(store: TaskStore): void {
   ensureTaskDir();
   writeFileSync(getTaskPath(), JSON.stringify(store, null, 2), 'utf-8');
 }
