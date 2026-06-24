@@ -264,10 +264,114 @@ async function determineAgentModel(
   return { model: 'sonnet', routedBy: 'default' };
 }
 
+interface RegisterAgentResult {
+  success: boolean;
+  error?: string;
+  agentId?: string;
+  agentType?: string;
+  model?: ClaudeModel;
+  modelRoutedBy?: 'explicit' | 'router' | 'codemod' | 'default' | 'hybrid';
+  modelId?: string;
+  provider?: 'anthropic' | 'openrouter';
+  openrouterModel?: string;
+  createdAt?: string;
+  canSkipLLM?: boolean;
+  codemodIntent?: string;
+  tier?: number;
+}
+
+/**
+ * Shared agent-registration body — extracted so `agent_spawn` (cheap, sub-100ms,
+ * preserves swarm-coordination contract) and the new `agent_run` (spawn + LLM
+ * execute in one call) reuse identical persistence, swarm-join, and graph-DB
+ * side-effects. Callers append their own `status` + `note` fields.
+ */
+async function registerAgent(input: Record<string, unknown>): Promise<RegisterAgentResult> {
+  const validation = await validateAgentSpawn(input);
+  if (!validation.valid) {
+    return { success: false, error: `Input validation failed: ${validation.errors.join('; ')}` };
+  }
+
+  const store = loadAgentStore();
+  const agentId = (input.agentId as string) || `agent-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  const agentType = input.agentType as string;
+  const config = (input.config as Record<string, unknown>) || {};
+
+  if (input.model) {
+    config.model = input.model;
+  }
+
+  const task = (input.task as string) || (config.task as string) || undefined;
+
+  const routingResult = await determineAgentModel(agentType, config, task);
+
+  const agent: AgentRecord = {
+    agentId,
+    agentType,
+    status: 'idle',
+    health: 1.0,
+    taskCount: 0,
+    config,
+    createdAt: new Date().toISOString(),
+    domain: input.domain as string,
+    model: routingResult.model,
+    modelRoutedBy: routingResult.routedBy,
+    ...(routingResult.modelId ? { modelId: routingResult.modelId } : {}),
+    ...(routingResult.provider ? { provider: routingResult.provider } : {}),
+    ...(routingResult.openrouterModel ? { openrouterModel: routingResult.openrouterModel } : {}),
+  };
+
+  store.agents[agentId] = agent;
+  saveAgentStore(store);
+
+  // #2085 — push into swarm store's agents array so swarm_status reports it.
+  try {
+    const { loadSwarmStore: _loadSwarmStore, saveSwarmStore: _saveSwarmStore } =
+      await import('./swarm-tools.js');
+    const swarmStore = _loadSwarmStore();
+    let targetSwarmId = (input.swarmId as string) || '';
+    if (!targetSwarmId) {
+      const all = Object.values(swarmStore.swarms);
+      const latest = all.sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      )[0];
+      targetSwarmId = latest?.swarmId || '';
+    }
+    if (targetSwarmId && swarmStore.swarms[targetSwarmId]) {
+      const swarm = swarmStore.swarms[targetSwarmId];
+      if (!Array.isArray(swarm.agents)) swarm.agents = [];
+      if (!swarm.agents.includes(agentId)) {
+        swarm.agents.push(agentId);
+        _saveSwarmStore(swarmStore);
+      }
+    }
+  } catch { /* swarm store unavailable — agent still registered globally */ }
+
+  try {
+    const { addNode } = await import('../ruvector/graph-backend.js');
+    await addNode({ id: agentId, type: 'agent', name: agentType });
+  } catch { /* graph-node not available */ }
+
+  return {
+    success: true,
+    agentId,
+    agentType: agent.agentType,
+    model: agent.model,
+    modelRoutedBy: routingResult.routedBy,
+    ...(routingResult.modelId ? { modelId: routingResult.modelId } : {}),
+    ...(routingResult.provider ? { provider: routingResult.provider } : {}),
+    ...(routingResult.openrouterModel ? { openrouterModel: routingResult.openrouterModel } : {}),
+    createdAt: agent.createdAt,
+    ...(routingResult.canSkipLLM
+      ? { canSkipLLM: true, codemodIntent: routingResult.codemodIntent, tier: routingResult.tier }
+      : routingResult.tier ? { tier: routingResult.tier } : {}),
+  };
+}
+
 export const agentTools: MCPTool[] = [
   {
     name: 'agent_spawn',
-    description: 'Spawn a Rufflo-tracked agent with cost attribution + memory persistence + swarm coordination. Use when native Task tool is wrong because you need (a) cost tracking per agent in the cost-tracking namespace, (b) cross-session learning via the patterns namespace, or (c) coordination with other agents in a swarm topology (hierarchical / mesh / consensus). For one-shot subtasks with no learning loop, native Task is fine. Pair with hooks_route to pick the right model first.',
+    description: 'Spawn a Rufflo-tracked agent with cost attribution + memory persistence + swarm coordination. Use when native Task tool is wrong because you need (a) cost tracking per agent in the cost-tracking namespace, (b) cross-session learning via the patterns namespace, or (c) coordination with other agents in a swarm topology (hierarchical / mesh / consensus). For one-shot subtasks with no learning loop, native Task is fine. For spawn-and-run in a single call (blocks ~2-5s on LLM), use agent_run instead. Pair with hooks_route to pick the right model first.',
     category: 'agent',
     inputSchema: {
       type: 'object',
@@ -290,115 +394,102 @@ export const agentTools: MCPTool[] = [
       required: ['agentType'],
     },
     handler: async (input) => {
-      // Validate user-provided input (#1425: wire security validators to runtime)
-      const validation = await validateAgentSpawn(input);
-      if (!validation.valid) {
-        return { success: false, error: `Input validation failed: ${validation.errors.join('; ')}` };
-      }
+      const registration = await registerAgent(input);
+      if (!registration.success) return registration;
 
-      const store = loadAgentStore();
-      const agentId = (input.agentId as string) || `agent-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-      const agentType = input.agentType as string;
-      const config = (input.config as Record<string, unknown>) || {};
-
-      // Add explicit model to config if provided
-      if (input.model) {
-        config.model = input.model;
-      }
-
-      // Get task from either top-level or config (CLI passes it in config.task)
-      const task = (input.task as string) || (config.task as string) || undefined;
-
-      // Determine model using ADR-026 3-tier routing logic
-      const routingResult = await determineAgentModel(
-        agentType,
-        config,
-        task
-      );
-
-      const agent: AgentRecord = {
-        agentId,
-        agentType,
-        status: 'idle',
-        health: 1.0,
-        taskCount: 0,
-        config,
-        createdAt: new Date().toISOString(),
-        domain: input.domain as string,
-        model: routingResult.model,
-        modelRoutedBy: routingResult.routedBy,
-        ...(routingResult.modelId ? { modelId: routingResult.modelId } : {}),
-        ...(routingResult.provider ? { provider: routingResult.provider } : {}),
-        ...(routingResult.openrouterModel ? { openrouterModel: routingResult.openrouterModel } : {}),
-      };
-
-      store.agents[agentId] = agent;
-      saveAgentStore(store);
-
-      // #2085 — also push to the swarm store's agents array so that
-      // swarm_status reports the new agent. Without this, agent_spawn
-      // and swarm_status read/write separate stores and agents added
-      // post-init never show up in swarm_status.agents — confirmed for
-      // all topologies (hierarchical, mesh, etc.).
-      try {
-        const { loadSwarmStore: _loadSwarmStore, saveSwarmStore: _saveSwarmStore } =
-          await import('./swarm-tools.js');
-        const swarmStore = _loadSwarmStore();
-        let targetSwarmId = (input.swarmId as string) || '';
-        if (!targetSwarmId) {
-          // Default to the most-recently-created swarm.
-          const all = Object.values(swarmStore.swarms);
-          const latest = all.sort(
-            (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          )[0];
-          targetSwarmId = latest?.swarmId || '';
-        }
-        if (targetSwarmId && swarmStore.swarms[targetSwarmId]) {
-          const swarm = swarmStore.swarms[targetSwarmId];
-          if (!Array.isArray(swarm.agents)) swarm.agents = [];
-          // Idempotent — don't duplicate if agent_spawn is retried.
-          if (!swarm.agents.includes(agentId)) {
-            swarm.agents.push(agentId);
-            _saveSwarmStore(swarmStore);
-          }
-        }
-      } catch { /* swarm store unavailable — agent still registered globally */ }
-
-      // Record agent in graph database (ADR-087, best-effort)
-      try {
-        const { addNode } = await import('../ruvector/graph-backend.js');
-        await addNode({ id: agentId, type: 'agent', name: agentType });
-      } catch { /* graph-node not available */ }
-
-      // Include deterministic codemod routing info if applicable
       const response: Record<string, unknown> = {
-        success: true,
-        agentId,
-        agentType: agent.agentType,
-        model: agent.model,
-        modelRoutedBy: routingResult.routedBy,
-        ...(routingResult.modelId ? { modelId: routingResult.modelId } : {}),
-        ...(routingResult.provider ? { provider: routingResult.provider } : {}),
-        ...(routingResult.openrouterModel ? { openrouterModel: routingResult.openrouterModel } : {}),
+        ...registration,
         status: 'registered',
-        createdAt: agent.createdAt,
-        note: 'Agent registered for coordination. Three execution paths: ' +
-          '(1) call agent_execute(agentId, prompt) — direct LLM call via Anthropic Messages API (requires ANTHROPIC_API_KEY); ' +
-          '(2) Claude Code Task tool — spawns a real subagent; ' +
-          '(3) claude -p — headless background instance.',
+        note: registration.canSkipLLM
+          ? `Deterministic codemod can apply "${registration.codemodIntent}" — call the hooks_codemod MCP tool (intent="${registration.codemodIntent}"), $0, no LLM`
+          : 'Agent registered for coordination. Four execution paths: ' +
+            '(1) call agent_run(agentType, prompt) — spawn + execute in one call (recommended for one-shot work); ' +
+            '(2) call agent_execute(agentId, prompt) — direct LLM call on this existing agent (multi-turn); ' +
+            '(3) Claude Code Task tool — spawns a real subagent; ' +
+            '(4) claude -p — headless background instance.',
       };
+      return response;
+    },
+  },
+  {
+    // ADR-095 G3 — spawn + execute fused. Closes the #1 UX trap from the
+    // 2026-04 audit (@roman-rr): `agent_spawn` looks like it spawns a worker
+    // but only registers metadata. New callers who want "register an agent
+    // AND run a task on it" should use agent_run — one tool call, real LLM
+    // round-trip, same cost-tracking + swarm-coordination + graph-DB side
+    // effects as agent_spawn. Blocks ~2-5s on the LLM call; `agent_spawn`
+    // stays cheap (<100ms) to preserve the swarm coordinator latency budget
+    // documented at @claude-flow/swarm/src/unified-coordinator.ts:7-8.
+    name: 'agent_run',
+    description: 'Spawn a Rufflo-tracked agent AND execute a task on it in one call. Reuses the same model routing, cost attribution, swarm registration, and graph-DB record as agent_spawn, then immediately calls the Anthropic Messages API (or OpenRouter / Ollama per RUFLO_PROVIDER) with the supplied prompt. Use this when you want a one-shot result with full Rufflo tracking — most common case. Blocks ~2-5s on the LLM round-trip. For cheap registration without execution (preserves <100ms swarm budget for topology setup), use agent_spawn separately. For multi-turn work against an already-registered agent, use agent_execute with the agentId.',
+    category: 'agent',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        agentType: { type: 'string', description: 'Type of agent to spawn (coder, researcher, etc.)' },
+        prompt: { type: 'string', description: 'Task / prompt for the agent to execute' },
+        agentId: { type: 'string', description: 'Optional custom agent ID' },
+        swarmId: { type: 'string', description: 'Optional swarm to register the agent with (defaults to most-recent swarm)' },
+        config: { type: 'object', description: 'Agent configuration' },
+        domain: { type: 'string', description: 'Agent domain' },
+        model: {
+          type: 'string',
+          enum: ['haiku', 'sonnet', 'opus', 'opus-4.7', 'inherit'],
+          description: 'Claude model alias (haiku=fast/cheap, sonnet=balanced, opus=current Opus 4.8, opus-4.7=prior Opus pin)'
+        },
+        task: { type: 'string', description: 'Task description for intelligent model routing (separate from prompt)' },
+        systemPrompt: { type: 'string', description: 'Optional system prompt (overrides agent default)' },
+        maxTokens: { type: 'number', description: 'Max output tokens (default 1024)' },
+        temperature: { type: 'number', description: 'Sampling temperature 0..1 (default 0.7)' },
+        timeoutMs: { type: 'number', description: 'LLM call timeout in ms (default 60000)' },
+      },
+      required: ['agentType', 'prompt'],
+    },
+    handler: async (input) => {
+      const vP = validateText(input.prompt as string, 'prompt');
+      if (!vP.valid) return { success: false, error: `Input validation failed: ${vP.error}` };
 
-      // Add codemod info if task can skip LLM (deterministic Tier-1, ADR-143)
-      if (routingResult.canSkipLLM) {
-        response.canSkipLLM = true;
-        response.codemodIntent = routingResult.codemodIntent;
-        response.tier = routingResult.tier;
-        response.note = `Deterministic codemod can apply "${routingResult.codemodIntent}" — call the hooks_codemod MCP tool (intent="${routingResult.codemodIntent}"), $0, no LLM`;
-      } else if (routingResult.tier) {
-        response.tier = routingResult.tier;
+      const registration = await registerAgent(input);
+      if (!registration.success) return registration;
+
+      // ADR-143 — if the router determined a deterministic codemod can apply,
+      // skip the LLM call entirely and surface the recommendation. The agent
+      // is still registered so subsequent agent_execute calls work normally.
+      if (registration.canSkipLLM) {
+        return {
+          ...registration,
+          status: 'codemod_recommended',
+          execution: {
+            skipped: true,
+            reason: `Deterministic codemod available — call hooks_codemod (intent="${registration.codemodIntent}") instead. $0, no LLM.`,
+            codemodIntent: registration.codemodIntent,
+          },
+        };
       }
 
-      return response;
+      const exec = await executeAgentTask({
+        agentId: registration.agentId as string,
+        prompt: input.prompt as string,
+        systemPrompt: input.systemPrompt as string | undefined,
+        maxTokens: input.maxTokens as number | undefined,
+        temperature: input.temperature as number | undefined,
+        timeoutMs: input.timeoutMs as number | undefined,
+      });
+
+      return {
+        success: exec.success,
+        agentId: registration.agentId,
+        agentType: registration.agentType,
+        model: registration.model,
+        modelRoutedBy: registration.modelRoutedBy,
+        ...(registration.modelId ? { modelId: registration.modelId } : {}),
+        ...(registration.provider ? { provider: registration.provider } : {}),
+        ...(registration.openrouterModel ? { openrouterModel: registration.openrouterModel } : {}),
+        ...(registration.tier ? { tier: registration.tier } : {}),
+        status: exec.success ? 'completed' : 'failed',
+        createdAt: registration.createdAt,
+        execution: exec,
+      };
     },
   },
   {
