@@ -261,7 +261,7 @@ const optimizedJobOrder = jobs.sort((a, b) =>
   jobPriorities[b.id] - jobPriorities[a.id]
 );
 
-console.log(`Job prioritization completed in ${processingTime}ms (2.49x-7.47x faster)`);
+console.log(`Job prioritization completed in ${processingTime}ms (unverified (no benchmark) faster)`);
 ```
 
 ### GNN-Enhanced Failure Prediction

@@ -77,9 +77,15 @@ const startCommand: Command = {
     },
     {
       name: 'tools',
-      description: 'Tools to enable (comma-separated or "all")',
+      description: 'Tools to enable (comma-separated group keys or "all")',
       type: 'string',
       default: 'all'
+    },
+    {
+      name: 'tools-profile',
+      description: 'Tool surface size: lean (~6 groups) | balanced | full (all ~270). Lean cuts context cost + sharpens tool selection (e.g. for Copilot).',
+      type: 'string',
+      default: 'full'
     },
     {
       name: 'daemon',
@@ -107,8 +113,19 @@ const startCommand: Command = {
     const host = (ctx.flags.host as string) ?? 'localhost';
     const transport = (ctx.flags.transport as 'stdio' | 'http' | 'websocket') ?? 'stdio';
     const tools = (ctx.flags.tools as string) || 'all';
+    const toolsProfile = (ctx.flags['tools-profile'] as string) || 'full';
     const daemon = (ctx.flags.daemon as boolean) ?? false;
     const force = (ctx.flags.force as boolean) ?? false;
+
+    // Sprint 2 Move 2' — set the tool-surface BEFORE the server's dynamic
+    // import of mcp-client (which registers tools at module load). An explicit
+    // `--tools` group list wins over `--tools-profile`. Default is full, so
+    // existing behavior is unchanged unless the user opts in.
+    if (tools && tools !== 'all') {
+      process.env.RUFFLO_TOOLS_GROUPS = tools;
+    } else if (toolsProfile && toolsProfile !== 'full') {
+      process.env.RUFFLO_TOOLS_PROFILE = toolsProfile;
+    }
 
     output.writeln();
     output.printInfo('Starting MCP Server...');

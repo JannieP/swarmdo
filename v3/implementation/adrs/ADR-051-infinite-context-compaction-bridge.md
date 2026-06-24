@@ -218,7 +218,7 @@ instead of blocking.
 |  |    -> GNN-enhanced retrieval, self-learning optimizer       |   |
 |  |                                                            |   |
 |  |  Tier 3: AgentDB + HNSW  (if @rufflo/memory built)   |   |
-|  |    -> 150x-12,500x faster semantic search                  |   |
+|  |    -> ~1.9x-4.7x measured faster semantic search                  |   |
 |  |    -> Vector-indexed retrieval                             |   |
 |  |                                                            |   |
 |  |  Tier 4: JsonFileBackend                                   |   |

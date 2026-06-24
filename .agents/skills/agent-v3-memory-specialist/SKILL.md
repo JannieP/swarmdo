@@ -7,7 +7,7 @@ description: Agent skill for v3-memory-specialist - invoke with $agent-v3-memory
 name: v3-memory-specialist
 version: "3.0.0-alpha"
 updated: "2026-01-04"
-description: V3 Memory Specialist for unifying 6+ memory systems into AgentDB with HNSW indexing. Implements ADR-006 (Unified Memory Service) and ADR-009 (Hybrid Memory Backend) to achieve 150x-12,500x search improvements.
+description: V3 Memory Specialist for unifying 6+ memory systems into AgentDB with HNSW indexing. Implements ADR-006 (Unified Memory Service) and ADR-009 (Hybrid Memory Backend) to achieve ~1.9x-4.7x measured search improvements.
 color: cyan
 metadata:
   v3_role: "specialist"
@@ -32,7 +32,7 @@ hooks:
     # Check AgentDB integration status
     npx agentic-flow@alpha --version 2>$dev$null | head -1 || echo "⚠️ agentic-flow@alpha not detected"
 
-    echo "🎯 Target: 150x-12,500x search improvement via HNSW"
+    echo "🎯 Target: ~1.9x-4.7x measured search improvement via HNSW"
     echo "🔄 Strategy: Gradual migration with backward compatibility"
 
   post_execution: |
@@ -43,7 +43,7 @@ hooks:
       --session-id "v3-memory-$(date +%s)" \
       --task "Memory Unification: $TASK" \
       --agent "v3-memory-specialist" \
-      --performance-improvement "150x-12500x" 2>$dev$null || true
+      --performance-improvement "~1.9x-4.7x measured" 2>$dev$null || true
 ---
 
 # V3 Memory Specialist
@@ -52,7 +52,7 @@ hooks:
 
 ## Mission: Memory System Convergence
 
-Unify 7 disparate memory systems into a single, high-performance AgentDB-based solution with HNSW indexing, achieving 150x-12,500x search performance improvements while maintaining backward compatibility.
+Unify 7 disparate memory systems into a single, high-performance AgentDB-based solution with HNSW indexing, achieving ~1.9x-4.7x measured search performance improvements while maintaining backward compatibility.
 
 ## Systems to Unify
 
@@ -74,7 +74,7 @@ Unify 7 disparate memory systems into a single, high-performance AgentDB-based s
 │            V3 UNIFIED SYSTEM            │
 ├─────────────────────────────────────────┤
 │       🚀 AgentDB with HNSW             │
-│  • 150x-12,500x faster search          │
+│  • ~1.9x-4.7x measured faster search          │
 │  • Unified query interface             │
 │  • Cross-agent memory sharing          │
 │  • SONA integration learning           │
@@ -104,7 +104,7 @@ class UnifiedMemoryService implements IMemoryBackend {
 
   async query(query: MemoryQuery): Promise<MemoryEntry[]> {
     if (query.semantic) {
-      // Use HNSW vector search (150x-12,500x faster)
+      // Use HNSW vector search (~1.9x-4.7x measured faster)
       return this.indexer.search(query);
     } else {
       // Use structured query
@@ -166,7 +166,7 @@ class HNSWIndexer {
 # Week 6: Performance optimization
 - SONA integration for learning patterns
 - Cross-agent memory sharing
-- Performance benchmarking (150x validation)
+- Performance benchmarking (~4.7x validation)
 - Backward compatibility layer cleanup
 ```
 
@@ -175,7 +175,7 @@ class HNSWIndexer {
 ### **Search Performance**
 - **Current**: O(n) linear search through memory entries
 - **Target**: O(log n) HNSW approximate nearest neighbor
-- **Improvement**: 150x-12,500x depending on dataset size
+- **Improvement**: ~1.9x-4.7x measured depending on dataset size
 - **Benchmark**: Sub-100ms queries for 1M+ entries
 
 ### **Memory Efficiency**
@@ -298,7 +298,7 @@ class MemoryBenchmarks {
 ```
 
 ### **Success Criteria**
-- [ ] 150x-12,500x search performance improvement validated
+- [ ] ~1.9x-4.7x measured search performance improvement validated
 - [ ] All existing memory systems successfully migrated
 - [ ] Backward compatibility maintained during transition
 - [ ] SONA integration functional with <0.05ms adaptation
@@ -318,6 +318,6 @@ class MemoryBenchmarks {
 - Domain boundary definitions for memory access
 
 ### **Performance Engineer (Agent #14)**
-- Benchmark validation of 150x-12,500x improvements
+- Benchmark validation of ~1.9x-4.7x measured improvements
 - Memory usage profiling and optimization
 - Performance regression testing

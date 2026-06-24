@@ -40,10 +40,10 @@ The `agentic-qe` package (v3.2.3) provides a comprehensive Quality Engineering f
 |-----------|-------------|-------------|
 | **51 QE Agents** | Specialized agents across 12 DDD bounded contexts | O(1) dispatch |
 | **7 TDD Subagents** | London-style TDD with red-green-refactor cycles | <500ms per cycle |
-| **ReasoningBank Learning** | HNSW-indexed pattern storage with Dream cycles | 150x faster search |
+| **ReasoningBank Learning** | HNSW-indexed pattern storage with Dream cycles | ~4.7x faster search |
 | **TinyDancer Model Routing** | 3-tier routing (Haiku/Sonnet/Opus) | <5ms routing |
 | **Queen Coordinator** | Hierarchical orchestration with Byzantine tolerance | O(log n) consensus |
-| **O(log n) Coverage** | Johnson-Lindenstrauss projected gap detection | 12,500x faster |
+| **O(log n) Coverage** | Johnson-Lindenstrauss projected gap detection | ~4.7x faster |
 | **Browser Automation** | @rufflo/browser integration | Full Playwright |
 | **MCP Server** | All tools via Model Context Protocol | <100ms response |
 

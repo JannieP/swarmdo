@@ -10,29 +10,146 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import type { Command, CommandContext, CommandResult } from '../types.js';
 import { output } from '../output.js';
+import { runAndPersistBenchmark, type BenchResults } from '../benchmarks/bench-runner.js';
+
+/**
+ * Sprint 2 Move 3 — default benchmark path. Spawns the authoritative
+ * `scripts/benchmark-intelligence.mjs`, persists `.rufflo/bench-results.json`,
+ * and renders an honest summary (measured numbers + `null`/reason for the
+ * unmeasurable, never fabricated). Shared persistence so `ruflo doctor`
+ * (Move 4) and `ruflo demo` (Move 7) read the same file.
+ */
+async function runAuthoritativeBenchmarkCommand(
+  ctx: CommandContext,
+  outputFormat: string,
+): Promise<CommandResult> {
+  const sizes = String(ctx.flags.sizes ?? '5000')
+    .split(',')
+    .map((s) => parseInt(s.trim(), 10))
+    .filter((n) => Number.isFinite(n) && n > 0);
+
+  const json = outputFormat === 'json';
+  if (!json) {
+    output.writeln();
+    output.writeln(output.bold('Performance Benchmark (authoritative harness)'));
+    output.writeln(output.dim('Source of truth: scripts/benchmark-intelligence.mjs — every number measured in-process'));
+    output.writeln(output.dim('─'.repeat(72)));
+  }
+
+  const spinner = json ? null : output.createSpinner({ text: `Measuring (HNSW sizes ${sizes.join(', ')})...`, spinner: 'dots' });
+  spinner?.start();
+
+  const run = await runAndPersistBenchmark({
+    sizes: sizes.length ? sizes : [5000],
+    persistedAt: new Date().toISOString(),
+    cwd: process.cwd(),
+    onStderr: (line) => { if (spinner && /\[\d\/6\]/.test(line)) spinner.setText(line.trim()); },
+  });
+
+  if (!run.ok || !run.results) {
+    spinner?.fail('Benchmark could not run');
+    if (json) { output.printJson({ ok: false, error: run.error }); }
+    else { output.writeln(output.warning(`Unmeasurable — ${run.error}`)); }
+    return { success: false, message: run.error };
+  }
+
+  spinner?.succeed(`Measured · persisted to ${run.persistedPath}`);
+  const r = run.results;
+
+  if (json) {
+    output.printJson(r);
+    return { success: true, data: r };
+  }
+
+  const rows = summarizeBenchResults(r);
+  output.writeln();
+  output.printTable({
+    columns: [
+      { key: 'metric', header: 'Metric', width: 26 },
+      { key: 'measured', header: 'Measured', width: 34 },
+      { key: 'status', header: 'Status', width: 14 },
+    ],
+    data: rows,
+  });
+  output.writeln();
+  output.writeln(output.dim(`Results: ${run.persistedPath} · run \`rufflo doctor\` to surface these as health checks`));
+  return { success: true, data: r };
+}
+
+/** Flatten the harness JSON into human rows, honestly handling null/reason. */
+function summarizeBenchResults(r: BenchResults): Array<{ metric: string; measured: string; status: string }> {
+  const rows: Array<{ metric: string; measured: string; status: string }> = [];
+  const ok = output.success('measured');
+  const na = output.warning('n/a');
+
+  const hnsw = r.hnsw?.entries?.[0];
+  if (hnsw && typeof hnsw.speedup === 'number') {
+    rows.push({
+      metric: `HNSW @ N=${hnsw.n ?? '?'}`,
+      measured: `${hnsw.speedup}x vs brute (recall@10 ${hnsw.recallAt10 ?? '?'})`,
+      status: ok,
+    });
+  } else {
+    rows.push({ metric: 'HNSW', measured: r.hnsw?.error ? String(r.hnsw.error).slice(0, 30) : 'no result', status: na });
+  }
+
+  const pick = (obj: Record<string, unknown> | null | undefined, keys: string[]): string | null => {
+    if (!obj) return null;
+    for (const k of keys) if (typeof obj[k] === 'number') return String(obj[k]);
+    return null;
+  };
+  const int8 = pick(r.int8, ['compressionRatio', 'ratio']);
+  rows.push(int8 ? { metric: 'Int8 quantization', measured: `${int8}x compression`, status: ok } : { metric: 'Int8 quantization', measured: 'n/a', status: na });
+
+  const rabitq = pick(r.rabitq, ['compressionRatio', 'ratio']);
+  rows.push(rabitq ? { metric: 'RaBitQ quantization', measured: `${rabitq}x compression`, status: ok } : { metric: 'RaBitQ quantization', measured: 'n/a', status: na });
+
+  const sona = pick(r.sona, ['avgMs', 'msPerAdapt']);
+  rows.push(sona ? { metric: 'SONA adaptation', measured: `${sona}ms/adapt`, status: ok } : { metric: 'SONA adaptation', measured: 'n/a', status: na });
+
+  const backend = r.embeddingBackend && typeof r.embeddingBackend.backend === 'string'
+    ? String(r.embeddingBackend.backend) : null;
+  rows.push(backend ? { metric: 'Embedding backend', measured: backend.slice(0, 32), status: ok } : { metric: 'Embedding backend', measured: 'n/a', status: na });
+
+  return rows;
+}
 
 // Benchmark subcommand - REAL measurements
 const benchmarkCommand: Command = {
   name: 'benchmark',
-  description: 'Run performance benchmarks',
+  description: 'Run performance benchmarks (authoritative harness by default; --in-process for per-op latency detail)',
   options: [
-    { name: 'suite', short: 's', type: 'string', description: 'Benchmark suite: all, wasm, neural, memory, search', default: 'all' },
-    { name: 'iterations', short: 'i', type: 'number', description: 'Number of iterations', default: '100' },
-    { name: 'warmup', short: 'w', type: 'number', description: 'Warmup iterations', default: '10' },
+    { name: 'suite', short: 's', type: 'string', description: 'Benchmark suite: all, wasm, neural, memory, search (--in-process only)', default: 'all' },
+    { name: 'iterations', short: 'i', type: 'number', description: 'Number of iterations (--in-process only)', default: '100' },
+    { name: 'warmup', short: 'w', type: 'number', description: 'Warmup iterations (--in-process only)', default: '10' },
     { name: 'output', short: 'o', type: 'string', description: 'Output format: text, json, csv', default: 'text' },
+    { name: 'in-process', type: 'boolean', description: 'Run the in-process micro-benchmarks (per-op p95/p99) instead of the authoritative harness', default: false },
+    { name: 'sizes', type: 'string', description: 'HNSW index sizes for the authoritative harness, comma-separated', default: '5000' },
   ],
   examples: [
-    { command: 'rufflo performance benchmark -s neural', description: 'Benchmark neural operations' },
-    { command: 'rufflo performance benchmark -i 1000', description: 'Run with 1000 iterations' },
+    { command: 'rufflo performance benchmark', description: 'Authoritative harness — honest HNSW/quant/SONA numbers, persisted to .rufflo/bench-results.json' },
+    { command: 'rufflo performance benchmark --sizes 1000,5000,20000', description: 'Authoritative harness across several HNSW sizes' },
+    { command: 'rufflo performance benchmark --in-process -s neural', description: 'In-process micro-benchmarks with per-op p95/p99' },
   ],
   action: async (ctx: CommandContext): Promise<CommandResult> => {
     const suite = ctx.flags.suite as string || 'all';
     const iterations = parseInt(ctx.flags.iterations as string || '100', 10);
     const warmup = parseInt(ctx.flags.warmup as string || '10', 10);
     const outputFormat = ctx.flags.output as string || 'text';
+    const inProcess = ctx.flags['in-process'] === true;
+
+    // Default path (Sprint 2 Move 3): delegate to the single source of truth —
+    // scripts/benchmark-intelligence.mjs — so the numbers match docs/reviews/
+    // intelligence-system-audit and `ruflo doctor`, and persist them for
+    // doctor + demo to surface. The legacy in-process micro-benchmarks (which
+    // computed their own HNSW speedup + a hardcoded Flash Attention baseline)
+    // stay available behind --in-process for per-op latency percentiles.
+    if (!inProcess) {
+      return runAuthoritativeBenchmarkCommand(ctx, outputFormat);
+    }
 
     output.writeln();
-    output.writeln(output.bold('Performance Benchmark (Real Measurements)'));
+    output.writeln(output.bold('Performance Benchmark (in-process micro-benchmarks)'));
     output.writeln(output.dim('─'.repeat(60)));
 
     const spinner = output.createSpinner({ text: `Running ${suite} benchmarks...`, spinner: 'dots' });

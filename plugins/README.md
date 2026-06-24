@@ -28,7 +28,7 @@ claude $(ls -d plugins/rufflo-*/ | sed 's|^|--plugin-dir |' | tr '\n' ' ')
 
 | Plugin | Description |
 |--------|-------------|
-| [rufflo-agentdb](rufflo-agentdb/) | AgentDB with HNSW vector search (150x-12,500x faster) |
+| [rufflo-agentdb](rufflo-agentdb/) | AgentDB with HNSW vector search (~1.9x-4.7x measured faster) |
 | [rufflo-rag-memory](rufflo-rag-memory/) | SOTA RAG — hybrid search, Graph RAG, MMR diversity, memory bridge |
 | [rufflo-rvf](rufflo-rvf/) | Portable RVF memory format, session persistence |
 | [rufflo-ruvector](rufflo-ruvector/) | [`ruvector`](https://npmjs.com/package/ruvector) — FlashAttention-3, Graph RAG, hybrid search, 103 MCP tools, Brain AGI |

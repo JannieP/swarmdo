@@ -28,7 +28,7 @@ Meanwhile, AgentDB v3 (activated in ADR-053) provides a full RuVector Framework 
 |---|---|---|---|
 | **ReasoningBank** | L1 | `storePattern`, `searchPatterns`, `searchPatternsV2`, `getPatternStats` | Pattern storage for plugin usage patterns |
 | **TieredCache** | L1 | `get`, `set`, `delete`, `getStats` | Hot plugin metadata caching |
-| **GuardedVectorBackend** | L2 | `insert`, `search`, `insertBatch`, `remove` | HNSW-indexed semantic plugin search (150x-12,500x faster) |
+| **GuardedVectorBackend** | L2 | `insert`, `search`, `insertBatch`, `remove` | HNSW-indexed semantic plugin search (~1.9x-4.7x measured faster) |
 | **MutationGuard** | L2 | `proveInsert`, `proveSearch`, `validateToken` | Proof-gated plugin publishing (tamper resistance) |
 | **SkillLibrary** | L3 | `createSkill`, `searchSkills`, `getSkillPlan`, `consolidateEpisodesIntoSkills` | Map plugins to capabilities ("OAuth" skill → security plugin) |
 | **ExplainableRecall** | L3 | `createCertificate`, `getJustification`, `traceProvenance` | Auditable search results ("why was this plugin recommended?") |

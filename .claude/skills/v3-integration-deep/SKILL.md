@@ -17,8 +17,8 @@ Task("Integration architecture", "Design agentic-flow@alpha adapter layer", "v3-
 
 # Feature integration (parallel)
 Task("SONA integration", "Integrate 5 SONA learning modes", "v3-integration-architect")
-Task("Flash Attention", "Implement 2.49x-7.47x speedup", "v3-integration-architect")
-Task("AgentDB coordination", "Setup 150x-12,500x search", "v3-integration-architect")
+Task("Flash Attention", "Implement unverified (no benchmark) speedup", "v3-integration-architect")
+Task("AgentDB coordination", "Setup ~1.9x-4.7x measured search", "v3-integration-architect")
 ```
 
 ## Code Deduplication Strategy
@@ -60,7 +60,7 @@ class SONAIntegration {
 class FlashAttentionIntegration {
   async optimizeAttention(): Promise<AttentionResult> {
     return this.agenticFlow.attention.flashAttention({
-      speedupTarget: '2.49x-7.47x',
+      speedupTarget: 'unverified (no benchmark)',
       memoryReduction: '50-75%',
       mechanisms: ['multi-head', 'linear', 'local', 'global']
     });
@@ -74,7 +74,7 @@ class AgentDBIntegration {
   async setupCrossAgentMemory(): Promise<void> {
     await this.agentdb.enableCrossAgentSharing({
       indexType: 'HNSW',
-      speedupTarget: '150x-12500x',
+      speedupTarget: '~1.9x-4.7x measured',
       dimensions: 1536
     });
   }
@@ -179,7 +179,7 @@ class RLIntegration {
 ```typescript
 const attentionBenchmark = {
   baseline: 'current attention mechanism',
-  target: '2.49x-7.47x improvement',
+  target: 'unverified (no benchmark) improvement',
   memoryReduction: '50-75%',
   implementation: 'agentic-flow@alpha Flash Attention'
 };
@@ -189,7 +189,7 @@ const attentionBenchmark = {
 ```typescript
 const searchBenchmark = {
   baseline: 'linear search in current systems',
-  target: '150x-12,500x via HNSW indexing',
+  target: '~1.9x-4.7x measured via HNSW indexing',
   implementation: 'agentic-flow@alpha AgentDB'
 };
 ```
@@ -226,8 +226,8 @@ class BackwardCompatibility {
 ## Success Metrics
 
 - **Code Reduction**: <5,000 lines orchestration (vs 15,000+)
-- **Performance**: 2.49x-7.47x Flash Attention speedup
-- **Search**: 150x-12,500x AgentDB improvement
+- **Performance**: unverified (no benchmark) Flash Attention speedup
+- **Search**: ~1.9x-4.7x measured AgentDB improvement
 - **Memory**: 50-75% usage reduction
 - **Feature Parity**: 100% v2 functionality maintained
 - **SONA**: <0.05ms adaptation time

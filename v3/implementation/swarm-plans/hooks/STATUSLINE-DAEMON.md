@@ -142,7 +142,7 @@ On-demand status display for Claude Code.
 ```
 ▊ Rufflo V3 ● agentic-flow@alpha  │  ⎇ v3
 ─────────────────────────────────────────────────────
-🏗️  DDD Domains    [●●●●●]  5/5    ⚡ 1.0x → 2.49x-7.47x
+🏗️  DDD Domains    [●●●●●]  5/5    ⚡ 1.0x → unverified (no benchmark)
 🤖 Swarm Agents    ◉ [ 2/15]      🟢 CVE 3/3    💾 0%
 🔧 Architecture    DDD ●93%  │  Security ●CLEAN  │  Memory ●AgentDB
 ─────────────────────────────────────────────────────

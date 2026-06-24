@@ -7,7 +7,7 @@
 
 ## Context
 
-The CLI declares 6 `@ruvector` WASM packages in `optionalDependencies`, promising significant performance improvements (Flash Attention 2.49x-7.47x, SONA <0.05ms adaptation, HNSW 150x-12,500x search). A utilization audit revealed that most of these packages are either dead code, permanently falling back to JS implementations, or only reachable through MCP tools rather than the CLI surface.
+The CLI declares 6 `@ruvector` WASM packages in `optionalDependencies`, promising significant performance improvements (Flash Attention unverified (no benchmark), SONA <0.05ms adaptation, HNSW ~1.9x-4.7x measured search). A utilization audit revealed that most of these packages are either dead code, permanently falling back to JS implementations, or only reachable through MCP tools rather than the CLI surface.
 
 Key audit findings:
 

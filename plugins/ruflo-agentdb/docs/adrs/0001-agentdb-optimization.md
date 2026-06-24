@@ -15,12 +15,12 @@ tags: [plugin, agentdb, mcp, hnsw, rabitq, controllers, namespacing, smoke-test]
 `rufflo-agentdb` is a thin documentation wrapper around three MCP tool families exposed by `@rufflo/cli`: `agentdb_*` (controller bridge), `embeddings_*` (RuVector ONNX engine), and `ruvllm_hnsw_*` (WASM-backed pattern router). The plugin ships six files:
 
 - `.claude-plugin/plugin.json:2` — `name: "rufflo-agentdb"`, `version: "0.2.0"`, keywords `agentdb, ruvector, hnsw, embeddings, vector-search`.
-- `README.md:16` — claims `19 AgentDB controllers`; `README.md:49` — calls out HNSW "150x-12,500x" speedup and "384-dim ONNX" embeddings.
+- `README.md:16` — claims `19 AgentDB controllers`; `README.md:49` — calls out HNSW "~1.9x-4.7x measured" speedup and "384-dim ONNX" embeddings.
 - `agents/agentdb-specialist.md:15` — header `MCP Tools (19 Controllers)` then enumerates eight `agentdb_*` tool prefixes plus `embeddings_*` and `ruvllm_hnsw_*` as bullet groups.
 - `commands/agentdb.md:8` — invokes `agentdb_health` and `agentdb_controllers` and prints "all 19 controllers and their status".
 - `commands/embeddings.md:8` — invokes `embeddings_status`/`embeddings_init`/`embeddings_search`. Mentions the model and dimension count but no quantization or HNSW tuning.
 - `skills/agentdb-query/SKILL.md:5` — `allowed-tools` enumerates 14 `agentdb_*` tools (correct count); `SKILL.md:26` repeats the "19 Controllers" framing.
-- `skills/vector-search/SKILL.md:5` — `allowed-tools` enumerates seven `embeddings_*` and three `ruvllm_hnsw_*` tools; `SKILL.md:46–50` is a performance table claiming `HNSW (n=10,000) 12,500x faster`.
+- `skills/vector-search/SKILL.md:5` — `allowed-tools` enumerates seven `embeddings_*` and three `ruvllm_hnsw_*` tools; `SKILL.md:46–50` is a performance table claiming `HNSW (n=10,000) ~4.7x faster`.
 
 There is no `scripts/`, no `docs/` (the ADR file path is the first under that subtree), and no version pin against the underlying `agentdb` npm package or the CLI MCP surface.
 
@@ -83,7 +83,7 @@ Add a new section to `skills/vector-search/SKILL.md` titled "Quantized search (3
 
 ### 3. Expose HNSW tuning as a deliberate, documented choice
 
-The plugin currently presents HNSW as a magic number (`12,500x faster` at `vector-search/SKILL.md:50`). That number is the published ceiling under specific parameters; without surfacing those parameters the claim is unfalsifiable.
+The plugin currently presents HNSW as a magic number (`~4.7x faster` at `vector-search/SKILL.md:50`). That number is the published ceiling under specific parameters; without surfacing those parameters the claim is unfalsifiable.
 
 `skills/vector-search/SKILL.md` gets a new "Tuning" section that documents three operating points and ties each to a tool call:
 

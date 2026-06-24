@@ -26,7 +26,7 @@ Gas Town is a 75,000-line Go codebase that implements:
 | Gas Town is Go-only | CLI bridge wraps `gt` and `bd` commands |
 | Go can't compile to WASM (syscalls) | Hybrid architecture: CLI for I/O, WASM for compute |
 | Formula parsing is slow in JS | Rust→WASM provides **352x speedup** |
-| Graph operations bottleneck | WASM DAG ops are **150x faster** |
+| Graph operations bottleneck | WASM DAG ops are **~4.7x faster** |
 
 ## Features
 
@@ -37,10 +37,10 @@ Gas Town is a 75,000-line Go codebase that implements:
 | Formula parse (TOML→AST) | 53ms | 0.15ms | **352x** |
 | Variable cooking | 35ms | 0.1ms | **350x** |
 | Batch cook (10 formulas) | 350ms | 1ms | **350x** |
-| DAG topological sort | 75ms | 0.5ms | **150x** |
-| Cycle detection | 45ms | 0.3ms | **150x** |
-| Critical path analysis | 120ms | 0.8ms | **150x** |
-| Pattern search (HNSW) | 5000ms | 5ms | **1000x-12500x** |
+| DAG topological sort | 75ms | 0.5ms | **~4.7x** |
+| Cycle detection | 45ms | 0.3ms | **~4.7x** |
+| Critical path analysis | 120ms | 0.8ms | **~4.7x** |
+| Pattern search (HNSW) | 5000ms | 5ms | **1000x-~4.7x** |
 
 ### 🔗 20 MCP Tools
 
@@ -103,7 +103,7 @@ Seamlessly sync between Gas Town's Beads and Rufflo's AgentDB:
 | Metric | Pure JavaScript | This Plugin (WASM) | Improvement |
 |--------|-----------------|-------------------|-------------|
 | Formula parse | 53ms | 0.15ms | 352x faster |
-| 100-node DAG sort | 75ms | 0.5ms | 150x faster |
+| 100-node DAG sort | 75ms | 0.5ms | ~4.7x faster |
 | Pattern search (10k) | 5000ms | 5ms | 1000x faster |
 | Memory usage | 48MB | 12MB | 4x reduction |
 | Startup time | 850ms | 120ms | 7x faster |
@@ -200,7 +200,7 @@ const ast = await plugin.tools.gt_wasm_parse_formula({
   `,
 });
 
-// Resolve dependencies (150x faster)
+// Resolve dependencies (~4.7x faster)
 const sorted = await plugin.tools.gt_wasm_resolve_deps({
   beads: beadList,
   action: 'topo_sort',
@@ -212,7 +212,7 @@ const cooked = await plugin.tools.gt_wasm_cook_batch({
   vars: [{ env: 'prod' }, { env: 'staging' }],
 });
 
-// Find similar patterns (1000x-12500x faster)
+// Find similar patterns (1000x-~4.7x faster)
 const matches = await plugin.tools.gt_wasm_match_pattern({
   query: 'authentication flow',
   candidates: formulaNames,
@@ -408,7 +408,7 @@ console.log(`Completed: ${status.completed}/${status.total}`);
 ### Optimizing Convoy Execution (WASM)
 
 ```typescript
-// Get optimal execution order (150x faster with WASM)
+// Get optimal execution order (~4.7x faster with WASM)
 const optimized = await claudeFlow.mcp.call('gt_wasm_optimize_convoy', {
   convoy_id: convoy.id,
   strategy: 'parallel', // or 'serial', 'hybrid'

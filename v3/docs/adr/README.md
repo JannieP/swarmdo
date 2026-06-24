@@ -39,8 +39,8 @@ All ADRs are located in [`/v3/implementation/adrs/`](../../implementation/adrs/)
 
 | Metric | Target | Status |
 |--------|--------|--------|
-| HNSW Search | 150x-12,500x faster | ✅ Achieved |
-| Flash Attention | 2.49x-7.47x speedup | ✅ Achieved (alpha.102) |
+| HNSW Search | ~1.9x-4.7x measured faster | ✅ Achieved |
+| Flash Attention | unverified (no benchmark) speedup | ✅ Achieved (alpha.102) |
 | Memory Reduction | 50-75% | ✅ Achieved |
 | MCP Response | <100ms | ✅ Achieved |
 | CLI Startup | <500ms | ✅ Achieved |

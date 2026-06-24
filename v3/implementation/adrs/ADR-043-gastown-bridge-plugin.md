@@ -74,7 +74,7 @@ Create `@rufflo/plugin-gastown-bridge` with a **WASM-centric hybrid architecture
 │            │                │  │              │ │              │  │ │
 │            │                │  │ • Pattern    │ │ • SONA       │  │ │
 │            │                │  │   search     │ │   patterns   │  │ │
-│            │                │  │ • 150x-12500x│ │ • MoE routing│  │ │
+│            │                │  │ • ~1.9x-4.7x measured│ │ • MoE routing│  │ │
 │            │                │  │   speedup    │ │ • EWC++      │  │ │
 │            │                │  └──────────────┘ └──────────────┘  │ │
 │            │                │                                      │ │
@@ -97,8 +97,8 @@ Create `@rufflo/plugin-gastown-bridge` with a **WASM-centric hybrid architecture
 | Module | Purpose | Performance |
 |--------|---------|-------------|
 | `gastown-formula-wasm` | TOML parsing, variable cooking, molecule generation | 352x vs JS |
-| `ruvector-gnn-wasm` | DAG operations, topological sort, cycle detection, critical path | 150x vs JS |
-| `micro-hnsw-wasm` | Pattern similarity search, formula matching | 150x-12500x |
+| `ruvector-gnn-wasm` | DAG operations, topological sort, cycle detection, critical path | ~4.7x vs JS |
+| `micro-hnsw-wasm` | Pattern similarity search, formula matching | ~1.9x-4.7x measured |
 | `ruvector-learning-wasm` | SONA patterns, success rate optimization | 50x vs JS |
 
 ### Component Boundaries
@@ -165,10 +165,10 @@ Create `@rufflo/plugin-gastown-bridge` with a **WASM-centric hybrid architecture
 | Tool | Description | Parameters | Performance |
 |------|-------------|------------|-------------|
 | `gt_wasm_parse_formula` | Parse TOML formula to AST | `content: string` | 352x vs JS |
-| `gt_wasm_resolve_deps` | Resolve dependency graph | `beads: Bead[]`, `action?: topo_sort\|critical_path\|cycle_detect` | 150x vs JS |
+| `gt_wasm_resolve_deps` | Resolve dependency graph | `beads: Bead[]`, `action?: topo_sort\|critical_path\|cycle_detect` | ~4.7x vs JS |
 | `gt_wasm_cook_batch` | Batch cook multiple formulas | `formulas: Formula[]`, `vars: Record<string, string>[]` | 352x vs JS |
-| `gt_wasm_match_pattern` | Find similar formulas/beads | `query: string`, `candidates: string[]`, `k?: number` | 150x-12500x |
-| `gt_wasm_optimize_convoy` | Optimize convoy execution order | `convoy_id`, `strategy?: parallel\|serial\|hybrid` | 150x vs JS |
+| `gt_wasm_match_pattern` | Find similar formulas/beads | `query: string`, `candidates: string[]`, `k?: number` | ~1.9x-4.7x measured |
+| `gt_wasm_optimize_convoy` | Optimize convoy execution order | `convoy_id`, `strategy?: parallel\|serial\|hybrid` | ~4.7x vs JS |
 
 ### TypeScript Implementation
 
@@ -786,7 +786,7 @@ petgraph = "0.6"  # For graph operations
 | DAG topological sort (1000 nodes) | <0.3ms | **250x faster** | ✅ |
 | Cycle detection (1000 nodes) | <0.1ms | **450x faster** | ✅ |
 | Critical path analysis | <0.2ms | **400x faster** | ✅ |
-| Pattern search (HNSW, 10k patterns) | <5ms | **1000x-12500x** | ✅ |
+| Pattern search (HNSW, 10k patterns) | <5ms | **1000x-~4.7x** | ✅ |
 | Molecule generation | <0.1ms | **500x faster** | ✅ |
 
 ### End-to-End Operations (Hybrid)

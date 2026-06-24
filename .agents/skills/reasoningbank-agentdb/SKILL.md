@@ -1,15 +1,15 @@
 ---
 name: "ReasoningBank with AgentDB"
-description: "Implement ReasoningBank adaptive learning with AgentDB's 150x faster vector database. Includes trajectory tracking, verdict judgment, memory distillation, and pattern recognition. Use when building self-learning agents, optimizing decision-making, or implementing experience replay systems."
+description: "Implement ReasoningBank adaptive learning with AgentDB's ~4.7x faster vector database. Includes trajectory tracking, verdict judgment, memory distillation, and pattern recognition. Use when building self-learning agents, optimizing decision-making, or implementing experience replay systems."
 ---
 
 # ReasoningBank with AgentDB
 
 ## What This Skill Does
 
-Provides ReasoningBank adaptive learning patterns using AgentDB's high-performance backend (150x-12,500x faster). Enables agents to learn from experiences, judge outcomes, distill memories, and improve decision-making over time with 100% backward compatibility.
+Provides ReasoningBank adaptive learning patterns using AgentDB's high-performance backend (~1.9x-4.7x measured faster). Enables agents to learn from experiences, judge outcomes, distill memories, and improve decision-making over time with 100% backward compatibility.
 
-**Performance**: 150x faster pattern retrieval, 500x faster batch operations, <1ms memory access.
+**Performance**: ~4.7x faster pattern retrieval, 500x faster batch operations, <1ms memory access.
 
 ## Prerequisites
 
@@ -297,7 +297,7 @@ const newMemories = await distillMemories(
 
 ## Performance Characteristics
 
-- **Pattern Search**: 150x faster (100µs vs 15ms)
+- **Pattern Search**: ~4.7x faster (100µs vs 15ms)
 - **Memory Retrieval**: <1ms (with cache)
 - **Batch Insert**: 500x faster (2ms vs 1s for 100 patterns)
 - **Trajectory Judgment**: <5ms (including retrieval + analysis)

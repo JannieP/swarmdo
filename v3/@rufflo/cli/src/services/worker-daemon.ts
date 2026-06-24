@@ -36,7 +36,12 @@ export type WorkerType =
   | 'document'
   | 'refactor'
   | 'benchmark'
-  | 'testgaps';
+  | 'testgaps'
+  // Sprint 3 Move 6' (follow-up) — drains the task queue: runs pending tasks
+  // on their agents via the real executeAgentTask wire. Local-only (NOT a
+  // headless `claude --print` sweep). Opt-in (disabled by default) since it
+  // makes real, billable LLM calls.
+  | 'dispatch';
 
 interface WorkerConfig {
   type: WorkerType;
@@ -114,6 +119,10 @@ const DEFAULT_WORKERS: WorkerConfigInternal[] = [
   { type: 'testgaps', intervalMs: 20 * 60 * 1000, offsetMs: 8 * 60 * 1000, priority: 'normal', description: 'Test coverage analysis', enabled: true },
   { type: 'predict', intervalMs: 10 * 60 * 1000, offsetMs: 0, priority: 'low', description: 'Predictive preloading', enabled: false },
   { type: 'document', intervalMs: 60 * 60 * 1000, offsetMs: 0, priority: 'low', description: 'Auto-documentation', enabled: false },
+  // Opt-in: drains the pending task queue every 60s via the real LLM wire.
+  // Disabled by default (makes billable calls); enable in daemon config or run
+  // on demand with `rufflo daemon trigger -w dispatch`.
+  { type: 'dispatch', intervalMs: 60 * 1000, offsetMs: 0, priority: 'normal', description: 'Task queue dispatch (executes pending tasks)', enabled: false },
 ];
 
 // Worker timeout — must exceed the longest per-worker headless timeout (15 min for audit/refactor).
@@ -1298,8 +1307,30 @@ export class WorkerDaemon extends EventEmitter {
         return this.runBenchmarkWorkerLocal();
       case 'preload':
         return this.runPreloadWorkerLocal();
+      case 'dispatch':
+        return this.runDispatchWorker();
       default:
         return { status: 'unknown worker type', mode: 'local' };
+    }
+  }
+
+  /**
+   * Sprint 3 Move 6' (follow-up) — drain the pending task queue by executing
+   * each task on its agent via the real LLM wire (executeAgentTask), the same
+   * path `task dispatch` uses. Bounded per pass (max 5) so the daemon tick
+   * stays responsive; remaining tasks drain on the next 60s fire. Never
+   * throws — returns a summary the metrics layer can persist.
+   */
+  private async runDispatchWorker(): Promise<unknown> {
+    try {
+      const { dispatchPendingTasks } = await import('../mcp-tools/task-dispatcher.js');
+      const summary = await dispatchPendingTasks({ cwd: this.projectRoot, max: 5 });
+      if (summary.dispatched > 0) {
+        this.log('info', `Dispatch worker: ${summary.completed} completed, ${summary.failed} failed, ${summary.skipped} skipped (${summary.pending} pending)`);
+      }
+      return { mode: 'local', ...summary };
+    } catch (error) {
+      return { mode: 'local', status: 'dispatch failed', error: error instanceof Error ? error.message : String(error) };
     }
   }
 

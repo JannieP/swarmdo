@@ -755,11 +755,64 @@ const retryCommand: Command = {
   }
 };
 
+// Sprint 3 Move 6' — drain the pending queue through the real LLM wire.
+// Closes the audit's "no worker picks up tasks" finding: previously
+// task_create stored a record nothing ever executed. `task dispatch` runs
+// each pending task on its assigned agent via executeAgentTask and writes the
+// result back.
+const dispatchCommand: Command = {
+  name: 'dispatch',
+  aliases: ['work', 'drain'],
+  description: 'Execute pending tasks on their assigned agents (real LLM call) and write results back',
+  options: [
+    { name: 'max', short: 'm', type: 'number', description: 'Max tasks to run this pass', default: 10 },
+    { name: 'dry-run', type: 'boolean', description: 'Show what would run without executing', default: false },
+    { name: 'no-auto-assign', type: 'boolean', description: 'Only run tasks with an explicit assignee (skip auto-assign to a spawned agent)', default: false },
+    { name: 'format', type: 'string', description: 'Output format: text | json', default: 'text' },
+  ],
+  examples: [
+    { command: 'rufflo task dispatch', description: 'Run up to 10 pending tasks on their agents' },
+    { command: 'rufflo task dispatch --dry-run', description: 'List what would run' },
+  ],
+  action: async (ctx: CommandContext): Promise<CommandResult> => {
+    const { dispatchPendingTasks } = await import('../mcp-tools/task-dispatcher.js');
+    const max = Number(ctx.flags.max ?? 10);
+    const dryRun = ctx.flags['dry-run'] === true;
+    const autoAssign = ctx.flags['no-auto-assign'] !== true;
+    const json = ctx.flags.format === 'json';
+
+    const summary = await dispatchPendingTasks({ max, dryRun, autoAssign });
+
+    if (json) {
+      output.printJson(summary);
+      return { success: true, data: summary };
+    }
+
+    output.writeln();
+    output.writeln(output.bold(dryRun ? 'Task Dispatch (dry-run)' : 'Task Dispatch'));
+    output.writeln(output.dim('─'.repeat(50)));
+    output.printInfo(`${summary.pending} pending / ${summary.scanned} total · dispatched ${summary.dispatched}`);
+    if (!dryRun) {
+      output.printInfo(`${output.success(String(summary.completed))} completed · ${summary.failed} failed · ${summary.skipped} skipped`);
+    }
+    for (const o of summary.outcomes) {
+      const tag = o.status === 'completed' ? output.success('✓') : o.status === 'failed' ? output.error('✗') : output.dim('•');
+      output.writeln(`  ${tag} ${o.taskId}${o.agentId ? ` → ${o.agentId}` : ''}${o.reason ? ` (${o.reason})` : ''}${o.durationMs ? ` ${o.durationMs}ms` : ''}`);
+    }
+    if (summary.skipped > 0 && summary.completed === 0 && summary.failed === 0) {
+      output.writeln();
+      output.printWarning('Nothing executed. Spawn an agent first: rufflo agent spawn -t coder');
+    }
+    output.writeln();
+    return { success: true, data: summary };
+  },
+};
+
 // Main task command
 export const taskCommand: Command = {
   name: 'task',
   description: 'Task management commands',
-  subcommands: [createCommand, listCommand, statusCommand, cancelCommand, assignCommand, retryCommand],
+  subcommands: [createCommand, listCommand, statusCommand, cancelCommand, assignCommand, retryCommand, dispatchCommand],
   options: [],
   examples: [
     { command: 'rufflo task create -t implementation -d "Add user auth"', description: 'Create a task' },

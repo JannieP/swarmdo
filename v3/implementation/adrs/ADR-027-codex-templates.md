@@ -157,7 +157,7 @@ Active monitoring for:
 
 | Metric | Target | Notes |
 |--------|--------|-------|
-| HNSW Search | 150x-12,500x faster | Vector operations |
+| HNSW Search | ~1.9x-4.7x measured faster | Vector operations |
 | Memory Reduction | 50-75% | Int8 quantization |
 | MCP Response | <100ms | API latency |
 | CLI Startup | <500ms | Cold start |
@@ -403,7 +403,7 @@ Interact with the AgentDB memory system for pattern storage, retrieval, and sema
 |-----------|-------------|
 | Store | ~1ms |
 | Retrieve | ~0.5ms |
-| Search (HNSW) | 150x-12,500x faster than brute force |
+| Search (HNSW) | ~1.9x-4.7x measured faster than brute force |
 
 ## Commands
 
@@ -463,8 +463,8 @@ npx rufflo@v3alpha memory list \
 
 The memory system uses HNSW (Hierarchical Navigable Small World) indexing:
 
-- **150x faster** for small datasets
-- **12,500x faster** for large datasets
+- **~4.7x faster** for small datasets
+- **~4.7x faster** for large datasets
 - Approximate nearest neighbor search
 - Configurable accuracy/speed tradeoff
 

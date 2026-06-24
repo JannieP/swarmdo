@@ -89,7 +89,7 @@ npx rufflo@alpha init --dual
 | **Vector Memory** | Semantic pattern search (384-dim embeddings) |
 | **Dual Platform** | Supports both Claude Code and Codex |
 | **Auto-Registration** | MCP server registered during init |
-| **HNSW Search** | 150x-12,500x faster pattern matching |
+| **HNSW Search** | ~1.9x-4.7x measured faster pattern matching |
 | **Self-Learning** | Learn from successes, remember patterns |
 | **GPT-5.3 Support** | Optimized for latest OpenAI models |
 | **Neural Training** | Train patterns with SONA architecture |
@@ -366,7 +366,7 @@ $performance-optimization
 | V3 Security Overhaul | `$v3-security-overhaul` | Complete security architecture with CVE remediation |
 | V3 Memory Unification | `$v3-memory-unification` | Unify 6+ memory systems into AgentDB with HNSW |
 | V3 Integration Deep | `$v3-integration-deep` | Deep agentic-flow@alpha integration (ADR-001) |
-| V3 Performance Optimization | `$v3-performance-optimization` | Achieve 2.49x-7.47x speedup targets |
+| V3 Performance Optimization | `$v3-performance-optimization` | Achieve unverified (no benchmark) speedup targets |
 | V3 Swarm Coordination | `$v3-swarm-coordination` | 15-agent hierarchical mesh coordination |
 | V3 DDD Architecture | `$v3-ddd-architecture` | Domain-Driven Design architecture |
 | V3 Core Implementation | `$v3-core-implementation` | Core module implementation |
@@ -792,7 +792,7 @@ CLAUDE_FLOW_MCP_PORT=3000
 |----------|-------|
 | Embedding Dimensions | 384 |
 | Search Algorithm | HNSW |
-| Speed Improvement | 150x-12,500x faster |
+| Speed Improvement | ~1.9x-4.7x measured faster |
 | Similarity Range | 0.0 - 1.0 |
 | Storage | SQLite with vector extension |
 | Model | all-MiniLM-L6-v2 |

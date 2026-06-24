@@ -287,7 +287,7 @@ Bash("npx @rufflo/cli@latest hooks worker dispatch --trigger optimize")
 | `init` | 4 | Project initialization with wizard, presets, skills, hooks |
 | `agent` | 8 | Agent lifecycle (spawn, list, status, stop, metrics, pool, health, logs) |
 | `swarm` | 6 | Multi-agent swarm coordination and orchestration |
-| `memory` | 11 | AgentDB memory with vector search (150x-12,500x faster) |
+| `memory` | 11 | AgentDB memory with vector search (~1.9x-4.7x measured faster) |
 | `mcp` | 9 | MCP server management and tool execution |
 | `task` | 6 | Task creation, assignment, and lifecycle |
 | `session` | 7 | Session state management and persistence |
@@ -483,9 +483,9 @@ npx @rufflo/cli@latest migrate validate
 V3 includes the RuVector Intelligence System:
 - **SONA**: Self-Optimizing Neural Architecture (<0.05ms adaptation)
 - **MoE**: Mixture of Experts for specialized routing
-- **HNSW**: 150x-12,500x faster pattern search
+- **HNSW**: ~1.9x-4.7x measured faster pattern search
 - **EWC++**: Elastic Weight Consolidation (prevents forgetting)
-- **Flash Attention**: 2.49x-7.47x speedup
+- **Flash Attention**: unverified (no benchmark) speedup
 
 The 4-step intelligence pipeline:
 1. **RETRIEVE** - Fetch relevant patterns via HNSW
@@ -522,8 +522,8 @@ Features:
 
 | Metric | Target |
 |--------|--------|
-| Flash Attention | 2.49x-7.47x speedup |
-| HNSW Search | 150x-12,500x faster |
+| Flash Attention | unverified (no benchmark) speedup |
+| HNSW Search | ~1.9x-4.7x measured faster |
 | Memory Reduction | 50-75% with quantization |
 | MCP Response | <100ms |
 | CLI Startup | <500ms |

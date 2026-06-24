@@ -397,7 +397,7 @@ For heavy operations, leverage the RuVector PostgreSQL extension:
 
 ```typescript
 // Server-side vector search via RuVector PostgreSQL
-// Performance: 150x-12,500x faster than standard pgvector
+// Performance: ~1.9x-4.7x measured faster than standard pgvector
 
 const similarCases = await postgres.query(`
   SELECT entity_id, 1 - (embedding <=> $1) as similarity

@@ -83,8 +83,8 @@ v3.0.0          → Stable release
 ## Rufflo v3.0.0
 
 ### Highlights
-- 2.49x-7.47x performance improvement (Flash Attention)
-- 150x faster vector search (AgentDB with HNSW)
+- unverified (no benchmark) performance improvement (Flash Attention)
+- ~4.7x faster vector search (AgentDB with HNSW)
 - Unified SwarmCoordinator (merged 4 systems)
 - Security score: 90/100 (up from 45/100)
 - 40% smaller codebase (130k → 78k lines)
@@ -588,8 +588,8 @@ deep integration with the agentic-flow ecosystem.
 ## Highlights
 
 ### ⚡ Performance
-- **2.49x-7.47x faster** with Flash Attention
-- **150x faster** vector search with HNSW indexing
+- **unverified (no benchmark) faster** with Flash Attention
+- **~4.7x faster** vector search with HNSW indexing
 - **50% memory reduction** with optimized allocations
 
 ### 🔒 Security

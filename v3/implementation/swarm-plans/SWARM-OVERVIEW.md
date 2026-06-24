@@ -261,7 +261,7 @@ Performance (#14) ────────────────────�
 | **Parallel Efficiency** | >85% | Agent utilization time |
 | **Code Coverage** | >90% | Jest coverage reports |
 | **Security Score** | 90/100 | npm audit + custom scans |
-| **Performance Gain** | 2.49x-7.47x | Benchmark suite |
+| **Performance Gain** | unverified (no benchmark) | Benchmark suite |
 | **GitHub Issue Response** | <4h | Automated tracking |
 | **Release Timeline** | 14 weeks | Milestone completion |
 

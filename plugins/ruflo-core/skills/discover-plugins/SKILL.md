@@ -38,7 +38,7 @@ When starting a new project, exploring rufflo capabilities, or wondering which p
 
 | Plugin | When to use | What it adds |
 |--------|-------------|-------------|
-| **rufflo-agentdb** | Semantic search over code patterns, telemetry, decisions | AgentDB with HNSW vector search (150x-12,500x faster), RuVector embeddings |
+| **rufflo-agentdb** | Semantic search over code patterns, telemetry, decisions | AgentDB with HNSW vector search (~1.9x-4.7x measured faster), RuVector embeddings |
 | **rufflo-rag-memory** | Simple key-value memory with search | Store/search/recall without full AgentDB setup |
 | **rufflo-rvf** | Portable memory export/import across machines | RVF format, session persistence, cross-platform transfer |
 | **rufflo-ruvector** | Vector embedding operations, HNSW indexing, clustering | ONNX 384-dim embeddings, hyperbolic Poincare ball, k-means/DBSCAN clustering |

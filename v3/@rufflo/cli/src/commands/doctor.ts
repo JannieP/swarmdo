@@ -15,6 +15,8 @@ import { execSync, exec } from 'child_process';
 import { promisify } from 'util';
 import { decodeKey, isEncryptionEnabled } from '../encryption/vault.js';
 import { isEncryptedBlob } from '../encryption/vault.js';
+import { readBenchResults, type BenchResults } from '../benchmarks/bench-runner.js';
+import * as os from 'os';
 
 // Promisified exec with proper shell and env inheritance for cross-platform support
 const execAsync = promisify(exec);
@@ -1010,6 +1012,125 @@ async function checkEncryptionAtRest(): Promise<HealthCheck> {
   };
 }
 
+// Sprint 2 Move 4 — surface MEASURED performance numbers (from
+// `.rufflo/bench-results.json`, written by `rufflo demo` / `rufflo performance
+// benchmark`) so users see honest, machine-measured figures in `doctor`
+// instead of the inflated marketing numbers the audit flagged. Never
+// fabricates — reports `warn` + a fix hint when no measurement exists yet.
+function relativeAge(iso: string | undefined): string {
+  if (!iso) return 'unknown time';
+  const then = Date.parse(iso);
+  if (Number.isNaN(then)) return 'unknown time';
+  const ms = Date.now() - then;
+  const mins = Math.round(ms / 60000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.round(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  return `${Math.round(hrs / 24)}d ago`;
+}
+
+export async function checkBenchmarkResults(cwd: string = process.cwd()): Promise<HealthCheck> {
+  const results: BenchResults | null = readBenchResults(cwd);
+  if (!results) {
+    return {
+      name: 'Perf Benchmarks',
+      status: 'warn',
+      message: 'no measured numbers yet (.rufflo/bench-results.json absent)',
+      fix: 'rufflo demo   # or: rufflo performance benchmark',
+    };
+  }
+
+  const parts: string[] = [];
+  const hnsw = results.hnsw?.entries?.[0];
+  if (hnsw && typeof hnsw.speedup === 'number') {
+    parts.push(`HNSW ${hnsw.speedup}x@N=${hnsw.n ?? '?'} (recall@10 ${hnsw.recallAt10 ?? '?'})`);
+  }
+  const backend = results.embeddingBackend && typeof (results.embeddingBackend as Record<string, unknown>).backend === 'string'
+    ? String((results.embeddingBackend as Record<string, unknown>).backend)
+    : null;
+  if (backend) parts.push(`embeddings: ${backend}`);
+
+  const age = relativeAge(results.persistedAt as string | undefined);
+
+  if (parts.length === 0) {
+    return {
+      name: 'Perf Benchmarks',
+      status: 'warn',
+      message: `measured ${age} but no HNSW/embedding figures captured`,
+      fix: 'rufflo performance benchmark   # re-run the authoritative harness',
+    };
+  }
+
+  return {
+    name: 'Perf Benchmarks',
+    status: 'pass',
+    message: `${parts.join(' · ')} (measured ${age})`,
+  };
+}
+
+// Move Pi — Raspberry Pi / edge-deploy readiness. Advisory (component-only,
+// `rufflo doctor -c edge`): reports arch, memory, CPU, and offline-provider
+// status so a user knows whether this box can run Rufflo at the edge, and
+// points at the lean profile + offline demo. Probe is injectable for tests.
+export interface EdgeProbe {
+  arch: string;
+  totalMemBytes: number;
+  cpus: number;
+  platform: string;
+  /** True when an offline LLM provider is configured (Ollama local / self-hosted). */
+  offlineProvider: boolean;
+}
+
+function defaultEdgeProbe(): EdgeProbe {
+  const explicit = (process.env.RUFFLO_PROVIDER || '').toLowerCase();
+  const offlineProvider = explicit === 'ollama' || !!process.env.OLLAMA_BASE_URL;
+  return {
+    arch: os.arch(),
+    totalMemBytes: os.totalmem(),
+    cpus: os.cpus()?.length ?? 1,
+    platform: os.platform(),
+    offlineProvider,
+  };
+}
+
+export async function checkEdgeReadiness(probe: EdgeProbe = defaultEdgeProbe()): Promise<HealthCheck> {
+  const memGB = probe.totalMemBytes / (1024 ** 3);
+  const isArm = probe.arch === 'arm' || probe.arch === 'arm64';
+  const archLabel = isArm ? `${probe.arch} (Pi/edge native)` : probe.arch;
+  const memLabel = `${memGB.toFixed(1)}GB RAM`;
+  const offlineLabel = probe.offlineProvider
+    ? 'offline-capable (Ollama configured)'
+    : 'needs network for agent exec (set OLLAMA_BASE_URL or RUFFLO_PROVIDER=ollama for offline)';
+
+  const parts = [`${archLabel}`, `${probe.cpus} CPU`, memLabel, offlineLabel];
+  const message = parts.join(' · ');
+
+  // Hard floor: under ~512MB the Node + ONNX embedder footprint won't fit.
+  if (memGB < 0.5) {
+    return {
+      name: 'Edge Readiness',
+      status: 'fail',
+      message: `${message} — under 512MB is too little for the Node + embedder footprint`,
+      fix: 'Use a board with ≥1GB RAM, or run Rufflo in MCP-only mode with --tools-profile lean (memory/search tools, no local embedder)',
+    };
+  }
+  // Tight but workable: 0.5–1GB (Pi Zero 2 / older Pi 3).
+  if (memGB < 1) {
+    return {
+      name: 'Edge Readiness',
+      status: 'warn',
+      message: `${message} — tight; prefer the lean profile + offline demo`,
+      fix: 'rufflo mcp start --tools-profile lean   ·   rufflo demo --skip-llm   (see docs/integrations/raspberry-pi.md)',
+    };
+  }
+  return {
+    name: 'Edge Readiness',
+    status: 'pass',
+    message: `${message}. Tip: rufflo mcp start --tools-profile lean (see docs/integrations/raspberry-pi.md)`,
+  };
+}
+
 // Format health check result
 function formatCheck(check: HealthCheck): string {
   const icon = check.status === 'pass' ? output.success('✓') :
@@ -1043,7 +1164,7 @@ export const doctorCommand: Command = {
     {
       name: 'component',
       short: 'c',
-      description: 'Check specific component (version, node, npm, config, daemon, memory, api, git, mcp, claude, disk, typescript, agentic-flow, encryption, federation, metaharness)',
+      description: 'Check specific component (version, node, npm, config, daemon, memory, api, git, mcp, claude, disk, typescript, agentic-flow, encryption, federation, metaharness, benchmarks, edge)',
       type: 'string'
     },
     {
@@ -1094,6 +1215,7 @@ export const doctorCommand: Command = {
       checkFederationBreaker, // ADR-097 Phase 4
       checkMetaharness, // ADR-150 — MetaHarness upstream package
       checkMetaharnessIntegration, // iter 45 — rufflo-side integration layer
+      checkBenchmarkResults, // Sprint 2 Move 4 — surface measured perf numbers
     ];
 
     const componentMap: Record<string, () => Promise<HealthCheck>> = {
@@ -1117,6 +1239,10 @@ export const doctorCommand: Command = {
       'federation': checkFederationBreaker, // ADR-097 Phase 4
       'metaharness': checkMetaharness, // ADR-150 — upstream package
       'metaharness-integration': checkMetaharnessIntegration, // iter 45 — rufflo-side
+      'benchmarks': checkBenchmarkResults, // Sprint 2 Move 4
+      'perf': checkBenchmarkResults,
+      'edge': checkEdgeReadiness, // Move Pi — Raspberry Pi / edge readiness
+      'pi': checkEdgeReadiness,
     };
 
     let checksToRun = allChecks;

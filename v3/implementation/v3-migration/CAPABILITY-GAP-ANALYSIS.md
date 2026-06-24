@@ -218,7 +218,7 @@ All hooks exposed as MCP tools in `@rufflo/cli/src/mcp-tools/hooks-tools.ts`:
 
 | Feature | Improvement |
 |---------|-------------|
-| **HNSW Index** | 150x-12,500x faster vector search |
+| **HNSW Index** | ~1.9x-4.7x measured faster vector search |
 | **AgentDB Backend** | Native hnswlib or WASM fallback |
 | **Hybrid Backend** | SQLite + AgentDB per ADR-009 |
 | **SQL.js Backend** | Cross-platform WASM SQLite |

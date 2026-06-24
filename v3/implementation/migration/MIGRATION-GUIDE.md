@@ -195,7 +195,7 @@ import { HybridMemorySystem } from 'rufflo/v3';
 const memory = new HybridMemorySystem();
 const results = await memory.search('query', {
   semantic: true,       // AgentDB vector search
-  k: 5                  // 150x faster with HNSW
+  k: 5                  // ~4.7x faster with HNSW
 });
 ```
 
@@ -285,7 +285,7 @@ rm -rf archive/
 // .claude/config.json
 {
   "agenticFlow": {
-    "attention": "flash"  // 2.49x-7.47x speedup
+    "attention": "flash"  // unverified (no benchmark) speedup
   }
 }
 ```

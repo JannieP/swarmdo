@@ -9,6 +9,7 @@
  */
 
 import type { MCPTool } from './mcp-tools/types.js';
+import { resolveProfileGroups } from './mcp-tools/profiles.js';
 
 // Import MCP tool handlers from local package
 import { agentTools } from './mcp-tools/agent-tools.js';
@@ -92,49 +93,82 @@ function registerTools(tools: MCPTool[]): void {
   });
 }
 
-// Initialize registry with all available tools
-registerTools([
-  ...agentTools,
-  ...swarmTools,
-  ...memoryTools,
-  ...configTools,
-  ...hooksTools,
-  ...taskTools,
-  ...sessionTools,
-  ...hiveMindTools,
-  ...workflowTools,
-  ...analyzeTools,
-  ...progressTools,
-  ...embeddingsTools,
-  ...claimsTools,
-  ...securityTools,
-  ...transferTools,
-  // V2 Compatibility tools
-  ...systemTools,
-  ...terminalTools,
-  ...neuralTools,
-  ...performanceTools,
-  ...githubTools,
-  ...daaTools,
-  ...coordinationTools,
-  ...getBrowserTools(),
-  ...getBrowserSessionTools(),
-  // Phase 6: AgentDB v3 controller tools
-  ...agentdbTools,
-  // RuVector WASM tools
-  ...ruvllmWasmTools,
-  ...wasmAgentTools,
-  // ADR-115: Anthropic Claude Managed Agents (cloud agent runtime)
-  ...managedAgentTools,
-  // Guidance & discovery tools
-  ...guidanceTools,
-  // Autopilot persistent completion tools
-  ...autopilotTools,
-  // #1916: coverage-aware routing (hooks_coverage-route / -suggest / -gaps)
-  ...coverageRouterTools,
-  // ADR-150 — MetaHarness static-analysis tools (5)
-  ...metaharnessTools,
-]);
+/**
+ * Named tool groups (Sprint 2 Move 2'). Each key maps to a tool array so a
+ * profile (lean / balanced / full) can select a subset at server start. Lazy
+ * thunks for browser groups preserve the agent-browser availability probe.
+ */
+const TOOL_GROUPS: Record<string, () => MCPTool[]> = {
+  agent: () => agentTools,
+  swarm: () => swarmTools,
+  memory: () => memoryTools,
+  config: () => configTools,
+  hooks: () => hooksTools,
+  task: () => taskTools,
+  session: () => sessionTools,
+  'hive-mind': () => hiveMindTools,
+  workflow: () => workflowTools,
+  analyze: () => analyzeTools,
+  progress: () => progressTools,
+  embeddings: () => embeddingsTools,
+  claims: () => claimsTools,
+  security: () => securityTools,
+  transfer: () => transferTools,
+  system: () => systemTools,
+  terminal: () => terminalTools,
+  neural: () => neuralTools,
+  performance: () => performanceTools,
+  github: () => githubTools,
+  daa: () => daaTools,
+  coordination: () => coordinationTools,
+  browser: () => [...getBrowserTools(), ...getBrowserSessionTools()],
+  agentdb: () => agentdbTools,
+  ruvllm: () => ruvllmWasmTools,
+  wasm: () => wasmAgentTools,
+  'managed-agent': () => managedAgentTools,
+  guidance: () => guidanceTools,
+  autopilot: () => autopilotTools,
+  coverage: () => coverageRouterTools,
+  metaharness: () => metaharnessTools,
+};
+
+/** All group keys, in a stable order. */
+export const TOOL_GROUP_KEYS = Object.keys(TOOL_GROUPS);
+
+/**
+ * (Re)build the registry from a set of group keys, or `'all'`. Clears first so
+ * this is idempotent and safe to call to switch profiles. Returns a summary.
+ */
+export function applyToolGroups(groups: readonly string[] | 'all'): { profileGroups: string[]; toolCount: number } {
+  TOOL_REGISTRY.clear();
+  const keys = groups === 'all' ? TOOL_GROUP_KEYS : TOOL_GROUP_KEYS.filter(k => groups.includes(k));
+  for (const key of keys) {
+    const fn = TOOL_GROUPS[key];
+    if (fn) registerTools(fn());
+  }
+  return { profileGroups: keys, toolCount: TOOL_REGISTRY.size };
+}
+
+/**
+ * Apply a named profile (lean / balanced / full). Unknown names fail open to
+ * `'all'`. Also honored implicitly at module load via RUFFLO_TOOLS_PROFILE.
+ */
+export function applyToolProfile(profileName: string | undefined): { profileGroups: string[]; toolCount: number } {
+  return applyToolGroups(resolveProfileGroups(profileName));
+}
+
+// Initialize registry at module load. `mcp start` sets RUFFLO_TOOLS_PROFILE
+// (and/or RUFFLO_TOOLS_GROUPS as an explicit csv) before the server's dynamic
+// import of this module, so the first registration already reflects the
+// chosen profile. Default (no env) = full, preserving existing behavior.
+(() => {
+  const csv = process.env.RUFFLO_TOOLS_GROUPS;
+  if (csv && csv.trim()) {
+    applyToolGroups(csv.split(',').map(s => s.trim()).filter(Boolean));
+    return;
+  }
+  applyToolProfile(process.env.RUFFLO_TOOLS_PROFILE);
+})();
 
 /**
  * MCP Client Error

@@ -60,7 +60,7 @@ RVF (RuVector Format) is a binary container format already used in the Rufflo ec
 | Capability | sql.js | RVF |
 |-----------|--------|-----|
 | Package size | 18MB WASM | ~50 bytes/vector overhead |
-| Vector search | Brute-force O(n) | HNSW 3-layer progressive (150x-12,500x faster) |
+| Vector search | Brute-force O(n) | HNSW 3-layer progressive (~1.9x-4.7x measured faster) |
 | Quantization | None | fp16, fp32, int8, int4, binary |
 | Crash safety | Manual export/save | Append-only (no WAL needed) |
 | COW branching | N/A | <3ms branch, 1:200 compression |
@@ -1029,7 +1029,7 @@ export class RvfBackend implements IMemoryBackend {
   }
 
   async search(embedding: Float32Array, options: SearchOptions): Promise<SearchResult[]> {
-    // HNSW search — 150x-12,500x faster than brute-force
+    // HNSW search — ~1.9x-4.7x measured faster than brute-force
     const results = this.idx.search(embedding, {
       k: options.k,
       efSearch: options.efSearch || 64,
@@ -1115,7 +1115,7 @@ export class RvfEventLog implements IEventStore {
 |--------|--------|-------|-------------|
 | sql.js install size | 18MB | 0 (lazy optional) | **−18MB** |
 | RVF install size | 0 | 52KB (WASM) | +52KB |
-| Vector search | O(n) brute-force | O(log n) HNSW | **150x-12,500x faster** |
+| Vector search | O(n) brute-force | O(log n) HNSW | **~1.9x-4.7x measured faster** |
 | Quantization | fp32 only | fp16/int8/int4/binary | **2-8x memory reduction** |
 | Docker lite image | 324MB | ~306MB | **−18MB** |
 | Cold start vectors | Load all into memory | Progressive 3-layer | **70% recall on first query** |
@@ -1187,7 +1187,7 @@ Backward Compatibility Tests:
 ### Positive
 
 - **−18MB hard dependency** removed from core install path
-- **150x-12,500x faster** vector search via native HNSW (vs brute-force cosine)
+- **~1.9x-4.7x measured faster** vector search via native HNSW (vs brute-force cosine)
 - **2-8x memory reduction** via quantization (int8/int4) for large embedding sets
 - **Crash-safe** append-only format — no manual export/save cycle
 - **Progressive loading** — 70% recall on first query before full index loads

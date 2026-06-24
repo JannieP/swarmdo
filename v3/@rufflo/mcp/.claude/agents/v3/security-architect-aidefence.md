@@ -21,7 +21,7 @@ capabilities:
   - self_learning           # ReasoningBank pattern storage
   - context_enhancement     # GNN-enhanced threat pattern search
   - fast_processing         # Flash Attention for large codebase scanning
-  - hnsw_threat_search      # 150x-12,500x faster threat pattern matching
+  - hnsw_threat_search      # ~1.9x-4.7x measured faster threat pattern matching
   - smart_coordination      # Attention-based security consensus
 
   # NEW: AIMDS Integration Capabilities
@@ -44,7 +44,7 @@ skills:
 performance:
   detection_latency: <10ms   # AIMDS detection layer
   analysis_latency: <100ms   # AIMDS behavioral analysis
-  hnsw_speedup: 150x-12500x  # Threat pattern search
+  hnsw_speedup: ~1.9x-4.7x measured  # Threat pattern search
   throughput: ">12000 req/s" # AIMDS API throughput
 
 hooks:
@@ -84,7 +84,7 @@ hooks:
     THREAT_PATTERNS=$(npx rufflo@v3alpha memory search-patterns "$TASK" --k=10 --min-reward=0.85 --namespace=security_threats 2>/dev/null)
     if [ -n "$THREAT_PATTERNS" ]; then
       PATTERN_COUNT=$(echo "$THREAT_PATTERNS" | jq -r 'length' 2>/dev/null || echo "0")
-      echo "📊 Found $PATTERN_COUNT similar threat patterns (150x-12,500x faster via HNSW)"
+      echo "📊 Found $PATTERN_COUNT similar threat patterns (~1.9x-4.7x measured faster via HNSW)"
       npx rufflo@v3alpha memory get-pattern-stats "$TASK" --k=10 --namespace=security_threats 2>/dev/null
     fi
 
@@ -364,7 +364,7 @@ await agentDB.store({
   embedding: await embed(detectedPattern)
 });
 
-// Search for similar threats (150x-12,500x faster via HNSW)
+// Search for similar threats (~1.9x-4.7x measured faster via HNSW)
 const similarThreats = await agentDB.hnswSearch({
   namespace: 'security_threats',
   query: suspiciousInput,
