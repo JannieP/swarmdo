@@ -82,6 +82,8 @@ const commandLoaders: Record<string, CommandLoader> = {
   metaharness: () => import('./metaharness.js'),
   // Eject (ADR-150 Phase 2) — lift ruflo project into a renamed standalone harness
   eject: () => import('./eject.js'),
+  // Sprint 1 Move 7 — first-run capability tour (HNSW + Ed25519 + agent_run + embedding backend)
+  demo: () => import('./demo.js'),
 };
 
 // Cache for loaded commands
@@ -244,7 +246,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
     analyzeCmd, routeCmd, progressCmd, providersCmd,
     pluginsCmd, deploymentCmd, claimsCmd, issuesCmd,
     updateCmd, processCmd, guidanceCmd, applianceCmd,
-    cleanupCmd, autopilotCmd,
+    cleanupCmd, autopilotCmd, demoCmd,
   ] = await Promise.all([
     loadCommand('daemon'), loadCommand('doctor'), loadCommand('embeddings'), loadCommand('neural'),
     loadCommand('performance'), loadCommand('security'), loadCommand('ruvector'), loadCommand('hive-mind'),
@@ -252,7 +254,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
     loadCommand('analyze'), loadCommand('route'), loadCommand('progress'), loadCommand('providers'),
     loadCommand('plugins'), loadCommand('deployment'), loadCommand('claims'), loadCommand('issues'),
     loadCommand('update'), loadCommand('process'), loadCommand('guidance'), loadCommand('appliance'),
-    loadCommand('cleanup'), loadCommand('autopilot'),
+    loadCommand('cleanup'), loadCommand('autopilot'), loadCommand('demo'),
   ]);
 
   return {
@@ -267,7 +269,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
     ].filter(Boolean) as Command[],
     utility: [
       configCmd, doctorCmd, daemonCmd, completionsCmd,
-      migrateCmd, workflowCmd,
+      migrateCmd, workflowCmd, demoCmd,
     ].filter(Boolean) as Command[],
     analysis: [
       analyzeCmd, routeCmd, progressCmd,
