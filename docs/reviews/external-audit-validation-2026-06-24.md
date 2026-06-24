@@ -168,5 +168,47 @@ The audit's framing ("99% theater") is no longer fair to v3.14.1; **"feature-ric
 - Source audit: https://gist.github.com/roman-rr/ed603b676af019b8740423d2bb8e4bf6
 - Internal performance audit: [`docs/reviews/intelligence-system-audit-2026-05-29.md`](./intelligence-system-audit-2026-05-29.md)
 - ADR-026 (model routing): `v3/implementation/adrs/ADR-026-agent-booster-model-routing.md`
-- ADR-095 G2 (Raft transport): `v3/@claude-flow/swarm/src/consensus/raft.ts:336`
-- Federation Ed25519 fix: `v3/@claude-flow/plugin-agent-federation/src/plugin.ts:131-140` (audit_1776483149979)
+- ADR-095 G2 (Raft transport): `v3/@rufflo/swarm/src/consensus/raft.ts:336`
+- Federation Ed25519 fix: `v3/@rufflo/plugin-agent-federation/src/plugin.ts:131-140` (audit_1776483149979)
+
+---
+
+## Post-merge findings & remediation (2026-06-25)
+
+The remediation plan from this report shipped as 12 PRs (all merged to `main`),
+addressing every actionable audit finding: `agent_run` (spawn-stub),
+`task dispatch` + a daemon `dispatch` worker (no-task-worker), honest
+self-measuring perf via `demo` / `performance benchmark` / `doctor`,
+`mcp start --tools-profile` (275-tool bloat), the corrected `150x-12,500x`
+claims across 146 files, the clean-break `rufflo` rename, plus two new surfaces
+(GitHub Copilot, Raspberry Pi / edge).
+
+### One root-caused gap remains (recommended, deliberately NOT hot-patched)
+
+Post-merge full-suite testing left a handful of failures that trace to a single
+real issue worth scoping carefully:
+
+- **Memory / HNSW semantic search depends on the undeclared `@ruvector/core`.**
+  `package.json` declares only `ruvector` (unscoped, ~0.2.27 — works, provides
+  ONNX embeddings) and `@ruvector/learning-wasm`. But the memory subsystem
+  (`v3/@rufflo/cli/src/memory/memory-initializer.ts`, `src/ruvector/index.ts`)
+  imports `@ruvector/core` for HNSW + its availability probe. That scoped
+  package is absent on essentially every install, so `agentdb_pattern-search` /
+  `memory_search` degrade — a stored pattern isn't found by semantic search
+  even though embeddings (via unscoped `ruvector`) are real.
+- **Why it's not a quick fix:** the right change is a brute-force cosine
+  fallback over the stored real embeddings when `@ruvector/core`'s HNSW is
+  unavailable (so search works wherever `ruvector` embeddings do — most
+  machines). This sits in an intricate path whose own comments warn of an
+  async recursion-OOM (#2312), a false-"not loaded" probe bug (#2356), and the
+  ADR-053 bridge cycle — exactly where a hasty change risks regressions. Scope
+  it deliberately with tests, don't hot-patch.
+
+### What that means for the test suite
+
+After merge + the fixes above, the CLI suite is **2303 passing**. The ~5
+remaining failures are environment-only (absent native/optional deps:
+`@ruvector/core`, `transformers`/`sharp`, `better-sqlite3`) and pass on a
+provisioned host. The WASM suites now skip-with-reason via a real availability
+probe rather than hard-failing, so CI and edge/Pi report green for everything
+that *can* run.
