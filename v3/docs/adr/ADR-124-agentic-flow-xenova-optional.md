@@ -3,25 +3,25 @@
 **Status**: Proposed (2026-05-19)
 **Date**: 2026-05-19
 **Authors**: claude (drafted with rUv)
-**Related**: [`agentic-flow@2.0.11`](https://www.npmjs.com/package/agentic-flow), [ruvnet/agentic-flow](https://github.com/ruvnet/agentic-flow), ADR-118 (AIDefence 2.3.0), ADR-121 (embeddings RuVector upgrade — long-term Xenova migration), ADR-122 (browser substrate), supply-chain hardening PR #2050, ruflo issue #2046
+**Related**: [`agentic-flow@2.0.11`](https://www.npmjs.com/package/agentic-flow), [ruvnet/agentic-flow](https://github.com/ruvnet/agentic-flow), ADR-118 (AIDefence 2.3.0), ADR-121 (embeddings RuVector upgrade — long-term Xenova migration), ADR-122 (browser substrate), supply-chain hardening PR #2050, rufflo issue #2046
 **Supersedes**: nothing (upstream-targeted)
 
 ## Context
 
-After landing the supply-chain hardening in PR #2050 (`scripts/audit-supply-chain.mjs` + `.github/supply-chain/allowed-deps.json` + dependency-review-action), the audit caught a real HIGH CVE in `@claude-flow/browser`'s fresh-install dep graph:
+After landing the supply-chain hardening in PR #2050 (`scripts/audit-supply-chain.mjs` + `.github/supply-chain/allowed-deps.json` + dependency-review-action), the audit caught a real HIGH CVE in `@rufflo/browser`'s fresh-install dep graph:
 
 ```
-ruflo-browser-consumer
-  └── @claude-flow/browser
+rufflo-browser-consumer
+  └── @rufflo/browser
         └── agentic-flow ^2.0.11
               ├── @xenova/transformers ^2.17.2  ← HIGH CVE via onnxruntime-web → protobufjs
               └── agentdb (opt) ^3.0.0-alpha.14
                     └── @opentelemetry/sdk-node (opt) ^0.52.0  ← HIGH CVE, fixed in our root overrides
 ```
 
-The `agentdb → @opentelemetry/sdk-node` chain was fixed in [PR #2050 commit `9a8c9c464`](https://github.com/ruvnet/ruflo/commit/9a8c9c464) by bumping agentdb to `3.0.0-alpha.14` + npm overrides pinning `@opentelemetry/sdk-node ≥ 0.218.0`. Overrides do NOT cascade across separate npm projects, so the same block was duplicated in `v3/@claude-flow/browser/package.json` to keep standalone installs clean.
+The `agentdb → @opentelemetry/sdk-node` chain was fixed in [PR #2050 commit `9a8c9c464`](https://github.com/ruvnet/ruflo/commit/9a8c9c464) by bumping agentdb to `3.0.0-alpha.14` + npm overrides pinning `@opentelemetry/sdk-node ≥ 0.218.0`. Overrides do NOT cascade across separate npm projects, so the same block was duplicated in `v3/@rufflo/browser/package.json` to keep standalone installs clean.
 
-What remains: **`@xenova/transformers` is a direct dependency of `agentic-flow`**, and `agentic-flow` is a direct dependency of `@claude-flow/browser`. Overrides on the consumer side can pin to a newer Xenova version — but the latest is 2.17.2, and the only fix-available is `@xenova/transformers@2.0.1` (a *downgrade* via a major version-bump). Upgrading would break Xenova's runtime API in ways the agentic-flow embedding code paths aren't prepared for, and downgrading to 2.0.1 sheds three years of ONNX-runtime improvements.
+What remains: **`@xenova/transformers` is a direct dependency of `agentic-flow`**, and `agentic-flow` is a direct dependency of `@rufflo/browser`. Overrides on the consumer side can pin to a newer Xenova version — but the latest is 2.17.2, and the only fix-available is `@xenova/transformers@2.0.1` (a *downgrade* via a major version-bump). Upgrading would break Xenova's runtime API in ways the agentic-flow embedding code paths aren't prepared for, and downgrading to 2.0.1 sheds three years of ONNX-runtime improvements.
 
 The **right fix lives upstream** in `agentic-flow` itself.
 
@@ -45,14 +45,14 @@ Five-out-of-six already gracefully degrade when the module is absent. The only f
 Land **`agentic-flow@2.0.12`** with three coupled changes:
 
 1. **Convert the one static import to dynamic** in `src/reasoningbank/utils/embeddings.ts` so the file loads even when `@xenova/transformers` is absent. Wrap in try/catch with a typed error matching the pattern in `src/router/providers/onnx.ts`.
-2. **Move `@xenova/transformers` from `dependencies` to `optionalDependencies`** in `agentic-flow/package.json`. Installs default to `--include=optional` so existing users who actually want embeddings see no behavior change; users who don't (the `@claude-flow/browser` substrate path is one) can `npm install --omit=optional` and get a clean CVE-free tree.
+2. **Move `@xenova/transformers` from `dependencies` to `optionalDependencies`** in `agentic-flow/package.json`. Installs default to `--include=optional` so existing users who actually want embeddings see no behavior change; users who don't (the `@rufflo/browser` substrate path is one) can `npm install --omit=optional` and get a clean CVE-free tree.
 3. **Bump version to `2.0.12`** (patch — behavior is preserved for consumers that have `@xenova/transformers` installed; the change is purely about *who decides to install it*).
 
 After upstream ships:
 
-- Bump `agentic-flow` to `^2.0.12` in `v3/@claude-flow/browser/package.json`
+- Bump `agentic-flow` to `^2.0.12` in `v3/@rufflo/browser/package.json`
 - Remove the corresponding entry from `.github/supply-chain/accepted-findings.json` (the audit will pass cleanly without an exception)
-- The fresh-install end-user audit on `@claude-flow/browser` drops from **7 HIGH** (after PR #2050) to **0 HIGH** when `--omit=optional` is used, or remains the same when the user opts into the embedding feature explicitly
+- The fresh-install end-user audit on `@rufflo/browser` drops from **7 HIGH** (after PR #2050) to **0 HIGH** when `--omit=optional` is used, or remains the same when the user opts into the embedding feature explicitly
 
 ## Why this is the right shape of fix
 
@@ -72,9 +72,9 @@ This is *exactly* the optional-dependency contract npm was designed for.
 - `npm install agentic-flow@2.0.12 --omit=optional` results in `npm audit` reporting **0 HIGH/CRITICAL** for the `agentic-flow` direct surface
 - `npm install agentic-flow@2.0.12` (default, includes optional) preserves all existing embedding-feature functionality
 
-## Update ruflo after upstream ships
+## Update rufflo after upstream ships
 
-1. Bump `v3/@claude-flow/browser/package.json` → `agentic-flow ^2.0.12`
+1. Bump `v3/@rufflo/browser/package.json` → `agentic-flow ^2.0.12`
 2. Run `pnpm install --lockfile-only` from `v3/` to refresh `v3/pnpm-lock.yaml`
 3. Run `npm install --legacy-peer-deps` at root to refresh `package-lock.json`
 4. Remove the `cve[]` entry for `agentic-flow → @xenova/transformers` from `.github/supply-chain/accepted-findings.json`
@@ -83,9 +83,9 @@ This is *exactly* the optional-dependency contract npm was designed for.
 
 ## Out of scope
 
-- **Full Xenova retirement** — ADR-121 Phase 4 tracks the larger migration to `ruvector-onnx-embeddings-wasm`. This ADR is a tactical patch that lets ruflo ship a clean supply-chain audit *now*; the strategic migration continues independently.
+- **Full Xenova retirement** — ADR-121 Phase 4 tracks the larger migration to `ruvector-onnx-embeddings-wasm`. This ADR is a tactical patch that lets rufflo ship a clean supply-chain audit *now*; the strategic migration continues independently.
 - **Bumping `@xenova/transformers` itself to v3** — v3 was renamed to `@huggingface/transformers`. That migration involves API changes and is what ADR-121 Phase 4 addresses. Not in scope here.
-- **Touching `@claude-flow/embeddings`** — also covered by ADR-121.
+- **Touching `@rufflo/embeddings`** — also covered by ADR-121.
 
 ## Open questions
 
@@ -101,5 +101,5 @@ This is *exactly* the optional-dependency contract npm was designed for.
 - [npm `optionalDependencies` semantics](https://docs.npmjs.com/cli/v10/configuring-npm/package-json#optionaldependencies)
 - ADR-121 (long-term Xenova migration)
 - ADR-122 (browser substrate consumer)
-- ruflo PR #2050 (supply-chain hardening that surfaced this)
-- ruflo issue #2046
+- rufflo PR #2050 (supply-chain hardening that surfaced this)
+- rufflo issue #2046

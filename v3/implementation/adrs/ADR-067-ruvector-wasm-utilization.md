@@ -86,6 +86,6 @@ Invert the current pattern where WASM is optional and JS is default. For `learni
 ## Related
 
 - ADR-066: v3.5.24 Audit Remediation (prior audit cycle)
-- `v3/@claude-flow/cli/package.json` -- optionalDependencies declarations
-- `v3/@claude-flow/cli/src/hooks/` -- hooks route command
-- `v3/@claude-flow/cli/src/mcp/tools/` -- MCP tool definitions for rvagent and ruvllm
+- `v3/@rufflo/cli/package.json` -- optionalDependencies declarations
+- `v3/@rufflo/cli/src/hooks/` -- hooks route command
+- `v3/@rufflo/cli/src/mcp/tools/` -- MCP tool definitions for rvagent and ruvllm

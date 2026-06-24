@@ -21,14 +21,14 @@ Pulls every `session-*` and `budget-config-*` record from `cost-tracking` and em
 
    ```bash
    # Prometheus node_exporter textfile collector
-   node plugins/ruflo-cost-tracker/scripts/export.mjs --prometheus /var/lib/node_exporter/textfile_collector/cost_tracker.prom
+   node plugins/rufflo-cost-tracker/scripts/export.mjs --prometheus /var/lib/node_exporter/textfile_collector/cost_tracker.prom
 
    # Webhook (POSTs JSON; add auth via env)
    EXPORT_WEBHOOK_HEADER='Authorization: Bearer $TOKEN' \
-     node plugins/ruflo-cost-tracker/scripts/export.mjs --webhook https://hooks.example.com/cost-tracker
+     node plugins/rufflo-cost-tracker/scripts/export.mjs --webhook https://hooks.example.com/cost-tracker
 
    # Stdout JSON (default if no flag)
-   node plugins/ruflo-cost-tracker/scripts/export.mjs
+   node plugins/rufflo-cost-tracker/scripts/export.mjs
    ```
 
 2. **Inspect what's emitted** — Prometheus output includes:

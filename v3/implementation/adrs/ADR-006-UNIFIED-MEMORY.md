@@ -138,7 +138,7 @@ async bulkDelete(ids: string[]): Promise<Map<string, boolean>>;
 - Bulk delete: 2x faster via parallel processing
 
 ### Package Version
-- `@claude-flow/memory@3.0.0-alpha.2` (published 2026-01-07)
+- `@rufflo/memory@3.0.0-alpha.2` (published 2026-01-07)
 
 ---
 
@@ -146,16 +146,16 @@ async bulkDelete(ids: string[]): Promise<Map<string, boolean>>;
 
 ### CLI Memory Init Command
 
-Added `memory init` command to CLI (`@claude-flow/cli@3.0.0-alpha.56`) using **sql.js** (WASM SQLite) for cross-platform compatibility without native compilation.
+Added `memory init` command to CLI (`@rufflo/cli@3.0.0-alpha.56`) using **sql.js** (WASM SQLite) for cross-platform compatibility without native compilation.
 
 ```bash
 # Initialize memory database
-npx @claude-flow/cli@latest memory init
+npx @rufflo/cli@latest memory init
 
 # Options
-npx @claude-flow/cli@latest memory init --backend sqlite  # Default
-npx @claude-flow/cli@latest memory init --path ./data/custom.db
-npx @claude-flow/cli@latest memory init --force  # Overwrite existing
+npx @rufflo/cli@latest memory init --backend sqlite  # Default
+npx @rufflo/cli@latest memory init --path ./data/custom.db
+npx @rufflo/cli@latest memory init --force  # Overwrite existing
 ```
 
 **Schema (6 tables):**

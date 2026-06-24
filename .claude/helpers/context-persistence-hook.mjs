@@ -10,7 +10,7 @@
  * Backend priority:
  *   1. better-sqlite3 (native, WAL mode, indexed queries, ACID transactions)
  *   2. RuVector PostgreSQL (if RUVECTOR_* env vars set - TB-scale, GNN search)
- *   3. AgentDB from @claude-flow/memory (HNSW vector search)
+ *   3. AgentDB from @rufflo/memory (HNSW vector search)
  *   4. JsonFileBackend (zero dependencies, always works)
  *
  * Proactive archiving:
@@ -35,7 +35,7 @@ import { createRequire } from 'module';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const PROJECT_ROOT = join(__dirname, '../..');
-const DATA_DIR = join(PROJECT_ROOT, '.claude-flow', 'data');
+const DATA_DIR = join(PROJECT_ROOT, '.rufflo', 'data');
 const ARCHIVE_JSON_PATH = join(DATA_DIR, 'transcript-archive.json');
 const ARCHIVE_DB_PATH = join(DATA_DIR, 'transcript-archive.db');
 
@@ -487,7 +487,7 @@ class RuVectorBackend {
       max: 3,
       idleTimeoutMillis: 10000,
       connectionTimeoutMillis: 3000,
-      application_name: 'claude-flow-context-persistence',
+      application_name: 'rufflo-context-persistence',
     });
 
     // Test connection and create schema
@@ -749,14 +749,14 @@ async function resolveBackend() {
     }
   } catch { /* fall through */ }
 
-  // Tier 3: AgentDB from @claude-flow/memory (HNSW)
+  // Tier 3: AgentDB from @rufflo/memory (HNSW)
   try {
-    const localDist = join(PROJECT_ROOT, 'v3/@claude-flow/memory/dist/index.js');
+    const localDist = join(PROJECT_ROOT, 'v3/@rufflo/memory/dist/index.js');
     let memPkg = null;
     if (existsSync(localDist)) {
       memPkg = await import(`file://${localDist}`);
     } else {
-      memPkg = await import('@claude-flow/memory');
+      memPkg = await import('@rufflo/memory');
     }
     if (memPkg?.AgentDBBackend) {
       const backend = new memPkg.AgentDBBackend();

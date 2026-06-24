@@ -23,12 +23,12 @@ This skill provides a comprehensive hook system that automatically manages devel
 ## Prerequisites
 
 **Required:**
-- Claude Flow CLI installed (`npm install -g claude-flow@alpha`)
+- Rufflo CLI installed (`npm install -g rufflo@alpha`)
 - Claude Code with hooks enabled
 - `.claude$settings.json` with hook configurations
 
 **Optional:**
-- MCP servers configured (claude-flow, ruv-swarm, flow-nexus)
+- MCP servers configured (rufflo, ruv-swarm, flow-nexus)
 - Git repository for version control
 - Testing framework for quality verification
 
@@ -38,7 +38,7 @@ This skill provides a comprehensive hook system that automatically manages devel
 
 ```bash
 # Initialize with default hooks configuration
-npx claude-flow init --hooks
+npx rufflo init --hooks
 ```
 
 This creates:
@@ -50,13 +50,13 @@ This creates:
 
 ```bash
 # Pre-task hook (auto-spawns agents)
-npx claude-flow hook pre-task --description "Implement authentication"
+npx rufflo hook pre-task --description "Implement authentication"
 
 # Post-edit hook (auto-formats and stores in memory)
-npx claude-flow hook post-edit --file "src$auth.js" --memory-key "auth$login"
+npx rufflo hook post-edit --file "src$auth.js" --memory-key "auth$login"
 
 # Session end hook (saves state and metrics)
-npx claude-flow hook session-end --session-id "dev-session" --export-metrics
+npx rufflo hook session-end --session-id "dev-session" --export-metrics
 ```
 
 ---
@@ -71,7 +71,7 @@ Hooks that execute BEFORE operations to prepare and validate:
 
 **pre-edit** - Validate and assign agents before file modifications
 ```bash
-npx claude-flow hook pre-edit [options]
+npx rufflo hook pre-edit [options]
 
 Options:
   --file, -f <path>         File path to be edited
@@ -81,9 +81,9 @@ Options:
   --backup-file             Create backup before editing
 
 Examples:
-  npx claude-flow hook pre-edit --file "src$auth$login.js"
-  npx claude-flow hook pre-edit -f "config$db.js" --validate-syntax
-  npx claude-flow hook pre-edit -f "production.env" --backup-file --check-conflicts
+  npx rufflo hook pre-edit --file "src$auth$login.js"
+  npx rufflo hook pre-edit -f "config$db.js" --validate-syntax
+  npx rufflo hook pre-edit -f "production.env" --backup-file --check-conflicts
 ```
 
 **Features:**
@@ -94,7 +94,7 @@ Examples:
 
 **pre-bash** - Check command safety and resource requirements
 ```bash
-npx claude-flow hook pre-bash --command <cmd>
+npx rufflo hook pre-bash --command <cmd>
 
 Options:
   --command, -c <cmd>       Command to validate
@@ -103,8 +103,8 @@ Options:
   --require-confirmation    Request user confirmation for risky commands
 
 Examples:
-  npx claude-flow hook pre-bash -c "rm -rf /tmp/cache"
-  npx claude-flow hook pre-bash --command "docker build ." --estimate-resources
+  npx rufflo hook pre-bash -c "rm -rf /tmp/cache"
+  npx rufflo hook pre-bash --command "docker build ." --estimate-resources
 ```
 
 **Features:**
@@ -115,7 +115,7 @@ Examples:
 
 **pre-task** - Auto-spawn agents and prepare for complex tasks
 ```bash
-npx claude-flow hook pre-task [options]
+npx rufflo hook pre-task [options]
 
 Options:
   --description, -d <text>  Task description for context
@@ -125,9 +125,9 @@ Options:
   --estimate-complexity     Analyze task complexity
 
 Examples:
-  npx claude-flow hook pre-task --description "Implement user authentication"
-  npx claude-flow hook pre-task -d "Continue API dev" --load-memory
-  npx claude-flow hook pre-task -d "Refactor codebase" --optimize-topology
+  npx rufflo hook pre-task --description "Implement user authentication"
+  npx rufflo hook pre-task -d "Continue API dev" --load-memory
+  npx rufflo hook pre-task -d "Refactor codebase" --optimize-topology
 ```
 
 **Features:**
@@ -138,7 +138,7 @@ Examples:
 
 **pre-search** - Prepare and optimize search operations
 ```bash
-npx claude-flow hook pre-search --query <query>
+npx rufflo hook pre-search --query <query>
 
 Options:
   --query, -q <text>        Search query
@@ -146,7 +146,7 @@ Options:
   --optimize-query          Optimize search pattern
 
 Examples:
-  npx claude-flow hook pre-search -q "authentication middleware"
+  npx rufflo hook pre-search -q "authentication middleware"
 ```
 
 **Features:**
@@ -160,7 +160,7 @@ Hooks that execute AFTER operations to process and learn:
 
 **post-edit** - Auto-format, validate, and update memory
 ```bash
-npx claude-flow hook post-edit [options]
+npx rufflo hook post-edit [options]
 
 Options:
   --file, -f <path>         File path that was edited
@@ -170,9 +170,9 @@ Options:
   --validate-output         Validate edited file
 
 Examples:
-  npx claude-flow hook post-edit --file "src$components/Button.jsx"
-  npx claude-flow hook post-edit -f "api$auth.js" --memory-key "auth$login"
-  npx claude-flow hook post-edit -f "utils$helpers.ts" --train-patterns
+  npx rufflo hook post-edit --file "src$components/Button.jsx"
+  npx rufflo hook post-edit -f "api$auth.js" --memory-key "auth$login"
+  npx rufflo hook post-edit -f "utils$helpers.ts" --train-patterns
 ```
 
 **Features:**
@@ -183,7 +183,7 @@ Examples:
 
 **post-bash** - Log execution and update metrics
 ```bash
-npx claude-flow hook post-bash --command <cmd>
+npx rufflo hook post-bash --command <cmd>
 
 Options:
   --command, -c <cmd>       Command that was executed
@@ -192,7 +192,7 @@ Options:
   --store-result            Store result in memory
 
 Examples:
-  npx claude-flow hook post-bash -c "npm test" --update-metrics
+  npx rufflo hook post-bash -c "npm test" --update-metrics
 ```
 
 **Features:**
@@ -203,7 +203,7 @@ Examples:
 
 **post-task** - Performance analysis and decision storage
 ```bash
-npx claude-flow hook post-task [options]
+npx rufflo hook post-task [options]
 
 Options:
   --task-id, -t <id>        Task identifier for tracking
@@ -213,9 +213,9 @@ Options:
   --generate-report         Create task completion report
 
 Examples:
-  npx claude-flow hook post-task --task-id "auth-implementation"
-  npx claude-flow hook post-task -t "api-refactor" --analyze-performance
-  npx claude-flow hook post-task -t "bug-fix-123" --store-decisions
+  npx rufflo hook post-task --task-id "auth-implementation"
+  npx rufflo hook post-task -t "api-refactor" --analyze-performance
+  npx rufflo hook post-task -t "bug-fix-123" --store-decisions
 ```
 
 **Features:**
@@ -226,7 +226,7 @@ Examples:
 
 **post-search** - Cache results and improve patterns
 ```bash
-npx claude-flow hook post-search --query <query> --results <path>
+npx rufflo hook post-search --query <query> --results <path>
 
 Options:
   --query, -q <text>        Original search query
@@ -235,7 +235,7 @@ Options:
   --train-patterns          Improve search patterns
 
 Examples:
-  npx claude-flow hook post-search -q "auth" -r "results.json" --train-patterns
+  npx rufflo hook post-search -q "auth" -r "results.json" --train-patterns
 ```
 
 **Features:**
@@ -249,7 +249,7 @@ Hooks that coordinate with MCP swarm tools:
 
 **mcp-initialized** - Persist swarm configuration
 ```bash
-npx claude-flow hook mcp-initialized --swarm-id <id>
+npx rufflo hook mcp-initialized --swarm-id <id>
 
 Features:
 - Save swarm topology and configuration
@@ -259,7 +259,7 @@ Features:
 
 **agent-spawned** - Update agent roster and memory
 ```bash
-npx claude-flow hook agent-spawned --agent-id <id> --type <type>
+npx rufflo hook agent-spawned --agent-id <id> --type <type>
 
 Features:
 - Register agent in coordination memory
@@ -269,7 +269,7 @@ Features:
 
 **task-orchestrated** - Monitor task progress
 ```bash
-npx claude-flow hook task-orchestrated --task-id <id>
+npx rufflo hook task-orchestrated --task-id <id>
 
 Features:
 - Track task progress through memory
@@ -279,7 +279,7 @@ Features:
 
 **neural-trained** - Save pattern improvements
 ```bash
-npx claude-flow hook neural-trained --pattern <name>
+npx rufflo hook neural-trained --pattern <name>
 
 Features:
 - Export trained neural patterns
@@ -309,7 +309,7 @@ Features:
 
 **memory-sync** - Synchronize memory across swarm agents
 ```bash
-npx claude-flow hook memory-sync --namespace <ns>
+npx rufflo hook memory-sync --namespace <ns>
 
 Features:
 - Sync memory state across agents
@@ -322,7 +322,7 @@ Features:
 
 **session-start** - Initialize new session
 ```bash
-npx claude-flow hook session-start --session-id <id>
+npx rufflo hook session-start --session-id <id>
 
 Options:
   --session-id, -s <id>     Session identifier
@@ -338,7 +338,7 @@ Features:
 
 **session-restore** - Load previous session state
 ```bash
-npx claude-flow hook session-restore --session-id <id>
+npx rufflo hook session-restore --session-id <id>
 
 Options:
   --session-id, -s <id>     Session to restore
@@ -346,8 +346,8 @@ Options:
   --restore-agents          Restore agent configurations
 
 Examples:
-  npx claude-flow hook session-restore --session-id "swarm-20241019"
-  npx claude-flow hook session-restore -s "feature-auth" --restore-memory
+  npx rufflo hook session-restore --session-id "swarm-20241019"
+  npx rufflo hook session-restore -s "feature-auth" --restore-memory
 ```
 
 **Features:**
@@ -358,7 +358,7 @@ Examples:
 
 **session-end** - Cleanup and persist session state
 ```bash
-npx claude-flow hook session-end [options]
+npx rufflo hook session-end [options]
 
 Options:
   --session-id, -s <id>     Session identifier to end
@@ -368,9 +368,9 @@ Options:
   --cleanup-temp            Remove temporary files
 
 Examples:
-  npx claude-flow hook session-end --session-id "dev-session-2024"
-  npx claude-flow hook session-end -s "feature-auth" --export-metrics --generate-summary
-  npx claude-flow hook session-end -s "quick-fix" --cleanup-temp
+  npx rufflo hook session-end --session-id "dev-session-2024"
+  npx rufflo hook session-end -s "feature-auth" --export-metrics --generate-summary
+  npx rufflo hook session-end -s "quick-fix" --cleanup-temp
 ```
 
 **Features:**
@@ -381,7 +381,7 @@ Examples:
 
 **notify** - Custom notifications with swarm status
 ```bash
-npx claude-flow hook notify --message <msg>
+npx rufflo hook notify --message <msg>
 
 Options:
   --message, -m <text>      Notification message
@@ -390,8 +390,8 @@ Options:
   --broadcast               Send to all agents
 
 Examples:
-  npx claude-flow hook notify -m "Task completed" --level info
-  npx claude-flow hook notify -m "Critical error" --level error --broadcast
+  npx rufflo hook notify -m "Task completed" --level info
+  npx rufflo hook notify -m "Critical error" --level error --broadcast
 ```
 
 **Features:**
@@ -414,14 +414,14 @@ Edit `.claude$settings.json` to configure hooks:
         "matcher": "^(Write|Edit|MultiEdit)$",
         "hooks": [{
           "type": "command",
-          "command": "npx claude-flow hook pre-edit --file '${tool.params.file_path}' --memory-key 'swarm$editor$current'"
+          "command": "npx rufflo hook pre-edit --file '${tool.params.file_path}' --memory-key 'swarm$editor$current'"
         }]
       },
       {
         "matcher": "^Bash$",
         "hooks": [{
           "type": "command",
-          "command": "npx claude-flow hook pre-bash --command '${tool.params.command}'"
+          "command": "npx rufflo hook pre-bash --command '${tool.params.command}'"
         }]
       }
     ],
@@ -430,14 +430,14 @@ Edit `.claude$settings.json` to configure hooks:
         "matcher": "^(Write|Edit|MultiEdit)$",
         "hooks": [{
           "type": "command",
-          "command": "npx claude-flow hook post-edit --file '${tool.params.file_path}' --memory-key 'swarm$editor$complete' --auto-format --train-patterns"
+          "command": "npx rufflo hook post-edit --file '${tool.params.file_path}' --memory-key 'swarm$editor$complete' --auto-format --train-patterns"
         }]
       },
       {
         "matcher": "^Bash$",
         "hooks": [{
           "type": "command",
-          "command": "npx claude-flow hook post-bash --command '${tool.params.command}' --update-metrics"
+          "command": "npx rufflo hook post-bash --command '${tool.params.command}' --update-metrics"
         }]
       }
     ]
@@ -462,7 +462,7 @@ Complete hook configuration with all features:
         "hooks": [
           {
             "type": "command",
-            "command": "npx claude-flow hook pre-edit --file '${tool.params.file_path}' --auto-assign-agent --validate-syntax",
+            "command": "npx rufflo hook pre-edit --file '${tool.params.file_path}' --auto-assign-agent --validate-syntax",
             "timeout": 3000,
             "continueOnError": true
           }
@@ -473,7 +473,7 @@ Complete hook configuration with all features:
         "hooks": [
           {
             "type": "command",
-            "command": "npx claude-flow hook pre-task --description '${tool.params.task}' --auto-spawn-agents --load-memory",
+            "command": "npx rufflo hook pre-task --description '${tool.params.task}' --auto-spawn-agents --load-memory",
             "async": true
           }
         ]
@@ -483,7 +483,7 @@ Complete hook configuration with all features:
         "hooks": [
           {
             "type": "command",
-            "command": "npx claude-flow hook pre-search --query '${tool.params.pattern}' --check-cache"
+            "command": "npx rufflo hook pre-search --query '${tool.params.pattern}' --check-cache"
           }
         ]
       }
@@ -495,7 +495,7 @@ Complete hook configuration with all features:
         "hooks": [
           {
             "type": "command",
-            "command": "npx claude-flow hook post-edit --file '${tool.params.file_path}' --memory-key 'edits/${tool.params.file_path}' --auto-format --train-patterns",
+            "command": "npx rufflo hook post-edit --file '${tool.params.file_path}' --memory-key 'edits/${tool.params.file_path}' --auto-format --train-patterns",
             "async": true
           }
         ]
@@ -505,7 +505,7 @@ Complete hook configuration with all features:
         "hooks": [
           {
             "type": "command",
-            "command": "npx claude-flow hook post-task --task-id '${result.task_id}' --analyze-performance --store-decisions --export-learnings",
+            "command": "npx rufflo hook post-task --task-id '${result.task_id}' --analyze-performance --store-decisions --export-learnings",
             "async": true
           }
         ]
@@ -515,7 +515,7 @@ Complete hook configuration with all features:
         "hooks": [
           {
             "type": "command",
-            "command": "npx claude-flow hook post-search --query '${tool.params.pattern}' --cache-results --train-patterns"
+            "command": "npx rufflo hook post-search --query '${tool.params.pattern}' --cache-results --train-patterns"
           }
         ]
       }
@@ -526,7 +526,7 @@ Complete hook configuration with all features:
         "hooks": [
           {
             "type": "command",
-            "command": "npx claude-flow hook session-start --session-id '${session.id}' --load-context"
+            "command": "npx rufflo hook session-start --session-id '${session.id}' --load-context"
           }
         ]
       }
@@ -537,7 +537,7 @@ Complete hook configuration with all features:
         "hooks": [
           {
             "type": "command",
-            "command": "npx claude-flow hook session-end --session-id '${session.id}' --export-metrics --generate-summary --cleanup-temp"
+            "command": "npx rufflo hook session-end --session-id '${session.id}' --export-metrics --generate-summary --cleanup-temp"
           }
         ]
       }
@@ -559,7 +559,7 @@ Add protection for sensitive files:
         "hooks": [
           {
             "type": "command",
-            "command": "npx claude-flow hook check-protected --file '${tool.params.file_path}'"
+            "command": "npx rufflo hook check-protected --file '${tool.params.file_path}'"
           }
         ]
       }
@@ -599,15 +599,15 @@ Hooks automatically integrate with MCP tools for coordination:
 
 ```javascript
 // Hook command
-npx claude-flow hook pre-task --description "Build REST API"
+npx rufflo hook pre-task --description "Build REST API"
 
 // Internally calls MCP tools:
-mcp__claude-flow__agent_spawn {
+mcp__rufflo__agent_spawn {
   type: "backend-dev",
   capabilities: ["api", "database", "testing"]
 }
 
-mcp__claude-flow__memory_usage {
+mcp__rufflo__memory_usage {
   action: "store",
   key: "swarm$task$api-build$context",
   namespace: "coordination",
@@ -623,10 +623,10 @@ mcp__claude-flow__memory_usage {
 
 ```javascript
 // Hook command
-npx claude-flow hook post-edit --file "api$auth.js"
+npx rufflo hook post-edit --file "api$auth.js"
 
 // Internally calls MCP tools:
-mcp__claude-flow__memory_usage {
+mcp__rufflo__memory_usage {
   action: "store",
   key: "swarm$edits$api$auth.js",
   namespace: "coordination",
@@ -639,7 +639,7 @@ mcp__claude-flow__memory_usage {
   })
 }
 
-mcp__claude-flow__neural_train {
+mcp__rufflo__neural_train {
   pattern_type: "coordination",
   training_data: { /* edit patterns */ }
 }
@@ -649,14 +649,14 @@ mcp__claude-flow__neural_train {
 
 ```javascript
 // Hook command
-npx claude-flow hook session-end --session-id "dev-2024"
+npx rufflo hook session-end --session-id "dev-2024"
 
 // Internally calls MCP tools:
-mcp__claude-flow__memory_persist {
+mcp__rufflo__memory_persist {
   sessionId: "dev-2024"
 }
 
-mcp__claude-flow__swarm_status {
+mcp__rufflo__swarm_status {
   swarmId: "current"
 }
 
@@ -671,7 +671,7 @@ All hooks follow a standardized memory coordination pattern:
 
 **Phase 1: STATUS** - Hook starts
 ```javascript
-mcp__claude-flow__memory_usage {
+mcp__rufflo__memory_usage {
   action: "store",
   key: "swarm$hooks$pre-edit$status",
   namespace: "coordination",
@@ -686,7 +686,7 @@ mcp__claude-flow__memory_usage {
 
 **Phase 2: PROGRESS** - Hook processes
 ```javascript
-mcp__claude-flow__memory_usage {
+mcp__rufflo__memory_usage {
   action: "store",
   key: "swarm$hooks$pre-edit$progress",
   namespace: "coordination",
@@ -700,7 +700,7 @@ mcp__claude-flow__memory_usage {
 
 **Phase 3: COMPLETE** - Hook finishes
 ```javascript
-mcp__claude-flow__memory_usage {
+mcp__rufflo__memory_usage {
   action: "store",
   key: "swarm$hooks$pre-edit$complete",
   namespace: "coordination",
@@ -776,7 +776,7 @@ FILES=$(git diff --cached --name-only --diff-filter=ACM)
 
 for FILE in $FILES; do
   # Run pre-edit hook for validation
-  npx claude-flow hook pre-edit --file "$FILE" --validate-syntax
+  npx rufflo hook pre-edit --file "$FILE" --validate-syntax
 
   if [ $? -ne 0 ]; then
     echo "Validation failed for $FILE"
@@ -784,7 +784,7 @@ for FILE in $FILES; do
   fi
 
   # Run post-edit hook for formatting
-  npx claude-flow hook post-edit --file "$FILE" --auto-format
+  npx rufflo hook post-edit --file "$FILE" --auto-format
 done
 
 # Run tests
@@ -803,7 +803,7 @@ exit $?
 COMMIT_HASH=$(git rev-parse HEAD)
 COMMIT_MSG=$(git log -1 --pretty=%B)
 
-npx claude-flow hook notify \
+npx rufflo hook notify \
   --message "Commit completed: $COMMIT_MSG" \
   --level info \
   --swarm-status
@@ -820,12 +820,12 @@ npx claude-flow hook notify \
 npm run test:all
 
 # Run quality checks
-npx claude-flow hook session-end \
+npx rufflo hook session-end \
   --generate-report \
   --export-metrics
 
 # Verify quality thresholds
-TRUTH_SCORE=$(npx claude-flow metrics score --format json | jq -r '.truth_score')
+TRUTH_SCORE=$(npx rufflo metrics score --format json | jq -r '.truth_score')
 
 if (( $(echo "$TRUTH_SCORE < 0.95" | bc -l) )); then
   echo "Truth score below threshold: $TRUTH_SCORE < 0.95"
@@ -844,13 +844,13 @@ How agents use hooks for coordination:
 ```bash
 # Agent 1: Backend Developer
 # STEP 1: Pre-task preparation
-npx claude-flow hook pre-task \
+npx rufflo hook pre-task \
   --description "Implement user authentication API" \
   --auto-spawn-agents \
   --load-memory
 
 # STEP 2: Work begins - pre-edit validation
-npx claude-flow hook pre-edit \
+npx rufflo hook pre-edit \
   --file "api$auth.js" \
   --auto-assign-agent \
   --validate-syntax
@@ -859,20 +859,20 @@ npx claude-flow hook pre-edit \
 # ... code changes ...
 
 # STEP 4: Post-edit processing
-npx claude-flow hook post-edit \
+npx rufflo hook post-edit \
   --file "api$auth.js" \
   --memory-key "swarm$backend$auth-api" \
   --auto-format \
   --train-patterns
 
 # STEP 5: Notify coordination system
-npx claude-flow hook notify \
+npx rufflo hook notify \
   --message "Auth API implementation complete" \
   --swarm-status \
   --broadcast
 
 # STEP 6: Task completion
-npx claude-flow hook post-task \
+npx rufflo hook post-task \
   --task-id "auth-api" \
   --analyze-performance \
   --store-decisions \
@@ -882,25 +882,25 @@ npx claude-flow hook post-task \
 ```bash
 # Agent 2: Test Engineer (receives notification)
 # STEP 1: Check memory for API details
-npx claude-flow hook session-restore \
+npx rufflo hook session-restore \
   --session-id "swarm-current" \
   --restore-memory
 
 # Memory contains: swarm$backend$auth-api with implementation details
 
 # STEP 2: Generate tests
-npx claude-flow hook pre-task \
+npx rufflo hook pre-task \
   --description "Write tests for auth API" \
   --load-memory
 
 # STEP 3: Create test file
-npx claude-flow hook post-edit \
+npx rufflo hook post-edit \
   --file "api$auth.test.js" \
   --memory-key "swarm$testing$auth-api-tests" \
   --train-patterns
 
 # STEP 4: Share test results
-npx claude-flow hook notify \
+npx rufflo hook notify \
   --message "Auth API tests complete - 100% coverage" \
   --broadcast
 ```
@@ -979,37 +979,37 @@ module.exports = {
 
 ```bash
 # Session start - initialize coordination
-npx claude-flow hook session-start --session-id "fullstack-feature"
+npx rufflo hook session-start --session-id "fullstack-feature"
 
 # Pre-task planning
-npx claude-flow hook pre-task \
+npx rufflo hook pre-task \
   --description "Build user profile feature - frontend + backend + tests" \
   --auto-spawn-agents \
   --optimize-topology
 
 # Backend work
-npx claude-flow hook pre-edit --file "api$profile.js"
+npx rufflo hook pre-edit --file "api$profile.js"
 # ... implement backend ...
-npx claude-flow hook post-edit \
+npx rufflo hook post-edit \
   --file "api$profile.js" \
   --memory-key "profile$backend" \
   --train-patterns
 
 # Frontend work (reads backend details from memory)
-npx claude-flow hook pre-edit --file "components/Profile.jsx"
+npx rufflo hook pre-edit --file "components/Profile.jsx"
 # ... implement frontend ...
-npx claude-flow hook post-edit \
+npx rufflo hook post-edit \
   --file "components/Profile.jsx" \
   --memory-key "profile$frontend" \
   --train-patterns
 
 # Testing (reads both backend and frontend from memory)
-npx claude-flow hook pre-task \
+npx rufflo hook pre-task \
   --description "Test profile feature" \
   --load-memory
 
 # Session end - export everything
-npx claude-flow hook session-end \
+npx rufflo hook session-end \
   --session-id "fullstack-feature" \
   --export-metrics \
   --generate-summary
@@ -1019,39 +1019,39 @@ npx claude-flow hook session-end \
 
 ```bash
 # Start debugging session
-npx claude-flow hook session-start --session-id "debug-memory-leak"
+npx rufflo hook session-start --session-id "debug-memory-leak"
 
 # Pre-task: analyze issue
-npx claude-flow hook pre-task \
+npx rufflo hook pre-task \
   --description "Debug memory leak in event handlers" \
   --load-memory \
   --estimate-complexity
 
 # Search for event emitters
-npx claude-flow hook pre-search --query "EventEmitter"
+npx rufflo hook pre-search --query "EventEmitter"
 # ... search executes ...
-npx claude-flow hook post-search \
+npx rufflo hook post-search \
   --query "EventEmitter" \
   --cache-results
 
 # Fix the issue
-npx claude-flow hook pre-edit \
+npx rufflo hook pre-edit \
   --file "services$events.js" \
   --backup-file
 # ... fix code ...
-npx claude-flow hook post-edit \
+npx rufflo hook post-edit \
   --file "services$events.js" \
   --memory-key "debug$memory-leak-fix" \
   --validate-output
 
 # Verify fix
-npx claude-flow hook post-task \
+npx rufflo hook post-task \
   --task-id "memory-leak-fix" \
   --analyze-performance \
   --generate-report
 
 # End session
-npx claude-flow hook session-end \
+npx rufflo hook session-end \
   --session-id "debug-memory-leak" \
   --export-metrics
 ```
@@ -1060,27 +1060,27 @@ npx claude-flow hook session-end \
 
 ```bash
 # Initialize swarm for refactoring
-npx claude-flow hook pre-task \
+npx rufflo hook pre-task \
   --description "Refactor legacy codebase to modern patterns" \
   --auto-spawn-agents \
   --optimize-topology
 
 # Agent 1: Code Analyzer
-npx claude-flow hook pre-task --description "Analyze code complexity"
+npx rufflo hook pre-task --description "Analyze code complexity"
 # ... analysis ...
-npx claude-flow hook post-task \
+npx rufflo hook post-task \
   --task-id "analysis" \
   --store-decisions
 
 # Agent 2: Refactoring (reads analysis from memory)
-npx claude-flow hook session-restore \
+npx rufflo hook session-restore \
   --session-id "swarm-refactor" \
   --restore-memory
 
 for file in src/**/*.js; do
-  npx claude-flow hook pre-edit --file "$file" --backup-file
+  npx rufflo hook pre-edit --file "$file" --backup-file
   # ... refactor ...
-  npx claude-flow hook post-edit \
+  npx rufflo hook post-edit \
     --file "$file" \
     --memory-key "refactor/$file" \
     --auto-format \
@@ -1088,12 +1088,12 @@ for file in src/**/*.js; do
 done
 
 # Agent 3: Testing (reads refactored code from memory)
-npx claude-flow hook pre-task \
+npx rufflo hook pre-task \
   --description "Generate tests for refactored code" \
   --load-memory
 
 # Broadcast completion
-npx claude-flow hook notify \
+npx rufflo hook notify \
   --message "Refactoring complete - all tests passing" \
   --broadcast
 ```
@@ -1117,13 +1117,13 @@ Enable debug mode for troubleshooting:
 export CLAUDE_FLOW_DEBUG=true
 
 # Test specific hook with verbose output
-npx claude-flow hook pre-edit --file "test.js" --debug
+npx rufflo hook pre-edit --file "test.js" --debug
 
 # Check hook execution logs
-cat .claude-flow$logs$hooks-$(date +%Y-%m-%d).log
+cat .rufflo$logs$hooks-$(date +%Y-%m-%d).log
 
 # Validate configuration
-npx claude-flow hook validate-config
+npx rufflo hook validate-config
 ```
 
 ### Benefits
@@ -1161,7 +1161,7 @@ npx claude-flow hook validate-config
 - Check hook matcher patterns
 - Enable debug mode
 - Review permission settings
-- Ensure claude-flow CLI is in PATH
+- Ensure rufflo CLI is in PATH
 
 #### Hook Timeouts
 - Increase timeout values in configuration
@@ -1183,12 +1183,12 @@ npx claude-flow hook validate-config
 
 ### Related Commands
 
-- `npx claude-flow init --hooks` - Initialize hooks system
-- `npx claude-flow hook --list` - List available hooks
-- `npx claude-flow hook --test <hook>` - Test specific hook
-- `npx claude-flow memory usage` - Manage memory
-- `npx claude-flow agent spawn` - Spawn agents
-- `npx claude-flow swarm init` - Initialize swarm
+- `npx rufflo init --hooks` - Initialize hooks system
+- `npx rufflo hook --list` - List available hooks
+- `npx rufflo hook --test <hook>` - Test specific hook
+- `npx rufflo memory usage` - Manage memory
+- `npx rufflo agent spawn` - Spawn agents
+- `npx rufflo swarm init` - Initialize swarm
 
 ### Integration with Other Skills
 

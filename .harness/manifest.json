@@ -1,11 +1,11 @@
 {
   "schema": 1,
-  "generator": "ruflo-hand-authored",
-  "template": "ruflo-self",
+  "generator": "rufflo-hand-authored",
+  "template": "rufflo-self",
   "template_version": "3.11.0",
   "vars": {
-    "name": "ruflo",
-    "description": "Ruflo — multi-agent orchestration platform built on @claude-flow/cli",
+    "name": "rufflo",
+    "description": "Rufflo — multi-agent orchestration platform built on @rufflo/cli",
     "host": "claude-code"
   },
   "hosts": ["claude-code"],
@@ -16,6 +16,6 @@
   "generated_at": "2026-06-16T20:00:00.000Z",
   "meta": {
     "surface": "cli",
-    "adr_anchor": "ADR-150 — ruflo's metaharness integration; this manifest covers the security-relevant surface that mcp-policy.json governs"
+    "adr_anchor": "ADR-150 — rufflo's metaharness integration; this manifest covers the security-relevant surface that mcp-policy.json governs"
   }
 }

@@ -2,7 +2,7 @@
 name: code-review-swarm
 description: |
   Deploy specialized AI agents to perform comprehensive, intelligent code reviews that go beyond traditional static analysis
-tools: mcp__claude-flow__swarm_init, mcp__claude-flow__agent_spawn, mcp__claude-flow__task_orchestrate, Bash, Read, Write, TodoWrite
+tools: mcp__rufflo__swarm_init, mcp__rufflo__agent_spawn, mcp__rufflo__task_orchestrate, Bash, Read, Write, TodoWrite
 ---
 
 # Code Review Swarm - Automated Code Review with AI Agents

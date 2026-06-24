@@ -75,15 +75,15 @@ Planning principles:
 - **Mixed Execution**: Choose between LLM, code, or hybrid execution per action
 
 Use MCP tools for persistence and learning:
-- `mcp__claude-flow__memory_store` / `memory_search` — store and retrieve plans in `goap-plans` namespace
-- `mcp__claude-flow__task_create` / `task_update` — create and track plan steps as tasks
-- `mcp__claude-flow__hooks_intelligence_trajectory-start` / `trajectory-step` / `trajectory-end` — record execution trajectories for learning
-- `mcp__claude-flow__neural_predict` — predict optimal approaches based on learned patterns
-- `mcp__claude-flow__workflow_create` / `workflow_execute` — codify repeatable plans as workflows
+- `mcp__rufflo__memory_store` / `memory_search` — store and retrieve plans in `goap-plans` namespace
+- `mcp__rufflo__task_create` / `task_update` — create and track plan steps as tasks
+- `mcp__rufflo__hooks_intelligence_trajectory-start` / `trajectory-step` / `trajectory-end` — record execution trajectories for learning
+- `mcp__rufflo__neural_predict` — predict optimal approaches based on learned patterns
+- `mcp__rufflo__workflow_create` / `workflow_execute` — codify repeatable plans as workflows
 
 ### Neural Learning
 
 After completing a plan, feed the planner trajectory store so future replans inherit the outcome:
 ```bash
-npx @claude-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
+npx @rufflo/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
 ```

@@ -2,7 +2,7 @@
 name: kg-extract
 description: Extract entities and relations from source files to build a knowledge graph
 argument-hint: "<path>"
-allowed-tools: Read Glob Grep mcp__claude-flow__agentdb_hierarchical-store mcp__claude-flow__agentdb_causal-edge mcp__claude-flow__agentdb_pattern-store mcp__claude-flow__embeddings_generate Bash
+allowed-tools: Read Glob Grep mcp__rufflo__agentdb_hierarchical-store mcp__rufflo__agentdb_causal-edge mcp__rufflo__agentdb_pattern-store mcp__rufflo__embeddings_generate Bash
 ---
 
 # KG Extract
@@ -32,13 +32,13 @@ When you need to build or update a knowledge graph from source code or documenta
    ^\s*import\s*\{[^}]*\btype\s+\w+   → split: type specifiers → type-depends-on, value specifiers → imports
    ^\s*import\s+[^{]*\bfrom\s+        → imports (value)
    ```
-4. **Store in AgentDB** -- call `mcp__claude-flow__agentdb_hierarchical-store` for each entity with metadata (name, type, file, line, description)
-5. **Create edges** -- call `mcp__claude-flow__agentdb_causal-edge` for each relation with source, target, relation type, and weight
+4. **Store in AgentDB** -- call `mcp__rufflo__agentdb_hierarchical-store` for each entity with metadata (name, type, file, line, description)
+5. **Create edges** -- call `mcp__rufflo__agentdb_causal-edge` for each relation with source, target, relation type, and weight
 6. **Report** -- summarize: total entities by type, total relations by type, files scanned
 
 ## CLI alternative
 
 ```bash
-npx @claude-flow/cli@latest memory store --namespace knowledge-graph --key "entity-NAME" --value "METADATA_JSON"
-npx @claude-flow/cli@latest memory search --query "entities in auth module" --namespace knowledge-graph
+npx @rufflo/cli@latest memory store --namespace knowledge-graph --key "entity-NAME" --value "METADATA_JSON"
+npx @rufflo/cli@latest memory search --query "entities in auth module" --namespace knowledge-graph
 ```

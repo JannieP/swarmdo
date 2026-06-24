@@ -6,7 +6,7 @@
  * - Mock external dependencies
  * - Focus on behavior, not implementation
  *
- * @module @claude-flow/teammate-plugin/tests
+ * @module @rufflo/teammate-plugin/tests
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
@@ -49,7 +49,7 @@ import {
 // Test Helpers
 // ============================================================================
 
-const TEST_TEAMS_DIR = path.join(os.tmpdir(), 'claude-flow-test-teams');
+const TEST_TEAMS_DIR = path.join(os.tmpdir(), 'rufflo-test-teams');
 
 function cleanupTestDir(): void {
   if (fs.existsSync(TEST_TEAMS_DIR)) {

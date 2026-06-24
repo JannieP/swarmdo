@@ -7,7 +7,7 @@
 
 ## Context
 
-Claude Flow V3's neural learning system generates valuable patterns, trajectories, and learned behaviors during operation. These patterns are currently isolated to individual installations, preventing knowledge sharing across:
+Rufflo V3's neural learning system generates valuable patterns, trajectories, and learned behaviors during operation. These patterns are currently isolated to individual installations, preventing knowledge sharing across:
 
 1. **Team collaboration** - Developers can't share optimized routing patterns
 2. **Organizational standards** - Companies can't distribute approved patterns
@@ -67,26 +67,26 @@ Implement a **Transfer Hook System** with:
 
 ```bash
 # Basic export to file
-npx claude-flow@v3alpha hooks transfer export \
+npx rufflo@v3alpha hooks transfer export \
   --output ./patterns/my-patterns.cfp \
   --format cbor
 
 # Export with anonymization
-npx claude-flow@v3alpha hooks transfer export \
+npx rufflo@v3alpha hooks transfer export \
   --output ./patterns/team-patterns.cfp \
   --anonymize standard \
   --redact-pii true \
   --strip-paths true
 
 # Export to IPFS
-npx claude-flow@v3alpha hooks transfer export \
+npx rufflo@v3alpha hooks transfer export \
   --to-ipfs \
   --anonymize strict \
   --pin true \
   --gateway https://w3s.link
 
 # Export specific pattern types
-npx claude-flow@v3alpha hooks transfer export \
+npx rufflo@v3alpha hooks transfer export \
   --types routing,complexity,coverage \
   --min-confidence 0.7 \
   --since "2026-01-01"
@@ -96,21 +96,21 @@ npx claude-flow@v3alpha hooks transfer export \
 
 ```bash
 # Import from file
-npx claude-flow@v3alpha hooks transfer import \
+npx rufflo@v3alpha hooks transfer import \
   --input ./patterns/team-patterns.cfp
 
 # Import from IPFS
-npx claude-flow@v3alpha hooks transfer import \
+npx rufflo@v3alpha hooks transfer import \
   --from-ipfs bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi \
   --verify-signature true
 
 # Import from Pattern Store
-npx claude-flow@v3alpha hooks transfer import \
+npx rufflo@v3alpha hooks transfer import \
   --from-store typescript-routing-patterns \
   --version latest
 
 # Import with merge strategy
-npx claude-flow@v3alpha hooks transfer import \
+npx rufflo@v3alpha hooks transfer import \
   --input ./patterns.cfp \
   --strategy merge \
   --conflict-resolution highest-confidence
@@ -120,13 +120,13 @@ npx claude-flow@v3alpha hooks transfer import \
 
 ```bash
 # Browse pattern store
-npx claude-flow@v3alpha hooks transfer store list \
+npx rufflo@v3alpha hooks transfer store list \
   --category routing \
   --language typescript \
   --min-downloads 100
 
 # Publish to store
-npx claude-flow@v3alpha hooks transfer store publish \
+npx rufflo@v3alpha hooks transfer store publish \
   --input ./patterns.cfp \
   --name "react-component-patterns" \
   --description "Optimized routing for React projects" \
@@ -134,7 +134,7 @@ npx claude-flow@v3alpha hooks transfer store publish \
   --anonymize strict
 
 # Download from store
-npx claude-flow@v3alpha hooks transfer store download \
+npx rufflo@v3alpha hooks transfer store download \
   --name "enterprise-security-patterns" \
   --output ./patterns/
 ```
@@ -297,7 +297,7 @@ interface RedactionConfig {
 
 ## Export Format Specification
 
-### Claude Flow Pattern (.cfp) Format
+### Rufflo Pattern (.cfp) Format
 
 ```typescript
 interface CFPFormat {
@@ -305,7 +305,7 @@ interface CFPFormat {
   magic: 'CFP1';                    // Magic bytes
   version: SemVer;                  // Format version
   createdAt: ISO8601;
-  generatedBy: string;              // Claude Flow version
+  generatedBy: string;              // Rufflo version
 
   // Metadata
   metadata: {
@@ -386,7 +386,7 @@ interface CFPFormat {
 ### RuVector IPFS Adapter
 
 ```typescript
-// v3/@claude-flow/cli/src/transfer/ipfs-adapter.ts
+// v3/@rufflo/cli/src/transfer/ipfs-adapter.ts
 
 import { create as createIpfsClient } from 'ipfs-http-client';
 
@@ -426,27 +426,27 @@ class IPFSPatternStore {
 
 ```bash
 # Upload to IPFS with pinning
-npx claude-flow@v3alpha hooks transfer ipfs upload \
+npx rufflo@v3alpha hooks transfer ipfs upload \
   --input ./patterns.cfp \
   --pin pinata \
   --name "my-patterns"
 
 # Download from IPFS
-npx claude-flow@v3alpha hooks transfer ipfs download \
+npx rufflo@v3alpha hooks transfer ipfs download \
   --cid bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi \
   --output ./patterns.cfp
 
 # List pinned patterns
-npx claude-flow@v3alpha hooks transfer ipfs list \
+npx rufflo@v3alpha hooks transfer ipfs list \
   --service pinata
 
 # Publish to IPNS (mutable name)
-npx claude-flow@v3alpha hooks transfer ipfs publish \
+npx rufflo@v3alpha hooks transfer ipfs publish \
   --cid bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi \
   --key my-patterns-key
 
 # Resolve IPNS name
-npx claude-flow@v3alpha hooks transfer ipfs resolve \
+npx rufflo@v3alpha hooks transfer ipfs resolve \
   --name my-patterns
 ```
 
@@ -458,7 +458,7 @@ npx claude-flow@v3alpha hooks transfer ipfs resolve \
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    Claude Flow Pattern Store                     │
+│                    Rufflo Pattern Store                     │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                  │
 │  ┌──────────────────┐    ┌──────────────────┐                   │
@@ -537,34 +537,34 @@ interface Category {
 
 ```bash
 # Search patterns
-npx claude-flow@v3alpha hooks transfer store search \
+npx rufflo@v3alpha hooks transfer store search \
   --query "react hooks optimization" \
   --category routing \
   --min-rating 4.0
 
 # Get pattern info
-npx claude-flow@v3alpha hooks transfer store info \
+npx rufflo@v3alpha hooks transfer store info \
   --name react-routing-patterns
 
 # Install pattern
-npx claude-flow@v3alpha hooks transfer store install \
+npx rufflo@v3alpha hooks transfer store install \
   --name react-routing-patterns \
   --version ^1.0.0
 
 # Publish pattern
-npx claude-flow@v3alpha hooks transfer store publish \
+npx rufflo@v3alpha hooks transfer store publish \
   --input ./patterns.cfp \
   --name my-patterns \
   --category routing \
   --license MIT
 
 # Update published pattern
-npx claude-flow@v3alpha hooks transfer store update \
+npx rufflo@v3alpha hooks transfer store update \
   --name my-patterns \
   --input ./patterns-v2.cfp
 
 # Rate pattern
-npx claude-flow@v3alpha hooks transfer store rate \
+npx rufflo@v3alpha hooks transfer store rate \
   --name react-routing-patterns \
   --rating 5 \
   --comment "Excellent for large React projects"
@@ -621,7 +621,7 @@ interface ImportSandbox {
 
 ```typescript
 type TrustLevel =
-  | 'verified'      // Signed by Claude Flow team
+  | 'verified'      // Signed by Rufflo team
   | 'community'     // Community verified, high ratings
   | 'unverified'    // No verification
   | 'untrusted'     // Flagged or low trust
@@ -685,7 +685,7 @@ interface TrustPolicy {
 ## File Structure
 
 ```
-v3/@claude-flow/cli/src/
+v3/@rufflo/cli/src/
 ├── commands/
 │   └── transfer.ts              # Main transfer command with subcommands
 ├── transfer/
@@ -727,7 +727,7 @@ v3/@claude-flow/cli/src/
 
 ## Configuration
 
-### claude-flow.config.json
+### rufflo.config.json
 
 ```json
 {
@@ -746,8 +746,8 @@ v3/@claude-flow/cli/src/
 
     "store": {
       "enabled": true,
-      "registryUrl": "https://patterns.claude-flow.dev/registry.json",
-      "cacheDir": ".claude-flow/patterns"
+      "registryUrl": "https://patterns.rufflo.dev/registry.json",
+      "cacheDir": ".rufflo/patterns"
     },
 
     "security": {
@@ -812,7 +812,7 @@ v3/@claude-flow/cli/src/
 ### Transfer MCP Tools
 
 ```typescript
-// v3/@claude-flow/cli/src/mcp-tools/transfer-tools.ts
+// v3/@rufflo/cli/src/mcp-tools/transfer-tools.ts
 
 import type { MCPTool } from './types.js';
 
@@ -1548,7 +1548,7 @@ export const transferTools: MCPTool[] = [
 ### MCP Tool Registration
 
 ```typescript
-// v3/@claude-flow/cli/src/mcp-tools/index.ts
+// v3/@rufflo/cli/src/mcp-tools/index.ts
 
 import { transferTools } from './transfer-tools.js';
 
@@ -1643,7 +1643,7 @@ const verification = await mcp__claude_flow__transfer_verify({
 On Windows, MCP servers require a `cmd /c` wrapper to execute npx commands. Without this wrapper, Claude Code will display the warning:
 
 ```
-[Warning] [claude-flow] mcpServers.claude-flow: Windows requires 'cmd /c' wrapper to execute npx
+[Warning] [rufflo] mcpServers.rufflo: Windows requires 'cmd /c' wrapper to execute npx
 ```
 
 ### Platform-Specific .mcp.json Configuration
@@ -1653,9 +1653,9 @@ On Windows, MCP servers require a `cmd /c` wrapper to execute npx commands. With
 ```json
 {
   "mcpServers": {
-    "claude-flow": {
+    "rufflo": {
       "command": "cmd",
-      "args": ["/c", "npx", "@claude-flow/cli@latest", "mcp", "start"],
+      "args": ["/c", "npx", "@rufflo/cli@latest", "mcp", "start"],
       "env": {
         "CLAUDE_FLOW_LOG_LEVEL": "info"
       }
@@ -1669,9 +1669,9 @@ On Windows, MCP servers require a `cmd /c` wrapper to execute npx commands. With
 ```json
 {
   "mcpServers": {
-    "claude-flow": {
+    "rufflo": {
       "command": "npx",
-      "args": ["@claude-flow/cli@latest", "mcp", "start"],
+      "args": ["@rufflo/cli@latest", "mcp", "start"],
       "env": {
         "CLAUDE_FLOW_LOG_LEVEL": "info"
       }
@@ -1686,10 +1686,10 @@ The `init` command automatically detects the platform and generates the correct 
 
 ```bash
 # Auto-detects platform and generates correct .mcp.json
-npx @claude-flow/cli@latest init --force
+npx @rufflo/cli@latest init --force
 
 # Or use the wizard for more options
-npx @claude-flow/cli@latest init wizard
+npx @rufflo/cli@latest init wizard
 ```
 
 ### MCP Server Auto-Configuration
@@ -1697,7 +1697,7 @@ npx @claude-flow/cli@latest init wizard
 The init command generates platform-aware MCP configuration:
 
 ```typescript
-// v3/@claude-flow/cli/src/init/mcp-generator.ts
+// v3/@rufflo/cli/src/init/mcp-generator.ts
 
 function generateMcpConfig(): MCPConfig {
   const isWindows = process.platform === 'win32';
@@ -1705,9 +1705,9 @@ function generateMcpConfig(): MCPConfig {
   if (isWindows) {
     return {
       mcpServers: {
-        'claude-flow': {
+        'rufflo': {
           command: 'cmd',
-          args: ['/c', 'npx', '@claude-flow/cli@latest', 'mcp', 'start'],
+          args: ['/c', 'npx', '@rufflo/cli@latest', 'mcp', 'start'],
           env: {
             CLAUDE_FLOW_LOG_LEVEL: 'info'
           }
@@ -1718,9 +1718,9 @@ function generateMcpConfig(): MCPConfig {
 
   return {
     mcpServers: {
-      'claude-flow': {
+      'rufflo': {
         command: 'npx',
-        args: ['@claude-flow/cli@latest', 'mcp', 'start'],
+        args: ['@rufflo/cli@latest', 'mcp', 'start'],
         env: {
           CLAUDE_FLOW_LOG_LEVEL: 'info'
         }
@@ -1735,9 +1735,9 @@ function generateMcpConfig(): MCPConfig {
 ```json
 {
   "mcpServers": {
-    "claude-flow": {
+    "rufflo": {
       "command": "cmd",
-      "args": ["/c", "npx", "@claude-flow/cli@latest", "mcp", "start"],
+      "args": ["/c", "npx", "@rufflo/cli@latest", "mcp", "start"],
       "tools": [
         "transfer/export",
         "transfer/import",
@@ -1765,13 +1765,13 @@ function generateMcpConfig(): MCPConfig {
 
 ```bash
 # Windows PowerShell
-cmd /c npx @claude-flow/cli@latest hooks transfer export --output patterns.cfp
+cmd /c npx @rufflo/cli@latest hooks transfer export --output patterns.cfp
 
 # Windows CMD
-npx @claude-flow/cli@latest hooks transfer export --output patterns.cfp
+npx @rufflo/cli@latest hooks transfer export --output patterns.cfp
 
 # macOS/Linux
-npx @claude-flow/cli@latest hooks transfer export --output patterns.cfp
+npx @rufflo/cli@latest hooks transfer export --output patterns.cfp
 ```
 
 ### Troubleshooting
@@ -1833,11 +1833,11 @@ Pre-configured trusted registries for initial discovery:
 ```typescript
 const BOOTSTRAP_REGISTRIES: KnownRegistry[] = [
   {
-    name: 'claude-flow-official',
-    description: 'Official Claude Flow pattern registry',
+    name: 'rufflo-official',
+    description: 'Official Rufflo pattern registry',
     ipnsName: 'k51qzi5uqu5dj0w8q1xvqn8ql2g4p7x8qpk9vz3xm1y2n3o4p5q6r7s8t9u0v',
     gateway: 'https://w3s.link',
-    publicKey: 'ed25519:claude-flow-registry-key',
+    publicKey: 'ed25519:rufflo-registry-key',
     trusted: true,
   },
   {
@@ -1872,7 +1872,7 @@ const BOOTSTRAP_REGISTRIES: KnownRegistry[] = [
 ### Implemented Files
 
 ```
-v3/@claude-flow/cli/src/transfer/store/
+v3/@rufflo/cli/src/transfer/store/
 ├── types.ts           # Type definitions (PatternEntry, Registry, etc.)
 ├── registry.ts        # Registry management, signature verification
 ├── discovery.ts       # IPNS resolution, IPFS fetch, caching
@@ -1887,7 +1887,7 @@ v3/@claude-flow/cli/src/transfer/store/
 ```typescript
 // Create and initialize store
 const store = createPatternStore();
-await store.initialize('claude-flow-official');
+await store.initialize('rufflo-official');
 
 // Search patterns
 const results = store.search({
@@ -1939,7 +1939,7 @@ Trust:       verified
 
 | Feature | Status | Evidence |
 |---------|--------|----------|
-| **Memory Store** | ✅ Real | Data persists to `.claude-flow/memory/store.json` |
+| **Memory Store** | ✅ Real | Data persists to `.rufflo/memory/store.json` |
 | **CLI-to-Store Wiring** | ✅ Real | `plugins list` calls actual `createPluginDiscoveryService()` |
 | **Pattern Store Module** | ✅ Real | `PatternStore` class with search, download, publish APIs |
 | **Plugin Store Module** | ✅ Real | `PluginDiscoveryService` with 9 plugins in registry |
@@ -1956,7 +1956,7 @@ Trust:       verified
 |---------|--------|---------|
 | **IPNS Resolution** | ⚠️ Demo | Attempts real IPNS resolution, falls back to demo registry |
 | **IPFS Gateway Fetch** | ⚠️ Demo | Tries w3s.link/dweb.link/ipfs.io, uses demo on failure |
-| **Registry Discovery** | ⚠️ Demo | Shows "claude-flow-official (demo)" source |
+| **Registry Discovery** | ⚠️ Demo | Shows "rufflo-official (demo)" source |
 
 **Why Demo Mode?** IPFS public gateways often have:
 - Rate limiting
@@ -2028,7 +2028,7 @@ CLI Commands:         Wired to real store modules ✅
 
 3. **Test Upload**:
    ```bash
-   npx @claude-flow/cli hooks transfer store publish \
+   npx @rufflo/cli hooks transfer store publish \
      -i patterns.cfp \
      -n my-patterns \
      -d "My patterns" \
@@ -2124,7 +2124,7 @@ CLI Commands:         Wired to real store modules ✅
 ```bash
 # Verify CLI uses real store
 ./bin/cli.js plugins list --official
-# Should show: "claude-flow-official (demo)" and list 6 official plugins
+# Should show: "rufflo-official (demo)" and list 6 official plugins
 
 # Verify MCP tools work
 ./bin/cli.js mcp exec --tool "transfer/plugin-search" --params '{"query":"neural"}'

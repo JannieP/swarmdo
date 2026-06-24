@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Structural smoke test for ruflo-aidefence v0.2.0 (ADR-0001).
+# Structural smoke test for rufflo-aidefence v0.2.0 (ADR-0001).
 set -u
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PASS=0
@@ -31,12 +31,12 @@ step "3. transfer_detect-pii referenced (used by pii-detect skill)"
 grep -q "transfer_detect-pii" "$ROOT/skills/pii-detect/SKILL.md" \
   && ok || bad "pii-detect skill missing transfer_detect-pii"
 
-step "4. README pins @claude-flow/cli to v3.6"
-grep -qE "@claude-flow/cli.*v3\.6|v3\.6.*claude-flow/cli" "$ROOT/README.md" \
+step "4. README pins @rufflo/cli to v3.6"
+grep -qE "@rufflo/cli.*v3\.6|v3\.6.*rufflo/cli" "$ROOT/README.md" \
   && ok || bad "Compatibility pin to v3.6 missing"
 
-step "5. README defers to ruflo-agentdb namespace convention"
-grep -q "ruflo-agentdb" "$ROOT/README.md" \
+step "5. README defers to rufflo-agentdb namespace convention"
+grep -q "rufflo-agentdb" "$ROOT/README.md" \
   && grep -q "Namespace convention" "$ROOT/README.md" \
   && ok || bad "namespace coordination block incomplete"
 

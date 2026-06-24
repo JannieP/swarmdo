@@ -10,8 +10,8 @@
 ## Executive Summary
 
 Both plugins are now **fully implemented** and **published to npm**:
-- `@claude-flow/plugin-agentic-qe@3.0.0-alpha.2` (28 files, ~17,036 LOC)
-- `@claude-flow/plugin-prime-radiant@0.1.4` (21 files, ~9,136 LOC)
+- `@rufflo/plugin-agentic-qe@3.0.0-alpha.2` (28 files, ~17,036 LOC)
+- `@rufflo/plugin-prime-radiant@0.1.4` (21 files, ~9,136 LOC)
 
 ### Security Implementation Status
 
@@ -136,7 +136,7 @@ sandbox:
       - ~/.ssh
       - ~/.aws
       - ~/.config
-      - node_modules/@claude-flow/security  # Prevent reading security module
+      - node_modules/@rufflo/security  # Prevent reading security module
 ```
 
 **Implementation Pattern:**
@@ -182,8 +182,8 @@ class TestSandbox {
 **Required Controls:**
 
 ```typescript
-// MUST use SafeExecutor from @claude-flow/security
-import { SafeExecutor } from '@claude-flow/security';
+// MUST use SafeExecutor from @rufflo/security
+import { SafeExecutor } from '@rufflo/security';
 
 const securityScanExecutor = new SafeExecutor({
   allowedCommands: [
@@ -227,7 +227,7 @@ async function runSecurityScan(input: SecurityScanInput): Promise<ScanResult> {
 ```typescript
 // src/schemas.ts - REQUIRED for all tools
 import { z } from 'zod';
-import { PathSchema, IdentifierSchema, SafeStringSchema } from '@claude-flow/security';
+import { PathSchema, IdentifierSchema, SafeStringSchema } from '@rufflo/security';
 
 // Example: generate-tests tool schema
 export const GenerateTestsInputSchema = z.object({
@@ -256,7 +256,7 @@ export const TddCycleInputSchema = z.object({
 
 ```typescript
 // In every tool that accesses files
-import { PathValidator, createProjectPathValidator } from '@claude-flow/security';
+import { PathValidator, createProjectPathValidator } from '@rufflo/security';
 
 const pathValidator = createProjectPathValidator(process.cwd());
 
@@ -285,7 +285,7 @@ grep -r "vm.runInContext" src/ && exit 1  # Use vm2 instead
 **Before storing test results, scan for PII:**
 
 ```typescript
-import { aidefence } from '@claude-flow/aidefence';
+import { aidefence } from '@rufflo/aidefence';
 
 async function storeTestResult(result: TestResult): Promise<void> {
   // Check for PII in test output
@@ -389,8 +389,8 @@ function validateNamespaceAccess(context: string, namespace: string): void {
 # package.json requirements
 {
   "dependencies": {
-    "@claude-flow/security": ">=3.0.0",  # REQUIRED
-    "@claude-flow/memory": ">=3.0.0",
+    "@rufflo/security": ">=3.0.0",  # REQUIRED
+    "@rufflo/memory": ">=3.0.0",
     "zod": "^3.22.0",
     "vm2": "^3.9.19"  # For sandboxing (check for CVEs)
   },
@@ -674,9 +674,9 @@ class SecureCache {
 ### Pre-Implementation Checklist
 
 - [ ] All Zod schemas defined in `src/schemas.ts`
-- [ ] PathValidator imported from `@claude-flow/security`
-- [ ] SafeExecutor imported from `@claude-flow/security`
-- [ ] InputValidator imported from `@claude-flow/security`
+- [ ] PathValidator imported from `@rufflo/security`
+- [ ] SafeExecutor imported from `@rufflo/security`
+- [ ] InputValidator imported from `@rufflo/security`
 - [ ] No hardcoded secrets in source code
 - [ ] npm audit clean (no high/critical vulnerabilities)
 
@@ -750,7 +750,7 @@ import {
   SafeExecutor,
   InputValidator,
   createSecurityModule,
-} from '@claude-flow/security';
+} from '@rufflo/security';
 
 export class AgenticQEPlugin implements Plugin {
   private security: SecurityModule;
@@ -819,7 +819,7 @@ export class AgenticQEPlugin implements Plugin {
 ```typescript
 // src/schemas.ts
 import { z } from 'zod';
-import { PathSchema, IdentifierSchema, SafeStringSchema } from '@claude-flow/security';
+import { PathSchema, IdentifierSchema, SafeStringSchema } from '@rufflo/security';
 
 // Test generation
 export const GenerateTestsInputSchema = z.object({
@@ -882,7 +882,7 @@ export const SecurityScanInputSchema = z.object({
 ```typescript
 // src/schemas.ts
 import { z } from 'zod';
-import { IdentifierSchema } from '@claude-flow/security';
+import { IdentifierSchema } from '@rufflo/security';
 
 const VectorSchema = z.array(z.number())
   .min(1)
@@ -1019,8 +1019,8 @@ describe('Chaos Engineering Safety', () => {
 
 **Report Status:** ✅ POST-IMPLEMENTATION REVIEW COMPLETE
 **Published Versions:**
-- `@claude-flow/plugin-agentic-qe@3.0.0-alpha.2`
-- `@claude-flow/plugin-prime-radiant@0.1.4`
+- `@rufflo/plugin-agentic-qe@3.0.0-alpha.2`
+- `@rufflo/plugin-prime-radiant@0.1.4`
 
 **Security Controls Implemented:**
 - ✅ All Zod input validation schemas

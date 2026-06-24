@@ -526,7 +526,7 @@ export interface ConsensusParams {
 }
 
 // ============================================================================
-// Memory Types (Integration with @claude-flow/memory)
+// Memory Types (Integration with @rufflo/memory)
 // ============================================================================
 
 /**

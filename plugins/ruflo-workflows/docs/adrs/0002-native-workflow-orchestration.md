@@ -1,6 +1,6 @@
 ---
 id: ADR-0002
-title: ruflo-workflows adopts native Claude Code Workflow orchestration (.claude/workflows/*.js) alongside the MCP workflow_* surface
+title: rufflo-workflows adopts native Claude Code Workflow orchestration (.claude/workflows/*.js) alongside the MCP workflow_* surface
 status: Accepted
 date: 2026-05-29
 authors:
@@ -10,7 +10,7 @@ tags: [plugin, workflows, orchestration, native-workflow, claude-code, agent-fan
 
 ## Context
 
-[ADR-0001](./0001-workflows-contract.md) established `ruflo-workflows` as the canonical wrapper for the **10 `workflow_*` MCP tools** (`v3/@claude-flow/cli/src/mcp-tools/workflow-tools.ts`). That surface is *declarative and persisted*: a workflow definition is created, then run/paused/resumed/cancelled through a state machine, with state indexed in the `workflows-state` AgentDB namespace.
+[ADR-0001](./0001-workflows-contract.md) established `rufflo-workflows` as the canonical wrapper for the **10 `workflow_*` MCP tools** (`v3/@rufflo/cli/src/mcp-tools/workflow-tools.ts`). That surface is *declarative and persisted*: a workflow definition is created, then run/paused/resumed/cancelled through a state machine, with state indexed in the `workflows-state` AgentDB namespace.
 
 Claude Code has since shipped a second, complementary capability — the **native `Workflow` tool**. It executes a JavaScript orchestration script that fans subagents out deterministically via four hooks:
 
@@ -60,7 +60,7 @@ Before this ADR the plugin documented only the MCP surface, so users had no in-p
 
 ```bash
 # Plugin contract (documents both surfaces; stays inside the plugin boundary):
-bash plugins/ruflo-workflows/scripts/smoke.sh
+bash plugins/rufflo-workflows/scripts/smoke.sh
 # Expected: "15 passed, 0 failed"
 ```
 
@@ -79,8 +79,8 @@ node -e 'const fs=require("fs");let s=fs.readFileSync(".claude/workflows/plugin-
 - [`0001-workflows-contract.md`](./0001-workflows-contract.md) — the MCP `workflow_*` contract this ADR amends
 - `.claude/workflows/intelligence-system-hardening.js` — first native workflow in the repo
 - `.claude/workflows/plugin-contract-audit.js` — reference native workflow shipped with this ADR
-- `plugins/ruflo-loop-workers/docs/adrs/0001-loop-workers-contract.md` — sibling automation surface (recurring loops)
-- `plugins/ruflo-sparc/docs/adrs/0001-sparc-contract.md` — SPARC phase transitions as workflows
+- `plugins/rufflo-loop-workers/docs/adrs/0001-loop-workers-contract.md` — sibling automation surface (recurring loops)
+- `plugins/rufflo-sparc/docs/adrs/0001-sparc-contract.md` — SPARC phase transitions as workflows
 
 ## Implementation status
 

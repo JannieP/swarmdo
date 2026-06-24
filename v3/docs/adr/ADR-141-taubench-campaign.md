@@ -12,15 +12,15 @@
 
 ### Why τ-bench after DeepSWE
 
-ADR-140 adopts DeepSWE as ruflo's primary SWE benchmark (harness-controlled, repo-level code editing). τ-bench is the complementary target: **agentic customer-service reliability in tool-rich, policy-constrained, multi-turn domains**. The two benchmarks measure orthogonal capabilities; success on both is the strongest possible demonstration of ruflo's orchestration thesis.
+ADR-140 adopts DeepSWE as rufflo's primary SWE benchmark (harness-controlled, repo-level code editing). τ-bench is the complementary target: **agentic customer-service reliability in tool-rich, policy-constrained, multi-turn domains**. The two benchmarks measure orthogonal capabilities; success on both is the strongest possible demonstration of rufflo's orchestration thesis.
 
 Key differentiators that make τ-bench the right second campaign:
 
-1. **HAL-ranked, custom submissions accepted** — the leaderboard explicitly supports `submission_type: "custom"` with detailed methodology documentation, labeling the approach and linking to implementations. Ruflo's orchestration is a legitimate entry, not a hack.
+1. **HAL-ranked, custom submissions accepted** — the leaderboard explicitly supports `submission_type: "custom"` with detailed methodology documentation, labeling the approach and linking to implementations. Rufflo's orchestration is a legitimate entry, not a hack.
 
-2. **Pass^k reliability is the decisive metric** — τ-bench measures `pass^k` (probability of success on k consecutive trials, computed via `C(success,k)/C(trials,k)`). A pass^1 of 72% (Claude Sonnet 4.5 Sierra baseline) drops to pass^4 of 48% — a 33% reliability gap. This is exactly the gap ruflo's planner+validator scaffold is designed to close. Research documented in prior sessions shows a planner+validator lift from 14%→26% pass^3 on the same underlying model.
+2. **Pass^k reliability is the decisive metric** — τ-bench measures `pass^k` (probability of success on k consecutive trials, computed via `C(success,k)/C(trials,k)`). A pass^1 of 72% (Claude Sonnet 4.5 Sierra baseline) drops to pass^4 of 48% — a 33% reliability gap. This is exactly the gap rufflo's planner+validator scaffold is designed to close. Research documented in prior sessions shows a planner+validator lift from 14%→26% pass^3 on the same underlying model.
 
-3. **Base model is not the constraint** — Claude Opus 4.5 already leads the airline leaderboard at 84% pass^1. The open problem is not "which model" but "why does it fail 3 times out of 10." The failure modes are well-understood: policy ambiguity resolved at wrong turn, irreversible API call before confirmation, and loop failures (23% of errors are retry loops). These are all tractable for ruflo's convergence layer.
+3. **Base model is not the constraint** — Claude Opus 4.5 already leads the airline leaderboard at 84% pass^1. The open problem is not "which model" but "why does it fail 3 times out of 10." The failure modes are well-understood: policy ambiguity resolved at wrong turn, irreversible API call before confirmation, and loop failures (23% of errors are retry loops). These are all tractable for rufflo's convergence layer.
 
 ### Harness verification (confirmed by direct inspection, 2026-05-28)
 
@@ -37,9 +37,9 @@ Harness cloned to `~/taubench-work` from `https://github.com/sierra-research/tau
 
 All 50 airline tasks loadable in zero-cost Python inspection (no LLM calls, no network). Tasks have `split_tasks.json` with `train` (30), `test` (20), and `base` (50) splits.
 
-**Evaluation criteria** (airline): Every task uses `reward_basis: ["DB", "COMMUNICATE"]`. DB check is a deterministic Python comparison of the database end-state against expected actions. COMMUNICATE check uses an LLM judge for `nl_assertions`. Ruflo's deterministic validator directly targets the DB check; the COMMUNICATE portion is already covered by the standard LLM turn.
+**Evaluation criteria** (airline): Every task uses `reward_basis: ["DB", "COMMUNICATE"]`. DB check is a deterministic Python comparison of the database end-state against expected actions. COMMUNICATE check uses an LLM judge for `nl_assertions`. Rufflo's deterministic validator directly targets the DB check; the COMMUNICATE portion is already covered by the standard LLM turn.
 
-**Custom agent interface**: `tau2/agent/base_agent.py` defines `HalfDuplexAgent[AgentState]` — subclass, implement `generate_next_message()` and `get_init_state()`. The harness registers agents in `tau2/registry.py`. A ruflo agent is a single Python file that subclasses `LLMAgent` (which itself subclasses `HalfDuplexAgent`), overriding the system prompt and adding pre-call validation.
+**Custom agent interface**: `tau2/agent/base_agent.py` defines `HalfDuplexAgent[AgentState]` — subclass, implement `generate_next_message()` and `get_init_state()`. The harness registers agents in `tau2/registry.py`. A rufflo agent is a single Python file that subclasses `LLMAgent` (which itself subclasses `HalfDuplexAgent`), overriding the system prompt and adding pre-call validation.
 
 ---
 
@@ -55,9 +55,9 @@ All 50 airline tasks loadable in zero-cost Python inspection (no LLM calls, no n
 | GPT-4.1 | standard | 56.0 | 47.8 | 42.4 | 38.1 | — |
 | Nemotron-Orchestrator-8B | **custom** | 56.0 | null | null | null | — |
 
-The Sierra Claude Sonnet 4.5 run (the closest public proxy for Claude Sonnet 4.6) is the baseline we improve on. With a 4.6-specific run, pass^1 baseline is estimated at 70-75%. The opportunity: if ruflo's scaffold closes the pass^3 gap by ~10pp (54% → 64%), that is a leaderboard-relevant, documented improvement attributed to orchestration, not model.
+The Sierra Claude Sonnet 4.5 run (the closest public proxy for Claude Sonnet 4.6) is the baseline we improve on. With a 4.6-specific run, pass^1 baseline is estimated at 70-75%. The opportunity: if rufflo's scaffold closes the pass^3 gap by ~10pp (54% → 64%), that is a leaderboard-relevant, documented improvement attributed to orchestration, not model.
 
-The lone custom submission (Nemotron-Orchestrator-8B) shows pass^1 only and uses a different model, so there is no direct custom-scaffold comparison with pass^k data yet. Ruflo would be the first custom submission with full pass^1–4 data on airline.
+The lone custom submission (Nemotron-Orchestrator-8B) shows pass^1 only and uses a different model, so there is no direct custom-scaffold comparison with pass^k data yet. Rufflo would be the first custom submission with full pass^1–4 data on airline.
 
 ---
 
@@ -67,14 +67,14 @@ The lone custom submission (Nemotron-Orchestrator-8B) shows pass^1 only and uses
 
 Example (Sierra Claude Sonnet 4.5 airline):
 - pass^1 = 72% → pass^4 = 48% (drop of 24pp over 4 trials)
-- If ruflo raises per-trial success from 72% to 78% (a 6pp gain), the math gives:
+- If rufflo raises per-trial success from 72% to 78% (a 6pp gain), the math gives:
   - pass^4 ≈ 56% — an 8pp gain at the hardest reliability measure
 
 The 14%→26% pass^3 improvement documented in the research spec (attributed to a planner+validator scaffold on the same model) corresponds to raising per-trial success by ~8pp, which is achievable through the mechanisms described in the next section.
 
 ---
 
-## Ruflo τ-bench agent design
+## Rufflo τ-bench agent design
 
 The four components map to τ-bench's specific failure modes.
 
@@ -108,7 +108,7 @@ Preconditions are deterministic Python code (no LLM call), executed in `generate
 
 **Targets**: "DB mismatch" failures — the direct driver of the DB reward component.
 
-This is ruflo's convergence layer, the single most important component for pass^k.
+This is rufflo's convergence layer, the single most important component for pass^k.
 
 Design: After each write action (booking, modification, cancellation, baggage edit), run a deterministic Python check:
 1. Call the environment's `get_state()` to read the current DB snapshot
@@ -138,7 +138,7 @@ Implementation: Count retries per action type in `LLMAgentState`; trigger replan
 ### Custom agent plug-in (tau2 registration)
 
 ```python
-# src/tau2/agent/ruflo_agent.py
+# src/tau2/agent/rufflo_agent.py
 from tau2.agent.llm_agent import LLMAgent, LLMAgentState
 
 RUFLO_SYSTEM_PROMPT = """
@@ -148,29 +148,29 @@ RUFLO_SYSTEM_PROMPT = """
 <policy>
 {domain_policy}
 </policy>
-<ruflo_constraints>
+<rufflo_constraints>
 Before any write action: verify preconditions from your plan.
 After any write action: check state matches intent before proceeding.
 On failure: replan, do not retry identically.
-</ruflo_constraints>
+</rufflo_constraints>
 """.strip()
 
-class RufloAgent(LLMAgent):
-    """Ruflo planner+validator scaffold for tau2-bench."""
+class RuffloAgent(LLMAgent):
+    """Rufflo planner+validator scaffold for tau2-bench."""
     ...
 ```
 
 Register in `tau2/registry.py`:
 ```python
-registry.register_agent("ruflo_agent", RufloAgent)
+registry.register_agent("rufflo_agent", RuffloAgent)
 ```
 
 Run with:
 ```bash
-tau2 run --domain airline --agent ruflo_agent \
+tau2 run --domain airline --agent rufflo_agent \
     --agent-llm claude-sonnet-4-6-20261001 \
     --user-llm claude-haiku-4-5-20251022 \
-    --num-trials 3 --save-to ruflo_airline_pilot
+    --num-trials 3 --save-to rufflo_airline_pilot
 ```
 
 ---
@@ -195,7 +195,7 @@ Source: Sierra's Claude Sonnet 4.5 run (`claude-sonnet-4-5_sierra_2026-02-26/sub
 
 With GPT-4o-mini user-sim (higher fidelity): **~$19**
 
-Ruflo orchestration adds ~300 tokens/task for the planning step, increasing agent cost by approximately 5%: total pilot ≈ **$19-20**.
+Rufflo orchestration adds ~300 tokens/task for the planning step, increasing agent cost by approximately 5%: total pilot ≈ **$19-20**.
 
 ### Full leaderboard run (3 domains, k=4)
 
@@ -220,7 +220,7 @@ Recommended plan: airline-only leaderboard (3 domains without banking_knowledge)
 **Custom entry requirements** (confirmed from `docs/leaderboard-submission.md`):
 - `submission_type: "custom"` in `submission.json`
 - Detailed `methodology.notes` explaining modifications
-- `references` array with GitHub link to ruflo agent implementation
+- `references` array with GitHub link to rufflo agent implementation
 - `methodology.verification.modified_prompts: true` (we modify the system prompt)
 - Standard: all domains, 4+ trials, `tau2 submit prepare` + `tau2 submit validate`
 
@@ -240,7 +240,7 @@ No `hal-upload` CLI: τ-bench uses direct PR submission, not the HAL CLI upload 
 - [x] Submission requirements documented
 - [x] Competitive landscape mapped
 - [x] Cost model derived from measured data
-- [x] Ruflo agent design specified (4 components)
+- [x] Rufflo agent design specified (4 components)
 - [ ] ADR-141 filed (this document)
 
 ### Phase 1 — Pilot (go-signal required, ~$20)
@@ -248,7 +248,7 @@ No `hal-upload` CLI: τ-bench uses direct PR submission, not the HAL CLI upload 
 **Gate**: User explicit authorization.
 
 Steps:
-1. Implement `ruflo_agent.py` (Component 3 — state validator only, minimal viable scaffold)
+1. Implement `rufflo_agent.py` (Component 3 — state validator only, minimal viable scaffold)
 2. Run: 20 airline tasks, k=3, Claude Sonnet 4.6 agent, Haiku user-sim
 3. Compare pass^1 and pass^3 against Sierra Claude Sonnet 4.5 baseline (72%/54.5%)
 4. Report uplift; if pass^3 ≥ 60%, proceed to Phase 2
@@ -286,9 +286,9 @@ Steps:
 
 ### Positive
 - τ-bench is the premier arena for agent reliability. A custom submission with documented pass^k uplift is directly publishable and leaderboard-visible.
-- The pass^k metric rewards exactly what ruflo's orchestration provides: consistency across trials, not just best-case performance.
+- The pass^k metric rewards exactly what rufflo's orchestration provides: consistency across trials, not just best-case performance.
 - All 50 airline tasks are inspectable for free; the policy is fully readable; the evaluator is transparent Python. Fast iteration is cheap.
-- Components 3 (state validator) and 4 (retry-governor) are reusable across domains and benchmarks; they generalize to ruflo's broader convergence layer.
+- Components 3 (state validator) and 4 (retry-governor) are reusable across domains and benchmarks; they generalize to rufflo's broader convergence layer.
 
 ### Negative / risks
 - Custom submissions are marked "Unverified" unless `trajectories_available: true` AND `modified_prompts: false`. Since we modify prompts, we will always show the caution icon. This is honest and acceptable.

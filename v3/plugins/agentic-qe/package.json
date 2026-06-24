@@ -1,7 +1,7 @@
 {
-  "name": "@claude-flow/plugin-agentic-qe",
+  "name": "@rufflo/plugin-agentic-qe",
   "version": "3.0.0-alpha.5",
-  "description": "Quality Engineering plugin for Ruflo V3 with 51 specialized agents across 12 DDD bounded contexts",
+  "description": "Quality Engineering plugin for Rufflo V3 with 51 specialized agents across 12 DDD bounded contexts",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -28,7 +28,7 @@
     "test:watch": "vitest"
   },
   "keywords": [
-    "claude-flow",
+    "rufflo",
     "plugin",
     "quality-engineering",
     "testing",
@@ -54,25 +54,25 @@
     "zod": "^3.23.0"
   },
   "peerDependencies": {
-    "@claude-flow/plugins": ">=3.0.0-0",
-    "@claude-flow/memory": ">=3.0.0-0",
-    "@claude-flow/security": ">=3.0.0-0",
-    "@claude-flow/embeddings": ">=3.0.0-0"
+    "@rufflo/plugins": ">=3.0.0-0",
+    "@rufflo/memory": ">=3.0.0-0",
+    "@rufflo/security": ">=3.0.0-0",
+    "@rufflo/embeddings": ">=3.0.0-0"
   },
   "peerDependenciesMeta": {
-    "@claude-flow/plugins": {
+    "@rufflo/plugins": {
       "optional": true
     },
-    "@claude-flow/memory": {
+    "@rufflo/memory": {
       "optional": true
     },
-    "@claude-flow/security": {
+    "@rufflo/security": {
       "optional": true
     },
-    "@claude-flow/embeddings": {
+    "@rufflo/embeddings": {
       "optional": true
     },
-    "@claude-flow/browser": {
+    "@rufflo/browser": {
       "optional": true
     },
     "@ruvector/attention": {

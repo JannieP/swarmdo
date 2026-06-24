@@ -1,8 +1,8 @@
 #!/bin/bash
-# Claude Flow V3 Status Display Template (Linux/macOS)
+# Rufflo V3 Status Display Template (Linux/macOS)
 
-METRICS_DIR="${PROJECT_ROOT:-.}/.claude-flow/metrics"
-SECURITY_DIR="${PROJECT_ROOT:-.}/.claude-flow/security"
+METRICS_DIR="${PROJECT_ROOT:-.}/.rufflo/metrics"
+SECURITY_DIR="${PROJECT_ROOT:-.}/.rufflo/security"
 
 # Colors
 GREEN='\033[0;32m'
@@ -55,7 +55,7 @@ get_color() {
 display_status() {
     get_metrics
 
-    echo -e "${BOLD}${PURPLE}⚡ Claude Flow V3 Development Status${RESET}"
+    echo -e "${BOLD}${PURPLE}⚡ Rufflo V3 Development Status${RESET}"
     echo -e "${BLUE}============================================${RESET}"
     echo ""
 
@@ -85,7 +85,7 @@ display_status() {
     fi
 
     echo ""
-    echo -e "${BLUE}Commands: claude-flow-v3.sh {status|update|validate|checkpoint}${RESET}"
+    echo -e "${BLUE}Commands: rufflo-v3.sh {status|update|validate|checkpoint}${RESET}"
 }
 
 display_status

@@ -33,62 +33,62 @@ Multi-agent swarm coordination for complex tasks. Uses hierarchical topology wit
 Start a new swarm with hierarchical topology (anti-drift)
 
 ```bash
-npx @claude-flow/cli swarm init --topology hierarchical --max-agents 8 --strategy specialized
+npx @rufflo/cli swarm init --topology hierarchical --max-agents 8 --strategy specialized
 ```
 
 **Example:**
 ```bash
-npx @claude-flow/cli swarm init --topology hierarchical --max-agents 6 --strategy specialized
+npx @rufflo/cli swarm init --topology hierarchical --max-agents 6 --strategy specialized
 ```
 
 ### Route Task
 Route a task to the appropriate agents based on task type
 
 ```bash
-npx @claude-flow/cli hooks route --task "[task description]"
+npx @rufflo/cli hooks route --task "[task description]"
 ```
 
 **Example:**
 ```bash
-npx @claude-flow/cli hooks route --task "implement OAuth2 authentication flow"
+npx @rufflo/cli hooks route --task "implement OAuth2 authentication flow"
 ```
 
 ### Spawn Agent
 Spawn a specific agent type
 
 ```bash
-npx @claude-flow/cli agent spawn --type [type] --name [name]
+npx @rufflo/cli agent spawn --type [type] --name [name]
 ```
 
 **Example:**
 ```bash
-npx @claude-flow/cli agent spawn --type coder --name impl-auth
+npx @rufflo/cli agent spawn --type coder --name impl-auth
 ```
 
 ### Monitor Status
 Check the current swarm status
 
 ```bash
-npx @claude-flow/cli swarm status --verbose
+npx @rufflo/cli swarm status --verbose
 ```
 
 ### Orchestrate Task
 Orchestrate a task across multiple agents
 
 ```bash
-npx @claude-flow/cli task orchestrate --task "[task]" --strategy adaptive
+npx @rufflo/cli task orchestrate --task "[task]" --strategy adaptive
 ```
 
 **Example:**
 ```bash
-npx @claude-flow/cli task orchestrate --task "refactor auth module" --strategy parallel --max-agents 4
+npx @rufflo/cli task orchestrate --task "refactor auth module" --strategy parallel --max-agents 4
 ```
 
 ### List Agents
 List all active agents
 
 ```bash
-npx @claude-flow/cli agent list --filter active
+npx @rufflo/cli agent list --filter active
 ```
 
 

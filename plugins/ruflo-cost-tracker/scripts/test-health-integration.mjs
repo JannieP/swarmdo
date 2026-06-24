@@ -49,7 +49,7 @@ function assert(cond, label) {
 
 function memStore(cwd, key, valueObj) {
   const r = spawnSync('npx', [
-    '@claude-flow/cli@latest', 'memory', 'store',
+    '@rufflo/cli@latest', 'memory', 'store',
     '--namespace', NS, '--key', key,
     '--value', JSON.stringify(valueObj),
   ], { cwd, stdio: ['ignore', 'pipe', 'pipe'], encoding: 'utf-8' });

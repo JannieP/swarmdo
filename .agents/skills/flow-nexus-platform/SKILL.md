@@ -783,7 +783,7 @@ mcp__flow-nexus__realtime_unsubscribe({
 **Subscribe to Execution Stream**
 ```javascript
 mcp__flow-nexus__execution_stream_subscribe({
-  stream_type: "claude-flow-swarm", // claude-code, claude-flow-swarm, claude-flow-hive-mind, github-integration
+  stream_type: "rufflo-swarm", // claude-code, rufflo-swarm, rufflo-hive-mind, github-integration
   deployment_id: "deployment_id",
   sandbox_id: "sandbox_id" // alternative
 })
@@ -800,7 +800,7 @@ mcp__flow-nexus__execution_stream_status({
 ```javascript
 mcp__flow-nexus__execution_files_list({
   stream_id: "stream_id",
-  created_by: "claude-flow", // claude-code, claude-flow, git-clone, user
+  created_by: "rufflo", // claude-code, rufflo, git-clone, user
   file_type: "javascript" // filter by extension
 })
 ```

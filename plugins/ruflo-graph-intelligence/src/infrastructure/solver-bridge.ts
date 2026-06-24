@@ -1,5 +1,5 @@
 /**
- * ruflo-graph-intelligence — Solver Bridge (ADR-123)
+ * rufflo-graph-intelligence — Solver Bridge (ADR-123)
  *
  * Thin shim over `sublinear-time-solver@1.7.0`. Translates our SparseMatrix
  * envelope into the solver's input shape, threads the complexity budget +

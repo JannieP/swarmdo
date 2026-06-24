@@ -89,13 +89,13 @@ All 8 files listed in the Decision shipped in a single commit (same as ADR-086).
 
 | Component | Status | Files | Commit(s) |
 |---|---|---|---|
-| **`graph-backend.ts`** — native graph wrapper (`addNode`, `addEdge`, `addHyperedge`, `getNeighbors`, `recordCausalEdge`, `recordCollaboration`, `recordSwarmTeam`) | Implemented | `v3/@claude-flow/cli/src/ruvector/graph-backend.ts` (new) | `7eb505d22 feat: native ruvllm + graph-node intelligence backends (ADR-086, ADR-087)` |
-| **`agentdb-tools.ts`** — `agentdb_causal-edge` graph-node first, AgentDB bridge fallback | Implemented | `v3/@claude-flow/cli/src/mcp-tools/agentdb-tools.ts` | `7eb505d22` |
-| **`agent-tools.ts`** — `agent_spawn` records agent node in graph | Implemented | `v3/@claude-flow/cli/src/mcp-tools/agent-tools.ts` | `7eb505d22` |
-| **`hooks-tools.ts`** — `hooks_intelligence` + `hooks_intelligence_stats` graph component + stats | Implemented | `v3/@claude-flow/cli/src/mcp-tools/hooks-tools.ts` | `7eb505d22` |
-| **`ruvllm-tools.ts`** — `ruvllm_status` graph backend status | Implemented | `v3/@claude-flow/cli/src/mcp-tools/ruvllm-tools.ts` | `7eb505d22` |
-| **`neural.ts`** — `neural status` Graph Database row | Implemented | `v3/@claude-flow/cli/src/commands/neural.ts` | `7eb505d22` |
-| **Test coverage** — 9 tests, graceful degradation, CJS import pattern | Implemented | `v3/@claude-flow/cli/__tests__/graph-backend.test.ts` | `7eb505d22` |
+| **`graph-backend.ts`** — native graph wrapper (`addNode`, `addEdge`, `addHyperedge`, `getNeighbors`, `recordCausalEdge`, `recordCollaboration`, `recordSwarmTeam`) | Implemented | `v3/@rufflo/cli/src/ruvector/graph-backend.ts` (new) | `7eb505d22 feat: native ruvllm + graph-node intelligence backends (ADR-086, ADR-087)` |
+| **`agentdb-tools.ts`** — `agentdb_causal-edge` graph-node first, AgentDB bridge fallback | Implemented | `v3/@rufflo/cli/src/mcp-tools/agentdb-tools.ts` | `7eb505d22` |
+| **`agent-tools.ts`** — `agent_spawn` records agent node in graph | Implemented | `v3/@rufflo/cli/src/mcp-tools/agent-tools.ts` | `7eb505d22` |
+| **`hooks-tools.ts`** — `hooks_intelligence` + `hooks_intelligence_stats` graph component + stats | Implemented | `v3/@rufflo/cli/src/mcp-tools/hooks-tools.ts` | `7eb505d22` |
+| **`ruvllm-tools.ts`** — `ruvllm_status` graph backend status | Implemented | `v3/@rufflo/cli/src/mcp-tools/ruvllm-tools.ts` | `7eb505d22` |
+| **`neural.ts`** — `neural status` Graph Database row | Implemented | `v3/@rufflo/cli/src/commands/neural.ts` | `7eb505d22` |
+| **Test coverage** — 9 tests, graceful degradation, CJS import pattern | Implemented | `v3/@rufflo/cli/__tests__/graph-backend.test.ts` | `7eb505d22` |
 
 ### Non-goals confirmed
 

@@ -62,14 +62,14 @@ const require = createRequire(import.meta.url);
 let resolveDbPath;
 try {
   const mod = await import(
-    join(ROOT, 'v3/@claude-flow/cli/dist/src/memory/memory-initializer.js')
+    join(ROOT, 'v3/@rufflo/cli/dist/src/memory/memory-initializer.js')
   );
   resolveDbPath = mod.resolveDbPath;
 } catch {
   // Try source fallback
   try {
     const mod = await import(
-      join(ROOT, 'v3/@claude-flow/cli/src/memory/memory-initializer.js')
+      join(ROOT, 'v3/@rufflo/cli/src/memory/memory-initializer.js')
     );
     resolveDbPath = mod.resolveDbPath;
   } catch (e) {
@@ -126,8 +126,8 @@ try {
     delete process.env.CLAUDE_FLOW_DB_PATH;
     // Reset cache so CLAUDE_FLOW_MEMORY_PATH takes effect
     const { _resetMemoryRootCache } = await import(
-      join(ROOT, 'v3/@claude-flow/cli/dist/src/memory/memory-initializer.js')
-    ).catch(() => import(join(ROOT, 'v3/@claude-flow/cli/src/memory/memory-initializer.js')));
+      join(ROOT, 'v3/@rufflo/cli/dist/src/memory/memory-initializer.js')
+    ).catch(() => import(join(ROOT, 'v3/@rufflo/cli/src/memory/memory-initializer.js')));
     if (_resetMemoryRootCache) _resetMemoryRootCache();
     const memPathResult = resolveDbPath(undefined);
     check('CLAUDE_FLOW_MEMORY_PATH provides directory, memory.db appended', () => {
@@ -153,13 +153,13 @@ try {
   let memoryCommand;
   try {
     const mod = await import(
-      join(ROOT, 'v3/@claude-flow/cli/dist/src/commands/memory.js')
+      join(ROOT, 'v3/@rufflo/cli/dist/src/commands/memory.js')
     );
     memoryCommand = mod.memoryCommand || mod.default;
   } catch {
     try {
       const mod = await import(
-        join(ROOT, 'v3/@claude-flow/cli/src/commands/memory.js')
+        join(ROOT, 'v3/@rufflo/cli/src/commands/memory.js')
       );
       memoryCommand = mod.memoryCommand || mod.default;
     } catch (e) {

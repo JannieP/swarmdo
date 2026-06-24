@@ -34,8 +34,8 @@ import { runHarness, runMetaharness, runHarnessAsync, runMetaharnessAsync, emitD
 // at the top of this file provide the same names.
 const NS = process.env.OIA_AUDIT_NAMESPACE || 'metaharness-audit';
 const CLI_PKG = process.env.CLI_CORE === '1'
-  ? '@claude-flow/cli-core@alpha'
-  : '@claude-flow/cli@latest';
+  ? '@rufflo/cli-core@alpha'
+  : '@rufflo/cli@latest';
 
 const ARGS = (() => {
   const a = { path: '.', format: 'json', dryRun: false, alertWorst: null };

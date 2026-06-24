@@ -5,7 +5,7 @@
  * Reference: ruvnet/ruflo PR #1922 / aaronjmars's disclosure.
  *
  * The historical bug: `verifyRegistrySignature` in
- * v3/@claude-flow/cli/src/plugins/store/discovery.ts was a stub that
+ * v3/@rufflo/cli/src/plugins/store/discovery.ts was a stub that
  * returned `true` whenever the served `registryPublicKey` field
  * started with `"ed25519"`. The call site then only `console.warn`ed
  * on failure and continued to use the unverified registry. With
@@ -28,7 +28,7 @@
  *
  *   [2/3] CRYPTO ROUND-TRIP — using the exact same Ed25519 scheme as
  *         `signRegistry()` in
- *         v3/@claude-flow/cli/scripts/publish-registry.ts:127-151:
+ *         v3/@rufflo/cli/scripts/publish-registry.ts:127-151:
  *         - signed fixture verifies
  *         - mutated registry body fails
  *         - empty signature fails
@@ -52,7 +52,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(__dirname, '..');
 const DISCOVERY_PATH = resolve(
   REPO_ROOT,
-  'v3/@claude-flow/cli/src/plugins/store/discovery.ts',
+  'v3/@rufflo/cli/src/plugins/store/discovery.ts',
 );
 
 let passed = 0;
@@ -171,11 +171,11 @@ const trustedPubKeyHex = `ed25519:${Buffer.from(publicKeyBytes).toString('hex')}
 const fixture = {
   version: 1,
   totalPlugins: 1,
-  publisher: 'claude-flow-team',
+  publisher: 'rufflo-team',
   plugins: [
     {
-      id: '@claude-flow/test-plugin',
-      name: '@claude-flow/test-plugin',
+      id: '@rufflo/test-plugin',
+      name: '@rufflo/test-plugin',
       version: '1.0.0',
       categories: ['official'],
       tags: ['test'],

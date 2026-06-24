@@ -1,7 +1,7 @@
 /**
  * RAG Memory Adapter (Wedge 5, ADR-123 Phase 4)
  *
- * `ruflo-rag-memory` ships Graph-RAG multi-hop retrieval. This adapter
+ * `rufflo-rag-memory` ships Graph-RAG multi-hop retrieval. This adapter
  * exports the chunk-connectivity graph so personalized PR seeded by the
  * query embedding ranks candidate chunks globally — graph-aware retrieval
  * beyond flat top-k MMR rerank.
@@ -38,13 +38,13 @@ export interface RagMemoryAdapterOptions {
 
 export function ragMemoryGraphId(namespace?: string): string {
   return namespace
-    ? `ruflo-rag-memory:chunks:${namespace}`
-    : 'ruflo-rag-memory:chunks:default';
+    ? `rufflo-rag-memory:chunks:${namespace}`
+    : 'rufflo-rag-memory:chunks:default';
 }
 
 export class RagMemoryAdapter implements SublinearAdapter {
   readonly graphId: string;
-  readonly ownerPlugin = 'ruflo-rag-memory';
+  readonly ownerPlugin = 'rufflo-rag-memory';
   readonly requiresPreprocessing = false;
 
   private readonly source: RagMemorySource;

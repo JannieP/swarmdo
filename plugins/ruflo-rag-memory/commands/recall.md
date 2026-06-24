@@ -7,7 +7,7 @@ $ARGUMENTS
 Semantic recall across all memory namespaces using HNSW vector search with MMR diversity reranking.
 
 ```bash
-npx @claude-flow/cli@latest memory search --query "$ARGUMENTS" --limit 5
+npx @rufflo/cli@latest memory search --query "$ARGUMENTS" --limit 5
 ```
 
 For richer results when ruvector is available:
@@ -19,5 +19,5 @@ This searches across patterns, tasks, solutions, feedback, security, and claude-
 
 If no arguments provided, show recent memory entries:
 ```bash
-npx @claude-flow/cli@latest memory list --limit 10
+npx @rufflo/cli@latest memory list --limit 10
 ```

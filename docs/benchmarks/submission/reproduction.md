@@ -28,14 +28,14 @@ export HF_TOKEN=<your-token>
 
 ```bash
 git clone https://github.com/ruvnet/ruflo
-cd ruflo
+cd rufflo
 git checkout 3ef6e175ddeb867135f00e843247aba2324d3c6d
 ```
 
 ## Build
 
 ```bash
-cd v3/@claude-flow/cli
+cd v3/@rufflo/cli
 npm install
 npm run build
 cd ../../..
@@ -44,7 +44,7 @@ cd ../../..
 ## Run
 
 ```bash
-node v3/@claude-flow/cli/dist/cli.js gaia-bench run \
+node v3/@rufflo/cli/dist/cli.js gaia-bench run \
   --level 1 \
   --model claude-sonnet-4-6 \
   --limit 53 \

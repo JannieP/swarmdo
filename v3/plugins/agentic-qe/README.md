@@ -1,10 +1,10 @@
-# @claude-flow/plugin-agentic-qe
+# @rufflo/plugin-agentic-qe
 
 **AI-powered quality engineering that writes tests, finds bugs, and breaks things (safely) so your users don't have to.**
 
 ## What is this?
 
-This plugin adds 58 AI agents to Claude Flow that handle all aspects of software quality:
+This plugin adds 58 AI agents to Rufflo that handle all aspects of software quality:
 
 - **Write tests for you** - Unit tests, integration tests, E2E tests, even chaos tests
 - **Find coverage gaps** - Shows exactly which code paths aren't tested
@@ -16,19 +16,19 @@ Think of it as having a team of QA engineers who never sleep, never miss edge ca
 
 ## Installation
 
-**Via Claude Flow CLI (recommended):**
+**Via Rufflo CLI (recommended):**
 ```bash
-npx claude-flow plugins install --name @claude-flow/plugin-agentic-qe
+npx rufflo plugins install --name @rufflo/plugin-agentic-qe
 ```
 
 **Via npm:**
 ```bash
-npm install @claude-flow/plugin-agentic-qe
+npm install @rufflo/plugin-agentic-qe
 ```
 
 **Verify installation:**
 ```bash
-npx claude-flow plugins list
+npx rufflo plugins list
 ```
 
 ---
@@ -40,7 +40,7 @@ npx claude-flow plugins list
 The simplest use case - point it at a file and get tests:
 
 ```bash
-npx claude-flow@v3alpha mcp call aqe/generate-tests \
+npx rufflo@v3alpha mcp call aqe/generate-tests \
   --targetPath ./src/utils/calculator.ts \
   --testType unit \
   --framework vitest
@@ -69,7 +69,7 @@ describe('Calculator', () => {
 Give it a requirement, and it runs the full red-green-refactor cycle:
 
 ```bash
-npx claude-flow@v3alpha mcp call aqe/tdd-cycle \
+npx rufflo@v3alpha mcp call aqe/tdd-cycle \
   --requirement "Users can reset their password via email" \
   --targetPath ./src/auth \
   --style london
@@ -86,7 +86,7 @@ npx claude-flow@v3alpha mcp call aqe/tdd-cycle \
 Scan your code for vulnerabilities:
 
 ```bash
-npx claude-flow@v3alpha mcp call aqe/security-scan \
+npx rufflo@v3alpha mcp call aqe/security-scan \
   --targetPath ./src \
   --scanType sast \
   --compliance owasp-top-10
@@ -135,7 +135,7 @@ if (!evaluation.passed) {
 Use ML to find likely defects:
 
 ```bash
-npx claude-flow@v3alpha mcp call aqe/predict-defects \
+npx rufflo@v3alpha mcp call aqe/predict-defects \
   --targetPath ./src/checkout \
   --includeRootCause true
 ```
@@ -160,7 +160,7 @@ Test how your system handles failures. **Always use dryRun first!**
 
 ```bash
 # Step 1: Preview what would happen (safe)
-npx claude-flow@v3alpha mcp call aqe/chaos-inject \
+npx rufflo@v3alpha mcp call aqe/chaos-inject \
   --target payment-service \
   --failureType network-latency \
   --duration 30 \
@@ -168,7 +168,7 @@ npx claude-flow@v3alpha mcp call aqe/chaos-inject \
   --dryRun true
 
 # Step 2: Run the actual experiment
-npx claude-flow@v3alpha mcp call aqe/chaos-inject \
+npx rufflo@v3alpha mcp call aqe/chaos-inject \
   --target payment-service \
   --failureType network-latency \
   --duration 30 \
@@ -290,7 +290,7 @@ const patterns = await mcp.call('aqe/suggest-tests', {
 ## Configuration
 
 ```yaml
-# claude-flow.config.yaml
+# rufflo.config.yaml
 plugins:
   agentic-qe:
     enabled: true

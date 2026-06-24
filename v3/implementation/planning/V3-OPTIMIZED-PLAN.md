@@ -1,4 +1,4 @@
-# Claude-Flow v3: Optimized Implementation Plan
+# Rufflo v3: Optimized Implementation Plan
 
 ## Core Priorities
 
@@ -609,9 +609,9 @@ export class InitController {
       '.claude/commands',
       '.claude/skills',
       '.claude/checkpoints/active',
-      '.claude-flow/coordination',
-      '.claude-flow/training',
-      '.claude-flow/metrics'
+      '.rufflo/coordination',
+      '.rufflo/training',
+      '.rufflo/metrics'
     ];
 
     for (const dir of dirs) {
@@ -846,14 +846,14 @@ import { InitController } from '../init/init-controller';
 
 export function createInitCommand(): Command {
   return new Command('init')
-    .description('Initialize Claude-Flow v3 with enhanced capabilities')
+    .description('Initialize Rufflo v3 with enhanced capabilities')
     .option('-m, --mode <mode>', 'Initialization mode', 'standard')
     .option('--sona <profile>', 'SONA learning profile', 'balanced')
     .option('--no-learning', 'Disable self-learning')
     .option('--attention <type>', 'Attention mechanism', 'flash')
     .option('--migrate', 'Auto-migrate from v2')
     .action(async (options) => {
-      console.log('🚀 Initializing Claude-Flow v3...\n');
+      console.log('🚀 Initializing Rufflo v3...\n');
 
       const controller = new InitController({
         mode: options.mode,
@@ -956,21 +956,21 @@ npm run test:compatibility
 
 ```bash
 # Fresh v3 installation
-npx claude-flow init --mode sparc --sona research
+npx rufflo init --mode sparc --sona research
 
 # With all features
-npx claude-flow init --mode enterprise --sona research --attention flash
+npx rufflo init --mode enterprise --sona research --attention flash
 
 # Minimal (fast startup)
-npx claude-flow init --mode standard --sona real-time
+npx rufflo init --mode standard --sona real-time
 
 # Migrate from v2
-npx claude-flow init --migrate
+npx rufflo init --migrate
 ```
 
 ```typescript
 // v3 API usage
-import { InitController, SwarmCoordinator, SONAManager } from 'claude-flow/v3';
+import { InitController, SwarmCoordinator, SONAManager } from 'rufflo/v3';
 
 // Initialize with learning
 const init = new InitController({

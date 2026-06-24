@@ -30,12 +30,12 @@ done
 [[ -f "$ROOT/commands/rvf.md" ]] || miss="$miss missing-command"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
-step "3. README pins @claude-flow/cli to v3.6"
-grep -qE "@claude-flow/cli.*v3\.6|v3\.6.*claude-flow/cli" "$ROOT/README.md" \
+step "3. README pins @rufflo/cli to v3.6"
+grep -qE "@rufflo/cli.*v3\.6|v3\.6.*rufflo/cli" "$ROOT/README.md" \
   && ok || bad "v3.6 pin missing"
 
-step "4. README defers to ruflo-agentdb namespace convention"
-grep -q "ruflo-agentdb" "$ROOT/README.md" \
+step "4. README defers to rufflo-agentdb namespace convention"
+grep -q "rufflo-agentdb" "$ROOT/README.md" \
   && grep -q "Namespace convention" "$ROOT/README.md" \
   && ok || bad "namespace coordination block incomplete"
 
@@ -43,15 +43,15 @@ step "5. rvf-sessions namespace claimed"
 grep -q "rvf-sessions" "$ROOT/README.md" \
   && ok || bad "rvf-sessions namespace not claimed"
 
-step "6. RVF cross-reference to ruflo-browser sessions"
+step "6. RVF cross-reference to rufflo-browser sessions"
 F="$ROOT/README.md"
-grep -q "ruflo-browser" "$F" \
+grep -q "rufflo-browser" "$F" \
   && grep -qE "session.*RVF|RVF.*session" "$F" \
   && ok || bad "browser-RVF cross-reference missing"
 
-step "7. RVF tooling cross-reference to ruflo-ruvector"
+step "7. RVF tooling cross-reference to rufflo-ruvector"
 F="$ROOT/README.md"
-grep -q "ruflo-ruvector" "$F" \
+grep -q "rufflo-ruvector" "$F" \
   && grep -qE "ruvector rvf|rvf tooling|RVF tooling" "$F" \
   && ok || bad "ruvector RVF tooling cross-reference missing"
 

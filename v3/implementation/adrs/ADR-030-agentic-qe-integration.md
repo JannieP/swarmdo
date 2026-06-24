@@ -21,7 +21,7 @@
 
 ### Problem Statement
 
-Claude Flow V3 requires comprehensive quality engineering (QE) capabilities for:
+Rufflo V3 requires comprehensive quality engineering (QE) capabilities for:
 1. **Automated test generation** across multiple paradigms (unit, integration, E2E, BDD)
 2. **Intelligent coverage analysis** with gap detection and prioritization
 3. **Defect prediction** using ML-based quality intelligence
@@ -30,7 +30,7 @@ Claude Flow V3 requires comprehensive quality engineering (QE) capabilities for:
 6. **Chaos engineering** and resilience validation
 7. **Security compliance** automation (SAST, DAST, audit trails)
 
-The current V3 architecture provides agent coordination (`@claude-flow/plugins`), memory management (`@claude-flow/memory`), and security primitives (`@claude-flow/security`), but lacks specialized QE capabilities.
+The current V3 architecture provides agent coordination (`@rufflo/plugins`), memory management (`@rufflo/memory`), and security primitives (`@rufflo/security`), but lacks specialized QE capabilities.
 
 ### Agentic-QE Package Analysis
 
@@ -44,7 +44,7 @@ The `agentic-qe` package (v3.2.3) provides a comprehensive Quality Engineering f
 | **TinyDancer Model Routing** | 3-tier routing (Haiku/Sonnet/Opus) | <5ms routing |
 | **Queen Coordinator** | Hierarchical orchestration with Byzantine tolerance | O(log n) consensus |
 | **O(log n) Coverage** | Johnson-Lindenstrauss projected gap detection | 12,500x faster |
-| **Browser Automation** | @claude-flow/browser integration | Full Playwright |
+| **Browser Automation** | @rufflo/browser integration | Full Playwright |
 | **MCP Server** | All tools via Model Context Protocol | <100ms response |
 
 ### 12 Bounded Contexts
@@ -67,30 +67,30 @@ agentic-qe/
 
 ### Shared Dependencies
 
-| Dependency | agentic-qe | claude-flow V3 | Strategy |
+| Dependency | agentic-qe | rufflo V3 | Strategy |
 |------------|------------|----------------|----------|
 | `@ruvector/attention` | Core attention | ADR-028 integration | **Reuse** V3 instance |
 | `@ruvector/gnn` | Code graphs | ADR-029 integration | **Reuse** V3 instance |
 | `@ruvector/sona` | Self-learning | ReasoningBank | **Bridge** via adapter |
-| `hnswlib-node` | Vector search | @claude-flow/memory | **Share** index |
+| `hnswlib-node` | Vector search | @rufflo/memory | **Share** index |
 | `better-sqlite3` | Persistence | sql.js (WASM) | **Separate** DBs |
-| `@xenova/transformers` | Embeddings | @claude-flow/embeddings | **Share** model |
+| `@xenova/transformers` | Embeddings | @rufflo/embeddings | **Share** model |
 
 ---
 
 ## Decision
 
-Integrate `agentic-qe` as a **first-class plugin** for Claude Flow V3 using the `@claude-flow/plugins` SDK with clear bounded context mapping, shared infrastructure coordination, and security isolation.
+Integrate `agentic-qe` as a **first-class plugin** for Rufflo V3 using the `@rufflo/plugins` SDK with clear bounded context mapping, shared infrastructure coordination, and security isolation.
 
 ### Architecture Overview
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│                              Claude Flow V3                                      │
+│                              Rufflo V3                                      │
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                  │
 │   ┌────────────────────────────────────────────────────────────────────────┐    │
-│   │                    @claude-flow/plugins Registry                        │    │
+│   │                    @rufflo/plugins Registry                        │    │
 │   │  ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌─────────────────┐  │    │
 │   │  │   Core     │  │  Security  │  │  Memory    │  │  agentic-qe     │  │    │
 │   │  │  Plugins   │  │  Plugins   │  │  Plugins   │  │  Plugin (NEW)   │  │    │
@@ -164,7 +164,7 @@ Integrate `agentic-qe` as a **first-class plugin** for Claude Flow V3 using the 
 ```typescript
 // v3/plugins/agentic-qe/src/index.ts
 
-import { PluginBuilder, HookEvent, HookPriority } from '@claude-flow/plugins';
+import { PluginBuilder, HookEvent, HookPriority } from '@rufflo/plugins';
 import { AgenticQEBridge } from './infrastructure/agentic-qe-bridge';
 import { ContextMapper } from './infrastructure/context-mapper';
 import { SecuritySandbox } from './infrastructure/security-sandbox';
@@ -177,9 +177,9 @@ export const agenticQEPlugin = new PluginBuilder('agentic-qe', '3.2.3')
   .withAuthor('rUv')
   .withLicense('MIT')
   .withDependencies([
-    '@claude-flow/memory',
-    '@claude-flow/security',
-    '@claude-flow/embeddings'
+    '@rufflo/memory',
+    '@rufflo/security',
+    '@rufflo/embeddings'
   ])
   .withCapabilities([
     'test-generation',
@@ -429,9 +429,9 @@ export class ContextMapper {
 ```typescript
 // v3/plugins/agentic-qe/src/infrastructure/agentic-qe-bridge.ts
 
-import type { IMemoryService } from '@claude-flow/memory';
-import type { SecurityModule } from '@claude-flow/security';
-import type { EmbeddingsService } from '@claude-flow/embeddings';
+import type { IMemoryService } from '@rufflo/memory';
+import type { SecurityModule } from '@rufflo/security';
+import type { EmbeddingsService } from '@rufflo/embeddings';
 
 export interface AgenticQEBridgeConfig {
   memory: IMemoryService;
@@ -636,7 +636,7 @@ export class AgenticQEBridge {
 ```typescript
 // v3/plugins/agentic-qe/src/mcp-tools/index.ts
 
-import type { MCPTool } from '@claude-flow/plugins';
+import type { MCPTool } from '@rufflo/plugins';
 
 export const mcpTools: MCPTool[] = [
   // Test Generation Tools
@@ -1063,7 +1063,7 @@ export const mcpTools: MCPTool[] = [
 ```typescript
 // v3/plugins/agentic-qe/src/infrastructure/model-routing-adapter.ts
 
-import type { EnhancedModelRouter, EnhancedRouteResult } from '@claude-flow/cli/ruvector';
+import type { EnhancedModelRouter, EnhancedRouteResult } from '@rufflo/cli/ruvector';
 
 /**
  * Adapter to align TinyDancer model routing with ADR-026 Agent Booster routing
@@ -1162,10 +1162,10 @@ interface ModelRouteResult extends EnhancedRouteResult {
 ```typescript
 // v3/plugins/agentic-qe/src/infrastructure/queen-hive-bridge.ts
 
-import type { HiveMindService } from '@claude-flow/coordination';
+import type { HiveMindService } from '@rufflo/coordination';
 
 /**
- * Bridge between agentic-qe Queen Coordinator and claude-flow Hive Mind
+ * Bridge between agentic-qe Queen Coordinator and rufflo Hive Mind
  */
 export class QueenHiveBridge {
   private hiveMind: HiveMindService;
@@ -1298,7 +1298,7 @@ interface QESwarmResult {
 ```typescript
 // v3/plugins/agentic-qe/src/infrastructure/security-sandbox.ts
 
-import type { SecurityModule } from '@claude-flow/security';
+import type { SecurityModule } from '@rufflo/security';
 
 export interface SandboxConfig {
   maxExecutionTime: number;  // ms
@@ -1721,7 +1721,7 @@ v3/plugins/agentic-qe/
 | Create constants | `src/constants.ts` | 🟡 High | types.ts |
 
 **Deliverables:**
-- Plugin registers with `@claude-flow/plugins` SDK
+- Plugin registers with `@rufflo/plugins` SDK
 - Type-safe configuration validation
 - Basic lifecycle hooks (onLoad, onUnload)
 
@@ -1847,14 +1847,14 @@ v3/plugins/agentic-qe/
 
 ```json
 {
-  "name": "@claude-flow/plugin-agentic-qe",
+  "name": "@rufflo/plugin-agentic-qe",
   "version": "3.0.0-alpha.1",
   "dependencies": {
     "agentic-qe": "^3.2.3",
-    "@claude-flow/plugins": "^3.0.0",
-    "@claude-flow/memory": "^3.0.0",
-    "@claude-flow/security": "^3.0.0",
-    "@claude-flow/embeddings": "^3.0.0",
+    "@rufflo/plugins": "^3.0.0",
+    "@rufflo/memory": "^3.0.0",
+    "@rufflo/security": "^3.0.0",
+    "@rufflo/embeddings": "^3.0.0",
     "zod": "^3.23.0"
   },
   "devDependencies": {
@@ -1863,7 +1863,7 @@ v3/plugins/agentic-qe/
     "@types/node": "^20.0.0"
   },
   "peerDependencies": {
-    "@claude-flow/browser": ">=3.0.0"
+    "@rufflo/browser": ">=3.0.0"
   }
 }
 ```

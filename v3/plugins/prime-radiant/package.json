@@ -1,5 +1,5 @@
 {
-  "name": "@claude-flow/plugin-prime-radiant",
+  "name": "@rufflo/plugin-prime-radiant",
   "version": "0.1.5",
   "description": "Mathematical AI interpretability plugin providing sheaf cohomology, spectral analysis, causal inference, and quantum topology for coherence validation, consensus verification, and hallucination prevention.",
   "type": "module",
@@ -29,7 +29,7 @@
     "prepublishOnly": "npm run build"
   },
   "keywords": [
-    "claude-flow",
+    "rufflo",
     "plugin",
     "ai-interpretability",
     "sheaf-cohomology",
@@ -54,18 +54,18 @@
     "node": ">=20.0.0"
   },
   "peerDependencies": {
-    "@claude-flow/memory": ">=3.0.0-0",
-    "@claude-flow/security": ">=3.0.0-0",
-    "@claude-flow/coordination": ">=3.0.0-0"
+    "@rufflo/memory": ">=3.0.0-0",
+    "@rufflo/security": ">=3.0.0-0",
+    "@rufflo/coordination": ">=3.0.0-0"
   },
   "peerDependenciesMeta": {
-    "@claude-flow/memory": {
+    "@rufflo/memory": {
       "optional": true
     },
-    "@claude-flow/security": {
+    "@rufflo/security": {
       "optional": true
     },
-    "@claude-flow/coordination": {
+    "@rufflo/coordination": {
       "optional": true
     }
   },

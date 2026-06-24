@@ -2,14 +2,14 @@
 
 This baseline captures the portfolio-CG bench after wiring the native
 sublinear dispatch in the `SublinearAdapter` (#55). The adapter now
-probes `mcp__ruflo-sublinear__solve` on `globalThis` and honours
+probes `mcp__rufflo-sublinear__solve` on `globalThis` and honours
 `RUFLO_SUBLINEAR_NATIVE=1` as a manual override. When the native path
 is unreachable from the current runtime, the bench produces a useful
 local-JS baseline that matches PR #2070's measured 1.5-1.9× speedup.
 
-The full 40-60× speedup headline requires the `ruflo-sublinear` plugin
+The full 40-60× speedup headline requires the `rufflo-sublinear` plugin
 to be registered AND its MCP tool to be mounted into the adapter's
-runtime via the harness — that happens on a live ruflo daemon. CI
+runtime via the harness — that happens on a live rufflo daemon. CI
 exercises that path.
 
 ## Run summary
@@ -73,13 +73,13 @@ Per `sublinear-time-solver@1.7.0` documentation and ADR-123 §162 Row 8:
 
 The bench will populate the `CG native (ms)` and `Native speedup`
 columns automatically when run in an environment where the harness has
-mounted `mcp__ruflo-sublinear__solve` onto `globalThis`. CI exercises
+mounted `mcp__rufflo-sublinear__solve` onto `globalThis`. CI exercises
 that path; this run does not.
 
 ## Wiring summary (what changed in #55)
 
 1. `SublinearAdapter.detectSublinearTool()` — new public probe that
-   checks both `globalThis['mcp__ruflo-sublinear__solve']` and the
+   checks both `globalThis['mcp__rufflo-sublinear__solve']` and the
    `RUFLO_SUBLINEAR_NATIVE=1` env-var override. Legacy `isMcpAvailable()`
    preserved as an alias.
 2. `SolveResult.method` — new field, `'cg-sublinear-native' | 'cg-local'`.
@@ -99,6 +99,6 @@ that path; this run does not.
 - Task #55 (downstream tracker) — wire native sublinear CG dispatch
 - ruvnet/ruflo#2068 — ADR-126 Phase 3 (the SublinearAdapter ships)
 - ruvnet/ruflo#2070 — Phase 3 PR (the local-JS baseline this builds on)
-- ADR-126 Phase 3 — `plugins/ruflo-neural-trader/src/sublinear-adapter.ts`
+- ADR-126 Phase 3 — `plugins/rufflo-neural-trader/src/sublinear-adapter.ts`
 - ADR-123 §162 Row 8 — Wedge 8 portfolio CG (the 40-60× claim)
 - Upstream `sublinear-time-solver@1.7.0` — production CG kernel target

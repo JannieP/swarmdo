@@ -49,7 +49,7 @@ export interface AttributionFeature {
 }
 
 export interface SignedAttributionArtifact {
-  schema: 'ruflo-neural-trader-attribution/v1';
+  schema: 'rufflo-neural-trader-attribution/v1';
   /** The signal whose prediction is being explained. */
   signalId: string;
   /** Which model produced the signal. e.g. `lstm-v3`, `transformer-attn8h-v2`. */
@@ -108,7 +108,7 @@ export async function signAttributionArtifact(
   const publicKeyBytes = await ed.getPublicKeyAsync(privateKey);
 
   return {
-    schema: 'ruflo-neural-trader-attribution/v1',
+    schema: 'rufflo-neural-trader-attribution/v1',
     ...body,
     witnessPublicKey: `ed25519:${bytesToHex(publicKeyBytes)}`,
     witnessSignature: bytesToHex(signatureBytes),
@@ -196,7 +196,7 @@ export interface PageRankResult {
 
 /**
  * Local JS power-iteration single-entry PageRank — the fallback used when
- * `mcp__ruflo-sublinear__page-rank-entry` is not registered in the runtime.
+ * `mcp__rufflo-sublinear__page-rank-entry` is not registered in the runtime.
  *
  * The math: standard personalized PageRank with the personalization vector
  * concentrated entirely on the source node. Forward-push semantics in the
@@ -286,14 +286,14 @@ export function localSingleEntryPageRank(
 /* ---------------------------------------------------------------------- */
 
 /**
- * True iff `mcp__ruflo-sublinear__page-rank-entry` is registered in the
+ * True iff `mcp__rufflo-sublinear__page-rank-entry` is registered in the
  * current runtime (the agent sandbox or the host process). Mirrors the
  * `SublinearAdapter.isMcpAvailable()` pattern from Phase 3.
  */
 export function isPageRankMcpAvailable(): boolean {
   try {
     const tool = (globalThis as Record<string, unknown>)[
-      'mcp__ruflo-sublinear__page-rank-entry'
+      'mcp__rufflo-sublinear__page-rank-entry'
     ];
     return typeof tool === 'function';
   } catch {
@@ -302,7 +302,7 @@ export function isPageRankMcpAvailable(): boolean {
 }
 
 /**
- * Dispatch to `mcp__ruflo-sublinear__page-rank-entry` when available, fall
+ * Dispatch to `mcp__rufflo-sublinear__page-rank-entry` when available, fall
  * through to the local power-iteration kernel otherwise. Either way the
  * math is single-entry forward-push PageRank with the personalization
  * vector concentrated on `sourceIndex`.
@@ -314,7 +314,7 @@ export async function singleEntryPageRank(
   if (isPageRankMcpAvailable()) {
     try {
       const tool = (globalThis as Record<string, unknown>)[
-        'mcp__ruflo-sublinear__page-rank-entry'
+        'mcp__rufflo-sublinear__page-rank-entry'
       ] as (args: unknown) => Promise<{ scores: number[]; iterations?: number }>;
       const out = await tool({
         nodes: graph.nodes,

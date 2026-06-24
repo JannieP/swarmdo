@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Clone tracker — fetches 14-day GitHub clone numbers for the ruflo
+ * Clone tracker — fetches 14-day GitHub clone numbers for the rufflo
  * ecosystem repos and appends a snapshot to `data/clone-data.rvf`
  * (a RuVector RVF vector store).
  *
@@ -8,7 +8,7 @@
  * which is just inside GitHub's 14-day clone-data retention window.
  *
  * Each snapshot is a 10-dimensional vector:
- *   [ruflo_clones,      ruflo_uniques,
+ *   [rufflo_clones,      rufflo_uniques,
  *    agentdb_clones,    agentdb_uniques,
  *    agentic_clones,    agentic_uniques,
  *    ruvector_clones,   ruvector_uniques,
@@ -48,10 +48,10 @@ const REPOS = [
 ];
 
 const NPM_PKGS_HEADLINE = [
-  'claude-flow',
-  'ruflo',
-  '@claude-flow/cli',
-  '@claude-flow/memory',
+  'rufflo',
+  'rufflo',
+  '@rufflo/cli',
+  '@rufflo/memory',
   'agentdb',
   'agentic-flow',
 ];
@@ -114,11 +114,11 @@ async function loadOrCreateRvf() {
 function readLedger() {
   if (!existsSync(LEDGER_PATH)) {
     return {
-      schema: 'ruflo-clone-tracker-ledger/v1',
+      schema: 'rufflo-clone-tracker-ledger/v1',
       created_at: new Date().toISOString(),
       repos: REPOS,
       vector_layout: [
-        'ruflo_clones', 'ruflo_uniques',
+        'rufflo_clones', 'rufflo_uniques',
         'agentdb_clones', 'agentdb_uniques',
         'agentic_flow_clones', 'agentic_flow_uniques',
         'ruvector_clones', 'ruvector_uniques',
@@ -221,7 +221,7 @@ async function main() {
   const ledgerBytes = readFileSync(LEDGER_PATH);
   const ledgerSha = createHash('sha256').update(ledgerBytes).digest('hex');
   const proof = {
-    schema: 'ruflo-ecosystem-proof/v2',
+    schema: 'rufflo-ecosystem-proof/v2',
     generated_at: now,
     sources: {
       github_clones: 'https://api.github.com/repos/{owner}/{repo}/traffic/clones (14-day rolling window)',

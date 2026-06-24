@@ -5,10 +5,10 @@
 set -e
 
 echo "Initializing hierarchical swarm..."
-npx @claude-flow/cli swarm init \
+npx @rufflo/cli swarm init \
   --topology hierarchical \
   --max-agents 8 \
   --strategy specialized
 
 echo "Swarm initialized successfully"
-npx @claude-flow/cli swarm status
+npx @rufflo/cli swarm status

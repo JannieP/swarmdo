@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Building RuFlo Research Widget..."
+echo "Building Rufflo Research Widget..."
 echo ""
 
 # Build the widget
@@ -18,7 +18,7 @@ if [ $? -eq 0 ]; then
   echo ""
   echo "🚀 Usage on external sites:"
   echo ""
-  echo "<div id=\"ruflo-research-widget-container\"></div>"
+  echo "<div id=\"rufflo-research-widget-container\"></div>"
   echo "<script src=\"https://your-domain.com/widget.js\"></script>"
   echo ""
 else

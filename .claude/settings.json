@@ -1,6 +1,6 @@
 {
   "model": "claude-opus-4-7",
-  "_comment_skillListingBudgetFraction": "#1834 — repo has 367 SKILL.md files (5x duplicates of common skills) across .agents/skills, .claude/skills, archive/v2/.claude/skills, v3/@claude-flow/{cli,mcp}/.claude/skills. With Claude Code's default 1% budget, ~378 descriptions get truncated. Bumping to 6% covers the actual usage (5.5%). Long-term fix is to prune the duplicates and archive paths (see #1834).",
+  "_comment_skillListingBudgetFraction": "#1834 — repo has 367 SKILL.md files (5x duplicates of common skills) across .agents/skills, .claude/skills, archive/v2/.claude/skills, v3/@rufflo/{cli,mcp}/.claude/skills. With Claude Code's default 1% budget, ~378 descriptions get truncated. Bumping to 6% covers the actual usage (5.5%). Long-term fix is to prune the duplicates and archive paths (see #1834).",
   "skillListingBudgetFraction": 0.06,
   "customInstructions": "Follow the project's CLAUDE.md guidelines. Use concurrent execution for all operations. Prioritize v3 implementation with security-first development, 15-agent swarm coordination, phased performance optimization, and cross-platform helper automation.",
   "env": {
@@ -10,8 +10,8 @@
   },
   "permissions": {
     "allow": [
-      "Bash(npx @claude-flow*)",
-      "Bash(npx claude-flow*)",
+      "Bash(npx @rufflo*)",
+      "Bash(npx rufflo*)",
       "Bash(node .claude/*)",
       "Bash(npm run:*)",
       "Bash(npm test:*)",
@@ -32,7 +32,7 @@
       "Bash(pwd)",
       "Bash(ls:*)",
       "Bash(npx:*)",
-      "mcp__claude-flow__*",
+      "mcp__rufflo__*",
       "mcp__ruv-swarm__*",
       "mcp__flow-nexus__*"
     ],
@@ -159,8 +159,8 @@
     ]
   },
   "attribution": {
-    "commit": "Co-Authored-By: RuFlo <ruv@ruv.net>",
-    "pr": "\ud83e\udd16 Generated with [RuFlo](https://github.com/ruvnet/ruflo)"
+    "commit": "Co-Authored-By: Rufflo <ruv@ruv.net>",
+    "pr": "\ud83e\udd16 Generated with [Rufflo](https://github.com/ruvnet/ruflo)"
   },
   "claudeFlow": {
     "version": "3.6.11",
@@ -269,17 +269,17 @@
     "command": "sh -c 'exec node \"${CLAUDE_PROJECT_DIR:-.}/.claude/helpers/statusline.cjs\"'"
   },
   "mcpServers": {
-    "claude-flow": {
+    "rufflo": {
       "command": "npx",
       "args": [
         "-y",
-        "ruflo@latest",
+        "rufflo@latest",
         "mcp",
         "start"
       ]
     }
   },
   "enabledMcpjsonServers": [
-    "claude-flow"
+    "rufflo"
   ]
 }

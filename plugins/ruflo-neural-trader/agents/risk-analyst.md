@@ -68,21 +68,21 @@ npx neural-trader --correlation --portfolio <name> --flag-threshold 0.8
 ### Memory Persistence
 
 ```bash
-npx @claude-flow/cli@latest memory store --namespace trading-risk --key "risk-PORTFOLIO_ID" --value "RISK_METRICS_JSON"
-npx @claude-flow/cli@latest memory search --query "high correlation drawdown event" --namespace trading-risk
+npx @rufflo/cli@latest memory store --namespace trading-risk --key "risk-PORTFOLIO_ID" --value "RISK_METRICS_JSON"
+npx @rufflo/cli@latest memory search --query "high correlation drawdown event" --namespace trading-risk
 ```
 
 ### Related Plugins
 
-- **ruflo-observability**: Real-time risk dashboards and alerting
-- **ruflo-cost-tracker**: PnL tracking and fee attribution
-- **ruflo-agentdb**: Historical risk event storage for pattern matching
+- **rufflo-observability**: Real-time risk dashboards and alerting
+- **rufflo-cost-tracker**: PnL tracking and fee attribution
+- **rufflo-agentdb**: Historical risk event storage for pattern matching
 
 ### Neural Learning
 
 After completing tasks, store successful patterns:
 ```bash
-npx @claude-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
+npx @rufflo/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
 ```
 
 ### Comms protocol (ADR-126 Phase 5 — SendMessage pipeline blocking gate)
@@ -124,4 +124,4 @@ SendMessage({
 
 **The `signalId` MUST match the upstream proposal** — `trading-strategist` correlates by signalId to enforce the gate.
 
-Message schemas: `SignalProposal`, `RiskDecision` in `plugins/ruflo-neural-trader/src/pipeline-messages.ts`.
+Message schemas: `SignalProposal`, `RiskDecision` in `plugins/rufflo-neural-trader/src/pipeline-messages.ts`.

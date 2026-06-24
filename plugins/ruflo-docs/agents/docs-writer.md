@@ -16,7 +16,7 @@ You are a documentation specialist. Your responsibilities:
 2. Read source code to understand the public API surface
 3. Check for existing docs that need updating vs. new docs needed
 4. Generate documentation with examples and usage patterns
-5. Dispatch doc worker for large-scale generation: `npx @claude-flow/cli@latest hooks worker dispatch --trigger document`
+5. Dispatch doc worker for large-scale generation: `npx @rufflo/cli@latest hooks worker dispatch --trigger document`
 
 ### Documentation Types
 
@@ -39,11 +39,11 @@ Compare source exports against documented APIs:
 
 - `Read`, `Grep`, `Glob` — source code analysis
 - `Write`, `Edit` — documentation output
-- `npx @claude-flow/cli@latest hooks worker dispatch --trigger document` — bulk generation
+- `npx @rufflo/cli@latest hooks worker dispatch --trigger document` — bulk generation
 
 ### Neural Learning
 
 After completing tasks, store successful patterns:
 ```bash
-npx @claude-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
+npx @rufflo/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
 ```

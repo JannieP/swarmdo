@@ -1,4 +1,4 @@
-// Adaptive evolution (Ruflo ADR-148).
+// Adaptive evolution (Rufflo ADR-148).
 //   evolveVsField — hill-climb a strategy against a fixed roster (mutate -> keep if fitter).
 //   coevolve      — two strategies evolve against each other (Wolfram's mutual co-evolution).
 // Fitness curves expose the plateau -> breakthrough structure Wolfram highlights.

@@ -7,8 +7,8 @@ You are the loop worker coordinator. You manage background worker lifecycle acro
 
 ## Responsibilities
 
-1. **Dispatch workers** via `mcp__claude-flow__hooks_worker-dispatch` with the correct trigger name
-2. **Monitor health** via `mcp__claude-flow__hooks_worker-status` and report failures
+1. **Dispatch workers** via `mcp__rufflo__hooks_worker-dispatch` with the correct trigger name
+2. **Monitor health** via `mcp__rufflo__hooks_worker-status` and report failures
 3. **Schedule iterations** using `ScheduleWakeup` (loop mode) or `CronCreate` (persistent mode)
 4. **Respect cache TTL** — default delay 270s to keep prompt cache warm (5-min TTL × 0.9)
 
@@ -31,23 +31,23 @@ You are the loop worker coordinator. You manage background worker lifecycle acro
 
 ## Workflow
 
-1. Check current worker status: `Bash("npx @claude-flow/cli@latest hooks worker status")`
-2. Dispatch needed workers: `Bash("npx @claude-flow/cli@latest hooks worker dispatch --trigger WORKER_NAME")`
+1. Check current worker status: `Bash("npx @rufflo/cli@latest hooks worker status")`
+2. Dispatch needed workers: `Bash("npx @rufflo/cli@latest hooks worker dispatch --trigger WORKER_NAME")`
 3. Schedule next check based on execution mode
 
 ## Tools
 
-- `Bash(npx @claude-flow/cli@latest hooks worker *)` — worker management
+- `Bash(npx @rufflo/cli@latest hooks worker *)` — worker management
 - `ScheduleWakeup` — loop-mode scheduling
 - `CronCreate` / `CronList` / `CronDelete` — persistent scheduling
-- `mcp__claude-flow__hooks_worker-dispatch` — direct worker dispatch
-- `mcp__claude-flow__hooks_worker-status` — worker health check
+- `mcp__rufflo__hooks_worker-dispatch` — direct worker dispatch
+- `mcp__rufflo__hooks_worker-status` — worker health check
 
 
 ### Neural Learning
 
 After completing tasks, store successful patterns:
 ```bash
-npx @claude-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
-npx @claude-flow/cli@latest memory search --query "TASK_TYPE patterns" --namespace patterns
+npx @rufflo/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
+npx @rufflo/cli@latest memory search --query "TASK_TYPE patterns" --namespace patterns
 ```

@@ -31,7 +31,7 @@ not declared in `package.json` `optionalDependencies`, meaning:
 
 ## Decision
 
-Add both packages to `optionalDependencies` in `v3/@claude-flow/cli/package.json`:
+Add both packages to `optionalDependencies` in `v3/@rufflo/cli/package.json`:
 
 ```json
 {

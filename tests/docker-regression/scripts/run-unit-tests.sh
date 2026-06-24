@@ -1,5 +1,5 @@
 #!/bin/bash
-# Claude-Flow V3 Package Unit Tests
+# Rufflo V3 Package Unit Tests
 # Runs all vitest unit tests across V3 packages
 
 set -e
@@ -56,21 +56,21 @@ run_package_tests() {
 # ============================================================================
 echo "── V3 Package Unit Tests ──"
 
-run_package_tests "@claude-flow/hooks" "/app/v3/@claude-flow/hooks"
-run_package_tests "@claude-flow/plugins" "/app/v3/@claude-flow/plugins"
-run_package_tests "@claude-flow/security" "/app/v3/@claude-flow/security"
-run_package_tests "@claude-flow/swarm" "/app/v3/@claude-flow/swarm"
-run_package_tests "@claude-flow/cli" "/app/v3/@claude-flow/cli"
-run_package_tests "@claude-flow/memory" "/app/v3/@claude-flow/memory"
-run_package_tests "@claude-flow/mcp" "/app/v3/@claude-flow/mcp"
-run_package_tests "@claude-flow/neural" "/app/v3/@claude-flow/neural"
-run_package_tests "@claude-flow/testing" "/app/v3/@claude-flow/testing"
-run_package_tests "@claude-flow/embeddings" "/app/v3/@claude-flow/embeddings"
-run_package_tests "@claude-flow/providers" "/app/v3/@claude-flow/providers"
-run_package_tests "@claude-flow/integration" "/app/v3/@claude-flow/integration"
-run_package_tests "@claude-flow/performance" "/app/v3/@claude-flow/performance"
-run_package_tests "@claude-flow/deployment" "/app/v3/@claude-flow/deployment"
-run_package_tests "@claude-flow/shared" "/app/v3/@claude-flow/shared"
+run_package_tests "@rufflo/hooks" "/app/v3/@rufflo/hooks"
+run_package_tests "@rufflo/plugins" "/app/v3/@rufflo/plugins"
+run_package_tests "@rufflo/security" "/app/v3/@rufflo/security"
+run_package_tests "@rufflo/swarm" "/app/v3/@rufflo/swarm"
+run_package_tests "@rufflo/cli" "/app/v3/@rufflo/cli"
+run_package_tests "@rufflo/memory" "/app/v3/@rufflo/memory"
+run_package_tests "@rufflo/mcp" "/app/v3/@rufflo/mcp"
+run_package_tests "@rufflo/neural" "/app/v3/@rufflo/neural"
+run_package_tests "@rufflo/testing" "/app/v3/@rufflo/testing"
+run_package_tests "@rufflo/embeddings" "/app/v3/@rufflo/embeddings"
+run_package_tests "@rufflo/providers" "/app/v3/@rufflo/providers"
+run_package_tests "@rufflo/integration" "/app/v3/@rufflo/integration"
+run_package_tests "@rufflo/performance" "/app/v3/@rufflo/performance"
+run_package_tests "@rufflo/deployment" "/app/v3/@rufflo/deployment"
+run_package_tests "@rufflo/shared" "/app/v3/@rufflo/shared"
 
 # ============================================================================
 # SPECIFIC TEST SUITES
@@ -80,8 +80,8 @@ echo "── Specific Test Suites ──"
 
 # ReasoningBank tests
 echo -n "  Testing: ReasoningBank... "
-if [ -f "/app/v3/@claude-flow/hooks/src/__tests__/reasoningbank.test.ts" ]; then
-    cd /app/v3/@claude-flow/hooks
+if [ -f "/app/v3/@rufflo/hooks/src/__tests__/reasoningbank.test.ts" ]; then
+    cd /app/v3/@rufflo/hooks
     set +e
     npm test -- --run src/__tests__/reasoningbank.test.ts 2>/dev/null && echo "✓ PASSED" || echo "✓ PASSED (via npm test)"
     set -e
@@ -92,8 +92,8 @@ fi
 
 # GuidanceProvider tests
 echo -n "  Testing: GuidanceProvider... "
-if [ -f "/app/v3/@claude-flow/hooks/src/__tests__/guidance-provider.test.ts" ]; then
-    cd /app/v3/@claude-flow/hooks
+if [ -f "/app/v3/@rufflo/hooks/src/__tests__/guidance-provider.test.ts" ]; then
+    cd /app/v3/@rufflo/hooks
     set +e
     npm test -- --run src/__tests__/guidance-provider.test.ts 2>/dev/null && echo "✓ PASSED" || echo "✓ PASSED (via npm test)"
     set -e
@@ -104,8 +104,8 @@ fi
 
 # Plugin tests
 echo -n "  Testing: RuVector Plugins... "
-if [ -f "/app/v3/@claude-flow/plugins/examples/ruvector-plugins/ruvector-plugins.test.ts" ]; then
-    cd /app/v3/@claude-flow/plugins
+if [ -f "/app/v3/@rufflo/plugins/examples/ruvector-plugins/ruvector-plugins.test.ts" ]; then
+    cd /app/v3/@rufflo/plugins
     set +e
     npm test -- --run examples/ruvector-plugins/ruvector-plugins.test.ts 2>/dev/null && echo "✓ PASSED" || echo "✓ PASSED (via npm test)"
     set -e
@@ -120,11 +120,11 @@ fi
 echo ""
 echo "── Test Coverage Summary ──"
 
-echo "  @claude-flow/hooks:    112 tests"
-echo "  @claude-flow/plugins:  142 tests"
-echo "  @claude-flow/security: 47 tests"
-echo "  @claude-flow/swarm:    89 tests"
-echo "  @claude-flow/cli:      34 tests"
+echo "  @rufflo/hooks:    112 tests"
+echo "  @rufflo/plugins:  142 tests"
+echo "  @rufflo/security: 47 tests"
+echo "  @rufflo/swarm:    89 tests"
+echo "  @rufflo/cli:      34 tests"
 echo "  Total:                 424+ tests"
 
 # ============================================================================

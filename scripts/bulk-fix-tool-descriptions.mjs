@@ -8,7 +8,7 @@
  * ruvllm / config / session / hive-mind / coordination / system / mcp /
  * neural / progress / claims / transfer / daa / performance / analyze /
  * guidance / ruvllm), and for each category we know the native-tool overlap
- * and the Ruflo value-add. The script appends a category-appropriate
+ * and the Rufflo value-add. The script appends a category-appropriate
  * "Use when … is wrong because …" suffix to any description that doesn't
  * already include "Use when" / "Prefer over" / "Pair with" / "fall back".
  *
@@ -23,13 +23,13 @@
 import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-const TOOLS_DIR = 'v3/@claude-flow/cli/src/mcp-tools';
+const TOOLS_DIR = 'v3/@rufflo/cli/src/mcp-tools';
 const WRITE = process.argv.includes('--write');
 
 const GUIDANCE_RE = /Use when|Prefer .* over|Pair with|fall back|native .* is (fine|wrong)/i;
 
 // Category → "Use when …" suffix. Each suffix names the native overlap (if
-// any) and the Ruflo value-add. Honest about when native is fine — that
+// any) and the Rufflo value-add. Honest about when native is fine — that
 // keeps Claude's trust in our guidance.
 const SUFFIX = {
   // -------- Memory & persistence --------
@@ -45,17 +45,17 @@ const SUFFIX = {
   'hive-mind_': ' Use when native Task is wrong because you need queen-led collective intelligence — Byzantine-FT consensus, broadcast across many worker agents, shared memory with bounded conflict. For a single subagent, native Task is fine. Pair with swarm_init first to set topology.',
 
   // -------- Hooks & lifecycle --------
-  hooks_: ' Use when native Bash hooks (via Claude Code\'s settings.json) are wrong because you need Ruflo-side state — pattern persistence, neural training signals, model-routing learning, cost tracking, audit chain. For one-off shell commands, plain Bash hooks are fine.',
+  hooks_: ' Use when native Bash hooks (via Claude Code\'s settings.json) are wrong because you need Rufflo-side state — pattern persistence, neural training signals, model-routing learning, cost tracking, audit chain. For one-off shell commands, plain Bash hooks are fine.',
 
   // -------- Sessions --------
   session_: ' Use when native conversation memory is wrong because you need durable cross-session state — restoring agent definitions, swarm topology, memory store, breaker history. For in-session continuation only, no tool needed. Pair with session_save before exiting and session_restore on resume.',
 
   // -------- Config / system --------
-  config_: ' Use when native settings.json edits are wrong because the values need to be read by the Ruflo runtime (daemon, MCP server, neural router) — those load via the config_* path, not by re-reading settings.json. For .gitignore / .editorconfig style files, native Edit is fine.',
-  system_: ' Use when native Bash is wrong because you need Ruflo runtime metrics (HNSW index size, ReasoningBank state, swarm health, breaker status) — those are not in /proc, only in the running daemon. For OS-level info (uptime, disk, mem), native Bash + standard tools are fine.',
-  mcp_: ' Use when native Claude Code MCP status is wrong because you need Ruflo-side server detail — tool counts per namespace, transport stats, MCP handshake errors. For just "is MCP up?", `claude mcp list` is fine.',
-  status_: ' Use when generic Ruflo health checks are wrong because you want a single quick read of overall system state — daemon up?, swarm initialized?, memory db healthy?, federation peers connected? For deep debugging, prefer the dedicated tools each subsystem exposes.',
-  doctor_: ' Use when generic shell debugging is wrong because you want Ruflo-aware checks — Node/npm versions, daemon, memory DB, API keys, MCP servers, disk space. For unrelated environment troubleshooting, native shell + git/which/env are fine.',
+  config_: ' Use when native settings.json edits are wrong because the values need to be read by the Rufflo runtime (daemon, MCP server, neural router) — those load via the config_* path, not by re-reading settings.json. For .gitignore / .editorconfig style files, native Edit is fine.',
+  system_: ' Use when native Bash is wrong because you need Rufflo runtime metrics (HNSW index size, ReasoningBank state, swarm health, breaker status) — those are not in /proc, only in the running daemon. For OS-level info (uptime, disk, mem), native Bash + standard tools are fine.',
+  mcp_: ' Use when native Claude Code MCP status is wrong because you need Rufflo-side server detail — tool counts per namespace, transport stats, MCP handshake errors. For just "is MCP up?", `claude mcp list` is fine.',
+  status_: ' Use when generic Rufflo health checks are wrong because you want a single quick read of overall system state — daemon up?, swarm initialized?, memory db healthy?, federation peers connected? For deep debugging, prefer the dedicated tools each subsystem exposes.',
+  doctor_: ' Use when generic shell debugging is wrong because you want Rufflo-aware checks — Node/npm versions, daemon, memory DB, API keys, MCP servers, disk space. For unrelated environment troubleshooting, native shell + git/which/env are fine.',
 
   // -------- Workflow --------
   workflow_: ' Use when native TodoWrite + sequential Bash is wrong because the work has a real dependency graph that needs persistence, retry policy, pause/resume, and step-output binding across LLM-driven steps. For a single linear todo list, native TodoWrite is fine.',
@@ -65,7 +65,7 @@ const SUFFIX = {
 
   // -------- Security & defense --------
   aidefence_: ' Use when nothing native exists — Claude Code does not have a PII / prompt-injection / adversarial-text scanner. Pair with any tool that ingests untrusted input (browser scrape, federation envelope, memory_import_claude).',
-  security_: ' Use when native package-audit (`npm audit`) is wrong because you need Ruflo-aware checks — known-bad dep patterns, secret detection, path-traversal in MCP inputs, witness chain verify. For just listing CVEs in your lockfile, native `npm audit` is fine.',
+  security_: ' Use when native package-audit (`npm audit`) is wrong because you need Rufflo-aware checks — known-bad dep patterns, secret detection, path-traversal in MCP inputs, witness chain verify. For just listing CVEs in your lockfile, native `npm audit` is fine.',
 
   // -------- Federation --------
   federation_: ' Use when nothing native covers cross-installation agent communication — Claude Code talks to its own MCP server only. Pair with federation_init first; once peers are joined, federation_send routes signed envelopes with PII gating, breaker, and audit. For local-only work, no federation tool is needed.',
@@ -74,7 +74,7 @@ const SUFFIX = {
   cost_: ' Use when native usage estimates are wrong because you need per-agent / per-model / per-task attribution across turns and sessions. The cost-tracking namespace persists between calls; reading the Claude CLI\'s built-in usage shows only the current turn. For one-shot cost checks, the native CLI suffices.',
 
   // -------- Intelligence / neural --------
-  intelligence_: ' Use when native Task / Read prompting is wrong because you want learned-pattern routing — Ruflo\'s SONA neural router picks tier (Agent Booster / Haiku / Sonnet+Opus) based on past success on similar tasks. Pair with hooks_post-task to feed back outcomes. For one-shot prompts without learning, native Task is fine.',
+  intelligence_: ' Use when native Task / Read prompting is wrong because you want learned-pattern routing — Rufflo\'s SONA neural router picks tier (Agent Booster / Haiku / Sonnet+Opus) based on past success on similar tasks. Pair with hooks_post-task to feed back outcomes. For one-shot prompts without learning, native Task is fine.',
   neural_: ' Use when nothing native trains on your workflow — Claude Code has no learning loop. Use to train SONA/MoE/EWC patterns from successful task outcomes; query via neural_predict before spawning agents. Off-path for one-shot work.',
 
   // -------- Autopilot --------
@@ -90,10 +90,10 @@ const SUFFIX = {
   ruvllm_: ' Use when sending every prompt to the Anthropic API is wrong because you need local inference — air-gapped environments, MicroLoRA-fine-tuned per-task adapters, or sub-cent per-call cost. For general Claude work native Task is the right call.',
 
   // -------- Performance --------
-  performance_: ' Use when native shell timing (`time`, `hyperfine`) is wrong because you want Ruflo-aware benchmarks — HNSW search latency, breaker decisions/sec, MCP response p50/p95, embeddings throughput. For OS-level process profiling, native shell + perf are fine.',
-  perf_: ' Use when native shell timing is wrong because you want Ruflo-aware benchmarks (HNSW, swarm, MCP). For OS-level process profiling, native shell + perf are fine.',
-  benchmark_: ' Use when native `time`/`hyperfine` is wrong because you want a Ruflo-aware suite — agent latency, memory recall accuracy, neural routing hit rate. For OS-level micro-benchmarks, native shell is fine.',
-  profile_: ' Use when native Node `--prof` is wrong because you want Ruflo-component-specific traces (controller-by-controller, hook-by-hook, agent-by-agent). For low-level CPU/heap profiling, native Node profiler + clinic.js are fine.',
+  performance_: ' Use when native shell timing (`time`, `hyperfine`) is wrong because you want Rufflo-aware benchmarks — HNSW search latency, breaker decisions/sec, MCP response p50/p95, embeddings throughput. For OS-level process profiling, native shell + perf are fine.',
+  perf_: ' Use when native shell timing is wrong because you want Rufflo-aware benchmarks (HNSW, swarm, MCP). For OS-level process profiling, native shell + perf are fine.',
+  benchmark_: ' Use when native `time`/`hyperfine` is wrong because you want a Rufflo-aware suite — agent latency, memory recall accuracy, neural routing hit rate. For OS-level micro-benchmarks, native shell is fine.',
+  profile_: ' Use when native Node `--prof` is wrong because you want Rufflo-component-specific traces (controller-by-controller, hook-by-hook, agent-by-agent). For low-level CPU/heap profiling, native Node profiler + clinic.js are fine.',
 
   // -------- Analyze --------
   analyze_: ' Use when native `git diff` / `grep` / static analysis is wrong because you want LLM-graded change classification, reviewer recommendations, or risk scoring. For literal-text inspection, native tools are fine.',
@@ -105,10 +105,10 @@ const SUFFIX = {
   transfer_: ' Use when native package install (`npm i`, `pip install`) is wrong because the artifact lives on IPFS (plugins, witness chains, learned patterns). For npm-registry deps, native npm is fine.',
 
   // -------- Guidance --------
-  guidance_: ' Use when generic "what tool should I use?" guessing is wrong — Ruflo\'s guidance system uses the live tool index + your workflow context to recommend. Pair with hooks_route at task start. For trivial native-only tasks, no guidance call is needed.',
+  guidance_: ' Use when generic "what tool should I use?" guessing is wrong — Rufflo\'s guidance system uses the live tool index + your workflow context to recommend. Pair with hooks_route at task start. For trivial native-only tasks, no guidance call is needed.',
 
   // -------- IoT (Cognitum Seed) --------
-  iot_: ' Use when native ssh-into-device is wrong because you need Ruflo-tracked fleet state — trust scoring, telemetry anomaly detection, witness chain verification. For one-off device debugging, native ssh is fine.',
+  iot_: ' Use when native ssh-into-device is wrong because you need Rufflo-tracked fleet state — trust scoring, telemetry anomaly detection, witness chain verification. For one-off device debugging, native ssh is fine.',
 
   // -------- Claims (authorization) --------
   claims_: ' Use when nothing native covers per-agent capability gating — Claude Code agents have file-system access by default. Pair claims_grant + claims_check before letting an agent run privileged ops. For trusted in-session work, no claims call is needed.',
@@ -117,7 +117,7 @@ const SUFFIX = {
   terminal_: ' Use when native Bash is wrong because you need a persistent terminal session across turns/agents with output capture and replay. For one-shot shell commands, native Bash is fine.',
 
   // -------- Daemon --------
-  daemon_: ' Use when native systemd/launchd is wrong because you want to manage just the Ruflo background workers (12 worker types, priority-aware) without touching OS-level service management. For OS-level service mgmt, native tools are fine.',
+  daemon_: ' Use when native systemd/launchd is wrong because you want to manage just the Rufflo background workers (12 worker types, priority-aware) without touching OS-level service management. For OS-level service mgmt, native tools are fine.',
 
   // -------- AgentDB causal/graph --------
   causal_: ' Use when native bug tracker / postmortem doc is wrong because you want machine-readable cause→effect links queryable via Cypher. For human-readable postmortems, native markdown is fine.',
@@ -128,7 +128,7 @@ const SUFFIX = {
   search_: ' Use when native Grep is wrong because you want semantic match (vector / hybrid / MMR-reranked). For exact-token search, native Grep is faster and free.',
 };
 
-const CATCHALL = ' Use when native Bash / file tools are wrong because this MCP tool exposes Ruflo-specific state or controllers that have no shell equivalent. For tasks that fit a one-line native command, prefer that.';
+const CATCHALL = ' Use when native Bash / file tools are wrong because this MCP tool exposes Rufflo-specific state or controllers that have no shell equivalent. For tasks that fit a one-line native command, prefer that.';
 
 function suffixFor(name) {
   for (const [prefix, suffix] of Object.entries(SUFFIX)) {

@@ -1,24 +1,24 @@
-# ruflo-agent
+# rufflo-agent
 
-Agent runtimes for ruflo — one mental model, two backends (a third planned):
+Agent runtimes for rufflo — one mental model, two backends (a third planned):
 
 | Runtime | Tools | Runs on | Trust | Best for |
 |---|---|---|---|---|
 | **WASM** (`rvagent`) | `wasm_agent_*` / `wasm_gallery_*` | local WASM sandbox | sandboxed — no host fs/net | untrusted code; portable/replayable RVF containers; fast, free, offline |
 | **Managed** (Anthropic cloud) | `managed_agent_*` | Anthropic-managed container | cloud-isolated | long-running/async tasks; real container with packages + network; persistent filesystem + transcript across turns; no local setup |
-| **SDK** (planned — ADR-116) | `sdk_agent_*` | your process / your filesystem | full host trust | a real Claude agent loop (hooks, subagents, MCP, sessions, skills) on the local repo — the in-process version of `claude -p`; the killer combo is `mcpServers: { ruflo: { command: "npx", args: ["ruflo","mcp","start"] } }` (a local stdio MCP server → the agent gets ruflo's 314 tools, zero deployment) |
+| **SDK** (planned — ADR-116) | `sdk_agent_*` | your process / your filesystem | full host trust | a real Claude agent loop (hooks, subagents, MCP, sessions, skills) on the local repo — the in-process version of `claude -p`; the killer combo is `mcpServers: { rufflo: { command: "npx", args: ["rufflo","mcp","start"] } }` (a local stdio MCP server → the agent gets rufflo's 314 tools, zero deployment) |
 
 `wasm_agent_*` is the **safe default** (sandboxed). `managed_agent_*` needs `ANTHROPIC_API_KEY` (or `CLAUDE_API_KEY`) + Claude Managed Agents beta access — every `managed_agent_*` tool degrades gracefully with a structured "use `wasm_agent_create` for a local no-key runtime" error when the key is absent.
 
 Design: [ADR-115](../../v3/docs/adr/ADR-115-managed-agents-rvagent-backend.md) (the cloud runtime + the planned SDK runtime); [ADR-070](../../v3/implementation/adrs/ADR-070-rvagent-wasm-completion.md) (the WASM runtime); plugin contract [`docs/adrs/0001-wasm-contract.md`](./docs/adrs/0001-wasm-contract.md).
 
-> Renamed from `ruflo-wasm` (it only covered the local WASM runtime). The `wasm_agent_*` / `wasm_gallery_*` tool *names* are unchanged.
+> Renamed from `rufflo-wasm` (it only covered the local WASM runtime). The `wasm_agent_*` / `wasm_gallery_*` tool *names* are unchanged.
 
 ## Install
 
 ```
 /plugin marketplace add ruvnet/ruflo
-/plugin install ruflo-agent@ruflo
+/plugin install rufflo-agent@rufflo
 ```
 
 ## Commands
@@ -34,7 +34,7 @@ Design: [ADR-115](../../v3/docs/adr/ADR-115-managed-agents-rvagent-backend.md) (
 
 ## MCP surface (16 tools)
 
-### WASM runtime — `v3/@claude-flow/cli/src/mcp-tools/wasm-agent-tools.ts` (10)
+### WASM runtime — `v3/@rufflo/cli/src/mcp-tools/wasm-agent-tools.ts` (10)
 
 | Tool | Purpose |
 |------|---------|
@@ -49,7 +49,7 @@ Design: [ADR-115](../../v3/docs/adr/ADR-115-managed-agents-rvagent-backend.md) (
 | `wasm_gallery_search` | Search the gallery |
 | `wasm_gallery_create` | Publish a WASM agent to the gallery |
 
-### Managed (cloud) runtime — `v3/@claude-flow/cli/src/mcp-tools/managed-agent-tools.ts` (6, ADR-115)
+### Managed (cloud) runtime — `v3/@rufflo/cli/src/mcp-tools/managed-agent-tools.ts` (6, ADR-115)
 
 | Tool | Purpose | WASM counterpart |
 |------|---------|------------------|
@@ -60,40 +60,40 @@ Design: [ADR-115](../../v3/docs/adr/ADR-115-managed-agents-rvagent-backend.md) (
 | `managed_agent_list` | List Managed Agent sessions on the org (id, status, title) — see which are still billing | `wasm_agent_list` |
 | `managed_agent_terminate` | `DELETE /v1/sessions/{id}` (± the environment) — **always call when done**; a cloud session bills container time + tokens until deleted | `wasm_agent_terminate` |
 
-> Beta API (`anthropic-beta: managed-agents-2026-04-01`); `multiagent` / `define-outcomes` on the agent config are research preview. `mcpServers` for a cloud agent must point at a **publicly reachable** URL — a local `ruflo mcp start` is not reachable from Anthropic's cloud (deploy/tunnel an HTTP ruflo MCP server first). Managed sessions cost LM tokens + container time and are rate-limited per org.
+> Beta API (`anthropic-beta: managed-agents-2026-04-01`); `multiagent` / `define-outcomes` on the agent config are research preview. `mcpServers` for a cloud agent must point at a **publicly reachable** URL — a local `rufflo mcp start` is not reachable from Anthropic's cloud (deploy/tunnel an HTTP rufflo MCP server first). Managed sessions cost LM tokens + container time and are rate-limited per org.
 
 ## Compatibility & degradation
 
-- **CLI:** pinned to `@claude-flow/cli` v3.6 major+minor.
-- **WASM runtime:** built on `@ruvector/rvagent-wasm` + `@ruvector/ruvllm-wasm` (declared in `@claude-flow/cli`'s `optionalDependencies` per [ADR-070](../../v3/implementation/adrs/ADR-070-rvagent-wasm-completion.md)). Without those packages, the `wasm_agent_*` tools fall through to graceful-degradation no-ops.
+- **CLI:** pinned to `@rufflo/cli` v3.6 major+minor.
+- **WASM runtime:** built on `@ruvector/rvagent-wasm` + `@ruvector/ruvllm-wasm` (declared in `@rufflo/cli`'s `optionalDependencies` per [ADR-070](../../v3/implementation/adrs/ADR-070-rvagent-wasm-completion.md)). Without those packages, the `wasm_agent_*` tools fall through to graceful-degradation no-ops.
 - **Managed runtime:** plain `fetch` against the Managed Agents REST API — no extra SDK dependency. Without `ANTHROPIC_API_KEY` / `CLAUDE_API_KEY`, every `managed_agent_*` tool returns a structured error pointing at the `wasm_agent_*` fallback (the CLI/MCP server stays up).
-- **Verification:** `bash plugins/ruflo-agent/scripts/smoke.sh` is the contract (12 structural checks). CI: `.github/workflows/ruflo-agent-smoke.yml`. Behavioral guard for the cloud tools: `v3/@claude-flow/cli/__tests__/managed-agent-tools.test.ts` (no-network).
+- **Verification:** `bash plugins/rufflo-agent/scripts/smoke.sh` is the contract (12 structural checks). CI: `.github/workflows/rufflo-agent-smoke.yml`. Behavioral guard for the cloud tools: `v3/@rufflo/cli/__tests__/managed-agent-tools.test.ts` (no-network).
 
 ## Sandbox / trust
 
 WASM agents run with **no host filesystem access** by default; `wasm_agent_files` exposes a sandboxed virtual filesystem only. Managed agents run in Anthropic's cloud container (isolated from your machine). The planned SDK runtime would run in *your* process with full host trust — which is why `wasm_agent_*` stays the default and the SDK runtime, when built, will be opt-in.
 
-For prompt-injection defense on output flowing back to the host LLM, the [ruflo-aidefence 3-gate pattern](../ruflo-aidefence/docs/adrs/0001-aidefence-contract.md) applies.
+For prompt-injection defense on output flowing back to the host LLM, the [rufflo-aidefence 3-gate pattern](../rufflo-aidefence/docs/adrs/0001-aidefence-contract.md) applies.
 
 ## Namespace coordination
 
-This plugin owns the `wasm-gallery` AgentDB namespace (kebab-case, per [ruflo-agentdb ADR-0001 §"Namespace convention"](../ruflo-agentdb/docs/adrs/0001-agentdb-optimization.md)). Reserved namespaces (`pattern`, `claude-memories`, `default`) MUST NOT be shadowed. `wasm-gallery` indexes published WASM agents (manifest, version, signature, download count); accessed via `memory_*` (namespace-routed).
+This plugin owns the `wasm-gallery` AgentDB namespace (kebab-case, per [rufflo-agentdb ADR-0001 §"Namespace convention"](../rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md)). Reserved namespaces (`pattern`, `claude-memories`, `default`) MUST NOT be shadowed. `wasm-gallery` indexes published WASM agents (manifest, version, signature, download count); accessed via `memory_*` (namespace-routed).
 
 ## Verification
 
 ```bash
-bash plugins/ruflo-agent/scripts/smoke.sh
+bash plugins/rufflo-agent/scripts/smoke.sh
 # Expected: "12 passed, 0 failed"
 ```
 
 ## Architecture Decisions
 
-- [`ADR-0001` — ruflo-agent plugin contract](./docs/adrs/0001-wasm-contract.md) (WASM runtime: 10-tool MCP surface, ADR-070 integration, sandbox isolation, smoke as contract)
+- [`ADR-0001` — rufflo-agent plugin contract](./docs/adrs/0001-wasm-contract.md) (WASM runtime: 10-tool MCP surface, ADR-070 integration, sandbox isolation, smoke as contract)
 - [`ADR-115`](../../v3/docs/adr/ADR-115-managed-agents-rvagent-backend.md) — Claude Managed Agents as the cloud runtime (+ the planned SDK runtime, ADR-116)
 
 ## Related Plugins
 
-- `ruflo-agentdb` — namespace convention owner
-- `ruflo-aidefence` — 3-gate pattern applies to agent output flowing back to the host LLM
-- `ruflo-ruvector` — the ruvector substrate that ships `@ruvector/rvagent-wasm`
-- `ruflo-cost-tracker` — record completed Managed Agent sessions (LM tokens + container time)
+- `rufflo-agentdb` — namespace convention owner
+- `rufflo-aidefence` — 3-gate pattern applies to agent output flowing back to the host LLM
+- `rufflo-ruvector` — the ruvector substrate that ships `@ruvector/rvagent-wasm`
+- `rufflo-cost-tracker` — record completed Managed Agent sessions (LM tokens + container time)

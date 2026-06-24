@@ -25,10 +25,10 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(process.argv[2] ?? resolve(__dirname, '..', '..', '..'));
-const CLI = resolve(REPO_ROOT, 'v3/@claude-flow/cli/bin/cli.js');
+const CLI = resolve(REPO_ROOT, 'v3/@rufflo/cli/bin/cli.js');
 
 if (!existsSync(CLI)) {
-  console.error(`FAIL: ${CLI} not found — run \`npm --prefix v3/@claude-flow/cli run build\` first`);
+  console.error(`FAIL: ${CLI} not found — run \`npm --prefix v3/@rufflo/cli run build\` first`);
   process.exit(1);
 }
 

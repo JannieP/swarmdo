@@ -35,18 +35,18 @@ import { readFileSync, writeFileSync, copyFileSync, existsSync, mkdtempSync, ren
 import { resolve, join, dirname } from 'node:path';
 import { tmpdir } from 'node:os';
 import * as mh from '@metaharness/router';
-import { pairTrajectoryRows } from '../v3/@claude-flow/cli/dist/src/ruvector/router-trajectory.js';
-import { IsotonicCalibrator } from '../v3/@claude-flow/cli/dist/src/ruvector/router-calibrator.js';
+import { pairTrajectoryRows } from '../v3/@rufflo/cli/dist/src/ruvector/router-trajectory.js';
+import { IsotonicCalibrator } from '../v3/@rufflo/cli/dist/src/ruvector/router-calibrator.js';
 // iter 35 — single source of truth for prices.
-import { blendedPrice } from '../v3/@claude-flow/cli/dist/src/ruvector/model-prices.js';
+import { blendedPrice } from '../v3/@rufflo/cli/dist/src/ruvector/model-prices.js';
 
 const ARGS = (() => {
   const a = {
     in: process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH
       ?? resolve('.swarm', 'model-router-trajectories.jsonl'),
-    seedRows: resolve('v3/@claude-flow/cli/assets/model-router/seed-rows.json'),
-    artifact: resolve('v3/@claude-flow/cli/assets/model-router/seed-router.krr.json'),
-    calibratorPath: resolve('v3/@claude-flow/cli/assets/model-router/seed-router.calibrator.json'),
+    seedRows: resolve('v3/@rufflo/cli/assets/model-router/seed-rows.json'),
+    artifact: resolve('v3/@rufflo/cli/assets/model-router/seed-router.krr.json'),
+    calibratorPath: resolve('v3/@rufflo/cli/assets/model-router/seed-router.calibrator.json'),
     margin: 0.005,           // 0.5 percentage points by default
     minNewRows: 10,
     dryRun: false,

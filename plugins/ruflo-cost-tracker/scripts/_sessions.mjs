@@ -17,8 +17,8 @@
 import { spawnSync } from 'node:child_process';
 
 const CLI_PKG = process.env.CLI_CORE === '1'
-  ? '@claude-flow/cli-core@alpha'
-  : '@claude-flow/cli@latest';
+  ? '@rufflo/cli-core@alpha'
+  : '@rufflo/cli@latest';
 
 export function memoryListAllKeys(namespace) {
   const r = spawnSync('npx', [

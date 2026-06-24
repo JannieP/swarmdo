@@ -16,8 +16,8 @@ import { spawnSync } from 'node:child_process';
 // verify only does list+retrieve across adr-patterns and adr-edges namespaces;
 // no semantic search needed. JSON backend is sufficient.
 const CLI_PKG = process.env.CLI_CORE === '1'
-  ? '@claude-flow/cli-core@alpha'
-  : '@claude-flow/cli@latest';
+  ? '@rufflo/cli-core@alpha'
+  : '@rufflo/cli@latest';
 
 function memoryListJson(namespace) {
   const r = spawnSync('npx', [

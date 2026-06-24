@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# smoke-gaia.sh — validate the GAIA benchmark component of ruflo-workflows
+# smoke-gaia.sh — validate the GAIA benchmark component of rufflo-workflows
 # Tests structure, frontmatter, and end-to-end /gaia validate invocation.
 set -u
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"

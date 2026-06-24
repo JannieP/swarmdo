@@ -9,13 +9,13 @@
 //
 // CONNECTION TO RUFLO ADR-155
 // ===========================
-// ruflo's ADR-155 (#2417) proposes a nightly self-learning security harness
+// rufflo's ADR-155 (#2417) proposes a nightly self-learning security harness
 // with three learning loops (per-dimension confidence weighting, severity
 // calibration, auto-fix bid). The upstream Darwin Shield is the closest
 // reference implementation — same shape, different scope (evolves a
 // security-detection harness vs evaluates findings; both grade by realized
 // TPR/FPR vs ground-truth corpus). Running `security bench` periodically
-// gives us the empirical baseline that ruflo's Phase 2 loop A needs before
+// gives us the empirical baseline that rufflo's Phase 2 loop A needs before
 // training: if Darwin Shield converges on a known-good corpus, the loop A
 // gradient signal is sound; if it doesn't, the corpus / sandbox is the
 // gap, not the learning algorithm.
@@ -55,11 +55,11 @@ const ARGS = (() => {
 
 function safetyChecks() {
   if (ARGS.population < 1 || ARGS.population > 20) {
-    console.error('security-bench: --population must be 1..20 (ruflo cap)');
+    console.error('security-bench: --population must be 1..20 (rufflo cap)');
     process.exit(2);
   }
   if (ARGS.cycles < 1 || ARGS.cycles > 100) {
-    console.error('security-bench: --cycles must be 1..100 (ruflo cap)');
+    console.error('security-bench: --cycles must be 1..100 (rufflo cap)');
     process.exit(2);
   }
 }

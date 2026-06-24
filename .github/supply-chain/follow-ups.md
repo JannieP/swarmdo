@@ -32,8 +32,8 @@ Open issues that the supply-chain audit + recent CI hardening surfaced but requi
 
 **Downstream integration** (this PR):
 
-- Bumped `agentic-flow` ^2.0.12 → ^2.0.13 in root `package.json` and `v3/@claude-flow/browser/package.json`.
-- Regenerated root `package-lock.json`, `v3/@claude-flow/browser/package-lock.json` (npm `--no-workspaces`), and `v3/pnpm-lock.yaml`.
+- Bumped `agentic-flow` ^2.0.12 → ^2.0.13 in root `package.json` and `v3/@rufflo/browser/package.json`.
+- Regenerated root `package-lock.json`, `v3/@rufflo/browser/package-lock.json` (npm `--no-workspaces`), and `v3/pnpm-lock.yaml`.
 
 **Acceptance test** (verified locally on 2.0.13):
 ```bash

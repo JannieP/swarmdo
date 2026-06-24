@@ -1,5 +1,5 @@
 /**
- * Claude Flow V3 Main Index
+ * Rufflo V3 Main Index
  *
  * Exports all public APIs for the V3 modular architecture.
  */

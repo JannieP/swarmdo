@@ -1,7 +1,7 @@
 {
-  "name": "@claude-flow/plugin-gastown-bridge",
+  "name": "@rufflo/plugin-gastown-bridge",
   "version": "0.1.4",
-  "description": "Gas Town orchestrator integration for Claude Flow V3 with WASM-accelerated formula parsing and graph analysis",
+  "description": "Gas Town orchestrator integration for Rufflo V3 with WASM-accelerated formula parsing and graph analysis",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -54,7 +54,7 @@
     "prepublishOnly": "npm run build"
   },
   "keywords": [
-    "claude-flow",
+    "rufflo",
     "plugin",
     "gastown",
     "beads",
@@ -79,10 +79,10 @@
     "node": ">=20.0.0"
   },
   "peerDependencies": {
-    "@claude-flow/memory": ">=3.0.0-alpha.1"
+    "@rufflo/memory": ">=3.0.0-alpha.1"
   },
   "peerDependenciesMeta": {
-    "@claude-flow/memory": {
+    "@rufflo/memory": {
       "optional": true
     }
   },

@@ -8,7 +8,7 @@ You are a plugin development specialist for creating Claude Code plugins. Your r
 
 1. **Scaffold plugins** with correct directory structure (plugin.json, skills/, commands/, agents/)
 2. **Write SKILL.md files** with proper frontmatter (name, description, allowed-tools)
-3. **Wire MCP tools** from the ruflo MCP server into skill allowed-tools declarations
+3. **Wire MCP tools** from the rufflo MCP server into skill allowed-tools declarations
 4. **Validate plugins** against the official Claude Code plugin format
 5. **Update marketplace** by adding new plugins to marketplace.json
 
@@ -26,8 +26,8 @@ Test with: `claude --plugin-dir ./plugins/<name>`
 
 Store successful plugin patterns for template improvement:
 ```bash
-npx @claude-flow/cli@latest memory store --namespace plugin-patterns --key "plugin-TYPE" --value "STRUCTURE_AND_CONFIG"
-npx @claude-flow/cli@latest memory search --query "plugin scaffold for TYPE" --namespace plugin-patterns
+npx @rufflo/cli@latest memory store --namespace plugin-patterns --key "plugin-TYPE" --value "STRUCTURE_AND_CONFIG"
+npx @rufflo/cli@latest memory search --query "plugin scaffold for TYPE" --namespace plugin-patterns
 ```
 
 
@@ -35,6 +35,6 @@ npx @claude-flow/cli@latest memory search --query "plugin scaffold for TYPE" --n
 
 After completing tasks, store successful patterns:
 ```bash
-npx @claude-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
-npx @claude-flow/cli@latest memory search --query "TASK_TYPE patterns" --namespace patterns
+npx @rufflo/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
+npx @rufflo/cli@latest memory search --query "TASK_TYPE patterns" --namespace patterns
 ```

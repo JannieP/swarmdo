@@ -1,6 +1,6 @@
 # ADR-088 — Lucene-Style BM25 + Cross-Encoder Rerank: The Pipeline That Works
 
-**Status**: Accepted — Implemented in ruflo 3.10.28
+**Status**: Accepted — Implemented in rufflo 3.10.28
 **Date**: 2026-05-30
 **Tracking**: continuation of BEIR climb (ADR-085, 086, 087)
 **Related**: ADR-087 (the RRF negative result that diagnosed this fix)
@@ -33,7 +33,7 @@ The cross-encoder infrastructure was already shipped in ADR-080 for repo-history
 
 ### 3. No default change to the production retrieval system
 
-Ruflo's runtime retrieval still uses the multi-field BM25 + dense + MMR + optional CE rerank pipeline from ADRs 078-083, tuned against repo-history corpora. The Lucene BM25 in this ADR is a **BEIR-benchmark-only** module — the multi-field BM25 stays better for short commit-subject text. We isolated the benchmark-vs-runtime concerns deliberately.
+Rufflo's runtime retrieval still uses the multi-field BM25 + dense + MMR + optional CE rerank pipeline from ADRs 078-083, tuned against repo-history corpora. The Lucene BM25 in this ADR is a **BEIR-benchmark-only** module — the multi-field BM25 stays better for short commit-subject text. We isolated the benchmark-vs-runtime concerns deliberately.
 
 ## Measured proof — full ablation matrix (N=323 NFCorpus, N=300 SciFact)
 
@@ -57,13 +57,13 @@ Ruflo's runtime retrieval still uses the multi-field BM25 + dense + MMR + option
 |---|---:|
 | BGE-large-v1.5 (published, 335M) | 0.551 |
 | SPLADE++ (published) | 0.526 |
-| **ruflo Lucene RRF + CE rerank (BGE-base 110M)** | **0.521** |
+| **rufflo Lucene RRF + CE rerank (BGE-base 110M)** | **0.521** |
 | Multi-field RRF + CE rerank | 0.520 |
 | Lucene BM25 alone | 0.505 |
 | BM25 (published Lucene) | 0.502 |
 | dense alone (BGE-base) | 0.489 |
 
-**Acceptance test from the climb plan ("ruflo beats BM25 on both datasets") PASSES.** With RRF+CE rerank we're 0.521 on the 2-dataset mean — beats published BM25 (0.502), beats every other published baseline except SPLADE++ (0.526, 1 percentage point above us) and BGE-large (0.551, 3 percentage points above).
+**Acceptance test from the climb plan ("rufflo beats BM25 on both datasets") PASSES.** With RRF+CE rerank we're 0.521 on the 2-dataset mean — beats published BM25 (0.502), beats every other published baseline except SPLADE++ (0.526, 1 percentage point above us) and BGE-large (0.551, 3 percentage points above).
 
 ### Notable per-dataset ranks (Lucene RRF + CE rerank)
 
@@ -91,7 +91,7 @@ This matches the published literature on hybrid retrieval — reranking helps mo
 
 ## What we did NOT do
 
-- Did not switch the runtime retrieval defaults to Lucene BM25. Runtime stays on multi-field BM25 (better for ruflo's commit-history corpora). The Lucene BM25 module is BEIR-runner-scoped.
+- Did not switch the runtime retrieval defaults to Lucene BM25. Runtime stays on multi-field BM25 (better for rufflo's commit-history corpora). The Lucene BM25 module is BEIR-runner-scoped.
 - Did not run BGE-large yet. That's the next likely lift (+0.02 on NFCorpus, +0.04 on SciFact based on published BGE-base vs BGE-large gaps). Tracked.
 - Did not add a third BEIR dataset. SciFact + NFCorpus is enough to claim "stacking works"; broader generalisation needs more datasets + GPU compute.
 
@@ -105,17 +105,17 @@ This matches the published literature on hybrid retrieval — reranking helps mo
 ## Verification
 
 ```bash
-git clone https://github.com/ruvnet/ruflo && cd ruflo
-npm install && ( cd v3/@claude-flow/cli && npx tsc )
+git clone https://github.com/ruvnet/ruflo && cd rufflo
+npm install && ( cd v3/@rufflo/cli && npx tsc )
 
 # Re-use NFCorpus + SciFact caches from ADR-085 (or re-ingest if needed)
 cd /tmp/beir-nfcorpus
-USE_LUCENE_BM25=1 RERANK=1 node /path/to/v3/@claude-flow/cli/scripts/run-beir-hybrid.mjs
+USE_LUCENE_BM25=1 RERANK=1 node /path/to/v3/@rufflo/cli/scripts/run-beir-hybrid.mjs
 # → nDCG@10 0.358, rank 2/11 on NFCorpus
 
 cd /tmp/beir-scifact
 USE_LUCENE_BM25=1 RERANK=1 BEIR_DATA_DIR=/tmp/beir-scifact/scifact \
-  node /path/to/v3/@claude-flow/cli/scripts/run-beir-hybrid.mjs
+  node /path/to/v3/@rufflo/cli/scripts/run-beir-hybrid.mjs
 # → nDCG@10 0.683, rank 3/11 on SciFact
 
 # Stand-alone Lucene BM25 (no rerank, fast)

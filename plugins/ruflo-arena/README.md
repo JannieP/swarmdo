@@ -1,7 +1,7 @@
-# ruflo-arena
+# rufflo-arena
 
-Competitive ruliology for Ruflo swarms — **arenas**, **tournaments**, and **adaptive
-co-evolution** of program strategies. Implements the first executable slice of Ruflo
+Competitive ruliology for Rufflo swarms — **arenas**, **tournaments**, and **adaptive
+co-evolution** of program strategies. Implements the first executable slice of Rufflo
 ADR-147/148/150, following Stephen Wolfram's
 [*Games Between Programs: The Ruliology of Competition*](https://writings.stephenwolfram.com/2026/06/games-between-programs-the-ruliology-of-competition/).
 
@@ -13,7 +13,7 @@ irreducibility, you have to *run* the competition to find out.
 ## Install & test
 
 ```bash
-cd plugins/ruflo-arena
+cd plugins/rufflo-arena
 npm install        # light — runtime dep is just zod
 npm run build      # tsc -> dist/
 npm test           # vitest (engine + MCP tools + persistence)
@@ -34,7 +34,7 @@ Sample PD ranking (mean-vs-field): `grim ≈ 2.99`, `always-defect ≈ 2.76`, `t
 … `always-cooperate ≈ 1.88`. The evolution run climbs from a random FSM (~2.78) to ~3.00 with
 the characteristic plateau→breakthrough fitness curve.
 
-## MCP tools (`ruflo-arena/mcp-tools`)
+## MCP tools (`rufflo-arena/mcp-tools`)
 
 | Tool | Purpose |
 |------|---------|
@@ -49,14 +49,14 @@ All return `{ success, result | error }` and validate inputs with Zod. See
 
 ## Persistence
 
-Full run artifacts are written to `.ruflo/arena/<runId>.json` (exact replay). Each tool result
+Full run artifacts are written to `.rufflo/arena/<runId>.json` (exact replay). Each tool result
 also carries an `agentdb` payload so the command layer can store a searchable summary via
-`mcp__claude-flow__memory_store` (namespace `arena`) — the local stand-in for the RuVector data
+`mcp__rufflo__memory_store` (namespace `arena`) — the local stand-in for the RuVector data
 layer (ADR-196/197), enabling queries like *"tournaments where grim dominated"*.
 
 ## Scope
 
-v1 is intentionally Ruflo-only and core-untouched:
+v1 is intentionally Rufflo-only and core-untouched:
 
 - **In:** simple-program + stochastic strategies, PD + zero-sum games, tournaments, hill-climb &
   co-evolution, file/AgentDB persistence, MCP tools + CLI.

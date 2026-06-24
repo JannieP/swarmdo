@@ -1,5 +1,5 @@
 {
-  "name": "ruflo-observability",
+  "name": "rufflo-observability",
   "description": "Structured logging, distributed tracing, and metrics — correlate agent swarm activity with application telemetry",
   "version": "0.2.0",
   "author": {
@@ -9,7 +9,7 @@
   "homepage": "https://github.com/ruvnet/ruflo",
   "license": "MIT",
   "keywords": [
-    "ruflo",
+    "rufflo",
     "observability",
     "logging",
     "tracing",

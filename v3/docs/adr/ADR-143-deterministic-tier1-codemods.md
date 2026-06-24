@@ -63,7 +63,7 @@ LLM-produced edit snippets), but it is **out of the Tier-1 path**.
 
 ## Implementation
 
-- **`v3/@claude-flow/cli/src/ruvector/codemods/engine.ts`** — `applyCodemod(intent, code, {language})`
+- **`v3/@rufflo/cli/src/ruvector/codemods/engine.ts`** — `applyCodemod(intent, code, {language})`
   + `isDeterministicCodemod()` + `DETERMINISTIC_CODEMOD_INTENTS` /
   `MODEL_ROUTED_INTENTS`. Never throws on malformed input; includes a
   **parse-diagnostic safety net** — if a transform would introduce new parse

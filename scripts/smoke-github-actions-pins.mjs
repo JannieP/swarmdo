@@ -5,7 +5,7 @@
  * Scans every `uses:` line in:
  *   - .claude/agents/github/*.md
  *   - .claude/skills/github-[name]/SKILL.md
- *   - v3/@claude-flow/cli/.claude/commands/github/[name].md
+ *   - v3/@rufflo/cli/.claude/commands/github/[name].md
  *
  * For each ref, asserts it is either:
  *   (a) SHA-pinned  — `owner/repo@<40-hex-chars>`
@@ -30,7 +30,7 @@ const REPO_ROOT = process.cwd();
 const SCAN_TREES = [
   join(REPO_ROOT, '.claude', 'agents', 'github'),
   join(REPO_ROOT, '.claude', 'skills'),
-  join(REPO_ROOT, 'v3', '@claude-flow', 'cli', '.claude', 'commands', 'github'),
+  join(REPO_ROOT, 'v3', '@rufflo', 'cli', '.claude', 'commands', 'github'),
 ];
 
 const ALLOWED_DEPS_PATH = join(REPO_ROOT, '.github', 'supply-chain', 'allowed-deps.json');

@@ -3,11 +3,11 @@
 //
 // SAFETY (ADR-150 architectural constraint + "executing actions with care"):
 //   - Target directory MUST be explicitly specified via --target. Defaults to
-//     a temp dir under /tmp/ruflo-mint-<timestamp>/ if not given — never the
-//     project root (ruflo behavioral rule "never save to root folder").
+//     a temp dir under /tmp/rufflo-mint-<timestamp>/ if not given — never the
+//     project root (rufflo behavioral rule "never save to root folder").
 //   - --confirm flag required. Without it the script prints a dry-run plan
 //     and exits 0 without writing files. This honors the "destructive-action
-//     confirmation" pattern in ruflo's CLAUDE.md.
+//     confirmation" pattern in rufflo's CLAUDE.md.
 //
 // USAGE
 //   node scripts/mint.mjs --name my-harness --template vertical:coding --host claude-code
@@ -44,7 +44,7 @@ function safetyChecks() {
     process.exit(2);
   }
   if (!ARGS.target) {
-    ARGS.target = resolve(tmpdir(), `ruflo-mint-${Date.now()}-${ARGS.name}`);
+    ARGS.target = resolve(tmpdir(), `rufflo-mint-${Date.now()}-${ARGS.name}`);
   }
   const targetAbs = resolve(ARGS.target);
   const repoRoot = resolve(process.cwd());

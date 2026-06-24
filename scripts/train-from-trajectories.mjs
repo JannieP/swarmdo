@@ -12,7 +12,7 @@
 //   node scripts/train-from-trajectories.mjs                        # stats only
 //   node scripts/train-from-trajectories.mjs --write production-rows.json
 //   node scripts/train-from-trajectories.mjs \
-//     --union v3/@claude-flow/cli/assets/model-router/seed-rows.json \
+//     --union v3/@rufflo/cli/assets/model-router/seed-rows.json \
 //     --write merged-rows.json
 //
 // FLAGS
@@ -32,7 +32,7 @@
 
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { pairTrajectoryRows } from '../v3/@claude-flow/cli/dist/src/ruvector/router-trajectory.js';
+import { pairTrajectoryRows } from '../v3/@rufflo/cli/dist/src/ruvector/router-trajectory.js';
 
 const ARGS = (() => {
   const a = {

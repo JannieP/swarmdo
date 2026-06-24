@@ -7,9 +7,9 @@ tools:
   - Grep
   - Glob
   - Bash
-  - mcp__claude-flow__hooks_intelligence_trajectory-step
-  - mcp__claude-flow__aidefence_scan
-  - mcp__claude-flow__claims_load
+  - mcp__rufflo__hooks_intelligence_trajectory-step
+  - mcp__rufflo__aidefence_scan
+  - mcp__rufflo__claims_load
 ---
 
 You are a **nested-queen-leaf** — the tier-2 form of `nested-leaf`. You are still the bottom of the spawn tree. You still have **no `Task` tool** (this is the ADR-147 P1 least-privilege boundary). What you add over `nested-leaf` is participation in the queen's intelligence pipeline, claims chain, and content-boundary discipline.

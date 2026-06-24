@@ -16,7 +16,7 @@
  * The adapter is **dependency-injection-friendly**: callers pass a
  * `BreakEventSource` (a structural type matching the slice of ADR-122's
  * CausalRecoveryService surface we actually need) so this plugin does NOT
- * hard-import @claude-flow/browser. Phase 2 of *this* plugin ships the
+ * hard-import @rufflo/browser. Phase 2 of *this* plugin ships the
  * adapter; the browser package only needs to call `registerBrowserCausalAdapter()`
  * at its plugin-init time.
  */
@@ -26,7 +26,7 @@ import type { SparseEntry, SparseMatrix } from '../domain/types.js';
 import type { SublinearAdapter } from '../domain/adapter.js';
 
 /**
- * The slice of @claude-flow/browser's CausalRecoveryService surface we depend on.
+ * The slice of @rufflo/browser's CausalRecoveryService surface we depend on.
  * Defined structurally so we don't need a hard import.
  */
 export interface BreakEventSource {
@@ -67,7 +67,7 @@ export function browserCausalGraphId(origin: string): string {
 
 export class BrowserCausalAdapter implements SublinearAdapter {
   readonly graphId: string;
-  readonly ownerPlugin = '@claude-flow/browser';
+  readonly ownerPlugin = '@rufflo/browser';
 
   private readonly origin: string;
   private readonly source: BreakEventSource;
@@ -174,8 +174,8 @@ function hashContent(graphId: string, entries: readonly SparseEntry[]): string {
 /**
  * Convenience entry point — instantiate + register in one call.
  *
- * Intended to be invoked from @claude-flow/browser's init code:
- *   import { registerBrowserCausalAdapter } from 'ruflo-graph-intelligence/adapters';
+ * Intended to be invoked from @rufflo/browser's init code:
+ *   import { registerBrowserCausalAdapter } from 'rufflo-graph-intelligence/adapters';
  *   registerBrowserCausalAdapter({ origin: 'https://example.com', source: causalService });
  */
 export function registerBrowserCausalAdapter(

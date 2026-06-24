@@ -1,6 +1,6 @@
 ---
 id: ADR-0001
-title: ruflo-observability plugin contract — pinning, namespace-routing fix, smoke as contract
+title: rufflo-observability plugin contract — pinning, namespace-routing fix, smoke as contract
 status: Accepted
 date: 2026-05-04
 updated: 2026-05-09
@@ -11,7 +11,7 @@ tags: [plugin, observability, tracing, metrics, namespace, smoke-test]
 
 ## Context
 
-`ruflo-observability` (v0.1.0) — structured logging, distributed tracing, metrics with anomaly detection. 1 agent + 2 skills + 1 command.
+`rufflo-observability` (v0.1.0) — structured logging, distributed tracing, metrics with anomaly detection. 1 agent + 2 skills + 1 command.
 
 Same namespace-routing bug class as cost-tracker / market-data / migrations: both skills called `agentdb_hierarchical-recall` with namespace `observability` argument, but `agentdb_hierarchical-*` routes by tier (`working|episodic|semantic`) and ignores namespace strings.
 
@@ -32,17 +32,17 @@ Same namespace-routing bug class as cost-tracker / market-data / migrations: bot
 ## Verification
 
 ```bash
-bash plugins/ruflo-observability/scripts/smoke.sh
+bash plugins/rufflo-observability/scripts/smoke.sh
 # Expected: "10 passed, 0 failed"
 ```
 
 ## Related
 
-- `plugins/ruflo-cost-tracker/docs/adrs/0001-cost-tracker-contract.md` — same bug class
-- `plugins/ruflo-market-data/docs/adrs/0001-market-data-contract.md` — same bug class
-- `plugins/ruflo-migrations/docs/adrs/0001-migrations-contract.md` — same bug class
-- `plugins/ruflo-agentdb/docs/adrs/0001-agentdb-optimization.md` — namespace convention
+- `plugins/rufflo-cost-tracker/docs/adrs/0001-cost-tracker-contract.md` — same bug class
+- `plugins/rufflo-market-data/docs/adrs/0001-market-data-contract.md` — same bug class
+- `plugins/rufflo-migrations/docs/adrs/0001-migrations-contract.md` — same bug class
+- `plugins/rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md` — namespace convention
 
 ## Implementation status
 
-Plugin version v0.2.0 shipped and listed in marketplace.json. Source exists at `plugins/ruflo-observability/`. Contract elements implemented: namespace-routing bug fixed in both skills (switched `agentdb_hierarchical-recall` with namespace arg to `memory_search`/`memory_list`); dual pattern-store path documented in observe-metrics; smoke-as-contract gate defined in `scripts/smoke.sh`.
+Plugin version v0.2.0 shipped and listed in marketplace.json. Source exists at `plugins/rufflo-observability/`. Contract elements implemented: namespace-routing bug fixed in both skills (switched `agentdb_hierarchical-recall` with namespace arg to `memory_search`/`memory_list`); dual pattern-store path documented in observe-metrics; smoke-as-contract gate defined in `scripts/smoke.sh`.

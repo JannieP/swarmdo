@@ -1,4 +1,4 @@
-# 🎉 Claude Flow Plugin - Complete Summary
+# 🎉 Rufflo Plugin - Complete Summary
 
 ## ✅ Plugin Status: PRODUCTION READY
 
@@ -12,7 +12,7 @@
 ## 📦 Plugin Structure
 
 ```
-claude-flow/
+rufflo/
 ├── .claude-plugin/
 │   ├── plugin.json           ✓ Official plugin metadata
 │   ├── marketplace.json      ✓ Marketplace distribution metadata
@@ -60,7 +60,7 @@ claude-flow/
 ### From Local Directory:
 
 ```
-cd claude-flow
+cd rufflo
 /plugin add .
 /restart
 ```
@@ -104,7 +104,7 @@ cd claude-flow
 
 ### MCP Integration: 110+ Tools
 
-1. **claude-flow** (Required)
+1. **rufflo** (Required)
    - 40+ orchestration tools
    - Swarm coordination
    - Agent management
@@ -208,7 +208,7 @@ All documentation follows official Claude Code plugin guidelines.
 - **Format**: JSON configuration
 - **Location**: `hooks/hooks.json`
 - **Events**: pre-task, post-task, post-edit, session-start, session-end
-- **Integration**: Claude Flow coordination
+- **Integration**: Rufflo coordination
 
 ### MCP Servers
 - **Protocol**: Model Context Protocol
@@ -227,18 +227,18 @@ All documentation follows official Claude Code plugin guidelines.
 
 ### Update
 ```
-/plugin update claude-flow
+/plugin update rufflo
 ```
 
 Or pull latest from GitHub:
 ```
-cd /path/to/claude-flow
+cd /path/to/rufflo
 git pull
 ```
 
 ### Remove
 ```
-/plugin remove claude-flow
+/plugin remove rufflo
 ```
 
 ### List Installed
@@ -264,7 +264,7 @@ After installation, verify with:
 /plugin list
 ```
 
-Should show `claude-flow` as active.
+Should show `rufflo` as active.
 
 ---
 
@@ -326,7 +326,7 @@ The plugin is configured via `.claude-plugin/plugin.json`:
 
 ```json
 {
-  "name": "claude-flow",
+  "name": "rufflo",
   "version": "2.5.0",
   "description": "Enterprise AI agent orchestration plugin...",
   "author": {
@@ -338,9 +338,9 @@ The plugin is configured via `.claude-plugin/plugin.json`:
     "url": "https://github.com/ruvnet/claude-flow.git"
   },
   "mcpServers": {
-    "claude-flow": {
+    "rufflo": {
       "command": "npx",
-      "args": ["claude-flow@alpha", "mcp", "start"]
+      "args": ["rufflo@alpha", "mcp", "start"]
     }
   }
 }

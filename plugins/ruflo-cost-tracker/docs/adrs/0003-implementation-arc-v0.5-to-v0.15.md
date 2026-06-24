@@ -1,6 +1,6 @@
 ---
 id: ADR-0003
-title: ruflo-cost-tracker — implementation arc from v0.4.0 to v0.15.0 (auto-capture, budget enforcement, model-outcome feedback, observability, federation consumer)
+title: rufflo-cost-tracker — implementation arc from v0.4.0 to v0.15.0 (auto-capture, budget enforcement, model-outcome feedback, observability, federation consumer)
 status: Accepted
 date: 2026-05-05
 authors:
@@ -30,7 +30,7 @@ Eleven priorities were implemented as separate plugin-local commits, each with v
 1. **P1 — `cost-track` (v0.5.0)** — the most embarrassing gap. Reads `~/.claude/projects/<encoded-cwd>/<session>.jsonl`, sums per-message `usage` by model, persists to `cost-tracking` namespace. Without this every other skill operated on empty data.
 2. **P2 — `cost-budget-check` (v0.6.0)** — the README documented a 50/75/90/100% alert ladder but no code enforced it. Wired the producer (`cost track`) to the consumer (`budget check`) with a real fail-closed exit-1 path on `HARD_STOP`.
 3. **P3 — auto-emit `hooks_model-outcome` (v0.7.0)** — `cost-optimize` step 8 was prose. Replaced with a wrapper script (`outcome.mjs`) and a `cost outcome` subcommand so applied recommendations actually train the router.
-4. **P4 — `compact.mjs` (v0.8.0)** — dropped the inline `node --input-type=module -e '...'` block from `cost-compact-context`. True MCP wrapping (modifying @claude-flow/cli source) deliberately deferred — see "Riskiest assumption" below.
+4. **P4 — `compact.mjs` (v0.8.0)** — dropped the inline `node --input-type=module -e '...'` block from `cost-compact-context`. True MCP wrapping (modifying @rufflo/cli source) deliberately deferred — see "Riskiest assumption" below.
 5. **P5 — `cost-trend` (v0.9.0)** — the binary smoke gate misses curves. Trend across all `runs/*.json` flags drifts the gate doesn't.
 6. **P7 — corpus v2 → v3 (v0.10.0)** — added `expectedTier1` field and 7 adversarial cases. Win rate now means something (was tautological at 100% across all endpoints on v1).
 7. **P8 — GitHub Actions (v0.11.0)** — smoke + booster-only bench on every PR; LLM/Anthropic baselines deliberately excluded from CI (cost guard).
@@ -51,8 +51,8 @@ Eleven priorities were implemented as separate plugin-local commits, each with v
 
 **Negative:**
 
-- **No real MCP tools registered** — adding `cost_report` / `cost_summary` MCP tools requires modifying `v3/@claude-flow/cli/src/mcp-tools/`, which is outside plugin-local scope and deserves its own ADR. The current `summary.mjs` provides equivalent functionality via Bash shell-out, but it is *not* an MCP tool.
-- **Budget upsert workaround** — `npx @claude-flow/cli memory store` rejects keys that `memory retrieve` doesn't see (a UNIQUE-constraint inconsistency in the @claude-flow/cli memory layer). `budget.mjs` works around this by writing timestamped keys (`budget-config-<ms>`) and resolving the latest at retrieve time. This is functional but indicates an upstream bug that should be fixed in a separate ADR.
+- **No real MCP tools registered** — adding `cost_report` / `cost_summary` MCP tools requires modifying `v3/@rufflo/cli/src/mcp-tools/`, which is outside plugin-local scope and deserves its own ADR. The current `summary.mjs` provides equivalent functionality via Bash shell-out, but it is *not* an MCP tool.
+- **Budget upsert workaround** — `npx @rufflo/cli memory store` rejects keys that `memory retrieve` doesn't see (a UNIQUE-constraint inconsistency in the @rufflo/cli memory layer). `budget.mjs` works around this by writing timestamped keys (`budget-config-<ms>`) and resolving the latest at retrieve time. This is functional but indicates an upstream bug that should be fixed in a separate ADR.
 - **Federation consumer activates only when Phase 3 lands** — the skill is dormant until `federation_send` completion events flow into the `federation-spend` namespace. Documented; not a hard issue but means the metric is currently zero.
 - **CI bench is booster-only** — LLM and Anthropic baselines are deliberately not run in CI (cost). Drift in those numbers can only be caught manually via `BENCH_LLM_BASELINE=1 BENCH_ANTHROPIC=1`.
 
@@ -70,7 +70,7 @@ Eleven priorities were implemented as separate plugin-local commits, each with v
 
 ## Verification
 
-Smoke contract is at 44 checks (`bash plugins/ruflo-cost-tracker/scripts/smoke.sh`). Live verified:
+Smoke contract is at 44 checks (`bash plugins/rufflo-cost-tracker/scripts/smoke.sh`). Live verified:
 
 - `cost-track` captured this session: 1597 messages, $1546.36 on Opus 4.7
 - `cost-budget` set / get / check: $2500 budget, 61.9% utilization → 🟡 INFO
@@ -95,5 +95,5 @@ Bench result persisted at `docs/benchmarks/runs/latest.json` (corpus v3, 4 endpo
 
 - Real MCP tool registration (`cost_report` / `cost_summary` as registered MCP tools, not Bash shell-out)
 - Upstream fix for the `memory store` UNIQUE-constraint inconsistency
-- Federation Phase 3 producer (in `ruflo-federation` plugin, not this one)
+- Federation Phase 3 producer (in `rufflo-federation` plugin, not this one)
 - Adversarial corpus expansion to 50+ cases for tighter signal

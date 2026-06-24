@@ -78,7 +78,7 @@ export class DAGBridge implements IDAGBridge {
 
     try {
       // Dynamic import of WASM module
-      // In production, this would load from @claude-flow/ruvector-upstream
+      // In production, this would load from @rufflo/ruvector-upstream
       this.wasmModule = await this.loadWasmModule();
       this.initialized = true;
     } catch {
@@ -375,7 +375,7 @@ export class DAGBridge implements IDAGBridge {
    * Load WASM module dynamically
    */
   private async loadWasmModule(): Promise<DAGWasmModule> {
-    // In production, this would load from @claude-flow/ruvector-upstream
+    // In production, this would load from @rufflo/ruvector-upstream
     // For now, throw to trigger JS fallback
     throw new Error('WASM module loading not implemented');
   }

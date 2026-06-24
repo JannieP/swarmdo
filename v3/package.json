@@ -1,12 +1,12 @@
 {
-  "name": "@claude-flow/v3-monorepo",
+  "name": "@rufflo/v3-monorepo",
   "version": "3.0.0-alpha.1",
   "private": true,
   "type": "module",
-  "description": "Claude Flow V3 - Modular AI Agent Coordination System",
+  "description": "Rufflo V3 - Modular AI Agent Coordination System",
   "workspaces": [
-    "@claude-flow/*",
-    "claude-flow"
+    "@rufflo/*",
+    "rufflo"
   ],
   "scripts": {
     "build": "pnpm -r build",
@@ -21,15 +21,15 @@
     "test:integration:workflow": "vitest run __tests__/integration/workflow-integration.test.ts",
     "test:coverage": "vitest run --coverage",
     "test:coverage:integration": "vitest run __tests__/integration --coverage",
-    "test:security": "pnpm --filter @claude-flow/security test",
-    "test:memory": "pnpm --filter @claude-flow/memory test",
-    "test:swarm": "pnpm --filter @claude-flow/swarm test",
-    "bench": "pnpm --filter @claude-flow/performance bench",
-    "bench:attention": "pnpm --filter @claude-flow/performance bench:attention",
+    "test:security": "pnpm --filter @rufflo/security test",
+    "test:memory": "pnpm --filter @rufflo/memory test",
+    "test:swarm": "pnpm --filter @rufflo/swarm test",
+    "bench": "pnpm --filter @rufflo/performance bench",
+    "bench:attention": "pnpm --filter @rufflo/performance bench:attention",
     "typecheck": "pnpm -r typecheck",
-    "clean": "rm -rf node_modules @claude-flow/*/node_modules claude-flow/node_modules",
-    "publish:dry": "pnpm --filter claude-flow publish --dry-run --tag v3alpha --no-git-checks",
-    "publish:v3alpha": "pnpm --filter claude-flow publish --tag v3alpha --no-git-checks",
+    "clean": "rm -rf node_modules @rufflo/*/node_modules rufflo/node_modules",
+    "publish:dry": "pnpm --filter rufflo publish --dry-run --tag v3alpha --no-git-checks",
+    "publish:v3alpha": "pnpm --filter rufflo publish --tag v3alpha --no-git-checks",
     "version:patch": "pnpm -r exec npm version patch",
     "version:minor": "pnpm -r exec npm version minor",
     "version:major": "pnpm -r exec npm version major",
@@ -37,8 +37,8 @@
     "bun:build": "bun run --filter '*' build",
     "bun:test": "bun test",
     "bun:dev": "bun run --watch src/index.ts",
-    "bun:publish:dry": "cd claude-flow && bun publish --dry-run --tag v3alpha",
-    "bun:publish:v3alpha": "cd claude-flow && bun publish --tag v3alpha"
+    "bun:publish:dry": "cd rufflo && bun publish --dry-run --tag v3alpha",
+    "bun:publish:v3alpha": "cd rufflo && bun publish --tag v3alpha"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

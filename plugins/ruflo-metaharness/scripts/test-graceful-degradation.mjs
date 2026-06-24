@@ -17,7 +17,7 @@
 //   score / genome / mcp-scan / threat-model / oia-audit /
 //   audit-list / audit-trend / mint
 //
-// (audit-list + audit-trend talk to `npx @claude-flow/cli memory ...`
+// (audit-list + audit-trend talk to `npx @rufflo/cli memory ...`
 //  rather than metaharness — they're tested separately for the
 //  "no records in namespace" graceful path.)
 //
@@ -89,7 +89,7 @@ function main() {
   console.log('Each skill must exit 0 AND emit "degraded": true in JSON.\n');
 
   // The 5 skills that directly invoke metaharness/harness binaries.
-  // (audit-list / audit-trend talk to claude-flow's memory layer, not
+  // (audit-list / audit-trend talk to rufflo's memory layer, not
   // metaharness; they have their own empty-namespace graceful paths
   // tested separately. mint requires a --name argv to even start.)
   // iter 55 — extending this list discovered 3 latent gaps:

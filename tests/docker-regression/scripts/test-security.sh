@@ -1,5 +1,5 @@
 #!/bin/bash
-# Claude-Flow Security Features Test Suite
+# Rufflo Security Features Test Suite
 # Tests all security features, validation, and protection mechanisms
 
 set -e
@@ -82,12 +82,12 @@ run_test "Argument sanitization" "echo 'argument sanitization' && echo 'ok'"
 echo ""
 echo "── Dangerous Command Blocking ──"
 
-run_test "Block rm -rf" "npx claude-flow hooks pre-command 'rm -rf /' 2>/dev/null | grep -qi 'block\|deny' || echo 'blocked'"
-run_test "Block DROP DATABASE" "npx claude-flow hooks pre-command 'DROP DATABASE prod' 2>/dev/null | grep -qi 'block\|deny' || echo 'blocked'"
-run_test "Block git reset --hard" "npx claude-flow hooks pre-command 'git reset --hard' 2>/dev/null | grep -qi 'block\|deny' || echo 'blocked'"
-run_test "Block force push" "npx claude-flow hooks pre-command 'git push --force' 2>/dev/null | grep -qi 'block\|deny' || echo 'blocked'"
-run_test "Block format c:" "npx claude-flow hooks pre-command 'format c:' 2>/dev/null | grep -qi 'block\|deny' || echo 'blocked'"
-run_test "Block truncate" "npx claude-flow hooks pre-command 'truncate table' 2>/dev/null | grep -qi 'block\|deny' || echo 'blocked'"
+run_test "Block rm -rf" "npx rufflo hooks pre-command 'rm -rf /' 2>/dev/null | grep -qi 'block\|deny' || echo 'blocked'"
+run_test "Block DROP DATABASE" "npx rufflo hooks pre-command 'DROP DATABASE prod' 2>/dev/null | grep -qi 'block\|deny' || echo 'blocked'"
+run_test "Block git reset --hard" "npx rufflo hooks pre-command 'git reset --hard' 2>/dev/null | grep -qi 'block\|deny' || echo 'blocked'"
+run_test "Block force push" "npx rufflo hooks pre-command 'git push --force' 2>/dev/null | grep -qi 'block\|deny' || echo 'blocked'"
+run_test "Block format c:" "npx rufflo hooks pre-command 'format c:' 2>/dev/null | grep -qi 'block\|deny' || echo 'blocked'"
+run_test "Block truncate" "npx rufflo hooks pre-command 'truncate table' 2>/dev/null | grep -qi 'block\|deny' || echo 'blocked'"
 
 # ============================================================================
 # 5. SENSITIVE FILE PROTECTION
@@ -95,12 +95,12 @@ run_test "Block truncate" "npx claude-flow hooks pre-command 'truncate table' 2>
 echo ""
 echo "── Sensitive File Protection ──"
 
-run_test "Block .env files" "npx claude-flow hooks pre-edit .env 2>/dev/null | grep -qi 'deny\|block' || echo 'blocked'"
-run_test "Block .pem files" "npx claude-flow hooks pre-edit server.pem 2>/dev/null | grep -qi 'deny\|block' || echo 'blocked'"
-run_test "Block .key files" "npx claude-flow hooks pre-edit private.key 2>/dev/null | grep -qi 'deny\|block' || echo 'blocked'"
-run_test "Block credentials.json" "npx claude-flow hooks pre-edit credentials.json 2>/dev/null | grep -qi 'deny\|block' || echo 'blocked'"
-run_test "Block secrets files" "npx claude-flow hooks pre-edit secrets.yaml 2>/dev/null | grep -qi 'deny\|block' || echo 'blocked'"
-run_test "Block password files" "npx claude-flow hooks pre-edit passwords.txt 2>/dev/null | grep -qi 'deny\|block' || echo 'blocked'"
+run_test "Block .env files" "npx rufflo hooks pre-edit .env 2>/dev/null | grep -qi 'deny\|block' || echo 'blocked'"
+run_test "Block .pem files" "npx rufflo hooks pre-edit server.pem 2>/dev/null | grep -qi 'deny\|block' || echo 'blocked'"
+run_test "Block .key files" "npx rufflo hooks pre-edit private.key 2>/dev/null | grep -qi 'deny\|block' || echo 'blocked'"
+run_test "Block credentials.json" "npx rufflo hooks pre-edit credentials.json 2>/dev/null | grep -qi 'deny\|block' || echo 'blocked'"
+run_test "Block secrets files" "npx rufflo hooks pre-edit secrets.yaml 2>/dev/null | grep -qi 'deny\|block' || echo 'blocked'"
+run_test "Block password files" "npx rufflo hooks pre-edit passwords.txt 2>/dev/null | grep -qi 'deny\|block' || echo 'blocked'"
 
 # ============================================================================
 # 6. PROTOTYPE POLLUTION PREVENTION
@@ -170,7 +170,7 @@ echo ""
 echo "── Security Audit ──"
 
 run_test "npm audit" "npm audit --audit-level=critical 2>/dev/null || echo 'audit passed'"
-run_test "Security scan" "npx @claude-flow/security audit 2>/dev/null || echo 'scan passed'"
+run_test "Security scan" "npx @rufflo/security audit 2>/dev/null || echo 'scan passed'"
 
 # ============================================================================
 # 13. AUTHENTICATION & AUTHORIZATION

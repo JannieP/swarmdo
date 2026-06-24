@@ -16,8 +16,8 @@ The repo ships **two parallel implementations** of the MCP hooks surface:
 
 | Path | Used by |
 |---|---|
-| `v3/mcp/tools/hooks-tools.ts` | Standalone `mcp` package (not loaded by the `claude-flow` MCP server) |
-| `v3/@claude-flow/cli/src/mcp-tools/hooks-tools.ts` | **Actual CLI MCP server** (`npx @claude-flow/cli mcp start`) |
+| `v3/mcp/tools/hooks-tools.ts` | Standalone `mcp` package (not loaded by the `rufflo` MCP server) |
+| `v3/@rufflo/cli/src/mcp-tools/hooks-tools.ts` | **Actual CLI MCP server** (`npx @rufflo/cli mcp start`) |
 
 The 3.6.13 fix for #1686 (adding `dbPath` to `createReasoningBank`) landed in the first file but the runtime uses the second. The `hooks_post-task` writer and the `hooks_metrics` reader in the second file persist via `memory-store.ts` not `ReasoningBank` — and the metrics reader filters entries by key substring (`pattern`, `route`, `task`) rather than by trajectory store, so post-task writes that don't match those substrings remain invisible.
 
@@ -93,10 +93,10 @@ Have `config_list` return the same union as `config_export` (defaults + user-set
 
 ## Validation Plan
 
-1. Re-spawn the same six-agent verification swarm (memory-tester, hooks-tester, swarm-tester, neural-tester, system-tester, workflow-tester) against `@claude-flow/cli@3.6.14`.
+1. Re-spawn the same six-agent verification swarm (memory-tester, hooks-tester, swarm-tester, neural-tester, system-tester, workflow-tester) against `@rufflo/cli@3.6.14`.
 2. Each agent re-runs the same scenarios that flagged F1–F6, F12 in the May 3 audit. Pass criteria: each row in the matrix above flips from MOCK/BROKEN/DEGRADED to REAL.
 3. Add unit-level tests for F1 (post-task → metrics round-trip), F3 (consensus param round-trip), F6 (session_list returns non-empty objects).
-4. Verify against published artifact in a clean `/tmp/ruflo-smoke-3.6.14` install.
+4. Verify against published artifact in a clean `/tmp/rufflo-smoke-3.6.14` install.
 
 ## Consequences
 
@@ -108,4 +108,4 @@ Have `config_list` return the same union as `config_export` (defaults + user-set
 
 ## Notes
 
-- The parallel `v3/mcp/tools/` and `v3/@claude-flow/cli/src/mcp-tools/` implementations should be unified in a follow-up ADR. Maintaining both creates the kind of fix-in-the-wrong-file confusion that turned the 3.6.13 #1686 fix into a no-op on the runtime path. Recommend deprecating `v3/mcp/tools/` and re-pointing its consumers at the CLI mcp-tools.
+- The parallel `v3/mcp/tools/` and `v3/@rufflo/cli/src/mcp-tools/` implementations should be unified in a follow-up ADR. Maintaining both creates the kind of fix-in-the-wrong-file confusion that turned the 3.6.13 #1686 fix into a no-op on the runtime path. Recommend deprecating `v3/mcp/tools/` and re-pointing its consumers at the CLI mcp-tools.

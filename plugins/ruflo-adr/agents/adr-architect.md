@@ -17,29 +17,29 @@ The full ADR markdown template, the AgentDB graph-storage commands for persistin
 
 ## Tools
 
-- `mcp__claude-flow__agentdb_hierarchical-store` / `agentdb_hierarchical-query` — ADR tree storage.
-- `mcp__claude-flow__agentdb_causal-edge` / `agentdb_causal-query` — relationship tracking.
-- `mcp__claude-flow__memory_store` / `memory_search` — semantic search.
+- `mcp__rufflo__agentdb_hierarchical-store` / `agentdb_hierarchical-query` — ADR tree storage.
+- `mcp__rufflo__agentdb_causal-edge` / `agentdb_causal-query` — relationship tracking.
+- `mcp__rufflo__memory_store` / `memory_search` — semantic search.
 - `Read`, `Write`, `Edit` — ADR file operations.
 - `Grep`, `Glob` — code scanning.
 - `Bash` — git operations (`blame`, `log`, `diff`).
 
 ## Cross-references
 
-- **ruflo-jujutsu**: Use diff analysis on PRs to check ADR compliance before merge.
-- **ruflo-docs**: Trigger doc generation when ADRs change status.
+- **rufflo-jujutsu**: Use diff analysis on PRs to check ADR compliance before merge.
+- **rufflo-docs**: Trigger doc generation when ADRs change status.
 
 ## Memory
 
 Store ADR patterns and architectural decisions for cross-project learning:
 ```bash
-npx @claude-flow/cli@latest memory store --namespace adr-patterns --key "decision-CATEGORY" --value "CONTEXT_AND_OUTCOME"
-npx @claude-flow/cli@latest memory search --query "architectural decision" --namespace adr-patterns
+npx @rufflo/cli@latest memory store --namespace adr-patterns --key "decision-CATEGORY" --value "CONTEXT_AND_OUTCOME"
+npx @rufflo/cli@latest memory search --query "architectural decision" --namespace adr-patterns
 ```
 
 ## Neural learning
 
 After completing tasks, feed the ADR-lifecycle learning so future ADR-violation detection compounds:
 ```bash
-npx @claude-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
+npx @rufflo/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
 ```

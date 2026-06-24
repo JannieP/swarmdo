@@ -20,7 +20,7 @@ Implementation: [`scripts/genome.mjs`](../../scripts/genome.mjs).
 3. If `--alert-on-risk-above N`: exit 1 when `risk_score > N`.
 4. Output JSON (default) or markdown.
 
-## Phase-0 baseline (ruflo, measured 2026-06-16)
+## Phase-0 baseline (rufflo, measured 2026-06-16)
 
 ```
 {
@@ -33,8 +33,8 @@ Implementation: [`scripts/genome.mjs`](../../scripts/genome.mjs).
 }
 ```
 
-Ruflo's `risk_score: 0.27` is low (good). `publish_readiness: 0.9` is
-high. The `mcp_surface: "remote"` reflects that ruflo's MCP servers are
+Rufflo's `risk_score: 0.27` is low (good). `publish_readiness: 0.9` is
+high. The `mcp_surface: "remote"` reflects that rufflo's MCP servers are
 hosted, not bundled.
 
 ## When to use

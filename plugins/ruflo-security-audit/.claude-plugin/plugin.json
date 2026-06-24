@@ -1,5 +1,5 @@
 {
-  "name": "ruflo-security-audit",
+  "name": "rufflo-security-audit",
   "description": "Security review, dependency scanning, policy gates, and CVE monitoring",
   "version": "0.2.0",
   "author": {
@@ -9,7 +9,7 @@
   "homepage": "https://github.com/ruvnet/ruflo",
   "license": "MIT",
   "keywords": [
-    "ruflo",
+    "rufflo",
     "security",
     "audit",
     "cve",

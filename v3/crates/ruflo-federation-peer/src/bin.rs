@@ -1,4 +1,4 @@
-//! `ruflo-federation-peer` binary entry point.
+//! `rufflo-federation-peer` binary entry point.
 //!
 //! Reads configuration from environment variables (the same set the
 //! TypeScript federation plugin already understands) and runs the
@@ -14,7 +14,7 @@ use std::process::ExitCode;
 
 fn main() -> ExitCode {
     if std::env::args().any(|a| a == "--version" || a == "-V") {
-        println!("ruflo-federation-peer {}", env!("CARGO_PKG_VERSION"));
+        println!("rufflo-federation-peer {}", env!("CARGO_PKG_VERSION"));
         return ExitCode::SUCCESS;
     }
 
@@ -26,7 +26,7 @@ fn main() -> ExitCode {
     #[cfg(not(feature = "native"))]
     {
         eprintln!(
-            "ruflo-federation-peer {} — built without `--features native`.\n\
+            "rufflo-federation-peer {} — built without `--features native`.\n\
              The binary's trait surface is exported as a library only;\n\
              rebuild with `--features native` to drive the real QUIC + AIMDS backend.",
             env!("CARGO_PKG_VERSION"),
@@ -39,7 +39,7 @@ fn main() -> ExitCode {
 fn native_main() -> ExitCode {
     use aimds_core::{AimdsError, PromptInput, SafetyGate, SafetyVerdict};
     use async_trait::async_trait;
-    use ruflo_federation_peer::{
+    use rufflo_federation_peer::{
         native_gate::AimdsGate,
         native_transport::MidstreamerTransport,
         Dispatcher, FederationMessage, Peer, PeerError,
@@ -71,7 +71,7 @@ fn native_main() -> ExitCode {
     }
 
     // Default dispatcher: emit NDJSON to stdout so the parent
-    // process (the ruflo MCP server) can ingest verdicts.
+    // process (the rufflo MCP server) can ingest verdicts.
     struct StdoutDispatcher;
     #[async_trait]
     impl Dispatcher for StdoutDispatcher {
@@ -95,7 +95,7 @@ fn native_main() -> ExitCode {
     {
         Ok(r) => r,
         Err(e) => {
-            eprintln!("ruflo-federation-peer: failed to build runtime: {e}");
+            eprintln!("rufflo-federation-peer: failed to build runtime: {e}");
             return ExitCode::from(2);
         }
     };
@@ -104,14 +104,14 @@ fn native_main() -> ExitCode {
         let transport = match MidstreamerTransport::connect(&remote).await {
             Ok(t) => t,
             Err(e) => {
-                eprintln!("ruflo-federation-peer: connect failed: {e}");
+                eprintln!("rufflo-federation-peer: connect failed: {e}");
                 return ExitCode::from(1);
             }
         };
         let gate = AimdsGate::new(PassGate);
         let peer = Peer::new(transport, gate, StdoutDispatcher);
         if let Err(e) = peer.run().await {
-            eprintln!("ruflo-federation-peer: run failed: {e}");
+            eprintln!("rufflo-federation-peer: run failed: {e}");
             return ExitCode::from(1);
         }
         ExitCode::SUCCESS

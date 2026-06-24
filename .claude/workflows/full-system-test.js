@@ -10,7 +10,7 @@ export const meta = {
 // args (optional): { skipTests?: boolean } — skip the (slow) vitest suite, run the rest
 const skipTests = !!(args && args.skipTests)
 
-const CLI = 'v3/@claude-flow/cli'
+const CLI = 'v3/@rufflo/cli'
 
 const DIM_SCHEMA = {
   type: 'object', additionalProperties: false,

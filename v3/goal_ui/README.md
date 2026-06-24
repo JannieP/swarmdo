@@ -1,15 +1,15 @@
-# RuFlo Research
+# Rufflo Research
 
-> Goal-Oriented Action Planning UI for autonomous AI research workflows. Part of the [RuFlo](https://github.com/ruvnet/ruflo) platform.
+> Goal-Oriented Action Planning UI for autonomous AI research workflows. Part of the [Rufflo](https://github.com/ruvnet/ruflo) platform.
 > Live: [goal.ruv.io](https://goal.ruv.io/) · Agents dashboard: [goal.ruv.io/agents](https://goal.ruv.io/agents)
 
-Turn plain-English research goals into executable agent plans. RuFlo Research applies classic Goal-Oriented Action Planning (GOAP) — A* search through a state space of actions with preconditions and effects — to autonomous AI research, then dispatches the work to live agents you can inspect in real time.
+Turn plain-English research goals into executable agent plans. Rufflo Research applies classic Goal-Oriented Action Planning (GOAP) — A* search through a state space of actions with preconditions and effects — to autonomous AI research, then dispatches the work to live agents you can inspect in real time.
 
 ## Highlights
 
 | | |
 |---|---|
-| 🎯 **Plain-English goals** | Describe an outcome — RuFlo extracts success criteria, constraints, and implicit preconditions |
+| 🎯 **Plain-English goals** | Describe an outcome — Rufflo extracts success criteria, constraints, and implicit preconditions |
 | 🧭 **GOAP A\* planner** | Shortest-path search through actions with preconditions/effects; replans on the fly when state changes |
 | 🤖 **Live agent dashboard** | `/agents` shows every spawned agent — role, current step, status, trajectories |
 | 🌳 **Visual plan tree** | Goals render as collapsible action trees with progress, blocked branches, rollbacks |
@@ -50,9 +50,9 @@ v3/goal_ui/
 ## Embedding the Widget
 
 ```html
-<div id="ruflo-research-widget-container"></div>
+<div id="rufflo-research-widget-container"></div>
 <script>
-  window.RufloResearchWidgetConfig = {
+  window.RuffloResearchWidgetConfig = {
     primaryColor: "#8b5cf6",
     accentColor: "#10b981",
   };
@@ -61,7 +61,7 @@ v3/goal_ui/
 <link rel="stylesheet" href="https://goal.ruv.io/widget.css" />
 ```
 
-The widget exposes a global `window.RufloResearchWidget` with `init(containerId)` and `version` for programmatic control. See [`docs/WIDGET-INTEGRATION.md`](docs/WIDGET-INTEGRATION.md) for the full integration guide.
+The widget exposes a global `window.RuffloResearchWidget` with `init(containerId)` and `version` for programmatic control. See [`docs/WIDGET-INTEGRATION.md`](docs/WIDGET-INTEGRATION.md) for the full integration guide.
 
 ## Tech Stack
 
@@ -83,4 +83,4 @@ VITE_SUPABASE_PUBLISHABLE_KEY=...
 
 ## License
 
-MIT — same as the parent [RuFlo](https://github.com/ruvnet/ruflo) project.
+MIT — same as the parent [Rufflo](https://github.com/ruvnet/ruflo) project.

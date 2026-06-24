@@ -13,9 +13,9 @@
 //     before any variant runs. Exit code 99 is reserved for "safety-disqualified".
 //   - --confirm is REQUIRED. Without it the script prints a plan and exits 0
 //     (mirrors mint.mjs convention). This is in addition to upstream's safety
-//     layer — defense in depth at the ruflo boundary.
+//     layer — defense in depth at the rufflo boundary.
 //   - Default --generations 3 --children 3 (small) — anything larger is opt-in.
-//     Real evolutions are minutes-to-hours; ruflo's default sandbox config
+//     Real evolutions are minutes-to-hours; rufflo's default sandbox config
 //     errs toward "show me the mechanism works" over "find a winner today".
 //
 // USAGE
@@ -93,15 +93,15 @@ function safetyChecks() {
     process.exit(2);
   }
   if (ARGS.generations < 1 || ARGS.generations > 50) {
-    console.error('evolve: --generations must be 1..50 (ruflo cap; upstream supports more)');
+    console.error('evolve: --generations must be 1..50 (rufflo cap; upstream supports more)');
     process.exit(2);
   }
   if (ARGS.children < 1 || ARGS.children > 20) {
-    console.error('evolve: --children must be 1..20 (ruflo cap)');
+    console.error('evolve: --children must be 1..20 (rufflo cap)');
     process.exit(2);
   }
   if (ARGS.concurrency < 1 || ARGS.concurrency > 8) {
-    console.error('evolve: --concurrency must be 1..8 (ruflo cap)');
+    console.error('evolve: --concurrency must be 1..8 (rufflo cap)');
     process.exit(2);
   }
   if (!['real', 'mock', 'agent'].includes(ARGS.sandbox)) {
@@ -195,7 +195,7 @@ async function main() {
   // Upstream exit code 99 = safety-disqualified — propagate verbatim so
   // CI gates can distinguish "evolution failed" from "evolution surfaced
   // a safety-tripping mutation". This is a designed-in tripwire, not an
-  // error the ruflo layer should remap.
+  // error the rufflo layer should remap.
   if (r.exitCode === 99) {
     const payload = {
       success: false,

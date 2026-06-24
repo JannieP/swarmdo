@@ -36,14 +36,14 @@ import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 const REPO_ROOT = resolve(process.argv[2] ?? process.cwd());
-const DIST = resolve(REPO_ROOT, 'v3/@claude-flow/cli/dist/src/mcp-tools/memory-tools.js');
+const DIST = resolve(REPO_ROOT, 'v3/@rufflo/cli/dist/src/mcp-tools/memory-tools.js');
 
 let failed = 0;
 const fail = (m) => { console.error(`FAIL: ${m}`); failed++; };
 const pass = (m) => console.log(`ok: ${m}`);
 
 if (!existsSync(DIST)) {
-  fail(`${DIST} not found — run \`npm --prefix v3/@claude-flow/cli run build\` first`);
+  fail(`${DIST} not found — run \`npm --prefix v3/@rufflo/cli run build\` first`);
   process.exit(1);
 }
 const distSrc = readFileSync(DIST, 'utf-8');
@@ -158,9 +158,9 @@ if (candidates.has(expectedWindowsHash)) {
 
 // macOS/Linux POSIX cwd should still produce the legacy hash in candidate set
 // so existing-deployment compatibility holds.
-const posixCwd = '/Users/alice/projects/ruflo';
+const posixCwd = '/Users/alice/projects/rufflo';
 const posixCandidates = deriveCandidates(posixCwd);
-if (posixCandidates.has('-Users-alice-projects-ruflo')) {
+if (posixCandidates.has('-Users-alice-projects-rufflo')) {
   pass(`#1883-posix-compat — legacy POSIX hash still in candidate set for ${posixCwd}`);
 } else {
   fail(`#1883-posix-compat — legacy POSIX hash missing from candidate set; would break existing macOS/Linux installs`);

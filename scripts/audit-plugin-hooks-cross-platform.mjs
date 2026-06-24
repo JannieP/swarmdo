@@ -24,14 +24,14 @@
  * cross-platform patterns audit. The exemption exists because the 3 plugin
  * hooks.json files in this repo use POSIX bash pipelines that are
  * battle-tested on Mac/Linux; the Windows path is provided via init-time
- * settings.json override (see v3/@claude-flow/cli/src/init/settings-generator.ts).
+ * settings.json override (see v3/@rufflo/cli/src/init/settings-generator.ts).
  *
  * Audit logic:
  *  1. Files with "_platform": "posix" - skip pattern scan, check Windows path exists
  *  2. All other files - strict cross-platform scan (original behaviour)
  *
  * Windows path check: for every POSIX-exempt file in a plugins/<name>/hooks/ dir,
- * verify that plugins/<name>/scripts/ruflo-hook.cjs exists (the Node shim that
+ * verify that plugins/<name>/scripts/rufflo-hook.cjs exists (the Node shim that
  * init copies to `.claude/helpers/` on Windows). This proves the Windows path
  * is covered without requiring platform detection at audit time.
  *
@@ -107,16 +107,16 @@ for (const file of walkForHooksJson(REPO_ROOT)) {
 
     // Verify the Windows path (Node shim) exists alongside this hooks.json.
     // Convention: hooks.json lives in <plugin>/hooks/hooks.json
-    //             shim lives in <plugin>/scripts/ruflo-hook.cjs
+    //             shim lives in <plugin>/scripts/rufflo-hook.cjs
     const pluginDir = resolve(join(file, '..', '..'));
-    const shimPath = join(pluginDir, 'scripts', 'ruflo-hook.cjs');
+    const shimPath = join(pluginDir, 'scripts', 'rufflo-hook.cjs');
     if (!existsSync(shimPath)) {
       violations.push({
         file: relFile,
         line: 0,
         label: 'POSIX-exempt but Windows shim missing',
         cmd: `Expected ${relative(REPO_ROOT, shimPath)}`,
-        hint: 'Create plugins/<name>/scripts/ruflo-hook.cjs (cross-platform Node port of ruflo-hook.sh). See #2132.',
+        hint: 'Create plugins/<name>/scripts/rufflo-hook.cjs (cross-platform Node port of rufflo-hook.sh). See #2132.',
       });
       posixWindowsPathMissing = true;
     }
@@ -184,5 +184,5 @@ for (const v of violations) {
 }
 console.error('\nReference: ruvnet/ruflo#2132 (plugin hooks broken on Windows).');
 console.error('Cross-platform pattern: .claude/settings.json + .claude/helpers/hook-handler.cjs (node, no bash).');
-console.error('POSIX-exempt pattern: add "_platform": "posix" to hooks.json + create scripts/ruflo-hook.cjs sibling.');
+console.error('POSIX-exempt pattern: add "_platform": "posix" to hooks.json + create scripts/rufflo-hook.cjs sibling.');
 process.exit(1);

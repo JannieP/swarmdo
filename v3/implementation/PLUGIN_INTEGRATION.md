@@ -1,8 +1,8 @@
-# Claude Flow Plugin Integration
+# Rufflo Plugin Integration
 
 ## Overview
 
-This document describes how claude-flow integrates with the official Claude Code plugin system.
+This document describes how rufflo integrates with the official Claude Code plugin system.
 
 ## Plugin Structure
 
@@ -24,7 +24,7 @@ plugin/
 
 ```json
 {
-  "name": "claude-flow",
+  "name": "rufflo",
   "version": "3.0.0",
   "capabilities": {
     "skills": true,
@@ -56,7 +56,7 @@ plugin/
 
 The plugin bundles three MCP servers:
 
-1. **claude-flow** (required): Core swarm coordination
+1. **rufflo** (required): Core swarm coordination
 2. **ruv-swarm** (optional): Enhanced topology patterns
 3. **flow-nexus** (optional): Cloud orchestration
 
@@ -78,7 +78,7 @@ allowed-tools: Read, Write, Bash
 
 ## V3 Hooks Bridge
 
-The `@claude-flow/hooks` package includes an official hooks bridge:
+The `@rufflo/hooks` package includes an official hooks bridge:
 
 ```typescript
 import {
@@ -86,7 +86,7 @@ import {
   processOfficialHookInput,
   outputOfficialHookResult,
   executeWithBridge,
-} from '@claude-flow/hooks';
+} from '@rufflo/hooks';
 
 // Process input from Claude Code
 const input = await processOfficialHookInput();
@@ -108,10 +108,10 @@ outputOfficialHookResult(output);
 
 ```bash
 # Add plugin marketplace
-/plugin marketplace add claude-flow https://github.com/ruvnet/claude-flow
+/plugin marketplace add rufflo https://github.com/ruvnet/claude-flow
 
 # Install plugin
-/plugin install claude-flow
+/plugin install rufflo
 ```
 
 ### Manual Installation
@@ -119,13 +119,13 @@ outputOfficialHookResult(output);
 ```bash
 # Clone and link
 git clone https://github.com/ruvnet/claude-flow
-claude --plugin-dir ./claude-flow/plugin
+claude --plugin-dir ./rufflo/plugin
 ```
 
 ### Via npx Init
 
 ```bash
-npx claude-flow@alpha init --hooks
+npx rufflo@alpha init --hooks
 ```
 
 ## Configuration
@@ -156,7 +156,7 @@ Enable only specific hooks by choosing matchers:
     "PreToolUse": [
       {
         "matcher": "^(Write|Edit)$",
-        "hooks": [{ "type": "command", "command": "npx claude-flow@alpha hooks pre-edit" }]
+        "hooks": [{ "type": "command", "command": "npx rufflo@alpha hooks pre-edit" }]
       }
     ]
   }
@@ -167,12 +167,12 @@ Enable only specific hooks by choosing matchers:
 
 After installation, MCP tools are available:
 
-- `mcp__claude-flow__swarm_init`
-- `mcp__claude-flow__agent_spawn`
-- `mcp__claude-flow__task_orchestrate`
-- `mcp__claude-flow__memory_usage`
-- `mcp__claude-flow__hooks_route`
-- `mcp__claude-flow__hooks_metrics`
+- `mcp__rufflo__swarm_init`
+- `mcp__rufflo__agent_spawn`
+- `mcp__rufflo__task_orchestrate`
+- `mcp__rufflo__memory_usage`
+- `mcp__rufflo__hooks_route`
+- `mcp__rufflo__hooks_metrics`
 
 ## Marketplace Publishing
 
@@ -180,10 +180,10 @@ After installation, MCP tools are available:
 
 ```json
 {
-  "name": "claude-flow-marketplace",
+  "name": "rufflo-marketplace",
   "plugins": [
     {
-      "name": "claude-flow",
+      "name": "rufflo",
       "description": "Multi-agent swarm coordination",
       "version": "3.0.0",
       "path": "plugin"
@@ -196,7 +196,7 @@ After installation, MCP tools are available:
 
 1. Push to repository
 2. Add marketplace: `/plugin marketplace add name https://github.com/user/repo`
-3. Users install: `/plugin install claude-flow@name`
+3. Users install: `/plugin install rufflo@name`
 
 ## Architecture
 
@@ -212,7 +212,7 @@ After installation, MCP tools are available:
 │         ▼             ▼             ▼             ▼          │
 │  ┌──────────────────────────────────────────────────────────┐│
 │  │              Official Hooks Bridge                        ││
-│  │  (v3/@claude-flow/hooks/src/bridge/official-hooks-bridge)││
+│  │  (v3/@rufflo/hooks/src/bridge/official-hooks-bridge)││
 │  └──────────────────────────────────────────────────────────┘│
 │         │             │             │             │          │
 │         ▼             ▼             ▼             ▼          │
@@ -222,7 +222,7 @@ After installation, MCP tools are available:
 │  └─────────────┴─────────────┴─────────────┴──────────────┘ │
 │                     V3 Hooks System                          │
 ├─────────────────────────────────────────────────────────────┤
-│                    @claude-flow/hooks                        │
+│                    @rufflo/hooks                        │
 │  ┌───────────┬───────────┬───────────┬───────────────────┐  │
 │  │ Registry  │ Executor  │ Daemons   │ MCP Tools         │  │
 │  └───────────┴───────────┴───────────┴───────────────────┘  │

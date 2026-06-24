@@ -1,6 +1,6 @@
 # ADR-078 — Hybrid Retrieval + Outcome Signal for Pretrain
 
-**Status**: Accepted — Implemented in ruflo 3.10.18
+**Status**: Accepted — Implemented in rufflo 3.10.18
 **Date**: 2026-05-30
 **Tracking**: continuation of the self-learning hardening cluster (#2245 → ADR-074 → ADR-075 → ADR-076 → ADR-077)
 **Related**: ADR-074 (wiring), ADR-075 (unified stats), ADR-076 (Structured Distillation), ADR-077 (pretrain)
@@ -124,14 +124,14 @@ This checkout has zero `Revert "<X>"`-style reverts in the 200 most recent commi
 ## Verification
 
 ```bash
-git clone https://github.com/ruvnet/ruflo && cd ruflo
-npm install && ( cd v3/@claude-flow/cli && npx tsc -b )
+git clone https://github.com/ruvnet/ruflo && cd rufflo
+npm install && ( cd v3/@rufflo/cli && npx tsc -b )
 
 # Unit tests (no I/O, no network) — 21 + 7 tests
-( cd v3/@claude-flow/cli && npx vitest run __tests__/hybrid-retrieval.test.ts __tests__/pretrain-from-github.test.ts )
+( cd v3/@rufflo/cli && npx vitest run __tests__/hybrid-retrieval.test.ts __tests__/pretrain-from-github.test.ts )
 
 # Pretrain + A/B retrieval (depends on git history; uses ONNX embedder)
-node v3/@claude-flow/cli/scripts/pretrain-from-github.mjs
-node v3/@claude-flow/cli/scripts/benchmark-pretrained-retrieval.mjs       # hybrid (default)
-HYBRID=0 node v3/@claude-flow/cli/scripts/benchmark-pretrained-retrieval.mjs   # cosine baseline
+node v3/@rufflo/cli/scripts/pretrain-from-github.mjs
+node v3/@rufflo/cli/scripts/benchmark-pretrained-retrieval.mjs       # hybrid (default)
+HYBRID=0 node v3/@rufflo/cli/scripts/benchmark-pretrained-retrieval.mjs   # cosine baseline
 ```

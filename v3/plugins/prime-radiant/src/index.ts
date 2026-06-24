@@ -1,7 +1,7 @@
 /**
  * Prime Radiant Plugin - Entry Point
  *
- * Mathematical AI Interpretability for Claude Flow V3
+ * Mathematical AI Interpretability for Rufflo V3
  *
  * Provides:
  * - Sheaf Laplacian coherence detection (CohomologyEngine)
@@ -263,11 +263,11 @@ export const pluginMetadata = {
   wasmSize: '92KB',
   dependencies: {
     required: [
-      '@claude-flow/memory',
-      '@claude-flow/security',
-      '@claude-flow/coordination',
+      '@rufflo/memory',
+      '@rufflo/security',
+      '@rufflo/coordination',
     ],
-    optional: ['@claude-flow/embeddings', '@claude-flow/aidefence'],
+    optional: ['@rufflo/embeddings', '@rufflo/aidefence'],
   },
   capabilities: [
     'coherence-checking',

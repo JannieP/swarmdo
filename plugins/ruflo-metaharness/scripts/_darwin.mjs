@@ -30,7 +30,7 @@ import { spawnSync, spawn } from 'node:child_process';
 const DEFAULT_TIMEOUT_MS = 60_000;
 
 // Pinned semver range. Bump in lock-step with optionalDependencies in
-// @claude-flow/cli/package.json + ruflo/package.json. The `~` allows
+// @rufflo/cli/package.json + rufflo/package.json. The `~` allows
 // patch upgrades without re-pinning.
 const DARWIN_PIN = '@metaharness/darwin@~0.3.1';
 
@@ -192,7 +192,7 @@ export function emitDarwinDegradedJsonAndExit(reason) {
     generatedAt: new Date().toISOString(),
   };
   console.log(JSON.stringify(payload, null, 2));
-  // Exit 0 — ADR-150 architectural constraint: ruflo continues to function
+  // Exit 0 — ADR-150 architectural constraint: rufflo continues to function
   // when MetaHarness is absent. Same posture as the umbrella scripts.
   process.exit(0);
 }

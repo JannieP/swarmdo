@@ -101,7 +101,7 @@ export class TestSonaBridge implements SonaBridgeInterface {
     try {
       // Try to load SONA WASM module
       // Dynamic import of optional WASM module - use string literal to avoid type error
-      const modulePath = '@claude-flow/ruvector-upstream';
+      const modulePath = '@rufflo/ruvector-upstream';
       const wasmModule = await import(/* @vite-ignore */ modulePath).catch(() => null);
 
       if (wasmModule) {

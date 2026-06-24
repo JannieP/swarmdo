@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Structural smoke test for ruflo-autopilot v0.2.0 (ADR-0001).
+# Structural smoke test for rufflo-autopilot v0.2.0 (ADR-0001).
 set -u
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PASS=0
@@ -42,12 +42,12 @@ step "4. both commands present (/autopilot + /autopilot-status)"
 [[ -f "$ROOT/commands/autopilot.md" ]] && [[ -f "$ROOT/commands/autopilot-status.md" ]] \
   && ok || bad "command files missing"
 
-step "5. README pins @claude-flow/cli to v3.6"
-grep -qE "@claude-flow/cli.*v3\.6|v3\.6.*claude-flow/cli" "$ROOT/README.md" \
+step "5. README pins @rufflo/cli to v3.6"
+grep -qE "@rufflo/cli.*v3\.6|v3\.6.*rufflo/cli" "$ROOT/README.md" \
   && ok || bad "v3.6 pin missing"
 
-step "6. README defers to ruflo-agentdb namespace convention"
-grep -q "ruflo-agentdb" "$ROOT/README.md" \
+step "6. README defers to rufflo-agentdb namespace convention"
+grep -q "rufflo-agentdb" "$ROOT/README.md" \
   && grep -q "Namespace convention" "$ROOT/README.md" \
   && ok || bad "namespace coordination block incomplete"
 

@@ -1,4 +1,4 @@
-# ruflo-ddd
+# rufflo-ddd
 
 Domain-Driven Design scaffolding -- bounded contexts, aggregate roots, domain events, and anti-corruption layers.
 
@@ -9,7 +9,7 @@ Transforms business domains into well-structured bounded contexts with aggregate
 ## Installation
 
 ```bash
-claude --plugin-dir plugins/ruflo-ddd
+claude --plugin-dir plugins/rufflo-ddd
 ```
 
 ## Agents
@@ -63,32 +63,32 @@ Detected via import analysis: upstream/downstream, ACL, shared kernel, published
 
 ## Compatibility
 
-- **CLI:** pinned to `@claude-flow/cli` v3.6 major+minor.
-- **Verification:** `bash plugins/ruflo-ddd/scripts/smoke.sh` is the contract.
+- **CLI:** pinned to `@rufflo/cli` v3.6 major+minor.
+- **Verification:** `bash plugins/rufflo-ddd/scripts/smoke.sh` is the contract.
 
 ## Namespace coordination
 
-This plugin owns the `ddd-patterns` AgentDB namespace (kebab-case, follows the convention from [ruflo-agentdb ADR-0001 §"Namespace convention"](../ruflo-agentdb/docs/adrs/0001-agentdb-optimization.md)). Reserved namespaces (`pattern`, `claude-memories`, `default`) MUST NOT be shadowed.
+This plugin owns the `ddd-patterns` AgentDB namespace (kebab-case, follows the convention from [rufflo-agentdb ADR-0001 §"Namespace convention"](../rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md)). Reserved namespaces (`pattern`, `claude-memories`, `default`) MUST NOT be shadowed.
 
 `ddd-patterns` stores reusable bounded-context shapes, aggregate templates, and event vocabularies for cross-project reuse. Accessed via `memory_*` tools (namespace-routed).
 
 ## Verification
 
 ```bash
-bash plugins/ruflo-ddd/scripts/smoke.sh
+bash plugins/rufflo-ddd/scripts/smoke.sh
 # Expected: "10 passed, 0 failed"
 ```
 
 ## Architecture Decisions
 
-- [`ADR-0001` — ruflo-ddd plugin contract](./docs/adrs/0001-ddd-contract.md)
+- [`ADR-0001` — rufflo-ddd plugin contract](./docs/adrs/0001-ddd-contract.md)
 
 ## Related Plugins
 
-- `ruflo-agentdb` — namespace convention owner; backing store for the domain graph
-- `ruflo-adr` -- Document domain decisions as Architecture Decision Records
-- `ruflo-sparc` -- Architecture phase leverages DDD bounded context patterns
-- `ruflo-migrations` -- Align migration boundaries with aggregate roots
+- `rufflo-agentdb` — namespace convention owner; backing store for the domain graph
+- `rufflo-adr` -- Document domain decisions as Architecture Decision Records
+- `rufflo-sparc` -- Architecture phase leverages DDD bounded context patterns
+- `rufflo-migrations` -- Align migration boundaries with aggregate roots
 
 ## License
 

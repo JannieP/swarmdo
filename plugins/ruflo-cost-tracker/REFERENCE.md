@@ -1,4 +1,4 @@
-# ruflo-cost-tracker — Reference
+# rufflo-cost-tracker — Reference
 
 Companion reference for `cost-analyst`. The agent prompt deliberately stays lean per [ADR-098 Part 2](../../v3/docs/adr/ADR-098-plugin-capability-sync-and-optimization.md); this file collects the pricing table, formulas, alert ladder, optimization catalog, and report shape the agent reads on-demand.
 
@@ -89,4 +89,4 @@ The tier breakdown is the report's most actionable line: it tells the user *what
 
 ## Federation cost integration (ADR-097 pairing)
 
-When `ruflo-federation` is loaded, `federation_send` calls carry optional `maxTokens` / `maxUsd` budget envelopes. Phase 1 enforces at the send side; Phase 3 (deferred) wires `federation_spend` events into this plugin's per-peer rolling aggregate so the cost report includes federated spend grouped by peer. Until Phase 3 ships, treat `cost-report` numbers as a **lower bound** when federation is in use.
+When `rufflo-federation` is loaded, `federation_send` calls carry optional `maxTokens` / `maxUsd` budget envelopes. Phase 1 enforces at the send side; Phase 3 (deferred) wires `federation_spend` events into this plugin's per-peer rolling aggregate so the cost report includes federated spend grouped by peer. Until Phase 3 ships, treat `cost-report` numbers as a **lower bound** when federation is in use.

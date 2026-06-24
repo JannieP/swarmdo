@@ -1,13 +1,13 @@
 # ADR-077 — Pretrain Self-Learning From Repository History
 
-**Status**: Accepted — Implemented in ruflo 3.10.17
+**Status**: Accepted — Implemented in rufflo 3.10.17
 **Date**: 2026-05-30
 **Tracking**: continuation of [#2245](https://github.com/ruvnet/ruflo/issues/2245) self-learning hardening cluster
 **Related**: ADR-074 (wiring), ADR-075 (unified stats), ADR-076 (Structured Distillation)
 
 ## Context
 
-ADRs 074–076 fixed *honesty* (no silent stubs), *coherence* (one aggregator) and *retrieval quality* (Structured Distillation). What was still missing: a way for a fresh ruflo install to start with a **non-empty** learning state. Users on day-one of a project had zero patterns, zero trajectories, and an empty neural store — every "did learning happen?" check legitimately returned 0. The system was honest but useless until many sessions had accumulated.
+ADRs 074–076 fixed *honesty* (no silent stubs), *coherence* (one aggregator) and *retrieval quality* (Structured Distillation). What was still missing: a way for a fresh rufflo install to start with a **non-empty** learning state. Users on day-one of a project had zero patterns, zero trajectories, and an empty neural store — every "did learning happen?" check legitimately returned 0. The system was honest but useless until many sessions had accumulated.
 
 The natural seed source for any repo is the repo itself: git history (commits = intent), and the issue tracker (closed = success, open = in-progress). Both are already-curated, project-specific learning signal.
 
@@ -62,7 +62,7 @@ Every query returns a non-empty top-K. Semantic alignment is mixed (small corpus
 
 ## Deliberately NOT in this round
 
-- A `ruflo pretrain` CLI subcommand wrapping this script — the script-as-tool pattern keeps the contract explicit during the initial rollout. A subcommand can land in a follow-up once flags settle.
+- A `rufflo pretrain` CLI subcommand wrapping this script — the script-as-tool pattern keeps the contract explicit during the initial rollout. A subcommand can land in a follow-up once flags settle.
 - Auto-running pretrain at `init` time — opt-in via the script keeps `init` fast and avoids unexpected GitHub API calls. The usage doc points users to it.
 - A learned distiller (paper's 11× byte compression) — same scope-line as ADR-076. Rule-based extractor is what ships; a learned drop-in replacement is tracked.
 
@@ -70,18 +70,18 @@ Every query returns a non-empty top-K. Semantic alignment is mixed (small corpus
 
 ```bash
 # Repro from a fresh checkout
-git clone https://github.com/ruvnet/ruflo && cd ruflo
-npm install && ( cd v3/@claude-flow/cli && npx tsc -b )
+git clone https://github.com/ruvnet/ruflo && cd rufflo
+npm install && ( cd v3/@rufflo/cli && npx tsc -b )
 
 # Pretrain on this repo's history (default 50 commits + 30 issues)
-node v3/@claude-flow/cli/scripts/pretrain-from-github.mjs
+node v3/@rufflo/cli/scripts/pretrain-from-github.mjs
 # → +80 trajectories, +80 neural patterns, run JSON in docs/benchmarks/runs/
 
 # Validate that what was learned is retrievable
-node v3/@claude-flow/cli/scripts/benchmark-pretrained-retrieval.mjs
+node v3/@rufflo/cli/scripts/benchmark-pretrained-retrieval.mjs
 # → 100% match rate across 10 sample queries
 
 # Regression guard (no live git/gh — embedded fixture)
-( cd v3/@claude-flow/cli && npx vitest run __tests__/pretrain-from-github.test.ts )
+( cd v3/@rufflo/cli && npx vitest run __tests__/pretrain-from-github.test.ts )
 # → 6 passed
 ```

@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document defines the **London School TDD** (Mock-first, Outside-in) approach for Claude-Flow v3 implementation. All 15 agents follow this methodology, with Agent #13 (TDD Test Engineer) as the primary coordinator.
+This document defines the **London School TDD** (Mock-first, Outside-in) approach for Rufflo v3 implementation. All 15 agents follow this methodology, with Agent #13 (TDD Test Engineer) as the primary coordinator.
 
 ---
 

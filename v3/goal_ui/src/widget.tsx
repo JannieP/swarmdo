@@ -27,8 +27,8 @@ interface WidgetConfig {
 
 declare global {
   interface Window {
-    RufloResearchWidgetConfig?: WidgetConfig;
-    RufloResearchWidget?: {
+    RuffloResearchWidgetConfig?: WidgetConfig;
+    RuffloResearchWidget?: {
       init: (containerId?: string) => void;
       version: string;
     };
@@ -36,21 +36,21 @@ declare global {
 }
 
 // Widget initialization function
-function initRufloResearchWidget(containerId: string = "ruflo-research-widget-container"): void {
-  console.log("[RuFlo Research] Starting initialization...");
+function initRuffloResearchWidget(containerId: string = "rufflo-research-widget-container"): void {
+  console.log("[Rufflo Research] Starting initialization...");
   
   const container = document.getElementById(containerId);
   if (!container) {
-    console.error(`[RuFlo Research] Container with id "${containerId}" not found`);
+    console.error(`[Rufflo Research] Container with id "${containerId}" not found`);
     return;
   }
 
-  console.log("[RuFlo Research] Container found:", containerId);
+  console.log("[Rufflo Research] Container found:", containerId);
 
   // Apply widget config if provided
-  const config = window.RufloResearchWidgetConfig;
+  const config = window.RuffloResearchWidgetConfig;
   if (config) {
-    console.log("[RuFlo Research] Applying configuration:", config);
+    console.log("[Rufflo Research] Applying configuration:", config);
     if (config.primaryColor) container.style.setProperty("--primary", config.primaryColor);
     if (config.accentColor) container.style.setProperty("--accent", config.accentColor);
     if (config.backgroundColor) container.style.setProperty("--background", config.backgroundColor);
@@ -78,9 +78,9 @@ function initRufloResearchWidget(containerId: string = "ruflo-research-widget-co
       )
     );
 
-    console.log("[RuFlo Research] ✅ Successfully initialized and rendered");
+    console.log("[Rufflo Research] ✅ Successfully initialized and rendered");
   } catch (error) {
-    console.error("[RuFlo Research] ❌ Initialization error:", error);
+    console.error("[Rufflo Research] ❌ Initialization error:", error);
   }
 }
 
@@ -88,28 +88,28 @@ function initRufloResearchWidget(containerId: string = "ruflo-research-widget-co
 function autoInit(): void {
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => {
-      console.log("[RuFlo Research] DOM ready, auto-initializing...");
-      initRufloResearchWidget();
+      console.log("[Rufflo Research] DOM ready, auto-initializing...");
+      initRuffloResearchWidget();
     });
   } else {
-    console.log("[RuFlo Research] DOM already loaded, initializing...");
+    console.log("[Rufflo Research] DOM already loaded, initializing...");
     // Use setTimeout to ensure script has fully loaded
-    setTimeout(() => initRufloResearchWidget(), 0);
+    setTimeout(() => initRuffloResearchWidget(), 0);
   }
 }
 
 // Initialize only in browser environment
 if (typeof window !== "undefined") {
   // Expose global API
-  window.RufloResearchWidget = {
-    init: initRufloResearchWidget,
+  window.RuffloResearchWidget = {
+    init: initRuffloResearchWidget,
     version: "1.0.0",
   };
   
-  console.log("[RuFlo Research] API exposed on window.RufloResearchWidget");
+  console.log("[Rufflo Research] API exposed on window.RuffloResearchWidget");
   
   // Auto-initialize
   autoInit();
 }
 
-export default initRufloResearchWidget;
+export default initRuffloResearchWidget;

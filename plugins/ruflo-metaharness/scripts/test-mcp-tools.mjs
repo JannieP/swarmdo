@@ -45,14 +45,14 @@ function assert(cond, label) {
 async function main() {
   // Locate the compiled dist of metaharness-tools.
   const distPath = resolve(SCRIPTS_DIR, '..', '..', '..',
-    'v3', '@claude-flow', 'cli', 'dist', 'src', 'mcp-tools', 'metaharness-tools.js');
+    'v3', '@rufflo', 'cli', 'dist', 'src', 'mcp-tools', 'metaharness-tools.js');
 
   if (!existsSync(distPath)) {
     console.log(`# test-mcp-tools — SKIPPED`);
     console.log('');
     console.log(`Compiled dist not present: ${distPath}`);
     console.log(`Build the CLI first:`);
-    console.log(`  cd v3/@claude-flow/cli && npm run build`);
+    console.log(`  cd v3/@rufflo/cli && npm run build`);
     console.log('');
     console.log(`Exit 0 — this script is meaningfully runnable only post-build.`);
     process.exit(0);
@@ -148,7 +148,7 @@ async function main() {
     //   chain-tools      : 180s  (drift_from_history + oia_audit + audit_list)
     // iter 131 — bumped chain-tool budget 90s → 180s. audit_list still
     // timed out at 90s in CI; locally it runs in ~4s, but CI's
-    // `npx @claude-flow/cli@latest memory list` invocation pays both
+    // `npx @rufflo/cli@latest memory list` invocation pays both
     // the npx fetch AND a full CLI startup (which loads agentic-flow +
     // ONNX). 180s gives 30x headroom over the local cost.
     const isChainTool = tool.name === 'metaharness_drift_from_history'
@@ -258,7 +258,7 @@ async function main() {
   // accompanies it.
   const scanTool = tools.find((t) => t.name === 'metaharness_mcp_scan');
   if (scanTool) {
-    // Run against ruflo itself — guaranteed to produce at least the
+    // Run against rufflo itself — guaranteed to produce at least the
     // INFO finding the iter-50 parser test verified manually.
     const r = await scanTool.handler({ path: '.', failOn: 'high' });
     // Either succeeds with structured findings, or gracefully degrades
@@ -357,7 +357,7 @@ async function main() {
       }
 
       // iter 85 — verify iter-78's alertOnNewSeverity MCP input plumbs
-      // through. baselineFile has no findings; current ruflo audit has
+      // through. baselineFile has no findings; current rufflo audit has
       // 1 INFO finding. With alertOnNewSeverity='info' the gate fires
       // and surfaces in the response.
       const baselineNoFindings = pjoin(tmp, 'drift-baseline-no-findings.json');

@@ -1,17 +1,17 @@
 ---
 name: harness-security-bench
-description: Run `@metaharness/darwin security bench` (upstream "Darwin Shield" / ADR-155) — evolves a champion security-detection harness against a 10-vuln / 9-decoy corpus and grades it on TPR/FPR/patch-pass/repro/unsafe vs four baselines (B0 static, B1 LLM-single-pass, B2 fixed-agent, B3 Darwin-champion). Closest reference implementation for ruflo's own ADR-155 nightly self-learning security harness (PR #2417). Degrades gracefully when @metaharness/darwin is absent.
+description: Run `@metaharness/darwin security bench` (upstream "Darwin Shield" / ADR-155) — evolves a champion security-detection harness against a 10-vuln / 9-decoy corpus and grades it on TPR/FPR/patch-pass/repro/unsafe vs four baselines (B0 static, B1 LLM-single-pass, B2 fixed-agent, B3 Darwin-champion). Closest reference implementation for rufflo's own ADR-155 nightly self-learning security harness (PR #2417). Degrades gracefully when @metaharness/darwin is absent.
 argument-hint: "[--population 2] [--cycles 1] [--seed N] [--alert-on-fail]"
 allowed-tools: Bash
 ---
 
 Surfaces the upstream `metaharness-darwin security bench` command. **This is
 the upstream's own ADR-155 — Darwin Shield — and is the closest reference
-implementation for ruflo's nightly self-learning security harness ([#2417](https://github.com/ruvnet/ruflo/pull/2417)).**
+implementation for rufflo's nightly self-learning security harness ([#2417](https://github.com/ruvnet/ruflo/pull/2417)).**
 
-## Why this matters for ruflo's ADR-155
+## Why this matters for rufflo's ADR-155
 
-ruflo's ADR-155 proposes three learning loops (per-dimension confidence,
+rufflo's ADR-155 proposes three learning loops (per-dimension confidence,
 severity calibration, auto-fix bid). Loop A trains on accumulated
 `(finding, dimension, human_outcome)` tuples — but the gradient signal is
 only sound if the underlying detection mechanism converges on a known-good

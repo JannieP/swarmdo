@@ -7,7 +7,7 @@ description: "15-agent hierarchical mesh coordination for v3 implementation. Orc
 
 ## What This Skill Does
 
-Orchestrates the complete 15-agent hierarchical mesh swarm for claude-flow v3 implementation, coordinating parallel execution across domains while maintaining dependencies and timeline adherence.
+Orchestrates the complete 15-agent hierarchical mesh swarm for rufflo v3 implementation, coordinating parallel execution across domains while maintaining dependencies and timeline adherence.
 
 ## Quick Start
 
@@ -178,7 +178,7 @@ class DependencyCoordination {
 class GitHubCoordination {
   async initializeV3Milestone(): Promise<void> {
     await gh.createMilestone({
-      title: 'Claude-Flow v3.0.0 Implementation',
+      title: 'Rufflo v3.0.0 Implementation',
       description: '15-agent swarm implementation of 10 ADRs',
       dueDate: this.calculate14WeekDeadline()
     });

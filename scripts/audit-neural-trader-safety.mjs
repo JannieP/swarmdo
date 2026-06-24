@@ -16,7 +16,7 @@
  * neural-trader` slips back in.
  *
  * Scope: scans tracked markdown / shell / json files in
- *   - plugins/ruflo-neural-trader/
+ *   - plugins/rufflo-neural-trader/
  *   - any agent / skill that mentions neural-trader
  * Exclusions: this script itself (the pattern is the literal we're
  * guarding against) plus the README's "DO NOT" example block.
@@ -40,7 +40,7 @@ const JSON_OUT = process.argv.includes('--json');
 const BAD = /(^|[\s|&;])npm\s+(?:install|i)\s+(?:[^|&\n]*\s)?neural-trader\b/;
 
 const ROOTS = [
-  'plugins/ruflo-neural-trader',
+  'plugins/rufflo-neural-trader',
   // future: add other plugins / docs if they ever recommend neural-trader
 ];
 const SKIP_DIRS = new Set(['node_modules', 'dist', '.git', 'target']);

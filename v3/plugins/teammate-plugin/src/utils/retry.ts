@@ -4,7 +4,7 @@
  * Provides exponential backoff retry logic with
  * configurable delays and error filtering.
  *
- * @module @claude-flow/teammate-plugin/utils/retry
+ * @module @rufflo/teammate-plugin/utils/retry
  */
 
 import type { RetryConfig, RetryState } from '../types.js';

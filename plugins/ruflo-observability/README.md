@@ -1,4 +1,4 @@
-# ruflo-observability
+# rufflo-observability
 
 Structured logging, distributed tracing, and metrics -- correlate agent swarm activity with application telemetry.
 
@@ -9,7 +9,7 @@ Implements OpenTelemetry-compatible structured logging with correlation IDs, dis
 ## Installation
 
 ```bash
-claude --plugin-dir plugins/ruflo-observability
+claude --plugin-dir plugins/rufflo-observability
 ```
 
 ## Agents
@@ -64,12 +64,12 @@ JSON structured logs with `timestamp`, `level`, `message`, `correlationId`, `age
 
 ## Compatibility
 
-- **CLI:** pinned to `@claude-flow/cli` v3.6 major+minor.
-- **Verification:** `bash plugins/ruflo-observability/scripts/smoke.sh` is the contract.
+- **CLI:** pinned to `@rufflo/cli` v3.6 major+minor.
+- **Verification:** `bash plugins/rufflo-observability/scripts/smoke.sh` is the contract.
 
 ## Namespace coordination
 
-This plugin owns the `observability` AgentDB namespace (base-name exception per [ruflo-agentdb ADR-0001 §"Namespace convention"](../ruflo-agentdb/docs/adrs/0001-agentdb-optimization.md), same precedent as `federation` and `migrations`). Reserved namespaces (`pattern`, `claude-memories`, `default`) MUST NOT be shadowed.
+This plugin owns the `observability` AgentDB namespace (base-name exception per [rufflo-agentdb ADR-0001 §"Namespace convention"](../rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md), same precedent as `federation` and `migrations`). Reserved namespaces (`pattern`, `claude-memories`, `default`) MUST NOT be shadowed.
 
 `observability` is accessed via `memory_*` tools (namespace-routed). Stores spans, metric snapshots, and log entries.
 
@@ -78,20 +78,20 @@ This plugin owns the `observability` AgentDB namespace (base-name exception per 
 ## Verification
 
 ```bash
-bash plugins/ruflo-observability/scripts/smoke.sh
+bash plugins/rufflo-observability/scripts/smoke.sh
 # Expected: "10 passed, 0 failed"
 ```
 
 ## Architecture Decisions
 
-- [`ADR-0001` — ruflo-observability plugin contract (namespace-routing fix, smoke as contract)](./docs/adrs/0001-observability-contract.md)
+- [`ADR-0001` — rufflo-observability plugin contract (namespace-routing fix, smoke as contract)](./docs/adrs/0001-observability-contract.md)
 
 ## Related Plugins
 
-- `ruflo-agentdb` — namespace convention owner; defines the routing rules ADR-0001 fixes a violation of
-- `ruflo-cost-tracker` -- Token usage metrics feed into cost attribution
-- `ruflo-iot-cognitum` -- Reuses Z-score anomaly detection for telemetry patterns
-- `ruflo-market-data` -- Data feed health and ingestion latency monitoring
+- `rufflo-agentdb` — namespace convention owner; defines the routing rules ADR-0001 fixes a violation of
+- `rufflo-cost-tracker` -- Token usage metrics feed into cost attribution
+- `rufflo-iot-cognitum` -- Reuses Z-score anomaly detection for telemetry patterns
+- `rufflo-market-data` -- Data feed health and ingestion latency monitoring
 
 ## License
 

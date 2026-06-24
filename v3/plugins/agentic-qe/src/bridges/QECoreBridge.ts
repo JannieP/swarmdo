@@ -34,7 +34,7 @@ import type {
   QELogger,
 } from '../interfaces.js';
 
-// V3 Core types (would be imported from @claude-flow/core in production)
+// V3 Core types (would be imported from @rufflo/core in production)
 interface IAgentService {
   spawn(config: AgentSpawnConfig): Promise<SpawnedAgent>;
   terminate(agentId: string): Promise<void>;

@@ -42,4 +42,4 @@ Seed: 271828
 
 - ADR-126 §SOTA delta — bench-driven perf work
 - ADR-006 — Unified Memory Service (HNSW)
-- `plugins/ruflo-neural-trader/skills/trader-backtest/SKILL.md` — production recall path
+- `plugins/rufflo-neural-trader/skills/trader-backtest/SKILL.md` — production recall path

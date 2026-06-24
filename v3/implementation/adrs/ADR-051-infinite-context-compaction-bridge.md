@@ -2,7 +2,7 @@
 
 **Status:** Implemented
 **Date:** 2026-02-10
-**Authors:** RuvNet, Claude Flow Team
+**Authors:** RuvNet, Rufflo Team
 **Version:** 2.0.0
 **Related:** ADR-006 (Unified Memory), ADR-009 (Hybrid Memory Backend), ADR-027 (RuVector PostgreSQL), ADR-048 (Auto Memory Integration), ADR-049 (Self-Learning Memory GNN), ADR-052 (Statusline Observability)
 **Implementation:** `.claude/helpers/context-persistence-hook.mjs` (~1600 lines), `.claude/helpers/patch-aggressive-prune.mjs` (~120 lines)
@@ -210,19 +210,19 @@ instead of blocking.
 |  |              Memory Backend (tiered)                        |   |
 |  |                                                            |   |
 |  |  Tier 1: SQLite (better-sqlite3)                           |   |
-|  |    -> .claude-flow/data/transcript-archive.db              |   |
+|  |    -> .rufflo/data/transcript-archive.db              |   |
 |  |    -> WAL mode, indexed queries, ACID transactions         |   |
 |  |                                                            |   |
 |  |  Tier 2: RuVector PostgreSQL (if RUVECTOR_* env set)       |   |
 |  |    -> TB-scale storage, pgvector embeddings                |   |
 |  |    -> GNN-enhanced retrieval, self-learning optimizer       |   |
 |  |                                                            |   |
-|  |  Tier 3: AgentDB + HNSW  (if @claude-flow/memory built)   |   |
+|  |  Tier 3: AgentDB + HNSW  (if @rufflo/memory built)   |   |
 |  |    -> 150x-12,500x faster semantic search                  |   |
 |  |    -> Vector-indexed retrieval                             |   |
 |  |                                                            |   |
 |  |  Tier 4: JsonFileBackend                                   |   |
-|  |    -> .claude-flow/data/transcript-archive.json            |   |
+|  |    -> .rufflo/data/transcript-archive.json            |   |
 |  |    -> Zero dependencies, always available                  |   |
 |  +-----------------------------------------------------------+   |
 |                                                                   |
@@ -478,7 +478,7 @@ The autopilot state is read by the statusline script to display real-time metric
 
 ### Autopilot State Persistence
 
-State is persisted to `.claude-flow/data/autopilot-state.json`:
+State is persisted to `.rufflo/data/autopilot-state.json`:
 
 ```json
 {
@@ -552,7 +552,7 @@ State is persisted to `.claude-flow/data/autopilot-state.json`:
 
 1. **No credentials in transcript**: Tool inputs may contain file paths but not secrets
    (Claude Code already redacts sensitive content before tool execution)
-2. **Local storage default**: SQLite writes to `.claude-flow/data/` which is
+2. **Local storage default**: SQLite writes to `.rufflo/data/` which is
    gitignored. No network calls unless RuVector PostgreSQL is configured.
 3. **Parameterized queries**: SQLite uses prepared statements, RuVector uses `$N`
    parameterized queries -- no SQL injection risk.
@@ -584,10 +584,10 @@ State is persisted to `.claude-flow/data/autopilot-state.json`:
 - Automatic fallback to SQLite if PostgreSQL connection fails
 
 ### Phase 3: AgentDB Integration (COMPLETE - Code Ready, Awaiting Build)
-- `resolveBackend()` checks for `@claude-flow/memory` dist at Tier 3
+- `resolveBackend()` checks for `@rufflo/memory` dist at Tier 3
 - If `AgentDBBackend` class exists, uses HNSW-indexed embeddings
 - Cross-session retrieval: semantic search across archived transcripts
-- Transparent upgrade when `@claude-flow/memory` package is built
+- Transparent upgrade when `@rufflo/memory` package is built
 
 ### Phase 4: JsonFileBackend (COMPLETE - Always Available)
 - `JsonFileBackend` class implemented (lines 278-355 of hook script)
@@ -787,8 +787,8 @@ All capabilities confirmed working (2026-02-10):
 
 | Class | Lines | Storage | Features |
 |-------|-------|---------|----------|
-| `SQLiteBackend` | 57-272 | `.claude-flow/data/transcript-archive.db` | WAL mode, indexed queries, prepared statements, importance-ranked queries, access tracking, stale pruning |
-| `JsonFileBackend` | 278-355 | `.claude-flow/data/transcript-archive.json` | Zero dependencies, Map-based in-memory with JSON persist |
+| `SQLiteBackend` | 57-272 | `.rufflo/data/transcript-archive.db` | WAL mode, indexed queries, prepared statements, importance-ranked queries, access tracking, stale pruning |
+| `JsonFileBackend` | 278-355 | `.rufflo/data/transcript-archive.json` | Zero dependencies, Map-based in-memory with JSON persist |
 | `RuVectorBackend` | 361-596 | PostgreSQL with pgvector | Connection pooling (max 3), JSONB metadata, 768-dim vector column, ON CONFLICT dedup, async hash check |
 
 ### Exported Functions (for testing)

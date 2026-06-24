@@ -21,12 +21,12 @@ V2 has concrete provider implementations in `v2/src/providers/` that need to be 
 
 ## Decision
 
-### 1. Create `@claude-flow/providers` Package
+### 1. Create `@rufflo/providers` Package
 
 A dedicated package for LLM provider implementations:
 
 ```
-v3/@claude-flow/providers/
+v3/@rufflo/providers/
 ├── src/
 │   ├── types.ts              # Unified type definitions
 │   ├── base-provider.ts      # Abstract base class with circuit breaker
@@ -73,7 +73,7 @@ interface ILLMProvider {
 
 ### 4. LLM Hooks Integration
 
-Add LLM-specific hooks to `@claude-flow/hooks`:
+Add LLM-specific hooks to `@rufflo/hooks`:
 
 ```typescript
 // Pre-LLM hooks
@@ -149,7 +149,7 @@ Include latest models:
 - Testing requires API mocks
 
 ### Neutral
-- Integration with existing `@claude-flow/integration` multi-model-router
+- Integration with existing `@rufflo/integration` multi-model-router
 - Can coexist with agentic-flow's provider system
 
 ## Implementation Notes
@@ -165,7 +165,7 @@ Include latest models:
 6. ✅ Implement provider manager with load balancing
 
 ### Phase 3: Hooks Integration 🔄 Pending
-7. Add LLM hooks to @claude-flow/hooks
+7. Add LLM hooks to @rufflo/hooks
 8. Integration testing with hooks system
 
 ## Validation Results
@@ -208,7 +208,7 @@ Include latest models:
 ## References
 
 - V2 Provider System: `v2/src/providers/`
-- V3 Multi-Model Router: `v3/@claude-flow/integration/src/multi-model-router.ts`
+- V3 Multi-Model Router: `v3/@rufflo/integration/src/multi-model-router.ts`
 - RuVector ruvLLM: `https://github.com/ruvnet/ruvector/tree/main/examples/ruvLLM`
 - ADR-001: agentic-flow Integration
 - ADR-006: Unified Memory Service

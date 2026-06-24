@@ -646,7 +646,7 @@ export const learnPatternsTool: MCPTool<
 // ============================================================================
 
 // #1554/#1553: Real implementations replacing the previous `return []` stubs.
-// Kept dep-free (no fast-glob, no @claude-flow/embeddings) so the plugin can
+// Kept dep-free (no fast-glob, no @rufflo/embeddings) so the plugin can
 // ship without runtime peer-dep churn — semantic search uses a token-overlap
 // score that returns real ranked results, with a TODO to upgrade to ONNX
 // embeddings when the embeddings package is loadable. Architecture analysis

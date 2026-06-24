@@ -2,12 +2,12 @@
 name: adr-index
 description: Build or rebuild the ADR index + dependency graph by running scripts/import.mjs (handles v3-style and plugin-style ADR formats; one Bash call vs hundreds of MCP round-trips)
 argument-hint: ""
-allowed-tools: Bash mcp__claude-flow__memory_list mcp__claude-flow__memory_search
+allowed-tools: Bash mcp__rufflo__memory_list mcp__rufflo__memory_search
 ---
 
 # ADR Index
 
-Persists every ADR under `*/docs/adr/` or `*/docs/adrs/` to the `adr-patterns` namespace and every relationship (supersedes / amends / related / depends-on) to `adr-edges`. Handles both ADR formats found in the Ruflo monorepo:
+Persists every ADR under `*/docs/adr/` or `*/docs/adrs/` to the `adr-patterns` namespace and every relationship (supersedes / amends / related / depends-on) to `adr-edges`. Handles both ADR formats found in the Rufflo monorepo:
 
 - **v3-style**: `# ADR-097: Title` heading + `**Status**: Proposed` line
 - **plugin-style**: YAML frontmatter (`id: ADR-NNNN`, `status: Proposed`)
@@ -25,7 +25,7 @@ Implementation is in `scripts/import.mjs` (one Bash call) rather than dozens of 
 1. **Run the importer**:
 
    ```bash
-   node plugins/ruflo-adr/scripts/import.mjs
+   node plugins/rufflo-adr/scripts/import.mjs
    ```
 
    Optional env:
@@ -37,7 +37,7 @@ Implementation is in `scripts/import.mjs` (one Bash call) rather than dozens of 
 
 3. **Verify graph integrity** (optional but recommended) via the sibling `adr-verify` skill, which runs `scripts/verify.mjs` and exits 1 on cycles.
 
-4. **Search semantically** via `mcp__claude-flow__memory_search` against the populated namespace:
+4. **Search semantically** via `mcp__rufflo__memory_search` against the populated namespace:
 
    ```
    memory_search --query "federation budget" --namespace adr-patterns

@@ -3,16 +3,16 @@
 **Status**: Proposed (2026-05-21)
 **Date**: 2026-05-21
 **Authors**: claude (drafted with rUv)
-**Related**: ADR-102 (plugin-hook-CLI flag regression CI guard), ADR-103 (witness temporal history), ADR-118 (AIDefence 2.3.0), ADR-125 (memory consolidation), ADR-126 (neural-trader substrate), ruflo issues #2017, #1922, #2078, #2086
+**Related**: ADR-102 (plugin-hook-CLI flag regression CI guard), ADR-103 (witness temporal history), ADR-118 (AIDefence 2.3.0), ADR-125 (memory consolidation), ADR-126 (neural-trader substrate), rufflo issues #2017, #1922, #2078, #2086
 **Supersedes**: nothing — extends the CI smoke pattern established by ADR-102 to the `.github` skills/agents surface
 
 ## Context
 
-The `.github`-related surface in ruflo ships in two layers:
+The `.github`-related surface in rufflo ships in two layers:
 
 1. **Dogfood layer** — `.claude/skills/github-*/SKILL.md` (5 skills: code-review, multi-repo, project-management, release-management, workflow-automation), `.claude/agents/github/*.md` (13 agents), `.claude/helpers/github-{safe.js,setup.sh}`. These drive our own workflow daily.
 
-2. **Init-template layer** — `v3/@claude-flow/cli/.claude/commands/github/*.md` (19 command files), `v3/@claude-flow/cli/.claude/helpers/github-{safe.js,setup.sh}`. These are materialized verbatim into every user project by `ruflo init`.
+2. **Init-template layer** — `v3/@rufflo/cli/.claude/commands/github/*.md` (19 command files), `v3/@rufflo/cli/.claude/helpers/github-{safe.js,setup.sh}`. These are materialized verbatim into every user project by `rufflo init`.
 
 Both layers were last substantively updated on 2025-10-19 — seven months before this ADR. In the same period the project shipped ~10 targeted CI guard + supply-chain hardening PRs: #1922 (CWE-347 plugin registry signature), #2017 (pre-bash hook silent exit 0), #2046 (5-layer supply-chain audit), #2060 (Ed25519 CWE-347 pattern formalization), #2079 (attribution opt-in), #2086 (ruvllm WASM auto-init). None of those fixes touched the `.github` surface.
 
@@ -36,7 +36,7 @@ The fix for #2017 added behavioral checks that drive real input payloads against
 
 ### Category D: Attribution footers are not gated on `--attribution` opt-in
 
-`v3/@claude-flow/cli/src/init/settings-generator.ts` lines 55-60 (introduced in #2079) implement opt-in `Co-Authored-By` using a no-reply bot email. The 19 GitHub command files embed hardcoded `"🤖 Generated with Claude Code"` footers in PR/issue body templates, unconditionally. A user who runs `ruflo init` without `--attribution` still gets attribution injected into every PR or issue the GitHub agents post on their behalf.
+`v3/@rufflo/cli/src/init/settings-generator.ts` lines 55-60 (introduced in #2079) implement opt-in `Co-Authored-By` using a no-reply bot email. The 19 GitHub command files embed hardcoded `"🤖 Generated with Claude Code"` footers in PR/issue body templates, unconditionally. A user who runs `rufflo init` without `--attribution` still gets attribution injected into every PR or issue the GitHub agents post on their behalf.
 
 ## Decision
 
@@ -48,7 +48,7 @@ Land a four-phase modernization of the `.github` skills/agents/helpers/init-temp
 
 Generalizes `smoke-pre-bash-hook.mjs` (introduced for #2017) to the GitHub helper surface. Drives adversarial bodies through `github-safe.js` and asserts the body lands in the temp file verbatim, not shell-expanded. Runs against both copies:
 - `.claude/helpers/github-safe.js` (dogfood)
-- `v3/@claude-flow/cli/.claude/helpers/github-safe.js` (init template)
+- `v3/@rufflo/cli/.claude/helpers/github-safe.js` (init template)
 
 Test cases: body containing backticks, body containing `$()`, body containing semicolons, body longer than 256KB (must be rejected, not truncated), empty body (no-op path, exit 0).
 
@@ -57,7 +57,7 @@ Test cases: body containing backticks, body containing `$()`, body containing se
 Static scan of three trees:
 - `.claude/agents/github/*.md`
 - `.claude/skills/github-*/SKILL.md`
-- `v3/@claude-flow/cli/.claude/commands/github/*.md`
+- `v3/@rufflo/cli/.claude/commands/github/*.md`
 
 For every `uses:` line, asserts the ref is either (a) SHA-pinned (`uses: owner/repo@<40-hex>`) or (b) listed in a new `actions` key added to `.github/supply-chain/allowed-deps.json`. First offense: list the violating file + line. Fails on any violation. Zero runtime deps — pure `readFileSync` + regex.
 
@@ -79,9 +79,9 @@ on:
     paths:
       - '.claude/agents/github/**'
       - '.claude/skills/github-*/**'
-      - 'v3/@claude-flow/cli/.claude/commands/github/**'
+      - 'v3/@rufflo/cli/.claude/commands/github/**'
       - '.claude/helpers/github-safe.js'
-      - 'v3/@claude-flow/cli/.claude/helpers/github-safe.js'
+      - 'v3/@rufflo/cli/.claude/helpers/github-safe.js'
       - 'scripts/smoke-github-*.mjs'
       - '.github/supply-chain/allowed-deps.json'
 ```
@@ -96,7 +96,7 @@ Generalizes the `github-safe.js` hardening pattern and the `hook-handler.cjs` pe
 
 **`github-setup.sh` (both copies)** — add `set -euo pipefail`. Replace `gh auth status &> /dev/null` with a check that parses the output for scope sufficiency. Comment the security rationale.
 
-**13 agent frontmatter `tools:` lines** — add explicit tool restrictions. Reference pattern: the `code-review-swarm.md` agent should list `Bash, Read, Grep, Glob, mcp__claude-flow__*` and explicitly omit `WebFetch`, `Write`. The `release-manager.md` and `release-swarm.md` agents may include `Write` (for CHANGELOG) but not `WebFetch`. No agent that processes GitHub-hosted content (issue bodies, PR descriptions, label names) should have `WebFetch` in its tool list.
+**13 agent frontmatter `tools:` lines** — add explicit tool restrictions. Reference pattern: the `code-review-swarm.md` agent should list `Bash, Read, Grep, Glob, mcp__rufflo__*` and explicitly omit `WebFetch`, `Write`. The `release-manager.md` and `release-swarm.md` agents may include `Write` (for CHANGELOG) but not `WebFetch`. No agent that processes GitHub-hosted content (issue bodies, PR descriptions, label names) should have `WebFetch` in its tool list.
 
 **`swarm-pr.md` and `swarm-issue.md` (both dogfood and init-template copies)** — replace the unquoted `${{ github.event.comment.body }}` and `${{ github.event.label.name }}` interpolations with temp-file indirection following the `github-safe.js` pattern. Specifically:
 ```bash
@@ -115,7 +115,7 @@ rm -f "$COMMENT_BODY_FILE"
 
 Ties directly to the `github-safe.js` temp-file pattern already documented in `.claude/helpers/`.
 
-Acceptance: `smoke-github-safe-injection.mjs` passes with the hardened copies; `grep -r 'github.event.comment.body.*--comment' .claude/agents/ v3/@claude-flow/cli/.claude/` returns no matches.
+Acceptance: `smoke-github-safe-injection.mjs` passes with the hardened copies; `grep -r 'github.event.comment.body.*--comment' .claude/agents/ v3/@rufflo/cli/.claude/` returns no matches.
 
 ### Phase 3 — Action pin upgrade and deprecated-action smoke (small)
 
@@ -137,11 +137,11 @@ Acceptance: `smoke-github-actions-pins.mjs` passes against all files in scope; `
 
 **Init-template command files** — gate the `🤖 Generated with` footer on the `attribution` option that `settings-generator.ts` already exposes. This is implemented via a new `ATTRIBUTION_FOOTER` variable in `helpers-generator.ts` that is set to an empty string by default and to the bot-identity string when `options.attribution === true`. Each of the 19 command files references the variable rather than hardcoding the footer.
 
-This follows the precedent from `settings-generator.ts` lines 55-60 (introduced in #2079 / #2078). The bot email `ruflo-bot@users.noreply.github.com` applies to commit trailers; the PR/issue body footer should use `🤖 Generated with [RuFlo](https://github.com/ruvnet/ruflo)` (same PR footer already in `settings-generator.ts:60`) when attribution is opted in, and no footer otherwise.
+This follows the precedent from `settings-generator.ts` lines 55-60 (introduced in #2079 / #2078). The bot email `rufflo-bot@users.noreply.github.com` applies to commit trailers; the PR/issue body footer should use `🤖 Generated with [Rufflo](https://github.com/ruvnet/ruflo)` (same PR footer already in `settings-generator.ts:60`) when attribution is opted in, and no footer otherwise.
 
 **`Last Updated` stamps** on the four skill SKILL.md files are updated from 2025-10-19 to the date this ADR ships. A comment in each file notes: "update this date when you change the skill so the smoke can detect stale copies." This is convention, not enforced — no smoke needed.
 
-Acceptance: `ruflo init` (without `--attribution`) produces command files with no `🤖` footer string in any PR/issue body template; `ruflo init --attribution` produces the `RuFlo` bot-identity footer.
+Acceptance: `rufflo init` (without `--attribution`) produces command files with no `🤖` footer string in any PR/issue body template; `rufflo init --attribution` produces the `Rufflo` bot-identity footer.
 
 ## Why this is the right shape of fix
 
@@ -152,7 +152,7 @@ All four phases are connect-the-existing-pieces work:
 - Phase 3 is a mechanical pin upgrade gated by a static smoke. The upgraded version (`@v4`) is already what our own `v3-ci.yml` uses (lines 154, 158, 163 of the workflow).
 - Phase 4 mirrors the existing `settings-generator.ts` attribution logic into the helper generator. No new concept.
 
-**Init-template constraint**: anything added to `ruflo init` output must work in an empty directory with only `node` and `gh` available. All four phases satisfy this: static markdown files and `.js`/`.sh` helpers — no new runtime dependencies installed into user projects.
+**Init-template constraint**: anything added to `rufflo init` output must work in an empty directory with only `node` and `gh` available. All four phases satisfy this: static markdown files and `.js`/`.sh` helpers — no new runtime dependencies installed into user projects.
 
 ## Consequences
 
@@ -166,9 +166,9 @@ All four phases are connect-the-existing-pieces work:
 
 ### Negative / trade-offs
 
-- ADR-127 adds 3 new CI smoke jobs that gate every PR touching `.claude/agents/github/`, `.claude/skills/github-*/`, or `v3/@claude-flow/cli/.claude/commands/github/`. Purely-editorial PRs to those files (e.g. fixing a typo in a skill description) now run the smoke suite. The smokes are fast (static file reads, no npm install beyond root node_modules), but they add ~20–30 seconds to the pre-merge wall clock for any contributor touching those trees.
+- ADR-127 adds 3 new CI smoke jobs that gate every PR touching `.claude/agents/github/`, `.claude/skills/github-*/`, or `v3/@rufflo/cli/.claude/commands/github/`. Purely-editorial PRs to those files (e.g. fixing a typo in a skill description) now run the smoke suite. The smokes are fast (static file reads, no npm install beyond root node_modules), but they add ~20–30 seconds to the pre-merge wall clock for any contributor touching those trees.
 - The `ruvnet/swarm-action@v1` SHA-pin requires looking up the current HEAD SHA of that repo and re-doing this whenever the action is updated. Mitigation: add a note in `.github/supply-chain/allowed-deps.json` next to the entry.
-- Phase 2's `tools:` frontmatter additions are a behavioral change for any consumer who has configured `ruflo init` output and relies on `WebFetch` being available in GitHub agents. The downgrade is intentional and documented, but it is a breaking change on the init-template surface.
+- Phase 2's `tools:` frontmatter additions are a behavioral change for any consumer who has configured `rufflo init` output and relies on `WebFetch` being available in GitHub agents. The downgrade is intentional and documented, but it is a breaking change on the init-template surface.
 - Phase 4's attribution gate is only enforced at `init` time. A user who edits their materialized command files after `init` can re-add the footer manually. This is acceptable — the commitment is to the default (`init` output without `--attribution` contains no footer), not to preventing all possible edits.
 
 ### Neutral
@@ -183,26 +183,26 @@ All four phases are connect-the-existing-pieces work:
 | 1 | Injection smoke + Actions pin smoke + CI wiring + supply-chain update | `scripts/smoke-github-safe-injection.mjs` (new), `scripts/smoke-github-actions-pins.mjs` (new), `.github/supply-chain/allowed-deps.json`, `.github/workflows/v3-ci.yml` | S | Both smokes exit 0 in CI; `v3-ci.yml` path filters trigger on agent/skill changes |
 | 2 | Helper hardening + agent frontmatter + unquoted interpolation fix | `github-safe.js` × 2, `github-setup.sh` × 2, 13 agent files × 2 (dogfood + init-template) | M | `smoke-github-safe-injection.mjs` passes hardened copies; grep for unquoted interpolation returns 0 matches |
 | 3 | Deprecated-action smoke + `@v3` → `@v4` pin upgrade | `scripts/smoke-github-release-no-deprecated-action.mjs` (new), 6 agent files × 2, 2 skill files | S | Both new smokes pass; `smoke-github-actions-pins.mjs` passes all in-scope files |
-| 4 | Attribution gate in init-template + skill `Last Updated` stamps | `v3/@claude-flow/cli/src/init/helpers-generator.ts`, 19 command files, 4 skill files | S | `ruflo init` without `--attribution` produces no `🤖` footer; `ruflo init --attribution` produces bot-identity footer |
+| 4 | Attribution gate in init-template + skill `Last Updated` stamps | `v3/@rufflo/cli/src/init/helpers-generator.ts`, 19 command files, 4 skill files | S | `rufflo init` without `--attribution` produces no `🤖` footer; `rufflo init --attribution` produces bot-identity footer |
 
 Recommended landing: Phases 1 + 3 in one PR (pure static checks + mechanical upgrades — no behavioral change). Phase 2 in its own PR (behavioral change to agents and helpers — needs explicit review). Phase 4 in its own PR (init-template behavior change).
 
 ## Acceptance Criteria
 
-The ADR is considered fulfilled when all of the following hold against `@claude-flow/cli@3.8.0-alpha.X`:
+The ADR is considered fulfilled when all of the following hold against `@rufflo/cli@3.8.0-alpha.X`:
 
 1. `node scripts/smoke-github-safe-injection.mjs` exits 0 with adversarial bodies against both handler copies.
 2. `node scripts/smoke-github-actions-pins.mjs` exits 0: all `uses:` refs in scope are SHA-pinned or on the allow-list.
 3. `node scripts/smoke-github-release-no-deprecated-action.mjs` exits 0: no deprecated action references survive.
-4. `grep -r 'github.event.comment.body.*--comment\|github.event.label.name.*[^"]' .claude/agents/github/ v3/@claude-flow/cli/.claude/commands/github/` returns 0 matches.
+4. `grep -r 'github.event.comment.body.*--comment\|github.event.label.name.*[^"]' .claude/agents/github/ v3/@rufflo/cli/.claude/commands/github/` returns 0 matches.
 5. All 13 agent files have explicit `tools:` frontmatter; none include `WebFetch` in the set.
-6. `ruflo init` (no `--attribution`) produces 19 command files with no `🤖 Generated with` string in any PR/issue body template.
-7. `v3-ci.yml` path filters include `.claude/agents/github/**`, `.claude/skills/github-*/**`, and `v3/@claude-flow/cli/.claude/commands/github/**`.
+6. `rufflo init` (no `--attribution`) produces 19 command files with no `🤖 Generated with` string in any PR/issue body template.
+7. `v3-ci.yml` path filters include `.claude/agents/github/**`, `.claude/skills/github-*/**`, and `v3/@rufflo/cli/.claude/commands/github/**`.
 8. No regression in the existing `pre-bash-hook-smoke`, `plugin-registry-signature-smoke`, or `ruvllm-wasm-auto-init-smoke` CI jobs.
 
 ## Out of Scope (Deferred)
 
 - **ADR-128**: Provenance / witness signing for `gh release create` artifacts — generalizing the ADR-103 witness pattern to the release pipeline. This ADR establishes that the helper surface must _not_ recommend deprecated Actions; it does not yet mandate Ed25519-signed release artifacts.
-- **ADR-129**: GitHub Apps token scoping — a separate decision about whether `ruflo init`-materialized workflows should request `contents: read` by default rather than inheriting the ambient `GITHUB_TOKEN` scopes. Gated on a broader permissions-minimization ADR.
+- **ADR-129**: GitHub Apps token scoping — a separate decision about whether `rufflo init`-materialized workflows should request `contents: read` by default rather than inheriting the ambient `GITHUB_TOKEN` scopes. Gated on a broader permissions-minimization ADR.
 - **ADR-130**: SBOM generation in the release workflow. The supply-chain audit covers npm dep CVEs; an SBOM is a separate artifact type requiring a separate decision on format (SPDX vs CycloneDX) and storage location.
 - **Dynamic action pinning automation** (`dependabot.yml` or Renovate configuration for `uses:` refs) — net-new pattern with no prior art in this repo. Phase 3 does the manual upgrade; automation is a follow-on.

@@ -2,7 +2,7 @@
 name: adr-verify
 description: Read back adr-patterns + adr-edges namespaces, surface dangling refs / supersede cycles / status mismatches; exit 1 on cycles
 argument-hint: ""
-allowed-tools: Bash mcp__claude-flow__memory_list mcp__claude-flow__memory_retrieve
+allowed-tools: Bash mcp__rufflo__memory_list mcp__rufflo__memory_retrieve
 ---
 
 # ADR Verify
@@ -22,7 +22,7 @@ Companion to `adr-index`. After import, reads the persisted graph and surfaces i
 ## Steps
 
 ```bash
-node plugins/ruflo-adr/scripts/verify.mjs
+node plugins/rufflo-adr/scripts/verify.mjs
 ```
 
 Optional env:

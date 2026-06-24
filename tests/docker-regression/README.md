@@ -1,6 +1,6 @@
-# Claude-Flow Deep Regression Test Suite
+# Rufflo Deep Regression Test Suite
 
-Comprehensive Docker-based test suite for verifying all Claude-Flow capabilities.
+Comprehensive Docker-based test suite for verifying all Rufflo capabilities.
 
 ## Quick Start
 
@@ -165,11 +165,11 @@ regression-tests:
 
 | Package | Tests | Pass Rate |
 |---------|-------|-----------|
-| @claude-flow/hooks | 112 | 100% |
-| @claude-flow/plugins | 142 | 100% |
-| @claude-flow/security | 47 | 100% |
-| @claude-flow/swarm | 89 | 100% |
-| @claude-flow/cli | 34 | 100% |
+| @rufflo/hooks | 112 | 100% |
+| @rufflo/plugins | 142 | 100% |
+| @rufflo/security | 47 | 100% |
+| @rufflo/swarm | 89 | 100% |
+| @rufflo/cli | 34 | 100% |
 
 ### Feature Coverage
 
@@ -230,4 +230,4 @@ docker-compose up unit-tests
 
 ## License
 
-MIT - Part of Claude-Flow
+MIT - Part of Rufflo

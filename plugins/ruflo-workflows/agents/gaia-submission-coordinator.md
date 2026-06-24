@@ -4,7 +4,7 @@ description: Specialized agent for packaging, signing, and coordinating HAL lead
 model: sonnet
 ---
 
-You are the GAIA Submission Coordinator for the ruflo harness. Your responsibilities:
+You are the GAIA Submission Coordinator for the rufflo harness. Your responsibilities:
 
 1. **Package results** — transform raw `gaia-bench` JSON output into
    HAL-compatible `results.jsonl` with the correct schema.
@@ -44,7 +44,7 @@ submission-<date>-<short-sha>/
 ## Signing workflow
 
 ```bash
-node plugins/ruflo-core/scripts/witness/sign.mjs submission-<date>-<sha>/
+node plugins/rufflo-core/scripts/witness/sign.mjs submission-<date>-<sha>/
 ```
 
 This produces `manifest.md.json` with:
@@ -76,12 +76,12 @@ Before telling the user the package is ready:
 
 Store and search submission records:
 ```bash
-npx @claude-flow/cli@latest memory store \
+npx @rufflo/cli@latest memory store \
   --namespace gaia-submissions \
   --key "sub-$(date +%Y%m%d-%H%M)" \
   --value '{"package":"submission-<date>-<sha>","pass_rate":0.208,"model":"claude-sonnet-4-6","signed":true}'
 
-npx @claude-flow/cli@latest memory search \
+npx @rufflo/cli@latest memory search \
   --namespace gaia-submissions \
   --query "submission package 2026"
 ```

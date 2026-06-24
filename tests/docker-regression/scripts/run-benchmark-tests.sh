@@ -1,5 +1,5 @@
 #!/bin/bash
-# Claude-Flow Benchmark Runner
+# Rufflo Benchmark Runner
 # Standalone benchmark test execution
 
 set -e

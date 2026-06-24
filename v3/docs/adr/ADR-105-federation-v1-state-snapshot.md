@@ -9,7 +9,7 @@
 
 Single source of truth for "where is federation today, what works, what's deferred, and where to look for each piece." Updated on every plugin alpha bump that changes the answer.
 
-## Snapshot as of 2026-05-09 (post-`@claude-flow/plugin-agent-federation@1.0.0-alpha.9`)
+## Snapshot as of 2026-05-09 (post-`@rufflo/plugin-agent-federation@1.0.0-alpha.9`)
 
 ### What works end-to-end
 
@@ -21,10 +21,10 @@ Single source of truth for "where is federation today, what works, what's deferr
 | Budget envelope + hop counter | ADR-097 P1 | `domain/value-objects/federation-budget.ts` | 41 tests |
 | Peer state machine (ACTIVE/SUSPENDED/EVICTED) | ADR-097 P2.a | `domain/value-objects/federation-node-state.ts` + `domain/entities/federation-node.ts` | 27 tests |
 | Breaker service + outbound short-circuit | ADR-097 P2.b | `application/federation-breaker-service.ts` | 25 tests |
-| Cost-tracker consumer (ruflo-cost-tracker) | ADR-097 P3 consumer | `plugins/ruflo-cost-tracker/scripts/federation.mjs` | Integration |
+| Cost-tracker consumer (rufflo-cost-tracker) | ADR-097 P3 consumer | `plugins/rufflo-cost-tracker/scripts/federation.mjs` | Integration |
 | Coordinator `reportSpend()` + `SpendReporter` interface | ADR-097 P3 upstream | `application/spend-reporter.ts` (`InMemorySpendReporter` reference) | 10 tests |
 | 3 operator MCP tools (`federation_breaker_status`, `_evict`, `_reactivate`) | ADR-097 P4 | `mcp-tools.ts` | 11 coordinator tests |
-| `ruflo doctor --component federation` health-check | ADR-097 P4 | `v3/@claude-flow/cli/src/commands/doctor.ts` | Smoke |
+| `rufflo doctor --component federation` health-check | ADR-097 P4 | `v3/@rufflo/cli/src/commands/doctor.ts` | Smoke |
 | Wire transport (WebSocket fallback today, QUIC roadmap) | ADR-104 | Plugin imports `agentic-flow/transport/loader` | Live mac↔ruvultra over tailscale, 150ms send |
 
 ### What's deferred (each its own ADR)
@@ -41,10 +41,10 @@ Single source of truth for "where is federation today, what works, what's deferr
 
 | Package | Tag | Version |
 |---|---|---|
-| `@claude-flow/plugin-agent-federation` | `alpha` | `1.0.0-alpha.9` |
-| `@claude-flow/cli` | `alpha`/`latest`/`v3alpha` | `3.7.0-alpha.20` |
-| `claude-flow` | `alpha`/`latest`/`v3alpha` | `3.7.0-alpha.20` |
-| `ruflo` | `alpha`/`latest`/`v3alpha` | `3.7.0-alpha.20` |
+| `@rufflo/plugin-agent-federation` | `alpha` | `1.0.0-alpha.9` |
+| `@rufflo/cli` | `alpha`/`latest`/`v3alpha` | `3.7.0-alpha.20` |
+| `rufflo` | `alpha`/`latest`/`v3alpha` | `3.7.0-alpha.20` |
+| `rufflo` | `alpha`/`latest`/`v3alpha` | `3.7.0-alpha.20` |
 | `agentic-flow` (companion fix) | `fix` | `2.0.12-fix.2` (until [ruvnet/agentic-flow#153](https://github.com/ruvnet/agentic-flow/pull/153) merges) |
 
 ### Plugin surface (alpha.9)
@@ -64,10 +64,10 @@ Single source of truth for "where is federation today, what works, what's deferr
 
 ```bash
 # Install
-npm install @claude-flow/plugin-agent-federation@alpha
+npm install @rufflo/plugin-agent-federation@alpha
 
 # Health-check
-npx ruflo@latest doctor --component federation
+npx rufflo@latest doctor --component federation
 
 # Inspect breaker (from MCP context)
 federation_breaker_status

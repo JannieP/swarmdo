@@ -284,7 +284,7 @@ export class HttpTransport extends EventEmitter implements ITransport {
     // Server info
     this.app.get('/info', (req, res) => {
       res.json({
-        name: 'Claude-Flow MCP Server V3',
+        name: 'Rufflo MCP Server V3',
         version: '3.0.0',
         transport: 'http',
         capabilities: {

@@ -8,7 +8,7 @@ author: Claude Code Flow
 requires:
   - github-cli
   - ruv-swarm
-  - claude-flow
+  - rufflo
 capabilities:
   - Multi-agent code review
   - Automated PR management
@@ -1027,10 +1027,10 @@ fi
 ```javascript
 [Single Message - Parallel Execution]:
   // Initialize coordination
-  mcp__claude-flow__swarm_init { topology: "hierarchical", maxAgents: 5 }
-  mcp__claude-flow__agent_spawn { type: "reviewer", name: "Senior Reviewer" }
-  mcp__claude-flow__agent_spawn { type: "tester", name: "QA Engineer" }
-  mcp__claude-flow__agent_spawn { type: "coordinator", name: "Merge Coordinator" }
+  mcp__rufflo__swarm_init { topology: "hierarchical", maxAgents: 5 }
+  mcp__rufflo__agent_spawn { type: "reviewer", name: "Senior Reviewer" }
+  mcp__rufflo__agent_spawn { type: "tester", name: "QA Engineer" }
+  mcp__rufflo__agent_spawn { type: "coordinator", name: "Merge Coordinator" }
 
   // Create and manage PR using gh CLI
   Bash("gh pr create --title 'Feature: Add authentication' --base main")
@@ -1120,7 +1120,7 @@ npx ruv-swarm github review-init --pr 123 --parallel --cache-results
 ### Documentation
 - [GitHub CLI Documentation](https:/$cli.github.com$manual/)
 - [RUV Swarm Guide](https:/$github.com$ruvnet$ruv-swarm)
-- [Claude Flow Integration](https:/$github.com$ruvnet$claude-flow)
+- [Rufflo Integration](https:/$github.com$ruvnet$rufflo)
 
 ### Support
 - GitHub Issues: Report bugs and request features

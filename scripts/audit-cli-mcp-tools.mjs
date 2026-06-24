@@ -2,7 +2,7 @@
 /**
  * CLI ↔ MCP tool coverage audit — regression guard for #1916.
  *
- * The `ruflo agent logs <id>` CLI subcommand referenced an `agent_logs` MCP
+ * The `rufflo agent logs <id>` CLI subcommand referenced an `agent_logs` MCP
  * tool that was never registered, so the command died with
  * `MCP tool not found: agent_logs`. There turned out to be ~20 more CLI
  * subcommands with the same shape (`callMCPTool('<name>', …)` where `<name>`
@@ -13,8 +13,8 @@
  * dangling reference.
  *
  * It scans every `callMCPTool('<name>', …)` reference in
- * `v3/@claude-flow/cli/src/commands/*.ts` and checks the name is registered
- * by some MCPTool definition in `v3/@claude-flow/cli/src/mcp-tools/*.ts`
+ * `v3/@rufflo/cli/src/commands/*.ts` and checks the name is registered
+ * by some MCPTool definition in `v3/@rufflo/cli/src/mcp-tools/*.ts`
  * (the files `mcp-client.ts` assembles into TOOL_REGISTRY).
  *
  * Usage:
@@ -27,7 +27,7 @@ import { readFileSync, readdirSync, existsSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const REPO_ROOT = process.cwd();
-const CLI_SRC = join(REPO_ROOT, 'v3', '@claude-flow', 'cli', 'src');
+const CLI_SRC = join(REPO_ROOT, 'v3', '@rufflo', 'cli', 'src');
 const COMMANDS_DIR = join(CLI_SRC, 'commands');
 const MCP_CLIENT = join(CLI_SRC, 'mcp-client.ts'); // single source of truth for what is registered
 const BASELINE_FILE = join(REPO_ROOT, 'verification', 'cli-mcp-tool-baseline.json');

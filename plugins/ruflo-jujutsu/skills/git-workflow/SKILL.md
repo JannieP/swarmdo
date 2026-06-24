@@ -2,7 +2,7 @@
 name: git-workflow
 description: Advanced git workflows with branch management, conflict resolution, and PR lifecycle
 argument-hint: "<branch|pr|merge|rebase> [options]"
-allowed-tools: mcp__claude-flow__analyze_diff mcp__claude-flow__analyze_diff-risk mcp__claude-flow__analyze_diff-stats mcp__claude-flow__github_pr_manage mcp__claude-flow__github_repo_analyze mcp__claude-flow__github_metrics Bash
+allowed-tools: mcp__rufflo__analyze_diff mcp__rufflo__analyze_diff-risk mcp__rufflo__analyze_diff-stats mcp__rufflo__github_pr_manage mcp__rufflo__github_repo_analyze mcp__rufflo__github_metrics Bash
 ---
 
 # Git Workflow
@@ -15,10 +15,10 @@ When managing complex git operations — multi-branch workflows, release branchi
 
 ## Steps
 
-1. **Analyze repo** — call `mcp__claude-flow__github_repo_analyze` for repository health metrics
-2. **Check diff risk** — call `mcp__claude-flow__analyze_diff-risk` before merging
-3. **Manage PRs** — call `mcp__claude-flow__github_pr_manage` for PR lifecycle operations
-4. **View metrics** — call `mcp__claude-flow__github_metrics` for merge frequency, review times, etc.
+1. **Analyze repo** — call `mcp__rufflo__github_repo_analyze` for repository health metrics
+2. **Check diff risk** — call `mcp__rufflo__analyze_diff-risk` before merging
+3. **Manage PRs** — call `mcp__rufflo__github_pr_manage` for PR lifecycle operations
+4. **View metrics** — call `mcp__rufflo__github_metrics` for merge frequency, review times, etc.
 
 ## Common workflows
 
@@ -41,5 +41,5 @@ git checkout -b release/v1.2.0
 ## CLI alternative
 
 ```bash
-npx @claude-flow/cli@latest hooks pre-task --description "git workflow"
+npx @rufflo/cli@latest hooks pre-task --description "git workflow"
 ```

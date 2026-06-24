@@ -1,7 +1,7 @@
 /**
  * Test Intelligence Plugin - Bridges Barrel Export
  *
- * @module @claude-flow/plugin-test-intelligence/bridges
+ * @module @rufflo/plugin-test-intelligence/bridges
  */
 
 export {

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Structural smoke test for ruflo-cost-tracker v0.3.0 (ADR-0001 + ADR-0002).
+# Structural smoke test for rufflo-cost-tracker v0.3.0 (ADR-0001 + ADR-0002).
 set -u
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PASS=0
@@ -49,12 +49,12 @@ else
   bad "missing dual-path documentation"
 fi
 
-step "5. README pins @claude-flow/cli to v3.6"
-grep -qE "@claude-flow/cli.*v3\.6|v3\.6.*claude-flow/cli" "$ROOT/README.md" \
+step "5. README pins @rufflo/cli to v3.6"
+grep -qE "@rufflo/cli.*v3\.6|v3\.6.*rufflo/cli" "$ROOT/README.md" \
   && ok || bad "v3.6 pin missing"
 
-step "6. README defers to ruflo-agentdb namespace convention"
-grep -q "ruflo-agentdb" "$ROOT/README.md" \
+step "6. README defers to rufflo-agentdb namespace convention"
+grep -q "rufflo-agentdb" "$ROOT/README.md" \
   && grep -q "Namespace convention" "$ROOT/README.md" \
   && ok || bad "namespace coordination block incomplete"
 
@@ -100,7 +100,7 @@ grep -q '^allowed-tools:[[:space:]]*\*' "$F" && miss="$miss wildcard"
 step "12. cost-compact-context skill references getTokenOptimizer + tags upstream figures"
 F="$ROOT/skills/cost-compact-context/SKILL.md"
 miss=""
-grep -qE "getTokenOptimizer|@claude-flow/integration" "$F" || miss="$miss bridge-ref"
+grep -qE "getTokenOptimizer|@rufflo/integration" "$F" || miss="$miss bridge-ref"
 grep -q "claimed upstream, not yet verified" "$F" || miss="$miss upstream-disclaimer"
 grep -qE "agentic-flow.*not (installed|available)|fallback|bridge[- ](unavailable|reported)" "$F" || miss="$miss fallback-doc"
 [[ -z "$miss" ]] && ok || bad "$miss"
@@ -118,11 +118,11 @@ miss=""
 grep -q "Background workers" "$F" || miss="$miss section"
 grep -q "optimize" "$F" || miss="$miss optimize-worker"
 grep -q "benchmark" "$F" || miss="$miss benchmark-worker"
-grep -q "ruflo-loop-workers" "$F" || miss="$miss cross-link"
+grep -q "rufflo-loop-workers" "$F" || miss="$miss cross-link"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
-step "15. ruflo-cost.md documents 'cost workers' subcommand with hooks_worker-status"
-F="$ROOT/commands/ruflo-cost.md"
+step "15. rufflo-cost.md documents 'cost workers' subcommand with hooks_worker-status"
+F="$ROOT/commands/rufflo-cost.md"
 miss=""
 grep -q "cost workers" "$F" || miss="$miss subcommand"
 grep -q "hooks_worker-status" "$F" || miss="$miss tool-ref"
@@ -217,8 +217,8 @@ grep -qE "winRate|win rate" "$F" || miss="$miss win-rate-mention"
 grep -q '^allowed-tools:[[:space:]]*\*' "$F" && miss="$miss wildcard"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
-step "26. ruflo-cost.md documents 'cost benchmark' subcommand"
-F="$ROOT/commands/ruflo-cost.md"
+step "26. rufflo-cost.md documents 'cost benchmark' subcommand"
+F="$ROOT/commands/rufflo-cost.md"
 grep -q "cost benchmark" "$F" && grep -q -- "--anthropic" "$F" \
   && ok || bad "missing subcommand or anthropic flag"
 
@@ -271,8 +271,8 @@ printf '%s\n' "$LOOKED_LINE" | grep -q 'D--project-Subcloudy' || miss="$miss not
 printf '%s\n' "$LOOKED_LINE" | grep -qF 'project\Subcloudy' && miss="$miss corrupt-encoded-path"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
-step "30. ruflo-cost.md documents 'cost track' subcommand"
-F="$ROOT/commands/ruflo-cost.md"
+step "30. rufflo-cost.md documents 'cost track' subcommand"
+F="$ROOT/commands/rufflo-cost.md"
 grep -qE "cost track" "$F" && grep -qE "session.*jsonl|track\.mjs" "$F" \
   && ok || bad "missing cost-track subcommand or session-source ref"
 
@@ -306,8 +306,8 @@ if printf '%s\n' "$post_alert_lines" | grep -qE "return console\.log\(JSON\.stri
 fi
 [[ -z "$miss" ]] && ok || bad "$miss"
 
-step "33. ruflo-cost.md documents 'cost budget set/get/check' subcommands"
-F="$ROOT/commands/ruflo-cost.md"
+step "33. rufflo-cost.md documents 'cost budget set/get/check' subcommands"
+F="$ROOT/commands/rufflo-cost.md"
 miss=""
 grep -q "cost budget set" "$F" || miss="$miss set"
 grep -q "cost budget get" "$F" || miss="$miss get"
@@ -330,8 +330,8 @@ grep -q "hooks.*model-outcome" "$F" || miss="$miss no-hooks-call"
 grep -qE "success.*escalated.*failure|ALLOWED" "$F" || miss="$miss no-validation"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
-step "36. ruflo-cost.md documents 'cost outcome' subcommand"
-grep -q "cost outcome" "$ROOT/commands/ruflo-cost.md" \
+step "36. rufflo-cost.md documents 'cost outcome' subcommand"
+grep -q "cost outcome" "$ROOT/commands/rufflo-cost.md" \
   && ok || bad "missing"
 
 step "37. compact.mjs replaces inline Node block in cost-compact-context"
@@ -359,8 +359,8 @@ grep -q "trend\.mjs" "$F2" || miss="$miss skill-no-script-ref"
 grep -q '^allowed-tools:[[:space:]]*\*' "$F2" && miss="$miss wildcard"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
-step "39. ruflo-cost.md documents 'cost trend' subcommand"
-grep -q "cost trend" "$ROOT/commands/ruflo-cost.md" \
+step "39. rufflo-cost.md documents 'cost trend' subcommand"
+grep -q "cost trend" "$ROOT/commands/rufflo-cost.md" \
   && ok || bad "missing"
 
 step "39c. cost-summary skill + summary.mjs (programmatic dump)"
@@ -521,15 +521,15 @@ grep -qE "cache_creation_input_tokens|Cache W" "$F2" || miss="$miss no-cache-wri
 grep -q '^allowed-tools:[[:space:]]*\*' "$F2" && miss="$miss wildcard"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
-step "39m. ruflo-cost.md documents 'cost session' subcommand"
-F="$ROOT/commands/ruflo-cost.md"
+step "39m. rufflo-cost.md documents 'cost session' subcommand"
+F="$ROOT/commands/rufflo-cost.md"
 miss=""
 grep -q "cost session" "$F" || miss="$miss subcommand"
 grep -qE "session-id|drill.down|per-message" "$F" || miss="$miss no-concept"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
-step "39k. ruflo-cost.md documents 'cost diff' subcommand"
-F="$ROOT/commands/ruflo-cost.md"
+step "39k. rufflo-cost.md documents 'cost diff' subcommand"
+F="$ROOT/commands/rufflo-cost.md"
 miss=""
 grep -q "cost diff" "$F" || miss="$miss subcommand"
 grep -q "alert-on-pct" "$F" || miss="$miss pct-flag"
@@ -537,24 +537,24 @@ grep -q "alert-on-usd" "$F" || miss="$miss usd-flag"
 grep -qE "baseline.*current|snapshot" "$F" || miss="$miss snapshot-concept"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
-step "39i. ruflo-cost.md documents 'cost health' subcommand"
-F="$ROOT/commands/ruflo-cost.md"
+step "39i. rufflo-cost.md documents 'cost health' subcommand"
+F="$ROOT/commands/rufflo-cost.md"
 miss=""
 grep -q "cost health" "$F" || miss="$miss subcommand"
 grep -qE "max\(|composite|HEALTHY" "$F" || miss="$miss no-concept"
 grep -q "alert-acceleration" "$F" || miss="$miss no-burn-flag"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
-step "39g. ruflo-cost.md documents 'cost anomaly' subcommand with alert flag"
-F="$ROOT/commands/ruflo-cost.md"
+step "39g. rufflo-cost.md documents 'cost anomaly' subcommand with alert flag"
+F="$ROOT/commands/rufflo-cost.md"
 miss=""
 grep -q "cost anomaly" "$F" || miss="$miss subcommand"
 grep -q "alert-on-outliers" "$F" || miss="$miss alert-flag"
 grep -qE "threshold|modified z|MAD" "$F" || miss="$miss algo-concept"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
-step "39e. ruflo-cost.md documents 'cost burn' subcommand with alert flag"
-F="$ROOT/commands/ruflo-cost.md"
+step "39e. rufflo-cost.md documents 'cost burn' subcommand with alert flag"
+F="$ROOT/commands/rufflo-cost.md"
 miss=""
 grep -q "cost burn" "$F" || miss="$miss subcommand"
 grep -q "alert-on-acceleration-pct" "$F" || miss="$miss alert-flag"

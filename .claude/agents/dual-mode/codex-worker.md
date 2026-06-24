@@ -46,7 +46,7 @@ You are a headless Codex worker executing in background mode. You run independen
 ### Before Starting Task
 ```javascript
 // 1. Search for relevant patterns
-mcp__ruflo__memory_search {
+mcp__rufflo__memory_search {
   query: "keywords from task",
   namespace: "patterns",
   limit: 5
@@ -59,7 +59,7 @@ mcp__ruflo__memory_search {
 ### After Completing Task
 ```javascript
 // 3. Store what worked for future workers
-mcp__ruflo__memory_store {
+mcp__rufflo__memory_store {
   key: "pattern-[task-type]",
   value: JSON.stringify({
     approach: "what worked",
@@ -70,7 +70,7 @@ mcp__ruflo__memory_store {
 }
 
 // 4. Store result for coordinator
-mcp__ruflo__memory_store {
+mcp__rufflo__memory_store {
   key: "result-[worker-id]",
   value: JSON.stringify({
     status: "complete",
@@ -152,13 +152,13 @@ Store findings in memory.
 ### Available Tools
 ```javascript
 // Search for patterns before starting
-mcp__ruflo__memory_search {
+mcp__rufflo__memory_search {
   query: "[task keywords]",
   namespace: "patterns"
 }
 
 // Store results and patterns
-mcp__ruflo__memory_store {
+mcp__rufflo__memory_store {
   key: "[result-key]",
   value: "[json-value]",
   namespace: "results",
@@ -166,7 +166,7 @@ mcp__ruflo__memory_store {
 }
 
 // Check swarm status (optional)
-mcp__ruflo__swarm_status {
+mcp__rufflo__swarm_status {
   verbose: true
 }
 ```

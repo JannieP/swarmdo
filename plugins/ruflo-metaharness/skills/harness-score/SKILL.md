@@ -5,9 +5,9 @@ argument-hint: "[--path .] [--alert-on-fit-below 70] [--format table|json]"
 allowed-tools: Bash
 ---
 
-Surfaces the upstream `metaharness score` CLI as a ruflo skill. Use when
+Surfaces the upstream `metaharness score` CLI as a rufflo skill. Use when
 Claude Code needs to assess whether a repo is ready for harness adoption
-before recommending the user run `npx ruflo init` or `harness-mint`.
+before recommending the user run `npx rufflo init` or `harness-mint`.
 
 ## Algorithm
 
@@ -21,7 +21,7 @@ Implementation: [`scripts/score.mjs`](../../scripts/score.mjs).
 3. If `--alert-on-fit-below N`: exit 1 when `harnessFit < N`.
 4. Output JSON (default) or markdown table.
 
-## Phase-0 baseline (ruflo's own scorecard, measured 2026-06-16)
+## Phase-0 baseline (rufflo's own scorecard, measured 2026-06-16)
 
 | Dimension | Value |
 |---|---:|
@@ -36,14 +36,14 @@ Implementation: [`scripts/score.mjs`](../../scripts/score.mjs).
 | template | vertical:coding |
 | scaffoldReady | true |
 
-Ruflo passes its own readiness check. `memoryUsefulness: 40` is the
+Rufflo passes its own readiness check. `memoryUsefulness: 40` is the
 weakest dimension — track this as a leading indicator for future memory
 work in the AgentDB layer.
 
 ## CI integration
 
 ```bash
-node plugins/ruflo-metaharness/scripts/score.mjs --alert-on-fit-below 70 --format json
+node plugins/rufflo-metaharness/scripts/score.mjs --alert-on-fit-below 70 --format json
 ```
 
 Exit 1 fails the build. Pair with `harness-genome` for the full
@@ -62,5 +62,5 @@ no network, registry unreachable), the script emits:
 }
 ```
 
-and exits 0. Ruflo continues to function — this is the architectural
+and exits 0. Rufflo continues to function — this is the architectural
 constraint in action.

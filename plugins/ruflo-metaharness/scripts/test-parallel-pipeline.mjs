@@ -101,7 +101,7 @@ async function main() {
   // ──────────────────────────────────────────────────────────────────
   console.log('\nPhase 2 — verify recorder TS module exports');
 
-  const recorderTs = join(SCRIPTS_DIR, '..', '..', '..', 'v3', '@claude-flow', 'cli', 'src', 'ruvector', 'router-parallel-recorder.ts');
+  const recorderTs = join(SCRIPTS_DIR, '..', '..', '..', 'v3', '@rufflo', 'cli', 'src', 'ruvector', 'router-parallel-recorder.ts');
   const recorderSrc = readFileSync(recorderTs, 'utf-8');
 
   assert(/export function recordPair\b/.test(recorderSrc), 'recordPair exported');

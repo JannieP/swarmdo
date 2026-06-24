@@ -5,7 +5,7 @@
 
 ## Context
 
-Claude Flow V3 uses embeddings extensively for:
+Rufflo V3 uses embeddings extensively for:
 - Memory vector search (HNSW-indexed)
 - Neural pattern recognition
 - Semantic drift detection
@@ -21,7 +21,7 @@ Currently, embeddings are initialized lazily when first used. This causes:
 ### Current Architecture
 
 ```
-@claude-flow/embeddings
+@rufflo/embeddings
 ├── embedding-service.ts      # Core embedding providers
 ├── hyperbolic.ts            # Poincaré ball transformations
 ├── neural-integration.ts    # agentic-flow substrate wrapper
@@ -96,10 +96,10 @@ function getMigrationSteps(target: string) {
       name: 'Embedding Models',
       description: 'Download ONNX embedding model for V3',
       source: 'N/A (cloud download)',
-      dest: '.claude-flow/models/',
+      dest: '.rufflo/models/',
       execute: async () => {
-        const { downloadEmbeddingModel } = await import('@claude-flow/embeddings');
-        await downloadEmbeddingModel('all-MiniLM-L6-v2', '.claude-flow/models/');
+        const { downloadEmbeddingModel } = await import('@rufflo/embeddings');
+        await downloadEmbeddingModel('all-MiniLM-L6-v2', '.rufflo/models/');
       }
     });
   }
@@ -112,7 +112,7 @@ Add embedding-specific pretraining:
 
 ```bash
 # New pretrain options
-npx claude-flow@v3alpha hooks pretrain \
+npx rufflo@v3alpha hooks pretrain \
   --model-type embeddings \
   --source-model all-MiniLM-L6-v2 \
   --hyperbolic true \
@@ -128,14 +128,14 @@ npx claude-flow@v3alpha hooks pretrain \
 
 ### 4. Configuration Schema
 
-Add to `claude-flow.config.json`:
+Add to `rufflo.config.json`:
 
 ```json
 {
   "embeddings": {
     "provider": "agentic-flow",
     "model": "all-MiniLM-L6-v2",
-    "modelPath": ".claude-flow/models/",
+    "modelPath": ".rufflo/models/",
     "dimension": 384,
     "cacheSize": 256,
     "hyperbolic": {
@@ -158,7 +158,7 @@ Add to `claude-flow.config.json`:
 #### `embeddings init`
 ```bash
 # Initialize embeddings subsystem
-npx claude-flow@v3alpha embeddings init [options]
+npx rufflo@v3alpha embeddings init [options]
 
 Options:
   --model <id>      Model to download (default: all-MiniLM-L6-v2)
@@ -171,7 +171,7 @@ Options:
 #### `embeddings status`
 ```bash
 # Check embeddings status
-npx claude-flow@v3alpha embeddings status
+npx rufflo@v3alpha embeddings status
 
 Output:
 ╭────────────────────────────────────────────────────╮
@@ -189,10 +189,10 @@ Output:
 #### `embeddings download`
 ```bash
 # Download specific model
-npx claude-flow@v3alpha embeddings download <model-id>
+npx rufflo@v3alpha embeddings download <model-id>
 
 # Example
-npx claude-flow@v3alpha embeddings download all-mpnet-base-v2
+npx rufflo@v3alpha embeddings download all-mpnet-base-v2
 Downloading all-mpnet-base-v2... [████████░░] 80% (88/110 MB)
 ```
 
@@ -210,7 +210,7 @@ Downloading all-mpnet-base-v2... [████████░░] 80% (88/110 MB
 │                          │                    │              │
 │                          ▼                    ▼              │
 │                  ┌──────────────┐    ┌─────────────────┐   │
-│                  │ Config write │    │ .claude-flow/   │   │
+│                  │ Config write │    │ .rufflo/   │   │
 │                  │ embeddings{} │    │ models/<model>  │   │
 │                  └──────────────┘    └─────────────────┘   │
 │                                                              │
@@ -312,7 +312,7 @@ export const DEFAULT_INIT_OPTIONS: InitOptions = {
 async function initializeEmbeddings(options: InitOptions): Promise<void> {
   if (!options.embeddings.enabled) return;
 
-  const configDir = path.join(options.targetDir, '.claude-flow');
+  const configDir = path.join(options.targetDir, '.rufflo');
   const modelDir = path.join(configDir, 'models');
 
   // Create model directory
@@ -320,7 +320,7 @@ async function initializeEmbeddings(options: InitOptions): Promise<void> {
 
   // Download model if requested
   if (options.embeddings.predownload) {
-    const { downloadEmbeddingModel } = await import('@claude-flow/embeddings');
+    const { downloadEmbeddingModel } = await import('@rufflo/embeddings');
     await downloadEmbeddingModel(
       options.embeddings.model,
       modelDir,
@@ -359,17 +359,17 @@ async function migrateEmbeddings(ctx: CommandContext): Promise<void> {
   output.writeln('Migrating embeddings...');
 
   // 1. Check for V2 embedding cache
-  const v2CachePath = path.join(ctx.cwd, '.claude-flow', 'cache', 'embeddings.db');
+  const v2CachePath = path.join(ctx.cwd, '.rufflo', 'cache', 'embeddings.db');
   const v2Exists = fs.existsSync(v2CachePath);
 
   // 2. Download V3 model
-  const { downloadEmbeddingModel, listEmbeddingModels } = await import('@claude-flow/embeddings');
+  const { downloadEmbeddingModel, listEmbeddingModels } = await import('@rufflo/embeddings');
   const models = await listEmbeddingModels();
   const targetModel = models.find(m => m.id === 'all-MiniLM-L6-v2');
 
   if (!targetModel?.downloaded) {
     output.writeln(output.dim('  Downloading ONNX model...'));
-    await downloadEmbeddingModel('all-MiniLM-L6-v2', '.claude-flow/models/');
+    await downloadEmbeddingModel('all-MiniLM-L6-v2', '.rufflo/models/');
     output.writeln(output.success('  ✓ Model downloaded'));
   }
 
@@ -417,14 +417,14 @@ const pretrainCommand: Command = {
 
       // 1. Ensure model downloaded
       const { downloadEmbeddingModel, createEmbeddingService } =
-        await import('@claude-flow/embeddings');
+        await import('@rufflo/embeddings');
 
-      await downloadEmbeddingModel('all-MiniLM-L6-v2', '.claude-flow/models/');
+      await downloadEmbeddingModel('all-MiniLM-L6-v2', '.rufflo/models/');
 
       // 2. Initialize embedding service
       const embedder = createEmbeddingService({
         provider: 'agentic-flow',
-        modelPath: '.claude-flow/models/all-MiniLM-L6-v2',
+        modelPath: '.rufflo/models/all-MiniLM-L6-v2',
       });
 
       // 3. Warm cache with common patterns
@@ -479,11 +479,11 @@ const initSubcommand: Command = {
 
     try {
       const { downloadEmbeddingModel, createEmbeddingService } =
-        await import('@claude-flow/embeddings');
+        await import('@rufflo/embeddings');
 
       // Download model
       spinner.text = 'Downloading ONNX model...';
-      await downloadEmbeddingModel(model, '.claude-flow/models/', (p) => {
+      await downloadEmbeddingModel(model, '.rufflo/models/', (p) => {
         spinner.text = `Downloading ${model}... ${p.percent}%`;
       });
 
@@ -491,7 +491,7 @@ const initSubcommand: Command = {
       spinner.text = 'Initializing embedding service...';
       const service = createEmbeddingService({
         provider: 'agentic-flow',
-        modelPath: `.claude-flow/models/${model}`,
+        modelPath: `.rufflo/models/${model}`,
       });
 
       // Test embedding
@@ -517,7 +517,7 @@ const statusSubcommand: Command = {
   description: 'Show embedding system status',
   action: async (ctx: CommandContext): Promise<CommandResult> => {
     const { listEmbeddingModels, isNeuralAvailable } =
-      await import('@claude-flow/embeddings');
+      await import('@rufflo/embeddings');
 
     const models = await listEmbeddingModels();
     const neuralAvailable = await isNeuralAvailable();
@@ -551,11 +551,11 @@ const downloadSubcommand: Command = {
   action: async (ctx: CommandContext): Promise<CommandResult> => {
     const modelId = ctx.args[0] || 'all-MiniLM-L6-v2';
 
-    const { downloadEmbeddingModel } = await import('@claude-flow/embeddings');
+    const { downloadEmbeddingModel } = await import('@rufflo/embeddings');
 
     output.writeln(`Downloading ${modelId}...`);
 
-    await downloadEmbeddingModel(modelId, '.claude-flow/models/', (p) => {
+    await downloadEmbeddingModel(modelId, '.rufflo/models/', (p) => {
       const bar = '█'.repeat(Math.floor(p.percent / 5)) +
                   '░'.repeat(20 - Math.floor(p.percent / 5));
       process.stdout.write(`\r[${bar}] ${p.percent}%`);
@@ -616,19 +616,19 @@ export default embeddingsCommand;
 ## Migration Path
 
 ### For Existing V2 Projects
-1. Run `claude-flow migrate run -t embeddings`
+1. Run `rufflo migrate run -t embeddings`
 2. Downloads ONNX model
 3. Migrates any cached embeddings
 4. Enables hyperbolic by default
 
 ### For New V3 Projects
-1. Run `claude-flow init` or `claude-flow init wizard`
+1. Run `rufflo init` or `rufflo init wizard`
 2. Embeddings step auto-runs
 3. Model pre-downloaded
 4. Hyperbolic enabled by default
 
 ### For Pretraining
-1. Run `claude-flow hooks pretrain --embeddings`
+1. Run `rufflo hooks pretrain --embeddings`
 2. Ensures model downloaded
 3. Warms cache with codebase terms
 4. Pre-computes hierarchical patterns
@@ -650,7 +650,7 @@ export default embeddingsCommand;
 ### Neutral
 - Adds `embeddings` command to CLI
 - Adds `embeddings` step to init/migrate
-- Requires `@claude-flow/embeddings` package
+- Requires `@rufflo/embeddings` package
 
 ## Related ADRs
 

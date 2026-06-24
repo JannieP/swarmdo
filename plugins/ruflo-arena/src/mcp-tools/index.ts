@@ -1,4 +1,4 @@
-// MCP tools for ruflo-arena (Ruflo ADR-147/148). Tool shape matches the Ruflo convention:
+// MCP tools for rufflo-arena (Rufflo ADR-147/148). Tool shape matches the Rufflo convention:
 // { name, description, category, inputSchema, handler } with Zod validation at the boundary
 // and a `{ success, result | error }` return envelope.
 
@@ -251,7 +251,7 @@ export function createArenaTools(store: RunStore): MCPTool[] {
 }
 
 /**
- * Default tool set, persisting to `.ruflo/arena/` under the process CWD.
+ * Default tool set, persisting to `.rufflo/arena/` under the process CWD.
  *
  * For hosts that need to control the on-disk location (test sandboxes, multi-tenant
  * runtimes, in-memory only), prefer the {@link createArenaTools} factory with an

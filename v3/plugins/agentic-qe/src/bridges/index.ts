@@ -2,7 +2,7 @@
  * Agentic-QE Bridge Layer Exports
  *
  * Anti-corruption layer (ACL) bridges that translate between agentic-qe
- * and Claude Flow V3 domains. Each bridge isolates a specific integration point.
+ * and Rufflo V3 domains. Each bridge isolates a specific integration point.
  *
  * Based on ADR-030: Agentic-QE Plugin Integration
  *

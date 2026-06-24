@@ -1,7 +1,7 @@
 /**
  * Performance Optimizer Plugin - Bridges Barrel Export
  *
- * @module @claude-flow/plugin-perf-optimizer/bridges
+ * @module @rufflo/plugin-perf-optimizer/bridges
  */
 
 export {

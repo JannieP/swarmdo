@@ -242,7 +242,7 @@ jobs:
           # Backup package.json and important config files
           cp package.json rollback-data/backup/ 2>/dev/null || true
           cp package-lock.json rollback-data/backup/ 2>/dev/null || true
-          cp claude-flow.config.json rollback-data/backup/ 2>/dev/null || true
+          cp rufflo.config.json rollback-data/backup/ 2>/dev/null || true
           
           echo "✅ Backup created successfully"
 

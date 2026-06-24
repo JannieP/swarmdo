@@ -1,4 +1,4 @@
-# ADR-043: Gas Town Bridge Plugin for Claude Flow V3
+# ADR-043: Gas Town Bridge Plugin for Rufflo V3
 
 ## Status
 **Implemented** - Ultra-Optimized (2026-01-24)
@@ -20,7 +20,7 @@
 - **GUPP**: Gastown Universal Propulsion Principle for crash-resilient execution
 - **Molecules/Wisps**: Chained work units for durable workflows
 
-Claude Flow V3 would benefit from:
+Rufflo V3 would benefit from:
 1. Interoperability with Gas Town installations
 2. Adopting Gas Town's durable workflow patterns
 3. Bridging Beads with AgentDB for unified work tracking
@@ -34,14 +34,14 @@ Claude Flow V3 would benefit from:
 
 ## Decision
 
-Create `@claude-flow/plugin-gastown-bridge` with a **WASM-centric hybrid architecture**:
+Create `@rufflo/plugin-gastown-bridge` with a **WASM-centric hybrid architecture**:
 
 1. **CLI Bridge**: Wraps `gt` and `bd` commands for I/O operations only
 2. **WASM Computation**: Pure computation logic in Rust→WASM for 352x speedup
 3. **Beads Sync**: Bidirectional sync between Beads and AgentDB
 4. **Formula Engine**: WASM-based TOML formula parser/executor
 5. **Graph Analysis**: WASM-based dependency resolution and DAG operations
-6. **GUPP Adapter**: Translate GUPP hooks to Claude Flow session persistence
+6. **GUPP Adapter**: Translate GUPP hooks to Rufflo session persistence
 
 ## Architecture
 
@@ -49,7 +49,7 @@ Create `@claude-flow/plugin-gastown-bridge` with a **WASM-centric hybrid archite
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                      Claude Flow V3 Plugin Host                      │
+│                      Rufflo V3 Plugin Host                      │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                      │
 │  ┌─────────────────────┐    ┌─────────────────────────────────────┐ │
@@ -116,9 +116,9 @@ Create `@claude-flow/plugin-gastown-bridge` with a **WASM-centric hybrid archite
 
 ```json
 {
-  "name": "@claude-flow/plugin-gastown-bridge",
+  "name": "@rufflo/plugin-gastown-bridge",
   "version": "0.1.0",
-  "description": "Gas Town orchestrator integration for Claude Flow V3",
+  "description": "Gas Town orchestrator integration for Rufflo V3",
   "keywords": ["gastown", "beads", "orchestration", "workflows", "formulas"]
 }
 ```
@@ -306,7 +306,7 @@ export class GasTownBridge {
 #### Beads-AgentDB Sync
 
 ```typescript
-import { AgentDB } from '@claude-flow/agentdb';
+import { AgentDB } from '@rufflo/agentdb';
 
 export class BeadsSyncService {
   private bridge: GasTownBridge;
@@ -355,7 +355,7 @@ export class BeadsSyncService {
           title: parsed.title || task.key,
           description: parsed.description || '',
           priority: parsed.priority || 2,
-          labels: ['from-claude-flow'],
+          labels: ['from-rufflo'],
         });
         pushed++;
       }
@@ -492,9 +492,9 @@ v3/plugins/gastown-bridge/
 │   │   │   └── critical.rs    # Critical path analysis
 │   │   └── pkg/
 │   ├── micro-hnsw-wasm/       # Pattern search (shared)
-│   │   └── ...                # From @claude-flow/plugin-micro-hnsw
+│   │   └── ...                # From @rufflo/plugin-micro-hnsw
 │   └── ruvector-learning-wasm/ # SONA patterns (shared)
-│       └── ...                # From @claude-flow/plugin-ruvector-learning
+│       └── ...                # From @rufflo/plugin-ruvector-learning
 ├── tests/
 │   ├── bridges.test.ts
 │   ├── formula.test.ts
@@ -546,10 +546,10 @@ export interface GasTownConfig {
   // Enable native formula execution (vs. shelling to gt)
   nativeFormulas: boolean;
 
-  // Enable convoy tracking in Claude Flow
+  // Enable convoy tracking in Rufflo
   enableConvoys: boolean;
 
-  // Auto-create beads from Claude Flow tasks
+  // Auto-create beads from Rufflo tasks
   autoCreateBeads: boolean;
 
   // GUPP integration
@@ -590,7 +590,7 @@ export interface GasTownConfig {
 
 ### Phase 4: Sync & Convoys (Week 5)
 - Beads-AgentDB bidirectional sync with WASM graph analysis
-- Convoy tracking with Claude Flow tasks
+- Convoy tracking with Rufflo tasks
 - 3 Convoy MCP tools
 - 3 Orchestration MCP tools
 - WASM-based convoy optimization
@@ -598,7 +598,7 @@ export interface GasTownConfig {
 ### Phase 5: GUPP Adapter & Polish (Week 6)
 - Translate GUPP hooks to session persistence
 - Automatic work continuation on restart
-- Integration with Claude Flow daemon
+- Integration with Rufflo daemon
 - Performance profiling and optimization
 - Documentation and examples
 
@@ -739,9 +739,9 @@ export class FormulaWasm {
 ```json
 {
   "dependencies": {
-    "@claude-flow/plugin-micro-hnsw": "^0.1.0",
-    "@claude-flow/plugin-ruvector-gnn": "^0.1.0",
-    "@claude-flow/plugin-ruvector-learning": "^0.1.0"
+    "@rufflo/plugin-micro-hnsw": "^0.1.0",
+    "@rufflo/plugin-ruvector-gnn": "^0.1.0",
+    "@rufflo/plugin-ruvector-learning": "^0.1.0"
   },
   "devDependencies": {
     "@aspect-js/bazel-lib": "^1.0.0"
@@ -939,6 +939,6 @@ User Request → MCP Tool → Route Decision
 - [ADR-037: RuVector Learning WASM](./ADR-037-ruvector-learning-wasm.md) - Optimization
 - [ADR-032: RuVector WASM Plugins Architecture](./ADR-032-ruvector-wasm-plugins.md)
 
-### Claude Flow V3
+### Rufflo V3
 - [ADR-006: Unified Memory Service](./ADR-006-unified-memory-service.md)
 - [ADR-001: Deep Agentic Flow Integration](./ADR-001-deep-agentic-flow-integration.md)

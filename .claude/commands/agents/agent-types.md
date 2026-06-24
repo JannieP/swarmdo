@@ -1,6 +1,6 @@
 # agent-types
 
-Complete guide to all 54 available agent types in Claude Flow.
+Complete guide to all 54 available agent types in Rufflo.
 
 ## Core Development Agents
 - `coder` - Implementation specialist
@@ -22,5 +22,5 @@ Complete guide to all 54 available agent types in Claude Flow.
 
 For full list and details:
 ```bash
-npx claude-flow agents list
+npx rufflo agents list
 ```

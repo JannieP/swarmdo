@@ -23,10 +23,10 @@ import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 const REPO_ROOT = resolve(process.argv[2] ?? process.cwd());
-const DIST = resolve(REPO_ROOT, 'v3/@claude-flow/cli/dist/src/mcp-tools/agentdb-tools.js');
+const DIST = resolve(REPO_ROOT, 'v3/@rufflo/cli/dist/src/mcp-tools/agentdb-tools.js');
 
 if (!existsSync(DIST)) {
-  console.error(`FAIL: ${DIST} not found — run \`npm --prefix v3/@claude-flow/cli run build\` first`);
+  console.error(`FAIL: ${DIST} not found — run \`npm --prefix v3/@rufflo/cli run build\` first`);
   process.exit(1);
 }
 

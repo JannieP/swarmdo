@@ -1,12 +1,12 @@
-# ruflo-neural-trader
+# rufflo-neural-trader
 
 Neural trading strategies powered by [`neural-trader`](https://www.npmjs.com/package/neural-trader) (v2.7+) — self-learning LSTM/Transformer/N-BEATS models, Rust/NAPI backtesting (8-19x faster), 112+ MCP tools, swarm coordination, and portfolio optimization.
 
 ## Overview
 
-Wraps the `neural-trader` npm package as a Ruflo plugin with 4 specialized agents, 7 skills, and comprehensive CLI commands. Adds AgentDB memory persistence, SONA trajectory learning, and swarm-coordinated execution on top of neural-trader's Rust/NAPI engine.
+Wraps the `neural-trader` npm package as a Rufflo plugin with 4 specialized agents, 7 skills, and comprehensive CLI commands. Adds AgentDB memory persistence, SONA trajectory learning, and swarm-coordinated execution on top of neural-trader's Rust/NAPI engine.
 
-Heavy jobs — multi-year walk-forward backtests, large Monte-Carlo runs, parameter sweeps, LSTM/Transformer/N-BEATS training — can be dispatched to an Anthropic Managed Agent **cloud container** instead of running locally: see the `trader-cloud-backtest` skill, the `/trader cloud <backtest|train|sweep>` command, and [ADR-117](../../v3/docs/adr/ADR-117-neural-trader-managed-agent-backtests.md) (built on the `managed_agent_*` runtime from the `ruflo-agent` plugin / [ADR-115](../../v3/docs/adr/ADR-115-managed-agents-rvagent-backend.md); needs `ANTHROPIC_API_KEY` + Managed Agents beta — degrades to the local `trader-backtest` skill without it).
+Heavy jobs — multi-year walk-forward backtests, large Monte-Carlo runs, parameter sweeps, LSTM/Transformer/N-BEATS training — can be dispatched to an Anthropic Managed Agent **cloud container** instead of running locally: see the `trader-cloud-backtest` skill, the `/trader cloud <backtest|train|sweep>` command, and [ADR-117](../../v3/docs/adr/ADR-117-neural-trader-managed-agent-backtests.md) (built on the `managed_agent_*` runtime from the `rufflo-agent` plugin / [ADR-115](../../v3/docs/adr/ADR-115-managed-agents-rvagent-backend.md); needs `ANTHROPIC_API_KEY` + Managed Agents beta — degrades to the local `trader-backtest` skill without it).
 
 ## Prerequisites
 
@@ -47,7 +47,7 @@ The `audit-neural-trader-safety.mjs` CI guard in this repo still enforces `--ign
 ## Installation
 
 ```bash
-claude --plugin-dir plugins/ruflo-neural-trader
+claude --plugin-dir plugins/rufflo-neural-trader
 ```
 
 ## MCP Integration (112+ Tools)
@@ -78,7 +78,7 @@ claude mcp add neural-trader -- npx neural-trader mcp start
 | `trader-train` | `/trader-train lstm --symbol TSLA` | Train neural prediction models |
 | `trader-risk` | `/trader-risk [--symbol AAPL]` | VaR, position sizing, circuit breaker status |
 | `trader-cloud-backtest` | `/trader cloud backtest <strategy> --symbol SPY` | Dispatch a heavy backtest / training / sweep to an Anthropic Managed Agent cloud container ([ADR-117](../../v3/docs/adr/ADR-117-neural-trader-managed-agent-backtests.md)) |
-| `trader-portfolio-cg` | `/trader-portfolio-cg [--portfolio-id ID]` | Conjugate-Gradient mean-variance solve via `mcp__ruflo-sublinear__solve` — 40-60× faster than the legacy Neumann path ([ADR-126 Phase 3](../../v3/docs/adr/ADR-126-neural-trader-substrate-integration.md), [ADR-123 Wedge 8](../../v3/docs/adr/ADR-123-sublinear-integration.md)) |
+| `trader-portfolio-cg` | `/trader-portfolio-cg [--portfolio-id ID]` | Conjugate-Gradient mean-variance solve via `mcp__rufflo-sublinear__solve` — 40-60× faster than the legacy Neumann path ([ADR-126 Phase 3](../../v3/docs/adr/ADR-126-neural-trader-substrate-integration.md), [ADR-123 Wedge 8](../../v3/docs/adr/ADR-123-sublinear-integration.md)) |
 | `trader-explain` | `/trader-explain <signalId> [--top-k 10] [--seed 42]` | Regulator-grade feature attribution via single-entry PageRank — ranks the top-K features that drove an LSTM/Transformer signal; reproducible across runs ([ADR-126 Phase 6](../../v3/docs/adr/ADR-126-neural-trader-substrate-integration.md)) |
 
 ## Commands
@@ -188,13 +188,13 @@ neural-trader uses Rust/NAPI bindings for zero-overhead performance:
 
 ## Compatibility
 
-- **CLI:** pinned to `@claude-flow/cli` v3.6 major+minor.
+- **CLI:** pinned to `@rufflo/cli` v3.6 major+minor.
 - **Runtime:** `npx neural-trader` (Rust/NAPI bindings — 112+ MCP tools).
-- **Verification:** `bash plugins/ruflo-neural-trader/scripts/smoke.sh` is the contract.
+- **Verification:** `bash plugins/rufflo-neural-trader/scripts/smoke.sh` is the contract.
 
 ## Namespace coordination
 
-This plugin owns five AgentDB namespaces (kebab-case, follows the convention from [ruflo-agentdb ADR-0001 §"Namespace convention"](../ruflo-agentdb/docs/adrs/0001-agentdb-optimization.md)). The canonical five-namespace set is defined by [ADR-126](../../v3/docs/adr/ADR-126-neural-trader-substrate-integration.md) Phase 1:
+This plugin owns five AgentDB namespaces (kebab-case, follows the convention from [rufflo-agentdb ADR-0001 §"Namespace convention"](../rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md)). The canonical five-namespace set is defined by [ADR-126](../../v3/docs/adr/ADR-126-neural-trader-substrate-integration.md) Phase 1:
 
 | Namespace | Purpose |
 |-----------|---------|
@@ -210,11 +210,11 @@ All access via `memory_*` (namespace-routed). No `agentdb_hierarchical-*` or `ag
 
 ### Memory lifecycle (ADR-125 integration)
 
-This plugin relies on `@claude-flow/memory@3.0.0-alpha.18` for the lifecycle guarantees defined in [ADR-125](../../v3/docs/adr/ADR-125-memory-consolidation.md) and wired by [ADR-126 Phase 2](../../v3/docs/adr/ADR-126-neural-trader-substrate-integration.md):
+This plugin relies on `@rufflo/memory@3.0.0-alpha.18` for the lifecycle guarantees defined in [ADR-125](../../v3/docs/adr/ADR-125-memory-consolidation.md) and wired by [ADR-126 Phase 2](../../v3/docs/adr/ADR-126-neural-trader-substrate-integration.md):
 
-- **Warm HNSW restart** — `@claude-flow/memory@3.0.0-alpha.18` (ADR-125 Phase 3) snapshots the HNSW index to a `.hnsw` sidecar file, so neural-trader process restarts no longer rebuild the strategy / regime similarity index from scratch. No plugin-side change is required to benefit; routing is automatic through `MemoryService.search()`.
+- **Warm HNSW restart** — `@rufflo/memory@3.0.0-alpha.18` (ADR-125 Phase 3) snapshots the HNSW index to a `.hnsw` sidecar file, so neural-trader process restarts no longer rebuild the strategy / regime similarity index from scratch. No plugin-side change is required to benefit; routing is automatic through `MemoryService.search()`.
 - **Hybrid retrieval (RRF + MMR)** — `market-analyst` regime-similarity queries automatically become hybrid (dense ANN + sparse FTS5 keyword, reciprocal-rank-fused and MMR-diversified) via the same `MemoryService.search()` path (ADR-125 Phase 5). When the embedding generator is unavailable, retrieval gracefully degrades to keyword-only rather than throwing.
-- **Signal TTL (24h)** — `trader-signal` writes to `trading-signals` with `expiresAt: now + 24h`. The `MemoryConsolidator.sweepExpired()` pass (ADR-125 Phase 4) removes them from all indexes — including HNSW — when they expire. Long-running ruflo sessions no longer accumulate stale intraday signals.
+- **Signal TTL (24h)** — `trader-signal` writes to `trading-signals` with `expiresAt: now + 24h`. The `MemoryConsolidator.sweepExpired()` pass (ADR-125 Phase 4) removes them from all indexes — including HNSW — when they expire. Long-running rufflo sessions no longer accumulate stale intraday signals.
 - **Backtest dedup** — `trader-backtest` proactively deletes prior entries for the same `(strategyId, paramsHash)` before storing a fresh one. The same outcome is also produced asynchronously by the `MemoryConsolidator.dedup('keep-newest')` background pass that runs every 6 hours.
 - **Consolidator schedule** — the consolidator runs every 6 hours by default (`sweepExpired` + `dedup` + `compactHnsw`), and also on `MemoryService.close()`. No plugin-side wiring is required.
 
@@ -222,17 +222,17 @@ This plugin relies on `@claude-flow/memory@3.0.0-alpha.18` for the lifecycle gua
 
 The new `trader-portfolio-cg` skill solves the mean-variance problem `Σ · x = μ` via Conjugate Gradient instead of the legacy Neumann series. CG is provably optimal for symmetric positive-definite inputs (covariance matrices are SPD by construction), and the upstream `sublinear-time-solver@1.7.0` benchmark shows **~816 ns CG vs ~50 µs Neumann at n=256 — a measured 40-60× speedup** ([ADR-123 §162 Row 8](../../v3/docs/adr/ADR-123-sublinear-integration.md)).
 
-**When it's used**: any time the team wants optimal portfolio weights — call `/trader-portfolio-cg` instead of `/trader-portfolio`. The skill reads the current covariance and expected-return vector from `npx neural-trader --portfolio current --json`, dispatches to `mcp__ruflo-sublinear__solve` (when the `ruflo-sublinear` plugin is registered), and writes weights with provenance metadata (`method: 'cg-sublinear' | 'cg-local' | 'neumann-fallback'`) to the `trading-risk` namespace.
+**When it's used**: any time the team wants optimal portfolio weights — call `/trader-portfolio-cg` instead of `/trader-portfolio`. The skill reads the current covariance and expected-return vector from `npx neural-trader --portfolio current --json`, dispatches to `mcp__rufflo-sublinear__solve` (when the `rufflo-sublinear` plugin is registered), and writes weights with provenance metadata (`method: 'cg-sublinear' | 'cg-local' | 'neumann-fallback'`) to the `trading-risk` namespace.
 
 **How to disable**: set `RUFLO_NEURAL_TRADER_DISABLE_CG=1` to skip the CG path entirely and fall back to the legacy `npx neural-trader --portfolio optimize` route. Useful for A/B validation or when an upstream covariance regression breaks SPD.
 
 **Parity guarantee**: `||cg_solution − neumann_solution||_∞ < 1e-4` on every benchmark seed — verified by `benchmarks/portfolio-cg.bench.mjs` and asserted by `scripts/smoke-neural-trader-portfolio-cg.mjs`.
 
-**Local fallback**: the adapter (`src/sublinear-adapter.ts` + `.mjs` mirror) ships a self-contained ~50-LOC CG kernel so the skill works even before the `ruflo-sublinear` plugin lands on the IPFS registry. The same call site picks up the full native-WASM speedup automatically once `mcp__ruflo-sublinear__solve` is registered in the runtime.
+**Local fallback**: the adapter (`src/sublinear-adapter.ts` + `.mjs` mirror) ships a self-contained ~50-LOC CG kernel so the skill works even before the `rufflo-sublinear` plugin lands on the IPFS registry. The same call site picks up the full native-WASM speedup automatically once `mcp__rufflo-sublinear__solve` is registered in the runtime.
 
 ```bash
 # Run the bench yourself:
-node plugins/ruflo-neural-trader/benchmarks/portfolio-cg.bench.mjs
+node plugins/rufflo-neural-trader/benchmarks/portfolio-cg.bench.mjs
 
 # Run the contract smoke:
 node scripts/smoke-neural-trader-portfolio-cg.mjs
@@ -247,9 +247,9 @@ The new `trader-explain` skill closes the regulator-grade interpretability gap t
 **Output**: a `SignedAttributionArtifact` written to the canonical `trading-analysis` namespace, plus a markdown summary surfaced to the agent. The artifact is Ed25519-signed using the same scheme as Phase 4 backtest artifacts — the verifier pins to a trusted public key (CWE-347 / #1922), so downstream consumers can refuse any tampered or unsigned artifact.
 
 ```ts
-// Schema — plugins/ruflo-neural-trader/src/signed-attribution.ts
+// Schema — plugins/rufflo-neural-trader/src/signed-attribution.ts
 interface SignedAttributionArtifact {
-  schema: 'ruflo-neural-trader-attribution/v1';
+  schema: 'rufflo-neural-trader-attribution/v1';
   signalId: string;
   modelId: string;                         // e.g. 'lstm-v3', 'transformer-attn8h-v2'
   features: Array<{
@@ -290,7 +290,7 @@ Example markdown surfaced to the agent:
 
 **Reproducibility guarantee**: two runs with the same `signalId` + same `--seed` produce byte-identical rank ordering. Asserted by `scripts/smoke-neural-trader-feature-attribution.mjs` (the smoke runs the local seeded PageRank twice and compares scores element-wise).
 
-**Local fallback**: when `mcp__ruflo-sublinear__page-rank-entry` is not registered in the runtime, the skill falls through to a ~30-LOC seeded power-iteration kernel that ships in `src/signed-attribution.mjs`. Same math, same ordering for the same seed. The native-WASM path picks up automatically once `ruflo-sublinear` lands on the IPFS registry.
+**Local fallback**: when `mcp__rufflo-sublinear__page-rank-entry` is not registered in the runtime, the skill falls through to a ~30-LOC seeded power-iteration kernel that ships in `src/signed-attribution.mjs`. Same math, same ordering for the same seed. The native-WASM path picks up automatically once `rufflo-sublinear` lands on the IPFS registry.
 
 **`--explain` fallback**: if the installed `neural-trader` build doesn't yet expose `--predict --explain --json`, the skill degrades to a z-score-magnitude heuristic over the signal's input vector and tags the artifact `attribution_method: "input-zscore-fallback"` so downstream consumers can filter it out for regulator-facing reports.
 
@@ -302,24 +302,24 @@ node scripts/smoke-neural-trader-feature-attribution.mjs
 ## Verification
 
 ```bash
-bash plugins/ruflo-neural-trader/scripts/smoke.sh
+bash plugins/rufflo-neural-trader/scripts/smoke.sh
 # Expected: "11 passed, 0 failed"
 ```
 
 ## Architecture Decisions
 
-- [`ADR-0001` — ruflo-neural-trader plugin contract (already-compliant namespaces, 4-namespace claim, smoke as contract)](./docs/adrs/0001-neural-trader-contract.md)
+- [`ADR-0001` — rufflo-neural-trader plugin contract (already-compliant namespaces, 4-namespace claim, smoke as contract)](./docs/adrs/0001-neural-trader-contract.md)
 - [`ADR-117`](../../v3/docs/adr/ADR-117-neural-trader-managed-agent-backtests.md) — run heavy jobs (walk-forward / Monte-Carlo / sweep / training) on the Managed Agent cloud runtime (the `trader-cloud-backtest` skill + `/trader cloud` command), with cost-optimization rules
-- [`ADR-115`](../../v3/docs/adr/ADR-115-managed-agents-rvagent-backend.md) — the `managed_agent_*` cloud runtime that ADR-117 builds on (lives in the `ruflo-agent` plugin)
+- [`ADR-115`](../../v3/docs/adr/ADR-115-managed-agents-rvagent-backend.md) — the `managed_agent_*` cloud runtime that ADR-117 builds on (lives in the `rufflo-agent` plugin)
 
 ## Related Plugins
 
-- `ruflo-agent` — the `managed_agent_*` cloud agent runtime used by the `trader-cloud-backtest` skill (ADR-115 / ADR-117)
-- `ruflo-agentdb` — namespace convention owner; backing store
-- `ruflo-market-data` — OHLCV data ingestion and candlestick pattern detection (feeds `trading-strategies`)
-- `ruflo-ruvector` — HNSW indexing for strategy pattern similarity search
-- `ruflo-cost-tracker` — PnL tracking and cost attribution
-- `ruflo-observability` — Strategy performance dashboards
+- `rufflo-agent` — the `managed_agent_*` cloud agent runtime used by the `trader-cloud-backtest` skill (ADR-115 / ADR-117)
+- `rufflo-agentdb` — namespace convention owner; backing store
+- `rufflo-market-data` — OHLCV data ingestion and candlestick pattern detection (feeds `trading-strategies`)
+- `rufflo-ruvector` — HNSW indexing for strategy pattern similarity search
+- `rufflo-cost-tracker` — PnL tracking and cost attribution
+- `rufflo-observability` — Strategy performance dashboards
 
 ## License
 

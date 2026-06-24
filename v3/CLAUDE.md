@@ -5,7 +5,7 @@ This directory contains the V3 monorepo packages. Root CLAUDE.md rules apply her
 ## Build & Test
 
 ```bash
-# From v3/@claude-flow/<package>
+# From v3/@rufflo/<package>
 npm install && npm run build && npm test
 ```
 
@@ -13,12 +13,12 @@ npm install && npm run build && npm test
 
 | Package | Path | Purpose |
 |---------|------|---------|
-| `@claude-flow/cli` | `@claude-flow/cli/` | CLI entry point (26 commands, 140+ subcommands) |
-| `@claude-flow/guidance` | `@claude-flow/guidance/` | Governance control plane (compile, enforce, prove, evolve) |
-| `@claude-flow/hooks` | `@claude-flow/hooks/` | 17 hooks + 12 background workers |
-| `@claude-flow/memory` | `@claude-flow/memory/` | AgentDB + HNSW vector search |
-| `@claude-flow/shared` | `@claude-flow/shared/` | Shared types and utilities |
-| `@claude-flow/security` | `@claude-flow/security/` | Input validation, path security, CVE remediation |
+| `@rufflo/cli` | `@rufflo/cli/` | CLI entry point (26 commands, 140+ subcommands) |
+| `@rufflo/guidance` | `@rufflo/guidance/` | Governance control plane (compile, enforce, prove, evolve) |
+| `@rufflo/hooks` | `@rufflo/hooks/` | 17 hooks + 12 background workers |
+| `@rufflo/memory` | `@rufflo/memory/` | AgentDB + HNSW vector search |
+| `@rufflo/shared` | `@rufflo/shared/` | Shared types and utilities |
+| `@rufflo/security` | `@rufflo/security/` | Input validation, path security, CVE remediation |
 
 ## Code Quality
 

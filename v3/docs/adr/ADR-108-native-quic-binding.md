@@ -30,7 +30,7 @@ What's missing for a real native build:
 
 **When the native binding ships upstream:**
 
-1. Update `agentic-flow` dep range in `@claude-flow/plugin-agent-federation/package.json` to the version that includes native (likely `^2.1` after their Phase-1 closes)
+1. Update `agentic-flow` dep range in `@rufflo/plugin-agent-federation/package.json` to the version that includes native (likely `^2.1` after their Phase-1 closes)
 2. Document the `AGENTIC_FLOW_QUIC_NATIVE=1` env var in the federation operator runbook
 3. Update doctor surface so `--component federation` reports `selectedBackend=quic` when native is loaded
 4. Add a federation-side smoke that asserts `getTransportCapabilities().selectedBackend === 'quic'` when env is set + binding installed

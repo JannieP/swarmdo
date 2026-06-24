@@ -27,22 +27,22 @@ Claims-based authorization for secure agent operations and access control.
 
 ### Check Claim
 ```bash
-npx claude-flow claims check --agent agent-123 --claim write
+npx rufflo claims check --agent agent-123 --claim write
 ```
 
 ### Grant Claim
 ```bash
-npx claude-flow claims grant --agent agent-123 --claim write --scope "/src/**"
+npx rufflo claims grant --agent agent-123 --claim write --scope "/src/**"
 ```
 
 ### Revoke Claim
 ```bash
-npx claude-flow claims revoke --agent agent-123 --claim write
+npx rufflo claims revoke --agent agent-123 --claim write
 ```
 
 ### List Claims
 ```bash
-npx claude-flow claims list --agent agent-123
+npx rufflo claims list --agent agent-123
 ```
 
 ## Scope Patterns

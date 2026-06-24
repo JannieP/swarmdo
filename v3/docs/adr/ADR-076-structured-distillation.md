@@ -1,13 +1,13 @@
 # ADR-076 — Structured Distillation for Trajectory Content (#2241 §SOTA)
 
-**Status**: Accepted — Implemented in ruflo 3.10.16
+**Status**: Accepted — Implemented in rufflo 3.10.16
 **Date**: 2026-05-30
 **Tracking**: [#2241](https://github.com/ruvnet/ruflo/issues/2241) — Dream Cycle 2026-05-30 performance scan
 **Paper**: arXiv:2603.13017 (Grade A, March 2026) — "Structured Distillation of Agent Exchanges: 4-field schema for 11× compression and improved retrieval MRR"
 
 ## Context
 
-The Dream Cycle 2026-05-30 scan (#2241) identified Structured Distillation as the highest-ROI intelligence finding from a 2026 Grade-A paper that maps directly onto ruflo's trajectory memory: the paper compresses agent exchanges from ~371 to ~38 tokens (≈11×) using a four-field schema, and shows retrieval MRR rising from 0.745 (raw) to 0.759 (distilled, Δ +0.014) on a 214 K-pair consensus-graded corpus.
+The Dream Cycle 2026-05-30 scan (#2241) identified Structured Distillation as the highest-ROI intelligence finding from a 2026 Grade-A paper that maps directly onto rufflo's trajectory memory: the paper compresses agent exchanges from ~371 to ~38 tokens (≈11×) using a four-field schema, and shows retrieval MRR rising from 0.745 (raw) to 0.759 (distilled, Δ +0.014) on a 214 K-pair consensus-graded corpus.
 
 ADR-074 wired the self-learning surfaces; ADR-075 unified the four stat aggregators. Both fixed *honesty* — making the surfaces report what they actually do. ADR-076 is the first round-C *quality* win: a real SOTA-paper alignment with measured proof, not just wiring.
 
@@ -24,7 +24,7 @@ interface DistilledContent {
 }
 ```
 
-Schema lives in `v3/@claude-flow/cli/src/memory/structured-distill.ts`. The serialiser (`serialiseDistilled`) places labels and paths at the front so the embedder allocates more probability mass to high-signal tokens — that ordering is what the paper credits for the MRR gain.
+Schema lives in `v3/@rufflo/cli/src/memory/structured-distill.ts`. The serialiser (`serialiseDistilled`) places labels and paths at the front so the embedder allocates more probability mass to high-signal tokens — that ordering is what the paper credits for the MRR gain.
 
 The extractor is **rule-based**, deterministic, dependency-free, and sub-millisecond. A future round can plug a learned distiller (LLM / cross-encoder) into the same schema as a drop-in replacement; the corpus + harness already exist as the gate.
 
@@ -34,7 +34,7 @@ The extractor is **rule-based**, deterministic, dependency-free, and sub-millise
 - `serialiseDistilled(d)` — produces the embedding-ready string with high-signal tokens first.
 - `distillAndSerialise(raw)` — convenience: distill + serialise.
 - `compressionRatio(raw)` — utility for tracking byte-level shrink (1.0 = parity, >1 = smaller).
-- `bench/trajectory-mrr-corpus.json` — 30 paired (raw, query) trajectories drawn from the recent ruflo issue-fix history.
+- `bench/trajectory-mrr-corpus.json` — 30 paired (raw, query) trajectories drawn from the recent rufflo issue-fix history.
 - `scripts/benchmark-trajectory-mrr.mjs` — runs raw vs distilled retrieval, computes MRR, writes a run JSON.
 
 ## Measured proof (this checkout)
@@ -52,7 +52,7 @@ Honest comparison to the paper (arXiv:2603.13017):
 | | Our run | Paper |
 |---|---|---|
 | Embedder | bridge ONNX (live MCP path) | learned cross-encoder |
-| Corpus | N=30 hand-curated ruflo fixes | 214 K consensus-graded pairs |
+| Corpus | N=30 hand-curated rufflo fixes | 214 K consensus-graded pairs |
 | Distiller | rule-based regex | learned LLM-based |
 | MRR delta | +0.0403 (+41.8% relative) | +0.014 (+1.9% relative) |
 | Compression | 0.74× (distilled grew by 35%) | 9.76× (371→38 tokens) |
@@ -81,14 +81,14 @@ The **direction matches the paper** (distilled improves MRR); the **relative del
 ## Reproduce
 
 ```bash
-git clone https://github.com/ruvnet/ruflo && cd ruflo
-npm install && ( cd v3/@claude-flow/cli && npx tsc -b )
+git clone https://github.com/ruvnet/ruflo && cd rufflo
+npm install && ( cd v3/@rufflo/cli && npx tsc -b )
 
 # Schema + extractor tests
-( cd v3/@claude-flow/cli && npx vitest run __tests__/structured-distill-2241.test.ts )
+( cd v3/@rufflo/cli && npx vitest run __tests__/structured-distill-2241.test.ts )
 
 # MRR proof benchmark (uses the bridge ONNX embedder when available;
 # falls back to hash-deterministic with an explicit "degraded" warning)
-node v3/@claude-flow/cli/scripts/benchmark-trajectory-mrr.mjs
+node v3/@rufflo/cli/scripts/benchmark-trajectory-mrr.mjs
 # → MRR raw 0.0964 → distilled 0.1367 (Δ +0.0403) on the committed 30-entry corpus
 ```

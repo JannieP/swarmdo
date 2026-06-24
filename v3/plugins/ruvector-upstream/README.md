@@ -1,6 +1,6 @@
 # RuVector Upstream WASM Packages
 
-This directory contains references and integration bridges for upstream RuVector WASM packages used by Claude Flow plugins.
+This directory contains references and integration bridges for upstream RuVector WASM packages used by Rufflo plugins.
 
 ## Available WASM Packages
 
@@ -30,16 +30,16 @@ All packages are sourced from: https://github.com/ruvnet/ruvector
 
 | Plugin | Primary WASM Packages |
 |--------|----------------------|
-| `@claude-flow/plugin-healthcare-cds` | micro-hnsw-wasm, ruvector-gnn-wasm, ruvector-hyperbolic-hnsw-wasm |
-| `@claude-flow/plugin-financial-risk` | micro-hnsw-wasm, ruvector-economy-wasm, ruvector-sparse-inference-wasm |
-| `@claude-flow/plugin-legal-contracts` | micro-hnsw-wasm, ruvector-attention-wasm, ruvector-dag-wasm |
-| `@claude-flow/plugin-code-intelligence` | micro-hnsw-wasm, ruvector-gnn-wasm, ruvector-mincut-wasm, sona |
-| `@claude-flow/plugin-test-intelligence` | ruvector-learning-wasm, ruvector-gnn-wasm, sona |
-| `@claude-flow/plugin-perf-optimizer` | ruvector-sparse-inference-wasm, ruvector-fpga-transformer-wasm |
-| `@claude-flow/plugin-neural-coordination` | sona, ruvector-nervous-system-wasm, ruvector-attention-wasm |
-| `@claude-flow/plugin-cognitive-kernel` | cognitum-gate-kernel, sona, ruvector-attention-wasm |
-| `@claude-flow/plugin-quantum-optimizer` | ruvector-exotic-wasm, ruvector-hyperbolic-hnsw-wasm |
-| `@claude-flow/plugin-hyperbolic-reasoning` | ruvector-hyperbolic-hnsw-wasm, ruvector-attention-wasm |
+| `@rufflo/plugin-healthcare-cds` | micro-hnsw-wasm, ruvector-gnn-wasm, ruvector-hyperbolic-hnsw-wasm |
+| `@rufflo/plugin-financial-risk` | micro-hnsw-wasm, ruvector-economy-wasm, ruvector-sparse-inference-wasm |
+| `@rufflo/plugin-legal-contracts` | micro-hnsw-wasm, ruvector-attention-wasm, ruvector-dag-wasm |
+| `@rufflo/plugin-code-intelligence` | micro-hnsw-wasm, ruvector-gnn-wasm, ruvector-mincut-wasm, sona |
+| `@rufflo/plugin-test-intelligence` | ruvector-learning-wasm, ruvector-gnn-wasm, sona |
+| `@rufflo/plugin-perf-optimizer` | ruvector-sparse-inference-wasm, ruvector-fpga-transformer-wasm |
+| `@rufflo/plugin-neural-coordination` | sona, ruvector-nervous-system-wasm, ruvector-attention-wasm |
+| `@rufflo/plugin-cognitive-kernel` | cognitum-gate-kernel, sona, ruvector-attention-wasm |
+| `@rufflo/plugin-quantum-optimizer` | ruvector-exotic-wasm, ruvector-hyperbolic-hnsw-wasm |
+| `@rufflo/plugin-hyperbolic-reasoning` | ruvector-hyperbolic-hnsw-wasm, ruvector-attention-wasm |
 
 ## Installation
 
@@ -60,9 +60,9 @@ import { FlashAttention } from '@ruvector/attention-wasm';
 const hnsw = await initMicroHnsw();
 const attention = await FlashAttention.init();
 
-// Use in Claude Flow plugin
+// Use in Rufflo plugin
 export const plugin: ClaudeFlowPlugin = {
-  name: '@claude-flow/plugin-example',
+  name: '@rufflo/plugin-example',
   bridges: {
     hnsw,
     attention,

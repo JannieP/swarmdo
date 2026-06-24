@@ -1,5 +1,5 @@
 {
-  "name": "ruflo-migrations",
+  "name": "rufflo-migrations",
   "description": "Schema migration management — generate, validate, dry-run, and rollback database migrations",
   "version": "0.2.0",
   "author": {
@@ -9,7 +9,7 @@
   "homepage": "https://github.com/ruvnet/ruflo",
   "license": "MIT",
   "keywords": [
-    "ruflo",
+    "rufflo",
     "migrations",
     "database",
     "schema",

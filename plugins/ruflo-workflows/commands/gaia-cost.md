@@ -68,7 +68,7 @@ cost estimate and require explicit confirmation before proceeding.
 
 ## Steps Claude should follow
 
-1. Load history: `npx @claude-flow/cli@latest memory list --namespace gaia-runs`
+1. Load history: `npx @rufflo/cli@latest memory list --namespace gaia-runs`
 2. Sum `est_cost_usd` across all stored runs to produce cumulative spend.
 3. Compute projection for the requested configuration:
    - `effective_questions = limit × voting`

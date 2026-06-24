@@ -11,7 +11,7 @@
 // WHAT IT MEASURES
 // Per-call mean + p50 + p99 over 100k iters, across 3 categories:
 //   - empty: parseMcpScanText('') — fastest path
-//   - typical: ruflo's actual single-INFO output
+//   - typical: rufflo's actual single-INFO output
 //   - rich: a synthetic multi-finding payload with continuation lines
 //
 // USAGE

@@ -9,12 +9,12 @@
  *   - Output records the *intended* value (the file path / command), not a
  *     stray boolean like "true" — the symptom that #1859 reported
  *
- * The script substitutes `npx ruflo@alpha` → the local CLI binary, so
+ * The script substitutes `npx rufflo@alpha` → the local CLI binary, so
  * we exercise the same flag wiring users hit in production but pinned to
  * the build under test.
  *
  * Usage (from repo root):
- *   node plugins/ruflo-core/scripts/test-hooks.mjs <path-to-cli-binary>
+ *   node plugins/rufflo-core/scripts/test-hooks.mjs <path-to-cli-binary>
  *
  * Wired into .github/workflows/v3-ci.yml as the `plugin-hooks-smoke` job.
  */
@@ -31,13 +31,13 @@ const HOOKS_JSON = join(__dirname, '..', 'hooks', 'hooks.json');
 // passes the full thing so this script doesn't need to guess shebangs:
 //   - local node script:   "node /abs/path/to/bin/cli.js"
 //   - shell wrapper:       "/abs/path/to/wrapper.sh"
-//   - npx fallthrough:     "npx --yes @claude-flow/cli@latest"
+//   - npx fallthrough:     "npx --yes @rufflo/cli@latest"
 const cliInvoke = process.argv[2];
 if (!cliInvoke) {
   console.error('Usage: node test-hooks.mjs "<cli-invocation-string>"');
   console.error('Examples:');
-  console.error('  node test-hooks.mjs "node $PWD/v3/@claude-flow/cli/bin/cli.js"');
-  console.error('  node test-hooks.mjs "npx --yes @claude-flow/cli@latest"');
+  console.error('  node test-hooks.mjs "node $PWD/v3/@rufflo/cli/bin/cli.js"');
+  console.error('  node test-hooks.mjs "npx --yes @rufflo/cli@latest"');
   process.exit(2);
 }
 
@@ -48,14 +48,14 @@ const findHook = (matcher) => {
   const hit = post.find(h => h.matcher === matcher);
   if (!hit) throw new Error(`No PostToolUse hook with matcher=${matcher}`);
   return hit.hooks[0].command
-    // legacy form: `npx ruflo@alpha hooks …`
-    .replace(/npx ruflo@alpha/g, cliInvoke)
-    // #1921 form: hook subcommands go through scripts/ruflo-hook.sh (which
+    // legacy form: `npx rufflo@alpha hooks …`
+    .replace(/npx rufflo@alpha/g, cliInvoke)
+    // #1921 form: hook subcommands go through scripts/rufflo-hook.sh (which
     // prepends `hooks`). Bypass the shim here and call the built CLI directly
     // so the test exercises the same flag wiring users hit, pinned to the
     // build under test. Also drop the shim's `|| true` so exit codes are
     // still asserted (the shim makes failures non-fatal in production).
-    .replace(/"\$\{CLAUDE_PLUGIN_ROOT\}\/scripts\/ruflo-hook\.sh"/g, `${cliInvoke} hooks`)
+    .replace(/"\$\{CLAUDE_PLUGIN_ROOT\}\/scripts\/rufflo-hook\.sh"/g, `${cliInvoke} hooks`)
     .replace(/\s*\|\|\s*true(\s*')/g, '$1');
 };
 

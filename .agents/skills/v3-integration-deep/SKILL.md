@@ -1,13 +1,13 @@
 ---
 name: "V3 Deep Integration"
-description: "Deep agentic-flow@alpha integration implementing ADR-001. Eliminates 10,000+ duplicate lines by building claude-flow as specialized extension rather than parallel implementation."
+description: "Deep agentic-flow@alpha integration implementing ADR-001. Eliminates 10,000+ duplicate lines by building rufflo as specialized extension rather than parallel implementation."
 ---
 
 # V3 Deep Integration
 
 ## What This Skill Does
 
-Transforms claude-flow from parallel implementation to specialized extension of agentic-flow@alpha, eliminating massive code duplication while achieving performance improvements and feature parity.
+Transforms rufflo from parallel implementation to specialized extension of agentic-flow@alpha, eliminating massive code duplication while achieving performance improvements and feature parity.
 
 ## Quick Start
 
@@ -26,7 +26,7 @@ Task("AgentDB coordination", "Setup 150x-12,500x search", "v3-integration-archit
 ### Current Overlap → Integration
 ```
 ┌─────────────────────────────────────────┐
-│  claude-flow          agentic-flow      │
+│  rufflo          agentic-flow      │
 ├─────────────────────────────────────────┤
 │ SwarmCoordinator  →   Swarm System      │ 80% overlap (eliminate)
 │ AgentManager      →   Agent Lifecycle   │ 70% overlap (eliminate)

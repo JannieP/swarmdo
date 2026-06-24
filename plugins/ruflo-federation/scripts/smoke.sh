@@ -54,12 +54,12 @@ for mode in HIPAA SOC2 GDPR; do
 done
 [[ -z "$miss" ]] && ok || bad "missing modes:$miss"
 
-step "6. README pins @claude-flow/cli to v3.6"
-grep -qE "@claude-flow/cli.*v3\.6|v3\.6.*claude-flow/cli" "$ROOT/README.md" \
+step "6. README pins @rufflo/cli to v3.6"
+grep -qE "@rufflo/cli.*v3\.6|v3\.6.*rufflo/cli" "$ROOT/README.md" \
   && ok || bad "v3.6 pin missing"
 
-step "7. README defers to ruflo-agentdb namespace convention"
-grep -q "ruflo-agentdb" "$ROOT/README.md" \
+step "7. README defers to rufflo-agentdb namespace convention"
+grep -q "rufflo-agentdb" "$ROOT/README.md" \
   && grep -q "Namespace convention" "$ROOT/README.md" \
   && ok || bad "namespace coordination block incomplete"
 
@@ -67,7 +67,7 @@ step "8. README aligns with canonical 3-gate pattern (cross-reference)"
 F="$ROOT/README.md"
 miss=""
 grep -qE "3-gate|3 gates|three gates" "$F" || miss="$miss header"
-grep -q "ruflo-aidefence" "$F" || miss="$miss aidefence-ref"
+grep -q "rufflo-aidefence" "$F" || miss="$miss aidefence-ref"
 [[ -z "$miss" ]] && ok || bad "3-gate alignment block missing:$miss"
 
 step "9. ADR-0001 exists with status Accepted"

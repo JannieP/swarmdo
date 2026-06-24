@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document defines the **performance benchmarking and optimization strategy** for Claude-Flow v3. Agent #14 (Performance Engineer) leads this effort, with support from all other agents.
+This document defines the **performance benchmarking and optimization strategy** for Rufflo v3. Agent #14 (Performance Engineer) leads this effort, with support from all other agents.
 
 ---
 
@@ -174,7 +174,7 @@ describe('CLI Startup Benchmarks', () => {
       'CLI Cold Start',
       async () => {
         await new Promise<void>((resolve, reject) => {
-          const proc = spawn('npx', ['claude-flow', '--version'], {
+          const proc = spawn('npx', ['rufflo', '--version'], {
             env: { ...process.env, NODE_ENV: 'production' }
           });
           proc.on('close', (code) => code === 0 ? resolve() : reject());

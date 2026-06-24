@@ -1,10 +1,10 @@
 # swarm
 
-Main swarm orchestration command for Claude Flow.
+Main swarm orchestration command for Rufflo.
 
 ## Usage
 ```bash
-npx claude-flow swarm <objective> [options]
+npx rufflo swarm <objective> [options]
 ```
 
 ## Options
@@ -17,11 +17,11 @@ npx claude-flow swarm <objective> [options]
 ## Examples
 ```bash
 # Basic swarm
-npx claude-flow swarm "Build REST API"
+npx rufflo swarm "Build REST API"
 
 # With strategy
-npx claude-flow swarm "Research AI patterns" --strategy research
+npx rufflo swarm "Research AI patterns" --strategy research
 
 # Open in Claude Code
-npx claude-flow swarm "Build API" --claude
+npx rufflo swarm "Build API" --claude
 ```

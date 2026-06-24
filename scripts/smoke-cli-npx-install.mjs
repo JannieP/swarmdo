@@ -3,7 +3,7 @@
  * Smoke: `npx`-style install of the CLI tarball (regression guard for #1147 and #2018).
  *
  * Both issues report the same user-visible failure:
- *   $ npx @claude-flow/cli@latest …
+ *   $ npx @rufflo/cli@latest …
  *   npm error Invalid Version:
  *
  * Caused by an `optionalDependencies` ↔ `peerDependencies` overlap deep in
@@ -29,7 +29,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
 const REPO_ROOT = process.cwd();
-const CLI_DIR = join(REPO_ROOT, 'v3', '@claude-flow', 'cli');
+const CLI_DIR = join(REPO_ROOT, 'v3', '@rufflo', 'cli');
 
 function run(cmd, args, opts = {}) {
   const r = spawnSync(cmd, args, { encoding: 'utf-8', ...opts });
@@ -42,7 +42,7 @@ function fail(msg) {
 }
 
 if (!existsSync(join(CLI_DIR, 'package.json'))) fail(`cli package not found at ${CLI_DIR}`);
-if (!existsSync(join(CLI_DIR, 'bin', 'cli.js'))) fail(`cli not built — run \`pnpm --filter @claude-flow/cli build\` first`);
+if (!existsSync(join(CLI_DIR, 'bin', 'cli.js'))) fail(`cli not built — run \`pnpm --filter @rufflo/cli build\` first`);
 
 // 1. Pack the CLI. Prefer pnpm pack (rewrites workspace:*); fall back to npm pack.
 const packDest = mkdtempSync(join(tmpdir(), 'cli-pack-'));
@@ -91,16 +91,16 @@ if (install.code !== 0) {
 }
 
 // 4. Resolve installed bin (handle pkg.bin shape — string or object)
-const installedPkgPath = join(scratch, 'node_modules', '@claude-flow', 'cli', 'package.json');
+const installedPkgPath = join(scratch, 'node_modules', '@rufflo', 'cli', 'package.json');
 if (!existsSync(installedPkgPath)) fail(`installed cli package.json missing: ${installedPkgPath}`);
 const installedPkg = JSON.parse(execFileSync('node', ['-e', `console.log(JSON.stringify(require(${JSON.stringify(installedPkgPath)})))`], { encoding: 'utf-8' }));
 let binRel;
 if (typeof installedPkg.bin === 'string') binRel = installedPkg.bin;
 else if (installedPkg.bin && typeof installedPkg.bin === 'object') {
-  binRel = installedPkg.bin['claude-flow'] || installedPkg.bin.cli || Object.values(installedPkg.bin)[0];
+  binRel = installedPkg.bin['rufflo'] || installedPkg.bin.cli || Object.values(installedPkg.bin)[0];
 }
 if (!binRel) fail('installed cli package.json has no usable "bin"');
-const binAbs = resolve(join(scratch, 'node_modules', '@claude-flow', 'cli'), binRel);
+const binAbs = resolve(join(scratch, 'node_modules', '@rufflo', 'cli'), binRel);
 if (!existsSync(binAbs)) fail(`installed cli bin missing on disk: ${binAbs}`);
 
 console.log(`[4/5] running ${binAbs} --version`);

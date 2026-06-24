@@ -6,7 +6,7 @@ argument-hint: "[--level=1] [--limit=53] [--models=haiku,sonnet] [--concurrency=
 
 # /gaia run
 
-Run GAIA benchmark questions through the ruflo agent loop.
+Run GAIA benchmark questions through the rufflo agent loop.
 
 ## Usage
 
@@ -51,7 +51,7 @@ When multiple flags combine:
 1. **Resolve environment keys** — checks `ANTHROPIC_API_KEY`, `HF_TOKEN`, and
    optionally `GOOGLE_*` keys; falls back to GCP Secrets.
 2. **Load dataset** — downloads and caches the GAIA validation split from
-   Hugging Face (`~/.cache/ruflo/gaia/`).  Cached files are reused on
+   Hugging Face (`~/.cache/rufflo/gaia/`).  Cached files are reused on
    subsequent runs.
 3. **Estimate cost** — computes expected spend based on model pricing and
    question count; asks for confirmation when estimated cost exceeds $5.
@@ -61,7 +61,7 @@ When multiple flags combine:
    (web_search, file_read, web_browse, image_describe, python_exec).
 5. **Score results** — two-stage LLM-as-judge (`gaia-judge.ts`) normalizes and
    compares the model's `FINAL_ANSWER` to the ground truth.
-6. **Write output** — results land in `~/.cache/ruflo/gaia/results-<sha>.json`.
+6. **Write output** — results land in `~/.cache/rufflo/gaia/results-<sha>.json`.
    Progress is printed to stdout every 5 questions.
 
 ## Resuming an interrupted run
@@ -73,7 +73,7 @@ If a run crashes, restart with the same flags. The loader checks for a
 ## Example invocation (underlying CLI)
 
 ```bash
-node $(npm root -g)/@claude-flow/cli/bin/cli.js gaia-bench run \
+node $(npm root -g)/@rufflo/cli/bin/cli.js gaia-bench run \
   --level 1 --limit 53 \
   --models claude-sonnet-4-6 \
   --concurrency 3 --voting 1 \
@@ -85,8 +85,8 @@ node $(npm root -g)/@claude-flow/cli/bin/cli.js gaia-bench run \
 | System | L1 pass-rate | Notes |
 |--------|-------------|-------|
 | HAL (Sonnet 4.5) | 74.6% | 300 Q reference run |
-| ruflo iter 23 | 20.8% | 53 Q, web_search restored |
-| ruflo iter 15 | 9.4% | 53 Q, broken web_search |
+| rufflo iter 23 | 20.8% | 53 Q, web_search restored |
+| rufflo iter 15 | 9.4% | 53 Q, broken web_search |
 
 ## Steps Claude should follow
 
@@ -95,4 +95,4 @@ node $(npm root -g)/@claude-flow/cli/bin/cli.js gaia-bench run \
 3. If estimated cost > $5, show the estimate and ask for confirmation
 4. Execute: `node … gaia-bench run --level $LEVEL --limit $LIMIT --models $MODELS --concurrency $CONCURRENCY --output json`
 5. Parse JSON output and display a summary table (model | pass-rate | cost | mean-turns)
-6. Store the run record in memory: `npx @claude-flow/cli@latest memory store --namespace gaia-runs --key "run-$(date +%Y%m%d-%H%M)" --value "$SUMMARY"`
+6. Store the run record in memory: `npx @rufflo/cli@latest memory store --namespace gaia-runs --key "run-$(date +%Y%m%d-%H%M)" --value "$SUMMARY"`

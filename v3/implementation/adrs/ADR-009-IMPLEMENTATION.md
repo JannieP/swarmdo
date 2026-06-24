@@ -81,7 +81,7 @@ Comprehensive test suite covering:
 ### Basic Hybrid Backend
 
 ```typescript
-import { HybridBackend } from '@claude-flow/memory';
+import { HybridBackend } from '@rufflo/memory';
 
 const backend = new HybridBackend({
   sqlite: {
@@ -306,7 +306,7 @@ console.log('Recommendations:', health.recommendations);
 For existing systems using only AgentDB:
 
 ```typescript
-import { HybridBackend, AgentDBAdapter } from '@claude-flow/memory';
+import { HybridBackend, AgentDBAdapter } from '@rufflo/memory';
 
 // Old: AgentDB only
 const oldBackend = new AgentDBAdapter(config);
@@ -326,7 +326,7 @@ const newBackend = new HybridBackend({
 Run the comprehensive test suite:
 
 ```bash
-cd /workspaces/claude-flow/v3/@claude-flow/memory
+cd /workspaces/rufflo/v3/@rufflo/memory
 npm test src/hybrid-backend.test.ts
 ```
 
@@ -395,7 +395,7 @@ Test coverage includes:
    - Query routing: <0.1ms overhead
 
 ### Package Versions
-- `@claude-flow/memory@3.0.0-alpha.2`
+- `@rufflo/memory@3.0.0-alpha.2`
 
 ---
 
@@ -411,4 +411,4 @@ The HybridBackend implementation successfully achieves ADR-009 goals:
 - ✅ Comprehensive test coverage
 - ✅ Production-ready monitoring
 
-This provides Claude Flow V3 with a **flexible, performant, and reliable** memory system that adapts to different query patterns while maintaining consistency across both backends.
+This provides Rufflo V3 with a **flexible, performant, and reliable** memory system that adapts to different query patterns while maintaining consistency across both backends.

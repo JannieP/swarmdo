@@ -2,7 +2,7 @@
 name: gaia-submission
 description: Walk through a complete GAIA benchmark→submit flow — from key resolution through HAL-compatible package generation
 argument-hint: "[level] [limit] [models]"
-allowed-tools: Bash mcp__claude-flow__memory_store mcp__claude-flow__memory_search mcp__claude-flow__memory_list mcp__claude-flow__hooks_post_task mcp__claude-flow__hooks_pre_task
+allowed-tools: Bash mcp__rufflo__memory_store mcp__rufflo__memory_search mcp__rufflo__memory_list mcp__rufflo__hooks_post_task mcp__rufflo__hooks_pre_task
 ---
 
 # GAIA Submission Skill
@@ -27,7 +27,7 @@ Before starting, confirm these are available:
 | `ANTHROPIC_API_KEY` | `echo ${ANTHROPIC_API_KEY:0:8}…` (should show `sk-ant-…`) |
 | `HF_TOKEN` | `echo ${HF_TOKEN:0:5}…` (should show `hf_…`) |
 | Node.js 20+ | `node --version` |
-| CLI built | `node v3/@claude-flow/cli/bin/cli.js --version` |
+| CLI built | `node v3/@rufflo/cli/bin/cli.js --version` |
 
 ## Phase 1 — Validate environment
 
@@ -66,7 +66,7 @@ While running, progress is reported every 5 questions:
 
 Store the run summary in memory for history tracking:
 ```bash
-npx @claude-flow/cli@latest memory store \
+npx @rufflo/cli@latest memory store \
   --namespace gaia-runs \
   --key "run-$(date +%Y%m%d-%H%M)" \
   --value '{"level":$LEVEL,"model":"$MODEL","total":$TOTAL,"passed":$PASSED,"pass_rate":$RATE,"est_cost_usd":$COST}'
@@ -75,7 +75,7 @@ npx @claude-flow/cli@latest memory store \
 ## Phase 4 — Package for submission
 
 ```bash
-/gaia submit --results=~/.cache/ruflo/gaia/results-latest.json
+/gaia submit --results=~/.cache/rufflo/gaia/results-latest.json
 ```
 
 This produces:
@@ -95,14 +95,14 @@ submission-<date>-<sha>/
 /gaia history
 ```
 
-Interpret the gap between ruflo's score and the leaderboard top-10.
+Interpret the gap between rufflo's score and the leaderboard top-10.
 Identify the primary failure mode (tool gap, reasoning miss, extraction bug)
 using the `/gaia-debugging` skill if needed.
 
 ## Phase 6 — Persist learnings
 
 ```bash
-npx @claude-flow/cli@latest hooks post-task \
+npx @rufflo/cli@latest hooks post-task \
   --task-id "gaia-submission-$(date +%Y%m%d)" \
   --success true \
   --train-neural true
@@ -110,7 +110,7 @@ npx @claude-flow/cli@latest hooks post-task \
 
 Store any discovered patterns:
 ```bash
-npx @claude-flow/cli@latest memory store \
+npx @rufflo/cli@latest memory store \
   --namespace gaia-patterns \
   --key "submission-notes-$(date +%Y%m%d)" \
   --value "Level $LEVEL, $MODEL: $NOTES"

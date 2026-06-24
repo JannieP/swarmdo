@@ -1,5 +1,5 @@
 {
-  "name": "@claude-flow/plugin-neural-coordination",
+  "name": "@rufflo/plugin-neural-coordination",
   "version": "3.0.0-alpha.1",
   "description": "Neural coordination plugin for multi-agent swarm intelligence using SONA, GNN, and attention mechanisms",
   "main": "./dist/index.js",
@@ -40,7 +40,7 @@
     "prepublishOnly": "npm run clean && npm run build && npm run typecheck"
   },
   "keywords": [
-    "claude-flow",
+    "rufflo",
     "neural-coordination",
     "multi-agent",
     "swarm",
@@ -50,7 +50,7 @@
     "gnn",
     "attention"
   ],
-  "author": "Claude Flow Team",
+  "author": "Rufflo Team",
   "license": "MIT",
   "repository": {
     "type": "git",

@@ -1,5 +1,5 @@
 # Prime Radiant Plugin Manifest
-# Mathematical AI Interpretability for Claude Flow V3
+# Mathematical AI Interpretability for Rufflo V3
 
 name: prime-radiant
 version: 0.1.3
@@ -35,15 +35,15 @@ domains:
   - coordination # Swarm stability analysis
   - hive-mind    # Consensus verification
 
-# Required Claude Flow dependencies
+# Required Rufflo dependencies
 dependencies:
   required:
-    - "@claude-flow/memory": ">=3.0.0"
-    - "@claude-flow/security": ">=3.0.0"
-    - "@claude-flow/coordination": ">=3.0.0"
+    - "@rufflo/memory": ">=3.0.0"
+    - "@rufflo/security": ">=3.0.0"
+    - "@rufflo/coordination": ">=3.0.0"
   optional:
-    - "@claude-flow/embeddings": ">=3.0.0"  # For embedding generation
-    - "@claude-flow/aidefence": ">=3.0.0"   # For enhanced threat detection
+    - "@rufflo/embeddings": ">=3.0.0"  # For embedding generation
+    - "@rufflo/aidefence": ">=3.0.0"   # For enhanced threat detection
 
 # Capabilities provided by this plugin
 capabilities:
@@ -678,7 +678,7 @@ implementation:
       files: 5
       estimatedLines: 475
       deliverables:
-        - Plugin registers with @claude-flow/plugins SDK
+        - Plugin registers with @rufflo/plugins SDK
         - Type-safe configuration
         - Basic lifecycle hooks
 

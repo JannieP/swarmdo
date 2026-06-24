@@ -1,7 +1,7 @@
 /**
  * Portfolio Covariance Adapter (Wedge 8, ADR-123 Phase 5)
  *
- * `ruflo-neural-trader` does mean-variance optimisation: solve `Σ x = μ`
+ * `rufflo-neural-trader` does mean-variance optimisation: solve `Σ x = μ`
  * where `Σ` is the symmetric positive-definite asset-covariance matrix and
  * `μ` is the vector of expected returns. CG is the ideal target — upstream
  * 1.7.0 benchmarks: **816 ns at n=256, 40-60× faster than Neumann**.
@@ -47,12 +47,12 @@ export interface PortfolioAdapterOptions {
 }
 
 export function portfolioGraphId(portfolioId: string): string {
-  return `ruflo-neural-trader:covariance:${portfolioId}`;
+  return `rufflo-neural-trader:covariance:${portfolioId}`;
 }
 
 export class PortfolioCovarianceAdapter implements SublinearAdapter {
   readonly graphId: string;
-  readonly ownerPlugin = 'ruflo-neural-trader';
+  readonly ownerPlugin = 'rufflo-neural-trader';
   readonly requiresPreprocessing = false;
 
   private readonly source: PortfolioSource;

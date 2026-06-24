@@ -44,13 +44,13 @@ Model pricing per 1M tokens (Haiku/Sonnet/Opus × Input/Output/Cache-Write/Cache
 
 ## Tools (MCP-routed primary path)
 
-- `mcp__claude-flow__memory_store` — store usage records, budget config, optimization patterns (the `memory_*` family is namespace-routed; prefer this over `agentdb_hierarchical-*`)
-- `mcp__claude-flow__memory_search` / `memory_list` / `memory_retrieve` — read cost-tracking + cost-patterns namespaces
-- `mcp__claude-flow__memory_delete` — clean up stale config (used by budget upsert-via-timestamp pattern)
-- `mcp__claude-flow__hooks_route` — invoked by `cost-booster-route`
-- `mcp__claude-flow__hooks_model-outcome` — invoked by `cost-optimize` step 8 (auto-emits via `outcome.mjs`)
-- `mcp__claude-flow__hooks_worker-status` — `cost workers` subcommand (consumes `optimize` + `benchmark` worker outputs)
-- `mcp__claude-flow__agentdb_pattern-store` / `_pattern-search` — ReasoningBank-routed (no namespace arg) for typed cost-optimization patterns
+- `mcp__rufflo__memory_store` — store usage records, budget config, optimization patterns (the `memory_*` family is namespace-routed; prefer this over `agentdb_hierarchical-*`)
+- `mcp__rufflo__memory_search` / `memory_list` / `memory_retrieve` — read cost-tracking + cost-patterns namespaces
+- `mcp__rufflo__memory_delete` — clean up stale config (used by budget upsert-via-timestamp pattern)
+- `mcp__rufflo__hooks_route` — invoked by `cost-booster-route`
+- `mcp__rufflo__hooks_model-outcome` — invoked by `cost-optimize` step 8 (auto-emits via `outcome.mjs`)
+- `mcp__rufflo__hooks_worker-status` — `cost workers` subcommand (consumes `optimize` + `benchmark` worker outputs)
+- `mcp__rufflo__agentdb_pattern-store` / `_pattern-search` — ReasoningBank-routed (no namespace arg) for typed cost-optimization patterns
 
 ## Agent Booster (direct invocation, $0/edit, ~1 ms measured)
 
@@ -67,32 +67,32 @@ booster.apply({ code, edit, language }) → { output, success, latency, confiden
 
 Store cost patterns and optimization results for cross-session learning:
 ```bash
-npx @claude-flow/cli@latest memory store --namespace cost-tracking --key "report-DATE" --value "REPORT_JSON"
-npx @claude-flow/cli@latest memory store --namespace cost-patterns --key "optimization-OPT_NAME" --value "OPTIMIZATION_RESULT_JSON"
-npx @claude-flow/cli@latest memory search --query "cost savings from model downgrades" --namespace cost-patterns
+npx @rufflo/cli@latest memory store --namespace cost-tracking --key "report-DATE" --value "REPORT_JSON"
+npx @rufflo/cli@latest memory store --namespace cost-patterns --key "optimization-OPT_NAME" --value "OPTIMIZATION_RESULT_JSON"
+npx @rufflo/cli@latest memory search --query "cost savings from model downgrades" --namespace cost-patterns
 ```
 
 ## Background workers
 
-This plugin is the declared consumer of two `ruflo-loop-workers` background workers (see [ruflo-loop-workers ADR-0001 §"12-worker trigger map"](../../ruflo-loop-workers/docs/adrs/0001-loop-workers-contract.md)):
+This plugin is the declared consumer of two `rufflo-loop-workers` background workers (see [rufflo-loop-workers ADR-0001 §"12-worker trigger map"](../../rufflo-loop-workers/docs/adrs/0001-loop-workers-contract.md)):
 
-- **`optimize`** — periodically scans recent cost data and produces optimization recommendations. Consumed by the `cost-optimize` skill and surfaced via `cost workers` (see `commands/ruflo-cost.md`).
+- **`optimize`** — periodically scans recent cost data and produces optimization recommendations. Consumed by the `cost-optimize` skill and surfaced via `cost workers` (see `commands/rufflo-cost.md`).
 - **`benchmark`** — runs cost-per-benchmark across spawned agents; results inform Tier 1/2/3 routing decisions reported in `cost-report`.
 
-Use `mcp__claude-flow__hooks_worker-status --worker optimize` and `--worker benchmark` to inspect last-run timestamps and outcomes. The worker scheduling itself is owned by `ruflo-loop-workers`; this plugin only consumes outputs.
+Use `mcp__rufflo__hooks_worker-status --worker optimize` and `--worker benchmark` to inspect last-run timestamps and outcomes. The worker scheduling itself is owned by `rufflo-loop-workers`; this plugin only consumes outputs.
 
 ## Neural learning
 
 After generating cost reports or applying optimizations, feed the cost-optimization learning loop so future strategies compound:
 ```bash
-npx @claude-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
-npx @claude-flow/cli@latest neural train --pattern-type cost-optimization --epochs 5
+npx @rufflo/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
+npx @rufflo/cli@latest neural train --pattern-type cost-optimization --epochs 5
 ```
 
 ## Related plugins
 
-- **ruflo-intelligence**: Model routing optimization data feeds cost analysis (3-tier routing reduces cost 75%).
-- **ruflo-autopilot**: Budget-aware autopilot mode uses cost data to throttle agent spawns.
-- **ruflo-observability**: Token usage metrics collected via observability instrumentation.
-- **ruflo-swarm**: Agent spawn/stop decisions informed by budget remaining.
-- **ruflo-federation**: Federation budget circuit breaker (ADR-097) — federation_send `maxTokens` / `maxUsd` enforcement complements local cost tracking.
+- **rufflo-intelligence**: Model routing optimization data feeds cost analysis (3-tier routing reduces cost 75%).
+- **rufflo-autopilot**: Budget-aware autopilot mode uses cost data to throttle agent spawns.
+- **rufflo-observability**: Token usage metrics collected via observability instrumentation.
+- **rufflo-swarm**: Agent spawn/stop decisions informed by budget remaining.
+- **rufflo-federation**: Federation budget circuit breaker (ADR-097) — federation_send `maxTokens` / `maxUsd` enforcement complements local cost tracking.

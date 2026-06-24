@@ -1,4 +1,4 @@
-# ruflo-ddd — DDD Reference
+# rufflo-ddd — DDD Reference
 
 Companion reference for `domain-modeler` and other agents in this plugin. The agent prompt deliberately stays lean per [ADR-098 Part 2](../../v3/docs/adr/ADR-098-plugin-capability-sync-and-optimization.md); this file collects the vocabulary tables, scaffolding catalogs, and AgentDB graph-storage recipes the agent reads on-demand.
 
@@ -46,15 +46,15 @@ Persist the domain model as a navigable graph so subsequent sessions can travers
 
 ```bash
 # Store bounded context hierarchy
-mcp__claude-flow__agentdb_hierarchical-store --parent "domain" \
+mcp__rufflo__agentdb_hierarchical-store --parent "domain" \
   --child "context:ordering" --relation "contains"
-mcp__claude-flow__agentdb_hierarchical-store --parent "context:ordering" \
+mcp__rufflo__agentdb_hierarchical-store --parent "context:ordering" \
   --child "aggregate:order" --relation "contains"
 
 # Store context dependencies
-mcp__claude-flow__agentdb_causal-edge --from "context:ordering" \
+mcp__rufflo__agentdb_causal-edge --from "context:ordering" \
   --to "context:inventory" --type "depends-on"
-mcp__claude-flow__agentdb_causal-edge --from "context:ordering" \
+mcp__rufflo__agentdb_causal-edge --from "context:ordering" \
   --to "context:payments" --type "publishes-events-to"
 ```
 

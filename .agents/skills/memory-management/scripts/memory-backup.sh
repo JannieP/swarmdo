@@ -11,6 +11,6 @@ BACKUP_FILE="${BACKUP_DIR}/memory_${TIMESTAMP}.json"
 mkdir -p "$BACKUP_DIR"
 
 echo "Backing up memory to $BACKUP_FILE..."
-npx @claude-flow/cli memory export --output "$BACKUP_FILE"
+npx @rufflo/cli memory export --output "$BACKUP_FILE"
 
 echo "Backup complete: $BACKUP_FILE"

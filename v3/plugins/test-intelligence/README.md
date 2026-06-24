@@ -1,7 +1,7 @@
-# @claude-flow/plugin-test-intelligence
+# @rufflo/plugin-test-intelligence
 
-[![npm version](https://img.shields.io/npm/v/@claude-flow/plugin-test-intelligence.svg)](https://www.npmjs.com/package/@claude-flow/plugin-test-intelligence)
-[![npm downloads](https://img.shields.io/npm/dm/@claude-flow/plugin-test-intelligence.svg)](https://www.npmjs.com/package/@claude-flow/plugin-test-intelligence)
+[![npm version](https://img.shields.io/npm/v/@rufflo/plugin-test-intelligence.svg)](https://www.npmjs.com/package/@rufflo/plugin-test-intelligence)
+[![npm downloads](https://img.shields.io/npm/dm/@rufflo/plugin-test-intelligence.svg)](https://www.npmjs.com/package/@rufflo/plugin-test-intelligence)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A comprehensive test intelligence plugin combining reinforcement learning for optimal test selection with graph neural networks for code-to-test mapping. The plugin enables predictive test selection (run only tests likely to fail), flaky test detection, mutation testing optimization, and test coverage gap identification while integrating seamlessly with popular testing frameworks.
@@ -19,19 +19,19 @@ A comprehensive test intelligence plugin combining reinforcement learning for op
 ### npm
 
 ```bash
-npm install @claude-flow/plugin-test-intelligence
+npm install @rufflo/plugin-test-intelligence
 ```
 
 ### CLI
 
 ```bash
-npx claude-flow plugins install --name @claude-flow/plugin-test-intelligence
+npx rufflo plugins install --name @rufflo/plugin-test-intelligence
 ```
 
 ## Quick Start
 
 ```typescript
-import { TestIntelligencePlugin } from '@claude-flow/plugin-test-intelligence';
+import { TestIntelligencePlugin } from '@rufflo/plugin-test-intelligence';
 
 // Initialize the plugin
 const testIntel = new TestIntelligencePlugin({
@@ -380,15 +380,15 @@ Execution History --> SONA Learning --> RL Policy
 
 | Plugin | Description | Use Case |
 |--------|-------------|----------|
-| [@claude-flow/plugin-code-intelligence](../code-intelligence) | Code analysis | Impact analysis for test prioritization |
-| [@claude-flow/plugin-perf-optimizer](../perf-optimizer) | Performance optimization | Test performance profiling |
-| [@claude-flow/plugin-financial-risk](../financial-risk) | Risk analysis | Test risk scoring for critical paths |
+| [@rufflo/plugin-code-intelligence](../code-intelligence) | Code analysis | Impact analysis for test prioritization |
+| [@rufflo/plugin-perf-optimizer](../perf-optimizer) | Performance optimization | Test performance profiling |
+| [@rufflo/plugin-financial-risk](../financial-risk) | Risk analysis | Test risk scoring for critical paths |
 
 ## License
 
 MIT License
 
-Copyright (c) 2026 Claude Flow
+Copyright (c) 2026 Rufflo
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -7,7 +7,7 @@ allowed-tools: Bash
 
 # Cost Summary
 
-A stable single-call interface that other plugins / scripts / dashboards can shell out to and parse. ADR-0002 considered exposing `cost_report` / `cost_summary` as proper MCP tools but **deferred that** — adding MCP tools requires modifying `@claude-flow/cli` source, out of scope for plugin-local work. This script is the equivalent: same data, exposed via a stdout JSON contract.
+A stable single-call interface that other plugins / scripts / dashboards can shell out to and parse. ADR-0002 considered exposing `cost_report` / `cost_summary` as proper MCP tools but **deferred that** — adding MCP tools requires modifying `@rufflo/cli` source, out of scope for plugin-local work. This script is the equivalent: same data, exposed via a stdout JSON contract.
 
 ## When to use
 
@@ -59,10 +59,10 @@ A stable single-call interface that other plugins / scripts / dashboards can she
 
 ```bash
 # Markdown (default)
-node plugins/ruflo-cost-tracker/scripts/summary.mjs
+node plugins/rufflo-cost-tracker/scripts/summary.mjs
 
 # JSON for programmatic consumption
-node plugins/ruflo-cost-tracker/scripts/summary.mjs --format json
+node plugins/rufflo-cost-tracker/scripts/summary.mjs --format json
 ```
 
 Optional env: `SUMMARY_NAMESPACE=cost-tracking`, `SUMMARY_FED_NAMESPACE=federation-spend`, `SUMMARY_FORMAT=json`.

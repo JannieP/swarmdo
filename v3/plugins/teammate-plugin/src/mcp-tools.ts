@@ -5,7 +5,7 @@
  * - 16 core TeammateTool integration tools
  * - 5 BMSSP optimization tools (10-15x faster with WASM)
  *
- * @module @claude-flow/teammate-plugin/mcp
+ * @module @rufflo/teammate-plugin/mcp
  * @version 1.0.0-alpha.1
  */
 

@@ -1,7 +1,7 @@
 /**
  * Federation Trust Adapter (Wedge 3, ADR-123 Phase 3)
  *
- * `ruflo-federation` ships a peer trust mesh (ADR-097/104/105/111). This
+ * `rufflo-federation` ships a peer trust mesh (ADR-097/104/105/111). This
  * adapter exports the mesh as a SparseMatrix so `sublinear/page-rank-entry`
  * computes transitive trust `(I − αT)τ = e` in O(log peers) instead of
  * O(peers²) closure walks. Trust is one-way → the matrix is asymmetric
@@ -37,11 +37,11 @@ export interface FederationTrustAdapterOptions {
   ddSafetyMargin?: number;
 }
 
-export const FEDERATION_TRUST_GRAPH_ID = 'ruflo-federation:trust-mesh';
+export const FEDERATION_TRUST_GRAPH_ID = 'rufflo-federation:trust-mesh';
 
 export class FederationTrustAdapter implements SublinearAdapter {
   readonly graphId = FEDERATION_TRUST_GRAPH_ID;
-  readonly ownerPlugin = 'ruflo-federation';
+  readonly ownerPlugin = 'rufflo-federation';
   readonly requiresPreprocessing = false;
 
   private readonly source: PeerTrustSource;

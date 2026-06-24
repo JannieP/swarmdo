@@ -1,6 +1,6 @@
 # ADR-074 — Self-Learning Wiring + Honest Multi-Path Output (#2245)
 
-**Status**: Accepted — Implemented in ruflo 3.10.14
+**Status**: Accepted — Implemented in rufflo 3.10.14
 **Date**: 2026-05-30
 **Tracking issue**: [#2245](https://github.com/ruvnet/ruflo/issues/2245)
 **Companion**: ADR-143 (deterministic Tier-1 codemods — same claims-vs-reality pattern), ADR-073 (agentdb SOTA — also a claims-vs-reality round), [ruvnet/ruflo#2241](https://github.com/ruvnet/ruflo/issues/2241) Dream-Cycle research (Structured Distillation is the natural Round-2 enhancement to this work)
@@ -21,7 +21,7 @@ This is the same family as ADR-143 (Agent Booster Tier-1 was dead/mislabeled) an
 
 ## Decision
 
-Ship ruflo 3.10.14 with the **three minimal wirings** plus **honest multi-path output**. The full unification (one source of truth for all 4 aggregators) is a multi-PR program tracked separately — not crammed into this round.
+Ship rufflo 3.10.14 with the **three minimal wirings** plus **honest multi-path output**. The full unification (one source of truth for all 4 aggregators) is a multi-PR program tracked separately — not crammed into this round.
 
 ### §1 — Wire `hooks_task-completed` to the trajectory pipeline
 

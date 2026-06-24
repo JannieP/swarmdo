@@ -24,76 +24,76 @@
     "incremental": true,
     "baseUrl": "./",
     "paths": {
-      "@claude-flow/security": [
-        "./@claude-flow/security/src"
+      "@rufflo/security": [
+        "./@rufflo/security/src"
       ],
-      "@claude-flow/memory": [
-        "./@claude-flow/memory/src"
+      "@rufflo/memory": [
+        "./@rufflo/memory/src"
       ],
-      "@claude-flow/integration": [
-        "./@claude-flow/integration/src"
+      "@rufflo/integration": [
+        "./@rufflo/integration/src"
       ],
-      "@claude-flow/swarm": [
-        "./@claude-flow/swarm/src"
+      "@rufflo/swarm": [
+        "./@rufflo/swarm/src"
       ],
-      "@claude-flow/performance": [
-        "./@claude-flow/performance/src"
+      "@rufflo/performance": [
+        "./@rufflo/performance/src"
       ],
-      "@claude-flow/cli": [
-        "./@claude-flow/cli/src"
+      "@rufflo/cli": [
+        "./@rufflo/cli/src"
       ],
-      "@claude-flow/neural": [
-        "./@claude-flow/neural/src"
+      "@rufflo/neural": [
+        "./@rufflo/neural/src"
       ],
-      "@claude-flow/testing": [
-        "./@claude-flow/testing/src"
+      "@rufflo/testing": [
+        "./@rufflo/testing/src"
       ],
-      "@claude-flow/deployment": [
-        "./@claude-flow/deployment/src"
+      "@rufflo/deployment": [
+        "./@rufflo/deployment/src"
       ],
-      "@claude-flow/shared": [
-        "./@claude-flow/shared/src"
+      "@rufflo/shared": [
+        "./@rufflo/shared/src"
       ],
-      "@claude-flow/hooks": [
-        "./@claude-flow/hooks/src"
+      "@rufflo/hooks": [
+        "./@rufflo/hooks/src"
       ]
     },
     "emitDeclarationOnly": false,
-    "tsBuildInfoFile": "/workspaces/claude-flow/v3/node_modules/.pnpm/vitest@1.6.1_@types+node@20.19.27/node_modules/vitest/dist/vendor/tsconfig.tmp.tsbuildinfo"
+    "tsBuildInfoFile": "/workspaces/rufflo/v3/node_modules/.pnpm/vitest@1.6.1_@types+node@20.19.27/node_modules/vitest/dist/vendor/tsconfig.tmp.tsbuildinfo"
   },
   "references": [
     {
-      "path": "./@claude-flow/shared"
+      "path": "./@rufflo/shared"
     },
     {
-      "path": "./@claude-flow/security"
+      "path": "./@rufflo/security"
     },
     {
-      "path": "./@claude-flow/memory"
+      "path": "./@rufflo/memory"
     },
     {
-      "path": "./@claude-flow/integration"
+      "path": "./@rufflo/integration"
     },
     {
-      "path": "./@claude-flow/swarm"
+      "path": "./@rufflo/swarm"
     },
     {
-      "path": "./@claude-flow/performance"
+      "path": "./@rufflo/performance"
     },
     {
-      "path": "./@claude-flow/cli"
+      "path": "./@rufflo/cli"
     },
     {
-      "path": "./@claude-flow/neural"
+      "path": "./@rufflo/neural"
     },
     {
-      "path": "./@claude-flow/testing"
+      "path": "./@rufflo/testing"
     },
     {
-      "path": "./@claude-flow/deployment"
+      "path": "./@rufflo/deployment"
     },
     {
-      "path": "./@claude-flow/hooks"
+      "path": "./@rufflo/hooks"
     }
   ],
   "include": [],

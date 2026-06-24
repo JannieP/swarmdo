@@ -25,7 +25,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const SOURCE = resolve(__dirname, '../v3/@claude-flow/cli/src/mcp-tools/agent-execute-core.ts');
+const SOURCE = resolve(__dirname, '../v3/@rufflo/cli/src/mcp-tools/agent-execute-core.ts');
 
 function fail(msg) { console.error(`✗ ${msg}`); process.exitCode = 1; }
 function pass(msg) { console.log(`✓ ${msg}`); }

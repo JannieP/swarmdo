@@ -76,7 +76,7 @@ async function handleStoreMemory(input, context) {
     const resourceManager = context?.resourceManager;
     if (resourceManager?.memoryService) {
         try {
-            const { UnifiedMemoryService } = await import('@claude-flow/memory');
+            const { UnifiedMemoryService } = await import('@rufflo/memory');
             const memoryService = resourceManager.memoryService;
             // Store the memory entry
             const entry = await memoryService.storeEntry({
@@ -119,7 +119,7 @@ async function handleSearchMemory(input, context) {
     const resourceManager = context?.resourceManager;
     if (resourceManager?.memoryService) {
         try {
-            const { UnifiedMemoryService } = await import('@claude-flow/memory');
+            const { UnifiedMemoryService } = await import('@rufflo/memory');
             const memoryService = resourceManager.memoryService;
             let searchResults;
             if (input.searchType === 'semantic' || input.searchType === 'hybrid') {
@@ -196,7 +196,7 @@ async function handleListMemory(input, context) {
     const resourceManager = context?.resourceManager;
     if (resourceManager?.memoryService) {
         try {
-            const { UnifiedMemoryService } = await import('@claude-flow/memory');
+            const { UnifiedMemoryService } = await import('@rufflo/memory');
             const memoryService = resourceManager.memoryService;
             // Query all entries
             const entries = await memoryService.query({

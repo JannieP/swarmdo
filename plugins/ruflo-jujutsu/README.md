@@ -1,4 +1,4 @@
-# ruflo-jujutsu
+# rufflo-jujutsu
 
 Advanced git workflows with diff analysis, risk scoring, and reviewer recommendations.
 
@@ -6,7 +6,7 @@ Advanced git workflows with diff analysis, risk scoring, and reviewer recommenda
 
 ```
 /plugin marketplace add ruvnet/ruflo
-/plugin install ruflo-jujutsu@ruflo
+/plugin install rufflo-jujutsu@rufflo
 ```
 
 ## Features
@@ -27,7 +27,7 @@ Advanced git workflows with diff analysis, risk scoring, and reviewer recommenda
 
 ## MCP surface (6 tools)
 
-All defined at `v3/@claude-flow/cli/src/mcp-tools/analyze-tools.ts`:
+All defined at `v3/@rufflo/cli/src/mcp-tools/analyze-tools.ts`:
 
 | Tool | Purpose |
 |------|---------|
@@ -40,12 +40,12 @@ All defined at `v3/@claude-flow/cli/src/mcp-tools/analyze-tools.ts`:
 
 ## Compatibility
 
-- **CLI:** pinned to `@claude-flow/cli` v3.6 major+minor.
-- **Verification:** `bash plugins/ruflo-jujutsu/scripts/smoke.sh` is the contract.
+- **CLI:** pinned to `@rufflo/cli` v3.6 major+minor.
+- **Verification:** `bash plugins/rufflo-jujutsu/scripts/smoke.sh` is the contract.
 
 ## ADR-compliance integration
 
-This plugin's diff analysis is the substrate that [ruflo-adr ADR-0001](../ruflo-adr/docs/adrs/0001-adr-plugin-pattern.md)'s `/adr check` runs on. When ADR compliance is queried for a diff:
+This plugin's diff analysis is the substrate that [rufflo-adr ADR-0001](../rufflo-adr/docs/adrs/0001-adr-plugin-pattern.md)'s `/adr check` runs on. When ADR compliance is queried for a diff:
 
 1. `/adr check` calls `analyze_diff` to get the structured diff
 2. Then `analyze_diff-classify` to determine change type
@@ -56,20 +56,20 @@ Without this plugin, `/adr check` falls back to plain `git diff` parsing — usa
 
 ## Namespace coordination
 
-This plugin owns the `git-patterns` AgentDB namespace (kebab-case, follows the convention from [ruflo-agentdb ADR-0001 §"Namespace convention"](../ruflo-agentdb/docs/adrs/0001-agentdb-optimization.md)). Reserved namespaces (`pattern`, `claude-memories`, `default`) MUST NOT be shadowed.
+This plugin owns the `git-patterns` AgentDB namespace (kebab-case, follows the convention from [rufflo-agentdb ADR-0001 §"Namespace convention"](../rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md)). Reserved namespaces (`pattern`, `claude-memories`, `default`) MUST NOT be shadowed.
 
 ## Verification
 
 ```bash
-bash plugins/ruflo-jujutsu/scripts/smoke.sh
+bash plugins/rufflo-jujutsu/scripts/smoke.sh
 # Expected: "10 passed, 0 failed"
 ```
 
 ## Architecture Decisions
 
-- [`ADR-0001` — ruflo-jujutsu plugin contract (ADR-compliance integration, smoke as contract)](./docs/adrs/0001-jujutsu-contract.md)
+- [`ADR-0001` — rufflo-jujutsu plugin contract (ADR-compliance integration, smoke as contract)](./docs/adrs/0001-jujutsu-contract.md)
 
 ## Related Plugins
 
-- `ruflo-adr` — `/adr check` consumes this plugin's `analyze_diff` output
-- `ruflo-agentdb` — namespace convention owner
+- `rufflo-adr` — `/adr check` consumes this plugin's `analyze_diff` output
+- `rufflo-agentdb` — namespace convention owner

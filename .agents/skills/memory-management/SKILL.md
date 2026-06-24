@@ -31,76 +31,76 @@ AgentDB memory system with HNSW vector search. Provides 150x-12,500x faster patt
 Store a pattern or knowledge item in memory
 
 ```bash
-npx @claude-flow/cli memory store --key "[key]" --value "[value]" --namespace patterns
+npx @rufflo/cli memory store --key "[key]" --value "[value]" --namespace patterns
 ```
 
 **Example:**
 ```bash
-npx @claude-flow/cli memory store --key "auth-jwt-pattern" --value "JWT validation with refresh tokens" --namespace patterns
+npx @rufflo/cli memory store --key "auth-jwt-pattern" --value "JWT validation with refresh tokens" --namespace patterns
 ```
 
 ### Semantic Search
 Search memory using semantic similarity
 
 ```bash
-npx @claude-flow/cli memory search --query "[search terms]" --limit 10
+npx @rufflo/cli memory search --query "[search terms]" --limit 10
 ```
 
 **Example:**
 ```bash
-npx @claude-flow/cli memory search --query "authentication best practices" --limit 5
+npx @rufflo/cli memory search --query "authentication best practices" --limit 5
 ```
 
 ### Retrieve Entry
 Retrieve a specific memory entry by key
 
 ```bash
-npx @claude-flow/cli memory get --key "[key]" --namespace [namespace]
+npx @rufflo/cli memory get --key "[key]" --namespace [namespace]
 ```
 
 **Example:**
 ```bash
-npx @claude-flow/cli memory get --key "auth-jwt-pattern" --namespace patterns
+npx @rufflo/cli memory get --key "auth-jwt-pattern" --namespace patterns
 ```
 
 ### List Entries
 List all entries in a namespace
 
 ```bash
-npx @claude-flow/cli memory list --namespace [namespace]
+npx @rufflo/cli memory list --namespace [namespace]
 ```
 
 **Example:**
 ```bash
-npx @claude-flow/cli memory list --namespace patterns --limit 20
+npx @rufflo/cli memory list --namespace patterns --limit 20
 ```
 
 ### Delete Entry
 Delete a memory entry
 
 ```bash
-npx @claude-flow/cli memory delete --key "[key]" --namespace [namespace]
+npx @rufflo/cli memory delete --key "[key]" --namespace [namespace]
 ```
 
 ### Initialize HNSW Index
 Initialize HNSW vector search index
 
 ```bash
-npx @claude-flow/cli memory init --enable-hnsw
+npx @rufflo/cli memory init --enable-hnsw
 ```
 
 ### Memory Stats
 Show memory usage statistics
 
 ```bash
-npx @claude-flow/cli memory stats
+npx @rufflo/cli memory stats
 ```
 
 ### Export Memory
 Export memory to JSON
 
 ```bash
-npx @claude-flow/cli memory export --output memory-backup.json
+npx @rufflo/cli memory export --output memory-backup.json
 ```
 
 

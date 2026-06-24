@@ -1,6 +1,6 @@
 # ADR-075 — Unified Learning Stats Aggregator (#2245 follow-up)
 
-**Status**: Accepted — Implemented in ruflo 3.10.15
+**Status**: Accepted — Implemented in rufflo 3.10.15
 **Date**: 2026-05-30
 **Tracking**: [#2245](https://github.com/ruvnet/ruflo/issues/2245) — self-learning subsystem audit
 **Supersedes**: the "future-rounds" item in ADR-074 §"Deliberately NOT in this round" titled *"Unify the 4 stat sources"*
@@ -15,7 +15,7 @@ When we tried that, we found the premise was wrong: the four sources **genuinely
 
 | Aggregator | Authoritative for |
 |---|---|
-| `globalStats` (`.claude-flow/neural/stats.json`) | "did the SONA/trajectory pipeline persist a learning event" (counter form) |
+| `globalStats` (`.rufflo/neural/stats.json`) | "did the SONA/trajectory pipeline persist a learning event" (counter form) |
 | `sonaCoordinator` (in-memory) | "in this process, how much has SONA trained" (live, resets per process) |
 | `memory-bridge` (AgentDB) | "how many memory entries exist across all namespaces" — way broader than learning |
 | `neural_patterns` store | "what pattern artefacts are queryable by `neural_patterns list`" |
@@ -92,12 +92,12 @@ This is the same shape as the per-handler `learningPath`/`note` design from ADR-
 ## Reproduce
 
 ```bash
-git clone https://github.com/ruvnet/ruflo && cd ruflo
-npm install && ( cd v3/@claude-flow/cli && npx tsc -b )
+git clone https://github.com/ruvnet/ruflo && cd rufflo
+npm install && ( cd v3/@rufflo/cli && npx tsc -b )
 
 # Cross-store consistency tests
-( cd v3/@claude-flow/cli && npx vitest run __tests__/unified-stats-2245.test.ts )
+( cd v3/@rufflo/cli && npx vitest run __tests__/unified-stats-2245.test.ts )
 
 # 6-section benchmark including §F unified-stats
-node v3/@claude-flow/cli/scripts/benchmark-self-learning.mjs
+node v3/@rufflo/cli/scripts/benchmark-self-learning.mjs
 ```

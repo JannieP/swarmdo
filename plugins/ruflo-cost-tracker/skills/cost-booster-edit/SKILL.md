@@ -74,7 +74,7 @@ Avg measured latency ≈ **1.2 ms**. All 5 above the default 0.5 confidence thre
 | **Cost saved per edit**            | **Measured:** $0.000020 vs Gemini, **$0.000722 vs Sonnet 4.6**, **$0.004720 vs Opus 4.7** (the booster side is $0 in all cases). |
 | **Win parity with frontier LLMs**  | **Verified** — Booster, Gemini 2.0 Flash, Sonnet 4.6, Opus 4.7 all scored 12/12 on this corpus. Booster matches LLM accuracy structurally for deterministic transforms. |
 
-To extend: add cases to `bench/booster-corpus.json`, run `( cd v3 && node ../plugins/ruflo-cost-tracker/scripts/bench.mjs )` (or with `BENCH_LLM_BASELINE=1`), commit `runs/latest.json`. Smoke step 23 fails the build if win rate drops below 0.80.
+To extend: add cases to `bench/booster-corpus.json`, run `( cd v3 && node ../plugins/rufflo-cost-tracker/scripts/bench.mjs )` (or with `BENCH_LLM_BASELINE=1`), commit `runs/latest.json`. Smoke step 23 fails the build if win rate drops below 0.80.
 
 **Override the LLM model:** `BENCH_LLM_MODEL='claude-sonnet-4'` (when wired against `api.anthropic.com`) or `BENCH_LLM_MODEL='models/gemini-2.5-flash'` for a reasoning-model comparison. Pricing flags: `BENCH_LLM_PRICE_IN`, `BENCH_LLM_PRICE_OUT`.
 

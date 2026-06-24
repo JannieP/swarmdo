@@ -8,7 +8,7 @@
 
 ## Context
 
-ADR-097 shipped the federation plugin's security/audit/breaker layers (Phases 1, 2.a, 2.b, 3 consumer + upstream, 4 — all Implemented in `@claude-flow/plugin-agent-federation@1.0.0-alpha.8`). The transport layer was deliberately deferred: `routing-service.ts` has no `fetch`/`WebSocket`/`http.request` calls; every `federation_send` runs in-process. The plugin contract treated wire transport as an integrator concern.
+ADR-097 shipped the federation plugin's security/audit/breaker layers (Phases 1, 2.a, 2.b, 3 consumer + upstream, 4 — all Implemented in `@rufflo/plugin-agent-federation@1.0.0-alpha.8`). The transport layer was deliberately deferred: `routing-service.ts` has no `fetch`/`WebSocket`/`http.request` calls; every `federation_send` runs in-process. The plugin contract treated wire transport as an integrator concern.
 
 For real mac↔ruvultra peering, an integrator (here: ourselves) needs to pick a transport. We surveyed three:
 
@@ -90,7 +90,7 @@ mac (darwin/arm64) → ruvultra:9101 (linux/x64) over tailscale, real bytes on t
 
 ## Operator-visible signal
 
-When this is wired into the federation plugin, `npx ruflo doctor --component federation` will report:
+When this is wired into the federation plugin, `npx rufflo doctor --component federation` will report:
 
 ```
 ✓ Federation Breaker: ADR-097 breaker loadable

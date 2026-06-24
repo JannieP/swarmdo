@@ -16,7 +16,7 @@
 //   synthetic data. This test does.
 //
 // THE PIPELINE BEING TESTED
-//   1. oia-audit --dry-run --path .         (real run against ruflo)
+//   1. oia-audit --dry-run --path .         (real run against rufflo)
 //   2. The audit record's fingerprint{score,genome}
 //   3. audit-trend --baseline {same-record} --current {same-record}
 //   4. delta.structuralDistance.verdict === 'near-identical'
@@ -43,7 +43,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SCRIPTS_DIR = dirname(fileURLToPath(import.meta.url));
-const REPO_ROOT = dirname(dirname(dirname(SCRIPTS_DIR))); // up out of plugins/ruflo-metaharness/scripts
+const REPO_ROOT = dirname(dirname(dirname(SCRIPTS_DIR))); // up out of plugins/rufflo-metaharness/scripts
 
 const ARGS = (() => {
   const a = { format: 'table' };
@@ -76,9 +76,9 @@ const tmp = mkdtempSync(join(tmpdir(), 'pipeline-roundtrip-'));
 
 try {
   // ──────────────────────────────────────────────────────────────
-  // STAGE 1: oia-audit --dry-run against ruflo repo itself
+  // STAGE 1: oia-audit --dry-run against rufflo repo itself
   // ──────────────────────────────────────────────────────────────
-  console.log('Stage 1 — oia-audit --dry-run against ruflo repo');
+  console.log('Stage 1 — oia-audit --dry-run against rufflo repo');
   const auditRun = runNode('oia-audit.mjs', ['--path', REPO_ROOT, '--dry-run', '--format', 'json'], 90_000);
 
   // Extract the JSON object from stdout (script may emit some prelude)
@@ -539,7 +539,7 @@ try {
 
   // Re-use baseClean (no findings) from Stage 11
   // Run drift-from-history with --alert-on-new-severity info
-  // (real ruflo audit has 1 INFO finding → introduced=1)
+  // (real rufflo audit has 1 INFO finding → introduced=1)
   const stage12Run = runNode('drift-from-history.mjs', [
     '--baseline-file', baseCleanPath,
     '--dry-run',
@@ -553,7 +553,7 @@ try {
 
   // The orthogonal gate fires
   assert(stage12.alert?.triggered === true,
-    'Stage 12: --alert-on-new-severity info triggers on ruflo current INFO finding');
+    'Stage 12: --alert-on-new-severity info triggers on rufflo current INFO finding');
   // Reason mentions severity, not similarity (structural is fine at threshold 0.5)
   const reasons = stage12.alert?.reasons ?? [];
   const hasSeverityReason = reasons.some((r) => /finding\(s\) at or above/.test(r));

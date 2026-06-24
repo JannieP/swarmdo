@@ -34,7 +34,7 @@ fails on MEDIUM; `--fail-on low` fails on any finding.
 
 ```yaml
 - name: MCP static scan
-  run: node plugins/ruflo-metaharness/scripts/mcp-scan.mjs --fail-on high
+  run: node plugins/rufflo-metaharness/scripts/mcp-scan.mjs --fail-on high
 ```
 
 The exit code is the only thing CI watches; the JSON output goes to
@@ -44,4 +44,4 @@ artifacts for human review.
 
 When `harness` binary is unavailable (no network, blocked registry),
 emits structured `{ degraded: true, reason: 'metaharness-not-available' }`
-and exits 0. Ruflo continues — ADR-150 architectural constraint.
+and exits 0. Rufflo continues — ADR-150 architectural constraint.

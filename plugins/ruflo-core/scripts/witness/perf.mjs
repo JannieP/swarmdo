@@ -11,9 +11,9 @@
  *
  * Capabilities tracked
  * ────────────────────
- *   install_pack          how long `pnpm pack @claude-flow/memory` takes
+ *   install_pack          how long `pnpm pack @rufflo/memory` takes
  *   install_no_optional   how long `npm install <tarball> --omit=optional` takes
- *   memory_load           how long `import('@claude-flow/memory')` takes
+ *   memory_load           how long `import('@rufflo/memory')` takes
  *   memory_round_trip     store + get on the auto-selected backend
  *   witness_verify        how long `verify.mjs --manifest` takes
  *
@@ -21,7 +21,7 @@
  *   { v, commit, issuedAt, os, capability, durationMs, metadata }
  *
  * Usage:
- *   node plugins/ruflo-core/scripts/witness/perf.mjs \
+ *   node plugins/rufflo-core/scripts/witness/perf.mjs \
  *     --output verification/<os>/performance.jsonl
  *
  *   --capabilities install_pack,memory_load   # subset
@@ -59,7 +59,7 @@ const runners = {
   install_pack: () => bench(() => {
     // execFileSync with array args prevents shell injection (CWE-78).
     execFileSync('pnpm', ['pack', '--pack-destination', tmpdir()], {
-      cwd: join(REPO_ROOT, 'v3/@claude-flow/memory'),
+      cwd: join(REPO_ROOT, 'v3/@rufflo/memory'),
       stdio: 'pipe',
     });
   }),
@@ -67,7 +67,7 @@ const runners = {
   install_no_optional: () => {
     const dir = mkdtempSync(join(tmpdir(), 'perf-install-'));
     const tarball = execFileSync('pnpm', ['pack', '--pack-destination', dir], {
-      cwd: join(REPO_ROOT, 'v3/@claude-flow/memory'),
+      cwd: join(REPO_ROOT, 'v3/@rufflo/memory'),
       stdio: 'pipe',
     }).toString().trim().split('\n').filter(l => l.endsWith('.tgz')).pop();
     if (!tarball) throw new Error('pnpm pack produced no tarball');
@@ -84,7 +84,7 @@ const runners = {
   memory_load: () => {
     return bench(() => {
       // Spawn a fresh node process so import is truly cold.
-      spawnSync(process.execPath, ['-e', "import('@claude-flow/memory').then(()=>{}).catch(e=>{process.exit(1)})"], {
+      spawnSync(process.execPath, ['-e', "import('@rufflo/memory').then(()=>{}).catch(e=>{process.exit(1)})"], {
         cwd: REPO_ROOT,
         stdio: 'pipe',
       });
@@ -95,7 +95,7 @@ const runners = {
     const dbPath = join(tmpdir(), `perf-mem-${Date.now()}.db`);
     const ms = bench(() => {
       const r = spawnSync(process.execPath, ['-e', `
-        const m = await import('@claude-flow/memory');
+        const m = await import('@rufflo/memory');
         const db = await m.createDatabase('${dbPath}', { provider: 'auto' });
         await db.initialize();
         const ts = Date.now();

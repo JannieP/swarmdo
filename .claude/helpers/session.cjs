@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Claude Flow Cross-Platform Session Manager
+ * Rufflo Cross-Platform Session Manager
  * Works on Windows, macOS, and Linux
  */
 
@@ -12,18 +12,18 @@ const platform = os.platform();
 const homeDir = os.homedir();
 
 function getDataDir() {
-  const localDir = path.join(process.cwd(), '.claude-flow', 'sessions');
+  const localDir = path.join(process.cwd(), '.rufflo', 'sessions');
   if (fs.existsSync(path.dirname(localDir))) {
     return localDir;
   }
 
   switch (platform) {
     case 'win32':
-      return path.join(process.env.APPDATA || homeDir, 'claude-flow', 'sessions');
+      return path.join(process.env.APPDATA || homeDir, 'rufflo', 'sessions');
     case 'darwin':
-      return path.join(homeDir, 'Library', 'Application Support', 'claude-flow', 'sessions');
+      return path.join(homeDir, 'Library', 'Application Support', 'rufflo', 'sessions');
     default:
-      return path.join(homeDir, '.claude-flow', 'sessions');
+      return path.join(homeDir, '.rufflo', 'sessions');
   }
 }
 

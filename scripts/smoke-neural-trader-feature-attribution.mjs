@@ -13,7 +13,7 @@
  *           NOT to artifact.witnessPublicKey (CWE-347 / #1922) — same
  *           defense the Phase 4 artifact uses
  *         - canonical message construction strips BOTH signature fields
- *         - skill mentions `mcp__ruflo-sublinear__page-rank-entry` and
+ *         - skill mentions `mcp__rufflo-sublinear__page-rank-entry` and
  *           documents the local fallback
  *         - skill writes to `trading-analysis` namespace (canonical per
  *           ADR-126 Phase 1)
@@ -48,7 +48,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, '..');
-const PLUGIN_DIR = join(REPO_ROOT, 'plugins', 'ruflo-neural-trader');
+const PLUGIN_DIR = join(REPO_ROOT, 'plugins', 'rufflo-neural-trader');
 const ATTR_TS = join(PLUGIN_DIR, 'src', 'signed-attribution.ts');
 const ATTR_MJS = join(PLUGIN_DIR, 'src', 'signed-attribution.mjs');
 const SKILL_MD = join(PLUGIN_DIR, 'skills', 'trader-explain', 'SKILL.md');
@@ -88,7 +88,7 @@ if (!existsSync(ATTR_TS)) {
   check(
     'TS declares `SignedAttributionArtifact` interface with required fields',
     /interface\s+SignedAttributionArtifact/.test(src) &&
-      /schema\s*:\s*'ruflo-neural-trader-attribution\/v1'/.test(src) &&
+      /schema\s*:\s*'rufflo-neural-trader-attribution\/v1'/.test(src) &&
       /signalId\s*:\s*string/.test(src) &&
       /modelId\s*:\s*string/.test(src) &&
       /features\s*:\s*AttributionFeature\[\]/.test(src) &&
@@ -148,8 +148,8 @@ if (!existsSync(ATTR_TS)) {
     'match the Phase 4 signer scheme exactly',
   );
   check(
-    'TS detects `mcp__ruflo-sublinear__page-rank-entry` for MCP dispatch',
-    /mcp__ruflo-sublinear__page-rank-entry/.test(src),
+    'TS detects `mcp__rufflo-sublinear__page-rank-entry` for MCP dispatch',
+    /mcp__rufflo-sublinear__page-rank-entry/.test(src),
     'singleEntryPageRank must check for the MCP tool before falling through to local',
   );
 }
@@ -196,8 +196,8 @@ if (!existsSync(SKILL_MD)) {
     'frontmatter must include the addressable skill name',
   );
   check(
-    'skill references `mcp__ruflo-sublinear__page-rank-entry`',
-    /mcp__ruflo-sublinear__page-rank-entry/.test(skill),
+    'skill references `mcp__rufflo-sublinear__page-rank-entry`',
+    /mcp__rufflo-sublinear__page-rank-entry/.test(skill),
     'skill must invoke (or fall back from) the single-entry PR MCP tool',
   );
   check(
@@ -299,7 +299,7 @@ if (ed && signAttributionArtifact && verifyAttributionArtifact) {
 
   check(
     'signed artifact carries schema + witnessPublicKey + witnessSignature',
-    signed.schema === 'ruflo-neural-trader-attribution/v1' &&
+    signed.schema === 'rufflo-neural-trader-attribution/v1' &&
       typeof signed.witnessPublicKey === 'string' &&
       signed.witnessPublicKey.startsWith('ed25519:') &&
       typeof signed.witnessSignature === 'string' &&

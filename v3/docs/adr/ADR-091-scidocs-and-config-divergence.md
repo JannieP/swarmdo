@@ -1,6 +1,6 @@
 # ADR-091 — 4-Dataset BEIR + Config Divergence
 
-**Status**: Accepted — Implemented in ruflo 3.10.30
+**Status**: Accepted — Implemented in rufflo 3.10.30
 **Date**: 2026-05-31
 **Tracking**: continuation of BEIR climb (ADR-085 → 086 → 087 → 088 → 089 → 090 → 091)
 
@@ -25,7 +25,7 @@
 |---|---:|---:|---:|---:|---:|---:|
 | BGE-large-v1.5 (published) | 335M | 0.380 | 0.722 | 0.636 | 0.225 | **0.491** |
 | SPLADE++ (published) | 110M | 0.347 | 0.704 | 0.521 | 0.159 | **0.433** |
-| **ruflo best (per-dataset)** | **110M** | **0.358** | **0.683** | **0.432** | **0.211** | **0.421** |
+| **rufflo best (per-dataset)** | **110M** | **0.358** | **0.683** | **0.432** | **0.211** | **0.421** |
 | GTR-XL (published) | 1.2B | 0.343 | 0.662 | 0.439 | 0.174 | 0.405 |
 | GenQ (published) | 110M | 0.319 | 0.644 | 0.493 | 0.143 | 0.400 |
 | BM25 (published Lucene) | — | 0.325 | 0.679 | 0.397 | 0.158 | **0.390** |
@@ -81,8 +81,8 @@ This is a real finding from running 4 datasets, not a guess. Worth a separate ex
 ## Verification
 
 ```bash
-git clone https://github.com/ruvnet/ruflo && cd ruflo
-npm install && ( cd v3/@claude-flow/cli && npx tsc )
+git clone https://github.com/ruvnet/ruflo && cd rufflo
+npm install && ( cd v3/@rufflo/cli && npx tsc )
 
 mkdir -p /tmp/beir-scidocs && cd /tmp/beir-scidocs
 curl -sL -o sd.zip 'https://public.ukp.informatik.tu-darmstadt.de/thakur/BEIR/datasets/scidocs.zip' && unzip -q sd.zip

@@ -1,13 +1,13 @@
 ---
 name: "V3 CLI Modernization"
-description: "CLI modernization and hooks system enhancement for claude-flow v3. Implements interactive prompts, command decomposition, enhanced hooks integration, and intelligent workflow automation."
+description: "CLI modernization and hooks system enhancement for rufflo v3. Implements interactive prompts, command decomposition, enhanced hooks integration, and intelligent workflow automation."
 ---
 
 # V3 CLI Modernization
 
 ## What This Skill Does
 
-Modernizes claude-flow v3 CLI with interactive prompts, intelligent command decomposition, enhanced hooks integration, performance optimization, and comprehensive workflow automation capabilities.
+Modernizes rufflo v3 CLI with interactive prompts, intelligent command decomposition, enhanced hooks integration, performance optimization, and comprehensive workflow automation capabilities.
 
 ## Quick Start
 
@@ -866,7 +866,7 @@ Task("CLI modernization implementation",
 ### Interactive Command Enhancement
 ```bash
 # Enhanced interactive commands
-claude-flow swarm init --interactive
-claude-flow learning start --guided
-claude-flow workflow create --from-intent "setup new project"
+rufflo swarm init --interactive
+rufflo learning start --guided
+rufflo workflow create --from-intent "setup new project"
 ```

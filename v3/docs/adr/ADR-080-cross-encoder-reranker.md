@@ -1,6 +1,6 @@
 # ADR-080 — Cross-Encoder Reranker (Opt-In Quality Pass)
 
-**Status**: Accepted — Implemented in ruflo 3.10.20
+**Status**: Accepted — Implemented in rufflo 3.10.20
 **Date**: 2026-05-30
 **Tracking**: continuation of self-learning hardening cluster (#2245 → ADR-074 → ADR-075 → ADR-076 → ADR-077 → ADR-078 → ADR-079)
 **Related**: ADR-078 (hybrid retrieval), ADR-079 (multi-field BM25)
@@ -90,14 +90,14 @@ Sweet spot is broad — anywhere from 0.5:0.5 to 0.3:0.7 hits the same 9/10, 10/
 ## Verification
 
 ```bash
-git clone https://github.com/ruvnet/ruflo && cd ruflo
-npm install && ( cd v3/@claude-flow/cli && npx tsc )
+git clone https://github.com/ruvnet/ruflo && cd rufflo
+npm install && ( cd v3/@rufflo/cli && npx tsc )
 
 # Unit tests — 44 total (5 new cross-encoder degradation tests, no network)
-( cd v3/@claude-flow/cli && npx vitest run __tests__/cross-encoder-rerank.test.ts __tests__/hybrid-retrieval.test.ts __tests__/pretrain-from-github.test.ts )
+( cd v3/@rufflo/cli && npx vitest run __tests__/cross-encoder-rerank.test.ts __tests__/hybrid-retrieval.test.ts __tests__/pretrain-from-github.test.ts )
 
 # Live A/B (cross-encoder downloads ~30MB on first run)
-cd v3/@claude-flow/cli
+cd v3/@rufflo/cli
 node scripts/pretrain-from-github.mjs
 node scripts/benchmark-pretrained-retrieval.mjs              # 3.10.19 default → 80% top-1
 RERANK=1 node scripts/benchmark-pretrained-retrieval.mjs    # 3.10.20 + rerank → 90% top-1, 100% top-3

@@ -1,7 +1,7 @@
 // SignedBacktestArtifact — runtime ES module mirror of signed-artifact.ts.
 //
 // Why this file exists:
-//   The plugin (ruflo-neural-trader) has no package.json / tsconfig /
+//   The plugin (rufflo-neural-trader) has no package.json / tsconfig /
 //   build step — it ships skills + agents + scripts only. The `.ts`
 //   file is the documented type-shape + source of truth (ADR-126
 //   Phase 4 spec). This `.mjs` file is the runtime that the smoke
@@ -30,7 +30,7 @@ export async function signBacktestArtifact(body, privateKeyHex) {
   const signatureBytes = await ed.signAsync(canonical, privateKey);
   const publicKeyBytes = await ed.getPublicKeyAsync(privateKey);
   return {
-    schema: 'ruflo-neural-trader-backtest/v1',
+    schema: 'rufflo-neural-trader-backtest/v1',
     ...body,
     witnessPublicKey: `ed25519:${bytesToHex(publicKeyBytes)}`,
     witnessSignature: bytesToHex(signatureBytes),

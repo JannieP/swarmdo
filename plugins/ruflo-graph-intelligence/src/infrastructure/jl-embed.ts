@@ -1,7 +1,7 @@
 /**
  * Johnson-Lindenstrauss embedding (Wedge: ADR-121 follow-up, ADR-123 Phase 6)
  *
- * Replaces `@claude-flow/embeddings`' hand-rolled hand-rolled JL with a
+ * Replaces `@rufflo/embeddings`' hand-rolled hand-rolled JL with a
  * tested implementation that obeys the Achlioptas / Dasgupta-Gupta bound
  * `target_dim ≤ original_dim − 1`. Matches the upstream
  * `sublinear-time-solver@1.7.0` JL contract.
@@ -37,7 +37,7 @@ export function computeTargetDim(originalDim: number, requestedDim: number, epsi
 export interface JLEmbedOptions {
   targetDim: number;
   epsilon?: number;
-  /** Seed for the projection matrix. Default 'ruflo-jl-v1' so it's reproducible. */
+  /** Seed for the projection matrix. Default 'rufflo-jl-v1' so it's reproducible. */
   seed?: string;
 }
 
@@ -62,7 +62,7 @@ export function jlEmbed(vectors: number[][], options: JLEmbedOptions): JLEmbedRe
   }
   const originalDim = vectors[0]!.length;
   const target = computeTargetDim(originalDim, options.targetDim, options.epsilon ?? 0.1);
-  const seed = options.seed ?? 'ruflo-jl-v1';
+  const seed = options.seed ?? 'rufflo-jl-v1';
 
   // Construct the k × n projection matrix R, then project each vector.
   const stream = gaussianStream(seed);

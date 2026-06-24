@@ -1,7 +1,7 @@
-# @claude-flow/plugin-performance-optimizer
+# @rufflo/plugin-performance-optimizer
 
-[![npm version](https://img.shields.io/npm/v/@claude-flow/plugin-performance-optimizer.svg)](https://www.npmjs.com/package/@claude-flow/plugin-performance-optimizer)
-[![npm downloads](https://img.shields.io/npm/dm/@claude-flow/plugin-performance-optimizer.svg)](https://www.npmjs.com/package/@claude-flow/plugin-performance-optimizer)
+[![npm version](https://img.shields.io/npm/v/@rufflo/plugin-performance-optimizer.svg)](https://www.npmjs.com/package/@rufflo/plugin-performance-optimizer)
+[![npm downloads](https://img.shields.io/npm/dm/@rufflo/plugin-performance-optimizer.svg)](https://www.npmjs.com/package/@rufflo/plugin-performance-optimizer)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A comprehensive performance optimization plugin combining sparse inference for efficient trace analysis with graph neural networks for dependency chain optimization. The plugin enables intelligent bottleneck detection, memory leak identification, N+1 query detection, and bundle size optimization while providing explainable recommendations based on historical performance patterns.
@@ -19,19 +19,19 @@ A comprehensive performance optimization plugin combining sparse inference for e
 ### npm
 
 ```bash
-npm install @claude-flow/plugin-performance-optimizer
+npm install @rufflo/plugin-performance-optimizer
 ```
 
 ### CLI
 
 ```bash
-npx claude-flow plugins install --name @claude-flow/plugin-performance-optimizer
+npx rufflo plugins install --name @rufflo/plugin-performance-optimizer
 ```
 
 ## Quick Start
 
 ```typescript
-import { PerfOptimizerPlugin } from '@claude-flow/plugin-performance-optimizer';
+import { PerfOptimizerPlugin } from '@rufflo/plugin-performance-optimizer';
 
 // Initialize the plugin
 const plugin = new PerfOptimizerPlugin();
@@ -247,15 +247,15 @@ const rateLimits = {
 
 | Plugin | Description | Use Case |
 |--------|-------------|----------|
-| [@claude-flow/plugin-code-intelligence](../code-intelligence) | Code analysis | Identify code causing performance issues |
-| [@claude-flow/plugin-test-intelligence](../test-intelligence) | Test optimization | Performance regression test selection |
-| [@claude-flow/plugin-financial-risk](../financial-risk) | Risk analysis | Trading system latency optimization |
+| [@rufflo/plugin-code-intelligence](../code-intelligence) | Code analysis | Identify code causing performance issues |
+| [@rufflo/plugin-test-intelligence](../test-intelligence) | Test optimization | Performance regression test selection |
+| [@rufflo/plugin-financial-risk](../financial-risk) | Risk analysis | Trading system latency optimization |
 
 ## License
 
 MIT License
 
-Copyright (c) 2026 Claude Flow
+Copyright (c) 2026 Rufflo
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

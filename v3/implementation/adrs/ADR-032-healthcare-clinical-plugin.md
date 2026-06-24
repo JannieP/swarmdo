@@ -18,7 +18,7 @@ Create a **Healthcare Clinical Decision Support Plugin** that leverages RuVector
 
 ## Plugin Name
 
-`@claude-flow/plugin-healthcare-clinical`
+`@rufflo/plugin-healthcare-clinical`
 
 ## Description
 

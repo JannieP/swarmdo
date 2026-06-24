@@ -27,8 +27,8 @@ for s in loop-worker cron-schedule; do
   done
 done
 [[ -f "$ROOT/agents/loop-worker-coordinator.md" ]] || miss="$miss missing-agent"
-[[ -f "$ROOT/commands/ruflo-loop.md" ]] || miss="$miss missing-loop-cmd"
-[[ -f "$ROOT/commands/ruflo-schedule.md" ]] || miss="$miss missing-schedule-cmd"
+[[ -f "$ROOT/commands/rufflo-loop.md" ]] || miss="$miss missing-loop-cmd"
+[[ -f "$ROOT/commands/rufflo-schedule.md" ]] || miss="$miss missing-schedule-cmd"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
 step "3. all 5 hooks_worker-* MCP tools referenced"
@@ -46,12 +46,12 @@ for trigger in ultralearn optimize consolidate predict audit map preload deepdiv
 done
 [[ -z "$miss" ]] && ok || bad "missing triggers:$miss"
 
-step "5. README pins @claude-flow/cli to v3.6"
-grep -qE "@claude-flow/cli.*v3\.6|v3\.6.*claude-flow/cli" "$ROOT/README.md" \
+step "5. README pins @rufflo/cli to v3.6"
+grep -qE "@rufflo/cli.*v3\.6|v3\.6.*rufflo/cli" "$ROOT/README.md" \
   && ok || bad "v3.6 pin missing"
 
-step "6. README defers to ruflo-agentdb namespace convention"
-grep -q "ruflo-agentdb" "$ROOT/README.md" \
+step "6. README defers to rufflo-agentdb namespace convention"
+grep -q "rufflo-agentdb" "$ROOT/README.md" \
   && grep -q "Namespace convention" "$ROOT/README.md" \
   && ok || bad "namespace coordination block incomplete"
 
@@ -65,9 +65,9 @@ grep -qE "270 ?s|270 second" "$F" \
   && grep -qE "cache|prompt cache" "$F" \
   && ok || bad "270s cache-aware note missing"
 
-step "9. ruflo-autopilot 270s heartbeat contract cross-reference"
+step "9. rufflo-autopilot 270s heartbeat contract cross-reference"
 F="$ROOT/README.md"
-grep -q "ruflo-autopilot" "$F" \
+grep -q "rufflo-autopilot" "$F" \
   && grep -qE "270s|270 ?second" "$F" \
   && ok || bad "autopilot heartbeat cross-reference missing"
 
@@ -75,8 +75,8 @@ step "10. worker-trigger → consumer-plugin attribution table present"
 F="$ROOT/README.md"
 miss=""
 grep -q "Consumer plugin" "$F" || miss="$miss header"
-grep -q "ruflo-docs" "$F" || miss="$miss docs-attribution"
-grep -q "ruflo-testgen" "$F" || miss="$miss testgen-attribution"
+grep -q "rufflo-docs" "$F" || miss="$miss docs-attribution"
+grep -q "rufflo-testgen" "$F" || miss="$miss testgen-attribution"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
 step "11. ADR-0001 exists with status Accepted"

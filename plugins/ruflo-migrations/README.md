@@ -1,4 +1,4 @@
-# ruflo-migrations
+# rufflo-migrations
 
 Schema migration management -- generate, validate, dry-run, and rollback database migrations.
 
@@ -9,7 +9,7 @@ Generates sequentially numbered database migrations with up/down SQL pairs for r
 ## Installation
 
 ```bash
-claude --plugin-dir plugins/ruflo-migrations
+claude --plugin-dir plugins/rufflo-migrations
 ```
 
 ## Agents
@@ -61,12 +61,12 @@ migrations/
 
 ## Compatibility
 
-- **CLI:** pinned to `@claude-flow/cli` v3.6 major+minor.
-- **Verification:** `bash plugins/ruflo-migrations/scripts/smoke.sh` is the contract.
+- **CLI:** pinned to `@rufflo/cli` v3.6 major+minor.
+- **Verification:** `bash plugins/rufflo-migrations/scripts/smoke.sh` is the contract.
 
 ## Namespace coordination
 
-This plugin owns the `migrations` AgentDB namespace (kebab-case is implicit when the plugin name is the intent — same documented exception as `federation`). Follows the convention from [ruflo-agentdb ADR-0001 §"Namespace convention"](../ruflo-agentdb/docs/adrs/0001-agentdb-optimization.md). Reserved namespaces (`pattern`, `claude-memories`, `default`) MUST NOT be shadowed.
+This plugin owns the `migrations` AgentDB namespace (kebab-case is implicit when the plugin name is the intent — same documented exception as `federation`). Follows the convention from [rufflo-agentdb ADR-0001 §"Namespace convention"](../rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md). Reserved namespaces (`pattern`, `claude-memories`, `default`) MUST NOT be shadowed.
 
 `migrations` is accessed via `memory_*` tools (namespace-routed). Tracks migration metadata, applied/pending status, and validation results.
 
@@ -75,20 +75,20 @@ This plugin owns the `migrations` AgentDB namespace (kebab-case is implicit when
 ## Verification
 
 ```bash
-bash plugins/ruflo-migrations/scripts/smoke.sh
+bash plugins/rufflo-migrations/scripts/smoke.sh
 # Expected: "10 passed, 0 failed"
 ```
 
 ## Architecture Decisions
 
-- [`ADR-0001` — ruflo-migrations plugin contract (namespace-routing fix, smoke as contract)](./docs/adrs/0001-migrations-contract.md)
+- [`ADR-0001` — rufflo-migrations plugin contract (namespace-routing fix, smoke as contract)](./docs/adrs/0001-migrations-contract.md)
 
 ## Related Plugins
 
-- `ruflo-agentdb` — namespace convention owner; defines the routing rules ADR-0001 fixes a violation of
-- `ruflo-adr` -- Document schema change decisions as ADRs
-- `ruflo-ddd` -- Align migration boundaries with aggregate roots
-- `ruflo-observability` -- Track migration execution duration and failure rates
+- `rufflo-agentdb` — namespace convention owner; defines the routing rules ADR-0001 fixes a violation of
+- `rufflo-adr` -- Document schema change decisions as ADRs
+- `rufflo-ddd` -- Align migration boundaries with aggregate roots
+- `rufflo-observability` -- Track migration execution duration and failure rates
 
 ## License
 

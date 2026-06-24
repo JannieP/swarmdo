@@ -1,5 +1,5 @@
 #!/bin/bash
-# Claude-Flow MCP Server Test Suite
+# Rufflo MCP Server Test Suite
 # Tests MCP server functionality and tools
 
 set -e

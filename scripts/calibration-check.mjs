@@ -37,13 +37,13 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import * as mh from '@metaharness/router';
-import { IsotonicCalibrator } from '../v3/@claude-flow/cli/dist/src/ruvector/router-calibrator.js';
+import { IsotonicCalibrator } from '../v3/@rufflo/cli/dist/src/ruvector/router-calibrator.js';
 // iter 35 — single source of truth for prices.
-import { blendedPrice } from '../v3/@claude-flow/cli/dist/src/ruvector/model-prices.js';
+import { blendedPrice } from '../v3/@rufflo/cli/dist/src/ruvector/model-prices.js';
 
 const ARGS = (() => {
   const a = {
-    corpus: resolve('v3/@claude-flow/cli/assets/model-router/seed-rows.json'),
+    corpus: resolve('v3/@rufflo/cli/assets/model-router/seed-rows.json'),
     format: 'json',
     bins: 10,
     calibrator: null,         // path to pre-trained calibrator JSON (in-sample apply)

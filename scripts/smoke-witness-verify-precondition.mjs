@@ -33,7 +33,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
 const REPO_ROOT = process.cwd();
-const VERIFY = resolve(REPO_ROOT, 'plugins/ruflo-core/scripts/witness/verify.mjs');
+const VERIFY = resolve(REPO_ROOT, 'plugins/rufflo-core/scripts/witness/verify.mjs');
 const REAL_MANIFEST = resolve(REPO_ROOT, 'verification/macos/manifest.md.json');
 
 if (!existsSync(VERIFY)) {

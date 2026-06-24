@@ -1,42 +1,42 @@
 # MetaHarness User Guide (ADR-150)
 
-**MetaHarness integration in ruflo `3.12.1+`.** Ten CLI subcommands, nine MCP tools, three CI workflows, and a dedicated `ruflo eject` command — all wired to the upstream `metaharness` / `@metaharness/*` ecosystem with **graceful degradation** when those optional packages aren't installed.
+**MetaHarness integration in rufflo `3.12.1+`.** Ten CLI subcommands, nine MCP tools, three CI workflows, and a dedicated `rufflo eject` command — all wired to the upstream `metaharness` / `@metaharness/*` ecosystem with **graceful degradation** when those optional packages aren't installed.
 
-Quick links: [Quick start](#quick-start) · [10 CLI subcommands](#cli-subcommands) · [9 MCP tools](#mcp-tools) · [Architectural constraints](#architectural-constraints-adr-150) · [Workflows](#common-workflows) · [Troubleshooting](#troubleshooting) · [ADR-152 similarity search](#adr-152-§31-genome-similarity-search) · [Eject](#ruflo-eject)
+Quick links: [Quick start](#quick-start) · [10 CLI subcommands](#cli-subcommands) · [9 MCP tools](#mcp-tools) · [Architectural constraints](#architectural-constraints-adr-150) · [Workflows](#common-workflows) · [Troubleshooting](#troubleshooting) · [ADR-152 similarity search](#adr-152-§31-genome-similarity-search) · [Eject](#rufflo-eject)
 
 ---
 
 ## What is MetaHarness?
 
-`metaharness` is a sibling agent-harness scaffolding system designed by the same author as ruflo. Where ruflo *is* a harness, metaharness analyzes harnesses — scoring readiness, mapping MCP surfaces, threat-modeling, fingerprinting genome characteristics, and detecting drift over time. ADR-150 integrates it as a first-class subsystem so you can audit and characterize ruflo (or any harness) from the same CLI.
+`metaharness` is a sibling agent-harness scaffolding system designed by the same author as rufflo. Where rufflo *is* a harness, metaharness analyzes harnesses — scoring readiness, mapping MCP surfaces, threat-modeling, fingerprinting genome characteristics, and detecting drift over time. ADR-150 integrates it as a first-class subsystem so you can audit and characterize rufflo (or any harness) from the same CLI.
 
-The integration is **strictly optional**. Per [ADR-150](../v3/docs/adr/ADR-150-metaharness-integration-surfaces.md) constraint #4, ruflo remains fully operational even when every `@metaharness/*` package is uninstalled — every command degrades gracefully with a clear `degraded: true` payload instead of crashing.
+The integration is **strictly optional**. Per [ADR-150](../v3/docs/adr/ADR-150-metaharness-integration-surfaces.md) constraint #4, rufflo remains fully operational even when every `@metaharness/*` package is uninstalled — every command degrades gracefully with a clear `degraded: true` payload instead of crashing.
 
 ---
 
 ## Quick start
 
 ```bash
-# Install (metaharness ships bundled in @claude-flow/cli's plugins/)
-npm i ruflo@latest
+# Install (metaharness ships bundled in @rufflo/cli's plugins/)
+npm i rufflo@latest
 
 # Score the current repo's harness readiness
-npx ruflo metaharness score --path .
+npx rufflo metaharness score --path .
 
 # 7-section categorical genome report
-npx ruflo metaharness genome --path .
+npx rufflo metaharness genome --path .
 
 # Static security scan of the declared MCP surface
-npx ruflo metaharness mcp-scan --path . --fail-on high
+npx rufflo metaharness mcp-scan --path . --fail-on high
 
 # Composite audit (oia-manifest + threat-model + mcp-scan + score + genome)
-npx ruflo metaharness oia-audit --path . --alert-on-worst high
+npx rufflo metaharness oia-audit --path . --alert-on-worst high
 
 # Detect drift from the last audit
-npx ruflo metaharness drift-from-history --threshold 0.95
+npx rufflo metaharness drift-from-history --threshold 0.95
 
 # Score two harnesses' similarity (ADR-152 §3.1)
-npx ruflo metaharness similarity --a harnessA.json --b harnessB.json
+npx rufflo metaharness similarity --a harnessA.json --b harnessB.json
 ```
 
 All commands accept `--format json|table` and `--help`.
@@ -46,7 +46,7 @@ All commands accept `--format json|table` and `--help`.
 ## CLI subcommands
 
 ```
-npx ruflo metaharness <subcommand> [flags]
+npx rufflo metaharness <subcommand> [flags]
 ```
 
 | # | Subcommand | One-line | Output shape |
@@ -65,8 +65,8 @@ npx ruflo metaharness <subcommand> [flags]
 ### `score` — 5-dimension readiness
 
 ```bash
-npx ruflo metaharness score --path . --format json
-npx ruflo metaharness score --path . --alert-on-fit-below 70
+npx rufflo metaharness score --path . --format json
+npx rufflo metaharness score --path . --alert-on-fit-below 70
 ```
 
 Returns five numeric dimensions (0–100):
@@ -82,7 +82,7 @@ Plus `estCostPerRunUsd`, `recommendedMode` (`CLI` / `CLI + MCP`), `archetype`, `
 ### `genome` — 7-section categorical
 
 ```bash
-npx ruflo metaharness genome --path . --alert-on-risk-above 0.5
+npx rufflo metaharness genome --path . --alert-on-risk-above 0.5
 ```
 
 Returns categorical (string/enum) classifications that complement `score`'s numerics. Pair them: `score` is *how ready*, `genome` is *what kind*.
@@ -90,7 +90,7 @@ Returns categorical (string/enum) classifications that complement `score`'s nume
 ### `mcp-scan` — MCP security
 
 ```bash
-npx ruflo metaharness mcp-scan --path . --fail-on high
+npx rufflo metaharness mcp-scan --path . --fail-on high
 ```
 
 Reads `.mcp/servers.json` + `.harness/claims.json` and runs static analysis. Finding shape is normalized to `{severity, message, title?, detail?, id?}` — same fields whether upstream emitted JSON or our text-parser fell back.
@@ -100,7 +100,7 @@ Reads `.mcp/servers.json` + `.harness/claims.json` and runs static analysis. Fin
 ### `threat-model` — Enterprise threat report
 
 ```bash
-npx ruflo metaharness threat-model --path . --fail-on high
+npx rufflo metaharness threat-model --path . --fail-on high
 ```
 
 Returns `{worst, findings: [...]}` suitable for sharing with infosec. Findings are categorized; the worst-severity rollup is the operationally-useful summary.
@@ -108,7 +108,7 @@ Returns `{worst, findings: [...]}` suitable for sharing with infosec. Findings a
 ### `oia-audit` — Composite audit → memory
 
 ```bash
-npx ruflo metaharness oia-audit --path . \
+npx rufflo metaharness oia-audit --path . \
   --alert-on-worst high \
   --format json
 ```
@@ -120,7 +120,7 @@ Output includes a denormalized `fingerprint: {score, genome}` field designed for
 ### `audit-list` — Enumerate records
 
 ```bash
-npx ruflo metaharness audit-list --limit 20 --since 30d --format json
+npx rufflo metaharness audit-list --limit 20 --since 30d --format json
 ```
 
 Discover which audit keys exist before running `audit-trend` or `drift-from-history --baseline-key <k>`.
@@ -128,7 +128,7 @@ Discover which audit keys exist before running `audit-trend` or `drift-from-hist
 ### `audit-trend` — Diff two audits
 
 ```bash
-npx ruflo metaharness audit-trend \
+npx rufflo metaharness audit-trend \
   --baseline-key audit-2026-06-01... \
   --current-key  audit-2026-06-15... \
   --alert-on-distance-below 0.85
@@ -141,7 +141,7 @@ Accepts memory keys OR direct file paths (`--baseline /path/to/json.json`) — u
 ### `similarity` — ADR-152 §3.1 weighted similarity
 
 ```bash
-npx ruflo metaharness similarity \
+npx rufflo metaharness similarity \
   --a harnessA.json --b harnessB.json \
   --per-dimension \
   --alert-below 0.5
@@ -158,15 +158,15 @@ See [ADR-152 §3.1 below](#adr-152-§31-genome-similarity-search) for math + use
 
 ```bash
 # Slowest path — discovers the most recent audit in memory
-npx ruflo metaharness drift-from-history --threshold 0.95
+npx rufflo metaharness drift-from-history --threshold 0.95
 
 # Fast path — skip audit-list (~14× faster)
-npx ruflo metaharness drift-from-history \
+npx rufflo metaharness drift-from-history \
   --baseline-key audit-2026-06-15T... \
   --threshold 0.95
 
 # Fastest path — skip memory entirely (~19× faster)
-npx ruflo metaharness drift-from-history \
+npx rufflo metaharness drift-from-history \
   --baseline-file /tmp/last-audit.json \
   --threshold 0.95 \
   --alert-on-new-severity high \
@@ -186,7 +186,7 @@ Composes `audit-list` + `oia-audit` + `audit-trend` into one structured report. 
 ### `mint` — Scaffold a harness
 
 ```bash
-npx ruflo metaharness mint --name foo --template vertical:coding --confirm
+npx rufflo metaharness mint --name foo --template vertical:coding --confirm
 ```
 
 Dry-run by default. Pass `--confirm` to actually write.
@@ -198,15 +198,15 @@ Dry-run by default. Pass `--confirm` to actually write.
 Nine MCP tools registered under the `metaharness` category, callable by Claude Code / any MCP-aware agent:
 
 ```
-mcp__claude-flow__metaharness_score
-mcp__claude-flow__metaharness_genome
-mcp__claude-flow__metaharness_mcp_scan
-mcp__claude-flow__metaharness_threat_model
-mcp__claude-flow__metaharness_oia_audit
-mcp__claude-flow__metaharness_audit_list
-mcp__claude-flow__metaharness_audit_trend
-mcp__claude-flow__metaharness_similarity
-mcp__claude-flow__metaharness_drift_from_history
+mcp__rufflo__metaharness_score
+mcp__rufflo__metaharness_genome
+mcp__rufflo__metaharness_mcp_scan
+mcp__rufflo__metaharness_threat_model
+mcp__rufflo__metaharness_oia_audit
+mcp__rufflo__metaharness_audit_list
+mcp__rufflo__metaharness_audit_trend
+mcp__rufflo__metaharness_similarity
+mcp__rufflo__metaharness_drift_from_history
 ```
 
 Every handler returns the `{success, data, degraded, exitCode}` contract:
@@ -258,10 +258,10 @@ If `@metaharness/router`, `metaharness`, or `@metaharness/kernel` are absent, ev
 
 ```bash
 # Once: seed with a baseline audit
-npx ruflo metaharness oia-audit --path . --alert-on-worst high
+npx rufflo metaharness oia-audit --path . --alert-on-worst high
 
 # Daily: detect drift vs the last baseline
-npx ruflo metaharness drift-from-history --threshold 0.95 \
+npx rufflo metaharness drift-from-history --threshold 0.95 \
   --alert-on-new-severity high
 ```
 
@@ -278,7 +278,7 @@ Adapt for your repo:
 ```yaml
 - name: composite audit
   run: |
-    npx ruflo metaharness oia-audit --path . --dry-run \
+    npx rufflo metaharness oia-audit --path . --dry-run \
       --alert-on-worst high --format json > /tmp/audit.json
 - uses: actions/upload-artifact@v4
   with:
@@ -289,7 +289,7 @@ Adapt for your repo:
 - name: drift vs prior week
   if: always() && steps.prior-artifact.outputs.has_prior == 'true'
   run: |
-    npx ruflo metaharness drift-from-history \
+    npx rufflo metaharness drift-from-history \
       --baseline-file /tmp/prior/audit.json \
       --threshold 0.95 \
       --alert-on-new-severity high \
@@ -300,9 +300,9 @@ Adapt for your repo:
 
 ```bash
 # In .github/workflows/metaharness-ci.yml
-npx ruflo metaharness score --path . --alert-on-fit-below 70
-npx ruflo metaharness mcp-scan --path . --fail-on high
-npx ruflo metaharness threat-model --path . --fail-on high
+npx rufflo metaharness score --path . --alert-on-fit-below 70
+npx rufflo metaharness mcp-scan --path . --fail-on high
+npx rufflo metaharness threat-model --path . --fail-on high
 ```
 
 Any of these exits 1 when the alert fires; standard CI failure semantics.
@@ -312,7 +312,7 @@ Any of these exits 1 when the alert fires; standard CI failure semantics.
 ```bash
 # Compare current repo against N candidate templates
 for t in templates/*.json; do
-  npx ruflo metaharness similarity \
+  npx rufflo metaharness similarity \
     --a current-genome.json --b "$t" --format json \
     | jq "{template: \"$t\", overall: .overall}"
 done | jq -s 'sort_by(-.overall)'
@@ -356,7 +356,7 @@ These are the structural-distance verdicts surfaced by `audit-trend` and `drift-
 ```bash
 export CLAUDE_FLOW_ROUTER_PARALLEL_LOG=1
 # … run your normal workload …
-node plugins/ruflo-metaharness/scripts/router-parallel-analyze.mjs \
+node plugins/rufflo-metaharness/scripts/router-parallel-analyze.mjs \
   --input .swarm/router-parallel.jsonl --strict
 ```
 
@@ -370,33 +370,33 @@ quality > 2%   AND   cost < 1%   AND   latency < 5%
 
 ---
 
-## `ruflo eject`
+## `rufflo eject`
 
-A dedicated CLI command (not under `metaharness`) that lifts a ruflo project into a renamed standalone harness via `metaharness --from-existing`.
+A dedicated CLI command (not under `metaharness`) that lifts a rufflo project into a renamed standalone harness via `metaharness --from-existing`.
 
 ```bash
 # Dry-run (default) — prints the plan and exits without writing
-npx ruflo eject --name my-harness
+npx rufflo eject --name my-harness
 
 # Eject for real
-npx ruflo eject --name my-harness --confirm
+npx rufflo eject --name my-harness --confirm
 
 # Eject to a specific dir (must be OUTSIDE the calling repo)
-npx ruflo eject --name my-harness --target /abs/path --confirm
+npx rufflo eject --name my-harness --target /abs/path --confirm
 ```
 
-**Safety gate:** refuses any `--target` inside the calling repo. The default target is `/tmp/ruflo-eject-<ts>-<name>/` — a fresh location to prevent eject-on-top-of-source accidents.
+**Safety gate:** refuses any `--target` inside the calling repo. The default target is `/tmp/rufflo-eject-<ts>-<name>/` — a fresh location to prevent eject-on-top-of-source accidents.
 
-Use case: you've prototyped agent workflows on top of ruflo and want a renamed harness with its own identity, ready to publish or distribute independently.
+Use case: you've prototyped agent workflows on top of rufflo and want a renamed harness with its own identity, ready to publish or distribute independently.
 
 ---
 
-## `ruflo doctor`
+## `rufflo doctor`
 
 Verify metaharness availability:
 
 ```bash
-npx ruflo doctor --component metaharness
+npx rufflo doctor --component metaharness
 ```
 
 Reports installed/missing status for `@metaharness/router`, `metaharness`, `@metaharness/kernel`, plus the plugin script directory location. Always exits 0 — doctor reports state, never blocks.
@@ -405,32 +405,32 @@ Reports installed/missing status for `@metaharness/router`, `metaharness`, `@met
 
 ## Troubleshooting
 
-### "metaharness: plugins/ruflo-metaharness/scripts/ not found"
+### "metaharness: plugins/rufflo-metaharness/scripts/ not found"
 
-Shipped fixed in **`ruflo@3.12.1+`**. The CLI dispatcher locates its plugin scripts under `node_modules/@claude-flow/cli/plugins/ruflo-metaharness/scripts/`. If you're on `3.12.0`, upgrade:
+Shipped fixed in **`rufflo@3.12.1+`**. The CLI dispatcher locates its plugin scripts under `node_modules/@rufflo/cli/plugins/rufflo-metaharness/scripts/`. If you're on `3.12.0`, upgrade:
 
 ```bash
-npm install ruflo@latest
+npm install rufflo@latest
 ```
 
 ### "degraded: true, reason: metaharness-not-installed"
 
-The optional `metaharness` / `@metaharness/*` packages aren't in `node_modules`. Per ADR-150 constraint #3 this is a **valid degraded mode** — ruflo still works, you just won't get score/genome/etc. results. To enable them:
+The optional `metaharness` / `@metaharness/*` packages aren't in `node_modules`. Per ADR-150 constraint #3 this is a **valid degraded mode** — rufflo still works, you just won't get score/genome/etc. results. To enable them:
 
 ```bash
 npm install -D metaharness@latest @metaharness/router@latest
 ```
 
-(Or accept the degraded mode — ruflo doesn't *require* metaharness for any non-metaharness command.)
+(Or accept the degraded mode — rufflo doesn't *require* metaharness for any non-metaharness command.)
 
 ### Drift report exits 2 with "no audit records found"
 
 You haven't seeded a baseline yet. Run one composite audit first:
 
 ```bash
-npx ruflo metaharness oia-audit --path .
+npx rufflo metaharness oia-audit --path .
 # Then drift detection becomes meaningful
-npx ruflo metaharness drift-from-history --threshold 0.95
+npx rufflo metaharness drift-from-history --threshold 0.95
 ```
 
 ### `audit-list` shows zero records but I ran audits
@@ -438,7 +438,7 @@ npx ruflo metaharness drift-from-history --threshold 0.95
 Check the namespace — `oia-audit` persists to `metaharness-audit` by default. If you've overridden `AUDIT_LIST_NAMESPACE`, set it for `audit-list` too:
 
 ```bash
-AUDIT_LIST_NAMESPACE=my-custom-ns npx ruflo metaharness audit-list
+AUDIT_LIST_NAMESPACE=my-custom-ns npx rufflo metaharness audit-list
 ```
 
 ### Composite audit takes 30+ seconds on CI
@@ -456,11 +456,11 @@ Usually transient network ECONNRESET on sharp / onnxruntime-node postinstall. Re
 
 ## Internals
 
-- **Source**: [`plugins/ruflo-metaharness/`](../plugins/ruflo-metaharness/) in the repo
-- **Bundled location at runtime**: `node_modules/@claude-flow/cli/plugins/ruflo-metaharness/scripts/`
-- **CLI dispatcher**: [`v3/@claude-flow/cli/src/commands/metaharness.ts`](../v3/@claude-flow/cli/src/commands/metaharness.ts)
-- **MCP tools**: [`v3/@claude-flow/cli/src/mcp-tools/metaharness-tools.ts`](../v3/@claude-flow/cli/src/mcp-tools/metaharness-tools.ts)
-- **Eject command**: [`v3/@claude-flow/cli/src/commands/eject.ts`](../v3/@claude-flow/cli/src/commands/eject.ts)
+- **Source**: [`plugins/rufflo-metaharness/`](../plugins/rufflo-metaharness/) in the repo
+- **Bundled location at runtime**: `node_modules/@rufflo/cli/plugins/rufflo-metaharness/scripts/`
+- **CLI dispatcher**: [`v3/@rufflo/cli/src/commands/metaharness.ts`](../v3/@rufflo/cli/src/commands/metaharness.ts)
+- **MCP tools**: [`v3/@rufflo/cli/src/mcp-tools/metaharness-tools.ts`](../v3/@rufflo/cli/src/mcp-tools/metaharness-tools.ts)
+- **Eject command**: [`v3/@rufflo/cli/src/commands/eject.ts`](../v3/@rufflo/cli/src/commands/eject.ts)
 - **ADR**: [`v3/docs/adr/ADR-150-metaharness-integration-surfaces.md`](../v3/docs/adr/ADR-150-metaharness-integration-surfaces.md)
 - **ADR-152 §3.1 similarity**: [`v3/docs/adr/ADR-152-genome-similarity-search.md`](../v3/docs/adr/ADR-152-genome-similarity-search.md)
 - **Tracking issue**: [#2399](https://github.com/ruvnet/ruflo/issues/2399)

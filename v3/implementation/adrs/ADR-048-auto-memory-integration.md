@@ -2,7 +2,7 @@
 
 **Status:** Implemented
 **Date:** 2026-02-08
-**Authors:** RuvNet, Claude Flow Team
+**Authors:** RuvNet, Rufflo Team
 **Supersedes:** None
 **Related:** ADR-006 (Unified Memory), ADR-018 (Claude Code Integration)
 
@@ -42,7 +42,7 @@ Key characteristics:
 
 ### Problem Statement
 
-Claude-flow v3 has its own rich memory system (`@claude-flow/memory`) backed by AgentDB with HNSW vector indexing. These two memory systems are currently disconnected:
+Claude-flow v3 has its own rich memory system (`@rufflo/memory`) backed by AgentDB with HNSW vector indexing. These two memory systems are currently disconnected:
 
 1. **Auto memory** — markdown files, loaded into system prompt, human-readable
 2. **AgentDB memory** — structured entries, vector-indexed, 150x-12,500x faster search
@@ -51,7 +51,7 @@ Without integration, insights discovered during swarm orchestration are lost bet
 
 ## Decision
 
-Implement a **bidirectional bridge** between Claude Code auto memory and claude-flow's unified memory system, treating auto memory as a persistent projection of the most relevant AgentDB entries.
+Implement a **bidirectional bridge** between Claude Code auto memory and rufflo's unified memory system, treating auto memory as a persistent projection of the most relevant AgentDB entries.
 
 ### Architecture
 
@@ -63,7 +63,7 @@ Implement a **bidirectional bridge** between Claude Code auto memory and claude-
 │                                                      │
 │  ┌──────────────────┐     ┌──────────────────────┐  │
 │  │  Auto Memory Dir │◄───►│  AutoMemoryBridge    │  │
-│  │  ~/.claude/...   │     │  (@claude-flow/memory)│  │
+│  │  ~/.claude/...   │     │  (@rufflo/memory)│  │
 │  │                  │     │                       │  │
 │  │  MEMORY.md       │     │  ┌─────────────────┐ │  │
 │  │  debugging.md    │     │  │  AgentDB + HNSW │ │  │
@@ -84,7 +84,7 @@ Implement a **bidirectional bridge** between Claude Code auto memory and claude-
 
 #### 1. Auto Memory Bridge Service
 
-New service in `@claude-flow/memory` that syncs between AgentDB and auto memory files:
+New service in `@rufflo/memory` that syncs between AgentDB and auto memory files:
 
 ```typescript
 interface AutoMemoryBridgeConfig {
@@ -173,7 +173,7 @@ interface MemoryInsight {
 Generated MEMORY.md structure:
 
 ```markdown
-# Claude Flow V3 Project Memory
+# Rufflo V3 Project Memory
 
 ## Project Patterns
 - Use `pnpm` for package management (not npm)
@@ -182,7 +182,7 @@ Generated MEMORY.md structure:
 - See `patterns.md` for detailed conventions
 
 ## Architecture
-- DDD with bounded contexts in `v3/@claude-flow/`
+- DDD with bounded contexts in `v3/@rufflo/`
 - Key packages: cli, memory, security, hooks, guidance
 - See `architecture.md` for module relationships
 
@@ -204,7 +204,7 @@ Generated MEMORY.md structure:
 
 #### 4. Hooks Integration
 
-Auto memory syncs are triggered by claude-flow hooks:
+Auto memory syncs are triggered by rufflo hooks:
 
 | Hook | Auto Memory Action |
 |------|--------------------|
@@ -373,20 +373,20 @@ async function persistSwarmLearnings(
 
 #### 8. CLI Commands
 
-New subcommands under `npx claude-flow@v3alpha memory`:
+New subcommands under `npx rufflo@v3alpha memory`:
 
 ```bash
 # Sync AgentDB → auto memory files
-npx claude-flow@v3alpha memory sync-auto
+npx rufflo@v3alpha memory sync-auto
 
 # Import auto memory → AgentDB
-npx claude-flow@v3alpha memory import-auto
+npx rufflo@v3alpha memory import-auto
 
 # Show auto memory status
-npx claude-flow@v3alpha memory auto-status
+npx rufflo@v3alpha memory auto-status
 
 # Curate MEMORY.md (prune to 200 lines)
-npx claude-flow@v3alpha memory curate
+npx rufflo@v3alpha memory curate
 ```
 
 #### 9. MCP Tool Extensions
@@ -427,7 +427,7 @@ New MCP tools for auto memory operations:
 
 ## Configuration
 
-Add to `claude-flow.config.json`:
+Add to `rufflo.config.json`:
 
 ```json
 {
@@ -500,7 +500,7 @@ Add to `.claude/settings.json`:
 - [x] `pruneTopicFile()` for topic file line management
 - [x] `formatInsightLine()` for markdown formatting
 - [x] 73 unit tests passing (305ms runtime)
-- [x] Exported from `@claude-flow/memory` index
+- [x] Exported from `@rufflo/memory` index
 
 ### Phase 1b: Optimizations -- COMPLETED
 - [x] Static `createDefaultEntry` import (was dynamic per-call)

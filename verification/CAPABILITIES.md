@@ -27,13 +27,13 @@ Each entry in `verification/<os>/performance.jsonl` records one capability×meas
 
 | Capability | What it measures | Why it matters |
 |---|---|---|
-| `install_pack` | Time for `pnpm pack @claude-flow/memory` | Catch regressions in package size / pack-time pipeline |
+| `install_pack` | Time for `pnpm pack @rufflo/memory` | Catch regressions in package size / pack-time pipeline |
 | `install_no_optional` | `npm install <tarball> --omit=optional` end-to-end | The user-visible "fresh install on a platform without prebuilds" — this is what was 152s on Node 26 before #1867 fix; now ~5s on a clean dir |
-| `memory_load` | Cold `import('@claude-flow/memory')` in a fresh node process | Catches accidentally-eager imports of heavy native modules |
+| `memory_load` | Cold `import('@rufflo/memory')` in a fresh node process | Catches accidentally-eager imports of heavy native modules |
 | `memory_round_trip` | `createDatabase(auto) → store → get → shutdown` | End-to-end runtime behaviour of the auto-fallback path |
 | `witness_verify` | `verify.mjs --manifest <os>/manifest.md.json` | The witness verification itself — should stay sub-second even at 100+ fixes |
 
-Add capabilities by extending the `runners` map in `plugins/ruflo-core/scripts/witness/perf.mjs`. The framework supports any synchronous benchmark that throws on failure.
+Add capabilities by extending the `runners` map in `plugins/rufflo-core/scripts/witness/perf.mjs`. The framework supports any synchronous benchmark that throws on failure.
 
 ---
 
@@ -99,13 +99,13 @@ Verified by `memory_round_trip` capability — the round-trip succeeds on whiche
 
 ```bash
 # Run all benchmarks now and append to verification/<os>/performance.jsonl
-node plugins/ruflo-core/scripts/witness/perf.mjs
+node plugins/rufflo-core/scripts/witness/perf.mjs
 
 # Run with baseline comparison (median of last 5 entries per capability)
-node plugins/ruflo-core/scripts/witness/perf.mjs --baseline
+node plugins/rufflo-core/scripts/witness/perf.mjs --baseline
 
 # Run a subset
-node plugins/ruflo-core/scripts/witness/perf.mjs \
+node plugins/rufflo-core/scripts/witness/perf.mjs \
   --capabilities install_pack,memory_load \
   --json
 ```
@@ -115,7 +115,7 @@ For CI, gate on regressions exceeding a threshold:
 ```yaml
 - name: Performance verification
   run: |
-    node plugins/ruflo-core/scripts/witness/perf.mjs --baseline --json > /tmp/perf.json
+    node plugins/rufflo-core/scripts/witness/perf.mjs --baseline --json > /tmp/perf.json
     node -e "
       const r = require('/tmp/perf.json');
       const regressed = r.results.filter(x => x.deltaPct != null && x.deltaPct > 200);
@@ -132,7 +132,7 @@ For CI, gate on regressions exceeding a threshold:
 ## What's not tracked yet (and why)
 
 - **HNSW search latency** — depends on dataset size; needs a fixture, follow-up.
-- **CLI startup time** — `ruflo --version` is the obvious metric, but currently dominated by node startup + module graph; not stable enough as a regression signal until the cli-core split (PR #1764) lands.
+- **CLI startup time** — `rufflo --version` is the obvious metric, but currently dominated by node startup + module graph; not stable enough as a regression signal until the cli-core split (PR #1764) lands.
 - **Memory growth over long-running processes** — needs an instrumented harness; out of scope for snapshot-style verification.
 
 ---
@@ -165,5 +165,5 @@ The file is append-only and OS-specific. Cross-OS comparison happens by reading 
 - [README.md](README.md) — the witness manifest layer (fix presence)
 - [witness-fixes.json](witness-fixes.json) — fix list (input to manifest regen)
 - [results.md](results.md) — last verification run report
-- [`plugins/ruflo-core/scripts/witness/perf.mjs`](../plugins/ruflo-core/scripts/witness/perf.mjs) — benchmark runner
+- [`plugins/rufflo-core/scripts/witness/perf.mjs`](../plugins/rufflo-core/scripts/witness/perf.mjs) — benchmark runner
 - [ADR-103](../v3/docs/adr/ADR-103-witness-temporal-history.md) — temporal history pattern (presence) that perf.mjs mirrors for measurements

@@ -7,13 +7,13 @@
 
 ## Context
 
-Two issues filed within ~30 minutes on 2026-05-08 (#1859, #1862) and one filed ~5 hours later (#1867) all had the same shape: a regression that affected every Claude Code session using ruflo, shipped to users via `latest` and `alpha` dist-tags, and was *not* reproducible by any test in the existing suite — because no test exercised the user-visible invocation path.
+Two issues filed within ~30 minutes on 2026-05-08 (#1859, #1862) and one filed ~5 hours later (#1867) all had the same shape: a regression that affected every Claude Code session using rufflo, shipped to users via `latest` and `alpha` dist-tags, and was *not* reproducible by any test in the existing suite — because no test exercised the user-visible invocation path.
 
 The existing `v3-ci.yml` ran `pnpm test` (vitest unit tests in workspace context) and `pnpm typecheck`. Both passed for the broken builds because:
 
-- `@claude-flow/memory` had a static `import 'better-sqlite3'` whose evaluation succeeded under the test runner's Node 20 + `pnpm install` (prebuilds present). It would only fail when a user ran `npm install` on Node 26 (no prebuilds) — which CI never did.
-- `@claude-flow/cli` had a `ctx.args[0] || ctx.flags.X` priority anti-pattern in 14 hook handlers. No test exercised these handlers as a subprocess with both `--flag` and a value-shaped boolean (e.g. `--success true`) on the command line, so the parser's stray-positional behaviour was invisible.
-- `plugins/ruflo-core/hooks/hooks.json` called CLI flags that didn't exist (`--format true`, `--update-memory true`, `--track-metrics true`, `--store-results true`). Every Write/Edit/Bash tool use crashed with `[ERROR] Invalid value for --format: true` once Claude Code fired the hook — but no test in the repo *invoked* `hooks.json` against the CLI with realistic stdin.
+- `@rufflo/memory` had a static `import 'better-sqlite3'` whose evaluation succeeded under the test runner's Node 20 + `pnpm install` (prebuilds present). It would only fail when a user ran `npm install` on Node 26 (no prebuilds) — which CI never did.
+- `@rufflo/cli` had a `ctx.args[0] || ctx.flags.X` priority anti-pattern in 14 hook handlers. No test exercised these handlers as a subprocess with both `--flag` and a value-shaped boolean (e.g. `--success true`) on the command line, so the parser's stray-positional behaviour was invisible.
+- `plugins/rufflo-core/hooks/hooks.json` called CLI flags that didn't exist (`--format true`, `--update-memory true`, `--track-metrics true`, `--store-results true`). Every Write/Edit/Bash tool use crashed with `[ERROR] Invalid value for --format: true` once Claude Code fired the hook — but no test in the repo *invoked* `hooks.json` against the CLI with realistic stdin.
 
 The common thread is a CI gap, not a coding gap. Each fix was small (~20 LOC) once the root cause was found; the cost was entirely in the user-visible failure window.
 
@@ -28,22 +28,22 @@ PostToolUse:Write hook error
 [ERROR] Invalid value for --format: true. Must be one of: text, json, table
 ```
 
-**Root cause**: `plugins/ruflo-core/hooks/hooks.json` line 38 invoked `npx claude-flow@alpha hooks post-edit --file <path> --format true --update-memory true`. The CLI has a *global* `--format` option restricted to `text|json|table` — the parser rejected `true` before any handler ran. `--update-memory` is also not a real flag.
+**Root cause**: `plugins/rufflo-core/hooks/hooks.json` line 38 invoked `npx rufflo@alpha hooks post-edit --file <path> --format true --update-memory true`. The CLI has a *global* `--format` option restricted to `text|json|table` — the parser rejected `true` before any handler ran. `--update-memory` is also not a real flag.
 
 The Bash hook (line 29) had the equivalent issue: `--track-metrics true --store-results true` are also not real flags.
 
-**Fix**: `plugins/ruflo-core/hooks/hooks.json` rewritten to call only the documented flags (`-f`/`-s` for post-edit, `-c`/`-s`/`-e` for post-command). Required republishing `ruflo-core@0.2.1`.
+**Fix**: `plugins/rufflo-core/hooks/hooks.json` rewritten to call only the documented flags (`-f`/`-s` for post-edit, `-c`/`-s`/`-e` for post-command). Required republishing `rufflo-core@0.2.1`.
 
 ### Bug 2 — CLI parser preferred stray positionals over named flags (#1859 part A)
 
-**Symptom**: `claude-flow hooks post-edit --file src/foo.ts --success true` recorded `"true"` as the file path:
+**Symptom**: `rufflo hooks post-edit --file src/foo.ts --success true` recorded `"true"` as the file path:
 
 ```
 [INFO] Recording outcome for: true
 [OK] Outcome recorded for true
 ```
 
-**Root cause**: `v3/@claude-flow/cli/src/commands/hooks.ts` resolved the primary value with the same anti-pattern across **14 handlers**:
+**Root cause**: `v3/@rufflo/cli/src/commands/hooks.ts` resolved the primary value with the same anti-pattern across **14 handlers**:
 
 ```ts
 const filePath = ctx.args[0] || ctx.flags.file as string || 'unknown';
@@ -72,21 +72,21 @@ Backward-compatible: legacy positional-only callers (`hooks post-edit src/foo.ts
 **Fix**: Replaced with a `bash -c` wrapper that reads stdin once, extracts via jq into env vars, and invokes the CLI exactly once with the multi-line command quoted:
 
 ```json
-"command": "/bin/bash -c 'INPUT=$(cat); CMD=$(printf %s \"$INPUT\" | jq -r \".tool_input.command // empty\"); [ -z \"$CMD\" ] && exit 0; EXIT=$(printf %s \"$INPUT\" | jq -r \".tool_response.exit_code // 0\"); SUCCESS=$([ \"$EXIT\" = \"0\" ] && echo true || echo false); npx claude-flow@alpha hooks post-command -c \"$CMD\" -s \"$SUCCESS\" -e \"$EXIT\"'"
+"command": "/bin/bash -c 'INPUT=$(cat); CMD=$(printf %s \"$INPUT\" | jq -r \".tool_input.command // empty\"); [ -z \"$CMD\" ] && exit 0; EXIT=$(printf %s \"$INPUT\" | jq -r \".tool_response.exit_code // 0\"); SUCCESS=$([ \"$EXIT\" = \"0\" ] && echo true || echo false); npx rufflo@alpha hooks post-command -c \"$CMD\" -s \"$SUCCESS\" -e \"$EXIT\"'"
 ```
 
 ## Decision
 
 ### 1. Add an integration smoke harness for plugin hooks
 
-`plugins/ruflo-core/scripts/test-hooks.mjs` drives **each** PostToolUse hook from `hooks/hooks.json` against a CLI binary (local build under test), with synthetic Claude-Code-style JSON on stdin. It asserts both:
+`plugins/rufflo-core/scripts/test-hooks.mjs` drives **each** PostToolUse hook from `hooks/hooks.json` against a CLI binary (local build under test), with synthetic Claude-Code-style JSON on stdin. It asserts both:
 
 - **Exit code** — catches "flag the CLI doesn't accept" (Bug 1).
 - **Recorded value matches input** — catches "parser ambiguity records the wrong value" (Bug 2). E.g. when stdin says `file_path = /tmp/foo.ts`, output must contain `/tmp/foo.ts` and must *not* contain `Recording outcome for: true`.
 
 Negative assertions (`absent: 'Recording … : true'`) are critical. A naive `contains: 'true'` test would have spuriously passed against the broken CLI because the recorded value happened to be the string "true".
 
-**Empirical validation**: Against the published broken `@claude-flow/cli@3.7.0-alpha.17` the harness reports `2/7 passed` with the exact #1859/#1862 symptoms. Against the fixed `@3.7.0-alpha.18` it reports `7/7 passed`.
+**Empirical validation**: Against the published broken `@rufflo/cli@3.7.0-alpha.17` the harness reports `2/7 passed` with the exact #1859/#1862 symptoms. Against the fixed `@3.7.0-alpha.18` it reports `7/7 passed`.
 
 ### 2. Wire it into `v3-ci.yml` as a blocking job
 
@@ -99,9 +99,9 @@ plugin-hooks-smoke:
       os: [ubuntu-latest, macos-latest]   # bash needed; Windows out of scope
       node: ['22']
   steps:
-    - install + scoped build of @claude-flow/cli...
-    - node plugins/ruflo-core/scripts/test-hooks.mjs \
-        "node $GITHUB_WORKSPACE/v3/@claude-flow/cli/bin/cli.js"
+    - install + scoped build of @rufflo/cli...
+    - node plugins/rufflo-core/scripts/test-hooks.mjs \
+        "node $GITHUB_WORKSPACE/v3/@rufflo/cli/bin/cli.js"
 ```
 
 Cross-platform reasoning per job (full matrix in §5):
@@ -116,7 +116,7 @@ This *blocks* publishing on hook regression. A future PR that adds a non-existen
 
 ### 3. Codify the CLI flag-priority convention
 
-`v3/@claude-flow/cli/src/commands/hooks.ts` sets the precedent for all `CommandContext` consumers: **named flags win over stray positionals**. The 14 changed sites are:
+`v3/@rufflo/cli/src/commands/hooks.ts` sets the precedent for all `CommandContext` consumers: **named flags win over stray positionals**. The 14 changed sites are:
 
 ```
 pre-edit          line 302   --file
@@ -164,13 +164,13 @@ The matrix expansion costs ~6 extra runner-minutes per CI invocation (3 OSes × 
 
 | Artifact | Path | Purpose |
 |----------|------|---------|
-| Plugin hook fix | `plugins/ruflo-core/hooks/hooks.json` | Real flags, multi-line-safe wrappers |
-| Smoke harness | `plugins/ruflo-core/scripts/test-hooks.mjs` | 7 assertions; runs against any CLI invocation string |
+| Plugin hook fix | `plugins/rufflo-core/hooks/hooks.json` | Real flags, multi-line-safe wrappers |
+| Smoke harness | `plugins/rufflo-core/scripts/test-hooks.mjs` | 7 assertions; runs against any CLI invocation string |
 | CI job | `.github/workflows/v3-ci.yml` (`plugin-hooks-smoke`) | ubuntu + macos × Node 22; blocks `publish` |
-| CLI parser fix | `v3/@claude-flow/cli/src/commands/hooks.ts` | 14-site flag/positional priority swap |
+| CLI parser fix | `v3/@rufflo/cli/src/commands/hooks.ts` | 14-site flag/positional priority swap |
 | Witness verify cross-platform | `v3-ci.yml` (`witness-verify`) | ubuntu + macos + windows; pure-JS verifier dogfooding |
 
-The smoke harness accepts an arbitrary CLI invocation string, so it can also run against the *published* CLI (`npx --yes @claude-flow/cli@latest`) as a post-release sanity check — the same script doubles as a pre-merge guard and a release canary.
+The smoke harness accepts an arbitrary CLI invocation string, so it can also run against the *published* CLI (`npx --yes @rufflo/cli@latest`) as a post-release sanity check — the same script doubles as a pre-merge guard and a release canary.
 
 ## Consequences
 
@@ -183,14 +183,14 @@ The smoke harness accepts an arbitrary CLI invocation string, so it can also run
 
 ### Not protected against (residual risk)
 
-- Plugins beyond `ruflo-core`. The harness is currently scoped to one plugin's `hooks.json`. Other plugins (`ruflo-swarm`, `ruflo-federation`, etc.) ship their own hook configs and could regress independently. Generalizing the harness to discover and exercise *all* plugin hook configs is a follow-up.
+- Plugins beyond `rufflo-core`. The harness is currently scoped to one plugin's `hooks.json`. Other plugins (`rufflo-swarm`, `rufflo-federation`, etc.) ship their own hook configs and could regress independently. Generalizing the harness to discover and exercise *all* plugin hook configs is a follow-up.
 - Hooks that call commands other than the documented set. The harness only verifies that exit code is 0 and the recorded value matches input — it doesn't verify behavioural side effects (memory writes, neural training, etc.).
 - Non-bash shells (Windows `cmd.exe`, PowerShell). The hook commands assume bash. Windows users running Claude Code outside WSL will see different failure modes that this harness doesn't cover. Tracked separately under #1857.
 
 ### User-visible impact
 
-- `ruflo-core@0.2.0` users still see the original errors until they update to `0.2.1` (plugin republish via IPFS — separate ship).
-- `npx ruflo@latest` (3.7.0-alpha.18) users get the parser fix immediately. Even with the cached `ruflo-core@0.2.0` plugin, the Bash hook's flag-priority symptom (recording "true" instead of the command) is fixed; only the Edit hook's `--format true` rejection remains until the plugin republish lands.
+- `rufflo-core@0.2.0` users still see the original errors until they update to `0.2.1` (plugin republish via IPFS — separate ship).
+- `npx rufflo@latest` (3.7.0-alpha.18) users get the parser fix immediately. Even with the cached `rufflo-core@0.2.0` plugin, the Bash hook's flag-priority symptom (recording "true" instead of the command) is fixed; only the Edit hook's `--format true` rejection remains until the plugin republish lands.
 
 ### Maintenance cost
 
@@ -200,7 +200,7 @@ The smoke harness accepts an arbitrary CLI invocation string, so it can also run
 
 ## References
 
-- #1859 — ruflo-core@0.2.0 ships broken PostToolUse hooks (Bash + Edit)
-- #1862 — ruflo-core plugin v0.2.0: PostToolUse hook fails with --format true
+- #1859 — rufflo-core@0.2.0 ships broken PostToolUse hooks (Bash + Edit)
+- #1862 — rufflo-core plugin v0.2.0: PostToolUse hook fails with --format true
 - #1867 — Established the post-build install smoke pattern (`smoke-install-no-bsqlite`) that this ADR generalizes
 - ADR-100 — cli-core split: relevant because the parser anti-pattern lives in the layer that ADR-100 isolates

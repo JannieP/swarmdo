@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Auto-extract ruflo's full capability surface — every MCP tool, CLI
+ * Auto-extract rufflo's full capability surface — every MCP tool, CLI
  * command, plugin, and agent — and render it as a markdown section
  * suitable for appending to verification.md.
  *
@@ -29,7 +29,7 @@ const ROOT = (() => {
 
 // ── MCP tools ─────────────────────────────────────────────────────────────────
 
-const MCP_TOOLS_DIR = join(ROOT, 'v3/@claude-flow/cli/src/mcp-tools');
+const MCP_TOOLS_DIR = join(ROOT, 'v3/@rufflo/cli/src/mcp-tools');
 
 function extractMcpTools() {
   const tools = [];
@@ -79,7 +79,7 @@ function extractMcpTools() {
 
 // ── CLI commands ──────────────────────────────────────────────────────────────
 
-const CLI_COMMANDS_DIR = join(ROOT, 'v3/@claude-flow/cli/src/commands');
+const CLI_COMMANDS_DIR = join(ROOT, 'v3/@rufflo/cli/src/commands');
 
 function extractCliCommands() {
   const commands = [];
@@ -113,7 +113,7 @@ function extractPlugins() {
   const plugins = [];
   if (!existsSync(PLUGINS_DIR)) return plugins;
   const dirs = readdirSync(PLUGINS_DIR)
-    .filter(d => d.startsWith('ruflo-'))
+    .filter(d => d.startsWith('rufflo-'))
     .filter(d => statSync(join(PLUGINS_DIR, d)).isDirectory());
 
   for (const dir of dirs) {
@@ -183,7 +183,7 @@ function renderMarkdown({ mcp, cli, plugins, agents }) {
   lines.push('');
   lines.push(`Coverage at this snapshot: **${mcp.length} MCP tools**, **${cli.length} CLI commands**, **${plugins.length} plugins**, **${agents.length} agent definitions**.`);
   lines.push('');
-  lines.push(`Per-capability cryptographic witnesses (SHA-256 of the dist file containing each tool / command, signed with the existing Ed25519 manifest key) land in iteration 2 of task #24 — see \`v3/docs/adr/\` for the design ADR. Functional smoke tests (\`ruflo verify --functional\`) that round-trip each MCP tool through the in-process server are iteration 3.`);
+  lines.push(`Per-capability cryptographic witnesses (SHA-256 of the dist file containing each tool / command, signed with the existing Ed25519 manifest key) land in iteration 2 of task #24 — see \`v3/docs/adr/\` for the design ADR. Functional smoke tests (\`rufflo verify --functional\`) that round-trip each MCP tool through the in-process server are iteration 3.`);
   lines.push('');
 
   lines.push(`### MCP tools (${mcp.length})`);
@@ -195,11 +195,11 @@ function renderMarkdown({ mcp, cli, plugins, agents }) {
 
   lines.push(`### CLI commands (${cli.length})`);
   lines.push('');
-  lines.push(`Top-level command surface. Subcommands are documented per-command in the source file and in \`.claude-flow/CAPABILITIES.md\` after \`ruflo init\`.`);
+  lines.push(`Top-level command surface. Subcommands are documented per-command in the source file and in \`.rufflo/CAPABILITIES.md\` after \`rufflo init\`.`);
   lines.push('');
   lines.push(table(
     ['Command', 'Description', 'Source'],
-    cli.map(c => [`\`ruflo ${c.name}\``, c.description || '*(no description)*', `\`${c.sourceFile}\``]),
+    cli.map(c => [`\`rufflo ${c.name}\``, c.description || '*(no description)*', `\`${c.sourceFile}\``]),
   ));
 
   lines.push(`### Plugins (${plugins.length})`);

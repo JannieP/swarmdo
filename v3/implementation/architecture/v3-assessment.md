@@ -1,4 +1,4 @@
-# Claude-Flow v3 Architecture Assessment
+# Rufflo v3 Architecture Assessment
 
 **Date:** 2026-01-03
 **Analyzed Version:** 2.7.47
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-Claude-Flow is a sophisticated multi-agent orchestration platform with deep integration into the agentic-flow ecosystem. The current v2.x architecture demonstrates strong engineering practices but suffers from architectural complexity, overlapping concerns, and scalability limitations. This assessment provides a comprehensive analysis and roadmap for v3 redesign focused on modularity, performance, and agentic-flow-native architecture.
+Rufflo is a sophisticated multi-agent orchestration platform with deep integration into the agentic-flow ecosystem. The current v2.x architecture demonstrates strong engineering practices but suffers from architectural complexity, overlapping concerns, and scalability limitations. This assessment provides a comprehensive analysis and roadmap for v3 redesign focused on modularity, performance, and agentic-flow-native architecture.
 
 **Key Metrics:**
 - Total TypeScript Files: 376
@@ -214,7 +214,7 @@ Implementations:
 - Dynamic tool registration
 - Schema validation with JSON Schema
 - Built-in tools: system/info, system/health, tools/list
-- Integration tools: Claude-Flow tools, Swarm tools, ruv-swarm tools
+- Integration tools: Rufflo tools, Swarm tools, ruv-swarm tools
 
 **Session Management:**
 - Per-connection sessions
@@ -458,18 +458,18 @@ CLI → Orchestrator → [TerminalManager, MemoryManager, CoordinationManager, M
 
 3. **Memory Integration**
    - Use agentic-flow's memory system as primary
-   - Add claude-flow-specific extensions via plugins
+   - Add rufflo-specific extensions via plugins
    - Leverage agentic-flow's distributed memory
 
 4. **Task Execution**
    - Use agentic-flow's task graph execution
-   - Add claude-flow-specific task types
+   - Add rufflo-specific task types
    - Leverage agentic-flow's retry and fault tolerance
 
 **Architecture Shift:**
 ```
-Current: claude-flow implements everything, integrates with agentic-flow
-   v3: agentic-flow provides core, claude-flow extends and specializes
+Current: rufflo implements everything, integrates with agentic-flow
+   v3: agentic-flow provides core, rufflo extends and specializes
 ```
 
 ---
@@ -481,7 +481,7 @@ Current: claude-flow implements everything, integrates with agentic-flow
 **Proposed Domain Model:**
 
 ```
-Claude-Flow v3 Domains:
+Rufflo v3 Domains:
 ┌─────────────────────────────────────────────────────────┐
 │            Shared Kernel (types, interfaces)            │
 └─────────────────────────────────────────────────────────┘
@@ -1296,7 +1296,7 @@ interface MCPContext {
 
 ### 11.1 Summary
 
-Claude-Flow v2.x is a sophisticated system with strong foundations but architectural complexity that limits scalability and maintainability. The v3 redesign presents an opportunity to:
+Rufflo v2.x is a sophisticated system with strong foundations but architectural complexity that limits scalability and maintainability. The v3 redesign presents an opportunity to:
 
 1. **Simplify** by adopting agentic-flow native architecture
 2. **Modularize** through domain-driven design and bounded contexts
@@ -1426,7 +1426,7 @@ Orchestrator (core/orchestrator.ts)
 - Swarm coordination from agentic-flow
 - Task graph execution from agentic-flow
 - Memory system from agentic-flow
-- Add claude-flow extensions via plugins
+- Add rufflo extensions via plugins
 ```
 
 ### Appendix D: Testing Strategy

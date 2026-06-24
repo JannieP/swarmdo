@@ -2,7 +2,7 @@
  * Gas Town Bridge Plugin - Main Entry Point
  *
  * GasTownBridgePlugin class implementing the IPlugin interface:
- * - register(): Register with claude-flow plugin system
+ * - register(): Register with rufflo plugin system
  * - initialize(): Load WASM modules, set up bridges
  * - shutdown(): Cleanup resources
  *
@@ -87,7 +87,7 @@ import {
 } from './errors.js';
 
 // ============================================================================
-// Plugin Interfaces (matching claude-flow plugin system)
+// Plugin Interfaces (matching rufflo plugin system)
 // ============================================================================
 
 /**
@@ -672,7 +672,7 @@ class WasmLoaderAdapter implements IWasmLoader {
 // ============================================================================
 
 /**
- * Gas Town Bridge Plugin for Claude Flow V3
+ * Gas Town Bridge Plugin for Rufflo V3
  *
  * Provides integration with Gas Town orchestrator:
  * - 5 Beads MCP tools (CLI-based)
@@ -682,7 +682,7 @@ class WasmLoaderAdapter implements IWasmLoader {
  * - 3 Orchestration tools
  */
 export class GasTownBridgePlugin extends EventEmitter implements IPlugin {
-  readonly name = '@claude-flow/plugin-gastown-bridge';
+  readonly name = '@rufflo/plugin-gastown-bridge';
   readonly version = '0.1.0';
   readonly description =
     'Gas Town orchestrator integration with WASM-accelerated formula parsing and graph analysis';
@@ -713,7 +713,7 @@ export class GasTownBridgePlugin extends EventEmitter implements IPlugin {
   }
 
   /**
-   * Register the plugin with claude-flow
+   * Register the plugin with rufflo
    */
   async register(context: PluginContext): Promise<void> {
     this.pluginContext = context;
@@ -976,7 +976,7 @@ export class GasTownBridgePlugin extends EventEmitter implements IPlugin {
       license: 'MIT',
       repository: 'https://github.com/ruvnet/claude-flow',
       keywords: [
-        'claude-flow',
+        'rufflo',
         'plugin',
         'gastown',
         'beads',

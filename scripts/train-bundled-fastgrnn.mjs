@@ -16,10 +16,10 @@ import { readFileSync, statSync } from 'node:fs';
 import { resolve } from 'node:path';
 import * as mh from '@metaharness/router';
 // iter 35 — single source of truth for prices.
-import { blendedPrice } from '../v3/@claude-flow/cli/dist/src/ruvector/model-prices.js';
+import { blendedPrice } from '../v3/@rufflo/cli/dist/src/ruvector/model-prices.js';
 
 const args = (() => {
-  const a = { out: resolve('v3/@claude-flow/cli/assets/model-router/seed-router.fastgrnn.safetensors'), epochs: 40, hiddenDim: 12, lr: 0.05 };
+  const a = { out: resolve('v3/@rufflo/cli/assets/model-router/seed-router.fastgrnn.safetensors'), epochs: 40, hiddenDim: 12, lr: 0.05 };
   for (let i = 2; i < process.argv.length; i++) {
     if (process.argv[i] === '--out') a.out = process.argv[++i];
     else if (process.argv[i] === '--epochs') a.epochs = parseInt(process.argv[++i], 10);
@@ -29,7 +29,7 @@ const args = (() => {
   return a;
 })();
 
-const seedPath = resolve('v3/@claude-flow/cli/assets/model-router/seed-rows.json');
+const seedPath = resolve('v3/@rufflo/cli/assets/model-router/seed-rows.json');
 console.log(`[fastgrnn] reading measured seed corpus from ${seedPath}`);
 const rows = JSON.parse(readFileSync(seedPath, 'utf8'));
 console.log(`[fastgrnn] ${rows.length} rows, dim=${rows[0].embedding.length}, candidates=${Object.keys(rows[0].scores).length}`);

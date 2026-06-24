@@ -1,5 +1,5 @@
 /**
- * ruflo-graph-intelligence — Adapter barrel export
+ * rufflo-graph-intelligence — Adapter barrel export
  *
  * Each adapter lives in its own file and is opted into by the owning plugin
  * at init time. Phase-1 ships zero adapters; Phase 2+ adds them one at a time.

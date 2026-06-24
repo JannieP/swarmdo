@@ -17,9 +17,9 @@ releases — so when a regression appears, you can pinpoint *the commit
 that introduced it*, not just "it's broken now."
 
 This skill works two ways:
-1. **Inside ruflo** — used by ruflo's own CI to gate publishes (see
+1. **Inside rufflo** — used by rufflo's own CI to gate publishes (see
    `.github/workflows/v3-ci.yml` job `witness-verify`).
-2. **In your own project** — copy `plugins/ruflo-core/scripts/witness/`
+2. **In your own project** — copy `plugins/rufflo-core/scripts/witness/`
    into your repo, run `init.mjs`, register your fixes in
    `witness-fixes.json`, and call `regen.mjs` from your release pipeline.
 
@@ -28,7 +28,7 @@ This skill works two ways:
 ```bash
 # One-time bootstrap — creates verification.md.json,
 # verification-history.jsonl, and witness-fixes.json template
-node plugins/ruflo-core/scripts/witness/init.mjs --root .
+node plugins/rufflo-core/scripts/witness/init.mjs --root .
 
 # Edit witness-fixes.json: add { id, desc, file, marker } per fix.
 # A "marker" is a distinctive substring that MUST appear in `file`
@@ -37,13 +37,13 @@ node plugins/ruflo-core/scripts/witness/init.mjs --root .
 
 # Regenerate the manifest (signs with Ed25519 from current gitCommit)
 npm i @noble/ed25519
-node plugins/ruflo-core/scripts/witness/regen.mjs \
+node plugins/rufflo-core/scripts/witness/regen.mjs \
   --manifest verification.md.json \
   --history verification-history.jsonl \
   --fixes witness-fixes.json
 
 # Verify markers are present in the live tree
-node plugins/ruflo-core/scripts/witness/verify.mjs \
+node plugins/rufflo-core/scripts/witness/verify.mjs \
   --manifest verification.md.json
 ```
 
@@ -51,19 +51,19 @@ node plugins/ruflo-core/scripts/witness/verify.mjs \
 
 ```bash
 # Latest snapshot vs. previous
-node plugins/ruflo-core/scripts/witness/history.mjs \
+node plugins/rufflo-core/scripts/witness/history.mjs \
   --history verification-history.jsonl summary
 
 # For each currently-regressed fix, find the commit that introduced it
-node plugins/ruflo-core/scripts/witness/history.mjs \
+node plugins/rufflo-core/scripts/witness/history.mjs \
   --history verification-history.jsonl regressions
 
 # Status timeline for a specific fix
-node plugins/ruflo-core/scripts/witness/history.mjs \
+node plugins/rufflo-core/scripts/witness/history.mjs \
   --history verification-history.jsonl timeline --id F1
 
 # Machine-readable for CI
-node plugins/ruflo-core/scripts/witness/history.mjs \
+node plugins/rufflo-core/scripts/witness/history.mjs \
   --history verification-history.jsonl summary --json
 ```
 
@@ -90,7 +90,7 @@ snapshot — drop it in CI as a soft pre-merge gate.
 - `scripts/witness/init.mjs` — CLI: bootstrap into a fresh project.
 - `scripts/witness/verify.mjs` — CLI: validate signature + markers.
 
-## In ruflo's CI
+## In rufflo's CI
 
 `v3-ci.yml` job `witness-verify` runs after the behavioral smoke tests
 and before `publish`. Failure modes:

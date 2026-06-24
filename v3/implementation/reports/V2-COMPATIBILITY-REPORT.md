@@ -224,12 +224,12 @@ const server = createMCPServer({
 
 ```bash
 # V2 (deprecated but supported)
-npx claude-flow hive-mind init
-npx claude-flow hive-mind status
+npx rufflo hive-mind init
+npx rufflo hive-mind status
 
 # V3 (recommended)
-npx @claude-flow/cli swarm init
-npx @claude-flow/cli swarm status
+npx @rufflo/cli swarm init
+npx @rufflo/cli swarm status
 ```
 
 #### MCP Tool Migration
@@ -261,12 +261,12 @@ const agent = await mcp.callTool('agent/spawn', {
 
 ```typescript
 // V2 imports
-import { HiveMind } from 'claude-flow/hive-mind';
-import { MemoryManager } from 'claude-flow/memory';
+import { HiveMind } from 'rufflo/hive-mind';
+import { MemoryManager } from 'rufflo/memory';
 
 // V3 imports with aliases
-import { UnifiedSwarmCoordinator as HiveMind } from '@claude-flow/swarm';
-import { UnifiedMemoryService as MemoryManager } from '@claude-flow/memory';
+import { UnifiedSwarmCoordinator as HiveMind } from '@rufflo/swarm';
+import { UnifiedMemoryService as MemoryManager } from '@rufflo/memory';
 
 // Usage remains the same
 const hive = new HiveMind();
@@ -280,29 +280,29 @@ const agent = await hive.spawn('coder');
 
 ```bash
 # Run the V3 migration tool
-npx @claude-flow/cli migrate --from v2 --to v3
+npx @rufflo/cli migrate --from v2 --to v3
 
 # Migrate configuration
-npx @claude-flow/cli migrate config --input .claude-flow/config.yaml
+npx @rufflo/cli migrate config --input .rufflo/config.yaml
 
 # Migrate memory database
-npx @claude-flow/cli migrate memory --input .claude-flow/memory.db
+npx @rufflo/cli migrate memory --input .rufflo/memory.db
 ```
 
 #### Manual Configuration Migration
 
 ```yaml
-# V2 Configuration (.claude-flow/config.yaml)
+# V2 Configuration (.rufflo/config.yaml)
 orchestrator:
   maxAgents: 10
   defaultStrategy: balanced
 memory:
   backend: sqlite
-  path: ./.claude-flow/memory.db
+  path: ./.rufflo/memory.db
 coordination:
   topology: hierarchical
 
-# V3 Configuration (.claude-flow/config.yaml)
+# V3 Configuration (.rufflo/config.yaml)
 swarm:
   topology: hierarchical-mesh
   maxAgents: 15
@@ -312,7 +312,7 @@ swarm:
 memory:
   backend: hybrid
   sqlite:
-    path: ./.claude-flow/memory.db
+    path: ./.rufflo/memory.db
   agentdb:
     enableHNSW: true
     dimensions: 384
@@ -325,10 +325,10 @@ hooks:
 
 1. Enable V2 compatibility mode in MCP server configuration
 2. Update tool calls to use new naming convention (e.g., agent/spawn)
-3. Update import statements to use @claude-flow/* packages
+3. Update import statements to use @rufflo/* packages
 4. Use provided import aliases for backward compatibility
 5. Consider using tool name translation layer for gradual migration
-6. Run migration script: npx @claude-flow/cli migrate
+6. Run migration script: npx @rufflo/cli migrate
 7. Update to Node.js 20+ (Deno support removed)
 
 ## Feature Compatibility Matrix
@@ -374,14 +374,14 @@ hooks:
 
 | V2 Import | V3 Import |
 |-----------|-----------|
-| claude-flow/hive-mind | @claude-flow/swarm |
-| claude-flow/swarm | @claude-flow/swarm |
-| claude-flow/memory | @claude-flow/memory |
-| claude-flow/agents | @claude-flow/agent-lifecycle |
-| claude-flow/tasks | @claude-flow/task-execution |
-| claude-flow/hooks | @claude-flow/hooks |
-| claude-flow/config | @claude-flow/config |
-| claude-flow | @claude-flow/core |
+| rufflo/hive-mind | @rufflo/swarm |
+| rufflo/swarm | @rufflo/swarm |
+| rufflo/memory | @rufflo/memory |
+| rufflo/agents | @rufflo/agent-lifecycle |
+| rufflo/tasks | @rufflo/task-execution |
+| rufflo/hooks | @rufflo/hooks |
+| rufflo/config | @rufflo/config |
+| rufflo | @rufflo/core |
 
 ### C. V2 to V3 Class Aliases
 

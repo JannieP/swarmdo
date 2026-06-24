@@ -6,7 +6,7 @@
 
 ## Context
 
-Ruflo v3 already integrates four `@ruvector/*` WASM packages for intelligence
+Rufflo v3 already integrates four `@ruvector/*` WASM packages for intelligence
 (learning-wasm, attention, router, sona). A new package —
 `@ruvector/rvagent-wasm@0.1.0` — provides a complete sandboxed AI agent runtime
 compiled to WebAssembly. It includes:
@@ -26,7 +26,7 @@ pi-quantization. This ADR covers both integrations.
 
 ## Decision
 
-Integrate `@ruvector/rvagent-wasm` as an optional dependency in `@claude-flow/cli`,
+Integrate `@ruvector/rvagent-wasm` as an optional dependency in `@rufflo/cli`,
 following the established pattern used by `@ruvector/learning-wasm` et al.
 
 ### Integration Surface
@@ -111,7 +111,7 @@ distribution that avoids floating-point logarithms entirely. Published as v2.0.1
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│  @claude-flow/cli                                        │
+│  @rufflo/cli                                        │
 │                                                          │
 │  src/ruvector/agent-wasm.ts  ◄── Integration module      │
 │    ├─ createWasmAgent()      (lifecycle)                  │

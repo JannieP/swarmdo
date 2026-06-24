@@ -43,24 +43,24 @@ npx neural-trader --sector-analysis --sectors "tech,healthcare,energy"
 3. Check correlations: `npx neural-trader --correlation --symbols "TICKERS" --window 30d`
 4. Store analysis in memory:
    ```bash
-   npx @claude-flow/cli@latest memory store --namespace trading-analysis --key "regime-TICKER-DATE" --value "ANALYSIS"
+   npx @rufflo/cli@latest memory store --namespace trading-analysis --key "regime-TICKER-DATE" --value "ANALYSIS"
    ```
 5. Compare with historical regimes:
    ```bash
-   npx @claude-flow/cli@latest memory search --query "similar regime to CURRENT_REGIME" --namespace trading-analysis
+   npx @rufflo/cli@latest memory search --query "similar regime to CURRENT_REGIME" --namespace trading-analysis
    ```
 
 ### Tools
 
 - `npx neural-trader` — technical analysis and regime detection
-- `mcp__claude-flow__memory_store` / `memory_search` — persist and query analysis history
-- `mcp__claude-flow__neural_predict` — SONA regime prediction
-- `mcp__claude-flow__agentdb_pattern-search` — find similar historical patterns
+- `mcp__rufflo__memory_store` / `memory_search` — persist and query analysis history
+- `mcp__rufflo__neural_predict` — SONA regime prediction
+- `mcp__rufflo__agentdb_pattern-search` — find similar historical patterns
 
 ### Neural Learning
 
 ```bash
-npx @claude-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
+npx @rufflo/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
 ```
 
 ### Comms protocol (ADR-126 Phase 5 — SendMessage pipeline)
@@ -87,6 +87,6 @@ SendMessage({
 })
 ```
 
-Message schema: `RegimeVerdict` in `plugins/ruflo-neural-trader/src/pipeline-messages.ts`.
+Message schema: `RegimeVerdict` in `plugins/rufflo-neural-trader/src/pipeline-messages.ts`.
 
 You do NOT message `risk-analyst` or any other agent directly — the pipeline is strictly linear `market-analyst → trading-strategist → risk-analyst`.

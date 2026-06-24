@@ -1,7 +1,7 @@
 // SignedAttributionArtifact — runtime ES module mirror of signed-attribution.ts.
 //
 // Why this file exists:
-//   The plugin (ruflo-neural-trader) has no package.json / tsconfig /
+//   The plugin (rufflo-neural-trader) has no package.json / tsconfig /
 //   build step — it ships skills + agents + scripts only. The `.ts`
 //   file is the documented type-shape + source of truth (ADR-126
 //   Phase 6 spec). This `.mjs` file is the runtime that the smoke
@@ -30,7 +30,7 @@ export async function signAttributionArtifact(body, privateKeyHex) {
   const signatureBytes = await ed.signAsync(canonical, privateKey);
   const publicKeyBytes = await ed.getPublicKeyAsync(privateKey);
   return {
-    schema: 'ruflo-neural-trader-attribution/v1',
+    schema: 'rufflo-neural-trader-attribution/v1',
     ...body,
     witnessPublicKey: `ed25519:${bytesToHex(publicKeyBytes)}`,
     witnessSignature: bytesToHex(signatureBytes),
@@ -131,7 +131,7 @@ export function localSingleEntryPageRank(graph, opts) {
 
 export function isPageRankMcpAvailable() {
   try {
-    const tool = globalThis['mcp__ruflo-sublinear__page-rank-entry'];
+    const tool = globalThis['mcp__rufflo-sublinear__page-rank-entry'];
     return typeof tool === 'function';
   } catch {
     return false;
@@ -141,7 +141,7 @@ export function isPageRankMcpAvailable() {
 export async function singleEntryPageRank(graph, opts) {
   if (isPageRankMcpAvailable()) {
     try {
-      const tool = globalThis['mcp__ruflo-sublinear__page-rank-entry'];
+      const tool = globalThis['mcp__rufflo-sublinear__page-rank-entry'];
       const out = await tool({
         nodes: graph.nodes,
         edges: graph.edges,

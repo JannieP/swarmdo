@@ -1,7 +1,7 @@
 {
-  "name": "@claude-flow/ruvector-upstream",
+  "name": "@rufflo/ruvector-upstream",
   "version": "3.0.0-alpha.1",
-  "description": "RuVector WASM package bridges for Claude Flow plugins",
+  "description": "RuVector WASM package bridges for Rufflo plugins",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
@@ -55,7 +55,7 @@
     "typecheck": "tsc --noEmit"
   },
   "keywords": [
-    "claude-flow",
+    "rufflo",
     "ruvector",
     "wasm",
     "vector-search",
@@ -63,7 +63,7 @@
     "graph",
     "quantum"
   ],
-  "author": "Claude Flow Team",
+  "author": "Rufflo Team",
   "license": "MIT",
   "repository": {
     "type": "git",

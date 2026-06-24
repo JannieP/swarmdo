@@ -1,5 +1,5 @@
 // Tournament — round-robin over a roster producing Wolfram's "competitive array":
-// the matrix of mean payoffs for every (strategy, opponent) pair (Ruflo ADR-147).
+// the matrix of mean payoffs for every (strategy, opponent) pair (Rufflo ADR-147).
 
 import { meanPayoff } from './arena.js';
 import type { GameSpec, Strategy, TournamentResult } from '../domain/types.js';

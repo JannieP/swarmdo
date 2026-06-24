@@ -1,7 +1,7 @@
 // SublinearAdapter — runtime ES module mirror of sublinear-adapter.ts.
 //
 // Why this file exists:
-//   The plugin (ruflo-neural-trader) does not have a `package.json` /
+//   The plugin (rufflo-neural-trader) does not have a `package.json` /
 //   tsconfig / build step — it ships skills + agents + scripts only.
 //   The `.ts` file in this directory is the documented type-shape and
 //   the source of truth for the SublinearAdapter contract (ADR-123
@@ -18,14 +18,14 @@
 export class SublinearAdapter {
   /**
    * Two-probe detection (kept in sync with sublinear-adapter.ts):
-   *   1) globalThis['mcp__ruflo-sublinear__solve'] is a function
+   *   1) globalThis['mcp__rufflo-sublinear__solve'] is a function
    *   2) process.env.RUFLO_SUBLINEAR_NATIVE === '1' (manual override)
    * Either probe passing triggers the native dispatch; failure of the call
    * itself falls back to the local JS CG kernel.
    */
   static detectSublinearTool() {
     try {
-      const tool = globalThis['mcp__ruflo-sublinear__solve'];
+      const tool = globalThis['mcp__rufflo-sublinear__solve'];
       if (typeof tool === 'function') return true;
     } catch {
       /* fall through */
@@ -221,9 +221,9 @@ function isSymmetric(A) {
 }
 
 async function callMcpSolve(matrix, vector, opts) {
-  const tool = globalThis['mcp__ruflo-sublinear__solve'];
+  const tool = globalThis['mcp__rufflo-sublinear__solve'];
   if (typeof tool !== 'function') {
-    throw new Error('mcp__ruflo-sublinear__solve not available');
+    throw new Error('mcp__rufflo-sublinear__solve not available');
   }
   const out = await tool({
     matrix,
@@ -233,7 +233,7 @@ async function callMcpSolve(matrix, vector, opts) {
     maxIterations: opts.maxIterations ?? 200,
   });
   if (!out || !Array.isArray(out.solution)) {
-    throw new Error('mcp__ruflo-sublinear__solve returned invalid shape');
+    throw new Error('mcp__rufflo-sublinear__solve returned invalid shape');
   }
   return {
     solution: out.solution,

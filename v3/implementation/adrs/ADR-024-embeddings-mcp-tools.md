@@ -26,7 +26,7 @@ Following ADR-005 (MCP-First API Design):
 
 ## Decision
 
-Implement 7 MCP tools in `@claude-flow/cli/src/mcp-tools/embeddings-tools.ts`:
+Implement 7 MCP tools in `@rufflo/cli/src/mcp-tools/embeddings-tools.ts`:
 
 ### 1. `embeddings/init`
 Initialize the ONNX embedding subsystem with hyperbolic support.
@@ -172,7 +172,7 @@ Get embeddings system status and configuration.
 │          ▼                     ▼                    ▼       │
 │  ┌─────────────────────────────────────────────────────────┐│
 │  │               Configuration Layer                        ││
-│  │    .claude-flow/embeddings.json (persistent config)      ││
+│  │    .rufflo/embeddings.json (persistent config)      ││
 │  └─────────────────────────────────────────────────────────┘│
 │                          │                                   │
 │          ┌───────────────┼───────────────┐                  │
@@ -213,12 +213,12 @@ where scale ensures ||m|| < maxNorm
 
 ## Configuration
 
-Tools store configuration in `.claude-flow/embeddings.json`:
+Tools store configuration in `.rufflo/embeddings.json`:
 
 ```json
 {
   "model": "all-MiniLM-L6-v2",
-  "modelPath": ".claude-flow/models",
+  "modelPath": ".rufflo/models",
   "dimension": 384,
   "cacheSize": 256,
   "hyperbolic": {

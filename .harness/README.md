@@ -1,6 +1,6 @@
-# .harness/ — ruflo's MetaHarness lifecycle directory
+# .harness/ — rufflo's MetaHarness lifecycle directory
 
-This directory holds the files that `harness <subcommand>` from `metaharness` reads to assess ruflo's governance posture. See [ADR-150](../v3/docs/adr/ADR-150-metaharness-integration-surfaces.md) for context.
+This directory holds the files that `harness <subcommand>` from `metaharness` reads to assess rufflo's governance posture. See [ADR-150](../v3/docs/adr/ADR-150-metaharness-integration-surfaces.md) for context.
 
 ## Contents
 
@@ -12,7 +12,7 @@ This directory holds the files that `harness <subcommand>` from `metaharness` re
 
 ## Witness — what's needed to ship it
 
-`harness sign .` produces a witness from `.harness/manifest.json` BUT requires `WITNESS_SIGNING_KEY` (64-char hex Ed25519 private key) in the environment. Ruflo's existing `brain-signing-key` in GCP Secret Manager is in a different format (89 chars, not hex) and can't be reused.
+`harness sign .` produces a witness from `.harness/manifest.json` BUT requires `WITNESS_SIGNING_KEY` (64-char hex Ed25519 private key) in the environment. Rufflo's existing `brain-signing-key` in GCP Secret Manager is in a different format (89 chars, not hex) and can't be reused.
 
 To enable witness signing, one of:
 
@@ -22,15 +22,15 @@ To enable witness signing, one of:
 
 3. **Skip the witness** and accept the "partial witness" note in the OIA manifest. The threat-model and mcp-scan are already CLEAN without it; the witness only signs the manifest, it doesn't itself add new security controls.
 
-Current state (option 3) gives ruflo:
+Current state (option 3) gives rufflo:
 - ✓ L7 governance alignment: **full** (per `harness oia-manifest`)
 - ✓ threat-model worst severity: **info / clean**
 - ✓ mcp-scan: **0 actionable findings**
 - The implementation note: `"mcp-policy.json (witness missing)"`
 
-The witness is genuinely optional unless an external party needs to verify the manifest hasn't been tampered with. For ruflo's internal use it's nice-to-have polish.
+The witness is genuinely optional unless an external party needs to verify the manifest hasn't been tampered with. For rufflo's internal use it's nice-to-have polish.
 
-## Verifying ruflo's current posture
+## Verifying rufflo's current posture
 
 ```bash
 # Full threat report
@@ -42,10 +42,10 @@ npx -y -p metaharness@latest harness mcp-scan .
 # Full OIA layer alignment
 npx -y -p metaharness@latest harness oia-manifest .
 
-# Or via ruflo's wrappers (no metaharness install required if optional dep is present)
-npx ruflo metaharness threat-model
-npx ruflo metaharness mcp-scan
-npx ruflo metaharness oia-audit --dry-run
+# Or via rufflo's wrappers (no metaharness install required if optional dep is present)
+npx rufflo metaharness threat-model
+npx rufflo metaharness mcp-scan
+npx rufflo metaharness oia-audit --dry-run
 ```
 
 ## Updating mcp-policy.json
@@ -65,4 +65,4 @@ console.log('Manifest updated.');
 "
 ```
 
-Smoke step 17t (in `plugins/ruflo-metaharness/scripts/smoke.sh`) locks the policy invariants. If you change the policy in a way that violates `defaultDeny:true / auditLog:true / requireApprovalForDangerous:true` or removes the `toolTimeoutMs`/`maxToolCallsPerTurn` positive-number requirements, CI will fail.
+Smoke step 17t (in `plugins/rufflo-metaharness/scripts/smoke.sh`) locks the policy invariants. If you change the policy in a way that violates `defaultDeny:true / auditLog:true / requireApprovalForDangerous:true` or removes the `toolTimeoutMs`/`maxToolCallsPerTurn` positive-number requirements, CI will fail.

@@ -7,13 +7,13 @@ argument-hint: "[--results=<path>] [--run-id=<id>] [--dry-run]"
 # /gaia submit
 
 Build a submission-ready package from a completed benchmark run and sign it
-with the ruflo Ed25519 witness manifest.
+with the rufflo Ed25519 witness manifest.
 
 ## Usage
 
 ```
 /gaia submit
-/gaia submit --results=~/.cache/ruflo/gaia/results-latest.json
+/gaia submit --results=~/.cache/rufflo/gaia/results-latest.json
 /gaia submit --results=./my-results.json --dry-run
 ```
 
@@ -21,7 +21,7 @@ with the ruflo Ed25519 witness manifest.
 
 | Flag | Default | Description |
 |------|---------|-------------|
-| `--results` | `~/.cache/ruflo/gaia/results-latest.json` | Path to the JSON results file from `/gaia run` |
+| `--results` | `~/.cache/rufflo/gaia/results-latest.json` | Path to the JSON results file from `/gaia run` |
 | `--run-id` | auto (from git SHA) | Short identifier embedded in the package directory name |
 | `--dry-run` | off | Build and validate the package but do not write it to disk |
 | `--no-sign` | off | Skip Ed25519 signing (not recommended for leaderboard submissions) |
@@ -52,7 +52,7 @@ submission-<date>-<short-sha>/
 
 ## Steps Claude should follow
 
-1. Locate the results file — default `~/.cache/ruflo/gaia/results-latest.json`;
+1. Locate the results file — default `~/.cache/rufflo/gaia/results-latest.json`;
    ask if multiple candidates exist.
 2. Validate the file has the expected shape: `level`, `model`, `summary`, `results` array.
 3. Transform `results[]` → HAL-compatible `results.jsonl` (one JSON per line).
@@ -61,7 +61,7 @@ submission-<date>-<short-sha>/
    ```json
    {
      "submitted_at": "<ISO-8601>",
-     "harness": "ruflo@3.6.x / @claude-flow/cli@3.6.x",
+     "harness": "rufflo@3.6.x / @rufflo/cli@3.6.x",
      "model": "<model-id>",
      "gaia_level": 1,
      "tool_catalogue": ["web_search","file_read","web_browse","image_describe","python_exec"],
@@ -72,7 +72,7 @@ submission-<date>-<short-sha>/
      "git_sha": "<short-sha>"
    }
    ```
-6. Sign with witness: `node plugins/ruflo-core/scripts/witness/sign.mjs submission-<id>/`
+6. Sign with witness: `node plugins/rufflo-core/scripts/witness/sign.mjs submission-<id>/`
 7. Write `README.md` with pass-rate table comparing to HAL baselines.
 8. If `--dry-run`, print the package tree and manifest hash without writing.
 9. Print the package directory path so the user can zip + upload to HAL.

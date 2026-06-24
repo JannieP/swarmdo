@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Smoke: ADR-125 Phase 7 — no stray DB artifacts after `npm test` in @claude-flow/memory.
+ * Smoke: ADR-125 Phase 7 — no stray DB artifacts after `npm test` in @rufflo/memory.
  *
  * The agentdb / @ruvector/rvf native bindings have a habit of writing
  * `ruvector.db` (and friends) to whatever cwd they're invoked from. ADR-125
@@ -8,7 +8,7 @@
  * behavioural guard that verifies the wipe actually works.
  *
  * Strategy:
- *   1. cd v3/@claude-flow/memory
+ *   1. cd v3/@rufflo/memory
  *   2. record `git status --porcelain .` as a baseline (untracked files that
  *      already exist do not count against us — we are checking the DELTA).
  *   3. run `npm test`
@@ -30,7 +30,7 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(__dirname, '..');
-const PKG_DIR = resolve(REPO_ROOT, 'v3/@claude-flow/memory');
+const PKG_DIR = resolve(REPO_ROOT, 'v3/@rufflo/memory');
 
 const FORBIDDEN_SUFFIXES = ['.db', '.db-journal', '.db-wal', '.rvf', '.redb'];
 
@@ -71,7 +71,7 @@ const testRun = spawnSync('npm', ['test'], {
   stdio: 'inherit',
 });
 // This smoke detects stray DB-like artifacts on disk after the test run.
-// It runs `npm test` for its side effects only. @claude-flow/memory has
+// It runs `npm test` for its side effects only. @rufflo/memory has
 // timing-sensitive HNSW perf assertions (e.g. search latency < 200ms) that
 // are flaky on slower CI runners (212ms observed). Demote a non-zero test
 // status to a warning so the file-leak check below — this smoke's real

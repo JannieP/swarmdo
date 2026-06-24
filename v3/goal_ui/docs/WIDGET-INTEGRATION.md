@@ -1,8 +1,8 @@
-# RuFlo Research Widget Integration Guide
+# Rufflo Research Widget Integration Guide
 
 ## 📦 Overview
 
-The RuFlo Research Widget is a standalone, embeddable component that brings Goal-Oriented Action Planning research capabilities to any website. It's fully self-contained with no external dependencies required on the host page.
+The Rufflo Research Widget is a standalone, embeddable component that brings Goal-Oriented Action Planning research capabilities to any website. It's fully self-contained with no external dependencies required on the host page.
 
 ## 🚀 Quick Start
 
@@ -12,7 +12,7 @@ Add this code to any HTML page:
 
 ```html
 <!-- 1. Add widget container -->
-<div id="ruflo-research-widget-container"></div>
+<div id="rufflo-research-widget-container"></div>
 
 <!-- 2. Load widget files -->
 <link rel="stylesheet" href="https://YOUR-DOMAIN/widget.css">
@@ -25,11 +25,11 @@ That's it! The widget will automatically initialize.
 
 ```html
 <!-- Widget container -->
-<div id="ruflo-research-widget-container"></div>
+<div id="rufflo-research-widget-container"></div>
 
 <!-- Configuration (optional) -->
 <script>
-  window.RufloResearchWidgetConfig = {
+  window.RuffloResearchWidgetConfig = {
     primaryColor: "#8b5cf6",
     accentColor: "#22c55e",
     backgroundColor: "#1a1a1a",
@@ -50,7 +50,7 @@ That's it! The widget will automatically initialize.
 All configuration options are optional. The widget will use sensible defaults.
 
 ```javascript
-window.RufloResearchWidgetConfig = {
+window.RuffloResearchWidgetConfig = {
   // Colors (use hex format)
   primaryColor: "#8b5cf6",          // Main brand color
   accentColor: "#22c55e",           // Success/highlight color
@@ -91,8 +91,8 @@ Use a custom container ID:
 
 <script>
   window.addEventListener('load', function() {
-    if (window.RufloResearchWidget) {
-      window.RufloResearchWidget.init('my-custom-container');
+    if (window.RuffloResearchWidget) {
+      window.RuffloResearchWidget.init('my-custom-container');
     }
   });
 </script>
@@ -153,8 +153,8 @@ Disable auto-initialization and manually control when the widget loads:
 
 // Then manually initialize when ready
 window.addEventListener('DOMContentLoaded', function() {
-  if (window.RufloResearchWidget) {
-    window.RufloResearchWidget.init('ruflo-research-widget-container');
+  if (window.RuffloResearchWidget) {
+    window.RuffloResearchWidget.init('rufflo-research-widget-container');
   }
 });
 ```
@@ -164,7 +164,7 @@ window.addEventListener('DOMContentLoaded', function() {
 Check the widget version:
 
 ```javascript
-console.log(window.RufloResearchWidget.version); // "1.0.0"
+console.log(window.RuffloResearchWidget.version); // "1.0.0"
 ```
 
 ### Multiple Widgets
@@ -177,8 +177,8 @@ Load multiple widgets on the same page:
 
 <script>
   window.addEventListener('load', function() {
-    window.RufloResearchWidget.init('widget-1');
-    window.RufloResearchWidget.init('widget-2');
+    window.RuffloResearchWidget.init('widget-1');
+    window.RuffloResearchWidget.init('widget-2');
   });
 </script>
 ```
@@ -243,9 +243,9 @@ For large pages or slow connections:
 // Add to your theme's functions.php
 function add_goap_widget() {
   ?>
-  <div id="ruflo-research-widget-container"></div>
+  <div id="rufflo-research-widget-container"></div>
   <script>
-    window.RufloResearchWidgetConfig = {
+    window.RuffloResearchWidgetConfig = {
       primaryColor: "<?php echo get_theme_mod('primary_color', '#8b5cf6'); ?>",
       defaultGoal: "<?php echo get_option('goap_default_goal'); ?>"
     };
@@ -263,7 +263,7 @@ add_action('wp_footer', 'add_goap_widget');
 ```javascript
 import { useEffect } from 'react';
 
-export default function RufloResearchWidget() {
+export default function RuffloResearchWidget() {
   useEffect(() => {
     // Load widget script
     const script = document.createElement('script');
@@ -283,7 +283,7 @@ export default function RufloResearchWidget() {
     };
   }, []);
 
-  return <div id="ruflo-research-widget-container" />;
+  return <div id="rufflo-research-widget-container" />;
 }
 ```
 
@@ -291,14 +291,14 @@ export default function RufloResearchWidget() {
 
 ```vue
 <template>
-  <div id="ruflo-research-widget-container"></div>
+  <div id="rufflo-research-widget-container"></div>
 </template>
 
 <script>
 export default {
   mounted() {
     // Set configuration
-    window.RufloResearchWidgetConfig = {
+    window.RuffloResearchWidgetConfig = {
       primaryColor: this.$root.theme.primaryColor
     };
 

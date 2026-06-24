@@ -4,7 +4,7 @@
  * RuVector / AgentDB intelligence stack.
  *
  * Measures, on the machine it runs on, against the BUILT exports under
- *   v3/@claude-flow/cli/dist/src/...
+ *   v3/@rufflo/cli/dist/src/...
  * (never against source, never hardcoded):
  *
  *   1. HNSW search vs in-process brute-force cosine baseline
@@ -39,7 +39,7 @@
  *   node scripts/benchmark-intelligence.mjs --queries 50 --dims 384
  *   node scripts/benchmark-intelligence.mjs --json-only
  *
- * Created for the ruflo intelligence stack. Co-Authored-By: RuFlo <ruv@ruv.net>
+ * Created for the rufflo intelligence stack. Co-Authored-By: Rufflo <ruv@ruv.net>
  */
 
 import { fileURLToPath } from 'node:url';
@@ -47,7 +47,7 @@ import path from 'node:path';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..');
-const DIST = path.join(REPO_ROOT, 'v3', '@claude-flow', 'cli', 'dist', 'src');
+const DIST = path.join(REPO_ROOT, 'v3', '@rufflo', 'cli', 'dist', 'src');
 
 // ----------------------------------------------------------------------------
 // CLI args

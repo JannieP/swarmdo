@@ -1,19 +1,19 @@
 [package]
-name = "ruflo-federation-peer"
+name = "rufflo-federation-peer"
 version = "0.1.0"
 edition = "2021"
 rust-version = "1.85"
-description = "Single-process federation peer for ruflo: midstreamer-quic transport composed with aimds-* 3-gate safety pipeline (ADR-120 Step 3)"
+description = "Single-process federation peer for rufflo: midstreamer-quic transport composed with aimds-* 3-gate safety pipeline (ADR-120 Step 3)"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/ruvnet/ruflo"
-keywords = ["ruflo", "federation", "quic", "aimds", "agent"]
+keywords = ["rufflo", "federation", "quic", "aimds", "agent"]
 categories = ["network-programming", "asynchronous"]
 
 [lib]
 crate-type = ["lib"]
 
 [[bin]]
-name = "ruflo-federation-peer"
+name = "rufflo-federation-peer"
 path = "src/bin.rs"
 
 [features]

@@ -1,5 +1,5 @@
 {
-  "name": "ruflo-knowledge-graph",
+  "name": "rufflo-knowledge-graph",
   "description": "Knowledge graph construction \u2014 entity extraction, relation mapping, and pathfinder graph traversal",
   "version": "0.2.0",
   "author": {
@@ -9,7 +9,7 @@
   "homepage": "https://github.com/ruvnet/ruflo",
   "license": "MIT",
   "keywords": [
-    "ruflo",
+    "rufflo",
     "knowledge-graph",
     "entities",
     "relations",

@@ -36,12 +36,12 @@ List or fetch persisted run records.
 
 ### Persistence (AgentDB)
 
-The MCP tools persist full artifacts to `.ruflo/arena/<runId>.json` (exact replay). Each tool
+The MCP tools persist full artifacts to `.rufflo/arena/<runId>.json` (exact replay). Each tool
 result also includes an `agentdb` payload — use it to store a searchable summary in AgentDB so
 runs are queryable later (the local stand-in for the RuVector data layer, ADR-196/197):
 
 ```
-mcp__claude-flow__memory_store({
+mcp__rufflo__memory_store({
   namespace: result.agentdb.namespace,   // "arena"
   key:       result.agentdb.key,         // the runId
   value:     result.agentdb.value,       // JSON summary (kind, game, seed, ranking/fitness …)
@@ -49,7 +49,7 @@ mcp__claude-flow__memory_store({
 })
 ```
 
-Later: `mcp__claude-flow__memory_search({ namespace: "arena", query: "tournaments where grim dominated" })`.
+Later: `mcp__rufflo__memory_search({ namespace: "arena", query: "tournaments where grim dominated" })`.
 
 ### Notes
 

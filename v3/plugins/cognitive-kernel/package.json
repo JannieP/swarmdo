@@ -1,5 +1,5 @@
 {
-  "name": "@claude-flow/plugin-cognitive-kernel",
+  "name": "@rufflo/plugin-cognitive-kernel",
   "version": "3.0.0-alpha.1",
   "description": "Cognitive kernel plugin for LLM augmentation with working memory, attention control, meta-cognition, and scaffolding",
   "main": "./dist/index.js",
@@ -40,7 +40,7 @@
     "prepublishOnly": "npm run clean && npm run build && npm run typecheck"
   },
   "keywords": [
-    "claude-flow",
+    "rufflo",
     "cognitive-kernel",
     "working-memory",
     "attention",
@@ -49,7 +49,7 @@
     "sona",
     "cognitum"
   ],
-  "author": "Claude Flow Team",
+  "author": "Rufflo Team",
   "license": "MIT",
   "repository": {
     "type": "git",

@@ -28,15 +28,15 @@ for s in memory-bridge memory-search; do
 done
 [[ -f "$ROOT/agents/memory-specialist.md" ]] || miss="$miss missing-agent"
 [[ -f "$ROOT/commands/recall.md" ]] || miss="$miss missing-recall-cmd"
-[[ -f "$ROOT/commands/ruflo-memory.md" ]] || miss="$miss missing-memory-cmd"
+[[ -f "$ROOT/commands/rufflo-memory.md" ]] || miss="$miss missing-memory-cmd"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
-step "3. README pins @claude-flow/cli to v3.6"
-grep -qE "@claude-flow/cli.*v3\.6|v3\.6.*claude-flow/cli" "$ROOT/README.md" \
+step "3. README pins @rufflo/cli to v3.6"
+grep -qE "@rufflo/cli.*v3\.6|v3\.6.*rufflo/cli" "$ROOT/README.md" \
   && ok || bad "v3.6 pin missing"
 
-step "4. README defers to ruflo-agentdb namespace convention"
-grep -q "ruflo-agentdb" "$ROOT/README.md" \
+step "4. README defers to rufflo-agentdb namespace convention"
+grep -q "rufflo-agentdb" "$ROOT/README.md" \
   && grep -q "Namespace convention" "$ROOT/README.md" \
   && ok || bad "namespace coordination block incomplete"
 

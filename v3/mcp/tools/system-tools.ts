@@ -669,7 +669,7 @@ async function handleSystemInfo(
   context?: ToolContext
 ): Promise<SystemInfoResult> {
   const result: SystemInfoResult = {
-    name: 'claude-flow',
+    name: 'rufflo',
     version: '3.0.0',
     nodeVersion: process.version,
     platform: process.platform,

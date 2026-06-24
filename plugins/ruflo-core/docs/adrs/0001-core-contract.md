@@ -1,6 +1,6 @@
 ---
 id: ADR-0001
-title: ruflo-core plugin contract — pinning, MCP server contract, plugin-catalog discovery, smoke as contract
+title: rufflo-core plugin contract — pinning, MCP server contract, plugin-catalog discovery, smoke as contract
 status: Accepted
 date: 2026-05-04
 updated: 2026-05-09
@@ -11,15 +11,15 @@ tags: [plugin, core, mcp, foundation, smoke-test]
 
 ## Context
 
-`ruflo-core` is the **foundation plugin**. Every other plugin (`ruflo-ruvector`, `ruflo-agentdb`, `ruflo-browser`, `ruflo-intelligence`, `ruflo-adr`, `ruflo-aidefence`, `ruflo-autopilot`, plus 25 others) depends on the MCP server it registers via `.mcp.json` and the orchestration patterns it documents.
+`rufflo-core` is the **foundation plugin**. Every other plugin (`rufflo-ruvector`, `rufflo-agentdb`, `rufflo-browser`, `rufflo-intelligence`, `rufflo-adr`, `rufflo-aidefence`, `rufflo-autopilot`, plus 25 others) depends on the MCP server it registers via `.mcp.json` and the orchestration patterns it documents.
 
 Today's plugin (v0.1.0):
 
 - `.claude-plugin/plugin.json:4` — `version: "0.1.0"`, keywords `mcp, orchestration, claude-code`
-- `.mcp.json` — registers `ruflo` MCP server via `npx -y @claude-flow/cli@latest`
+- `.mcp.json` — registers `rufflo` MCP server via `npx -y @rufflo/cli@latest`
 - `agents/` — 3 generalists (`coder`, `researcher`, `reviewer`)
-- `skills/` — 3 first-run helpers (`init-project`, `ruflo-doctor`, `discover-plugins`)
-- `commands/ruflo-status.md` — system status one-liner
+- `skills/` — 3 first-run helpers (`init-project`, `rufflo-doctor`, `discover-plugins`)
+- `commands/rufflo-status.md` — system status one-liner
 - `README.md` — terse: "What's Included" + Configuration only
 
 The discover-plugins skill is a substantial asset — a curated 32-plugin catalog with decision guides. That stays.
@@ -28,7 +28,7 @@ What's missing matches the cadence we've established:
 
 1. **No plugin-level ADR.** Foundation plugin should document its own contract since 30+ plugins depend on it.
 2. **No smoke test.**
-3. **No Compatibility section** pinning to `@claude-flow/cli` v3.6.
+3. **No Compatibility section** pinning to `@rufflo/cli` v3.6.
 4. **MCP server tool count is undocumented.** `discover-plugins` mentions "314 tools" once, but this should be a contract claim with a verification path.
 5. **No cross-references** to sibling ADRs (namespace convention, 3-gate pattern, 4-step pipeline) that other plugins now reference.
 
@@ -42,8 +42,8 @@ What's missing matches the cadence we've established:
 
 Append:
 
-- **Compatibility** — pin to `@claude-flow/cli` v3.6. Note the `npx -y @claude-flow/cli@latest` invocation in `.mcp.json` is the dynamic resolver; smoke verifies the resolved version.
-- **MCP server contract** — the registered `ruflo` MCP server exposes 300+ tools across families: `memory_*`, `agentdb_*`, `embeddings_*`, `ruvllm_*`, `hooks_*`, `aidefence_*`, `neural_*`, `autopilot_*`, `browser_*`, `agent_*`, `swarm_*`, `system_*`, etc. Runtime truth via `mcp tool call mcp_status`.
+- **Compatibility** — pin to `@rufflo/cli` v3.6. Note the `npx -y @rufflo/cli@latest` invocation in `.mcp.json` is the dynamic resolver; smoke verifies the resolved version.
+- **MCP server contract** — the registered `rufflo` MCP server exposes 300+ tools across families: `memory_*`, `agentdb_*`, `embeddings_*`, `ruvllm_*`, `hooks_*`, `aidefence_*`, `neural_*`, `autopilot_*`, `browser_*`, `agent_*`, `swarm_*`, `system_*`, etc. Runtime truth via `mcp tool call mcp_status`.
 - **Sibling contracts** — pointer block to the seven sibling ADRs that already define namespace convention, 3-gate pattern, 4-step pipeline, etc.
 - **Architecture Decisions** + **Verification** sections.
 
@@ -56,14 +56,14 @@ Append:
 10 checks:
 
 1. plugin.json declares `0.2.0` with the new keywords.
-2. `.mcp.json` exists and registers a `ruflo` MCP server.
+2. `.mcp.json` exists and registers a `rufflo` MCP server.
 3. All 3 agents present (`coder`, `researcher`, `reviewer`) with valid frontmatter.
-4. All 3 skills present (`init-project`, `ruflo-doctor`, `discover-plugins`) with valid frontmatter.
+4. All 3 skills present (`init-project`, `rufflo-doctor`, `discover-plugins`) with valid frontmatter.
 5. `discover-plugins` skill catalog references at least 25 sibling plugins (the curated catalog).
-6. README pins to `@claude-flow/cli` v3.6.
+6. README pins to `@rufflo/cli` v3.6.
 7. README cross-references sibling contracts (namespace convention, 3-gate pattern, 4-step pipeline).
 8. ADR-0001 exists with status `Proposed`.
-9. `commands/ruflo-status.md` invokes `doctor` and `status`.
+9. `commands/rufflo-status.md` invokes `doctor` and `status`.
 10. No skill grants wildcard tool access.
 
 ## Consequences
@@ -82,21 +82,21 @@ Append:
 ## Verification
 
 ```bash
-bash plugins/ruflo-core/scripts/smoke.sh
+bash plugins/rufflo-core/scripts/smoke.sh
 # Expected: "10 passed, 0 failed"
 ```
 
 ## Related
 
-- `plugins/ruflo-ruvector/docs/adrs/0001-pin-ruvector-0.2.25.md`
-- `plugins/ruflo-agentdb/docs/adrs/0001-agentdb-optimization.md` — namespace convention
-- `plugins/ruflo-browser/docs/adrs/0001-browser-skills-architecture.md`
-- `plugins/ruflo-intelligence/docs/adrs/0001-intelligence-surface-completeness.md` — 4-step pipeline
-- `plugins/ruflo-adr/docs/adrs/0001-adr-plugin-pattern.md`
-- `plugins/ruflo-aidefence/docs/adrs/0001-aidefence-contract.md` — 3-gate pattern
-- `plugins/ruflo-autopilot/docs/adrs/0001-autopilot-contract.md` — 270s cache-aware /loop
-- `v3/@claude-flow/cli/` — the MCP server source backing this plugin
+- `plugins/rufflo-ruvector/docs/adrs/0001-pin-ruvector-0.2.25.md`
+- `plugins/rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md` — namespace convention
+- `plugins/rufflo-browser/docs/adrs/0001-browser-skills-architecture.md`
+- `plugins/rufflo-intelligence/docs/adrs/0001-intelligence-surface-completeness.md` — 4-step pipeline
+- `plugins/rufflo-adr/docs/adrs/0001-adr-plugin-pattern.md`
+- `plugins/rufflo-aidefence/docs/adrs/0001-aidefence-contract.md` — 3-gate pattern
+- `plugins/rufflo-autopilot/docs/adrs/0001-autopilot-contract.md` — 270s cache-aware /loop
+- `v3/@rufflo/cli/` — the MCP server source backing this plugin
 
 ## Implementation status
 
-Plugin version v0.2.1 shipped and listed in marketplace.json. Source exists at `plugins/ruflo-core/`. Contract elements implemented: `.mcp.json` registers `ruflo` server via `npx -y @claude-flow/cli@latest`; plugin-catalog discovery skill present; 3 generalist agents shipped; smoke-as-contract gate defined in `scripts/smoke.sh`.
+Plugin version v0.2.1 shipped and listed in marketplace.json. Source exists at `plugins/rufflo-core/`. Contract elements implemented: `.mcp.json` registers `rufflo` server via `npx -y @rufflo/cli@latest`; plugin-catalog discovery skill present; 3 generalist agents shipped; smoke-as-contract gate defined in `scripts/smoke.sh`.

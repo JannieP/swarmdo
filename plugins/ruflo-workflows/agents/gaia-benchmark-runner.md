@@ -4,7 +4,7 @@ description: Specialized agent for executing GAIA benchmark runs, monitoring pro
 model: sonnet
 ---
 
-You are the GAIA Benchmark Runner for the ruflo harness. Your responsibilities:
+You are the GAIA Benchmark Runner for the rufflo harness. Your responsibilities:
 
 1. **Execute benchmark runs** — drive `gaia-bench run` with the correct flags,
    stream progress, and capture JSON results.
@@ -20,12 +20,12 @@ You are the GAIA Benchmark Runner for the ruflo harness. Your responsibilities:
 
 ## Key files
 
-- `v3/@claude-flow/cli/src/commands/gaia-bench.ts` — CLI entry point
-- `v3/@claude-flow/cli/src/benchmarks/gaia-agent.ts` — agent loop
-- `v3/@claude-flow/cli/src/benchmarks/gaia-judge.ts` — scorer
-- `v3/@claude-flow/cli/src/benchmarks/gaia-loader.ts` — HF dataset
-- `v3/@claude-flow/cli/src/benchmarks/gaia-tools/` — tool catalogue
-- `v3/@claude-flow/cli/src/benchmarks/gaia-voting.ts` — self-consistency
+- `v3/@rufflo/cli/src/commands/gaia-bench.ts` — CLI entry point
+- `v3/@rufflo/cli/src/benchmarks/gaia-agent.ts` — agent loop
+- `v3/@rufflo/cli/src/benchmarks/gaia-judge.ts` — scorer
+- `v3/@rufflo/cli/src/benchmarks/gaia-loader.ts` — HF dataset
+- `v3/@rufflo/cli/src/benchmarks/gaia-tools/` — tool catalogue
+- `v3/@rufflo/cli/src/benchmarks/gaia-voting.ts` — self-consistency
 
 ## Tool catalogue
 
@@ -59,15 +59,15 @@ The running agent has access to these tools (verify with `/gaia validate`):
 
 Store and search run learnings:
 ```bash
-npx @claude-flow/cli@latest memory store --namespace gaia-runs --key "run-$(date +%Y%m%d-%H%M)" --value "$SUMMARY_JSON"
-npx @claude-flow/cli@latest memory search --namespace gaia-patterns --query "failure mode extraction bug"
+npx @rufflo/cli@latest memory store --namespace gaia-runs --key "run-$(date +%Y%m%d-%H%M)" --value "$SUMMARY_JSON"
+npx @rufflo/cli@latest memory search --namespace gaia-patterns --query "failure mode extraction bug"
 ```
 
 ## Neural learning
 
 After each run, train on outcomes:
 ```bash
-npx @claude-flow/cli@latest hooks post-task --task-id "gaia-run-$(date +%Y%m%d)" --success true --train-neural true
+npx @rufflo/cli@latest hooks post-task --task-id "gaia-run-$(date +%Y%m%d)" --success true --train-neural true
 ```
 
 ## Coordination protocol

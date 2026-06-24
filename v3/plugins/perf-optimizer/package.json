@@ -1,5 +1,5 @@
 {
-  "name": "@claude-flow/plugin-perf-optimizer",
+  "name": "@rufflo/plugin-perf-optimizer",
   "version": "3.0.0-alpha.2",
   "description": "AI-powered performance optimization plugin for bottleneck detection, memory analysis, and configuration tuning",
   "main": "./dist/index.js",
@@ -40,7 +40,7 @@
     "prepublishOnly": "npm run clean && npm run build && npm run typecheck"
   },
   "keywords": [
-    "claude-flow",
+    "rufflo",
     "plugin",
     "performance",
     "optimization",
@@ -48,7 +48,7 @@
     "memory-analysis",
     "query-optimization"
   ],
-  "author": "Claude Flow Team",
+  "author": "Rufflo Team",
   "license": "MIT",
   "repository": {
     "type": "git",

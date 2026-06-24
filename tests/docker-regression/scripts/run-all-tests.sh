@@ -1,5 +1,5 @@
 #!/bin/bash
-# Claude-Flow Deep Regression Test Suite - Main Runner
+# Rufflo Deep Regression Test Suite - Main Runner
 # Executes all capability tests for comprehensive regression testing
 
 set -e
@@ -41,7 +41,7 @@ echo ""
 # Initialize JSON report
 cat > "$REPORT_FILE" << EOF
 {
-  "testSuite": "claude-flow-deep-regression",
+  "testSuite": "rufflo-deep-regression",
   "version": "3.0.0",
   "timestamp": "$(date -Iseconds)",
   "environment": {

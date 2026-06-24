@@ -18,7 +18,7 @@ Create a **Cognitive Kernel Plugin** that leverages RuVector WASM packages to pr
 
 ## Plugin Name
 
-`@claude-flow/plugin-cognitive-kernel`
+`@rufflo/plugin-cognitive-kernel`
 
 ## Description
 

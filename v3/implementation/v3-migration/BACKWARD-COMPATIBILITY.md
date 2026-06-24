@@ -42,18 +42,18 @@ V3 introduces breaking changes per ADR-001 through ADR-010. This document outlin
 ### Import Aliases
 
 ```typescript
-// v3/@claude-flow/shared/src/compat/v2-aliases.ts
+// v3/@rufflo/shared/src/compat/v2-aliases.ts
 // Provides V2-compatible imports
 
 // V2 imports
-import { HiveMind } from 'claude-flow/hive-mind';
-import { SwarmCoordinator } from 'claude-flow/swarm';
-import { MemoryManager } from 'claude-flow/memory';
+import { HiveMind } from 'rufflo/hive-mind';
+import { SwarmCoordinator } from 'rufflo/swarm';
+import { MemoryManager } from 'rufflo/memory';
 
 // V3 compatibility layer
-export { UnifiedSwarmCoordinator as HiveMind } from '@claude-flow/swarm';
-export { UnifiedSwarmCoordinator as SwarmCoordinator } from '@claude-flow/swarm';
-export { UnifiedMemoryService as MemoryManager } from '@claude-flow/memory';
+export { UnifiedSwarmCoordinator as HiveMind } from '@rufflo/swarm';
+export { UnifiedSwarmCoordinator as SwarmCoordinator } from '@rufflo/swarm';
+export { UnifiedMemoryService as MemoryManager } from '@rufflo/memory';
 ```
 
 ### Tool Name Mapping
@@ -148,7 +148,7 @@ export function translateMemoryQueryParams(v2Params: any): any {
 ### CLI Command Mapping
 
 ```typescript
-// v3/@claude-flow/cli/src/compat/v2-commands.ts
+// v3/@rufflo/cli/src/compat/v2-commands.ts
 // Provides V2 command aliases
 
 export const commandMapping: Record<string, string[]> = {
@@ -171,13 +171,13 @@ export const commandMapping: Record<string, string[]> = {
 
 ### V2 Configuration
 ```yaml
-# v2/.claude-flow/config.yaml
+# v2/.rufflo/config.yaml
 orchestrator:
   maxAgents: 10
   defaultStrategy: balanced
 memory:
   backend: sqlite
-  path: ./.claude-flow/memory.db
+  path: ./.rufflo/memory.db
 coordination:
   topology: hierarchical
   consensus: quorum
@@ -185,7 +185,7 @@ coordination:
 
 ### V3 Configuration
 ```yaml
-# v3/.claude-flow/config.yaml
+# v3/.rufflo/config.yaml
 swarm:
   topology: hierarchical-mesh
   maxAgents: 15
@@ -195,7 +195,7 @@ swarm:
 memory:
   backend: hybrid  # SQLite + AgentDB
   sqlite:
-    path: ./.claude-flow/memory.db
+    path: ./.rufflo/memory.db
   agentdb:
     enableHNSW: true
     dimensions: 384
@@ -208,7 +208,7 @@ hooks:
 ### Migration Script
 
 ```typescript
-// v3/@claude-flow/cli/src/commands/migrate.ts
+// v3/@rufflo/cli/src/commands/migrate.ts
 export async function migrateConfig(v2ConfigPath: string): Promise<void> {
   const v2Config = await loadYaml(v2ConfigPath);
 
@@ -224,7 +224,7 @@ export async function migrateConfig(v2ConfigPath: string): Promise<void> {
     memory: {
       backend: 'hybrid',
       sqlite: {
-        path: v2Config.memory?.path || './.claude-flow/memory.db'
+        path: v2Config.memory?.path || './.rufflo/memory.db'
       },
       agentdb: {
         enableHNSW: true,
@@ -239,7 +239,7 @@ export async function migrateConfig(v2ConfigPath: string): Promise<void> {
     }
   };
 
-  await saveYaml('.claude-flow/config.yaml', v3Config);
+  await saveYaml('.rufflo/config.yaml', v3Config);
 }
 
 function mapTopology(v2Topology: string): string {
@@ -292,7 +292,7 @@ ALTER TABLE memory_entries ADD COLUMN access_count INTEGER DEFAULT 0;
 ### Migration Script
 
 ```typescript
-// v3/@claude-flow/memory/src/migration.ts
+// v3/@rufflo/memory/src/migration.ts
 export async function migrateMemoryData(v2DbPath: string, v3DbPath: string): Promise<void> {
   const v2Db = new Database(v2DbPath);
   const v3Db = new Database(v3DbPath);

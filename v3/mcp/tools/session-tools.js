@@ -19,7 +19,7 @@ function generateSecureSessionId() {
     return `session-${timestamp}-${random}`;
 }
 // Default session directory
-const DEFAULT_SESSION_DIR = '.claude-flow/sessions';
+const DEFAULT_SESSION_DIR = '.rufflo/sessions';
 // ============================================================================
 // Input Schemas
 // ============================================================================

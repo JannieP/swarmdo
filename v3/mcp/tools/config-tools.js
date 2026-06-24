@@ -14,7 +14,7 @@ import { z } from 'zod';
 // ============================================================================
 const loadConfigSchema = z.object({
     path: z.string().optional()
-        .describe('Configuration file path (defaults to ./claude-flow.config.json)'),
+        .describe('Configuration file path (defaults to ./rufflo.config.json)'),
     scope: z.enum(['global', 'project', 'user']).default('project')
         .describe('Configuration scope'),
     merge: z.boolean().default(true)
@@ -26,7 +26,7 @@ const saveConfigSchema = z.object({
     config: z.record(z.unknown())
         .describe('Configuration object to save'),
     path: z.string().optional()
-        .describe('Configuration file path (defaults to ./claude-flow.config.json)'),
+        .describe('Configuration file path (defaults to ./rufflo.config.json)'),
     scope: z.enum(['global', 'project', 'user']).default('project')
         .describe('Configuration scope'),
     merge: z.boolean().default(true)
@@ -97,7 +97,7 @@ const DEFAULT_CONFIG = {
  * Load configuration
  */
 async function handleLoadConfig(input, context) {
-    const path = input.path || './claude-flow.config.json';
+    const path = input.path || './rufflo.config.json';
     const loadedAt = new Date().toISOString();
     let config = { ...DEFAULT_CONFIG };
     // Try to load from filesystem
@@ -135,7 +135,7 @@ async function handleLoadConfig(input, context) {
  * Save configuration
  */
 async function handleSaveConfig(input, context) {
-    const path = input.path || './claude-flow.config.json';
+    const path = input.path || './rufflo.config.json';
     const savedAt = new Date().toISOString();
     let backupPath;
     try {

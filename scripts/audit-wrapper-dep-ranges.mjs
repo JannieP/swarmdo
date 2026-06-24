@@ -3,26 +3,26 @@
  * Static guard for ruvnet/ruflo#2127 (and the family of #1147 / #2018).
  *
  * The reporter hit `TypeError: Invalid Version: (empty)` inside arborist's
- * `canDedupe` while installing `ruflo@3.8.0`. Two reviewers could not
- * reproduce, but the published `ruflo` wrapper still pinned
- * `"@claude-flow/cli": "^3.7.0-alpha.11"` long after the project moved to
+ * `canDedupe` while installing `rufflo@3.8.0`. Two reviewers could not
+ * reproduce, but the published `rufflo` wrapper still pinned
+ * `"@rufflo/cli": "^3.7.0-alpha.11"` long after the project moved to
  * stable semver. That pre-release range widens the resolution space the
  * dedupe pass has to walk and gives more chances for an upstream
  * malformed dep to surface as an empty version comparison.
  *
  * This audit asserts:
  *
- *   1. The `ruflo` wrapper's `@claude-flow/cli` dep range INCLUDES the
- *      version that `v3/@claude-flow/cli` currently publishes.
+ *   1. The `rufflo` wrapper's `@rufflo/cli` dep range INCLUDES the
+ *      version that `v3/@rufflo/cli` currently publishes.
  *
- *   2. The root `claude-flow` umbrella's sibling deps that we maintain
- *      (`@claude-flow/cli-core`, `@claude-flow/mcp`, `@claude-flow/neural`,
- *      `@claude-flow/shared`) likewise include their actual published
+ *   2. The root `rufflo` umbrella's sibling deps that we maintain
+ *      (`@rufflo/cli-core`, `@rufflo/mcp`, `@rufflo/neural`,
+ *      `@rufflo/shared`) likewise include their actual published
  *      versions (best-effort — only when the corresponding workspace
  *      package.json is present locally).
  *
- *   3. The `ruflo` wrapper does NOT carry a pre-release range
- *      (`-alpha.N` / `-beta.N`) for `@claude-flow/cli` once that package
+ *   3. The `rufflo` wrapper does NOT carry a pre-release range
+ *      (`-alpha.N` / `-beta.N`) for `@rufflo/cli` once that package
  *      is publishing stable versions. Pre-release ranges on stable deps
  *      are the specific shape that caused #2127.
  *
@@ -51,40 +51,40 @@ function readPkg(relPath) {
 const violations = [];
 const checks = [];
 
-// ── 1. ruflo wrapper's @claude-flow/cli dep range ────────────────────────────
+// ── 1. rufflo wrapper's @rufflo/cli dep range ────────────────────────────
 
-const rufloPkg = readPkg('ruflo/package.json');
-const cliPkg = readPkg('v3/@claude-flow/cli/package.json');
+const ruffloPkg = readPkg('rufflo/package.json');
+const cliPkg = readPkg('v3/@rufflo/cli/package.json');
 
-if (!rufloPkg) {
-  violations.push('ruflo/package.json not found');
+if (!ruffloPkg) {
+  violations.push('rufflo/package.json not found');
 } else if (!cliPkg) {
-  violations.push('v3/@claude-flow/cli/package.json not found');
+  violations.push('v3/@rufflo/cli/package.json not found');
 } else {
   const cliVersion = cliPkg.version;
-  const rufloDepRange = rufloPkg.dependencies?.['@claude-flow/cli'];
+  const ruffloDepRange = ruffloPkg.dependencies?.['@rufflo/cli'];
 
-  if (!rufloDepRange) {
+  if (!ruffloDepRange) {
     violations.push(
-      `ruflo/package.json does not declare @claude-flow/cli — wrapper must depend on the CLI it wraps`
+      `rufflo/package.json does not declare @rufflo/cli — wrapper must depend on the CLI it wraps`
     );
   } else {
-    checks.push(`ruflo wraps @claude-flow/cli with range "${rufloDepRange}" — cli published as ${cliVersion}`);
+    checks.push(`rufflo wraps @rufflo/cli with range "${ruffloDepRange}" — cli published as ${cliVersion}`);
 
     // 1a. Range must include the current cli version
-    if (!semver.satisfies(cliVersion, rufloDepRange, { includePrerelease: true })) {
+    if (!semver.satisfies(cliVersion, ruffloDepRange, { includePrerelease: true })) {
       violations.push(
-        `ruflo's "@claude-flow/cli": "${rufloDepRange}" does NOT include the cli's actual ` +
+        `rufflo's "@rufflo/cli": "${ruffloDepRange}" does NOT include the cli's actual ` +
         `version ${cliVersion}. Bump the range to "^${cliVersion}" or wider that covers it.`
       );
     }
 
     // 1b. If the cli is on stable semver (no pre-release), the dep must not be on a pre-release range
     const cliPrerelease = semver.prerelease(cliVersion);
-    const rangeUsesPrerelease = /-alpha\.|-beta\.|-rc\.|alpha\.\d+|beta\.\d+|rc\.\d+/.test(rufloDepRange);
+    const rangeUsesPrerelease = /-alpha\.|-beta\.|-rc\.|alpha\.\d+|beta\.\d+|rc\.\d+/.test(ruffloDepRange);
     if (!cliPrerelease && rangeUsesPrerelease) {
       violations.push(
-        `ruflo's "@claude-flow/cli": "${rufloDepRange}" carries a pre-release tag but cli ${cliVersion} ` +
+        `rufflo's "@rufflo/cli": "${ruffloDepRange}" carries a pre-release tag but cli ${cliVersion} ` +
         `is on stable semver. Pre-release ranges widen the dedupe walk and have caused real-world ` +
         `crashes (see #1147 / #2018 / #2127). Replace with a plain caret range like "^${cliVersion}".`
       );
@@ -92,14 +92,14 @@ if (!rufloPkg) {
   }
 }
 
-// ── 2. root claude-flow umbrella sibling deps ────────────────────────────────
+// ── 2. root rufflo umbrella sibling deps ────────────────────────────────
 
 const rootPkg = readPkg('package.json');
 const siblingsToCheck = [
-  { dep: '@claude-flow/cli-core', workspace: 'v3/@claude-flow/cli-core/package.json' },
-  { dep: '@claude-flow/mcp',      workspace: 'v3/@claude-flow/mcp/package.json' },
-  { dep: '@claude-flow/neural',   workspace: 'v3/@claude-flow/neural/package.json' },
-  { dep: '@claude-flow/shared',   workspace: 'v3/@claude-flow/shared/package.json' },
+  { dep: '@rufflo/cli-core', workspace: 'v3/@rufflo/cli-core/package.json' },
+  { dep: '@rufflo/mcp',      workspace: 'v3/@rufflo/mcp/package.json' },
+  { dep: '@rufflo/neural',   workspace: 'v3/@rufflo/neural/package.json' },
+  { dep: '@rufflo/shared',   workspace: 'v3/@rufflo/shared/package.json' },
 ];
 
 for (const { dep, workspace } of siblingsToCheck) {
@@ -107,11 +107,11 @@ for (const { dep, workspace } of siblingsToCheck) {
   if (!wsPkg) continue; // best-effort — skip if workspace missing
   const range = rootPkg?.dependencies?.[dep];
   if (!range) continue;
-  checks.push(`claude-flow umbrella → ${dep}: range "${range}" — workspace at ${wsPkg.version}`);
+  checks.push(`rufflo umbrella → ${dep}: range "${range}" — workspace at ${wsPkg.version}`);
 
   if (!semver.satisfies(wsPkg.version, range, { includePrerelease: true })) {
     violations.push(
-      `claude-flow's "${dep}": "${range}" does NOT include the workspace's actual ` +
+      `rufflo's "${dep}": "${range}" does NOT include the workspace's actual ` +
       `version ${wsPkg.version}. Bump the range.`
     );
   }

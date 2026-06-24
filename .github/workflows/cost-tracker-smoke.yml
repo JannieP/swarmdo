@@ -1,4 +1,4 @@
-# Smoke + booster-only bench for plugins/ruflo-cost-tracker.
+# Smoke + booster-only bench for plugins/rufflo-cost-tracker.
 #
 # Triggers on changes to the plugin or its corpus. Smoke is fast (~100 ms,
 # pure bash + node --check) so it always runs. The booster-only bench runs
@@ -13,11 +13,11 @@ on:
   push:
     branches: [main]
     paths:
-      - 'plugins/ruflo-cost-tracker/**'
+      - 'plugins/rufflo-cost-tracker/**'
       - '.github/workflows/cost-tracker-smoke.yml'
   pull_request:
     paths:
-      - 'plugins/ruflo-cost-tracker/**'
+      - 'plugins/rufflo-cost-tracker/**'
       - '.github/workflows/cost-tracker-smoke.yml'
   workflow_dispatch:
 
@@ -33,7 +33,7 @@ jobs:
           node-version: '20'
 
       - name: Run smoke (39+ structural checks)
-        run: bash plugins/ruflo-cost-tracker/scripts/smoke.sh
+        run: bash plugins/rufflo-cost-tracker/scripts/smoke.sh
 
       - name: Install agent-booster for the bench
         run: |
@@ -48,10 +48,10 @@ jobs:
       - name: Run booster-only bench (no LLM cost)
         run: |
           cd .ci-bench
-          node ../plugins/ruflo-cost-tracker/scripts/bench.mjs
+          node ../plugins/rufflo-cost-tracker/scripts/bench.mjs
 
       - name: Trend report (drift across runs in this checkout)
-        run: node plugins/ruflo-cost-tracker/scripts/trend.mjs
+        run: node plugins/rufflo-cost-tracker/scripts/trend.mjs
         # The checkout only contains the runs that were committed — useful
         # as a sanity check that trend.mjs runs cleanly on real data.
 
@@ -61,7 +61,7 @@ jobs:
           # returns "insufficient data" / "no budget" — the composite must
           # still exit 0. This guards against regressions where a subcheck
           # mis-handles empty input and bubbles up a false alert.
-          node plugins/ruflo-cost-tracker/scripts/health.mjs --format json > /tmp/cost-health.json
+          node plugins/rufflo-cost-tracker/scripts/health.mjs --format json > /tmp/cost-health.json
           node -e "
             const r = JSON.parse(require('fs').readFileSync('/tmp/cost-health.json'));
             if (!r.overall.ok) {
@@ -72,7 +72,7 @@ jobs:
           "
 
       - name: cost-health integration test (synthetic fixtures incl. iter-75 regression)
-        run: node plugins/ruflo-cost-tracker/scripts/test-health-integration.mjs
+        run: node plugins/rufflo-cost-tracker/scripts/test-health-integration.mjs
         # 7 end-to-end assertions including the EXACT iter-75 regression
         # target: budget HARD_STOP via BUDGET_QUIET=1 must propagate as
         # exit 1 to cost-health's composite gate. Catches cross-script
@@ -81,7 +81,7 @@ jobs:
       - name: Verify Tier 1 win rate ≥ 0.80 (regression gate)
         run: |
           node -e "
-            const d = JSON.parse(require('fs').readFileSync('plugins/ruflo-cost-tracker/docs/benchmarks/runs/latest.json'));
+            const d = JSON.parse(require('fs').readFileSync('plugins/rufflo-cost-tracker/docs/benchmarks/runs/latest.json'));
             if (d.summary.winRate < 0.80) {
               console.error('REGRESSION: Tier 1 win rate', d.summary.winRate, '< 0.80');
               process.exit(1);
@@ -94,5 +94,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: cost-tracker-bench-result
-          path: plugins/ruflo-cost-tracker/docs/benchmarks/runs/latest.json
+          path: plugins/rufflo-cost-tracker/docs/benchmarks/runs/latest.json
           retention-days: 30

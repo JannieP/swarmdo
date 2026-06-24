@@ -39,19 +39,19 @@ step "4. agent + command present"
 [[ -f "$ROOT/agents/git-specialist.md" ]] && [[ -f "$ROOT/commands/jujutsu.md" ]] \
   && ok || bad "agent or command missing"
 
-step "5. README pins @claude-flow/cli to v3.6"
-grep -qE "@claude-flow/cli.*v3\.6|v3\.6.*claude-flow/cli" "$ROOT/README.md" \
+step "5. README pins @rufflo/cli to v3.6"
+grep -qE "@rufflo/cli.*v3\.6|v3\.6.*rufflo/cli" "$ROOT/README.md" \
   && ok || bad "v3.6 pin missing"
 
-step "6. README defers to ruflo-agentdb namespace convention"
-grep -q "ruflo-agentdb" "$ROOT/README.md" \
+step "6. README defers to rufflo-agentdb namespace convention"
+grep -q "rufflo-agentdb" "$ROOT/README.md" \
   && grep -q "Namespace convention" "$ROOT/README.md" \
   && ok || bad "namespace coordination block incomplete"
 
-step "7. ADR-compliance integration documented (ruflo-adr cross-reference)"
+step "7. ADR-compliance integration documented (rufflo-adr cross-reference)"
 F="$ROOT/README.md"
 grep -q "ADR-compliance" "$F" \
-  && grep -q "ruflo-adr" "$F" \
+  && grep -q "rufflo-adr" "$F" \
   && grep -q "/adr check" "$F" \
   && ok || bad "ADR-compliance integration block incomplete"
 

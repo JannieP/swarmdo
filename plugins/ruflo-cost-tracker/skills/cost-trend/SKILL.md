@@ -22,7 +22,7 @@ This skill reads every persisted run in `docs/benchmarks/runs/*.json` and report
 1. **Run the trend script** from the project root:
 
    ```bash
-   node plugins/ruflo-cost-tracker/scripts/trend.mjs
+   node plugins/rufflo-cost-tracker/scripts/trend.mjs
    ```
 
    Optional env:

@@ -2,12 +2,12 @@
 name: cost-booster-route
 description: Route tasks through hooks_route, partition by Agent Booster availability, and report Tier 1 bypass utilization with $0 cost
 argument-hint: "[--from-recent] | <task-description>"
-allowed-tools: mcp__claude-flow__hooks_route mcp__claude-flow__memory_search mcp__claude-flow__memory_list Bash
+allowed-tools: mcp__rufflo__hooks_route mcp__rufflo__memory_search mcp__rufflo__memory_list Bash
 ---
 
 # Cost Booster Route
 
-Wraps `mcp__claude-flow__hooks_route` and reports how many tasks the 3-tier router classified as Agent Booster (Tier 1) eligible. Tier 1 bypasses run as WASM transforms — no LLM call, structurally **$0** cost.
+Wraps `mcp__rufflo__hooks_route` and reports how many tasks the 3-tier router classified as Agent Booster (Tier 1) eligible. Tier 1 bypasses run as WASM transforms — no LLM call, structurally **$0** cost.
 
 ## When to use
 
@@ -33,10 +33,10 @@ Before a batch of similar tasks, or when `cost-report` shows Sonnet/Opus spend o
 
 ## Caveats — claimed upstream, not yet verified
 
-- `[AGENT_BOOSTER_AVAILABLE]` fires only when the upstream router populates `routeResult.agentBoosterIntent.type` (`v3/@claude-flow/cli/src/mcp-tools/hooks-tools.ts:1228`). The published CLI's semantic-VectorDb path does not always trigger the classifier — treat the partition as a **lower bound** on Tier 1 eligibility.
+- `[AGENT_BOOSTER_AVAILABLE]` fires only when the upstream router populates `routeResult.agentBoosterIntent.type` (`v3/@rufflo/cli/src/mcp-tools/hooks-tools.ts:1228`). The published CLI's semantic-VectorDb path does not always trigger the classifier — treat the partition as a **lower bound** on Tier 1 eligibility.
 - CLAUDE.md root claims `<1ms` latency and `352× faster` than LLM. `<1ms` and `$0` are structural; `352×` is **claimed upstream, not yet verified** here. Report what the router actually returns.
 - See `docs/benchmarks/0002-baseline.md` for the full upstream-claims-vs-measured table.
 
 ## Cross-references
 
-ADR-0002 Decision #1 · ruflo-intelligence ADR-0001 §"Neutral" (closes the routing-outcomes loop via `cost-optimize` step 8) · CLAUDE.md root §"3-Tier Model Routing (ADR-026)".
+ADR-0002 Decision #1 · rufflo-intelligence ADR-0001 §"Neutral" (closes the routing-outcomes loop via `cost-optimize` step 8) · CLAUDE.md root §"3-Tier Model Routing (ADR-026)".

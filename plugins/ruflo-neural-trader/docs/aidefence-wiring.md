@@ -1,4 +1,4 @@
-# AIDefence Wiring Sketch — ruflo-neural-trader
+# AIDefence Wiring Sketch — rufflo-neural-trader
 
 ADR-126 follow-up #50. Per ADR-118, market data ingestion should pass
 through AIDefence for PII scan + prompt-injection block before any
@@ -32,12 +32,12 @@ The two attack-relevant surfaces are:
 
 | Gate | Where                             | Tool                                | Action on hit |
 |------|-----------------------------------|-------------------------------------|---------------|
-| 1    | `--symbol $TICKER` input          | `mcp__claude-flow__aidefence_is_safe` | Reject — refuse to invoke neural-trader; alert team lead |
-| 2    | `fetchLiveBars` response body     | `mcp__claude-flow__aidefence_has_pii` | Redact PII placeholders; record in session manifest |
-| 3    | LLM prompt body (pre-`neural_predict`) | `mcp__claude-flow__aidefence_is_safe` | Quarantine to `findings.md`; don't reach model |
-| 4    | AgentDB store value               | `mcp__claude-flow__aidefence_scan`    | Block high-entropy tokens that look like leaked credentials |
+| 1    | `--symbol $TICKER` input          | `mcp__rufflo__aidefence_is_safe` | Reject — refuse to invoke neural-trader; alert team lead |
+| 2    | `fetchLiveBars` response body     | `mcp__rufflo__aidefence_has_pii` | Redact PII placeholders; record in session manifest |
+| 3    | LLM prompt body (pre-`neural_predict`) | `mcp__rufflo__aidefence_is_safe` | Quarantine to `findings.md`; don't reach model |
+| 4    | AgentDB store value               | `mcp__rufflo__aidefence_scan`    | Block high-entropy tokens that look like leaked credentials |
 
-These are exactly the four gates `ruflo-browser` and `ruflo-federation`
+These are exactly the four gates `rufflo-browser` and `rufflo-federation`
 already use — same pattern, different ingest source.
 
 ## Proposed flow
@@ -101,15 +101,15 @@ already use — same pattern, different ingest source.
 When ADR-127 picks this up, the changes would be:
 
 1. **`agents/market-analyst.md`** — add a "PII & injection gates" section
-   mirroring `plugins/ruflo-browser/agents/browser-agent.md:79-81`. Include
+   mirroring `plugins/rufflo-browser/agents/browser-agent.md:79-81`. Include
    the four-gate workflow above.
 2. **`agents/market-analyst.md` allowed-tools** — add
-   `mcp__claude-flow__aidefence_is_safe`,
-   `mcp__claude-flow__aidefence_has_pii`,
-   `mcp__claude-flow__aidefence_scan` to the frontmatter so the agent
+   `mcp__rufflo__aidefence_is_safe`,
+   `mcp__rufflo__aidefence_has_pii`,
+   `mcp__rufflo__aidefence_scan` to the frontmatter so the agent
    has the capability.
 3. **`README.md`** — add a "Safety" section like
-   `plugins/ruflo-browser/README.md:74-78`.
+   `plugins/rufflo-browser/README.md:74-78`.
 4. **`scripts/smoke.sh`** — add gates 12-14 asserting the agent
    declares the three AIDefence tools and that the README mentions the
    safety pipeline.
@@ -147,6 +147,6 @@ These will be picked up in a follow-up that references this sketch.
 - ADR-118 — `aidefence@2.3.0` upgrade
 - ADR-126 Phase 5 — comms pipeline `market-analyst → trading-strategist`
 - ADR-127 (proposed) — neural-trader safety gates wiring
-- `plugins/ruflo-federation/README.md:74-82` — existing four-gate pattern
-- `plugins/ruflo-browser/agents/browser-agent.md:79-81` — agent-prompt
+- `plugins/rufflo-federation/README.md:74-82` — existing four-gate pattern
+- `plugins/rufflo-browser/agents/browser-agent.md:79-81` — agent-prompt
   gate example

@@ -2,7 +2,7 @@
 name: browser-record
 description: Open a named, traced browser session into an RVF cognitive container with a ruvector trajectory recording every action
 argument-hint: "<url-or-task> [--with-dom] [--viewport WxH]"
-allowed-tools: mcp__claude-flow__browser_open mcp__claude-flow__browser_close mcp__claude-flow__browser_session-list mcp__claude-flow__browser_screenshot mcp__claude-flow__browser_snapshot mcp__claude-flow__browser_wait mcp__claude-flow__aidefence_has_pii mcp__claude-flow__aidefence_scan Bash Read Write
+allowed-tools: mcp__rufflo__browser_open mcp__rufflo__browser_close mcp__rufflo__browser_session-list mcp__rufflo__browser_screenshot mcp__rufflo__browser_snapshot mcp__rufflo__browser_wait mcp__rufflo__aidefence_has_pii mcp__rufflo__aidefence_scan Bash Read Write
 ---
 
 # Browser Record
@@ -23,7 +23,7 @@ Primitive on which every other browser skill composes. Opens a named browser ses
    npx -y ruvector@0.2.25 rvf create "$SID.rvf" --dimension 384
    npx -y ruvector@0.2.25 hooks trajectory-begin --session-id "$SID" --task "$1"
    ```
-2. **Open the browser** via `mcp__claude-flow__browser_open` with the URL.
+2. **Open the browser** via `mcp__rufflo__browser_open` with the URL.
 3. **Snapshot the initial state**: `browser_snapshot` for the accessibility tree, `browser_screenshot` for a baseline image.
 4. **For each interaction**, record a trajectory step before and after:
    ```bash
@@ -37,13 +37,13 @@ Primitive on which every other browser skill composes. Opens a named browser ses
    ```
 6. **Index in AgentDB** under `browser-sessions`:
    ```bash
-   npx -y @claude-flow/cli@latest memory store --namespace browser-sessions \
+   npx -y @rufflo/cli@latest memory store --namespace browser-sessions \
      --key "$SID" --value "{rvf_id:$SID,host:...,task:...,verdict:pass}"
    ```
 
 ## Caveats
 
-- Until the `browser_session_record` MCP tool ships (ADR-0001 §7), this skill drives the lifecycle from inside its own bash steps. Do not call `mcp__claude-flow__browser_open` directly without these wrappers.
-- The session id format is fixed: `<YYYYMMDD-HHMMSS>-<task-slug>`. Downstream `/ruflo-browser ls` parses this.
+- Until the `browser_session_record` MCP tool ships (ADR-0001 §7), this skill drives the lifecycle from inside its own bash steps. Do not call `mcp__rufflo__browser_open` directly without these wrappers.
+- The session id format is fixed: `<YYYYMMDD-HHMMSS>-<task-slug>`. Downstream `/rufflo-browser ls` parses this.
 - `--with-dom` is expensive (full HTML dump per nav). Off by default.
 - AIDefence gates apply at extraction time, not at navigation time. `browser-record` is a primitive; redaction is the responsibility of skills that read content (`browser-extract`, `browser-test`).

@@ -21,8 +21,8 @@ You are a witness chain auditor agent for Cognitum Seed devices. Your responsibi
 
 ### Tools
 
-- `npx -y -p @claude-flow/plugin-iot-cognitum@latest cognitum-iot witness <device-id>` — view raw witness chain
-- `npx -y -p @claude-flow/plugin-iot-cognitum@latest cognitum-iot witness verify <device-id>` — verify chain integrity
+- `npx -y -p @rufflo/plugin-iot-cognitum@latest cognitum-iot witness <device-id>` — view raw witness chain
+- `npx -y -p @rufflo/plugin-iot-cognitum@latest cognitum-iot witness verify <device-id>` — verify chain integrity
 
 ### Events
 
@@ -33,6 +33,6 @@ You are a witness chain auditor agent for Cognitum Seed devices. Your responsibi
 
 After completing tasks, store successful patterns:
 ```bash
-npx @claude-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
-npx @claude-flow/cli@latest memory search --query "TASK_TYPE patterns" --namespace patterns
+npx @rufflo/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
+npx @rufflo/cli@latest memory search --query "TASK_TYPE patterns" --namespace patterns
 ```

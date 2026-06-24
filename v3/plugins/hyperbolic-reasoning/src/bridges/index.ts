@@ -1,7 +1,7 @@
 /**
  * Hyperbolic Reasoning Plugin - Bridges Barrel Export
  *
- * @module @claude-flow/plugin-hyperbolic-reasoning/bridges
+ * @module @rufflo/plugin-hyperbolic-reasoning/bridges
  */
 
 export {

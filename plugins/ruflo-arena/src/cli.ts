@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// Human-facing CLI for ruflo-arena. Subcommands mirror the MCP tools (ADR-147).
-//   ruflo-arena demo | arena | tournament | evolve | coevolve
+// Human-facing CLI for rufflo-arena. Subcommands mirror the MCP tools (ADR-147).
+//   rufflo-arena demo | arena | tournament | evolve | coevolve
 
 import { getGame } from './domain/games.js';
 import { classicRoster, findStrategy } from './domain/strategies.js';
@@ -87,7 +87,7 @@ function cmdCoevolve(flags: Flags): void {
 
 function cmdDemo(): void {
   console.log('============================================================');
-  console.log(' ruflo-arena — competitive ruliology demo (ADR-147/148/150)');
+  console.log(' rufflo-arena — competitive ruliology demo (ADR-147/148/150)');
   console.log('============================================================');
   cmdTournament({ game: 'pd', rounds: '200', seed: '1' });
   cmdEvolve({ game: 'pd', generations: '400', seed: '42' });

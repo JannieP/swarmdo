@@ -175,20 +175,20 @@ The experimental neural substrate (`embed neural --help`) may expose richer proj
 
 Store vector configurations and search patterns in AgentDB:
 ```bash
-npx @claude-flow/cli@latest memory store --namespace vector-patterns --key "hnsw-config-DOMAIN" --value "M=16,efC=200,efS=50"
-npx @claude-flow/cli@latest memory search --query "HNSW configuration" --namespace vector-patterns
+npx @rufflo/cli@latest memory store --namespace vector-patterns --key "hnsw-config-DOMAIN" --value "M=16,efC=200,efS=50"
+npx @rufflo/cli@latest memory search --query "HNSW configuration" --namespace vector-patterns
 ```
 
 ### Related Plugins
 
-- **ruflo-agentdb**: HNSW storage backend — persists indexes in AgentDB
-- **ruflo-intelligence**: Neural embeddings and SONA pattern learning
-- **ruflo-rag-memory**: Simple semantic search delegating to ruvector
-- **ruflo-knowledge-graph**: Graph RAG integration for multi-hop retrieval
+- **rufflo-agentdb**: HNSW storage backend — persists indexes in AgentDB
+- **rufflo-intelligence**: Neural embeddings and SONA pattern learning
+- **rufflo-rag-memory**: Simple semantic search delegating to ruvector
+- **rufflo-knowledge-graph**: Graph RAG integration for multi-hop retrieval
 
 ### Neural Learning
 
 After completing tasks, store successful patterns:
 ```bash
-npx @claude-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
+npx @rufflo/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
 ```

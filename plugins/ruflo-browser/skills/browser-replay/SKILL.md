@@ -2,7 +2,7 @@
 name: browser-replay
 description: Replay a recorded session trajectory against the same URL or a mutated variant; uses browser-selectors embedding similarity to recover from DOM drift
 argument-hint: "<session-id> [--url <new-url>] [--mutate <json>] [--tolerance <0..1>]"
-allowed-tools: mcp__claude-flow__browser_open mcp__claude-flow__browser_close mcp__claude-flow__browser_click mcp__claude-flow__browser_fill mcp__claude-flow__browser_type mcp__claude-flow__browser_press mcp__claude-flow__browser_select mcp__claude-flow__browser_check mcp__claude-flow__browser_uncheck mcp__claude-flow__browser_hover mcp__claude-flow__browser_wait mcp__claude-flow__browser_screenshot mcp__claude-flow__browser_snapshot mcp__claude-flow__browser_eval Bash Read
+allowed-tools: mcp__rufflo__browser_open mcp__rufflo__browser_close mcp__rufflo__browser_click mcp__rufflo__browser_fill mcp__rufflo__browser_type mcp__rufflo__browser_press mcp__rufflo__browser_select mcp__rufflo__browser_check mcp__rufflo__browser_uncheck mcp__rufflo__browser_hover mcp__rufflo__browser_wait mcp__rufflo__browser_screenshot mcp__rufflo__browser_snapshot mcp__rufflo__browser_eval Bash Read
 ---
 
 # Browser Replay
@@ -16,7 +16,7 @@ Re-drive a recorded session trajectory. Used for regression testing, determinist
 - Regression-testing a UI flow after a deploy.
 - Reproducing a bug captured in a prior session.
 - Comparing two runs of the same flow for `browser-screenshot-diff`.
-- Forking a session (`/ruflo-browser fork`) and replaying the parent before mutating.
+- Forking a session (`/rufflo-browser fork`) and replaying the parent before mutating.
 
 ## Steps
 
@@ -29,11 +29,11 @@ Re-drive a recorded session trajectory. Used for regression testing, determinist
    Read .../trajectory.ndjson
    ```
    Each line is `{ts, action, args, selector, result}`.
-3. **Open a fresh browser** via `mcp__claude-flow__browser_open` (target URL = original or `--url` override).
+3. **Open a fresh browser** via `mcp__rufflo__browser_open` (target URL = original or `--url` override).
 4. **For each trajectory step**, dispatch the matching MCP tool (`browser_click`, `browser_fill`, `browser_eval`, etc.) with the recorded args.
 5. **On selector miss**, do *not* fail immediately — query the `browser-selectors` namespace for an embedding-similar selector for the same `<host>:<intent>` and retry once:
    ```bash
-   npx -y @claude-flow/cli@latest memory search --namespace browser-selectors \
+   npx -y @rufflo/cli@latest memory search --namespace browser-selectors \
      --query "<host> <intent>" --limit 5
    ```
 6. **Record a new trajectory** for the replay run (allocate a fresh RVF container, lineage-tracked via `rvf derive`).

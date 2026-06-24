@@ -53,4 +53,4 @@ If you find you genuinely need to spawn, **return to your parent with a `followu
 ## Pairs with
 
 - Any of the `nested-coordinator` / `nested-researcher` / `nested-reviewer` orchestrators — they are the patterns that spawn leaves like you.
-- `ruflo-core:coder` / `ruflo-core:tester` — sibling leaves with their own specialized prompts. Use those when their role fits; use this template only when no existing leaf matches.
+- `rufflo-core:coder` / `rufflo-core:tester` — sibling leaves with their own specialized prompts. Use those when their role fits; use this template only when no existing leaf matches.

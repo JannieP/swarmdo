@@ -1,10 +1,10 @@
-# @claude-flow/plugin-prime-radiant
+# @rufflo/plugin-prime-radiant
 
 **Mathematical AI that catches contradictions, verifies consensus, and prevents hallucinations before they cause problems.**
 
 ## What is this?
 
-This plugin brings advanced mathematical techniques to Claude Flow for ensuring AI reliability:
+This plugin brings advanced mathematical techniques to Rufflo for ensuring AI reliability:
 
 - **Coherence Checking** - Detect when information contradicts itself before storing it
 - **Consensus Verification** - Mathematically verify that multiple agents actually agree
@@ -17,7 +17,7 @@ Think of it as a mathematical "sanity check" layer that catches logical inconsis
 ## Installation
 
 ```bash
-npm install @claude-flow/plugin-prime-radiant
+npm install @rufflo/plugin-prime-radiant
 ```
 
 ---
@@ -326,7 +326,7 @@ class CoherentKnowledgeBase {
 ## Configuration
 
 ```yaml
-# claude-flow.config.yaml
+# rufflo.config.yaml
 plugins:
   prime-radiant:
     enabled: true

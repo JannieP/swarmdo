@@ -30,7 +30,7 @@ hooks:
     echo "🚀 Ready for systematic agent system rollout"
 ---
 
-# Claude Flow Commands to Agent System Migration Plan
+# Rufflo Commands to Agent System Migration Plan
 
 ## Overview
 This document provides a comprehensive migration plan to convert existing .claude$commands to the new agent-based system. Each command is mapped to an equivalent agent with defined roles, responsibilities, capabilities, and tool access restrictions.
@@ -80,9 +80,9 @@ capabilities:
   - network-configuration
 tools:
   allowed:
-    - mcp__claude-flow__swarm_init
-    - mcp__claude-flow__topology_optimize
-    - mcp__claude-flow__memory_usage
+    - mcp__rufflo__swarm_init
+    - mcp__rufflo__topology_optimize
+    - mcp__rufflo__memory_usage
     - TodoWrite
   restricted:
     - Bash
@@ -112,10 +112,10 @@ capabilities:
   - pattern-recognition
 tools:
   allowed:
-    - mcp__claude-flow__agent_spawn
-    - mcp__claude-flow__daa_agent_create
-    - mcp__claude-flow__agent_list
-    - mcp__claude-flow__memory_usage
+    - mcp__rufflo__agent_spawn
+    - mcp__rufflo__daa_agent_create
+    - mcp__rufflo__agent_list
+    - mcp__rufflo__memory_usage
   restricted:
     - Bash
     - Write
@@ -146,10 +146,10 @@ capabilities:
   - progress-tracking
 tools:
   allowed:
-    - mcp__claude-flow__task_orchestrate
-    - mcp__claude-flow__task_status
-    - mcp__claude-flow__task_results
-    - mcp__claude-flow__parallel_execute
+    - mcp__rufflo__task_orchestrate
+    - mcp__rufflo__task_status
+    - mcp__rufflo__task_results
+    - mcp__rufflo__parallel_execute
     - TodoWrite
     - TodoRead
   restricted:
@@ -185,10 +185,10 @@ capabilities:
 tools:
   allowed:
     - Bash  # For gh CLI commands
-    - mcp__claude-flow__swarm_init
-    - mcp__claude-flow__agent_spawn
-    - mcp__claude-flow__task_orchestrate
-    - mcp__claude-flow__memory_usage
+    - mcp__rufflo__swarm_init
+    - mcp__rufflo__agent_spawn
+    - mcp__rufflo__task_orchestrate
+    - mcp__rufflo__memory_usage
     - TodoWrite
     - Read
   restricted:
@@ -223,10 +223,10 @@ tools:
     - Bash  # For gh CLI
     - Read
     - Grep
-    - mcp__claude-flow__swarm_init
-    - mcp__claude-flow__agent_spawn
-    - mcp__claude-flow__github_code_review
-    - mcp__claude-flow__memory_usage
+    - mcp__rufflo__swarm_init
+    - mcp__rufflo__agent_spawn
+    - mcp__rufflo__github_code_review
+    - mcp__rufflo__memory_usage
   restricted:
     - Write
     - Edit
@@ -258,9 +258,9 @@ tools:
   allowed:
     - Bash
     - Read
-    - mcp__claude-flow__github_release_coord
-    - mcp__claude-flow__swarm_init
-    - mcp__claude-flow__task_orchestrate
+    - mcp__rufflo__github_release_coord
+    - mcp__rufflo__swarm_init
+    - mcp__rufflo__task_orchestrate
     - TodoWrite
   restricted:
     - Write  # Use version control for releases
@@ -293,13 +293,13 @@ capabilities:
   - result-synthesis
 tools:
   allowed:
-    - mcp__claude-flow__sparc_mode
-    - mcp__claude-flow__swarm_init
-    - mcp__claude-flow__agent_spawn
-    - mcp__claude-flow__task_orchestrate
+    - mcp__rufflo__sparc_mode
+    - mcp__rufflo__swarm_init
+    - mcp__rufflo__agent_spawn
+    - mcp__rufflo__task_orchestrate
     - TodoWrite
     - TodoRead
-    - mcp__claude-flow__memory_usage
+    - mcp__rufflo__memory_usage
   restricted:
     - Bash
     - Write
@@ -335,10 +335,10 @@ tools:
     - Edit
     - MultiEdit
     - Bash
-    - mcp__claude-flow__sparc_mode
+    - mcp__rufflo__sparc_mode
     - TodoWrite
   restricted:
-    - mcp__claude-flow__swarm_init  # Focus on implementation
+    - mcp__rufflo__swarm_init  # Focus on implementation
 triggers:
   - pattern: "implement|code|develop|build.*feature"
     priority: high
@@ -369,11 +369,11 @@ tools:
     - Write
     - Edit
     - Bash
-    - mcp__claude-flow__sparc_mode
+    - mcp__rufflo__sparc_mode
     - TodoWrite
-    - mcp__claude-flow__parallel_execute
+    - mcp__rufflo__parallel_execute
   restricted:
-    - mcp__claude-flow__swarm_init
+    - mcp__rufflo__swarm_init
 triggers:
   - pattern: "test|verify|validate|check.*quality"
     priority: high
@@ -402,10 +402,10 @@ capabilities:
   - optimization-planning
 tools:
   allowed:
-    - mcp__claude-flow__bottleneck_analyze
-    - mcp__claude-flow__performance_report
-    - mcp__claude-flow__metrics_collect
-    - mcp__claude-flow__trend_analysis
+    - mcp__rufflo__bottleneck_analyze
+    - mcp__rufflo__performance_report
+    - mcp__rufflo__metrics_collect
+    - mcp__rufflo__trend_analysis
     - Read
     - Grep
   restricted:
@@ -438,10 +438,10 @@ capabilities:
   - report-generation
 tools:
   allowed:
-    - mcp__claude-flow__token_usage
-    - mcp__claude-flow__cost_analysis
-    - mcp__claude-flow__usage_stats
-    - mcp__claude-flow__memory_analytics
+    - mcp__rufflo__token_usage
+    - mcp__rufflo__cost_analysis
+    - mcp__rufflo__usage_stats
+    - mcp__rufflo__memory_analytics
     - Read
   restricted:
     - Write
@@ -475,11 +475,11 @@ capabilities:
   - synchronization
 tools:
   allowed:
-    - mcp__claude-flow__memory_usage
-    - mcp__claude-flow__memory_search
-    - mcp__claude-flow__memory_namespace
-    - mcp__claude-flow__memory_compress
-    - mcp__claude-flow__memory_sync
+    - mcp__rufflo__memory_usage
+    - mcp__rufflo__memory_search
+    - mcp__rufflo__memory_namespace
+    - mcp__rufflo__memory_compress
+    - mcp__rufflo__memory_sync
   restricted:
     - Write
     - Edit
@@ -510,11 +510,11 @@ capabilities:
   - transfer-learning
 tools:
   allowed:
-    - mcp__claude-flow__neural_train
-    - mcp__claude-flow__neural_patterns
-    - mcp__claude-flow__neural_predict
-    - mcp__claude-flow__cognitive_analyze
-    - mcp__claude-flow__learning_adapt
+    - mcp__rufflo__neural_train
+    - mcp__rufflo__neural_patterns
+    - mcp__rufflo__neural_predict
+    - mcp__rufflo__cognitive_analyze
+    - mcp__rufflo__learning_adapt
   restricted:
     - Write
     - Edit
@@ -547,11 +547,11 @@ capabilities:
   - auto-scaling
 tools:
   allowed:
-    - mcp__claude-flow__daa_agent_create
-    - mcp__claude-flow__daa_capability_match
-    - mcp__claude-flow__daa_resource_alloc
-    - mcp__claude-flow__swarm_scale
-    - mcp__claude-flow__agent_metrics
+    - mcp__rufflo__daa_agent_create
+    - mcp__rufflo__daa_capability_match
+    - mcp__rufflo__daa_resource_alloc
+    - mcp__rufflo__swarm_scale
+    - mcp__rufflo__agent_metrics
   restricted:
     - Write
     - Edit
@@ -582,10 +582,10 @@ capabilities:
   - error-analysis
 tools:
   allowed:
-    - mcp__claude-flow__daa_fault_tolerance
-    - mcp__claude-flow__health_check
-    - mcp__claude-flow__error_analysis
-    - mcp__claude-flow__diagnostic_run
+    - mcp__rufflo__daa_fault_tolerance
+    - mcp__rufflo__health_check
+    - mcp__rufflo__error_analysis
+    - mcp__rufflo__diagnostic_run
     - Bash  # For system commands
   restricted:
     - Write  # Prevent accidental file modifications during recovery
@@ -618,10 +618,10 @@ capabilities:
   - bottleneck-removal
 tools:
   allowed:
-    - mcp__claude-flow__parallel_execute
-    - mcp__claude-flow__load_balance
-    - mcp__claude-flow__batch_process
-    - mcp__claude-flow__performance_report
+    - mcp__rufflo__parallel_execute
+    - mcp__rufflo__load_balance
+    - mcp__rufflo__batch_process
+    - mcp__rufflo__performance_report
     - TodoWrite
   restricted:
     - Write
@@ -652,11 +652,11 @@ capabilities:
   - adaptive-configuration
 tools:
   allowed:
-    - mcp__claude-flow__topology_optimize
-    - mcp__claude-flow__swarm_monitor
-    - mcp__claude-flow__coordination_sync
-    - mcp__claude-flow__swarm_status
-    - mcp__claude-flow__metrics_collect
+    - mcp__rufflo__topology_optimize
+    - mcp__rufflo__swarm_monitor
+    - mcp__rufflo__coordination_sync
+    - mcp__rufflo__swarm_status
+    - mcp__rufflo__metrics_collect
   restricted:
     - Write
     - Edit
@@ -689,11 +689,11 @@ capabilities:
   - alert-generation
 tools:
   allowed:
-    - mcp__claude-flow__swarm_status
-    - mcp__claude-flow__swarm_monitor
-    - mcp__claude-flow__agent_metrics
-    - mcp__claude-flow__health_check
-    - mcp__claude-flow__performance_report
+    - mcp__rufflo__swarm_status
+    - mcp__rufflo__swarm_monitor
+    - mcp__rufflo__agent_metrics
+    - mcp__rufflo__health_check
+    - mcp__rufflo__performance_report
   restricted:
     - Write
     - Edit

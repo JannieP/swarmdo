@@ -1,4 +1,4 @@
-//! `ruflo-federation-peer` — single-process federation peer.
+//! `rufflo-federation-peer` — single-process federation peer.
 //!
 //! Composes the QUIC transport (`midstreamer-quic`) and the AIMDS
 //! 3-gate safety pipeline (`aimds-detection` / `aimds-analysis` /
@@ -226,7 +226,7 @@ pub mod native_transport {
     //!
     //! `MidstreamerTransport` owns a single established
     //! [`midstreamer_quic::QuicConnection`] (typically a
-    //! ruflo↔hub-peer link). Outbound `send` opens a fresh
+    //! rufflo↔hub-peer link). Outbound `send` opens a fresh
     //! bidirectional stream and writes one NDJSON line per
     //! [`FederationMessage`]; `recv` accepts an incoming
     //! bidirectional stream and reads one NDJSON line. This matches

@@ -1,4 +1,4 @@
-# Ruflo Federation — User Guide
+# Rufflo Federation — User Guide
 
 > Cross-installation agent peering with built-in cost limits, circuit breaker, signed envelopes, and (as of alpha.14) opt-in WireGuard mesh layer governed by federation trust.
 
@@ -6,7 +6,7 @@ This guide walks through what federation is, when to use it, and how to set it u
 
 ## What federation does
 
-Federation lets two or more Ruflo installations — your mac, a server, a teammate's laptop — discover each other, exchange signed manifests, and send messages between them with bounded cost and per-peer trust gates. Key properties:
+Federation lets two or more Rufflo installations — your mac, a server, a teammate's laptop — discover each other, exchange signed manifests, and send messages between them with bounded cost and per-peer trust gates. Key properties:
 
 - **Ed25519 identity** — each node holds a private key; peers exchange Ed25519-signed manifests. No central directory.
 - **Five-level trust ladder** — `UNTRUSTED → VERIFIED → ATTESTED → TRUSTED → PRIVILEGED`. Each level unlocks a wider set of operations (`discovery`, `send`, `share-context`, `remote-spawn`, …).
@@ -33,20 +33,20 @@ Federation lets two or more Ruflo installations — your mac, a server, a teamma
 ### 1. Install the plugin
 
 ```bash
-npx ruflo@latest                                     # if you don't have it yet
-npx ruflo plugins install @claude-flow/plugin-agent-federation
+npx rufflo@latest                                     # if you don't have it yet
+npx rufflo plugins install @rufflo/plugin-agent-federation
 ```
 
 Or directly via npm:
 
 ```bash
-npm i @claude-flow/plugin-agent-federation@latest    # currently 1.0.0-alpha.14
+npm i @rufflo/plugin-agent-federation@latest    # currently 1.0.0-alpha.14
 ```
 
 ### 2. Initialize a node
 
 ```bash
-npx claude-flow@v3alpha agent spawn -t federation --name fed-1
+npx rufflo@v3alpha agent spawn -t federation --name fed-1
 ```
 
 Or via the MCP tool `federation_init`:
@@ -62,7 +62,7 @@ Or via the MCP tool `federation_init`:
 }
 ```
 
-This generates an Ed25519 keypair (persisted to `.claude-flow/federation/keys-<nodeId>.json`, mode 0600), publishes a signed manifest, and starts the discovery service.
+This generates an Ed25519 keypair (persisted to `.rufflo/federation/keys-<nodeId>.json`, mode 0600), publishes a signed manifest, and starts the discovery service.
 
 ### 3. Join a peer
 
@@ -171,24 +171,24 @@ See [`docs/federation/phase7-mesh-bringup.md`](./phase7-mesh-bringup.md) for the
 Set `config.wgMesh: true` in your federation plugin config, then run the staging helper:
 
 ```bash
-node v3/@claude-flow/plugin-agent-federation/scripts/phase7-stage.mjs \
+node v3/@rufflo/plugin-agent-federation/scripts/phase7-stage.mjs \
   <localNodeId> <peerNodeId> <peerPubkey> <peerMeshIP> <peerEndpoint>
 ```
 
 The script generates `/tmp/adr-111-stage/`:
 - `wg-key-<nodeId>.json` (mode 0600 — your private WG key)
-- `ruflo-fed.conf` (the wg-quick interface config)
-- `ruflo-fed.nft` or `ruflo-fed.pf` (firewall projection)
+- `rufflo-fed.conf` (the wg-quick interface config)
+- `rufflo-fed.nft` or `rufflo-fed.pf` (firewall projection)
 
 After review, the operator manually activates:
 
 ```bash
-sudo install -m 0600 /tmp/adr-111-stage/ruflo-fed.conf /etc/wireguard/ruflo-fed.conf
+sudo install -m 0600 /tmp/adr-111-stage/rufflo-fed.conf /etc/wireguard/rufflo-fed.conf
 # Linux:
-sudo nft -f /tmp/adr-111-stage/ruflo-fed.nft
+sudo nft -f /tmp/adr-111-stage/rufflo-fed.nft
 # macOS:
-sudo pfctl -a ruflo-fed -f /tmp/adr-111-stage/ruflo-fed.pf
-sudo wg-quick up ruflo-fed
+sudo pfctl -a rufflo-fed -f /tmp/adr-111-stage/rufflo-fed.pf
+sudo wg-quick up rufflo-fed
 ```
 
 ## Using `claude -p` headless mode
@@ -240,11 +240,11 @@ The federation plugin handles signing, PII gating, breaker, and audit on every s
 
 | What | Path |
 |---|---|
-| Plugin source | `v3/@claude-flow/plugin-agent-federation/src/` |
-| Tests | `v3/@claude-flow/plugin-agent-federation/__tests__/` |
+| Plugin source | `v3/@rufflo/plugin-agent-federation/src/` |
+| Tests | `v3/@rufflo/plugin-agent-federation/__tests__/` |
 | ADRs | `v3/docs/adr/ADR-{097,104,105,106,107,109,110,111}-*.md` |
-| Phase 7 staging script | `v3/@claude-flow/plugin-agent-federation/scripts/phase7-stage.mjs` |
-| Witness signing | `plugins/ruflo-core/scripts/witness/` |
+| Phase 7 staging script | `v3/@rufflo/plugin-agent-federation/scripts/phase7-stage.mjs` |
+| Witness signing | `plugins/rufflo-core/scripts/witness/` |
 
 ## Releases
 

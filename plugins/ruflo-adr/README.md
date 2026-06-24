@@ -1,4 +1,4 @@
-# ruflo-adr
+# rufflo-adr
 
 ADR lifecycle management -- create, index, supersede, and link Architecture Decision Records to code.
 
@@ -9,7 +9,7 @@ Manages Architecture Decision Records through their full lifecycle (proposed, ac
 ## Installation
 
 ```bash
-claude --plugin-dir plugins/ruflo-adr
+claude --plugin-dir plugins/rufflo-adr
 ```
 
 ## Agents
@@ -52,34 +52,34 @@ Relationships tracked as causal edges: `supersedes`, `amends`, `depends-on`, `re
 
 ## Compatibility
 
-- **CLI:** pinned to `@claude-flow/cli` v3.6 major+minor.
-- **Verification:** `bash plugins/ruflo-adr/scripts/smoke.sh` is the contract.
+- **CLI:** pinned to `@rufflo/cli` v3.6 major+minor.
+- **Verification:** `bash plugins/rufflo-adr/scripts/smoke.sh` is the contract.
 
 ## Namespace coordination
 
-This plugin owns the `adr-patterns` AgentDB namespace. It defers to [ruflo-agentdb ADR-0001 §"Namespace convention"](../ruflo-agentdb/docs/adrs/0001-agentdb-optimization.md) for naming rules. Reserved namespaces (`pattern`, `claude-memories`, `default`) MUST NOT be shadowed.
+This plugin owns the `adr-patterns` AgentDB namespace. It defers to [rufflo-agentdb ADR-0001 §"Namespace convention"](../rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md) for naming rules. Reserved namespaces (`pattern`, `claude-memories`, `default`) MUST NOT be shadowed.
 
-`adr-patterns` follows kebab-case `<plugin-stem>-<intent>` per the convention. The plugin uses it for semantic ADR search and for cross-project pattern transfer (via `hooks_transfer` in `ruflo-intelligence`).
+`adr-patterns` follows kebab-case `<plugin-stem>-<intent>` per the convention. The plugin uses it for semantic ADR search and for cross-project pattern transfer (via `hooks_transfer` in `rufflo-intelligence`).
 
 ## Verification
 
 ```bash
-bash plugins/ruflo-adr/scripts/smoke.sh
+bash plugins/rufflo-adr/scripts/smoke.sh
 # Expected: "10 passed, 0 failed"
 ```
 
 ## Architecture Decisions
 
-- [`ADR-0001` — ruflo-adr plugin contract (pinning, namespace coordination, smoke as contract)](./docs/adrs/0001-adr-plugin-pattern.md)
+- [`ADR-0001` — rufflo-adr plugin contract (pinning, namespace coordination, smoke as contract)](./docs/adrs/0001-adr-plugin-pattern.md)
 
 ## Related Plugins
 
-- `ruflo-agentdb` — namespace convention owner; backing store for the ADR graph
-- `ruflo-ddd` — document domain decisions as ADRs
-- `ruflo-sparc` — Architecture phase (Phase 3) produces ADRs
-- `ruflo-migrations` — schema change decisions recorded as ADRs
-- `ruflo-jujutsu` — ADR-aware diff analysis on PRs
-- `ruflo-intelligence` — `hooks_transfer` ships ADR patterns across projects
+- `rufflo-agentdb` — namespace convention owner; backing store for the ADR graph
+- `rufflo-ddd` — document domain decisions as ADRs
+- `rufflo-sparc` — Architecture phase (Phase 3) produces ADRs
+- `rufflo-migrations` — schema change decisions recorded as ADRs
+- `rufflo-jujutsu` — ADR-aware diff analysis on PRs
+- `rufflo-intelligence` — `hooks_transfer` ships ADR patterns across projects
 
 ## License
 

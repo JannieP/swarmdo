@@ -68,18 +68,18 @@ for state in pending canary rolling complete rolled-back; do
 done
 [[ -z "$miss" ]] && ok || bad "missing states:$miss"
 
-step "8. README pins @claude-flow/cli to v3.6"
-grep -qE "@claude-flow/cli.*v3\.6|v3\.6.*claude-flow/cli" "$ROOT/README.md" \
+step "8. README pins @rufflo/cli to v3.6"
+grep -qE "@rufflo/cli.*v3\.6|v3\.6.*rufflo/cli" "$ROOT/README.md" \
   && ok || bad "v3.6 pin missing"
 
-step "9. README defers to ruflo-agentdb namespace convention"
-grep -q "ruflo-agentdb" "$ROOT/README.md" \
+step "9. README defers to rufflo-agentdb namespace convention"
+grep -q "rufflo-agentdb" "$ROOT/README.md" \
   && grep -qE "Namespace convention|namespace convention" "$ROOT/README.md" \
   && ok || bad "namespace coordination block incomplete"
 
-step "10. ruflo-federation trust-model cross-reference present"
+step "10. rufflo-federation trust-model cross-reference present"
 F="$ROOT/README.md"
-grep -q "ruflo-federation" "$F" \
+grep -q "rufflo-federation" "$F" \
   && grep -qE "trust|trust model" "$F" \
   && ok || bad "federation trust-model parallel cross-reference missing"
 

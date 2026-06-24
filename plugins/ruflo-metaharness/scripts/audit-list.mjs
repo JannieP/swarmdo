@@ -20,8 +20,8 @@ import { spawnSync } from 'node:child_process';
 
 const NS = process.env.AUDIT_LIST_NAMESPACE || 'metaharness-audit';
 const CLI_PKG = process.env.CLI_CORE === '1'
-  ? '@claude-flow/cli-core@alpha'
-  : '@claude-flow/cli@latest';
+  ? '@rufflo/cli-core@alpha'
+  : '@rufflo/cli@latest';
 
 const ARGS = (() => {
   const a = { limit: 20, since: null, format: 'table' };

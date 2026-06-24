@@ -1,4 +1,4 @@
-# ruflo-adr — ADR Reference
+# rufflo-adr — ADR Reference
 
 Companion reference for `adr-architect`. The agent prompt deliberately stays lean per [ADR-098 Part 2](../../v3/docs/adr/ADR-098-plugin-capability-sync-and-optimization.md); this file collects the template, graph-storage recipes, and detection workflow the agent reads on-demand.
 
@@ -65,16 +65,16 @@ Persist the ADR tree + relationships so traversal queries (e.g. "all ADRs depend
 
 ```bash
 # Hierarchical tree — store each ADR under adr/<id>
-mcp__claude-flow__agentdb_hierarchical-store \
+mcp__rufflo__agentdb_hierarchical-store \
   --path "adr/ADR-097" \
   --value '{"status":"accepted","title":"Federation Budget Circuit Breaker","date":"2026-05-04"}'
 
 # Causal edges for relationships
-mcp__claude-flow__agentdb_causal-edge \
+mcp__rufflo__agentdb_causal-edge \
   --from "ADR-097" --to "ADR-086" --relation "depends-on"
-mcp__claude-flow__agentdb_causal-edge \
+mcp__rufflo__agentdb_causal-edge \
   --from "ADR-098" --to "ADR-095" --relation "depends-on"
-mcp__claude-flow__agentdb_causal-edge \
+mcp__rufflo__agentdb_causal-edge \
   --from "ADR-094" --to "ADR-093" --relation "amends"
 ```
 
