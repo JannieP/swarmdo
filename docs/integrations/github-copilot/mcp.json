@@ -1,0 +1,22 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schemas/draft/2024-11-05/server-config.json",
+  "_comment": "Copy this to .vscode/mcp.json in your project to expose Rufflo's MCP tools to GitHub Copilot agent mode. See docs/integrations/github-copilot.md.",
+  "servers": {
+    "rufflo": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "rufflo", "mcp", "start", "--tools-profile", "lean"],
+      "env": {
+        "ANTHROPIC_API_KEY": "${input:rufflo_anthropic_key}"
+      }
+    }
+  },
+  "inputs": [
+    {
+      "id": "rufflo_anthropic_key",
+      "type": "promptString",
+      "description": "Anthropic API key for Rufflo agent execution (leave blank to use memory/search tools only)",
+      "password": true
+    }
+  ]
+}
