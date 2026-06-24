@@ -12,7 +12,7 @@
 // USAGE
 //   node scripts/audit-skill-frontmatter.mjs                  # all skills
 //   node scripts/audit-skill-frontmatter.mjs --format json    # machine-readable
-//   node scripts/audit-skill-frontmatter.mjs --only ruflo-cost-tracker
+//   node scripts/audit-skill-frontmatter.mjs --only rufflo-cost-tracker
 //
 // CHECKS per SKILL.md
 //   1. File has a `---` frontmatter block at the top.

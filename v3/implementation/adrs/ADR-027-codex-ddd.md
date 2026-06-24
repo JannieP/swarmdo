@@ -2,14 +2,14 @@
 
 ## Overview
 
-This document defines the Domain-Driven Design (DDD) architecture for integrating OpenAI Codex support into claude-flow via the `@claude-flow/codex` package. The design follows the existing V3 architecture patterns while introducing new bounded contexts for Codex-specific functionality.
+This document defines the Domain-Driven Design (DDD) architecture for integrating OpenAI Codex support into rufflo via the `@rufflo/codex` package. The design follows the existing V3 architecture patterns while introducing new bounded contexts for Codex-specific functionality.
 
 ## Package Information
 
-- **Package Name**: `@claude-flow/codex`
-- **Location**: `v3/@claude-flow/codex/`
+- **Package Name**: `@rufflo/codex`
+- **Location**: `v3/@rufflo/codex/`
 - **Future Umbrella**: `coflow` (npm/npx coflow)
-- **Compatibility**: Maintains `claude-flow` branding during transition
+- **Compatibility**: Maintains `rufflo` branding during transition
 
 ## Strategic Design
 
@@ -17,7 +17,7 @@ This document defines the Domain-Driven Design (DDD) architecture for integratin
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                           Claude Flow V3 Core Domain                         │
+│                           Rufflo V3 Core Domain                         │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────────────────┐ │
@@ -772,7 +772,7 @@ class InitializationApplicationService {
     return {
       claude: claudeResult,
       codex: codexResult,
-      syncConfigPath: path.join(options.projectPath, '.claude-flow', 'platform-sync.yaml')
+      syncConfigPath: path.join(options.projectPath, '.rufflo', 'platform-sync.yaml')
     };
   }
 }
@@ -851,7 +851,7 @@ class PlatformConversionCompleted implements DomainEvent {
 ## Package Structure
 
 ```
-v3/@claude-flow/
+v3/@rufflo/
 ├── cli/
 │   └── src/
 │       └── commands/
@@ -918,9 +918,9 @@ v3/@claude-flow/
 ### With Existing Init System
 
 ```typescript
-// v3/@claude-flow/cli/src/commands/init.ts
+// v3/@rufflo/cli/src/commands/init.ts
 
-import { CodexInitializer } from '@claude-flow/codex';
+import { CodexInitializer } from '@rufflo/codex';
 
 // Add new options
 const initCommand: Command = {

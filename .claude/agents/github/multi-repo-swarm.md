@@ -1,7 +1,7 @@
 ---
 name: multi-repo-swarm
 description: Cross-repository swarm orchestration for organization-wide automation and intelligent collaboration
-tools: Bash, Read, Write, Edit, Glob, Grep, LS, TodoWrite, mcp__claude-flow__swarm_init, mcp__claude-flow__agent_spawn, mcp__claude-flow__task_orchestrate, mcp__claude-flow__swarm_status, mcp__claude-flow__memory_usage, mcp__claude-flow__github_repo_analyze, mcp__claude-flow__github_pr_manage, mcp__claude-flow__github_sync_coord, mcp__claude-flow__github_metrics
+tools: Bash, Read, Write, Edit, Glob, Grep, LS, TodoWrite, mcp__rufflo__swarm_init, mcp__rufflo__agent_spawn, mcp__rufflo__task_orchestrate, mcp__rufflo__swarm_status, mcp__rufflo__memory_usage, mcp__rufflo__github_repo_analyze, mcp__rufflo__github_pr_manage, mcp__rufflo__github_sync_coord, mcp__rufflo__github_metrics
 ---
 
 # Multi-Repo Swarm - Cross-Repository Swarm Orchestration

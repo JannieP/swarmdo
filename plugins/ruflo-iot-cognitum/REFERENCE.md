@@ -1,4 +1,4 @@
-# ruflo-iot-cognitum — Operations Reference
+# rufflo-iot-cognitum — Operations Reference
 
 Companion reference for the agents in this plugin. The agent prompts deliberately stay lean (≤ 60 lines) per [ADR-098 Part 2](../../v3/docs/adr/ADR-098-plugin-capability-sync-and-optimization.md); this file collects the tables and catalogs an agent reads on-demand instead of paying for them in every spawn's context window.
 
@@ -20,19 +20,19 @@ The default endpoint when none is supplied is `http://169.254.42.1/` — the Cog
 
 ```bash
 # Lifecycle
-npx -y -p @claude-flow/plugin-iot-cognitum@latest cognitum-iot register [endpoint]
-npx -y -p @claude-flow/plugin-iot-cognitum@latest cognitum-iot pair <device-id>
-npx -y -p @claude-flow/plugin-iot-cognitum@latest cognitum-iot unpair <device-id>
-npx -y -p @claude-flow/plugin-iot-cognitum@latest cognitum-iot remove <device-id>
+npx -y -p @rufflo/plugin-iot-cognitum@latest cognitum-iot register [endpoint]
+npx -y -p @rufflo/plugin-iot-cognitum@latest cognitum-iot pair <device-id>
+npx -y -p @rufflo/plugin-iot-cognitum@latest cognitum-iot unpair <device-id>
+npx -y -p @rufflo/plugin-iot-cognitum@latest cognitum-iot remove <device-id>
 
 # Inspection
-npx -y -p @claude-flow/plugin-iot-cognitum@latest cognitum-iot status <device-id>
-npx -y -p @claude-flow/plugin-iot-cognitum@latest cognitum-iot list
-npx -y -p @claude-flow/plugin-iot-cognitum@latest cognitum-iot mesh <device-id>
+npx -y -p @rufflo/plugin-iot-cognitum@latest cognitum-iot status <device-id>
+npx -y -p @rufflo/plugin-iot-cognitum@latest cognitum-iot list
+npx -y -p @rufflo/plugin-iot-cognitum@latest cognitum-iot mesh <device-id>
 
 # Witness audit
-npx -y -p @claude-flow/plugin-iot-cognitum@latest cognitum-iot witness <device-id>
-npx -y -p @claude-flow/plugin-iot-cognitum@latest cognitum-iot witness verify <device-id>
+npx -y -p @rufflo/plugin-iot-cognitum@latest cognitum-iot witness <device-id>
+npx -y -p @rufflo/plugin-iot-cognitum@latest cognitum-iot witness verify <device-id>
 ```
 
 ## Background workers
@@ -46,7 +46,7 @@ npx -y -p @claude-flow/plugin-iot-cognitum@latest cognitum-iot witness verify <d
 | `FirmwareWatchWorker` | 300s | `iot:firmware-mismatch` | Detects firmware version changes |
 | `WitnessAuditWorker` | 600s | `iot:witness-gap` | Audits witness chain epoch continuity |
 
-Workers are dispatched by the host daemon when `ruflo-iot-cognitum` is loaded. Verify via `ruflo hooks worker list` and `ruflo hooks worker status`.
+Workers are dispatched by the host daemon when `rufflo-iot-cognitum` is loaded. Verify via `rufflo hooks worker list` and `rufflo hooks worker status`.
 
 ## Trust-score formula breakdown
 

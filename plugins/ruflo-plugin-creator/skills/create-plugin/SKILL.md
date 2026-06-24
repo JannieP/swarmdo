@@ -2,7 +2,7 @@
 name: create-plugin
 description: Scaffold a new Claude Code plugin with proper directory structure, plugin.json, skills, commands, and agents
 argument-hint: "<plugin-name>"
-allowed-tools: mcp__claude-flow__transfer_plugin-info mcp__claude-flow__transfer_plugin-search mcp__claude-flow__transfer_store-search Bash Read Write Edit
+allowed-tools: mcp__rufflo__transfer_plugin-info mcp__rufflo__transfer_plugin-search mcp__rufflo__transfer_store-search Bash Read Write Edit
 ---
 
 # Create Plugin
@@ -16,7 +16,7 @@ When you want to create a new plugin that extends Claude Code with skills, comma
 ## Steps
 
 1. **Get plugin name and description** from the user
-2. **Check for conflicts** — call `mcp__claude-flow__transfer_plugin-search` to ensure the name isn't taken
+2. **Check for conflicts** — call `mcp__rufflo__transfer_plugin-search` to ensure the name isn't taken
 3. **Create directory structure** (follows the canonical plugin contract from sibling plugins' ADR-0001s):
    ```
    plugins/<name>/
@@ -42,19 +42,19 @@ When you want to create a new plugin that extends Claude Code with skills, comma
    ---
    name: skill-name
    description: What this skill does
-   allowed-tools: mcp__claude-flow__tool1 mcp__claude-flow__tool2 Bash
+   allowed-tools: mcp__rufflo__tool1 mcp__rufflo__tool2 Bash
    ---
    ```
 6. **Generate command files** with name and description frontmatter
 7. **Generate agent files** with name, description, and `model: sonnet`
 8. **Generate README.md** with install instructions, features, commands, skills, AND the canonical plugin-contract sections:
-   - **Compatibility** — pin to `@claude-flow/cli` v3.6 major+minor
-   - **Namespace coordination** — claim a kebab-case `<plugin-stem>-<intent>` namespace; defer to ruflo-agentdb ADR-0001 §"Namespace convention"
+   - **Compatibility** — pin to `@rufflo/cli` v3.6 major+minor
+   - **Namespace coordination** — claim a kebab-case `<plugin-stem>-<intent>` namespace; defer to rufflo-agentdb ADR-0001 §"Namespace convention"
    - **Verification** — `bash plugins/<name>/scripts/smoke.sh`
    - **Architecture Decisions** — link to ADR-0001
 9. **Generate ADR-0001 (Proposed)** at `docs/adrs/0001-<name>-contract.md` documenting: pinning, namespace coordination, MCP-tool surface count if applicable, smoke contract scope. Status: `Proposed`.
 10. **Generate scripts/smoke.sh** — at minimum 8 structural checks: version + keywords; skills/agents/commands present with valid frontmatter; v3.6 pin in README; namespace coordination block in README; ADR exists with status `Proposed`; no wildcard tools in skills.
-11. **Update marketplace.json** if adding to the ruflo marketplace.
+11. **Update marketplace.json** if adding to the rufflo marketplace.
 
 ## MCP-tool drift to avoid (per sibling-ADR lessons learned)
 
@@ -92,7 +92,7 @@ Optional fields:
 
 ## Available MCP tools to wire
 
-Browse available tools: `mcp__claude-flow__transfer_plugin-info`
+Browse available tools: `mcp__rufflo__transfer_plugin-info`
 
 Common tool categories:
 - `memory_*` — storage, search, retrieval

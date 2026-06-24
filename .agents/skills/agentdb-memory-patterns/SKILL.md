@@ -9,7 +9,7 @@ description: "Implement persistent memory patterns for AI agents using AgentDB. 
 
 Provides memory management patterns for AI agents using AgentDB's persistent storage and ReasoningBank integration. Enables agents to remember conversations, learn from interactions, and maintain context across sessions.
 
-**Performance**: 150x-12,500x faster than traditional solutions with 100% backward compatibility.
+**Performance**: ~1.9x-4.7x measured faster than traditional solutions with 100% backward compatibility.
 
 ## Prerequisites
 
@@ -221,9 +221,9 @@ npx agentdb@latest stats .$agents.db
 npx agentdb@latest benchmark
 
 # Results show:
-# - Pattern Search: 150x faster (100µs vs 15ms)
+# - Pattern Search: ~4.7x faster (100µs vs 15ms)
 # - Batch Insert: 500x faster (2ms vs 1s)
-# - Large-scale Query: 12,500x faster (8ms vs 100s)
+# - Large-scale Query: ~4.7x faster (8ms vs 100s)
 ```
 
 ## Integration with ReasoningBank

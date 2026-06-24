@@ -2,7 +2,7 @@
 name: project-board-sync
 description: |
   Synchronize AI swarms with GitHub Projects for visual task management, progress tracking, and team coordination
-tools: Bash, Read, Write, Edit, Glob, Grep, LS, TodoWrite, mcp__claude-flow__swarm_init, mcp__claude-flow__agent_spawn, mcp__claude-flow__task_orchestrate, mcp__claude-flow__swarm_status, mcp__claude-flow__memory_usage, mcp__claude-flow__github_repo_analyze, mcp__claude-flow__github_pr_manage, mcp__claude-flow__github_issue_track, mcp__claude-flow__github_metrics, mcp__claude-flow__workflow_create, mcp__claude-flow__workflow_execute
+tools: Bash, Read, Write, Edit, Glob, Grep, LS, TodoWrite, mcp__rufflo__swarm_init, mcp__rufflo__agent_spawn, mcp__rufflo__task_orchestrate, mcp__rufflo__swarm_status, mcp__rufflo__memory_usage, mcp__rufflo__github_repo_analyze, mcp__rufflo__github_pr_manage, mcp__rufflo__github_issue_track, mcp__rufflo__github_metrics, mcp__rufflo__workflow_create, mcp__rufflo__workflow_execute
 ---
 
 # Project Board Sync - GitHub Projects Integration

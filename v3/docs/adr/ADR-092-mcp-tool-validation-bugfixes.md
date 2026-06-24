@@ -6,7 +6,7 @@
 
 ## Context
 
-Comprehensive tool verification (~190 MCP tools across 4 servers) revealed 6 bugs in input validation and WASM serialization within `@claude-flow/cli`. All stem from overly strict or mismatched validators, null safety gaps, and raw WASM objects leaking through the MCP JSON layer.
+Comprehensive tool verification (~190 MCP tools across 4 servers) revealed 6 bugs in input validation and WASM serialization within `@rufflo/cli`. All stem from overly strict or mismatched validators, null safety gaps, and raw WASM objects leaking through the MCP JSON layer.
 
 ## Bugs Fixed
 
@@ -19,7 +19,7 @@ Comprehensive tool verification (~190 MCP tools across 4 servers) revealed 6 bug
 
 ### Bug 2 — `transfer_plugin-info` rejects `@` in npm package names (v3.6.1)
 
-**Symptom**: `transfer_plugin-info(name: "@claude-flow/embeddings")` → error "name contains invalid characters".  
+**Symptom**: `transfer_plugin-info(name: "@rufflo/embeddings")` → error "name contains invalid characters".  
 **Root cause**: Plugin name passed through `validateIdentifier()` which rejects `@` and `/`.  
 **Fix**: Added `validatePackageName()` with npm-scoped name regex `(@[a-zA-Z0-9_\-]+\/)?[a-zA-Z0-9_\-][a-zA-Z0-9_\-.]{0,213}` and switched `transfer_plugin-info` to use it.  
 **Files**: `validate-input.ts`, `transfer-tools.ts`

@@ -33,10 +33,10 @@ v2/
 ### V3 Hooks Architecture
 ```
 v3/
-├── @claude-flow/shared/src/hooks/
+├── @rufflo/shared/src/hooks/
 │   ├── registry.ts               # Hook registration
 │   └── executor.ts               # Hook execution
-├── @claude-flow/cli/src/commands/
+├── @rufflo/cli/src/commands/
 │   └── hooks.ts                  # CLI commands
 └── mcp/tools/hooks-tools.ts      # MCP tools (9 hooks)
 ```
@@ -340,7 +340,7 @@ class AgenticHookManager {
 
 ### V3 Hook Registry
 ```typescript
-// V3: @claude-flow/shared/src/hooks/registry.ts
+// V3: @rufflo/shared/src/hooks/registry.ts
 class HookRegistry {
   register(hook: HookDefinition): void;
   getHook(name: string): HookDefinition | undefined;
@@ -353,7 +353,7 @@ class HookRegistry {
 ### Migration Path
 ```typescript
 // Migration: Adapt V2 hook manager to V3 registry
-import { HookRegistry } from '@claude-flow/shared/hooks';
+import { HookRegistry } from '@rufflo/shared/hooks';
 
 const registry = new HookRegistry();
 
@@ -379,28 +379,28 @@ registry.register({
 ### V2 Hooks CLI
 ```bash
 # V2 Commands
-npx claude-flow hooks pre-task --description "Task" --task-id ID
-npx claude-flow hooks post-task --task-id ID
-npx claude-flow hooks pre-edit --file path
-npx claude-flow hooks post-edit --file path --success true
-npx claude-flow hooks pre-command --command "npm test"
-npx claude-flow hooks post-command --command "npm test" --success true
-npx claude-flow hooks session-end
-npx claude-flow hooks session-restore --session-id latest
-npx claude-flow hooks notify --message "Done" --level success
+npx rufflo hooks pre-task --description "Task" --task-id ID
+npx rufflo hooks post-task --task-id ID
+npx rufflo hooks pre-edit --file path
+npx rufflo hooks post-edit --file path --success true
+npx rufflo hooks pre-command --command "npm test"
+npx rufflo hooks post-command --command "npm test" --success true
+npx rufflo hooks session-end
+npx rufflo hooks session-restore --session-id latest
+npx rufflo hooks notify --message "Done" --level success
 ```
 
 ### V3 Hooks CLI
 ```bash
 # V3 Commands (implemented)
-npx claude-flow hooks pre-edit <filePath>
-npx claude-flow hooks post-edit <filePath> --success true
-npx claude-flow hooks pre-command "<command>"
-npx claude-flow hooks post-command "<command>" --success true
-npx claude-flow hooks route "<task description>"
-npx claude-flow hooks explain "<task description>"
-npx claude-flow hooks pretrain
-npx claude-flow hooks metrics
+npx rufflo hooks pre-edit <filePath>
+npx rufflo hooks post-edit <filePath> --success true
+npx rufflo hooks pre-command "<command>"
+npx rufflo hooks post-command "<command>" --success true
+npx rufflo hooks route "<task description>"
+npx rufflo hooks explain "<task description>"
+npx rufflo hooks pretrain
+npx rufflo hooks metrics
 
 # Missing V3 commands:
 # - hooks pre-task

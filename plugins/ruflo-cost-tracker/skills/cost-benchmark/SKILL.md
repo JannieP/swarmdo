@@ -21,10 +21,10 @@ Runs `scripts/bench.mjs` against the structural+adversarial corpus and writes pe
 1. **Run the bench from `v3/`** (where `agent-booster` resolves):
 
    ```bash
-   ( cd v3 && node ../plugins/ruflo-cost-tracker/scripts/bench.mjs )                  # booster only — free, ~85 ms
-   ( cd v3 && BENCH_LLM_BASELINE=1 node ../plugins/ruflo-cost-tracker/scripts/bench.mjs ) # + Gemini 2.0 Flash (cheap)
+   ( cd v3 && node ../plugins/rufflo-cost-tracker/scripts/bench.mjs )                  # booster only — free, ~85 ms
+   ( cd v3 && BENCH_LLM_BASELINE=1 node ../plugins/rufflo-cost-tracker/scripts/bench.mjs ) # + Gemini 2.0 Flash (cheap)
    ( cd v3 && BENCH_LLM_BASELINE=1 BENCH_ANTHROPIC=1 \
-        node ../plugins/ruflo-cost-tracker/scripts/bench.mjs )                          # + Sonnet 4.6 + Opus 4.7
+        node ../plugins/rufflo-cost-tracker/scripts/bench.mjs )                          # + Sonnet 4.6 + Opus 4.7
    ```
 
 2. **Inspect the markdown summary** printed to stdout. The gate metric is `winRate` (Tier 1 cases). Adversarial cases are tracked separately as `escalationRate`.

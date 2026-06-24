@@ -7,7 +7,7 @@
 
 ## Context
 
-Claude Code's auto-memory system stores project knowledge in `~/.claude/projects/*/memory/MEMORY.md` files with YAML frontmatter. Ruflo's AgentDB stores data in sql.js with ONNX embeddings (all-MiniLM-L6-v2, 384d) for semantic vector search. These two systems were disconnected.
+Claude Code's auto-memory system stores project knowledge in `~/.claude/projects/*/memory/MEMORY.md` files with YAML frontmatter. Rufflo's AgentDB stores data in sql.js with ONNX embeddings (all-MiniLM-L6-v2, 384d) for semantic vector search. These two systems were disconnected.
 
 [ruDevolution](https://github.com/ruvnet/rudevolution) research (`07-context-and-session-management.md`) documents Claude Code's memory internals: auto-memory paths, env vars (`autoMemoryEnabled`, `CLAUDE_CODE_DISABLE_AUTO_MEMORY`), session persistence, dream mode, and compaction system.
 
@@ -40,18 +40,18 @@ Move bridge logic into proper MCP tools for real-time access:
 
 CLI equivalents:
 ```bash
-ruflo memory import-claude          # Import current project memories
-ruflo memory import-claude --all    # Import all projects
-ruflo memory bridge-status          # Show bridge status
-ruflo memory bridge-sync            # Sync back to MEMORY.md
-ruflo memory search --unified       # Search both stores
+rufflo memory import-claude          # Import current project memories
+rufflo memory import-claude --all    # Import all projects
+rufflo memory bridge-status          # Show bridge status
+rufflo memory bridge-sync            # Sync back to MEMORY.md
+rufflo memory search --unified       # Search both stores
 ```
 
 **Why MCP over helpers:**
 - Accessible during sessions (not just start/end)
 - Discoverable via ToolSearch
 - Testable via CLI
-- Works via `npx ruflo` without file path dependencies
+- Works via `npx rufflo` without file path dependencies
 - Composable with other MCP tools (swarm, hooks, hive-mind)
 - Claude Code can call them directly through the MCP server
 
@@ -105,8 +105,8 @@ Not available mid-session              MCP Tool: memory_search_unified
 - `.claude/helpers/auto-memory-hook.mjs` — vectorization bridge + import-all + pattern flush
 
 ### Phase 2 (Proposed)
-- `v3/@claude-flow/cli/src/mcp-tools/memory-tools.ts` — add MCP tool handlers
-- `v3/@claude-flow/cli/src/commands/memory.ts` — add CLI subcommands
+- `v3/@rufflo/cli/src/mcp-tools/memory-tools.ts` — add MCP tool handlers
+- `v3/@rufflo/cli/src/commands/memory.ts` — add CLI subcommands
 
 ## References
 

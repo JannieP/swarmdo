@@ -260,13 +260,13 @@ jobs:
       - name: Build CLI package
         run: |
           echo "🔨 Building CLI package..."
-          cd v3/@claude-flow/cli && npm run build || echo "✅ CLI build completed (or already built)"
+          cd v3/@rufflo/cli && npm run build || echo "✅ CLI build completed (or already built)"
         continue-on-error: true
 
       - name: Verify CLI availability
         run: |
           echo "✅ Verifying CLI..."
-          test -f v3/@claude-flow/cli/bin/cli.js && echo "CLI binary exists" || echo "⚠️ CLI binary not found (non-blocking)"
+          test -f v3/@rufflo/cli/bin/cli.js && echo "CLI binary exists" || echo "⚠️ CLI binary not found (non-blocking)"
         continue-on-error: true
 
       - name: Package for distribution
@@ -327,7 +327,7 @@ jobs:
       - name: Build CLI for benchmarks
         run: |
           echo "🔨 Building CLI for benchmarks..."
-          cd v3/@claude-flow/cli && npm run build || echo "⚠️ CLI build skipped (non-blocking)"
+          cd v3/@rufflo/cli && npm run build || echo "⚠️ CLI build skipped (non-blocking)"
         continue-on-error: true
 
       - name: Run performance benchmarks
@@ -340,8 +340,8 @@ jobs:
           echo "🔍 Checking for memory leaks..."
           # Prefer the v3 CLI binary if built; fall back gracefully so the
           # job stays informational rather than failing on missing dist.
-          if [ -f v3/@claude-flow/cli/dist/bin.js ]; then
-            node --expose-gc --max-old-space-size=128 v3/@claude-flow/cli/dist/bin.js --version || true
+          if [ -f v3/@rufflo/cli/dist/bin.js ]; then
+            node --expose-gc --max-old-space-size=128 v3/@rufflo/cli/dist/bin.js --version || true
           elif [ -f dist/cli/main.js ]; then
             node --expose-gc --max-old-space-size=128 dist/cli/main.js --version || true
           else

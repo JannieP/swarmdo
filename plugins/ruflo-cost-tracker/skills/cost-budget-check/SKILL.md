@@ -2,7 +2,7 @@
 name: cost-budget-check
 description: Read accumulated cost-tracking spend + budget config, compute utilization, emit 50/75/90/100% alert ladder
 argument-hint: "[--period today|week|month|all]"
-allowed-tools: Bash mcp__claude-flow__memory_retrieve mcp__claude-flow__memory_list mcp__claude-flow__memory_store
+allowed-tools: Bash mcp__rufflo__memory_retrieve mcp__rufflo__memory_list mcp__rufflo__memory_store
 ---
 
 # Cost Budget Check
@@ -22,7 +22,7 @@ Until P2 (this skill) landed, the README documented the alert ladder but no code
 1. **Run the check**:
 
    ```bash
-   node plugins/ruflo-cost-tracker/scripts/budget.mjs check
+   node plugins/rufflo-cost-tracker/scripts/budget.mjs check
    ```
 
    Filter by period: `BUDGET_PERIOD=today` (default `all`). Use `BUDGET_QUIET=1` for machine-readable JSON.
@@ -32,8 +32,8 @@ Until P2 (this skill) landed, the README documented the alert ladder but no code
 3. **Set / inspect the budget**:
 
    ```bash
-   node plugins/ruflo-cost-tracker/scripts/budget.mjs set 50.00
-   node plugins/ruflo-cost-tracker/scripts/budget.mjs get
+   node plugins/rufflo-cost-tracker/scripts/budget.mjs set 50.00
+   node plugins/rufflo-cost-tracker/scripts/budget.mjs get
    ```
 
 4. **HARD_STOP path** — `budget.mjs check` exits with code `1` when utilization ≥ 100%. Wrap critical agent spawns in a `budget.mjs check && spawn …` guard to fail closed.

@@ -2,7 +2,7 @@
 name: browser-auth-flow
 description: Probe a site's authentication flow for redirect leaks, missing CSRF, weak session cookies, and OAuth misconfiguration; produces an auth findings.md
 argument-hint: "<login-url> [--credentials <handle>] [--probes csrf,redirect,cookie,oauth]"
-allowed-tools: mcp__claude-flow__browser_open mcp__claude-flow__browser_close mcp__claude-flow__browser_fill mcp__claude-flow__browser_type mcp__claude-flow__browser_click mcp__claude-flow__browser_wait mcp__claude-flow__browser_eval mcp__claude-flow__browser_snapshot mcp__claude-flow__browser_get-url mcp__claude-flow__aidefence_has_pii mcp__claude-flow__aidefence_scan Bash Read Write
+allowed-tools: mcp__rufflo__browser_open mcp__rufflo__browser_close mcp__rufflo__browser_fill mcp__rufflo__browser_type mcp__rufflo__browser_click mcp__rufflo__browser_wait mcp__rufflo__browser_eval mcp__rufflo__browser_snapshot mcp__rufflo__browser_get-url mcp__rufflo__aidefence_has_pii mcp__rufflo__aidefence_scan Bash Read Write
 ---
 
 # Browser Auth Flow

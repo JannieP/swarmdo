@@ -1,4 +1,4 @@
-# Security Audit — ruflo-neural-trader (2026-05-20)
+# Security Audit — rufflo-neural-trader (2026-05-20)
 
 ADR-126 follow-up #50. Three-part audit run against the plugin tree:
 supply chain, static checks on plugin code, and AIDefence wiring
@@ -9,7 +9,7 @@ readiness.
 Command:
 
 ```
-node scripts/audit-supply-chain.mjs 2>&1 | grep -A5 'ruflo-neural-trader\|plugins/ruflo-neural-trader' || echo "no plugin-specific findings"
+node scripts/audit-supply-chain.mjs 2>&1 | grep -A5 'rufflo-neural-trader\|plugins/rufflo-neural-trader' || echo "no plugin-specific findings"
 ```
 
 Result:
@@ -40,8 +40,8 @@ audited per push by `.github/workflows/v3-ci.yml`.
 
 ```
 grep -rn 'process.env\|API_KEY\|SECRET' \
-  plugins/ruflo-neural-trader/skills/ \
-  plugins/ruflo-neural-trader/src/
+  plugins/rufflo-neural-trader/skills/ \
+  plugins/rufflo-neural-trader/src/
 ```
 
 Findings:
@@ -60,7 +60,7 @@ prereq checks. **PASS**.
 ### Dynamic code execution
 
 ```
-grep -rn 'eval\|new Function' plugins/ruflo-neural-trader/ | grep -v '\.md:'
+grep -rn 'eval\|new Function' plugins/rufflo-neural-trader/ | grep -v '\.md:'
 ```
 
 Findings: **none in code**. Zero `eval(...)` or `new Function(...)` calls
@@ -71,7 +71,7 @@ anywhere in `src/`, `scripts/`, `skills/`, `agents/`, or `commands/`.
 ### Child-process invocations
 
 ```
-grep -rn 'spawn\|execSync\|spawnSync' plugins/ruflo-neural-trader/
+grep -rn 'spawn\|execSync\|spawnSync' plugins/rufflo-neural-trader/
 ```
 
 Findings:
@@ -83,7 +83,7 @@ Findings:
 No actual `spawn` / `execSync` / `spawnSync` invocations exist in the
 plugin code. The plugin shells out to `npx neural-trader` only via skill
 bash blocks (which run under the Claude Code permission model), and to
-`npx @claude-flow/cli` via documented memory-store commands. Both go
+`npx @rufflo/cli` via documented memory-store commands. Both go
 through the same shell that Claude Code itself executes, with no
 shell-string-injection vector.
 
@@ -102,8 +102,8 @@ Detailed proposal in `aidefence-wiring.md` (sibling doc). Summary:
   the `fetchLiveBars` JSON response (the `npx neural-trader --symbol …`
   cloud roundtrip).
 - AIDefence MCP tools to call: `aidefence_has_pii`, `aidefence_scan`,
-  `aidefence_is_safe` (same three gates the `ruflo-browser` and
-  `ruflo-federation` plugins already use).
+  `aidefence_is_safe` (same three gates the `rufflo-browser` and
+  `rufflo-federation` plugins already use).
 - **Not implemented in this PR.** Tracked as a separate ADR-127
   follow-up — wiring is a design decision that needs the comms-pipeline
   changes (Phase 5+) to land first so the gate sits at the right
@@ -124,5 +124,5 @@ the AIDefence wiring is an enhancement, not a remediation.
 - ADR-118 — aidefence@2.3.0 upgrade (broader injection surface)
 - #2073 / #2074 — Windows `spawnSync npx` regression (review lens)
 - `scripts/audit-supply-chain.mjs` — the audit tool itself
-- `plugins/ruflo-federation/README.md` — existing AIDefence wiring (reference pattern)
-- `plugins/ruflo-browser/agents/browser-agent.md` — existing AIDefence gates (reference pattern)
+- `plugins/rufflo-federation/README.md` — existing AIDefence wiring (reference pattern)
+- `plugins/rufflo-browser/agents/browser-agent.md` — existing AIDefence gates (reference pattern)

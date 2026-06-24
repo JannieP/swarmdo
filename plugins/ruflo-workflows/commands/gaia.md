@@ -7,7 +7,7 @@ argument-hint: "<subcommand> [options]"
 # /gaia — GAIA Benchmark Dispatcher
 
 Dispatch GAIA benchmark operations. All subcommands are thin wrappers over the
-`gaia-bench` CLI command shipped in `@claude-flow/cli`.
+`gaia-bench` CLI command shipped in `@rufflo/cli`.
 
 ## Subcommands
 
@@ -25,7 +25,7 @@ Dispatch GAIA benchmark operations. All subcommands are thin wrappers over the
 ```
 /gaia validate
 /gaia run --level=1 --limit=10 --models=haiku
-/gaia submit --results=~/.cache/ruflo/gaia/results-latest.json
+/gaia submit --results=~/.cache/rufflo/gaia/results-latest.json
 ```
 
 ## Environment variables resolved

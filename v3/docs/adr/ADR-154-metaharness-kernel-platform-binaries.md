@@ -4,12 +4,12 @@
 **Date**: 2026-06-17
 **Related**: [ADR-150](ADR-150-metaharness-integration-surfaces.md) (MetaHarness integration surfaces), [ADR-153](ADR-153-metaharness-darwin-mode-integration.md) (Darwin Mode integration), ADR-124 (optional native dependencies), ADR-148 (cost-optimal router lifecycle), [ADR-152](ADR-152-genome-similarity-search.md) (genome similarity)
 **Upstream**: [`ruvnet/agent-harness-generator/packages/kernel-js`](https://github.com/ruvnet/agent-harness-generator/tree/main/packages/kernel-js)
-**Affects**: `ruflo@3.12.3+`, `@claude-flow/cli@3.12.3+`, `claude-flow@3.12.3+`
+**Affects**: `rufflo@3.12.3+`, `@rufflo/cli@3.12.3+`, `rufflo@3.12.3+`
 **Affected packages**: `@metaharness/kernel@~0.1.0` (already in `optionalDependencies` per ADR-150)
 
 ## Context
 
-[ADR-150](ADR-150-metaharness-integration-surfaces.md) integrated `@metaharness/kernel@~0.1.0` as an optional peer of `@claude-flow/cli` (and transitively `ruflo`). The kernel exposes `loadKernel()`, `kernelDiagnostics()`, `ToolDispatcher` (claims-checked), `SelfEvolvingRouter`, `TrajectoryStore`, and `rankWithDecay` to ruflo's intelligence layer.
+[ADR-150](ADR-150-metaharness-integration-surfaces.md) integrated `@metaharness/kernel@~0.1.0` as an optional peer of `@rufflo/cli` (and transitively `rufflo`). The kernel exposes `loadKernel()`, `kernelDiagnostics()`, `ToolDispatcher` (claims-checked), `SelfEvolvingRouter`, `TrajectoryStore`, and `rankWithDecay` to rufflo's intelligence layer.
 
 The upstream design intent (per `packages/kernel-js/README.md`) is:
 
@@ -41,10 +41,10 @@ The upstream design intent (per `packages/kernel-js/README.md`) is:
 @metaharness/kernel-win32-x64-msvc       NOT_PUBLISHED
 ```
 
-**Runtime evidence** — fresh install of `ruflo@3.12.3` on a darwin-arm64 host (Mac mini M4 Pro, the platform the upstream-intended `@metaharness/kernel-darwin-arm64` should serve):
+**Runtime evidence** — fresh install of `rufflo@3.12.3` on a darwin-arm64 host (Mac mini M4 Pro, the platform the upstream-intended `@metaharness/kernel-darwin-arm64` should serve):
 
 ```bash
-$ npm install ruflo@3.12.3
+$ npm install rufflo@3.12.3
 added 1163 packages
 
 $ find node_modules/@metaharness/kernel-* -maxdepth 0 2>/dev/null
@@ -58,20 +58,20 @@ wasm
 
 ## Decision
 
-**Accept the WASM-only runtime path as the supported configuration for ruflo `3.12.3+`.** Do not block on the upstream native-binary publish gap. Specifically:
+**Accept the WASM-only runtime path as the supported configuration for rufflo `3.12.3+`.** Do not block on the upstream native-binary publish gap. Specifically:
 
-1. **No code change in ruflo.** `@metaharness/kernel` stays in `optionalDependencies` as it is today. `loadKernel()` already does the right thing — prefers native, falls back to WASM. The fallback is reached because the optional native packages don't resolve, which is the documented graceful path.
-2. **Treat WASM as the steady-state baseline** for benchmarks, smoke tests, and CI gates. Any "native vs WASM" performance comparison in ruflo's perf docs must mark the native column as "unverified — binaries not published" rather than copying upstream's claimed numbers.
-3. **Add a smoke gate** in `plugins/ruflo-metaharness/scripts/smoke.sh` that asserts `loadKernel().backend === 'wasm'` is reachable. This is the inverse of a regression check: if the upstream ever ships natives, the smoke alerts so we can re-baseline.
-4. **Per ADR-150 architectural constraint #3** (graceful degradation) the kernel-absent case is already handled — ruflo continues to work if `@metaharness/kernel` itself is uninstalled. The platform-binary absence is a *softer* degradation: kernel API surface is fully available, only the hot-path acceleration is missing.
+1. **No code change in rufflo.** `@metaharness/kernel` stays in `optionalDependencies` as it is today. `loadKernel()` already does the right thing — prefers native, falls back to WASM. The fallback is reached because the optional native packages don't resolve, which is the documented graceful path.
+2. **Treat WASM as the steady-state baseline** for benchmarks, smoke tests, and CI gates. Any "native vs WASM" performance comparison in rufflo's perf docs must mark the native column as "unverified — binaries not published" rather than copying upstream's claimed numbers.
+3. **Add a smoke gate** in `plugins/rufflo-metaharness/scripts/smoke.sh` that asserts `loadKernel().backend === 'wasm'` is reachable. This is the inverse of a regression check: if the upstream ever ships natives, the smoke alerts so we can re-baseline.
+4. **Per ADR-150 architectural constraint #3** (graceful degradation) the kernel-absent case is already handled — rufflo continues to work if `@metaharness/kernel` itself is uninstalled. The platform-binary absence is a *softer* degradation: kernel API surface is fully available, only the hot-path acceleration is missing.
 
 ## Why not block on upstream
 
 Three reasons:
 
-1. **WASM is functionally complete.** `loadKernel().backend === 'wasm'` exposes the same API as the native backend. The router's `SelfEvolvingRouter` parallel-logging gate from ADR-150 Phase 2 works against the WASM kernel; ADR-152 §3.1 genome similarity is pure-TS and doesn't touch the kernel at all. No ruflo feature is blocked by the missing natives.
-2. **The performance ceiling isn't binding yet.** ruflo's measured router path is dominated by the LLM call latency (seconds), not kernel dispatch (microseconds). Even if the native path were 10× faster than WASM, the user-visible improvement on a real query would be sub-percent. We'd capture that improvement later, when we have the natives, without architectural changes.
-3. **The fix is upstream-only.** Publishing five NAPI-RS binaries requires release-engineering on `ruvnet/agent-harness-generator` (CI matrix → upload to npm). Ruflo can't ship the natives ourselves without forking — which would violate the "MetaHarness is first-party" framing from ADR-150.
+1. **WASM is functionally complete.** `loadKernel().backend === 'wasm'` exposes the same API as the native backend. The router's `SelfEvolvingRouter` parallel-logging gate from ADR-150 Phase 2 works against the WASM kernel; ADR-152 §3.1 genome similarity is pure-TS and doesn't touch the kernel at all. No rufflo feature is blocked by the missing natives.
+2. **The performance ceiling isn't binding yet.** rufflo's measured router path is dominated by the LLM call latency (seconds), not kernel dispatch (microseconds). Even if the native path were 10× faster than WASM, the user-visible improvement on a real query would be sub-percent. We'd capture that improvement later, when we have the natives, without architectural changes.
+3. **The fix is upstream-only.** Publishing five NAPI-RS binaries requires release-engineering on `ruvnet/agent-harness-generator` (CI matrix → upload to npm). Rufflo can't ship the natives ourselves without forking — which would violate the "MetaHarness is first-party" framing from ADR-150.
 
 ## Consequences
 
@@ -79,7 +79,7 @@ Three reasons:
 
 - **No regression risk.** This ADR is descriptive — it changes the documentation, not the code. Today's behavior is the future behavior.
 - **Honest perf surface.** The smoke gate prevents accidentally claiming native speedups in benchmarks.
-- **Self-correcting.** When the upstream publishes the natives, `loadKernel()` will silently pick them up on the next install. The smoke gate fires, we audit, and decide whether to re-baseline ruflo's perf docs.
+- **Self-correcting.** When the upstream publishes the natives, `loadKernel()` will silently pick them up on the next install. The smoke gate fires, we audit, and decide whether to re-baseline rufflo's perf docs.
 - **Aligns with [ADR-124](ADR-124-optional-native-deps.md)** — same pattern as `better-sqlite3`, `hnswlib-node`, sharp et al: declare optional natives, ship a WASM/JS fallback, never crash when the native is absent.
 
 ### Negative
@@ -96,7 +96,7 @@ Three reasons:
 
 ### Smoke gate (one-time addition)
 
-Add to `plugins/ruflo-metaharness/scripts/smoke.sh`:
+Add to `plugins/rufflo-metaharness/scripts/smoke.sh`:
 
 ```bash
 step "18a. @metaharness/kernel loadKernel returns wasm backend (ADR-153)"
@@ -113,7 +113,7 @@ if node -e "import('@metaharness/kernel').then(() => process.exit(0)).catch(() =
       : # expected — see ADR-153
       ;;
     native|napi|napi-rs)
-      # Upstream published the natives — re-baseline ruflo's perf docs
+      # Upstream published the natives — re-baseline rufflo's perf docs
       miss="$miss kernel-now-native-rebaseline-perf-docs"
       ;;
     *)
@@ -126,11 +126,11 @@ fi
 
 ### Doctor surface
 
-`npx ruflo doctor --component metaharness` should already report the kernel backend; verify that the JSON includes a `kernelBackend: 'wasm' | 'native' | 'absent'` field. If not, add it as part of the next doctor revision.
+`npx rufflo doctor --component metaharness` should already report the kernel backend; verify that the JSON includes a `kernelBackend: 'wasm' | 'native' | 'absent'` field. If not, add it as part of the next doctor revision.
 
 ### Benchmark docstring
 
-Wherever ruflo's perf docs cite kernel dispatch latency, add a one-liner:
+Wherever rufflo's perf docs cite kernel dispatch latency, add a one-liner:
 
 > *Measured against `@metaharness/kernel`'s WASM path. NAPI-RS native binaries (`@metaharness/kernel-{darwin-arm64,linux-x64-gnu,…}`) are declared but not yet published upstream — see [ADR-153](v3/docs/adr/ADR-153-metaharness-kernel-platform-binaries.md).*
 
@@ -144,5 +144,5 @@ Wherever ruflo's perf docs cite kernel dispatch latency, add a one-liner:
 ## Open questions
 
 1. **When to re-baseline perf docs.** Trigger: smoke gate fires `kernel-now-native-rebaseline-perf-docs`. Action: re-run the relevant benchmarks, compare WASM vs NAPI-RS, update the docs with side-by-side numbers, drop the ADR's "currently inverted" caveat.
-2. **Whether ruflo should publish its own NAPI-RS binaries as a fallback fallback.** No — out of scope. ruflo is a downstream consumer of `@metaharness/kernel`, not a native-binary publisher. If upstream stays unpublished for >1 quarter, revisit this decision.
+2. **Whether rufflo should publish its own NAPI-RS binaries as a fallback fallback.** No — out of scope. rufflo is a downstream consumer of `@metaharness/kernel`, not a native-binary publisher. If upstream stays unpublished for >1 quarter, revisit this decision.
 3. **Whether the kernel API surface differs at all between WASM and NAPI-RS.** Spot-checked the WASM path on darwin-arm64; the exports match the TS declarations. ADR-150 Phase 3 §3.4 (Capability Graph) is the systematic answer for behavioral parity at API level — that's where to add a row per kernel method.

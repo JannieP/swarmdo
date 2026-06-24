@@ -1,7 +1,7 @@
 /**
  * Legal Contracts Plugin - Bridges Barrel Export
  *
- * @module @claude-flow/plugin-legal-contracts/bridges
+ * @module @rufflo/plugin-legal-contracts/bridges
  */
 
 export {

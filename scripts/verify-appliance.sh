@@ -1,10 +1,10 @@
 #!/bin/sh
 # ═══════════════════════════════════════════════════════════════
-# Ruflo RVFA Appliance — Full Capability Verification Suite
-# ADR-058: Self-Contained Ruflo RVF Appliance
+# Rufflo RVFA Appliance — Full Capability Verification Suite
+# ADR-058: Self-Contained Rufflo RVF Appliance
 #
 # Tests ALL 35 categories (95+ checks) to verify every capability
-# of the Ruflo + Claude Flow system works correctly.
+# of the Rufflo + Rufflo system works correctly.
 #
 # Usage:
 #   sh verify-appliance.sh                    # Run all checks
@@ -24,7 +24,7 @@ START_TIME=$(date +%s)
 QUICK_MODE=0
 TARGET_CATEGORY=""
 JSON_MODE=0
-RUFLO_CMD="${RUFLO_CMD:-ruflo}"
+RUFLO_CMD="${RUFLO_CMD:-rufflo}"
 
 # Parse arguments
 while [ $# -gt 0 ]; do
@@ -33,7 +33,7 @@ while [ $# -gt 0 ]; do
     --category|-c)  TARGET_CATEGORY="$2"; shift 2 ;;
     --json|-j)      JSON_MODE=1; shift ;;
     --help|-h)
-      echo "Ruflo Appliance Verification Suite"
+      echo "Rufflo Appliance Verification Suite"
       echo ""
       echo "Usage: sh verify-appliance.sh [OPTIONS]"
       echo ""
@@ -44,7 +44,7 @@ while [ $# -gt 0 ]; do
       echo "  --help, -h             Show this help"
       echo ""
       echo "Environment:"
-      echo "  RUFLO_CMD=ruflo        Command to test (default: ruflo)"
+      echo "  RUFLO_CMD=rufflo        Command to test (default: rufflo)"
       echo "  SKIP_NETWORK=1         Skip checks that require network"
       echo "  SKIP_MODELS=1          Skip local model inference checks"
       exit 0
@@ -125,19 +125,19 @@ is_quick() {
   [ "$QUICK_MODE" = "1" ]
 }
 
-# ── Detect Ruflo version ─────────────────────────────────────
+# ── Detect Rufflo version ─────────────────────────────────────
 RUFLO_VERSION=$($RUFLO_CMD --version 2>/dev/null || echo "unknown")
 
 # ── Banner ────────────────────────────────────────────────────
 if [ "$JSON_MODE" = "0" ]; then
   echo "╔══════════════════════════════════════════════════════════╗"
-  echo "║  Ruflo Appliance — Full Capability Verification Suite   ║"
+  echo "║  Rufflo Appliance — Full Capability Verification Suite   ║"
   if [ -f /etc/os-release ]; then
     OS_NAME=$(grep PRETTY /etc/os-release 2>/dev/null | cut -d= -f2 | tr -d '"' || echo "unknown")
     echo "║  OS: $OS_NAME"
   fi
   echo "║  Node: $(node --version 2>/dev/null || echo 'N/A')"
-  echo "║  Ruflo: $RUFLO_VERSION"
+  echo "║  Rufflo: $RUFLO_VERSION"
   echo "║  Mode: $([ "$QUICK_MODE" = "1" ] && echo "Quick" || echo "Full") | $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
   echo "╚══════════════════════════════════════════════════════════╝"
 fi
@@ -149,8 +149,8 @@ fi
 # ── 1. CLI Core ───────────────────────────────────────────────
 if should_run "cli"; then
   section 1 "CLI Core"
-  check "ruflo --version" $RUFLO_CMD --version
-  check "ruflo --help" $RUFLO_CMD --help
+  check "rufflo --version" $RUFLO_CMD --version
+  check "rufflo --help" $RUFLO_CMD --help
   check_contains "version string valid" "[0-9]\+\.[0-9]\+\.[0-9]" $RUFLO_CMD --version
 fi
 
@@ -168,7 +168,7 @@ fi
 # ── 3. Init System ────────────────────────────────────────────
 if should_run "init"; then
   section 3 "Init System"
-  TEST_DIR="/tmp/ruflo-verify-$$"
+  TEST_DIR="/tmp/rufflo-verify-$$"
   mkdir -p "$TEST_DIR" && cd "$TEST_DIR"
   check "init --yes" $RUFLO_CMD init --yes
   check ".claude/settings.json exists" test -f .claude/settings.json
@@ -406,7 +406,7 @@ fi
 # ── 26. RVF Format Verification ───────────────────────────────
 if should_run "rvf"; then
   section 26 "RVF Format Verification"
-  RVF_DIR="/tmp/ruflo-rvf-verify-$$"
+  RVF_DIR="/tmp/rufflo-rvf-verify-$$"
   mkdir -p "$RVF_DIR"
 
   # Test RVF backend by writing and reading data
@@ -431,14 +431,14 @@ if should_run "ruvllm"; then
     check_skip "ruvllm: tokenize" "SKIP_MODELS=1"
     check_skip "ruvllm: generate" "SKIP_MODELS=1"
     check_skip "ruvllm: stream" "SKIP_MODELS=1"
-  elif command -v ruflo-ruvllm >/dev/null 2>&1; then
-    check_warn "ruvllm: engine available" ruflo-ruvllm --version
-    check_warn "ruvllm: model list" ruflo-ruvllm models list
-    check_warn "ruvllm: tokenize" ruflo-ruvllm tokenize --text "Hello world"
-    check_warn "ruvllm: generate" ruflo-ruvllm generate --prompt "2+2=" --max-tokens 10
+  elif command -v rufflo-ruvllm >/dev/null 2>&1; then
+    check_warn "ruvllm: engine available" rufflo-ruvllm --version
+    check_warn "ruvllm: model list" rufflo-ruvllm models list
+    check_warn "ruvllm: tokenize" rufflo-ruvllm tokenize --text "Hello world"
+    check_warn "ruvllm: generate" rufflo-ruvllm generate --prompt "2+2=" --max-tokens 10
   else
-    check_skip "ruvllm: engine" "ruflo-ruvllm not installed (future: ADR-058 Phase 3)"
-    check_skip "ruvllm: inference" "ruflo-ruvllm not installed"
+    check_skip "ruvllm: engine" "rufflo-ruvllm not installed (future: ADR-058 Phase 3)"
+    check_skip "ruvllm: inference" "rufflo-ruvllm not installed"
   fi
 fi
 
@@ -457,7 +457,7 @@ fi
 # ── 29. Boot Integrity ────────────────────────────────────────
 if should_run "boot"; then
   section 29 "Boot Integrity"
-  check "boot: ruflo binary exists" command -v $RUFLO_CMD
+  check "boot: rufflo binary exists" command -v $RUFLO_CMD
   check "boot: node available" command -v node
   check_contains "boot: node version ≥ 20" "v2[0-9]" node --version
   check "boot: npm available" command -v npm
@@ -549,7 +549,7 @@ TOTAL=$((PASS + FAIL + WARN + SKIP))
 if [ "$JSON_MODE" = "1" ]; then
   cat <<ENDJSON
 {
-  "suite": "ruflo-appliance-verify",
+  "suite": "rufflo-appliance-verify",
   "version": "$RUFLO_VERSION",
   "timestamp": "$(date -u '+%Y-%m-%dT%H:%M:%SZ')",
   "duration_seconds": $DURATION,

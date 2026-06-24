@@ -28,7 +28,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const SOURCE = resolve(__dirname, '../v3/@claude-flow/cli/src/ruvector/agent-wasm.ts');
+const SOURCE = resolve(__dirname, '../v3/@rufflo/cli/src/ruvector/agent-wasm.ts');
 
 function fail(msg) { console.error(`✗ ${msg}`); process.exitCode = 1; }
 function pass(msg) { console.log(`✓ ${msg}`); }

@@ -83,11 +83,11 @@ Value: { phase, passed, criteria: [{name, passed, detail}], blockers: [] }
 ## Phase State Management
 
 Track current phase in memory:
-- `mcp__claude-flow__memory_store` with namespace `sparc-state`, key `current-phase-{feature-slug}`
+- `mcp__rufflo__memory_store` with namespace `sparc-state`, key `current-phase-{feature-slug}`
 - Value: `{ phase: 1-5, phaseName, feature, startedAt, gateAttempts, artifacts: [] }`
 
 Before any phase operation, retrieve current state to prevent drift:
-- `mcp__claude-flow__memory_search` with namespace `sparc-state` and query for the feature slug
+- `mcp__rufflo__memory_search` with namespace `sparc-state` and query for the feature slug
 
 ## Agent Spawning
 
@@ -105,20 +105,20 @@ Each agent receives the artifacts from all previous phases via memory retrieval.
 
 ## Cross-References
 
-- **ruflo-goals**: Use horizon tracking to place SPARC features within long-term planning horizons. Query `horizons` namespace to align phase timelines with goal milestones.
-- **ruflo-workflows**: SPARC phases can be codified as workflow templates. Use `mcp__claude-flow__workflow_create` to create reusable phase workflows.
-- **ruflo-ddd**: Architecture phase (Phase 3) directly leverages DDD bounded context patterns. Query `ddd-contexts` namespace for existing domain models.
+- **rufflo-goals**: Use horizon tracking to place SPARC features within long-term planning horizons. Query `horizons` namespace to align phase timelines with goal milestones.
+- **rufflo-workflows**: SPARC phases can be codified as workflow templates. Use `mcp__rufflo__workflow_create` to create reusable phase workflows.
+- **rufflo-ddd**: Architecture phase (Phase 3) directly leverages DDD bounded context patterns. Query `ddd-contexts` namespace for existing domain models.
 
 ## Neural Learning
 
 After completing a full SPARC cycle:
-1. Record the trajectory: `mcp__claude-flow__hooks_intelligence_trajectory-start` through `trajectory-end`
-2. Train patterns: `mcp__claude-flow__neural_train` with the successful phase sequence
-3. Store the pattern: `mcp__claude-flow__memory_store` with namespace `patterns`, key `sparc-{feature-slug}`
+1. Record the trajectory: `mcp__rufflo__hooks_intelligence_trajectory-start` through `trajectory-end`
+2. Train patterns: `mcp__rufflo__neural_train` with the successful phase sequence
+3. Store the pattern: `mcp__rufflo__memory_store` with namespace `patterns`, key `sparc-{feature-slug}`
 
 Use learned patterns to predict phase durations and common blockers:
-- `mcp__claude-flow__neural_predict` with the feature description to estimate phase effort
-- `mcp__claude-flow__memory_search` with namespace `patterns` and query for similar features
+- `mcp__rufflo__neural_predict` with the feature description to estimate phase effort
+- `mcp__rufflo__memory_search` with namespace `patterns` and query for similar features
 
 ## Memory Namespaces
 
@@ -131,15 +131,15 @@ Use learned patterns to predict phase durations and common blockers:
 
 ## MCP Tools
 
-- `mcp__claude-flow__memory_store` / `memory_search` / `memory_retrieve` — phase state and artifacts
-- `mcp__claude-flow__task_create` / `task_update` / `task_complete` — track phase tasks
-- `mcp__claude-flow__hooks_intelligence_trajectory-start` / `trajectory-step` / `trajectory-end` — record execution trajectories
-- `mcp__claude-flow__neural_predict` / `neural_train` — predict and learn from SPARC cycles
-- `mcp__claude-flow__workflow_create` / `workflow_execute` — automate repeatable phase workflows
+- `mcp__rufflo__memory_store` / `memory_search` / `memory_retrieve` — phase state and artifacts
+- `mcp__rufflo__task_create` / `task_update` / `task_complete` — track phase tasks
+- `mcp__rufflo__hooks_intelligence_trajectory-start` / `trajectory-step` / `trajectory-end` — record execution trajectories
+- `mcp__rufflo__neural_predict` / `neural_train` — predict and learn from SPARC cycles
+- `mcp__rufflo__workflow_create` / `workflow_execute` — automate repeatable phase workflows
 
 ### Neural Learning
 
 After each phase or full SPARC cycle, feed the phase-quality learning loop so quality gates self-tune:
 ```bash
-npx @claude-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
+npx @rufflo/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
 ```

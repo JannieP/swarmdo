@@ -20,7 +20,7 @@ allowed-tools: Bash
 1. **Run the script** from anywhere:
 
    ```bash
-   node plugins/ruflo-cost-tracker/scripts/conversation.mjs
+   node plugins/rufflo-cost-tracker/scripts/conversation.mjs
    ```
 
    Optional env:

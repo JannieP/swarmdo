@@ -1,7 +1,7 @@
 {
-  "name": "@claude-flow/plugin-legal-contracts",
+  "name": "@rufflo/plugin-legal-contracts",
   "version": "3.0.0-alpha.2",
-  "description": "Legal contract analysis plugin for Claude Flow V3 - clause extraction, risk assessment, contract comparison, obligation tracking, and playbook matching",
+  "description": "Legal contract analysis plugin for Rufflo V3 - clause extraction, risk assessment, contract comparison, obligation tracking, and playbook matching",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -44,7 +44,7 @@
     "tag": "v3alpha"
   },
   "keywords": [
-    "claude-flow",
+    "rufflo",
     "plugin",
     "legal",
     "contracts",
@@ -54,7 +54,7 @@
     "obligation-tracking",
     "mcp"
   ],
-  "author": "Claude Flow Team",
+  "author": "Rufflo Team",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -70,7 +70,7 @@
     "vitest": "^1.0.0"
   },
   "peerDependencies": {
-    "@claude-flow/plugins": "^3.0.0-alpha.1"
+    "@rufflo/plugins": "^3.0.0-alpha.1"
   },
   "engines": {
     "node": ">=20.0.0"

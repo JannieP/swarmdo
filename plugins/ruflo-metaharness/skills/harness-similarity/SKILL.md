@@ -47,21 +47,21 @@ Both invariants from ADR-152 §"Smallest demonstrable spike" hold:
 
 ```bash
 # File inputs
-npx ruflo metaharness similarity --a a.json --b b.json
+npx rufflo metaharness similarity --a a.json --b b.json
 
 # Memory inputs (records persisted by oia-audit.mjs)
-npx ruflo metaharness similarity --a-key harness-X --b-key harness-Y
+npx rufflo metaharness similarity --a-key harness-X --b-key harness-Y
 
 # Per-dimension breakdown (used by ADR-151 §3.2 Recommender)
-npx ruflo metaharness similarity --a a.json --b b.json --per-dimension
+npx rufflo metaharness similarity --a a.json --b b.json --per-dimension
 
 # Alert when too-dissimilar (used by ADR-151 §3.3 Drift Detection)
-npx ruflo metaharness similarity --a a.json --b b.json --alert-below 0.5
+npx rufflo metaharness similarity --a a.json --b b.json --alert-below 0.5
 ```
 
 ## Implementation
 
 Production module: [`scripts/_similarity.mjs`](../../scripts/_similarity.mjs)
 CLI skill: [`scripts/similarity.mjs`](../../scripts/similarity.mjs)
-MCP tool: `mcp__claude-flow__metaharness_similarity` (registered in `v3/@claude-flow/cli/src/mcp-tools/metaharness-tools.ts`)
+MCP tool: `mcp__rufflo__metaharness_similarity` (registered in `v3/@rufflo/cli/src/mcp-tools/metaharness-tools.ts`)
 Spike anchor: [`scripts/_spike-similarity.mjs`](../../scripts/_spike-similarity.mjs) (regression suite — invariants locked here)

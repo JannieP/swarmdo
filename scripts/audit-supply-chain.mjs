@@ -42,8 +42,8 @@ const REPO_ROOT = join(__dirname, '..');
 const ALLOWLIST_PATH = join(REPO_ROOT, '.github', 'supply-chain', 'allowed-deps.json');
 const ACCEPTED_PATH = join(REPO_ROOT, '.github', 'supply-chain', 'accepted-findings.json');
 const PACKAGES_TO_AUDIT = [
-  'plugins/ruflo-graph-intelligence',
-  'v3/@claude-flow/browser',
+  'plugins/rufflo-graph-intelligence',
+  'v3/@rufflo/browser',
   // Add more as supply-chain coverage expands. Existing packages with their
   // own already-passing CVE story (memory, hooks, etc.) can come online by
   // adding them here.
@@ -230,7 +230,7 @@ function runAllowlistAudit(allowlist) {
     // Find this package's package.json by scanning known locations
     const candidates = [
       join(REPO_ROOT, 'plugins', pkgName, 'package.json'),
-      join(REPO_ROOT, 'v3', pkgName, 'package.json'), // e.g. v3/@claude-flow/browser
+      join(REPO_ROOT, 'v3', pkgName, 'package.json'), // e.g. v3/@rufflo/browser
     ];
     let pkgPath;
     for (const c of candidates) {
@@ -324,7 +324,7 @@ function runPublisherTrustAudit(allowlist) {
 // ---------------------------------------------------------------------------
 
 function main() {
-  log('=== ruflo supply-chain audit ===');
+  log('=== rufflo supply-chain audit ===');
   log(`scope: ${SCOPE}`);
   const allowlist = loadAllowlist();
   const accepted = loadAcceptedFindings();

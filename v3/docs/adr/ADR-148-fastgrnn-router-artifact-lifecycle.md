@@ -7,7 +7,7 @@
 
 ## Context
 
-`v3/@claude-flow/cli/src/ruvector/model-router.ts` shipped a **lexical complexity
+`v3/@rufflo/cli/src/ruvector/model-router.ts` shipped a **lexical complexity
 heuristic + Thompson-sampling Beta-Bernoulli bandit** even though its file header
 and ADR-026 both described a **`@ruvector/tiny-dancer` FastGRNN neural router**.
 #2329 closed the documentation–implementation gap via Option A in #2330 (docs +
@@ -72,14 +72,14 @@ ADR-026.
 
 ## Decision
 
-Wire `@metaharness/router@^0.3.2` into `@claude-flow/cli`'s model routing path,
+Wire `@metaharness/router@^0.3.2` into `@rufflo/cli`'s model routing path,
 with `@ruvector/tiny-dancer@^0.1.22` as an optional peer for native
 acceleration. Default behavior remains **byte-identical** to the shipped
 heuristic + bandit until a model is intentionally adopted. Six phases:
 
 ### 1. Dependencies (ADR-124)
 
-- `@claude-flow/cli/package.json` `optionalDependencies`:
+- `@rufflo/cli/package.json` `optionalDependencies`:
   - `@metaharness/router: ^0.3.2`           (pure TS, no native)
   - `@ruvector/tiny-dancer: ^0.1.22`        (optional native acceleration)
 - Both resolved via dynamic `import()` inside `neural-router.ts`. If either is
@@ -313,8 +313,8 @@ Sequenced for the smallest credible PR first:
 **PR 1 — Phase 1 (smallest, default behavior byte-identical)**
 
 - Add `@metaharness/router ^0.3.2` and `@ruvector/tiny-dancer ^0.1.22` to
-  `@claude-flow/cli/package.json` `optionalDependencies`.
-- Add `v3/@claude-flow/cli/src/ruvector/neural-router.ts` exporting one
+  `@rufflo/cli/package.json` `optionalDependencies`.
+- Add `v3/@rufflo/cli/src/ruvector/neural-router.ts` exporting one
   function: `tryCostOptimalRoute(embedding) → Promise<{model, predictedQuality,
   metBar, routedBy} | null>`. Returns `null` unless
   `CLAUDE_FLOW_ROUTER_NEURAL=1` is set, a seed corpus or trained artifact
@@ -346,8 +346,8 @@ Sequenced for the smallest credible PR first:
 
 - Issues: #2329 (closed, Option A), #2334 (open, Option B), #2250 (closed)
 - ADRs: ADR-026 (3-tier routing), ADR-074, ADR-086, ADR-124, ADR-142, ADR-143
-- Code: `v3/@claude-flow/cli/src/ruvector/model-router.ts`,
-  `v3/@claude-flow/cli/src/ruvector/enhanced-model-router.ts`
+- Code: `v3/@rufflo/cli/src/ruvector/model-router.ts`,
+  `v3/@rufflo/cli/src/ruvector/enhanced-model-router.ts`
 - Upstream:
   - `@metaharness/router@0.3.2` (2026-06-15, exports `Router`, `TrainedRouter`,
     `trainRouter`, `NativeRouter`, `trainNativeRouter`, `resolveRouterBackend`,

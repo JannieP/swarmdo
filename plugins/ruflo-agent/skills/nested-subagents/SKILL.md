@@ -42,8 +42,8 @@ Skip this skill when flat fan-out (`Task` × N in one message) suffices — nest
 | Source | Limit |
 |---|---|
 | Anthropic API | 5 levels (announced 2026-06-09) |
-| Ruflo default (`pre-task` hook) | 4 levels — one-level guard band, configurable in `claude-flow.config.json` |
-| Strict-mode env var | `CLAUDE_FLOW_STRICT_NESTING=true` to enforce the ruflo cap |
+| Rufflo default (`pre-task` hook) | 4 levels — one-level guard band, configurable in `rufflo.config.json` |
+| Strict-mode env var | `CLAUDE_FLOW_STRICT_NESTING=true` to enforce the rufflo cap |
 
 The hook returns a typed `NESTING_DEPTH_EXCEEDED` error at the cap, with the full chain in the payload so the parent can decide to summarize, hand off, or abort.
 
@@ -52,7 +52,7 @@ The hook returns a typed `NESTING_DEPTH_EXCEEDED` error at the cap, with the ful
 - **Context isolation per level** — top-level coordinator never sees inner chatter; leaf summaries climb back up.
 - **Deeper delegation without re-summarization** — eliminates the "summarize at level 1 to fit it all" anti-pattern that flat fan-out forces.
 - **Tree-shaped cost attribution** — `parent_agent_id` lineage gives accurate per-tree spend, not just flat per-agent.
-- **Maps cleanly onto ruflo's existing orchestrators** — `ruflo-sparc:sparc-orchestrator` (5 phases ≈ 5 levels), `ruflo-goals:dossier-investigator` (recursive entity expansion), `v3-queen-coordinator` (hierarchical-mesh top).
+- **Maps cleanly onto rufflo's existing orchestrators** — `rufflo-sparc:sparc-orchestrator` (5 phases ≈ 5 levels), `rufflo-goals:dossier-investigator` (recursive entity expansion), `v3-queen-coordinator` (hierarchical-mesh top).
 
 ## Anti-patterns (do NOT)
 
@@ -63,7 +63,7 @@ The hook returns a typed `NESTING_DEPTH_EXCEEDED` error at the cap, with the ful
 
 ## Related
 
-- **Agent**: `ruflo-agent:nested-coordinator` — the orchestrator
+- **Agent**: `rufflo-agent:nested-coordinator` — the orchestrator
 - **ADR-147** — design rationale and four-phase rollout
 - **ADR-144** — authorization propagation shares the depth counter as `AuthScope.delegationDepth`
 - **ADR-099** — dossier investigator (recursive parallel research) is the textbook deep use case

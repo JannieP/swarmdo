@@ -45,7 +45,7 @@ import { TextEncoder } from 'node:util';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, '..');
-const PLUGIN_DIR = join(REPO_ROOT, 'plugins', 'ruflo-neural-trader');
+const PLUGIN_DIR = join(REPO_ROOT, 'plugins', 'rufflo-neural-trader');
 const ARTIFACT_TS = join(PLUGIN_DIR, 'src', 'signed-artifact.ts');
 const ARTIFACT_MJS = join(PLUGIN_DIR, 'src', 'signed-artifact.mjs');
 const TRADER_BACKTEST_MD = join(PLUGIN_DIR, 'skills', 'trader-backtest', 'SKILL.md');
@@ -79,7 +79,7 @@ if (!existsSync(ARTIFACT_TS)) {
   check(
     'TS declares `SignedBacktestArtifact` interface with required fields',
     /interface\s+SignedBacktestArtifact/.test(src) &&
-      /schema\s*:\s*'ruflo-neural-trader-backtest\/v1'/.test(src) &&
+      /schema\s*:\s*'rufflo-neural-trader-backtest\/v1'/.test(src) &&
       /witnessPublicKey\s*:\s*string/.test(src) &&
       /witnessSignature\s*:\s*string/.test(src) &&
       /paramsHash\s*:\s*string/.test(src) &&
@@ -195,7 +195,7 @@ if (ed && signBacktestArtifact && verifyBacktestArtifact) {
   // sanity: artifact has the documented shape
   check(
     'signed artifact carries schema + witnessPublicKey + witnessSignature',
-    signed.schema === 'ruflo-neural-trader-backtest/v1' &&
+    signed.schema === 'rufflo-neural-trader-backtest/v1' &&
       typeof signed.witnessPublicKey === 'string' &&
       signed.witnessPublicKey.startsWith('ed25519:') &&
       typeof signed.witnessSignature === 'string' &&

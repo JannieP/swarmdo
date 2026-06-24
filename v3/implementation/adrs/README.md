@@ -1,6 +1,6 @@
 # V3 Architecture Decision Records (ADRs)
 
-This directory contains all Architecture Decision Records for Claude-Flow v3.
+This directory contains all Architecture Decision Records for Rufflo v3.
 
 **Status:** ✅ **BETA READY** (22 ADRs Complete)
 **Version:** 3.0.0-alpha.84
@@ -63,7 +63,7 @@ This directory contains all Architecture Decision Records for Claude-Flow v3.
 
 | ADR | Title | Status | File |
 |-----|-------|--------|------|
-| ADR-046 | Dual Umbrella: claude-flow + ruflo | Accepted | [ADR-046-ruflo-rebrand.md](./ADR-046-ruflo-rebrand.md) |
+| ADR-046 | Dual Umbrella: rufflo + rufflo | Accepted | [ADR-046-rufflo-rebrand.md](./ADR-046-rufflo-rebrand.md) |
 | ADR-047 | Fast Mode Integration | Proposed | [ADR-047-fast-mode-integration.md](./ADR-047-fast-mode-integration.md) |
 | ADR-048 | Auto Memory Integration | Accepted | [ADR-048-auto-memory-integration.md](./ADR-048-auto-memory-integration.md) |
 
@@ -143,8 +143,8 @@ This directory contains all Architecture Decision Records for Claude-Flow v3.
 | Metric | Target | ADR Reference |
 |--------|--------|---------------|
 | Code reduction | <5,000 lines vs 15,000+ | ADR-001 |
-| HNSW search | 150x-12,500x faster | ADR-009 |
-| Flash Attention | 2.49x-7.47x speedup | ADR-001 |
+| HNSW search | ~1.9x-4.7x measured faster | ADR-009 |
+| Flash Attention | unverified (no benchmark) speedup | ADR-001 |
 | Test execution | <5s (10x improvement) | ADR-008 |
 | Startup time | <500ms | ADR-004 |
 | Query latency | <100ms | ADR-006 |
@@ -159,12 +159,12 @@ All ADRs consider security:
 ---
 
 **Last Updated:** 2026-01-13
-**Project:** Claude-Flow V3
+**Project:** Rufflo V3
 **Version:** 3.0.0-alpha.84 (Beta Ready)
 
 ### Recent Updates (2026-01-13)
 
-#### Release: @claude-flow/cli@3.0.0-alpha.84 (Beta Ready)
+#### Release: @rufflo/cli@3.0.0-alpha.84 (Beta Ready)
 
 **All Audit Issues Resolved:**
 
@@ -176,17 +176,17 @@ All ADRs consider security:
 
 **Auto-Update System (ADR-025):**
 ```bash
-npx claude-flow update check      # Check for updates
-npx claude-flow update all        # Update all packages
-npx claude-flow update history    # View update history
-npx claude-flow update rollback   # Rollback last update
+npx rufflo update check      # Check for updates
+npx rufflo update all        # Update all packages
+npx rufflo update history    # View update history
+npx rufflo update rollback   # Rollback last update
 ```
 
 ---
 
 ### Previous Updates (2026-01-07)
 
-#### Release: @claude-flow/cli@3.0.0-alpha.15 (Latest)
+#### Release: @rufflo/cli@3.0.0-alpha.15 (Latest)
 
 **Doctor Command Enhancements**:
 - **Claude Code CLI Check**: Verifies `@anthropic-ai/claude-code` installation
@@ -195,18 +195,18 @@ npx claude-flow update rollback   # Rollback last update
 
 ```bash
 # Check system health including Claude Code CLI
-npx claude-flow@v3alpha doctor
+npx rufflo@v3alpha doctor
 
 # Auto-install Claude Code CLI if missing
-npx claude-flow@v3alpha doctor --install
+npx rufflo@v3alpha doctor --install
 
 # Check only Claude Code CLI
-npx claude-flow@v3alpha doctor -c claude
+npx rufflo@v3alpha doctor -c claude
 ```
 
-**Package Resolution Fix**: Fixed Windows module resolution issue where `@claude-flow/cli` exports pointed to wrong paths (`dist/index.js` → `dist/src/index.js`).
+**Package Resolution Fix**: Fixed Windows module resolution issue where `@rufflo/cli` exports pointed to wrong paths (`dist/index.js` → `dist/src/index.js`).
 
-#### Release: @claude-flow/cli@3.0.0-alpha.7
+#### Release: @rufflo/cli@3.0.0-alpha.7
 - **Hive-Mind CLI**: All MCP tools now exposed via CLI subcommands:
   - `hive-mind join <agent-id>` - Join agent to hive
   - `hive-mind leave <agent-id>` - Remove agent from hive
@@ -214,7 +214,7 @@ npx claude-flow@v3alpha doctor -c claude
   - `hive-mind broadcast -m <msg>` - Broadcast messages to workers
   - `hive-mind memory` - Access shared memory (get/set/delete/list)
 - **Bug Fix**: Fixed positional argument parsing for subcommands in CLI parser
-- **File Persistence**: All MCP tools use file-based persistence in `.claude-flow/` directories
+- **File Persistence**: All MCP tools use file-based persistence in `.rufflo/` directories
 - **ADR-014**: Node.js Worker Daemon - cross-platform TypeScript daemon replaces shell helpers
 - **CLI**: `daemon` command with start/stop/status/trigger/enable subcommands
 - **Session Integration**: Auto-start daemon on SessionStart, auto-stop on SessionEnd
@@ -232,10 +232,10 @@ npx claude-flow@v3alpha doctor -c claude
 
 #### Install
 ```bash
-npx @claude-flow/cli@v3alpha --help
+npx @rufflo/cli@v3alpha --help
 ```
 
-### Release: @claude-flow/cli@3.0.0-alpha.11 (2026-01-07)
+### Release: @rufflo/cli@3.0.0-alpha.11 (2026-01-07)
 
 #### New V3 Advanced CLI Commands
 All commands include subcommand help and "Created with ❤️ by ruv.io" branding.
@@ -257,22 +257,22 @@ All commands include subcommand help and "Created with ❤️ by ruv.io" brandin
 
 **Smart Error Suggestions**: Typo detection with Levenshtein distance
 ```bash
-$ claude-flow swram
+$ rufflo swram
 [ERROR] Unknown command: swram
   Did you mean one of these?
   - swarm
   - neural
   - start
 
-$ claude-flow memroy
+$ rufflo memroy
 [ERROR] Unknown command: memroy
   Did you mean "memory"?
 ```
 
 **Doctor Command**: System health diagnostics
 ```bash
-$ claude-flow doctor
-Claude Flow Doctor
+$ rufflo doctor
+Rufflo Doctor
 ──────────────────────────────────────────────────
 ✓ Node.js Version: v22.21.1 (>= 20 required)
 ✓ npm Version: v10.9.4
@@ -292,16 +292,16 @@ Summary: 6 passed, 5 warnings
 **Shell Completions**: Tab completion for all shells
 ```bash
 # Install bash completions
-claude-flow completions bash > ~/.bash_completion.d/claude-flow
+rufflo completions bash > ~/.bash_completion.d/rufflo
 
 # Install zsh completions
-claude-flow completions zsh > ~/.zfunc/_claude-flow
+rufflo completions zsh > ~/.zfunc/_rufflo
 
 # Install fish completions
-claude-flow completions fish > ~/.config/fish/completions/claude-flow.fish
+rufflo completions fish > ~/.config/fish/completions/rufflo.fish
 
 # Install PowerShell completions
-claude-flow completions powershell >> $PROFILE
+rufflo completions powershell >> $PROFILE
 ```
 
 ## CLI Roadmap
@@ -316,41 +316,41 @@ claude-flow completions powershell >> $PROFILE
 | 🟡 P1 | Resolve provider config overlap | Pending | Unify provider configs across embeddings/providers commands |
 | 🟡 P1 | Add unified `logs` command | Pending | Centralized log viewing across daemon, agents, swarms |
 | 🟢 P2 | Add `upgrade` command | Pending | Self-update CLI to latest version |
-| 🟢 P2 | Add interactive shell/REPL mode | Pending | `claude-flow shell` for interactive command execution |
+| 🟢 P2 | Add interactive shell/REPL mode | Pending | `rufflo shell` for interactive command execution |
 
 ### Implementation Plan
 
 **P0 - Critical (Next Release)**
 ```bash
 # Doctor command - diagnose system health
-claude-flow doctor              # Full system check
-claude-flow doctor --fix        # Auto-fix issues where possible
-claude-flow doctor --component mcp  # Check specific component
+rufflo doctor              # Full system check
+rufflo doctor --fix        # Auto-fix issues where possible
+rufflo doctor --component mcp  # Check specific component
 
 # Shell completions
-claude-flow completions bash > ~/.bash_completion.d/claude-flow
-claude-flow completions zsh > ~/.zfunc/_claude-flow
-claude-flow completions fish > ~/.config/fish/completions/claude-flow.fish
+rufflo completions bash > ~/.bash_completion.d/rufflo
+rufflo completions zsh > ~/.zfunc/_rufflo
+rufflo completions fish > ~/.config/fish/completions/rufflo.fish
 ```
 
 **P1 - High Priority**
 ```bash
 # Unified logs command
-claude-flow logs                # All logs
-claude-flow logs --follow       # Tail logs
-claude-flow logs --component daemon
-claude-flow logs --level error
+rufflo logs                # All logs
+rufflo logs --follow       # Tail logs
+rufflo logs --component daemon
+rufflo logs --level error
 ```
 
 **P2 - Nice to Have**
 ```bash
 # Self-update
-claude-flow upgrade             # Upgrade to latest
-claude-flow upgrade --check     # Check for updates
-claude-flow upgrade --version 3.1.0
+rufflo upgrade             # Upgrade to latest
+rufflo upgrade --check     # Check for updates
+rufflo upgrade --version 3.1.0
 
 # Interactive shell
-claude-flow shell               # Enter REPL
+rufflo shell               # Enter REPL
 > swarm init mesh
 > agent spawn coder
 > memory search "patterns"
@@ -358,11 +358,11 @@ claude-flow shell               # Enter REPL
 
 ---
 
-## agentic-flow vs claude-flow Feature Comparison
+## agentic-flow vs rufflo Feature Comparison
 
 ### Feature Matrix
 
-| Feature | agentic-flow | claude-flow | Integration Value |
+| Feature | agentic-flow | rufflo | Integration Value |
 |---------|--------------|-------------|-------------------|
 | **Core Agent System** | | | |
 | Specialized Agents | 66+ | 15 (hierarchical) | 🟡 |
@@ -411,36 +411,36 @@ claude-flow shell               # Enter REPL
 **1. QUIC Transport (50-70% faster)**
 ```bash
 # Integration target:
-claude-flow transport quic --port 4433
-claude-flow swarm start --transport quic  # 50-70% faster agent comms
+rufflo transport quic --port 4433
+rufflo swarm start --transport quic  # 50-70% faster agent comms
 ```
 
 **2. Federation Hub (Ephemeral Agents)**
 ```bash
 # Integration target:
-claude-flow federation start --port 9443
-claude-flow federation spawn --tenant acme --lifetime 600
+rufflo federation start --port 9443
+rufflo federation spawn --tenant acme --lifetime 600
 ```
 *Value: Agents die but memories persist → learning across agent generations*
 
 **3. Model Optimization (85% cost savings)**
 ```bash
 # Integration target:
-claude-flow agent spawn -t coder --optimize --priority cost
-claude-flow providers optimize --task "Build API" --budget 0.01
+rufflo agent spawn -t coder --optimize --priority cost
+rufflo providers optimize --task "Build API" --budget 0.01
 ```
 
 **4. Provider Fallback (Enterprise resilience)**
 ```bash
 # Integration target:
-claude-flow providers fallback configure --primary anthropic --fallback openrouter,onnx
+rufflo providers fallback configure --primary anthropic --fallback openrouter,onnx
 ```
 
 **5. ReasoningBank (WASM Learning Memory)**
 ```bash
 # Integration target:
-claude-flow reasoningbank store "pattern" --reasoning "..."
-claude-flow reasoningbank search "authentication patterns"
+rufflo reasoningbank store "pattern" --reasoning "..."
+rufflo reasoningbank search "authentication patterns"
 ```
 *Value: 10-100x faster reasoning pattern storage vs JSON*
 
@@ -464,9 +464,9 @@ claude-flow reasoningbank search "authentication patterns"
 
 ```bash
 # After Phase 1:
-claude-flow agent spawn -t coder --optimize --priority cost
-claude-flow providers fallback configure --primary anthropic --fallback openrouter,onnx
-claude-flow embeddings download all-MiniLM-L6-v2
+rufflo agent spawn -t coder --optimize --priority cost
+rufflo providers fallback configure --primary anthropic --fallback openrouter,onnx
+rufflo embeddings download all-MiniLM-L6-v2
 ```
 
 #### Phase 2: Core Integration (2-3 weeks) → 9.5 → 9.7
@@ -480,10 +480,10 @@ claude-flow embeddings download all-MiniLM-L6-v2
 
 ```bash
 # After Phase 2:
-claude-flow federation start --port 9443
-claude-flow federation spawn --lifetime 300 --task "Quick analysis"
-claude-flow proxy start --provider openrouter
-claude-flow daemon dispatch security-audit
+rufflo federation start --port 9443
+rufflo federation spawn --lifetime 300 --task "Quick analysis"
+rufflo proxy start --provider openrouter
+rufflo daemon dispatch security-audit
 ```
 
 #### Phase 3: Advanced (4-6 weeks) → 9.7 → 9.9
@@ -496,16 +496,16 @@ claude-flow daemon dispatch security-audit
 
 ```bash
 # After Phase 3:
-claude-flow swarm start --transport quic  # 50-70% faster
-claude-flow reasoningbank store "pattern" --reasoning "..."
-claude-flow agent spawn -t security-analyst  # One of 66 types
+rufflo swarm start --transport quic  # 50-70% faster
+rufflo reasoningbank store "pattern" --reasoning "..."
+rufflo agent spawn -t security-analyst  # One of 66 types
 ```
 
 ### Recommended Integration Approach
 
 **Option A: Dependency Approach (Fastest)**
 ```json
-// claude-flow/package.json
+// rufflo/package.json
 {
   "dependencies": {
     "agentic-flow": "^2.0.3"
@@ -516,17 +516,17 @@ claude-flow agent spawn -t security-analyst  # One of 66 types
 **Option B: Port Code (More Control)**
 ```bash
 # Copy specific modules:
-- agentic-flow/src/transport/quic.ts → claude-flow/src/transport/
-- agentic-flow/src/federation/ → claude-flow/src/federation/
-- agentic-flow/src/reasoningbank/ → claude-flow/src/reasoningbank/
+- agentic-flow/src/transport/quic.ts → rufflo/src/transport/
+- agentic-flow/src/federation/ → rufflo/src/federation/
+- agentic-flow/src/reasoningbank/ → rufflo/src/reasoningbank/
 ```
 
 **Option C: Unified Package (Long-term)**
 ```bash
-@claude-flow/core      # Shared primitives
-@claude-flow/cli       # CLI (current)
-@claude-flow/agents    # From agentic-flow's 66 agents
-@claude-flow/transport # QUIC + HTTP + WebSocket
+@rufflo/core      # Shared primitives
+@rufflo/cli       # CLI (current)
+@rufflo/agents    # From agentic-flow's 66 agents
+@rufflo/transport # QUIC + HTTP + WebSocket
 ```
 
 ---
@@ -545,21 +545,21 @@ claude-flow agent spawn -t security-analyst  # One of 66 types
 
 ### Feature Overlap Analysis
 
-**claude-flow ALREADY HAS** (via @claude-flow/embeddings):
-| Feature | claude-flow | ruvector | Status |
+**rufflo ALREADY HAS** (via @rufflo/embeddings):
+| Feature | rufflo | ruvector | Status |
 |---------|-------------|----------|--------|
 | ONNX Embeddings | ✅ agentic-flow (~3ms) | ✅ @ruvector/core | **Equivalent** |
 | Local Embeddings | ✅ all-MiniLM-L6-v2 | ✅ all-MiniLM-L6-v2 | **Equivalent** |
-| HNSW Indexing | ✅ @claude-flow/memory | ✅ @ruvector/core | **Equivalent** |
+| HNSW Indexing | ✅ @rufflo/memory | ✅ @ruvector/core | **Equivalent** |
 | Persistent Cache | ✅ SQLite + LRU | ✅ Memory cache | **Equivalent** |
-| Hyperbolic Embeddings | ✅ Poincaré ball | ❌ | **claude-flow ahead** |
-| Document Chunking | ✅ 4 strategies | ❌ | **claude-flow ahead** |
-| Normalization | ✅ L2, L1, min-max, z-score | ❌ | **claude-flow ahead** |
-| Neural Substrate | ✅ Drift, memory physics | ❌ | **claude-flow ahead** |
+| Hyperbolic Embeddings | ✅ Poincaré ball | ❌ | **rufflo ahead** |
+| Document Chunking | ✅ 4 strategies | ❌ | **rufflo ahead** |
+| Normalization | ✅ L2, L1, min-max, z-score | ❌ | **rufflo ahead** |
+| Neural Substrate | ✅ Drift, memory physics | ❌ | **rufflo ahead** |
 
 ### Unique ruvector Features (Integration Candidates)
 
-#### 🔴 Tier 1: High Value (claude-flow lacks these)
+#### 🔴 Tier 1: High Value (rufflo lacks these)
 
 | Feature | ruvector Source | Integration Target | Value |
 |---------|-----------------|-------------------|-------|
@@ -583,7 +583,7 @@ claude-flow agent spawn -t security-analyst  # One of 66 types
 | Louvain Communities | `hooks_graph_cluster` | Module detection |
 | GNN Layers | `@ruvector/gnn` | Graph analysis |
 
-*Note: Flash Attention, SONA Learning, HNSW, and ONNX embeddings are already in claude-flow via agentic-flow.*
+*Note: Flash Attention, SONA Learning, HNSW, and ONNX embeddings are already in rufflo via agentic-flow.*
 
 ### MCP Tools from ruvector (Unique Only)
 
@@ -599,16 +599,16 @@ claude mcp add ruvector-mcp -- npx ruvector mcp-server
 - `hooks_coverage_route`, `hooks_coverage_suggest` — Test-aware routing ✅
 - `hooks_graph_mincut`, `hooks_graph_cluster` — Code boundaries ✅
 
-**Already in claude-flow (skip):**
-- `hooks_rag_context` — Use @claude-flow/memory instead
-- `hooks_attention_info` — Use @claude-flow/neural instead
-- Embeddings tools — Use @claude-flow/embeddings instead
+**Already in rufflo (skip):**
+- `hooks_rag_context` — Use @rufflo/memory instead
+- `hooks_attention_info` — Use @rufflo/neural instead
+- Embeddings tools — Use @rufflo/embeddings instead
 
 ### Integration Approach
 
 **Recommended: Option A - Add as Optional Dependency (for unique features only)**
 ```json
-// @claude-flow/cli/package.json
+// @rufflo/cli/package.json
 {
   "optionalDependencies": {
     "ruvector": "^0.1.95"
@@ -619,22 +619,22 @@ claude mcp add ruvector-mcp -- npx ruvector mcp-server
 **CLI Wrappers (unique ruvector features):**
 ```bash
 # Q-Learning agent routing (unique to ruvector)
-claude-flow route "task" --q-learning          # Uses hooks_route
+rufflo route "task" --q-learning          # Uses hooks_route
 
 # AST analysis (unique to ruvector)
-claude-flow analyze ast src/                   # Uses hooks_ast_analyze
+rufflo analyze ast src/                   # Uses hooks_ast_analyze
 
 # Diff classification (unique to ruvector)
-claude-flow analyze diff --risk                # Uses hooks_diff_analyze
+rufflo analyze diff --risk                # Uses hooks_diff_analyze
 
 # Coverage-aware routing (unique to ruvector)
-claude-flow route "task" --coverage-aware      # Uses hooks_coverage_route
+rufflo route "task" --coverage-aware      # Uses hooks_coverage_route
 ```
 
-**Already in claude-flow (DO NOT import from ruvector):**
+**Already in rufflo (DO NOT import from ruvector):**
 ```bash
-claude-flow embeddings generate --local        # Uses @claude-flow/embeddings (ONNX)
-claude-flow memory search --semantic "query"   # Uses @claude-flow/memory (HNSW)
+rufflo embeddings generate --local        # Uses @rufflo/embeddings (ONNX)
+rufflo memory search --semantic "query"   # Uses @rufflo/memory (HNSW)
 ```
 
 ### ruvector Integration Roadmap
@@ -654,4 +654,4 @@ claude-flow memory search --semantic "query"   # Uses @claude-flow/memory (HNSW)
 - [ ] Add Louvain community detection (`analyze --modules`)
 - [ ] Integrate GNN layers for dependency graphs
 
-*Note: SONA, Flash Attention, HNSW already in claude-flow - no need to import.*
+*Note: SONA, Flash Attention, HNSW already in rufflo - no need to import.*

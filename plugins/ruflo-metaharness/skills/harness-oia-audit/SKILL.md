@@ -46,7 +46,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-      - run: node plugins/ruflo-metaharness/scripts/oia-audit.mjs --alert-on-worst high
+      - run: node plugins/rufflo-metaharness/scripts/oia-audit.mjs --alert-on-worst high
 ```
 
 `--alert-on-worst high` fails the job on any HIGH-severity finding;
@@ -58,7 +58,7 @@ Each audit run stores under `metaharness-audit:audit-<iso-ts>`. To list
 recent audits:
 
 ```bash
-npx @claude-flow/cli@latest memory list --namespace metaharness-audit --limit 10
+npx @rufflo/cli@latest memory list --namespace metaharness-audit --limit 10
 ```
 
 To diff two audits (drift detection):

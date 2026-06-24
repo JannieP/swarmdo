@@ -85,33 +85,33 @@ Span hierarchy for swarm operations:
 
 ### Tools
 
-- `mcp__claude-flow__agentdb_hierarchical-store` -- store trace spans and log entries
-- `mcp__claude-flow__agentdb_hierarchical-recall` -- recall traces by traceId or correlationId
-- `mcp__claude-flow__agentdb_pattern-store` -- store anomaly patterns for future detection
-- `mcp__claude-flow__agentdb_pattern-search` -- search for similar anomaly patterns
-- `mcp__claude-flow__agentdb_semantic-route` -- route observability queries to relevant data
-- `mcp__claude-flow__agentdb_context-synthesize` -- synthesize context from multiple trace spans
+- `mcp__rufflo__agentdb_hierarchical-store` -- store trace spans and log entries
+- `mcp__rufflo__agentdb_hierarchical-recall` -- recall traces by traceId or correlationId
+- `mcp__rufflo__agentdb_pattern-store` -- store anomaly patterns for future detection
+- `mcp__rufflo__agentdb_pattern-search` -- search for similar anomaly patterns
+- `mcp__rufflo__agentdb_semantic-route` -- route observability queries to relevant data
+- `mcp__rufflo__agentdb_context-synthesize` -- synthesize context from multiple trace spans
 
 ### Neural Learning
 
 After completing observability tasks, train patterns:
 ```bash
-npx @claude-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
-npx @claude-flow/cli@latest neural train --pattern-type observability --epochs 10
+npx @rufflo/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
+npx @rufflo/cli@latest neural train --pattern-type observability --epochs 10
 ```
 
 ### Memory Learning
 
 Store telemetry patterns and anomaly signatures:
 ```bash
-npx @claude-flow/cli@latest memory store --namespace observability --key "trace-TRACE_ID" --value "TRACE_SUMMARY_JSON"
-npx @claude-flow/cli@latest memory store --namespace observability-patterns --key "anomaly-ANOMALY_TYPE" --value "ANOMALY_SIGNATURE_JSON"
-npx @claude-flow/cli@latest memory search --query "latency spikes in authentication flow" --namespace observability
+npx @rufflo/cli@latest memory store --namespace observability --key "trace-TRACE_ID" --value "TRACE_SUMMARY_JSON"
+npx @rufflo/cli@latest memory store --namespace observability-patterns --key "anomaly-ANOMALY_TYPE" --value "ANOMALY_SIGNATURE_JSON"
+npx @rufflo/cli@latest memory search --query "latency spikes in authentication flow" --namespace observability
 ```
 
 ### Related Plugins
 
-- **ruflo-iot-cognitum**: Reuses Z-score anomaly detection for telemetry pattern analysis
-- **ruflo-loop-workers**: Background workers produce telemetry that this plugin correlates
-- **ruflo-swarm**: Agent swarm activity generates the traces and metrics this plugin collects
-- **ruflo-cost-tracker**: Token usage metrics feed into cost attribution and budget monitoring
+- **rufflo-iot-cognitum**: Reuses Z-score anomaly detection for telemetry pattern analysis
+- **rufflo-loop-workers**: Background workers produce telemetry that this plugin correlates
+- **rufflo-swarm**: Agent swarm activity generates the traces and metrics this plugin collects
+- **rufflo-cost-tracker**: Token usage metrics feed into cost attribution and budget monitoring

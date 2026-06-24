@@ -15,7 +15,7 @@ is wiring of tools that already exist in `hooks-tools.ts`.
 | skills/cost-optimize/SKILL.md              |  3,489 |   414 |    37 |
 | skills/cost-report/SKILL.md                |  2,629 |   351 |    35 |
 | agents/cost-analyst.md                     |  3,713 |   437 |    58 |
-| commands/ruflo-cost.md                     |  2,802 |   370 |    46 |
+| commands/rufflo-cost.md                     |  2,802 |   370 |    46 |
 | REFERENCE.md                               |  4,420 |   662 |    92 |
 | README.md                                  |  8,208 | 1,087 |   141 |
 | .claude-plugin/plugin.json                 |    684 |    61 |    25 |
@@ -96,11 +96,11 @@ of the new skills, all caught and fixed before this baseline was recorded:
 |---|----------------------------------|-------------------------------------------------------------|----------|-----|
 | 1 | Upstream literals exist          | `grep "AGENT_BOOSTER_AVAILABLE" hooks-tools.ts`             | found at line 1228 ✓ | none |
 | 2 | `getTokenOptimizer` exported     | `grep` token-optimizer.ts:308                               | found ✓ | none |
-| 3 | `dist/token-optimizer.js` built  | `ls v3/node_modules/@claude-flow/integration/dist/`         | present ✓ | none |
-| 4 | sibling contract honored both ways | `grep "cost-tracker" ruflo-loop-workers/README.md`        | declared at lines 46, 55 ✓ | none |
-| 5 | Skill's claimed import path      | `import("@claude-flow/integration/dist/token-optimizer.js")`| FAILED — Node resolver doubled `.js.js` via the `./*` exports rule | use canonical export `@claude-flow/integration/token-optimizer` |
+| 3 | `dist/token-optimizer.js` built  | `ls v3/node_modules/@rufflo/integration/dist/`         | present ✓ | none |
+| 4 | sibling contract honored both ways | `grep "cost-tracker" rufflo-loop-workers/README.md`        | declared at lines 46, 55 ✓ | none |
+| 5 | Skill's claimed import path      | `import("@rufflo/integration/dist/token-optimizer.js")`| FAILED — Node resolver doubled `.js.js` via the `./*` exports rule | use canonical export `@rufflo/integration/token-optimizer` |
 | 6 | Skill's claimed availability API | `opt.isAgentBoosterAvailable?.()`                           | undefined — method does not exist on the singleton | switched to `getStats().agenticFlowAvailable` (the actual public field) |
-| 7 | Booster signal under published CLI | `npx @claude-flow/cli@latest hooks route --task "var to const"` | router used semantic-VectorDb path; **no `[AGENT_BOOSTER_AVAILABLE]` emitted** | added "sparse signal" caveat to the skill — the partition is a lower bound on Tier 1 eligibility |
+| 7 | Booster signal under published CLI | `npx @rufflo/cli@latest hooks route --task "var to const"` | router used semantic-VectorDb path; **no `[AGENT_BOOSTER_AVAILABLE]` emitted** | added "sparse signal" caveat to the skill — the partition is a lower bound on Tier 1 eligibility |
 | 8 | Bridge returns expected shape    | Node one-liner with corrected import + stats key            | `{memoriesRetrieved:0, tokensSaved:0, agenticFlowAvailable:false, cacheHitRate:"0%"}` ✓ — graceful fallback when agentic-flow not installed | none |
 
 The first four checks confirm what the ADR claimed about the upstream
@@ -130,7 +130,7 @@ timestamped JSON. Smoke step 23 fails CI if `summary.winRate < 0.80`.
 ### Run command
 
 ```bash
-( cd v3 && node ../plugins/ruflo-cost-tracker/scripts/bench.mjs )
+( cd v3 && node ../plugins/rufflo-cost-tracker/scripts/bench.mjs )
 ```
 
 ### Latest result (2026-05-05, 12-case corpus)
@@ -200,7 +200,7 @@ All four endpoints achieve 12/12. Booster matches frontier LLM accuracy on this 
 | Claude Sonnet 4.6 | ~29.8 hours | $72.20 |
 | **Claude Opus 4.7** | **~42.7 hours** | **$472.00** |
 
-Method to refresh: `( cd v3 && BENCH_LLM_BASELINE=1 BENCH_ANTHROPIC=1 node ../plugins/ruflo-cost-tracker/scripts/bench.mjs )`.
+Method to refresh: `( cd v3 && BENCH_LLM_BASELINE=1 BENCH_ANTHROPIC=1 node ../plugins/rufflo-cost-tracker/scripts/bench.mjs )`.
 
 ### Still "claimed upstream, not yet verified"
 
@@ -309,7 +309,7 @@ Wall-time 0.08–0.09 s on all phases.
 ## How to refresh
 
 ```bash
-cd plugins/ruflo-cost-tracker
+cd plugins/rufflo-cost-tracker
 for f in skills/*/SKILL.md agents/*.md commands/*.md REFERENCE.md README.md \
          .claude-plugin/plugin.json scripts/smoke.sh; do
   wc -c "$f" | awk '{printf "%6d B  ", $1}'

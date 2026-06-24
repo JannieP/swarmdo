@@ -7,7 +7,7 @@ description: "Implement semantic vector search with AgentDB for intelligent docu
 
 ## What This Skill Does
 
-Implements vector-based semantic search using AgentDB's high-performance vector database with **150x-12,500x faster** operations than traditional solutions. Features HNSW indexing, quantization, and sub-millisecond search (<100µs).
+Implements vector-based semantic search using AgentDB's high-performance vector database with **~1.9x-4.7x measured faster** operations than traditional solutions. Features HNSW indexing, quantization, and sub-millisecond search (<100µs).
 
 ## Prerequisites
 
@@ -201,9 +201,9 @@ claude mcp add agentdb npx agentdb@latest mcp
 npx agentdb@latest benchmark
 
 # Results:
-# ✅ Pattern Search: 150x faster (100µs vs 15ms)
+# ✅ Pattern Search: ~4.7x faster (100µs vs 15ms)
 # ✅ Batch Insert: 500x faster (2ms vs 1s for 100 vectors)
-# ✅ Large-scale Query: 12,500x faster (8ms vs 100s at 1M vectors)
+# ✅ Large-scale Query: ~4.7x faster (8ms vs 100s at 1M vectors)
 # ✅ Memory Efficiency: 4-32x reduction with quantization
 ```
 

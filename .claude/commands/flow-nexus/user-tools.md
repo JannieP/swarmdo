@@ -83,7 +83,7 @@ mcp__flow-nexus__realtime_unsubscribe({
 ```javascript
 // Monitor execution stream
 mcp__flow-nexus__execution_stream_subscribe({
-  stream_type: "claude-flow-swarm",
+  stream_type: "rufflo-swarm",
   deployment_id: "deployment_id"
 })
 
@@ -95,7 +95,7 @@ mcp__flow-nexus__execution_stream_status({
 // List generated files
 mcp__flow-nexus__execution_files_list({
   stream_id: "stream_id",
-  created_by: "claude-flow",
+  created_by: "rufflo",
   file_type: "javascript"
 })
 

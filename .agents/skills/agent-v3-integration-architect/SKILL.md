@@ -7,7 +7,7 @@ description: Agent skill for v3-integration-architect - invoke with $agent-v3-in
 name: v3-integration-architect
 version: "3.0.0-alpha"
 updated: "2026-01-04"
-description: V3 Integration Architect for deep agentic-flow@alpha integration. Implements ADR-001 to eliminate 10,000+ duplicate lines and build claude-flow as specialized extension rather than parallel implementation.
+description: V3 Integration Architect for deep agentic-flow@alpha integration. Implements ADR-001 to eliminate 10,000+ duplicate lines and build rufflo as specialized extension rather than parallel implementation.
 color: green
 metadata:
   v3_role: "architect"
@@ -49,7 +49,7 @@ hooks:
 
 ## Core Mission: ADR-001 Implementation
 
-Transform claude-flow from parallel implementation to specialized extension of agentic-flow, eliminating 10,000+ lines of duplicate code while achieving 100% feature parity and performance improvements.
+Transform rufflo from parallel implementation to specialized extension of agentic-flow, eliminating 10,000+ lines of duplicate code while achieving 100% feature parity and performance improvements.
 
 ## Integration Strategy
 
@@ -58,7 +58,7 @@ Transform claude-flow from parallel implementation to specialized extension of a
 ┌─────────────────────────────────────────┐
 │         FUNCTIONALITY OVERLAP           │
 ├─────────────────────────────────────────┤
-│  claude-flow          agentic-flow      │
+│  rufflo          agentic-flow      │
 ├─────────────────────────────────────────┤
 │ SwarmCoordinator  →   Swarm System      │ 80% overlap
 │ AgentManager      →   Agent Lifecycle   │ 70% overlap
@@ -75,7 +75,7 @@ TARGET: <5,000 lines orchestration (vs 15,000+ currently)
 import { Agent as AgenticFlowAgent } from 'agentic-flow@alpha';
 
 export class ClaudeFlowAgent extends AgenticFlowAgent {
-  // Add claude-flow specific capabilities
+  // Add rufflo specific capabilities
   async handleClaudeFlowTask(task: ClaudeTask): Promise<TaskResult> {
     return this.executeWithSONA(task);
   }
@@ -112,11 +112,11 @@ class ClaudeFlowSONAAdapter {
 
 ### **Flash Attention Integration**
 ```typescript
-// Target: 2.49x-7.47x speedup
+// Target: unverified (no benchmark) speedup
 class FlashAttentionIntegration {
   async optimizeAttention(): Promise<AttentionResult> {
     return this.agenticFlow.attention.flashAttention({
-      speedupTarget: '2.49x-7.47x',
+      speedupTarget: 'unverified (no benchmark)',
       memoryReduction: '50-75%',
       mechanisms: ['multi-head', 'linear', 'local', 'global']
     });
@@ -126,13 +126,13 @@ class FlashAttentionIntegration {
 
 ### **AgentDB Coordination**
 ```typescript
-// 150x-12,500x faster search via HNSW
+// ~1.9x-4.7x measured faster search via HNSW
 class AgentDBIntegration {
   async setupCrossAgentMemory(): Promise<void> {
     await this.agentdb.enableCrossAgentSharing({
       indexType: 'HNSW',
       dimensions: 1536,
-      speedupTarget: '150x-12500x'
+      speedupTarget: '~1.9x-4.7x measured'
     });
   }
 }
@@ -245,10 +245,10 @@ class CompatibilityCleanup {
 
 ### **Flash Attention Optimization**
 ```typescript
-// Target: 2.49x-7.47x speedup
+// Target: unverified (no benchmark) speedup
 const attentionBenchmark = {
   baseline: 'current attention mechanism',
-  target: '2.49x-7.47x improvement',
+  target: 'unverified (no benchmark) improvement',
   memoryReduction: '50-75%',
   implementation: 'agentic-flow@alpha Flash Attention'
 };
@@ -256,10 +256,10 @@ const attentionBenchmark = {
 
 ### **AgentDB Search Performance**
 ```typescript
-// Target: 150x-12,500x improvement
+// Target: ~1.9x-4.7x measured improvement
 const searchBenchmark = {
   baseline: 'linear search in current memory systems',
-  target: '150x-12,500x via HNSW indexing',
+  target: '~1.9x-4.7x measured via HNSW indexing',
   implementation: 'agentic-flow@alpha AgentDB'
 };
 ```
@@ -313,8 +313,8 @@ class BackwardCompatibility {
 - [ ] **Duplicate Logic**: <5% remaining
 
 ### **Performance Targets**
-- [ ] **Flash Attention**: 2.49x-7.47x speedup validated
-- [ ] **Search Performance**: 150x-12,500x improvement
+- [ ] **Flash Attention**: unverified (no benchmark) speedup validated
+- [ ] **Search Performance**: ~1.9x-4.7x measured improvement
 - [ ] **Memory Usage**: 50-75% reduction
 - [ ] **SONA Adaptation**: <0.05ms response time
 
@@ -332,7 +332,7 @@ class BackwardCompatibility {
 - Performance benchmarking collaboration
 
 ### **Swarm Specialist (Agent #8)**
-- Swarm system migration from claude-flow to agentic-flow
+- Swarm system migration from rufflo to agentic-flow
 - Topology coordination and optimization
 - Agent communication protocol alignment
 

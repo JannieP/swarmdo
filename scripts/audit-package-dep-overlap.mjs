@@ -15,7 +15,7 @@
  *
  * Fix: any name should appear in EITHER `optionalDependencies` OR as an
  * optional peer — never both. This script scans every package.json under
- * `v3/@claude-flow/*` and `v3/plugins/*` and fails on the overlap.
+ * `v3/@rufflo/*` and `v3/plugins/*` and fails on the overlap.
  *
  * Usage:
  *   node scripts/audit-package-dep-overlap.mjs            # exit 1 on any overlap
@@ -27,7 +27,7 @@ import { join } from 'node:path';
 
 const REPO_ROOT = process.cwd();
 const SCAN_DIRS = [
-  join(REPO_ROOT, 'v3', '@claude-flow'),
+  join(REPO_ROOT, 'v3', '@rufflo'),
   join(REPO_ROOT, 'v3', 'plugins'),
 ];
 const JSON_OUT = process.argv.includes('--json');

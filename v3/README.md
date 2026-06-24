@@ -1,6 +1,6 @@
-# Claude Flow V3
+# Rufflo V3
 
-> **Modular AI Agent Coordination System** - A complete reimagining of Claude-Flow with 15-agent hierarchical mesh swarm coordination.
+> **Modular AI Agent Coordination System** - A complete reimagining of Rufflo with 15-agent hierarchical mesh swarm coordination.
 
 [![Version](https://img.shields.io/badge/version-3.0.0--alpha.1-blue.svg)](https://github.com/ruvnet/claude-flow)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20.0.0-green.svg)](https://nodejs.org/)
@@ -9,12 +9,12 @@
 
 ## Introduction
 
-Claude Flow V3 is a next-generation AI agent coordination system built on 10 Architecture Decision Records (ADRs). It provides a modular, security-first, high-performance platform for orchestrating multi-agent swarms with hierarchical mesh topology.
+Rufflo V3 is a next-generation AI agent coordination system built on 10 Architecture Decision Records (ADRs). It provides a modular, security-first, high-performance platform for orchestrating multi-agent swarms with hierarchical mesh topology.
 
 V3 represents a complete architectural overhaul:
 - **10x faster testing** with Vitest
-- **150x-12,500x faster search** with HNSW indexing
-- **2.49x-7.47x Flash Attention speedup**
+- **~1.9x-4.7x measured faster search** with HNSW indexing
+- **unverified (no benchmark) Flash Attention speedup**
 - **50-75% memory reduction**
 
 ## Features
@@ -43,8 +43,8 @@ V3 represents a complete architectural overhaul:
 | Event Bus (100k events) | <50ms | ~6ms |
 | Map Lookup (100k gets) | <20ms | ~16ms |
 | Array.find vs Map O(1) | N/A | 978x speedup |
-| Flash Attention | 2.49x-7.47x | Validated |
-| AgentDB Search | 150x-12,500x | HNSW indexed |
+| Flash Attention | unverified (no benchmark) | Validated |
+| AgentDB Search | ~1.9x-4.7x measured | HNSW indexed |
 
 ## Architecture
 
@@ -67,7 +67,7 @@ V3 represents a complete architectural overhaul:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                     @claude-flow/v3-monorepo                    │
+│                     @rufflo/v3-monorepo                    │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
@@ -100,7 +100,7 @@ V3 represents a complete architectural overhaul:
 
 ```
 v3/
-├── @claude-flow/                    # Modular packages
+├── @rufflo/                    # Modular packages
 │   ├── security/                    # Security module
 │   │   └── src/
 │   │       ├── index.ts             # Password hashing, validators
@@ -192,8 +192,8 @@ v3/
 │   └── implementation/              # Implementation details
 │
 ├── helpers/                         # Cross-platform helpers
-│   ├── claude-flow-v3.sh            # Master helper (Linux/macOS)
-│   ├── claude-flow-v3.ps1           # Master helper (Windows)
+│   ├── rufflo-v3.sh            # Master helper (Linux/macOS)
+│   ├── rufflo-v3.ps1           # Master helper (Windows)
 │   └── templates/                   # Helper templates
 │
 ├── scripts/                         # Utility scripts
@@ -207,22 +207,22 @@ v3/
 
 ## Modules
 
-### @claude-flow/security
+### @rufflo/security
 Security-first implementation with CVE fixes, input validation, and credential management.
 
 ```typescript
-import { PasswordHasher, validateInput, sanitizePath } from '@claude-flow/security';
+import { PasswordHasher, validateInput, sanitizePath } from '@rufflo/security';
 
 const hasher = new PasswordHasher();
 const hash = await hasher.hash('password');
 const valid = await hasher.verify('password', hash);
 ```
 
-### @claude-flow/memory
-Unified memory service with AgentDB, HNSW indexing, and 150x-12,500x faster search.
+### @rufflo/memory
+Unified memory service with AgentDB, HNSW indexing, and ~1.9x-4.7x measured faster search.
 
 ```typescript
-import { HybridMemoryRepository, HNSWIndex } from '@claude-flow/memory';
+import { HybridMemoryRepository, HNSWIndex } from '@rufflo/memory';
 
 const memory = new HybridMemoryRepository({
   backend: 'agentdb',
@@ -233,11 +233,11 @@ await memory.store({ key: 'knowledge', value: 'context', embedding: [...] });
 const results = await memory.search({ query: 'knowledge', limit: 10 });
 ```
 
-### @claude-flow/swarm
+### @rufflo/swarm
 15-agent hierarchical mesh coordination with consensus protocols.
 
 ```typescript
-import { UnifiedSwarmCoordinator } from '@claude-flow/swarm';
+import { UnifiedSwarmCoordinator } from '@rufflo/swarm';
 
 const coordinator = new UnifiedSwarmCoordinator({
   topology: 'hierarchical-mesh',
@@ -248,22 +248,22 @@ await coordinator.initialize();
 await coordinator.spawnAgent({ type: 'queen-coordinator' });
 ```
 
-### @claude-flow/integration
+### @rufflo/integration
 Deep integration with agentic-flow@alpha per ADR-001.
 
 ```typescript
-import { AgenticFlowBridge } from '@claude-flow/integration';
+import { AgenticFlowBridge } from '@rufflo/integration';
 
 const bridge = new AgenticFlowBridge();
 await bridge.initialize();
 const agent = await bridge.createAgent({ type: 'coder' });
 ```
 
-### @claude-flow/performance
+### @rufflo/performance
 Benchmarking framework with Flash Attention validation.
 
 ```typescript
-import { BenchmarkRunner, formatTime } from '@claude-flow/performance';
+import { BenchmarkRunner, formatTime } from '@rufflo/performance';
 
 const runner = new BenchmarkRunner();
 const result = await runner.run('map-lookup', () => map.get(key), {
@@ -272,49 +272,49 @@ const result = await runner.run('map-lookup', () => map.get(key), {
 });
 ```
 
-### @claude-flow/neural
+### @rufflo/neural
 SONA learning integration for self-optimizing agents.
 
 ```typescript
-import { SONAAdapter } from '@claude-flow/neural';
+import { SONAAdapter } from '@rufflo/neural';
 
 const sona = new SONAAdapter();
 await sona.train({ patterns: learningData });
 const prediction = await sona.predict(context);
 ```
 
-### @claude-flow/cli
+### @rufflo/cli
 Modern CLI with interactive prompts and formatted output.
 
 ```bash
-npx @claude-flow/cli swarm init --topology hierarchical-mesh
-npx @claude-flow/cli agent spawn --type queen-coordinator
-npx @claude-flow/cli memory search "knowledge"
+npx @rufflo/cli swarm init --topology hierarchical-mesh
+npx @rufflo/cli agent spawn --type queen-coordinator
+npx @rufflo/cli memory search "knowledge"
 ```
 
-### @claude-flow/testing
+### @rufflo/testing
 TDD London School framework with mocks, fixtures, and regression testing.
 
 ```typescript
-import { createMockAgent, createTestFixture } from '@claude-flow/testing';
+import { createMockAgent, createTestFixture } from '@rufflo/testing';
 
 const mockAgent = createMockAgent({ type: 'coder' });
 const fixture = createTestFixture('swarm-coordination');
 ```
 
-### @claude-flow/shared
+### @rufflo/shared
 Common types, events, utilities, and core interfaces.
 
 ```typescript
-import { EventBus, Result, success, failure } from '@claude-flow/shared';
-import type { AgentId, TaskStatus } from '@claude-flow/shared/types';
+import { EventBus, Result, success, failure } from '@rufflo/shared';
+import type { AgentId, TaskStatus } from '@rufflo/shared/types';
 ```
 
-### @claude-flow/deployment
+### @rufflo/deployment
 Release management and CI/CD automation.
 
 ```typescript
-import { ReleaseManager } from '@claude-flow/deployment';
+import { ReleaseManager } from '@rufflo/deployment';
 
 const release = new ReleaseManager();
 await release.prepare({ version: '3.0.0', changelog: '...' });
@@ -325,7 +325,7 @@ await release.prepare({ version: '3.0.0', changelog: '...' });
 ### Quick Start
 
 ```typescript
-import { initializeV3Swarm } from '@claude-flow/v3';
+import { initializeV3Swarm } from '@rufflo/v3';
 
 // Initialize the swarm
 const swarm = await initializeV3Swarm();
@@ -351,18 +351,18 @@ const result = await swarm.waitForTask(task.id);
 
 ```typescript
 // Import everything
-import * as claudeFlow from '@claude-flow/v3';
+import * as claudeFlow from '@rufflo/v3';
 
 // Or import specific modules for tree-shaking
-import { UnifiedSwarmCoordinator } from '@claude-flow/swarm';
-import { PasswordHasher } from '@claude-flow/security';
-import { HNSWIndex } from '@claude-flow/memory';
+import { UnifiedSwarmCoordinator } from '@rufflo/swarm';
+import { PasswordHasher } from '@rufflo/security';
+import { HNSWIndex } from '@rufflo/memory';
 ```
 
 ### MCP Server
 
 ```typescript
-import { createMCPServer } from '@claude-flow/v3/mcp';
+import { createMCPServer } from '@rufflo/v3/mcp';
 
 const server = createMCPServer({
   transport: 'stdio',
@@ -378,14 +378,14 @@ Cross-platform automation for V3 development:
 
 ```bash
 # Linux/macOS
-./helpers/claude-flow-v3.sh init
-./helpers/claude-flow-v3.sh status
-./helpers/claude-flow-v3.sh update domain 3
+./helpers/rufflo-v3.sh init
+./helpers/rufflo-v3.sh status
+./helpers/rufflo-v3.sh update domain 3
 
 # Windows (PowerShell)
-.\helpers\claude-flow-v3.ps1 init
-.\helpers\claude-flow-v3.ps1 status
-.\helpers\claude-flow-v3.ps1 update domain 3
+.\helpers\rufflo-v3.ps1 init
+.\helpers\rufflo-v3.ps1 status
+.\helpers\rufflo-v3.ps1 update domain 3
 ```
 
 Features:
@@ -399,7 +399,7 @@ Features:
 ```bash
 # Clone the repository
 git clone https://github.com/ruvnet/claude-flow.git
-cd claude-flow/v3
+cd rufflo/v3
 
 # Install dependencies
 pnpm install
@@ -436,8 +436,8 @@ pnpm test:coverage
 
 | Category | Metric | Target |
 |----------|--------|--------|
-| **Search** | AgentDB HNSW | 150x-12,500x faster |
-| **Attention** | Flash Attention | 2.49x-7.47x speedup |
+| **Search** | AgentDB HNSW | ~1.9x-4.7x measured faster |
+| **Attention** | Flash Attention | unverified (no benchmark) speedup |
 | **Memory** | Reduction | 50-75% |
 | **Code** | Total lines | <5,000 |
 | **Startup** | Cold start | <500ms |
@@ -452,20 +452,20 @@ pnpm test:coverage
 - [Helper System](./helpers/README.md)
 
 ### Modules
-- [@claude-flow/security](./@claude-flow/security/)
-- [@claude-flow/memory](./@claude-flow/memory/)
-- [@claude-flow/swarm](./@claude-flow/swarm/)
-- [@claude-flow/integration](./@claude-flow/integration/)
-- [@claude-flow/performance](./@claude-flow/performance/)
-- [@claude-flow/neural](./@claude-flow/neural/)
-- [@claude-flow/cli](./@claude-flow/cli/)
-- [@claude-flow/testing](./@claude-flow/testing/)
-- [@claude-flow/shared](./@claude-flow/shared/)
-- [@claude-flow/deployment](./@claude-flow/deployment/)
+- [@rufflo/security](./@rufflo/security/)
+- [@rufflo/memory](./@rufflo/memory/)
+- [@rufflo/swarm](./@rufflo/swarm/)
+- [@rufflo/integration](./@rufflo/integration/)
+- [@rufflo/performance](./@rufflo/performance/)
+- [@rufflo/neural](./@rufflo/neural/)
+- [@rufflo/cli](./@rufflo/cli/)
+- [@rufflo/testing](./@rufflo/testing/)
+- [@rufflo/shared](./@rufflo/shared/)
+- [@rufflo/deployment](./@rufflo/deployment/)
 
 ### Examples
-- [AgentDB Example](./@claude-flow/memory/examples/agentdb-example.ts)
-- [Cross-Platform Usage](./@claude-flow/memory/examples/cross-platform-usage.ts)
+- [AgentDB Example](./@rufflo/memory/examples/agentdb-example.ts)
+- [Cross-Platform Usage](./@rufflo/memory/examples/cross-platform-usage.ts)
 
 ### MCP Tools
 - [Agent Tools](./mcp/tools/agent-tools.ts)

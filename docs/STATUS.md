@@ -1,18 +1,18 @@
-# Ruflo — Overview · Usage · Status
+# Rufflo — Overview · Usage · Status
 
-> The complementary doc to [`USERGUIDE.md`](USERGUIDE.md) (deep reference) and [`/verification.md`](../verification.md) (cryptographic witness). This doc tells you **what Ruflo is**, **how to use it day-to-day**, and **what currently works** — without the encyclopedic reference depth.
+> The complementary doc to [`USERGUIDE.md`](USERGUIDE.md) (deep reference) and [`/verification.md`](../verification.md) (cryptographic witness). This doc tells you **what Rufflo is**, **how to use it day-to-day**, and **what currently works** — without the encyclopedic reference depth.
 
 ---
 
 ## Overview
 
-Ruflo is a multi-agent AI orchestration layer for Claude Code. It turns Claude Code from a single-context coding assistant into a coordinated swarm of agents that share memory, learn from outcomes, talk across machines, and remain auditable.
+Rufflo is a multi-agent AI orchestration layer for Claude Code. It turns Claude Code from a single-context coding assistant into a coordinated swarm of agents that share memory, learn from outcomes, talk across machines, and remain auditable.
 
-The runtime is the `ruflo` npm package. End-user surface is:
+The runtime is the `rufflo` npm package. End-user surface is:
 
 - **MCP server** — exposes 323 tools to Claude Code (memory, agents, swarm coordination, hooks, GitHub integration, browser automation, etc.).
-- **CLI** — 45 top-level commands (`ruflo agent`, `ruflo swarm`, `ruflo memory`, `ruflo hooks`, `ruflo verify`, …) for terminal/script use.
-- **Claude Code plugins** — 32 installable plugins (`ruflo-core`, `ruflo-federation`, `ruflo-cost-tracker`, …) that bundle agent + skill + slash-command definitions.
+- **CLI** — 45 top-level commands (`rufflo agent`, `rufflo swarm`, `rufflo memory`, `rufflo hooks`, `rufflo verify`, …) for terminal/script use.
+- **Claude Code plugins** — 32 installable plugins (`rufflo-core`, `rufflo-federation`, `rufflo-cost-tracker`, …) that bundle agent + skill + slash-command definitions.
 - **WASM kernels** — Rust-compiled WASM for the policy engine, embeddings, and proof system; plugged into the same MCP/CLI surface.
 
 For the "why" — coordinated swarms, self-learning memory, federated comms, enterprise security — see [`README.md`](../README.md).
@@ -23,37 +23,37 @@ The intended day-to-day flow:
 
 1. **Install once**:
    ```bash
-   npx ruflo init --wizard
+   npx rufflo init --wizard
    ```
-   This writes a `CLAUDE.md` with hooks and routing rules, registers the MCP server with Claude Code, and seeds `.claude-flow/` with config + memory.
+   This writes a `CLAUDE.md` with hooks and routing rules, registers the MCP server with Claude Code, and seeds `.rufflo/` with config + memory.
 
 2. **Just use Claude Code normally**. Hooks automatically route tasks, retrieve relevant memory patterns, and coordinate background agents. You don't have to learn the 323 MCP tools — the routing layer does.
 
 3. **Run the CLI for orchestration tasks** that don't fit naturally into Claude Code:
-   - `ruflo agent spawn -t coder --name api-worker` — long-running agent
-   - `ruflo swarm init --topology hierarchical --max-agents 8` — coordinated team
-   - `ruflo memory search --query "auth patterns"` — semantic search across stored knowledge
-   - `ruflo doctor --fix` — diagnose & repair install
-   - `ruflo verify` — confirm your installed bytes match the signed witness
+   - `rufflo agent spawn -t coder --name api-worker` — long-running agent
+   - `rufflo swarm init --topology hierarchical --max-agents 8` — coordinated team
+   - `rufflo memory search --query "auth patterns"` — semantic search across stored knowledge
+   - `rufflo doctor --fix` — diagnose & repair install
+   - `rufflo verify` — confirm your installed bytes match the signed witness
 
 4. **Install plugins as you need them**:
    ```bash
    /plugin marketplace add ruvnet/ruflo
-   /plugin install ruflo-federation@ruflo
+   /plugin install rufflo-federation@rufflo
    ```
 
 Full command reference: [`USERGUIDE.md`](USERGUIDE.md).
 
 ## Status — what currently works
 
-**Snapshot at `ruflo@3.10.2` / `@claude-flow/cli@3.10.1`**, branch `main` @ commit `cdd5308d8`. Capability counts updated 2026-05-25 via quality-sweep audit (see `docs/QUALITY-SWEEP.md`).
+**Snapshot at `rufflo@3.10.2` / `@rufflo/cli@3.10.1`**, branch `main` @ commit `cdd5308d8`. Capability counts updated 2026-05-25 via quality-sweep audit (see `docs/QUALITY-SWEEP.md`).
 
 ### Test baseline
 
 | Suite | Count | Status |
 |---|---|---|
-| `@claude-flow/cli` vitest | 1999 / 1999 | green, 0 failures, 46 intentionally skipped |
-| `@claude-flow/plugin-agent-federation` vitest | 366 / 366 | green |
+| `@rufflo/cli` vitest | 1999 / 1999 | green, 0 failures, 46 intentionally skipped |
+| `@rufflo/plugin-agent-federation` vitest | 366 / 366 | green |
 | **Combined audit-fix surface** | all encryption + federation + graph tests | green |
 
 ### Capability inventory (auto-generated via [`scripts/inventory-capabilities.mjs`](../scripts/inventory-capabilities.mjs))
@@ -62,10 +62,10 @@ Full command reference: [`USERGUIDE.md`](USERGUIDE.md).
 |---|---|---|
 | MCP tools | **323** | `verification/inventory.json` + quality-sweep audit 2026-05-25 |
 | CLI commands (top-level) | **45** | quality-sweep audit 2026-05-25 (commands/index.ts) |
-| Plugins (`plugins/ruflo-*`) | **33** | quality-sweep audit 2026-05-25 (33 dirs with .claude-plugin/plugin.json) |
+| Plugins (`plugins/rufflo-*`) | **33** | quality-sweep audit 2026-05-25 (33 dirs with .claude-plugin/plugin.json) |
 | Agent definitions | **45** | quality-sweep audit 2026-05-25 (plugins/*/agents/*.md count) |
 
-### Recently shipped (since `ruflo@3.6.24` published)
+### Recently shipped (since `rufflo@3.6.24` published)
 
 **Audit hardening — `audit_1776853149979`**:
 - Command injection closed in `github-safe.js`, `statusline.js/cjs` (git calls), `github-tools` MCP (gh pr/issue/run), `update/executor` (npm install).
@@ -92,13 +92,13 @@ Tracked in the project task list (see GitHub Project / `TaskList`):
 
 | Track | Status |
 |---|---|
-| ADR-096 Phase 5 — `ruflo doctor` encryption status | pending |
+| ADR-096 Phase 5 — `rufflo doctor` encryption status | pending |
 | ADR-096 Phase 5+ — keychain (`keytar`) + passphrase resolvers | deferred |
 | ADR-097 Phase 2 — peer state machine (ACTIVE / SUSPENDED / EVICTED) | deferred |
-| ADR-097 Phase 3 — `ruflo-cost-tracker` integration | deferred |
-| ADR-097 Phase 4 — `ruflo doctor` peer state + `federation_breaker_status` MCP tool | deferred |
+| ADR-097 Phase 3 — `rufflo-cost-tracker` integration | deferred |
+| ADR-097 Phase 4 — `rufflo doctor` peer state + `federation_breaker_status` MCP tool | deferred |
 | `verification.md` per-MCP-tool witness signing | pending (task #25) |
-| `verification.md` functional smoke tests for `ruflo verify --functional` | pending (task #26) |
+| `verification.md` functional smoke tests for `rufflo verify --functional` | pending (task #26) |
 | Batch publish `3.6.25` + witness manifest regen | pending |
 
 ### Verification
@@ -106,7 +106,7 @@ Tracked in the project task list (see GitHub Project / `TaskList`):
 Every fix in `verification.md` is signed with Ed25519 keyed off the git commit. To verify your installed bytes match what was witnessed:
 
 ```bash
-ruflo verify
+rufflo verify
 ```
 
 The command fetches the manifest, recomputes SHA-256 for every cited file, re-derives the public key from the git commit, and verifies the signature. Drift in any fix produces a non-zero exit + a structured error pointing at the regressed file.
@@ -117,9 +117,9 @@ Per-capability witness signing for the full 300-tool / 49-command surface is in 
 
 | If you want to… | Read this |
 |---|---|
-| Pitch / why-ruflo | [`README.md`](../README.md) |
+| Pitch / why-rufflo | [`README.md`](../README.md) |
 | Day-to-day commands + config | This doc, plus [`USERGUIDE.md`](USERGUIDE.md) for depth |
 | Architecture decisions | [`v3/docs/adr/`](../v3/docs/adr/) — ADR-093, ADR-095, ADR-096, ADR-097 are the recent ones |
-| Cryptographic proof of build correctness | [`verification.md`](../verification.md) + [`ruflo verify`](#verification) |
+| Cryptographic proof of build correctness | [`verification.md`](../verification.md) + [`rufflo verify`](#verification) |
 | Plugin development | [`USERGUIDE.md` → Plugin section](USERGUIDE.md#-ecosystem--integrations) |
 | Open issues + roadmap | [GitHub Issues](https://github.com/ruvnet/claude-flow/issues) |

@@ -252,8 +252,8 @@ interface CollectionManagerState {
 ```typescript
 // Core collection - essential plugins
 const coreCollection: PluginCollection = {
-  id: 'claude-flow-core',
-  name: 'Claude Flow Core Plugins',
+  id: 'rufflo-core',
+  name: 'Rufflo Core Plugins',
   version: '3.0.0',
   plugins: [
     { plugin: memoryPlugin, defaultEnabled: true, category: 'memory' },
@@ -264,7 +264,7 @@ const coreCollection: PluginCollection = {
 
 // Development collection - coding assistance
 const developmentCollection: PluginCollection = {
-  id: 'claude-flow-development',
+  id: 'rufflo-development',
   name: 'Development Tools',
   version: '3.0.0',
   plugins: [
@@ -278,7 +278,7 @@ const developmentCollection: PluginCollection = {
 
 // Intelligence collection - AI/ML features
 const intelligenceCollection: PluginCollection = {
-  id: 'claude-flow-intelligence',
+  id: 'rufflo-intelligence',
   name: 'Intelligence & Learning',
   version: '3.0.0',
   plugins: [
@@ -290,7 +290,7 @@ const intelligenceCollection: PluginCollection = {
 
 // Swarm collection - multi-agent coordination
 const swarmCollection: PluginCollection = {
-  id: 'claude-flow-swarm',
+  id: 'rufflo-swarm',
   name: 'Swarm Coordination',
   version: '3.0.0',
   plugins: [
@@ -303,7 +303,7 @@ const swarmCollection: PluginCollection = {
 
 // Security collection - security features
 const securityCollection: PluginCollection = {
-  id: 'claude-flow-security',
+  id: 'rufflo-security',
   name: 'Security & Audit',
   version: '3.0.0',
   plugins: [
@@ -465,7 +465,7 @@ class SecurePluginContext implements PluginContext {
 
 ### Phase 5: CLI Integration (2026-01-24)
 - [x] PluginManager for CLI (real npm installation)
-- [x] Persist to `.claude-flow/plugins/installed.json`
+- [x] Persist to `.rufflo/plugins/installed.json`
 - [x] Install, uninstall, upgrade, toggle commands
 - [x] Local plugin installation support
 - [x] Discovery service with npm fallback (IPFS demo mode)
@@ -596,7 +596,7 @@ CLI Commands (plugins.ts)
     │
     └── PluginManager (manager.ts)
             │
-            ├── InstalledPlugins manifest (.claude-flow/plugins/installed.json)
+            ├── InstalledPlugins manifest (.rufflo/plugins/installed.json)
             ├── npm install/uninstall
             └── PluginDiscoveryService (discovery.ts)
                     │
@@ -612,9 +612,9 @@ CLI Commands (plugins.ts)
 
 ## References
 
-- [Plugin Interface](../../@claude-flow/plugins/src/core/plugin-interface.ts)
-- [Plugin Registry](../../@claude-flow/plugins/src/registry/plugin-registry.ts)
-- [Plugin Manager (CLI)](../../@claude-flow/cli/src/plugins/manager.ts)
-- [Collection Manager](../../@claude-flow/plugins/src/collections/collection-manager.ts)
-- [Dependency Graph](../../@claude-flow/plugins/src/registry/dependency-graph.ts)
-- [Official Collections](../../@claude-flow/plugins/src/collections/official/index.ts)
+- [Plugin Interface](../../@rufflo/plugins/src/core/plugin-interface.ts)
+- [Plugin Registry](../../@rufflo/plugins/src/registry/plugin-registry.ts)
+- [Plugin Manager (CLI)](../../@rufflo/cli/src/plugins/manager.ts)
+- [Collection Manager](../../@rufflo/plugins/src/collections/collection-manager.ts)
+- [Dependency Graph](../../@rufflo/plugins/src/registry/dependency-graph.ts)
+- [Official Collections](../../@rufflo/plugins/src/collections/official/index.ts)

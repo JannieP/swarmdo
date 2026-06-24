@@ -1,4 +1,4 @@
-# Claude-Flow V3 Plugin System
+# Rufflo V3 Plugin System
 
 > Domain-Driven Design Plugin-Based Architecture (ADR-004)
 
@@ -14,7 +14,7 @@ The V3 Plugin System implements a **microkernel architecture** enabling modular 
 ## Quick Start
 
 ```typescript
-import { ClaudeFlowPlugin, PluginContext } from '@claude-flow/shared';
+import { ClaudeFlowPlugin, PluginContext } from '@rufflo/shared';
 
 class MyPlugin implements ClaudeFlowPlugin {
   readonly name = 'my-plugin';
@@ -291,7 +291,7 @@ The PluginLoader:
 
 ## Official Plugins
 
-Located in `@claude-flow/shared/src/plugins/official/`:
+Located in `@rufflo/shared/src/plugins/official/`:
 
 ### Maestro Plugin
 
@@ -310,7 +310,7 @@ Collective intelligence coordination:
 ## Error Handling
 
 ```typescript
-import { PluginError, PluginErrorCode } from '@claude-flow/shared';
+import { PluginError, PluginErrorCode } from '@rufflo/shared';
 
 // Error codes
 type PluginErrorCode =

@@ -8,7 +8,7 @@ Accepted (2026-02-27)
 
 ## Context
 
-The `agentic-flow` package is the upstream coordination engine that powers claude-flow's ReasoningBank, Router, Agent Booster, QUIC transport, and intelligence subsystems. The major version upgrade from 2.0.7 to 3.0.0-alpha.1 introduces breaking changes, new modules, and a complete rewrite of the build pipeline.
+The `agentic-flow` package is the upstream coordination engine that powers rufflo's ReasoningBank, Router, Agent Booster, QUIC transport, and intelligence subsystems. The major version upgrade from 2.0.7 to 3.0.0-alpha.1 introduces breaking changes, new modules, and a complete rewrite of the build pipeline.
 
 ### Previous State (2.0.7)
 
@@ -30,7 +30,7 @@ The `agentic-flow` package is the upstream coordination engine that powers claud
 
 ## Decision
 
-Upgrade `agentic-flow` from `^2.0.7` to `^3.0.0-alpha.1` in `@claude-flow/cli`, preserving all lazy-import patterns and fallback behavior.
+Upgrade `agentic-flow` from `^2.0.7` to `^3.0.0-alpha.1` in `@rufflo/cli`, preserving all lazy-import patterns and fallback behavior.
 
 ### Package Overview
 
@@ -122,7 +122,7 @@ dist/
 | `stdio-full` | stdio | Full-featured stdio server |
 | `http-sse` | HTTP/SSE | Server-Sent Events transport |
 | `http-streaming-updated` | HTTP | Streaming HTTP transport |
-| `claude-flow-sdk` | SDK | Claude Flow SDK server |
+| `rufflo-sdk` | SDK | Rufflo SDK server |
 | `hooks-server` | mixed | Hooks-specific server |
 
 ### Intelligence Modules
@@ -186,7 +186,7 @@ dist/
 | `src/memory/memory-initializer.ts` | `import('agentic-flow/reasoningbank')`, `import('agentic-flow')` | Tier 1: ReasoningBank `computeEmbedding`, Tier 2: legacy core |
 | `src/ruvector/enhanced-model-router.ts` | `import('agentic-flow/agent-booster')` | Agent Booster with local module (no npx), npx fallback |
 | `src/commands/hooks.ts` | `import('agentic-flow/reasoningbank')`, `import('agentic-flow')` | Token optimizer — v3 ReasoningBank first, legacy fallback |
-| `src/mcp-tools/neural-tools.ts` | `import('agentic-flow/reasoningbank')`, `import('@claude-flow/embeddings')` | Tier 1: ReasoningBank WASM, Tier 2: embeddings, Tier 3: mock |
+| `src/mcp-tools/neural-tools.ts` | `import('agentic-flow/reasoningbank')`, `import('@rufflo/embeddings')` | Tier 1: ReasoningBank WASM, Tier 2: embeddings, Tier 3: mock |
 | `src/commands/doctor.ts` | `import('agentic-flow/reasoningbank')`, `import('agentic-flow')` | **NEW** — Health check for agentic-flow capabilities |
 | `src/commands/embeddings.ts` | provider option | `agentic-flow` as embedding provider |
 | `src/types/optional-modules.d.ts` | Type declarations | Full types for 7 agentic-flow subpath modules |
@@ -202,7 +202,7 @@ All imports use **lazy dynamic `import()`** with `.catch(() => null)` fallbacks.
 | I1 | `optional-modules.d.ts` | Expanded from 2 to 7 `agentic-flow/*` module declarations with full type coverage |
 | I2 | `enhanced-model-router.ts` | Agent Booster: npx → local `import('agentic-flow/agent-booster')` with npx fallback |
 | I3 | `memory-initializer.ts` | Added Tier 1: `computeEmbedding` from `agentic-flow/reasoningbank` before legacy fallback |
-| I4 | `neural-tools.ts` | Added Tier 1: ReasoningBank WASM embeddings before @claude-flow/embeddings |
+| I4 | `neural-tools.ts` | Added Tier 1: ReasoningBank WASM embeddings before @rufflo/embeddings |
 | I5 | `hooks.ts` | Token optimizer: v3 ReasoningBank direct import, detects version in spinner label |
 | I6 | `doctor.ts` | New `checkAgenticFlow()` health check — detects ReasoningBank/Embeddings/Judgement/Consolidation |
 | I7 | `agentic-flow-bridge.ts` | **NEW** — Unified bridge with `capabilities()`, `isAvailable()`, `computeEmbedding()`, `retrieveMemories()` |
@@ -218,7 +218,7 @@ All imports use **lazy dynamic `import()`** with `.catch(() => null)` fallbacks.
 | Type declarations | Compatible | 7 module declarations in `optional-modules.d.ts` |
 | AgentDB controllers | Compatible | ADR-055 Phase 2 already adapted bridge for new exports |
 | Memory bridge | Compatible | `memory-bridge.ts` hardened in ADR-055 |
-| Embedding service | Compatible | 3-tier: ReasoningBank → @claude-flow/embeddings → mock |
+| Embedding service | Compatible | 3-tier: ReasoningBank → @rufflo/embeddings → mock |
 | Router integration | Compatible | Local agent-booster import with npx fallback |
 | Doctor health check | New | Detects all 4 ReasoningBank capabilities |
 | Unified bridge | New | Single entry point for all agentic-flow v3 modules |
@@ -227,8 +227,8 @@ All imports use **lazy dynamic `import()`** with `.catch(() => null)` fallbacks.
 
 | Package | Dependency | Required Version |
 |---------|-----------|-----------------|
-| `@claude-flow/cli` | `agentic-flow` | `^3.0.0-alpha.1` (updated) |
-| `@claude-flow/cli` | `agentdb` | `^3.0.0-alpha.10` (updated) |
+| `@rufflo/cli` | `agentic-flow` | `^3.0.0-alpha.1` (updated) |
+| `@rufflo/cli` | `agentdb` | `^3.0.0-alpha.10` (updated) |
 
 ## Consequences
 
@@ -270,7 +270,7 @@ node -e "import('agentic-flow/reasoningbank').then(m => console.log('RB:', !!m))
 node -e "import('agentic-flow/router').then(m => console.log('Router:', !!m))"
 
 # Verify CLI tests pass
-cd v3/@claude-flow/cli && npm test  # → 445 passed
+cd v3/@rufflo/cli && npm test  # → 445 passed
 
 # Verify zero production vulnerabilities
 npm audit --omit=dev  # → 0 vulnerabilities

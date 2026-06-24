@@ -2,7 +2,7 @@
 /**
  * Memory recall bench — ADR-126 follow-up #48.
  *
- * Measures `mcp__claude-flow__memory_search`-style latency over the
+ * Measures `mcp__rufflo__memory_search`-style latency over the
  * `trading-backtests` namespace at three sizes: N ∈ {100, 1000, 5000}
  * entries.
  *
@@ -28,7 +28,7 @@
  *   - ops/sec at each size
  *
  * Run:
- *   node plugins/ruflo-neural-trader/benchmarks/memory-recall.bench.mjs
+ *   node plugins/rufflo-neural-trader/benchmarks/memory-recall.bench.mjs
  *
  * Output is markdown, capturable to
  * `benchmarks/results/memory-recall-baseline-<timestamp>.md`.
@@ -195,4 +195,4 @@ console.log('## Refs');
 console.log('');
 console.log('- ADR-126 §SOTA delta — bench-driven perf work');
 console.log('- ADR-006 — Unified Memory Service (HNSW)');
-console.log('- `plugins/ruflo-neural-trader/skills/trader-backtest/SKILL.md` — production recall path');
+console.log('- `plugins/rufflo-neural-trader/skills/trader-backtest/SKILL.md` — production recall path');

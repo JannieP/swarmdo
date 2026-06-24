@@ -2,7 +2,7 @@
 name: ddd-validate
 description: Validate domain boundaries -- detect cross-context import violations and aggregate invariant issues
 argument-hint: ""
-allowed-tools: Bash(find * grep * npx *) Read Grep Glob mcp__claude-flow__memory_store mcp__claude-flow__memory_search mcp__claude-flow__hooks_pre-task mcp__claude-flow__hooks_post-task
+allowed-tools: Bash(find * grep * npx *) Read Grep Glob mcp__rufflo__memory_store mcp__rufflo__memory_search mcp__rufflo__hooks_pre-task mcp__rufflo__hooks_post-task
 ---
 Validate domain boundary integrity across all bounded contexts.
 
@@ -45,6 +45,6 @@ Validate domain boundary integrity across all bounded contexts.
 
 7. **Store results**:
    ```bash
-   npx @claude-flow/cli@latest memory store --key "ddd-validation-TIMESTAMP" --value "RESULTS_SUMMARY" --namespace tasks
-   npx @claude-flow/cli@latest hooks post-task --task-id "ddd-validate" --success true --store-results true
+   npx @rufflo/cli@latest memory store --key "ddd-validation-TIMESTAMP" --value "RESULTS_SUMMARY" --namespace tasks
+   npx @rufflo/cli@latest hooks post-task --task-id "ddd-validate" --success true --store-results true
    ```

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Structural smoke test for ruflo-metaharness v0.1.0 (ADR-150 Phase 1).
+# Structural smoke test for rufflo-metaharness v0.1.0 (ADR-150 Phase 1).
 set -u
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PASS=0
@@ -14,7 +14,7 @@ if [[ "$v" != "0.1.0" ]]; then
   bad "expected 0.1.0, got '$v'"
 else
   miss=""
-  for k in ruflo metaharness harness scorecard genome mcp-scan threat-model router adr-150 adr-148 adr-149 optional-dependency graceful-degradation subprocess phase-1-mvp; do
+  for k in rufflo metaharness harness scorecard genome mcp-scan threat-model router adr-150 adr-148 adr-149 optional-dependency graceful-degradation subprocess phase-1-mvp; do
     grep -q "\"$k\"" "$ROOT/.claude-plugin/plugin.json" || miss="$miss $k"
   done
   [[ -z "$miss" ]] && ok || bad "missing keywords:$miss"
@@ -102,7 +102,7 @@ grep -q "process.exit(2)" "$F" || miss="$miss no-config-exit"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
 step "9. command file documents all five skills"
-F="$ROOT/commands/ruflo-metaharness.md"
+F="$ROOT/commands/rufflo-metaharness.md"
 miss=""
 [[ -f "$F" ]] || miss="$miss missing-file"
 for s in score genome mint mcp-scan threat-model; do
@@ -147,7 +147,7 @@ node -e "JSON.parse(require('fs').readFileSync('$ROOT/.claude-plugin/plugin.json
   && ok || bad "plugin.json invalid JSON"
 
 step "15. top-level CLI command registered (deep integration — iter 3)"
-F="$ROOT/../../v3/@claude-flow/cli/src/commands/metaharness.ts"
+F="$ROOT/../../v3/@rufflo/cli/src/commands/metaharness.ts"
 miss=""
 [[ -f "$F" ]] || miss="$miss command-file-missing"
 grep -q "name: 'metaharness'" "$F" 2>/dev/null || miss="$miss no-name-field"
@@ -157,18 +157,18 @@ for sub in score genome mcp-scan threat-model oia-audit audit-list audit-trend m
   grep -qE "(^|[[:space:]])'?${sub}'?:" "$F" 2>/dev/null || miss="$miss missing-$sub"
 done
 # Registered in the loader
-LOADER="$ROOT/../../v3/@claude-flow/cli/src/commands/index.ts"
+LOADER="$ROOT/../../v3/@rufflo/cli/src/commands/index.ts"
 grep -q "metaharness: () => import" "$LOADER" 2>/dev/null || miss="$miss not-registered-in-loader"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
-step "16. ruflo wrapper has metaharness in optionalDependencies (architectural constraint #2)"
-F="$ROOT/../../ruflo/package.json"
+step "16. rufflo wrapper has metaharness in optionalDependencies (architectural constraint #2)"
+F="$ROOT/../../rufflo/package.json"
 node -e "
 const j = JSON.parse(require('fs').readFileSync('$F','utf-8'));
 const od = j.optionalDependencies || {};
 if (!od.metaharness) { console.error('missing metaharness in optionalDependencies'); process.exit(1); }
 if (j.dependencies && j.dependencies.metaharness) { console.error('metaharness leaked into dependencies'); process.exit(1); }
-" 2>/dev/null && ok || bad "ruflo wrapper missing metaharness optionalDep"
+" 2>/dev/null && ok || bad "rufflo wrapper missing metaharness optionalDep"
 
 step "17r. _harness.mjs npx-argv regression guard (iter 27 fix lock)"
 F="$ROOT/scripts/_harness.mjs"
@@ -226,7 +226,7 @@ miss=""
 # silently disables the gate. Smoke-anchor the job set.
 W="$ROOT/../../.github/workflows/metaharness-ci.yml"
 EXPECTED_JOBS=(
-  "score"            # iter 1 — score harness against ruflo
+  "score"            # iter 1 — score harness against rufflo
   "mcp-scan"         # iter 1 — security finding scan
   "router-compat"    # iter 12 — @metaharness/router API tripwire
   "eject-dryrun"     # iter 4 — eject command Phase-2 differentiator
@@ -334,14 +334,14 @@ step "17z74. metaharness pin versions consistent across all 3 package.json (iter
 miss=""
 # Each of the 3 package.json files pins metaharness/@metaharness/*
 # independently. If they drift, behavior varies by install path:
-#   - `npm install ruflo` → uses ruflo/package.json
-#   - `npm install @claude-flow/cli` → uses cli/package.json
+#   - `npm install rufflo` → uses rufflo/package.json
+#   - `npm install @rufflo/cli` → uses cli/package.json
 #   - Repo-clone dev install → uses root package.json
 # Pin drift between them means CI tests one version while users get
 # another. iter-111 enforces matching pin strings across all three.
 ROOTPJ="$ROOT/../../package.json"
-RUFLOPJ="$ROOT/../../ruflo/package.json"
-CLIPJ="$ROOT/../../v3/@claude-flow/cli/package.json"
+RUFLOPJ="$ROOT/../../rufflo/package.json"
+CLIPJ="$ROOT/../../v3/@rufflo/cli/package.json"
 for pkg in "metaharness" "@metaharness/router" "@metaharness/kernel"; do
   ROOT_PIN=$(node -e "console.log(JSON.parse(require('fs').readFileSync('$ROOTPJ')).optionalDependencies?.['$pkg'] || '')" 2>/dev/null)
   RUFLO_PIN=$(node -e "console.log(JSON.parse(require('fs').readFileSync('$RUFLOPJ')).optionalDependencies?.['$pkg'] || '')" 2>/dev/null)
@@ -353,7 +353,7 @@ for pkg in "metaharness" "@metaharness/router" "@metaharness/kernel"; do
   # Compare non-empty pins — they must all match.
   PINS=$(echo "$ROOT_PIN $RUFLO_PIN $CLI_PIN" | tr ' ' '\n' | grep -v '^$' | sort -u | wc -l | tr -d ' ')
   if [[ "$PINS" != "1" ]]; then
-    miss="$miss ${pkg}-pin-drift:root=${ROOT_PIN},ruflo=${RUFLO_PIN},cli=${CLI_PIN}"
+    miss="$miss ${pkg}-pin-drift:root=${ROOT_PIN},rufflo=${RUFLO_PIN},cli=${CLI_PIN}"
   fi
 done
 [[ -z "$miss" ]] && ok || bad "$miss"
@@ -367,7 +367,7 @@ miss=""
 # permissive for v0.1.x upstream.
 #
 # Smoke catches regression from tilde → caret OR loose-pinning.
-for pj in "$ROOT/../../package.json" "$ROOT/../../ruflo/package.json" "$ROOT/../../v3/@claude-flow/cli/package.json"; do
+for pj in "$ROOT/../../package.json" "$ROOT/../../rufflo/package.json" "$ROOT/../../v3/@rufflo/cli/package.json"; do
   [[ -f "$pj" ]] || continue
   # Look for any @metaharness/* or 'metaharness' line with NON-tilde pinning
   BAD=$(node -e "
@@ -541,7 +541,7 @@ miss=""
 # pattern: each directory under skills/ is a skill, with its NAME taken
 # from the directory. The SKILL.md's frontmatter `name:` field must
 # match, otherwise tooling that maps dir→id fails silently:
-#   plugins/ruflo-metaharness/skills/harness-foo/SKILL.md
+#   plugins/rufflo-metaharness/skills/harness-foo/SKILL.md
 #                                     └── must have `name: harness-foo`
 SKILLS_DIR="$ROOT/skills"
 COUNT=0
@@ -571,8 +571,8 @@ miss=""
 # are shared utility modules imported, not invoked directly — they're
 # covered by static-grep of import statements.
 SCRIPTS_DIR="$ROOT/scripts"
-DISP="$ROOT/../../v3/@claude-flow/cli/src/commands/metaharness.ts"
-WRAPPER="$ROOT/../../v3/@claude-flow/cli/src/mcp-tools/metaharness-tools.ts"
+DISP="$ROOT/../../v3/@rufflo/cli/src/commands/metaharness.ts"
+WRAPPER="$ROOT/../../v3/@rufflo/cli/src/mcp-tools/metaharness-tools.ts"
 CIM="$ROOT/../../.github/workflows/metaharness-ci.yml"
 CIW="$ROOT/../../.github/workflows/oia-audit-weekly.yml"
 SMOKE="$ROOT/scripts/smoke.sh"
@@ -703,9 +703,9 @@ step "17z57. every CLI subcommand documented in CLAUDE.md (iter 94)"
 miss=""
 # Companion to iter-93's MCP-tool documentation gate. CLAUDE.md also
 # serves as a CLI catalog — each subcommand from metaharness.ts's
-# SUBCOMMANDS map should appear as `npx ruflo metaharness <X>` for
+# SUBCOMMANDS map should appear as `npx rufflo metaharness <X>` for
 # discoverability.
-DISP="$ROOT/../../v3/@claude-flow/cli/src/commands/metaharness.ts"
+DISP="$ROOT/../../v3/@rufflo/cli/src/commands/metaharness.ts"
 CMD="$ROOT/../../CLAUDE.md"
 # Extract SUBCOMMANDS keys (both quoted + unquoted forms).
 # BSD sed (macOS) doesn't recognize \s; use [ \t] for portability.
@@ -714,7 +714,7 @@ KEYS=$(grep -E "^[ 	]+('?[a-z-]+'?):[ 	]*'[a-z-]+\.mjs'" "$DISP" 2>/dev/null \
 COUNT=0
 for k in $KEYS; do
   COUNT=$((COUNT + 1))
-  grep -qE "npx ruflo metaharness ${k}([ \\\\]|$)" "$CMD" 2>/dev/null \
+  grep -qE "npx rufflo metaharness ${k}([ \\\\]|$)" "$CMD" 2>/dev/null \
     || miss="$miss subcommand-${k}-not-in-claude-md"
 done
 [[ "$COUNT" == "10" ]] || miss="$miss subcommand-count-stale:$COUNT-expected-10"
@@ -726,15 +726,15 @@ miss=""
 # in metaharness-tools.ts should appear at least once in CLAUDE.md so
 # agents browsing the catalog discover it. If a future iter adds a tool
 # but forgets the CLAUDE.md update, the tool exists but is invisible.
-WRAPPER="$ROOT/../../v3/@claude-flow/cli/src/mcp-tools/metaharness-tools.ts"
+WRAPPER="$ROOT/../../v3/@rufflo/cli/src/mcp-tools/metaharness-tools.ts"
 CMD="$ROOT/../../CLAUDE.md"
 TOOLS=$(grep -oE "name: 'metaharness_[a-z_]+'" "$WRAPPER" 2>/dev/null \
   | sed -E "s/name: '([a-z_]+)'/\1/" | sort -u)
 COUNT=0
 for t in $TOOLS; do
   COUNT=$((COUNT + 1))
-  # Look for `mcp__claude-flow__metaharness_X` (the agent-facing name form)
-  grep -q "mcp__claude-flow__${t}" "$CMD" 2>/dev/null \
+  # Look for `mcp__rufflo__metaharness_X` (the agent-facing name form)
+  grep -q "mcp__rufflo__${t}" "$CMD" 2>/dev/null \
     || miss="$miss ${t}-not-in-claude-md"
 done
 # Lock count: 9 MCP tools (mint deliberately excluded — see iter 73)
@@ -752,7 +752,7 @@ miss=""
 #   - The only SEVERITY_RANK key NOT in the enum is 'clean' (alerting on
 #     'clean' is meaningless — clean=0 ranks below everything)
 HARNESS="$ROOT/scripts/_harness.mjs"
-WRAPPER="$ROOT/../../v3/@claude-flow/cli/src/mcp-tools/metaharness-tools.ts"
+WRAPPER="$ROOT/../../v3/@rufflo/cli/src/mcp-tools/metaharness-tools.ts"
 # Extract SEVERITY_RANK keys — only from inside the SEVERITY_RANK literal.
 # Pre-iter-92 regex `^\s+[a-z]+: [0-9]` missed multi-key lines like
 # `clean: 0, info: 0`. Use grep -oE on the whole literal to capture all
@@ -802,7 +802,7 @@ miss=""
 # handlers, each calling runScript('<name>.mjs', args). If a future iter
 # renames a script but forgets the MCP-tool handler, the agent-callable
 # surface fails at runtime with "Script not found".
-WRAPPER="$ROOT/../../v3/@claude-flow/cli/src/mcp-tools/metaharness-tools.ts"
+WRAPPER="$ROOT/../../v3/@rufflo/cli/src/mcp-tools/metaharness-tools.ts"
 SCRIPTS_DIR="$ROOT/scripts"
 # Extract `runScript('foo.mjs', ...)` references.
 REFS=$(grep -oE "runScript\('[a-z-]+\.mjs'" "$WRAPPER" 2>/dev/null \
@@ -821,9 +821,9 @@ step "17z52. SUBCOMMANDS map entries point at existing script files (iter 89)"
 miss=""
 # CLI dispatcher (metaharness.ts) has a SUBCOMMANDS map that routes
 # `metaharness X` → `scripts/X.mjs`. If a future iter renames a script
-# but forgets the map (or vice-versa), `ruflo metaharness X` errors at
+# but forgets the map (or vice-versa), `rufflo metaharness X` errors at
 # runtime: "Script not found at <path>". Smoke catches the drift here.
-DISP="$ROOT/../../v3/@claude-flow/cli/src/commands/metaharness.ts"
+DISP="$ROOT/../../v3/@rufflo/cli/src/commands/metaharness.ts"
 SCRIPTS_DIR="$ROOT/scripts"
 # Extract each `'subname': 'file.mjs'` or `subname: 'file.mjs'` mapping.
 # Both quoted and unquoted-key forms appear in the source.
@@ -1011,7 +1011,7 @@ grep -q "parseMcpScanText extracts at least 1 finding" "$F" 2>/dev/null || miss=
 # CI workflow runs it
 W="$ROOT/../../.github/workflows/metaharness-ci.yml"
 grep -q "check-mcp-scan-format.mjs" "$W" 2>/dev/null || miss="$miss not-in-ci"
-# Runtime: tripwire passes on ruflo's own audit
+# Runtime: tripwire passes on rufflo's own audit
 node "$F" >/dev/null 2>&1 || miss="$miss tripwire-fails-locally"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
@@ -1041,14 +1041,14 @@ grep -q "alertOnNewSeverity" "$F" 2>/dev/null || miss="$miss no-args-key"
 grep -q "elevatedFindings" "$F" 2>/dev/null || miss="$miss no-elevated-array"
 grep -q "import.*rankSeverity.*from './_harness.mjs'" "$F" 2>/dev/null || miss="$miss no-rank-import"
 # MCP tool input schema includes it
-WRAPPER="$ROOT/../../v3/@claude-flow/cli/src/mcp-tools/metaharness-tools.ts"
+WRAPPER="$ROOT/../../v3/@rufflo/cli/src/mcp-tools/metaharness-tools.ts"
 grep -q "alertOnNewSeverity:" "$WRAPPER" 2>/dev/null || miss="$miss no-mcp-input"
 grep -q "args.push('--alert-on-new-severity'" "$WRAPPER" 2>/dev/null || miss="$miss no-mcp-dispatch"
 # CLAUDE.md surfaces the flag
 CMD="$ROOT/../../CLAUDE.md"
 grep -q -- "--alert-on-new-severity" "$CMD" 2>/dev/null || miss="$miss no-claude-md"
 # Runtime end-to-end: --alert-on-new-severity info on real baseline fires
-# (real ruflo audit has 1 INFO finding; baseline file with no findings → introduced=1)
+# (real rufflo audit has 1 INFO finding; baseline file with no findings → introduced=1)
 BC=$(mktemp)
 node "$ROOT/scripts/oia-audit.mjs" --dry-run --format json 2>/dev/null > "$BC"
 python3 -c "
@@ -1103,21 +1103,21 @@ node "$F" 2>&1 | grep -qE "(4[6-9]|[5-9][0-9]+) passed, 0 failed" || miss="$miss
 step "17z37. ADR-150 architectural-constraint negative guards (iter 74)"
 miss=""
 # Guard 1 — ADR-150 §Sandboxing: `harness from-repo` must never be wrapped
-# as a ruflo skill or MCP tool. It clones arbitrary git URLs which is too
-# powerful to expose to agents. (Upstream supports it; ruflo deliberately
+# as a rufflo skill or MCP tool. It clones arbitrary git URLs which is too
+# powerful to expose to agents. (Upstream supports it; rufflo deliberately
 # does not.) Negative greps across all the wrapping surfaces:
 SKILLS_DIR="$ROOT/skills"
 ! find "$SKILLS_DIR" -name SKILL.md -exec grep -l "from-repo" {} \; 2>/dev/null | grep -q . || miss="$miss from-repo-leaked-to-skill"
 SCRIPTS_DIR="$ROOT/scripts"
 ! grep -rE "^[^/]*runHarness\(\['from-repo'" "$SCRIPTS_DIR" 2>/dev/null | grep -q . || miss="$miss from-repo-leaked-to-script"
-WRAPPER="$ROOT/../../v3/@claude-flow/cli/src/mcp-tools/metaharness-tools.ts"
+WRAPPER="$ROOT/../../v3/@rufflo/cli/src/mcp-tools/metaharness-tools.ts"
 ! grep -q "name: 'metaharness_from_repo'" "$WRAPPER" 2>/dev/null || miss="$miss from-repo-leaked-to-mcp"
 
 # Guard 2 — ADR-150 architectural constraint #1: the ONE exception is
 # neural-router.ts using a dynamic-import of @metaharness/router. Any OTHER
-# static import of @metaharness/* breaks the "ruflo works without the dep"
+# static import of @metaharness/* breaks the "rufflo works without the dep"
 # rule. Scan the CLI source tree for stray static imports.
-CLI_SRC="$ROOT/../../v3/@claude-flow/cli/src"
+CLI_SRC="$ROOT/../../v3/@rufflo/cli/src"
 STATIC_IMPORTS=$(grep -rE "^import .* from '@metaharness/" "$CLI_SRC" 2>/dev/null | grep -v "neural-router.ts" | grep -v "// allowed:" | wc -l | tr -d ' ')
 [[ "$STATIC_IMPORTS" == "0" ]] || miss="$miss static-import-leak:$STATIC_IMPORTS-outside-neural-router"
 
@@ -1128,8 +1128,8 @@ STATIC_IMPORTS=$(grep -rE "^import .* from '@metaharness/" "$CLI_SRC" 2>/dev/nul
 
 step "17z36. CLI subcommand list current + mint anti-MCP guard (iter 73)"
 miss=""
-DISP="$ROOT/../../v3/@claude-flow/cli/src/commands/metaharness.ts"
-WRAPPER="$ROOT/../../v3/@claude-flow/cli/src/mcp-tools/metaharness-tools.ts"
+DISP="$ROOT/../../v3/@rufflo/cli/src/commands/metaharness.ts"
+WRAPPER="$ROOT/../../v3/@rufflo/cli/src/mcp-tools/metaharness-tools.ts"
 # iter-73 description string lists all 10 dispatchable subcommands
 for sub in score genome mcp-scan threat-model oia-audit audit-list audit-trend similarity drift-from-history mint; do
   grep -q "${sub}" "$DISP" 2>/dev/null || miss="$miss subcommand-${sub}-not-listed"
@@ -1157,7 +1157,7 @@ node "$F" >/dev/null 2>&1 || miss="$miss runtime-fails"
 
 step "17z34. drift_from_history MCP tool exposes baselineKey + baselineFile (iter 71)"
 miss=""
-WRAPPER="$ROOT/../../v3/@claude-flow/cli/src/mcp-tools/metaharness-tools.ts"
+WRAPPER="$ROOT/../../v3/@rufflo/cli/src/mcp-tools/metaharness-tools.ts"
 grep -q "baselineKey:" "$WRAPPER" 2>/dev/null || miss="$miss no-baseline-key-input"
 grep -q "baselineFile:" "$WRAPPER" 2>/dev/null || miss="$miss no-baseline-file-input"
 grep -q "args.push('--baseline-key'" "$WRAPPER" 2>/dev/null || miss="$miss no-baseline-key-arg-push"
@@ -1323,7 +1323,7 @@ echo "$OUT" | grep -q '"worst": "clean"' || miss="$miss live-not-clean"
 
 step "17z24. doctor required-files include iter-53 + iter-56 surfaces (iter 61)"
 miss=""
-DOC="$ROOT/../../v3/@claude-flow/cli/src/commands/doctor.ts"
+DOC="$ROOT/../../v3/@rufflo/cli/src/commands/doctor.ts"
 # Newly-gated files (iter 53 surfaces)
 grep -q "drift-from-history.mjs" "$DOC" 2>/dev/null || miss="$miss no-drift-script-check"
 grep -q "harness-drift-from-history/SKILL.md" "$DOC" 2>/dev/null || miss="$miss no-drift-skill-check"
@@ -1437,14 +1437,14 @@ grep -q "extending this list discovered 3 latent gaps" "$T" 2>/dev/null || miss=
 
 step "17z17. drift_from_history MCP tool + CLAUDE.md surfacing (iter 54)"
 miss=""
-WRAPPER="$ROOT/../../v3/@claude-flow/cli/src/mcp-tools/metaharness-tools.ts"
+WRAPPER="$ROOT/../../v3/@rufflo/cli/src/mcp-tools/metaharness-tools.ts"
 grep -q "name: 'metaharness_drift_from_history'" "$WRAPPER" 2>/dev/null || miss="$miss no-mcp-tool"
 grep -q "drift-from-history.mjs" "$WRAPPER" 2>/dev/null || miss="$miss no-script-dispatch"
 grep -q "baselineSince" "$WRAPPER" 2>/dev/null || miss="$miss no-baseline-since-input"
 # CLAUDE.md mentions both surfaces
 CMD="$ROOT/../../CLAUDE.md"
-grep -q "mcp__claude-flow__metaharness_drift_from_history" "$CMD" 2>/dev/null || miss="$miss claude-md-no-mcp"
-grep -q "ruflo metaharness drift-from-history" "$CMD" 2>/dev/null || miss="$miss claude-md-no-subcommand"
+grep -q "mcp__rufflo__metaharness_drift_from_history" "$CMD" 2>/dev/null || miss="$miss claude-md-no-mcp"
+grep -q "rufflo metaharness drift-from-history" "$CMD" 2>/dev/null || miss="$miss claude-md-no-subcommand"
 # Phase 4 includes the new positive-case assertions
 T="$ROOT/scripts/test-mcp-tools.mjs"
 grep -q "drift_from_history positive: data is an object" "$T" 2>/dev/null || miss="$miss no-phase4-positive"
@@ -1472,7 +1472,7 @@ grep -q "audit-trend.mjs" "$F" 2>/dev/null || miss="$miss no-audit-trend-compose
 SK="$ROOT/skills/harness-drift-from-history/SKILL.md"
 [[ -f "$SK" ]] || miss="$miss no-skill-md"
 grep -q "name: harness-drift-from-history" "$SK" 2>/dev/null || miss="$miss skill-name-wrong"
-DISP="$ROOT/../../v3/@claude-flow/cli/src/commands/metaharness.ts"
+DISP="$ROOT/../../v3/@rufflo/cli/src/commands/metaharness.ts"
 grep -q "'drift-from-history': 'drift-from-history.mjs'" "$DISP" 2>/dev/null || miss="$miss no-dispatcher-entry"
 grep -q "drift-from-history.*iter 53" "$DISP" 2>/dev/null || miss="$miss no-help-line"
 # 4-exit-code semantic — script exits 0/1/2/3 based on threshold + dep state
@@ -1487,7 +1487,7 @@ grep -q "mcp_scan positive: data.findings is an array" "$T" 2>/dev/null || miss=
 grep -q "mcp_scan positive: first finding has string severity" "$T" 2>/dev/null || miss="$miss no-severity-mcp-assert"
 grep -q "mcp_scan positive: data.summary.totalCount" "$T" 2>/dev/null || miss="$miss no-summary-mcp-assert"
 # Doctor verifies parseMcpScanText export + smoke
-DOC="$ROOT/../../v3/@claude-flow/cli/src/commands/doctor.ts"
+DOC="$ROOT/../../v3/@rufflo/cli/src/commands/doctor.ts"
 grep -q "parseMcpScanText" "$DOC" 2>/dev/null || miss="$miss doctor-no-parser-import"
 grep -q "iter 50 — needed by mcp-scan + oia-audit" "$DOC" 2>/dev/null || miss="$miss doctor-no-iter50-marker"
 grep -q "parseMcpScanText returned unexpected shape" "$DOC" 2>/dev/null || miss="$miss doctor-no-empty-input-check"
@@ -1616,7 +1616,7 @@ CODE=$?
 
 step "17z9. MCP success-semantic footnote + audit_trend file inputs (iter 46)"
 miss=""
-WRAPPER="$ROOT/../../v3/@claude-flow/cli/src/mcp-tools/metaharness-tools.ts"
+WRAPPER="$ROOT/../../v3/@rufflo/cli/src/mcp-tools/metaharness-tools.ts"
 # Success-semantic constant declared + appended to N descriptions = N+1 occurrences.
 # Iter 46 set this at 9 (8 tools); iter 54 added the 9th tool → expect 10.
 COUNT=$(grep -c "MCP_SUCCESS_SEMANTIC" "$WRAPPER" 2>/dev/null; true)
@@ -1631,9 +1631,9 @@ T="$ROOT/scripts/test-mcp-tools.mjs"
 grep -q "audit_trend file-input path: success === true" "$T" 2>/dev/null || miss="$miss no-file-input-assert"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
-step "17z8. ruflo doctor checks the integration layer, not just upstream (iter 45)"
+step "17z8. rufflo doctor checks the integration layer, not just upstream (iter 45)"
 miss=""
-DOC="$ROOT/../../v3/@claude-flow/cli/src/commands/doctor.ts"
+DOC="$ROOT/../../v3/@rufflo/cli/src/commands/doctor.ts"
 # New function present
 grep -q "function checkMetaharnessIntegration" "$DOC" 2>/dev/null || miss="$miss no-integration-check"
 # Registered in allChecks
@@ -1650,7 +1650,7 @@ grep -q "mod.similarity({}, {})" "$DOC" 2>/dev/null || miss="$miss no-smoke-call
 
 step "17z7. MCP wrapper success semantic fix (iter 44 — exitCode is the source of truth)"
 miss=""
-WRAPPER="$ROOT/../../v3/@claude-flow/cli/src/mcp-tools/metaharness-tools.ts"
+WRAPPER="$ROOT/../../v3/@rufflo/cli/src/mcp-tools/metaharness-tools.ts"
 # runScript signature includes success now
 grep -q "success: boolean" "$WRAPPER" 2>/dev/null || miss="$miss no-success-type"
 grep -q "success = exitCode === 0" "$WRAPPER" 2>/dev/null || miss="$miss no-exitcode-derived-success"
@@ -1681,7 +1681,7 @@ node "$F" >/dev/null 2>&1 || miss="$miss runtime-fails"
 
 step "17z5. CLI dispatcher round-trips flags (iter 42 — fixes existing bug)"
 miss=""
-DISP="$ROOT/../../v3/@claude-flow/cli/src/commands/metaharness.ts"
+DISP="$ROOT/../../v3/@rufflo/cli/src/commands/metaharness.ts"
 # Reconstruction logic literal markers (anti-deletion)
 grep -q "reconstructedFlags" "$DISP" 2>/dev/null || miss="$miss no-reconstruction"
 grep -q "ctxFlags" "$DISP" 2>/dev/null || miss="$miss no-ctx-flags-read"
@@ -1726,8 +1726,8 @@ grep -q "Graceful fallback when fingerprint missing" "$F" 2>/dev/null || miss="$
 grep -q "Distance alert gate exits 1" "$F" 2>/dev/null || miss="$miss no-alert-step"
 # CLAUDE.md documents the new MCP tool + subcommand
 CMD="$ROOT/../../CLAUDE.md"
-grep -q "mcp__claude-flow__metaharness_similarity" "$CMD" 2>/dev/null || miss="$miss claude-md-no-mcp-tool"
-grep -q "ruflo metaharness similarity" "$CMD" 2>/dev/null || miss="$miss claude-md-no-subcommand"
+grep -q "mcp__rufflo__metaharness_similarity" "$CMD" 2>/dev/null || miss="$miss claude-md-no-mcp-tool"
+grep -q "rufflo metaharness similarity" "$CMD" 2>/dev/null || miss="$miss claude-md-no-subcommand"
 grep -q -- "--alert-on-distance-below" "$CMD" 2>/dev/null || miss="$miss claude-md-no-distance-flag"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
@@ -1809,10 +1809,10 @@ SK="$ROOT/skills/harness-similarity/SKILL.md"
 grep -q "^name: harness-similarity" "$SK" 2>/dev/null || miss="$miss skill-md-name-wrong"
 grep -q "^allowed-tools:" "$SK" 2>/dev/null || miss="$miss skill-md-no-allowed-tools"
 # Dispatcher
-DISP="$ROOT/../../v3/@claude-flow/cli/src/commands/metaharness.ts"
+DISP="$ROOT/../../v3/@rufflo/cli/src/commands/metaharness.ts"
 grep -q "similarity: 'similarity.mjs'" "$DISP" 2>/dev/null || miss="$miss no-dispatcher-entry"
 # MCP tool registered
-MCP="$ROOT/../../v3/@claude-flow/cli/src/mcp-tools/metaharness-tools.ts"
+MCP="$ROOT/../../v3/@rufflo/cli/src/mcp-tools/metaharness-tools.ts"
 grep -q "name: 'metaharness_similarity'" "$MCP" 2>/dev/null || miss="$miss no-mcp-tool"
 # Smoke-runtime sanity: production module reproduces spike LEGAL×SUPPORT score
 TMPA=$(mktemp); TMPB=$(mktemp)
@@ -2033,12 +2033,12 @@ miss=""
 [[ -f "$F" ]] || miss="$miss claude-md-missing"
 grep -q "^## MetaHarness Integration (ADR-150)" "$F" || miss="$miss no-section-header"
 # Architectural constraint anchor
-grep -q "Ruflo remains operational if every MetaHarness package is removed" "$F" || miss="$miss no-constraint-quote"
+grep -q "Rufflo remains operational if every MetaHarness package is removed" "$F" || miss="$miss no-constraint-quote"
 # All 4 rules documented
 grep -q "no-metaharness-smoke.yml" "$F" || miss="$miss no-ci-gate-ref"
 # Command surface + tool surface enumerated
-grep -q "npx ruflo metaharness score" "$F" || miss="$miss no-cli-example"
-grep -q "mcp__claude-flow__metaharness_" "$F" || miss="$miss no-mcp-tool-list"
+grep -q "npx rufflo metaharness score" "$F" || miss="$miss no-cli-example"
+grep -q "mcp__rufflo__metaharness_" "$F" || miss="$miss no-mcp-tool-list"
 # Routing + parallel-log integration both mentioned
 grep -q "CLAUDE_FLOW_ROUTER_NEURAL\|CLAUDE_FLOW_ROUTER_PARALLEL_LOG" "$F" || miss="$miss no-routing-flags"
 # 3-criteria gate
@@ -2046,7 +2046,7 @@ grep -q "quality > 2% AND cost < 1% AND latency < 5%" "$F" || miss="$miss no-3-c
 [[ -z "$miss" ]] && ok || bad "$miss"
 
 step "17m. metaharness MCP tools registered (ADR-150 deepest integration — iter 20)"
-F="$ROOT/../../v3/@claude-flow/cli/src/mcp-tools/metaharness-tools.ts"
+F="$ROOT/../../v3/@rufflo/cli/src/mcp-tools/metaharness-tools.ts"
 miss=""
 [[ -f "$F" ]] || miss="$miss tools-file-missing"
 # All 7 tools declared (5 static-analysis + 2 audit-observability — iter 20, 21)
@@ -2059,7 +2059,7 @@ grep -q "from '@metaharness/" "$F" && miss="$miss static-metaharness-import-LEAK
 grep -q "locatePluginScripts" "$F" || miss="$miss no-locator"
 grep -q "child_process" "$F" || miss="$miss no-subprocess"
 # Registered in mcp-client.ts
-CLIENT="$ROOT/../../v3/@claude-flow/cli/src/mcp-client.ts"
+CLIENT="$ROOT/../../v3/@rufflo/cli/src/mcp-client.ts"
 grep -q "import { metaharnessTools }" "$CLIENT" || miss="$miss not-imported-in-client"
 grep -q "\.\.\.metaharnessTools" "$CLIENT" || miss="$miss not-spread-in-registry"
 [[ -z "$miss" ]] && ok || bad "$miss"
@@ -2082,15 +2082,15 @@ grep -q "no-such-registry" "$F" || miss="$miss no-fake-host"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
 step "17k. init + hooks discovery surfaces metaharness (iter 18)"
-INIT="$ROOT/../../v3/@claude-flow/cli/src/commands/init.ts"
-HOOKS="$ROOT/../../v3/@claude-flow/cli/src/commands/hooks.ts"
+INIT="$ROOT/../../v3/@rufflo/cli/src/commands/init.ts"
+HOOKS="$ROOT/../../v3/@rufflo/cli/src/commands/hooks.ts"
 miss=""
 # init.ts Next-steps points at metaharness score
 grep -q "metaharness score.*5-dim\|metaharness score)\`} for a 5-dim" "$INIT" 2>/dev/null || miss="$miss init-no-metaharness-tip"
 grep -q "ADR-150" "$INIT" 2>/dev/null || miss="$miss init-no-adr-anchor"
 # hooks.ts worker-dispatch trigger list includes oia-audit
 grep -q "testgaps, oia-audit" "$HOOKS" 2>/dev/null || miss="$miss hooks-trigger-list-missing"
-grep -q "ruflo metaharness oia-audit" "$HOOKS" 2>/dev/null || miss="$miss hooks-tip-missing"
+grep -q "rufflo metaharness oia-audit" "$HOOKS" 2>/dev/null || miss="$miss hooks-tip-missing"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
 step "17j. audit-list — enumerate metaharness-audit records (iter 16)"
@@ -2124,7 +2124,7 @@ grep -q "process.exit(1)" "$F" || miss="$miss no-fail-closed"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
 step "17h. doctor integration — checkMetaharness in standard health checks (iter 14)"
-F="$ROOT/../../v3/@claude-flow/cli/src/commands/doctor.ts"
+F="$ROOT/../../v3/@rufflo/cli/src/commands/doctor.ts"
 miss=""
 [[ -f "$F" ]] || miss="$miss missing-file"
 # The check function exists, with ADR-150 anchor
@@ -2157,7 +2157,7 @@ grep -q "exits 1\|status === 1" "$F" || miss="$miss no-non-promotable-assertion"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
 step "17f. model-router.ts wires recordPair() (ADR-150 last-mile, iter 12)"
-F="$ROOT/../../v3/@claude-flow/cli/src/ruvector/model-router.ts"
+F="$ROOT/../../v3/@rufflo/cli/src/ruvector/model-router.ts"
 miss=""
 [[ -f "$F" ]] || miss="$miss missing-file"
 # Lazy loader registered
@@ -2175,7 +2175,7 @@ grep -q "metaharness-router-hybrid\|bandit-only" "$F" || miss="$miss no-ser-tag"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
 step "17e. router-parallel-recorder TS module (ADR-150 SelfEvolvingRouter recording — iter 11)"
-F="$ROOT/../../v3/@claude-flow/cli/src/ruvector/router-parallel-recorder.ts"
+F="$ROOT/../../v3/@rufflo/cli/src/ruvector/router-parallel-recorder.ts"
 miss=""
 [[ -f "$F" ]] || miss="$miss missing-file"
 # Architectural constraint #2: env-gated optional behavior
@@ -2236,17 +2236,17 @@ grep -q "process.exit(1)" "$F" || miss="$miss no-fail-closed"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
 step "17b. harness type in plugin registry (Phase 2 — iter 6)"
-F="$ROOT/../../v3/@claude-flow/cli/src/plugins/store/types.ts"
+F="$ROOT/../../v3/@rufflo/cli/src/plugins/store/types.ts"
 miss=""
 [[ -f "$F" ]] || miss="$miss types-file-missing"
 grep -q "'harness'" "$F" 2>/dev/null || miss="$miss no-harness-type"
 grep -q "ADR-150" "$F" 2>/dev/null || miss="$miss no-adr-anchor"
-D="$ROOT/../../v3/@claude-flow/cli/src/plugins/store/discovery.ts"
+D="$ROOT/../../v3/@rufflo/cli/src/plugins/store/discovery.ts"
 grep -q "id: 'harness'" "$D" 2>/dev/null || miss="$miss no-harness-category"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
 step "17. eject command — Phase 2 differentiator (iter 4)"
-F="$ROOT/../../v3/@claude-flow/cli/src/commands/eject.ts"
+F="$ROOT/../../v3/@rufflo/cli/src/commands/eject.ts"
 miss=""
 [[ -f "$F" ]] || miss="$miss command-file-missing"
 grep -q "name: 'eject'" "$F" 2>/dev/null || miss="$miss no-name-field"
@@ -2260,7 +2260,7 @@ grep -q "dryRun" "$F" 2>/dev/null || miss="$miss no-dryrun"
 # Graceful degradation on missing binary
 grep -q "metaharness-not-available\|degraded:" "$F" 2>/dev/null || miss="$miss no-graceful-deg"
 # Registered in the loader
-LOADER="$ROOT/../../v3/@claude-flow/cli/src/commands/index.ts"
+LOADER="$ROOT/../../v3/@rufflo/cli/src/commands/index.ts"
 grep -q "eject: () => import" "$LOADER" 2>/dev/null || miss="$miss not-registered-in-loader"
 [[ -z "$miss" ]] && ok || bad "$miss"
 

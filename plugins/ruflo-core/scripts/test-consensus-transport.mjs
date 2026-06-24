@@ -2,7 +2,7 @@
 /**
  * CI guard for ADR-095 G2 — hive-mind consensus transport.
  *
- * Asserts the @claude-flow/swarm package ships a real, pluggable
+ * Asserts the @rufflo/swarm package ships a real, pluggable
  * consensus transport (not the implicit single-process EventEmitter):
  *
  *   1. The dist exports ConsensusTransport / LocalTransport / signMessage /
@@ -20,8 +20,8 @@ import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 const REPO_ROOT = resolve(process.argv[2] ?? process.cwd());
-const DIST_INDEX = resolve(REPO_ROOT, 'v3/@claude-flow/swarm/dist/consensus/index.js');
-const DIST_TRANSPORT = resolve(REPO_ROOT, 'v3/@claude-flow/swarm/dist/consensus/transport.js');
+const DIST_INDEX = resolve(REPO_ROOT, 'v3/@rufflo/swarm/dist/consensus/index.js');
+const DIST_TRANSPORT = resolve(REPO_ROOT, 'v3/@rufflo/swarm/dist/consensus/transport.js');
 
 let failed = 0;
 const fail = (m) => { console.error(`FAIL: ${m}`); failed++; };
@@ -29,7 +29,7 @@ const pass = (m) => console.log(`ok: ${m}`);
 
 for (const p of [DIST_INDEX, DIST_TRANSPORT]) {
   if (!existsSync(p)) {
-    fail(`${p} not found — run \`npm --prefix v3/@claude-flow/swarm run build\` first`);
+    fail(`${p} not found — run \`npm --prefix v3/@rufflo/swarm run build\` first`);
   }
 }
 if (failed > 0) process.exit(1);

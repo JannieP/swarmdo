@@ -1,8 +1,8 @@
-# Claude-Flow v3: Agent, Skills, Commands & Hooks Optimization
+# Rufflo v3: Agent, Skills, Commands & Hooks Optimization
 
 ## Overview
 
-This document details the optimization strategy for the four core extensibility systems in Claude-Flow v3:
+This document details the optimization strategy for the four core extensibility systems in Rufflo v3:
 - **Agents**: 76 specialized agent definitions
 - **Skills**: 28 skill definitions with progressive disclosure
 - **Commands**: 93 slash commands
@@ -128,7 +128,7 @@ description: Implementation specialist for writing clean, efficient code
 # v3: agentic-flow integration
 agentic-flow:
   sona-profile: research        # +55% code quality
-  attention: flash              # 2.49x-7.47x faster context
+  attention: flash              # unverified (no benchmark) faster context
   learning: enabled             # Learn from implementations
   reflexion: enabled            # Self-improvement
   skill-library: true           # Store successful patterns
@@ -352,9 +352,9 @@ tools:
   - Task
   - TodoWrite
   - Bash
-  - mcp__claude-flow__swarm_init
-  - mcp__claude-flow__agent_spawn
-  - mcp__claude-flow__task_orchestrate
+  - mcp__rufflo__swarm_init
+  - mcp__rufflo__agent_spawn
+  - mcp__rufflo__task_orchestrate
 ---
 
 # Swarm Orchestration Skill
@@ -543,7 +543,7 @@ Initialize a multi-agent swarm with intelligent topology selection.
 ## v3 Enhancements
 
 - **Auto Topology**: Automatically selects best topology based on task complexity
-- **Flash Attention**: 2.49x-7.47x faster agent coordination
+- **Flash Attention**: unverified (no benchmark) faster agent coordination
 - **SONA Learning**: Learns optimal swarm configurations over time
 
 ## Examples
@@ -589,7 +589,7 @@ All hooks defined in `.claude/config.json`:
       {
         "matcher": "Bash",
         "commands": [
-          "npx claude-flow hooks pre-tool --tool=$TOOL_NAME --command=\"$BASH_COMMAND\""
+          "npx rufflo hooks pre-tool --tool=$TOOL_NAME --command=\"$BASH_COMMAND\""
         ],
         "timeout": 5000,
         "failOnError": false
@@ -597,7 +597,7 @@ All hooks defined in `.claude/config.json`:
       {
         "matcher": "Write|Edit",
         "commands": [
-          "npx claude-flow hooks pre-edit --file=$FILE_PATH"
+          "npx rufflo hooks pre-edit --file=$FILE_PATH"
         ]
       }
     ],
@@ -606,13 +606,13 @@ All hooks defined in `.claude/config.json`:
       {
         "matcher": "*",
         "commands": [
-          "npx claude-flow hooks post-tool --tool=$TOOL_NAME --success=$SUCCESS"
+          "npx rufflo hooks post-tool --tool=$TOOL_NAME --success=$SUCCESS"
         ]
       },
       {
         "matcher": "Write|Edit",
         "commands": [
-          "npx claude-flow hooks post-edit --file=$FILE_PATH --memory-key=\"edits/$FILE_PATH\""
+          "npx rufflo hooks post-edit --file=$FILE_PATH --memory-key=\"edits/$FILE_PATH\""
         ]
       }
     ],
@@ -620,7 +620,7 @@ All hooks defined in `.claude/config.json`:
     "PreCompact": [
       {
         "commands": [
-          "npx claude-flow hooks pre-compact --session=$SESSION_ID"
+          "npx rufflo hooks pre-compact --session=$SESSION_ID"
         ]
       }
     ],
@@ -628,7 +628,7 @@ All hooks defined in `.claude/config.json`:
     "Stop": [
       {
         "commands": [
-          "npx claude-flow hooks session-end --export-metrics true"
+          "npx rufflo hooks session-end --export-metrics true"
         ]
       }
     ]

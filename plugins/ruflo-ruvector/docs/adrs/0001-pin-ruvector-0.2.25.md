@@ -1,6 +1,6 @@
 ---
 id: ADR-0001
-title: Pin ruflo-ruvector plugin to ruvector@0.2.25 with optional add-on packages
+title: Pin rufflo-ruvector plugin to ruvector@0.2.25 with optional add-on packages
 status: Accepted
 date: 2026-05-04
 authors:
@@ -10,7 +10,7 @@ tags: [plugin, ruvector, versioning, mcp, dependencies]
 
 ## Context
 
-The `ruflo-ruvector` plugin wraps the `ruvector` npm package as a Claude Code plugin. The plugin's documentation (README, agent file, skills, command spec) drifted from the actual CLI surface in two ways:
+The `rufflo-ruvector` plugin wraps the `ruvector` npm package as a Claude Code plugin. The plugin's documentation (README, agent file, skills, command spec) drifted from the actual CLI surface in two ways:
 
 1. **Aspirational features.** Older docs referenced `FlashAttention-3`, `Graph RAG`, `Hybrid Search`, `DiskANN`, `ColBERT`, `Matryoshka`, `MLA`, `TurboQuant`, `Brain AGI`, and `Midstream` as if they were invokable CLI subcommands. The native Rust bindings expose primitives for most of these, but **no CLI subcommand wires them up** — only `attention list` enumerates the mechanisms.
 2. **Unspecified version.** The plugin invoked `npx ruvector ...` without a version pin, so a user with `ruvector@0.1.x` resolved would silently get a different surface (no `brain`, no `route`, no `sona`) than a user on `ruvector@0.2.x`.
@@ -110,7 +110,7 @@ The plugin's own `version` field in `.claude-plugin/plugin.json` is bumped (patc
 
 ```bash
 # Plugin contract check
-bash plugins/ruflo-ruvector/scripts/smoke.sh
+bash plugins/rufflo-ruvector/scripts/smoke.sh
 # Expected: "11 passed, 0 failed"
 ```
 

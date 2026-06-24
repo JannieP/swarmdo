@@ -1,5 +1,5 @@
 /**
- * ruflo-graph-intelligence — Adapter Contract (ADR-123 § Architecture)
+ * rufflo-graph-intelligence — Adapter Contract (ADR-123 § Architecture)
  *
  * Each owning plugin (browser, federation, knowledge-graph, …) implements
  * this interface and registers itself at plugin-load time. The registry is
@@ -9,7 +9,7 @@
 import type { SparseMatrix } from './types.js';
 
 export interface SublinearAdapter {
-  /** Stable identifier — `"ruflo-federation:trust-mesh"`, etc. */
+  /** Stable identifier — `"rufflo-federation:trust-mesh"`, etc. */
   readonly graphId: string;
 
   /** Owning plugin's package name; informational. */

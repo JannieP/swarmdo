@@ -23,8 +23,8 @@ import { resolve } from 'node:path';
 
 const REPO_ROOT = resolve(process.argv[2] ?? process.cwd());
 const TARGETS = [
-  'v3/@claude-flow/mcp/dist/server.js',
-  'v3/@claude-flow/shared/dist/mcp/server.js',
+  'v3/@rufflo/mcp/dist/server.js',
+  'v3/@rufflo/shared/dist/mcp/server.js',
 ];
 
 const SPEC_DATE_REGEX = /^['"]\d{4}-\d{2}-\d{2}['"]$/;

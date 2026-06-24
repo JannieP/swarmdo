@@ -1,6 +1,6 @@
 # Supply-chain hardening — `.github/supply-chain/`
 
-This directory is the **maintained surface** for ruflo's supply-chain defence.
+This directory is the **maintained surface** for rufflo's supply-chain defence.
 
 CI runs [`scripts/audit-supply-chain.mjs`](../../scripts/audit-supply-chain.mjs) on every PR and push that touches a `package.json`, a lockfile, this directory, or the audit script itself. Five layers of defence:
 
@@ -71,6 +71,6 @@ Three real supply-chain incidents on npm in the last 18 months involved:
 - a typosquat that pulled in `event-stream → flatmap-stream` and exfiltrated wallets
 - a postinstall script in a transitively-pulled dep that ran during `npm install`
 
-This audit doesn't make ruflo immune. It does make these patterns **visible** in CI before they reach production, with structured failures the maintainer can triage rather than silent installs.
+This audit doesn't make rufflo immune. It does make these patterns **visible** in CI before they reach production, with structured failures the maintainer can triage rather than silent installs.
 
 Related: [ADR-123](../../v3/docs/adr/ADR-123-sublinear-integration.md) (introduced the new plugin under audit), [ADR-122](../../v3/docs/adr/ADR-122-browser-beyond-sota.md) (introduced the browser substrate under audit).

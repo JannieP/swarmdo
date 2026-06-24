@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Structural smoke test for ruflo-adr v0.2.0 (ADR-0001).
+# Structural smoke test for rufflo-adr v0.2.0 (ADR-0001).
 set -u
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PASS=0
@@ -55,15 +55,15 @@ grep -q "adr-patterns" "$ROOT/skills/adr-create/SKILL.md" || miss="$miss adr-cre
 grep -q "adr-patterns" "$ROOT/skills/adr-index/SKILL.md" || miss="$miss adr-index"
 [[ -z "$miss" ]] && ok || bad "missing in:$miss"
 
-# 6. README pins to @claude-flow/cli v3.6
-step "6. README pins @claude-flow/cli to v3.6"
-grep -qE "@claude-flow/cli.*v3\.6|v3\.6.*claude-flow/cli" "$ROOT/README.md" \
+# 6. README pins to @rufflo/cli v3.6
+step "6. README pins @rufflo/cli to v3.6"
+grep -qE "@rufflo/cli.*v3\.6|v3\.6.*rufflo/cli" "$ROOT/README.md" \
   && ok || bad "Compatibility pin to v3.6 missing"
 
 # 7. README has namespace coordination section
-step "7. README defers to ruflo-agentdb ADR-0001 namespace convention"
+step "7. README defers to rufflo-agentdb ADR-0001 namespace convention"
 grep -q "Namespace coordination" "$ROOT/README.md" \
-  && grep -q "ruflo-agentdb" "$ROOT/README.md" \
+  && grep -q "rufflo-agentdb" "$ROOT/README.md" \
   && grep -q "Namespace convention" "$ROOT/README.md" \
   && ok || bad "namespace coordination block incomplete"
 

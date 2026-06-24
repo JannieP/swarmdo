@@ -19,7 +19,7 @@
  * - Rate limiting for fair resource allocation
  *
  * @packageDocumentation
- * @module @claude-flow/plugin-financial-risk
+ * @module @rufflo/plugin-financial-risk
  */
 
 // Export all types
@@ -63,7 +63,7 @@ import { DEFAULT_FINANCIAL_CONFIG } from './types.js';
  * Plugin metadata
  */
 export const pluginMetadata = {
-  name: '@claude-flow/plugin-financial-risk',
+  name: '@rufflo/plugin-financial-risk',
   version: '3.0.0-alpha.1',
   description: 'High-performance financial risk analysis with portfolio risk, anomaly detection, and compliance checking',
   author: 'rUv',

@@ -6,7 +6,7 @@
  * n ∈ {16, 64, 256}. Output columns:
  *
  *   - cg_local_avg_ms              — local JS CG kernel
- *   - cg_sublinear_native_avg_ms   — native dispatch via mcp__ruflo-sublinear__solve
+ *   - cg_sublinear_native_avg_ms   — native dispatch via mcp__rufflo-sublinear__solve
  *                                    (only measured when the tool surface is
  *                                    reachable in this runtime — see #55)
  *   - neumann_solve_avg_ms         — legacy Jacobi-Neumann (the path the CLI
@@ -23,7 +23,7 @@
  * Self-contained — no external runtime deps beyond Node 20+ stdlib.
  *
  * Run:
- *   node plugins/ruflo-neural-trader/benchmarks/portfolio-cg.bench.mjs
+ *   node plugins/rufflo-neural-trader/benchmarks/portfolio-cg.bench.mjs
  *
  * Output is markdown so the result can be captured directly into
  * benchmarks/results/cg-native-baseline-<timestamp>.md.
@@ -116,7 +116,7 @@ function benchOne(fn, A, b, opts) {
 
 // --- Native availability probe ------------------------------------------
 //
-// The native dispatch is reachable iff `mcp__ruflo-sublinear__solve` is
+// The native dispatch is reachable iff `mcp__rufflo-sublinear__solve` is
 // mounted on globalThis (or RUFLO_SUBLINEAR_NATIVE=1 forces an attempt).
 // When reachable, we run the adapter end-to-end and capture its latency.
 // When not, we still produce a useful local-JS baseline.
@@ -232,18 +232,18 @@ console.log('');
 const at256 = results.find((r) => r.n === 256);
 console.log(`- CG (local JS) latency at n=256: **${at256.cgAvgMs.toFixed(4)} ms** (target: <1 ms — ${at256.cgAvgMs < 1 ? 'PASS' : 'FAIL'})`);
 if (at256.cgNativeAvgMs != null) {
-  console.log(`- CG (native) latency at n=256: **${at256.cgNativeAvgMs.toFixed(4)} ms** (via \`mcp__ruflo-sublinear__solve\`)`);
+  console.log(`- CG (native) latency at n=256: **${at256.cgNativeAvgMs.toFixed(4)} ms** (via \`mcp__rufflo-sublinear__solve\`)`);
   console.log(`- Native speedup at n=256: **${at256.nativeSpeedup.toFixed(2)}×** vs Neumann (target: 40-60× per ADR-123 Wedge 8)`);
 } else {
   console.log('- CG (native) latency: **n/a** — native dispatch surface not reachable from this runtime');
-  console.log('  - Reasons it can be unreachable: ruflo daemon not running, ruflo-sublinear plugin not registered, or the agent sandbox does not mount MCP tools onto globalThis. Set `RUFLO_SUBLINEAR_NATIVE=1` to force a dispatch attempt.');
+  console.log('  - Reasons it can be unreachable: rufflo daemon not running, rufflo-sublinear plugin not registered, or the agent sandbox does not mount MCP tools onto globalThis. Set `RUFLO_SUBLINEAR_NATIVE=1` to force a dispatch attempt.');
 }
 console.log(`- Local JS speedup at n=256: **${at256.localSpeedup.toFixed(2)}×** vs Neumann (JS-vs-JS gap — both kernels converge in O(few) iterations on well-conditioned SPD inputs, so the gap is dominated by per-iter constant factors. The full 40-60× requires the native kernel.)`);
 console.log(`- Parity at all n: **${allParityOk ? 'PASS' : 'FAIL'}** (||cg − neumann||_∞ < 1e-4)`);
 console.log('');
 console.log('## Refs');
 console.log('');
-console.log('- ADR-126 Phase 3 — `plugins/ruflo-neural-trader/src/sublinear-adapter.ts`');
+console.log('- ADR-126 Phase 3 — `plugins/rufflo-neural-trader/src/sublinear-adapter.ts`');
 console.log('- ADR-123 §162 Row 8 — Wedge 8 portfolio CG');
 console.log('- Upstream `sublinear-time-solver@1.7.0` — production CG kernel target');
 console.log('- Task #55 — native CG dispatch wiring (this bench column)');

@@ -1,6 +1,6 @@
-# Ruflo Verification System
+# Rufflo Verification System
 
-A cross-platform, cryptographically-signed regression-protection toolkit. Every documented fix in ruflo gets attested by a SHA-256 + marker substring + Ed25519 signature. Anyone with the same git commit can re-derive the public key and verify it independently.
+A cross-platform, cryptographically-signed regression-protection toolkit. Every documented fix in rufflo gets attested by a SHA-256 + marker substring + Ed25519 signature. Anyone with the same git commit can re-derive the public key and verify it independently.
 
 > **Three-layer regression protection:**
 > 1. **Behavioral smoke tests** (CI) — exercise user-visible failure modes
@@ -49,11 +49,11 @@ verification/
 
 ### 1. Bootstrap
 
-The witness toolkit lives in `plugins/ruflo-core/scripts/witness/` — copy it into your project (or install the ruflo-core plugin).
+The witness toolkit lives in `plugins/rufflo-core/scripts/witness/` — copy it into your project (or install the rufflo-core plugin).
 
 ```bash
 # Initialize per-OS folders + sample fix template
-node plugins/ruflo-core/scripts/witness/init.mjs --root .
+node plugins/rufflo-core/scripts/witness/init.mjs --root .
 
 # Single runtime dependency
 npm i @noble/ed25519
@@ -104,7 +104,7 @@ Pick a unique substring from the diff that's specifically created by the fix.
 
 ### 3. Generate the signed manifest
 
-In ruflo's monorepo there's a wrapper that hard-codes paths:
+In rufflo's monorepo there's a wrapper that hard-codes paths:
 
 ```bash
 node scripts/regen-witness.mjs
@@ -113,7 +113,7 @@ node scripts/regen-witness.mjs
 For external projects, call the plugin script with explicit paths:
 
 ```bash
-node plugins/ruflo-core/scripts/witness/regen.mjs \
+node plugins/rufflo-core/scripts/witness/regen.mjs \
   --manifest verification/macos/manifest.md.json \
   --history  verification/macos/history.jsonl \
   --fixes    verification/witness-fixes.json
@@ -140,7 +140,7 @@ appended: verification/macos/history.jsonl
 ### 4. Verify
 
 ```bash
-node plugins/ruflo-core/scripts/witness/verify.mjs \
+node plugins/rufflo-core/scripts/witness/verify.mjs \
   --manifest verification/macos/manifest.md.json
 ```
 
@@ -162,7 +162,7 @@ If `regressed > 0` or `signatureValid: no`, the manifest has been tampered with 
 When CI reports `F12 regressed`:
 
 ```bash
-node plugins/ruflo-core/scripts/witness/history.mjs \
+node plugins/rufflo-core/scripts/witness/history.mjs \
   --history verification/macos/history.jsonl regressions
 ```
 
@@ -198,7 +198,7 @@ witness-verify:
           macOS)   OS_DIR=macos ;;
           Windows) OS_DIR=windows ;;
         esac
-        node plugins/ruflo-core/scripts/witness/verify.mjs \
+        node plugins/rufflo-core/scripts/witness/verify.mjs \
           --manifest "verification/$OS_DIR/manifest.md.json" \
           --json > /tmp/result.json
         node -e "if (!require('/tmp/result.json').ok) process.exit(1)"
@@ -214,7 +214,7 @@ Block publish on failure. Every commit on every OS gets attested.
 |---|---|---|
 | **SHA-256 fingerprint per fix** | Per-file hash recorded at issuance | Any change to the file |
 | **Marker substring** | Distinctive code substring required to be present | Refactors that delete the fix |
-| **Ed25519 signature** | Deterministic seed `sha256(gitCommit + ':ruflo-witness/v1')` | Manifest tampering, key-derivation drift |
+| **Ed25519 signature** | Deterministic seed `sha256(gitCommit + ':rufflo-witness/v1')` | Manifest tampering, key-derivation drift |
 | **Reproducible public key** | Anyone with the git commit re-derives the same pubkey | No committed private key needed |
 | **Per-OS bundles** | `verification/{linux,macos,windows}/` | Platform-specific marker drift (CRLF, path separators) |
 | **Temporal history (JSONL)** | One snapshot appended per regen | When a regression was introduced |
@@ -231,19 +231,19 @@ $EDITOR verification/witness-fixes.json
 node scripts/regen-witness.mjs
 
 # Verify the current tree
-node plugins/ruflo-core/scripts/witness/verify.mjs \
+node plugins/rufflo-core/scripts/witness/verify.mjs \
   --manifest verification/macos/manifest.md.json
 
 # Diff against the previous snapshot
-node plugins/ruflo-core/scripts/witness/history.mjs \
+node plugins/rufflo-core/scripts/witness/history.mjs \
   --history verification/macos/history.jsonl summary
 
 # Find when a regression was introduced
-node plugins/ruflo-core/scripts/witness/history.mjs \
+node plugins/rufflo-core/scripts/witness/history.mjs \
   --history verification/macos/history.jsonl regressions
 
 # Status timeline for one fix
-node plugins/ruflo-core/scripts/witness/history.mjs \
+node plugins/rufflo-core/scripts/witness/history.mjs \
   --history verification/macos/history.jsonl timeline --id F12
 ```
 
@@ -256,18 +256,18 @@ node plugins/ruflo-core/scripts/witness/history.mjs \
 ```jsonc
 {
   "manifest": {
-    "schema": "ruflo-witness/v1",
+    "schema": "rufflo-witness/v1",
     "issuedAt": "2026-05-09T00:00:00.000Z",
     "gitCommit": "<full sha>",
     "branch": "main",
     "os": "macos",                              // matches the folder
-    "releases": { "ruflo": "3.7.0-alpha.21", "@claude-flow/plugin-agent-federation": "1.0.0-alpha.15" },
+    "releases": { "rufflo": "3.7.0-alpha.21", "@rufflo/plugin-agent-federation": "1.0.0-alpha.15" },
     "summary": { "totalFixes": 102, "verified": 102, "missing": 0 },
     "fixes": [
       {
         "id": "F1",
         "desc": "...",
-        "file": "v3/@claude-flow/cli/dist/...",
+        "file": "v3/@rufflo/cli/dist/...",
         "sha256": "<64 hex>",
         "marker": "<distinctive substring>",
         "markerVerified": true
@@ -281,7 +281,7 @@ node plugins/ruflo-core/scripts/witness/history.mjs \
     "signatureAlgo": "ed25519",
     "publicKey": "<32-byte hex>",
     "signature": "<64-byte hex>",
-    "seedDerivation": "sha256(gitCommit + ':ruflo-witness/v1')"
+    "seedDerivation": "sha256(gitCommit + ':rufflo-witness/v1')"
   }
 }
 ```
@@ -331,14 +331,14 @@ node plugins/ruflo-core/scripts/witness/history.mjs \
 
 ---
 
-## How it integrates with the rest of ruflo's regression stack
+## How it integrates with the rest of rufflo's regression stack
 
 | Layer | Where | What it catches |
 |---|---|---|
-| Layer 1 — install smoke | `v3/@claude-flow/memory/scripts/smoke-no-bsqlite.mjs` + CI `smoke-install-no-bsqlite` | `npm install` failures on platforms without prebuilds |
-| Layer 1 — hook smoke | `plugins/ruflo-core/scripts/test-hooks.mjs` + CI `plugin-hooks-smoke` | Plugin/CLI flag drift, parser ambiguity |
-| Layer 1 — MCP protocol smoke | `plugins/ruflo-core/scripts/test-mcp-protocol.mjs` + CI `mcp-protocol-smoke` | HTTP MCP wire-format compliance |
-| Layer 1 — memory-import smoke | `plugins/ruflo-core/scripts/test-memory-import.mjs` + CI `memory-import-smoke` | Memory_import_claude WSL path + key sanitization regressions |
+| Layer 1 — install smoke | `v3/@rufflo/memory/scripts/smoke-no-bsqlite.mjs` + CI `smoke-install-no-bsqlite` | `npm install` failures on platforms without prebuilds |
+| Layer 1 — hook smoke | `plugins/rufflo-core/scripts/test-hooks.mjs` + CI `plugin-hooks-smoke` | Plugin/CLI flag drift, parser ambiguity |
+| Layer 1 — MCP protocol smoke | `plugins/rufflo-core/scripts/test-mcp-protocol.mjs` + CI `mcp-protocol-smoke` | HTTP MCP wire-format compliance |
+| Layer 1 — memory-import smoke | `plugins/rufflo-core/scripts/test-memory-import.mjs` + CI `memory-import-smoke` | Memory_import_claude WSL path + key sanitization regressions |
 | Layer 1 — tool-description audit | `scripts/audit-tool-descriptions.mjs` + CI `tool-descriptions-audit` (ADR-112) | Every MCP tool description must have "Use when … is wrong because …" guidance + length ≥ 80 + unique. Baseline at `verification/mcp-tool-baseline.json` monotone-decreasing |
 | **Layer 2 — witness manifest** | **`verification/<os>/manifest.md.json`** + CI `witness-verify` | **Documented fix marker disappearing** |
 | Layer 3 — temporal history | `verification/<os>/history.jsonl` + `history.mjs` | When a regression was introduced |
@@ -353,6 +353,6 @@ All CI jobs gate `publish`. A regression in any layer blocks the release on the 
 - [Public gist](https://gist.github.com/ruvnet/ee7763c36f7a9a1c1886da783abc872b) — external-friendly version
 - [ADR-102](../v3/docs/adr/ADR-102-plugin-hook-cli-flag-regression-ci-guard.md) — smoke harness pattern + flag-priority CLI convention
 - [ADR-103](../v3/docs/adr/ADR-103-witness-temporal-history.md) — JSONL history layer + plugin distribution
-- [`plugins/ruflo-core/skills/witness/SKILL.md`](../plugins/ruflo-core/skills/witness/SKILL.md) — Claude Code skill workflow
-- [`plugins/ruflo-core/agents/witness-curator.md`](../plugins/ruflo-core/agents/witness-curator.md) — curator agent definition
+- [`plugins/rufflo-core/skills/witness/SKILL.md`](../plugins/rufflo-core/skills/witness/SKILL.md) — Claude Code skill workflow
+- [`plugins/rufflo-core/agents/witness-curator.md`](../plugins/rufflo-core/agents/witness-curator.md) — curator agent definition
 - [`.github/workflows/v3-ci.yml`](../.github/workflows/v3-ci.yml) — `smoke-install-no-bsqlite`, `plugin-hooks-smoke`, `witness-verify` jobs

@@ -102,30 +102,30 @@ Key MCP tool categories: market data, strategy management, backtesting, risk, po
 
 Store strategy results in AgentDB for cross-session learning:
 ```bash
-npx @claude-flow/cli@latest memory store --namespace trading-strategies --key "strategy-NAME" --value "CONFIG_JSON"
-npx @claude-flow/cli@latest memory search --query "momentum strategies Sharpe > 1.5" --namespace trading-strategies
+npx @rufflo/cli@latest memory store --namespace trading-strategies --key "strategy-NAME" --value "CONFIG_JSON"
+npx @rufflo/cli@latest memory search --query "momentum strategies Sharpe > 1.5" --namespace trading-strategies
 ```
 
 ### SONA Neural Integration
 
 Feed backtest trajectories to SONA for continuous optimization:
 ```bash
-npx @claude-flow/cli@latest neural train --pattern-type trading-strategy --epochs 20
-npx @claude-flow/cli@latest neural predict --input "current market: high volatility, upward drift"
+npx @rufflo/cli@latest neural train --pattern-type trading-strategy --epochs 20
+npx @rufflo/cli@latest neural predict --input "current market: high volatility, upward drift"
 ```
 
 ### Related Plugins
 
-- **ruflo-market-data**: OHLCV ingestion and candlestick pattern detection
-- **ruflo-ruvector**: HNSW indexing for strategy pattern similarity search
-- **ruflo-cost-tracker**: PnL tracking and cost attribution
-- **ruflo-observability**: Strategy performance dashboards
+- **rufflo-market-data**: OHLCV ingestion and candlestick pattern detection
+- **rufflo-ruvector**: HNSW indexing for strategy pattern similarity search
+- **rufflo-cost-tracker**: PnL tracking and cost attribution
+- **rufflo-observability**: Strategy performance dashboards
 
 ### Neural Learning
 
 After completing tasks, store successful patterns:
 ```bash
-npx @claude-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
+npx @rufflo/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
 ```
 
 ### Comms protocol (ADR-126 Phase 5 — SendMessage pipeline with risk-gate)
@@ -165,6 +165,6 @@ SendMessage({
 
 **Structural risk-gate (NON-NEGOTIABLE):** the live-trading branch above (step 5 of the Strategy Development Workflow) refuses to call `--broker` unless a `RiskDecision` with `decision: 'approved'` for the matching `signalId` is present in the SendMessage trace. The `scripts/smoke-neural-trader-pipeline.mjs` regression smoke fails the build if this guard is dropped or weakened.
 
-Message schemas: `RegimeVerdict`, `SignalProposal`, `RiskDecision` in `plugins/ruflo-neural-trader/src/pipeline-messages.ts`.
+Message schemas: `RegimeVerdict`, `SignalProposal`, `RiskDecision` in `plugins/rufflo-neural-trader/src/pipeline-messages.ts`.
 
 **Note on `backtest-engineer`:** that agent runs in an orthogonal lane — it produces signed-artifact promotion candidates (ADR-126 Phase 4) and does NOT participate in the live pipeline. Do not consume or send messages to it from the live execution path.

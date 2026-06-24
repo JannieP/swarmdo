@@ -1,4 +1,4 @@
-# ruflo-sparc
+# rufflo-sparc
 
 SPARC methodology -- Specification, Pseudocode, Architecture, Refinement, Completion phases with quality gates between each phase.
 
@@ -9,7 +9,7 @@ Drives features through a rigorous five-phase development lifecycle. Each phase 
 ## Installation
 
 ```bash
-claude --plugin-dir plugins/ruflo-sparc
+claude --plugin-dir plugins/rufflo-sparc
 ```
 
 ## Agents
@@ -57,8 +57,8 @@ sparc report                 # Generate full SPARC methodology report with trace
 
 ## Compatibility
 
-- **CLI:** pinned to `@claude-flow/cli` v3.6 major+minor.
-- **Verification:** `bash plugins/ruflo-sparc/scripts/smoke.sh` is the contract.
+- **CLI:** pinned to `@rufflo/cli` v3.6 major+minor.
+- **Verification:** `bash plugins/rufflo-sparc/scripts/smoke.sh` is the contract.
 
 ## Phase-to-plugin alignment
 
@@ -66,17 +66,17 @@ Each SPARC phase has a canonical handoff plugin that owns its deeper tooling:
 
 | Phase | Owner | What it provides |
 |-------|-------|-----------------|
-| **Specification** | [ruflo-goals](../ruflo-goals/docs/adrs/0001-goals-contract.md) (deep-research) | Multi-source research orchestration to gather requirements |
-| **Pseudocode** | `ruflo-sparc` (this plugin) | Pseudocode generation + complexity annotation |
-| **Architecture** | [ruflo-adr](../ruflo-adr/docs/adrs/0001-adr-plugin-pattern.md) + [ruflo-ddd](../ruflo-ddd/docs/adrs/0001-ddd-contract.md) | ADR creation + bounded-context modeling |
-| **Refinement** | [ruflo-jujutsu](../ruflo-jujutsu/docs/adrs/0001-jujutsu-contract.md) + ruflo-testgen | Diff-aware refactor + test gap analysis |
-| **Completion** | [ruflo-docs](../ruflo-docs/docs/adrs/0001-docs-contract.md) | Auto-generated documentation |
+| **Specification** | [rufflo-goals](../rufflo-goals/docs/adrs/0001-goals-contract.md) (deep-research) | Multi-source research orchestration to gather requirements |
+| **Pseudocode** | `rufflo-sparc` (this plugin) | Pseudocode generation + complexity annotation |
+| **Architecture** | [rufflo-adr](../rufflo-adr/docs/adrs/0001-adr-plugin-pattern.md) + [rufflo-ddd](../rufflo-ddd/docs/adrs/0001-ddd-contract.md) | ADR creation + bounded-context modeling |
+| **Refinement** | [rufflo-jujutsu](../rufflo-jujutsu/docs/adrs/0001-jujutsu-contract.md) + rufflo-testgen | Diff-aware refactor + test gap analysis |
+| **Completion** | [rufflo-docs](../rufflo-docs/docs/adrs/0001-docs-contract.md) | Auto-generated documentation |
 
 This plugin orchestrates the lifecycle; sibling plugins do the deep work per phase.
 
 ## Namespace coordination
 
-This plugin owns four AgentDB namespaces, all kebab-case compliant per [ruflo-agentdb ADR-0001 §"Namespace convention"](../ruflo-agentdb/docs/adrs/0001-agentdb-optimization.md):
+This plugin owns four AgentDB namespaces, all kebab-case compliant per [rufflo-agentdb ADR-0001 §"Namespace convention"](../rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md):
 
 | Namespace | Purpose |
 |-----------|---------|
@@ -89,22 +89,22 @@ The reserved `patterns` (plural) namespace is consumed for cross-feature SPARC p
 ## Verification
 
 ```bash
-bash plugins/ruflo-sparc/scripts/smoke.sh
+bash plugins/rufflo-sparc/scripts/smoke.sh
 # Expected: "11 passed, 0 failed"
 ```
 
 ## Architecture Decisions
 
-- [`ADR-0001` — ruflo-sparc plugin contract (phase-to-plugin alignment, namespace coordination, smoke as contract)](./docs/adrs/0001-sparc-contract.md)
+- [`ADR-0001` — rufflo-sparc plugin contract (phase-to-plugin alignment, namespace coordination, smoke as contract)](./docs/adrs/0001-sparc-contract.md)
 
 ## Related Plugins
 
-- `ruflo-agentdb` — namespace convention owner; backing store for sparc-state/-phases/-gates
-- `ruflo-goals` — Specification phase deep-research
-- `ruflo-adr` -- Architecture decisions recorded as ADRs in Phase 3
-- `ruflo-ddd` -- Architecture phase uses DDD bounded context patterns
-- `ruflo-jujutsu` -- Refinement phase diff analysis
-- `ruflo-docs` -- Completion phase documentation generation
+- `rufflo-agentdb` — namespace convention owner; backing store for sparc-state/-phases/-gates
+- `rufflo-goals` — Specification phase deep-research
+- `rufflo-adr` -- Architecture decisions recorded as ADRs in Phase 3
+- `rufflo-ddd` -- Architecture phase uses DDD bounded context patterns
+- `rufflo-jujutsu` -- Refinement phase diff analysis
+- `rufflo-docs` -- Completion phase documentation generation
 
 ## License
 

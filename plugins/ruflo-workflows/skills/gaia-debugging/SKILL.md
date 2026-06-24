@@ -2,7 +2,7 @@
 name: gaia-debugging
 description: Diagnose why a GAIA question failed — extract trace, classify failure mode, and propose a fix
 argument-hint: "<task_id> [--results=<path>]"
-allowed-tools: Bash Read mcp__claude-flow__memory_search mcp__claude-flow__memory_store mcp__claude-flow__agentdb_pattern_search mcp__claude-flow__agentdb_pattern_store
+allowed-tools: Bash Read mcp__rufflo__memory_search mcp__rufflo__memory_store mcp__rufflo__agentdb_pattern_search mcp__rufflo__agentdb_pattern_store
 ---
 
 # GAIA Debugging Skill
@@ -33,7 +33,7 @@ a targeted fix.
 
 ```bash
 # Find the result for the task_id in the latest run
-RESULTS=~/.cache/ruflo/gaia/results-latest.json
+RESULTS=~/.cache/rufflo/gaia/results-latest.json
 node -e "
   const r = JSON.parse(require('fs').readFileSync('$RESULTS'));
   const q = r.results.find(x => x.task_id === '$TASK_ID');
@@ -54,7 +54,7 @@ Look at the trace output:
 ### Step 3 — Re-run with extended logging
 
 ```bash
-node v3/@claude-flow/cli/bin/cli.js gaia-bench run \
+node v3/@rufflo/cli/bin/cli.js gaia-bench run \
   --level 1 --limit 1 \
   --task-id $TASK_ID \
   --models claude-sonnet-4-6 \
@@ -80,7 +80,7 @@ node v3/@claude-flow/cli/bin/cli.js gaia-bench run \
 node … gaia-bench run --task-id $TASK_ID --models $MODEL --output json
 
 # If now passing, store the pattern
-npx @claude-flow/cli@latest memory store \
+npx @rufflo/cli@latest memory store \
   --namespace gaia-debug-patterns \
   --key "fix-$FAILURE_CODE-$(date +%Y%m%d)" \
   --value "task_id=$TASK_ID, mode=$FAILURE_CODE, fix=$FIX_DESCRIPTION"
@@ -90,7 +90,7 @@ npx @claude-flow/cli@latest memory store \
 
 ```bash
 node -e "
-  const { createDefaultToolCatalogue } = require('./v3/@claude-flow/cli/src/benchmarks/gaia-tools/index.js');
+  const { createDefaultToolCatalogue } = require('./v3/@rufflo/cli/src/benchmarks/gaia-tools/index.js');
   const cat = createDefaultToolCatalogue({});
   console.log('Tools registered:', cat.definitions.map(t => t.name));
 "
@@ -102,7 +102,7 @@ Expected: `web_search`, `file_read`, `web_browse`, `image_describe`, `python_exe
 
 After resolving a debugging session, store the finding:
 ```bash
-npx @claude-flow/cli@latest memory store \
+npx @rufflo/cli@latest memory store \
   --namespace gaia-debug-patterns \
   --key "session-$(date +%Y%m%d-%H%M)" \
   --value '{"task_id":"$TASK_ID","failure_mode":"$CODE","fix":"$FIX","verified":true}'
@@ -110,7 +110,7 @@ npx @claude-flow/cli@latest memory store \
 
 Search for similar past failures:
 ```bash
-npx @claude-flow/cli@latest memory search \
+npx @rufflo/cli@latest memory search \
   --namespace gaia-debug-patterns \
   --query "extraction bug final answer regex"
 ```

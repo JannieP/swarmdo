@@ -1,7 +1,7 @@
 /**
  * Signed PageRank Artifact (Phase 7 — beyond-SOTA, ADR-123)
  *
- * RuFlo gains a primitive no competing memory framework can ship: a portable,
+ * Rufflo gains a primitive no competing memory framework can ship: a portable,
  * Ed25519-signed PageRank result that carries enough metadata for a remote
  * peer to verify provenance + budget compliance + input stability without
  * trusting the producer. Federation peers exchange these instead of
@@ -30,7 +30,7 @@ export const SignedPageRankPayloadSchema = z.object({
   witnessKeyId: z.string().min(1),
   /** Ed25519 public key (hex, 32 bytes). */
   publicKey: z.string().regex(/^[0-9a-f]{64}$/),
-  /** Adapter graph id (e.g. `ruflo-federation:trust-mesh`). */
+  /** Adapter graph id (e.g. `rufflo-federation:trust-mesh`). */
   graphId: z.string().min(1),
   /** SHA-256 of the input matrix's `contentHash`. */
   graphHash: z.string().regex(/^[0-9a-f]{64}$/),

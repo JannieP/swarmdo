@@ -2,7 +2,7 @@
 name: neural-train
 description: Train SONA + MicroLoRA neural patterns from successful task completions; runs the DISTILL + CONSOLIDATE phases of the 4-step pipeline
 argument-hint: "[--pattern-type coordination|edit|task] [--epochs N] [--microlora]"
-allowed-tools: mcp__claude-flow__neural_train mcp__claude-flow__neural_status mcp__claude-flow__neural_patterns mcp__claude-flow__neural_predict mcp__claude-flow__neural_optimize mcp__claude-flow__neural_compress mcp__claude-flow__hooks_pretrain mcp__claude-flow__hooks_build-agents mcp__claude-flow__hooks_intelligence_trajectory-start mcp__claude-flow__hooks_intelligence_trajectory-step mcp__claude-flow__hooks_intelligence_trajectory-end mcp__claude-flow__hooks_intelligence_pattern-store mcp__claude-flow__hooks_intelligence_learn mcp__claude-flow__hooks_intelligence-reset mcp__claude-flow__ruvllm_sona_create mcp__claude-flow__ruvllm_sona_adapt mcp__claude-flow__ruvllm_microlora_create mcp__claude-flow__ruvllm_microlora_adapt mcp__claude-flow__agentdb_consolidate Bash
+allowed-tools: mcp__rufflo__neural_train mcp__rufflo__neural_status mcp__rufflo__neural_patterns mcp__rufflo__neural_predict mcp__rufflo__neural_optimize mcp__rufflo__neural_compress mcp__rufflo__hooks_pretrain mcp__rufflo__hooks_build-agents mcp__rufflo__hooks_intelligence_trajectory-start mcp__rufflo__hooks_intelligence_trajectory-step mcp__rufflo__hooks_intelligence_trajectory-end mcp__rufflo__hooks_intelligence_pattern-store mcp__rufflo__hooks_intelligence_learn mcp__rufflo__hooks_intelligence-reset mcp__rufflo__ruvllm_sona_create mcp__rufflo__ruvllm_sona_adapt mcp__rufflo__ruvllm_microlora_create mcp__rufflo__ruvllm_microlora_adapt mcp__rufflo__agentdb_consolidate Bash
 ---
 
 # Neural Training
@@ -17,14 +17,14 @@ Train and consolidate neural patterns. Implements the **DISTILL** and **CONSOLID
 
 ## Standard flow (DISTILL)
 
-1. **Check current neural status** — `mcp__claude-flow__neural_status`.
-2. **Start a trajectory** — `mcp__claude-flow__hooks_intelligence_trajectory-start` with the task context.
-3. **Record steps** — for each significant action, `mcp__claude-flow__hooks_intelligence_trajectory-step`.
-4. **End trajectory** — `mcp__claude-flow__hooks_intelligence_trajectory-end` with `verdict: pass|fail|partial`.
-5. **Learn from the trajectory** — `mcp__claude-flow__hooks_intelligence_learn`.
-6. **Train patterns** — `mcp__claude-flow__neural_train` with `--pattern-type coordination --epochs 10`.
-7. **Store patterns** — `mcp__claude-flow__hooks_intelligence_pattern-store`.
-8. **Verify** — `mcp__claude-flow__neural_patterns` to confirm.
+1. **Check current neural status** — `mcp__rufflo__neural_status`.
+2. **Start a trajectory** — `mcp__rufflo__hooks_intelligence_trajectory-start` with the task context.
+3. **Record steps** — for each significant action, `mcp__rufflo__hooks_intelligence_trajectory-step`.
+4. **End trajectory** — `mcp__rufflo__hooks_intelligence_trajectory-end` with `verdict: pass|fail|partial`.
+5. **Learn from the trajectory** — `mcp__rufflo__hooks_intelligence_learn`.
+6. **Train patterns** — `mcp__rufflo__neural_train` with `--pattern-type coordination --epochs 10`.
+7. **Store patterns** — `mcp__rufflo__hooks_intelligence_pattern-store`.
+8. **Verify** — `mcp__rufflo__neural_patterns` to confirm.
 
 ## SONA adaptation (single-domain, <0.05ms)
 
@@ -72,7 +72,7 @@ mcp tool call hooks_pretrain --json -- '{"modelType": "moe", "epochs": 10}'
 mcp tool call hooks_build-agents --json -- '{"agentTypes": "coder,tester"}'
 ```
 
-`hooks_pretrain` writes to the `patterns` (plural) namespace — distinct from the `pattern` (singular) ReasoningBank target. See `ruflo-agentdb` ADR-0001 for the namespace convention.
+`hooks_pretrain` writes to the `patterns` (plural) namespace — distinct from the `pattern` (singular) ReasoningBank target. See `rufflo-agentdb` ADR-0001 for the namespace convention.
 
 ## Reset (testing only)
 
@@ -85,10 +85,10 @@ mcp tool call hooks_intelligence-reset --json
 ## CLI alternatives
 
 ```bash
-npx @claude-flow/cli@latest neural train --pattern-type coordination --epochs 10
-npx @claude-flow/cli@latest neural patterns --list
-npx @claude-flow/cli@latest neural status
-npx @claude-flow/cli@latest neural compress
-npx @claude-flow/cli@latest hooks pretrain --model-type moe --epochs 10
-npx @claude-flow/cli@latest hooks build-agents --agent-types coder,tester
+npx @rufflo/cli@latest neural train --pattern-type coordination --epochs 10
+npx @rufflo/cli@latest neural patterns --list
+npx @rufflo/cli@latest neural status
+npx @rufflo/cli@latest neural compress
+npx @rufflo/cli@latest hooks pretrain --model-type moe --epochs 10
+npx @rufflo/cli@latest hooks build-agents --agent-types coder,tester
 ```

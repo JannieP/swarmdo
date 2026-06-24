@@ -18,7 +18,7 @@ Create a **Quantum-Inspired Optimization Plugin** that leverages RuVector's exot
 
 ## Plugin Name
 
-`@claude-flow/plugin-quantum-optimizer`
+`@rufflo/plugin-quantum-optimizer`
 
 ## Description
 

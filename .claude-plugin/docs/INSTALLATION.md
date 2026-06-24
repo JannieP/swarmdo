@@ -1,4 +1,4 @@
-# 📦 Claude Flow Plugin Installation Guide
+# 📦 Rufflo Plugin Installation Guide
 
 ## Quick Installation
 
@@ -24,7 +24,7 @@ If you've cloned the repository:
 ```bash
 # Clone the repository
 git clone https://github.com/ruvnet/claude-flow.git
-cd claude-flow
+cd rufflo
 
 # In Claude Code, install the plugin
 /plugin add .
@@ -44,7 +44,7 @@ Restart to activate the plugin:
 /plugin list
 ```
 
-Look for `claude-flow` in the active plugins list.
+Look for `rufflo` in the active plugins list.
 
 Try a command:
 ```
@@ -88,7 +88,7 @@ Available for delegation:
 ### ✅ MCP Integration
 
 3 MCP servers with 110+ tools:
-- **claude-flow**: Core orchestration (40+ tools) - Required
+- **rufflo**: Core orchestration (40+ tools) - Required
 - **ruv-swarm**: Enhanced coordination - Optional
 - **flow-nexus**: Cloud features (70+ tools) - Optional
 
@@ -105,19 +105,19 @@ Available for delegation:
 ### Update Plugin
 
 ```
-/plugin update claude-flow
+/plugin update rufflo
 ```
 
 Or pull latest from GitHub:
 ```
-cd /path/to/claude-flow
+cd /path/to/rufflo
 git pull
 ```
 
 ### Remove Plugin
 
 ```
-/plugin remove claude-flow
+/plugin remove rufflo
 ```
 
 ---
@@ -130,7 +130,7 @@ The plugin defines MCP servers, but you may need to install the packages:
 
 ```bash
 # Core MCP (recommended)
-npm install -g claude-flow@alpha
+npm install -g rufflo@alpha
 
 # Optional enhanced coordination
 npm install -g ruv-swarm
@@ -152,7 +152,7 @@ In Claude Code:
 /plugin list
 ```
 
-Look for `claude-flow` in the list with status "active".
+Look for `rufflo` in the list with status "active".
 
 ### Test Commands
 
@@ -200,7 +200,7 @@ ls -la agents/
 ```
 # Try local installation
 git clone https://github.com/ruvnet/claude-flow.git
-cd claude-flow
+cd rufflo
 /plugin add .
 ```
 
@@ -220,7 +220,7 @@ cd claude-flow
 To remove the plugin:
 
 ```
-/plugin remove claude-flow
+/plugin remove rufflo
 ```
 
 This will remove all commands, agents, and hooks.
@@ -238,7 +238,7 @@ This will remove all commands, agents, and hooks.
 After installation, the plugin structure is:
 
 ```
-claude-flow/
+rufflo/
 ├── .claude-plugin/
 │   ├── plugin.json          # Plugin metadata
 │   ├── README.md            # Documentation

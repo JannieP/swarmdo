@@ -1,4 +1,4 @@
-# ruflo-plugin-creator
+# rufflo-plugin-creator
 
 Scaffold, validate, and publish new Claude Code plugins with proper structure, MCP tool wiring, AND the canonical plugin contract (ADR + smoke + Compatibility + namespace coordination).
 
@@ -6,14 +6,14 @@ Scaffold, validate, and publish new Claude Code plugins with proper structure, M
 
 ```
 /plugin marketplace add ruvnet/ruflo
-/plugin install ruflo-plugin-creator@ruflo
+/plugin install rufflo-plugin-creator@rufflo
 ```
 
 ## Features
 
 - **Scaffold plugins**: Generate complete plugin directory structure in seconds, including the canonical contract (ADR-0001, scripts/smoke.sh, README contract sections)
 - **Validate format**: Check plugin.json, SKILL.md frontmatter, and file references
-- **MCP tool wiring**: Auto-discover and wire ruflo MCP tools into skills, with **drift warnings** for known-broken tool references (`embeddings_embed`, namespace passed to `agentdb_hierarchical-*` / `agentdb_pattern-*`)
+- **MCP tool wiring**: Auto-discover and wire rufflo MCP tools into skills, with **drift warnings** for known-broken tool references (`embeddings_embed`, namespace passed to `agentdb_hierarchical-*` / `agentdb_pattern-*`)
 - **Marketplace integration**: Update marketplace.json for distribution
 
 ## Commands
@@ -27,12 +27,12 @@ Scaffold, validate, and publish new Claude Code plugins with proper structure, M
 
 ## Compatibility
 
-- **CLI:** pinned to `@claude-flow/cli` v3.6 major+minor.
-- **Verification:** `bash plugins/ruflo-plugin-creator/scripts/smoke.sh` is the contract.
+- **CLI:** pinned to `@rufflo/cli` v3.6 major+minor.
+- **Verification:** `bash plugins/rufflo-plugin-creator/scripts/smoke.sh` is the contract.
 
 ## Canonical plugin contract (what gets scaffolded)
 
-Every plugin scaffolded by this plugin inherits the same shape every other plugin in the ruflo family adopted via its own ADR-0001:
+Every plugin scaffolded by this plugin inherits the same shape every other plugin in the rufflo family adopted via its own ADR-0001:
 
 ```
 plugins/<name>/
@@ -60,16 +60,16 @@ Lessons learned from sibling-ADR fixes — the scaffolder warns about these:
 ## Verification
 
 ```bash
-bash plugins/ruflo-plugin-creator/scripts/smoke.sh
+bash plugins/rufflo-plugin-creator/scripts/smoke.sh
 # Expected: "10 passed, 0 failed"
 ```
 
 ## Architecture Decisions
 
-- [`ADR-0001` — ruflo-plugin-creator plugin contract (scaffold-the-canonical-contract, MCP-drift warnings, smoke as contract)](./docs/adrs/0001-plugin-creator-contract.md)
+- [`ADR-0001` — rufflo-plugin-creator plugin contract (scaffold-the-canonical-contract, MCP-drift warnings, smoke as contract)](./docs/adrs/0001-plugin-creator-contract.md)
 
 ## Related Plugins
 
-- `ruflo-agentdb` — namespace convention owner; `agentdb_controllers` runtime is the canonical controller list
-- `ruflo-cost-tracker`, `ruflo-market-data`, `ruflo-migrations`, `ruflo-observability` — each fixed namespace-routing bugs the scaffolder now warns about
-- `ruflo-knowledge-graph`, `ruflo-market-data` — each fixed `embeddings_embed` references the scaffolder now warns about
+- `rufflo-agentdb` — namespace convention owner; `agentdb_controllers` runtime is the canonical controller list
+- `rufflo-cost-tracker`, `rufflo-market-data`, `rufflo-migrations`, `rufflo-observability` — each fixed namespace-routing bugs the scaffolder now warns about
+- `rufflo-knowledge-graph`, `rufflo-market-data` — each fixed `embeddings_embed` references the scaffolder now warns about

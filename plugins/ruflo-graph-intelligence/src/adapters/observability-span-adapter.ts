@@ -1,7 +1,7 @@
 /**
  * Observability Span Adapter (Wedge 7, ADR-123 Phase 3)
  *
- * `ruflo-observability` records spans (OpenTelemetry-style) with parent links
+ * `rufflo-observability` records spans (OpenTelemetry-style) with parent links
  * + cross-trace causality. This adapter exports the span graph so the user
  * can ask "which span most contributed to this slow/failed request" in
  * O(log spans) instead of full-trace walks.
@@ -34,12 +34,12 @@ export interface ObservabilitySpanAdapterOptions {
 }
 
 export function observabilityGraphId(traceId: string): string {
-  return `ruflo-observability:trace:${traceId}`;
+  return `rufflo-observability:trace:${traceId}`;
 }
 
 export class ObservabilitySpanAdapter implements SublinearAdapter {
   readonly graphId: string;
-  readonly ownerPlugin = 'ruflo-observability';
+  readonly ownerPlugin = 'rufflo-observability';
   readonly requiresPreprocessing = false;
 
   private readonly source: ObservabilitySpanSource;

@@ -33,7 +33,7 @@
  *   19. gt_wasm_match_pattern - Find similar formulas/beads
  *   20. gt_wasm_optimize_convoy - Optimize convoy execution order
  *
- * Based on ADR-043: Gas Town Bridge Plugin for Claude Flow V3
+ * Based on ADR-043: Gas Town Bridge Plugin for Rufflo V3
  *
  * @module v3/plugins/gastown-bridge/mcp-tools
  */
@@ -878,7 +878,7 @@ export const beadsDepTool: MCPTool<BeadsDepInput, BeadDepResult> = {
  */
 export const beadsSyncTool: MCPTool<BeadsSyncInput, BeadsSyncResult> = {
   name: 'gt_beads_sync',
-  description: 'Synchronize beads between Gas Town and Claude Flow AgentDB',
+  description: 'Synchronize beads between Gas Town and Rufflo AgentDB',
   category: 'gastown-bridge',
   version: '0.1.0',
   layer: 'hybrid',

@@ -1,9 +1,9 @@
-# Ruflo Project-Wide Quality Sweep
+# Rufflo Project-Wide Quality Sweep
 
 **Branch**: `chore/project-wide-quality-sweep`  
-**Cut from**: `cdd5308d8` (main @ ruflo@3.10.2 / @claude-flow/cli@3.10.1)  
+**Cut from**: `cdd5308d8` (main @ rufflo@3.10.2 / @rufflo/cli@3.10.1)  
 **Test baseline**: 1999 passing | 46 skipped  
-**Do not regress**: ruflo@3.10.2, @claude-flow/cli@3.10.1, claude-flow@3.10.1  
+**Do not regress**: rufflo@3.10.2, @rufflo/cli@3.10.1, rufflo@3.10.1  
 **Target release**: 3.11.0 (unpublished until explicit user approval)
 
 ---
@@ -29,7 +29,7 @@ Tracking issue: #2138
 Draft PR: #2139
 
 **What was completed across sessions:**
-- T1 (partial): Fixed dep dedup bug in cli/package.json — @claude-flow/memory, @claude-flow/embeddings, @claude-flow/security removed from `dependencies` (were dynamic-import only; belonged in optionalDependencies only). This fixes the npm 11.x arborist crash class (#1147/#2018). 66 dual exports (named + default) tracked in issue #2141 — all defaults confirmed unimported; removal deferred as a focused PR.
+- T1 (partial): Fixed dep dedup bug in cli/package.json — @rufflo/memory, @rufflo/embeddings, @rufflo/security removed from `dependencies` (were dynamic-import only; belonged in optionalDependencies only). This fixes the npm 11.x arborist crash class (#1147/#2018). 66 dual exports (named + default) tracked in issue #2141 — all defaults confirmed unimported; removal deferred as a focused PR.
 - T2 (done): All plugin scripts wired or documented. 0 violations.
 - T3 (done): Deleted `scripts/regenerate-witness.mjs` (pointed at non-existent root verification.md.json). Wired `scripts/smoke-memory-no-stray-db.mjs` to CI as `memory-no-stray-db-smoke` job. 5 remaining unreferenced scripts are intentional utilities (documented).
 - T4 (clean): All 5 TODO/FIXME entries in cli/src are part of the `analyze` tool's scan logic, not implementation TODOs.
@@ -38,7 +38,7 @@ Draft PR: #2139
 - T7 (done): All 46 skips documented. Removed the one `expect(true).toBe(true)` trivial assertion in coverage-router.test.ts.
 - T8 (done): All file paths cited in ADR-120 through ADR-130 verified to exist. No drift.
 - T9 (done): STATUS.md updated — MCP 300→323, CLI 49→45, plugins 32→33, agents 43→45. All counts match HEAD.
-- T10 (done): Added `overrides.protobufjs = >=7.5.6` to cli/package.json. Tightened ruflo/package.json from >=7.5.5 to >=7.5.6 (covers all 3 protobufjs CVEs). All 25 high vulns traced to optional/dev transitive deps — production paths clean.
+- T10 (done): Added `overrides.protobufjs = >=7.5.6` to cli/package.json. Tightened rufflo/package.json from >=7.5.5 to >=7.5.6 (covers all 3 protobufjs CVEs). All 25 high vulns traced to optional/dev transitive deps — production paths clean.
 - T11 (done): Witness regen ran at ff685013a — 117 verified, 0 missing, 0 drifted.
 
 **Counts verified:**
@@ -56,7 +56,7 @@ Draft PR: #2139
 
 | # | Territory | Status | Violation Count (baseline) | Done Criteria |
 |---|---|---|---|---|
-| T1 | Dead-code sweep -- `v3/@claude-flow/cli/src/**` | **partial** | Dep dedup fixed; 66 dual exports tracked in #2141 (defaults never imported; removal = focused PR) | knip clean, no unused exports, no unreachable branches |
+| T1 | Dead-code sweep -- `v3/@rufflo/cli/src/**` | **partial** | Dep dedup fixed; 66 dual exports tracked in #2141 (defaults never imported; removal = focused PR) | knip clean, no unused exports, no unreachable branches |
 | T2 | Dead-code sweep -- `plugins/**` | **done** | 0 violations found; all scripts wired | done |
 | T3 | Stale scripts | **done** | regenerate-witness.mjs deleted; smoke-memory-no-stray-db wired to CI; 5 remaining are documented utilities | done |
 | T4 | Slop hunt -- `any` types, magic numbers, TODOs | **clean** | 0 implementation TODOs; any in non-ambient code is acceptable optional-module pattern | done |
@@ -70,7 +70,7 @@ Draft PR: #2139
 
 ---
 
-## T1 — Dead-code sweep: `v3/@claude-flow/cli/src/**`
+## T1 — Dead-code sweep: `v3/@rufflo/cli/src/**`
 
 **Status**: in_progress  
 **Baseline snapshot** (2026-05-25):
@@ -201,12 +201,12 @@ Draft PR: #2139
 **Scope**: ADR-120 through ADR-130 (the 11 most recent ADRs)  
 **Initial findings**:
 - ADR-120: no file paths cited
-- ADR-122: references `v3/@claude-flow/browser/package.json` — browser package exists?
+- ADR-122: references `v3/@rufflo/browser/package.json` — browser package exists?
 - ADR-124: same browser package references
-- ADR-126: cites `v3/@claude-flow/memory/src/agentdb-adapter.ts`
-- ADR-127: cites `v3/@claude-flow/cli/.claude/helpers/github-safe.js` — known to exist
+- ADR-126: cites `v3/@rufflo/memory/src/agentdb-adapter.ts`
+- ADR-127: cites `v3/@rufflo/cli/.claude/helpers/github-safe.js` — known to exist
 - ADR-128: cites `.claude/commands/` and `.claude/skills/`
-- ADR-129: cites `v3/@claude-flow/cli/src/ruvector/agent-wasm.ts`
+- ADR-129: cites `v3/@rufflo/cli/src/ruvector/agent-wasm.ts`
 
 **Acceptance criteria**:
 - [ ] Every file path cited in ADR-120 through ADR-130 verified to exist
@@ -222,7 +222,7 @@ Draft PR: #2139
 - IMPROVEMENT-ROADMAP.md: references specific issue numbers (#1872, #2030, #2032, etc.)
 - USERGUIDE.md: lists every CLI command
 
-**Note**: STATUS.md is outdated (references "branch fix/issues-may-1-3", ruflo@3.6.24) — needs update to reflect 3.10.x reality.
+**Note**: STATUS.md is outdated (references "branch fix/issues-may-1-3", rufflo@3.6.24) — needs update to reflect 3.10.x reality.
 
 **Acceptance criteria**:
 - [ ] MCP tool count verified against actual registered tools
@@ -284,6 +284,6 @@ None — first iteration, starting clean.
 ## Remaining work (3.11.0 release prep)
 
 - [ ] T1 remaining: Open dedicated PR to remove 66 unused `export default` lines (tracked in #2141). Each line is in commands/*, production/*, mcp-tools/*, ruvector/* files confirmed by grep to have zero default-import callers. Small scope, easy review.
-- [ ] Version bump: bump @claude-flow/cli and ruflo to 3.11.0 (minor — new MCP tools added since 3.10.x)
+- [ ] Version bump: bump @rufflo/cli and rufflo to 3.11.0 (minor — new MCP tools added since 3.10.x)
 - [ ] Publish 3.11.0 artifacts (requires explicit user approval per hard constraints)
 - [ ] Open final PR for `chore/project-wide-quality-sweep` → main (draft PR #2139 already exists)

@@ -1,7 +1,7 @@
-# sql.js Implementation Guide for Claude-Flow
+# sql.js Implementation Guide for Rufflo
 
 **Implementation Date**: 2026-01-03
-**Target Version**: Claude-Flow v3.0
+**Target Version**: Rufflo v3.0
 **Author**: Research Agent
 
 ---
@@ -60,7 +60,7 @@ This guide provides step-by-step implementation instructions for integrating sql
 
 ### Step 1: Install sql.js Dependency
 
-**File**: `/home/user/claude-flow/package.json`
+**File**: `/home/user/rufflo/package.json`
 
 ```json
 {
@@ -84,7 +84,7 @@ npm install sql.js@^1.13.0 --save
 
 ### Step 2: Create sql.js Backend Implementation
 
-**File**: `/home/user/claude-flow/src/memory/backends/sqljs.ts`
+**File**: `/home/user/rufflo/src/memory/backends/sqljs.ts`
 
 ```typescript
 /**
@@ -592,7 +592,7 @@ export class SqlJsBackend implements IMemoryBackend {
 
 ### Step 3: Update sqlite-wrapper.js
 
-**File**: `/home/user/claude-flow/src/memory/sqlite-wrapper.js`
+**File**: `/home/user/rufflo/src/memory/sqlite-wrapper.js`
 
 Add sql.js detection and provider creation:
 
@@ -813,7 +813,7 @@ export default {
 
 ### Step 4: Update DatabaseManager.ts
 
-**File**: `/home/user/claude-flow/src/core/DatabaseManager.ts`
+**File**: `/home/user/rufflo/src/core/DatabaseManager.ts`
 
 Add SqlJsProvider option:
 
@@ -958,7 +958,7 @@ class SqlJsProvider implements IDatabaseProvider {
 }
 ```
 
-**File**: `/home/user/claude-flow/package.json` (files section)
+**File**: `/home/user/rufflo/package.json` (files section)
 
 ```json
 {
@@ -975,7 +975,7 @@ class SqlJsProvider implements IDatabaseProvider {
 
 ### Step 6: Add Tests
 
-**File**: `/home/user/claude-flow/tests/unit/memory/sqljs-backend.test.ts`
+**File**: `/home/user/rufflo/tests/unit/memory/sqljs-backend.test.ts`
 
 ```typescript
 import { SqlJsBackend } from '../../../src/memory/backends/sqljs';

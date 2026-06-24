@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Smoke test for ruflo-ruvector plugin against ruvector@0.2.25.
+# Smoke test for rufflo-ruvector plugin against ruvector@0.2.25.
 # Exits non-zero if any contracted CLI surface is missing or behaves
 # differently from documented. Run after `npm install ruvector@0.2.25`
 # (or rely on the npx fetch).

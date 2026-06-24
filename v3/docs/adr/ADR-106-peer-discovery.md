@@ -41,7 +41,7 @@ await plugin.initialize({
 ### Service record shape
 
 ```
-_ruflo-federation._tcp.local.
+_rufflo-federation._tcp.local.
   TXT records:
     nodeId       = <peer node id>
     publicKey    = <hex-encoded Ed25519 public key>
@@ -49,11 +49,11 @@ _ruflo-federation._tcp.local.
     version      = <plugin semver>
 ```
 
-Receiving side queries `_ruflo-federation._tcp.local.` periodically (default 30s), enumerates instances, fetches each one's signed manifest at `ws://<host>:<port>/.well-known/federation-manifest`, verifies the Ed25519 sig, and adds to discovery if new.
+Receiving side queries `_rufflo-federation._tcp.local.` periodically (default 30s), enumerates instances, fetches each one's signed manifest at `ws://<host>:<port>/.well-known/federation-manifest`, verifies the Ed25519 sig, and adds to discovery if new.
 
 ### Security model — why mDNS doesn't change the trust assumptions
 
-- mDNS announces existence on the LAN multicast group, but **anyone can publish** an `_ruflo-federation._tcp.local.` record. We treat mDNS as a HINT, not a trust signal.
+- mDNS announces existence on the LAN multicast group, but **anyone can publish** an `_rufflo-federation._tcp.local.` record. We treat mDNS as a HINT, not a trust signal.
 - The actual trust gate is the post-discovery handshake: Ed25519 manifest signature → trust evaluator → trust level → capability check. A malicious mDNS record at best gets the peer added to discovery as `UNTRUSTED` (no send/receive capability per the trust gates).
 - mDNS scope is the local broadcast domain. **Tailscale does not bridge mDNS** across the tailnet by default. Cross-host mDNS over tailnet requires either:
   - The user enables MagicDNS + `tailscale set --advertise-tags`

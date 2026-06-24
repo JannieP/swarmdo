@@ -1,14 +1,14 @@
 # Windows Support via sql.js - Executive Summary
 
 **Date**: 2026-01-03
-**Project**: Claude-Flow v3
+**Project**: Rufflo v3
 **Status**: ✅ Research Complete - Ready for Implementation
 
 ---
 
 ## TL;DR
 
-**Problem**: Claude-Flow fails to install on Windows due to `better-sqlite3` requiring native compilation (node-gyp, python, gcc).
+**Problem**: Rufflo fails to install on Windows due to `better-sqlite3` requiring native compilation (node-gyp, python, gcc).
 
 **Solution**: Add `sql.js` (WebAssembly SQLite) as a cross-platform fallback provider alongside existing `better-sqlite3`.
 
@@ -96,7 +96,7 @@ Fallback:      JSON (compatibility)
 
 ## Performance Analysis
 
-### Use Case: Claude-Flow Metadata Storage
+### Use Case: Rufflo Metadata Storage
 
 | Operation | better-sqlite3 | sql.js | Impact |
 |-----------|----------------|--------|--------|
@@ -140,14 +140,14 @@ Fallback:      JSON (compatibility)
 
 **Before** (Windows):
 ```bash
-$ npm install claude-flow@alpha
+$ npm install rufflo@alpha
 ⚠️  Warning: Use pnpm on Windows
 ❌ Error: better-sqlite3 compilation failed
 ```
 
 **After** (Windows):
 ```bash
-$ npm install claude-flow@alpha
+$ npm install rufflo@alpha
 ✅ Installed successfully
 ℹ️  Using sql.js (cross-platform mode)
 ```
@@ -214,7 +214,7 @@ JSON              | ✅            | ❌            | ❌
 - Monitor performance in production
 - Optimize sql.js usage patterns
 - Consider sql.js as default on all platforms (if performance acceptable)
-- Explore browser-based Claude-Flow (sql.js enables this)
+- Explore browser-based Rufflo (sql.js enables this)
 
 ---
 
@@ -247,10 +247,10 @@ JSON              | ✅            | ❌            | ❌
 - [SQLite WASM Documentation](https://sqlite.org/wasm)
 
 ### Codebase Files
-- `/home/user/claude-flow/src/memory/sqlite-wrapper.js` - Main abstraction
-- `/home/user/claude-flow/src/core/DatabaseManager.ts` - Provider manager
-- `/home/user/claude-flow/src/memory/backends/sqlite.ts` - Current backend
-- `/home/user/claude-flow/src/utils/error-recovery.ts` - Error handling
+- `/home/user/rufflo/src/memory/sqlite-wrapper.js` - Main abstraction
+- `/home/user/rufflo/src/core/DatabaseManager.ts` - Provider manager
+- `/home/user/rufflo/src/memory/backends/sqlite.ts` - Current backend
+- `/home/user/rufflo/src/utils/error-recovery.ts` - Error handling
 
 ---
 

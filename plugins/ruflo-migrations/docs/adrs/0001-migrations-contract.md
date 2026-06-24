@@ -1,6 +1,6 @@
 ---
 id: ADR-0001
-title: ruflo-migrations plugin contract — pinning, namespace-routing fix, namespace coordination, smoke as contract
+title: rufflo-migrations plugin contract — pinning, namespace-routing fix, namespace coordination, smoke as contract
 status: Accepted
 date: 2026-05-04
 updated: 2026-05-09
@@ -11,9 +11,9 @@ tags: [plugin, migrations, schema, namespace, smoke-test]
 
 ## Context
 
-`ruflo-migrations` (v0.1.0) — schema migration generator + validator. 1 agent + 2 skills + 1 command.
+`rufflo-migrations` (v0.1.0) — schema migration generator + validator. 1 agent + 2 skills + 1 command.
 
-Same namespace-routing bug class as ruflo-cost-tracker / ruflo-market-data: both skills called `agentdb_hierarchical-*` and `agentdb_pattern-store` with namespace arguments, but those tool families route by tier / ReasoningBank and ignore namespace strings.
+Same namespace-routing bug class as rufflo-cost-tracker / rufflo-market-data: both skills called `agentdb_hierarchical-*` and `agentdb_pattern-store` with namespace arguments, but those tool families route by tier / ReasoningBank and ignore namespace strings.
 
 ## Decision
 
@@ -32,16 +32,16 @@ Same namespace-routing bug class as ruflo-cost-tracker / ruflo-market-data: both
 ## Verification
 
 ```bash
-bash plugins/ruflo-migrations/scripts/smoke.sh
+bash plugins/rufflo-migrations/scripts/smoke.sh
 # Expected: "10 passed, 0 failed"
 ```
 
 ## Related
 
-- `plugins/ruflo-cost-tracker/docs/adrs/0001-cost-tracker-contract.md` — same bug class
-- `plugins/ruflo-market-data/docs/adrs/0001-market-data-contract.md` — same bug class
-- `plugins/ruflo-agentdb/docs/adrs/0001-agentdb-optimization.md` — namespace convention this fix observes
+- `plugins/rufflo-cost-tracker/docs/adrs/0001-cost-tracker-contract.md` — same bug class
+- `plugins/rufflo-market-data/docs/adrs/0001-market-data-contract.md` — same bug class
+- `plugins/rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md` — namespace convention this fix observes
 
 ## Implementation status
 
-Plugin version v0.2.0 shipped and listed in marketplace.json. Source exists at `plugins/ruflo-migrations/`. Contract elements implemented: namespace-routing bug fixed in both skills (switched `agentdb_hierarchical-*` + `agentdb_pattern-store` namespace args to `memory_*`); dual pattern-store path documented; smoke-as-contract gate defined in `scripts/smoke.sh`.
+Plugin version v0.2.0 shipped and listed in marketplace.json. Source exists at `plugins/rufflo-migrations/`. Contract elements implemented: namespace-routing bug fixed in both skills (switched `agentdb_hierarchical-*` + `agentdb_pattern-store` namespace args to `memory_*`); dual pattern-store path documented; smoke-as-contract gate defined in `scripts/smoke.sh`.

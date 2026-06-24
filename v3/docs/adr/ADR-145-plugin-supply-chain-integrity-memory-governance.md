@@ -7,7 +7,7 @@
 
 ## Context
 
-ADR-131 closed the content boundary and ADR-144 closes the runtime action boundary. Both assume the *code that's about to run* is trustworthy in the first place. Two Grade A papers published April–May 2026 demonstrate that assumption is broken under current Ruflo defenses.
+ADR-131 closed the content boundary and ADR-144 closes the runtime action boundary. Both assume the *code that's about to run* is trustworthy in the first place. Two Grade A papers published April–May 2026 demonstrate that assumption is broken under current Rufflo defenses.
 
 ### Threat: plugin supply-chain attacks
 
@@ -15,7 +15,7 @@ ADR-131 closed the content boundary and ADR-144 closes the runtime action bounda
 
 **DDIPE** (arXiv:2604.03081, Apr 3, 2026, Grade A): Document-Driven Implicit Payload Execution embeds malicious logic in plugin documentation and configuration templates. Tested across 4 frameworks, 5 models, 1,070 adversarial skills covering 15 MITRE ATT&CK categories. **Bypass rate 11.6–33.5%; 2.5% of adversarial skills evade both detection and alignment systems.** Four CVEs were disclosed from this research.
 
-Ruflo's current plugin install path (`v3/@claude-flow/cli/src/plugins/store/discovery.ts`) fetches manifests from IPFS via Pinata. It carries **no signature verification** and **no semantic intent analysis**.
+Rufflo's current plugin install path (`v3/@rufflo/cli/src/plugins/store/discovery.ts`) fetches manifests from IPFS via Pinata. It carries **no signature verification** and **no semantic intent analysis**.
 
 ### Threat: memory-namespace poisoning
 
@@ -23,7 +23,7 @@ Ruflo's current plugin install path (`v3/@claude-flow/cli/src/plugins/store/disc
 
 **Plan Injection** (arXiv:2506.17318, Jun 2026, Grade A): Context-chained memory attacks achieve **3× higher attack success** than prompt-based injection and **+17.7% exfiltration gain** by creating logical bridges between unrelated memory entries. The fix is **namespace isolation with explicit write grants** — agents cannot poison a namespace they have no business writing to.
 
-**Mnemonic Sovereignty survey** (arXiv:2604.16548, Apr 2026, Grade A): Catalogs nine governance primitives required for secure long-term agent memory. No existing published architecture satisfies all nine. The Ruflo gap: the shared `collaboration` namespace (and all AgentDB namespaces) accepts writes from any agent with no per-namespace authorization. ADR-131 catches *what gets read out*; this ADR catches *who is allowed to write in*.
+**Mnemonic Sovereignty survey** (arXiv:2604.16548, Apr 2026, Grade A): Catalogs nine governance primitives required for secure long-term agent memory. No existing published architecture satisfies all nine. The Rufflo gap: the shared `collaboration` namespace (and all AgentDB namespaces) accepts writes from any agent with no per-namespace authorization. ADR-131 catches *what gets read out*; this ADR catches *who is allowed to write in*.
 
 ### Why this is architectural
 
@@ -42,13 +42,13 @@ ADR-145 introduces two new trust boundaries, two new module surfaces, a protocol
 
 ### Part A — `PluginIntegrityVerifier`
 
-Add `PluginIntegrityVerifier` to `@claude-flow/security` with two verification stages run at `plugins install` time.
+Add `PluginIntegrityVerifier` to `@rufflo/security` with two verification stages run at `plugins install` time.
 
 **Stage 1 — Signature verification** (blocks DDIPE's static-payload variants):
 
 - Every plugin published to the IPFS registry MUST carry a detached **Ed25519 signature** over its manifest hash. The signature lives alongside the manifest in IPFS; the registry index records the signing key's fingerprint.
 - `discovery.ts` MUST refuse to install unsigned plugins when `CLAUDE_FLOW_STRICT_PLUGINS=true` (default: warn-only for backwards compatibility).
-- Trust anchors (publisher keys we vouch for) live in `v3/@claude-flow/cli/src/plugins/trust/trust-anchors.json`. Edits are gated on CODEOWNERS review.
+- Trust anchors (publisher keys we vouch for) live in `v3/@rufflo/cli/src/plugins/trust/trust-anchors.json`. Edits are gated on CODEOWNERS review.
 
 **Stage 2 — Semantic intent scan** (blocks SCH):
 
@@ -58,9 +58,9 @@ Add `PluginIntegrityVerifier` to `@claude-flow/security` with two verification s
 - Fallback: LLM-free pattern rules covering the top-5 SCH families from arXiv:2605.14460 (Table 3 of the paper). The pattern fallback is what makes this safe to run during `plugins install` in environments without LLM credentials.
 
 **Implementation targets**:
-- `v3/@claude-flow/security/src/plugins/integrity-verifier.ts` (new)
-- `v3/@claude-flow/cli/src/plugins/store/discovery.ts` — verification hook on install
-- `v3/@claude-flow/cli/src/plugins/trust/trust-anchors.json` (new)
+- `v3/@rufflo/security/src/plugins/integrity-verifier.ts` (new)
+- `v3/@rufflo/cli/src/plugins/store/discovery.ts` — verification hook on install
+- `v3/@rufflo/cli/src/plugins/trust/trust-anchors.json` (new)
 
 ### Part B — Memory namespace write ACLs
 
@@ -73,18 +73,18 @@ Address governance primitives 1–3 from the Mnemonic Sovereignty taxonomy (writ
 - A `readNamespaces` grant is *optional* in v1 and becomes required in v4 (matching the strict-mode escalation in ADR-144).
 
 **Implementation targets**:
-- `v3/@claude-flow/memory/src/namespaces/authorization.ts` (new)
-- `v3/@claude-flow/memory/src/agent-db.ts` — grant enforcement
-- `v3/@claude-flow/cli/src/agent/spawn.ts` — `writeNamespaces` parameter
+- `v3/@rufflo/memory/src/namespaces/authorization.ts` (new)
+- `v3/@rufflo/memory/src/agent-db.ts` — grant enforcement
+- `v3/@rufflo/cli/src/agent/spawn.ts` — `writeNamespaces` parameter
 
 ### Integration plan (phased — P1 is the first PR)
 
 | Phase | Scope | Where |
 |---|---|---|
-| **P1** | `PluginIntegrityVerifier` skeleton + Stage-1 signature path; trust-anchors file with the existing official-plugin keys | `@claude-flow/security/src/plugins/`, `@claude-flow/cli/src/plugins/trust/` |
+| **P1** | `PluginIntegrityVerifier` skeleton + Stage-1 signature path; trust-anchors file with the existing official-plugin keys | `@rufflo/security/src/plugins/`, `@rufflo/cli/src/plugins/trust/` |
 | P2 | Stage-2 semantic scan (pattern fallback first, classifier opt-in) | same files |
-| P3 | Memory namespace ACL primitives 1–3 in AgentDB | `@claude-flow/memory/src/namespaces/` |
-| P4 | `agent spawn --write-namespaces` plumbing through every spawn callsite | `@claude-flow/cli/src/agent/spawn.ts`, hooks |
+| P3 | Memory namespace ACL primitives 1–3 in AgentDB | `@rufflo/memory/src/namespaces/` |
+| P4 | `agent spawn --write-namespaces` plumbing through every spawn callsite | `@rufflo/cli/src/agent/spawn.ts`, hooks |
 | P5 | Strict-mode flips to default in v4.0; legacy mode requires explicit env var to re-enable | release docs + breaking-change ADR |
 
 ### Backwards compatibility
@@ -108,10 +108,10 @@ Address governance primitives 1–3 from the Mnemonic Sovereignty taxonomy (writ
 - Closes the **77.67% breach / 0.00% detection** SCH gap (arXiv:2605.14460) at the semantic layer.
 - Closes DDIPE static-payload variants via Stage-1 signature check.
 - Reduces memory-poisoning propagation across agent boundaries (write ACLs are the only mechanism that scales with namespace count).
-- Positions Ruflo's memory governance ahead of every 2026 competitor surveyed — none satisfy more than 4 of the 9 Mnemonic Sovereignty primitives.
+- Positions Rufflo's memory governance ahead of every 2026 competitor surveyed — none satisfy more than 4 of the 9 Mnemonic Sovereignty primitives.
 
 **Negative / risks**:
-- Plugin publishers must generate Ed25519 keypairs and sign manifests (new workflow). The ruflo-plugin-creator skill MUST be updated to scaffold the signing step.
+- Plugin publishers must generate Ed25519 keypairs and sign manifests (new workflow). The rufflo-plugin-creator skill MUST be updated to scaffold the signing step.
 - Semantic intent scan adds **~50–200 ms** to `plugins install` — acceptable at install time, would be unacceptable at runtime.
 - Write-ACL migration requires updating every existing `agent_spawn` callsite that uses shared namespaces. Existing pipelines fail open in legacy mode until v4.
 

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Claude-Flow Agent Capabilities Test Suite
+# Rufflo Agent Capabilities Test Suite
 # Tests all 54+ agents for basic functionality
 
 set -e
@@ -39,7 +39,7 @@ run_test() {
 # Test agent exists and is loadable
 test_agent() {
     local agent_name="$1"
-    run_test "Agent: ${agent_name}" "npx claude-flow agent info ${agent_name} 2>/dev/null || echo 'agent: ${agent_name}'"
+    run_test "Agent: ${agent_name}" "npx rufflo agent info ${agent_name} 2>/dev/null || echo 'agent: ${agent_name}'"
 }
 
 # ============================================================================
@@ -176,9 +176,9 @@ test_agent "swarm-init"
 echo ""
 echo "── Agent Spawn Tests ──"
 
-run_test "Spawn coder agent" "npx claude-flow agent spawn coder --dry-run 2>/dev/null || echo 'spawn coder'"
-run_test "Spawn tester agent" "npx claude-flow agent spawn tester --dry-run 2>/dev/null || echo 'spawn tester'"
-run_test "Spawn reviewer agent" "npx claude-flow agent spawn reviewer --dry-run 2>/dev/null || echo 'spawn reviewer'"
+run_test "Spawn coder agent" "npx rufflo agent spawn coder --dry-run 2>/dev/null || echo 'spawn coder'"
+run_test "Spawn tester agent" "npx rufflo agent spawn tester --dry-run 2>/dev/null || echo 'spawn tester'"
+run_test "Spawn reviewer agent" "npx rufflo agent spawn reviewer --dry-run 2>/dev/null || echo 'spawn reviewer'"
 
 # ============================================================================
 # SUMMARY

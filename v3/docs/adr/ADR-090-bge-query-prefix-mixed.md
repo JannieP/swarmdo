@@ -1,6 +1,6 @@
 # ADR-090 — BGE Query Prefix: Mixed Results (Per-Dataset Win, Not a Default)
 
-**Status**: Accepted — Implemented in ruflo 3.10.29 (opt-in via `BGE_QUERY_PREFIX=1`)
+**Status**: Accepted — Implemented in rufflo 3.10.29 (opt-in via `BGE_QUERY_PREFIX=1`)
 **Date**: 2026-05-30
 **Related**: ADR-085 (BEIR harness), ADR-089 (3-dataset summary)
 

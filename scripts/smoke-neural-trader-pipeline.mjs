@@ -50,7 +50,7 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, '..');
-const PLUGIN_DIR = join(REPO_ROOT, 'plugins', 'ruflo-neural-trader');
+const PLUGIN_DIR = join(REPO_ROOT, 'plugins', 'rufflo-neural-trader');
 const AGENTS_DIR = join(PLUGIN_DIR, 'agents');
 const MESSAGES_TS = join(PLUGIN_DIR, 'src', 'pipeline-messages.ts');
 

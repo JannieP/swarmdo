@@ -1,7 +1,7 @@
 /**
  * Knowledge Graph Adapter (Wedge 4, ADR-123 Phase 4)
  *
- * `ruflo-knowledge-graph` builds an entity-relation graph via kg-extract.
+ * `rufflo-knowledge-graph` builds an entity-relation graph via kg-extract.
  * This adapter exports it as a SparseMatrix so kg-importance(entity) becomes
  * a single-entry PR query — answering "which entity is most central" in
  * sub-millisecond on a 10k-node graph.
@@ -30,11 +30,11 @@ export interface KnowledgeGraphAdapterOptions {
   ddSafetyMargin?: number;
 }
 
-export const KNOWLEDGE_GRAPH_ID = 'ruflo-knowledge-graph:entities';
+export const KNOWLEDGE_GRAPH_ID = 'rufflo-knowledge-graph:entities';
 
 export class KnowledgeGraphAdapter implements SublinearAdapter {
   readonly graphId = KNOWLEDGE_GRAPH_ID;
-  readonly ownerPlugin = 'ruflo-knowledge-graph';
+  readonly ownerPlugin = 'rufflo-knowledge-graph';
   readonly requiresPreprocessing = false;
 
   private readonly source: KnowledgeGraphSource;
@@ -122,18 +122,18 @@ export class GraphEdgesSource implements KnowledgeGraphSource {
 
   async listEdges(): Promise<readonly KGEdge[]> {
     try {
-      // Lazy import to avoid hard-coupling the plugin to @claude-flow/cli at compile time.
+      // Lazy import to avoid hard-coupling the plugin to @rufflo/cli at compile time.
       // The import paths are resolved at runtime only; TypeScript cannot type-check them
-      // from this plugin's compilation context (no package-level dependency on @claude-flow/cli).
+      // from this plugin's compilation context (no package-level dependency on @rufflo/cli).
       type GraphEdgeWriterModule = {
         getBridgeDb: (dbPath?: string) => Promise<{ exec: (sql: string) => Array<{ values?: unknown[][] }> } | null>;
       };
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore — dynamic cross-package import resolved at runtime
-      const mod: GraphEdgeWriterModule = await import('@claude-flow/cli/src/memory/graph-edge-writer.js')
+      const mod: GraphEdgeWriterModule = await import('@rufflo/cli/src/memory/graph-edge-writer.js')
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore — fallback to local dist path in mono-repo context
-        .catch(() => import('../../../../../v3/@claude-flow/cli/dist/src/memory/graph-edge-writer.js'));
+        .catch(() => import('../../../../../v3/@rufflo/cli/dist/src/memory/graph-edge-writer.js'));
 
       const db = await mod.getBridgeDb();
       if (!db) return [];

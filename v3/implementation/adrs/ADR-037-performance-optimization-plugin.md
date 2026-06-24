@@ -18,7 +18,7 @@ Create a **Performance Optimization Plugin** that leverages RuVector WASM packag
 
 ## Plugin Name
 
-`@claude-flow/plugin-performance-optimizer`
+`@rufflo/plugin-performance-optimizer`
 
 ## Description
 

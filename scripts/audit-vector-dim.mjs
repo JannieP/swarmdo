@@ -9,7 +9,7 @@
  * `memory_store --vector` succeeds but `memory_search` always returns 0 hits.
  *
  * The fix is purely a number change in 11 `.swarm/schema.sql` files plus the
- * inline schema string in `v3/@claude-flow/cli/src/memory/memory-initializer.ts`.
+ * inline schema string in `v3/@rufflo/cli/src/memory/memory-initializer.ts`.
  * This script blocks the next regression: every `INSERT ... INTO
  * vector_indexes (id, name, dimensions) VALUES ('default'|'patterns', ..., N)`
  * must have `N === EXPECTED_DIM` (currently 384 — track the default model).
@@ -37,7 +37,7 @@ const JSON_OUT = process.argv.includes('--json');
 const ROW_RE = /\(\s*'(default|patterns)'\s*,\s*'(?:default|patterns)'\s*,\s*(\d+)\s*\)/g;
 
 // Roots to scan. Skip build outputs / vendor dirs.
-const ROOTS = ['v3', 'ruflo'];
+const ROOTS = ['v3', 'rufflo'];
 const SKIP_DIRS = new Set([
   'node_modules',
   'dist',

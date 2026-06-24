@@ -25,7 +25,7 @@
  * scan latency (sum across symbols).
  *
  * Run:
- *   node plugins/ruflo-neural-trader/benchmarks/signal-generation.bench.mjs
+ *   node plugins/rufflo-neural-trader/benchmarks/signal-generation.bench.mjs
  *
  * Output is markdown so the result can be captured into
  * `benchmarks/results/signal-generation-baseline-<timestamp>.md`.
@@ -230,4 +230,4 @@ console.log('');
 console.log('## Refs');
 console.log('');
 console.log('- ADR-126 §SOTA delta — bench-driven perf work');
-console.log('- `plugins/ruflo-neural-trader/skills/trader-signal/SKILL.md` — production scan path');
+console.log('- `plugins/rufflo-neural-trader/skills/trader-signal/SKILL.md` — production scan path');

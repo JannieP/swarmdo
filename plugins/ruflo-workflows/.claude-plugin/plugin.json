@@ -1,5 +1,5 @@
 {
-  "name": "ruflo-workflows",
+  "name": "rufflo-workflows",
   "description": "Workflow automation across two surfaces: the 10 workflow_* MCP tools (create/run/execute/status/list/pause/resume/cancel/delete/template) with full state-machine lifecycle (created → running ↔ paused → completed/cancelled), and native Claude Code Workflow JS orchestration (.claude/workflows/*.js — agent/parallel/pipeline/phase fan-out). Includes GAIA benchmark component for Princeton HAL leaderboard submissions.",
   "version": "0.4.0",
   "author": {
@@ -9,7 +9,7 @@
   "homepage": "https://github.com/ruvnet/ruflo",
   "license": "MIT",
   "keywords": [
-    "ruflo",
+    "rufflo",
     "workflows",
     "automation",
     "orchestration",
@@ -49,7 +49,7 @@
         "gaia-benchmark-runner",
         "gaia-submission-coordinator"
       ],
-      "cli_backend": "@claude-flow/cli gaia-bench",
+      "cli_backend": "@rufflo/cli gaia-bench",
       "adrs": ["ADR-133", "ADR-135", "ADR-136"],
       "memory_namespaces": [
         "gaia-runs",

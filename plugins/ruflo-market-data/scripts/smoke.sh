@@ -31,7 +31,7 @@ done
 [[ -z "$miss" ]] && ok || bad "$miss"
 
 step "3. embeddings_embed (non-existent tool) NOT at any tool-call site (excludes ADR + README call-outs)"
-hits=$(grep -rE 'mcp__claude-flow__embeddings_embed' "$ROOT" \
+hits=$(grep -rE 'mcp__rufflo__embeddings_embed' "$ROOT" \
        --include='*.md' --include='*.json' \
        --exclude-dir='adrs' 2>/dev/null \
        | grep -v 'NOT \`embeddings_embed\`\|embeddings_embed.*does not exist\|fixes prior references' \
@@ -65,12 +65,12 @@ step "7. embeddings_generate (real tool) referenced in market-ingest"
 grep -q "embeddings_generate" "$ROOT/skills/market-ingest/SKILL.md" \
   && ok || bad "embeddings_generate not referenced in market-ingest"
 
-step "8. README pins @claude-flow/cli to v3.6"
-grep -qE "@claude-flow/cli.*v3\.6|v3\.6.*claude-flow/cli" "$ROOT/README.md" \
+step "8. README pins @rufflo/cli to v3.6"
+grep -qE "@rufflo/cli.*v3\.6|v3\.6.*rufflo/cli" "$ROOT/README.md" \
   && ok || bad "v3.6 pin missing"
 
-step "9. README defers to ruflo-agentdb namespace convention"
-grep -q "ruflo-agentdb" "$ROOT/README.md" \
+step "9. README defers to rufflo-agentdb namespace convention"
+grep -q "rufflo-agentdb" "$ROOT/README.md" \
   && grep -q "Namespace convention" "$ROOT/README.md" \
   && ok || bad "namespace coordination block incomplete"
 

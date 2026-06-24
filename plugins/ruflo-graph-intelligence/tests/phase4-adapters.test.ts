@@ -126,8 +126,8 @@ describe('RagMemoryAdapter', () => {
   });
 
   it('namespace scopes the graph id', () => {
-    expect(ragMemoryGraphId('docs')).toBe('ruflo-rag-memory:chunks:docs');
-    expect(ragMemoryGraphId()).toBe('ruflo-rag-memory:chunks:default');
+    expect(ragMemoryGraphId('docs')).toBe('rufflo-rag-memory:chunks:docs');
+    expect(ragMemoryGraphId()).toBe('rufflo-rag-memory:chunks:default');
   });
 
   it('end-to-end personalized PR via seedNodes', async () => {

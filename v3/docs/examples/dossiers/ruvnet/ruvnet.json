@@ -9,7 +9,7 @@
   "generatedAt": "2026-05-03T00:00:00Z",
   "nodes": [
     { "id": "ruvnet", "type": "username", "attrs": { "name": "rUv", "followers": 7268, "publicRepos": 173, "createdAt": "2012-11-30", "company": "Not a Bot", "location": "0x", "blog": "Cognitum.One", "twitter": "ruv" }, "sources": ["gh-api:users/ruvnet", "WebSearch"] },
-    { "id": "ruflo", "type": "repo", "attrs": { "language": "TypeScript", "stars": 39201, "forks": 4442, "openIssues": 497, "license": "MIT", "topics": ["agentic-ai", "claude-code", "mcp-server", "swarm-intelligence"] }, "sources": ["gh-api:repos/ruvnet/ruflo", "WebSearch"] },
+    { "id": "rufflo", "type": "repo", "attrs": { "language": "TypeScript", "stars": 39201, "forks": 4442, "openIssues": 497, "license": "MIT", "topics": ["agentic-ai", "claude-code", "mcp-server", "swarm-intelligence"] }, "sources": ["gh-api:repos/ruvnet/ruflo", "WebSearch"] },
     { "id": "RuView", "type": "repo", "attrs": { "language": "Rust", "stars": 51576, "topics": ["wifi", "pose-estimation", "self-learning", "esp32"] }, "sources": ["gh-api:users/ruvnet/repos"] },
     { "id": "RuVector", "type": "repo", "attrs": { "language": "Rust", "stars": 3891, "license": "MIT", "topics": ["gnn", "graph-neural-networks", "wasm", "onnx", "rust"] }, "sources": ["gh-api:repos/ruvnet/RuVector"] },
     { "id": "agentic-flow", "type": "repo", "attrs": { "language": "TypeScript", "stars": 668, "topics": ["claude-code", "claude-agent-sdk", "openrouter"] }, "sources": ["gh-api:repos/ruvnet/agentic-flow", "WebSearch"] },
@@ -25,7 +25,7 @@
     { "id": "Not a Bot", "type": "org", "attrs": { "role": "company" }, "sources": ["gh-api:users/ruvnet:company"] }
   ],
   "edges": [
-    { "from": "ruvnet", "to": "ruflo", "kind": "owns", "source": "gh-api", "confidence": "high" },
+    { "from": "ruvnet", "to": "rufflo", "kind": "owns", "source": "gh-api", "confidence": "high" },
     { "from": "ruvnet", "to": "RuView", "kind": "owns", "source": "gh-api", "confidence": "high" },
     { "from": "ruvnet", "to": "RuVector", "kind": "owns", "source": "gh-api", "confidence": "high" },
     { "from": "ruvnet", "to": "agentic-flow", "kind": "owns", "source": "gh-api", "confidence": "high" },
@@ -38,8 +38,8 @@
     { "from": "ruvnet", "to": "obsidian-brain", "kind": "owns", "source": "gh-api", "confidence": "high" },
     { "from": "ruvnet", "to": "Cognitum.One", "kind": "writes-at", "source": "gh-api:profile", "confidence": "high" },
     { "from": "ruvnet", "to": "Not a Bot", "kind": "works-at", "source": "gh-api:profile", "confidence": "high" },
-    { "from": "ruflo", "to": "agentic-flow", "kind": "integrates", "source": "WebSearch:summary", "confidence": "medium" },
-    { "from": "ruflo", "to": "RuVector", "kind": "uses", "source": "WebSearch:summary", "confidence": "medium" },
+    { "from": "rufflo", "to": "agentic-flow", "kind": "integrates", "source": "WebSearch:summary", "confidence": "medium" },
+    { "from": "rufflo", "to": "RuVector", "kind": "uses", "source": "WebSearch:summary", "confidence": "medium" },
     { "from": "RuLake", "to": "RuVector", "kind": "extends", "source": "gh-api:repo-description", "confidence": "high" },
     { "from": "obsidian-brain", "to": "RuVector", "kind": "bridges", "source": "gh-api:repo-description", "confidence": "high" },
     { "from": "obsidian-brain", "to": "pi.ruv.io", "kind": "federates-via", "source": "gh-api:repo-description", "confidence": "medium" }

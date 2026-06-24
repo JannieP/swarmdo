@@ -1,4 +1,4 @@
-// GameSpec library — payoff matrices (Ruflo ADR-147). Prisoner's dilemma (symmetric)
+// GameSpec library — payoff matrices (Rufflo ADR-147). Prisoner's dilemma (symmetric)
 // and match-or-not (zero-sum), per Wolfram's "Games Between Programs".
 
 import type { ActionSymbol, GameSpec, Payoff } from './types.js';

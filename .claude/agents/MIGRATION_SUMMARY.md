@@ -5,7 +5,7 @@ category: migration
 description: Complete migration plan for converting command-based system to intelligent agent-based system
 ---
 
-# Claude Flow Commands to Agent System Migration Summary
+# Rufflo Commands to Agent System Migration Summary
 
 ## Executive Summary
 This document provides a complete migration plan for converting the existing command-based system (`.claude/commands/`) to the new intelligent agent-based system (`.claude/agents/`). The migration preserves all functionality while adding natural language understanding, intelligent coordination, and improved parallelization.

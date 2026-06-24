@@ -15,7 +15,7 @@
  *   --tools <list>      Comma-separated tool list or "all" (default: all)
  *   --log-level <level> Log level: debug, info, warn, error (default: info)
  *
- * @module @claude-flow/mcp/server-entry
+ * @module @rufflo/mcp/server-entry
  * @version 3.0.0
  */
 
@@ -100,7 +100,7 @@ function parseArgs(): {
  */
 function showHelp(): void {
   console.log(`
-Claude-Flow MCP Server V3
+Rufflo MCP Server V3
 
 Usage:
   npx tsx v3/mcp/server-entry.ts [options]
@@ -184,7 +184,7 @@ async function main(): Promise<void> {
   const options = parseArgs();
   const logger = createLogger(options.logLevel);
 
-  logger.info('Starting Claude-Flow MCP Server V3', {
+  logger.info('Starting Rufflo MCP Server V3', {
     transport: options.transport,
     host: options.host,
     port: options.port,
@@ -208,7 +208,7 @@ async function main(): Promise<void> {
 
   // Server configuration
   const config: Partial<MCPServerConfig> = {
-    name: 'Claude-Flow MCP Server V3',
+    name: 'Rufflo MCP Server V3',
     version: '3.0.0',
     transport: options.transport,
     host: options.host,
@@ -264,7 +264,7 @@ async function main(): Promise<void> {
         method: 'notifications/server/ready',
         params: {
           serverInfo: {
-            name: 'Claude-Flow MCP Server V3',
+            name: 'Rufflo MCP Server V3',
             version: '3.0.0',
           },
           tools: stats.total,

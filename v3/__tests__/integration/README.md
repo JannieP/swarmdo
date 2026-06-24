@@ -1,6 +1,6 @@
 # V3 Integration Test Suite
 
-Comprehensive cross-module integration tests for claude-flow V3 architecture.
+Comprehensive cross-module integration tests for rufflo V3 architecture.
 
 ## Test Files Overview
 
@@ -24,7 +24,7 @@ Tests for HybridBackend with SQLite + AgentDB integration:
 
 **Key Features Tested:**
 - SQLite + AgentDB hybrid backend
-- Vector search (150x-12,500x faster)
+- Vector search (~1.9x-4.7x measured faster)
 - Cross-backend query coordination
 - Transaction consistency
 - Concurrent operations
@@ -207,7 +207,7 @@ These integration tests are designed to run in CI/CD pipelines:
 
 ### Enable verbose logging
 ```bash
-DEBUG=claude-flow:* npm run test:integration
+DEBUG=rufflo:* npm run test:integration
 ```
 
 ### Run single test
@@ -232,8 +232,8 @@ When adding new integration tests:
 ## Performance Targets (from V3 Goals)
 
 Integration tests verify these targets:
-- ⚡ Flash Attention: 2.49x-7.47x speedup
-- 🔍 AgentDB Search: 150x-12,500x improvement
+- ⚡ Flash Attention: unverified (no benchmark) speedup
+- 🔍 AgentDB Search: ~1.9x-4.7x measured improvement
 - 💾 Memory Reduction: 50-75%
 - 🚀 Startup Time: <500ms
 

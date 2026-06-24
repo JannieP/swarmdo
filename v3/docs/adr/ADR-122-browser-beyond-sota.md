@@ -1,16 +1,16 @@
-# ADR-122 — RuFlo Browser Substrate: signed trajectories, causal self-healing, federated MCTS, session capsules
+# ADR-122 — Rufflo Browser Substrate: signed trajectories, causal self-healing, federated MCTS, session capsules
 
 **Status**: Proposed (2026-05-18) — revised 2026-05-18 to reframe as substrate
 **Date**: 2026-05-18
 **Authors**: claude (drafted with rUv)
-**Related**: `@claude-flow/browser@3.0.0-alpha.3`, [`agent-browser@0.27.0`](https://www.npmjs.com/package/agent-browser), `ruflo-browser` plugin (record/replay/auth-flow/cookie-vault), [`@ruvector/rvf@0.2.1`](https://www.npmjs.com/package/@ruvector/rvf), AgentDB causal graph (ADR-076 family), Ed25519 witness manifest (ADR-103), Federation v1 (ADR-097/104/105–110), AIDefence 2.3.0 (ADR-118), [Reflective MCTS for web agents (arXiv 2410.02052)](https://arxiv.org/abs/2410.02052), [OWASP Session Management Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html), [Browserbase Stagehand](https://www.browserbase.com/blog/browser-automation-all-languages-with-stagehand/)
+**Related**: `@rufflo/browser@3.0.0-alpha.3`, [`agent-browser@0.27.0`](https://www.npmjs.com/package/agent-browser), `rufflo-browser` plugin (record/replay/auth-flow/cookie-vault), [`@ruvector/rvf@0.2.1`](https://www.npmjs.com/package/@ruvector/rvf), AgentDB causal graph (ADR-076 family), Ed25519 witness manifest (ADR-103), Federation v1 (ADR-097/104/105–110), AIDefence 2.3.0 (ADR-118), [Reflective MCTS for web agents (arXiv 2410.02052)](https://arxiv.org/abs/2410.02052), [OWASP Session Management Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html), [Browserbase Stagehand](https://www.browserbase.com/blog/browser-automation-all-languages-with-stagehand/)
 **Supersedes**: nothing (additive)
 
 ## Core thesis (revised)
 
-**RuFlo is not a browser agent. RuFlo is the memory, policy, replay, and distributed-planning substrate underneath browser agents.**
+**Rufflo is not a browser agent. Rufflo is the memory, policy, replay, and distributed-planning substrate underneath browser agents.**
 
-Stagehand, Browser Use, Surfer-H, Playwright, Chrome, Browserbase, local browsers, and cloud browser pools become **execution targets**. RuFlo owns: memory, auth state, planning, replay, scoring, policy, learning, and cross-installation coordination.
+Stagehand, Browser Use, Surfer-H, Playwright, Chrome, Browserbase, local browsers, and cloud browser pools become **execution targets**. Rufflo owns: memory, auth state, planning, replay, scoring, policy, learning, and cross-installation coordination.
 
 The public stack today is:
 
@@ -18,12 +18,12 @@ The public stack today is:
 agent → browser → action → observation → next action
 ```
 
-RuFlo should be:
+Rufflo should be:
 
 ```
 agent → governed Session Capsule → distributed MCTS search →
   Browser Execution Adapter → replay verification → RuVector memory →
-  Workflow Compiler → reusable RuFlo primitive
+  Workflow Compiler → reusable Rufflo primitive
 ```
 
 That is the architectural jump and the defensible SOTA claim.
@@ -32,8 +32,8 @@ That is the architectural jump and the defensible SOTA claim.
 
 There are **two browser systems** in this repo, drifting apart:
 
-1. **`@claude-flow/browser@3.0.0-alpha.3`** (v3 monorepo) — built on AugmentCode's `agent-browser` CLI, ships 59 MCP tools, element-ref snapshots (`@e1`, `@e2` — 93% context reduction), trajectory recording into ReasoningBank, URL/PII scanning, 9 workflow templates, basic multi-session swarm. **Locked to `agent-browser@^0.6.0` while upstream is at `0.27.0`** — a 21-minor-version drift covering the entire 2025–mid-2026 evolution of the CLI.
-2. **`ruflo-browser` plugin** (`plugins/ruflo-browser/`) — more modern, 23 MCP tools, already composes RVF cognitive containers + AIDefence gates + cookie vault + replay-with-mutation. This is where the "beyond SOTA" primitives have been quietly accumulating.
+1. **`@rufflo/browser@3.0.0-alpha.3`** (v3 monorepo) — built on AugmentCode's `agent-browser` CLI, ships 59 MCP tools, element-ref snapshots (`@e1`, `@e2` — 93% context reduction), trajectory recording into ReasoningBank, URL/PII scanning, 9 workflow templates, basic multi-session swarm. **Locked to `agent-browser@^0.6.0` while upstream is at `0.27.0`** — a 21-minor-version drift covering the entire 2025–mid-2026 evolution of the CLI.
+2. **`rufflo-browser` plugin** (`plugins/rufflo-browser/`) — more modern, 23 MCP tools, already composes RVF cognitive containers + AIDefence gates + cookie vault + replay-with-mutation. This is where the "beyond SOTA" primitives have been quietly accumulating.
 
 Meanwhile the SOTA web-agent field has moved hard. Current WebVoyager numbers (Apr 2026):
 
@@ -49,11 +49,11 @@ Meanwhile the SOTA web-agent field has moved hard. Current WebVoyager numbers (A
 
 The benchmark frontier is no longer about action accuracy — it's about **inspectability, provenance, and cross-session learning**, none of which any of the named systems ship. Pure-Playwright + LLM systems cannot bolt on signed replay or causal-graph recovery without architectural surgery.
 
-This ADR converges the two ruflo browser systems and commits to three wedges that exploit ambient ruflo infrastructure (HNSW vector memory + AgentDB causal graphs + Ed25519 witness + federation peers + AIDefence) to do what SOTA structurally cannot.
+This ADR converges the two rufflo browser systems and commits to three wedges that exploit ambient rufflo infrastructure (HNSW vector memory + AgentDB causal graphs + Ed25519 witness + federation peers + AIDefence) to do what SOTA structurally cannot.
 
 ## Gap analysis (what we don't have)
 
-| Capability | Surfer-H | Browser Use | Stagehand v3 | Skyvern | Operator | `@claude-flow/browser` today | `ruflo-browser` today |
+| Capability | Surfer-H | Browser Use | Stagehand v3 | Skyvern | Operator | `@rufflo/browser` today | `rufflo-browser` today |
 |---|---|---|---|---|---|---|---|
 | Visual grounding (specialized VLM Localizer) | Y | partial | N | Y | Y | N | N |
 | Self-healing selectors (queryable) | Y (silent) | partial | Y (silent) | Y (silent) | N | N | N |
@@ -67,13 +67,13 @@ This ADR converges the two ruflo browser systems and commits to three wedges tha
 | OCR for screenshot text | Y | N | N | Y | Y | N | N |
 | Action-graph / GOAP pre-planning | N | N | N | partial | partial | N | N |
 
-The bolded rows are the wedges: every named SOTA system is "N", ruflo has the primitives in place to be "Y", and nothing else can ship these without rebuilding their core.
+The bolded rows are the wedges: every named SOTA system is "N", rufflo has the primitives in place to be "Y", and nothing else can ship these without rebuilding their core.
 
 ## Architecture (substrate)
 
 ### Layered system
 
-1. **Browser Execution Adapters** — Playwright, Stagehand, Browser Use, Browserbase, local Chrome profile, remote browser pool, future Surfer-H visual adapter. Single interface; RuFlo stays above the tool wars.
+1. **Browser Execution Adapters** — Playwright, Stagehand, Browser Use, Browserbase, local Chrome profile, remote browser pool, future Surfer-H visual adapter. Single interface; Rufflo stays above the tool wars.
 2. **Session Capsule Layer** — sealed browser-state bundles with origin policy, consent proof, expiry, reuse policy, and witness chain. Cookies, localStorage, sessionStorage, IndexedDB metadata, browser fingerprint profile — never raw reusable blobs.
 3. **Distributed MCTS Layer** — risk/cost/auth-aware UCT search distributed across federation peers. Reflective MCTS extended to persist across runs and installations.
 4. **Cross-Installation Search Fabric** — Explorer / Verifier / Critic / Recorder / Learner / Coordinator node roles. CRDT or append-only event-log merge of search-tree deltas. **Search deltas shared by default; raw secrets never.**
@@ -85,12 +85,12 @@ The bolded rows are the wedges: every named SOTA system is "N", ruflo has the pr
 
 | Service | Responsibility |
 |---|---|
-| `ruflo-sessiond` | Capture / seal / refresh / rotate / revoke Session Capsules. Mount into browser context. Audit reuse. |
-| `ruflo-browexec` | Adapter dispatch. Launch browser via chosen adapter; apply capsule; execute action; emit trace event. |
-| `ruflo-mcts` | Distributed tree search engine. Select / expand / simulate / score / backprop / publish delta. |
-| `ruflo-replayd` | Replay successful runs; verify; generalize selectors; produce fallback paths; create workflow artifact. |
-| `ruflo-critic` | Policy + risk evaluation. Detects irreversible actions; scores auth/site risk; enforces consent; blocks unsafe transitions. |
-| `ruflo-memory` | RuVector-backed embeddings + similarity retrieval; failure clustering; reusable-path ranking. |
+| `rufflo-sessiond` | Capture / seal / refresh / rotate / revoke Session Capsules. Mount into browser context. Audit reuse. |
+| `rufflo-browexec` | Adapter dispatch. Launch browser via chosen adapter; apply capsule; execute action; emit trace event. |
+| `rufflo-mcts` | Distributed tree search engine. Select / expand / simulate / score / backprop / publish delta. |
+| `rufflo-replayd` | Replay successful runs; verify; generalize selectors; produce fallback paths; create workflow artifact. |
+| `rufflo-critic` | Policy + risk evaluation. Detects irreversible actions; scores auth/site risk; enforces consent; blocks unsafe transitions. |
+| `rufflo-memory` | RuVector-backed embeddings + similarity retrieval; failure clustering; reusable-path ranking. |
 
 ### Risk classes (autonomous-action gate)
 
@@ -160,15 +160,15 @@ Land the substrate in **eight phases**, each shippable alone, each opt-in via co
 
 The 21-minor drift on `agent-browser` is the highest-yield, lowest-risk fix. Land it first.
 
-- Bump `@claude-flow/browser` dependency to `agent-browser@^0.27.0` in one PR.
+- Bump `@rufflo/browser` dependency to `agent-browser@^0.27.0` in one PR.
 - Audit the 59 MCP tools against `agent-browser@0.27` CLI surface; deprecate any that no longer have a CLI counterpart; surface any new CLI verbs (`record`, `replay`, etc.) as new MCP tools.
-- Fold the more-mature `ruflo-browser` plugin primitives (record/replay/auth-flow/cookie-vault/screenshot-diff) into `@claude-flow/browser` as first-class application services. Keep the plugin as a thin re-export for backward compatibility, scheduled for removal in 4.0.
+- Fold the more-mature `rufflo-browser` plugin primitives (record/replay/auth-flow/cookie-vault/screenshot-diff) into `@rufflo/browser` as first-class application services. Keep the plugin as a thin re-export for backward compatibility, scheduled for removal in 4.0.
 
 **Acceptance:**
-- Single source of truth: `@claude-flow/browser` exports `record`, `replay`, `replayWithMutation`, `authFlow`, `cookieVault`, `screenshotDiff` as application-level operations.
-- Plugin `plugins/ruflo-browser` re-exports from `@claude-flow/browser` only; no duplicated logic.
+- Single source of truth: `@rufflo/browser` exports `record`, `replay`, `replayWithMutation`, `authFlow`, `cookieVault`, `screenshotDiff` as application-level operations.
+- Plugin `plugins/rufflo-browser` re-exports from `@rufflo/browser` only; no duplicated logic.
 - Zero regression on existing 128 tests; new tests cover the merged surface area.
-- `ruflo doctor` reports `agent-browser` version and warns when below 0.27.
+- `rufflo doctor` reports `agent-browser` version and warns when below 0.27.
 
 **Non-goals (Phase 0):** removing the plugin entirely (keep through 4.0); changing the MCP tool names (back-compat).
 
@@ -177,14 +177,14 @@ The 21-minor drift on `agent-browser` is the highest-yield, lowest-risk fix. Lan
 Combine the existing RVF cognitive container format (`@ruvector/rvf@0.2.1`) with the Ed25519 witness manifest (ADR-103) to produce a portable, signed `.rvf` browser-session bundle. No other web agent has cryptographic provenance for a recorded session.
 
 - At `endTrajectory(success, verdict)`, write the trajectory steps + final snapshot + screenshot hashes into an RVF container, then sign the container with the project's witness key.
-- Provide a verifier: `ruflo browser verify <session.rvf>` — confirms signature, integrity, and chain-of-custody back to the recording project.
+- Provide a verifier: `rufflo browser verify <session.rvf>` — confirms signature, integrity, and chain-of-custody back to the recording project.
 - Provide `replayWithMutation(session.rvf, mutations)` — replay against the same or mutated URL, producing a new signed delta artifact suitable for visual-regression CI gates.
 
 **Acceptance:**
 - A recorded trajectory round-trips through `record → sign → distribute → verify → replay` with byte-exact step reproduction.
 - Forging a step (modifying the trajectory JSON in the container) fails verification.
 - CI integration: a session `.rvf` artifact can be checked into a repo and replayed by an unrelated checkout; the replay produces a signed delta against the original.
-- Tamper-evidence: changing one element ref in the trajectory breaks `ruflo browser verify`.
+- Tamper-evidence: changing one element ref in the trajectory breaks `rufflo browser verify`.
 
 **Non-goals (Phase 1):** distributed signing (use single project key); replay across browser-engine versions (require same Playwright major).
 
@@ -192,7 +192,7 @@ Combine the existing RVF cognitive container format (`@ruvector/rvf@0.2.1`) with
 
 Every time a selector resolution fails (element-ref no longer present, click target moved, fill target's role changed), record a causal edge in AgentDB: `selector @eN at URL U broke because of DOM mutation M observed between timestamps T1..T2`. Future sessions on the same domain query the causal graph *before* attempting a known-brittle locator family.
 
-- Hook into the existing `agent-browser-adapter` retry path. On retry, snapshot the DOM diff (Playwright `accessibility.snapshot()` before/after) and write a causal edge via `mcp__claude-flow__agentdb_causal-edge`.
+- Hook into the existing `agent-browser-adapter` retry path. On retry, snapshot the DOM diff (Playwright `accessibility.snapshot()` before/after) and write a causal edge via `mcp__rufflo__agentdb_causal-edge`.
 - New MCP tool: `browser/explain-recovery` — given a current page + a failing selector, walk the causal graph and return the historical break events that share a structural ancestor.
 - Heal proactively: the next session's snapshot is annotated with `_causalRiskScore` per element-ref, sourced from prior break events on this domain. Element-refs with high break-history are flagged in the MCP response.
 
@@ -207,7 +207,7 @@ Every time a selector resolution fails (element-ref no longer present, click tar
 
 Every cookie write goes through AIDefence (`aidefence_has_pii` + `aidefence_is_safe`) before it lands in the vault. The vault entry is sealed in an RVF container and witness-signed. The signed attestation confirms: "this cookie handle was scanned by AIDefence version X at timestamp T and contained no PII / no detected threats."
 
-- Replace the current cookie persistence in `ruflo-browser`'s `browser-cookies` MCP tool with the attested flow.
+- Replace the current cookie persistence in `rufflo-browser`'s `browser-cookies` MCP tool with the attested flow.
 - The cookie handle exposes a `verifyAttestation()` method consumers MUST call before reuse; unverified handles refuse to attach to a new session.
 - Federation peers (when ADR-097/111 is online) can request attested cookie handles from each other; the witness signature is the cross-installation trust boundary.
 
@@ -235,10 +235,10 @@ For exploratory browse-tasks (unfamiliar site, ambiguous goal), distribute paral
 
 ### Phase 5 — Cost-aware per-action model routing + GOAP pre-planning
 
-Compose with existing ruflo primitives — no new architecture:
+Compose with existing rufflo primitives — no new architecture:
 
 - Wire `hooks_route` per browser action: simple DOM-present actions → Agent Booster (Tier 1, $0); visual grounding on unfamiliar pages → Haiku (Tier 2); plan-level reasoning + recovery → Sonnet/Opus (Tier 3). Cost-tracker already logs per-action spend.
-- Wire `ruflo-goals` GOAP planner: before touching the browser, produce an action plan with preconditions/effects against AgentDB causal graphs. Dry-run validation surfaces likely failures (e.g. "this site requires login; you have no cookie attestation") before consuming a real browser session.
+- Wire `rufflo-goals` GOAP planner: before touching the browser, produce an action plan with preconditions/effects against AgentDB causal graphs. Dry-run validation surfaces likely failures (e.g. "this site requires login; you have no cookie attestation") before consuming a real browser session.
 
 **Acceptance:**
 - ≥30% of browser actions route through Agent Booster (Tier 1, $0) on a representative workload.
@@ -276,7 +276,7 @@ Compile winning MCTS traces (Phase 4) into deterministic YAML workflows with sel
 | 2 | Causal self-healing | AgentDB causal edges + adapter retry hook | alpha.6 ✅ |
 | 3 | Attested cookie vault | AIDefence + RVF + witness | alpha.7 ✅ |
 | 4 | Federated MCTS | Federation v1 + HNSW + ReasoningBank | alpha.8 ✅ |
-| 5 | Cost-aware routing + GOAP | hooks_route + ruflo-goals + cost-tracker | alpha.9 ✅ |
+| 5 | Cost-aware routing + GOAP | hooks_route + rufflo-goals + cost-tracker | alpha.9 ✅ |
 | 6 | Session Capsule + adapters + risk classes | Capsule schema + BrowserExecutionAdapter + RiskClassifier | alpha.10 🚧 |
 | 7 | Workflow Compiler + production-aware UCT | YAML workflows + selector fallback graphs + UCT extension | alpha.11 ⏳ |
 

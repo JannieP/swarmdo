@@ -1,5 +1,5 @@
 {
-  "name": "ruflo-rag-memory",
+  "name": "rufflo-rag-memory",
   "description": "RuVector memory with HNSW search, AgentDB, and semantic retrieval",
   "version": "0.2.0",
   "author": {
@@ -9,7 +9,7 @@
   "homepage": "https://github.com/ruvnet/ruflo",
   "license": "MIT",
   "keywords": [
-    "ruflo",
+    "rufflo",
     "memory",
     "hnsw",
     "agentdb",

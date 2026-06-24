@@ -1,4 +1,4 @@
-// Domain contracts for competitive ruliology (Ruflo ADR-147/148).
+// Domain contracts for competitive ruliology (Rufflo ADR-147/148).
 // Strategies are *programs*; games are payoff matrices; runs are reproducible artifacts.
 
 import { z } from 'zod';
@@ -95,7 +95,7 @@ export interface RunRecord {
 }
 
 // ---------------------------------------------------------------------------
-// Zod input schemas — validated at MCP tool boundaries (Ruflo: validate at boundaries).
+// Zod input schemas — validated at MCP tool boundaries (Rufflo: validate at boundaries).
 // Numbers are coerced because MCP/CLI inputs may arrive as strings.
 // ---------------------------------------------------------------------------
 

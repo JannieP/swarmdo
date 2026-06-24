@@ -5,7 +5,7 @@ argument-hint: "--repo <path> [--generations 3] [--children 3] [--concurrency 2]
 allowed-tools: Bash
 ---
 
-Surfaces the upstream `metaharness-darwin evolve` CLI as a ruflo skill. The
+Surfaces the upstream `metaharness-darwin evolve` CLI as a rufflo skill. The
 **write** layer that pairs with ADR-150's read layer (score / genome /
 mcp-scan / threat-model / oia-audit). Use when you have a harness whose
 readiness scores are flat and you want to discover *which* surface mutation
@@ -24,7 +24,7 @@ moves them — without retraining the foundation model.
 
 - For continuous background optimization. Darwin Mode is human-initiated.
   Wire it into CI for one-shot exploration, not for autonomous self-modification.
-- For ruflo itself in CI. ADR-153 §5 explicitly rejects auto-evolving ruflo
+- For rufflo itself in CI. ADR-153 §5 explicitly rejects auto-evolving rufflo
   — the CI gate verifies graceful degradation, not convergence.
 
 ## Algorithm
@@ -88,5 +88,5 @@ Skill stdout = JSON `{success, data: {champion, plan, durationMs, improved}}`.
 
 When `@metaharness/darwin` is not installed, the script emits
 `{degraded: true, reason: 'metaharness-darwin-not-available', hint: ...}`
-and exits 0. ruflo continues to function. CI's
+and exits 0. rufflo continues to function. CI's
 `no-metaharness-smoke.yml`-style job asserts this path.

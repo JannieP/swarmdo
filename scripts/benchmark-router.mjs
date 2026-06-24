@@ -5,7 +5,7 @@
  *   vs  @ruvector/tiny-dancer FastGRNN score()
  *
  * What this measures, on the machine it runs on, against:
- *   - v3/@claude-flow/cli/dist/src/ruvector/model-router.js  (must be built)
+ *   - v3/@rufflo/cli/dist/src/ruvector/model-router.js  (must be built)
  *   - @metaharness/router@0.3.2  Router (k-NN), trainRouter (KRR) — pure TS, no native deps
  *   - @ruvector/tiny-dancer@0.1.22 trainRouter() + score() (native FastGRNN)
  *
@@ -34,7 +34,7 @@ import { createRequire } from 'node:module';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..');
-const DIST = path.join(REPO_ROOT, 'v3', '@claude-flow', 'cli', 'dist', 'src');
+const DIST = path.join(REPO_ROOT, 'v3', '@rufflo', 'cli', 'dist', 'src');
 const require = createRequire(import.meta.url);
 
 // ----------------------------------------------------------------------------
@@ -131,7 +131,7 @@ function embed(task, label, dim) {
 }
 
 // ----------------------------------------------------------------------------
-// Run the INTEGRATED ruflo path with neural gate ON (ADR-148 in-tree)
+// Run the INTEGRATED rufflo path with neural gate ON (ADR-148 in-tree)
 // ----------------------------------------------------------------------------
 async function runIntegratedNeural(test, dim) {
   process.env.CLAUDE_FLOW_ROUTER_NEURAL = '1';
@@ -167,7 +167,7 @@ async function runIntegratedNeural(test, dim) {
   // Unset to avoid leaking into later runs in same process
   delete process.env.CLAUDE_FLOW_ROUTER_NEURAL;
   return {
-    name: 'INTEGRATED ruflo path (CLAUDE_FLOW_ROUTER_NEURAL=1)',
+    name: 'INTEGRATED rufflo path (CLAUDE_FLOW_ROUTER_NEURAL=1)',
     accuracy: correct / test.length,
     costAdjReward,
     latency: { mean: lat.reduce((a,b)=>a+b,0)/lat.length, p50: lat[Math.floor(lat.length*0.5)], p95: lat[Math.floor(lat.length*0.95)] },
@@ -363,7 +363,7 @@ async function runTinyDancer(train, test, dim, options) {
 // ----------------------------------------------------------------------------
 async function main() {
   if (!existsSync(path.join(DIST, 'ruvector', 'model-router.js'))) {
-    console.error('[bench] dist not built — run `npm --prefix v3/@claude-flow/cli run build`');
+    console.error('[bench] dist not built — run `npm --prefix v3/@rufflo/cli run build`');
     process.exit(2);
   }
 

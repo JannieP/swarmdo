@@ -2,7 +2,7 @@
 name: intelligence-transfer
 description: Publish or fetch learned patterns across projects via IPFS (Pinata) -- the cross-project pattern transfer that hooks_transfer enables
 argument-hint: "<store|load|from-project> [--cid <ipfs-cid>] [--source <project-path>]"
-allowed-tools: mcp__claude-flow__hooks_transfer mcp__claude-flow__hooks_intelligence_pattern-search mcp__claude-flow__hooks_intelligence_pattern-store mcp__claude-flow__neural_patterns mcp__claude-flow__neural_status Bash
+allowed-tools: mcp__rufflo__hooks_transfer mcp__rufflo__hooks_intelligence_pattern-search mcp__rufflo__hooks_intelligence_pattern-store mcp__rufflo__neural_patterns mcp__rufflo__neural_status Bash
 ---
 
 # Intelligence Transfer
@@ -76,5 +76,5 @@ Useful for consolidating learnings across a monorepo or a fleet of related proje
 
 ## Related
 
-- `ruflo-agentdb` ADR-0001 §"Namespace convention" — defines `pattern` namespace that this transfer reads from
+- `rufflo-agentdb` ADR-0001 §"Namespace convention" — defines `pattern` namespace that this transfer reads from
 - `neural-train` skill — produces the patterns that this skill ships

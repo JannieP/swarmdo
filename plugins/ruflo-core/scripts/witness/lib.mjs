@@ -6,7 +6,7 @@
  * Pure functions + small I/O helpers; no project-specific assumptions.
  * CLI wrappers in this directory configure paths and surface output.
  *
- * @module plugins/ruflo-core/scripts/witness/lib
+ * @module plugins/rufflo-core/scripts/witness/lib
  */
 
 import { readFileSync, writeFileSync, existsSync, appendFileSync } from 'node:fs';
@@ -36,8 +36,8 @@ function loadRvfNode(probeRoots) {
   const expanded = [
     ...probeRoots,
     ...probeRoots.flatMap(r => [
-      join(r, 'v3/@claude-flow/cli'),
-      join(r, 'v3/@claude-flow/memory'),
+      join(r, 'v3/@rufflo/cli'),
+      join(r, 'v3/@rufflo/memory'),
     ]),
   ];
   for (const root of expanded) {
@@ -53,7 +53,7 @@ function loadRvfNode(probeRoots) {
 // ─── ed25519 lazy load ─────────────────────────────────────────────
 // Locate @noble/ed25519 from the caller's project (it lives in their
 // node_modules, not bundled with this script). We probe a few likely
-// install roots so the toolkit works in ruflo's monorepo layout *and*
+// install roots so the toolkit works in rufflo's monorepo layout *and*
 // a user's flat node_modules.
 function loadEd25519(probeRoots) {
   // Expand caller-supplied roots with workspace-package locations so
@@ -63,8 +63,8 @@ function loadEd25519(probeRoots) {
   const expanded = [
     ...probeRoots,
     ...probeRoots.flatMap(r => [
-      join(r, 'v3/@claude-flow/cli'),
-      join(r, 'v3/@claude-flow/plugin-agent-federation'),
+      join(r, 'v3/@rufflo/cli'),
+      join(r, 'v3/@rufflo/plugin-agent-federation'),
     ]),
   ];
   let lastErr;
@@ -140,7 +140,7 @@ export function regenerate(opts) {
   const missingCount = merged.filter(f => f._missing).length;
 
   const manifest = {
-    schema: existing?.manifest?.schema ?? 'ruflo-witness/v1',
+    schema: existing?.manifest?.schema ?? 'rufflo-witness/v1',
     issuedAt,
     gitCommit,
     branch,
@@ -152,7 +152,7 @@ export function regenerate(opts) {
 
   const manifestCanonical = JSON.stringify(manifest);
   const manifestHash = createHash('sha256').update(manifestCanonical).digest('hex');
-  const seed = createHash('sha256').update(gitCommit + ':ruflo-witness/v1').digest();
+  const seed = createHash('sha256').update(gitCommit + ':rufflo-witness/v1').digest();
   const publicKey = ed.getPublicKey(seed);
   const signature = ed.sign(Buffer.from(manifestHash, 'hex'), seed);
 
@@ -164,7 +164,7 @@ export function regenerate(opts) {
       signatureAlgo: 'ed25519',
       publicKey: Buffer.from(publicKey).toString('hex'),
       signature: Buffer.from(signature).toString('hex'),
-      seedDerivation: "sha256(gitCommit + ':ruflo-witness/v1')",
+      seedDerivation: "sha256(gitCommit + ':rufflo-witness/v1')",
     },
   };
 

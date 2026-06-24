@@ -4,13 +4,13 @@
 // inlined Node one-liner.
 //
 // Resolution strategy (#1930): pnpm-workspace marketplace installs don't
-// hoist `@claude-flow/integration` into `v3/node_modules/`, so resolving
+// hoist `@rufflo/integration` into `v3/node_modules/`, so resolving
 // from cwd alone breaks. Try, in order:
 //   1. createRequire(cwd)           — works for npm-style hoisted installs
 //   2. createRequire(script-dir)    — works when run from inside the plugin
 //   3. absolute path from this file — works on the marketplace layout
-//      (script lives at <ruflo>/plugins/ruflo-cost-tracker/scripts/, the
-//       integration package at <ruflo>/v3/@claude-flow/integration/)
+//      (script lives at <rufflo>/plugins/rufflo-cost-tracker/scripts/, the
+//       integration package at <rufflo>/v3/@rufflo/integration/)
 //
 // Also: agentic-flow's index.js binds `process.env.HEALTH_PORT || 8080`
 // unconditionally on import. On any host with something already on 8080
@@ -40,19 +40,19 @@ const __dirname = dirname(__filename);
 function tryResolveFrom(anchorPath) {
   try {
     const req = createRequire(anchorPath);
-    return req.resolve('@claude-flow/integration/token-optimizer');
+    return req.resolve('@rufflo/integration/token-optimizer');
   } catch {
     return null;
   }
 }
 
 function tryAbsolutePath() {
-  // Walk up from this script looking for `v3/@claude-flow/integration/dist/token-optimizer.js`.
-  // Handles the marketplace layout (script at plugins/ruflo-cost-tracker/scripts/) and the
+  // Walk up from this script looking for `v3/@rufflo/integration/dist/token-optimizer.js`.
+  // Handles the marketplace layout (script at plugins/rufflo-cost-tracker/scripts/) and the
   // dev-repo layout. Caps depth at 6 to avoid runaway traversal.
   let dir = __dirname;
   for (let i = 0; i < 6; i++) {
-    const candidate = join(dir, 'v3', '@claude-flow', 'integration', 'dist', 'token-optimizer.js');
+    const candidate = join(dir, 'v3', '@rufflo', 'integration', 'dist', 'token-optimizer.js');
     if (existsSync(candidate)) return candidate;
     const parent = dirname(dir);
     if (parent === dir) break;
@@ -84,7 +84,7 @@ async function main() {
       // #1930 step 1).
       const abs = isAbsolute(resolved) ? resolved : resolve(resolved);
       if (!existsSync(abs)) {
-        lastErr = new Error(`token-optimizer.js missing at ${abs} — run \`cd v3/@claude-flow/integration && pnpm run build\` (#1930 step 1)`);
+        lastErr = new Error(`token-optimizer.js missing at ${abs} — run \`cd v3/@rufflo/integration && pnpm run build\` (#1930 step 1)`);
         continue;
       }
       mod = await import(pathToFileURL(abs).href);
@@ -97,7 +97,7 @@ async function main() {
   if (!mod) {
     const reason = lastErr
       ? String(lastErr.message || lastErr).slice(0, 300)
-      : 'Cannot find module @claude-flow/integration/token-optimizer';
+      : 'Cannot find module @rufflo/integration/token-optimizer';
     const out = {
       bridgeUnavailable: true,
       reason,
@@ -112,10 +112,10 @@ async function main() {
     console.log('Tried:');
     console.log('  - resolve from cwd');
     console.log('  - resolve from script dir');
-    console.log('  - absolute path walk from this script (looking for v3/@claude-flow/integration/dist/token-optimizer.js)');
+    console.log('  - absolute path walk from this script (looking for v3/@rufflo/integration/dist/token-optimizer.js)');
     console.log('');
-    console.log('If `@claude-flow/integration` is installed but `dist/` is missing, run:');
-    console.log('  cd v3/@claude-flow/integration && pnpm run build');
+    console.log('If `@rufflo/integration` is installed but `dist/` is missing, run:');
+    console.log('  cd v3/@rufflo/integration && pnpm run build');
     return;
   }
 

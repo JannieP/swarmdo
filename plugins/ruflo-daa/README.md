@@ -1,4 +1,4 @@
-# ruflo-daa
+# rufflo-daa
 
 Dynamic Agentic Architecture with cognitive patterns, knowledge sharing, and adaptive agents.
 
@@ -6,7 +6,7 @@ Dynamic Agentic Architecture with cognitive patterns, knowledge sharing, and ada
 
 ```
 /plugin marketplace add ruvnet/ruflo
-/plugin install ruflo-daa@ruflo
+/plugin install rufflo-daa@rufflo
 ```
 
 ## Features
@@ -27,7 +27,7 @@ Dynamic Agentic Architecture with cognitive patterns, knowledge sharing, and ada
 
 ## MCP surface (8 tools)
 
-All defined at `v3/@claude-flow/cli/src/mcp-tools/daa-tools.ts`:
+All defined at `v3/@rufflo/cli/src/mcp-tools/daa-tools.ts`:
 
 | Tool | Purpose |
 |------|---------|
@@ -42,28 +42,28 @@ All defined at `v3/@claude-flow/cli/src/mcp-tools/daa-tools.ts`:
 
 ## Compatibility
 
-- **CLI:** pinned to `@claude-flow/cli` v3.6 major+minor.
-- **Verification:** `bash plugins/ruflo-daa/scripts/smoke.sh` is the contract.
+- **CLI:** pinned to `@rufflo/cli` v3.6 major+minor.
+- **Verification:** `bash plugins/rufflo-daa/scripts/smoke.sh` is the contract.
 
 ## Intelligence-pipeline alignment
 
-DAA cognitive patterns feed the **JUDGE** phase of the 4-step intelligence pipeline (RETRIEVE → JUDGE → DISTILL → CONSOLIDATE) defined by [ruflo-intelligence ADR-0001](../ruflo-intelligence/docs/adrs/0001-intelligence-surface-completeness.md). When a task is routed via `hooks_route` and a similar past trajectory is retrieved, DAA cognitive patterns provide the structured reasoning to evaluate fit before adaptation.
+DAA cognitive patterns feed the **JUDGE** phase of the 4-step intelligence pipeline (RETRIEVE → JUDGE → DISTILL → CONSOLIDATE) defined by [rufflo-intelligence ADR-0001](../rufflo-intelligence/docs/adrs/0001-intelligence-surface-completeness.md). When a task is routed via `hooks_route` and a similar past trajectory is retrieved, DAA cognitive patterns provide the structured reasoning to evaluate fit before adaptation.
 
 `daa_knowledge_share` writes pattern propagation events that `hooks_intelligence_learn` can consume during the DISTILL phase.
 
 ## Namespace coordination
 
-This plugin owns the `daa-patterns` AgentDB namespace (kebab-case, follows the convention from [ruflo-agentdb ADR-0001 §"Namespace convention"](../ruflo-agentdb/docs/adrs/0001-agentdb-optimization.md)). Reserved namespaces (`pattern`, `claude-memories`, `default`) MUST NOT be shadowed.
+This plugin owns the `daa-patterns` AgentDB namespace (kebab-case, follows the convention from [rufflo-agentdb ADR-0001 §"Namespace convention"](../rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md)). Reserved namespaces (`pattern`, `claude-memories`, `default`) MUST NOT be shadowed.
 
 `daa-patterns` is accessed via `memory_*` tools (which route by namespace). The agent file's CLI examples are correct (`memory store --namespace daa-patterns`).
 
 ## Verification
 
 ```bash
-bash plugins/ruflo-daa/scripts/smoke.sh
+bash plugins/rufflo-daa/scripts/smoke.sh
 # Expected: "10 passed, 0 failed"
 ```
 
 ## Architecture Decisions
 
-- [`ADR-0001` — ruflo-daa plugin contract (pinning, namespace coordination, intelligence-pipeline alignment, smoke as contract)](./docs/adrs/0001-daa-contract.md)
+- [`ADR-0001` — rufflo-daa plugin contract (pinning, namespace coordination, intelligence-pipeline alignment, smoke as contract)](./docs/adrs/0001-daa-contract.md)

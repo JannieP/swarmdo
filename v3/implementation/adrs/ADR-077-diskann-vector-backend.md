@@ -6,7 +6,7 @@
 
 ## Context
 
-ruflo's vector search uses three backends with different tradeoffs. With `@ruvector/diskann@0.1.0` now published (5-platform native binaries), we have a Vamana graph-based SSD-friendly alternative to HNSW.
+rufflo's vector search uses three backends with different tradeoffs. With `@ruvector/diskann@0.1.0` now published (5-platform native binaries), we have a Vamana graph-based SSD-friendly alternative to HNSW.
 
 ## Benchmark Results (measured, not theoretical)
 
@@ -53,7 +53,7 @@ DiskANN (native, Vamana graph) → HNSW (@ruvector/router) → Cosine-JS (pure J
 ## Implementation
 
 ### Files
-- `v3/@claude-flow/cli/src/ruvector/diskann-backend.ts` — unified backend with auto-selection, fallback chain, benchmark utility
+- `v3/@rufflo/cli/src/ruvector/diskann-backend.ts` — unified backend with auto-selection, fallback chain, benchmark utility
 
 ### API
 ```typescript

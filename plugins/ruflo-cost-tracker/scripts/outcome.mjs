@@ -31,7 +31,7 @@ function main() {
     process.exit(2);
   }
   const r = spawnSync('npx', [
-    '@claude-flow/cli@latest', 'hooks', 'model-outcome',
+    '@rufflo/cli@latest', 'hooks', 'model-outcome',
     '-t', task, '-m', model, '-o', outcome,
   ], { stdio: 'inherit', shell: process.platform === 'win32' });
   if (r.status !== 0) {

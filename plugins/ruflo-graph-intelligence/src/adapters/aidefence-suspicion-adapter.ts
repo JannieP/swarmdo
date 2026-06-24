@@ -1,7 +1,7 @@
 /**
  * AIDefence Suspicion Adapter (Wedge 10, ADR-123 Phase 6)
  *
- * `ruflo-aidefence` flags syscalls / agent actions as suspicious. This
+ * `rufflo-aidefence` flags syscalls / agent actions as suspicious. This
  * adapter exports the call-graph so suspicion propagates from the flagged
  * leaf node back through callers via single-entry PR. `α=0.95` (high
  * decay — suspicion travels far) by convention.
@@ -29,11 +29,11 @@ export interface AIDefenceAdapterOptions {
   ddSafetyMargin?: number;
 }
 
-export const AIDEFENCE_CALL_GRAPH_ID = 'ruflo-aidefence:call-graph';
+export const AIDEFENCE_CALL_GRAPH_ID = 'rufflo-aidefence:call-graph';
 
 export class AIDefenceSuspicionAdapter implements SublinearAdapter {
   readonly graphId = AIDEFENCE_CALL_GRAPH_ID;
-  readonly ownerPlugin = 'ruflo-aidefence';
+  readonly ownerPlugin = 'rufflo-aidefence';
   readonly requiresPreprocessing = false;
 
   private readonly source: AIDefenceSource;

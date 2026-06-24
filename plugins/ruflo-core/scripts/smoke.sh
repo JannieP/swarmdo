@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Structural smoke test for ruflo-core v0.2.2 (ADR-0001).
+# Structural smoke test for rufflo-core v0.2.2 (ADR-0001).
 set -u
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PASS=0
@@ -20,12 +20,12 @@ else
   [[ -z "$miss" ]] && ok || bad "missing keywords:$miss"
 fi
 
-step "2. .mcp.json registers a 'ruflo' MCP server"
+step "2. .mcp.json registers a 'rufflo' MCP server"
 F="$ROOT/.mcp.json"
-if [[ -f "$F" ]] && grep -q '"ruflo"' "$F" && grep -q '"command"' "$F"; then
+if [[ -f "$F" ]] && grep -q '"rufflo"' "$F" && grep -q '"command"' "$F"; then
   ok
 else
-  bad ".mcp.json missing or no ruflo server registration"
+  bad ".mcp.json missing or no rufflo server registration"
 fi
 
 step "3. all 3 agents present with valid frontmatter"
@@ -41,7 +41,7 @@ done
 
 step "4. all 3 skills present with valid frontmatter"
 miss=""
-for s in init-project ruflo-doctor discover-plugins; do
+for s in init-project rufflo-doctor discover-plugins; do
   f="$ROOT/skills/$s/SKILL.md"
   [[ -f "$f" ]] || { miss="$miss missing-$s"; continue; }
   for k in 'name:' 'description:' 'allowed-tools:'; do
@@ -52,15 +52,15 @@ done
 
 step "5. discover-plugins catalog references at least 25 sibling plugins"
 F="$ROOT/skills/discover-plugins/SKILL.md"
-n=$(grep -oE 'ruflo-[a-z-]+' "$F" | sort -u | wc -l | tr -d ' ')
+n=$(grep -oE 'rufflo-[a-z-]+' "$F" | sort -u | wc -l | tr -d ' ')
 if [[ $n -ge 25 ]]; then
   ok
 else
-  bad "expected ≥25 distinct ruflo-* references, got $n"
+  bad "expected ≥25 distinct rufflo-* references, got $n"
 fi
 
-step "6. README pins @claude-flow/cli to v3.6"
-grep -qE "@claude-flow/cli.*v3\.6|v3\.6.*claude-flow/cli" "$ROOT/README.md" \
+step "6. README pins @rufflo/cli to v3.6"
+grep -qE "@rufflo/cli.*v3\.6|v3\.6.*rufflo/cli" "$ROOT/README.md" \
   && ok || bad "Compatibility pin to v3.6 missing"
 
 step "7. README cross-references sibling contracts"
@@ -76,12 +76,12 @@ ADR="$ROOT/docs/adrs/0001-core-contract.md"
 [[ -f "$ADR" ]] && grep -qE "^status:[[:space:]]*Accepted" "$ADR" \
   && ok || bad "ADR missing or status != Accepted"
 
-step "9. /ruflo-status command invokes doctor + status"
-F="$ROOT/commands/ruflo-status.md"
+step "9. /rufflo-status command invokes doctor + status"
+F="$ROOT/commands/rufflo-status.md"
 if grep -q "doctor" "$F" && grep -q "status" "$F"; then
   ok
 else
-  bad "ruflo-status command missing doctor/status invocation"
+  bad "rufflo-status command missing doctor/status invocation"
 fi
 
 step "10. no wildcard tool grants in skills"

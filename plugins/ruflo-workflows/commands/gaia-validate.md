@@ -37,7 +37,7 @@ results for the HAL leaderboard.
 
 ### 2. TypeScript build
 ```bash
-cd v3/@claude-flow/cli && npx tsc --noEmit
+cd v3/@rufflo/cli && npx tsc --noEmit
 ```
 All GAIA benchmark source files must be TS-error-free.
 
@@ -48,20 +48,20 @@ the token and network path work.
 ### 4. Witness manifest
 Verify the witness manifest is up to date and valid:
 ```bash
-node plugins/ruflo-core/scripts/witness/verify.mjs
+node plugins/rufflo-core/scripts/witness/verify.mjs
 ```
 
 ### 5. Benchmark source files present
 Confirm all required benchmark source files exist:
-- `v3/@claude-flow/cli/src/commands/gaia-bench.ts`
-- `v3/@claude-flow/cli/src/benchmarks/gaia-agent.ts`
-- `v3/@claude-flow/cli/src/benchmarks/gaia-judge.ts`
-- `v3/@claude-flow/cli/src/benchmarks/gaia-loader.ts`
-- `v3/@claude-flow/cli/src/benchmarks/gaia-tools/index.ts`
+- `v3/@rufflo/cli/src/commands/gaia-bench.ts`
+- `v3/@rufflo/cli/src/benchmarks/gaia-agent.ts`
+- `v3/@rufflo/cli/src/benchmarks/gaia-judge.ts`
+- `v3/@rufflo/cli/src/benchmarks/gaia-loader.ts`
+- `v3/@rufflo/cli/src/benchmarks/gaia-tools/index.ts`
 
 ### 6. CLI binary resolvable
 ```bash
-node v3/@claude-flow/cli/bin/cli.js --version
+node v3/@rufflo/cli/bin/cli.js --version
 ```
 
 ## Expected output

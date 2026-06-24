@@ -85,7 +85,7 @@ class AgentDBBackend implements IMemoryBackend {
   }
 
   async searchSemantic(embedding: Float32Array, k: number): Promise<MemoryEntry[]> {
-    // Uses HNSW for 150x-12,500x faster search
+    // Uses HNSW for ~1.9x-4.7x measured faster search
     return this.db.search(embedding, k);
   }
 }
@@ -93,7 +93,7 @@ class AgentDBBackend implements IMemoryBackend {
 
 ## Performance Targets
 
-- **HNSW Search**: 150x-12,500x faster than linear scan
+- **HNSW Search**: ~1.9x-4.7x measured faster than linear scan
 - **Query latency**: <100ms for 1M+ entries
 - **Memory overhead**: <500MB for 100K entries
 - **Cache hit rate**: >80%
@@ -138,7 +138,7 @@ async bulkDelete(ids: string[]): Promise<Map<string, boolean>>;
 - Bulk delete: 2x faster via parallel processing
 
 ### Package Version
-- `@claude-flow/memory@3.0.0-alpha.2` (published 2026-01-07)
+- `@rufflo/memory@3.0.0-alpha.2` (published 2026-01-07)
 
 ---
 
@@ -146,16 +146,16 @@ async bulkDelete(ids: string[]): Promise<Map<string, boolean>>;
 
 ### CLI Memory Init Command
 
-Added `memory init` command to CLI (`@claude-flow/cli@3.0.0-alpha.56`) using **sql.js** (WASM SQLite) for cross-platform compatibility without native compilation.
+Added `memory init` command to CLI (`@rufflo/cli@3.0.0-alpha.56`) using **sql.js** (WASM SQLite) for cross-platform compatibility without native compilation.
 
 ```bash
 # Initialize memory database
-npx @claude-flow/cli@latest memory init
+npx @rufflo/cli@latest memory init
 
 # Options
-npx @claude-flow/cli@latest memory init --backend sqlite  # Default
-npx @claude-flow/cli@latest memory init --path ./data/custom.db
-npx @claude-flow/cli@latest memory init --force  # Overwrite existing
+npx @rufflo/cli@latest memory init --backend sqlite  # Default
+npx @rufflo/cli@latest memory init --path ./data/custom.db
+npx @rufflo/cli@latest memory init --force  # Overwrite existing
 ```
 
 **Schema (6 tables):**

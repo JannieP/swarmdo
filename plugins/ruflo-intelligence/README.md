@@ -1,30 +1,30 @@
-# ruflo-intelligence
+# rufflo-intelligence
 
-User-facing surface for Ruflo's self-learning system. Wraps **29 intelligence-related MCP tools** across four families into discoverable skills, commands, and the canonical 4-step pipeline (RETRIEVE → JUDGE → DISTILL → CONSOLIDATE). Coordinates with `ruflo-agentdb` (namespace convention), `ruflo-ruvector` (trajectory recording substrate), and `ruflo-browser` (consumes trajectory hooks for session replay).
+User-facing surface for Rufflo's self-learning system. Wraps **29 intelligence-related MCP tools** across four families into discoverable skills, commands, and the canonical 4-step pipeline (RETRIEVE → JUDGE → DISTILL → CONSOLIDATE). Coordinates with `rufflo-agentdb` (namespace convention), `rufflo-ruvector` (trajectory recording substrate), and `rufflo-browser` (consumes trajectory hooks for session replay).
 
-> **Status:** ADR-0001 implemented. Plugin v0.3.0 targets `@claude-flow/cli` v3.6.x.
+> **Status:** ADR-0001 implemented. Plugin v0.3.0 targets `@rufflo/cli` v3.6.x.
 
 ## Install
 
 ```
 /plugin marketplace add ruvnet/ruflo
-/plugin install ruflo-intelligence@ruflo
+/plugin install rufflo-intelligence@rufflo
 ```
 
 ## Compatibility
 
-- **CLI:** pinned to `@claude-flow/cli` v3.6 major+minor.
-- **Verification:** `bash plugins/ruflo-intelligence/scripts/smoke.sh` is the contract.
+- **CLI:** pinned to `@rufflo/cli` v3.6 major+minor.
+- **Verification:** `bash plugins/rufflo-intelligence/scripts/smoke.sh` is the contract.
 
 ## Tool inventory
 
 | Family | Count | Source |
 |--------|------:|--------|
-| `neural_*` | 6 | `v3/@claude-flow/cli/src/mcp-tools/neural-tools.ts:195, 312, 413, 539, 651, 706` |
-| `hooks_intelligence_*` (incl. dispatcher + reset) | 10 | `v3/@claude-flow/cli/src/mcp-tools/hooks-tools.ts:2093, 2226, 2296, 2355, 2404, 2556, 2634, 2741, 2952, 3027` |
+| `neural_*` | 6 | `v3/@rufflo/cli/src/mcp-tools/neural-tools.ts:195, 312, 413, 539, 651, 706` |
+| `hooks_intelligence_*` (incl. dispatcher + reset) | 10 | `v3/@rufflo/cli/src/mcp-tools/hooks-tools.ts:2093, 2226, 2296, 2355, 2404, 2556, 2634, 2741, 2952, 3027` |
 | Routing & meta hooks (`hooks_route`, `hooks_explain`, `hooks_pretrain`, `hooks_build-agents`, `hooks_metrics`, `hooks_transfer`) | 6 | `hooks-tools.ts:884, 1062, 1420, 1499, 1593, 1664` |
 | `hooks_model-*` (3-tier routing) | 3 | `hooks-tools.ts:3797, 3844, 3879` |
-| `ruvllm_sona_*` + `ruvllm_microlora_*` | 4 | `v3/@claude-flow/cli/src/mcp-tools/ruvllm-tools.ts:142, 169, 192, 222` |
+| `ruvllm_sona_*` + `ruvllm_microlora_*` | 4 | `v3/@rufflo/cli/src/mcp-tools/ruvllm-tools.ts:142, 169, 192, 222` |
 | **Total** | **29** | — |
 
 ## The 4-step intelligence pipeline
@@ -77,13 +77,13 @@ Several Claude Code hooks fire intelligence-side writes:
 | `pre-task` | `hooks_route` + `hooks_intelligence_pattern-search` | RETRIEVE phase |
 | `post-task --train-neural` | `agentdb_pattern-store` (ReasoningBank) → falls back to `memory_store --namespace pattern` | DISTILL phase, writes to **`pattern`** namespace |
 | `pretrain` (one-shot) | `hooks_pretrain` → seeds `memory_store --namespace patterns` | Bootstrap, writes to **`patterns`** namespace (plural) |
-| Trajectory hooks (ruvector substrate) | `intelligence_trajectory-*` | Recorded by `ruflo-ruvector`; consumed by this plugin's pattern-store |
+| Trajectory hooks (ruvector substrate) | `intelligence_trajectory-*` | Recorded by `rufflo-ruvector`; consumed by this plugin's pattern-store |
 
-> **Pluralization gotcha:** ReasoningBank fallback writes to `pattern` (singular). The `pretrain` hook writes to `patterns` (plural). They are *different* namespaces. See `ruflo-agentdb` ADR-0001 §"Namespace convention" for the canonical contract.
+> **Pluralization gotcha:** ReasoningBank fallback writes to `pattern` (singular). The `pretrain` hook writes to `patterns` (plural). They are *different* namespaces. See `rufflo-agentdb` ADR-0001 §"Namespace convention" for the canonical contract.
 
-## Namespace coordination with ruflo-agentdb
+## Namespace coordination with rufflo-agentdb
 
-This plugin defers to [ruflo-agentdb ADR-0001](../ruflo-agentdb/docs/adrs/0001-agentdb-optimization.md) for namespace conventions. Three reserved namespaces are read by the intelligence pipeline:
+This plugin defers to [rufflo-agentdb ADR-0001](../rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md) for namespace conventions. Three reserved namespaces are read by the intelligence pipeline:
 
 | Namespace | Read by | Source |
 |-----------|---------|--------|
@@ -129,14 +129,14 @@ Configure once via `mcp tool call hooks_intelligence -- '{"mode": "moe", "enable
 
 ## Architecture Decisions
 
-- [`ADR-0001` — Optimize ruflo-intelligence (surface completeness, 4-step pipeline, IPFS transfer, namespace coordination)](./docs/adrs/0001-intelligence-surface-completeness.md)
+- [`ADR-0001` — Optimize rufflo-intelligence (surface completeness, 4-step pipeline, IPFS transfer, namespace coordination)](./docs/adrs/0001-intelligence-surface-completeness.md)
 
 ## Related Plugins
 
-- `ruflo-agentdb` — substrate for HNSW + namespace contract; `agentdb_pattern-*` is this plugin's storage backend
-- `ruflo-ruvector` — trajectory hooks substrate; `intelligence_trajectory-*` calls land in ruvector's persisted trajectories
-- `ruflo-browser` — consumes trajectory hooks for session replay (ADR-0001 there)
-- `ruflo-daa` — Dynamic Agentic Architecture; cognitive patterns feed routing as inputs
+- `rufflo-agentdb` — substrate for HNSW + namespace contract; `agentdb_pattern-*` is this plugin's storage backend
+- `rufflo-ruvector` — trajectory hooks substrate; `intelligence_trajectory-*` calls land in ruvector's persisted trajectories
+- `rufflo-browser` — consumes trajectory hooks for session replay (ADR-0001 there)
+- `rufflo-daa` — Dynamic Agentic Architecture; cognitive patterns feed routing as inputs
 
 ## License
 

@@ -12,12 +12,12 @@
 //   5. Alert if structural similarity falls below --threshold
 //
 // Until this iter, doing this required the user to:
-//   $ npx ruflo metaharness audit-list --format json
+//   $ npx rufflo metaharness audit-list --format json
 //   $ # ... pick a key by hand from the listing
-//   $ npx ruflo metaharness oia-audit --format json > /tmp/curr.json
-//   $ npx ruflo metaharness audit-trend --baseline-key X --current-file /tmp/curr.json
+//   $ npx rufflo metaharness oia-audit --format json > /tmp/curr.json
+//   $ npx rufflo metaharness audit-trend --baseline-key X --current-file /tmp/curr.json
 // Now it's:
-//   $ npx ruflo metaharness drift-from-history --threshold 0.95
+//   $ npx rufflo metaharness drift-from-history --threshold 0.95
 //
 // USAGE
 //   node scripts/drift-from-history.mjs                       # default: last record vs now
@@ -43,8 +43,8 @@ import { fileURLToPath } from 'node:url';
 const SCRIPTS_DIR = dirname(fileURLToPath(import.meta.url));
 const NS = process.env.METAHARNESS_AUDIT_NAMESPACE || 'metaharness-audit';
 const CLI_PKG = process.env.CLI_CORE === '1'
-  ? '@claude-flow/cli-core@alpha'
-  : '@claude-flow/cli@latest';
+  ? '@rufflo/cli-core@alpha'
+  : '@rufflo/cli@latest';
 
 const ARGS = (() => {
   const a = {
@@ -226,7 +226,7 @@ async function main() {
     }
     emitAndExit({
       error: 'no audit records found in namespace ' + NS,
-      hint: 'Run `ruflo metaharness oia-audit` at least once to seed history.',
+      hint: 'Run `rufflo metaharness oia-audit` at least once to seed history.',
     }, 2);
   }
   // Pick the most recent record (records are typically newest-first; if not,

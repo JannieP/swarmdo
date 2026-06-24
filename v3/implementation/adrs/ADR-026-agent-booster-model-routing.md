@@ -9,7 +9,7 @@
 
 > **Note (2026-06-09, #2329):** This ADR was authored when the design intent
 > was a `@ruvector/tiny-dancer` neural router. The shipped router in
-> `v3/@claude-flow/cli/src/ruvector/model-router.ts` is instead a lexical
+> `v3/@rufflo/cli/src/ruvector/model-router.ts` is instead a lexical
 > complexity heuristic combined with a Thompson-sampling Beta-Bernoulli
 > bandit (no `@ruvector/tiny-dancer` import, no neural model load). Read
 > every `tiny-dancer` mention below as "the local heuristic + bandit
@@ -83,7 +83,7 @@ Task Input
 ### 1. Enhanced Model Router Interface
 
 ```typescript
-// v3/@claude-flow/cli/src/ruvector/model-router.ts
+// v3/@rufflo/cli/src/ruvector/model-router.ts
 
 import { AgentBoosterPreprocessor, EditIntent, PreprocessorResult } from 'agentic-flow';
 
@@ -124,7 +124,7 @@ export interface EnhancedModelRouterConfig {
 ### 2. Enhanced Route Function
 
 ```typescript
-// v3/@claude-flow/cli/src/ruvector/model-router.ts
+// v3/@rufflo/cli/src/ruvector/model-router.ts
 
 export class EnhancedModelRouter {
   private preprocessor: AgentBoosterPreprocessor;
@@ -266,7 +266,7 @@ export class EnhancedModelRouter {
 ### 3. Pre-Task Hook Integration
 
 ```typescript
-// v3/@claude-flow/cli/src/commands/hooks.ts (update preTaskCommand)
+// v3/@rufflo/cli/src/commands/hooks.ts (update preTaskCommand)
 
 // In pre-task action, after existing logic:
 
@@ -309,7 +309,7 @@ try {
 ### 4. Agent Spawn Integration
 
 ```typescript
-// v3/@claude-flow/cli/src/mcp-tools/agent-tools.ts (update determineAgentModel)
+// v3/@rufflo/cli/src/mcp-tools/agent-tools.ts (update determineAgentModel)
 
 import { EnhancedModelRouter } from '../ruvector/enhanced-model-router.js';
 
@@ -398,7 +398,7 @@ async function determineAgentModel(
 ## File Structure
 
 ```
-v3/@claude-flow/cli/src/
+v3/@rufflo/cli/src/
 ├── ruvector/
 │   ├── model-router.ts           # Existing tiny-dancer router
 │   ├── enhanced-model-router.ts  # NEW: Agent Booster + AST integration

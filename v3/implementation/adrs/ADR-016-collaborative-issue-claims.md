@@ -538,36 +538,36 @@ const config: AutoAssignConfig = {
 
 ```bash
 # View available issues
-claude-flow issues list --available
+rufflo issues list --available
 
 # Claim an issue (as current user/agent)
-claude-flow issues claim 123
+rufflo issues claim 123
 
 # Release a claim
-claude-flow issues release 123
+rufflo issues release 123
 
 # Request handoff to specific agent/human
-claude-flow issues handoff 123 --to agent:coder-1
-claude-flow issues handoff 123 --to human:alice
+rufflo issues handoff 123 --to agent:coder-1
+rufflo issues handoff 123 --to human:alice
 
 # Update status
-claude-flow issues status 123 --blocked "Waiting for API spec"
-claude-flow issues status 123 --review-requested
+rufflo issues status 123 --blocked "Waiting for API spec"
+rufflo issues status 123 --review-requested
 
 # View who's working on what
-claude-flow issues board
+rufflo issues board
 
 # Work stealing commands
-claude-flow issues stealable              # List stealable issues
-claude-flow issues steal 123              # Steal an issue
-claude-flow issues mark-stealable 123     # Mark your claim as stealable
-claude-flow issues contest 123            # Contest a steal
+rufflo issues stealable              # List stealable issues
+rufflo issues steal 123              # Steal an issue
+rufflo issues mark-stealable 123     # Mark your claim as stealable
+rufflo issues contest 123            # Contest a steal
 
 # Load balancing
-claude-flow issues load                   # View agent load distribution
-claude-flow issues load --agent coder-1   # View specific agent load
-claude-flow issues rebalance              # Trigger swarm rebalancing
-claude-flow issues rebalance --dry-run    # Preview rebalancing without applying
+rufflo issues load                   # View agent load distribution
+rufflo issues load --agent coder-1   # View specific agent load
+rufflo issues rebalance              # Trigger swarm rebalancing
+rufflo issues rebalance --dry-run    # Preview rebalancing without applying
 ```
 
 ## MCP Tools
@@ -632,7 +632,7 @@ const claimTools = [
 
 ## Success Metrics
 
-- [x] Claim service implemented (`@claude-flow/cli/src/services/claim-service.ts`)
+- [x] Claim service implemented (`@rufflo/cli/src/services/claim-service.ts`)
 - [x] Human and agent claims work
 - [x] Human ↔ Agent handoff flow tested
 - [x] Agent ↔ Agent handoff flow tested
@@ -642,7 +642,7 @@ const claimTools = [
 - [x] Load balancing rebalance operation
 - [ ] GitHub sync operational (future)
 - [x] Auto-assignment rules configurable
-- [x] CLI commands functional (`@claude-flow/cli/src/commands/issues.ts`)
+- [x] CLI commands functional (`@rufflo/cli/src/commands/issues.ts`)
 - [ ] MCP tools exposed (planned for MCP integration phase)
 - [x] Event sourcing for all claim/steal changes
 - [x] <30s average steal latency (sub-second in practice)
@@ -654,23 +654,23 @@ const claimTools = [
 
 | File | Lines | Description |
 |------|-------|-------------|
-| `@claude-flow/cli/src/services/claim-service.ts` | ~600 | Full claims service with work stealing |
-| `@claude-flow/cli/src/commands/issues.ts` | ~450 | CLI commands for issue claims |
+| `@rufflo/cli/src/services/claim-service.ts` | ~600 | Full claims service with work stealing |
+| `@rufflo/cli/src/commands/issues.ts` | ~450 | CLI commands for issue claims |
 
 ### CLI Commands Implemented
 
 ```bash
 # Issue claim commands (10 subcommands)
-claude-flow issues list          # List all claims
-claude-flow issues claim <id>    # Claim an issue
-claude-flow issues release <id>  # Release a claim
-claude-flow issues handoff       # Request handoff
-claude-flow issues status <id>   # Get claim status
-claude-flow issues stealable     # List stealable issues
-claude-flow issues steal <id>    # Steal an issue
-claude-flow issues load          # View agent load
-claude-flow issues rebalance     # Rebalance swarm
-claude-flow issues board         # Visual claim board
+rufflo issues list          # List all claims
+rufflo issues claim <id>    # Claim an issue
+rufflo issues release <id>  # Release a claim
+rufflo issues handoff       # Request handoff
+rufflo issues status <id>   # Get claim status
+rufflo issues stealable     # List stealable issues
+rufflo issues steal <id>    # Steal an issue
+rufflo issues load          # View agent load
+rufflo issues rebalance     # Rebalance swarm
+rufflo issues board         # Visual claim board
 ```
 
 ### Key Features
@@ -680,7 +680,7 @@ claude-flow issues board         # Visual claim board
 3. **Work Stealing**: Supports overloaded, stale, blocked-timeout, voluntary reasons
 4. **Load Balancing**: Automatic rebalancing across swarm agents
 5. **Event-Driven**: ClaimEvent types for all state changes
-6. **Persistence**: File-based storage in `.claude-flow/claims/claims.json`
+6. **Persistence**: File-based storage in `.rufflo/claims/claims.json`
 
 ## Dependencies
 

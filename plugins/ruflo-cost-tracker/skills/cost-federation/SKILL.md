@@ -22,7 +22,7 @@ ADR-097 Phase 3 specifies a `federation_spend` event bus that publishes one even
 1. **Run the script**:
 
    ```bash
-   node plugins/ruflo-cost-tracker/scripts/federation.mjs
+   node plugins/rufflo-cost-tracker/scripts/federation.mjs
    ```
 
    Optional env:
@@ -52,4 +52,4 @@ The script reads any record matching that prefix, regardless of how upstream pro
 
 - [ADR-097: Federation budget circuit breaker](../../v3/docs/adr/ADR-097-federation-budget-circuit-breaker.md) — the complete spec
 - `cost-report` — same data, different lens (cost-report focuses on local agent spend; this skill on per-peer federated spend)
-- `ruflo-federation` plugin — the producer side (when Phase 3 lands)
+- `rufflo-federation` plugin — the producer side (when Phase 3 lands)

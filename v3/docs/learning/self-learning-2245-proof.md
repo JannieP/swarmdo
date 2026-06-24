@@ -18,7 +18,7 @@
 | **Multi-step learning loop** | `hooks_intelligence_trajectory-start` → `-step*` → `-end {success}` | full trajectory → SONA + ReasoningBank → memory-bridge `trajectories` namespace | `hooks_intelligence_stats` + `memory_bridge_status` |
 | **Just remember this** | `memory_store` / `memory_store_episode` | row in memory-bridge default namespace | `memory_search_unified` |
 | **Bootstrap from a repo** | `hooks_pretrain` | (1) summary bundle in `pretrain` namespace **+** (2) per-pattern rows in the neural store | `neural_patterns list` + `memory_search_unified` |
-| **Activity counter (any write)** | any of the above | `globalStats.signalsProcessed` | `.claude-flow/neural/stats.json` |
+| **Activity counter (any write)** | any of the above | `globalStats.signalsProcessed` | `.rufflo/neural/stats.json` |
 
 If you call `hooks_task-completed` *without* `trainPatterns:true`, the response
 explicitly says `"learningPath":"recorded-only"` and tells you what to set if
@@ -31,15 +31,15 @@ what it did and didn't do.
 
 ```bash
 git clone https://github.com/ruvnet/ruflo
-cd ruflo && npm install
-( cd v3/@claude-flow/cli && npx tsc -b )
+cd rufflo && npm install
+( cd v3/@rufflo/cli && npx tsc -b )
 
 # Default: N=20 calls per surface; writes a run JSON.
-node v3/@claude-flow/cli/scripts/benchmark-self-learning.mjs
+node v3/@rufflo/cli/scripts/benchmark-self-learning.mjs
 
 # Optional: machine-readable output, larger sample, no-write mode for CI:
-N=100 BENCH_JSON=1 node v3/@claude-flow/cli/scripts/benchmark-self-learning.mjs
-BENCH_NO_WRITE=1 node v3/@claude-flow/cli/scripts/benchmark-self-learning.mjs
+N=100 BENCH_JSON=1 node v3/@rufflo/cli/scripts/benchmark-self-learning.mjs
+BENCH_NO_WRITE=1 node v3/@rufflo/cli/scripts/benchmark-self-learning.mjs
 ```
 
 Expected output (with `N=10`):
@@ -78,7 +78,7 @@ in the reporter's trace:
 ### Reproducing the unit-test gate
 
 ```bash
-cd v3/@claude-flow/cli
+cd v3/@rufflo/cli
 npx vitest run __tests__/self-learning-2245.test.ts
 ```
 
@@ -92,13 +92,13 @@ After running the benchmark, the scratch directory is cleaned up. To inspect
 persistence on your own machine:
 
 ```bash
-mkdir -p /tmp/ruflo-learn-demo && cd /tmp/ruflo-learn-demo
+mkdir -p /tmp/rufflo-learn-demo && cd /tmp/rufflo-learn-demo
 
 # Run one task-completed with training enabled
 RUFLO_CWD=$(pwd) node -e '
 (async () => {
   process.chdir(process.env.RUFLO_CWD);
-  const { hooksTools } = await import("/Users/cohen/Projects/ruflo/v3/@claude-flow/cli/dist/src/mcp-tools/hooks-tools.js");
+  const { hooksTools } = await import("/Users/cohen/Projects/rufflo/v3/@rufflo/cli/dist/src/mcp-tools/hooks-tools.js");
   const tool = hooksTools.find(t => t.name === "hooks_task-completed");
   const r = await tool.handler({
     taskId: "demo-1",
@@ -111,7 +111,7 @@ RUFLO_CWD=$(pwd) node -e '
 })();'
 
 # Check the persisted stats file
-cat .claude-flow/neural/stats.json
+cat .rufflo/neural/stats.json
 # Expected: { "trajectoriesRecorded": 1+, "patternsLearned": 0..1, "signalsProcessed": 0+, ... }
 ```
 
@@ -137,15 +137,15 @@ available), the handler would return `learningPath: "recorded-only"` plus a
 
 ## When the dashboards still show 0
 
-If you're using `ruflo hooks metrics` and seeing zeros, check **which store**
+If you're using `rufflo hooks metrics` and seeing zeros, check **which store**
 your activity is writing to. The 4 stat aggregators sample different stores:
 
 | Reading from | Reflects activity via |
 |---|---|
 | `hooks_intelligence_stats` | `globalStats` (trajectory-end + task-completed `trainPatterns:true`) + `sonaCoordinator` |
 | `memory_bridge_status` | the memory-bridge SQL store directly |
-| `ruflo hooks metrics` | reads `globalStats` + a different aggregator subset |
-| `neural_patterns list` | the `.claude-flow/neural/patterns.json` file (pretrain + `neural_patterns store` action) |
+| `rufflo hooks metrics` | reads `globalStats` + a different aggregator subset |
+| `neural_patterns list` | the `.rufflo/neural/patterns.json` file (pretrain + `neural_patterns store` action) |
 
 This fragmentation is the #2245 reporter's "four contradictory sources" finding
 and is being tracked for unification in a future ADR. For now, the rule of

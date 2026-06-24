@@ -30,7 +30,7 @@ import type {
   QELogger,
 } from '../interfaces.js';
 
-// V3 Security types (would be imported from @claude-flow/security in production)
+// V3 Security types (would be imported from @rufflo/security in production)
 interface ISecurityModule {
   pathValidator: IPathValidator;
   safeExecutor: ISafeExecutor;

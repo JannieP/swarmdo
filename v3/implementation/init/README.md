@@ -1,12 +1,12 @@
 # V3 Init System
 
-Comprehensive initialization system for Claude Code integration with claude-flow V3.
+Comprehensive initialization system for Claude Code integration with rufflo V3.
 
 ## Overview
 
 The V3 init system creates a complete development environment including:
 - `.claude/` directory with settings, skills, commands, agents, and helpers
-- `.claude-flow/` runtime configuration
+- `.rufflo/` runtime configuration
 - `.mcp.json` MCP server configuration
 - Cross-platform support (Windows, macOS, Linux)
 
@@ -16,30 +16,30 @@ The V3 init system creates a complete development environment including:
 
 ```bash
 # Default initialization (recommended settings)
-npx @claude-flow/cli init
+npx @rufflo/cli init
 
 # Minimal setup (lightweight)
-npx @claude-flow/cli init --minimal
+npx @rufflo/cli init --minimal
 
 # Full setup (everything enabled)
-npx @claude-flow/cli init --full
+npx @rufflo/cli init --full
 
 # Force overwrite existing files
-npx @claude-flow/cli init --force
+npx @rufflo/cli init --force
 
 # Interactive wizard
-npx @claude-flow/cli init wizard
+npx @rufflo/cli init wizard
 ```
 
 ### Programmatic Usage
 
 ```typescript
-import { executeInit, DEFAULT_INIT_OPTIONS } from '@claude-flow/cli/init';
+import { executeInit, DEFAULT_INIT_OPTIONS } from '@rufflo/cli/init';
 
 const result = await executeInit({
   ...DEFAULT_INIT_OPTIONS,
   targetDir: process.cwd(),
-  sourceBaseDir: '/path/to/claude-flow',
+  sourceBaseDir: '/path/to/rufflo',
 });
 
 console.log(`Created ${result.created.files.length} files`);
@@ -95,7 +95,7 @@ project/
 │   ├── helpers/           # Utility scripts
 │   ├── statusline.sh      # Unix statusline
 │   └── statusline.mjs     # ESM module
-├── .claude-flow/
+├── .rufflo/
 │   ├── config.yaml        # Runtime config
 │   ├── data/              # Persistent data
 │   ├── logs/              # Log files

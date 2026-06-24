@@ -34,12 +34,12 @@
           "score": "0.671"
         },
         {
-          "name": "fix: inline schemas + prefer native better-sqlite3 (closes #1, #2, ruflo#2235 A)",
+          "name": "fix: inline schemas + prefer native better-sqlite3 (closes #1, #2, rufflo#2235 A)",
           "relevant": false,
           "score": "0.513"
         },
         {
-          "name": "docs: rewrite README in ruflo style — concise, opinionated, scannable",
+          "name": "docs: rewrite README in rufflo style — concise, opinionated, scannable",
           "relevant": false,
           "score": "0.500"
         },
@@ -142,7 +142,7 @@
           "score": "0.383"
         },
         {
-          "name": "docs: rewrite README in ruflo style — concise, opinionated, scannable",
+          "name": "docs: rewrite README in rufflo style — concise, opinionated, scannable",
           "relevant": false,
           "score": "0.365"
         }
@@ -184,7 +184,7 @@
       "top1": true,
       "topK": [
         {
-          "name": "fix: inline schemas + prefer native better-sqlite3 (closes #1, #2, ruflo#2235 A)",
+          "name": "fix: inline schemas + prefer native better-sqlite3 (closes #1, #2, rufflo#2235 A)",
           "relevant": true,
           "score": "0.836"
         },
@@ -204,7 +204,7 @@
           "score": "0.386"
         },
         {
-          "name": "docs: rewrite README in ruflo style — concise, opinionated, scannable",
+          "name": "docs: rewrite README in rufflo style — concise, opinionated, scannable",
           "relevant": false,
           "score": "0.380"
         }
@@ -225,7 +225,7 @@
           "score": "0.690"
         },
         {
-          "name": "docs: rewrite README in ruflo style — concise, opinionated, scannable",
+          "name": "docs: rewrite README in rufflo style — concise, opinionated, scannable",
           "relevant": false,
           "score": "0.500"
         },
@@ -242,11 +242,11 @@
       ]
     },
     {
-      "q": "README rewrite ruflo style",
+      "q": "README rewrite rufflo style",
       "top1": true,
       "topK": [
         {
-          "name": "docs: rewrite README in ruflo style — concise, opinionated, scannable",
+          "name": "docs: rewrite README in rufflo style — concise, opinionated, scannable",
           "relevant": true,
           "score": "0.880"
         },
@@ -282,7 +282,7 @@
           "score": "0.671"
         },
         {
-          "name": "fix: inline schemas + prefer native better-sqlite3 (closes #1, #2, ruflo#2235 A)",
+          "name": "fix: inline schemas + prefer native better-sqlite3 (closes #1, #2, rufflo#2235 A)",
           "relevant": false,
           "score": "0.561"
         },
@@ -318,7 +318,7 @@
           "score": "0.428"
         },
         {
-          "name": "fix: inline schemas + prefer native better-sqlite3 (closes #1, #2, ruflo#2235 A)",
+          "name": "fix: inline schemas + prefer native better-sqlite3 (closes #1, #2, rufflo#2235 A)",
           "relevant": false,
           "score": "0.430"
         },

@@ -57,7 +57,7 @@ Implement a hybrid architecture using:
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
 │  ┌─────────────┐     ┌─────────────┐     ┌─────────────┐       │
-│  │ Claude Flow │────▶│   Resolve   │────▶│   Fetch     │       │
+│  │ Rufflo │────▶│   Resolve   │────▶│   Fetch     │       │
 │  │    CLI      │     │    IPNS     │     │    IPFS     │       │
 │  └─────────────┘     └──────┬──────┘     └──────┬──────┘       │
 │                             │                    │              │
@@ -83,12 +83,12 @@ Implement a hybrid architecture using:
 1. **Create GCS Bucket**
 ```bash
 # Create bucket for registry data
-gcloud storage buckets create gs://claude-flow-plugin-registry \
+gcloud storage buckets create gs://rufflo-plugin-registry \
   --location=US \
   --uniform-bucket-level-access
 
 # Enable versioning for rollback
-gsutil versioning set on gs://claude-flow-plugin-registry
+gsutil versioning set on gs://rufflo-plugin-registry
 ```
 
 2. **Create Service Account**
@@ -98,7 +98,7 @@ gcloud iam service-accounts create plugin-registry-publisher \
   --display-name="Plugin Registry Publisher"
 
 # Grant permissions
-gsutil iam ch serviceAccount:plugin-registry-publisher@PROJECT.iam.gserviceaccount.com:objectViewer gs://claude-flow-plugin-registry
+gsutil iam ch serviceAccount:plugin-registry-publisher@PROJECT.iam.gserviceaccount.com:objectViewer gs://rufflo-plugin-registry
 ```
 
 ### Phase 2: Pinata Setup
@@ -118,7 +118,7 @@ const pinata = new PinataSDK({
 
 // Generate IPNS key for the registry
 async function setupIPNS() {
-  const keyName = 'claude-flow-official-registry';
+  const keyName = 'rufflo-official-registry';
   const key = await pinata.generateKey({
     keyName,
     permissions: {
@@ -225,7 +225,7 @@ const pinata = new PinataSDK({
 export async function publishRegistry(req: any, res: any) {
   try {
     // 1. Fetch registry from GCS
-    const bucket = storage.bucket('claude-flow-plugin-registry');
+    const bucket = storage.bucket('rufflo-plugin-registry');
     const file = bucket.file('registry.json');
     const [content] = await file.download();
     const registry = JSON.parse(content.toString());
@@ -249,7 +249,7 @@ export async function publishRegistry(req: any, res: any) {
     // 4. Pin to IPFS via Pinata
     const pinResult = await pinata.pinJSONToIPFS(validated, {
       pinataMetadata: {
-        name: 'claude-flow-plugin-registry',
+        name: 'rufflo-plugin-registry',
         keyvalues: {
           version: validated.version,
           updatedAt: validated.updatedAt,
@@ -435,8 +435,8 @@ export function hashContent(content: Buffer): string {
 export const DEFAULT_PLUGIN_STORE_CONFIG: PluginStoreConfig = {
   registries: [
     {
-      name: 'claude-flow-official',
-      description: 'Official Claude Flow plugin registry',
+      name: 'rufflo-official',
+      description: 'Official Rufflo plugin registry',
       // Real IPNS name from Pinata
       ipnsName: 'k51qzi5uqu5dl...', // Your actual IPNS key
       gateway: 'https://gateway.pinata.cloud',
@@ -445,15 +445,15 @@ export const DEFAULT_PLUGIN_STORE_CONFIG: PluginStoreConfig = {
       official: true,
     },
   ],
-  defaultRegistry: 'claude-flow-official',
+  defaultRegistry: 'rufflo-official',
   gateway: 'https://gateway.pinata.cloud',
   timeout: 30000,
-  cacheDir: '.claude-flow/plugins/cache',
+  cacheDir: '.rufflo/plugins/cache',
   cacheExpiry: 3600000,
   requireVerification: true,
   requireSecurityAudit: false,
   minTrustLevel: 'community',
-  trustedAuthors: ['claude-flow-team'],
+  trustedAuthors: ['rufflo-team'],
   blockedPlugins: [],
   allowedPermissions: ['network', 'filesystem', 'memory', 'hooks'],
   requirePermissionPrompt: true,

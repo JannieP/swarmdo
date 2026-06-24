@@ -8,10 +8,10 @@
 
 ## Context
 
-Claude Flow v3 has multiple extension mechanisms scattered across different packages:
-- Plugin interfaces in `@claude-flow/shared`
-- Worker system in `@claude-flow/integration`
-- Hooks system in `@claude-flow/hooks`
+Rufflo v3 has multiple extension mechanisms scattered across different packages:
+- Plugin interfaces in `@rufflo/shared`
+- Worker system in `@rufflo/integration`
+- Hooks system in `@rufflo/hooks`
 - Provider definitions spread across multiple modules
 - Duplicate security utilities in various places
 
@@ -24,12 +24,12 @@ This fragmentation leads to:
 
 ## Decision
 
-Create a unified `@claude-flow/plugins` package that consolidates all plugin development capabilities into a single, coherent SDK.
+Create a unified `@rufflo/plugins` package that consolidates all plugin development capabilities into a single, coherent SDK.
 
 ### Package Structure
 
 ```
-@claude-flow/plugins/
+@rufflo/plugins/
 ├── src/
 │   ├── types/              # Unified type definitions
 │   │   └── index.ts        # All plugin-related types
@@ -97,7 +97,7 @@ Dedicated security module with:
 
 Separate bridge modules for external systems:
 - `AgenticFlowBridge`: Swarm coordination, agent spawning, task orchestration
-- `AgentDBBridge`: Vector storage, similarity search (150x-12,500x faster)
+- `AgentDBBridge`: Vector storage, similarity search (~1.9x-4.7x measured faster)
 
 **Rationale**: Clean separation allows mocking for testing and future provider swapping.
 
@@ -119,7 +119,7 @@ PluginRegistry automatically collects extension points during initialization:
 
 ### Positive
 
-1. **Single Import**: Plugin authors import from `@claude-flow/plugins` only
+1. **Single Import**: Plugin authors import from `@rufflo/plugins` only
 2. **Type Safety**: Unified types with strict TypeScript validation
 3. **Security**: Centralized, audited security utilities
 4. **Testing**: Comprehensive test suite with 100+ test cases
@@ -209,24 +209,24 @@ PluginRegistry automatically collects extension points during initialization:
 
 ## Migration Guide
 
-### From @claude-flow/shared
+### From @rufflo/shared
 
 ```typescript
 // Before
-import { IPlugin, PluginMetadata } from '@claude-flow/shared';
+import { IPlugin, PluginMetadata } from '@rufflo/shared';
 
 // After
-import { IPlugin, PluginMetadata } from '@claude-flow/plugins';
+import { IPlugin, PluginMetadata } from '@rufflo/plugins';
 ```
 
-### From @claude-flow/hooks
+### From @rufflo/hooks
 
 ```typescript
 // Before
-import { HookEvent, HookHandler } from '@claude-flow/hooks';
+import { HookEvent, HookHandler } from '@rufflo/hooks';
 
 // After
-import { HookEvent, HookHandler, HookRegistry } from '@claude-flow/plugins';
+import { HookEvent, HookHandler, HookRegistry } from '@rufflo/plugins';
 ```
 
 ### From manual plugin creation
@@ -253,7 +253,7 @@ const myPlugin = new PluginBuilder('my-plugin', '1.0.0')
 The package includes a comprehensive example plugin that demonstrates all SDK capabilities:
 
 ```typescript
-import { pluginCreatorPlugin } from '@claude-flow/plugins/examples/plugin-creator';
+import { pluginCreatorPlugin } from '@rufflo/plugins/examples/plugin-creator';
 
 // Register the meta-plugin
 await getDefaultRegistry().register(pluginCreatorPlugin);
@@ -296,9 +296,9 @@ TypeErrors  0 errors
 
 ## References
 
-- [Plugin Interface Design](../../@claude-flow/plugins/src/core/plugin-interface.ts)
-- [Base Plugin Implementation](../../@claude-flow/plugins/src/core/base-plugin.ts)
-- [Security Module](../../@claude-flow/plugins/src/security/index.ts)
-- [agentic-flow@alpha Integration](../../@claude-flow/plugins/src/integrations/agentic-flow.ts)
-- [Plugin Creator Example](../../@claude-flow/plugins/examples/plugin-creator/index.ts)
-- [README.md](../../@claude-flow/plugins/README.md)
+- [Plugin Interface Design](../../@rufflo/plugins/src/core/plugin-interface.ts)
+- [Base Plugin Implementation](../../@rufflo/plugins/src/core/base-plugin.ts)
+- [Security Module](../../@rufflo/plugins/src/security/index.ts)
+- [agentic-flow@alpha Integration](../../@rufflo/plugins/src/integrations/agentic-flow.ts)
+- [Plugin Creator Example](../../@rufflo/plugins/examples/plugin-creator/index.ts)
+- [README.md](../../@rufflo/plugins/README.md)

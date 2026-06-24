@@ -1,11 +1,11 @@
-# ADR-153 — `@metaharness/darwin` (Darwin Mode) integration: population-based harness self-improvement in ruflo
+# ADR-153 — `@metaharness/darwin` (Darwin Mode) integration: population-based harness self-improvement in rufflo
 
 **Status**: Proposed
 **Date**: 2026-06-17
 **Related**: [ADR-150](ADR-150-metaharness-integration-surfaces.md) (MetaHarness integration surfaces), [ADR-151](ADR-151-harness-intelligence-layer.md) (harness intelligence layer), [ADR-152](ADR-152-genome-similarity-search.md) (genome similarity), [ADR-148](ADR-148-cost-optimal-router-lifecycle.md) (router lifecycle), ADR-103 (witness-signed releases), ADR-144 (agent-authorization-propagation)
 **Upstream package**: [`@metaharness/darwin@0.1.0`](https://www.npmjs.com/package/@metaharness/darwin) (MIT, zero runtime deps, 266 KB, published 2026-06-17)
 **Upstream ADRs**: ADR-070…075 in [`ruvnet/agent-harness-generator/packages/darwin-mode`](https://github.com/ruvnet/agent-harness-generator/tree/main/packages/darwin-mode)
-**Affects**: `@claude-flow/cli`, `ruflo` wrapper, `plugins/ruflo-metaharness/`
+**Affects**: `@rufflo/cli`, `rufflo` wrapper, `plugins/rufflo-metaharness/`
 
 ## Tagline
 
@@ -13,7 +13,7 @@
 
 ## Context
 
-[ADR-150](ADR-150-metaharness-integration-surfaces.md) integrated `metaharness`, `@metaharness/router`, and `@metaharness/kernel` as the **read** + **routing** layers of harness analysis: score, genome, mcp-scan, threat-model, oia-audit, similarity, drift detection. Those surfaces let ruflo *describe* a harness; none of them *change* one.
+[ADR-150](ADR-150-metaharness-integration-surfaces.md) integrated `metaharness`, `@metaharness/router`, and `@metaharness/kernel` as the **read** + **routing** layers of harness analysis: score, genome, mcp-scan, threat-model, oia-audit, similarity, drift detection. Those surfaces let rufflo *describe* a harness; none of them *change* one.
 
 `@metaharness/darwin@0.1.0` is the **write** layer. It implements the Darwin Gödel Machine pattern at the harness level: generate child variants of a harness's policy surfaces, sandbox-score them, archive the lineage, and promote only **measured, safe** wins. The foundation model never changes; the operating system around it (planner, context builder, reviewer, retry/tool/memory/score policy) does.
 
@@ -66,13 +66,13 @@ Exit code 99 is reserved for "disqualified by safety". This is a designed-in tri
 
 ## Decision
 
-**Integrate `@metaharness/darwin` as `ruflo`'s harness-evolution layer, behind the same four ADR-150 architectural constraints (removable / optional / graceful / CI-gate).** Specifically:
+**Integrate `@metaharness/darwin` as `rufflo`'s harness-evolution layer, behind the same four ADR-150 architectural constraints (removable / optional / graceful / CI-gate).** Specifically:
 
-1. Add `@metaharness/darwin@~0.1.0` to `optionalDependencies` of `@claude-flow/cli` + `ruflo` wrapper. **Never** to `dependencies`.
-2. Expose a new CLI surface: `npx ruflo evolve <repo>` (top-level, mirroring `ruflo eject`) → delegates to the `metaharness-darwin evolve` binary via `runScript`-style spawn. ADR-150's `metaharness mint` is the **birth** verb; `eject` is the **rename** verb; **evolve** is the **growth** verb.
-3. Expose a new MCP tool: `mcp__claude-flow__metaharness_evolve` with the same `{success, data, degraded, exitCode}` contract as the other 9 metaharness tools.
+1. Add `@metaharness/darwin@~0.1.0` to `optionalDependencies` of `@rufflo/cli` + `rufflo` wrapper. **Never** to `dependencies`.
+2. Expose a new CLI surface: `npx rufflo evolve <repo>` (top-level, mirroring `rufflo eject`) → delegates to the `metaharness-darwin evolve` binary via `runScript`-style spawn. ADR-150's `metaharness mint` is the **birth** verb; `eject` is the **rename** verb; **evolve** is the **growth** verb.
+3. Expose a new MCP tool: `mcp__rufflo__metaharness_evolve` with the same `{success, data, degraded, exitCode}` contract as the other 9 metaharness tools.
 4. Stay graceful: when `@metaharness/darwin` is uninstalled, both the CLI and the MCP tool degrade with `{degraded: true, reason: 'metaharness-darwin-not-installed', hint: 'npm i -D @metaharness/darwin@latest'}` and exit 0 — same pattern as the other metaharness optional surfaces.
-5. **DO NOT auto-evolve `ruflo` itself in CI.** Darwin Mode is a human-initiated *operation* on a harness; it's not a continuous background optimization. The CI gate verifies graceful degradation, not that an evolution converges.
+5. **DO NOT auto-evolve `rufflo` itself in CI.** Darwin Mode is a human-initiated *operation* on a harness; it's not a continuous background optimization. The CI gate verifies graceful degradation, not that an evolution converges.
 
 ## Architecture (the 4 constraints, restated for darwin)
 
@@ -80,7 +80,7 @@ Exit code 99 is reserved for "disqualified by safety". This is a designed-in tri
 |---|---|---|
 | 1 | **Removable** | `npm ls --without @metaharness/darwin` must produce a working CLI. Verified by `.github/workflows/no-metaharness-smoke.yml`'s drill (extend to include darwin). |
 | 2 | **Optional in `package.json`** | Add to `optionalDependencies`, never `dependencies`. Smoke 17z74 (cross-file pin alignment) extended to cover `@metaharness/darwin`. |
-| 3 | **Graceful degradation** | CLI's `ruflo evolve` + MCP `metaharness_evolve` catch `MODULE_NOT_FOUND` from the darwin spawn and emit the standard degraded payload (mirrors `score.mjs`, `genome.mjs`, etc.). |
+| 3 | **Graceful degradation** | CLI's `rufflo evolve` + MCP `metaharness_evolve` catch `MODULE_NOT_FOUND` from the darwin spawn and emit the standard degraded payload (mirrors `score.mjs`, `genome.mjs`, etc.). |
 | 4 | **CI gate** | Extend `metaharness-ci.yml` with a new `darwin-dryrun` job: runs `metaharness-darwin evolve --generations 1 --children 1 --concurrency 1 --seed 0` against a tiny seed repo, asserts the archive.json + lineage.json + winner.json artifacts exist. Wall-clock budget: 5 minutes. |
 
 ## Surfaces to add (Phase 1 MVP)
@@ -88,7 +88,7 @@ Exit code 99 is reserved for "disqualified by safety". This is a designed-in tri
 ### CLI
 
 ```
-npx ruflo evolve <repo> [--generations N] [--children N] [--concurrency N] [--seed N] [--dry-run]
+npx rufflo evolve <repo> [--generations N] [--children N] [--concurrency N] [--seed N] [--dry-run]
 ```
 
 Flags pass through to `metaharness-darwin evolve` unchanged except for `--dry-run`, which short-circuits at the profile step and prints the would-be plan without writing under `<repo>/.metaharness/`. The first run on a repo prints a one-time **safety summary** (the seven surfaces, the blocked patterns, the sandbox model) so users know what's about to happen.
@@ -130,7 +130,7 @@ Flags pass through to `metaharness-darwin evolve` unchanged except for `--dry-ru
 
 ### Plugin script
 
-`plugins/ruflo-metaharness/scripts/evolve.mjs` — thin spawn wrapper that:
+`plugins/rufflo-metaharness/scripts/evolve.mjs` — thin spawn wrapper that:
 
 1. Tries `await import('@metaharness/darwin')` — if it throws `MODULE_NOT_FOUND`, emit degraded payload, exit 0.
 2. Spawns the `metaharness-darwin` binary with the forwarded args.
@@ -139,26 +139,26 @@ Flags pass through to `metaharness-darwin evolve` unchanged except for `--dry-ru
 
 ### Doctor extension
 
-`npx ruflo doctor --component metaharness` already reports `metaharness` / `@metaharness/router` / `@metaharness/kernel`. Extend it to surface `@metaharness/darwin` availability + a quick `metaharness-darwin --version` smoke.
+`npx rufflo doctor --component metaharness` already reports `metaharness` / `@metaharness/router` / `@metaharness/kernel`. Extend it to surface `@metaharness/darwin` availability + a quick `metaharness-darwin --version` smoke.
 
 ## Phase rollout
 
 | Phase | Scope | Gate |
 |---|---|---|
-| **1** (this ADR, MVP) | CLI `ruflo evolve`, MCP `metaharness_evolve`, plugin script, doctor entry, smoke + CI dry-run job | All four ADR-153 constraints green |
+| **1** (this ADR, MVP) | CLI `rufflo evolve`, MCP `metaharness_evolve`, plugin script, doctor entry, smoke + CI dry-run job | All four ADR-153 constraints green |
 | **2** | Witness-sign winning archives (ADR-103) so a promoted variant carries cryptographic provenance | ADR-103 manifest schema extension |
-| **3** | Federated archives — share lineage trees across ruflo installations via the IPFS pattern from `hooks transfer` | ADR-097 federation budget integration |
+| **3** | Federated archives — share lineage trees across rufflo installations via the IPFS pattern from `hooks transfer` | ADR-097 federation budget integration |
 | **4** | Surface mutation-surface choice as a per-repo policy: "evolve only contextBuilder + memoryPolicy, leave my planner alone" | Policy file `.metaharness/policy.json` |
 
 Phases 2–4 are out of scope for this ADR; tracked as follow-ups.
 
 ## What this does NOT do
 
-1. **Does not change ruflo's model layer.** No fine-tuning, no LoRA, no embedding training. The model is frozen — that's the entire point.
-2. **Does not auto-evolve ruflo in CI.** Evolution is a user-initiated operation. CI verifies graceful degradation + the dry-run path, never the actual evolve.
-3. **Does not bypass any existing safety.** Darwin's safety inspector is additive to ruflo's existing CVE / threat-model / mcp-scan checks. ADR-150's `mcp-scan` runs against the harness's CURRENT mcp surface; Darwin runs against generated variants BEFORE they execute.
+1. **Does not change rufflo's model layer.** No fine-tuning, no LoRA, no embedding training. The model is frozen — that's the entire point.
+2. **Does not auto-evolve rufflo in CI.** Evolution is a user-initiated operation. CI verifies graceful degradation + the dry-run path, never the actual evolve.
+3. **Does not bypass any existing safety.** Darwin's safety inspector is additive to rufflo's existing CVE / threat-model / mcp-scan checks. ADR-150's `mcp-scan` runs against the harness's CURRENT mcp surface; Darwin runs against generated variants BEFORE they execute.
 4. **Does not promote across machines.** Each repo's `.metaharness/` is local. Phase 3 (federation) is the future answer.
-5. **Does not mutate ruflo's own seven surfaces.** When you run `ruflo evolve <some-other-repo>`, Darwin mutates THAT repo's harness surfaces. Running `ruflo evolve .` against the ruflo repo itself works (it's just a repo), but the variants land under `./.metaharness/variants/`, not in `v3/@claude-flow/cli/src/`. Promoting a variant means *manually copying it back* — and going through normal PR review. This is deliberate: ADR-103 + the witness manifest still gate every commit to `main`.
+5. **Does not mutate rufflo's own seven surfaces.** When you run `rufflo evolve <some-other-repo>`, Darwin mutates THAT repo's harness surfaces. Running `rufflo evolve .` against the rufflo repo itself works (it's just a repo), but the variants land under `./.metaharness/variants/`, not in `v3/@rufflo/cli/src/`. Promoting a variant means *manually copying it back* — and going through normal PR review. This is deliberate: ADR-103 + the witness manifest still gate every commit to `main`.
 
 ## Consequences
 
@@ -172,7 +172,7 @@ Phases 2–4 are out of scope for this ADR; tracked as follow-ups.
 
 ### Negative
 
-- **Time + compute.** A 3-generation × 4-children evolution runs 12 sandboxed variants. Each variant runs the test command at least once. For ruflo's own test suite (~3 minutes) that's 36+ minutes per evolution. Document this honestly.
+- **Time + compute.** A 3-generation × 4-children evolution runs 12 sandboxed variants. Each variant runs the test command at least once. For rufflo's own test suite (~3 minutes) that's 36+ minutes per evolution. Document this honestly.
 - **Sandbox tax.** Darwin's safety inspector rejects variants that touch the filesystem, network, env, etc. — perfectly correct, but it means **mutation surfaces are limited to pure policy logic**. Anything that needs side effects (e.g., a `memoryPolicy` that wants to flush an external cache) won't survive inspection. This is by design; mention it prominently.
 - **Lineage tree storage.** The `.metaharness/` directory grows linearly with generations × children × surfaces. Phase 4 will need a `--prune` flag and an archive retention policy.
 
@@ -185,7 +185,7 @@ Phases 2–4 are out of scope for this ADR; tracked as follow-ups.
 ### Pin
 
 ```diff
-// v3/@claude-flow/cli/package.json + ruflo/package.json
+// v3/@rufflo/cli/package.json + rufflo/package.json
 "optionalDependencies": {
 +  "@metaharness/darwin": "~0.1.0",
    "@metaharness/kernel":  "~0.1.0",
@@ -196,21 +196,21 @@ Phases 2–4 are out of scope for this ADR; tracked as follow-ups.
 
 ### Smoke (graceful-degradation drill)
 
-Extend `plugins/ruflo-metaharness/scripts/smoke.sh` with:
+Extend `plugins/rufflo-metaharness/scripts/smoke.sh` with:
 
 ```bash
 step "18. metaharness evolve CLI + MCP tool present + graceful degradation (ADR-153)"
 miss=""
 # CLI surface
-CLI="$ROOT/../../v3/@claude-flow/cli/src/commands/metaharness.ts"
+CLI="$ROOT/../../v3/@rufflo/cli/src/commands/metaharness.ts"
 grep -q "'evolve'" "$CLI" 2>/dev/null || miss="$miss no-evolve-subcommand"
 # MCP tool
-TOOLS="$ROOT/../../v3/@claude-flow/cli/src/mcp-tools/metaharness-tools.ts"
+TOOLS="$ROOT/../../v3/@rufflo/cli/src/mcp-tools/metaharness-tools.ts"
 grep -q "name: 'metaharness_evolve'" "$TOOLS" 2>/dev/null || miss="$miss no-evolve-mcp-tool"
 # Plugin script
 [[ -x "$ROOT/scripts/evolve.mjs" ]] || miss="$miss no-evolve-script"
 # Optional dep in all 3 pkg.json
-for pj in "$ROOT/../../package.json" "$ROOT/../../ruflo/package.json" "$ROOT/../../v3/@claude-flow/cli/package.json"; do
+for pj in "$ROOT/../../package.json" "$ROOT/../../rufflo/package.json" "$ROOT/../../v3/@rufflo/cli/package.json"; do
   grep -q "@metaharness/darwin" "$pj" 2>/dev/null || miss="$miss no-darwin-pin-in-$(basename $(dirname $pj))"
 done
 # Runtime: degraded path emits the right shape
@@ -249,24 +249,24 @@ darwin-dryrun:
 Add to the MetaHarness section in `CLAUDE.md`:
 
 ```
-# CLI subcommands (npx ruflo metaharness …)
+# CLI subcommands (npx rufflo metaharness …)
 …existing list…
 
 # Dedicated commands
-npx ruflo eject  --name foo --confirm        # ADR-150 Phase 2
-npx ruflo evolve <repo> [--generations N]    # ADR-153 — Darwin Mode
+npx rufflo eject  --name foo --confirm        # ADR-150 Phase 2
+npx rufflo evolve <repo> [--generations N]    # ADR-153 — Darwin Mode
 
 # MCP tools
 …existing list…
-mcp__claude-flow__metaharness_evolve            # ADR-153 — population-based self-improvement
+mcp__rufflo__metaharness_evolve            # ADR-153 — population-based self-improvement
 ```
 
 ## Open questions
 
-1. **Surface name: `evolve` vs `metaharness evolve`.** Going with top-level `ruflo evolve` (mirroring `ruflo eject`) because Darwin Mode is operationally distinct from the read-only `metaharness *` cluster. If users find that confusing, fold it back under `metaharness evolve` in a later patch.
-2. **How to handle `--generations` budget on real repos.** A user typing `ruflo evolve` against their production codebase shouldn't accidentally run a 4-hour evolution. Default to a conservative `--generations 1` with a one-line "increase with --generations N" hint. The benchmark CI uses the same defaults to anchor expectations.
+1. **Surface name: `evolve` vs `metaharness evolve`.** Going with top-level `rufflo evolve` (mirroring `rufflo eject`) because Darwin Mode is operationally distinct from the read-only `metaharness *` cluster. If users find that confusing, fold it back under `metaharness evolve` in a later patch.
+2. **How to handle `--generations` budget on real repos.** A user typing `rufflo evolve` against their production codebase shouldn't accidentally run a 4-hour evolution. Default to a conservative `--generations 1` with a one-line "increase with --generations N" hint. The benchmark CI uses the same defaults to anchor expectations.
 3. **What's the winner-promotion ceremony?** v0.1.0 of darwin just leaves the winner under `.metaharness/`. Phase 2 (witness-signed archives) is the right home for "promote this variant to a PR". Don't preempt that here.
-4. **Does the archive land in ruflo's intelligence layer?** ADR-151 §3.2 (Recommender) could consume Darwin archives as additional training signal. Out of scope for Phase 1 — flag as a Phase 4 candidate.
+4. **Does the archive land in rufflo's intelligence layer?** ADR-151 §3.2 (Recommender) could consume Darwin archives as additional training signal. Out of scope for Phase 1 — flag as a Phase 4 candidate.
 
 ## Cross-references
 
@@ -283,12 +283,12 @@ mcp__claude-flow__metaharness_evolve            # ADR-153 — population-based s
 Open a tracking issue with the Phase 1 checklist:
 
 - [ ] Add `@metaharness/darwin@~0.1.0` to all 3 `package.json` `optionalDependencies`
-- [ ] Add `plugins/ruflo-metaharness/scripts/evolve.mjs`
-- [ ] Add `'evolve'` to `SUBCOMMANDS` in `v3/@claude-flow/cli/src/commands/metaharness.ts` (OR top-level `evolve.ts` mirroring `eject.ts`)
-- [ ] Add `metaharness_evolve` to `v3/@claude-flow/cli/src/mcp-tools/metaharness-tools.ts` with ADR-112 "Use when" guidance
-- [ ] Extend `npx ruflo doctor --component metaharness` to report darwin availability
+- [ ] Add `plugins/rufflo-metaharness/scripts/evolve.mjs`
+- [ ] Add `'evolve'` to `SUBCOMMANDS` in `v3/@rufflo/cli/src/commands/metaharness.ts` (OR top-level `evolve.ts` mirroring `eject.ts`)
+- [ ] Add `metaharness_evolve` to `v3/@rufflo/cli/src/mcp-tools/metaharness-tools.ts` with ADR-112 "Use when" guidance
+- [ ] Extend `npx rufflo doctor --component metaharness` to report darwin availability
 - [ ] Add `darwin-dryrun` job to `.github/workflows/metaharness-ci.yml`
-- [ ] Extend `plugins/ruflo-metaharness/scripts/smoke.sh` with step 18 (above)
+- [ ] Extend `plugins/rufflo-metaharness/scripts/smoke.sh` with step 18 (above)
 - [ ] Extend `no-metaharness-smoke.yml` to verify graceful degradation when `@metaharness/darwin` is absent
-- [ ] Update `CLAUDE.md` MetaHarness section with `ruflo evolve` + `metaharness_evolve`
+- [ ] Update `CLAUDE.md` MetaHarness section with `rufflo evolve` + `metaharness_evolve`
 - [ ] Update `docs/metaharness-user-guide.md` with a "Darwin Mode" section

@@ -1,6 +1,6 @@
 ---
 id: ADR-0001
-title: ruflo-knowledge-graph plugin contract — pinning, namespace coordination, embeddings_generate fix, smoke as contract
+title: rufflo-knowledge-graph plugin contract — pinning, namespace coordination, embeddings_generate fix, smoke as contract
 status: Accepted
 date: 2026-05-04
 updated: 2026-05-09
@@ -11,11 +11,11 @@ tags: [plugin, knowledge-graph, entities, relations, pathfinder, namespace, smok
 
 ## Context
 
-`ruflo-knowledge-graph` (v0.2.0) — entity extraction + relation mapping + pathfinder graph traversal. Surface: 1 agent + 2 skills + 1 command (5 subcommands). Backed by `agentdb_hierarchical-*` (entity tree), `agentdb_causal-edge` (relation tracking), `agentdb_semantic-route` (query routing), and `embeddings_*` (entity description embeddings).
+`rufflo-knowledge-graph` (v0.2.0) — entity extraction + relation mapping + pathfinder graph traversal. Surface: 1 agent + 2 skills + 1 command (5 subcommands). Backed by `agentdb_hierarchical-*` (entity tree), `agentdb_causal-edge` (relation tracking), `agentdb_semantic-route` (query routing), and `embeddings_*` (entity description embeddings).
 
 ### The drift this ADR fixes
 
-Two files reference `mcp__claude-flow__embeddings_embed`, but the real tool is `embeddings_generate` (`v3/@claude-flow/cli/src/mcp-tools/embeddings-tools.ts:260`). There is no `embeddings_embed` MCP tool.
+Two files reference `mcp__rufflo__embeddings_embed`, but the real tool is `embeddings_generate` (`v3/@rufflo/cli/src/mcp-tools/embeddings-tools.ts:260`). There is no `embeddings_embed` MCP tool.
 
 - `skills/kg-extract/SKILL.md:5` — `allowed-tools` line includes the wrong tool name
 - `agents/graph-navigator.md:56` — agent's tool list also wrong
@@ -49,16 +49,16 @@ This is a real bug: invocations would fail with "tool not found". Fixing in this
 ## Verification
 
 ```bash
-bash plugins/ruflo-knowledge-graph/scripts/smoke.sh
+bash plugins/rufflo-knowledge-graph/scripts/smoke.sh
 # Expected: "10 passed, 0 failed"
 ```
 
 ## Related
 
-- `plugins/ruflo-agentdb/docs/adrs/0001-agentdb-optimization.md` — namespace convention
-- `plugins/ruflo-cost-tracker/docs/adrs/0001-cost-tracker-contract.md` — sibling pattern of fixing real MCP-tool drift in skills
-- `v3/@claude-flow/cli/src/mcp-tools/embeddings-tools.ts:260` — `embeddings_generate` (the real tool name)
+- `plugins/rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md` — namespace convention
+- `plugins/rufflo-cost-tracker/docs/adrs/0001-cost-tracker-contract.md` — sibling pattern of fixing real MCP-tool drift in skills
+- `v3/@rufflo/cli/src/mcp-tools/embeddings-tools.ts:260` — `embeddings_generate` (the real tool name)
 
 ## Implementation status
 
-Plugin version v0.2.0 shipped and listed in marketplace.json. Source exists at `plugins/ruflo-knowledge-graph/`. Contract elements implemented: `embeddings_embed` → `embeddings_generate` tool-name drift fixed in both skill and agent files; namespace `knowledge-graph` claimed; pathfinder graph traversal via `agentdb_semantic-route` + `agentdb_causal-edge` documented; smoke-as-contract gate defined in `scripts/smoke.sh`.
+Plugin version v0.2.0 shipped and listed in marketplace.json. Source exists at `plugins/rufflo-knowledge-graph/`. Contract elements implemented: `embeddings_embed` → `embeddings_generate` tool-name drift fixed in both skill and agent files; namespace `knowledge-graph` claimed; pathfinder graph traversal via `agentdb_semantic-route` + `agentdb_causal-edge` documented; smoke-as-contract gate defined in `scripts/smoke.sh`.

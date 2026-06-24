@@ -1,13 +1,13 @@
-# @claude-flow/plugin-gastown-bridge
+# @rufflo/plugin-gastown-bridge
 
 > **WASM-Accelerated Bridge to Steve Yegge's Gas Town Multi-Agent Orchestrator**
 
-[![npm version](https://img.shields.io/npm/v/@claude-flow/plugin-gastown-bridge.svg)](https://www.npmjs.com/package/@claude-flow/plugin-gastown-bridge)
+[![npm version](https://img.shields.io/npm/v/@rufflo/plugin-gastown-bridge.svg)](https://www.npmjs.com/package/@rufflo/plugin-gastown-bridge)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Introduction
 
-The **Gas Town Bridge Plugin** brings Steve Yegge's powerful [Gas Town](https://github.com/steveyegge/gastown) multi-agent orchestrator to Claude Flow V3. Gas Town introduces battle-tested concepts for durable workflow execution that complement Claude Flow's swarm intelligence.
+The **Gas Town Bridge Plugin** brings Steve Yegge's powerful [Gas Town](https://github.com/steveyegge/gastown) multi-agent orchestrator to Rufflo V3. Gas Town introduces battle-tested concepts for durable workflow execution that complement Rufflo's swarm intelligence.
 
 ### What is Gas Town?
 
@@ -26,7 +26,7 @@ Gas Town is a 75,000-line Go codebase that implements:
 | Gas Town is Go-only | CLI bridge wraps `gt` and `bd` commands |
 | Go can't compile to WASM (syscalls) | Hybrid architecture: CLI for I/O, WASM for compute |
 | Formula parsing is slow in JS | Rust→WASM provides **352x speedup** |
-| Graph operations bottleneck | WASM DAG ops are **150x faster** |
+| Graph operations bottleneck | WASM DAG ops are **~4.7x faster** |
 
 ## Features
 
@@ -37,10 +37,10 @@ Gas Town is a 75,000-line Go codebase that implements:
 | Formula parse (TOML→AST) | 53ms | 0.15ms | **352x** |
 | Variable cooking | 35ms | 0.1ms | **350x** |
 | Batch cook (10 formulas) | 350ms | 1ms | **350x** |
-| DAG topological sort | 75ms | 0.5ms | **150x** |
-| Cycle detection | 45ms | 0.3ms | **150x** |
-| Critical path analysis | 120ms | 0.8ms | **150x** |
-| Pattern search (HNSW) | 5000ms | 5ms | **1000x-12500x** |
+| DAG topological sort | 75ms | 0.5ms | **~4.7x** |
+| Cycle detection | 45ms | 0.3ms | **~4.7x** |
+| Critical path analysis | 120ms | 0.8ms | **~4.7x** |
+| Pattern search (HNSW) | 5000ms | 5ms | **1000x-~4.7x** |
 
 ### 🔗 20 MCP Tools
 
@@ -73,7 +73,7 @@ Gas Town is a 75,000-line Go codebase that implements:
 
 ### 🔄 Bidirectional Sync
 
-Seamlessly sync between Gas Town's Beads and Claude Flow's AgentDB:
+Seamlessly sync between Gas Town's Beads and Rufflo's AgentDB:
 
 ```
 ┌──────────────┐     SyncBridge      ┌──────────────┐
@@ -87,9 +87,9 @@ Seamlessly sync between Gas Town's Beads and Claude Flow's AgentDB:
 
 ## Enhancement & Comparison
 
-### Gas Town vs Claude Flow V3
+### Gas Town vs Rufflo V3
 
-| Feature | Gas Town | Claude Flow V3 | With This Plugin |
+| Feature | Gas Town | Rufflo V3 | With This Plugin |
 |---------|----------|----------------|------------------|
 | **Issue Tracking** | Beads (Git-backed) | AgentDB | Unified sync |
 | **Workflows** | TOML Formulas | TypeScript | Both supported |
@@ -103,7 +103,7 @@ Seamlessly sync between Gas Town's Beads and Claude Flow's AgentDB:
 | Metric | Pure JavaScript | This Plugin (WASM) | Improvement |
 |--------|-----------------|-------------------|-------------|
 | Formula parse | 53ms | 0.15ms | 352x faster |
-| 100-node DAG sort | 75ms | 0.5ms | 150x faster |
+| 100-node DAG sort | 75ms | 0.5ms | ~4.7x faster |
 | Pattern search (10k) | 5000ms | 5ms | 1000x faster |
 | Memory usage | 48MB | 12MB | 4x reduction |
 | Startup time | 850ms | 120ms | 7x faster |
@@ -120,11 +120,11 @@ Seamlessly sync between Gas Town's Beads and Claude Flow's AgentDB:
 ## Installation
 
 ```bash
-# Install via Claude Flow CLI (recommended)
-npx claude-flow@latest plugins install -n @claude-flow/plugin-gastown-bridge
+# Install via Rufflo CLI (recommended)
+npx rufflo@latest plugins install -n @rufflo/plugin-gastown-bridge
 
 # Or install directly via npm
-npm install @claude-flow/plugin-gastown-bridge
+npm install @rufflo/plugin-gastown-bridge
 
 # Prerequisites: Gas Town and Beads CLI (optional - for full CLI integration)
 # See: https://github.com/steveyegge/gastown
@@ -137,7 +137,7 @@ go install github.com/steveyegge/beads/cmd/bd@latest
 ### Basic Setup
 
 ```typescript
-import { GasTownBridgePlugin } from '@claude-flow/plugin-gastown-bridge';
+import { GasTownBridgePlugin } from '@rufflo/plugin-gastown-bridge';
 
 // Initialize the plugin
 const plugin = new GasTownBridgePlugin({
@@ -146,7 +146,7 @@ const plugin = new GasTownBridgePlugin({
   wasmEnabled: true,             // Enable WASM acceleration
 });
 
-// Register with Claude Flow
+// Register with Rufflo
 await claudeFlow.registerPlugin(plugin);
 ```
 
@@ -200,7 +200,7 @@ const ast = await plugin.tools.gt_wasm_parse_formula({
   `,
 });
 
-// Resolve dependencies (150x faster)
+// Resolve dependencies (~4.7x faster)
 const sorted = await plugin.tools.gt_wasm_resolve_deps({
   beads: beadList,
   action: 'topo_sort',
@@ -212,7 +212,7 @@ const cooked = await plugin.tools.gt_wasm_cook_batch({
   vars: [{ env: 'prod' }, { env: 'staging' }],
 });
 
-// Find similar patterns (1000x-12500x faster)
+// Find similar patterns (1000x-~4.7x faster)
 const matches = await plugin.tools.gt_wasm_match_pattern({
   query: 'authentication flow',
   candidates: formulaNames,
@@ -263,9 +263,9 @@ bd --version
 ### Step 2: Initialize Plugin in Your Project
 
 ```typescript
-// claude-flow.config.ts
-import { defineConfig } from 'claude-flow';
-import { GasTownBridgePlugin } from '@claude-flow/plugin-gastown-bridge';
+// rufflo.config.ts
+import { defineConfig } from 'rufflo';
+import { GasTownBridgePlugin } from '@rufflo/plugin-gastown-bridge';
 
 export default defineConfig({
   plugins: [
@@ -281,7 +281,7 @@ export default defineConfig({
 ```typescript
 const bead = await claudeFlow.mcp.call('gt_beads_create', {
   title: 'Hello Gas Town',
-  description: 'My first bead from Claude Flow!',
+  description: 'My first bead from Rufflo!',
   priority: 3,
   labels: ['tutorial'],
 });
@@ -408,7 +408,7 @@ console.log(`Completed: ${status.completed}/${status.total}`);
 ### Optimizing Convoy Execution (WASM)
 
 ```typescript
-// Get optimal execution order (150x faster with WASM)
+// Get optimal execution order (~4.7x faster with WASM)
 const optimized = await claudeFlow.mcp.call('gt_wasm_optimize_convoy', {
   convoy_id: convoy.id,
   strategy: 'parallel', // or 'serial', 'hybrid'
@@ -593,7 +593,7 @@ See [MCP Tools Documentation](./docs/mcp-tools.md) for complete API reference.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                      Claude Flow V3 Plugin Host                      │
+│                      Rufflo V3 Plugin Host                      │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                      │
 │  ┌─────────────────────┐    ┌─────────────────────────────────────┐ │
@@ -646,4 +646,4 @@ MIT License - see [LICENSE](./LICENSE) for details.
 
 ---
 
-**Built with ❤️ by the Claude Flow Team**
+**Built with ❤️ by the Rufflo Team**

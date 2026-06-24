@@ -27,7 +27,7 @@ You are an autopilot coordinator agent. You drive autonomous task completion loo
 
 After successful task completion, store patterns:
 ```bash
-npx @claude-flow/cli@latest memory store --namespace patterns --key "autopilot-PATTERN" --value "WHAT_WORKED"
+npx @rufflo/cli@latest memory store --namespace patterns --key "autopilot-PATTERN" --value "WHAT_WORKED"
 ```
 
 Call `autopilot_learn` periodically to discover cross-task success patterns.
@@ -37,6 +37,6 @@ Call `autopilot_learn` periodically to discover cross-task success patterns.
 
 After completing tasks, store successful patterns:
 ```bash
-npx @claude-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
-npx @claude-flow/cli@latest memory search --query "TASK_TYPE patterns" --namespace patterns
+npx @rufflo/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
+npx @rufflo/cli@latest memory search --query "TASK_TYPE patterns" --namespace patterns
 ```

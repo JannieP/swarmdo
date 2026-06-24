@@ -5,7 +5,7 @@
 
 ## Context
 
-The claude-flow intelligence pipeline (ReasoningBank, EWC++, LoRA, SONA, cosine similarity) is implemented in pure JavaScript using Float32Array operations. `@ruvector/ruvllm@2.5.4` is installed and provides structured ML components.
+The rufflo intelligence pipeline (ReasoningBank, EWC++, LoRA, SONA, cosine similarity) is implemented in pure JavaScript using Float32Array operations. `@ruvector/ruvllm@2.5.4` is installed and provides structured ML components.
 
 ### API Testing Results (2026-04-07)
 
@@ -106,13 +106,13 @@ All integration points shipped in a single commit alongside ADR-087. A follow-on
 
 | Component | Status | Files | Commit(s) |
 |---|---|---|---|
-| **SonaCoordinator** — lazy load + trajectory forwarding + background learning | Implemented | `v3/@claude-flow/cli/src/memory/intelligence.ts` | `7eb505d22 feat: native ruvllm + graph-node intelligence backends (ADR-086, ADR-087)` |
-| **ContrastiveTrainer** — lazy load + `trainAgentEmbeddings()` | Implemented | `v3/@claude-flow/cli/src/memory/sona-optimizer.ts` | `7eb505d22` |
-| **TrainingPipeline** — lazy load + `saveCheckpoint()`/`loadCheckpoint()` | Implemented | `v3/@claude-flow/cli/src/ruvector/lora-adapter.ts` | `7eb505d22` |
-| **CLI wiring** — `neural status` table rows; `neural train` checkpoint; `neural optimize` background learning | Implemented | `v3/@claude-flow/cli/src/commands/neural.ts` | `7eb505d22` |
-| **MCP tool wiring** — `hooks_intelligence`, `hooks_intelligence stats`, `trajectory-end`, `ruvllm_status` | Implemented | `v3/@claude-flow/cli/src/mcp-tools/hooks-tools.ts`, `ruvllm-tools.ts` | `7eb505d22` |
-| **Stats truthfulness fix** — Flash Attention + ruvllm coordinator stats corrected | Implemented | `v3/@claude-flow/cli/src/memory/intelligence.ts` | `a7122a50e fix(intelligence): make Flash Attention + ruvllm coordinator stats truthful (#1770)` |
-| **Test suite** — 11 integration tests, 9 graph-backend tests, 32 files / 1762 tests passing | Implemented | `v3/@claude-flow/cli/__tests__/ruvllm-integration.test.ts`, `ruvllm-tools.test.ts`, `graph-backend.test.ts` | `7eb505d22` |
+| **SonaCoordinator** — lazy load + trajectory forwarding + background learning | Implemented | `v3/@rufflo/cli/src/memory/intelligence.ts` | `7eb505d22 feat: native ruvllm + graph-node intelligence backends (ADR-086, ADR-087)` |
+| **ContrastiveTrainer** — lazy load + `trainAgentEmbeddings()` | Implemented | `v3/@rufflo/cli/src/memory/sona-optimizer.ts` | `7eb505d22` |
+| **TrainingPipeline** — lazy load + `saveCheckpoint()`/`loadCheckpoint()` | Implemented | `v3/@rufflo/cli/src/ruvector/lora-adapter.ts` | `7eb505d22` |
+| **CLI wiring** — `neural status` table rows; `neural train` checkpoint; `neural optimize` background learning | Implemented | `v3/@rufflo/cli/src/commands/neural.ts` | `7eb505d22` |
+| **MCP tool wiring** — `hooks_intelligence`, `hooks_intelligence stats`, `trajectory-end`, `ruvllm_status` | Implemented | `v3/@rufflo/cli/src/mcp-tools/hooks-tools.ts`, `ruvllm-tools.ts` | `7eb505d22` |
+| **Stats truthfulness fix** — Flash Attention + ruvllm coordinator stats corrected | Implemented | `v3/@rufflo/cli/src/memory/intelligence.ts` | `a7122a50e fix(intelligence): make Flash Attention + ruvllm coordinator stats truthful (#1770)` |
+| **Test suite** — 11 integration tests, 9 graph-backend tests, 32 files / 1762 tests passing | Implemented | `v3/@rufflo/cli/__tests__/ruvllm-integration.test.ts`, `ruvllm-tools.test.ts`, `graph-backend.test.ts` | `7eb505d22` |
 
 ### Kept as pure JS (as decided)
 

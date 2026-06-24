@@ -1,4 +1,4 @@
-# ruflo-workflows
+# rufflo-workflows
 
 Workflow automation across **two complementary surfaces**:
 
@@ -11,7 +11,7 @@ Neither subsumes the other — see [Choosing a surface](#choosing-a-surface).
 
 ```
 /plugin marketplace add ruvnet/ruflo
-/plugin install ruflo-workflows@ruflo
+/plugin install rufflo-workflows@rufflo
 ```
 
 ## Features
@@ -32,12 +32,12 @@ Neither subsumes the other — see [Choosing a surface](#choosing-a-surface).
 
 ## Compatibility
 
-- **CLI:** pinned to `@claude-flow/cli` v3.6 major+minor.
-- **Verification:** `bash plugins/ruflo-workflows/scripts/smoke.sh` is the contract.
+- **CLI:** pinned to `@rufflo/cli` v3.6 major+minor.
+- **Verification:** `bash plugins/rufflo-workflows/scripts/smoke.sh` is the contract.
 
 ## MCP surface (10 tools)
 
-All defined at `v3/@claude-flow/cli/src/mcp-tools/workflow-tools.ts`:
+All defined at `v3/@rufflo/cli/src/mcp-tools/workflow-tools.ts`:
 
 | Tool | Purpose |
 |------|---------|
@@ -107,7 +107,7 @@ return { audited: sweep.results.length, failures, diagnoses }
 ```js
 Workflow({ name: 'plugin-contract-audit' })            // run a named .claude/workflows/*.js
 Workflow({ scriptPath: '.claude/workflows/foo.js' })   // run a script by path
-Workflow({ name: 'plugin-contract-audit', args: 'ruflo-agentdb' })  // pass args (the script's `args` global)
+Workflow({ name: 'plugin-contract-audit', args: 'rufflo-agentdb' })  // pass args (the script's `args` global)
 Workflow({ scriptPath, resumeFromRunId: 'wf_…' })      // resume — unchanged agent() calls return cached
 ```
 
@@ -125,24 +125,24 @@ The repo ships a reference workflow at `.claude/workflows/plugin-contract-audit.
 
 ## Namespace coordination
 
-This plugin owns the `workflows-state` AgentDB namespace (kebab-case, follows the convention from [ruflo-agentdb ADR-0001 §"Namespace convention"](../ruflo-agentdb/docs/adrs/0001-agentdb-optimization.md)). Reserved namespaces (`pattern`, `claude-memories`, `default`) MUST NOT be shadowed.
+This plugin owns the `workflows-state` AgentDB namespace (kebab-case, follows the convention from [rufflo-agentdb ADR-0001 §"Namespace convention"](../rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md)). Reserved namespaces (`pattern`, `claude-memories`, `default`) MUST NOT be shadowed.
 
 `workflows-state` indexes workflow definitions, current state, run history, and template metadata. Accessed via `memory_*` (namespace-routed).
 
 ## Verification
 
 ```bash
-bash plugins/ruflo-workflows/scripts/smoke.sh
+bash plugins/rufflo-workflows/scripts/smoke.sh
 # Expected: "15 passed, 0 failed"
 ```
 
 ## Architecture Decisions
 
-- [`ADR-0001` — ruflo-workflows plugin contract (10-tool MCP surface, lifecycle state machine, smoke as contract)](./docs/adrs/0001-workflows-contract.md)
+- [`ADR-0001` — rufflo-workflows plugin contract (10-tool MCP surface, lifecycle state machine, smoke as contract)](./docs/adrs/0001-workflows-contract.md)
 - [`ADR-0002` — native Claude Code Workflow orchestration (`.claude/workflows/*.js` fan-out) alongside the MCP surface](./docs/adrs/0002-native-workflow-orchestration.md)
 
 ## Related Plugins
 
-- `ruflo-agentdb` — namespace convention owner
-- `ruflo-loop-workers` — sibling automation surface (loops are recurring; workflows are stateful pipelines)
-- `ruflo-sparc` — SPARC phase transitions can be modeled as workflows
+- `rufflo-agentdb` — namespace convention owner
+- `rufflo-loop-workers` — sibling automation surface (loops are recurring; workflows are stateful pipelines)
+- `rufflo-sparc` — SPARC phase transitions can be modeled as workflows

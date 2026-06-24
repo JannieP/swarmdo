@@ -1,6 +1,6 @@
 ---
 id: ADR-0001
-title: ruflo-workflows plugin contract — pinning, namespace coordination, 10-tool MCP surface, smoke as contract
+title: rufflo-workflows plugin contract — pinning, namespace coordination, 10-tool MCP surface, smoke as contract
 status: Accepted
 date: 2026-05-04
 updated: 2026-05-09
@@ -11,9 +11,9 @@ tags: [plugin, workflows, automation, orchestration, namespace, smoke-test]
 
 ## Context
 
-`ruflo-workflows` (v0.1.0) — workflow automation with templates, orchestration, and lifecycle management. 1 agent (`workflow-specialist`), 2 skills (`workflow-create`, `workflow-run`), 1 command (`/workflow`).
+`rufflo-workflows` (v0.1.0) — workflow automation with templates, orchestration, and lifecycle management. 1 agent (`workflow-specialist`), 2 skills (`workflow-create`, `workflow-run`), 1 command (`/workflow`).
 
-Wraps **10 `workflow_*` MCP tools** at `v3/@claude-flow/cli/src/mcp-tools/workflow-tools.ts:84, 196, 264, 450, 511, 558, 597, 648, 701, 739`:
+Wraps **10 `workflow_*` MCP tools** at `v3/@rufflo/cli/src/mcp-tools/workflow-tools.ts:84, 196, 264, 450, 511, 558, 597, 648, 701, 739`:
 
 | Tool | Purpose |
 |------|---------|
@@ -39,24 +39,24 @@ This plugin is the canonical wrapper for the workflow-* MCP family.
 
 ## Consequences
 
-**Positive:** plugin joins the cadence. The 10-tool surface + lifecycle state machine are now contractually documented. **This ADR completes the plugin-contract retrofit across the entire ruflo plugin family** — all 33 plugins now have ADR-0001 + smoke + namespace coordination.
+**Positive:** plugin joins the cadence. The 10-tool surface + lifecycle state machine are now contractually documented. **This ADR completes the plugin-contract retrofit across the entire rufflo plugin family** — all 33 plugins now have ADR-0001 + smoke + namespace coordination.
 
 **Negative:** none material.
 
 ## Verification
 
 ```bash
-bash plugins/ruflo-workflows/scripts/smoke.sh
+bash plugins/rufflo-workflows/scripts/smoke.sh
 # Expected: "11 passed, 0 failed"
 ```
 
 ## Related
 
-- `plugins/ruflo-agentdb/docs/adrs/0001-agentdb-optimization.md` — namespace convention
-- `plugins/ruflo-loop-workers/docs/adrs/0001-loop-workers-contract.md` — sibling automation surface (loops vs workflows)
-- `plugins/ruflo-sparc/docs/adrs/0001-sparc-contract.md` — SPARC orchestration uses workflows for phase transitions
-- `v3/@claude-flow/cli/src/mcp-tools/workflow-tools.ts` — 10 `workflow_*` tools
+- `plugins/rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md` — namespace convention
+- `plugins/rufflo-loop-workers/docs/adrs/0001-loop-workers-contract.md` — sibling automation surface (loops vs workflows)
+- `plugins/rufflo-sparc/docs/adrs/0001-sparc-contract.md` — SPARC orchestration uses workflows for phase transitions
+- `v3/@rufflo/cli/src/mcp-tools/workflow-tools.ts` — 10 `workflow_*` tools
 
 ## Implementation status
 
-Plugin version v0.2.0 shipped and listed in marketplace.json. Source exists at `plugins/ruflo-workflows/`. Contract elements implemented: all 10 `workflow_*` MCP tools covered; SPARC phase-transition orchestration cross-linked; namespace `workflows-state` claimed; smoke-as-contract gate defined in `scripts/smoke.sh` (11 checks).
+Plugin version v0.2.0 shipped and listed in marketplace.json. Source exists at `plugins/rufflo-workflows/`. Contract elements implemented: all 10 `workflow_*` MCP tools covered; SPARC phase-transition orchestration cross-linked; namespace `workflows-state` claimed; smoke-as-contract gate defined in `scripts/smoke.sh` (11 checks).

@@ -49,14 +49,14 @@ npx neural-trader --backtest --strategy NAME --symbol TICKER --benchmark SPY
 5. Compare against benchmark (SPY buy-and-hold)
 6. Store results and train SONA:
    ```bash
-   npx @claude-flow/cli@latest memory store --namespace trading-backtests --key "bt-STRATEGY-DATE" --value "RESULTS"
-   npx @claude-flow/cli@latest neural train --pattern-type trading-strategy --epochs 10
+   npx @rufflo/cli@latest memory store --namespace trading-backtests --key "bt-STRATEGY-DATE" --value "RESULTS"
+   npx @rufflo/cli@latest neural train --pattern-type trading-strategy --epochs 10
    ```
 
 ### Neural Learning
 
 ```bash
-npx @claude-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
+npx @rufflo/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
 ```
 
 ### Comms protocol (ADR-126 Phase 5 — orthogonal research lane)
@@ -71,4 +71,4 @@ You MUST sign every backtest result you store — see the `trader-backtest` skil
 
 The live pipeline (`market-analyst → trading-strategist → risk-analyst → broker`) never depends on you for hot-path execution. Live trades can fire while a backtest is running and vice versa.
 
-Message schemas (none consumed by you; documented for completeness): `RegimeVerdict`, `SignalProposal`, `RiskDecision` in `plugins/ruflo-neural-trader/src/pipeline-messages.ts`.
+Message schemas (none consumed by you; documented for completeness): `RegimeVerdict`, `SignalProposal`, `RiskDecision` in `plugins/rufflo-neural-trader/src/pipeline-messages.ts`.

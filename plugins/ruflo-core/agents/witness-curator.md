@@ -21,13 +21,13 @@ You are invoked when:
 
 The manifest at `verification.md.json` lists `{ id, desc, file, sha256, marker, markerVerified }` per fix.
 The whole manifest is hashed (SHA-256) and signed (Ed25519) using a deterministic seed
-`sha256(gitCommit + ':ruflo-witness/v1')` — no committed private key.
+`sha256(gitCommit + ':rufflo-witness/v1')` — no committed private key.
 
 `verification-history.jsonl` is an append-only log of each regen's snapshot.
 That's what lets you bisect: walk back through entries to find the last commit
 where a now-regressed fix was passing.
 
-Toolkit lives in `plugins/ruflo-core/scripts/witness/`:
+Toolkit lives in `plugins/rufflo-core/scripts/witness/`:
 - `init.mjs` — bootstrap into a fresh repo
 - `regen.mjs` — sign + append history (run on each release)
 - `history.mjs` — query temporal log (summary, regressions, timeline)
@@ -44,7 +44,7 @@ When a fix ships:
    a comment referencing the issue.
 2. Append `{ id, desc, file, marker }` to the project's `witness-fixes.json`
    (or directly to the script's `NEW_FIXES` array if no config file).
-3. Run `node plugins/ruflo-core/scripts/witness/regen.mjs --dry-run` first
+3. Run `node plugins/rufflo-core/scripts/witness/regen.mjs --dry-run` first
    to confirm `verified: N/N` (all markers present).
 4. Run without `--dry-run` to write the manifest + append history.
 5. Commit `verification.md.json`, `verification-history.jsonl`, and any
@@ -68,7 +68,7 @@ When CI reports a fix as `regressed`:
 - Adding a fix entry whose `markerVerified=false` at issuance — fix the
   build first, then regen.
 
-## In ruflo's CI
+## In rufflo's CI
 
 `witness-verify` job in `v3-ci.yml` blocks `publish` if:
 - signature invalid (someone hand-edited the manifest)

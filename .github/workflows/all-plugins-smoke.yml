@@ -1,7 +1,7 @@
 # Meta-smoke: run every plugins/*/scripts/smoke.sh in parallel and fail the
 # build if any plugin's structural contract regresses.
 #
-# Before iter 74, only ruflo-cost-tracker and ruflo-agent had dedicated CI
+# Before iter 74, only rufflo-cost-tracker and rufflo-agent had dedicated CI
 # gates — the other 30 plugins shipped smoke.sh files that nobody enforced.
 # This workflow turns the 32 unrelated smoke scripts into a single
 # CI-gateable check. New plugins authored with the canonical scripts/smoke.sh
@@ -38,7 +38,7 @@ jobs:
 
       - name: Discover and run every plugin smoke contract (parallel)
         # --timeout 300 caps each individual plugin smoke at 5 minutes.
-        # iter 119 — bumped from 60s because ruflo-metaharness has grown
+        # iter 119 — bumped from 60s because rufflo-metaharness has grown
         # to 118 steps with many npx invocations and routinely exceeds
         # 60s (was timing out at 151s before SIGKILL). Most plugins
         # still complete in <5s; 300s protects against a genuinely-hung

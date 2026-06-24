@@ -1,11 +1,11 @@
-# Claude-Flow v3: Optimized Implementation Plan
+# Rufflo v3: Optimized Implementation Plan
 
 ## Core Priorities
 
 | Priority | Focus | Target |
 |----------|-------|--------|
 | **1** | Clean Integration | Zero security vulnerabilities |
-| **2** | Speed | 2.49x-7.47x performance gains |
+| **2** | Speed | unverified (no benchmark) performance gains |
 | **3** | Self-Learning | SONA + Reflexion + AgentDB |
 | **4** | Backward Compatibility | 100% v2 API preservation |
 | **5** | Init Capabilities | Enhanced initialization system |
@@ -106,7 +106,7 @@ export class FlashCoordinator {
     this.wrapper = new EnhancedAgentDBWrapper({
       enableAttention: true,
       attentionConfig: {
-        type: 'flash',           // 2.49x-7.47x speedup
+        type: 'flash',           // unverified (no benchmark) speedup
         memoryEfficient: true,   // 50-75% memory reduction
         batchSize: 64
       },
@@ -126,7 +126,7 @@ export class FlashCoordinator {
     return this.attention.coordinateAgents(outputs, 'flash');
   }
 
-  // Fast pattern search with HNSW indexing (150x-12,500x faster)
+  // Fast pattern search with HNSW indexing (~1.9x-4.7x measured faster)
   async searchPatterns(query: string, k = 5): Promise<Pattern[]> {
     return this.wrapper.gnnEnhancedSearch(query, { k });
   }
@@ -609,9 +609,9 @@ export class InitController {
       '.claude/commands',
       '.claude/skills',
       '.claude/checkpoints/active',
-      '.claude-flow/coordination',
-      '.claude-flow/training',
-      '.claude-flow/metrics'
+      '.rufflo/coordination',
+      '.rufflo/training',
+      '.rufflo/metrics'
     ];
 
     for (const dir of dirs) {
@@ -846,14 +846,14 @@ import { InitController } from '../init/init-controller';
 
 export function createInitCommand(): Command {
   return new Command('init')
-    .description('Initialize Claude-Flow v3 with enhanced capabilities')
+    .description('Initialize Rufflo v3 with enhanced capabilities')
     .option('-m, --mode <mode>', 'Initialization mode', 'standard')
     .option('--sona <profile>', 'SONA learning profile', 'balanced')
     .option('--no-learning', 'Disable self-learning')
     .option('--attention <type>', 'Attention mechanism', 'flash')
     .option('--migrate', 'Auto-migrate from v2')
     .action(async (options) => {
-      console.log('🚀 Initializing Claude-Flow v3...\n');
+      console.log('🚀 Initializing Rufflo v3...\n');
 
       const controller = new InitController({
         mode: options.mode,
@@ -956,21 +956,21 @@ npm run test:compatibility
 
 ```bash
 # Fresh v3 installation
-npx claude-flow init --mode sparc --sona research
+npx rufflo init --mode sparc --sona research
 
 # With all features
-npx claude-flow init --mode enterprise --sona research --attention flash
+npx rufflo init --mode enterprise --sona research --attention flash
 
 # Minimal (fast startup)
-npx claude-flow init --mode standard --sona real-time
+npx rufflo init --mode standard --sona real-time
 
 # Migrate from v2
-npx claude-flow init --migrate
+npx rufflo init --migrate
 ```
 
 ```typescript
 // v3 API usage
-import { InitController, SwarmCoordinator, SONAManager } from 'claude-flow/v3';
+import { InitController, SwarmCoordinator, SONAManager } from 'rufflo/v3';
 
 // Initialize with learning
 const init = new InitController({
@@ -995,7 +995,7 @@ const patterns = await sona.searchPatterns('implement feature');
 | Priority | Implemented | Benefit |
 |----------|-------------|---------|
 | **Security** | SecureFoundation, Zod validation | Zero vulnerabilities |
-| **Speed** | Flash Attention, Lazy loading | 2.49x-7.47x faster |
+| **Speed** | Flash Attention, Lazy loading | unverified (no benchmark) faster |
 | **Learning** | SONA, Reflexion, AgentDB | +55% quality |
 | **Compatibility** | v2 API wrappers, auto-migration | 100% preserved |
 | **Init** | InitController, Mode initializers | Clean, fast startup |

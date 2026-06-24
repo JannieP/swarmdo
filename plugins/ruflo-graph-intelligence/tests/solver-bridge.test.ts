@@ -1,5 +1,5 @@
 /**
- * ruflo-graph-intelligence — Solver Bridge Tests (ADR-123 Phase 1)
+ * rufflo-graph-intelligence — Solver Bridge Tests (ADR-123 Phase 1)
  */
 
 import { describe, it, expect } from 'vitest';

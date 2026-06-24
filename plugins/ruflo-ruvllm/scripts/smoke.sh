@@ -30,12 +30,12 @@ done
 [[ -f "$ROOT/commands/ruvllm.md" ]] || miss="$miss missing-command"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
-step "3. README pins @claude-flow/cli to v3.6"
-grep -qE "@claude-flow/cli.*v3\.6|v3\.6.*claude-flow/cli" "$ROOT/README.md" \
+step "3. README pins @rufflo/cli to v3.6"
+grep -qE "@rufflo/cli.*v3\.6|v3\.6.*rufflo/cli" "$ROOT/README.md" \
   && ok || bad "v3.6 pin missing"
 
-step "4. README defers to ruflo-agentdb namespace convention"
-grep -q "ruflo-agentdb" "$ROOT/README.md" \
+step "4. README defers to rufflo-agentdb namespace convention"
+grep -q "rufflo-agentdb" "$ROOT/README.md" \
   && grep -q "Namespace convention" "$ROOT/README.md" \
   && ok || bad "namespace coordination block incomplete"
 
@@ -43,22 +43,22 @@ step "5. ruvllm-config namespace claimed"
 grep -q "ruvllm-config" "$ROOT/README.md" \
   && ok || bad "ruvllm-config namespace not claimed"
 
-step "6. SONA cross-reference (ruflo-intelligence canonical owner)"
+step "6. SONA cross-reference (rufflo-intelligence canonical owner)"
 F="$ROOT/README.md"
-grep -q "ruflo-intelligence" "$F" \
+grep -q "rufflo-intelligence" "$F" \
   && grep -qE "SONA|sona_create|sona_adapt" "$F" \
   && ok || bad "SONA cross-reference missing"
 
-step "7. MicroLoRA cross-reference (ruflo-intelligence DISTILL phase)"
+step "7. MicroLoRA cross-reference (rufflo-intelligence DISTILL phase)"
 F="$ROOT/README.md"
 grep -qE "MicroLoRA|microlora" "$F" \
   && grep -qE "DISTILL|CONSOLIDATE|--consolidate" "$F" \
   && ok || bad "MicroLoRA / DISTILL cross-reference missing"
 
-step "8. HNSW WASM router cross-reference (ruflo-agentdb canonical owner)"
+step "8. HNSW WASM router cross-reference (rufflo-agentdb canonical owner)"
 F="$ROOT/README.md"
 grep -qE "ruvllm_hnsw|HNSW WASM router|11 patterns" "$F" \
-  && grep -q "ruflo-agentdb" "$F" \
+  && grep -q "rufflo-agentdb" "$F" \
   && ok || bad "HNSW router cross-reference missing"
 
 step "9. ADR-0001 exists with status Accepted"

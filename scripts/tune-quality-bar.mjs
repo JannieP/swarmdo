@@ -37,15 +37,15 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import * as mh from '@metaharness/router';
-import { blendedPrice, costUsd } from '../v3/@claude-flow/cli/dist/src/ruvector/model-prices.js';
-import { IsotonicCalibrator } from '../v3/@claude-flow/cli/dist/src/ruvector/router-calibrator.js';
+import { blendedPrice, costUsd } from '../v3/@rufflo/cli/dist/src/ruvector/model-prices.js';
+import { IsotonicCalibrator } from '../v3/@rufflo/cli/dist/src/ruvector/router-calibrator.js';
 
 const ARGS = (() => {
   const a = {
     in: process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH
       ?? resolve('.swarm', 'model-router-trajectories.jsonl'),
-    artifact: resolve('v3/@claude-flow/cli/assets/model-router/seed-router.krr.json'),
-    calibratorDir: resolve('v3/@claude-flow/cli/assets/model-router'),
+    artifact: resolve('v3/@rufflo/cli/assets/model-router/seed-router.krr.json'),
+    calibratorDir: resolve('v3/@rufflo/cli/assets/model-router'),
     bars: '0.30,0.35,0.40,0.45,0.50,0.55,0.60,0.65,0.70,0.75,0.80,0.85,0.90',
     since: null,
     format: 'table',

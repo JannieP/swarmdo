@@ -36,7 +36,7 @@ step "4. embeddings_embed (non-existent tool) is NOT referenced as a tool call (
 # ADR file legitimately mentions the broken tool as the thing being removed.
 # The README's namespace-coord note also calls it out as "NOT embeddings_embed".
 # Filter both — invariant is on actual tool-call-site references in skills/agent/command.
-hits=$(grep -rE 'mcp__claude-flow__embeddings_embed' "$ROOT" \
+hits=$(grep -rE 'mcp__rufflo__embeddings_embed' "$ROOT" \
        --include='*.md' --include='*.json' \
        --exclude-dir='adrs' 2>/dev/null \
        | grep -v 'NOT embeddings_embed\|embeddings_embed.*does not exist\|fixes prior references' \
@@ -62,12 +62,12 @@ for sub in 'extract' 'traverse' 'relations' 'visualize' 'search'; do
 done
 [[ -z "$miss" ]] && ok || bad "missing subcommands:$miss"
 
-step "7. README pins @claude-flow/cli to v3.6"
-grep -qE "@claude-flow/cli.*v3\.6|v3\.6.*claude-flow/cli" "$ROOT/README.md" \
+step "7. README pins @rufflo/cli to v3.6"
+grep -qE "@rufflo/cli.*v3\.6|v3\.6.*rufflo/cli" "$ROOT/README.md" \
   && ok || bad "v3.6 pin missing"
 
-step "8. README defers to ruflo-agentdb namespace convention"
-grep -q "ruflo-agentdb" "$ROOT/README.md" \
+step "8. README defers to rufflo-agentdb namespace convention"
+grep -q "rufflo-agentdb" "$ROOT/README.md" \
   && grep -q "Namespace convention" "$ROOT/README.md" \
   && ok || bad "namespace coordination block incomplete"
 

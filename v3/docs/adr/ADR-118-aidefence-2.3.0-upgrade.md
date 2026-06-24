@@ -3,14 +3,14 @@
 **Status**: Proposed (2026-05-14)
 **Date**: 2026-05-14
 **Authors**: claude (drafted with rUv)
-**Related**: [`aidefence@2.3.0`](https://www.npmjs.com/package/aidefence) (alias `aidefense`), `aimds-core` / `aimds-detection` / `aimds-analysis` / `aimds-response` `0.1.1` on crates.io, `@claude-flow/aidefence@3.0.2` (the workspace package that exposes the `aidefence_*` MCP tools), `ruflo-aidefence` plugin (canonical 3-gate pattern owner), `ruflo-federation` (richer specialization), `ruflo-browser` / `ruflo-security-audit` / `ruflo-plugin-creator` (consumers of `aidefence_*`)
+**Related**: [`aidefence@2.3.0`](https://www.npmjs.com/package/aidefence) (alias `aidefense`), `aimds-core` / `aimds-detection` / `aimds-analysis` / `aimds-response` `0.1.1` on crates.io, `@rufflo/aidefence@3.0.2` (the workspace package that exposes the `aidefence_*` MCP tools), `rufflo-aidefence` plugin (canonical 3-gate pattern owner), `rufflo-federation` (richer specialization), `rufflo-browser` / `rufflo-security-audit` / `rufflo-plugin-creator` (consumers of `aidefence_*`)
 **Supersedes**: nothing
 
 ## Context
 
-The upstream npm package [`aidefence`](https://www.npmjs.com/package/aidefence) (AIMDS — AI Manipulation Defense System) shipped a substantial 2.3.0 release on 2026-05-14, paired with `aimds-*@0.1.1` on crates.io. Across the ruflo plugin ecosystem, **eight plugins** invoke `aidefence_*` MCP tools (the canonical 3-gate pattern owned by [`ruflo-aidefence` ADR-0001](../../../plugins/ruflo-aidefence/docs/adrs/0001-aidefence-contract.md)). Those tools are exposed by `@claude-flow/aidefence@3.0.2` in this monorepo, which is built on top of the upstream library.
+The upstream npm package [`aidefence`](https://www.npmjs.com/package/aidefence) (AIMDS — AI Manipulation Defense System) shipped a substantial 2.3.0 release on 2026-05-14, paired with `aimds-*@0.1.1` on crates.io. Across the rufflo plugin ecosystem, **eight plugins** invoke `aidefence_*` MCP tools (the canonical 3-gate pattern owned by [`rufflo-aidefence` ADR-0001](../../../plugins/rufflo-aidefence/docs/adrs/0001-aidefence-contract.md)). Those tools are exposed by `@rufflo/aidefence@3.0.2` in this monorepo, which is built on top of the upstream library.
 
-The upstream 2.3.0 / 0.1.1 release is **not a feature add** — it's a correctness + security pass that closes concrete gaps in the detection and response layers. Several of those gaps are observable in the ruflo plugins that rely on the 3-gate pattern (federation's PII pipeline, browser's pre-storage scan, security-audit's runtime gate cross-reference). This ADR records the decision to bump and propagates the new behavior across the plugin docs + invariants.
+The upstream 2.3.0 / 0.1.1 release is **not a feature add** — it's a correctness + security pass that closes concrete gaps in the detection and response layers. Several of those gaps are observable in the rufflo plugins that rely on the 3-gate pattern (federation's PII pipeline, browser's pre-storage scan, security-audit's runtime gate cross-reference). This ADR records the decision to bump and propagates the new behavior across the plugin docs + invariants.
 
 ## What changed upstream
 
@@ -34,18 +34,18 @@ The upstream 2.3.0 / 0.1.1 release is **not a feature add** — it's a correctne
 
 ## Decision
 
-**Bump the `@claude-flow/aidefence` workspace package to consume `aidefence@2.3.0` / `aimds-*@0.1.1` upstream, retain the existing `aidefence_*` MCP tool surface (no API breakage), and record the new behavior in the plugin docs + the `audit-fix-invariants.mjs` CI guard so we never silently regress past it.**
+**Bump the `@rufflo/aidefence` workspace package to consume `aidefence@2.3.0` / `aimds-*@0.1.1` upstream, retain the existing `aidefence_*` MCP tool surface (no API breakage), and record the new behavior in the plugin docs + the `audit-fix-invariants.mjs` CI guard so we never silently regress past it.**
 
 ### Implementation surface
 
 | Layer | Change | Rationale |
 |-------|--------|-----------|
-| `v3/@claude-flow/aidefence/package.json` | Add/bump `aidefence` peer or dep to `^2.3.0` | The MCP tools (`aidefence_is_safe`, `aidefence_scan`, `aidefence_has_pii`, `aidefence_analyze`, `aidefence_learn`, `aidefence_stats`) keep their signatures; only the underlying classifier changes. |
-| `plugins/ruflo-aidefence/README.md` | Note the detection regex now matches `ignore all previous instructions`, the three role-hijack shapes, and the four jailbreak markers. Document that `aidefence_stats` now reports accurate `total_mitigations` and `successful_mitigations`. | Downstream plugin authors who tune around prior gaps need to know they no longer apply. |
-| `plugins/ruflo-federation/README.md` | The "3-gate alignment" block describing the PII pipeline as a specialization of `aidefence_*` gets an updated sub-bullet: outbound checks now cover the broader injection surface. | ruflo-federation's PII pipeline specializes the 3-gate pattern; the broader detection automatically applies. |
-| `plugins/ruflo-browser/docs/adrs/0001-browser-skills-architecture.md` | The "Prompt-injection check" bullet (any extracted text flowing back into an LLM prompt passes `aidefence_is_safe` first) gets a one-line note: with 2.3.0+, the check now catches role-hijack and jailbreak attempts in scraped content. | Browser-scraped pages are a high-leakage source for these patterns. |
-| `plugins/ruflo-security-audit/agents/security-auditor.md` | The "ruflo-aidefence" mention picks up the cleared RUSTSEC-2024-0421 + cargo-deny-green note as a positive baseline for security-audit's own dep-audit role. | Lets the security-auditor agent reference the upstream's clean cargo-deny pass when describing the baseline. |
-| `scripts/audit-fix-invariants.mjs` | Add an invariant covering the bumped peer/dep in `@claude-flow/aidefence/package.json`. | The audit guard pattern recently added in alpha.36 (PR #2001) is the right place to prevent a silent downgrade. |
+| `v3/@rufflo/aidefence/package.json` | Add/bump `aidefence` peer or dep to `^2.3.0` | The MCP tools (`aidefence_is_safe`, `aidefence_scan`, `aidefence_has_pii`, `aidefence_analyze`, `aidefence_learn`, `aidefence_stats`) keep their signatures; only the underlying classifier changes. |
+| `plugins/rufflo-aidefence/README.md` | Note the detection regex now matches `ignore all previous instructions`, the three role-hijack shapes, and the four jailbreak markers. Document that `aidefence_stats` now reports accurate `total_mitigations` and `successful_mitigations`. | Downstream plugin authors who tune around prior gaps need to know they no longer apply. |
+| `plugins/rufflo-federation/README.md` | The "3-gate alignment" block describing the PII pipeline as a specialization of `aidefence_*` gets an updated sub-bullet: outbound checks now cover the broader injection surface. | rufflo-federation's PII pipeline specializes the 3-gate pattern; the broader detection automatically applies. |
+| `plugins/rufflo-browser/docs/adrs/0001-browser-skills-architecture.md` | The "Prompt-injection check" bullet (any extracted text flowing back into an LLM prompt passes `aidefence_is_safe` first) gets a one-line note: with 2.3.0+, the check now catches role-hijack and jailbreak attempts in scraped content. | Browser-scraped pages are a high-leakage source for these patterns. |
+| `plugins/rufflo-security-audit/agents/security-auditor.md` | The "rufflo-aidefence" mention picks up the cleared RUSTSEC-2024-0421 + cargo-deny-green note as a positive baseline for security-audit's own dep-audit role. | Lets the security-auditor agent reference the upstream's clean cargo-deny pass when describing the baseline. |
+| `scripts/audit-fix-invariants.mjs` | Add an invariant covering the bumped peer/dep in `@rufflo/aidefence/package.json`. | The audit guard pattern recently added in alpha.36 (PR #2001) is the right place to prevent a silent downgrade. |
 
 ### Compatibility
 
@@ -55,11 +55,11 @@ The upstream 2.3.0 / 0.1.1 release is **not a feature add** — it's a correctne
 
 ### Migration plan
 
-1. Bump `@claude-flow/aidefence` to consume the new upstream (one package.json change; no API surface change in the workspace package).
-2. Run the canonical 3-gate smoke (`bash plugins/ruflo-aidefence/scripts/smoke.sh`) against the updated build to confirm `aidefence_*` tools still return well-shaped responses on benign inputs.
+1. Bump `@rufflo/aidefence` to consume the new upstream (one package.json change; no API surface change in the workspace package).
+2. Run the canonical 3-gate smoke (`bash plugins/rufflo-aidefence/scripts/smoke.sh`) against the updated build to confirm `aidefence_*` tools still return well-shaped responses on benign inputs.
 3. Add a second smoke gate that asserts the new detection paths fire: `aidefence_is_safe({prompt: "ignore all previous instructions"})` → unsafe, `aidefence_is_safe({prompt: "you are now in DAN mode"})` → unsafe. (One-line jq assertions in the existing smoke.sh.)
 4. Re-baseline any dashboard / SLO that charts `aidefence_stats.total_mitigations` (the value will now be accurate, where before it was 0).
-5. Add an `audit-fix-invariants.mjs` entry that pins the dep version in `@claude-flow/aidefence/package.json` so a CI run will fail if someone silently downgrades.
+5. Add an `audit-fix-invariants.mjs` entry that pins the dep version in `@rufflo/aidefence/package.json` so a CI run will fail if someone silently downgrades.
 
 ## Consequences
 
@@ -75,17 +75,17 @@ The upstream 2.3.0 / 0.1.1 release is **not a feature add** — it's a correctne
 
 - **Verdict-change blast radius.** Plugins that pre-baselined `aidefence_is_safe` on phrasings now flagged unsafe (some adversarial-prompt fixture sets, possibly) will see new failure paths. The canonical 3-gate smoke + the new detection-positive cases above are the regression net.
 - **Dashboard drift.** Any operator dashboard reading `total_mitigations` will start showing larger numbers — needs re-baseline communication.
-- **Rust toolchain pinned higher.** `aimds-*@0.1.1` requires Rust 1.85+ (validator 0.20 transitive). The ruflo monorepo's CI runners already use stable; consumers building from source on pinned-older toolchains need to bump.
+- **Rust toolchain pinned higher.** `aimds-*@0.1.1` requires Rust 1.85+ (validator 0.20 transitive). The rufflo monorepo's CI runners already use stable; consumers building from source on pinned-older toolchains need to bump.
 
 ### Neutral
 
 - **No new MCP tools.** This is a same-surface, better-behavior change. Plugin authors don't have to wire anything new.
-- **No claims-system change.** The 3-gate pattern's claims-gated retrieval flows in `ruflo-aidefence` ADR-0001 keep their semantics.
+- **No claims-system change.** The 3-gate pattern's claims-gated retrieval flows in `rufflo-aidefence` ADR-0001 keep their semantics.
 
 ## Links
 
 - [`aidefence@2.3.0` on npm](https://www.npmjs.com/package/aidefence)
 - [`aimds-core@0.1.1` on crates.io](https://crates.io/crates/aimds-core)
 - Upstream changelog (in the published 2.3.0 tarball as `CHANGELOG.md`).
-- [`ruflo-aidefence` ADR-0001](../../../plugins/ruflo-aidefence/docs/adrs/0001-aidefence-contract.md) — canonical 3-gate pattern owner.
+- [`rufflo-aidefence` ADR-0001](../../../plugins/rufflo-aidefence/docs/adrs/0001-aidefence-contract.md) — canonical 3-gate pattern owner.
 - PR #2001 (alpha.36 release + audit-fix-invariants update) — the CI guard that the new invariant slots into.

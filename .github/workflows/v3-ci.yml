@@ -8,23 +8,23 @@ on:
       - '.github/workflows/v3-ci.yml'
       # Witness-verify + plugin-hooks-smoke depend on these scripts;
       # path filter keeps CI in sync with their changes.
-      - 'plugins/ruflo-core/scripts/witness/**'
-      - 'plugins/ruflo-core/scripts/test-hooks.mjs'
+      - 'plugins/rufflo-core/scripts/witness/**'
+      - 'plugins/rufflo-core/scripts/test-hooks.mjs'
       - 'verification/**'
       # scripts/*.mjs audits (tool-descriptions, plugin-packages, hook-commands)
       - 'scripts/**'
-      # hook-command audit (#1921) — every plugin hooks.json + the ruflo-hook shims
+      # hook-command audit (#1921) — every plugin hooks.json + the rufflo-hook shims
       - '**/hooks/hooks.json'
-      - '**/scripts/ruflo-hook.sh'
+      - '**/scripts/rufflo-hook.sh'
       # pre-bash hook safety (#2017) — both handler copies trigger the smoke
       - '**/.claude/helpers/hook-handler.cjs'
-      # ruflo-browser rvf create flag (#2015) — TS source, plugin shell
+      # rufflo-browser rvf create flag (#2015) — TS source, plugin shell
       # scripts, agent-facing recipes all guarded by the same smoke.
-      - 'v3/@claude-flow/cli/src/mcp-tools/browser-session-tools.ts'
-      - 'plugins/ruflo-browser/**'
-      # ruflo-graph-intelligence (#2044, ADR-123) — outside v3 workspace,
+      - 'v3/@rufflo/cli/src/mcp-tools/browser-session-tools.ts'
+      - 'plugins/rufflo-browser/**'
+      # rufflo-graph-intelligence (#2044, ADR-123) — outside v3 workspace,
       # has its own lockfile + tests; needs to be CI-guarded on every change.
-      - 'plugins/ruflo-graph-intelligence/**'
+      - 'plugins/rufflo-graph-intelligence/**'
       # Supply-chain hardening (#2046) — every package.json + lockfile +
       # allowlist edit triggers the supply-chain audit.
       - '**/package.json'
@@ -35,77 +35,77 @@ on:
       # Knowledge-graph plugin (#2049) — kg-extract type-import classifier
       # + kg-traverse controller wiring drift fast when SKILL.md edits
       # silently revert the bug-fix shape.
-      - 'plugins/ruflo-knowledge-graph/**'
+      - 'plugins/rufflo-knowledge-graph/**'
       - 'scripts/smoke-kg-extract-type-imports.mjs'
       # Neural-trader portfolio CG (#2068, ADR-126 Phase 3) — drift fast
       # when the adapter, skill, or runtime mirror diverge from the
       # ADR-123 Wedge 8 contract.
-      - 'plugins/ruflo-neural-trader/src/sublinear-adapter.ts'
-      - 'plugins/ruflo-neural-trader/src/sublinear-adapter.mjs'
-      - 'plugins/ruflo-neural-trader/skills/trader-portfolio-cg/**'
+      - 'plugins/rufflo-neural-trader/src/sublinear-adapter.ts'
+      - 'plugins/rufflo-neural-trader/src/sublinear-adapter.mjs'
+      - 'plugins/rufflo-neural-trader/skills/trader-portfolio-cg/**'
       - 'scripts/smoke-neural-trader-portfolio-cg.mjs'
       # Neural-trader backtest signing (#2068, ADR-126 Phase 4) — Ed25519
       # tamper-evidence for paper→live promotion; verifier MUST pin to a
       # trusted key (CWE-347 / #1922 pattern).
-      - 'plugins/ruflo-neural-trader/src/signed-artifact.ts'
-      - 'plugins/ruflo-neural-trader/src/signed-artifact.mjs'
-      - 'plugins/ruflo-neural-trader/skills/trader-backtest/**'
-      - 'plugins/ruflo-neural-trader/skills/trader-cloud-backtest/**'
+      - 'plugins/rufflo-neural-trader/src/signed-artifact.ts'
+      - 'plugins/rufflo-neural-trader/src/signed-artifact.mjs'
+      - 'plugins/rufflo-neural-trader/skills/trader-backtest/**'
+      - 'plugins/rufflo-neural-trader/skills/trader-cloud-backtest/**'
       - 'scripts/smoke-neural-trader-backtest-signing.mjs'
       # Neural-trader SendMessage risk-gate pipeline (#2068, ADR-126 Phase 5) —
       # structural gate: trading-strategist refuses --broker without an
       # explicit risk-analyst RiskDecision approval.
-      - 'plugins/ruflo-neural-trader/src/pipeline-messages.ts'
-      - 'plugins/ruflo-neural-trader/agents/market-analyst.md'
-      - 'plugins/ruflo-neural-trader/agents/trading-strategist.md'
-      - 'plugins/ruflo-neural-trader/agents/risk-analyst.md'
-      - 'plugins/ruflo-neural-trader/agents/backtest-engineer.md'
+      - 'plugins/rufflo-neural-trader/src/pipeline-messages.ts'
+      - 'plugins/rufflo-neural-trader/agents/market-analyst.md'
+      - 'plugins/rufflo-neural-trader/agents/trading-strategist.md'
+      - 'plugins/rufflo-neural-trader/agents/risk-analyst.md'
+      - 'plugins/rufflo-neural-trader/agents/backtest-engineer.md'
       - 'scripts/smoke-neural-trader-pipeline.mjs'
       # Neural-trader feature attribution (#2068, ADR-126 Phase 6) —
       # regulator-grade interpretability via single-entry PageRank.
       # Same signing scheme as Phase 4; ranking is seed-reproducible.
-      - 'plugins/ruflo-neural-trader/src/signed-attribution.ts'
-      - 'plugins/ruflo-neural-trader/src/signed-attribution.mjs'
-      - 'plugins/ruflo-neural-trader/skills/trader-explain/**'
+      - 'plugins/rufflo-neural-trader/src/signed-attribution.ts'
+      - 'plugins/rufflo-neural-trader/src/signed-attribution.mjs'
+      - 'plugins/rufflo-neural-trader/skills/trader-explain/**'
       - 'scripts/smoke-neural-trader-feature-attribution.mjs'
       # Plugin-registry CWE-347 regression smoke (#1922) — `discovery.ts`
       # signature verifier + the smoke fixture must stay in lockstep.
-      - 'v3/@claude-flow/cli/src/plugins/store/discovery.ts'
-      - 'v3/@claude-flow/cli/src/transfer/ipfs/client.ts'
-      - 'v3/@claude-flow/cli/scripts/publish-registry.ts'
+      - 'v3/@rufflo/cli/src/plugins/store/discovery.ts'
+      - 'v3/@rufflo/cli/src/transfer/ipfs/client.ts'
+      - 'v3/@rufflo/cli/scripts/publish-registry.ts'
       - 'scripts/smoke-plugin-registry-signature.mjs'
       # ruvllm WASM auto-init regression smoke (#2086) — the
       # `loadRuvllmWasm()` helper in `ruvllm-tools.ts` and the
       # `ruvllm_status` un-init diagnostic path must stay in lockstep.
-      - 'v3/@claude-flow/cli/src/mcp-tools/ruvllm-tools.ts'
-      - 'v3/@claude-flow/cli/src/ruvector/ruvllm-wasm.ts'
+      - 'v3/@rufflo/cli/src/mcp-tools/ruvllm-tools.ts'
+      - 'v3/@rufflo/cli/src/ruvector/ruvllm-wasm.ts'
       - 'scripts/smoke-ruvllm-wasm-auto-init.mjs'
       # agent_execute provider routing (#2042) — executeAgentTask must
       # not regress to inline Anthropic fetch, and the OpenRouter branch
       # in callAnthropicMessages must stay wired.
-      - 'v3/@claude-flow/cli/src/mcp-tools/agent-execute-core.ts'
+      - 'v3/@rufflo/cli/src/mcp-tools/agent-execute-core.ts'
       - 'scripts/smoke-agent-execute-providers.mjs'
       # memory stats legacy-DB regression guard (#2120) — the WHERE
       # status='active' filter must accept NULL too, and the schema
       # backfill must promote NULL→'active' on existing DBs.
-      - 'v3/@claude-flow/cli/src/memory/memory-bridge.ts'
-      - 'v3/@claude-flow/cli/src/memory/memory-initializer.ts'
-      - 'v3/@claude-flow/cli/src/commands/status.ts'
+      - 'v3/@rufflo/cli/src/memory/memory-bridge.ts'
+      - 'v3/@rufflo/cli/src/memory/memory-initializer.ts'
+      - 'v3/@rufflo/cli/src/commands/status.ts'
       - 'scripts/smoke-memory-stats-legacy-db.mjs'
       # ADR-125 Phase 7 — no stray DB artifacts after `npm test` in
-      # @claude-flow/memory. vitest.setup.ts must wipe *.db / *.rvf /
+      # @rufflo/memory. vitest.setup.ts must wipe *.db / *.rvf /
       # *.redb files written by agentdb / @ruvector/rvf bindings.
-      - 'v3/@claude-flow/memory/vitest.setup.ts'
-      - 'v3/@claude-flow/memory/vitest.config.ts'
-      - 'v3/@claude-flow/memory/vitest.config.mts'
+      - 'v3/@rufflo/memory/vitest.setup.ts'
+      - 'v3/@rufflo/memory/vitest.config.ts'
+      - 'v3/@rufflo/memory/vitest.config.mts'
       - 'scripts/smoke-memory-no-stray-db.mjs'
       # GitHub skills/agents/helpers surface (#2089, ADR-127) — injection
       # smoke + actions pin smoke gate every change to the .github surface.
       - '.claude/agents/github/**'
       - '.claude/skills/github-*/**'
-      - 'v3/@claude-flow/cli/.claude/commands/github/**'
+      - 'v3/@rufflo/cli/.claude/commands/github/**'
       - '.claude/helpers/github-safe.js'
-      - 'v3/@claude-flow/cli/.claude/helpers/github-safe.js'
+      - 'v3/@rufflo/cli/.claude/helpers/github-safe.js'
       - 'scripts/smoke-github-safe-injection.mjs'
       - 'scripts/smoke-github-actions-pins.mjs'
       - 'scripts/smoke-deprecated-actions.mjs'
@@ -113,26 +113,26 @@ on:
       - '.github/supply-chain/allowed-deps.json'
       # Init-bundle invariants smoke (#2095, ADR-128) — orphan dirs, SKILLS_MAP
       # completeness, and plugin-init agent dedup are all guarded by Phase 5.
-      - 'v3/@claude-flow/cli/.claude/**'
-      - 'v3/@claude-flow/cli/src/init/**'
+      - 'v3/@rufflo/cli/.claude/**'
+      - 'v3/@rufflo/cli/src/init/**'
       - 'plugins/*/agents/**'
       - 'plugins/*/skills/**'
       - 'plugins/*/commands/**'
       - 'scripts/smoke-init-bundle-invariants.mjs'
       # ADR-129 — rvagent full integration (P1-P4)
-      - 'v3/@claude-flow/cli/src/ruvector/agent-wasm.ts'
-      - 'v3/@claude-flow/cli/src/mcp-tools/wasm-agent-tools.ts'
+      - 'v3/@rufflo/cli/src/ruvector/agent-wasm.ts'
+      - 'v3/@rufflo/cli/src/mcp-tools/wasm-agent-tools.ts'
       - 'scripts/smoke-wasm-provider-bridge.mjs'
       - 'scripts/smoke-wasm-rvf-compose.mjs'
       - 'scripts/smoke-wasm-gallery-crud.mjs'
       - 'scripts/smoke-wasm-plugin-bridge.mjs'
       # ADR-130 — graph intelligence integration (P1-P6)
-      - 'v3/@claude-flow/cli/src/memory/memory-initializer.ts'
-      - 'v3/@claude-flow/cli/src/memory/embedding-quantization.ts'
-      - 'v3/@claude-flow/cli/src/memory/graph-edge-writer.ts'
-      - 'v3/@claude-flow/cli/src/mcp-tools/agentdb-tools.ts'
-      - 'v3/@claude-flow/cli/src/mcp-tools/hooks-tools.ts'
-      - 'plugins/ruflo-graph-intelligence/src/adapters/knowledge-graph-adapter.ts'
+      - 'v3/@rufflo/cli/src/memory/memory-initializer.ts'
+      - 'v3/@rufflo/cli/src/memory/embedding-quantization.ts'
+      - 'v3/@rufflo/cli/src/memory/graph-edge-writer.ts'
+      - 'v3/@rufflo/cli/src/mcp-tools/agentdb-tools.ts'
+      - 'v3/@rufflo/cli/src/mcp-tools/hooks-tools.ts'
+      - 'plugins/rufflo-graph-intelligence/src/adapters/knowledge-graph-adapter.ts'
       - 'scripts/smoke-graph-schema-migration.mjs'
       - 'scripts/smoke-graph-query-dispatch.mjs'
       - 'scripts/smoke-trajectory-graph-edges.mjs'
@@ -140,28 +140,28 @@ on:
       - 'scripts/smoke-graph-pathfinder.mjs'
       - 'scripts/benchmark-graph.mjs'
       # statusline generator delegation regression guard (#2195)
-      - 'v3/@claude-flow/cli/src/init/statusline-generator.ts'
+      - 'v3/@rufflo/cli/src/init/statusline-generator.ts'
       - '.claude/helpers/statusline.cjs'
       - 'scripts/smoke-statusline-generator-delegation.mjs'
       # wizard init regression guard (#2206 #2207 #2208)
-      - 'v3/@claude-flow/cli/src/init/mcp-generator.ts'
-      - 'v3/@claude-flow/cli/src/init/executor.ts'
+      - 'v3/@rufflo/cli/src/init/mcp-generator.ts'
+      - 'v3/@rufflo/cli/src/init/executor.ts'
       - 'scripts/smoke-wizard-init-regression.mjs'
   pull_request:
     branches: [main, develop]
     paths:
       - 'v3/**'
-      - 'plugins/ruflo-core/scripts/witness/**'
-      - 'plugins/ruflo-core/scripts/test-hooks.mjs'
+      - 'plugins/rufflo-core/scripts/witness/**'
+      - 'plugins/rufflo-core/scripts/test-hooks.mjs'
       - 'scripts/**'
       - '**/hooks/hooks.json'
-      - '**/scripts/ruflo-hook.sh'
+      - '**/scripts/rufflo-hook.sh'
       - '**/.claude/helpers/hook-handler.cjs'
-      # ruflo-browser rvf create flag (#2015)
-      - 'v3/@claude-flow/cli/src/mcp-tools/browser-session-tools.ts'
-      - 'plugins/ruflo-browser/**'
-      # ruflo-graph-intelligence (#2044, ADR-123)
-      - 'plugins/ruflo-graph-intelligence/**'
+      # rufflo-browser rvf create flag (#2015)
+      - 'v3/@rufflo/cli/src/mcp-tools/browser-session-tools.ts'
+      - 'plugins/rufflo-browser/**'
+      # rufflo-graph-intelligence (#2044, ADR-123)
+      - 'plugins/rufflo-graph-intelligence/**'
       # Supply-chain hardening (#2046) — every dep + lockfile change is
       # CVE-audited, allowlist-checked, integrity-checked.
       - '**/package.json'
@@ -170,74 +170,74 @@ on:
       - '.github/supply-chain/**'
       - 'scripts/audit-supply-chain.mjs'
       # Knowledge-graph plugin (#2049)
-      - 'plugins/ruflo-knowledge-graph/**'
+      - 'plugins/rufflo-knowledge-graph/**'
       - 'scripts/smoke-kg-extract-type-imports.mjs'
       # Neural-trader portfolio CG (#2068, ADR-126 Phase 3)
-      - 'plugins/ruflo-neural-trader/src/sublinear-adapter.ts'
-      - 'plugins/ruflo-neural-trader/src/sublinear-adapter.mjs'
-      - 'plugins/ruflo-neural-trader/skills/trader-portfolio-cg/**'
+      - 'plugins/rufflo-neural-trader/src/sublinear-adapter.ts'
+      - 'plugins/rufflo-neural-trader/src/sublinear-adapter.mjs'
+      - 'plugins/rufflo-neural-trader/skills/trader-portfolio-cg/**'
       - 'scripts/smoke-neural-trader-portfolio-cg.mjs'
       # Neural-trader backtest signing (#2068, ADR-126 Phase 4)
-      - 'plugins/ruflo-neural-trader/src/signed-artifact.ts'
-      - 'plugins/ruflo-neural-trader/src/signed-artifact.mjs'
-      - 'plugins/ruflo-neural-trader/skills/trader-backtest/**'
-      - 'plugins/ruflo-neural-trader/skills/trader-cloud-backtest/**'
+      - 'plugins/rufflo-neural-trader/src/signed-artifact.ts'
+      - 'plugins/rufflo-neural-trader/src/signed-artifact.mjs'
+      - 'plugins/rufflo-neural-trader/skills/trader-backtest/**'
+      - 'plugins/rufflo-neural-trader/skills/trader-cloud-backtest/**'
       - 'scripts/smoke-neural-trader-backtest-signing.mjs'
       # Neural-trader SendMessage risk-gate pipeline (#2068, ADR-126 Phase 5)
-      - 'plugins/ruflo-neural-trader/src/pipeline-messages.ts'
-      - 'plugins/ruflo-neural-trader/agents/market-analyst.md'
-      - 'plugins/ruflo-neural-trader/agents/trading-strategist.md'
-      - 'plugins/ruflo-neural-trader/agents/risk-analyst.md'
-      - 'plugins/ruflo-neural-trader/agents/backtest-engineer.md'
+      - 'plugins/rufflo-neural-trader/src/pipeline-messages.ts'
+      - 'plugins/rufflo-neural-trader/agents/market-analyst.md'
+      - 'plugins/rufflo-neural-trader/agents/trading-strategist.md'
+      - 'plugins/rufflo-neural-trader/agents/risk-analyst.md'
+      - 'plugins/rufflo-neural-trader/agents/backtest-engineer.md'
       - 'scripts/smoke-neural-trader-pipeline.mjs'
       # Neural-trader feature attribution (#2068, ADR-126 Phase 6)
-      - 'plugins/ruflo-neural-trader/src/signed-attribution.ts'
-      - 'plugins/ruflo-neural-trader/src/signed-attribution.mjs'
-      - 'plugins/ruflo-neural-trader/skills/trader-explain/**'
+      - 'plugins/rufflo-neural-trader/src/signed-attribution.ts'
+      - 'plugins/rufflo-neural-trader/src/signed-attribution.mjs'
+      - 'plugins/rufflo-neural-trader/skills/trader-explain/**'
       - 'scripts/smoke-neural-trader-feature-attribution.mjs'
       # Plugin-registry CWE-347 regression (#1922)
-      - 'v3/@claude-flow/cli/src/plugins/store/discovery.ts'
-      - 'v3/@claude-flow/cli/src/transfer/ipfs/client.ts'
-      - 'v3/@claude-flow/cli/scripts/publish-registry.ts'
+      - 'v3/@rufflo/cli/src/plugins/store/discovery.ts'
+      - 'v3/@rufflo/cli/src/transfer/ipfs/client.ts'
+      - 'v3/@rufflo/cli/scripts/publish-registry.ts'
       - 'scripts/smoke-plugin-registry-signature.mjs'
       # ruvllm WASM auto-init regression (#2086)
-      - 'v3/@claude-flow/cli/src/mcp-tools/ruvllm-tools.ts'
-      - 'v3/@claude-flow/cli/src/ruvector/ruvllm-wasm.ts'
+      - 'v3/@rufflo/cli/src/mcp-tools/ruvllm-tools.ts'
+      - 'v3/@rufflo/cli/src/ruvector/ruvllm-wasm.ts'
       - 'scripts/smoke-ruvllm-wasm-auto-init.mjs'
       # agent_execute provider routing (#2042)
-      - 'v3/@claude-flow/cli/src/mcp-tools/agent-execute-core.ts'
+      - 'v3/@rufflo/cli/src/mcp-tools/agent-execute-core.ts'
       - 'scripts/smoke-agent-execute-providers.mjs'
       # memory stats legacy-DB regression (#2120)
-      - 'v3/@claude-flow/cli/src/memory/memory-bridge.ts'
-      - 'v3/@claude-flow/cli/src/memory/memory-initializer.ts'
-      - 'v3/@claude-flow/cli/src/commands/status.ts'
+      - 'v3/@rufflo/cli/src/memory/memory-bridge.ts'
+      - 'v3/@rufflo/cli/src/memory/memory-initializer.ts'
+      - 'v3/@rufflo/cli/src/commands/status.ts'
       - 'scripts/smoke-memory-stats-legacy-db.mjs'
       # ADR-125 Phase 7 — no stray DB artifacts after npm test
-      - 'v3/@claude-flow/memory/vitest.setup.ts'
-      - 'v3/@claude-flow/memory/vitest.config.ts'
-      - 'v3/@claude-flow/memory/vitest.config.mts'
+      - 'v3/@rufflo/memory/vitest.setup.ts'
+      - 'v3/@rufflo/memory/vitest.config.ts'
+      - 'v3/@rufflo/memory/vitest.config.mts'
       - 'scripts/smoke-memory-no-stray-db.mjs'
       # GitHub skills/agents/helpers surface (#2089, ADR-127)
       - '.claude/agents/github/**'
       - '.claude/skills/github-*/**'
-      - 'v3/@claude-flow/cli/.claude/commands/github/**'
+      - 'v3/@rufflo/cli/.claude/commands/github/**'
       - '.claude/helpers/github-safe.js'
-      - 'v3/@claude-flow/cli/.claude/helpers/github-safe.js'
+      - 'v3/@rufflo/cli/.claude/helpers/github-safe.js'
       - 'scripts/smoke-github-safe-injection.mjs'
       - 'scripts/smoke-github-actions-pins.mjs'
       - 'scripts/smoke-deprecated-actions.mjs'
       - 'scripts/smoke-attribution-opt-in.mjs'
       - '.github/supply-chain/allowed-deps.json'
       # Init-bundle invariants smoke (#2095, ADR-128)
-      - 'v3/@claude-flow/cli/.claude/**'
-      - 'v3/@claude-flow/cli/src/init/**'
+      - 'v3/@rufflo/cli/.claude/**'
+      - 'v3/@rufflo/cli/src/init/**'
       - 'plugins/*/agents/**'
       - 'plugins/*/skills/**'
       - 'plugins/*/commands/**'
       - 'scripts/smoke-init-bundle-invariants.mjs'
       # ADR-129 — rvagent full integration (P1-P4)
-      - 'v3/@claude-flow/cli/src/ruvector/agent-wasm.ts'
-      - 'v3/@claude-flow/cli/src/mcp-tools/wasm-agent-tools.ts'
+      - 'v3/@rufflo/cli/src/ruvector/agent-wasm.ts'
+      - 'v3/@rufflo/cli/src/mcp-tools/wasm-agent-tools.ts'
       - 'scripts/smoke-wasm-provider-bridge.mjs'
       - 'scripts/smoke-wasm-rvf-compose.mjs'
       - 'scripts/smoke-wasm-gallery-crud.mjs'
@@ -246,12 +246,12 @@ on:
       # touch them (otherwise a stale per-OS manifest only fails post-merge).
       - 'verification/**'
       # statusline generator delegation regression guard (#2195)
-      - 'v3/@claude-flow/cli/src/init/statusline-generator.ts'
+      - 'v3/@rufflo/cli/src/init/statusline-generator.ts'
       - '.claude/helpers/statusline.cjs'
       - 'scripts/smoke-statusline-generator-delegation.mjs'
       # wizard init regression guard (#2206 #2207 #2208)
-      - 'v3/@claude-flow/cli/src/init/mcp-generator.ts'
-      - 'v3/@claude-flow/cli/src/init/executor.ts'
+      - 'v3/@rufflo/cli/src/init/mcp-generator.ts'
+      - 'v3/@rufflo/cli/src/init/executor.ts'
       - 'scripts/smoke-wizard-init-regression.mjs'
   workflow_dispatch:
 
@@ -302,7 +302,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build (so workspace dist/ exists for runtime imports)
-        # Some test suites do `await import('@claude-flow/X')` and Vite's
+        # Some test suites do `await import('@rufflo/X')` and Vite's
         # import-analysis pass needs dist/ files at the resolved path.
         # --no-bail keeps building past unrelated failures.
         working-directory: v3
@@ -400,10 +400,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: v3-build-${{ matrix.os }}
-          path: v3/@claude-flow/*/dist/
+          path: v3/@rufflo/*/dist/
 
   smoke-install-no-bsqlite:
-    # Regression guard for ruvnet/ruflo#1867 — ensures @claude-flow/memory
+    # Regression guard for ruvnet/ruflo#1867 — ensures @rufflo/memory
     # installs and loads when better-sqlite3 fails to build (e.g. Node 26
     # without prebuilds). Reproduces the user-visible failure mode by
     # installing with --omit=optional.
@@ -449,11 +449,11 @@ jobs:
         working-directory: v3
         run: |
           pnpm install --frozen-lockfile
-          pnpm --filter @claude-flow/memory... run build
+          pnpm --filter @rufflo/memory... run build
 
       - name: Pack memory tarball
         id: pack
-        working-directory: v3/@claude-flow/memory
+        working-directory: v3/@rufflo/memory
         run: |
           # pnpm pack rewrites workspace:* → resolved versions (npm pack doesn't).
           # Pack to RUNNER_TEMP so the path works on both ubuntu and macos.
@@ -479,19 +479,19 @@ jobs:
 
       - name: Run smoke script
         run: |
-          cp v3/@claude-flow/memory/scripts/smoke-no-bsqlite.mjs "$RUNNER_TEMP/smoke/"
+          cp v3/@rufflo/memory/scripts/smoke-no-bsqlite.mjs "$RUNNER_TEMP/smoke/"
           cd "$RUNNER_TEMP/smoke"
           node smoke-no-bsqlite.mjs
 
   plugin-hooks-smoke:
     # Regression guard for ruvnet/ruflo#1859 + #1862 — drives each PostToolUse
-    # hook from plugins/ruflo-core/hooks/hooks.json with synthetic Claude-Code
+    # hook from plugins/rufflo-core/hooks/hooks.json with synthetic Claude-Code
     # JSON against the locally built CLI. Catches:
     #   - hooks calling flags the CLI doesn't accept (#1862's --format true)
     #   - CLI parser ambiguity recording the wrong value (#1859's "true" filename)
     #
     # Independent of the workspace `build` job — only the cli package needs
-    # to be built. We use `pnpm --filter @claude-flow/cli...` to scope.
+    # to be built. We use `pnpm --filter @rufflo/cli...` to scope.
     name: Plugin hooks smoke / ${{ matrix.os }} / Node ${{ matrix.node }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -534,18 +534,18 @@ jobs:
           # (e.g. plugin-agent-federation TS error). We then assert the
           # specific dist file we need was produced.
           pnpm --recursive --no-bail run build || true
-          test -f @claude-flow/cli/bin/cli.js \
+          test -f @rufflo/cli/bin/cli.js \
             || (echo "cli build did not produce bin/cli.js"; exit 1)
-          test -f @claude-flow/cli/dist/src/commands/hooks.js \
+          test -f @rufflo/cli/dist/src/commands/hooks.js \
             || (echo "cli build did not produce hooks.js"; exit 1)
 
       - name: Run plugin hooks smoke against local CLI build
         run: |
-          node plugins/ruflo-core/scripts/test-hooks.mjs \
-            "node $GITHUB_WORKSPACE/v3/@claude-flow/cli/bin/cli.js"
+          node plugins/rufflo-core/scripts/test-hooks.mjs \
+            "node $GITHUB_WORKSPACE/v3/@rufflo/cli/bin/cli.js"
 
   browser-rvf-create-flags-smoke:
-    # Regression guard for ruvnet/ruflo#2015 — the ruflo-browser
+    # Regression guard for ruvnet/ruflo#2015 — the rufflo-browser
     # `browser_session_record` MCP tool wraps `ruvector rvf create`.
     # ruvector@0.2.25 makes `-d, --dimension <n>` required, so before
     # this fix every session-record call failed with
@@ -592,13 +592,13 @@ jobs:
         run: node scripts/smoke-browser-rvf-create-flags.mjs
 
   graph-intelligence-build-smoke:
-    # Regression guard for #2044 / ADR-123 — the ruflo-graph-intelligence
+    # Regression guard for #2044 / ADR-123 — the rufflo-graph-intelligence
     # plugin lives outside the v3 pnpm workspace (it has its own
     # package-lock.json) so it does not pick up the workspace's
     # frozen-lockfile / -r build path. This job installs + builds + tests
     # the plugin in isolation so the eleven sublinear wedges are verified
     # on every push and PR.
-    name: ruflo-graph-intelligence build + test smoke (#2044, ADR-123)
+    name: rufflo-graph-intelligence build + test smoke (#2044, ADR-123)
     runs-on: ubuntu-latest
 
     steps:
@@ -611,19 +611,19 @@ jobs:
           node-version: '22'
 
       - name: Install plugin dependencies (npm — plugin is outside v3 workspace)
-        working-directory: plugins/ruflo-graph-intelligence
+        working-directory: plugins/rufflo-graph-intelligence
         run: npm ci --no-audit --no-fund --legacy-peer-deps
 
       - name: Type-check
-        working-directory: plugins/ruflo-graph-intelligence
+        working-directory: plugins/rufflo-graph-intelligence
         run: npx tsc --noEmit
 
       - name: Build
-        working-directory: plugins/ruflo-graph-intelligence
+        working-directory: plugins/rufflo-graph-intelligence
         run: npx tsc
 
       - name: Run vitest
-        working-directory: plugins/ruflo-graph-intelligence
+        working-directory: plugins/rufflo-graph-intelligence
         run: npx vitest run
 
   supply-chain-audit:
@@ -658,12 +658,12 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Install ruflo-graph-intelligence deps (for npm audit)
-        working-directory: plugins/ruflo-graph-intelligence
+      - name: Install rufflo-graph-intelligence deps (for npm audit)
+        working-directory: plugins/rufflo-graph-intelligence
         run: npm ci --no-audit --no-fund --legacy-peer-deps
 
-      - name: Install @claude-flow/browser deps (for npm audit)
-        working-directory: v3/@claude-flow/browser
+      - name: Install @rufflo/browser deps (for npm audit)
+        working-directory: v3/@rufflo/browser
         run: npm install --no-audit --no-fund --legacy-peer-deps --no-workspaces
 
       - name: Run supply-chain audit
@@ -791,7 +791,7 @@ jobs:
     # cycle driven entirely by a one-way type-only import).
     #
     # This smoke runs two layers:
-    #   1. Static contract check on plugins/ruflo-knowledge-graph/skills/{kg-extract,kg-traverse}/SKILL.md
+    #   1. Static contract check on plugins/rufflo-knowledge-graph/skills/{kg-extract,kg-traverse}/SKILL.md
     #      — assert kg-extract declares `type-depends-on` as a separate relation
     #        with weight ≤ 0.1, and that neither skill references the
     #        compiled-out `agentdb_semantic-route` controller.
@@ -830,7 +830,7 @@ jobs:
     #   2. `src/sublinear-adapter.mjs` — the runtime mirror that the
     #      smoke + bench import directly (the plugin has no build step).
     #   3. `skills/trader-portfolio-cg/SKILL.md` — frontmatter must
-    #      declare `mcp__ruflo-sublinear__solve` in allowed-tools and
+    #      declare `mcp__rufflo-sublinear__solve` in allowed-tools and
     #      write to the canonical `trading-risk` namespace.
     #
     # The smoke runs three layers:
@@ -971,7 +971,7 @@ jobs:
     # Transformer trading signals. Given a `signalId`, the `trader-explain`
     # skill builds a feature-contribution graph, runs single-entry forward-
     # push PageRank from the signal output node (via
-    # `mcp__ruflo-sublinear__page-rank-entry` when registered, local seeded
+    # `mcp__rufflo-sublinear__page-rank-entry` when registered, local seeded
     # power-iteration fallback otherwise), and stores the top-K ranked
     # features as a `SignedAttributionArtifact` (the Phase 4 signing
     # scheme — same Ed25519 + CWE-347 trusted-pin pattern).
@@ -1023,7 +1023,7 @@ jobs:
   plugin-registry-signature-smoke:
     # Regression guard for ruvnet/ruflo#1922 (CWE-347 — improper verification
     # of cryptographic signature). The plugin-registry signature verifier in
-    # v3/@claude-flow/cli/src/plugins/store/discovery.ts used to be a stub
+    # v3/@rufflo/cli/src/plugins/store/discovery.ts used to be a stub
     # that returned `true` whenever the served `registryPublicKey` field
     # started with `"ed25519"`. The call site only `console.warn`ed on
     # failure and continued. With `requireVerification: true` (the default),
@@ -1068,7 +1068,7 @@ jobs:
     # Regression guard for ruvnet/ruflo#2086 — ruvllm WASM bootstrap not
     # exposed via MCP. Reporter: @seo-yas. Every `ruvllm_*` MCP tool that
     # touches the WASM runtime calls `loadRuvllmWasm()` in
-    # `v3/@claude-flow/cli/src/mcp-tools/ruvllm-tools.ts`. That helper used
+    # `v3/@rufflo/cli/src/mcp-tools/ruvllm-tools.ts`. That helper used
     # to just `import(...)` the module and never call `initRuvllmWasm()`,
     # leaving `_wasmReady=false`. Result: `ruvllm_status` reported
     # `wasm.initialized=false` even after `ruvllm_sona_create` and
@@ -1124,7 +1124,7 @@ jobs:
         run: node scripts/smoke-agent-execute-providers.mjs
 
   memory-stats-legacy-db-smoke:
-    # Regression guard for ruvnet/ruflo#2120 — `ruflo memory stats` and
+    # Regression guard for ruvnet/ruflo#2120 — `rufflo memory stats` and
     # `listEntries` returned 0 entries against a populated
     # `.swarm/memory.db` on WSL2 (reporter: @alexandrelealbess on
     # alpha.81). Root cause: the `WHERE status = 'active'` filter
@@ -1165,12 +1165,12 @@ jobs:
         run: npm install --legacy-peer-deps --no-audit --no-fund --ignore-scripts
 
       - name: Install workspace deps + build CLI (pnpm — `workspace:*` protocol)
-        # `cd v3/@claude-flow/cli && npm install` errors with
+        # `cd v3/@rufflo/cli && npm install` errors with
         # `EUNSUPPORTEDPROTOCOL: Unsupported URL Type "workspace:"` because
         # npm doesn't understand workspace:*. The pnpm workspace root is
         # `v3/pnpm-workspace.yaml`. The CLI's tsc references project-refs to
-        # @claude-flow/swarm (and others), so those must be built first —
-        # `pnpm --filter @claude-flow/cli build` alone fails with TS6305.
+        # @rufflo/swarm (and others), so those must be built first —
+        # `pnpm --filter @rufflo/cli build` alone fails with TS6305.
         # `--recursive --no-bail` builds the whole graph in topological order
         # past unrelated package failures; we then assert the specific dist
         # file the smoke imports.
@@ -1178,7 +1178,7 @@ jobs:
         run: |
           pnpm install --frozen-lockfile=false --ignore-scripts
           pnpm --recursive --no-bail run build || true
-          test -f @claude-flow/cli/dist/src/memory/memory-initializer.js \
+          test -f @rufflo/cli/dist/src/memory/memory-initializer.js \
             || (echo "CLI build did not produce memory-initializer.js"; exit 1)
 
       - name: Run memory stats legacy-DB smoke
@@ -1186,10 +1186,10 @@ jobs:
 
   memory-no-stray-db-smoke:
     # Regression guard for ADR-125 Phase 7 — vitest.setup.ts in
-    # @claude-flow/memory must wipe any *.db / *.db-journal / *.db-wal /
+    # @rufflo/memory must wipe any *.db / *.db-journal / *.db-wal /
     # *.rvf / *.redb files written by agentdb / @ruvector/rvf native
     # bindings during the test run. This smoke:
-    #   1. records `git status --porcelain` baseline in v3/@claude-flow/memory
+    #   1. records `git status --porcelain` baseline in v3/@rufflo/memory
     #   2. runs `npm test` inside that package
     #   3. asserts no net-new DB-like artifacts appeared after the run
     # A failure here means vitest.setup.ts stopped cleaning up, or a new
@@ -1211,8 +1211,8 @@ jobs:
         with:
           version: 8
 
-      - name: Install workspace deps (pnpm — @claude-flow/memory pulled in workspace:* deps)
-        # @claude-flow/memory now depends on sibling workspace packages via
+      - name: Install workspace deps (pnpm — @rufflo/memory pulled in workspace:* deps)
+        # @rufflo/memory now depends on sibling workspace packages via
         # workspace:* protocol, so plain npm install fails with
         # EUNSUPPORTEDPROTOCOL. We MUST run install scripts (no --ignore-scripts)
         # because the smoke runs `npm test` which opens better-sqlite3 via
@@ -1241,7 +1241,7 @@ jobs:
     #
     # Runs against both copies:
     #   - .claude/helpers/github-safe.js           (dogfood)
-    #   - v3/@claude-flow/cli/.claude/helpers/      (init-template)
+    #   - v3/@rufflo/cli/.claude/helpers/      (init-template)
     name: github-safe injection smoke (#2089, ADR-127 Phase 1)
     runs-on: ubuntu-latest
 
@@ -1263,7 +1263,7 @@ jobs:
     # Scans every `uses:` line in:
     #   .claude/agents/github/*.md
     #   .claude/skills/github-[name]/SKILL.md
-    #   v3/@claude-flow/cli/.claude/commands/github/[name].md
+    #   v3/@rufflo/cli/.claude/commands/github/[name].md
     #
     # Asserts each ref is either SHA-pinned (40-hex) or present in
     # .github/supply-chain/allowed-deps.json actions.allowed[].
@@ -1355,7 +1355,7 @@ jobs:
     # "[OK] Command validated" while letting the dangerous command through.
     #
     # This smoke drives real Claude-Code-shaped PreToolUse JSON into BOTH
-    # the published template (v3/@claude-flow/cli/.claude/helpers/) and the
+    # the published template (v3/@rufflo/cli/.claude/helpers/) and the
     # repo's dogfood copy (.claude/helpers/), and fails on any of:
     #   - dangerous command + exit 0  (the security bypass)
     #   - "[OK] Command validated" on a dangerous input (the misleading log)
@@ -1415,11 +1415,11 @@ jobs:
         shell: bash
         run: |
           pnpm install --frozen-lockfile
-          pnpm --filter @claude-flow/mcp... --filter @claude-flow/shared... run build
+          pnpm --filter @rufflo/mcp... --filter @rufflo/shared... run build
 
       - name: Run MCP protocol-shape compliance scan
         shell: bash
-        run: node plugins/ruflo-core/scripts/test-mcp-protocol.mjs
+        run: node plugins/rufflo-core/scripts/test-mcp-protocol.mjs
 
   memory-import-smoke:
     # Regression guard for ruvnet/ruflo#1883 + #1884 — drives the import-side
@@ -1468,7 +1468,7 @@ jobs:
 
       - name: Run memory-import regression guards (#1883 + #1884)
         shell: bash
-        run: node plugins/ruflo-core/scripts/test-memory-import.mjs
+        run: node plugins/rufflo-core/scripts/test-memory-import.mjs
 
   mcp-roundtrip-smoke:
     # Regression guard for ruvnet/ruflo#1889 — paired MCP tool round-trip.
@@ -1507,7 +1507,7 @@ jobs:
 
       - name: Run #1889 round-trip smoke
         shell: bash
-        run: node plugins/ruflo-core/scripts/test-mcp-roundtrips.mjs
+        run: node plugins/rufflo-core/scripts/test-mcp-roundtrips.mjs
 
       - name: Run #1863 cli-no-crash smoke
         shell: bash
@@ -1515,19 +1515,19 @@ jobs:
         # and asserts none crash with an unhandled exception. Catches the
         # class where callMCPTool<{...}>() types a response field as
         # non-optional but the server omits it → `.join()` on undefined.
-        run: node plugins/ruflo-core/scripts/test-cli-no-crash.mjs
+        run: node plugins/rufflo-core/scripts/test-cli-no-crash.mjs
 
       - name: Run ADR-095 G2 consensus-transport guard
         shell: bash
-        # Asserts @claude-flow/swarm ships a real pluggable ConsensusTransport
+        # Asserts @rufflo/swarm ships a real pluggable ConsensusTransport
         # (not the implicit single-process EventEmitter): required exports
         # present, LocalTransport round-trip works, Ed25519 sign/verify is
         # real (no `return true` stub regression). ADR-095 G2.
-        run: node plugins/ruflo-core/scripts/test-consensus-transport.mjs
+        run: node plugins/rufflo-core/scripts/test-consensus-transport.mjs
 
   tool-descriptions-audit:
     # ADR-112 — gate: every MCP tool description must include "Use when …"
-    # guidance so Claude knows when to pick Ruflo's tool over native
+    # guidance so Claude knows when to pick Rufflo's tool over native
     # (Bash, Read, Grep, Glob, Task, TodoWrite, WebFetch). Baseline lives
     # in verification/mcp-tool-baseline.json and is monotone-decreasing —
     # the script fails the build if the no-guidance count goes UP. Run
@@ -1550,7 +1550,7 @@ jobs:
         run: node scripts/audit-tool-descriptions.mjs
 
       - name: Run CLI ↔ MCP tool coverage audit (#1916)
-        # Fails if a `ruflo <cmd>` subcommand callMCPTool()s a tool that isn't
+        # Fails if a `rufflo <cmd>` subcommand callMCPTool()s a tool that isn't
         # registered in src/mcp-tools/*.ts (it would die with `MCP tool not
         # found`). Monotone-decreasing baseline at verification/cli-mcp-tool-
         # baseline.json — new dangling references fail; fixing one and running
@@ -1560,7 +1560,7 @@ jobs:
 
   plugin-package-audit:
     # Regression guard for #1902/#1903/#1904 — plugin package.json install
-    # safety. Checks: (A) no unpublished @claude-flow/* hard dep / non-optional
+    # safety. Checks: (A) no unpublished @rufflo/* hard dep / non-optional
     # peer, (B) no bare-stable peer range that can't resolve a 3.x prerelease
     # publish, (C) every main/module/exports path is covered by `files`,
     # (D) after building each plugin, every main/module/exports path exists on
@@ -1617,9 +1617,9 @@ jobs:
         run: node scripts/audit-package-dep-overlap.mjs
 
       - name: Run wrapper dep-range audit (#2127)
-        # Catches stale alpha-tagged dep ranges in the ruflo wrapper and the
-        # claude-flow umbrella that point at sibling packages we publish.
-        # #2127 shipped with `ruflo → @claude-flow/cli@^3.7.0-alpha.11` even
+        # Catches stale alpha-tagged dep ranges in the rufflo wrapper and the
+        # rufflo umbrella that point at sibling packages we publish.
+        # #2127 shipped with `rufflo → @rufflo/cli@^3.7.0-alpha.11` even
         # after cli moved to stable 3.10.0 — a pre-release range against a
         # stable dep widens arborist's dedupe walk and can surface as the
         # "Invalid Version: (empty)" crash on some npm/Node combos.
@@ -1627,9 +1627,9 @@ jobs:
         run: node scripts/audit-wrapper-dep-ranges.mjs
 
       - name: Run umbrella version-lockstep audit (#2151)
-        # Asserts @claude-flow/cli, claude-flow, and ruflo all share the
-        # same version. #2151 reported ruflo@3.10.2 + cli@3.10.1 drift —
-        # `npx ruflo --version` printed the bundled CLI's 3.10.1, not the
+        # Asserts @rufflo/cli, rufflo, and rufflo all share the
+        # same version. #2151 reported rufflo@3.10.2 + cli@3.10.1 drift —
+        # `npx rufflo --version` printed the bundled CLI's 3.10.1, not the
         # wrapper's 3.10.2. CLAUDE.md publish rules already require lockstep;
         # this audit enforces it so drift can't reach a release.
         shell: bash
@@ -1639,7 +1639,7 @@ jobs:
         # agentdb pins better-sqlite3 as an OPTIONAL dep at ^11.8.1, which has
         # no Node 24/25/26 prebuild → the optional native build fails silently
         # on those runtimes and AgentDB drops to a non-persistent backend
-        # (silent write loss). Asserts both the root umbrella and the ruflo
+        # (silent write loss). Asserts both the root umbrella and the rufflo
         # wrapper override better-sqlite3 to >=12.8.0 (which ships Node 20–26
         # prebuilds). Root overrides do NOT reach the published wrapper (#2112),
         # so both must carry it.
@@ -1651,7 +1651,7 @@ jobs:
         # and .sh script invocations in plugin hooks.json files — patterns
         # that fail on native Windows (exit 126).
         # Files with "_platform": "posix" are exempt (Mac/Linux-only, verified
-        # to have a companion ruflo-hook.cjs Windows shim). New hooks.json
+        # to have a companion rufflo-hook.cjs Windows shim). New hooks.json
         # files without the marker are scanned strictly.
         # Strict (no continue-on-error) — fixed in PR fix/2132-windows-hooks.
         shell: bash
@@ -1671,7 +1671,7 @@ jobs:
 
   cli-npx-install-smoke:
     # Regression guard for ruvnet/ruflo#1147 and #2018 — both report:
-    #   $ npx @claude-flow/cli@latest …
+    #   $ npx @rufflo/cli@latest …
     #   npm error Invalid Version:
     # Caused by an optionalDependencies/peerDependencies overlap deep in the
     # dep tree (see scripts/audit-package-dep-overlap.mjs for the static
@@ -1709,7 +1709,7 @@ jobs:
         run: |
           pnpm install --frozen-lockfile
           pnpm --recursive --no-bail run build || true
-          test -f @claude-flow/cli/bin/cli.js \
+          test -f @rufflo/cli/bin/cli.js \
             || (echo "cli build did not produce bin/cli.js"; exit 1)
 
       - name: Pack, install, and run cli (asserts no 'Invalid Version' crash)
@@ -1717,9 +1717,9 @@ jobs:
         run: node scripts/smoke-cli-npx-install.mjs
 
   windows-hook-shim-smoke:
-    # Smoke test for ruvnet/ruflo#2132 — ruflo-hook.cjs cross-platform shim.
-    # Proves that plugins/ruflo-core/scripts/ruflo-hook.cjs can be invoked
-    # via `node ruflo-hook.cjs <subcommand>`, always exits 0, and accepts
+    # Smoke test for ruvnet/ruflo#2132 — rufflo-hook.cjs cross-platform shim.
+    # Proves that plugins/rufflo-core/scripts/rufflo-hook.cjs can be invoked
+    # via `node rufflo-hook.cjs <subcommand>`, always exits 0, and accepts
     # stdin JSON input without crashing.
     # Runs on all 3 OS to prove cross-platform behaviour.
     name: Windows hook shim smoke (#2132) / ${{ matrix.os }}
@@ -1738,16 +1738,16 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Run ruflo-hook.cjs smoke
+      - name: Run rufflo-hook.cjs smoke
         shell: bash
-        run: node scripts/smoke-ruflo-hook-cjs.mjs
+        run: node scripts/smoke-rufflo-hook-cjs.mjs
 
   windows-init-hooks-smoke:
     # Smoke test for ruvnet/ruflo#2132 — init-time platform detection.
-    # Proves ruflo init generates correct hook commands per platform:
+    # Proves rufflo init generates correct hook commands per platform:
     #   - windows-latest: node-based (no /bin/bash, no | jq)
     #   - ubuntu/macos: POSIX-compatible (sh-based, no cmd.exe patterns)
-    # Also verifies ruflo-hook.cjs is always deployed to .claude/helpers/.
+    # Also verifies rufflo-hook.cjs is always deployed to .claude/helpers/.
     name: Windows init hooks smoke (#2132) / ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -1779,7 +1779,7 @@ jobs:
           pnpm --recursive --no-bail run build || true
           # --no-bail lets unrelated workspace failures pass; assert the
           # one dist file the smoke needs is actually produced.
-          test -f @claude-flow/cli/bin/cli.js \
+          test -f @rufflo/cli/bin/cli.js \
             || (echo "::error::cli build did not produce bin/cli.js"; exit 1)
 
       - name: Run init hooks smoke
@@ -1830,7 +1830,7 @@ jobs:
   hook-command-audit:
     # Regression guard for #1921 (and #1147) — plugin hooks.json must not
     # invoke a bare `npx <pkg>@alpha hooks …` per fire. The fix is
-    # scripts/ruflo-hook.sh (prefers a local `ruflo`/`claude-flow` binary,
+    # scripts/rufflo-hook.sh (prefers a local `rufflo`/`rufflo` binary,
     # falls back to `npx --prefer-offline`, always exits 0).
     name: Hook-command install safety (#1921)
     runs-on: ubuntu-latest
@@ -1860,14 +1860,14 @@ jobs:
         shell: bash
         run: node scripts/audit-neural-trader-safety.mjs
 
-      - name: Lint the ruflo-hook shims
+      - name: Lint the rufflo-hook shims
         shell: bash
         run: |
           # Every shim must be valid bash and exit 0 even when no CLI is
           # reachable (the #1921 contract). Probe with an empty PATH (invoke
           # bash by full path since PATH= can't find it otherwise).
           BASH="$(command -v bash)"
-          for sh in $(git ls-files '**/scripts/ruflo-hook.sh'); do
+          for sh in $(git ls-files '**/scripts/rufflo-hook.sh'); do
             echo "checking $sh"
             bash -n "$sh"
             PATH= "$BASH" "$sh" modify-bash </dev/null || { echo "::error::$sh did not exit 0 with no CLI on PATH"; exit 1; }
@@ -1924,21 +1924,21 @@ jobs:
           cache: 'pnpm'
           cache-dependency-path: v3/pnpm-lock.yaml
 
-      - name: Build @claude-flow/security
+      - name: Build @rufflo/security
         working-directory: v3
         shell: bash
         run: |
           pnpm install --frozen-lockfile
-          pnpm --filter @claude-flow/security run build
-          test -f @claude-flow/security/dist/index.js \
-            || (echo "::error::@claude-flow/security/dist/index.js missing after build"; exit 1)
+          pnpm --filter @rufflo/security run build
+          test -f @rufflo/security/dist/index.js \
+            || (echo "::error::@rufflo/security/dist/index.js missing after build"; exit 1)
 
       - name: Run guardrail smoke
         shell: bash
         run: node scripts/smoke-tool-output-guardrail.mjs
 
   witness-verify:
-    # Cryptographic regression guard: runs `ruflo verify --manifest` against
+    # Cryptographic regression guard: runs `rufflo verify --manifest` against
     # the local build to confirm every documented fix in verification.md.json
     # still has its marker present. Catches silent regression of any of the
     # 81+ fixes without requiring per-fix smoke tests.
@@ -1996,7 +1996,7 @@ jobs:
         # works across all 3 OSes. RUNNER_TEMP is set on every runner.
         shell: bash
         run: |
-          # Use the project-agnostic verifier from ruflo-core plugin. This
+          # Use the project-agnostic verifier from rufflo-core plugin. This
           # is the same script external adopters use — dogfooding ensures
           # the plugin pathway works and avoids CI-specific cli build
           # issues (e.g. missing @ruvector/sona, sharp native postinstall).
@@ -2014,7 +2014,7 @@ jobs:
           MANIFEST="verification/$OS_DIR/manifest.md.json"
           echo "verifying: $MANIFEST"
           set +e
-          node plugins/ruflo-core/scripts/witness/verify.mjs \
+          node plugins/rufflo-core/scripts/witness/verify.mjs \
             --manifest "$MANIFEST" \
             --json > "$RUNNER_TEMP/witness-result.json" 2> "$RUNNER_TEMP/witness-result.err"
           VERIFY_EXIT=$?
@@ -2051,7 +2051,7 @@ jobs:
             macOS)   OS_DIR=macos ;;
             Windows) OS_DIR=windows ;;
           esac
-          node plugins/ruflo-core/scripts/witness/perf.mjs \
+          node plugins/rufflo-core/scripts/witness/perf.mjs \
             --output "verification/$OS_DIR/performance.jsonl" \
             --capabilities install_pack,memory_load,witness_verify \
             --baseline || echo "perf bench errored — non-blocking"
@@ -2069,7 +2069,7 @@ jobs:
           esac
           HISTORY="verification/$OS_DIR/history.jsonl"
           if [ -f "$HISTORY" ]; then
-            node plugins/ruflo-core/scripts/witness/history.mjs \
+            node plugins/rufflo-core/scripts/witness/history.mjs \
               --history "$HISTORY" \
               summary
           else
@@ -2116,10 +2116,10 @@ jobs:
   init-bundle-invariants-smoke:
     # Regression guard for ruvnet/ruflo#2095 — ADR-128 Phase 5.
     #
-    # Statically asserts three invariants of the @claude-flow/cli init bundle:
+    # Statically asserts three invariants of the @rufflo/cli init bundle:
     #
     #   1. NO ORPHANED DIRECTORIES — every subdirectory under
-    #      v3/@claude-flow/cli/.claude/{commands,agents}/ is reachable from
+    #      v3/@rufflo/cli/.claude/{commands,agents}/ is reachable from
     #      COMMANDS_MAP or AGENTS_MAP in executor.ts.
     #
     #   2. SKILLS_MAP COMPLETENESS — every skill referenced in SKILLS_MAP
@@ -2394,7 +2394,7 @@ jobs:
     # previously re-implemented all data readers locally with fragile file
     # probes that returned wrong values (DDD 0/5, intelligence 1%, ADR 87/87).
     #
-    # The fix delegates to 'npx @claude-flow/cli@latest hooks statusline --json'
+    # The fix delegates to 'npx @rufflo/cli@latest hooks statusline --json'
     # as the single source of truth and counts ADRs in BOTH directories
     # (v3/implementation/adrs/ + v3/docs/adr/).
     #
@@ -2421,23 +2421,23 @@ jobs:
         shell: bash
         run: |
           echo "Checking that statusline-generator.ts delegates to 'hooks statusline --json'..."
-          grep -q "hooks statusline --json" v3/@claude-flow/cli/src/init/statusline-generator.ts \
+          grep -q "hooks statusline --json" v3/@rufflo/cli/src/init/statusline-generator.ts \
             || { echo "::error::statusline-generator.ts no longer delegates to 'hooks statusline --json' — regression of #2195"; exit 1; }
           echo "ok: delegation pattern found"
 
           echo "Checking that the old fragile heuristics are NOT present..."
           # The buggy fallback computed domains from file-based pattern counts —
           # this produced domainsCompleted=0 when AgentDB had 26k+ patterns.
-          ! grep -q "getLearningStats\b" v3/@claude-flow/cli/src/init/statusline-generator.ts \
+          ! grep -q "getLearningStats\b" v3/@rufflo/cli/src/init/statusline-generator.ts \
             || { echo "::error::statusline-generator.ts still has getLearningStats (old local reader) — regression of #2195"; exit 1; }
-          ! grep -q "getV3Progress\b" v3/@claude-flow/cli/src/init/statusline-generator.ts \
+          ! grep -q "getV3Progress\b" v3/@rufflo/cli/src/init/statusline-generator.ts \
             || { echo "::error::statusline-generator.ts still has getV3Progress (old local reader) — regression of #2195"; exit 1; }
           echo "ok: old local-reader heuristics removed"
 
           echo "Checking that both ADR directories are counted..."
-          grep -q "v3/docs/adr" v3/@claude-flow/cli/src/init/statusline-generator.ts \
+          grep -q "v3/docs/adr" v3/@rufflo/cli/src/init/statusline-generator.ts \
             || { echo "::error::statusline-generator.ts missing v3/docs/adr ADR directory — regression of #2195 ADR-count bug"; exit 1; }
-          grep -q "v3/implementation/adrs" v3/@claude-flow/cli/src/init/statusline-generator.ts \
+          grep -q "v3/implementation/adrs" v3/@rufflo/cli/src/init/statusline-generator.ts \
             || { echo "::error::statusline-generator.ts missing v3/implementation/adrs ADR directory"; exit 1; }
           echo "ok: both ADR directories present"
 
@@ -2451,7 +2451,7 @@ jobs:
         run: |
           pnpm install --frozen-lockfile
           pnpm --recursive --no-bail run build || true
-          test -f @claude-flow/cli/dist/src/init/statusline-generator.js \
+          test -f @rufflo/cli/dist/src/init/statusline-generator.js \
             || { echo "::error::statusline-generator.js not built"; exit 1; }
 
       - name: "Guard 2 — smoke: generate .cjs and validate output ranges"
@@ -2462,24 +2462,24 @@ jobs:
     # Regression guard for ruvnet/ruflo#2206 #2207 #2208 — three init-wizard
     # bugs that collectively broke every new user install:
     #
-    # #2206: mcp-generator registered the server under key 'ruflo', causing all
-    #        33 ruflo plugins to fail with "Unknown tool mcp__claude-flow__*".
-    #        The key must be 'claude-flow'; the command args (ruflo@latest) are
+    # #2206: mcp-generator registered the server under key 'rufflo', causing all
+    #        33 rufflo plugins to fail with "Unknown tool mcp__rufflo__*".
+    #        The key must be 'rufflo'; the command args (rufflo@latest) are
     #        correct and must NOT change.
     #
-    # #2207: detectExistingRufloMCP only checked for 'ruflo' in mcpServers.
-    #        After #2206, the key becomes 'claude-flow', so the detector would
+    # #2207: detectExistingRuffloMCP only checked for 'rufflo' in mcpServers.
+    #        After #2206, the key becomes 'rufflo', so the detector would
     #        NEVER recognise a prior install. Both keys must be accepted. Also
     #        guarded: bare .claude/settings.json must NOT be a false positive.
     #
     # #2208: init --force silently destroyed existing CLAUDE.md without backup,
-    #        causing data loss. A .pre-ruflo backup must be created before
+    #        causing data loss. A .pre-rufflo backup must be created before
     #        any overwrite; timestamped fallback when a backup already exists.
     #
     # Three guards (static + runtime each):
-    #   [1/3] STATIC #2206 — mcp-generator source must write 'claude-flow' key
+    #   [1/3] STATIC #2206 — mcp-generator source must write 'rufflo' key
     #   [2/3] RUNTIME #2206 + #2208 — build CLI, run init in tmp dir, assert
-    #         .mcp.json has 'claude-flow' key and CLAUDE.md.pre-ruflo was created
+    #         .mcp.json has 'rufflo' key and CLAUDE.md.pre-rufflo was created
     #   [3/3] RUNTIME #2207 — bare .claude/settings.json must NOT trigger
     #         the duplicate-detection guard (false-positive check)
     name: wizard init regression guard (#2206 #2207 #2208)
@@ -2497,24 +2497,24 @@ jobs:
       - name: Guard 1 — static #2206 server key contract
         shell: bash
         run: |
-          echo "=== Guard 1: mcp-generator must write the claude-flow key ==="
+          echo "=== Guard 1: mcp-generator must write the rufflo key ==="
 
-          echo "Checking mcp-generator uses 'claude-flow' as the server key..."
-          grep -qE "mcpServers\['claude-flow'\]|mcpServers\[\"claude-flow\"\]" \
-            v3/@claude-flow/cli/src/init/mcp-generator.ts \
-            || { echo "::error::mcp-generator no longer writes 'claude-flow' server key — #2206 regression"; exit 1; }
-          echo "ok: 'claude-flow' key found"
+          echo "Checking mcp-generator uses 'rufflo' as the server key..."
+          grep -qE "mcpServers\['rufflo'\]|mcpServers\[\"rufflo\"\]" \
+            v3/@rufflo/cli/src/init/mcp-generator.ts \
+            || { echo "::error::mcp-generator no longer writes 'rufflo' server key — #2206 regression"; exit 1; }
+          echo "ok: 'rufflo' key found"
 
-          echo "Checking mcp-generator does NOT use bare 'ruflo' as the server key..."
-          ! grep -qE "mcpServers\['ruflo'\]|mcpServers\[\"ruflo\"\]" \
-            v3/@claude-flow/cli/src/init/mcp-generator.ts \
-            || { echo "::error::mcp-generator writes 'ruflo' server key — breaks mcp__claude-flow__* tool naming (#2206)"; exit 1; }
-          echo "ok: bare 'ruflo' server key absent"
+          echo "Checking mcp-generator does NOT use bare 'rufflo' as the server key..."
+          ! grep -qE "mcpServers\['rufflo'\]|mcpServers\[\"rufflo\"\]" \
+            v3/@rufflo/cli/src/init/mcp-generator.ts \
+            || { echo "::error::mcp-generator writes 'rufflo' server key — breaks mcp__rufflo__* tool naming (#2206)"; exit 1; }
+          echo "ok: bare 'rufflo' server key absent"
 
-          echo "Checking command args still invoke ruflo@latest (must NOT change)..."
-          grep -q "ruflo@latest" v3/@claude-flow/cli/src/init/mcp-generator.ts \
-            || { echo "::error::mcp-generator no longer invokes ruflo@latest — command args must be preserved (#2206)"; exit 1; }
-          echo "ok: ruflo@latest invocation present"
+          echo "Checking command args still invoke rufflo@latest (must NOT change)..."
+          grep -q "rufflo@latest" v3/@rufflo/cli/src/init/mcp-generator.ts \
+            || { echo "::error::mcp-generator no longer invokes rufflo@latest — command args must be preserved (#2206)"; exit 1; }
+          echo "ok: rufflo@latest invocation present"
 
           echo "Guard 1 passed."
 
@@ -2528,9 +2528,9 @@ jobs:
         run: |
           pnpm install --frozen-lockfile
           pnpm --recursive --no-bail run build || true
-          test -f @claude-flow/cli/dist/src/init/executor.js \
+          test -f @rufflo/cli/dist/src/init/executor.js \
             || { echo "::error::executor.js not built — CLI build failed"; exit 1; }
-          test -f @claude-flow/cli/dist/src/init/mcp-generator.js \
+          test -f @rufflo/cli/dist/src/init/mcp-generator.js \
             || { echo "::error::mcp-generator.js not built"; exit 1; }
 
       - name: Guard 2 — runtime #2206 server key + #2208 CLAUDE.md backup
@@ -2546,36 +2546,36 @@ jobs:
 
           # Run init --force (non-interactive); ignore non-zero exit from
           # optional components that need extra deps (skills, helpers, etc.)
-          HOME="$TMP" node "$GITHUB_WORKSPACE/v3/@claude-flow/cli/bin/cli.js" \
+          HOME="$TMP" node "$GITHUB_WORKSPACE/v3/@rufflo/cli/bin/cli.js" \
             init --force 2>&1 || true
 
           echo "--- .mcp.json contents ---"
           cat .mcp.json 2>/dev/null || echo "(not found)"
 
-          # #2206: 'claude-flow' key must exist
+          # #2206: 'rufflo' key must exist
           node -e "
             const cfg = JSON.parse(require('fs').readFileSync('.mcp.json','utf-8'));
-            if (!cfg.mcpServers || !('claude-flow' in cfg.mcpServers)) {
-              console.error('FAIL: .mcp.json missing claude-flow server key (#2206)');
+            if (!cfg.mcpServers || !('rufflo' in cfg.mcpServers)) {
+              console.error('FAIL: .mcp.json missing rufflo server key (#2206)');
               process.exit(1);
             }
-            console.log('ok: claude-flow key present in .mcp.json');
-          " || { echo "::error::generated .mcp.json missing 'claude-flow' server key (#2206)"; exit 1; }
+            console.log('ok: rufflo key present in .mcp.json');
+          " || { echo "::error::generated .mcp.json missing 'rufflo' server key (#2206)"; exit 1; }
 
-          # #2206: stray 'ruflo' key must NOT exist
+          # #2206: stray 'rufflo' key must NOT exist
           node -e "
             const cfg = JSON.parse(require('fs').readFileSync('.mcp.json','utf-8'));
-            if (cfg.mcpServers && 'ruflo' in cfg.mcpServers) {
-              console.error('FAIL: .mcp.json has stray ruflo server key (#2206)');
+            if (cfg.mcpServers && 'rufflo' in cfg.mcpServers) {
+              console.error('FAIL: .mcp.json has stray rufflo server key (#2206)');
               process.exit(1);
             }
-            console.log('ok: stray ruflo key absent');
-          " || { echo "::error::generated .mcp.json has stray 'ruflo' server key (#2206)"; exit 1; }
+            console.log('ok: stray rufflo key absent');
+          " || { echo "::error::generated .mcp.json has stray 'rufflo' server key (#2206)"; exit 1; }
 
-          # #2208: CLAUDE.md.pre-ruflo backup must exist with sentinel content
-          BACKUP=$(ls CLAUDE.md.pre-ruflo* 2>/dev/null | head -1)
+          # #2208: CLAUDE.md.pre-rufflo backup must exist with sentinel content
+          BACKUP=$(ls CLAUDE.md.pre-rufflo* 2>/dev/null | head -1)
           if [ -z "$BACKUP" ]; then
-            echo "::error::init --force did not create CLAUDE.md.pre-ruflo backup (#2208)"
+            echo "::error::init --force did not create CLAUDE.md.pre-rufflo backup (#2208)"
             exit 1
           fi
           echo "ok: backup file created: $BACKUP"
@@ -2593,21 +2593,21 @@ jobs:
           TMP=$(mktemp -d)
           cd "$TMP"
 
-          # Simulate Claude Code's own project settings.json with NO ruflo registration
+          # Simulate Claude Code's own project settings.json with NO rufflo registration
           mkdir -p .claude
           echo '{"env": {}, "hooks": {}}' > .claude/settings.json
 
           # Run init WITHOUT --force; use a custom HOME with no ~/.claude.json
           # so the real user's global config doesn't interfere
           FAKE_HOME=$(mktemp -d)
-          OUT=$(HOME="$FAKE_HOME" node "$GITHUB_WORKSPACE/v3/@claude-flow/cli/bin/cli.js" \
+          OUT=$(HOME="$FAKE_HOME" node "$GITHUB_WORKSPACE/v3/@rufflo/cli/bin/cli.js" \
             init 2>&1 || true)
 
           echo "--- init output ---"
           echo "$OUT"
 
           # The init must NOT claim "already initialized" due to the bare settings.json
-          if echo "$OUT" | grep -qi "existing 'ruflo' MCP registration\|existing 'claude-flow' MCP registration"; then
+          if echo "$OUT" | grep -qi "existing 'rufflo' MCP registration\|existing 'rufflo' MCP registration"; then
             echo "::error::init false-positives on bare .claude/settings.json (#2207)"
             exit 1
           fi

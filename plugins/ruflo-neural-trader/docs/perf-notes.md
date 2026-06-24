@@ -14,7 +14,7 @@ ADR-126 Phase 3 / #2080 work and is referenced read-only here.
 
 ### 1. Neumann solver per-iter allocation (FIXED in this PR)
 
-- **Where**: `plugins/ruflo-neural-trader/src/sublinear-adapter.mjs:148-184`
+- **Where**: `plugins/rufflo-neural-trader/src/sublinear-adapter.mjs:148-184`
   (`neumannSeries` exported kernel)
 - **Measured before**: avg ~0.635 ms at n=256 across 5 runs, plus measurable
   GC variance (p95 / max well above p50)
@@ -31,7 +31,7 @@ ADR-126 Phase 3 / #2080 work and is referenced read-only here.
 
 ### 2. Memory recall linear scan grows ~O(N) (TRACKED, not fixed here)
 
-- **Where**: the production path uses `mcp__claude-flow__memory_search`
+- **Where**: the production path uses `mcp__rufflo__memory_search`
   via AgentDB + HNSW. The bench `memory-recall.bench.mjs` models the
   linear-scan baseline (cosine over Float32Array) to track the
   approximate-vs-exact recall gap an ANN index would create.

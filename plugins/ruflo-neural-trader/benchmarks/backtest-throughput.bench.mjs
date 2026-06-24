@@ -23,7 +23,7 @@
  *   - trade count
  *
  * Run:
- *   node plugins/ruflo-neural-trader/benchmarks/backtest-throughput.bench.mjs
+ *   node plugins/rufflo-neural-trader/benchmarks/backtest-throughput.bench.mjs
  *
  * Output is markdown so the result can be captured into
  * `benchmarks/results/backtest-throughput-baseline-<timestamp>.md`.
@@ -244,4 +244,4 @@ console.log('');
 console.log('## Refs');
 console.log('');
 console.log('- ADR-126 §SOTA delta — bench-driven perf work');
-console.log('- `plugins/ruflo-neural-trader/skills/trader-backtest/SKILL.md` — production backtest path');
+console.log('- `plugins/rufflo-neural-trader/skills/trader-backtest/SKILL.md` — production backtest path');

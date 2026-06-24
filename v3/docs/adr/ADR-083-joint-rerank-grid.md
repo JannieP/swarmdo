@@ -1,6 +1,6 @@
 # ADR-083 — Joint Rerank Re-Grid (Conditional Defaults for Rerank Path)
 
-**Status**: Accepted — Implemented in ruflo 3.10.23
+**Status**: Accepted — Implemented in rufflo 3.10.23
 **Date**: 2026-05-30
 **Tracking**: continuation of self-learning hardening cluster (ADR-077 → 078 → 079 → 080 → 081 → 082 → 083)
 **Related**: ADR-082 (single-axis grid-search)
@@ -95,7 +95,7 @@ Three configs tied at the corpus ceiling. Picked hw=0.7 cw=0.3 over hw=0.8 cw=0.
 ## Honest limits
 
 - **N=10 queries** still — three configs tied at 0.963 are likely indistinguishable within noise.
-- **Cross-repo generalisation pending** — all numbers in ADRs 077-083 are on the ruflo corpus. The real SOTA test is "does this hold up on a different repo's history?" — pretrain on agentdb / agentic-flow, run a similar labelled bench, see if nDCG@3 stays near 0.96. Tracked for the next iteration.
+- **Cross-repo generalisation pending** — all numbers in ADRs 077-083 are on the rufflo corpus. The real SOTA test is "does this hold up on a different repo's history?" — pretrain on agentdb / agentic-flow, run a similar labelled bench, see if nDCG@3 stays near 0.96. Tracked for the next iteration.
 - **Conditional defaults add complexity** — callers passing explicit `subjectWeight` get consistent behaviour, but callers relying on defaults see different values based on `rerank` flag. This is documented in the schema but is a minor surprise.
 
 ## Deliberately NOT in this round
@@ -107,12 +107,12 @@ Three configs tied at the corpus ceiling. Picked hw=0.7 cw=0.3 over hw=0.8 cw=0.
 ## Verification
 
 ```bash
-git clone https://github.com/ruvnet/ruflo && cd ruflo
-npm install && ( cd v3/@claude-flow/cli && npx tsc )
-node v3/@claude-flow/cli/scripts/pretrain-from-github.mjs
+git clone https://github.com/ruvnet/ruflo && cd rufflo
+npm install && ( cd v3/@rufflo/cli && npx tsc )
+node v3/@rufflo/cli/scripts/pretrain-from-github.mjs
 
 # Joint grid (~25 min)
-cd v3/@claude-flow/cli && node scripts/grid-search-retrieval.mjs
+cd v3/@rufflo/cli && node scripts/grid-search-retrieval.mjs
 
 # Verify new defaults
 BENCH_NO_WRITE=1 node scripts/benchmark-pretrained-retrieval.mjs              # hybrid → nDCG@3 0.963

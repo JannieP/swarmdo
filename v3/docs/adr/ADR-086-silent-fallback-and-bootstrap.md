@@ -1,6 +1,6 @@
 # ADR-086 — Silent-Fallback Bug Story + Bootstrap Significance Testing
 
-**Status**: Accepted — Implemented in ruflo 3.10.26
+**Status**: Accepted — Implemented in rufflo 3.10.26
 **Date**: 2026-05-30
 **Tracking**: continuation of self-learning hardening cluster (ADR-077 → ... → 085)
 **Related**: ADR-085 (BEIR harness)
@@ -158,7 +158,7 @@ counterpart to the leaderboard table in ADR-085.
 | System | NFCorpus | SciFact | Mean |
 |---|---:|---:|---:|
 | BGE-large-v1.5 (335M, published) | 0.380 | 0.722 | 0.551 |
-| **ruflo + BGE-base-en-v1.5 (110M)** | **0.352** | **0.626** | **0.489** |
+| **rufflo + BGE-base-en-v1.5 (110M)** | **0.352** | **0.626** | **0.489** |
 | SPLADE++ | 0.347 | 0.704 | 0.526 |
 | BM25 (Lucene) | 0.325 | 0.679 | 0.502 |
 
@@ -184,8 +184,8 @@ counterpart to the leaderboard table in ADR-085.
 ## Verification
 
 ```bash
-git clone https://github.com/ruvnet/ruflo && cd ruflo
-npm install && ( cd v3/@claude-flow/cli && npx tsc )
+git clone https://github.com/ruvnet/ruflo && cd rufflo
+npm install && ( cd v3/@rufflo/cli && npx tsc )
 
 # Re-run the NFCorpus bench with updated harness (writes perQuery to JSON)
 cd /tmp/beir-nfcorpus

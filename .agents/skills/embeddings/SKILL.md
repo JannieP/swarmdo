@@ -16,7 +16,7 @@ Vector embeddings for semantic search and pattern matching with HNSW indexing.
 | Feature | Description |
 |---------|-------------|
 | **sql.js** | Cross-platform SQLite persistent cache (WASM) |
-| **HNSW** | 150x-12,500x faster search |
+| **HNSW** | ~1.9x-4.7x measured faster search |
 | **Hyperbolic** | Poincare ball model for hierarchical data |
 | **Normalization** | L2, L1, min-max, z-score |
 | **Chunking** | Configurable overlap and size |
@@ -26,32 +26,32 @@ Vector embeddings for semantic search and pattern matching with HNSW indexing.
 
 ### Initialize Embeddings
 ```bash
-npx claude-flow embeddings init --backend sqlite
+npx rufflo embeddings init --backend sqlite
 ```
 
 ### Embed Text
 ```bash
-npx claude-flow embeddings embed --text "authentication patterns"
+npx rufflo embeddings embed --text "authentication patterns"
 ```
 
 ### Batch Embed
 ```bash
-npx claude-flow embeddings batch --file documents.json
+npx rufflo embeddings batch --file documents.json
 ```
 
 ### Semantic Search
 ```bash
-npx claude-flow embeddings search --query "security best practices" --top-k 5
+npx rufflo embeddings search --query "security best practices" --top-k 5
 ```
 
 ## Memory Integration
 
 ```bash
 # Store with embeddings
-npx claude-flow memory store --key "pattern-1" --value "description" --embed
+npx rufflo memory store --key "pattern-1" --value "description" --embed
 
 # Search with embeddings
-npx claude-flow memory search --query "related patterns" --semantic
+npx rufflo memory search --query "related patterns" --semantic
 ```
 
 ## Quantization

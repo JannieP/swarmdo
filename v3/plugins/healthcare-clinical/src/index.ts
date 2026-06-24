@@ -19,7 +19,7 @@
  * - Role-based access control
  *
  * @packageDocumentation
- * @module @claude-flow/plugin-healthcare-clinical
+ * @module @rufflo/plugin-healthcare-clinical
  */
 
 // Export all types
@@ -61,7 +61,7 @@ import { DEFAULT_HEALTHCARE_CONFIG } from './types.js';
  * Plugin metadata
  */
 export const pluginMetadata = {
-  name: '@claude-flow/plugin-healthcare-clinical',
+  name: '@rufflo/plugin-healthcare-clinical',
   version: '3.0.0-alpha.1',
   description: 'HIPAA-compliant clinical decision support with patient similarity, drug interactions, and clinical pathways',
   author: 'rUv',

@@ -1,6 +1,6 @@
 ---
 name: harness-mint
-description: Scaffold a custom AI agent harness via `metaharness new <name> --template <id> --host <id>`. Defaults to DRY-RUN (no writes) unless --confirm is passed. Refuses to write to the calling repo root or anywhere inside it. Honors ADR-150 architectural constraint + ruflo's "destructive-action confirmation" pattern.
+description: Scaffold a custom AI agent harness via `metaharness new <name> --template <id> --host <id>`. Defaults to DRY-RUN (no writes) unless --confirm is passed. Refuses to write to the calling repo root or anywhere inside it. Honors ADR-150 architectural constraint + rufflo's "destructive-action confirmation" pattern.
 argument-hint: "--name <id> --template <vertical:coding|minimal|…> [--host claude-code|codex|…] [--target /abs/path] [--confirm] [--format table|json]"
 allowed-tools: Bash
 ---
@@ -16,11 +16,11 @@ directory tree.
 2. **Refuses project root.** If `--target` resolves to the current
    working directory OR any path inside it, the script errors out with
    exit 2. Target must be an absolute path OUTSIDE the calling repo
-   (default is a fresh `/tmp/ruflo-mint-<ts>-<name>/` dir).
+   (default is a fresh `/tmp/rufflo-mint-<ts>-<name>/` dir).
 3. **Refuses existing target.** Won't overwrite — must scaffold into a
    non-existent dir.
 4. **Subprocess + 60s timeout.** No library import, no in-process
-   execution. The mint stays sandboxed from ruflo's runtime.
+   execution. The mint stays sandboxed from rufflo's runtime.
 
 ## Algorithm
 
@@ -57,7 +57,7 @@ $ node scripts/mint.mjs --name my-harness --template vertical:coding --host clau
 - name: my-harness
 - template: vertical:coding
 - host: claude-code
-- target: /tmp/ruflo-mint-1718560000-my-harness
+- target: /tmp/rufflo-mint-1718560000-my-harness
 - confirm: false
 - willWrite: false
 
@@ -66,7 +66,7 @@ Re-run with `--confirm` to actually scaffold.
 
 ## Why dry-run by default
 
-Ruflo's behavioral rules say "executing actions with care" — destructive
+Rufflo's behavioral rules say "executing actions with care" — destructive
 or repo-touching actions need confirmation. The dry-run output makes the
 WHAT visible before the WHEN. A human sees `target`, decides, then
 adds `--confirm` if happy.

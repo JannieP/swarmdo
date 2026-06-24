@@ -1,25 +1,25 @@
 #!/usr/bin/env node
 /**
- * ruflo-hook.cjs — cross-platform Node.js port of ruflo-hook.sh (#2132)
+ * rufflo-hook.cjs — cross-platform Node.js port of rufflo-hook.sh (#2132)
  *
- * The bash shim (ruflo-hook.sh) works on Mac/Linux but fails on native
+ * The bash shim (rufflo-hook.sh) works on Mac/Linux but fails on native
  * Windows (exit 126 — "cannot execute binary file"). This .cjs shim
  * provides identical behaviour via Node.js child_process so Windows users
  * get working hooks without WSL or Git Bash.
  *
- * Mac/Linux continue to use ruflo-hook.sh via the plugin hooks.json files
- * (unchanged). On Windows, ruflo init writes a .claude/settings.json that
+ * Mac/Linux continue to use rufflo-hook.sh via the plugin hooks.json files
+ * (unchanged). On Windows, rufflo init writes a .claude/settings.json that
  * overrides those entries with node-based equivalents pointing here.
  *
- * Behaviour mirrors ruflo-hook.sh:
+ * Behaviour mirrors rufflo-hook.sh:
  *   1. Reads hook JSON payload from stdin.
- *   2. Prefers a locally installed `ruflo` or `claude-flow` binary.
- *   3. Falls back to `npx --prefer-offline ruflo@latest`.
+ *   2. Prefers a locally installed `rufflo` or `rufflo` binary.
+ *   3. Falls back to `npx --prefer-offline rufflo@latest`.
  *   4. Always exits 0 — hook subcommands are best-effort telemetry.
  *   5. Swallows all stderr — nothing should surface to Claude Code.
  *
- * Usage: node ruflo-hook.cjs <hook-subcommand> [args...]
- *   e.g. node ruflo-hook.cjs post-edit --file "x.ts" --train-patterns
+ * Usage: node rufflo-hook.cjs <hook-subcommand> [args...]
+ *   e.g. node rufflo-hook.cjs post-edit --file "x.ts" --train-patterns
  */
 
 'use strict';
@@ -86,9 +86,9 @@ function commandExists(cmd) {
   }
 }
 
-/** Build the argv for the ruflo/claude-flow/npx invocation */
+/** Build the argv for the rufflo/rufflo/npx invocation */
 function buildArgs(subcommand, extraArgs) {
-  // The `hooks` word is prepended here, matching ruflo-hook.sh convention.
+  // The `hooks` word is prepended here, matching rufflo-hook.sh convention.
   return ['hooks', subcommand, ...extraArgs];
 }
 
@@ -136,15 +136,15 @@ function main() {
 
   const hookArgs = buildArgs(subcommand, rest);
 
-  // Priority 1: locally installed ruflo binary
-  if (commandExists('ruflo')) {
-    invokeHook('ruflo', [], hookArgs, stdinData);
+  // Priority 1: locally installed rufflo binary
+  if (commandExists('rufflo')) {
+    invokeHook('rufflo', [], hookArgs, stdinData);
     done();
   }
 
-  // Priority 2: locally installed claude-flow binary
-  if (commandExists('claude-flow')) {
-    invokeHook('claude-flow', [], hookArgs, stdinData);
+  // Priority 2: locally installed rufflo binary
+  if (commandExists('rufflo')) {
+    invokeHook('rufflo', [], hookArgs, stdinData);
     done();
   }
 
@@ -157,7 +157,7 @@ function main() {
   // a spurious failure even though the shim itself works correctly.
   // The bash version doesn't hit this because it backgrounded the work.
   if (process.env.RUFLO_HOOK_SKIP_NPX !== '1') {
-    invokeHook('npx', ['--prefer-offline', '--yes', 'ruflo@latest'], hookArgs, stdinData);
+    invokeHook('npx', ['--prefer-offline', '--yes', 'rufflo@latest'], hookArgs, stdinData);
   }
 
   done();

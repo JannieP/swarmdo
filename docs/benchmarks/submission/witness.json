@@ -1,5 +1,5 @@
 {
-  "_comment": "Ed25519 witness for GAIA L1 submission package. Key derived deterministically from 'ruflo-gaia-submission-key-v1' for reproducibility. A production HAL submission should use a persistent off-repo keypair.",
+  "_comment": "Ed25519 witness for GAIA L1 submission package. Key derived deterministically from 'rufflo-gaia-submission-key-v1' for reproducibility. A production HAL submission should use a persistent off-repo keypair.",
   "schema_version": "1.0",
   "package": "gaia-l1-submission-stable-3ef6e175d",
   "build_date": "2026-05-28",

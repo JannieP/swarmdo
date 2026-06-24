@@ -17,9 +17,9 @@ updates:
       prefix: "chore"
       include: "scope"
 
-  # ruflo-graph-intelligence — ADR-123, supply-chain-audited
+  # rufflo-graph-intelligence — ADR-123, supply-chain-audited
   - package-ecosystem: "npm"
-    directory: "/plugins/ruflo-graph-intelligence"
+    directory: "/plugins/rufflo-graph-intelligence"
     schedule:
       interval: "weekly"
       day: "monday"
@@ -40,9 +40,9 @@ updates:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
 
-  # @claude-flow/browser — ADR-122 substrate, supply-chain-audited
+  # @rufflo/browser — ADR-122 substrate, supply-chain-audited
   - package-ecosystem: "npm"
-    directory: "/v3/@claude-flow/browser"
+    directory: "/v3/@rufflo/browser"
     schedule:
       interval: "weekly"
       day: "monday"

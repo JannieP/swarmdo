@@ -80,7 +80,7 @@ const portfolioOptimization = await mcp__sublinear-time-solver__solve({
 });
 ```
 
-## Integration with Claude Flow
+## Integration with Rufflo
 
 ### Multi-Agent Trading Swarms
 - **Market Data Processing**: Distribute market data analysis across swarm agents

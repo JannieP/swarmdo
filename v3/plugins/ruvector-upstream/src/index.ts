@@ -1,7 +1,7 @@
 /**
- * @claude-flow/ruvector-upstream
+ * @rufflo/ruvector-upstream
  *
- * RuVector WASM package bridges for Claude Flow plugins.
+ * RuVector WASM package bridges for Rufflo plugins.
  * Provides unified access to 15+ WASM packages from ruvnet/ruvector.
  */
 

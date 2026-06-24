@@ -1,5 +1,5 @@
 {
-  "name": "claude-flow",
+  "name": "rufflo",
   "description": "Multi-agent swarm coordination, memory management, SPARC methodology, and intelligent hooks for Claude Code. Provides 60+ skills, 100+ commands, and 80+ specialized agents.",
   "version": "3.0.0",
   "author": {

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Smoke test for ADR-131 / ruvnet/ruflo#2149 — ToolOutputGuardrail wired up
- * end-to-end through the published `@claude-flow/security` build output.
+ * end-to-end through the published `@rufflo/security` build output.
  *
  * Runs after the security package has been built (CI: `Build V3` job). This
  * is the "real install" check that catches:
@@ -24,11 +24,11 @@ import { dirname, resolve, join } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(__dirname, '..');
-const SECURITY_DIST = join(REPO_ROOT, 'v3/@claude-flow/security/dist/index.js');
+const SECURITY_DIST = join(REPO_ROOT, 'v3/@rufflo/security/dist/index.js');
 
 if (!existsSync(SECURITY_DIST)) {
   console.error(`[smoke] FAIL: built artifact missing at ${SECURITY_DIST}`);
-  console.error('[smoke] Run `cd v3/@claude-flow/security && npm run build` first.');
+  console.error('[smoke] Run `cd v3/@rufflo/security && npm run build` first.');
   process.exit(1);
 }
 

@@ -42,13 +42,13 @@ const INVARIANTS = [
   // #1939 — Win32 cwd → Claude Code slug
   {
     issue: '#1939',
-    file: 'v3/@claude-flow/cli/src/mcp-tools/memory-tools.ts',
+    file: 'v3/@rufflo/cli/src/mcp-tools/memory-tools.ts',
     regex: /\/\^\[A-Za-z\]:\[\\\\\/\]\//,
     why: 'Win32 slug candidate regex (`^[A-Za-z]:[\\/]`) — without it, memory_import_claude({allProjects:false}) returns 0 on Win32 paths like `C:\\Users\\…\\Claude Stuff`.',
   },
   {
     issue: '#1939',
-    file: 'v3/@claude-flow/cli/src/mcp-tools/memory-tools.ts',
+    file: 'v3/@rufflo/cli/src/mcp-tools/memory-tools.ts',
     substring: "replace(/[:\\\\/]/g, '-')",
     why: 'Win32 slug normalization — drops `:` / `\\` / `/` so `C:\\Users\\…\\Claude Stuff` → `C--Users-…-Claude-Stuff`.',
   },
@@ -56,13 +56,13 @@ const INVARIANTS = [
   // #1941 — provision per-namespace vector_indexes row before entry insert
   {
     issue: '#1941',
-    file: 'v3/@claude-flow/cli/src/memory/memory-bridge.ts',
+    file: 'v3/@rufflo/cli/src/memory/memory-bridge.ts',
     substring: 'INSERT OR IGNORE INTO vector_indexes (id, name, dimensions)',
     why: 'Per-namespace vector_indexes provisioning in bridgeStoreEntry — without it, memory_search({namespace:"X"}) returns 0 for any non-default namespace.',
   },
   {
     issue: '#1941',
-    file: 'v3/@claude-flow/cli/src/memory/memory-initializer.ts',
+    file: 'v3/@rufflo/cli/src/memory/memory-initializer.ts',
     substring: 'INSERT OR IGNORE INTO vector_indexes (id, name, dimensions)',
     why: 'Per-namespace vector_indexes provisioning in storeEntry (sql.js fallback) — same root cause as the bridge path; one needs both branches.',
   },
@@ -70,13 +70,13 @@ const INVARIANTS = [
   // #1943 — settings-generator project-local OR $HOME probe
   {
     issue: '#1943',
-    file: 'v3/@claude-flow/cli/src/init/settings-generator.ts',
+    file: 'v3/@rufflo/cli/src/init/settings-generator.ts',
     substring: '[ -f "$D/',
     why: 'POSIX sh probe in hookCmd() — without it, global-install hook paths anchor at `${CLAUDE_PROJECT_DIR}` only and every Bash/Edit/Session hook fires MODULE_NOT_FOUND.',
   },
   {
     issue: '#1943',
-    file: 'v3/@claude-flow/cli/src/init/settings-generator.ts',
+    file: 'v3/@rufflo/cli/src/init/settings-generator.ts',
     substring: 'IF EXIST',
     why: 'Windows `cmd /c IF EXIST … ELSE …` fallback — Win32 equivalent of the sh probe.',
   },
@@ -84,13 +84,13 @@ const INVARIANTS = [
   // #1945 / #1946 — memory bridge + doctor honor CLAUDE_FLOW_MEMORY_PATH
   {
     issue: '#1945',
-    file: 'v3/@claude-flow/cli/src/memory/memory-bridge.ts',
+    file: 'v3/@rufflo/cli/src/memory/memory-bridge.ts',
     substring: 'getMemoryRoot',
     why: 'getDbPath() routes through getMemoryRoot() — without it, the bridge hard-codes `<cwd>/.swarm/memory.db` and CLI store writes to a different file than memory init created.',
   },
   {
     issue: '#1946',
-    file: 'v3/@claude-flow/cli/src/commands/doctor.ts',
+    file: 'v3/@rufflo/cli/src/commands/doctor.ts',
     substring: 'getMemoryRoot',
     why: 'doctor.checkMemoryDatabase() routes through getMemoryRoot() — without it, doctor reports "Not initialized" on any DB at a non-default path.',
   },
@@ -98,36 +98,36 @@ const INVARIANTS = [
   // #1951 — statusline reads installed version from plugin package.json
   {
     issue: '#1951',
-    file: 'v3/@claude-flow/cli/.claude/helpers/statusline.cjs',
+    file: 'v3/@rufflo/cli/.claude/helpers/statusline.cjs',
     substring: 'RUFLO_VERSION',
-    why: 'Startup version-probe variable in the deployed statusline — without it the header reverts to a hard-coded `RuFlo V3.5`.',
+    why: 'Startup version-probe variable in the deployed statusline — without it the header reverts to a hard-coded `Rufflo V3.5`.',
   },
   {
     issue: '#1951',
-    file: 'v3/@claude-flow/cli/.claude/helpers/statusline.cjs',
-    // Regex matches the path.join(home, '.claude', 'plugins', 'marketplaces', 'ruflo', …) form.
+    file: 'v3/@rufflo/cli/.claude/helpers/statusline.cjs',
+    // Regex matches the path.join(home, '.claude', 'plugins', 'marketplaces', 'rufflo', …) form.
     // The original substring form happened to hit because of a comment in the v3 snapshot,
     // not the actual code path; switch to a regex that catches the real call site.
-    regex: /['"]marketplaces['"]\s*,\s*['"]ruflo['"]/,
+    regex: /['"]marketplaces['"]\s*,\s*['"]rufflo['"]/,
     why: 'Plugin-install candidate path probed first — without it, plugin users always fall through to the hardcoded default.',
   },
   {
     issue: '#1951',
     file: '.claude/helpers/statusline.cjs',
-    regex: /['"]marketplaces['"]\s*,\s*['"]ruflo['"]/,
+    regex: /['"]marketplaces['"]\s*,\s*['"]rufflo['"]/,
     why: 'Same plugin-install candidate in the root statusline copy.',
   },
   {
     issue: '#1951',
-    file: 'v3/@claude-flow/cli/src/init/statusline-generator.ts',
-    regex: /['"]marketplaces['"]\s*,\s*['"]ruflo['"]/,
+    file: 'v3/@rufflo/cli/src/init/statusline-generator.ts',
+    regex: /['"]marketplaces['"]\s*,\s*['"]rufflo['"]/,
     why: 'Same plugin-install candidate in the init template that generates project-local statuslines.',
   },
 
   // #1953 — hooks_pretrain code-file budget + code-dir-first traversal
   {
     issue: '#1953',
-    file: 'v3/@claude-flow/cli/src/mcp-tools/hooks-tools.ts',
+    file: 'v3/@rufflo/cli/src/mcp-tools/hooks-tools.ts',
     substring: 'codeFilesScanned',
     why: 'Separate code-file budget counter — without it, the 50-file budget is burned by .md/.yaml/.db files and patternsExtracted: 0 on docs-heavy repos.',
   },
@@ -135,13 +135,13 @@ const INVARIANTS = [
   // #1968 — daemon launcher forwards --workers / --headless / --sandbox
   {
     issue: '#1968',
-    file: 'v3/@claude-flow/cli/src/commands/daemon.ts',
+    file: 'v3/@rufflo/cli/src/commands/daemon.ts',
     regex: /forkArgs\.push\(['"]--workers['"]/,
     why: 'Daemon launcher forwards --workers to the forked child — without it, `daemon start --workers map` silently uses the default worker set.',
   },
   {
     issue: '#1968',
-    file: 'v3/@claude-flow/cli/src/commands/daemon.ts',
+    file: 'v3/@rufflo/cli/src/commands/daemon.ts',
     regex: /forkArgs\.push\(['"]--headless['"]\)/,
     why: 'Daemon launcher forwards --headless — same family as the --workers gap.',
   },
@@ -159,7 +159,7 @@ const INVARIANTS = [
   // user-deployed (pre-#2196) statusline still having the bug.
   {
     issue: '#2196',
-    file: 'v3/@claude-flow/cli/src/init/statusline-generator.ts',
+    file: 'v3/@rufflo/cli/src/init/statusline-generator.ts',
     regex: /hooks[- ]statusline|hooksStatusline/,
     why: 'Statusline-generator must delegate to hooks-statusline rather than re-implementing memory.db readers (#2195/#1989 supersession). Without delegation, the regenerated statusline.cjs goes back to raw-bytes reading which broke for encrypted RFE1 DBs.',
   },
@@ -168,7 +168,7 @@ const INVARIANTS = [
   // the in-process JS state (which is always 0 from a fresh CLI invocation).
   {
     issue: '#1987',
-    file: 'v3/@claude-flow/cli/src/commands/memory.ts',
+    file: 'v3/@rufflo/cli/src/commands/memory.ts',
     substring: 'statsResult.entriesWithEmbeddings',
     why: 'memory stats reads persistent entriesWithEmbeddings, not in-process hnsw.entryCount. Without this, `memory stats` shows HNSW (0 entries) even when the DB has thousands of vectors.',
   },
@@ -176,7 +176,7 @@ const INVARIANTS = [
   // #1948 — Windows-specific statusLine command (no `sh` required)
   {
     issue: '#1948',
-    file: 'v3/@claude-flow/cli/src/init/settings-generator.ts',
+    file: 'v3/@rufflo/cli/src/init/settings-generator.ts',
     regex: /process\.platform === ['"]win32['"]/,
     why: 'Platform-aware statusLine emission. On native Windows we emit `node -e "…"` instead of `sh -c …` so missing/mangled-quoting `sh` no longer produces stray repo-root files.',
   },
@@ -184,7 +184,7 @@ const INVARIANTS = [
   // #1937 — exclusion patterns for memory_import_claude (voice-fidelity)
   {
     issue: '#1937',
-    file: 'v3/@claude-flow/cli/src/mcp-tools/memory-tools.ts',
+    file: 'v3/@rufflo/cli/src/mcp-tools/memory-tools.ts',
     substring: 'excludeFilePatterns',
     why: 'memory_import_claude accepts excludeFilePatterns (glob) for voice-fidelity / persona-restricted operators. Per-file granularity beyond the coarse allProjects:true/false.',
   },
@@ -194,19 +194,19 @@ const INVARIANTS = [
     issue: '#1921',
     file: 'package.json',
     substring: '"@opentelemetry/core": "1.25.1"',
-    why: 'overrides pin for @opentelemetry/core@1.25.1. Eliminates the npm 10.8.x arborist `Invalid Version: ` placeholder that fails every `npx claude-flow@alpha …` install (including all 5 hook fires).',
+    why: 'overrides pin for @opentelemetry/core@1.25.1. Eliminates the npm 10.8.x arborist `Invalid Version: ` placeholder that fails every `npx rufflo@alpha …` install (including all 5 hook fires).',
   },
 
   // #1910 — MCP stdio mode protects stdout from stray console.log
   {
     issue: '#1910',
-    file: 'v3/@claude-flow/cli/src/mcp-server.ts',
+    file: 'v3/@rufflo/cli/src/mcp-server.ts',
     substring: 'process.env.MCP_STDIO_MODE',
     why: 'stdio MCP server hijacks console.log/info/debug → stderr so lazy-loaded module diagnostics never corrupt the JSON-RPC stream. Without this, hooks_route lazy-loads transformers.js/ONNX whose init prints to stdout and closes the Codex transport mid-batch.',
   },
   {
     issue: '#1910',
-    file: 'v3/@claude-flow/cli/src/mcp-server.ts',
+    file: 'v3/@rufflo/cli/src/mcp-server.ts',
     substring: 'uncaughtException',
     why: 'stdio MCP server installs uncaughtException + unhandledRejection handlers so a lazy-loaded native init failure goes to stderr instead of crashing the transport silently.',
   },
@@ -232,13 +232,13 @@ const INVARIANTS = [
   // loadQuicTransport import that bypasses the midstream preference.
   {
     issue: 'ADR-120',
-    file: 'v3/@claude-flow/plugin-agent-federation/src/transport/midstream-aware-loader.ts',
+    file: 'v3/@rufflo/plugin-agent-federation/src/transport/midstream-aware-loader.ts',
     substring: 'MIDSTREAMER_QUIC_NATIVE',
     why: 'midstream-aware loader probes MIDSTREAMER_QUIC_NATIVE first; without this env flag check, the federation transport silently stays on agentic-flow even after midstream@0.3.0 ships real QUIC.',
   },
   {
     issue: 'ADR-120',
-    file: 'v3/@claude-flow/plugin-agent-federation/src/plugin.ts',
+    file: 'v3/@rufflo/plugin-agent-federation/src/plugin.ts',
     substring: 'loadFederationTransport',
     why: 'plugin.ts dispatches through the midstream-aware loader. Reverting to the bare loadQuicTransport import bypasses the ADR-120 preference layer entirely.',
   },
@@ -250,70 +250,70 @@ const INVARIANTS = [
   // plugin install with a 403 even on a clean checkout.
   {
     issue: '#1949',
-    file: 'v3/@claude-flow/plugin-agent-federation/package.json',
+    file: 'v3/@rufflo/plugin-agent-federation/package.json',
     regex: /"peerDependencies"[\s\S]*?"agentic-flow"/,
     why: 'agentic-flow must be a peer dependency (not a hard runtime dep) so hardened npm registries that block cookies@0.9.1 transitively can still install the federation plugin (issue #1949).',
   },
   {
     issue: '#1949',
-    file: 'v3/@claude-flow/plugin-agent-federation/package.json',
+    file: 'v3/@rufflo/plugin-agent-federation/package.json',
     regex: /"peerDependenciesMeta"[\s\S]*?"agentic-flow"[\s\S]*?"optional"\s*:\s*true/,
     why: 'agentic-flow must be marked optional in peerDependenciesMeta so npm doesn\'t warn or fail when the peer is missing (#1949).',
   },
   {
     issue: '#1949',
-    file: 'v3/@claude-flow/plugin-agent-federation/src/transport/midstream-aware-loader.ts',
+    file: 'v3/@rufflo/plugin-agent-federation/src/transport/midstream-aware-loader.ts',
     substring: "import type {",
     why: 'midstream-aware-loader.ts must use TYPE-ONLY imports from agentic-flow (which are erased at compile time). Reverting to a static value import would force users to install agentic-flow even when only midstreamer is needed (#1949).',
   },
   {
     issue: '#1949',
-    file: 'v3/@claude-flow/plugin-agent-federation/src/transport/midstream-aware-loader.ts',
+    file: 'v3/@rufflo/plugin-agent-federation/src/transport/midstream-aware-loader.ts',
     substring: "loadAgenticFlowQuicTransport",
     why: 'midstream-aware-loader.ts must lazy-load agentic-flow via loadAgenticFlowQuicTransport so it can degrade gracefully when the peer dep is absent (#1949).',
   },
 
-  // ADR-120 Step 3 — ruflo-federation-peer Rust crate composes the
+  // ADR-120 Step 3 — rufflo-federation-peer Rust crate composes the
   // QUIC transport (midstreamer-quic) with the AIMDS 3-gate pipeline.
   {
     issue: 'ADR-120',
-    file: 'v3/crates/ruflo-federation-peer/Cargo.toml',
-    substring: 'name = "ruflo-federation-peer"',
+    file: 'v3/crates/rufflo-federation-peer/Cargo.toml',
+    substring: 'name = "rufflo-federation-peer"',
     why: 'Step 3 crate name pin. The crate composes midstreamer-quic + aimds-* into a single Rust process per federation peer.',
   },
   {
     issue: 'ADR-120',
-    file: 'v3/crates/ruflo-federation-peer/Cargo.toml',
+    file: 'v3/crates/rufflo-federation-peer/Cargo.toml',
     substring: 'midstreamer-quic = { version = "0.3.0"',
     why: 'Step 3 crate pins midstreamer-quic@0.3.0 (ruvnet/midstream PR #82 added the QuicTransport embedding trait this crate needs for its TransportProvider blanket impl).',
   },
   {
     issue: 'ADR-120',
-    file: 'v3/crates/ruflo-federation-peer/Cargo.toml',
+    file: 'v3/crates/rufflo-federation-peer/Cargo.toml',
     substring: 'aimds-core = { version = "0.2.0"',
     why: 'Step 3 crate pins aimds-core@0.2.0 (ruvnet/midstream PR #82 added the SafetyGate composing trait this crate adapts in native_gate).',
   },
   {
     issue: 'ADR-120',
-    file: 'v3/crates/ruflo-federation-peer/src/lib.rs',
+    file: 'v3/crates/rufflo-federation-peer/src/lib.rs',
     substring: 'midstreamer_quic::{QuicConnection, QuicTransport}',
     why: 'Step 3 native_transport must import the upstream QuicTransport trait (not just QuicConnection) so MidstreamerTransport is generic over any embedder-supplied transport.',
   },
   {
     issue: 'ADR-120',
-    file: 'v3/crates/ruflo-federation-peer/src/lib.rs',
+    file: 'v3/crates/rufflo-federation-peer/src/lib.rs',
     substring: 'aimds_core::{PromptInput, SafetyGate as AimdsSafetyGate, SafetyVerdict as AimdsVerdict}',
     why: 'Step 3 native_gate must adapt aimds_core::SafetyGate to the peer-local SafetyGate trait — without this import the adapter degrades to a typed placeholder.',
   },
   {
     issue: 'ADR-120',
-    file: 'v3/crates/ruflo-federation-peer/src/lib.rs',
+    file: 'v3/crates/rufflo-federation-peer/src/lib.rs',
     substring: 'pub trait TransportProvider',
     why: 'Step 3 trait surface: TransportProvider abstracts the QUIC backend so the Peer dispatch loop is testable without the upstream Rust deps materialized.',
   },
   {
     issue: 'ADR-120',
-    file: 'v3/crates/ruflo-federation-peer/src/lib.rs',
+    file: 'v3/crates/rufflo-federation-peer/src/lib.rs',
     substring: 'pub trait SafetyGate',
     why: 'Step 3 trait surface: SafetyGate abstracts the AIMDS 3-gate pipeline so the Peer dispatch loop is testable without the upstream aimds-* deps materialized.',
   },

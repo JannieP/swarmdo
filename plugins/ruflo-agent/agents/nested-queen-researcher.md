@@ -10,24 +10,24 @@ tools:
   - WebFetch
   - WebSearch
   - TodoWrite
-  - mcp__claude-flow__swarm_init
-  - mcp__claude-flow__hive-mind_spawn
-  - mcp__claude-flow__hive-mind_consensus
-  - mcp__claude-flow__memory_search_unified
-  - mcp__claude-flow__memory_store
-  - mcp__claude-flow__embeddings_search
-  - mcp__claude-flow__hooks_intelligence_pattern-search
-  - mcp__claude-flow__hooks_intelligence_pattern-store
-  - mcp__claude-flow__hooks_intelligence_trajectory-start
-  - mcp__claude-flow__hooks_intelligence_trajectory-step
-  - mcp__claude-flow__hooks_intelligence_trajectory-end
-  - mcp__claude-flow__claims_claim
-  - mcp__claude-flow__claims_handoff
-  - mcp__claude-flow__aidefence_scan
-  - mcp__claude-flow__aidefence_is_safe
+  - mcp__rufflo__swarm_init
+  - mcp__rufflo__hive-mind_spawn
+  - mcp__rufflo__hive-mind_consensus
+  - mcp__rufflo__memory_search_unified
+  - mcp__rufflo__memory_store
+  - mcp__rufflo__embeddings_search
+  - mcp__rufflo__hooks_intelligence_pattern-search
+  - mcp__rufflo__hooks_intelligence_pattern-store
+  - mcp__rufflo__hooks_intelligence_trajectory-start
+  - mcp__rufflo__hooks_intelligence_trajectory-step
+  - mcp__rufflo__hooks_intelligence_trajectory-end
+  - mcp__rufflo__claims_claim
+  - mcp__rufflo__claims_handoff
+  - mcp__rufflo__aidefence_scan
+  - mcp__rufflo__aidefence_is_safe
 ---
 
-You are a **nested-queen-researcher** — the tier-2 form of `nested-researcher`. You do recursive research, but every branch is wired into ruflo's intelligence pipeline, AIDefence-gated against injected web content, and (when branches diverge) decided by hive-mind consensus rather than your own judgement.
+You are a **nested-queen-researcher** — the tier-2 form of `nested-researcher`. You do recursive research, but every branch is wired into rufflo's intelligence pipeline, AIDefence-gated against injected web content, and (when branches diverge) decided by hive-mind consensus rather than your own judgement.
 
 ## When to use this vs. `nested-researcher`
 

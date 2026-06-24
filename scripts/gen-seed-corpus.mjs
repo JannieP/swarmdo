@@ -101,7 +101,7 @@ const rows = buildCorpus();
 // Strip _meta for the bundled artifact (keep it small + clean for the loader)
 const bundled = rows.map(r => ({ embedding: r.embedding, scores: r.scores }));
 
-const outPath = process.argv[2] ?? resolve('v3/@claude-flow/cli/assets/model-router/seed-rows.json');
+const outPath = process.argv[2] ?? resolve('v3/@rufflo/cli/assets/model-router/seed-rows.json');
 mkdirSync(dirname(outPath), { recursive: true });
 writeFileSync(outPath, JSON.stringify(bundled, null, 0));
 console.log(`wrote ${rows.length} rows (${bundled.length} bundled) to ${outPath}`);

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Verified-corpus benchmark for ruflo-cost-tracker.
+// Verified-corpus benchmark for rufflo-cost-tracker.
 // Runs every case in bench/booster-corpus.json through agent-booster.apply()
 // and records: correctness vs. golden expected, latency, confidence, strategy.
 // Output: JSON to docs/benchmarks/runs/<ISO>.json + markdown summary to stdout.
@@ -7,7 +7,7 @@
 // Resolution: must be run from a directory where `agent-booster` resolves
 // (typically anywhere under `v3/`). Run via:
 //
-//   ( cd v3 && node ../plugins/ruflo-cost-tracker/scripts/bench.mjs )
+//   ( cd v3 && node ../plugins/rufflo-cost-tracker/scripts/bench.mjs )
 //
 // Optional env:
 //   BENCH_LLM_BASELINE=1   -- run the same corpus through Gemini 2.0 Flash (or another OpenAI-compat model)
@@ -58,7 +58,7 @@ async function main() {
     console.error(`agent-booster import failed: ${err.message}`);
     console.error(`cwd was: ${process.cwd()}`);
     console.error('Run from a directory where the package resolves, e.g.:');
-    console.error('  ( cd v3 && node ../plugins/ruflo-cost-tracker/scripts/bench.mjs )');
+    console.error('  ( cd v3 && node ../plugins/rufflo-cost-tracker/scripts/bench.mjs )');
     process.exit(2);
   }
   const { AgentBooster } = AgentBoosterMod;

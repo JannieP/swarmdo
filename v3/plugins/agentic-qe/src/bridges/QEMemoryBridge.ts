@@ -24,7 +24,7 @@ import type {
   QELogger,
 } from '../interfaces.js';
 
-// V3 Memory types (would be imported from @claude-flow/memory in production)
+// V3 Memory types (would be imported from @rufflo/memory in production)
 interface IMemoryService {
   createNamespace(name: string, config: NamespaceConfig): Promise<void>;
   store(entry: StoreEntry): Promise<string>;
@@ -80,7 +80,7 @@ interface MemoryStats {
   memoryUsage: number;
 }
 
-// V3 Embeddings types (would be imported from @claude-flow/embeddings in production)
+// V3 Embeddings types (would be imported from @rufflo/embeddings in production)
 interface IEmbeddingsService {
   embed(text: string): Promise<{ embedding: Float32Array }>;
 }

@@ -1,14 +1,14 @@
 # MetaHarness integration gates — ADR-150 Phase 1 MVP.
 #
 # Three jobs, all fast (subprocess invocations of `npx metaharness`):
-#   1. score              — fail if ruflo's own harnessFit drops below 70
-#   2. mcp-scan           — fail on any HIGH-severity MCP finding in ruflo
+#   1. score              — fail if rufflo's own harnessFit drops below 70
+#   2. mcp-scan           — fail on any HIGH-severity MCP finding in rufflo
 #   3. router-compat      — exercise `@metaharness/router.Router` constructor;
 #                            catches breaking API changes before publish
 #
 # Triggers on changes that could move any of these signals:
-#   - the ruflo-metaharness plugin
-#   - the @metaharness/router optional dep version in v3/@claude-flow/cli
+#   - the rufflo-metaharness plugin
+#   - the @metaharness/router optional dep version in v3/@rufflo/cli
 #   - the v3 ruvector router-trajectory + neural-router source
 #   - this workflow file
 name: metaharness-ci
@@ -17,18 +17,18 @@ on:
   push:
     branches: [main]
     paths:
-      - 'plugins/ruflo-metaharness/**'
-      - 'v3/@claude-flow/cli/package.json'
-      - 'v3/@claude-flow/cli/src/ruvector/neural-router.ts'
-      - 'v3/@claude-flow/cli/src/ruvector/router-trajectory.ts'
+      - 'plugins/rufflo-metaharness/**'
+      - 'v3/@rufflo/cli/package.json'
+      - 'v3/@rufflo/cli/src/ruvector/neural-router.ts'
+      - 'v3/@rufflo/cli/src/ruvector/router-trajectory.ts'
       - 'scripts/check-metaharness-compat.mjs'
       - '.github/workflows/metaharness-ci.yml'
   pull_request:
     paths:
-      - 'plugins/ruflo-metaharness/**'
-      - 'v3/@claude-flow/cli/package.json'
-      - 'v3/@claude-flow/cli/src/ruvector/neural-router.ts'
-      - 'v3/@claude-flow/cli/src/ruvector/router-trajectory.ts'
+      - 'plugins/rufflo-metaharness/**'
+      - 'v3/@rufflo/cli/package.json'
+      - 'v3/@rufflo/cli/src/ruvector/neural-router.ts'
+      - 'v3/@rufflo/cli/src/ruvector/router-trajectory.ts'
       - 'scripts/check-metaharness-compat.mjs'
       - '.github/workflows/metaharness-ci.yml'
   workflow_dispatch:
@@ -44,11 +44,11 @@ jobs:
           node-version: '20'
 
       - name: Plugin structural smoke
-        run: bash plugins/ruflo-metaharness/scripts/smoke.sh
+        run: bash plugins/rufflo-metaharness/scripts/smoke.sh
 
-      - name: harness-score against ruflo (alert on harnessFit < 70)
+      - name: harness-score against rufflo (alert on harnessFit < 70)
         run: |
-          node plugins/ruflo-metaharness/scripts/score.mjs \
+          node plugins/rufflo-metaharness/scripts/score.mjs \
             --path . \
             --alert-on-fit-below 70 \
             --format json > /tmp/metaharness-score.json
@@ -62,9 +62,9 @@ jobs:
           path: /tmp/metaharness-score.json
           retention-days: 30
 
-      - name: harness-genome against ruflo (alert on risk_score > 0.5)
+      - name: harness-genome against rufflo (alert on risk_score > 0.5)
         run: |
-          node plugins/ruflo-metaharness/scripts/genome.mjs \
+          node plugins/rufflo-metaharness/scripts/genome.mjs \
             --path . \
             --alert-on-risk-above 0.5 \
             --format json > /tmp/metaharness-genome.json
@@ -87,12 +87,12 @@ jobs:
         with:
           node-version: '20'
 
-      - name: harness mcp-scan against ruflo (fail on HIGH findings)
+      - name: harness mcp-scan against rufflo (fail on HIGH findings)
         run: |
           # Exit 0 on no/low-severity findings; exit 1 on HIGH.
           # Exit 0 also when metaharness is unavailable — ADR-150
-          # graceful-degradation rule #3 lets ruflo continue without it.
-          node plugins/ruflo-metaharness/scripts/mcp-scan.mjs \
+          # graceful-degradation rule #3 lets rufflo continue without it.
+          node plugins/rufflo-metaharness/scripts/mcp-scan.mjs \
             --path . \
             --fail-on high \
             --format json > /tmp/metaharness-mcp-scan.json
@@ -121,7 +121,7 @@ jobs:
       - name: Compat check against current @metaharness/router pin
         # Exercises the Router constructor, fromExamples factory, and
         # routedBy field shape. If any of these change in @metaharness/
-        # router@0.4.x, this fails BEFORE we publish a ruflo release
+        # router@0.4.x, this fails BEFORE we publish a rufflo release
         # that would break neural-router.ts at runtime.
         run: node scripts/check-metaharness-compat.mjs
 
@@ -130,7 +130,7 @@ jobs:
         # 25 assertions including the exact 3 thresholds from
         # ADR-150 review-round-1, plus --strict semantics for both
         # promotable and non-promotable paths.
-        run: node plugins/ruflo-metaharness/scripts/test-parallel-pipeline.mjs
+        run: node plugins/rufflo-metaharness/scripts/test-parallel-pipeline.mjs
 
       - name: MCP tool runtime contract test (ADR-150 iter 23)
         # Builds the CLI dist, imports metaharnessTools, invokes every
@@ -143,7 +143,7 @@ jobs:
           # EUNSUPPORTEDPROTOCOL "workspace:*" because the workspace uses pnpm
           # (v3/pnpm-workspace.yaml). Install at workspace root with pnpm.
           # iter 119 — cli imports from workspace siblings; build them first.
-          # iter 127 — switched from `-F "@claude-flow/cli..."` to `-r` because
+          # iter 127 — switched from `-F "@rufflo/cli..."` to `-r` because
           # cli imports from `../../../swarm/src/...` (CROSS-PACKAGE relative
           # path, NOT via the package dep graph). pnpm filter follows
           # package.json deps and missed swarm, producing TS6305 "Output file
@@ -176,15 +176,15 @@ jobs:
           fi
           # iter 127b — `|| true` because cli's tsc emits TS6305 ("Output
           # file has not been built from source file") for cross-package
-          # relative imports from @claude-flow/swarm/src/..., even though
+          # relative imports from @rufflo/swarm/src/..., even though
           # the JS gets emitted correctly. Mirror the existing v3-ci.yml
           # pattern: keep building, then assert the critical dist exists.
           npx -y pnpm@8.15.0 -r --no-bail run build || true
-          test -f @claude-flow/cli/dist/src/index.js \
+          test -f @rufflo/cli/dist/src/index.js \
             || { echo "::error::cli build did not produce dist/src/index.js"; exit 1; }
-          cd @claude-flow/cli
+          cd @rufflo/cli
           cd ../../..
-          node plugins/ruflo-metaharness/scripts/test-mcp-tools.mjs
+          node plugins/rufflo-metaharness/scripts/test-mcp-tools.mjs
 
       - name: Regression gate — iter-12 dispatch overhead < 500ns (iter 24/25)
         # Micro-benchmark proving the iter-12 "zero default-path overhead"
@@ -193,7 +193,7 @@ jobs:
         # /Node 22. Fails the PR if someone accidentally inflates the
         # route() hot path on the default path.
         run: |
-          node plugins/ruflo-metaharness/scripts/bench-recordpair-overhead.mjs \
+          node plugins/rufflo-metaharness/scripts/bench-recordpair-overhead.mjs \
             --max-overhead-ns 500 --format json > /tmp/bench-overhead.json
           # Pretty-print the verdict
           node -e "
@@ -214,8 +214,8 @@ jobs:
           retention-days: 90
 
   eject-dryrun:
-    # ADR-150 Phase 2 — verify `ruflo eject` dry-run produces a valid
-    # plan against the ruflo repo itself, AND that the safety gate
+    # ADR-150 Phase 2 — verify `rufflo eject` dry-run produces a valid
+    # plan against the rufflo repo itself, AND that the safety gate
     # rejects --target paths inside the repo. The actual eject is
     # never executed in CI; only the dry-run path + safety gates.
     runs-on: ubuntu-latest
@@ -227,14 +227,14 @@ jobs:
           node-version: '20'
 
       - name: Build CLI to dist
-        # The eject command lives in v3/@claude-flow/cli/src/commands/.
+        # The eject command lives in v3/@rufflo/cli/src/commands/.
         # CI doesn't have the bundled dist; build it here.
         run: |
           # iter 117 — `npm install` in a single v3 workspace pkg fails with
           # EUNSUPPORTEDPROTOCOL "workspace:*" because the workspace uses pnpm
           # (v3/pnpm-workspace.yaml). Install at workspace root with pnpm.
           # iter 119 — cli imports from workspace siblings; build them first.
-          # iter 127 — switched from `-F "@claude-flow/cli..."` to `-r` because
+          # iter 127 — switched from `-F "@rufflo/cli..."` to `-r` because
           # cli imports from `../../../swarm/src/...` (CROSS-PACKAGE relative
           # path, NOT via the package dep graph). pnpm filter follows
           # package.json deps and missed swarm, producing TS6305 "Output file
@@ -267,19 +267,19 @@ jobs:
           fi
           # iter 127b — `|| true` because cli's tsc emits TS6305 ("Output
           # file has not been built from source file") for cross-package
-          # relative imports from @claude-flow/swarm/src/..., even though
+          # relative imports from @rufflo/swarm/src/..., even though
           # the JS gets emitted correctly. Mirror the existing v3-ci.yml
           # pattern: keep building, then assert the critical dist exists.
           npx -y pnpm@8.15.0 -r --no-bail run build || true
-          test -f @claude-flow/cli/dist/src/index.js \
+          test -f @rufflo/cli/dist/src/index.js \
             || { echo "::error::cli build did not produce dist/src/index.js"; exit 1; }
-          cd @claude-flow/cli
+          cd @rufflo/cli
 
       - name: eject dry-run produces a valid plan
         run: |
           set -e
           # Run via the built bin
-          OUT=$(node v3/@claude-flow/cli/bin/cli.js eject --name my-test-harness --format json 2>&1 || true)
+          OUT=$(node v3/@rufflo/cli/bin/cli.js eject --name my-test-harness --format json 2>&1 || true)
           echo "$OUT" | head -20
           # Must contain the dry-run plan + dryRun:true
           echo "$OUT" | grep -q '"dryRun"' || { echo "FAIL: eject dry-run did not emit dryRun:true"; exit 1; }
@@ -289,7 +289,7 @@ jobs:
       - name: eject refuses --target inside the repo (safety gate)
         run: |
           set -e
-          OUT=$(node v3/@claude-flow/cli/bin/cli.js eject --name foo --target "$PWD/eject-test" --confirm 2>&1 || true)
+          OUT=$(node v3/@rufflo/cli/bin/cli.js eject --name foo --target "$PWD/eject-test" --confirm 2>&1 || true)
           echo "$OUT" | head -10
           echo "$OUT" | grep -qi "refusing to write\|target-inside-repo" || {
             echo "FAIL: eject should refuse --target inside the repo"
@@ -310,10 +310,10 @@ jobs:
           node-version: '20'
 
       - name: Unit tests — _similarity.mjs (iter 39, 53 assertions)
-        run: node plugins/ruflo-metaharness/scripts/test-similarity.mjs
+        run: node plugins/rufflo-metaharness/scripts/test-similarity.mjs
 
       - name: Spike invariants still hold (iter 35 regression anchor)
-        run: node plugins/ruflo-metaharness/scripts/_spike-similarity.mjs
+        run: node plugins/rufflo-metaharness/scripts/_spike-similarity.mjs
 
       - name: CLI skill — file-input round-trip
         run: |
@@ -324,7 +324,7 @@ jobs:
           cat > /tmp/b.json <<'JSON'
           {"score":{"harnessFit":75,"compileConfidence":90,"taskCoverage":70,"toolSafety":90,"memoryUsefulness":72,"estCostPerRunUsd":0.05,"recommendedMode":"CLI + MCP","archetype":"compliance-harness","template":"vertical:support"},"genome":{"repo_type":"node_mcp_ci","agent_topology":["b1","b2","b3","a3","a4"],"risk_score":0.40,"test_confidence":0.75,"publish_readiness":0.65}}
           JSON
-          OUT=$(node plugins/ruflo-metaharness/scripts/similarity.mjs --a /tmp/a.json --b /tmp/b.json --format json)
+          OUT=$(node plugins/rufflo-metaharness/scripts/similarity.mjs --a /tmp/a.json --b /tmp/b.json --format json)
           echo "$OUT"
           echo "$OUT" | grep -q '"overall"' || { echo "FAIL: no overall field"; exit 1; }
           echo "✓ similarity skill emits valid JSON"
@@ -338,7 +338,7 @@ jobs:
           cat > /tmp/audit-current.json <<'JSON'
           {"startedAt":"2026-06-16T00:00:00Z","composite":{"worst":"low"},"components":{"oiaManifest":{},"threatModel":{},"mcpScan":{"json":{"findings":[]}}},"fingerprint":{"score":{"harnessFit":75,"recommendedMode":"CLI + MCP","archetype":"typescript-sdk-harness","template":"vertical:coding"},"genome":{"repo_type":"node_mcp_ci","agent_topology":["maintainer","tester","security","release","experimental"],"risk_score":0.35,"test_confidence":0.78,"publish_readiness":0.85}}}
           JSON
-          OUT=$(node plugins/ruflo-metaharness/scripts/audit-trend.mjs --baseline /tmp/audit-baseline.json --current /tmp/audit-current.json --format json)
+          OUT=$(node plugins/rufflo-metaharness/scripts/audit-trend.mjs --baseline /tmp/audit-baseline.json --current /tmp/audit-current.json --format json)
           echo "$OUT" | python3 -c "import json,sys; d=json.load(sys.stdin); sd=d['delta']['structuralDistance']; assert sd['verdict'] in ('near-identical','minor-drift'), sd; assert 0 < sd['distance'] < 0.2, sd; print('✓ structural-distance:', sd['verdict'], 'distance=' + str(sd['distance']))"
 
       - name: Graceful fallback when fingerprint missing
@@ -350,7 +350,7 @@ jobs:
           cat > /tmp/audit-new.json <<'JSON'
           {"startedAt":"2026-06-16T00:00:00Z","composite":{"worst":"clean"},"components":{"oiaManifest":{},"threatModel":{},"mcpScan":{"json":{"findings":[]}}},"fingerprint":{"score":{"harnessFit":82},"genome":{"repo_type":"node_mcp_ci","agent_topology":["x"]}}}
           JSON
-          OUT=$(node plugins/ruflo-metaharness/scripts/audit-trend.mjs --baseline /tmp/audit-old.json --current /tmp/audit-new.json --format json)
+          OUT=$(node plugins/rufflo-metaharness/scripts/audit-trend.mjs --baseline /tmp/audit-old.json --current /tmp/audit-new.json --format json)
           echo "$OUT" | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['delta']['structuralDistance']['verdict']=='unavailable', d['delta']['structuralDistance']; print('✓ graceful fallback when fingerprint absent')"
 
       - name: Distance alert gate exits 1 below threshold
@@ -358,7 +358,7 @@ jobs:
           set -e
           # The fixtures from the previous step produce overall ~0.97;
           # threshold 0.99 must trigger exit 1.
-          if node plugins/ruflo-metaharness/scripts/audit-trend.mjs \
+          if node plugins/rufflo-metaharness/scripts/audit-trend.mjs \
             --baseline /tmp/audit-baseline.json \
             --current /tmp/audit-current.json \
             --alert-on-distance-below 0.99 > /tmp/trend-alert.txt 2>&1; then
@@ -377,7 +377,7 @@ jobs:
         # data accumulates. Future regression analysis can diff across runs
         # without re-running the bench.
         run: |
-          node plugins/ruflo-metaharness/scripts/bench-similarity.mjs \
+          node plugins/rufflo-metaharness/scripts/bench-similarity.mjs \
             --iters 100000 \
             --max-mean-us 10 \
             --format json > /tmp/bench-similarity.json
@@ -402,7 +402,7 @@ jobs:
         # CI runners are slower; 5μs ceiling gives ~3× headroom while
         # still catching ~10× regressions. 100k iters keeps the job fast.
         run: |
-          node plugins/ruflo-metaharness/scripts/bench-parse-mcp-scan.mjs \
+          node plugins/rufflo-metaharness/scripts/bench-parse-mcp-scan.mjs \
             --iters 100000 \
             --max-mean-us 5 \
             --format json > /tmp/bench-parse-mcp-scan.json
@@ -428,7 +428,7 @@ jobs:
           # EUNSUPPORTEDPROTOCOL "workspace:*" because the workspace uses pnpm
           # (v3/pnpm-workspace.yaml). Install at workspace root with pnpm.
           # iter 119 — cli imports from workspace siblings; build them first.
-          # iter 127 — switched from `-F "@claude-flow/cli..."` to `-r` because
+          # iter 127 — switched from `-F "@rufflo/cli..."` to `-r` because
           # cli imports from `../../../swarm/src/...` (CROSS-PACKAGE relative
           # path, NOT via the package dep graph). pnpm filter follows
           # package.json deps and missed swarm, producing TS6305 "Output file
@@ -461,13 +461,13 @@ jobs:
           fi
           # iter 127b — `|| true` because cli's tsc emits TS6305 ("Output
           # file has not been built from source file") for cross-package
-          # relative imports from @claude-flow/swarm/src/..., even though
+          # relative imports from @rufflo/swarm/src/..., even though
           # the JS gets emitted correctly. Mirror the existing v3-ci.yml
           # pattern: keep building, then assert the critical dist exists.
           npx -y pnpm@8.15.0 -r --no-bail run build || true
-          test -f @claude-flow/cli/dist/src/index.js \
+          test -f @rufflo/cli/dist/src/index.js \
             || { echo "::error::cli build did not produce dist/src/index.js"; exit 1; }
-          cd @claude-flow/cli
+          cd @rufflo/cli
 
       - name: CLI dispatcher round-trip — `node bin/cli.js metaharness similarity` (iter 36)
         # Proves the iter-36 SUBCOMMANDS entry actually dispatches at the
@@ -475,7 +475,7 @@ jobs:
         # "the script works in isolation" and "the user-facing command works".
         run: |
           set -e
-          OUT=$(node v3/@claude-flow/cli/bin/cli.js metaharness similarity \
+          OUT=$(node v3/@rufflo/cli/bin/cli.js metaharness similarity \
             --a /tmp/a.json --b /tmp/b.json --format json)
           echo "$OUT" | head -20
           echo "$OUT" | grep -q '"overall"' || { echo "FAIL: dispatcher did not emit overall"; exit 1; }
@@ -486,7 +486,7 @@ jobs:
         # Anti-regression on the help text (iter 36 added this line).
         run: |
           set -e
-          OUT=$(node v3/@claude-flow/cli/bin/cli.js metaharness 2>&1 || true)
+          OUT=$(node v3/@rufflo/cli/bin/cli.js metaharness 2>&1 || true)
           echo "$OUT" | grep -q "similarity" || { echo "FAIL: help text dropped similarity"; exit 1; }
           echo "✓ help text references similarity subcommand"
 
@@ -543,7 +543,7 @@ jobs:
         # roundtrip's load-bearing self-match invariant (overall===1)
         # failed — that's the schema-shape regression iter 47 fixed.
         run: |
-          node plugins/ruflo-metaharness/scripts/test-pipeline-roundtrip.mjs
+          node plugins/rufflo-metaharness/scripts/test-pipeline-roundtrip.mjs
           echo "✓ full ADR-152 §3.1 pipeline works with real metaharness output"
 
       - name: Cross-check — same path also produces valid score JSON via dispatcher
@@ -556,7 +556,7 @@ jobs:
           # EUNSUPPORTEDPROTOCOL "workspace:*" because the workspace uses pnpm
           # (v3/pnpm-workspace.yaml). Install at workspace root with pnpm.
           # iter 119 — cli imports from workspace siblings; build them first.
-          # iter 127 — switched from `-F "@claude-flow/cli..."` to `-r` because
+          # iter 127 — switched from `-F "@rufflo/cli..."` to `-r` because
           # cli imports from `../../../swarm/src/...` (CROSS-PACKAGE relative
           # path, NOT via the package dep graph). pnpm filter follows
           # package.json deps and missed swarm, producing TS6305 "Output file
@@ -589,15 +589,15 @@ jobs:
           fi
           # iter 127b — `|| true` because cli's tsc emits TS6305 ("Output
           # file has not been built from source file") for cross-package
-          # relative imports from @claude-flow/swarm/src/..., even though
+          # relative imports from @rufflo/swarm/src/..., even though
           # the JS gets emitted correctly. Mirror the existing v3-ci.yml
           # pattern: keep building, then assert the critical dist exists.
           npx -y pnpm@8.15.0 -r --no-bail run build || true
-          test -f @claude-flow/cli/dist/src/index.js \
+          test -f @rufflo/cli/dist/src/index.js \
             || { echo "::error::cli build did not produce dist/src/index.js"; exit 1; }
-          cd @claude-flow/cli
+          cd @rufflo/cli
           cd ../../../
-          OUT=$(node v3/@claude-flow/cli/bin/cli.js metaharness score --path . --format json)
+          OUT=$(node v3/@rufflo/cli/bin/cli.js metaharness score --path . --format json)
           echo "$OUT" | grep -q '"harnessFit"' || { echo "FAIL: score dispatcher dropped harnessFit"; exit 1; }
           echo "✓ score dispatcher emits the expected metaharness schema"
 
@@ -612,10 +612,10 @@ jobs:
         run: |
           set -e
           # Generate a fresh audit as baseline-file input
-          node plugins/ruflo-metaharness/scripts/oia-audit.mjs \
+          node plugins/rufflo-metaharness/scripts/oia-audit.mjs \
             --dry-run --format json > /tmp/drift-baseline.json
           # Dispatch through the CLI — exercises iter-42 flag round-trip
-          OUT=$(node v3/@claude-flow/cli/bin/cli.js metaharness drift-from-history \
+          OUT=$(node v3/@rufflo/cli/bin/cli.js metaharness drift-from-history \
             --baseline-file /tmp/drift-baseline.json \
             --dry-run --format json)
           # Verify the iter-95 timing.path field surfaces with 'file'

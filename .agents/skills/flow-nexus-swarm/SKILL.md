@@ -404,7 +404,7 @@ Save successful swarm configurations as reusable templates for future projects.
 ```javascript
 // Subscribe to execution streams
 mcp__flow-nexus__execution_stream_subscribe({
-  stream_type: "claude-flow-swarm",
+  stream_type: "rufflo-swarm",
   deployment_id: "deployment_id"
 })
 
@@ -416,7 +416,7 @@ mcp__flow-nexus__execution_stream_status({
 // List files created during execution
 mcp__flow-nexus__execution_files_list({
   stream_id: "stream_id",
-  created_by: "claude-flow"
+  created_by: "rufflo"
 })
 ```
 
@@ -544,16 +544,16 @@ mcp__flow-nexus__swarm_create_from_template({
 })
 ```
 
-## Integration with Claude Flow
+## Integration with Rufflo
 
-Flow Nexus swarms integrate seamlessly with Claude Flow hooks:
+Flow Nexus swarms integrate seamlessly with Rufflo hooks:
 
 ```bash
 # Pre-task coordination setup
-npx claude-flow@alpha hooks pre-task --description "Initialize swarm"
+npx rufflo@alpha hooks pre-task --description "Initialize swarm"
 
 # Post-task metrics export
-npx claude-flow@alpha hooks post-task --task-id "swarm-execution"
+npx rufflo@alpha hooks post-task --task-id "swarm-execution"
 ```
 
 ## Common Use Cases
@@ -607,4 +607,4 @@ claude mcp add flow-nexus npx flow-nexus@latest mcp start
 
 ---
 
-**Remember**: Flow Nexus provides cloud-based orchestration infrastructure. For local execution and coordination, use the core `claude-flow` MCP server alongside Flow Nexus for maximum flexibility.
+**Remember**: Flow Nexus provides cloud-based orchestration infrastructure. For local execution and coordination, use the core `rufflo` MCP server alongside Flow Nexus for maximum flexibility.

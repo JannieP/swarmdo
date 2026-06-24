@@ -1,5 +1,5 @@
 {
-  "schema": "ruflo-ecosystem-proof/v2",
+  "schema": "rufflo-ecosystem-proof/v2",
   "generated_at": "2026-06-14T07:54:57.046Z",
   "sources": {
     "github_clones": "https://api.github.com/repos/{owner}/{repo}/traffic/clones (14-day rolling window)",

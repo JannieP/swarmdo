@@ -41,16 +41,16 @@ done
 step "4. command present"
 [[ -f "$ROOT/commands/trader.md" ]] && ok || bad "trader command missing"
 
-step "5. README pins @claude-flow/cli to v3.6"
-grep -qE "@claude-flow/cli.*v3\.6|v3\.6.*claude-flow/cli" "$ROOT/README.md" \
+step "5. README pins @rufflo/cli to v3.6"
+grep -qE "@rufflo/cli.*v3\.6|v3\.6.*rufflo/cli" "$ROOT/README.md" \
   && ok || bad "v3.6 pin missing"
 
 step "6. README pins neural-trader runtime"
 grep -qE "npx neural-trader|Rust/NAPI" "$ROOT/README.md" \
   && ok || bad "neural-trader runtime pin missing"
 
-step "7. README defers to ruflo-agentdb namespace convention"
-grep -q "ruflo-agentdb" "$ROOT/README.md" \
+step "7. README defers to rufflo-agentdb namespace convention"
+grep -q "rufflo-agentdb" "$ROOT/README.md" \
   && grep -q "Namespace convention" "$ROOT/README.md" \
   && ok || bad "namespace coordination block incomplete"
 

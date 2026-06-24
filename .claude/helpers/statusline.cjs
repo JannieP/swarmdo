@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 /**
- * RuFlo V3 Statusline — delegation build (#2195)
+ * Rufflo V3 Statusline — delegation build (#2195)
  *
  * Fix for ruvnet/ruflo#2195: the previous version re-implemented all data
  * readers locally using fragile file probes that missed AgentDB patterns,
  * the v3/docs/adr/ ADR directory, and the real vector count.
  *
- * This version delegates to 'npx @claude-flow/cli hooks statusline --json'
+ * This version delegates to 'npx @rufflo/cli hooks statusline --json'
  * as the single source of truth. That command queries AgentDB directly,
  * counts ADRs in both directories, and reports the real intelligence pct.
  *
@@ -46,12 +46,12 @@ const CWD = process.cwd();
 // (Claude Code refreshes the statusline several times a second while
 // streaming) don't re-invoke the CLI each time. #2337: bumped 10s→60s
 // because 10s was far too short for how often Claude Code re-renders.
-const CACHE_FILE = path.join(os.tmpdir(), 'ruflo-statusline-cache-' + require('crypto').createHash('md5').update(CWD).digest('hex').slice(0, 8) + '.json');
+const CACHE_FILE = path.join(os.tmpdir(), 'rufflo-statusline-cache-' + require('crypto').createHash('md5').update(CWD).digest('hex').slice(0, 8) + '.json');
 const CACHE_TTL_MS = 60000;
 
-// #2337: resolve an already-installed @claude-flow/cli (or ruflo) bin so we
+// #2337: resolve an already-installed @rufflo/cli (or rufflo) bin so we
 // can invoke it directly via `node`. The previous version called
-// `npx --yes @claude-flow/cli@latest` on every uncached render, which forces
+// `npx --yes @rufflo/cli@latest` on every uncached render, which forces
 // a registry resolution + cold-start of the entire CLI per render. With
 // multiple concurrent Claude Code sessions this storms the host (reporter
 // saw load average 40-65 on a 12-core box).
@@ -63,10 +63,10 @@ function resolveCliBin() {
   try {
     const home = os.homedir();
     const candidates = [
-      path.join(home, '.claude', 'plugins', 'marketplaces', 'ruflo', 'bin', 'cli.js'),
-      path.join(CWD, 'node_modules', '@claude-flow', 'cli', 'bin', 'cli.js'),
-      path.join(CWD, 'node_modules', 'ruflo', 'bin', 'cli.js'),
-      path.join(CWD, 'v3', '@claude-flow', 'cli', 'bin', 'cli.js'),
+      path.join(home, '.claude', 'plugins', 'marketplaces', 'rufflo', 'bin', 'cli.js'),
+      path.join(CWD, 'node_modules', '@rufflo', 'cli', 'bin', 'cli.js'),
+      path.join(CWD, 'node_modules', 'rufflo', 'bin', 'cli.js'),
+      path.join(CWD, 'v3', '@rufflo', 'cli', 'bin', 'cli.js'),
     ];
     try {
       const binDir = path.dirname(process.execPath);
@@ -76,8 +76,8 @@ function resolveCliBin() {
       }
       for (const gm of globalModuleDirs) {
         candidates.push(
-          path.join(gm, 'ruflo', 'bin', 'cli.js'),
-          path.join(gm, '@claude-flow', 'cli', 'bin', 'cli.js'),
+          path.join(gm, 'rufflo', 'bin', 'cli.js'),
+          path.join(gm, '@rufflo', 'cli', 'bin', 'cli.js'),
         );
       }
     } catch { /* ignore */ }
@@ -108,7 +108,7 @@ function writeCache(data) {
  * Single source of truth: delegate to the CLI hooks statusline --json command.
  * Falls back to a minimal static object on failure so the statusline still renders.
  *
- * Fix for ruflo#2195: the previous local readers returned 0 for AgentDB patterns
+ * Fix for rufflo#2195: the previous local readers returned 0 for AgentDB patterns
  * (missed the .swarm/memory.db → AgentDB path), computed dddProgress wrong,
  * and only counted ADRs in v3/implementation/adrs/ (missed v3/docs/adr/).
  */
@@ -119,12 +119,12 @@ function getStatuslineData() {
   try {
     // #2337: prefer an already-installed CLI bin via direct `node` invocation
     // — no npx, no registry round-trip, no @latest re-resolve per render.
-    // Fall back to `npx --prefer-offline @claude-flow/cli` (no @latest) only
+    // Fall back to `npx --prefer-offline @rufflo/cli` (no @latest) only
     // when nothing is installed locally, so a cold environment still works.
     const cliBin = resolveCliBin();
     const cmd = cliBin
       ? '"' + process.execPath + '" "' + cliBin + '" hooks statusline --json 2>/dev/null'
-      : 'npx --prefer-offline @claude-flow/cli hooks statusline --json 2>/dev/null';
+      : 'npx --prefer-offline @rufflo/cli hooks statusline --json 2>/dev/null';
     const raw = execSync(
       cmd,
       { encoding: 'utf-8', timeout: 8000, stdio: ['pipe', 'pipe', 'pipe'], cwd: CWD }
@@ -145,14 +145,14 @@ function getStatuslineData() {
   return buildLocalFallback();
 }
 
-// Count ADRs from BOTH known directories (fix for ruflo#2195: old code missed
+// Count ADRs from BOTH known directories (fix for rufflo#2195: old code missed
 // v3/docs/adr/ which holds ADR-088..ADR-137, i.e. 41 of the 128 total ADRs).
 function getLocalADRCount() {
   const adrDirs = [
     path.join(CWD, 'v3', 'implementation', 'adrs'),
     path.join(CWD, 'v3', 'docs', 'adr'),
     path.join(CWD, 'docs', 'adrs'),
-    path.join(CWD, '.claude-flow', 'adrs'),
+    path.join(CWD, '.rufflo', 'adrs'),
   ];
   let total = 0;
   for (const dir of adrDirs) {
@@ -480,12 +480,12 @@ function getPkgVersion() {
   try {
     const home = os.homedir();
     const pkgPaths = [
-      path.join(home, '.claude', 'plugins', 'marketplaces', 'ruflo', 'package.json'),
-      path.join(CWD, 'node_modules', '@claude-flow', 'cli', 'package.json'),
-      path.join(CWD, 'node_modules', 'ruflo', 'package.json'),
-      path.join(CWD, 'v3', '@claude-flow', 'cli', 'package.json'),
+      path.join(home, '.claude', 'plugins', 'marketplaces', 'rufflo', 'package.json'),
+      path.join(CWD, 'node_modules', '@rufflo', 'cli', 'package.json'),
+      path.join(CWD, 'node_modules', 'rufflo', 'package.json'),
+      path.join(CWD, 'v3', '@rufflo', 'cli', 'package.json'),
     ];
-    // #2221: global installs (npm i -g ruflo) live outside CWD/node_modules, so the
+    // #2221: global installs (npm i -g rufflo) live outside CWD/node_modules, so the
     // probes above all miss and the version falls back to the hard-coded default.
     // Derive the global node_modules dir from the running node binary (no npm spawn —
     // statusline renders often). Covers nvm/mise (bin/../lib/node_modules) and Windows
@@ -501,8 +501,8 @@ function getPkgVersion() {
       }
       for (const gm of globalModuleDirs) {
         pkgPaths.push(
-          path.join(gm, 'ruflo', 'package.json'),
-          path.join(gm, '@claude-flow', 'cli', 'package.json'),
+          path.join(gm, 'rufflo', 'package.json'),
+          path.join(gm, '@rufflo', 'cli', 'package.json'),
         );
       }
     } catch { /* ignore */ }
@@ -568,7 +568,7 @@ function generateStatusline() {
   const lines = [];
 
   // Header
-  let header = c.bold + c.brightPurple + '▊ RuFlo V' + pkgVersion + ' ' + c.reset;
+  let header = c.bold + c.brightPurple + '▊ Rufflo V' + pkgVersion + ' ' + c.reset;
   header += (coordinationActive ? c.brightCyan : c.dim) + '● ' + c.brightCyan + git.name + c.reset;
   if (git.gitBranch) {
     header += '  ' + c.dim + '│' + c.reset + '  ' + c.brightBlue + '⏇ ' + git.gitBranch + c.reset;

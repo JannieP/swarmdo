@@ -116,14 +116,14 @@ hooks:
 
     # 🧠 v2.0.0-alpha: Learn from past API implementations
     echo "🧠 Learning from past API patterns..."
-    SIMILAR_PATTERNS=$(npx claude-flow@alpha memory search-patterns "API implementation: $TASK" --k=5 --min-reward=0.85 2>$dev$null || echo "")
+    SIMILAR_PATTERNS=$(npx rufflo@alpha memory search-patterns "API implementation: $TASK" --k=5 --min-reward=0.85 2>$dev$null || echo "")
     if [ -n "$SIMILAR_PATTERNS" ]; then
       echo "📚 Found similar successful API patterns"
-      npx claude-flow@alpha memory get-pattern-stats "API implementation" --k=5 2>$dev$null || true
+      npx rufflo@alpha memory get-pattern-stats "API implementation" --k=5 2>$dev$null || true
     fi
 
     # Store task start for learning
-    npx claude-flow@alpha memory store-pattern \
+    npx rufflo@alpha memory store-pattern \
       --session-id "backend-dev-$(date +%s)" \
       --task "API: $TASK" \
       --input "$TASK_CONTEXT" \
@@ -139,7 +139,7 @@ hooks:
     REWARD=$(if npm run test:api 2>$dev$null; then echo "0.95"; else echo "0.7"; fi)
     SUCCESS=$(if npm run test:api 2>$dev$null; then echo "true"; else echo "false"; fi)
 
-    npx claude-flow@alpha memory store-pattern \
+    npx rufflo@alpha memory store-pattern \
       --session-id "backend-dev-$(date +%s)" \
       --task "API: $TASK" \
       --output "$TASK_OUTPUT" \
@@ -150,7 +150,7 @@ hooks:
     # Train neural patterns on successful implementations
     if [ "$SUCCESS" = "true" ]; then
       echo "🧠 Training neural pattern from successful API implementation"
-      npx claude-flow@alpha neural train \
+      npx rufflo@alpha neural train \
         --pattern-type "coordination" \
         --training-data "$TASK_OUTPUT" \
         --epochs 50 2>$dev$null || true
@@ -161,7 +161,7 @@ hooks:
     echo "🔄 Rolling back changes if needed..."
 
     # Store failure pattern for learning
-    npx claude-flow@alpha memory store-pattern \
+    npx rufflo@alpha memory store-pattern \
       --session-id "backend-dev-$(date +%s)" \
       --task "API: $TASK" \
       --output "Failed: {{error_message}}" \

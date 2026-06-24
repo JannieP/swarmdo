@@ -27,7 +27,7 @@ if (existsSync(manifestPath) && !args.force) {
 
 const emptyWitness = {
   manifest: {
-    schema: 'ruflo-witness/v1',
+    schema: 'rufflo-witness/v1',
     issuedAt: new Date().toISOString(),
     gitCommit: '',
     branch: '',
@@ -41,7 +41,7 @@ const emptyWitness = {
     signatureAlgo: 'ed25519',
     publicKey: '',
     signature: '',
-    seedDerivation: "sha256(gitCommit + ':ruflo-witness/v1')",
+    seedDerivation: "sha256(gitCommit + ':rufflo-witness/v1')",
   },
 };
 

@@ -25,7 +25,7 @@ V3 represents a major architectural overhaul with significant improvements acros
 | MCP Tools | 119 | ✅ Complete |
 | Hooks Subcommands | 20 | ✅ Complete |
 | Hook MCP Tools | 60+ | ✅ Complete |
-| @claude-flow Packages | 16 | ✅ Complete |
+| @rufflo Packages | 16 | ✅ Complete |
 | Total TS Files | 419 | Active |
 
 ---
@@ -36,11 +36,11 @@ V3 represents a major architectural overhaul with significant improvements acros
 
 | Feature | V2 Location | V3 Location |
 |---------|-------------|-------------|
-| UnifiedSwarmCoordinator | `v2/src/swarm/coordinator.ts` | `v3/@claude-flow/swarm/src/unified-coordinator.ts` |
-| Topology Manager | `v2/src/core/TopologyManager.ts` | `v3/@claude-flow/swarm/src/topology-manager.ts` |
-| Agent Base Class | `v2/src/hive-mind/core/Agent.ts` | `v3/@claude-flow/swarm/src/domain/entities/` |
-| Event-based Communication | `v2/src/hive-mind/core/Communication.ts` | `v3/@claude-flow/shared/src/events/` |
-| Consensus Engine | `v2/src/hive-mind/integration/ConsensusEngine.ts` | `v3/@claude-flow/swarm/src/consensus/` |
+| UnifiedSwarmCoordinator | `v2/src/swarm/coordinator.ts` | `v3/@rufflo/swarm/src/unified-coordinator.ts` |
+| Topology Manager | `v2/src/core/TopologyManager.ts` | `v3/@rufflo/swarm/src/topology-manager.ts` |
+| Agent Base Class | `v2/src/hive-mind/core/Agent.ts` | `v3/@rufflo/swarm/src/domain/entities/` |
+| Event-based Communication | `v2/src/hive-mind/core/Communication.ts` | `v3/@rufflo/shared/src/events/` |
+| Consensus Engine | `v2/src/hive-mind/integration/ConsensusEngine.ts` | `v3/@rufflo/swarm/src/consensus/` |
 
 ### Missing in V3 ❌
 
@@ -48,7 +48,7 @@ V3 represents a major architectural overhaul with significant improvements acros
 |---------|-------------|----------|----------------|
 | **Queen Coordinator** | `v2/src/hive-mind/core/Queen.ts` | HIGH | Implement as specialized agent in swarm module |
 | **HiveMind Core** | `v2/src/hive-mind/core/HiveMind.ts` | HIGH | Integrate into UnifiedSwarmCoordinator |
-| **Collective Memory** | `v2/src/hive-mind/core/Memory.ts` | MEDIUM | Already have better implementation in @claude-flow/memory |
+| **Collective Memory** | `v2/src/hive-mind/core/Memory.ts` | MEDIUM | Already have better implementation in @rufflo/memory |
 | **SwarmOrchestrator** | `v2/src/hive-mind/integration/SwarmOrchestrator.ts` | MEDIUM | Merge into UnifiedSwarmCoordinator |
 | **Hive Agent Types** | `v2/src/cli/agents/hive-agents.ts` | MEDIUM | Add QueenAgent, WorkerAgent, ScoutAgent, GuardianAgent |
 | **Maestro Integration** | `v2/src/maestro/maestro-swarm-coordinator.ts` | LOW | Specs-driven workflow support |
@@ -100,7 +100,7 @@ V3 represents a major architectural overhaul with significant improvements acros
 
 #### MCP Hook Tools (60+)
 
-All hooks exposed as MCP tools in `@claude-flow/cli/src/mcp-tools/hooks-tools.ts`:
+All hooks exposed as MCP tools in `@rufflo/cli/src/mcp-tools/hooks-tools.ts`:
 - Core hooks: pre-edit, post-edit, pre-command, post-command, pre-task, post-task
 - Session hooks: session-start, session-end, session-restore, notify
 - Intelligence hooks: route, explain, pretrain, build-agents, transfer, metrics, list, init
@@ -152,7 +152,7 @@ All hooks exposed as MCP tools in `@claude-flow/cli/src/mcp-tools/hooks-tools.ts
 ### MCP Tools Architecture
 
 - **119 MCP tools** across 12 tool files
-- All tools in `@claude-flow/cli/src/mcp-tools/`
+- All tools in `@rufflo/cli/src/mcp-tools/`
 - JSON Schema validation for all inputs
 - Consistent response format with success/error handling
 
@@ -206,7 +206,7 @@ All hooks exposed as MCP tools in `@claude-flow/cli/src/mcp-tools/hooks-tools.ts
 ### CLI Architecture
 
 - **28 commands** with **140+ subcommands**
-- All commands exported from `@claude-flow/cli/src/commands/index.ts`
+- All commands exported from `@rufflo/cli/src/commands/index.ts`
 - Consistent Command interface with options, examples, and action handlers
 - Smart error suggestions via Levenshtein distance
 
@@ -218,7 +218,7 @@ All hooks exposed as MCP tools in `@claude-flow/cli/src/mcp-tools/hooks-tools.ts
 
 | Feature | Improvement |
 |---------|-------------|
-| **HNSW Index** | 150x-12,500x faster vector search |
+| **HNSW Index** | ~1.9x-4.7x measured faster vector search |
 | **AgentDB Backend** | Native hnswlib or WASM fallback |
 | **Hybrid Backend** | SQLite + AgentDB per ADR-009 |
 | **SQL.js Backend** | Cross-platform WASM SQLite |

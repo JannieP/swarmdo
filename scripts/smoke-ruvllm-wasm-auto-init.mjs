@@ -29,7 +29,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const SOURCE = resolve(__dirname, '../v3/@claude-flow/cli/src/mcp-tools/ruvllm-tools.ts');
+const SOURCE = resolve(__dirname, '../v3/@rufflo/cli/src/mcp-tools/ruvllm-tools.ts');
 
 function fail(msg) {
   console.error(`✗ ${msg}`);

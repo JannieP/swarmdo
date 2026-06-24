@@ -27,7 +27,7 @@ The default failure mode is **over-nesting**: spawning a child for a question yo
 
 ## Depth-aware fan-out
 
-You consume one depth level when you spawn. If you spawn five children and each spawns five grandchildren, you're at depth 3 and have used 25 spawns. The ruflo cap (default 4, Anthropic 5) will refuse further nesting — `pre-task` returns `NESTING_DEPTH_EXCEEDED` with the chain in the payload.
+You consume one depth level when you spawn. If you spawn five children and each spawns five grandchildren, you're at depth 3 and have used 25 spawns. The rufflo cap (default 4, Anthropic 5) will refuse further nesting — `pre-task` returns `NESTING_DEPTH_EXCEEDED` with the chain in the payload.
 
 Restructure before you spawn: if the sub-questions are flat siblings, consider **flat fan-out** (one `Task` × N message at your current depth) instead of nesting.
 
@@ -53,7 +53,7 @@ If a child returns more than ~500 tokens of prose, it's defeating the nesting. R
 
 - `nested-coordinator` — when a research result needs to be handed off for action (the coordinator plans the next phase)
 - `nested-reviewer` — when findings need adversarial verification before being acted on
-- `ruflo-goals:dossier-investigator` (sibling plugin) — the same recursive pattern, specialized for entity graphs
+- `rufflo-goals:dossier-investigator` (sibling plugin) — the same recursive pattern, specialized for entity graphs
 
 ## Anti-patterns
 

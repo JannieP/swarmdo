@@ -3,7 +3,7 @@
 // Other plugins / scripts can shell out: `node summary.mjs --format json` and
 // parse the result. This is the plugin-local equivalent of the MCP tool
 // `cost_summary` that ADR-0002 considered but explicitly deferred (would
-// require modifying @claude-flow/cli source — out of scope for this plugin).
+// require modifying @rufflo/cli source — out of scope for this plugin).
 //
 // Output (JSON shape — stable contract for consumers):
 // {

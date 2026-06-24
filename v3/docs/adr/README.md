@@ -1,4 +1,4 @@
-# Claude Flow V3 - Architecture Decision Records
+# Rufflo V3 - Architecture Decision Records
 
 All ADRs are located in [`/v3/implementation/adrs/`](../../implementation/adrs/).
 
@@ -26,7 +26,7 @@ All ADRs are located in [`/v3/implementation/adrs/`](../../implementation/adrs/)
 | [ADR-018](../../implementation/adrs/ADR-018-claude-code-integration.md) | Claude Code Integration | Complete |
 | [ADR-019](../../implementation/adrs/ADR-019-headless-runtime-package.md) | Headless Runtime Package | Complete |
 | [ADR-020](../../implementation/adrs/ADR-020-headless-worker-integration.md) | Headless Worker Integration | Complete |
-| [ADR-046](../../implementation/adrs/ADR-046-ruflo-rebrand.md) | Dual Umbrella: claude-flow + ruflo | Accepted |
+| [ADR-046](../../implementation/adrs/ADR-046-rufflo-rebrand.md) | Dual Umbrella: rufflo + rufflo | Accepted |
 | [ADR-047](../../implementation/adrs/ADR-047-fast-mode-integration.md) | Fast Mode Integration | Proposed |
 
 ## Summary Documents
@@ -39,8 +39,8 @@ All ADRs are located in [`/v3/implementation/adrs/`](../../implementation/adrs/)
 
 | Metric | Target | Status |
 |--------|--------|--------|
-| HNSW Search | 150x-12,500x faster | ✅ Achieved |
-| Flash Attention | 2.49x-7.47x speedup | ✅ Achieved (alpha.102) |
+| HNSW Search | ~1.9x-4.7x measured faster | ✅ Achieved |
+| Flash Attention | unverified (no benchmark) speedup | ✅ Achieved (alpha.102) |
 | Memory Reduction | 50-75% | ✅ Achieved |
 | MCP Response | <100ms | ✅ Achieved |
 | CLI Startup | <500ms | ✅ Achieved |
@@ -71,4 +71,4 @@ All ADRs are located in [`/v3/implementation/adrs/`](../../implementation/adrs/)
 ---
 
 **Last Updated:** 2026-01-14
-**CLI Version:** @claude-flow/cli@3.0.0-alpha.104
+**CLI Version:** @rufflo/cli@3.0.0-alpha.104

@@ -2,7 +2,7 @@
 name: ddd-aggregate
 description: Scaffold an aggregate root with entity, value objects, repository interface, domain events, and test stubs
 argument-hint: "<context> <aggregate-name>"
-allowed-tools: Bash(mkdir * find * ls *) Read Write Edit Grep Glob mcp__claude-flow__memory_store mcp__claude-flow__memory_search mcp__claude-flow__agentdb_hierarchical-store mcp__claude-flow__hooks_pre-task mcp__claude-flow__hooks_post-task
+allowed-tools: Bash(mkdir * find * ls *) Read Write Edit Grep Glob mcp__rufflo__memory_store mcp__rufflo__memory_search mcp__rufflo__agentdb_hierarchical-store mcp__rufflo__hooks_pre-task mcp__rufflo__hooks_post-task
 ---
 Scaffold a complete aggregate root inside a bounded context.
 
@@ -12,7 +12,7 @@ Parse `$ARGUMENTS` as `<context-name> <aggregate-name>` (both kebab-case). The c
 
 1. **Validate**: Confirm `src/<context>/domain/` exists. If not, suggest running `/ddd-context <context>` first.
 
-2. **Pre-task hook**: `npx @claude-flow/cli@latest hooks pre-task --description "DDD aggregate: <aggregate-name> in <context>"`
+2. **Pre-task hook**: `npx @rufflo/cli@latest hooks pre-task --description "DDD aggregate: <aggregate-name> in <context>"`
 
 3. **Create aggregate root entity**:
    - File: `src/<context>/domain/entities/<aggregate-name>.entity.ts`
@@ -44,8 +44,8 @@ Parse `$ARGUMENTS` as `<context-name> <aggregate-name>` (both kebab-case). The c
 
 9. **Store in domain model graph**:
    ```
-   mcp__claude-flow__agentdb_hierarchical-store --parent "context:<context>" --child "aggregate:<aggregate-name>" --relation "contains"
-   mcp__claude-flow__memory_store --key "ddd-aggregate-<context>-<aggregate-name>" --value "AGGREGATE_SUMMARY" --namespace tasks
+   mcp__rufflo__agentdb_hierarchical-store --parent "context:<context>" --child "aggregate:<aggregate-name>" --relation "contains"
+   mcp__rufflo__memory_store --key "ddd-aggregate-<context>-<aggregate-name>" --value "AGGREGATE_SUMMARY" --namespace tasks
    ```
 
-10. **Post-task hook**: `npx @claude-flow/cli@latest hooks post-task --task-id "ddd-aggregate-<aggregate-name>" --success true --train-neural true`
+10. **Post-task hook**: `npx @rufflo/cli@latest hooks post-task --task-id "ddd-aggregate-<aggregate-name>" --success true --train-neural true`

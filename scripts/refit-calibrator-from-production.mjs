@@ -30,14 +30,14 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import * as mh from '@metaharness/router';
-import { IsotonicCalibrator } from '../v3/@claude-flow/cli/dist/src/ruvector/router-calibrator.js';
+import { IsotonicCalibrator } from '../v3/@rufflo/cli/dist/src/ruvector/router-calibrator.js';
 
 const ARGS = (() => {
   const a = {
     in: process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH
       ?? resolve('.swarm', 'model-router-trajectories.jsonl'),
-    artifact: resolve('v3/@claude-flow/cli/assets/model-router/seed-router.krr.json'),
-    out: resolve('v3/@claude-flow/cli/assets/model-router/seed-router.calibrator.production.json'),
+    artifact: resolve('v3/@rufflo/cli/assets/model-router/seed-router.krr.json'),
+    out: resolve('v3/@rufflo/cli/assets/model-router/seed-router.calibrator.production.json'),
     minPairs: 50,
     dryRun: false,
     format: 'table',

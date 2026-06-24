@@ -63,10 +63,10 @@ import { SonaBridge, createSonaBridge } from './bridges/sona-bridge.js';
  * Cognitive Kernel Plugin metadata
  */
 export const PLUGIN_METADATA = {
-  name: '@claude-flow/plugin-cognitive-kernel',
+  name: '@rufflo/plugin-cognitive-kernel',
   version: '3.0.0-alpha.1',
   description: 'Cognitive kernel plugin for LLM augmentation',
-  author: 'Claude Flow Team',
+  author: 'Rufflo Team',
   keywords: [
     'cognitive-kernel',
     'working-memory',
@@ -144,7 +144,7 @@ export function getMCPTools(): MCPTool[] {
 }
 
 /**
- * Plugin interface for registration with Claude Flow
+ * Plugin interface for registration with Rufflo
  */
 export const cognitiveKernelPlugin = {
   metadata: PLUGIN_METADATA,

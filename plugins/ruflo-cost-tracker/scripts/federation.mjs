@@ -22,8 +22,8 @@ import { spawnSync } from 'node:child_process';
 // ADR-100 / #1748 Issue 3 — CLI_CORE=1 routes to lite cli-core (~2s cold-cache).
 // Federation aggregation is list+retrieve only on the federation-spend namespace.
 const CLI_PKG = process.env.CLI_CORE === '1'
-  ? '@claude-flow/cli-core@alpha'
-  : '@claude-flow/cli@latest';
+  ? '@rufflo/cli-core@alpha'
+  : '@rufflo/cli@latest';
 
 const NS = process.env.FED_NAMESPACE || 'federation-spend';
 

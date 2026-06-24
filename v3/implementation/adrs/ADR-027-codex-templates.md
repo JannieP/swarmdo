@@ -1,6 +1,6 @@
 # ADR-027 Supplement: Codex Template Specifications
 
-> **Branding Note**: This package is published as `@claude-flow/codex` and is the first step in transitioning to the `coflow` brand. The future umbrella package will be `npm/npx coflow`.
+> **Branding Note**: This package is published as `@rufflo/codex` and is the first step in transitioning to the `coflow` brand. The future umbrella package will be `npm/npx coflow`.
 
 ## Overview
 
@@ -10,18 +10,18 @@ This document provides the complete template specifications for all Codex-genera
 
 | Property | Value |
 |----------|-------|
-| Package Name | `@claude-flow/codex` |
-| Location | `v3/@claude-flow/codex/` |
+| Package Name | `@rufflo/codex` |
+| Location | `v3/@rufflo/codex/` |
 | Future Umbrella | `coflow` |
-| CLI Command | `npx @claude-flow/codex init` |
-| Integration | Works with `@claude-flow/cli` via `--codex` flag |
+| CLI Command | `npx @rufflo/codex init` |
+| Integration | Works with `@rufflo/cli` via `--codex` flag |
 
 ## AGENTS.md Templates
 
 ### Default Template (Full)
 
 ```markdown
-# Claude Flow V3
+# Rufflo V3
 
 > Multi-agent orchestration framework for agentic coding
 
@@ -128,7 +128,7 @@ Use `$skill-name` syntax to invoke:
 
 [optional body]
 
-Co-Authored-By: claude-flow <ruv@ruv.net>
+Co-Authored-By: rufflo <ruv@ruv.net>
 ```
 
 Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`
@@ -157,7 +157,7 @@ Active monitoring for:
 
 | Metric | Target | Notes |
 |--------|--------|-------|
-| HNSW Search | 150x-12,500x faster | Vector operations |
+| HNSW Search | ~1.9x-4.7x measured faster | Vector operations |
 | Memory Reduction | 50-75% | Int8 quantization |
 | MCP Response | <100ms | API latency |
 | CLI Startup | <500ms | Cold start |
@@ -186,7 +186,7 @@ npm run test:coverage
 
 ### Storing Patterns
 ```bash
-npx claude-flow@v3alpha memory store \
+npx rufflo@v3alpha memory store \
   --key "pattern-name" \
   --value "pattern description" \
   --namespace patterns
@@ -194,7 +194,7 @@ npx claude-flow@v3alpha memory store \
 
 ### Searching Memory
 ```bash
-npx claude-flow@v3alpha memory search \
+npx rufflo@v3alpha memory search \
   --query "search terms" \
   --namespace patterns
 ```
@@ -206,11 +206,11 @@ npx claude-flow@v3alpha memory search \
 
 ## MCP Integration
 
-Claude Flow exposes tools via MCP:
+Rufflo exposes tools via MCP:
 
 ```bash
 # Start MCP server
-npx claude-flow@v3alpha mcp start
+npx rufflo@v3alpha mcp start
 ```
 
 ### Available Tools
@@ -222,7 +222,7 @@ npx claude-flow@v3alpha mcp start
 
 ## Hooks System
 
-Claude Flow uses hooks for automation:
+Rufflo uses hooks for automation:
 
 | Hook | Purpose |
 |------|---------|
@@ -233,7 +233,7 @@ Claude Flow uses hooks for automation:
 
 ### Example
 ```bash
-npx claude-flow@v3alpha hooks pre-task \
+npx rufflo@v3alpha hooks pre-task \
   --description "implementing authentication"
 ```
 
@@ -332,7 +332,7 @@ Coordinate multiple specialized agents to work on complex tasks in parallel.
 
 ### 1. Initialize Swarm
 ```bash
-npx claude-flow@v3alpha swarm init \
+npx rufflo@v3alpha swarm init \
   --topology hierarchical \
   --max-agents 8 \
   --strategy specialized
@@ -340,24 +340,24 @@ npx claude-flow@v3alpha swarm init \
 
 ### 2. Route Task
 ```bash
-npx claude-flow@v3alpha hooks route --task "[task description]"
+npx rufflo@v3alpha hooks route --task "[task description]"
 ```
 
 ### 3. Monitor Status
 ```bash
-npx claude-flow@v3alpha swarm status
+npx rufflo@v3alpha swarm status
 ```
 
 ## Memory Integration
 
 ### Before Starting
 ```bash
-npx claude-flow@v3alpha memory search --query "[task keywords]"
+npx rufflo@v3alpha memory search --query "[task keywords]"
 ```
 
 ### After Completion
 ```bash
-npx claude-flow@v3alpha memory store \
+npx rufflo@v3alpha memory store \
   --key "[pattern-name]" \
   --value "[what worked]" \
   --namespace patterns
@@ -403,13 +403,13 @@ Interact with the AgentDB memory system for pattern storage, retrieval, and sema
 |-----------|-------------|
 | Store | ~1ms |
 | Retrieve | ~0.5ms |
-| Search (HNSW) | 150x-12,500x faster than brute force |
+| Search (HNSW) | ~1.9x-4.7x measured faster than brute force |
 
 ## Commands
 
 ### Store Data
 ```bash
-npx claude-flow@v3alpha memory store \
+npx rufflo@v3alpha memory store \
   --key "unique-key" \
   --value "data to store" \
   --namespace patterns \
@@ -418,7 +418,7 @@ npx claude-flow@v3alpha memory store \
 
 ### Search Data
 ```bash
-npx claude-flow@v3alpha memory search \
+npx rufflo@v3alpha memory search \
   --query "semantic search terms" \
   --namespace patterns \
   --limit 10
@@ -426,14 +426,14 @@ npx claude-flow@v3alpha memory search \
 
 ### Retrieve Specific Entry
 ```bash
-npx claude-flow@v3alpha memory retrieve \
+npx rufflo@v3alpha memory retrieve \
   --key "unique-key" \
   --namespace patterns
 ```
 
 ### List All Entries
 ```bash
-npx claude-flow@v3alpha memory list \
+npx rufflo@v3alpha memory list \
   --namespace patterns \
   --limit 50
 ```
@@ -463,8 +463,8 @@ npx claude-flow@v3alpha memory list \
 
 The memory system uses HNSW (Hierarchical Navigable Small World) indexing:
 
-- **150x faster** for small datasets
-- **12,500x faster** for large datasets
+- **~4.7x faster** for small datasets
+- **~4.7x faster** for large datasets
 - Approximate nearest neighbor search
 - Configurable accuracy/speed tradeoff
 
@@ -497,35 +497,35 @@ Structured development workflow ensuring thorough planning before implementation
 Define requirements and acceptance criteria.
 
 ```bash
-npx claude-flow@v3alpha hooks route --task "specification: [requirements]"
+npx rufflo@v3alpha hooks route --task "specification: [requirements]"
 ```
 
 ### 2. Pseudocode
 Design algorithm in plain language.
 
 ```bash
-npx claude-flow@v3alpha hooks route --task "pseudocode: [algorithm design]"
+npx rufflo@v3alpha hooks route --task "pseudocode: [algorithm design]"
 ```
 
 ### 3. Architecture
 Plan system structure and components.
 
 ```bash
-npx claude-flow@v3alpha hooks route --task "architecture: [system design]"
+npx rufflo@v3alpha hooks route --task "architecture: [system design]"
 ```
 
 ### 4. Refinement
 Iterate and improve implementation.
 
 ```bash
-npx claude-flow@v3alpha hooks route --task "refinement: [improvements]"
+npx rufflo@v3alpha hooks route --task "refinement: [improvements]"
 ```
 
 ### 5. Completion
 Final validation and documentation.
 
 ```bash
-npx claude-flow@v3alpha hooks route --task "completion: [validation]"
+npx rufflo@v3alpha hooks route --task "completion: [validation]"
 ```
 
 ## Agent Mapping
@@ -602,22 +602,22 @@ Always invoke for:
 
 ### 1. Input Validation
 ```bash
-npx claude-flow@v3alpha security scan --check input-validation
+npx rufflo@v3alpha security scan --check input-validation
 ```
 
 ### 2. Path Security
 ```bash
-npx claude-flow@v3alpha security scan --check path-traversal
+npx rufflo@v3alpha security scan --check path-traversal
 ```
 
 ### 3. Command Injection
 ```bash
-npx claude-flow@v3alpha security scan --check command-injection
+npx rufflo@v3alpha security scan --check command-injection
 ```
 
 ### 4. Full Audit
 ```bash
-npx claude-flow@v3alpha security scan --depth full
+npx rufflo@v3alpha security scan --depth full
 ```
 
 ## CVE Monitoring
@@ -664,8 +664,8 @@ await safeExec.run(command, { sanitize: true });
 ### Default Configuration
 
 ```toml
-# Claude Flow V3 - Codex Configuration
-# Generated by: claude-flow init --codex
+# Rufflo V3 - Codex Configuration
+# Generated by: rufflo init --codex
 # Documentation: https://github.com/ruvnet/claude-flow
 
 # =============================================================================
@@ -719,9 +719,9 @@ remote_compaction = true
 # MCP Servers
 # =============================================================================
 
-[mcp_servers.claude-flow]
+[mcp_servers.rufflo]
 command = "npx"
-args = ["-y", "@claude-flow/cli@latest"]
+args = ["-y", "@rufflo/cli@latest"]
 enabled = true
 tool_timeout_sec = 120
 
@@ -821,22 +821,22 @@ exclude_slash_tmp = false
 ### Minimal Configuration
 
 ```toml
-# Claude Flow V3 - Minimal Codex Configuration
+# Rufflo V3 - Minimal Codex Configuration
 
 model = "gpt-5.3-codex"
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
 
-[mcp_servers.claude-flow]
+[mcp_servers.rufflo]
 command = "npx"
-args = ["-y", "@claude-flow/cli@latest"]
+args = ["-y", "@rufflo/cli@latest"]
 enabled = true
 ```
 
 ### CI/CD Configuration
 
 ```toml
-# Claude Flow V3 - CI/CD Pipeline Configuration
+# Rufflo V3 - CI/CD Pipeline Configuration
 
 model = "gpt-5.3-codex"
 approval_policy = "never"
@@ -847,9 +847,9 @@ web_search = "disabled"
 shell_snapshot = false
 remote_compaction = false
 
-[mcp_servers.claude-flow]
+[mcp_servers.rufflo]
 command = "npx"
-args = ["-y", "@claude-flow/cli@latest"]
+args = ["-y", "@rufflo/cli@latest"]
 enabled = true
 
 [history]
@@ -894,7 +894,7 @@ project/
 ├── .codex/                            # User-local overrides (gitignored)
 │   ├── config.toml                    # Personal config overrides
 │   └── AGENTS.override.md             # Local instruction overrides
-└── .claude-flow/                      # Runtime data (shared)
+└── .rufflo/                      # Runtime data (shared)
     ├── config.yaml
     ├── data/
     └── logs/
@@ -916,29 +916,29 @@ interface:
 dependencies:
   tools:
     - type: "mcp"
-      value: "claude-flow"
-      description: "Claude Flow MCP server for swarm coordination"
+      value: "rufflo"
+      description: "Rufflo MCP server for swarm coordination"
       transport: "stdio"
       command: "npx"
-      args: ["-y", "@claude-flow/cli@latest"]
+      args: ["-y", "@rufflo/cli@latest"]
 ```
 
 ## Generation API
 
 ```typescript
-// Usage in claude-flow CLI or standalone
-// Package: @claude-flow/codex (first step toward coflow rebranding)
+// Usage in rufflo CLI or standalone
+// Package: @rufflo/codex (first step toward coflow rebranding)
 
 import {
   generateAgentsMd,
   generateSkillMd,
   generateConfigToml,
   CodexInitializer
-} from '@claude-flow/codex';
+} from '@rufflo/codex';
 
 // Or via the CLI
-// npx @claude-flow/codex init
-// npx @claude-flow/codex generate-skill --name my-skill
+// npx @rufflo/codex init
+// npx @rufflo/codex generate-skill --name my-skill
 
 // Generate AGENTS.md
 const agentsMd = await generateAgentsMd({
@@ -963,7 +963,7 @@ const config = await generateConfigToml({
   approvalPolicy: 'on-request',
   sandboxMode: 'workspace-write',
   mcpServers: [
-    { name: 'claude-flow', command: 'npx', args: ['-y', '@claude-flow/cli@latest'] }
+    { name: 'rufflo', command: 'npx', args: ['-y', '@rufflo/cli@latest'] }
   ],
   skills: [
     { path: '.agents/skills/swarm-orchestration', enabled: true }
@@ -984,38 +984,38 @@ This completes the template specifications for the Codex integration.
 
 ## CLI Commands
 
-The `@claude-flow/codex` package provides the following commands:
+The `@rufflo/codex` package provides the following commands:
 
 ```bash
 # Initialize a new Codex project
-npx @claude-flow/codex init
+npx @rufflo/codex init
 
 # Initialize with specific template
-npx @claude-flow/codex init --template minimal
+npx @rufflo/codex init --template minimal
 
 # Generate a new skill
-npx @claude-flow/codex generate-skill --name custom-skill
+npx @rufflo/codex generate-skill --name custom-skill
 
 # Migrate from Claude Code to Codex
-npx @claude-flow/codex migrate --from claude.md
+npx @rufflo/codex migrate --from claude.md
 
 # Validate AGENTS.md and skills
-npx @claude-flow/codex validate
+npx @rufflo/codex validate
 
 # Generate dual-platform setup (Claude Code + Codex)
-npx @claude-flow/codex init --dual
+npx @rufflo/codex init --dual
 ```
 
-## Integration with @claude-flow/cli
+## Integration with @rufflo/cli
 
 When using the main CLI, Codex support is available via:
 
 ```bash
 # Initialize with Codex support
-npx claude-flow@v3alpha init --codex
+npx rufflo@v3alpha init --codex
 
 # Initialize with dual-platform support
-npx claude-flow@v3alpha init --dual
+npx rufflo@v3alpha init --dual
 
 # Future (after coflow rebrand)
 npx coflow init --codex

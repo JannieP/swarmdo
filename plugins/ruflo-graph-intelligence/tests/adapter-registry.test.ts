@@ -1,5 +1,5 @@
 /**
- * ruflo-graph-intelligence — Adapter Registry Tests (ADR-123 Phase 1)
+ * rufflo-graph-intelligence — Adapter Registry Tests (ADR-123 Phase 1)
  */
 
 import { describe, it, expect, beforeEach } from 'vitest';

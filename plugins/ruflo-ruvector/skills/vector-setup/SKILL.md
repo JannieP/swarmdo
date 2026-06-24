@@ -68,7 +68,7 @@ This skill installs them in one pass.
 
 For a deterministic verification of the install, run the plugin's bundled smoke script:
 ```bash
-bash plugins/ruflo-ruvector/scripts/smoke.sh
+bash plugins/rufflo-ruvector/scripts/smoke.sh
 ```
 
 It checks: version pin, top-level subcommand visibility, `hooks ast-analyze`, `hooks route`, `attention list`, `rvf examples`, and `info`. Exits non-zero if any drift from the contracted surface is detected.

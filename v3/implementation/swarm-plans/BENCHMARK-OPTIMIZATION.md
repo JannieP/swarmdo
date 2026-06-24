@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document defines the **performance benchmarking and optimization strategy** for Claude-Flow v3. Agent #14 (Performance Engineer) leads this effort, with support from all other agents.
+This document defines the **performance benchmarking and optimization strategy** for Rufflo v3. Agent #14 (Performance Engineer) leads this effort, with support from all other agents.
 
 ---
 
@@ -13,10 +13,10 @@ This document defines the **performance benchmarking and optimization strategy**
 | **CLI Startup** | ~2.5s | <500ms | 5x faster |
 | **MCP Init** | ~1.8s | <400ms | 4.5x faster |
 | **Agent Spawn** | ~800ms | <200ms | 4x faster |
-| **Vector Search** | 150ms/query | <1ms/query | 150x faster |
+| **Vector Search** | 150ms/query | <1ms/query | ~4.7x faster |
 | **Memory Write** | 50ms | <5ms | 10x faster |
 | **Swarm Consensus** | ~500ms | <100ms | 5x faster |
-| **Flash Attention** | N/A | 2.49x-7.47x | New feature |
+| **Flash Attention** | N/A | unverified (no benchmark) | New feature |
 | **Memory Usage** | 512MB | <256MB | 50% reduction |
 
 ---
@@ -174,7 +174,7 @@ describe('CLI Startup Benchmarks', () => {
       'CLI Cold Start',
       async () => {
         await new Promise<void>((resolve, reject) => {
-          const proc = spawn('npx', ['claude-flow', '--version'], {
+          const proc = spawn('npx', ['rufflo', '--version'], {
             env: { ...process.env, NODE_ENV: 'production' }
           });
           proc.on('close', (code) => code === 0 ? resolve() : reject());
@@ -310,7 +310,7 @@ describe('Vector Search Benchmarks', () => {
     expect(result.p95).toBeLessThan(1);
   });
 
-  it('should achieve 150x improvement over brute force', async () => {
+  it('should achieve ~4.7x measured improvement over brute force', async () => {
     const queryVector = new Float32Array(VECTOR_DIM).map(() => Math.random());
 
     // Brute force baseline
@@ -445,7 +445,7 @@ describe('Flash Attention Benchmarks', () => {
     });
   }
 
-  it('should achieve 2.49x-7.47x speedup over standard attention', async () => {
+  it('should achieve unverified (no benchmark) speedup over standard attention', async () => {
     const seqLen = 2048;
     const input = new Float32Array(seqLen * 768).map(() => Math.random());
 

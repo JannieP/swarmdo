@@ -14,7 +14,7 @@ project/
 │   ├── helpers/                # Utility scripts
 │   ├── statusline.sh           # Unix/macOS statusline
 │   └── statusline.mjs          # ESM statusline module
-├── .claude-flow/               # V3 runtime
+├── .rufflo/               # V3 runtime
 │   ├── config.yaml             # Runtime configuration
 │   ├── data/                   # Persistent data
 │   ├── logs/                   # Log files
@@ -80,9 +80,9 @@ Skills are installed to `.claude/skills/` and provide specialized capabilities.
 Commands are installed to `.claude/commands/` and provide quick actions.
 
 ### Core Commands
-- `claude-flow-help.md` - Help documentation
-- `claude-flow-swarm.md` - Swarm operations
-- `claude-flow-memory.md` - Memory operations
+- `rufflo-help.md` - Help documentation
+- `rufflo-swarm.md` - Swarm operations
+- `rufflo-memory.md` - Memory operations
 
 ### Command Groups
 | Group | Contents |
@@ -171,9 +171,9 @@ Claude Code statusline module showing:
 ```json
 {
   "mcpServers": {
-    "claude-flow": {
+    "rufflo": {
       "command": "npx",
-      "args": ["@claude-flow/cli", "mcp", "start"],
+      "args": ["@rufflo/cli", "mcp", "start"],
       "env": {
         "CLAUDE_FLOW_MODE": "v3",
         "CLAUDE_FLOW_HOOKS_ENABLED": "true",
@@ -188,7 +188,7 @@ Claude Code statusline module showing:
 
 ## Runtime Configuration
 
-`.claude-flow/config.yaml` configures V3 runtime.
+`.rufflo/config.yaml` configures V3 runtime.
 
 ```yaml
 version: "3.0.0"
@@ -202,12 +202,12 @@ swarm:
 memory:
   backend: hybrid
   enableHNSW: true
-  persistPath: .claude-flow/data
+  persistPath: .rufflo/data
   cacheSize: 100
 
 neural:
   enabled: true
-  modelPath: .claude-flow/neural
+  modelPath: .rufflo/neural
 
 hooks:
   enabled: true

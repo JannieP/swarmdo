@@ -10,7 +10,7 @@
  * \b boundaries or bumps confidence back to 0.8 is caught at PR-time.
  *
  * Drives the SOURCE OF TRUTH (helpers-generator.ts::generateAgentRouter)
- * AND the in-repo snapshot under v3/@claude-flow/cli/.claude/helpers/.
+ * AND the in-repo snapshot under v3/@rufflo/cli/.claude/helpers/.
  *
  * Exit codes:
  *   0 — all expectations met
@@ -27,13 +27,13 @@ const require = createRequire(import.meta.url);
 // Render the generator output to disk so we test the SOURCE OF TRUTH.
 async function loadGeneratedRouter() {
   // tsx is the project's standard TS-on-the-fly loader.
-  const { generateAgentRouter } = await import('../v3/@claude-flow/cli/src/init/helpers-generator.ts')
+  const { generateAgentRouter } = await import('../v3/@rufflo/cli/src/init/helpers-generator.ts')
     .catch(async () => {
       // Fall back to a tsx-loaded copy if direct ESM TS import isn't supported.
       const { execSync } = await import('node:child_process');
       const tmp = mkdtempSync(join(tmpdir(), 'router-smoke-'));
       const out = execSync(
-        `node --import tsx -e "import('./v3/@claude-flow/cli/src/init/helpers-generator.ts').then(m => process.stdout.write(m.generateAgentRouter()))"`,
+        `node --import tsx -e "import('./v3/@rufflo/cli/src/init/helpers-generator.ts').then(m => process.stdout.write(m.generateAgentRouter()))"`,
         { encoding: 'utf8' }
       );
       const path = join(tmp, 'router-gen.cjs');
@@ -83,7 +83,7 @@ async function main() {
   // Hard contract on the file format too — if someone strips \b boundaries
   // the cases above might still pass on this corpus but break on others.
   const generated = await router.routeTask ? null : null;
-  const sourcePath = 'v3/@claude-flow/cli/src/init/helpers-generator.ts';
+  const sourcePath = 'v3/@rufflo/cli/src/init/helpers-generator.ts';
   const src = readFileSync(sourcePath, 'utf8');
   if (!src.includes('\\\\b')) {
     console.error(`\nFAIL  ${sourcePath} no longer contains \\b boundary anchors — #2257 regression`);

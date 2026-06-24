@@ -7,11 +7,11 @@
 2026-03-17
 
 ## Authors
-- Ruflo Maintainers
+- Rufflo Maintainers
 
 ## Context
 
-Ruflo v3.5.22 achieved 100% capability audit (76/76 checks, 259 MCP tools). With the project gaining traction (5,900+ commits, growing community), external contributors are submitting PRs that fix real bugs and add valuable features. This ADR documents the review process, verdicts, and merge plan for the first batch of community PRs.
+Rufflo v3.5.22 achieved 100% capability audit (76/76 checks, 259 MCP tools). With the project gaining traction (5,900+ commits, growing community), external contributors are submitting PRs that fix real bugs and add valuable features. This ADR documents the review process, verdicts, and merge plan for the first batch of community PRs.
 
 ### Review Criteria
 
@@ -50,7 +50,7 @@ Each PR is evaluated on 4 axes:
 - **Files**: hooks-tools.ts
 - **Additions**: 161 / **Deletions**: 6
 - **Issue**: #1310 — router never improves from task outcomes
-- **Fix**: File-based persistence to `.claude-flow/routing-outcomes.json`, 500-entry FIFO cap
+- **Fix**: File-based persistence to `.rufflo/routing-outcomes.json`, 500-entry FIFO cap
 - **Verdict**: ACCEPT WITH CHANGES
 - **Security**: No input validation on `agent`/`task` before JSON persistence. Add length + character whitelist: `agent.length > 100 || !/^[a-zA-Z0-9_-]+$/.test(agent)`.
 - **Required changes**: (1) Hoist `getMergedTaskPatterns()` out of `.map()` callback — currently N file reads per route call. (2) Add agent name validation. (3) Replace regex dir extraction with `dirname()`. (4) Consider in-memory cache for `loadRoutingOutcomes()`.
@@ -58,7 +58,7 @@ Each PR is evaluated on 4 axes:
 
 ### Tier 2: Build & Interop Fixes
 
-#### PR #1346 — fix(cli): prevent TS2307 for optional @claude-flow/codex import
+#### PR #1346 — fix(cli): prevent TS2307 for optional @rufflo/codex import
 - **Author**: @TimChesko
 - **Files**: init.ts
 - **Additions**: 3 / **Deletions**: 1

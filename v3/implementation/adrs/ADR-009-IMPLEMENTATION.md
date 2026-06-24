@@ -5,7 +5,7 @@
 This implementation provides a **HybridBackend** that combines SQLite (structured queries) and AgentDB (vector search) as per ADR-009. The hybrid approach leverages the strengths of both backends:
 
 - **SQLite**: ACID transactions, exact matches, structured queries, complex joins
-- **AgentDB**: Vector similarity search, HNSW indexing (150x-12,500x faster), semantic queries
+- **AgentDB**: Vector similarity search, HNSW indexing (~1.9x-4.7x measured faster), semantic queries
 
 ## Architecture
 
@@ -22,7 +22,7 @@ This implementation provides a **HybridBackend** that combines SQLite (structure
         │ • Prefix queries     │  │ • HNSW indexing        │
         │ • Complex SQL        │  │ • Semantic similarity  │
         │ • ACID transactions  │  │ • LRU caching          │
-        │ • Full-text search   │  │ • 150x-12,500x faster  │
+        │ • Full-text search   │  │ • ~1.9x-4.7x measured faster  │
         └──────────────────────┘  └────────────────────────┘
 ```
 
@@ -81,7 +81,7 @@ Comprehensive test suite covering:
 ### Basic Hybrid Backend
 
 ```typescript
-import { HybridBackend } from '@claude-flow/memory';
+import { HybridBackend } from '@rufflo/memory';
 
 const backend = new HybridBackend({
   sqlite: {
@@ -221,7 +221,7 @@ The HybridBackend intelligently routes queries:
 | `exact` | SQLite | Optimized for exact key lookups with indexes |
 | `prefix` | SQLite | Optimized for LIKE queries with indexes |
 | `tag` | SQLite | Efficient JSON filtering |
-| `semantic` | AgentDB | HNSW vector search (150x-12,500x faster) |
+| `semantic` | AgentDB | HNSW vector search (~1.9x-4.7x measured faster) |
 | `hybrid` | Both | Combines results from both backends |
 | Auto (has embedding) | AgentDB | Semantic search capability |
 | Auto (has key/prefix) | SQLite | Structured query capability |
@@ -238,7 +238,7 @@ The HybridBackend intelligently routes queries:
 
 ### AgentDB Backend
 - **Vector search**: O(log n) with HNSW (vs O(n) brute force)
-- **Speedup**: 150x-12,500x faster than linear scan
+- **Speedup**: ~1.9x-4.7x measured faster than linear scan
 - **Memory**: Configurable with quantization support
 - **Cache**: LRU cache with TTL for hot queries
 - **Concurrency**: Lock-free reads with CAS writes
@@ -306,7 +306,7 @@ console.log('Recommendations:', health.recommendations);
 For existing systems using only AgentDB:
 
 ```typescript
-import { HybridBackend, AgentDBAdapter } from '@claude-flow/memory';
+import { HybridBackend, AgentDBAdapter } from '@rufflo/memory';
 
 // Old: AgentDB only
 const oldBackend = new AgentDBAdapter(config);
@@ -326,7 +326,7 @@ const newBackend = new HybridBackend({
 Run the comprehensive test suite:
 
 ```bash
-cd /workspaces/claude-flow/v3/@claude-flow/memory
+cd /workspaces/rufflo/v3/@rufflo/memory
 npm test src/hybrid-backend.test.ts
 ```
 
@@ -349,7 +349,7 @@ Test coverage includes:
 
 2. **Performance Optimization**
    - Automatic routing to optimal backend
-   - 150x-12,500x faster semantic search with HNSW
+   - ~1.9x-4.7x measured faster semantic search with HNSW
    - Efficient exact matches with B-tree indexes
 
 3. **Data Consistency**
@@ -391,11 +391,11 @@ Test coverage includes:
 
 2. **Performance Results**
    - Bulk operations: 2-3x faster
-   - HNSW search: 150x-12,500x faster (confirmed)
+   - HNSW search: ~1.9x-4.7x measured faster (confirmed)
    - Query routing: <0.1ms overhead
 
 ### Package Versions
-- `@claude-flow/memory@3.0.0-alpha.2`
+- `@rufflo/memory@3.0.0-alpha.2`
 
 ---
 
@@ -405,10 +405,10 @@ Test coverage includes:
 
 The HybridBackend implementation successfully achieves ADR-009 goals:
 - ✅ SQLite for structured queries with ACID guarantees
-- ✅ AgentDB for semantic search with 150x-12,500x speedup
+- ✅ AgentDB for semantic search with ~1.9x-4.7x measured speedup
 - ✅ Intelligent automatic query routing
 - ✅ Dual-write consistency option
 - ✅ Comprehensive test coverage
 - ✅ Production-ready monitoring
 
-This provides Claude Flow V3 with a **flexible, performant, and reliable** memory system that adapts to different query patterns while maintaining consistency across both backends.
+This provides Rufflo V3 with a **flexible, performant, and reliable** memory system that adapts to different query patterns while maintaining consistency across both backends.

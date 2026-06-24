@@ -5,6 +5,6 @@ description: RVF memory management -- list entries, show stats, manage sessions
 
 RVF memory management:
 
-1. Call `mcp__claude-flow__memory_stats` to get storage metrics
-2. Call `mcp__claude-flow__session_list` to show saved sessions
+1. Call `mcp__rufflo__memory_stats` to get storage metrics
+2. Call `mcp__rufflo__session_list` to show saved sessions
 3. Present: total entries, namespaces, storage size, saved sessions, last backup time

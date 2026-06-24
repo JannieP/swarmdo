@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Structural smoke test for ruflo-intelligence v0.3.0.
+# Structural smoke test for rufflo-intelligence v0.3.0.
 # Per ADR-0001 §6 Verification: 13 contract checks + 3 doc invariants.
 # Offline-safe; no live MCP calls.
 set -u
@@ -112,7 +112,7 @@ else
   bad "intelligence-transfer skill missing or incomplete"
 fi
 
-# 10. Pluralization gotcha referenced (defers to ruflo-agentdb)
+# 10. Pluralization gotcha referenced (defers to rufflo-agentdb)
 step "10. pluralization gotcha (pattern vs patterns) documented"
 F="$ROOT/README.md"
 if grep -q '`pattern`' "$F" \
@@ -141,8 +141,8 @@ else
 fi
 
 # 13. Compatibility section pins to v3.6
-step "13. Compatibility section pins @claude-flow/cli to v3.6"
-if grep -qE "@claude-flow/cli.*v3\.6|v3\.6.*claude-flow/cli" "$ROOT/README.md"; then
+step "13. Compatibility section pins @rufflo/cli to v3.6"
+if grep -qE "@rufflo/cli.*v3\.6|v3\.6.*rufflo/cli" "$ROOT/README.md"; then
   ok
 else
   bad "Compatibility pin to v3.6 missing"

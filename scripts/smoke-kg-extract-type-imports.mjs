@@ -32,7 +32,7 @@ import { randomBytes } from 'node:crypto';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, '..');
-const SKILL_DIR = join(REPO_ROOT, 'plugins', 'ruflo-knowledge-graph', 'skills');
+const SKILL_DIR = join(REPO_ROOT, 'plugins', 'rufflo-knowledge-graph', 'skills');
 const KG_EXTRACT = join(SKILL_DIR, 'kg-extract', 'SKILL.md');
 const KG_TRAVERSE = join(SKILL_DIR, 'kg-traverse', 'SKILL.md');
 
@@ -97,7 +97,7 @@ if (!existsSync(KG_TRAVERSE)) {
 
 console.log('\n[2/2] Behavioural classification check on a TS fixture');
 
-const fixtureDir = join(tmpdir(), 'ruflo-kg-fixture-' + randomBytes(4).toString('hex'));
+const fixtureDir = join(tmpdir(), 'rufflo-kg-fixture-' + randomBytes(4).toString('hex'));
 mkdirSync(fixtureDir, { recursive: true });
 
 const findingsTs = `

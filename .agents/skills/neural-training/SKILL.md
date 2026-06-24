@@ -19,7 +19,7 @@ Train and optimize neural patterns using SONA, MoE, and EWC++ systems.
 
 ## Intelligence Pipeline
 
-1. **RETRIEVE** — Fetch relevant patterns via HNSW (150x-12,500x faster)
+1. **RETRIEVE** — Fetch relevant patterns via HNSW (~1.9x-4.7x measured faster)
 2. **JUDGE** — Evaluate with verdicts (success$failure)
 3. **DISTILL** — Extract key learnings via LoRA
 4. **CONSOLIDATE** — Prevent catastrophic forgetting via EWC++
@@ -30,35 +30,35 @@ Train and optimize neural patterns using SONA, MoE, and EWC++ systems.
 |-----------|---------|-------------|
 | SONA | Self-optimizing adaptation | <0.05ms |
 | MoE | Expert routing | 8 experts |
-| HNSW | Pattern search | 150x-12,500x |
+| HNSW | Pattern search | ~1.9x-4.7x measured |
 | EWC++ | Prevent forgetting | Continuous |
-| Flash Attention | Speed | 2.49x-7.47x |
+| Flash Attention | Speed | unverified (no benchmark) |
 
 ## Commands
 
 ### Train Patterns
 ```bash
-npx claude-flow neural train --model-type moe --epochs 10
+npx rufflo neural train --model-type moe --epochs 10
 ```
 
 ### Check Status
 ```bash
-npx claude-flow neural status
+npx rufflo neural status
 ```
 
 ### View Patterns
 ```bash
-npx claude-flow neural patterns --type all
+npx rufflo neural patterns --type all
 ```
 
 ### Predict
 ```bash
-npx claude-flow neural predict --input "task description"
+npx rufflo neural predict --input "task description"
 ```
 
 ### Optimize
 ```bash
-npx claude-flow neural optimize --target latency
+npx rufflo neural optimize --target latency
 ```
 
 ## Best Practices

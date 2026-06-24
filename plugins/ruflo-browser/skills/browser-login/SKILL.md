@@ -2,7 +2,7 @@
 name: browser-login
 description: Drive an authentication flow once, sanitize cookies through AIDefence, and vault a reusable cookie handle in browser-cookies for future sessions
 argument-hint: "<login-url> [--vault-name <handle>] [--mfa]"
-allowed-tools: mcp__claude-flow__browser_open mcp__claude-flow__browser_close mcp__claude-flow__browser_fill mcp__claude-flow__browser_type mcp__claude-flow__browser_click mcp__claude-flow__browser_wait mcp__claude-flow__browser_eval mcp__claude-flow__browser_snapshot mcp__claude-flow__aidefence_scan mcp__claude-flow__aidefence_has_pii Bash Read Write
+allowed-tools: mcp__rufflo__browser_open mcp__rufflo__browser_close mcp__rufflo__browser_fill mcp__rufflo__browser_type mcp__rufflo__browser_click mcp__rufflo__browser_wait mcp__rufflo__browser_eval mcp__rufflo__browser_snapshot mcp__rufflo__aidefence_scan mcp__rufflo__aidefence_has_pii Bash Read Write
 ---
 
 # Browser Login
@@ -32,7 +32,7 @@ Authenticate against a target site once, then vault the resulting session creden
    Tokens that look raw get vault-wrapped (an opaque handle) before AgentDB store; raw values never enter the namespace.
 6. **Store in `browser-cookies`**:
    ```bash
-   npx -y @claude-flow/cli@latest memory store --namespace browser-cookies \
+   npx -y @rufflo/cli@latest memory store --namespace browser-cookies \
      --key "<host>" \
      --value "{vault_handle:<opaque>, expiry:<iso>, aidefence_verdict:safe}"
    ```

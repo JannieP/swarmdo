@@ -5,6 +5,6 @@ description: Dynamic Agentic Architecture status -- learning metrics, active age
 
 Show DAA dashboard:
 
-1. Call `mcp__claude-flow__daa_learning_status` to get learning metrics across all DAA agents
-2. Call `mcp__claude-flow__daa_performance_metrics` for efficiency and accuracy stats
+1. Call `mcp__rufflo__daa_learning_status` to get learning metrics across all DAA agents
+2. Call `mcp__rufflo__daa_performance_metrics` for efficiency and accuracy stats
 3. Present: active agents, adaptation progress, knowledge sharing events, cognitive patterns in use

@@ -55,20 +55,20 @@ npx ruvector brain search "query"
 # hooks_rag_context({ query: "topic", limit: 5 })
 ```
 
-### Retrieval via claude-flow CLI
+### Retrieval via rufflo CLI
 
 ```bash
 # Dense semantic search
-npx @claude-flow/cli@latest memory search --query "QUERY" --namespace NAMESPACE --limit 10
+npx @rufflo/cli@latest memory search --query "QUERY" --namespace NAMESPACE --limit 10
 
 # Store with metadata
-npx @claude-flow/cli@latest memory store --key "KEY" --value "VALUE" --namespace NAMESPACE
+npx @rufflo/cli@latest memory store --key "KEY" --value "VALUE" --namespace NAMESPACE
 
 # List and audit
-npx @claude-flow/cli@latest memory list --namespace NAMESPACE --limit 20
+npx @rufflo/cli@latest memory list --namespace NAMESPACE --limit 20
 
 # Consolidated search across all namespaces
-npx @claude-flow/cli@latest memory search --query "QUERY" --limit 10
+npx @rufflo/cli@latest memory search --query "QUERY" --limit 10
 ```
 
 ### Adaptive Chunking Strategy
@@ -90,7 +90,7 @@ npx @claude-flow/cli@latest memory search --query "QUERY" --limit 10
 5. **Re-index** — rebuild HNSW index after consolidation for optimal graph quality
 
 ```bash
-npx @claude-flow/cli@latest hooks worker dispatch --trigger consolidate
+npx @rufflo/cli@latest hooks worker dispatch --trigger consolidate
 ```
 
 ### Namespaces
@@ -108,13 +108,13 @@ npx @claude-flow/cli@latest hooks worker dispatch --trigger consolidate
 
 After completing tasks, train on successful retrieval patterns:
 ```bash
-npx @claude-flow/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
+npx @rufflo/cli@latest hooks post-task --task-id "TASK_ID" --success true --train-neural true
 ```
 
 ### Related Plugins
 
-- **ruflo-agentdb**: Full AgentDB backend with HNSW vector_indexes table
-- **ruflo-ruvector**: FlashAttention-3, Graph RAG, hybrid search, DiskANN
-- **ruflo-rvf**: Portable RVF format for cross-machine memory export/import
-- **ruflo-knowledge-graph**: Entity-relationship graphs over memory entries
-- **ruflo-intelligence**: SONA trajectory learning from retrieval patterns
+- **rufflo-agentdb**: Full AgentDB backend with HNSW vector_indexes table
+- **rufflo-ruvector**: FlashAttention-3, Graph RAG, hybrid search, DiskANN
+- **rufflo-rvf**: Portable RVF format for cross-machine memory export/import
+- **rufflo-knowledge-graph**: Entity-relationship graphs over memory entries
+- **rufflo-intelligence**: SONA trajectory learning from retrieval patterns

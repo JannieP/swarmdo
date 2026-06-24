@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// One-shot ADR importer for the ruflo-adr plugin.
+// One-shot ADR importer for the rufflo-adr plugin.
 //
 // Walks the working directory (or ADR_ROOT override), parses every ADR file
 // under */docs/adr/ or */docs/adrs/, persists records to the `adr-patterns`
@@ -31,8 +31,8 @@ import { spawnSync } from 'node:child_process';
 // rather than incremental (records skipped). For incremental imports across
 // many runs, leave CLI_CORE unset.
 const CLI_PKG = process.env.CLI_CORE === '1'
-  ? '@claude-flow/cli-core@alpha'
-  : '@claude-flow/cli@latest';
+  ? '@rufflo/cli-core@alpha'
+  : '@rufflo/cli@latest';
 
 const ROOT = process.env.ADR_ROOT || process.cwd();
 const SKIP_DIRS = new Set(['node_modules', '.git', 'dist', 'v2', '.next', '.turbo', 'build']);

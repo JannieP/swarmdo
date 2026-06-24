@@ -41,7 +41,7 @@
 /* ---------------------------------------------------------------------- */
 
 export interface SignedBacktestArtifact {
-  schema: 'ruflo-neural-trader-backtest/v1';
+  schema: 'rufflo-neural-trader-backtest/v1';
   strategyId: string;
   paramsHash: string;           // sha256 of canonical params JSON
   dataRange: { from: string; to: string };
@@ -94,7 +94,7 @@ export async function signBacktestArtifact(
   const publicKeyBytes = await ed.getPublicKeyAsync(privateKey);
 
   return {
-    schema: 'ruflo-neural-trader-backtest/v1',
+    schema: 'rufflo-neural-trader-backtest/v1',
     ...body,
     witnessPublicKey: `ed25519:${bytesToHex(publicKeyBytes)}`,
     witnessSignature: bytesToHex(signatureBytes),

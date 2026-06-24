@@ -1,13 +1,13 @@
 ---
 name: "V3 DDD Architecture"
-description: "Domain-Driven Design architecture for claude-flow v3. Implements modular, bounded context architecture with clean separation of concerns and microkernel pattern."
+description: "Domain-Driven Design architecture for rufflo v3. Implements modular, bounded context architecture with clean separation of concerns and microkernel pattern."
 ---
 
 # V3 DDD Architecture
 
 ## What This Skill Does
 
-Designs and implements Domain-Driven Design (DDD) architecture for claude-flow v3, decomposing god objects into bounded contexts, implementing clean architecture patterns, and enabling modular, testable code structure.
+Designs and implements Domain-Driven Design (DDD) architecture for rufflo v3, decomposing god objects into bounded contexts, implementing clean architecture patterns, and enabling modular, testable code structure.
 
 ## Quick Start
 
@@ -115,7 +115,7 @@ interface HealthMonitoringDomain {
 
 ### Core Kernel
 ```typescript
-// core$kernel$claude-flow-kernel.ts
+// core$kernel$rufflo-kernel.ts
 export class ClaudeFlowKernel {
   private domains: Map<string, Domain> = new Map();
   private eventBus: DomainEventBus;

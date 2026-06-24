@@ -1,4 +1,4 @@
-# ruflo-iot-cognitum
+# rufflo-iot-cognitum
 
 IoT device lifecycle, telemetry anomaly detection, fleet management, and witness chain verification for Cognitum Seed hardware.
 
@@ -8,14 +8,14 @@ This plugin requires a **Cognitum Seed** device. Get one at **https://cognitum.o
 
 ## Overview
 
-Treats every Cognitum Seed device as a Ruflo agent with hardware capabilities. Devices progress through a 5-tier trust model, emit telemetry vectors for anomaly detection, participate in mesh networks, and maintain Ed25519 witness chains for provenance.
+Treats every Cognitum Seed device as a Rufflo agent with hardware capabilities. Devices progress through a 5-tier trust model, emit telemetry vectors for anomaly detection, participate in mesh networks, and maintain Ed25519 witness chains for provenance.
 
-Backed by `@claude-flow/plugin-iot-cognitum` (239 tests, 32 source files).
+Backed by `@rufflo/plugin-iot-cognitum` (239 tests, 32 source files).
 
 ## Installation
 
 ```bash
-claude --plugin-dir plugins/ruflo-iot-cognitum
+claude --plugin-dir plugins/rufflo-iot-cognitum
 ```
 
 ## Agents
@@ -136,13 +136,13 @@ pending → canary → rolling → complete
 
 ## Compatibility
 
-- **CLI:** pinned to `@claude-flow/cli` v3.6 major+minor.
+- **CLI:** pinned to `@rufflo/cli` v3.6 major+minor.
 - **Hardware:** requires Cognitum Seed device. SDK: `@cognitum-one/sdk/seed`.
-- **Verification:** `bash plugins/ruflo-iot-cognitum/scripts/smoke.sh` is the contract.
+- **Verification:** `bash plugins/rufflo-iot-cognitum/scripts/smoke.sh` is the contract.
 
 ## Namespace coordination
 
-This plugin owns five AgentDB namespaces, all compliant with the [ruflo-agentdb ADR-0001 §"Namespace convention"](../ruflo-agentdb/docs/adrs/0001-agentdb-optimization.md) (`<plugin-stem>-<intent>` kebab-case):
+This plugin owns five AgentDB namespaces, all compliant with the [rufflo-agentdb ADR-0001 §"Namespace convention"](../rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md) (`<plugin-stem>-<intent>` kebab-case):
 
 | Namespace | Purpose |
 |-----------|---------|
@@ -156,25 +156,25 @@ Reserved namespaces (`pattern`, `claude-memories`, `default`) MUST NOT be shadow
 
 ## Trust model parallel with federation
 
-This plugin's 5-tier device trust model (UNKNOWN → REGISTERED → PROVISIONED → CERTIFIED → FLEET_TRUSTED) follows the same shape as the [ruflo-federation 5-tier trust model](../ruflo-federation/docs/adrs/0001-federation-contract.md) (UNTRUSTED → VERIFIED → ATTESTED → TRUSTED → PRIVILEGED). Different surface (IoT devices vs federation peers) and distinct naming, but the score-driven progression and capability-gating principle are the same.
+This plugin's 5-tier device trust model (UNKNOWN → REGISTERED → PROVISIONED → CERTIFIED → FLEET_TRUSTED) follows the same shape as the [rufflo-federation 5-tier trust model](../rufflo-federation/docs/adrs/0001-federation-contract.md) (UNTRUSTED → VERIFIED → ATTESTED → TRUSTED → PRIVILEGED). Different surface (IoT devices vs federation peers) and distinct naming, but the score-driven progression and capability-gating principle are the same.
 
 ## Verification
 
 ```bash
-bash plugins/ruflo-iot-cognitum/scripts/smoke.sh
+bash plugins/rufflo-iot-cognitum/scripts/smoke.sh
 # Expected: "12 passed, 0 failed"
 ```
 
 ## Architecture Decisions
 
-- [`ADR-0001` — ruflo-iot-cognitum plugin contract (compliant namespaces, 5-tier trust parallel, 6 background workers, smoke as contract)](./docs/adrs/0001-iot-cognitum-contract.md)
+- [`ADR-0001` — rufflo-iot-cognitum plugin contract (compliant namespaces, 5-tier trust parallel, 6 background workers, smoke as contract)](./docs/adrs/0001-iot-cognitum-contract.md)
 
 ## Related Plugins
 
-- `ruflo-agentdb` — HNSW-indexed telemetry storage backend; namespace convention owner
-- `ruflo-federation` — 5-tier trust model parallel (different surface, distinct naming, same shape)
-- `ruflo-intelligence` — SONA neural pattern learning
-- `ruflo-observability` — Telemetry correlation and tracing
+- `rufflo-agentdb` — HNSW-indexed telemetry storage backend; namespace convention owner
+- `rufflo-federation` — 5-tier trust model parallel (different surface, distinct naming, same shape)
+- `rufflo-intelligence` — SONA neural pattern learning
+- `rufflo-observability` — Telemetry correlation and tracing
 
 ## License
 

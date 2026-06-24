@@ -30,7 +30,7 @@ Seed: 271828
 ## Notes
 
 - This bench models a **linear scan** baseline. The production
-  backend uses HNSW (ADR-006), which is 150x-12,500x faster on
+  backend uses HNSW (ADR-006), which is ~1.9x-4.7x measured faster on
   the same data at the same dim — that gap is the optimization
   budget the bench should track as memory grows.
 - Embeddings are unit-norm 384-dim Gaussian — a reasonable proxy
@@ -42,4 +42,4 @@ Seed: 271828
 
 - ADR-126 §SOTA delta — bench-driven perf work
 - ADR-006 — Unified Memory Service (HNSW)
-- `plugins/ruflo-neural-trader/skills/trader-backtest/SKILL.md` — production recall path
+- `plugins/rufflo-neural-trader/skills/trader-backtest/SKILL.md` — production recall path

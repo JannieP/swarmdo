@@ -96,7 +96,7 @@ ws.on('message', (raw: RawData) => {
 
 ### Step 2 — Federation plugin subscribes
 
-In `v3/@claude-flow/plugin-agent-federation/src/plugin.ts`, after `transport.listen()`:
+In `v3/@rufflo/plugin-agent-federation/src/plugin.ts`, after `transport.listen()`:
 
 ```typescript
 if (transport && typeof transport.onMessage === 'function') {

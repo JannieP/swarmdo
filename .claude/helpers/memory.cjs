@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 /**
- * Claude Flow Memory Helper
+ * Rufflo Memory Helper
  * Simple key-value memory for cross-session context
  */
 
 const fs = require('fs');
 const path = require('path');
 
-const MEMORY_DIR = path.join(process.cwd(), '.claude-flow', 'data');
+const MEMORY_DIR = path.join(process.cwd(), '.rufflo', 'data');
 const MEMORY_FILE = path.join(MEMORY_DIR, 'memory.json');
 
 function loadMemory() {

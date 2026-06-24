@@ -1,7 +1,7 @@
 {
-  "name": "@claude-flow/teammate-plugin",
+  "name": "@rufflo/teammate-plugin",
   "version": "1.0.0-alpha.1",
-  "description": "Native TeammateTool integration plugin for Claude Flow - bridges Claude Code v2.1.19+ multi-agent capabilities",
+  "description": "Native TeammateTool integration plugin for Rufflo - bridges Claude Code v2.1.19+ multi-agent capabilities",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -43,7 +43,7 @@
   "keywords": [
     "claude",
     "claude-code",
-    "claude-flow",
+    "rufflo",
     "teammate",
     "multi-agent",
     "swarm",

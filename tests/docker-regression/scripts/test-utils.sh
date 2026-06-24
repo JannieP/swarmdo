@@ -1,5 +1,5 @@
 #!/bin/bash
-# Claude-Flow Test Utilities
+# Rufflo Test Utilities
 # Shared functions for test scripts
 
 # Colors

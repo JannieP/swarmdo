@@ -1,14 +1,14 @@
 ---
 name: federation-audit
 description: Query federation audit logs with compliance filtering
-allowed-tools: Bash(npx *) mcp__claude-flow__memory_search Read Grep
+allowed-tools: Bash(npx *) mcp__rufflo__memory_search Read Grep
 argument-hint: "[--compliance hipaa|soc2|gdpr] [--since DATE] [--severity critical|error|warn|info]"
 ---
 Query structured federation audit logs. Supports compliance mode filtering (HIPAA, SOC2, GDPR) and severity filtering.
 
 Steps:
 1. Parse compliance mode, date range, and severity from arguments
-2. `npx -y -p @claude-flow/plugin-agent-federation@latest ruflo-federation audit --compliance MODE --since DATE --severity LEVEL`
+2. `npx -y -p @rufflo/plugin-agent-federation@latest rufflo-federation audit --compliance MODE --since DATE --severity LEVEL`
 3. Summarize findings: total events, PII detections, threat blocks, trust changes
 4. Highlight any critical or error-severity events
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Runtime smoke test for ruflo-neural-trader: actually invoke each
+# Runtime smoke test for rufflo-neural-trader: actually invoke each
 # `npx neural-trader` command the plugin's skills document and confirm
 # it returns parseable JSON with the expected shape.
 #
@@ -9,7 +9,7 @@
 # `neural-trader` npm package working end-to-end.
 #
 # Run:
-#   bash plugins/ruflo-neural-trader/scripts/runtime-smoke.sh
+#   bash plugins/rufflo-neural-trader/scripts/runtime-smoke.sh
 #
 # Exit codes:
 #   0  every command emits valid JSON with the expected `command` key

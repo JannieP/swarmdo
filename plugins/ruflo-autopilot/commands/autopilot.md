@@ -3,7 +3,7 @@ name: autopilot
 description: Enable, configure, or disable autonomous task completion
 ---
 $ARGUMENTS
-Manage Ruflo autopilot for autonomous /loop-driven task completion.
+Manage Rufflo autopilot for autonomous /loop-driven task completion.
 
 Usage:
 - `/autopilot enable` -- Enable autopilot and start the completion loop

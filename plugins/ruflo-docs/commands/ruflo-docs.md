@@ -1,13 +1,13 @@
 ---
-name: ruflo-docs
+name: rufflo-docs
 description: Generate or update documentation for a file, module, or the entire project
 ---
 $ARGUMENTS
 
 Generate or update documentation using the document worker and drift detection.
 
-**Full project**: `npx @claude-flow/cli@latest hooks worker dispatch --trigger document`
-**Specific scope**: `npx @claude-flow/cli@latest hooks worker dispatch --trigger document --scope api`
+**Full project**: `npx @rufflo/cli@latest hooks worker dispatch --trigger document`
+**Specific scope**: `npx @rufflo/cli@latest hooks worker dispatch --trigger document --scope api`
 
 Parse $ARGUMENTS to determine scope:
 - If a file path is given, generate docs for that file

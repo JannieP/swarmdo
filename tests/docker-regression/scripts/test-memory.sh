@@ -1,5 +1,5 @@
 #!/bin/bash
-# Claude-Flow Memory/AgentDB Test Suite
+# Rufflo Memory/AgentDB Test Suite
 # Tests memory management, AgentDB, and HNSW indexing
 
 set -e
@@ -41,7 +41,7 @@ run_test() {
 # ============================================================================
 echo "── Memory Initialization ──"
 
-run_test "Memory status" "npx claude-flow memory status 2>/dev/null || echo 'memory status ok'"
+run_test "Memory status" "npx rufflo memory status 2>/dev/null || echo 'memory status ok'"
 run_test "Memory path config" "echo 'memory path: ${CLAUDE_FLOW_MEMORY_PATH:-./data}' && echo 'ok'"
 run_test "AgentDB initialization" "echo 'AgentDB init' && echo 'ok'"
 run_test "SQLite backend" "echo 'SQLite backend' && echo 'ok'"
@@ -153,7 +153,7 @@ run_test "Session export" "echo 'session export' && echo 'ok'"
 echo ""
 echo "── Memory Statistics ──"
 
-run_test "Memory stats" "npx claude-flow memory stats 2>/dev/null || echo 'stats ok'"
+run_test "Memory stats" "npx rufflo memory stats 2>/dev/null || echo 'stats ok'"
 run_test "Vector count" "echo 'vector count' && echo 'ok'"
 run_test "Index size" "echo 'index size' && echo 'ok'"
 run_test "Search metrics" "echo 'search metrics' && echo 'ok'"

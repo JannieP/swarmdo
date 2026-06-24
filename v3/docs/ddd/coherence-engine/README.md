@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Coherence Engine domain provides mathematical AI interpretability capabilities for Claude Flow V3 through the `prime-radiant` plugin. It enables rigorous coherence validation, spectral stability analysis, and causal reasoning using advanced mathematical frameworks including Sheaf Cohomology, Spectral Graph Theory, and Do-Calculus.
+The Coherence Engine domain provides mathematical AI interpretability capabilities for Rufflo V3 through the `prime-radiant` plugin. It enables rigorous coherence validation, spectral stability analysis, and causal reasoning using advanced mathematical frameworks including Sheaf Cohomology, Spectral Graph Theory, and Do-Calculus.
 
 ## Strategic Design
 
@@ -71,7 +71,7 @@ Coherence Engine Domain
 │                                                                                  │
 └─────────────────────────────────────────────────────────────────────────────────┘
                                      │
-                    Integration with Claude Flow V3
+                    Integration with Rufflo V3
                                      │
         ┌────────────────────────────┼────────────────────────────┐
         │                            │                            │

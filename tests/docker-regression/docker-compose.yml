@@ -1,4 +1,4 @@
-# Claude-Flow Deep Regression Test Suite
+# Rufflo Deep Regression Test Suite
 # Docker Compose orchestration for comprehensive testing
 
 version: '3.8'
@@ -9,7 +9,7 @@ services:
     build:
       context: ../..
       dockerfile: tests/docker-regression/Dockerfile
-    container_name: claude-flow-test-runner
+    container_name: rufflo-test-runner
     volumes:
       - test-data:/app/data
       - test-reports:/app/reports
@@ -29,7 +29,7 @@ services:
       - MCP_SERVER_HOST=localhost
       - MCP_SERVER_PORT=3000
     networks:
-      - claude-flow-test
+      - rufflo-test
     command: ["bash", "/app/tests/docker-regression/scripts/run-all-tests.sh"]
 
   # MCP Server for integration tests
@@ -37,7 +37,7 @@ services:
     build:
       context: ../..
       dockerfile: tests/docker-regression/Dockerfile
-    container_name: claude-flow-mcp-server
+    container_name: rufflo-mcp-server
     volumes:
       - test-data:/app/data
       - test-logs:/app/logs
@@ -50,21 +50,21 @@ services:
     ports:
       - "3000:3000"
     networks:
-      - claude-flow-test
+      - rufflo-test
     healthcheck:
       test: ["CMD", "nc", "-z", "localhost", "3000"]
       interval: 5s
       timeout: 5s
       retries: 10
       start_period: 30s
-    command: ["npx", "claude-flow", "mcp", "start", "--port", "3000"]
+    command: ["npx", "rufflo", "mcp", "start", "--port", "3000"]
 
   # Unit test runner
   unit-tests:
     build:
       context: ../..
       dockerfile: tests/docker-regression/Dockerfile
-    container_name: claude-flow-unit-tests
+    container_name: rufflo-unit-tests
     volumes:
       - test-reports:/app/reports
     environment:
@@ -72,7 +72,7 @@ services:
       - CI=true
       - TEST_REPORT_PATH=/app/reports
     networks:
-      - claude-flow-test
+      - rufflo-test
     command: ["bash", "/app/tests/docker-regression/scripts/run-unit-tests.sh"]
 
   # Integration test runner
@@ -80,7 +80,7 @@ services:
     build:
       context: ../..
       dockerfile: tests/docker-regression/Dockerfile
-    container_name: claude-flow-integration-tests
+    container_name: rufflo-integration-tests
     volumes:
       - test-data:/app/data
       - test-reports:/app/reports
@@ -96,7 +96,7 @@ services:
       mcp-server:
         condition: service_healthy
     networks:
-      - claude-flow-test
+      - rufflo-test
     command: ["bash", "/app/tests/docker-regression/scripts/run-integration-tests.sh"]
 
   # Performance benchmark runner
@@ -104,7 +104,7 @@ services:
     build:
       context: ../..
       dockerfile: tests/docker-regression/Dockerfile
-    container_name: claude-flow-benchmark-tests
+    container_name: rufflo-benchmark-tests
     volumes:
       - test-data:/app/data
       - test-reports:/app/reports
@@ -115,7 +115,7 @@ services:
       - CI=true
       - TEST_REPORT_PATH=/app/reports
     networks:
-      - claude-flow-test
+      - rufflo-test
     command: ["bash", "/app/tests/docker-regression/scripts/run-benchmark-tests.sh"]
 
   # Security test runner
@@ -123,7 +123,7 @@ services:
     build:
       context: ../..
       dockerfile: tests/docker-regression/Dockerfile
-    container_name: claude-flow-security-tests
+    container_name: rufflo-security-tests
     volumes:
       - test-reports:/app/reports
     environment:
@@ -132,11 +132,11 @@ services:
       - CI=true
       - TEST_REPORT_PATH=/app/reports
     networks:
-      - claude-flow-test
+      - rufflo-test
     command: ["bash", "/app/tests/docker-regression/scripts/run-security-tests.sh"]
 
 networks:
-  claude-flow-test:
+  rufflo-test:
     driver: bridge
 
 volumes:

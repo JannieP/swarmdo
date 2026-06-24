@@ -1,13 +1,13 @@
 ---
 name: "V3 Performance Optimization"
-description: "Achieve aggressive v3 performance targets: 2.49x-7.47x Flash Attention speedup, 150x-12,500x search improvements, 50-75% memory reduction. Comprehensive benchmarking and optimization suite."
+description: "Achieve aggressive v3 performance targets: unverified (no benchmark) Flash Attention speedup, ~1.9x-4.7x measured search improvements, 50-75% memory reduction. Comprehensive benchmarking and optimization suite."
 ---
 
 # V3 Performance Optimization
 
 ## What This Skill Does
 
-Validates and optimizes claude-flow v3 to achieve industry-leading performance through Flash Attention, AgentDB HNSW indexing, and comprehensive system optimization with continuous benchmarking.
+Validates and optimizes rufflo v3 to achieve industry-leading performance through Flash Attention, AgentDB HNSW indexing, and comprehensive system optimization with continuous benchmarking.
 
 ## Quick Start
 
@@ -16,8 +16,8 @@ Validates and optimizes claude-flow v3 to achieve industry-leading performance t
 Task("Performance baseline", "Establish v2 performance benchmarks", "v3-performance-engineer")
 
 # Target validation (parallel)
-Task("Flash Attention", "Validate 2.49x-7.47x speedup target", "v3-performance-engineer")
-Task("Search optimization", "Validate 150x-12,500x search improvement", "v3-performance-engineer")
+Task("Flash Attention", "Validate unverified (no benchmark) speedup target", "v3-performance-engineer")
+Task("Search optimization", "Validate ~1.9x-4.7x measured search improvement", "v3-performance-engineer")
 Task("Memory optimization", "Achieve 50-75% memory reduction", "v3-performance-engineer")
 ```
 
@@ -41,7 +41,7 @@ Task("Memory optimization", "Achieve 50-75% memory reduction", "v3-performance-e
 │            SEARCH OPTIMIZATION         │
 ├─────────────────────────────────────────┤
 │  Current:  O(n) linear search           │
-│  Target:   150x - 12,500x improvement   │
+│  Target:   ~4.7x - ~4.7x improvement   │
 │  Method:   HNSW indexing                │
 │  Latency:  <100ms for 1M+ entries       │
 └─────────────────────────────────────────┘
@@ -333,8 +333,8 @@ class CPUOptimization {
 class PerformanceGates {
   async validateAllTargets(): Promise<ValidationReport> {
     const results = await Promise.all([
-      this.validateFlashAttention(),     // 2.49x-7.47x
-      this.validateSearchPerformance(),  // 150x-12,500x
+      this.validateFlashAttention(),     // unverified (no benchmark)
+      this.validateSearchPerformance(),  // ~1.9x-4.7x measured
       this.validateMemoryReduction(),    // 50-75%
       this.validateStartupTime(),        // <500ms
       this.validateSONAAdaptation()      // <0.05ms
@@ -353,8 +353,8 @@ class PerformanceGates {
 ## Success Metrics
 
 ### Primary Targets
-- [ ] **Flash Attention**: 2.49x-7.47x speedup validated
-- [ ] **Search Performance**: 150x-12,500x improvement confirmed
+- [ ] **Flash Attention**: unverified (no benchmark) speedup validated
+- [ ] **Search Performance**: ~1.9x-4.7x measured improvement confirmed
 - [ ] **Memory Reduction**: 50-75% usage optimization achieved
 - [ ] **Startup Time**: <500ms cold start consistently
 - [ ] **SONA Adaptation**: <0.05ms learning response time

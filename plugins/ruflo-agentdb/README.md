@@ -1,21 +1,21 @@
-# ruflo-agentdb
+# rufflo-agentdb
 
-The substrate plugin for Ruflo memory. Wraps three CLI MCP families — `agentdb_*` (controller bridge, 15 tools), `embeddings_*` (RuVector ONNX engine, 10 tools), and `ruvllm_hnsw_*` (WASM-backed pattern router, 3 tools) — into discoverable skills and commands. Other plugins (`ruflo-browser`, `ruflo-rag-memory`, `ruflo-intelligence`) compose this substrate; this plugin owns the namespace convention and the smoke contract for the substrate as a whole.
+The substrate plugin for Rufflo memory. Wraps three CLI MCP families — `agentdb_*` (controller bridge, 15 tools), `embeddings_*` (RuVector ONNX engine, 10 tools), and `ruvllm_hnsw_*` (WASM-backed pattern router, 3 tools) — into discoverable skills and commands. Other plugins (`rufflo-browser`, `rufflo-rag-memory`, `rufflo-intelligence`) compose this substrate; this plugin owns the namespace convention and the smoke contract for the substrate as a whole.
 
-> **Status:** ADR-0001 implemented. Plugin v0.3.0 targets `@claude-flow/cli` v3.6.x with bundled `agentdb@^3.0.0-alpha.11`. The smoke contract (10 checks) is the verification mechanism — see [docs/adrs/0001-agentdb-optimization.md](./docs/adrs/0001-agentdb-optimization.md).
+> **Status:** ADR-0001 implemented. Plugin v0.3.0 targets `@rufflo/cli` v3.6.x with bundled `agentdb@^3.0.0-alpha.11`. The smoke contract (10 checks) is the verification mechanism — see [docs/adrs/0001-agentdb-optimization.md](./docs/adrs/0001-agentdb-optimization.md).
 
 ## Install
 
 ```
 /plugin marketplace add ruvnet/ruflo
-/plugin install ruflo-agentdb@ruflo
+/plugin install rufflo-agentdb@rufflo
 ```
 
 ## Compatibility
 
-- **CLI:** pinned to `@claude-flow/cli` v3.6 major+minor. Patch bumps within v3.6 are expected to be no-op.
+- **CLI:** pinned to `@rufflo/cli` v3.6 major+minor. Patch bumps within v3.6 are expected to be no-op.
 - **AgentDB:** the CLI bundles `agentdb@^3.0.0-alpha.11`. The plugin does **not** pin the npm package — internals (alpha.11 → alpha.12 etc.) are not the plugin's contract.
-- **Verification:** the bundled smoke script is the source of truth (`bash plugins/ruflo-agentdb/scripts/smoke.sh`). If smoke passes against your CLI version, the plugin's contract holds.
+- **Verification:** the bundled smoke script is the source of truth (`bash plugins/rufflo-agentdb/scripts/smoke.sh`). If smoke passes against your CLI version, the plugin's contract holds.
 
 ## Features
 
@@ -26,7 +26,7 @@ The substrate plugin for Ruflo memory. Wraps three CLI MCP families — `agentdb
 
 ## Controllers (real registry, grouped by INIT_LEVELS)
 
-The "controller count" reported anywhere in this plugin is **whatever the runtime tool reports**. The canonical list of names is the `ControllerName` union at `v3/@claude-flow/memory/src/controller-registry.ts:34-73` (29 names across 6 init levels). Inspect at runtime:
+The "controller count" reported anywhere in this plugin is **whatever the runtime tool reports**. The canonical list of names is the `ControllerName` union at `v3/@rufflo/memory/src/controller-registry.ts:34-73` (29 names across 6 init levels). Inspect at runtime:
 
 ```bash
 mcp tool call agentdb_controllers --json
@@ -44,7 +44,7 @@ Initialization order per ADR-053 (`controller-registry.ts:160-174`):
 | 5 | `graphTransformer`, `sonaTrajectory`, `contextSynthesizer`, `rvfOptimizer`, `mmrDiversityRanker`, `guardedVectorBackend` | Advanced services |
 | 6 | `federatedSession`, `graphAdapter` | Session management |
 
-`graphAdapter` is currently disabled pending an external graph-DB connection (tracked in ADR-095). Other Level-2/3 security controllers (`mutationGuard`, `attestationLog`, `gnnService`, `rvfOptimizer`, `guardedVectorBackend`) were activated by ADR-095 G7 in ruflo 3.6.23+.
+`graphAdapter` is currently disabled pending an external graph-DB connection (tracked in ADR-095). Other Level-2/3 security controllers (`mutationGuard`, `attestationLog`, `gnnService`, `rvfOptimizer`, `guardedVectorBackend`) were activated by ADR-095 G7 in rufflo 3.6.23+.
 
 ## G7 controllers (activated by ADR-095)
 
@@ -78,9 +78,9 @@ This plugin owns the namespace convention that downstream plugins consume. Follo
 
 | Plugin | Namespaces |
 |---|---|
-| `ruflo-browser` | `browser-sessions`, `browser-selectors`, `browser-templates`, `browser-cookies` |
-| `ruflo-rag-memory` | (uses bridge target `claude-memories`) |
-| `ruflo-intelligence` | (uses fallback target `pattern`) |
+| `rufflo-browser` | `browser-sessions`, `browser-selectors`, `browser-templates`, `browser-cookies` |
+| `rufflo-rag-memory` | (uses bridge target `claude-memories`) |
+| `rufflo-intelligence` | (uses fallback target `pattern`) |
 
 ### Reserved namespaces (do NOT shadow)
 
@@ -145,7 +145,7 @@ Several Claude Code hooks fire writes into AgentDB. Consumer plugins should know
 | `SessionEnd` | `auto-memory-hook.mjs sync` | bridge → `MEMORY.md` | Flows AgentDB insights back to Claude Code's MEMORY.md |
 | `post-task --train-neural` | `agentdb_pattern-store` (ReasoningBank) | `pattern` (with `memory-store-fallback` if registry unavailable) | Stores task-completion patterns for SONA distillation |
 | `pretrain` (one-shot) | `memory_store` | `patterns` (plural) | Bootstrap learning corpus |
-| `trajectory-begin/step/end` (ruvector hooks) | ruvector substrate (separate plugin) | sona/agentdb namespaces handled by `ruflo-ruvector` | See `plugins/ruflo-ruvector/docs/adrs/0001-pin-ruvector-0.2.25.md` |
+| `trajectory-begin/step/end` (ruvector hooks) | ruvector substrate (separate plugin) | sona/agentdb namespaces handled by `rufflo-ruvector` | See `plugins/rufflo-ruvector/docs/adrs/0001-pin-ruvector-0.2.25.md` |
 
 Implication for consumer plugins:
 
@@ -178,12 +178,12 @@ A `controller: 'memory-store-fallback'` response is a pattern that **was persist
 
 ### Bridge unavailable
 
-When `bridgeHealthCheck()` returns null (the `@claude-flow/memory` package is not installed or `controller-registry.ts` is missing), every `agentdb_*` handler returns:
+When `bridgeHealthCheck()` returns null (the `@rufflo/memory` package is not installed or `controller-registry.ts` is missing), every `agentdb_*` handler returns:
 
 ```json
 {
   "success": false,
-  "error": "AgentDB bridge not available — @claude-flow/memory not installed... Use memory_store/memory_search tools instead."
+  "error": "AgentDB bridge not available — @rufflo/memory not installed... Use memory_store/memory_search tools instead."
 }
 ```
 
@@ -199,7 +199,7 @@ Replacement table for bridge-unavailable mode:
 ## Verification
 
 ```bash
-bash plugins/ruflo-agentdb/scripts/smoke.sh
+bash plugins/rufflo-agentdb/scripts/smoke.sh
 # Expected: "10 passed, 0 failed"
 ```
 
@@ -207,14 +207,14 @@ The smoke script is the contract. It calls each documented MCP tool, exercises t
 
 ## Architecture Decisions
 
-- [`ADR-0001` — Optimize ruflo-agentdb (accurate surface, RaBitQ, namespacing, smoke contract)](./docs/adrs/0001-agentdb-optimization.md)
+- [`ADR-0001` — Optimize rufflo-agentdb (accurate surface, RaBitQ, namespacing, smoke contract)](./docs/adrs/0001-agentdb-optimization.md)
 
 ## Related Plugins
 
-- `ruflo-rag-memory` — simple store/search/recall interface; consumes the `claude-memories` reserved namespace
-- `ruflo-intelligence` — SONA neural patterns; consumes the `pattern` reserved namespace via ReasoningBank
-- `ruflo-browser` — composes the namespace convention for `browser-sessions/-selectors/-templates/-cookies` (ADR-0001 §3 there)
-- `ruflo-ruvector` — pinned ruvector CLI; sibling substrate plugin
+- `rufflo-rag-memory` — simple store/search/recall interface; consumes the `claude-memories` reserved namespace
+- `rufflo-intelligence` — SONA neural patterns; consumes the `pattern` reserved namespace via ReasoningBank
+- `rufflo-browser` — composes the namespace convention for `browser-sessions/-selectors/-templates/-cookies` (ADR-0001 §3 there)
+- `rufflo-ruvector` — pinned ruvector CLI; sibling substrate plugin
 
 ## License
 

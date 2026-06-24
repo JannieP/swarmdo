@@ -23,14 +23,14 @@ import { loadSessions } from './_sessions.mjs';
 // SQLite/HNSW; semantic search degrades to substring (fine here — budget
 // only does list/store/retrieve, no search). See cli-core/MIGRATION.md.
 const CLI_PKG = process.env.CLI_CORE === '1'
-  ? '@claude-flow/cli-core@alpha'
-  : '@claude-flow/cli@latest';
+  ? '@rufflo/cli-core@alpha'
+  : '@rufflo/cli@latest';
 
 const NS = process.env.BUDGET_NAMESPACE || 'cost-tracking';
 const KEY = 'budget-config';
 
 function memoryStore(key, value) {
-  // The @claude-flow/cli memory layer has a UNIQUE-constraint quirk where
+  // The @rufflo/cli memory layer has a UNIQUE-constraint quirk where
   // `store` rejects keys that `retrieve` doesn't surface. Workaround:
   // - For the budget-config key (single record), append a timestamp suffix
   //   on each write and update a small index that points at the latest.

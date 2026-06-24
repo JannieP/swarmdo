@@ -2,7 +2,7 @@
 name: vector-search
 description: Vector search via embeddings_* (large-scale HNSW) and ruvllm_hnsw_* (WASM router for ≤11 hot patterns), with RaBitQ 1-bit quantization for 32× memory reduction
 argument-hint: "<query> [--limit N] [--quantized]"
-allowed-tools: mcp__claude-flow__embeddings_generate mcp__claude-flow__embeddings_search mcp__claude-flow__embeddings_compare mcp__claude-flow__embeddings_init mcp__claude-flow__embeddings_status mcp__claude-flow__embeddings_hyperbolic mcp__claude-flow__embeddings_neural mcp__claude-flow__embeddings_rabitq_build mcp__claude-flow__embeddings_rabitq_search mcp__claude-flow__embeddings_rabitq_status mcp__claude-flow__ruvllm_hnsw_create mcp__claude-flow__ruvllm_hnsw_add mcp__claude-flow__ruvllm_hnsw_route mcp__claude-flow__memory_search_unified Bash
+allowed-tools: mcp__rufflo__embeddings_generate mcp__rufflo__embeddings_search mcp__rufflo__embeddings_compare mcp__rufflo__embeddings_init mcp__rufflo__embeddings_status mcp__rufflo__embeddings_hyperbolic mcp__rufflo__embeddings_neural mcp__rufflo__embeddings_rabitq_build mcp__rufflo__embeddings_rabitq_search mcp__rufflo__embeddings_rabitq_status mcp__rufflo__ruvllm_hnsw_create mcp__rufflo__ruvllm_hnsw_add mcp__rufflo__ruvllm_hnsw_route mcp__rufflo__memory_search_unified Bash
 ---
 
 # Vector Search
@@ -11,7 +11,7 @@ Two distinct vector-search paths live in this plugin. Pick the right one — the
 
 | Path | Tool family | Backing | Capacity | Latency |
 |------|-------------|---------|----------|---------|
-| **Large-scale corpus** | `embeddings_*` | `@claude-flow/memory` HNSW (Rust/Native) | up to millions of vectors | 150×–12,500× faster than brute-force, depending on N and parameters |
+| **Large-scale corpus** | `embeddings_*` | `@rufflo/memory` HNSW (Rust/Native) | up to millions of vectors | 150×–12,500× faster than brute-force, depending on N and parameters |
 | **Hot-path router** | `ruvllm_hnsw_*` | WASM-backed router (v2.0.1) | **~11 patterns max** (`ruvllm-tools.ts:58`) | sub-ms; designed for high-priority routing, not corpus search |
 
 The "12,500×" headline applies to the large-scale `embeddings_search` path. The WASM router is **not** that path.
@@ -29,12 +29,12 @@ The "12,500×" headline applies to the large-scale `embeddings_search` path. The
 
 ## Standard search
 
-1. **Check status** — `mcp__claude-flow__embeddings_status` to verify the embedding engine.
-2. **Initialize** — `mcp__claude-flow__embeddings_init` if not active.
-3. **Generate** — `mcp__claude-flow__embeddings_generate` for text input.
-4. **Search** — `mcp__claude-flow__embeddings_search` with the query.
-5. **Compare** — `mcp__claude-flow__embeddings_compare` to measure similarity.
-6. **Unified search** — `mcp__claude-flow__memory_search_unified` for cross-namespace.
+1. **Check status** — `mcp__rufflo__embeddings_status` to verify the embedding engine.
+2. **Initialize** — `mcp__rufflo__embeddings_init` if not active.
+3. **Generate** — `mcp__rufflo__embeddings_generate` for text input.
+4. **Search** — `mcp__rufflo__embeddings_search` with the query.
+5. **Compare** — `mcp__rufflo__embeddings_compare` to measure similarity.
+6. **Unified search** — `mcp__rufflo__memory_search_unified` for cross-namespace.
 
 ## Quantized search (32× memory reduction)
 
@@ -65,22 +65,22 @@ HNSW exposes three knobs that trade recall against latency. The "12,500×" headl
 ## HNSW pattern router (WASM, ≤11 patterns)
 
 For routing a small number of high-priority patterns:
-- `mcp__claude-flow__ruvllm_hnsw_create` — create the WASM index (cap ~11)
-- `mcp__claude-flow__ruvllm_hnsw_add` — add a pattern
-- `mcp__claude-flow__ruvllm_hnsw_route` — route an incoming query
+- `mcp__rufflo__ruvllm_hnsw_create` — create the WASM index (cap ~11)
+- `mcp__rufflo__ruvllm_hnsw_add` — add a pattern
+- `mcp__rufflo__ruvllm_hnsw_route` — route an incoming query
 
 This is **not** a corpus index. Treat it as a fast classifier over a curated set of patterns.
 
 ## Hyperbolic embeddings
 
-For hierarchical data (code trees, org charts), use `mcp__claude-flow__embeddings_hyperbolic` which maps to Poincare ball space. Distance is geodesic, not cosine.
+For hierarchical data (code trees, org charts), use `mcp__rufflo__embeddings_hyperbolic` which maps to Poincare ball space. Distance is geodesic, not cosine.
 
 ## CLI alternative
 
 ```bash
-npx @claude-flow/cli@latest embeddings search --query "authentication patterns"
-npx @claude-flow/cli@latest embeddings init
-npx @claude-flow/cli@latest memory search --query "your query"
+npx @rufflo/cli@latest embeddings search --query "authentication patterns"
+npx @rufflo/cli@latest embeddings init
+npx @rufflo/cli@latest memory search --query "your query"
 ```
 
 ## Performance

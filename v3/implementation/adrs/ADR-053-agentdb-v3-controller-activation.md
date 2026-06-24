@@ -3,14 +3,14 @@
 **Status:** Implemented
 **Date:** 2026-02-25
 **Updated:** 2026-02-25
-**Authors:** RuvNet, Claude Flow Team
+**Authors:** RuvNet, Rufflo Team
 **Version:** 1.3.0
 **Published:** v3.1.0-alpha.51
 **Related:** ADR-006 (Unified Memory), ADR-049 (Self-Learning Memory GNN), ADR-050 (Intelligence Loop), ADR-009 (Hybrid Memory Backend), ADR-060 (Proof-Gated Mutations)
 
 ## Context
 
-Between issues #1207 and #1227, a systemic pattern has emerged: AgentDB v3 ships a rich controller ecosystem — 28 controllers (as of `3.0.0-alpha.7`) covering self-learning, causal reasoning, episodic replay, explainable recall, proof-gated mutations, graph intelligence, skill promotion, and multi-armed bandit optimization — but the CLI runtime (`@claude-flow/cli`) instantiates none of them. The result is that powerful capabilities are available as dead exports while the runtime falls back to generic memory operations via `memory-initializer.js`.
+Between issues #1207 and #1227, a systemic pattern has emerged: AgentDB v3 ships a rich controller ecosystem — 28 controllers (as of `3.0.0-alpha.7`) covering self-learning, causal reasoning, episodic replay, explainable recall, proof-gated mutations, graph intelligence, skill promotion, and multi-armed bandit optimization — but the CLI runtime (`@rufflo/cli`) instantiates none of them. The result is that powerful capabilities are available as dead exports while the runtime falls back to generic memory operations via `memory-initializer.js`.
 
 ### AgentDB v3 Package Status (alpha.7)
 
@@ -20,7 +20,7 @@ Between issues #1207 and #1227, a systemic pattern has emerged: AgentDB v3 ships
 - **3.5 MB** unpacked, 0 npm audit vulnerabilities
 - **CJS + ESM** both fully working (dual exports, dynamic import for CJS)
 - **sql.js fallback**: Main entry works without `better-sqlite3` (import crash from alpha.6 fixed)
-- `@claude-flow/memory` upgraded from `agentdb@2.0.0-alpha.3.7` to `agentdb@^3.0.0-alpha.7`
+- `@rufflo/memory` upgraded from `agentdb@2.0.0-alpha.3.7` to `agentdb@^3.0.0-alpha.7`
 
 ### AgentDB v3 Internal Capabilities (alpha.7)
 
@@ -115,15 +115,15 @@ The following capabilities are fully wired **inside AgentDB** and available to c
 | Controller | AgentDB Export | CLI Instantiation | Gap Issue |
 |-----------|---------------|-------------------|-----------|
 | `ReasoningBank` | Yes | No | #1210 |
-| `LearningBridge` | Yes (via `@claude-flow/memory`) | No | #1213 |
-| `MemoryGraph` | Yes (via `@claude-flow/memory`) | No | #1214 |
+| `LearningBridge` | Yes (via `@rufflo/memory`) | No | #1213 |
+| `MemoryGraph` | Yes (via `@rufflo/memory`) | No | #1214 |
 | `SkillLibrary` | Yes | No | #1215 |
 | `ExplainableRecall` | Yes | No | #1216 |
 | `NightlyLearner` | Yes | No | #1218 |
 | `ReflexionMemory` | Yes | No | #1221 |
 | `CausalMemoryGraph` | Yes | No | #1223 |
 | `LearningSystem` (9-RL) | Yes | No | #1224 |
-| `TieredCacheManager` | Yes (via `@claude-flow/memory`) | No | #1220 |
+| `TieredCacheManager` | Yes (via `@rufflo/memory`) | No | #1220 |
 | `GuardedVectorBackend` | Yes (since alpha.5) | No | — |
 | `MutationGuard` | Yes (since alpha.5) | No | — |
 | `AttestationLog` | Yes (since alpha.5) | No | — |
@@ -148,7 +148,7 @@ Implement a **phased controller activation plan** organized by dependency order,
 
 | Work Item | Issues | Description |
 |-----------|--------|-------------|
-| **Eliminate dual memory system** | — | Refactor CLI to use `@claude-flow/memory` → `HybridBackend` → AgentDB v3 instead of raw `sql.js` in `memory-initializer.js`. This is the single largest blocker. |
+| **Eliminate dual memory system** | — | Refactor CLI to use `@rufflo/memory` → `HybridBackend` → AgentDB v3 instead of raw `sql.js` in `memory-initializer.js`. This is the single largest blocker. |
 | **Hook stdin fix** | #1211 | Read JSON from stdin in `hook-handler.cjs` instead of environment variables. Without this, all hook-based wiring is non-functional. |
 | **Init hook config fix** | #1230 | Remove invalid `TaskCompleted`/`TeammateIdle` keys from generated hook config that cause Claude Code settings warnings. |
 | **HybridBackend proxy** | #1212 | Add `recordFeedback()`, `verifyWitnessChain()`, `getWitnessChain()` proxy methods to `HybridBackend`. |
@@ -220,7 +220,7 @@ All 6 controllers below are already activated inside `AgentDB.ts` (lines 102-152
 
 ### ControllerRegistry
 
-A central registry (replacing the current `memory-initializer.js`) that wraps the `AgentDB` class and adds CLI-specific controllers from `@claude-flow/memory`:
+A central registry (replacing the current `memory-initializer.js`) that wraps the `AgentDB` class and adds CLI-specific controllers from `@rufflo/memory`:
 
 ```typescript
 interface ControllerRegistry {
@@ -236,7 +236,7 @@ interface ControllerRegistry {
   // AgentDB instance (manages 14 internal controllers)
   agentdb: AgentDB;
 
-  // CLI-layer controllers (from @claude-flow/memory, not in AgentDB)
+  // CLI-layer controllers (from @rufflo/memory, not in AgentDB)
   controllers: Map<ControllerName, ControllerInstance>;
 }
 
@@ -248,7 +248,7 @@ type AgentDBControllerName =
   | 'graphTransformer' | 'mutationGuard' | 'attestationLog'
   | 'vectorBackend' | 'graphAdapter';
 
-// CLI-layer controllers (from @claude-flow/memory or new)
+// CLI-layer controllers (from @rufflo/memory or new)
 type CLIControllerName =
   | 'learningBridge' | 'memoryGraph' | 'agentMemoryScope'
   | 'tieredCache' | 'hybridSearch' | 'federatedSession'
@@ -338,8 +338,8 @@ Controllers are only instantiated when their config section is present and enabl
 This ADR acknowledges issue #1196 (beginner confusion from the paradox of choice). While the controller activation is internal plumbing, the UX problem is real. We recommend:
 
 1. **Beginner's Guide**: Create a "Getting Started in 5 Minutes" doc.
-2. **Auto-start dependencies**: `ruflo` / `claude-flow` should auto-start MCP when needed.
-3. **Simplified CLI entry point**: A single `npx ruflo start "build me a todo app"` command that handles everything.
+2. **Auto-start dependencies**: `rufflo` / `rufflo` should auto-start MCP when needed.
+3. **Simplified CLI entry point**: A single `npx rufflo start "build me a todo app"` command that handles everything.
 4. **Progressive disclosure**: Hide advanced options behind `--advanced` flags.
 
 This is tracked separately but noted here as the most valuable community feedback received.
@@ -356,11 +356,11 @@ Each phase gate requires:
 
 ## Prerequisite: Eliminate Dual Memory System
 
-The most critical integration gap is that the CLI (`memory-initializer.js`, 1929 lines) runs a **self-contained SQLite memory system** that duplicates what `@claude-flow/memory` + AgentDB already provides. Before wiring controllers, the CLI must be refactored to use `@claude-flow/memory`'s `HybridBackend` as its storage layer instead of raw `sql.js` calls.
+The most critical integration gap is that the CLI (`memory-initializer.js`, 1929 lines) runs a **self-contained SQLite memory system** that duplicates what `@rufflo/memory` + AgentDB already provides. Before wiring controllers, the CLI must be refactored to use `@rufflo/memory`'s `HybridBackend` as its storage layer instead of raw `sql.js` calls.
 
 | Current (Broken) | Target |
 |-------------------|--------|
-| CLI → `memory-initializer.js` → raw `sql.js` | CLI → `@claude-flow/memory` → `HybridBackend` → AgentDB v3 |
+| CLI → `memory-initializer.js` → raw `sql.js` | CLI → `@rufflo/memory` → `HybridBackend` → AgentDB v3 |
 | `intelligence.js` → local JSON files | `intelligence.js` → `ReasoningBank` + `SonaTrajectoryService` |
 | `hooks-tools.js` → `storeEntry()`/`searchEntries()` | `hooks-tools.js` → `ControllerRegistry.get('reasoningBank')` |
 
@@ -454,7 +454,7 @@ The following modules exist in AgentDB but are **not exported** from the main en
 
 ### Completed: Foundation Bridge (Phase 1 Core)
 
-The bridge pattern was implemented as `memory-bridge.ts` (858 lines) in `@claude-flow/cli`, routing CLI operations through `ControllerRegistry` → `HybridBackend` → AgentDB v3. This eliminates the dual memory system described in the "Prerequisite" section.
+The bridge pattern was implemented as `memory-bridge.ts` (858 lines) in `@rufflo/cli`, routing CLI operations through `ControllerRegistry` → `HybridBackend` → AgentDB v3. This eliminates the dual memory system described in the "Prerequisite" section.
 
 **Files delivered:**
 
@@ -535,11 +535,11 @@ Phases 2-6 describe deeper integration where specific CLI commands and hooks cal
 - Issues: #1196, #1204, #1206, #1207-#1230
 - Tracking issue: #1228
 - ADR-060: Proof-Gated State Mutation (agentdb internal)
-- Contributor: @sparkling (claude-flow-patch repository)
+- Contributor: @sparkling (rufflo-patch repository)
 - Contributor: @HF-teamdev (hook-handler stdin fix)
 - Contributor: @ffMathy (UX/onboarding feedback)
 - Contributor: @ThyannSeng (Windows Defender false positive report, #1229)
 - Contributor: @bendelonlee (init hook config issue, #1230)
 - AgentDB v3: `agentdb@3.0.0-alpha.7` (4 deps, 3.5MB, 0 CVEs, CJS+ESM, sql.js fallback)
-- `@claude-flow/memory`: upgraded to `agentdb@^3.0.0-alpha.7`
+- `@rufflo/memory`: upgraded to `agentdb@^3.0.0-alpha.7`
 - AgentDB source files reviewed: `AgentDB.js`, `MutationGuard.js`, `AttestationLog.js`, `GuardedVectorBackend.js`, `factory.js`, `GraphTransformerService.js`, `SemanticRouter.js`, `SonaTrajectoryService.js`, `LLMRouter.js`, `index.js`, `controllers/index.js`

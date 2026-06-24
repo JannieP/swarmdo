@@ -1,6 +1,6 @@
 # Weekly composite audit (ADR-150 Phase 2 — iter 7).
 #
-# Runs `harness oia-audit` against the ruflo repo every Sunday at
+# Runs `harness oia-audit` against the rufflo repo every Sunday at
 # 04:17 UTC (off-peak, off-the-hour to avoid the global :00 thundering
 # herd; see CronCreate "Avoid the :00 and :30 minute marks").
 #
@@ -45,8 +45,8 @@ on:
   push:
     branches: [main]
     paths:
-      - 'plugins/ruflo-metaharness/scripts/oia-audit.mjs'
-      - 'plugins/ruflo-metaharness/scripts/_harness.mjs'
+      - 'plugins/rufflo-metaharness/scripts/oia-audit.mjs'
+      - 'plugins/rufflo-metaharness/scripts/_harness.mjs'
       - '.github/workflows/oia-audit-weekly.yml'
 
 jobs:
@@ -65,7 +65,7 @@ jobs:
         # --alert-on-worst high fails the job on any composite HIGH
         # finding; medium/low/clean pass.
         run: |
-          node plugins/ruflo-metaharness/scripts/oia-audit.mjs \
+          node plugins/rufflo-metaharness/scripts/oia-audit.mjs \
             --path . \
             --dry-run \
             --alert-on-worst high \
@@ -140,7 +140,7 @@ jobs:
           # inputs. Scheduled runs fall back to 0.85 / high.
           THRESHOLD="${{ inputs.threshold || '0.85' }}"
           ALERT_SEV="${{ inputs.alert_on_new_severity || 'high' }}"
-          node plugins/ruflo-metaharness/scripts/drift-from-history.mjs \
+          node plugins/rufflo-metaharness/scripts/drift-from-history.mjs \
             --baseline-file /tmp/prior/oia-audit.json \
             --dry-run \
             --threshold "$THRESHOLD" \

@@ -1,14 +1,14 @@
-# Claude-Flow v3: Complete Reimagining with agentic-flow@alpha Foundation
+# Rufflo v3: Complete Reimagining with agentic-flow@alpha Foundation
 
 ## Executive Summary
 
-Claude-Flow v3 represents a complete architectural overhaul that builds on **agentic-flow@alpha** as its core foundation while maintaining full backward compatibility with v2.x. This plan consolidates findings from concurrent swarm analysis covering architecture, security, dead code, Windows compatibility, repository cleanup, and .claude/ optimization.
+Rufflo v3 represents a complete architectural overhaul that builds on **agentic-flow@alpha** as its core foundation while maintaining full backward compatibility with v2.x. This plan consolidates findings from concurrent swarm analysis covering architecture, security, dead code, Windows compatibility, repository cleanup, and .claude/ optimization.
 
 ### Key Objectives
 
 | Objective | Target | Impact |
 |-----------|--------|--------|
-| **Performance** | 2.49x-7.47x speedup | Flash Attention integration |
+| **Performance** | unverified (no benchmark) speedup | Flash Attention integration |
 | **Quality** | +55% improvement | SONA adaptive learning |
 | **Cost** | 60-70% savings | Intelligent LLM routing |
 | **Codebase** | 40% smaller | 130k → 78k lines |
@@ -46,7 +46,7 @@ Claude-Flow v3 represents a complete architectural overhaul that builds on **age
 ### 1.1 Codebase Overview
 
 ```
-Claude-Flow v2.7.47
+Rufflo v2.7.47
 ├── Source Files: 376 TypeScript files (~130,000 lines)
 ├── Dependencies: agentic-flow (^1.9.4), ruv-swarm, flow-nexus
 ├── Architecture: Multi-layered (CLI, Core, MCP, Swarm, Hive-Mind)
@@ -127,7 +127,7 @@ const hash = await bcrypt.hash(password, SALT_ROUNDS);
 
 ```typescript
 // REMOVE these hardcoded credentials
-email: 'admin@claude-flow.local'
+email: 'admin@rufflo.local'
 password: 'admin123'  // CRITICAL RISK
 
 // v3: Generate random on installation
@@ -162,8 +162,8 @@ const adminPassword = crypto.randomBytes(32).toString('hex');
 | Feature | Capability | Improvement |
 |---------|-----------|-------------|
 | **SONA Learning** | Sub-millisecond adaptive | +55% quality |
-| **Flash Attention** | 8 attention mechanisms | 2.49x-7.47x speedup |
-| **AgentDB** | 150x-12,500x search | HNSW indexing |
+| **Flash Attention** | 8 attention mechanisms | unverified (no benchmark) speedup |
+| **AgentDB** | ~1.9x-4.7x measured search | HNSW indexing |
 | **66 Agents** | Pre-built specialists | Full coverage |
 | **213 MCP Tools** | Complete toolset | Enterprise ready |
 | **9 RL Algorithms** | PPO, MCTS, Q-Learning | Continuous learning |
@@ -172,7 +172,7 @@ const adminPassword = crypto.randomBytes(32).toString('hex');
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     Claude-Flow v3                          │
+│                     Rufflo v3                          │
 ├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────────────────────────────────────────────┐   │
 │  │              Compatibility Layer (v2 API)            │   │
@@ -402,7 +402,7 @@ export class SqlJsBackend implements DatabaseBackend {
 |------|------|--------|
 | `dist-cjs/` | 22MB | Remove from git, add to .gitignore |
 | Duplicate lock file | 0.6MB | Keep one (npm or pnpm) |
-| `claude-flow-wiki/` | 0 | Remove empty directory |
+| `rufflo-wiki/` | 0 | Remove empty directory |
 
 #### Medium Priority (26.6MB)
 
@@ -435,7 +435,7 @@ rm -f package-lock.json  # If using pnpm
 rm -f pnpm-lock.yaml     # If using npm
 
 # 4. Remove empty directory
-rmdir claude-flow-wiki/
+rmdir rufflo-wiki/
 
 # 5. Clean up .gitignore duplicates
 # (manual edit to remove 8 duplicate "hive-mind-prompt-*.txt" entries)
@@ -457,7 +457,7 @@ dist-cjs/
 # Runtime databases (shouldn't be tracked)
 .swarm/memory.db
 .hive-mind/memory.db
-.claude-flow/**/*.db
+.rufflo/**/*.db
 ```
 
 ---
@@ -469,7 +469,7 @@ dist-cjs/
 | Directory | Size | Issues |
 |-----------|------|--------|
 | `.claude/` | 11MB | 9 settings variants, 3,720 checkpoints |
-| `.claude-flow/` | 2.5MB | Stale training data |
+| `.rufflo/` | 2.5MB | Stale training data |
 | `.claude-plugin/` | 81KB | Hook duplication |
 | `.hive-mind/` | 20KB | Separate database |
 | `.swarm/` | 272KB | Separate database |
@@ -518,7 +518,7 @@ dist-cjs/
     ├── MIGRATION_LOG.md
     └── OPTIMIZATION_STATUS.md
 
-.claude-flow/
+.rufflo/
 ├── swarm-config.json              # Includes agent profiles
 ├── coordination/                  # NEW: Unified runtime
 │   ├── memory.db                  # Merged swarm + hive-mind
@@ -532,8 +532,8 @@ dist-cjs/
     └── latest-validation.json     # Single file
 
 # REMOVE these directories
-.swarm/                            # → .claude-flow/coordination/
-.hive-mind/                        # → .claude-flow/coordination/
+.swarm/                            # → .rufflo/coordination/
+.hive-mind/                        # → .rufflo/coordination/
 .ruv-swarm/                        # Archive or remove
 ```
 
@@ -623,7 +623,7 @@ version: 3.0.0
 category: core
 agentic-flow:
   sona-profile: research      # +55% quality
-  attention: flash            # 2.49x-7.47x speedup
+  attention: flash            # unverified (no benchmark) speedup
   learning: enabled
   reflexion: enabled
 capabilities:
@@ -698,23 +698,23 @@ commands/
     "PreToolUse": [
       {
         "matcher": "Bash",
-        "commands": ["npx claude-flow hooks pre-tool --tool=$TOOL_NAME"]
+        "commands": ["npx rufflo hooks pre-tool --tool=$TOOL_NAME"]
       }
     ],
     "PostToolUse": [
       {
         "matcher": "*",
-        "commands": ["npx claude-flow hooks post-tool --tool=$TOOL_NAME"]
+        "commands": ["npx rufflo hooks post-tool --tool=$TOOL_NAME"]
       }
     ],
     "PreCompact": [
       {
-        "commands": ["npx claude-flow hooks pre-compact --session=$SESSION_ID"]
+        "commands": ["npx rufflo hooks pre-compact --session=$SESSION_ID"]
       }
     ],
     "Stop": [
       {
-        "commands": ["npx claude-flow hooks session-end --export-metrics true"]
+        "commands": ["npx rufflo hooks session-end --export-metrics true"]
       }
     ]
   },
@@ -1096,7 +1096,7 @@ docs/reasoningbank/models/*/memory.db.backup
 dist-cjs/ (remove from git)
 
 # Empty
-claude-flow-wiki/
+rufflo-wiki/
 
 # Duplicate settings
 .claude/settings-complete.json
@@ -1132,7 +1132,7 @@ npm audit fix --force
 ./scripts/cleanup-v3.sh
 
 # Run migration
-npx claude-flow migrate --to v3
+npx rufflo migrate --to v3
 
 # Verify backward compatibility
 npm run test:compatibility
@@ -1160,10 +1160,10 @@ npm run build:v3
 
 ```typescript
 // v3 with backward compatibility
-import { SwarmCoordinator } from 'claude-flow';  // v2 API still works
+import { SwarmCoordinator } from 'rufflo';  // v2 API still works
 
 // v3 native
-import { AgenticFlowAdapter } from 'claude-flow/v3';
+import { AgenticFlowAdapter } from 'rufflo/v3';
 const adapter = new AgenticFlowAdapter({ sona: 'research' });
 await adapter.initialize();
 ```

@@ -1,13 +1,13 @@
 ---
 name: gaia-architecture-comparison
-description: Side-by-side comparison of ruflo vs HAL vs other GAIA harnesses — capability gaps, design decisions, and improvement roadmap
+description: Side-by-side comparison of rufflo vs HAL vs other GAIA harnesses — capability gaps, design decisions, and improvement roadmap
 argument-hint: "[--focus=tools|routing|memory|cost]"
-allowed-tools: Bash Read mcp__claude-flow__memory_search mcp__claude-flow__memory_store
+allowed-tools: Bash Read mcp__rufflo__memory_search mcp__rufflo__memory_store
 ---
 
 # GAIA Architecture Comparison Skill
 
-Compare ruflo's GAIA benchmark harness against the Princeton HAL reference
+Compare rufflo's GAIA benchmark harness against the Princeton HAL reference
 implementation and other open-source harnesses to understand capability gaps
 and prioritize improvements.
 
@@ -19,7 +19,7 @@ and prioritize improvements.
 
 ## Architecture overview
 
-### ruflo harness (current)
+### rufflo harness (current)
 
 ```
 gaia-bench run
@@ -43,16 +43,16 @@ HAL uses a similar loop but with:
 
 ### Key differences
 
-| Dimension | ruflo | HAL reference | Gap |
+| Dimension | rufflo | HAL reference | Gap |
 |-----------|-------|--------------|-----|
 | Question count | 53 (partial L1) | 300 (full L1) | Use `--limit 165` for full L1 |
 | Web search | DuckDuckGo / Google CSE | BrowserBase live | Add Playwright or Browserless |
 | Code execution | python_exec stub | Real Jupyter kernel | Implement real sandbox |
 | Image OCR | image_describe (Gemini) | GPT-4V / Gemini | Functionally equivalent |
 | File handling | file_read | Full PDF/XLSX/ZIP parser | Expand file_read |
-| Self-consistency | voting.ts (Track A) | Not in reference | ruflo advantage |
-| Hardness routing | predictor.ts (Track Q) | Not in reference | ruflo advantage |
-| Memory | AgentDB HNSW | None | ruflo advantage |
+| Self-consistency | voting.ts (Track A) | Not in reference | rufflo advantage |
+| Hardness routing | predictor.ts (Track Q) | Not in reference | rufflo advantage |
+| Memory | AgentDB HNSW | None | rufflo advantage |
 | Pass-rate L1 | ~20.8% (iter 23) | 74.6% (HAL Sonnet 4.5) | ~54 pp gap |
 
 ## Gap analysis
@@ -83,7 +83,7 @@ HAL uses a similar loop but with:
 6. **System prompt tuning** — HAL's system prompt is more elaborate and
    explicitly instructs the model to use tools before answering.
 
-### ruflo advantages
+### rufflo advantages
 
 7. **Self-consistency voting** (Track A) — running N attempts per question and
    taking the majority answer reduces variance on borderline questions.
@@ -112,7 +112,7 @@ HAL uses a similar loop but with:
 ## Loading context from past research
 
 ```bash
-npx @claude-flow/cli@latest memory search \
+npx @rufflo/cli@latest memory search \
   --namespace gaia-patterns \
   --query "architecture comparison HAL benchmark"
 ```
@@ -120,7 +120,7 @@ npx @claude-flow/cli@latest memory search \
 ## Storing comparison findings
 
 ```bash
-npx @claude-flow/cli@latest memory store \
+npx @rufflo/cli@latest memory store \
   --namespace gaia-patterns \
   --key "architecture-comparison-$(date +%Y%m%d)" \
   --value "HAL gap: 54pp. Primary: python_exec stub. Secondary: browser, file parsing."

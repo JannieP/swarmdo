@@ -1,4 +1,4 @@
-# ruflo-knowledge-graph
+# rufflo-knowledge-graph
 
 Knowledge graph construction -- entity extraction, relation mapping, and pathfinder graph traversal.
 
@@ -9,7 +9,7 @@ Extracts entities (classes, functions, modules, types, concepts) and relations (
 ## Installation
 
 ```bash
-claude --plugin-dir plugins/ruflo-knowledge-graph
+claude --plugin-dir plugins/rufflo-knowledge-graph
 ```
 
 ## Agents
@@ -48,12 +48,12 @@ kg search <query>            # Semantic search across the graph
 
 ## Compatibility
 
-- **CLI:** pinned to `@claude-flow/cli` v3.6 major+minor.
-- **Verification:** `bash plugins/ruflo-knowledge-graph/scripts/smoke.sh` is the contract.
+- **CLI:** pinned to `@rufflo/cli` v3.6 major+minor.
+- **Verification:** `bash plugins/rufflo-knowledge-graph/scripts/smoke.sh` is the contract.
 
 ## Namespace coordination
 
-This plugin owns the `kg-graph` AgentDB namespace (kebab-case, follows the convention from [ruflo-agentdb ADR-0001 §"Namespace convention"](../ruflo-agentdb/docs/adrs/0001-agentdb-optimization.md)). Reserved namespaces (`pattern`, `claude-memories`, `default`) MUST NOT be shadowed.
+This plugin owns the `kg-graph` AgentDB namespace (kebab-case, follows the convention from [rufflo-agentdb ADR-0001 §"Namespace convention"](../rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md)). Reserved namespaces (`pattern`, `claude-memories`, `default`) MUST NOT be shadowed.
 
 Entity nodes are stored via `agentdb_hierarchical-store`; relation edges via `agentdb_causal-edge`; semantic indexing via `embeddings_generate` (NOT `embeddings_embed` — that tool name doesn't exist; ADR-0001 fixes prior references).
 
@@ -65,7 +65,7 @@ Entity nodes are stored via `agentdb_hierarchical-store`; relation edges via `ag
 4. **Prune** -- remove paths below threshold (default 0.3)
 5. **Rank** -- return top-K paths by cumulative relevance
 
-## G7 controllers (activated in ruflo 3.6.23+ / 3.6.24)
+## G7 controllers (activated in rufflo 3.6.23+ / 3.6.24)
 
 [ADR-095](../../v3/docs/adr/ADR-095-architectural-gaps-from-april-audit.md) closed five AgentDB controllers that this plugin's graph traversal can leverage:
 
@@ -80,19 +80,19 @@ Inspect runtime status via the `agentdb_controllers` or `agentdb_health` MCP too
 ## Verification
 
 ```bash
-bash plugins/ruflo-knowledge-graph/scripts/smoke.sh
+bash plugins/rufflo-knowledge-graph/scripts/smoke.sh
 # Expected: "10 passed, 0 failed"
 ```
 
 ## Architecture Decisions
 
-- [`ADR-0001` — ruflo-knowledge-graph plugin contract (embeddings_generate fix, namespace coordination, smoke as contract)](./docs/adrs/0001-knowledge-graph-contract.md)
+- [`ADR-0001` — rufflo-knowledge-graph plugin contract (embeddings_generate fix, namespace coordination, smoke as contract)](./docs/adrs/0001-knowledge-graph-contract.md)
 
 ## Related Plugins
 
-- `ruflo-agentdb` -- The G7 controllers above ship via this plugin's runtime; install both for full graph + traversal coverage; namespace convention owner
-- `ruflo-ruvector` -- HNSW indexing for fast semantic search across graph nodes
-- `ruflo-adr` -- ADR dependency graphs share the same causal edge model
+- `rufflo-agentdb` -- The G7 controllers above ship via this plugin's runtime; install both for full graph + traversal coverage; namespace convention owner
+- `rufflo-ruvector` -- HNSW indexing for fast semantic search across graph nodes
+- `rufflo-adr` -- ADR dependency graphs share the same causal edge model
 
 ## License
 

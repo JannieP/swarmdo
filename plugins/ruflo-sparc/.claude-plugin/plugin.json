@@ -1,5 +1,5 @@
 {
-  "name": "ruflo-sparc",
+  "name": "rufflo-sparc",
   "description": "SPARC methodology — Specification, Pseudocode, Architecture, Refinement, Completion phases with gate checks",
   "version": "0.2.0",
   "author": {
@@ -9,7 +9,7 @@
   "homepage": "https://github.com/ruvnet/ruflo",
   "license": "MIT",
   "keywords": [
-    "ruflo",
+    "rufflo",
     "sparc",
     "methodology",
     "specification",

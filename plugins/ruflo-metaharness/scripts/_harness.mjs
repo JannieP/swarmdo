@@ -1,6 +1,6 @@
 // _harness.mjs — shared invocation helper for the metaharness/harness CLIs.
 //
-// All ruflo-metaharness skills shell out to the upstream CLI rather than
+// All rufflo-metaharness skills shell out to the upstream CLI rather than
 // linking the library — this honors ADR-150's architectural constraint
 // (MetaHarness must remain a removable augmentation, never a required
 // runtime dep) while still giving us "deep integration" through a single
@@ -254,7 +254,7 @@ export function emitDegradedJsonAndExit(reason) {
     generatedAt: new Date().toISOString(),
   };
   console.log(JSON.stringify(payload, null, 2));
-  // Exit 0 — ADR-150 architectural constraint says ruflo continues to
+  // Exit 0 — ADR-150 architectural constraint says rufflo continues to
   // function when MetaHarness is absent. Skills emit a structured
   // degraded payload rather than failing.
   process.exit(0);

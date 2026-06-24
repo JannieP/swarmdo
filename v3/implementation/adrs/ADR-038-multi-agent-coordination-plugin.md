@@ -18,7 +18,7 @@ Create a **Multi-Agent Neural Coordination Plugin** that leverages RuVector WASM
 
 ## Plugin Name
 
-`@claude-flow/plugin-neural-coordination`
+`@rufflo/plugin-neural-coordination`
 
 ## Description
 

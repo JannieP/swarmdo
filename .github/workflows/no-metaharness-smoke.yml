@@ -1,10 +1,10 @@
 # ADR-150 architectural constraint rule #4 enforcement.
 #
-#   "Ruflo remains operational if every MetaHarness package is removed."
+#   "Rufflo remains operational if every MetaHarness package is removed."
 #
-# This workflow installs ruflo with `--no-optional` (or equivalent) so
+# This workflow installs rufflo with `--no-optional` (or equivalent) so
 # every `@metaharness/*` and `metaharness` package is EXCLUDED. It then
-# runs scripts/smoke-all-plugins.mjs and asserts that ruflo's entire
+# runs scripts/smoke-all-plugins.mjs and asserts that rufflo's entire
 # plugin fleet still passes its structural contract.
 #
 # If this job ever fails, a MetaHarness package has accidentally been
@@ -45,7 +45,7 @@ jobs:
 
       - name: Verify no `@metaharness/*` or `metaharness` appears in non-optional deps anywhere
         # Static check: every plugins/*/package.json AND v3/*/package.json
-        # AND the root package.json AND ruflo/package.json must NOT list
+        # AND the root package.json AND rufflo/package.json must NOT list
         # metaharness/router/kernel in `dependencies` (only `optionalDependencies`
         # or `peerDependencies` are allowed).
         run: |
@@ -54,8 +54,8 @@ jobs:
             const { join } = require('path');
             const candidates = [
               'package.json',
-              'ruflo/package.json',
-              'v3/@claude-flow/cli/package.json',
+              'rufflo/package.json',
+              'v3/@rufflo/cli/package.json',
             ];
             // Also scan all plugins/*/package.json (if any plugin has one)
             try {
@@ -83,7 +83,7 @@ jobs:
           "
 
       - name: Run meta-smoke (should pass with current optional deps in place)
-        # iter 119 — 300s timeout to give ruflo-metaharness (118 steps,
+        # iter 119 — 300s timeout to give rufflo-metaharness (118 steps,
         # many npx invocations) enough wall time. Same change as
         # all-plugins-smoke.yml; 60s was timing out at 151s+ in CI.
         run: node scripts/smoke-all-plugins.mjs --timeout 300
@@ -121,8 +121,8 @@ jobs:
           for skill in score genome mcp-scan threat-model oia-audit mint drift-from-history; do
             echo "--- exercising ${skill}.mjs with unreachable registry ---"
             ARGS="${SKILL_ARGS[$skill]}"
-            OUT=$(node plugins/ruflo-metaharness/scripts/$skill.mjs $ARGS 2>&1 || echo '__NON_ZERO_EXIT__')
-            EXIT=$(node plugins/ruflo-metaharness/scripts/$skill.mjs $ARGS > /dev/null 2>&1; echo $?)
+            OUT=$(node plugins/rufflo-metaharness/scripts/$skill.mjs $ARGS 2>&1 || echo '__NON_ZERO_EXIT__')
+            EXIT=$(node plugins/rufflo-metaharness/scripts/$skill.mjs $ARGS > /dev/null 2>&1; echo $?)
             echo "$OUT" | head -10
             echo "exit: $EXIT"
             # Assert: graceful path means exit 0 (or 3 for drift-from-history

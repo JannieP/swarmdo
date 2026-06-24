@@ -1,11 +1,11 @@
-// Run persistence. A competition run is a reproducible artifact (Ruflo ADR-147; the local
+// Run persistence. A competition run is a reproducible artifact (Rufflo ADR-147; the local
 // stand-in for RuVector ADR-197's payoff/fitness/evolution storage).
 //
 // Two backends ship here:
-//   - FileRunStore     — writes full artifacts to `.ruflo/arena/<runId>.json` (exact replay).
+//   - FileRunStore     — writes full artifacts to `.rufflo/arena/<runId>.json` (exact replay).
 //   - InMemoryRunStore — for tests / ephemeral use.
-// AgentDB persistence is handled at the COMMAND layer (Ruflo convention: plugin TS persists
-// artifacts; commands call `mcp__claude-flow__memory_store` with `agentdbRecord(run)`).
+// AgentDB persistence is handled at the COMMAND layer (Rufflo convention: plugin TS persists
+// artifacts; commands call `mcp__rufflo__memory_store` with `agentdbRecord(run)`).
 
 import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -57,7 +57,7 @@ export class InMemoryRunStore implements RunStore {
 }
 
 export class FileRunStore implements RunStore {
-  constructor(private readonly baseDir = join(process.cwd(), '.ruflo', 'arena')) {}
+  constructor(private readonly baseDir = join(process.cwd(), '.rufflo', 'arena')) {}
 
   async save(record: RunRecord): Promise<RunRecord> {
     await mkdir(this.baseDir, { recursive: true });
@@ -98,7 +98,7 @@ export class FileRunStore implements RunStore {
 }
 
 /**
- * Shape a run for AgentDB persistence via `mcp__claude-flow__memory_store`.
+ * Shape a run for AgentDB persistence via `mcp__rufflo__memory_store`.
  * The command layer calls the MCP tool with this payload so runs become semantically
  * searchable ("tournaments where grim dominated") and feed the RuVector data layer later.
  *

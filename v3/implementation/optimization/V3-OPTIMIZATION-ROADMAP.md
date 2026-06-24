@@ -1,8 +1,8 @@
-# Claude-Flow V3 Optimization Implementation Roadmap
+# Rufflo V3 Optimization Implementation Roadmap
 
 ## 🚀 Executive Summary
 
-This roadmap implements the comprehensive optimization recommendations for claude-flow V3, incorporating security-first development, enhanced parallel execution, phased performance targets, and intelligent learning integration.
+This roadmap implements the comprehensive optimization recommendations for rufflo V3, incorporating security-first development, enhanced parallel execution, phased performance targets, and intelligent learning integration.
 
 **Key Optimizations Applied:**
 - ✅ **Agent-Skills Perfect Alignment**: 15 agents → 9 specialized skills (4 new skills created)
@@ -86,7 +86,7 @@ Week 1-3 Parallel Groups:
 
 **Performance Targets:**
 - Flash Attention: 2.49x minimum (conservative)
-- Search: 150x minimum (basic HNSW)
+- Search: ~4.7x minimum (basic HNSW)
 - Memory: 40% reduction (achievable)
 - Startup: <750ms (less aggressive)
 - Security: 75/100 score (significant improvement)
@@ -132,7 +132,7 @@ Week 5-9 Reduced Dependencies:
 
 **Performance Targets:**
 - Flash Attention: 5.0x-7.47x (near maximum)
-- Search: 2000x-12,500x (maximum performance)
+- Search: 2000x-~4.7x (maximum performance)
 - Memory: 65% reduction (advanced compression)
 - Startup: <350ms (excellence target)
 - MCP: <100ms p95 response time
@@ -153,7 +153,7 @@ Week 9-16 Full Swarm:
 
 **Performance Targets:**
 - Flash Attention: 7.47x (stretch target)
-- Search: 12,500x (peak performance)
+- Search: ~4.7x (peak performance)
 - Memory: 75% reduction (maximum efficiency)
 - Startup: <300ms (sub-300ms goal)
 - Throughput: 10x overall improvement
@@ -255,7 +255,7 @@ const phasedTargets = {
 
 **Phase 3 Success:**
 - ✅ Flash Attention 5.0x-7.47x
-- ✅ Search improvement 2000x-12,500x
+- ✅ Search improvement 2000x-~4.7x
 - ✅ Integration complete
 - ✅ All features operational
 
@@ -318,8 +318,8 @@ const monitoring = {
 ### **Performance Improvements**
 | Metric | Before | After | Improvement |
 |--------|---------|-------|-------------|
-| **Flash Attention** | N/A | 2.49x-7.47x | New capability |
-| **Search Speed** | Linear | 150x-12,500x | **Revolutionary** |
+| **Flash Attention** | N/A | unverified (no benchmark) | New capability |
+| **Search Speed** | Linear | ~1.9x-4.7x measured | **Revolutionary** |
 | **Memory Usage** | Baseline | 40-75% reduction | **Massive savings** |
 | **Startup Time** | ~2.5s | <300-750ms | **5-8x faster** |
 | **Agent Coordination** | N/A | <100ms | **Real-time** |

@@ -1,9 +1,9 @@
 /**
- * ruflo-arena — Competitive ruliology for Ruflo swarms (ADR-147/148).
+ * rufflo-arena — Competitive ruliology for Rufflo swarms (ADR-147/148).
  *
  * Strategies-as-programs compete under payoff games; tournaments produce Wolfram-style
  * competitive arrays; hill-climb and mutual co-evolution discover winners empirically.
- * The presentation/dashboard layer lives in Ruflo (ADR-150); the data/intelligence layer
+ * The presentation/dashboard layer lives in Rufflo (ADR-150); the data/intelligence layer
  * is RuVector's (ADR-196/197). This plugin is execution + a local data stand-in.
  */
 

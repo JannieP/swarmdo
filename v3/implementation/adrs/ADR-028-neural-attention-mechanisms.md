@@ -1,4 +1,4 @@
-# ADR-028: Neural Attention Mechanisms for Claude-Flow V3
+# ADR-028: Neural Attention Mechanisms for Rufflo V3
 
 **Status:** Proposed
 **Date:** 2026-01-16
@@ -7,7 +7,7 @@
 
 ## Context
 
-Claude-Flow v3 requires advanced attention mechanisms for several critical operations:
+Rufflo v3 requires advanced attention mechanisms for several critical operations:
 
 1. **Agent Memory Retrieval**: Current memory lookups use basic vector similarity (cosine/dot product). More sophisticated attention mechanisms can improve retrieval quality by weighing relevance, recency, and contextual importance.
 
@@ -17,11 +17,11 @@ Claude-Flow v3 requires advanced attention mechanisms for several critical opera
 
 4. **Swarm Coordination Signals**: Multi-agent coordination requires cross-attention mechanisms to share relevant context between agents while filtering noise.
 
-The RuVector intelligence system provides 39 attention mechanism implementations optimized for AI agent workloads. Integrating these into Claude-Flow v3 will significantly improve memory retrieval, context management, and agent coordination.
+The RuVector intelligence system provides 39 attention mechanism implementations optimized for AI agent workloads. Integrating these into Rufflo v3 will significantly improve memory retrieval, context management, and agent coordination.
 
 ## Decision
 
-Integrate RuVector's 39 attention mechanism types into Claude-Flow v3 via a unified **AttentionService** that provides:
+Integrate RuVector's 39 attention mechanism types into Rufflo v3 via a unified **AttentionService** that provides:
 
 1. **Pluggable attention backends** - Select mechanisms based on use case
 2. **Automatic fallback** - Graceful degradation when GPU unavailable
@@ -215,7 +215,7 @@ interface MoEAttentionConfig {
 
 ---
 
-## Use Cases in Claude-Flow V3
+## Use Cases in Rufflo V3
 
 ### 1. Agent Memory Retrieval
 
@@ -398,9 +398,9 @@ class SwarmAttentionCoordinator {
 ### 1. Memory Service (ADR-006)
 
 ```typescript
-// v3/@claude-flow/memory/src/attention-enhanced-memory.ts
+// v3/@rufflo/memory/src/attention-enhanced-memory.ts
 
-import { AttentionService } from '@claude-flow/attention';
+import { AttentionService } from '@rufflo/attention';
 import { UnifiedMemoryService } from './unified-memory-service.js';
 
 export class AttentionEnhancedMemoryService extends UnifiedMemoryService {
@@ -443,9 +443,9 @@ export class AttentionEnhancedMemoryService extends UnifiedMemoryService {
 ### 2. SONA Neural Architecture
 
 ```typescript
-// v3/@claude-flow/intelligence/src/sona-attention.ts
+// v3/@rufflo/intelligence/src/sona-attention.ts
 
-import { AttentionService, FlashAttentionConfig } from '@claude-flow/attention';
+import { AttentionService, FlashAttentionConfig } from '@rufflo/attention';
 
 export class SONAWithAttention {
   private flashAttention: AttentionService;
@@ -474,7 +474,7 @@ export class SONAWithAttention {
   }
 
   async adapt(pattern: Pattern): Promise<AdaptationResult> {
-    // Fast adaptation with Flash Attention (2.49x-7.47x speedup)
+    // Fast adaptation with Flash Attention (unverified (no benchmark) speedup)
     const attended = await this.flashAttention.forward(
       pattern.embedding,
       this.expertWeights
@@ -494,9 +494,9 @@ export class SONAWithAttention {
 ### 3. Plugin Hook System
 
 ```typescript
-// v3/@claude-flow/cli/src/hooks/attention-hooks.ts
+// v3/@rufflo/cli/src/hooks/attention-hooks.ts
 
-import { AttentionService } from '@claude-flow/attention';
+import { AttentionService } from '@rufflo/attention';
 
 export const attentionHooks = {
   /**
@@ -679,7 +679,7 @@ class AttentionKVCache {
 
 ### Phase 1: Core Attention Service (Week 1-2)
 
-1. Create `@claude-flow/attention` package
+1. Create `@rufflo/attention` package
 2. Implement base `AttentionService` interface
 3. Add 7 multi-head attention types
 4. Add 6 self-attention variants
@@ -711,7 +711,7 @@ class AttentionKVCache {
 ## File Structure
 
 ```
-v3/@claude-flow/attention/
+v3/@rufflo/attention/
 ├── package.json
 ├── src/
 │   ├── index.ts                    # Public API exports
@@ -797,7 +797,7 @@ v3/@claude-flow/attention/
 ## Configuration Schema
 
 ```typescript
-// claude-flow.config.json
+// rufflo.config.json
 {
   "attention": {
     // Default mechanism for general use
@@ -841,19 +841,19 @@ v3/@claude-flow/attention/
 
 ```bash
 # List available attention mechanisms
-npx @claude-flow/cli@latest attention list
+npx @rufflo/cli@latest attention list
 
 # Benchmark attention mechanism
-npx @claude-flow/cli@latest attention benchmark --mechanism longformer --sequence-length 16384
+npx @rufflo/cli@latest attention benchmark --mechanism longformer --sequence-length 16384
 
 # Set default attention mechanism
-npx @claude-flow/cli@latest attention set-default --mechanism flash-attention-v2
+npx @rufflo/cli@latest attention set-default --mechanism flash-attention-v2
 
 # Show attention statistics
-npx @claude-flow/cli@latest attention stats
+npx @rufflo/cli@latest attention stats
 
 # Clear attention cache
-npx @claude-flow/cli@latest attention cache clear
+npx @rufflo/cli@latest attention cache clear
 ```
 
 ---
@@ -862,7 +862,7 @@ npx @claude-flow/cli@latest attention cache clear
 
 ### Positive
 
-1. **2.49x-7.47x speedup** with Flash Attention on GPU
+1. **unverified (no benchmark) speedup** with Flash Attention on GPU
 2. **O(n) complexity** for long sequences with sparse/linear attention
 3. **Improved retrieval quality** with attention-based reranking
 4. **Better swarm coordination** with topology-aware attention
@@ -889,7 +889,7 @@ npx @claude-flow/cli@latest attention cache clear
 | Memory retrieval latency | <10ms | memory-attention |
 | Long context (32K tokens) | <100ms | longformer-attention |
 | Swarm coordination | <5ms | star-attention |
-| Flash Attention speedup | 2.49x-7.47x | flash-attention-v2/v3 |
+| Flash Attention speedup | unverified (no benchmark) | flash-attention-v2/v3 |
 | Linear attention throughput | 10x standard | performer-attention |
 | Memory overhead (KV cache) | <500MB | configurable |
 
@@ -931,7 +931,7 @@ The `@ruvector/ruvllm-wasm@2.0.0` package now provides native WASM implementatio
 
 | This ADR Concept | ruvllm-wasm Class | Status |
 |------------------|-------------------|--------|
-| HNSW Search (150x-12,500x) | `HnswRouterWasm` | Published, working (v2.0.1) |
+| HNSW Search (~1.9x-4.7x measured) | `HnswRouterWasm` | Published, working (v2.0.1) |
 | SONA Adaptation (<0.05ms) | `SonaInstantWasm` | Published, working |
 | KV Cache Management | `KvCacheWasm` | Published, working |
 | LoRA Adaptation | `MicroLoraWasm` | Published, working (ranks 1-4, <10KB) |

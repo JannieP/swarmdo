@@ -1,7 +1,7 @@
 /**
  * Jujutsu Blast-Radius Adapter (Wedge 11, ADR-123 Phase 6)
  *
- * `ruflo-jujutsu` runs diff-analyze. This adapter exports the file-import
+ * `rufflo-jujutsu` runs diff-analyze. This adapter exports the file-import
  * graph so "if I change `foo.ts`, which files are downstream-affected" is a
  * single-entry PR query — O(log files) instead of O(LOC × imports).
  *
@@ -35,11 +35,11 @@ export interface JujutsuAdapterOptions {
   ddSafetyMargin?: number;
 }
 
-export const JUJUTSU_IMPORT_GRAPH_ID = 'ruflo-jujutsu:import-graph';
+export const JUJUTSU_IMPORT_GRAPH_ID = 'rufflo-jujutsu:import-graph';
 
 export class JujutsuBlastRadiusAdapter implements SublinearAdapter {
   readonly graphId = JUJUTSU_IMPORT_GRAPH_ID;
-  readonly ownerPlugin = 'ruflo-jujutsu';
+  readonly ownerPlugin = 'rufflo-jujutsu';
   readonly requiresPreprocessing = false;
 
   private readonly source: JujutsuSource;

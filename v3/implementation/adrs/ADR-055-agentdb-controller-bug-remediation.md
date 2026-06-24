@@ -106,8 +106,8 @@ Fallback stubs           →  HierarchicalMemory, MemoryConsolidation (if agentd
 
 ## Files Changed
 
-- `v3/@claude-flow/memory/src/controller-registry.ts` — 8 controllers upgraded from stub/null to real instantiation, added `createEmbeddingService()` helper
-- `v3/@claude-flow/cli/src/memory/memory-bridge.ts` — Bridge functions detect real vs stub API, updated recall/store/consolidate signatures
-- `v3/@claude-flow/cli/src/mcp-tools/agentdb-tools.ts` — Tier enum, input validation (phase 1)
-- `v3/@claude-flow/memory/package.json` — agentdb dependency `^3.0.0-alpha.10`
+- `v3/@rufflo/memory/src/controller-registry.ts` — 8 controllers upgraded from stub/null to real instantiation, added `createEmbeddingService()` helper
+- `v3/@rufflo/cli/src/memory/memory-bridge.ts` — Bridge functions detect real vs stub API, updated recall/store/consolidate signatures
+- `v3/@rufflo/cli/src/mcp-tools/agentdb-tools.ts` — Tier enum, input validation (phase 1)
+- `v3/@rufflo/memory/package.json` — agentdb dependency `^3.0.0-alpha.10`
 - `README.md` — Tier names, capacity/TTL claims, RVFOptimizer categorization (phase 1)

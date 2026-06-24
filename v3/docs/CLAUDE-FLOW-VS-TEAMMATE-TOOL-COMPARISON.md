@@ -1,13 +1,13 @@
-# Architectural Comparison: Claude Flow V3 vs Claude Code TeammateTool
+# Architectural Comparison: Rufflo V3 vs Claude Code TeammateTool
 
 **Date:** 2026-01-25
-**Analysis:** Side-by-side comparison of Claude Flow V3 swarm architecture (developed by rUv) and Claude Code's TeammateTool (discovered in v2.1.19)
+**Analysis:** Side-by-side comparison of Rufflo V3 swarm architecture (developed by rUv) and Claude Code's TeammateTool (discovered in v2.1.19)
 
 ---
 
 ## Executive Summary
 
-A detailed analysis reveals **striking architectural similarities** between Claude Flow V3's swarm system and Claude Code's TeammateTool. The terminology differs, but the core concepts, data structures, and workflows are nearly identical.
+A detailed analysis reveals **striking architectural similarities** between Rufflo V3's swarm system and Claude Code's TeammateTool. The terminology differs, but the core concepts, data structures, and workflows are nearly identical.
 
 | Similarity Score | 92% Overlap |
 |------------------|-------------|
@@ -22,7 +22,7 @@ A detailed analysis reveals **striking architectural similarities** between Clau
 
 ### 1.1 Team/Swarm Management
 
-| Concept | Claude Flow V3 | TeammateTool (v2.1.19) |
+| Concept | Rufflo V3 | TeammateTool (v2.1.19) |
 |---------|----------------|------------------------|
 | **Group Unit** | `Swarm` / `SwarmId` | `Team` / `team_name` |
 | **Create Group** | `swarm_init()` | `spawnTeam()` |
@@ -32,7 +32,7 @@ A detailed analysis reveals **striking architectural similarities** between Clau
 | **Max Members** | `maxAgents` | `maxTeammates` |
 | **Cleanup** | `shutdown()` | `cleanup()` |
 
-**Claude Flow V3 (types.ts:10-22):**
+**Rufflo V3 (types.ts:10-22):**
 ```typescript
 export interface SwarmId {
   id: string;
@@ -63,14 +63,14 @@ interface AgentInput {
 
 ### 1.2 Topology Types
 
-| Topology | Claude Flow V3 | TeammateTool |
+| Topology | Rufflo V3 | TeammateTool |
 |----------|----------------|--------------|
 | **Flat/Mesh** | `type: 'mesh'` | `topology: 'flat'` |
 | **Hierarchical** | `type: 'hierarchical'` | `topology: 'hierarchical'` |
 | **Centralized** | `type: 'centralized'` | Queen with `planModeRequired` |
 | **Hybrid** | `type: 'hybrid'` | `topology: 'mesh'` + coordinator |
 
-**Claude Flow V3 (types.ts:33-42):**
+**Rufflo V3 (types.ts:33-42):**
 ```typescript
 export type TopologyType = 'mesh' | 'hierarchical' | 'centralized' | 'hybrid';
 
@@ -98,7 +98,7 @@ export interface TopologyConfig {
 
 ### 2.1 Role Definitions
 
-| Role | Claude Flow V3 | TeammateTool |
+| Role | Rufflo V3 | TeammateTool |
 |------|----------------|--------------|
 | **Orchestrator** | `queen` / `coordinator` | `mode: "plan"` agent |
 | **Code Writer** | `coder` | `subagent_type: "coder"` |
@@ -108,7 +108,7 @@ export interface TopologyConfig {
 | **Architect** | `architect` | `subagent_type: "architect"` |
 | **Worker** | `worker` | Default teammate |
 
-**Claude Flow V3 (types.ts:78-91):**
+**Rufflo V3 (types.ts:78-91):**
 ```typescript
 export type AgentType =
   | 'coordinator'
@@ -134,7 +134,7 @@ subagent_type field supports same agent types
 
 ### 2.2 Agent State
 
-| State Field | Claude Flow V3 | TeammateTool |
+| State Field | Rufflo V3 | TeammateTool |
 |-------------|----------------|--------------|
 | **ID** | `id: AgentId` | `teammateId` |
 | **Name** | `name: string` | `name` in AgentInput |
@@ -143,7 +143,7 @@ subagent_type field supports same agent types
 | **Capabilities** | `capabilities: AgentCapabilities` | `allowed_tools: string[]` |
 | **Messages Sent** | `metrics.messagesProcessed` | `messagesSent` |
 
-**Claude Flow V3 (types.ts:136-149):**
+**Rufflo V3 (types.ts:136-149):**
 ```typescript
 export interface AgentState {
   id: AgentId;
@@ -181,7 +181,7 @@ interface TeammateInfo {
 
 ### 3.1 Message Bus vs Mailbox
 
-| Feature | Claude Flow V3 | TeammateTool |
+| Feature | Rufflo V3 | TeammateTool |
 |---------|----------------|--------------|
 | **System** | `MessageBus` class | `teammate_mailbox` |
 | **Send Direct** | `send(message)` | `write` operation |
@@ -189,7 +189,7 @@ interface TeammateInfo {
 | **Queue** | `PriorityMessageQueue` | File-based mailbox |
 | **Persistence** | In-memory + optional persist | `~/.claude/teams/{team}/mailbox/` |
 
-**Claude Flow V3 (types.ts:237-265):**
+**Rufflo V3 (types.ts:237-265):**
 ```typescript
 export type MessageType =
   | 'task_assign'
@@ -228,7 +228,7 @@ export interface Message {
 
 ### 3.2 Message Flow Patterns
 
-**Claude Flow V3:**
+**Rufflo V3:**
 ```
 Coordinator → MessageBus.broadcast() → All Agents
 Agent → MessageBus.send() → Specific Agent
@@ -248,7 +248,7 @@ Teammate → Mailbox polling → Receive messages
 
 ### 4.1 Consensus System
 
-| Feature | Claude Flow V3 | TeammateTool |
+| Feature | Rufflo V3 | TeammateTool |
 |---------|----------------|--------------|
 | **Propose** | `proposeConsensus(value)` | `submitPlan()` implicit |
 | **Vote** | `ConsensusVote` interface | `approvePlan` / `rejectPlan` |
@@ -256,7 +256,7 @@ Teammate → Mailbox polling → Receive messages
 | **Algorithms** | `raft`, `byzantine`, `gossip`, `paxos` | Implicit majority |
 | **Result** | `ConsensusResult` | Plan `status: 'approved' \| 'rejected'` |
 
-**Claude Flow V3 (types.ts:197-235):**
+**Rufflo V3 (types.ts:197-235):**
 ```typescript
 export type ConsensusAlgorithm = 'raft' | 'byzantine' | 'gossip' | 'paxos';
 
@@ -299,7 +299,7 @@ export interface ConsensusVote {
 
 ### 4.2 Plan Mode / Swarm Launch
 
-**Claude Flow V3:**
+**Rufflo V3:**
 ```typescript
 // Queen analyzes task and creates plan
 const analysis = await queen.analyzeTask(task);
@@ -329,7 +329,7 @@ interface ExitPlanModeInput {
 
 ### 5.1 Agent Lifecycle
 
-| Action | Claude Flow V3 | TeammateTool |
+| Action | Rufflo V3 | TeammateTool |
 |--------|----------------|--------------|
 | **Register** | `registerAgent(agent)` | `requestJoin` + approval |
 | **Join Approval** | Implicit (no approval needed) | `approveJoin` / `rejectJoin` |
@@ -337,7 +337,7 @@ interface ExitPlanModeInput {
 | **Leave Approval** | Implicit | `approveShutdown` / `rejectShutdown` |
 | **Force Remove** | `removeNode(agentId)` | `cleanup()` |
 
-**Claude Flow V3 (types.ts:519-535):**
+**Rufflo V3 (types.ts:519-535):**
 ```typescript
 export interface IUnifiedSwarmCoordinator {
   // Agent management
@@ -365,14 +365,14 @@ rejectShutdown → Coordinator rejects (implicit)
 
 ### 6.1 Execution Environments
 
-| Backend | Claude Flow V3 | TeammateTool |
+| Backend | Rufflo V3 | TeammateTool |
 |---------|----------------|--------------|
 | **In-Process** | Default (same process) | `in_process_teammate` (18 refs) |
 | **tmux** | Via Bash tool | `tmux` (26 refs) + env vars |
 | **Background** | `run_in_background: true` | Same parameter |
 | **iTerm2** | Not implemented | Suspected (macOS) |
 
-**Claude Flow V3 approach:**
+**Rufflo V3 approach:**
 - Agents run as sub-processes via Claude Code Task tool
 - Background execution via `run_in_background: true`
 - Coordination via MCP + memory
@@ -390,9 +390,9 @@ CLAUDE_CODE_TEAMMATE_COMMAND   # Spawn command
 
 ### 7.1 Creating a Team/Swarm
 
-**Claude Flow V3:**
+**Rufflo V3:**
 ```typescript
-import { UnifiedSwarmCoordinator } from '@claude-flow/swarm';
+import { UnifiedSwarmCoordinator } from '@rufflo/swarm';
 
 const coordinator = new UnifiedSwarmCoordinator({
   topology: { type: 'hierarchical', maxAgents: 8 },
@@ -425,7 +425,7 @@ Task({
 
 ### 7.2 Broadcasting a Message
 
-**Claude Flow V3:**
+**Rufflo V3:**
 ```typescript
 await coordinator.broadcastMessage({
   type: 'task_assign',
@@ -445,7 +445,7 @@ TeammateTool.broadcast({
 
 ### 7.3 Plan Approval
 
-**Claude Flow V3:**
+**Rufflo V3:**
 ```typescript
 const proposal = await coordinator.proposeConsensus({
   plan: 'Implement authentication',
@@ -488,15 +488,15 @@ ExitPlanMode({
 
 | Date | Event |
 |------|-------|
-| **~2024 Q4** | Claude Flow V3 architecture designed (rUv) |
-| **2025-01** | Claude Flow V3 alpha releases begin |
-| **2025-01-20** | Claude Flow swarm module last commit |
+| **~2024 Q4** | Rufflo V3 architecture designed (rUv) |
+| **2025-01** | Rufflo V3 alpha releases begin |
+| **2025-01-20** | Rufflo swarm module last commit |
 | **2026-01-24** | TeammateTool discovered in Claude Code v2.1.19 |
 | **2026-01-25** | This comparison created |
 
 ### 8.2 Public Evidence
 
-- Claude Flow V3 has been open source on GitHub
+- Rufflo V3 has been open source on GitHub
 - ADRs (Architecture Decision Records) document the design decisions
 - Multiple alpha releases published to npm
 - CLAUDE.md configuration predates TeammateTool discovery
@@ -507,7 +507,7 @@ ExitPlanMode({
 
 Despite the similarities, there are differences:
 
-| Aspect | Claude Flow V3 | TeammateTool |
+| Aspect | Rufflo V3 | TeammateTool |
 |--------|----------------|--------------|
 | **Consensus Algorithms** | 4 algorithms (raft, byzantine, gossip, paxos) | Implicit majority |
 | **Topology Graph** | Full graph with edges, weights, partitions | Simpler flat/hierarchical |
@@ -521,7 +521,7 @@ Despite the similarities, there are differences:
 
 ## 10. Conclusion
 
-The architectural similarity between Claude Flow V3 and TeammateTool is **undeniable**:
+The architectural similarity between Rufflo V3 and TeammateTool is **undeniable**:
 
 ### Identical Concepts
 1. **Team/Swarm** - Group of coordinated agents
@@ -533,7 +533,7 @@ The architectural similarity between Claude Flow V3 and TeammateTool is **undeni
 7. **Spawn Backends** - in-process, tmux, background
 
 ### Terminology Mapping
-| Claude Flow V3 | TeammateTool |
+| Rufflo V3 | TeammateTool |
 |----------------|--------------|
 | Swarm | Team |
 | Agent | Teammate |
@@ -551,7 +551,7 @@ Either:
 2. **Inspiration** - One influenced the other
 3. **Shared knowledge** - Common architectural patterns in multi-agent systems
 
-Given that Claude Flow V3 was:
+Given that Rufflo V3 was:
 - Publicly available on GitHub
 - Published to npm with alpha releases
 - Documented with detailed ADRs
@@ -563,4 +563,4 @@ Given that Claude Flow V3 was:
 
 **Document Hash:** SHA256 of this comparison for provenance
 **Author:** Analysis by Claude (commissioned by rUv)
-**Sources:** Claude Flow V3 source code, Claude Code v2.1.19 binary analysis
+**Sources:** Rufflo V3 source code, Claude Code v2.1.19 binary analysis

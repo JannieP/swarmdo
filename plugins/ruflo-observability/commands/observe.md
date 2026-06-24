@@ -30,7 +30,7 @@ Observability commands:
 1. Collect latest metrics, recent errors, and active traces
 2. Display sections: System Health (gauges), Recent Activity (counters), Active Traces (spans), Errors (last 10)
 3. Compute overall health score: green (all normal), yellow (warnings), red (errors)
-4. Show cost summary from ruflo-cost-tracker if available
+4. Show cost summary from rufflo-cost-tracker if available
 
 **`observe correlate <agent-id>`** -- Correlate all telemetry for a specific agent.
 1. Query logs, traces, and metrics filtered by `<agent-id>`

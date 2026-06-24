@@ -34,7 +34,7 @@ interface InitComponents {
   helpers: boolean;     // .claude/helpers/
   statusline: boolean;  // statusline scripts
   mcp: boolean;         // .mcp.json
-  runtime: boolean;     // .claude-flow/
+  runtime: boolean;     // .rufflo/
 }
 ```
 
@@ -138,7 +138,7 @@ interface AgentsConfig {
 
 ```typescript
 interface MCPConfig {
-  claudeFlow: boolean;    // claude-flow MCP server
+  claudeFlow: boolean;    // rufflo MCP server
   agenticFlow: boolean;   // agentic-flow integration
   memory: boolean;        // Memory MCP tools
   neural: boolean;        // Neural MCP tools

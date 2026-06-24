@@ -1,6 +1,6 @@
 name: neural-trader-smoke
 
-# Runs the ruflo-neural-trader plugin's runtime smoke test against
+# Runs the rufflo-neural-trader plugin's runtime smoke test against
 # the currently-pinned neural-trader npm package. Catches regressions
 # where the published package stops matching what the plugin's skills
 # document (e.g. another missing-loader bug, another fork-bomb, an
@@ -15,11 +15,11 @@ on:
   push:
     branches: [main]
     paths:
-      - 'plugins/ruflo-neural-trader/**'
+      - 'plugins/rufflo-neural-trader/**'
       - '.github/workflows/neural-trader-smoke.yml'
   pull_request:
     paths:
-      - 'plugins/ruflo-neural-trader/**'
+      - 'plugins/rufflo-neural-trader/**'
       - '.github/workflows/neural-trader-smoke.yml'
   workflow_dispatch:
   schedule:
@@ -43,7 +43,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y jq
 
       - name: Run runtime smoke
-        run: bash plugins/ruflo-neural-trader/scripts/runtime-smoke.sh
+        run: bash plugins/rufflo-neural-trader/scripts/runtime-smoke.sh
 
       - name: Upload smoke output on failure
         if: failure()

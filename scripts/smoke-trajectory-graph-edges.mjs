@@ -16,7 +16,7 @@ import * as os from 'os';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, '..');
-const distBase = path.join(projectRoot, 'v3/@claude-flow/cli/dist/src');
+const distBase = path.join(projectRoot, 'v3/@rufflo/cli/dist/src');
 // Windows: absolute paths must be file:// URLs for dynamic import() — a bare
 // C:\... path fails with ERR_UNSUPPORTED_ESM_URL_SCHEME (hit while debugging
 // #2312 locally). No-op on POSIX.

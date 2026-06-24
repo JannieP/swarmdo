@@ -1,5 +1,5 @@
 /**
- * ruflo-graph-intelligence — Domain Types (ADR-123)
+ * rufflo-graph-intelligence — Domain Types (ADR-123)
  *
  * Core type contract: SparseMatrix shape, ComplexityClass budget, coherence
  * threshold, signed PR artifact envelope. These are the wire types every
@@ -20,7 +20,7 @@ export const SparseEntrySchema = z.object({
 export type SparseEntry = z.infer<typeof SparseEntrySchema>;
 
 export const SparseMatrixSchema = z.object({
-  /** Stable identifier — e.g. "ruflo-federation:trust-mesh:2026-05-19T01:00:00Z". */
+  /** Stable identifier — e.g. "rufflo-federation:trust-mesh:2026-05-19T01:00:00Z". */
   graphId: z.string().min(1),
   /** Number of rows / columns (square). */
   size: z.number().int().positive(),

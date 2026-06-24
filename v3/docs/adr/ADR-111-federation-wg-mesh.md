@@ -1,10 +1,10 @@
-# ADR-111 — Federation network mesh via WireGuard, governed by ruflo trust + breaker
+# ADR-111 — Federation network mesh via WireGuard, governed by rufflo trust + breaker
 
 - Status: **Accepted** (Phases 1-3 Implemented; Phases 4-7 Proposed)
 - Date: 2026-05-09 (Proposed) → 2026-05-10 (Phases 1-3 Implemented)
 - Authors: claude (drafted with rUv)
 - Related: [ADR-097](./ADR-097-federation-budget-circuit-breaker.md), [ADR-104](./ADR-104-federation-wire-transport.md), [ADR-105](./ADR-105-federation-v1-state-snapshot.md), [ADR-106](./ADR-106-peer-discovery.md), [ADR-107](./ADR-107-federation-tls.md)
-- Supersedes parts of: ADR-104's "tailnet provides TLS" assumption (this ADR makes ruflo own the network layer optionally)
+- Supersedes parts of: ADR-104's "tailnet provides TLS" assumption (this ADR makes rufflo own the network layer optionally)
 
 ## Context
 
@@ -12,7 +12,7 @@ Federation today (post-alpha.13) assumes peers reach each other through some pre
 
 This works but creates two real frictions:
 
-1. **Operational coupling to Tailscale Inc.** Most operators in our session validation used Tailscale as the connectivity layer. Tailscale is excellent but introduces an external trust/billing/availability dependency that's outside ruflo's control. Headscale (self-hosted Tailscale-compatible coord server) reduces the trust dependency but still requires a dedicated control-plane service.
+1. **Operational coupling to Tailscale Inc.** Most operators in our session validation used Tailscale as the connectivity layer. Tailscale is excellent but introduces an external trust/billing/availability dependency that's outside rufflo's control. Headscale (self-hosted Tailscale-compatible coord server) reduces the trust dependency but still requires a dedicated control-plane service.
 
 2. **Trust + connectivity managed in two places.** Federation's trust ladder (UNTRUSTED → PRIVILEGED) governs MCP-tool access. Tailscale ACLs govern packet-layer reachability. They can drift — a peer that gets EVICTED in federation-trust-land remains in the tailnet until an admin manually removes it. **Compromised peer detection in federation does not propagate to the network layer.**
 
@@ -22,7 +22,7 @@ This works but creates two real frictions:
 
 - Generates and exchanges WG public keys via the existing federation manifest (same Ed25519 trust chain)
 - Auto-builds `wg-quick` configuration from the federation peer registry
-- Maps ruflo trust levels to packet-layer `AllowedIPs` slices (see "Trust-graded access" below)
+- Maps rufflo trust levels to packet-layer `AllowedIPs` slices (see "Trust-graded access" below)
 - Hooks into the breaker so SUSPEND/EVICT removes the peer from the WG mesh instantly
 - Witness-attests every coordination change (add/remove/key-rotate) as an Ed25519-signed manifest entry
 
@@ -33,7 +33,7 @@ This works but creates two real frictions:
 Both remain valid choices and the plugin will continue to work over them. ADR-111 adds an additional path — useful when:
 
 - The operator wants zero external dependencies (no Tailscale Inc., no Headscale instance)
-- The operator wants packet-layer access to follow ruflo trust changes (no two-system drift)
+- The operator wants packet-layer access to follow rufflo trust changes (no two-system drift)
 - The federation peer count is small (~2-50 nodes, no meaningful NAT traversal need)
 - The peers are reachable on a known transport (direct UDP, OR a relay configured separately)
 
@@ -160,21 +160,21 @@ Every WG mesh change becomes a witness manifest entry, signed by the operator's 
 {
   "id": "wg-mesh-change-2026-05-09T22:00:00Z-add-peer-ruvultra",
   "desc": "Added ruvultra to WG mesh, AllowedIPs 10.50.0.2/32, TrustLevel=ATTESTED",
-  "file": ".claude-flow/federation/wg-changes.log",
+  "file": ".rufflo/federation/wg-changes.log",
   "marker": "PublicKey = <wg-pk-base64>",
   "ts": "2026-05-09T22:00:00Z",
   "operator": "<ed25519 sig of the change>"
 }
 ```
 
-Anyone running `node plugins/ruflo-core/scripts/witness/verify.mjs --manifest .claude-flow/federation/wg-witness.md.json` can prove the mesh's history end-to-end. **This is something Tailscale fundamentally can't offer** because their coordination is server-mediated.
+Anyone running `node plugins/rufflo-core/scripts/witness/verify.mjs --manifest .rufflo/federation/wg-witness.md.json` can prove the mesh's history end-to-end. **This is something Tailscale fundamentally can't offer** because their coordination is server-mediated.
 
 ## Implementation plan
 
 ### Phase 1 — Manifest extension + key generation (1-2 days)
 
 - Extend `FederationManifest` type with optional `wg: { publicKey, endpoint, meshIP }`
-- On plugin init: if `config.wgMesh === true`, generate a WG keypair and persist to `.claude-flow/federation/wg-key-<nodeId>.json` (mode 0600, alongside existing Ed25519 key)
+- On plugin init: if `config.wgMesh === true`, generate a WG keypair and persist to `.rufflo/federation/wg-key-<nodeId>.json` (mode 0600, alongside existing Ed25519 key)
 - Assign mesh IP via deterministic hash of nodeId into 10.50.0.0/16 — no central allocator needed. The 10.50.0.0/16 range is RFC1918 private space outside any common LAN allocation (10.0.0.0/24 — home routers, 10.10.0.0/16 — common k8s); it also avoids 100.64.0.0/10 which Tailscale claims, so dual-stack ADR-111+tailnet deployments don't collide. Birthday-collision probability stays under 1% up to ~36 peers and under 50% at ~302 peers — well outside the ≤50-peer v1 target. **Collision handling:** if `deriveMeshIP(nodeId)` resolves to an IP already published by another peer's manifest, the WgMeshService rotates one bit of the hash input (`nodeId + '\x00'`, `nodeId + '\x01'`, …) until a free slot is found. Larger deployments should jump to `10.50.0.0/12` (~1M slots).
 - Manifest publishes the WG section + signature covers it
 
@@ -182,15 +182,15 @@ Anyone running `node plugins/ruflo-core/scripts/witness/verify.mjs --manifest .c
 
 - New `domain/services/wg-mesh-service.ts`
 - `buildPeerConfigFromRegistry()` → builds `wg-quick`-compatible config from `discovery.listPeers()` filtering ATTESTED+
-- Writes to `/etc/wireguard/ruflo-fed.conf` (linux) or equivalent path on macOS
-- `wg-quick up ruflo-fed` invocation (with operator confirmation per CLAUDE.md "destructive actions" guidance — bringing up a network interface qualifies)
+- Writes to `/etc/wireguard/rufflo-fed.conf` (linux) or equivalent path on macOS
+- `wg-quick up rufflo-fed` invocation (with operator confirmation per CLAUDE.md "destructive actions" guidance — bringing up a network interface qualifies)
 - Hook into discovery's `onPeerDiscovered` to regenerate config on new peers
 
 ### Phase 3 — Breaker integration (2 days)
 
 - Subscribe to FederationNode state transitions
-- On SUSPENDED: `wg set ruflo-fed peer <pubkey> remove-allowed-ips`
-- On EVICTED: `wg set ruflo-fed peer <pubkey> remove`
+- On SUSPENDED: `wg set rufflo-fed peer <pubkey> remove-allowed-ips`
+- On EVICTED: `wg set rufflo-fed peer <pubkey> remove`
 - On reactivate: restore from manifest
 
 ### Phase 4 — Trust-graded firewall rules (3 days)
@@ -202,7 +202,7 @@ Anyone running `node plugins/ruflo-core/scripts/witness/verify.mjs --manifest .c
 
 ### Phase 5 — Witness attestation (2 days)
 
-- Every WgMeshService mutation appends to `.claude-flow/federation/wg-changes.log`
+- Every WgMeshService mutation appends to `.rufflo/federation/wg-changes.log`
 - Periodic regen-witness includes the change log
 - New `federation_wg_status` MCP tool exposes the chain
 

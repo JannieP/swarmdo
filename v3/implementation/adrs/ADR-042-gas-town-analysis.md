@@ -1,4 +1,4 @@
-# ADR-042: Gas Town & Beads Analysis - Lessons for Claude Flow V3
+# ADR-042: Gas Town & Beads Analysis - Lessons for Rufflo V3
 
 ## Status
 **Research** - Comparative Analysis (2026-01-24)
@@ -11,7 +11,7 @@
 
 ## Context
 
-Steve Yegge released [Gas Town](https://github.com/steveyegge/gastown) on January 1, 2026, a multi-agent orchestration system built on top of [Beads](https://github.com/steveyegge/beads), his git-backed issue tracker. This ADR analyzes these systems and identifies lessons applicable to Claude Flow V3.
+Steve Yegge released [Gas Town](https://github.com/steveyegge/gastown) on January 1, 2026, a multi-agent orchestration system built on top of [Beads](https://github.com/steveyegge/beads), his git-backed issue tracker. This ADR analyzes these systems and identifies lessons applicable to Rufflo V3.
 
 ## Source Material
 
@@ -25,7 +25,7 @@ Steve Yegge released [Gas Town](https://github.com/steveyegge/gastown) on Januar
 
 Gas Town operates on the principle that **sessions are ephemeral cattle; agents are persistent identities**. This is the inverse of how most orchestrators work.
 
-| Concept | Gas Town | Claude Flow V3 |
+| Concept | Gas Town | Rufflo V3 |
 |---------|----------|----------------|
 | Session Persistence | Cattle (disposable) | Cattle (disposable) |
 | Agent Identity | Pets (persistent in Git) | Pets (persistent in memory) |
@@ -49,7 +49,7 @@ Formulas (TOML) → Protomolecules → Molecules → Wisps
 
 ### Worker Roles
 
-| Role | Function | Claude Flow Equivalent |
+| Role | Function | Rufflo Equivalent |
 |------|----------|----------------------|
 | **Mayor** | Main coordinator, concierge | `hierarchical-coordinator` |
 | **Polecats** | Ephemeral workers for swarms | Task tool agents |
@@ -95,11 +95,11 @@ Workers can communicate with their predecessors via Claude Code's `/resume` feat
 - Useful for handoff continuity
 - Recovers lost context from crashed sessions
 
-## Comparison: Gas Town vs Claude Flow V3
+## Comparison: Gas Town vs Rufflo V3
 
 ### Similarities
 
-| Feature | Gas Town | Claude Flow V3 |
+| Feature | Gas Town | Rufflo V3 |
 |---------|----------|----------------|
 | Multi-agent orchestration | ✅ | ✅ |
 | Hierarchical coordination | ✅ Mayor-led | ✅ Queen-led |
@@ -111,7 +111,7 @@ Workers can communicate with their predecessors via Claude Code's `/resume` feat
 
 ### Differences
 
-| Aspect | Gas Town | Claude Flow V3 |
+| Aspect | Gas Town | Rufflo V3 |
 |--------|----------|----------------|
 | **Primary UI** | tmux | CLI + MCP |
 | **Language** | Go | TypeScript |
@@ -130,16 +130,16 @@ Workers can communicate with their predecessors via Claude Code's `/resume` feat
 4. **Formula marketplace** - Mol Mall for sharing workflows
 5. **Seance** - Talk to previous sessions
 
-### Claude Flow V3 Advantages
+### Rufflo V3 Advantages
 
-1. **Vector search** - 150x-12,500x faster semantic search
+1. **Vector search** - ~1.9x-4.7x measured faster semantic search
 2. **Neural learning** - SONA, MoE, pattern learning
 3. **MCP integration** - Standard protocol support
 4. **Plugin ecosystem** - 18+ plugins with 50+ MCP tools
 5. **Multi-model** - Haiku/Sonnet/Opus routing
 6. **Cloud-native** - No tmux dependency
 
-## Lessons for Claude Flow V3
+## Lessons for Rufflo V3
 
 ### High Priority Adoptions
 
@@ -248,16 +248,16 @@ await hooks.sessionRestore({
 For power users who want terminal-native orchestration:
 
 ```bash
-npx claude-flow tmux attach --mayor
-npx claude-flow tmux crew cycle
+npx rufflo tmux attach --mayor
+npx rufflo tmux crew cycle
 ```
 
 #### 9. Mol Mall Equivalent
 Marketplace for workflow templates:
 
 ```bash
-npx claude-flow formulas search "release"
-npx claude-flow formulas install @community/release-workflow
+npx rufflo formulas search "release"
+npx rufflo formulas install @community/release-workflow
 ```
 
 ## Architectural Insights
@@ -273,7 +273,7 @@ Git provides:
 - Distributed sync
 - Cryptographic integrity
 
-Claude Flow uses AgentDB for vectors, but could add Git-backed audit logs for critical state.
+Rufflo uses AgentDB for vectors, but could add Git-backed audit logs for critical state.
 
 ### Why Molecules Work
 
@@ -298,9 +298,9 @@ Yegge's evolution chart is useful for positioning:
 | 5 | CLI single agent | Claude Code |
 | 6 | CLI multi-agent | 3-5 parallel |
 | 7 | 10+ agents, hand-managed | Power user |
-| 8 | Building orchestrator | Gas Town, Claude Flow |
+| 8 | Building orchestrator | Gas Town, Rufflo |
 
-**Claude Flow V3 targets Stage 7-8 users.**
+**Rufflo V3 targets Stage 7-8 users.**
 
 ## Recommendations
 
@@ -329,12 +329,12 @@ Gas Town represents a significant advancement in multi-agent orchestration, part
 - **Self-healing**: GUPP + Patrols
 - **Scalability**: 20-30+ concurrent agents
 
-Claude Flow V3 has advantages in:
+Rufflo V3 has advantages in:
 - **Intelligence**: Vector search, neural learning
 - **Ecosystem**: MCP, plugins, multi-model
 - **Accessibility**: No tmux requirement
 
-The ideal system would combine Gas Town's durability guarantees with Claude Flow's intelligence features.
+The ideal system would combine Gas Town's durability guarantees with Rufflo's intelligence features.
 
 ## References
 

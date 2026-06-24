@@ -2,7 +2,7 @@
 /**
  * Verify a signed witness manifest against the live tree (ADR-103).
  *
- * Project-agnostic — works without ruflo CLI being installed.
+ * Project-agnostic — works without rufflo CLI being installed.
  *
  * Usage:
  *   node verify.mjs --manifest <path> [--root <path>] [--json]
@@ -140,15 +140,15 @@ async function verifySignature(witness, repoRoot) {
   const probes = [
     repoRoot,
     join(repoRoot, 'v3'),
-    join(repoRoot, 'v3/@claude-flow/cli'),
-    join(repoRoot, 'v3/@claude-flow/plugin-agent-federation'),
+    join(repoRoot, 'v3/@rufflo/cli'),
+    join(repoRoot, 'v3/@rufflo/plugin-agent-federation'),
   ];
   for (const root of probes) {
     try { ed = createRequire(join(root, 'noop.js'))('@noble/ed25519'); break; }
     catch (e) { probeErr = e; }
   }
   if (!ed) {
-    // ruflo#1880 — the scheduled 12h verification has bounced off this
+    // rufflo#1880 — the scheduled 12h verification has bounced off this
     // 6+ times. Spell out the fix in the error message instead of
     // leaving the operator to chase it.
     console.error(
@@ -186,7 +186,7 @@ async function verifySignature(witness, repoRoot) {
 
   const recomputed = createHash('sha256').update(JSON.stringify(witness.manifest)).digest('hex');
   const manifestHashOk = recomputed === witness.integrity.manifestHash;
-  const seed = createHash('sha256').update(witness.manifest.gitCommit + ':ruflo-witness/v1').digest();
+  const seed = createHash('sha256').update(witness.manifest.gitCommit + ':rufflo-witness/v1').digest();
   const reKey = ed.getPublicKey(seed);
   const publicKeyReproducible = Buffer.from(reKey).toString('hex') === witness.integrity.publicKey;
   const signatureValid = ed.verify(

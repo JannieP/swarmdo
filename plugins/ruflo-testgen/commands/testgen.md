@@ -6,9 +6,9 @@ $ARGUMENTS
 
 Generate tests by analyzing coverage gaps and applying TDD London School patterns.
 
-1. **Analyze gaps**: `npx @claude-flow/cli@latest hooks coverage-gaps --format table`
-2. **Route for coverage**: `npx @claude-flow/cli@latest hooks coverage-route --task "$ARGUMENTS"`
-3. **Suggest tests**: `npx @claude-flow/cli@latest hooks coverage-suggest --path "$ARGUMENTS"`
+1. **Analyze gaps**: `npx @rufflo/cli@latest hooks coverage-gaps --format table`
+2. **Route for coverage**: `npx @rufflo/cli@latest hooks coverage-route --task "$ARGUMENTS"`
+3. **Suggest tests**: `npx @rufflo/cli@latest hooks coverage-suggest --path "$ARGUMENTS"`
 
 Parse $ARGUMENTS as a file path or module name. Generate tests following these conventions:
 - Place tests adjacent to source: `src/foo.ts` -> `src/foo.test.ts`

@@ -1,6 +1,6 @@
 {
-  "name": "@ruflo/research",
-  "description": "RuFlo Research — Goal-Oriented Action Planning UI for autonomous AI research workflows",
+  "name": "@rufflo/research",
+  "description": "Rufflo Research — Goal-Oriented Action Planning UI for autonomous AI research workflows",
   "private": true,
   "version": "0.1.0",
   "type": "module",

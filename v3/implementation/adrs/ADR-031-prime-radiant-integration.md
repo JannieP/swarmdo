@@ -24,7 +24,7 @@
 
 ### Problem Statement
 
-Claude Flow V3 requires mathematical AI interpretability capabilities for:
+Rufflo V3 requires mathematical AI interpretability capabilities for:
 1. **Memory coherence validation** - Detecting contradictions in stored vectors before storage
 2. **Multi-agent consensus verification** - Mathematical validation of swarm agreement
 3. **RAG hallucination prevention** - Catching retrieval-augmented generation inconsistencies
@@ -32,7 +32,7 @@ Claude Flow V3 requires mathematical AI interpretability capabilities for:
 5. **Causal reasoning** - Do-calculus based causal inference for agent decisions
 6. **Hierarchical data modeling** - Quantum topology for agent relationship graphs
 
-The current V3 architecture provides memory management (`@claude-flow/memory`), coordination (`@claude-flow/coordination`), and security primitives (`@claude-flow/security`), but lacks mathematical interpretability and coherence validation capabilities.
+The current V3 architecture provides memory management (`@rufflo/memory`), coordination (`@rufflo/coordination`), and security primitives (`@rufflo/security`), but lacks mathematical interpretability and coherence validation capabilities.
 
 ### Prime Radiant Package Analysis
 
@@ -86,17 +86,17 @@ prime-radiant-advanced-wasm/
 
 ## Decision
 
-Integrate `prime-radiant-advanced-wasm` as a **coherence validation plugin** for Claude Flow V3, providing mathematical interpretability gates at critical system boundaries.
+Integrate `prime-radiant-advanced-wasm` as a **coherence validation plugin** for Rufflo V3, providing mathematical interpretability gates at critical system boundaries.
 
 ### Architecture Overview
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│                              Claude Flow V3                                      │
+│                              Rufflo V3                                      │
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                  │
 │   ┌────────────────────────────────────────────────────────────────────────┐    │
-│   │                    @claude-flow/plugins Registry                        │    │
+│   │                    @rufflo/plugins Registry                        │    │
 │   │  ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌─────────────────┐  │    │
 │   │  │   Core     │  │  Security  │  │  Memory    │  │  prime-radiant  │  │    │
 │   │  │  Plugins   │  │  Plugins   │  │  Plugins   │  │  Plugin (NEW)   │  │    │
@@ -169,7 +169,7 @@ Integrate `prime-radiant-advanced-wasm` as a **coherence validation plugin** for
 ```typescript
 // v3/plugins/prime-radiant/src/index.ts
 
-import { PluginBuilder, HookEvent, HookPriority } from '@claude-flow/plugins';
+import { PluginBuilder, HookEvent, HookPriority } from '@rufflo/plugins';
 import { PrimeRadiantBridge } from './infrastructure/prime-radiant-bridge';
 import { CoherenceGate } from './domain/coherence-gate';
 import { mcpTools } from './mcp-tools';
@@ -180,9 +180,9 @@ export const primeRadiantPlugin = new PluginBuilder('prime-radiant', '0.1.3')
   .withAuthor('rUv')
   .withLicense('MIT')
   .withDependencies([
-    '@claude-flow/memory',
-    '@claude-flow/security',
-    '@claude-flow/coordination'
+    '@rufflo/memory',
+    '@rufflo/security',
+    '@rufflo/coordination'
   ])
   .withCapabilities([
     'coherence-checking',
@@ -531,7 +531,7 @@ export class CoherenceViolationError extends Error {
 ```typescript
 // v3/plugins/prime-radiant/src/mcp-tools/index.ts
 
-import type { MCPTool } from '@claude-flow/plugins';
+import type { MCPTool } from '@rufflo/plugins';
 
 export const mcpTools: MCPTool[] = [
   // Coherence Checking
@@ -910,7 +910,7 @@ function cosineSimilarity(a: Float32Array, b: Float32Array): number {
 ```typescript
 // v3/plugins/prime-radiant/src/hooks/index.ts
 
-import type { Hook, HookPriority } from '@claude-flow/plugins';
+import type { Hook, HookPriority } from '@rufflo/plugins';
 
 export const hooks: Hook[] = [
   // Pre-Memory-Store Hook - Coherence Gate
@@ -1088,7 +1088,7 @@ export const hooks: Hook[] = [
 ```typescript
 // v3/plugins/prime-radiant/src/integration/memory-integration.ts
 
-import type { IMemoryService } from '@claude-flow/memory';
+import type { IMemoryService } from '@rufflo/memory';
 import { CoherenceGate } from '../domain/coherence-gate';
 
 /**
@@ -1194,7 +1194,7 @@ export class CoherentMemoryService {
 ```typescript
 // v3/plugins/prime-radiant/src/integration/hive-mind-integration.ts
 
-import type { HiveMindService } from '@claude-flow/coordination';
+import type { HiveMindService } from '@rufflo/coordination';
 import { PrimeRadiantBridge } from '../infrastructure/prime-radiant-bridge';
 
 /**

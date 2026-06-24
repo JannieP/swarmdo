@@ -1,7 +1,7 @@
 /**
  * Witness Signer for PR Artifacts (Phase 7, ADR-123)
  *
- * Ed25519 sign / verify via node:crypto. Mirrors @claude-flow/browser's
+ * Ed25519 sign / verify via node:crypto. Mirrors @rufflo/browser's
  * ADR-122 Phase 1 witness signer — same canonical-JSON approach so a single
  * upstream-ADR-103 schema change cascades cleanly.
  */

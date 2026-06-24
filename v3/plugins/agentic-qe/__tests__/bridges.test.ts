@@ -2,7 +2,7 @@
  * Agentic-QE Bridge Integration Tests
  *
  * Tests for the anti-corruption layer bridges that connect
- * agentic-qe to Claude Flow V3 domains.
+ * agentic-qe to Rufflo V3 domains.
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';

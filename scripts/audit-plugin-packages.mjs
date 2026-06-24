@@ -4,14 +4,14 @@
  *
  * Scans v3/plugins/<name>/package.json and fails CI on any of:
  *
- *   A. (#1903) A `@claude-flow/*` package referenced as a hard `dependencies`
+ *   A. (#1903) A `@rufflo/*` package referenced as a hard `dependencies`
  *      entry, OR as a `peerDependencies` entry that is NOT marked
  *      `peerDependenciesMeta[name].optional: true`, that is not in the
  *      KNOWN_PUBLISHED allow-list. npm 7+ auto-installs non-optional peers,
- *      so an unpublished one (e.g. `@claude-flow/ruvector-upstream`) makes
+ *      so an unpublished one (e.g. `@rufflo/ruvector-upstream`) makes
  *      `npm install <plugin>` fail with E404.
  *
- *   B. (#1902) A `peerDependencies` range for a `@claude-flow/*` or
+ *   B. (#1902) A `peerDependencies` range for a `@rufflo/*` or
  *      `@ruvector/*` target that is a "bare stable" range (`>=X.Y.Z`,
  *      `^X.Y.Z`, `~X.Y.Z`, `X.Y.Z`) with no prerelease component. Those
  *      ranges DON'T satisfy a prerelease publish like `3.0.0-alpha.15`, so
@@ -39,32 +39,32 @@ const REPO_ROOT = process.cwd();
 const PLUGINS_DIR = join(REPO_ROOT, 'v3', 'plugins');
 const JSON_OUT = process.argv.includes('--json');
 
-// @claude-flow/* packages known to be published to the npm registry. A hard
-// dep / non-optional peer on anything @claude-flow/* NOT in this set fails the
-// audit. Refresh with: for n in <pkg>; do npm view @claude-flow/$n version; done
+// @rufflo/* packages known to be published to the npm registry. A hard
+// dep / non-optional peer on anything @rufflo/* NOT in this set fails the
+// audit. Refresh with: for n in <pkg>; do npm view @rufflo/$n version; done
 const KNOWN_PUBLISHED = new Set([
-  '@claude-flow/aidefence',
-  '@claude-flow/browser',
-  '@claude-flow/claims',
-  '@claude-flow/cli',
-  '@claude-flow/cli-core',
-  '@claude-flow/codex',
-  '@claude-flow/deployment',
-  '@claude-flow/embeddings',
-  '@claude-flow/guidance',
-  '@claude-flow/hooks',
-  '@claude-flow/integration',
-  '@claude-flow/mcp',
-  '@claude-flow/memory',
-  '@claude-flow/neural',
-  '@claude-flow/performance',
-  '@claude-flow/plugins',
-  '@claude-flow/providers',
-  '@claude-flow/security',
-  '@claude-flow/shared',
-  '@claude-flow/swarm',
-  '@claude-flow/testing',
-  // plugin-* packages publish under @claude-flow/plugin-<name>; the plugin
+  '@rufflo/aidefence',
+  '@rufflo/browser',
+  '@rufflo/claims',
+  '@rufflo/cli',
+  '@rufflo/cli-core',
+  '@rufflo/codex',
+  '@rufflo/deployment',
+  '@rufflo/embeddings',
+  '@rufflo/guidance',
+  '@rufflo/hooks',
+  '@rufflo/integration',
+  '@rufflo/mcp',
+  '@rufflo/memory',
+  '@rufflo/neural',
+  '@rufflo/performance',
+  '@rufflo/plugins',
+  '@rufflo/providers',
+  '@rufflo/security',
+  '@rufflo/shared',
+  '@rufflo/swarm',
+  '@rufflo/testing',
+  // plugin-* packages publish under @rufflo/plugin-<name>; the plugin
   // store loads them by tarball, but if one plugin hard-depends on another
   // it must be published. Add entries here if/when that happens.
 ]);
@@ -139,29 +139,29 @@ for (const dir of plugins) {
   const peers = pkg.peerDependencies || {};
   const peerMeta = pkg.peerDependenciesMeta || {};
 
-  // --- Check A: unpublished @claude-flow/* as hard dep / non-optional peer
+  // --- Check A: unpublished @rufflo/* as hard dep / non-optional peer
   for (const [name] of Object.entries(deps)) {
-    if (name.startsWith('@claude-flow/') && !KNOWN_PUBLISHED.has(name)) {
-      note(dir, 'A', `"${name}" is a hard dependency but not a published @claude-flow package — \`npm install\` will E404. Make it an optional peerDependency or remove it (the runtime should fall back when absent).`);
+    if (name.startsWith('@rufflo/') && !KNOWN_PUBLISHED.has(name)) {
+      note(dir, 'A', `"${name}" is a hard dependency but not a published @rufflo package — \`npm install\` will E404. Make it an optional peerDependency or remove it (the runtime should fall back when absent).`);
     }
   }
   for (const [name] of Object.entries(peers)) {
     const optional = peerMeta[name] && peerMeta[name].optional === true;
-    if (name.startsWith('@claude-flow/') && !KNOWN_PUBLISHED.has(name) && !optional) {
-      note(dir, 'A', `"${name}" is a non-optional peerDependency but not a published @claude-flow package — npm 7+ auto-installs peers and will E404. Add \`peerDependenciesMeta["${name}"].optional: true\`.`);
+    if (name.startsWith('@rufflo/') && !KNOWN_PUBLISHED.has(name) && !optional) {
+      note(dir, 'A', `"${name}" is a non-optional peerDependency but not a published @rufflo package — npm 7+ auto-installs peers and will E404. Add \`peerDependenciesMeta["${name}"].optional: true\`.`);
     }
   }
 
-  // --- Check B: bare-stable peer ranges for prerelease @claude-flow targets.
-  // All @claude-flow packages currently publish as 3.x prereleases, so a bare
-  // ">=3.0.0" can never resolve. We only flag @claude-flow/* here (and only
-  // when non-optional, or optional-but-@claude-flow since the project always
+  // --- Check B: bare-stable peer ranges for prerelease @rufflo targets.
+  // All @rufflo packages currently publish as 3.x prereleases, so a bare
+  // ">=3.0.0" can never resolve. We only flag @rufflo/* here (and only
+  // when non-optional, or optional-but-@rufflo since the project always
   // ships those as prereleases). Optional @ruvector/* WASM peers are exempt —
   // a bare range there at worst means the optional dep doesn't get installed.
   for (const [name, range] of Object.entries(peers)) {
-    if (!name.startsWith('@claude-flow/')) continue;
+    if (!name.startsWith('@rufflo/')) continue;
     if (isPrereleaseSafeRange(range)) continue;
-    note(dir, 'B', `peerDependency "${name}": "${range}" can't resolve any @claude-flow publish — they're all 3.x prereleases. Use ">=${String(range).replace(/^[\^~>=\s]+/, '')}-0" or "*".`);
+    note(dir, 'B', `peerDependency "${name}": "${range}" can't resolve any @rufflo publish — they're all 3.x prereleases. Use ">=${String(range).replace(/^[\^~>=\s]+/, '')}-0" or "*".`);
   }
 
   // --- Check C: export-ish paths must be covered by `files`
@@ -198,7 +198,7 @@ if (JSON_OUT) {
   if (issues.length === 0) {
     console.log('  ✓ no install-safety issues');
   } else {
-    const labels = { A: 'unpublished @claude-flow dep', B: 'prerelease-unsafe peer range', C: 'export not in files', D: 'export missing after build', PARSE: 'invalid package.json' };
+    const labels = { A: 'unpublished @rufflo dep', B: 'prerelease-unsafe peer range', C: 'export not in files', D: 'export missing after build', PARSE: 'invalid package.json' };
     for (const i of issues) {
       console.log(`  ✗ [${i.code}] ${i.plugin}: ${i.message}`);
     }

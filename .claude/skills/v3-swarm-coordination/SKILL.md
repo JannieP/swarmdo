@@ -7,7 +7,7 @@ description: "15-agent hierarchical mesh coordination for v3 implementation. Orc
 
 ## What This Skill Does
 
-Orchestrates the complete 15-agent hierarchical mesh swarm for claude-flow v3 implementation, coordinating parallel execution across domains while maintaining dependencies and timeline adherence.
+Orchestrates the complete 15-agent hierarchical mesh swarm for rufflo v3 implementation, coordinating parallel execution across domains while maintaining dependencies and timeline adherence.
 
 ## Quick Start
 
@@ -21,9 +21,9 @@ Task("CVE remediation", "Fix CVE-1, CVE-2, CVE-3 vulnerabilities", "security-aud
 Task("Security testing", "Implement TDD security framework", "test-architect")
 
 # Core domain (Phase 2 - Parallel execution)
-Task("Memory unification", "Implement AgentDB 150x improvement", "v3-memory-specialist")
+Task("Memory unification", "Implement AgentDB ~4.7x measured improvement", "v3-memory-specialist")
 Task("Integration architecture", "Deep agentic-flow@alpha integration", "v3-integration-architect")
-Task("Performance validation", "Validate 2.49x-7.47x targets", "v3-performance-engineer")
+Task("Performance validation", "Validate unverified (no benchmark) targets", "v3-performance-engineer")
 ```
 
 ## 15-Agent Swarm Architecture
@@ -93,7 +93,7 @@ const phase1 = async () => {
 const phase2 = async () => {
   // Parallel core system implementation
   await Promise.all([
-    Task("Memory unification", "Implement AgentDB with 150x-12,500x improvement", "v3-memory-specialist"),
+    Task("Memory unification", "Implement AgentDB with ~1.9x-4.7x measured improvement", "v3-memory-specialist"),
     Task("Swarm coordination", "Merge 4 coordination systems into unified engine", "swarm-specialist"),
     Task("MCP optimization", "Optimize MCP server performance", "mcp-specialist"),
     Task("Core implementation", "Implement DDD modular architecture", "core-implementer"),
@@ -111,7 +111,7 @@ const phase3 = async () => {
     Task("agentic-flow integration", "Eliminate 10,000+ duplicate lines", "v3-integration-architect"),
     Task("CLI modernization", "Enhance CLI with hooks system", "cli-hooks-developer"),
     Task("SONA integration", "Implement <0.05ms learning adaptation", "neural-learning-developer"),
-    Task("Performance benchmarking", "Validate 2.49x-7.47x targets", "v3-performance-engineer"),
+    Task("Performance benchmarking", "Validate unverified (no benchmark) targets", "v3-performance-engineer"),
     Task("Integration testing", "End-to-end system validation", "test-architect")
   ]);
 };
@@ -178,7 +178,7 @@ class DependencyCoordination {
 class GitHubCoordination {
   async initializeV3Milestone(): Promise<void> {
     await gh.createMilestone({
-      title: 'Claude-Flow v3.0.0 Implementation',
+      title: 'Rufflo v3.0.0 Implementation',
       description: '15-agent swarm implementation of 10 ADRs',
       dueDate: this.calculate14WeekDeadline()
     });
@@ -302,8 +302,8 @@ class SwarmLoadBalancer {
 
 ### Implementation Targets
 - [ ] **ADR Coverage**: All 10 ADRs implemented successfully
-- [ ] **Performance**: 2.49x-7.47x Flash Attention achieved
-- [ ] **Search**: 150x-12,500x AgentDB improvement validated
+- [ ] **Performance**: unverified (no benchmark) Flash Attention achieved
+- [ ] **Search**: ~1.9x-4.7x measured AgentDB improvement validated
 - [ ] **Code Reduction**: <5,000 lines (vs 15,000+)
 - [ ] **Security**: 90/100 security score achieved
 

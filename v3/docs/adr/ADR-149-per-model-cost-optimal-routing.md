@@ -49,7 +49,7 @@ ADR-148's `openrouter-alts.json` maps each Claude tier to **one** OpenRouter alt
 
 ### The Phase 1 seed corpus is unmeasured
 
-`v3/@claude-flow/cli/assets/model-router/seed-rows.json` carries `scores: { haiku: 0.94, sonnet: 0.92, opus: 0.93 }` — **hand-coded, not measured.** The bundled KRR artifact was fit to these assumptions, not to real model behavior. The 100% accuracy on `scripts/benchmark-router.mjs` is a property of the synthetic corpus, not real-world routing fidelity.
+`v3/@rufflo/cli/assets/model-router/seed-rows.json` carries `scores: { haiku: 0.94, sonnet: 0.92, opus: 0.93 }` — **hand-coded, not measured.** The bundled KRR artifact was fit to these assumptions, not to real model behavior. The 100% accuracy on `scripts/benchmark-router.mjs` is a property of the synthetic corpus, not real-world routing fidelity.
 
 ## Decision
 
@@ -141,7 +141,7 @@ Existing per-tier state migrates forward: `state.priors.haiku` becomes the prior
 - **Measured ~$0.15/1k passes savings vs Haiku 4.5** on the cheap-tier corpus by routing to Ling 2.6 Flash (151× cheaper).
 - **Measured ~$0.11/quality savings vs Sonnet 4.6** on the mid-tier corpus by routing to GPT-4.1 (4× cheaper at higher quality), or **~$0.14/quality** via Llama 3.3 70B (70× cheaper at 91% quality).
 - Online learning per model id — the bandit can now distinguish GPT-4.1 from Sonnet, and Ling from Haiku, instead of aggregating them.
-- New candidates are extensible: `claude-flow neural router add-model <id> --cost-in X --cost-out Y` (CLI follow-up).
+- New candidates are extensible: `rufflo neural router add-model <id> --cost-in X --cost-out Y` (CLI follow-up).
 - DRACO's measured-data lifecycle becomes the actual lifecycle: the seed corpus is regenerable, retrainable, and improvable with more data.
 
 ### Negative
@@ -180,7 +180,7 @@ These are forecasts from per-call measured costs, not measured end-to-end. The P
 
 1. **`qualityBar` default.** ADR-148 set it to 0.8. With measured rows (not synthetic), 0.8 may be too aggressive — the LLM-judged mid-tier corpus has Sonnet at 0.767 (just below the bar). Proposal: default to **0.7** to keep Sonnet in the "clears the bar" set; configurable as before via `CLAUDE_FLOW_ROUTER_QUALITY_BAR`.
 2. **How many candidates ship in the bundled registry.** Initial proposal: ~8 (3 Anthropic tiers + Ling + GPT-4.1 + Gemini-Flash + Llama-3.3-70b + Nemotron-free). Larger registries are more flexible but every candidate adds a column to the seed-corpus measurement. Open to growing it post-launch.
-3. **Re-measurement cadence.** OpenRouter pricing and model availability shift. Proposal: run `benchmark-seed-corpus.mjs` quarterly, or whenever a candidate's pricing changes by >20%. CLI surface: `claude-flow neural router measure --candidates <list>`.
+3. **Re-measurement cadence.** OpenRouter pricing and model availability shift. Proposal: run `benchmark-seed-corpus.mjs` quarterly, or whenever a candidate's pricing changes by >20%. CLI surface: `rufflo neural router measure --candidates <list>`.
 4. **Online retraining.** Trajectory-collected outcomes (ADR-148 phase 1) accumulate per-model evidence. When do we retrain the bundled KRR from them? Proposal: a follow-up ADR once we have a few weeks of real trajectory data.
 
 ## Implementation plan
@@ -205,9 +205,9 @@ Sequenced for the smallest credible PR first:
 **PR 3 — Observability + CLI**
 - `getModelRouterStats()` extends to per-model distribution + cost-optimality saved
 - `hooks_intelligence_stats` surfaces it
-- `claude-flow neural router models` — lists registry with measured stats
-- `claude-flow neural router measure` — re-runs the seed-corpus bench against the registry
-- `claude-flow neural router add-model <id> --cost-in X --cost-out Y` — extend at runtime
+- `rufflo neural router models` — lists registry with measured stats
+- `rufflo neural router measure` — re-runs the seed-corpus bench against the registry
+- `rufflo neural router add-model <id> --cost-in X --cost-out Y` — extend at runtime
 
 **PR 4 — Compat sunset**
 - Remove the `openrouter-alts.json` shim
@@ -218,7 +218,7 @@ Sequenced for the smallest credible PR first:
 - Issues: #2334 (Option B), #2329 (Option A, closed)
 - ADRs: ADR-026, ADR-074, ADR-086, ADR-124, ADR-142, ADR-143, ADR-148
 - External: [`ruvnet/agent-harness-generator` ADR-040 (DRACO)](https://github.com/ruvnet/agent-harness-generator)
-- Code: `v3/@claude-flow/cli/src/ruvector/{model-router,neural-router,router-trajectory}.ts`
+- Code: `v3/@rufflo/cli/src/ruvector/{model-router,neural-router,router-trajectory}.ts`
 - Upstream: `@metaharness/router@0.3.2`, `@ruvector/tiny-dancer@0.1.22`
 - Measured benches (this branch):
   - `docs/benchmarks/runs/cheap-models-2026-06-15-20-3*.json` — variance + Pareto

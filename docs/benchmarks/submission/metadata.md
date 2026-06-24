@@ -1,4 +1,4 @@
-# ruflo: Convergence-Guided Adaptive Agent Harness
+# rufflo: Convergence-Guided Adaptive Agent Harness
 
 **GAIA Level 1 Validation — Submission Package**
 Status: **DRAFT — pending n=3 confirmation**
@@ -81,7 +81,7 @@ The convergence layer reduces (but does not eliminate) variance by forcing deter
 
 ## Honest Positioning
 
-ruflo's 34/53 (64.2%) on GAIA L1 validation is reported honestly:
+rufflo's 34/53 (64.2%) on GAIA L1 validation is reported honestly:
 
 - HAL leaderboard leaders: approximately 82% (closed-source, often with additional infrastructure)
 - Our score: 64.2% (open-weight reproducible config, single Anthropic API key)

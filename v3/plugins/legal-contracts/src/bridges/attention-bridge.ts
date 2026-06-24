@@ -82,7 +82,7 @@ export class AttentionBridge implements IAttentionBridge {
 
     try {
       // Dynamic import of WASM module
-      // In production, this would load from @claude-flow/ruvector-upstream
+      // In production, this would load from @rufflo/ruvector-upstream
       const wasmModule = await this.loadWasmModule();
       this.wasmModule = wasmModule;
       this.initialized = true;
@@ -309,7 +309,7 @@ export class AttentionBridge implements IAttentionBridge {
    * Load WASM module dynamically
    */
   private async loadWasmModule(): Promise<AttentionWasmModule> {
-    // In production, this would load from @claude-flow/ruvector-upstream
+    // In production, this would load from @rufflo/ruvector-upstream
     // For now, throw to trigger JS fallback
     throw new Error('WASM module loading not implemented');
   }

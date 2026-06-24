@@ -11,7 +11,7 @@
  */
 import { z } from 'zod';
 import { randomBytes } from 'crypto';
-import { sanitizeErrorForLogging } from '../../@claude-flow/shared/src/utils/secure-logger.js';
+import { sanitizeErrorForLogging } from '../../@rufflo/shared/src/utils/secure-logger.js';
 // Secure ID generation helper
 function generateSecureAgentId() {
     const timestamp = Date.now().toString(36);
@@ -87,7 +87,7 @@ async function handleSpawnAgent(input, context) {
     // Try to use swarmCoordinator if available
     if (context?.swarmCoordinator) {
         try {
-            const { UnifiedSwarmCoordinator } = await import('@claude-flow/swarm');
+            const { UnifiedSwarmCoordinator } = await import('@rufflo/swarm');
             const coordinator = context.swarmCoordinator;
             // Spawn agent using the coordinator
             await coordinator.spawnAgent({
@@ -125,7 +125,7 @@ async function handleListAgents(input, context) {
     // Try to use swarmCoordinator if available
     if (context?.swarmCoordinator) {
         try {
-            const { UnifiedSwarmCoordinator } = await import('@claude-flow/swarm');
+            const { UnifiedSwarmCoordinator } = await import('@rufflo/swarm');
             const coordinator = context.swarmCoordinator;
             // Get swarm status
             const status = await coordinator.getStatus();
@@ -179,7 +179,7 @@ async function handleTerminateAgent(input, context) {
     // Try to use swarmCoordinator if available
     if (context?.swarmCoordinator) {
         try {
-            const { UnifiedSwarmCoordinator } = await import('@claude-flow/swarm');
+            const { UnifiedSwarmCoordinator } = await import('@rufflo/swarm');
             const coordinator = context.swarmCoordinator;
             // Terminate agent
             await coordinator.terminateAgent(input.agentId);
@@ -210,7 +210,7 @@ async function handleAgentStatus(input, context) {
     // Try to use swarmCoordinator if available
     if (context?.swarmCoordinator) {
         try {
-            const { UnifiedSwarmCoordinator } = await import('@claude-flow/swarm');
+            const { UnifiedSwarmCoordinator } = await import('@rufflo/swarm');
             const coordinator = context.swarmCoordinator;
             // Get agent status
             const agentState = await coordinator.getAgentStatus(input.agentId);

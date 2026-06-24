@@ -92,7 +92,7 @@ async function cheapInferenceCall(apiKey) {
       Authorization: `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
       'HTTP-Referer': 'https://github.com/ruvnet/ruflo',
-      'X-Title': 'ruflo-metaharness-test',
+      'X-Title': 'rufflo-metaharness-test',
     },
     body: JSON.stringify({
       model: 'openrouter/auto',
@@ -155,9 +155,9 @@ async function main() {
   // CRITICAL: `metaharness new <name>` writes to $CWD/<name> — the
   // --target flag is ignored by the CLI (verified 2026-06-16 against
   // metaharness@0.1.11). Run from inside a fresh temp dir so the
-  // scaffold lands there, not in the ruflo project root.
+  // scaffold lands there, not in the rufflo project root.
   console.log('\nPhase 3 — scaffold a fresh harness');
-  const fixture = mkdtempSync(join(tmpdir(), 'ruflo-mh-openrouter-'));
+  const fixture = mkdtempSync(join(tmpdir(), 'rufflo-mh-openrouter-'));
   const target = join(fixture, 'test-harness');
   console.log(`  fixture cwd: ${fixture}`);
   console.log(`  expected target: ${target}`);

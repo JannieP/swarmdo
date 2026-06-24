@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to the Ruflo project (formerly Claude Flow) are documented here.
+All notable changes to the Rufflo project (formerly Rufflo) are documented here.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -15,13 +15,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.5.0] - 2026-02-27
 
-### Ruflo v3.5 — First Major Stable Release
+### Rufflo v3.5 — First Major Stable Release
 
-This release marks the official rebranding from **Claude Flow** to **Ruflo** and represents the first major stable release after 5,800+ commits, 55 alpha iterations, and 10 months of development.
+This release marks the official rebranding from **Rufflo** to **Rufflo** and represents the first major stable release after 5,800+ commits, 55 alpha iterations, and 10 months of development.
 
 ### Highlights
 
-- **Rebranding**: Claude Flow → Ruflo across all packages (`@claude-flow/cli`, `claude-flow`, `ruflo`)
+- **Rebranding**: Rufflo → Rufflo across all packages (`@rufflo/cli`, `rufflo`, `rufflo`)
 - **agentic-flow v3.0.0-alpha.1 Integration**: Full deep integration with 10 subpath exports (ReasoningBank, Router, Orchestration, Agent Booster, SDK, Security, QUIC transport)
 - **AgentDB v3.0.0-alpha.9**: 8 new controllers (HierarchicalMemory, MemoryConsolidation, SemanticRouter, GNNService, RVFOptimizer, MutationGuard, AttestationLog, GuardedVectorBackend) + 6 MCP tools
 - **215 MCP Tools**: Full Model Context Protocol server with vector memory, neural training, swarm coordination
@@ -32,7 +32,7 @@ This release marks the official rebranding from **Claude Flow** to **Ruflo** and
 ### Added
 
 - `agentic-flow-bridge.ts` — Unified lazy-loading bridge for all agentic-flow v3 modules
-- Tiered embedding resolution: ReasoningBank WASM (Tier 1) → @claude-flow/embeddings (Tier 2) → mock fallback (Tier 3)
+- Tiered embedding resolution: ReasoningBank WASM (Tier 1) → @rufflo/embeddings (Tier 2) → mock fallback (Tier 3)
 - Agent Booster local import with npx fallback
 - `checkAgenticFlow()` doctor health check
 - 7 TypeScript module declarations for agentic-flow subpath exports
@@ -67,9 +67,9 @@ This release marks the official rebranding from **Claude Flow** to **Ruflo** and
 
 ## [3.1.0-alpha.43] - 2026-02-15
 
-### Ruflo Branding Fix
+### Rufflo Branding Fix
 
-- Fixed CLI branding: show 'ruflo' instead of 'claude-flow' when run via `npx ruflo`
+- Fixed CLI branding: show 'rufflo' instead of 'rufflo' when run via `npx rufflo`
 - Fixed Windows ESM import crash with `pathToFileURL`
 - Fixed init hook prompt overflow and description field
 
@@ -106,7 +106,7 @@ This release marks the official rebranding from **Claude Flow** to **Ruflo** and
 - **Plugin Marketplace**: 8 official plugins + IPFS registry via Pinata
 - **Gas Town Bridge Plugin**: WASM-accelerated orchestrator integration
 - **10 RuVector WASM Plugins**: 50 MCP tools for neural computation
-- **@claude-flow/teammate-plugin**: MCP tools for Agent Teams coordination
+- **@rufflo/teammate-plugin**: MCP tools for Agent Teams coordination
 
 ### v3.0.0-alpha.150 — SONA & SemanticRouter (2025-11)
 
@@ -116,9 +116,9 @@ This release marks the official rebranding from **Claude Flow** to **Ruflo** and
 - Fixed MCP tool naming (`/` → `_`) for Claude Desktop compatibility
 - Memory namespace support in delete command
 
-### v3.0.0-alpha.100 — @claude-flow/guidance (2025-11)
+### v3.0.0-alpha.100 — @rufflo/guidance (2025-11)
 
-- **@claude-flow/guidance Control Plane**: Governance, compliance, and policy enforcement
+- **@rufflo/guidance Control Plane**: Governance, compliance, and policy enforcement
 - Wave 1: Proof, gateway, memory-gate, coherence, hooks, persistence primitives
 - Wave 2: Conformance kit, capability algebra, evolution pipeline, artifact ledger
 - Wave 3: Civilization-grade primitives (trust, truth, uncertainty, time, authority)
@@ -138,12 +138,12 @@ This release marks the official rebranding from **Claude Flow** to **Ruflo** and
 - MCP memory tools upgraded to sql.js + HNSW backend
 - Claims-based authorization (ADR-016)
 - Node.js worker daemon system
-- Auto-update system for @claude-flow packages (ADR-025)
+- Auto-update system for @rufflo packages (ADR-025)
 - Replaced all mock implementations with real functionality
 
 ### v3.0.0-alpha.1 — Foundation (2025-10)
 
-- Complete V3 monorepo structure (`@claude-flow/cli`, `shared`, `memory`, `hooks`, `security`)
+- Complete V3 monorepo structure (`@rufflo/cli`, `shared`, `memory`, `hooks`, `security`)
 - 26 CLI commands with 140+ subcommands
 - 215 MCP tools via FastMCP 3.x
 - RuVector intelligence system (SONA, MoE, HNSW, EWC++, Flash Attention)
@@ -222,7 +222,7 @@ This release marks the official rebranding from **Claude Flow** to **Ruflo** and
 
 ### v1.0.1 — Initial Release (2025-01-01)
 
-- Complete Claude-Flow AI Agent Orchestration System
+- Complete Rufflo AI Agent Orchestration System
 - Configuration guide and comprehensive tests
 - Initial commit
 
@@ -240,4 +240,4 @@ This release marks the official rebranding from **Claude Flow** to **Ruflo** and
 | Plugin Marketplace | v3.0.0-alpha.170 | 2025-12 | 8 plugins + IPFS registry |
 | Guidance Control Plane | v3.0.0-alpha.100 | 2026-01 | WASM policy kernel, ContinueGate |
 | AgentDB v3 | v3.1.0-alpha.55 | 2026-02 | 8 controllers, MutationGuard |
-| **Ruflo v3.5** | **v3.5.0** | **2026-02-27** | **First stable release, rebranding** |
+| **Rufflo v3.5** | **v3.5.0** | **2026-02-27** | **First stable release, rebranding** |

@@ -8,9 +8,9 @@ allowed-tools: Bash
 The natural ops question after running `oia-audit` weekly is "did anything drift?" Before this skill, the answer required a three-step sequence:
 
 ```bash
-npx ruflo metaharness audit-list --format json   # → pick a key by hand
-npx ruflo metaharness oia-audit --format json > /tmp/curr.json
-npx ruflo metaharness audit-trend \
+npx rufflo metaharness audit-list --format json   # → pick a key by hand
+npx rufflo metaharness oia-audit --format json > /tmp/curr.json
+npx rufflo metaharness audit-trend \
   --baseline-key <picked-key> --current /tmp/curr.json \
   --alert-on-distance-below 0.95
 ```
@@ -18,7 +18,7 @@ npx ruflo metaharness audit-trend \
 This skill collapses it into one command:
 
 ```bash
-npx ruflo metaharness drift-from-history --threshold 0.95
+npx rufflo metaharness drift-from-history --threshold 0.95
 ```
 
 ## What it does
@@ -48,7 +48,7 @@ npx ruflo metaharness drift-from-history --threshold 0.95
 ## Example
 
 ```bash
-$ npx ruflo metaharness drift-from-history --threshold 0.95
+$ npx rufflo metaharness drift-from-history --threshold 0.95
 # drift-from-history
 
 Baseline:        audit-2026-06-16T22-58-47-840Z

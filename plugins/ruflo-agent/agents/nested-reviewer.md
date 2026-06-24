@@ -66,7 +66,7 @@ A single finding's verification consumes one depth level. The diverse-lens varia
 
 - `nested-coordinator` — coordinator hands you a diff; you return only survived findings.
 - `nested-researcher` — when a finding requires going beyond the diff (e.g., "is this pattern used elsewhere?"), delegate to a researcher instead of doing it yourself.
-- `ruflo-core:reviewer` (sibling) — flat reviewer for simple diffs; use that when the two-phase pattern is overkill.
+- `rufflo-core:reviewer` (sibling) — flat reviewer for simple diffs; use that when the two-phase pattern is overkill.
 
 ## Anti-patterns
 

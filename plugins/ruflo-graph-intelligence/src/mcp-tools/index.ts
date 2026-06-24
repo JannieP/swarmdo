@@ -1,5 +1,5 @@
 /**
- * ruflo-graph-intelligence — MCP Tool Surface (ADR-123 § Architecture)
+ * rufflo-graph-intelligence — MCP Tool Surface (ADR-123 § Architecture)
  *
  * Six tools mounted under `sublinear/*`:
  *   - sublinear/page-rank-entry  — single-entry PPR (workhorse)
@@ -42,7 +42,7 @@ export const graphIntelligenceTools: MCPTool[] = [
   {
     name: 'sublinear/page-rank-entry',
     description:
-      'Single-entry personalized PageRank over a registered RuFlo graph. O(log n) on DD inputs. Returns score + observed complexity-class + coherence margin. Accepts maxComplexityClass budget gate (default linear) and coherenceThreshold (default 0 = disabled).',
+      'Single-entry personalized PageRank over a registered Rufflo graph. O(log n) on DD inputs. Returns score + observed complexity-class + coherence margin. Accepts maxComplexityClass budget gate (default linear) and coherenceThreshold (default 0 = disabled).',
     category: 'graph-intelligence',
     inputSchema: {
       type: 'object',
@@ -271,7 +271,7 @@ export const graphIntelligenceTools: MCPTool[] = [
   {
     name: 'sublinear/jl-embed',
     description:
-      'Johnson-Lindenstrauss projection. Maps vectors to a target dimension with ε-distortion. Replaces @claude-flow/embeddings hand-rolled JL (closes ADR-121 Phase 4 follow-up).',
+      'Johnson-Lindenstrauss projection. Maps vectors to a target dimension with ε-distortion. Replaces @rufflo/embeddings hand-rolled JL (closes ADR-121 Phase 4 follow-up).',
     category: 'graph-intelligence',
     inputSchema: {
       type: 'object',

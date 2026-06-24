@@ -1,6 +1,6 @@
 # ADR-081 — Labelled Held-Out Corpus + nDCG/Precision Metrics
 
-**Status**: Accepted — Implemented in ruflo 3.10.21
+**Status**: Accepted — Implemented in rufflo 3.10.21
 **Date**: 2026-05-30
 **Tracking**: continuation of self-learning hardening cluster (#2245 → ADR-074 → ADR-075 → ADR-076 → ADR-077 → ADR-078 → ADR-079 → ADR-080)
 **Related**: ADR-077–080 (which used a regex-over-subject relevance proxy)
@@ -26,7 +26,7 @@ Three changes, one release:
 
 ### 1. Labelled held-out corpus
 
-Each of the 10 bench queries gets `expectedSubstrings: string[]` — case-insensitive substring matches against the pattern's name. A result is "relevant" if its name contains ANY of the labelled substrings. Hand-curated from inspection of the actual ruflo commit/issue history; encoded directly in `scripts/benchmark-pretrained-retrieval.mjs` (no separate file).
+Each of the 10 bench queries gets `expectedSubstrings: string[]` — case-insensitive substring matches against the pattern's name. A result is "relevant" if its name contains ANY of the labelled substrings. Hand-curated from inspection of the actual rufflo commit/issue history; encoded directly in `scripts/benchmark-pretrained-retrieval.mjs` (no separate file).
 
 The regex proxy (`expect: RegExp`) is preserved for back-compat — the regex-derived top-1/top-3 numbers in ADRs 077–080 remain reproducible, and the new labelled numbers run alongside them in every bench run.
 
@@ -97,14 +97,14 @@ The labelled corpus encodes domain knowledge that no regex can express compactly
 ## Verification
 
 ```bash
-git clone https://github.com/ruvnet/ruflo && cd ruflo
-npm install && ( cd v3/@claude-flow/cli && npx tsc )
+git clone https://github.com/ruvnet/ruflo && cd rufflo
+npm install && ( cd v3/@rufflo/cli && npx tsc )
 
 # Pretrain (writes 415-pattern store)
-node v3/@claude-flow/cli/scripts/pretrain-from-github.mjs
+node v3/@rufflo/cli/scripts/pretrain-from-github.mjs
 
 # All four configs through the labelled bench
-( cd v3/@claude-flow/cli && {
+( cd v3/@rufflo/cli && {
   echo "=== A) cosine ===";                HYBRID=0 BENCH_NO_WRITE=1 node scripts/benchmark-pretrained-retrieval.mjs | grep -E "^(Mode|Top|MRR|Precision|nDCG)"
   echo "=== B) hybrid 3.10.19 ===";        BENCH_NO_WRITE=1 node scripts/benchmark-pretrained-retrieval.mjs | grep -E "^(Mode|Top|MRR|Precision|nDCG)"
   echo "=== C) hybrid + rerank 3.10.20 ==="; RERANK=1 BENCH_NO_WRITE=1 node scripts/benchmark-pretrained-retrieval.mjs | grep -E "^(Mode|Top|MRR|Precision|nDCG)"

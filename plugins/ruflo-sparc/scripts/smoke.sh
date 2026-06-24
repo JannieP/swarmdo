@@ -27,7 +27,7 @@ for s in sparc-spec sparc-implement sparc-refine; do
   done
 done
 [[ -f "$ROOT/agents/sparc-orchestrator.md" ]] || miss="$miss missing-agent"
-[[ -f "$ROOT/commands/ruflo-sparc.md" ]] || miss="$miss missing-command"
+[[ -f "$ROOT/commands/rufflo-sparc.md" ]] || miss="$miss missing-command"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
 step "3. all 5 SPARC phase names documented (Specification/Pseudocode/Architecture/Refinement/Completion)"
@@ -39,15 +39,15 @@ done
 [[ -z "$miss" ]] && ok || bad "missing phases:$miss"
 
 step "4. /sparc command covers 5 subcommands"
-F="$ROOT/commands/ruflo-sparc.md"
+F="$ROOT/commands/rufflo-sparc.md"
 [[ -s "$F" ]] && ok || bad "command file empty/missing"
 
-step "5. README pins @claude-flow/cli to v3.6"
-grep -qE "@claude-flow/cli.*v3\.6|v3\.6.*claude-flow/cli" "$ROOT/README.md" \
+step "5. README pins @rufflo/cli to v3.6"
+grep -qE "@rufflo/cli.*v3\.6|v3\.6.*rufflo/cli" "$ROOT/README.md" \
   && ok || bad "v3.6 pin missing"
 
-step "6. README defers to ruflo-agentdb namespace convention"
-grep -q "ruflo-agentdb" "$ROOT/README.md" \
+step "6. README defers to rufflo-agentdb namespace convention"
+grep -q "rufflo-agentdb" "$ROOT/README.md" \
   && grep -q "Namespace convention" "$ROOT/README.md" \
   && ok || bad "namespace coordination block incomplete"
 
@@ -62,7 +62,7 @@ done
 step "8. phase-to-plugin alignment table present (cross-references to adr/ddd/jujutsu/docs/goals)"
 F="$ROOT/README.md"
 miss=""
-for plugin in ruflo-adr ruflo-ddd ruflo-jujutsu ruflo-docs ruflo-goals; do
+for plugin in rufflo-adr rufflo-ddd rufflo-jujutsu rufflo-docs rufflo-goals; do
   grep -q "$plugin" "$F" || miss="$miss $plugin"
 done
 [[ -z "$miss" ]] && ok || bad "missing plugin cross-references:$miss"

@@ -7,7 +7,7 @@
 
 ## Context
 
-Ruflo's `@claude-flow/security` package has strong transport- and boundary-level controls:
+Rufflo's `@rufflo/security` package has strong transport- and boundary-level controls:
 
 | Control | Component |
 |---|---|
@@ -26,7 +26,7 @@ OpenAI Agents SDK (March 2025) is the current best-in-class reference: parallel-
 
 ## Decision
 
-Introduce `ToolOutputGuardrail` in `@claude-flow/security` — a pure, synchronous, pattern-based screener for content crossing the agent's content boundary. It does **not** alter the agent's running prompt; it returns a finding result the caller uses to decide policy (`allow` / `flag` / `redact` / `reject`).
+Introduce `ToolOutputGuardrail` in `@rufflo/security` — a pure, synchronous, pattern-based screener for content crossing the agent's content boundary. It does **not** alter the agent's running prompt; it returns a finding result the caller uses to decide policy (`allow` / `flag` / `redact` / `reject`).
 
 ### Shape
 
@@ -63,9 +63,9 @@ Pattern set is intentionally conservative — it targets the explicit shapes tha
 
 | Phase | Scope | Where |
 |---|---|---|
-| **P1** (this PR) | Class + tests + exports; OWASP mapping doc | `@claude-flow/security/src/tool-output-guardrail.ts` |
-| P2 | MCP tool result boundary | `@claude-flow/cli/src/mcp-tools/*` dispatch layer |
-| P3 | Memory read path | `@claude-flow/cli/src/memory/*` retrieve functions |
+| **P1** (this PR) | Class + tests + exports; OWASP mapping doc | `@rufflo/security/src/tool-output-guardrail.ts` |
+| P2 | MCP tool result boundary | `@rufflo/cli/src/mcp-tools/*` dispatch layer |
+| P3 | Memory read path | `@rufflo/cli/src/memory/*` retrieve functions |
 | P4 | Raft consensus payload validator (swarm-layer ASI01) | hive-mind proposal pipeline |
 | P5 | Per-tool policy overrides + structured telemetry | hooks system |
 
@@ -99,9 +99,9 @@ P2–P5 are tracked separately so the class can ship + be exercised by callers (
 ## Validation
 
 Implementation in this PR:
-- `v3/@claude-flow/security/src/tool-output-guardrail.ts` (~300 LOC)
-- `v3/@claude-flow/security/__tests__/tool-output-guardrail.test.ts` — 24 tests, 9 ms total
-- Public exports added to `@claude-flow/security/index.ts`
+- `v3/@rufflo/security/src/tool-output-guardrail.ts` (~300 LOC)
+- `v3/@rufflo/security/__tests__/tool-output-guardrail.test.ts` — 24 tests, 9 ms total
+- Public exports added to `@rufflo/security/index.ts`
 - OWASP mapping: `v3/docs/security/owasp-agents-2026-mapping.md`
 
 Out of scope (tracked in follow-on issues):

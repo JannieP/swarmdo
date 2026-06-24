@@ -106,7 +106,7 @@ const stats = await PerfUtils.benchmark('operation', async () => {
 
 ### Enable verbose output
 ```bash
-DEBUG=claude-flow:* npm run test:integration
+DEBUG=rufflo:* npm run test:integration
 ```
 
 ### Run in watch mode with specific test
@@ -201,7 +201,7 @@ Expected CI execution time: <5 minutes
 ### First time running tests
 ```bash
 # Install dependencies (if not done)
-cd /workspaces/claude-flow/v3
+cd /workspaces/rufflo/v3
 npm install
 
 # Run all integration tests

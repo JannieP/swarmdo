@@ -2,14 +2,14 @@
 
 This is a verification run report against the witness manifest in
 [`verification.md.json`](./verification.md.json) (issued at commit
-`63b9ac35d1d33d01e877fee88f9da5664ccdfe31`, ruflo `3.6.28`).
+`63b9ac35d1d33d01e877fee88f9da5664ccdfe31`, rufflo `3.6.28`).
 
 ## Summary
 
 | Metric | Value |
 |---|---:|
-| Manifest commit | `63b9ac35d1d3...` (ruflo 3.6.28) |
-| Verified-at HEAD | `origin/main` (ruflo 3.7.0-alpha.8 + recent PRs) |
+| Manifest commit | `63b9ac35d1d3...` (rufflo 3.6.28) |
+| Verified-at HEAD | `origin/main` (rufflo 3.7.0-alpha.8 + recent PRs) |
 | Total fixes in manifest | 55 |
 | **Semantic pass rate** | **100.0%** (55/55) |
 | Marker missing | 0 |
@@ -50,7 +50,7 @@ The check is two-layered:
 
 ## Drift commentary
 
-43 files moved from `PASS` (exact) to `PASS_DRIFT` (semantic) because the codebase advanced. That's expected behavior; the manifest pinned ruflo `3.6.28` and the current tree is `3.7.0-alpha.8` plus 20 in-flight fix PRs. Drift here is a healthy signal of forward motion, not regression — every drift entry was checked for marker presence.
+43 files moved from `PASS` (exact) to `PASS_DRIFT` (semantic) because the codebase advanced. That's expected behavior; the manifest pinned rufflo `3.6.28` and the current tree is `3.7.0-alpha.8` plus 20 in-flight fix PRs. Drift here is a healthy signal of forward motion, not regression — every drift entry was checked for marker presence.
 
 If you want to refresh the manifest's exact-match baseline to the current tree, regenerate it:
 

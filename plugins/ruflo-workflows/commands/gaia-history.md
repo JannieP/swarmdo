@@ -30,7 +30,7 @@ Display a table of all GAIA benchmark runs that have been stored in the
 
 ## What this does
 
-1. Queries the `gaia-runs` namespace: `npx @claude-flow/cli@latest memory list --namespace gaia-runs`
+1. Queries the `gaia-runs` namespace: `npx @rufflo/cli@latest memory list --namespace gaia-runs`
 2. Parses each stored value (JSON summary blobs saved by `/gaia run`).
 3. Renders a sorted table (newest first):
 
@@ -65,7 +65,7 @@ run-20260522-1537    2026-05-22  L1     claude-sonnet-4-5   53   18.2%   $0.41  
 
 ## Steps Claude should follow
 
-1. Run `npx @claude-flow/cli@latest memory list --namespace gaia-runs --limit $LIMIT`
+1. Run `npx @rufflo/cli@latest memory list --namespace gaia-runs --limit $LIMIT`
 2. Parse each entry value as JSON.
 3. Apply `--level` and `--model` filters if provided.
 4. Sort by timestamp descending.

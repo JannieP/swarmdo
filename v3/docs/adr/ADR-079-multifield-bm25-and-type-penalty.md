@@ -1,6 +1,6 @@
 # ADR-079 — Multi-Field BM25 + Opt-In Type Penalty
 
-**Status**: Accepted — Implemented in ruflo 3.10.19
+**Status**: Accepted — Implemented in rufflo 3.10.19
 **Date**: 2026-05-30
 **Tracking**: continuation of the self-learning hardening cluster (#2245 → ADR-074 → ADR-075 → ADR-076 → ADR-077 → ADR-078)
 **Related**: ADR-078 (hybrid retrieval)
@@ -61,7 +61,7 @@ The "type penalty disabled by default" decision was driven by the ablation, not 
 
 - The 10-query bench is small and uses regex-over-subject as a relevance proxy. A held-out labelled corpus would give tighter confidence intervals. Direction (0% → 80%) is robust to noise; absolute magnitudes could shift on a different corpus.
 - The 3:1 subject:body weight was chosen by inspection, not grid-search. A future tuning pass could grid-search `subjectWeight ∈ {1,2,3,5,8}, bodyWeight ∈ {0.5,1,2}` against the same harness. Tracked.
-- The type penalty regex is hand-curated against ruflo's commit conventions (`chore(release)`, `Merge`, `bump`, `publish`, `[Dream Cycle]`). Other repos with different conventions need their own regex — the function takes one as a param.
+- The type penalty regex is hand-curated against rufflo's commit conventions (`chore(release)`, `Merge`, `bump`, `publish`, `[Dream Cycle]`). Other repos with different conventions need their own regex — the function takes one as a param.
 
 ## Deliberately NOT in this round
 
@@ -72,14 +72,14 @@ The "type penalty disabled by default" decision was driven by the ablation, not 
 ## Verification
 
 ```bash
-git clone https://github.com/ruvnet/ruflo && cd ruflo
-npm install && ( cd v3/@claude-flow/cli && npx tsc )
+git clone https://github.com/ruvnet/ruflo && cd rufflo
+npm install && ( cd v3/@rufflo/cli && npx tsc )
 
 # Unit tests — 39 tests (21 from ADR-078 + 18 new)
-( cd v3/@claude-flow/cli && npx vitest run __tests__/hybrid-retrieval.test.ts __tests__/pretrain-from-github.test.ts )
+( cd v3/@rufflo/cli && npx vitest run __tests__/hybrid-retrieval.test.ts __tests__/pretrain-from-github.test.ts )
 
 # Live A/B
-cd v3/@claude-flow/cli
+cd v3/@rufflo/cli
 node scripts/pretrain-from-github.mjs
 node scripts/benchmark-pretrained-retrieval.mjs                    # 3.10.19 default — 80% top-1, MRR 0.800
 HYBRID=0 node scripts/benchmark-pretrained-retrieval.mjs           # cosine — 0% top-1

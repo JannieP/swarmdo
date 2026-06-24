@@ -28,12 +28,12 @@ const REPO_ROOT = resolve(process.cwd());
 // the original anchor (`--kind browser-session`) is gone post-fix, so
 // we have to identify call sites by path, not by content.
 const PATHS_IN_SCOPE = [
-  'v3/@claude-flow/cli/src/mcp-tools/browser-session-tools.ts',
-  'v3/@claude-flow/cli/dist/src/mcp-tools/browser-session-tools.js',
-  'plugins/ruflo-browser/scripts/replay-spike.sh',
-  'plugins/ruflo-browser/agents/browser-agent.md',
-  'plugins/ruflo-browser/skills/browser-record/SKILL.md',
-  'plugins/ruflo-browser/docs/adrs/0001-browser-skills-architecture.md',
+  'v3/@rufflo/cli/src/mcp-tools/browser-session-tools.ts',
+  'v3/@rufflo/cli/dist/src/mcp-tools/browser-session-tools.js',
+  'plugins/rufflo-browser/scripts/replay-spike.sh',
+  'plugins/rufflo-browser/agents/browser-agent.md',
+  'plugins/rufflo-browser/skills/browser-record/SKILL.md',
+  'plugins/rufflo-browser/docs/adrs/0001-browser-skills-architecture.md',
 ];
 const failures = [];
 const checked = [];

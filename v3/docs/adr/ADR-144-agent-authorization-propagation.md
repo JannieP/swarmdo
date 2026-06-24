@@ -19,7 +19,7 @@ The distinction matters:
 
 ### Evidence
 
-1. **MCP Authentication Measurement** (arXiv:2605.22333, May 2026, Grade A — empirical): First survey of 7,973 live MCP servers. **40.55% expose tools with zero authentication; 96.6% of OAuth-enabled servers contain ≥1 exploitable flaw** (most common: improper scope validation). Ruflo registers MCP tools but performs no runtime authentication check on server identity before accepting tool responses, so any agent that calls a federated MCP tool today has a >40% chance of trusting an unauthenticated source.
+1. **MCP Authentication Measurement** (arXiv:2605.22333, May 2026, Grade A — empirical): First survey of 7,973 live MCP servers. **40.55% expose tools with zero authentication; 96.6% of OAuth-enabled servers contain ≥1 exploitable flaw** (most common: improper scope validation). Rufflo registers MCP tools but performs no runtime authentication check on server identity before accepting tool responses, so any agent that calls a federated MCP tool today has a >40% chance of trusting an unauthenticated source.
 
 2. **AIRGuard** (arXiv:2605.28914, May 2026, Grade A — controlled benchmark): Runtime authority control at the action execution layer reduces agent attack success **from 36.3% to 5.5% (−85%)**. The load-bearing primitive is least-privilege authorization checked **per action**, not per session.
 
@@ -29,15 +29,15 @@ The distinction matters:
 
 ### Current State
 
-`@claude-flow/security` provides `InputValidator`, `PathValidator`, `SafeExecutor`, `PasswordHasher`, `TokenGenerator`. None of these track authorization scope across agent delegation boundaries, verify MCP server identity, enforce per-action privilege, or produce an execution provenance record. `SendMessage` (the comms primitive between named agents) carries no authorization metadata at all.
+`@rufflo/security` provides `InputValidator`, `PathValidator`, `SafeExecutor`, `PasswordHasher`, `TokenGenerator`. None of these track authorization scope across agent delegation boundaries, verify MCP server identity, enforce per-action privilege, or produce an execution provenance record. `SendMessage` (the comms primitive between named agents) carries no authorization metadata at all.
 
 ## Decision
 
-Add `AgentAuthorizationPropagator` as a new component in `@claude-flow/security`, paired with an MCP-server auth validator in the CLI's MCP layer.
+Add `AgentAuthorizationPropagator` as a new component in `@rufflo/security`, paired with an MCP-server auth validator in the CLI's MCP layer.
 
 ### `AgentAuthorizationPropagator` shape
 
-**File**: `v3/@claude-flow/security/src/authorization/propagator.ts`
+**File**: `v3/@rufflo/security/src/authorization/propagator.ts`
 
 ```typescript
 interface AuthScope {
@@ -75,7 +75,7 @@ Scope is **monotonically reducing**: each delegation hop can drop tools/servers 
 
 ### MCP Authentication Validator
 
-**File**: `v3/@claude-flow/cli/src/mcp/auth-validator.ts`
+**File**: `v3/@rufflo/cli/src/mcp/auth-validator.ts`
 
 Before any tool response from an MCP server enters agent reasoning:
 
@@ -87,11 +87,11 @@ Before any tool response from an MCP server enters agent reasoning:
 
 | Phase | Scope | Where |
 |---|---|---|
-| **P1** | Component + tests + exports; SendMessage envelope schema | `@claude-flow/security/src/authorization/`, `@claude-flow/cli/src/types/` |
-| P2 | Outbound: wrap every SendMessage in the comms layer | `@claude-flow/cli/src/agent/comms.ts` |
-| P3 | Inbound: validate scope at the MCP tool dispatcher | `@claude-flow/cli/src/mcp-tools/dispatch.ts` |
-| P4 | MCP auth validator wired before tool result processing | `@claude-flow/cli/src/mcp/auth-validator.ts` |
-| P5 | Provenance log + dual-graph audit CLI | `@claude-flow/cli/src/commands/audit.ts` |
+| **P1** | Component + tests + exports; SendMessage envelope schema | `@rufflo/security/src/authorization/`, `@rufflo/cli/src/types/` |
+| P2 | Outbound: wrap every SendMessage in the comms layer | `@rufflo/cli/src/agent/comms.ts` |
+| P3 | Inbound: validate scope at the MCP tool dispatcher | `@rufflo/cli/src/mcp-tools/dispatch.ts` |
+| P4 | MCP auth validator wired before tool result processing | `@rufflo/cli/src/mcp/auth-validator.ts` |
+| P5 | Provenance log + dual-graph audit CLI | `@rufflo/cli/src/commands/audit.ts` |
 
 P2–P5 ship behind `CLAUDE_FLOW_STRICT_AUTH=true` so existing pipelines continue to work in legacy permissive mode until v4.0.
 

@@ -152,14 +152,14 @@ jobs:
       - name: Test CLI binary (Unix)
         if: runner.os != 'Windows'
         run: |
-          chmod +x ./v3/@claude-flow/cli/bin/cli.js
-          node ./v3/@claude-flow/cli/bin/cli.js --version
+          chmod +x ./v3/@rufflo/cli/bin/cli.js
+          node ./v3/@rufflo/cli/bin/cli.js --version
         continue-on-error: true
 
       - name: Test CLI binary (Windows)
         if: runner.os == 'Windows'
         run: |
-          node ./v3/@claude-flow/cli/bin/cli.js --version
+          node ./v3/@rufflo/cli/bin/cli.js --version
         continue-on-error: true
 
       - name: Daemon survives parent exit (Windows, regression #1766)
@@ -167,11 +167,11 @@ jobs:
         timeout-minutes: 15
         shell: pwsh
         run: |
-          # We install the published `@claude-flow/cli@alpha` inside an isolated
+          # We install the published `@rufflo/cli@alpha` inside an isolated
           # temp dir rather than running the source-tree CLI directly, because
           # the source-tree CLI imports the sibling workspace package
-          # `@claude-flow/cli-core` (split out in #1764) which isn't always
-          # resolvable from a source checkout. Skipping the `ruflo` umbrella
+          # `@rufflo/cli-core` (split out in #1764) which isn't always
+          # resolvable from a source checkout. Skipping the `rufflo` umbrella
           # (just a thin wrapper) keeps the install footprint smaller on the
           # cold-cache Windows runner.
           $ErrorActionPreference = 'Stop'
@@ -180,16 +180,16 @@ jobs:
           New-Item -ItemType Directory -Path $tmp | Out-Null
           Set-Location $tmp
 
-          Write-Host "::group::Phase 1: install @claude-flow/cli@alpha"
+          Write-Host "::group::Phase 1: install @rufflo/cli@alpha"
           $installSw = [System.Diagnostics.Stopwatch]::StartNew()
           npm init -y | Out-Null
-          npm install '@claude-flow/cli@alpha' --no-audit --no-fund --omit=optional --omit=dev
+          npm install '@rufflo/cli@alpha' --no-audit --no-fund --omit=optional --omit=dev
           $installSw.Stop()
           Write-Host "Install took $($installSw.Elapsed.TotalSeconds)s"
-          $cli = Join-Path $tmp 'node_modules/@claude-flow/cli/bin/cli.js'
+          $cli = Join-Path $tmp 'node_modules/@rufflo/cli/bin/cli.js'
           if (-not (Test-Path $cli)) { throw "CLI not found at $cli after npm install" }
-          $cliVer = (Get-Content (Join-Path $tmp 'node_modules/@claude-flow/cli/package.json') | ConvertFrom-Json).version
-          Write-Host "Testing daemon survival for @claude-flow/cli@$cliVer"
+          $cliVer = (Get-Content (Join-Path $tmp 'node_modules/@rufflo/cli/package.json') | ConvertFrom-Json).version
+          Write-Host "Testing daemon survival for @rufflo/cli@$cliVer"
           Write-Host "::endgroup::"
 
           Write-Host "::group::Phase 2: spawn daemon via cmd.exe (parent exits when node returns)"
@@ -217,7 +217,7 @@ jobs:
           Write-Host "::endgroup::"
 
           Write-Host "::group::Phase 3: verify daemon survives parent exit"
-          $pidFile = Join-Path $tmp '.claude-flow/daemon.pid'
+          $pidFile = Join-Path $tmp '.rufflo/daemon.pid'
           if (-not (Test-Path $pidFile)) {
             throw "FAIL: pid file $pidFile was never written — daemon failed to start"
           }
@@ -229,9 +229,9 @@ jobs:
           Start-Sleep -Seconds 5
           $alive = Get-Process -Id $daemonPid -ErrorAction SilentlyContinue
           if ($null -eq $alive) {
-            throw "FAIL: daemon PID $daemonPid is no longer running 5s after parent exit (regression of #1766 in @claude-flow/cli@$cliVer)"
+            throw "FAIL: daemon PID $daemonPid is no longer running 5s after parent exit (regression of #1766 in @rufflo/cli@$cliVer)"
           }
-          Write-Host "PASS: daemon PID $daemonPid alive 5s after parent exit (@claude-flow/cli@$cliVer)"
+          Write-Host "PASS: daemon PID $daemonPid alive 5s after parent exit (@rufflo/cli@$cliVer)"
           Write-Host "::endgroup::"
 
           Write-Host "::group::Phase 4: cleanup"

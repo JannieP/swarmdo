@@ -1,6 +1,6 @@
-# Claude-Flow v3 Migration Roadmap
+# Rufflo v3 Migration Roadmap
 
-**Project:** Claude-Flow v2.x → v3.0 Migration
+**Project:** Rufflo v2.x → v3.0 Migration
 **Timeline:** 20 weeks (5 months)
 **Team Size:** 2-3 core developers + community contributors
 **Start Date:** 2026-01-06 (planned)
@@ -24,7 +24,7 @@
 
 ### Vision
 
-Transform Claude-Flow from a monolithic orchestration system into a modular, agentic-flow-native platform with clear domain boundaries, plugin extensibility, and superior performance.
+Transform Rufflo from a monolithic orchestration system into a modular, agentic-flow-native platform with clear domain boundaries, plugin extensibility, and superior performance.
 
 ### Key Objectives
 
@@ -472,7 +472,7 @@ describe('ExamplePlugin', () => {
 **CI/CD Setup (Day 1-2)**
 ```yaml
 # .github/workflows/v3-ci.yml
-name: Claude-Flow v3 CI
+name: Rufflo v3 CI
 
 on:
   push:
@@ -581,7 +581,7 @@ Step-by-step guide for migrating from v2 to v3
 
 ## Automated Migration Tool
 ```bash
-npx claude-flow migrate v2-to-v3
+npx rufflo migrate v2-to-v3
 ```
 
 ## Common Issues
@@ -1186,7 +1186,7 @@ npm run benchmark:compare -- --base=v2 --compare=v3
 
 # Backup v2 data
 echo "Backing up v2 data..."
-cp claude-flow.db claude-flow-v2-backup.db
+cp rufflo.db rufflo-v2-backup.db
 
 # Migrate configuration
 echo "Migrating configuration..."
@@ -1208,7 +1208,7 @@ echo "Migration complete! Review logs at migration.log"
 # Migrating from v2 to v3
 
 ## Overview
-This guide helps you migrate your claude-flow installation from v2 to v3.
+This guide helps you migrate your rufflo installation from v2 to v3.
 
 ## Prerequisites
 - Node.js 20+
@@ -1218,39 +1218,39 @@ This guide helps you migrate your claude-flow installation from v2 to v3.
 ## Step 1: Backup
 ```bash
 # Backup data
-cp claude-flow.db backup/
+cp rufflo.db backup/
 cp -r .claude/ backup/
 ```
 
 ## Step 2: Install v3
 ```bash
-npm install claude-flow@3.0.0
+npm install rufflo@3.0.0
 ```
 
 ## Step 3: Migrate Config
 ```bash
-npx claude-flow migrate config
+npx rufflo migrate config
 ```
 
 ## Step 4: Migrate Data
 ```bash
-npx claude-flow migrate data
+npx rufflo migrate data
 ```
 
 ## Step 5: Test
 ```bash
-npx claude-flow test-migration
+npx rufflo test-migration
 ```
 
 ## Step 6: Switch
 ```bash
-npx claude-flow activate v3
+npx rufflo activate v3
 ```
 
 ## Rollback
 If issues occur:
 ```bash
-npx claude-flow rollback v2
+npx rufflo rollback v2
 ```
 ```
 

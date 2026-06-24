@@ -127,7 +127,7 @@
           "score": "0.755"
         },
         {
-          "name": "chore: bump agentdb submodule — ruflo-style README rewrite (43d1cc3)",
+          "name": "chore: bump agentdb submodule — rufflo-style README rewrite (43d1cc3)",
           "relevant": true,
           "score": "0.751"
         },
@@ -251,7 +251,7 @@
           "score": "0.955"
         },
         {
-          "name": "agentdb: GraphDatabaseAdapter has no delete methods — blocks downstream re-indexing (ruflo",
+          "name": "agentdb: GraphDatabaseAdapter has no delete methods — blocks downstream re-indexing (rufflo",
           "relevant": true,
           "score": "0.366"
         },
@@ -261,7 +261,7 @@
           "score": "0.329"
         },
         {
-          "name": "perf: ruflo memory store needs batch/pipe mode — CLI startup overhead makes bulk import im",
+          "name": "perf: rufflo memory store needs batch/pipe mode — CLI startup overhead makes bulk import im",
           "relevant": false,
           "score": "0.500"
         },
@@ -318,7 +318,7 @@
           "score": "0.642"
         },
         {
-          "name": "chore: bump agentdb submodule — ruflo-style README rewrite (43d1cc3)",
+          "name": "chore: bump agentdb submodule — rufflo-style README rewrite (43d1cc3)",
           "relevant": true,
           "score": "0.500"
         },
@@ -328,7 +328,7 @@
           "score": "0.489"
         },
         {
-          "name": "agentdb: GraphDatabaseAdapter has no delete methods — blocks downstream re-indexing (ruflo",
+          "name": "agentdb: GraphDatabaseAdapter has no delete methods — blocks downstream re-indexing (rufflo",
           "relevant": true,
           "score": "0.469"
         }

@@ -22,7 +22,7 @@ export default defineConfig({
   resolve: {
     alias: {
       // Mock unavailable WASM dependencies
-      '@ruvector/gnn-wasm': '/workspaces/claude-flow/v3/plugins/hyperbolic-reasoning/tests/__mocks__/gnn-wasm.ts',
+      '@ruvector/gnn-wasm': '/workspaces/rufflo/v3/plugins/hyperbolic-reasoning/tests/__mocks__/gnn-wasm.ts',
     },
   },
 });

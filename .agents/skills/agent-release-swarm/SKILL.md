@@ -22,11 +22,11 @@ tools:
   - mcp__github__create_branch
   - mcp__github__push_files
   - mcp__github__create_issue
-  - mcp__claude-flow__swarm_init
-  - mcp__claude-flow__agent_spawn
-  - mcp__claude-flow__task_orchestrate
-  - mcp__claude-flow__parallel_execute
-  - mcp__claude-flow__load_balance
+  - mcp__rufflo__swarm_init
+  - mcp__rufflo__agent_spawn
+  - mcp__rufflo__task_orchestrate
+  - mcp__rufflo__parallel_execute
+  - mcp__rufflo__load_balance
 hooks:
   pre_task: |
     echo "🐝 Initializing release swarm coordination..."

@@ -99,10 +99,10 @@ function persistToMemory(summary) {
   // Cold-cache wall-time drops from ~25s to ~2s. JSON backend instead of
   // SQLite/HNSW; semantic search degrades to substring (fine for cost-track
   // which never invokes search — only store/list/retrieve). See
-  // v3/@claude-flow/cli-core/MIGRATION.md.
+  // v3/@rufflo/cli-core/MIGRATION.md.
   const cliPkg = process.env.CLI_CORE === '1'
-    ? '@claude-flow/cli-core@alpha'
-    : '@claude-flow/cli@latest';
+    ? '@rufflo/cli-core@alpha'
+    : '@rufflo/cli@latest';
   // spawnSync with explicit args avoids shell-escape pitfalls for the JSON value.
   const r = spawnSync('npx', [
     cliPkg, 'memory', 'store',

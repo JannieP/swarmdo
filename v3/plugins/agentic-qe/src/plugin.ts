@@ -640,7 +640,7 @@ function getMemoryNamespaces(): QEMemoryNamespace[] {
 
 /**
  * Main Agentic-QE Plugin class
- * Implements IPlugin interface for claude-flow integration
+ * Implements IPlugin interface for rufflo integration
  */
 export class AQEPlugin implements IPlugin {
   readonly name = PLUGIN_NAME;

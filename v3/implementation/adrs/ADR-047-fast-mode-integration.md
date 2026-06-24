@@ -2,7 +2,7 @@
 
 **Status:** Proposed
 **Date:** 2026-02-08
-**Authors:** RuvNet, Claude Flow Team
+**Authors:** RuvNet, Rufflo Team
 
 ## Context
 
@@ -34,7 +34,7 @@ Fast Mode is not a different model - it uses the same Opus 4.6 with a different 
 
 ## Decision
 
-Integrate Fast Mode awareness into RuvFlow/Claude-Flow to enable:
+Integrate Fast Mode awareness into RuvFlow/Rufflo to enable:
 
 1. **Automatic Fast Mode for time-critical swarm tasks**
 2. **Settings integration** for user preference management

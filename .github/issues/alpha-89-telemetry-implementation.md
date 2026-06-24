@@ -42,7 +42,7 @@ The token tracking and telemetry system has been successfully implemented and co
 
 ### Real Token Data Capture
 ```bash
-$ ./claude-flow hive-mind spawn "test" --claude --non-interactive
+$ ./rufflo hive-mind spawn "test" --claude --non-interactive
 ```
 
 **Actual Output (Real Claude API Response):**
@@ -58,15 +58,15 @@ $ ./claude-flow hive-mind spawn "test" --claude --non-interactive
 ### Commands Working
 ```bash
 # Setup confirmed working
-$ ./claude-flow analysis setup-telemetry
+$ ./rufflo analysis setup-telemetry
 ✅ Telemetry ENABLED for this session!
 
 # Usage analysis working  
-$ ./claude-flow analysis token-usage --breakdown --cost-analysis
+$ ./rufflo analysis token-usage --breakdown --cost-analysis
 🔢 TOKEN USAGE ANALYSIS: [Shows comprehensive breakdown]
 
 # Cost tracking working
-$ ./claude-flow analysis claude-cost  
+$ ./rufflo analysis claude-cost  
 💰 Current Session Usage: [Shows real token counts]
 ```
 
@@ -191,7 +191,7 @@ The Alpha-89 telemetry implementation is **COMPLETE and WORKING**. The system su
 
 **Key Success**: Confirmed real token data capture with actual Claude API responses showing input tokens, output tokens, and cache utilization metrics.
 
-This implementation provides the foundation for advanced usage analytics, cost management, and performance optimization in Claude Flow v2.0.0.
+This implementation provides the foundation for advanced usage analytics, cost management, and performance optimization in Rufflo v2.0.0.
 
 ---
 

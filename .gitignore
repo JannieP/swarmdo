@@ -1,17 +1,17 @@
 
 !/memory/agents/README.md
 !/memory/sessions/README.md
-!bin/claude-flow
-!v3/@claude-flow/
+!bin/rufflo
+!v3/@rufflo/
 # Binaries
 # Build outputs
 
-# Claude-Flow specific
+# Rufflo specific
 # Dependencies
 # Development
 # Dot folders to ignore (except .claude, .claude-plugin, .git, .github, .githooks)
 # Environment
-# Exclude @claude-flow module directories from ignore patterns
+# Exclude @rufflo module directories from ignore patterns
 # IDE
 # Logs
 # MCP/Swarm
@@ -55,7 +55,7 @@
 .Python
 .agentic-flow/
 .cache/
-.claude-flow/
+.rufflo/
 .claude/settings.local.json
 .deno/
 .env
@@ -66,7 +66,7 @@
 .idea/
 .mcp.json
 # Plugin-shipped .mcp.json templates are part of the plugin contract (smoke
-# step "registers a 'ruflo' MCP server" asserts they're committed). Exempt
+# step "registers a 'rufflo' MCP server" asserts they're committed). Exempt
 # them from the repo-level .mcp.json ignore. User-specific .mcp.json at
 # the repo root or other paths stays ignored.
 !plugins/*/.mcp.json
@@ -84,18 +84,18 @@
 /coordination/
 /memory/
 /memory/agents/*
-/memory/claude-flow-data.json
+/memory/rufflo-data.json
 /memory/sessions/*
 Thumbs.db
 __pycache__/
 analyzing
 api-project/
-bin/claude-flow-*
+bin/rufflo-*
 build/
-claude-flow
-claude-flow-mcp-wrapper
-claude-flow.config.json
-claude-flow.db
+rufflo
+rufflo-mcp-wrapper
+rufflo.config.json
+rufflo.db
 coordination/memory_bank/*
 coordination/orchestration/*
 coordination/subtasks/*
@@ -128,17 +128,17 @@ ui_*.log
 yarn-debug.log*
 yarn-error.log*
 
-# Claude Flow generated files
+# Rufflo generated files
 .claude/settings.local.json
 .mcp.json
 !plugins/*/.mcp.json
-claude-flow.config.json
+rufflo.config.json
 .swarm/
 .hive-mind/
-.claude-flow/
+.rufflo/
 /memory/
 /coordination/
-/memory/claude-flow-data.json
+/memory/rufflo-data.json
 /memory/sessions/*
 !/memory/sessions/README.md
 /memory/agents/*
@@ -152,16 +152,16 @@ claude-flow.config.json
 *.sqlite
 *.sqlite-journal
 *.sqlite-wal
-claude-flow
+rufflo
 # Removed Windows wrapper files per user request
 hive-mind-prompt-*.txt
 
 # Codex local configuration
 .codex/
 
-# Claude Flow runtime data
-.claude-flow/data/
-.claude-flow/logs/
+# Rufflo runtime data
+.rufflo/data/
+.rufflo/logs/
 
 # Environment variables — block ALL .env variants except .example templates
 .env

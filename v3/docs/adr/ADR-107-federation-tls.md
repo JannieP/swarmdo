@@ -126,7 +126,7 @@ async listen(port: number, host: string, opts?: { cert: Buffer; key: Buffer }) {
 ### Phase 4 — doctor surface
 
 ```bash
-$ npx ruflo doctor --component federation
+$ npx rufflo doctor --component federation
 ✓ Federation Breaker: ADR-097 breaker loadable
 ✓ Federation Transport: selectedBackend=websocket
 ℹ Federation TLS: wss + 2 pinned fingerprints

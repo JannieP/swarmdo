@@ -101,7 +101,7 @@ const KNOWN_ESCAPE_HATCHES = new Set([
 
   // ── Statusline cosmetics (no CLI on the statusline; init-time settings.json) ─
   // Added 2026-06-02: statusline is invoked by Claude Code via hook config,
-  // not by an interactive `ruflo statusline …` command line. There is no CLI
+  // not by an interactive `rufflo statusline …` command line. There is no CLI
   // surface to attach a flag to; the env reads in statusline-generator.ts
   // are the documented configuration channel.
   'RUFLO_STATUSLINE_COST_SYMBOL',
@@ -133,13 +133,13 @@ const KNOWN_ESCAPE_HATCHES = new Set([
   'TOOL_INPUT_command',
 
   // ── Router (ADR-130/148/149) operator knobs ─────────────────────────────────
-  // These configure ruflo's neural-router/bandit/trajectory subsystems and
+  // These configure rufflo's neural-router/bandit/trajectory subsystems and
   // are intentionally env-only:
   //   - Most are CI/benchmark knobs (KNN_K, LATENCY_BUDGET_MS, COST_CEILING),
   //     not user-typed inputs.
   //   - Several are feature flags (NEURAL=1, BANDIT_PER_MODEL=1, TRAJECTORY=1)
   //     that, like CLAUDE_FLOW_V3_ENABLED above, get baked into settings
-  //     by `ruflo init` rather than passed on the command line.
+  //     by `rufflo init` rather than passed on the command line.
   //   - SEED_CORPUS / CALIBRATOR_PATH / MODEL_PATH are file-path inputs to
   //     long-running daemons, not transient CLI flags.
   // If a router knob graduates to user-facing surface, add a CLI flag override
@@ -172,12 +172,12 @@ const KNOWN_ESCAPE_HATCHES = new Set([
   'CLAUDE_FLOW_ROUTER_TRAJECTORY_MAXSIZE',
   'CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH',
   'CLAUDE_FLOW_ROUTER_TRAJECTORY_TASKLEN',
-  'CLAUDE_FLOW_SWARM_DIR',  // Set by ruflo init / inter-process — not user-typed
+  'CLAUDE_FLOW_SWARM_DIR',  // Set by rufflo init / inter-process — not user-typed
 ]);
 
 // ── Source directories to scan ────────────────────────────────────────────────
 const SCAN_ROOTS = [
-  join(REPO_ROOT, 'v3/@claude-flow/cli/src'),
+  join(REPO_ROOT, 'v3/@rufflo/cli/src'),
   join(REPO_ROOT, 'plugins'),
 ];
 

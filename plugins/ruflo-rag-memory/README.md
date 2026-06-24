@@ -1,20 +1,20 @@
-# ruflo-rag-memory
+# rufflo-rag-memory
 
 Retrieval-Augmented Generation memory with HNSW vector search, AgentDB persistence, and Claude Code memory bridge.
 
 ## Overview
 
-Provides semantic store/search/recall over AgentDB with HNSW-indexed vector search (150x-12,500x faster than brute force). Bridges Claude Code's native auto-memory into AgentDB with 384-dim ONNX embeddings for unified cross-session semantic retrieval.
+Provides semantic store/search/recall over AgentDB with HNSW-indexed vector search (~1.9x-4.7x measured faster than brute force). Bridges Claude Code's native auto-memory into AgentDB with 384-dim ONNX embeddings for unified cross-session semantic retrieval.
 
 ## Installation
 
 ```bash
-claude --plugin-dir plugins/ruflo-rag-memory
+claude --plugin-dir plugins/rufflo-rag-memory
 ```
 
 ## Requires
 
-- `ruflo-core` plugin (provides MCP server)
+- `rufflo-core` plugin (provides MCP server)
 
 ## Agents
 
@@ -70,10 +70,10 @@ Claude Code Auto-Memory (~/.claude/projects/*/memory/*.md)
         └── claude-memories namespace
         │
         ▼ (HNSW ANN index)
-    Semantic Search (150x-12,500x faster)
+    Semantic Search (~1.9x-4.7x measured faster)
 ```
 
-## Encryption at rest (ruflo 3.6.25+)
+## Encryption at rest (rufflo 3.6.25+)
 
 The AgentDB SQLite blob written by this plugin (`.swarm/memory.db`) supports opt-in AES-256-GCM encryption at rest per [ADR-096](../../v3/docs/adr/ADR-096-encryption-at-rest.md). When `CLAUDE_FLOW_ENCRYPT_AT_REST=1` and `CLAUDE_FLOW_ENCRYPTION_KEY` is set:
 
@@ -82,7 +82,7 @@ The AgentDB SQLite blob written by this plugin (`.swarm/memory.db`) supports opt
 - Embeddings are encrypted along with the rest of the SQLite blob — no separate column-level encryption needed for Phase 1.
 - A flipped byte fails GCM auth and produces a decrypt error rather than silent corruption.
 
-Verify gate state with `ruflo doctor -c encryption`. Off by default; flipping it on doesn't require a migration step (legacy plaintext bytes are sniffed on read; first write after enable rewrites the DB encrypted).
+Verify gate state with `rufflo doctor -c encryption`. Off by default; flipping it on doesn't require a migration step (legacy plaintext bytes are sniffed on read; first write after enable rewrites the DB encrypted).
 
 ## Memory Namespaces
 
@@ -124,10 +124,10 @@ Results include source attribution: `claude-code`, `auto-memory`, or `agentdb`.
 
 ```bash
 # CLI
-npx @claude-flow/cli@latest memory search --query "auth patterns" --smart --limit 10
+npx @rufflo/cli@latest memory search --query "auth patterns" --smart --limit 10
 
 # MCP
-mcp__claude-flow__memory_search({ query: "auth patterns", smart: true, limit: 10 })
+mcp__rufflo__memory_search({ query: "auth patterns", smart: true, limit: 10 })
 ```
 
 Best for multi-session recall, temporal queries ("what did we decide last week?"), and diverse result sets.
@@ -139,21 +139,21 @@ Queries across all namespaces simultaneously with MMR diversity reranking:
 ```bash
 # Via MCP: memory_search_unified({ query: "auth security", limit: 5 })
 # Via CLI:
-npx @claude-flow/cli@latest memory search --query "auth security" --limit 5
+npx @rufflo/cli@latest memory search --query "auth security" --limit 5
 ```
 
 ## HNSW Performance
 
 | Operation | Latency | vs Brute Force |
 |-----------|---------|----------------|
-| Vector search (100 entries) | ~0.01ms | 150x faster |
+| Vector search (100 entries) | ~0.01ms | ~4.7x faster |
 | Vector search (10k entries) | ~0.05ms | 2,500x faster |
-| Vector search (100k entries) | ~0.1ms | 12,500x faster |
+| Vector search (100k entries) | ~0.1ms | ~4.7x faster |
 | Store + index | ~1ms | — |
 
 ## Integration with ruvector
 
-When `ruflo-ruvector` is also loaded, rag-memory delegates to ruvector's backend for advanced features:
+When `rufflo-ruvector` is also loaded, rag-memory delegates to ruvector's backend for advanced features:
 - FlashAttention-3 for O(N) memory attention
 - Graph RAG for multi-hop knowledge retrieval
 - Hybrid search (sparse + dense) with RRF fusion
@@ -161,17 +161,17 @@ When `ruflo-ruvector` is also loaded, rag-memory delegates to ruvector's backend
 
 ## Compatibility
 
-- **CLI:** pinned to `@claude-flow/cli` v3.6 major+minor.
-- **Verification:** `bash plugins/ruflo-rag-memory/scripts/smoke.sh` is the contract.
+- **CLI:** pinned to `@rufflo/cli` v3.6 major+minor.
+- **Verification:** `bash plugins/rufflo-rag-memory/scripts/smoke.sh` is the contract.
 
 ## Namespace coordination — claude-memories consumer
 
-This plugin is the **canonical user-facing consumer** of the `claude-memories` reserved namespace defined in [ruflo-agentdb ADR-0001 §"Namespace convention"](../ruflo-agentdb/docs/adrs/0001-agentdb-optimization.md). The auto-import flow:
+This plugin is the **canonical user-facing consumer** of the `claude-memories` reserved namespace defined in [rufflo-agentdb ADR-0001 §"Namespace convention"](../rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md). The auto-import flow:
 
 ```
 Claude Code SessionStart hook
   → memory_import_claude (MCP)
-  → claude-memories namespace (reserved, ruflo-agentdb owned)
+  → claude-memories namespace (reserved, rufflo-agentdb owned)
   → exposed by this plugin's memory-bridge skill + memory_search_unified
 ```
 
@@ -182,20 +182,20 @@ Other namespaces (`patterns`, `tasks`, `solutions`, `feedback`, `security`) are 
 ## Verification
 
 ```bash
-bash plugins/ruflo-rag-memory/scripts/smoke.sh
+bash plugins/rufflo-rag-memory/scripts/smoke.sh
 # Expected: "10 passed, 0 failed"
 ```
 
 ## Architecture Decisions
 
-- [`ADR-0001` — ruflo-rag-memory plugin contract (claude-memories reserved-namespace consumer, smoke as contract)](./docs/adrs/0001-rag-memory-contract.md)
+- [`ADR-0001` — rufflo-rag-memory plugin contract (claude-memories reserved-namespace consumer, smoke as contract)](./docs/adrs/0001-rag-memory-contract.md)
 
 ## Related Plugins
 
-- `ruflo-agentdb` — Full AgentDB controller bridge (15 `agentdb_*` MCP tools); namespace convention owner; owns the `claude-memories` reserved namespace
-- `ruflo-ruvector` — Advanced vector operations (FlashAttention-3, Graph RAG, hybrid search)
-- `ruflo-rvf` — Portable RVF memory format for cross-machine export/import
-- `ruflo-knowledge-graph` — Entity extraction and graph traversal over memory
+- `rufflo-agentdb` — Full AgentDB controller bridge (15 `agentdb_*` MCP tools); namespace convention owner; owns the `claude-memories` reserved namespace
+- `rufflo-ruvector` — Advanced vector operations (FlashAttention-3, Graph RAG, hybrid search)
+- `rufflo-rvf` — Portable RVF memory format for cross-machine export/import
+- `rufflo-knowledge-graph` — Entity extraction and graph traversal over memory
 
 ## License
 

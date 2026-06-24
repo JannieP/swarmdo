@@ -1,6 +1,6 @@
 # Migration Guide: v2 → v3
 
-Complete guide for upgrading from Claude Flow v2 to v3.0.0-alpha.1
+Complete guide for upgrading from Rufflo v2 to v3.0.0-alpha.1
 
 ---
 
@@ -21,10 +21,10 @@ Complete guide for upgrading from Claude Flow v2 to v3.0.0-alpha.1
 ## Overview
 
 ### What's Changed
-Claude Flow v3 is a complete architectural overhaul based on 10 Architecture Decision Records (ADRs). The migration involves:
+Rufflo v3 is a complete architectural overhaul based on 10 Architecture Decision Records (ADRs). The migration involves:
 
 - **Code reduction**: 15,000+ lines → <5,000 lines
-- **Module architecture**: Monolith → 10 @claude-flow modules
+- **Module architecture**: Monolith → 10 @rufflo modules
 - **Foundation**: Custom implementation → agentic-flow@alpha core
 - **Memory**: 6+ fragmented systems → Unified AgentDB
 - **Testing**: Jest → Vitest (10x faster)
@@ -45,7 +45,7 @@ Claude Flow v3 is a complete architectural overhaul based on 10 Architecture Dec
 ### 1. Backup Current Setup
 ```bash
 # Backup your v2 installation
-cp -r ~/.claude-flow ~/.claude-flow.v2.backup
+cp -r ~/.rufflo ~/.rufflo.v2.backup
 cp -r ./node_modules ./node_modules.v2.backup
 cp package.json package.json.v2.backup
 cp package-lock.json package-lock.json.v2.backup
@@ -57,7 +57,7 @@ npx agentic-flow memory export --output ./v2-memory-backup.json
 ### 2. Document Current Configuration
 ```bash
 # Save current configuration
-cat ~/.claude-flow/config.json > v2-config-backup.json
+cat ~/.rufflo/config.json > v2-config-backup.json
 
 # List installed agents
 npx agentic-flow --list > v2-agents-list.txt
@@ -90,7 +90,7 @@ npm list @ruvector/attention
 npm list @ruvector/sona
 
 # Check for custom plugins or extensions
-ls ~/.claude-flow/plugins/
+ls ~/.rufflo/plugins/
 ```
 
 ---
@@ -131,7 +131,7 @@ ls ~/.claude-flow/plugins/
 - npx agentic-flow memory --backend mongodb
 
 + # v3: Unified AgentDB
-+ npx @claude-flow/memory unify --backend agentdb
++ npx @rufflo/memory unify --backend agentdb
 ```
 
 **Action Required**: Migrate all memory data to AgentDB.
@@ -144,7 +144,7 @@ ls ~/.claude-flow/plugins/
 - import { AdaptiveCoordinator } from './coordinators/adaptive'
 
 + # v3: Single UnifiedSwarmCoordinator
-+ import { SwarmCoordinator } from '@claude-flow/swarm'
++ import { SwarmCoordinator } from '@rufflo/swarm'
 ```
 
 **Action Required**: Update all coordinator imports and usage.
@@ -180,9 +180,9 @@ ls ~/.claude-flow/plugins/
 - import { Security, Memory, Swarm } from 'agentic-flow';
 
 + # v3: Module imports
-+ import { SecurityModule } from '@claude-flow/security';
-+ import { MemoryModule } from '@claude-flow/memory';
-+ import { SwarmModule } from '@claude-flow/swarm';
++ import { SecurityModule } from '@rufflo/security';
++ import { MemoryModule } from '@rufflo/memory';
++ import { SwarmModule } from '@rufflo/swarm';
 ```
 
 ### 3. Configuration Changes
@@ -247,13 +247,13 @@ rm package-lock.json
 # 2. Install v3 alpha
 npm install agentic-flow@3.0.0-alpha.1
 
-# 3. Install required @claude-flow modules
-npm install @claude-flow/security@latest
-npm install @claude-flow/memory@latest
-npm install @claude-flow/integration@latest
-npm install @claude-flow/performance@latest
-npm install @claude-flow/swarm@latest
-npm install @claude-flow/cli@latest
+# 3. Install required @rufflo modules
+npm install @rufflo/security@latest
+npm install @rufflo/memory@latest
+npm install @rufflo/integration@latest
+npm install @rufflo/performance@latest
+npm install @rufflo/swarm@latest
+npm install @rufflo/cli@latest
 
 # 4. Install peer dependencies
 npm install agentdb@2.0.0-alpha.3.4
@@ -272,7 +272,7 @@ npm install --save-dev @vitest/ui@^2.1.8
 npx agentic-flow@3.0.0-alpha.1 init --v3
 
 # 2. Migrate v2 configuration (manual merge)
-# Edit ~/.claude-flow/config.json with your v2 settings
+# Edit ~/.rufflo/config.json with your v2 settings
 # Follow new schema from v3/config/schema.json
 
 # 3. Set environment variables
@@ -289,7 +289,7 @@ setx CLAUDE_FLOW_MODE "production"
 setx CLAUDE_FLOW_MEMORY_BACKEND "agentdb"
 
 # Update config path
-$env:CLAUDE_FLOW_CONFIG = "$env:APPDATA\claude-flow\config.json"
+$env:CLAUDE_FLOW_CONFIG = "$env:APPDATA\rufflo\config.json"
 ```
 
 #### macOS/Linux Configuration
@@ -300,7 +300,7 @@ export CLAUDE_FLOW_MODE=production
 export CLAUDE_FLOW_MEMORY_BACKEND=agentdb
 
 # Update config path
-export CLAUDE_FLOW_CONFIG="$HOME/.claude-flow/config.json"
+export CLAUDE_FLOW_CONFIG="$HOME/.rufflo/config.json"
 
 # Add to ~/.bashrc or ~/.zshrc for persistence
 ```
@@ -312,17 +312,17 @@ export CLAUDE_FLOW_CONFIG="$HOME/.claude-flow/config.json"
 npx agentic-flow@2.x memory export --output ./v2-memory.json
 
 # 2. Initialize v3 memory backend
-npx @claude-flow/memory init --backend agentdb
+npx @rufflo/memory init --backend agentdb
 
 # 3. Import v2 memory into v3
-npx @claude-flow/memory import ./v2-memory.json --format v2
+npx @rufflo/memory import ./v2-memory.json --format v2
 
 # 4. Verify migration
-npx @claude-flow/memory stats
+npx @rufflo/memory stats
 # Should show: "Migrated X patterns from v2"
 
 # 5. Optimize with HNSW indexing
-npx @claude-flow/memory optimize --hnsw
+npx @rufflo/memory optimize --hnsw
 ```
 
 ### Step 4: Update Code
@@ -339,9 +339,9 @@ import {
 
 // After (v3)
 import { Agent } from 'agentic-flow';
-import { SwarmCoordinator } from '@claude-flow/swarm';
-import { MemoryModule } from '@claude-flow/memory';
-import { SecurityModule } from '@claude-flow/security';
+import { SwarmCoordinator } from '@rufflo/swarm';
+import { MemoryModule } from '@rufflo/memory';
+import { SecurityModule } from '@rufflo/security';
 ```
 
 #### 4b. Update Agent Initialization
@@ -470,48 +470,48 @@ export default defineConfig({
 
 ```bash
 # 1. Run v3 security audit
-npx @claude-flow/security audit --strict
+npx @rufflo/security audit --strict
 
 # 2. Fix any CVEs automatically
-npx @claude-flow/security fix --auto
+npx @rufflo/security fix --auto
 
 # 3. Validate credentials
-npx @claude-flow/security validate-credentials
+npx @rufflo/security validate-credentials
 
 # 4. Check path security
-npx @claude-flow/security check-paths
+npx @rufflo/security check-paths
 
 # 5. Review security report
-cat ~/.claude-flow/security-report.json
+cat ~/.rufflo/security-report.json
 ```
 
 ### Step 7: Performance Validation
 
 ```bash
 # 1. Run performance benchmarks
-npx @claude-flow/performance benchmark
+npx @rufflo/performance benchmark
 
 # 2. Compare with v2 baseline
-npx @claude-flow/performance compare --baseline v2
+npx @rufflo/performance compare --baseline v2
 
 # 3. Validate targets
-# - Flash Attention: 2.49x-7.47x speedup
-# - Vector Search: 150x-12,500x faster
+# - Flash Attention: unverified (no benchmark) speedup
+# - Vector Search: ~1.9x-4.7x measured faster
 # - Memory: 50-75% reduction
 # - CLI Startup: <500ms
 
 # 4. Profile memory usage
-npx @claude-flow/performance profile --memory
+npx @rufflo/performance profile --memory
 
 # 5. Analyze bottlenecks
-npx @claude-flow/performance analyze
+npx @rufflo/performance analyze
 ```
 
 ### Step 8: Integration Testing
 
 ```bash
 # 1. Test agentic-flow integration
-npx @claude-flow/integration test --agentic-flow-version alpha
+npx @rufflo/integration test --agentic-flow-version alpha
 
 # 2. Test all modules
 npm run test:modules
@@ -523,14 +523,14 @@ npm run test:cross-platform
 npx agentic-flow --agent coder --task "Hello v3"
 
 # 5. Test swarm coordination
-npx @claude-flow/swarm test --agents 15
+npx @rufflo/swarm test --agents 15
 ```
 
 ---
 
 ## Module-by-Module Guide
 
-### @claude-flow/security Migration
+### @rufflo/security Migration
 
 #### Before (v2)
 ```typescript
@@ -540,7 +540,7 @@ npx @claude-flow/swarm test --agents 15
 
 #### After (v3)
 ```typescript
-import { SecurityModule } from '@claude-flow/security';
+import { SecurityModule } from '@rufflo/security';
 
 const security = new SecurityModule({
   strict: true,
@@ -564,7 +564,7 @@ const safe = await security.sanitizeOutput(output);
 await security.validateCredentials();
 ```
 
-### @claude-flow/memory Migration
+### @rufflo/memory Migration
 
 #### Before (v2)
 ```typescript
@@ -577,7 +577,7 @@ const result = await memory.retrieve('key');
 
 #### After (v3)
 ```typescript
-import { MemoryModule } from '@claude-flow/memory';
+import { MemoryModule } from '@rufflo/memory';
 
 const memory = new MemoryModule({
   backend: 'hybrid', // SQLite + AgentDB
@@ -598,7 +598,7 @@ await memory.storePattern({
   critique: 'Good test coverage'
 });
 
-// Search with vector similarity (150x faster)
+// Search with vector similarity (~4.7x faster)
 const patterns = await memory.searchPatterns({
   task: 'code-implementation',
   k: 5,
@@ -612,7 +612,7 @@ const enhanced = await memory.gnnEnhancedSearch(embedding, {
 });
 ```
 
-### @claude-flow/swarm Migration
+### @rufflo/swarm Migration
 
 #### Before (v2)
 ```typescript
@@ -630,7 +630,7 @@ const coordinator = new HierarchicalCoordinator({
 
 #### After (v3)
 ```typescript
-import { SwarmCoordinator } from '@claude-flow/swarm';
+import { SwarmCoordinator } from '@rufflo/swarm';
 
 // Single unified coordinator
 const swarm = new SwarmCoordinator({
@@ -643,7 +643,7 @@ const swarm = new SwarmCoordinator({
 
 // Coordinate with attention mechanisms
 const result = await swarm.coordinate(task, {
-  attentionType: 'flash', // 2.49x-7.47x faster
+  attentionType: 'flash', // unverified (no benchmark) faster
   consensusThreshold: 0.8
 });
 
@@ -652,7 +652,7 @@ const status = await swarm.getStatus();
 console.log(`Active: ${status.activeAgents}/${status.totalAgents}`);
 ```
 
-### @claude-flow/performance Migration
+### @rufflo/performance Migration
 
 #### Before (v2)
 ```typescript
@@ -662,12 +662,12 @@ console.log(`Active: ${status.activeAgents}/${status.totalAgents}`);
 
 #### After (v3)
 ```typescript
-import { PerformanceModule } from '@claude-flow/performance';
+import { PerformanceModule } from '@rufflo/performance';
 
 const perf = new PerformanceModule({
   targets: {
-    flashAttention: '2.49x-7.47x',
-    vectorSearch: '150x-12500x',
+    flashAttention: 'unverified (no benchmark)',
+    vectorSearch: '~1.9x-4.7x measured',
     memoryReduction: '50-75%'
   }
 });
@@ -788,7 +788,7 @@ CLAUDE_FLOW_COORDINATOR=hierarchical
 # Core
 CLAUDE_FLOW_VERSION=3
 CLAUDE_FLOW_MODE=production
-CLAUDE_FLOW_CONFIG=~/.claude-flow/config.json
+CLAUDE_FLOW_CONFIG=~/.rufflo/config.json
 
 # Memory
 CLAUDE_FLOW_MEMORY_BACKEND=agentdb
@@ -805,11 +805,11 @@ CLAUDE_FLOW_SONA_LEARNING=true
 
 # Platform-specific (Windows)
 APPDATA=C:\Users\YourName\AppData\Roaming
-CLAUDE_FLOW_CONFIG=%APPDATA%\claude-flow\config.json
+CLAUDE_FLOW_CONFIG=%APPDATA%\rufflo\config.json
 
 # Platform-specific (macOS/Linux)
 HOME=/home/yourname
-CLAUDE_FLOW_CONFIG=$HOME/.claude-flow/config.json
+CLAUDE_FLOW_CONFIG=$HOME/.rufflo/config.json
 ```
 
 ---
@@ -830,8 +830,8 @@ const agent = new Agent({
 
 // ✅ v3 Pattern
 import { Agent } from 'agentic-flow';
-import { MemoryModule } from '@claude-flow/memory';
-import { SecurityModule } from '@claude-flow/security';
+import { MemoryModule } from '@rufflo/memory';
+import { SecurityModule } from '@rufflo/security';
 
 const agent = new Agent({
   name: 'coder',
@@ -855,14 +855,14 @@ const swarm = new HierarchicalCoordinator({
 const result = await swarm.execute(task);
 
 // ✅ v3 Pattern
-import { SwarmCoordinator } from '@claude-flow/swarm';
-import { AttentionCoordinator } from '@claude-flow/swarm/attention';
+import { SwarmCoordinator } from '@rufflo/swarm';
+import { AttentionCoordinator } from '@rufflo/swarm/attention';
 
 const swarm = new SwarmCoordinator({
   topology: 'hierarchical-mesh',
   agents: [coder, reviewer, tester],
   consensus: new AttentionCoordinator({
-    type: 'flash', // 2.49x-7.47x faster
+    type: 'flash', // unverified (no benchmark) faster
     threshold: 0.8
   })
 });
@@ -881,7 +881,7 @@ await memory.store('user-123', userData);
 const user = await memory.retrieve('user-123');
 
 // ✅ v3 Pattern
-import { MemoryModule } from '@claude-flow/memory';
+import { MemoryModule } from '@rufflo/memory';
 
 const memory = new MemoryModule({
   backend: 'hybrid',
@@ -919,7 +919,7 @@ try {
 }
 
 // ✅ v3 Pattern (Event Sourcing)
-import { SecurityError, MemoryError } from '@claude-flow/shared';
+import { SecurityError, MemoryError } from '@rufflo/shared';
 
 try {
   const result = await agent.execute(task);
@@ -969,7 +969,7 @@ describe('Agent', () => {
 // ✅ v3 Pattern (Vitest)
 import { describe, it, expect, vi } from 'vitest';
 import { Agent } from 'agentic-flow';
-import { MemoryModule } from '@claude-flow/memory';
+import { MemoryModule } from '@rufflo/memory';
 
 describe('Agent', () => {
   it('should execute task with memory', async () => {
@@ -1104,7 +1104,7 @@ rm -rf node_modules
 cp -r node_modules.v2.backup node_modules
 
 # 3. Restore configuration
-cp v2-config-backup.json ~/.claude-flow/config.json
+cp v2-config-backup.json ~/.rufflo/config.json
 
 # 4. Restore memory
 npx agentic-flow@2.x memory import ./v2-memory-backup.json
@@ -1118,17 +1118,17 @@ npx agentic-flow --agent coder --task "Test rollback"
 ```bash
 # 1. Uninstall v3 completely
 npm uninstall agentic-flow
-npm uninstall @claude-flow/security
-npm uninstall @claude-flow/memory
-npm uninstall @claude-flow/swarm
-npm uninstall @claude-flow/integration
-npm uninstall @claude-flow/performance
+npm uninstall @rufflo/security
+npm uninstall @rufflo/memory
+npm uninstall @rufflo/swarm
+npm uninstall @rufflo/integration
+npm uninstall @rufflo/performance
 npm uninstall agentdb
 npm uninstall @ruvector/attention
 npm uninstall @ruvector/sona
 
 # 2. Restore entire v2 environment
-cp -r ~/.claude-flow.v2.backup ~/.claude-flow
+cp -r ~/.rufflo.v2.backup ~/.rufflo
 rm -rf node_modules
 cp package.json.v2.backup package.json
 cp package-lock.json.v2.backup package-lock.json
@@ -1149,7 +1149,7 @@ npx agentic-flow --list
 
 **Symptoms**:
 ```
-Error: Claude Flow v3 requires Node.js 20.x or higher
+Error: Rufflo v3 requires Node.js 20.x or higher
 Current version: v18.x.x
 ```
 
@@ -1179,19 +1179,19 @@ AgentDB not initialized
 **Solution**:
 ```bash
 # 1. Initialize AgentDB manually
-npx @claude-flow/memory init --backend agentdb --force
+npx @rufflo/memory init --backend agentdb --force
 
 # 2. Create data directory
 mkdir -p ./data/agentdb
 
 # 3. Import v2 memory with verbose logging
-npx @claude-flow/memory import ./v2-memory-backup.json \
+npx @rufflo/memory import ./v2-memory-backup.json \
   --format v2 \
   --verbose \
   --continue-on-error
 
 # 4. Verify
-npx @claude-flow/memory stats
+npx @rufflo/memory stats
 ```
 
 ### Issue 3: Security Validation Errors
@@ -1205,15 +1205,15 @@ Path traversal detected: ../../../etc/passwd
 **Solution**:
 ```bash
 # 1. Review security configuration
-cat ~/.claude-flow/config.json | grep -A 10 security
+cat ~/.rufflo/config.json | grep -A 10 security
 
 # 2. Update allowedDirectories
-npx @claude-flow/security configure \
+npx @rufflo/security configure \
   --allowed-dirs "./src/,./tests/,./data/" \
   --blocked-patterns "../,~/,/etc/,/tmp/"
 
 # 3. Validate paths
-npx @claude-flow/security check-paths --fix
+npx @rufflo/security check-paths --fix
 
 # 4. Re-run with strict mode disabled (temporary)
 export CLAUDE_FLOW_SECURITY_STRICT=false
@@ -1253,18 +1253,18 @@ npm test
 
 **Symptoms**:
 ```
-Error: Cannot find module '@claude-flow/security'
+Error: Cannot find module '@rufflo/security'
 Module not found
 ```
 
 **Solution**:
 ```bash
 # 1. Install all v3 modules
-npm install @claude-flow/security@latest
-npm install @claude-flow/memory@latest
-npm install @claude-flow/swarm@latest
-npm install @claude-flow/integration@latest
-npm install @claude-flow/performance@latest
+npm install @rufflo/security@latest
+npm install @rufflo/memory@latest
+npm install @rufflo/swarm@latest
+npm install @rufflo/integration@latest
+npm install @rufflo/performance@latest
 
 # 2. Clear npm cache
 npm cache clean --force
@@ -1274,8 +1274,8 @@ rm -rf node_modules package-lock.json
 npm install
 
 # 4. Verify modules
-npm list @claude-flow/security
-npm list @claude-flow/memory
+npm list @rufflo/security
+npm list @rufflo/memory
 ```
 
 ### Issue 6: Platform-Specific Errors
@@ -1296,7 +1296,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 
 # Solution
 xattr -d com.apple.quarantine /path/to/npx
-spctl --add --label "Claude Flow" /path/to/npx
+spctl --add --label "Rufflo" /path/to/npx
 ```
 
 #### Linux: Permission Denied
@@ -1314,7 +1314,7 @@ sudo chown -R $USER:$USER ~/.npm
 ## Post-Migration Checklist
 
 - [ ] v3 installed and running (`npx agentic-flow --version` shows 3.0.0-alpha.1)
-- [ ] All 10 @claude-flow modules installed
+- [ ] All 10 @rufflo modules installed
 - [ ] Configuration migrated to v3 format
 - [ ] Memory data imported into AgentDB
 - [ ] Security audit passed
@@ -1333,8 +1333,8 @@ sudo chown -R $USER:$USER ~/.npm
 ### Resources
 - **Documentation**: https://github.com/ruvnet/agentic-flow/tree/v3/docs
 - **GitHub Issues**: https://github.com/ruvnet/agentic-flow/issues
-- **ADR Reference**: /workspaces/claude-flow/v3/docs/adr/
-- **Examples**: /workspaces/claude-flow/v3/examples/
+- **ADR Reference**: /workspaces/rufflo/v3/docs/adr/
+- **Examples**: /workspaces/rufflo/v3/examples/
 
 ### Support Channels
 - **Bug Reports**: Open issue with `migration` label
@@ -1347,7 +1347,7 @@ If you encounter issues not covered in this guide:
 1. **Collect diagnostic information**:
    ```bash
    npx agentic-flow diagnose --output diagnostics.json
-   npx @claude-flow/security audit --report security-report.json
+   npx @rufflo/security audit --report security-report.json
    ```
 
 2. **Create detailed issue**:
@@ -1368,8 +1368,8 @@ If you encounter issues not covered in this guide:
 ## Summary
 
 **Migration Benefits**:
-- ✅ 2.49x-7.47x faster with Flash Attention
-- ✅ 150x-12,500x faster vector search
+- ✅ unverified (no benchmark) faster with Flash Attention
+- ✅ ~1.9x-4.7x measured faster vector search
 - ✅ 83.1% memory reduction
 - ✅ Security-first design (CVE fixes)
 - ✅ Clean modular architecture
@@ -1398,4 +1398,4 @@ If you encounter issues not covered in this guide:
 
 ---
 
-**Happy Migrating! Welcome to Claude Flow v3!** 🚀
+**Happy Migrating! Welcome to Rufflo v3!** 🚀

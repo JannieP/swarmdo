@@ -5,7 +5,7 @@ argument-hint: "--repo <path> --test <path> --test-command <cmd> [--max-attempts
 allowed-tools: Bash
 ---
 
-Surfaces the **Test-Driven Repair** loop as a ruflo skill. Use when you have a failing test and want the source-under-test fixed automatically, with the test's pass/fail as the verification gate (no LLM-as-judge).
+Surfaces the **Test-Driven Repair** loop as a rufflo skill. Use when you have a failing test and want the source-under-test fixed automatically, with the test's pass/fail as the verification gate (no LLM-as-judge).
 
 ## When to use
 
@@ -91,20 +91,20 @@ Conformant mode (no test, write own repro via MCTS) is deferred to a future ADR.
 
 ```bash
 # Smoke / dry-run (no --confirm yet)
-node plugins/ruflo-testgen/scripts/tdd-repair/tdd-repair.mjs \
+node plugins/rufflo-testgen/scripts/tdd-repair/tdd-repair.mjs \
   --repo /path/to/myrepo \
   --test tests/auth.test.ts \
   --test-command "npx vitest run tests/auth.test.ts"
 
 # Actually repair (Haiku tier, $5 budget, 1 attempt)
-node plugins/ruflo-testgen/scripts/tdd-repair/tdd-repair.mjs \
+node plugins/rufflo-testgen/scripts/tdd-repair/tdd-repair.mjs \
   --repo /path/to/myrepo \
   --test tests/auth.test.ts \
   --test-command "npx vitest run tests/auth.test.ts" \
   --confirm
 
 # Bigger model + more attempts for harder bugs
-node plugins/ruflo-testgen/scripts/tdd-repair/tdd-repair.mjs \
+node plugins/rufflo-testgen/scripts/tdd-repair/tdd-repair.mjs \
   --repo . --test tests/regression-2456.test.ts \
   --test-command "npm test -- tests/regression-2456.test.ts" \
   --model sonnet --max-attempts 3 --budget 15.00 \

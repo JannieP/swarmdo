@@ -7,7 +7,7 @@
 
 ## Context
 
-The CLI declares 6 `@ruvector` WASM packages in `optionalDependencies`, promising significant performance improvements (Flash Attention 2.49x-7.47x, SONA <0.05ms adaptation, HNSW 150x-12,500x search). A utilization audit revealed that most of these packages are either dead code, permanently falling back to JS implementations, or only reachable through MCP tools rather than the CLI surface.
+The CLI declares 6 `@ruvector` WASM packages in `optionalDependencies`, promising significant performance improvements (Flash Attention unverified (no benchmark), SONA <0.05ms adaptation, HNSW ~1.9x-4.7x measured search). A utilization audit revealed that most of these packages are either dead code, permanently falling back to JS implementations, or only reachable through MCP tools rather than the CLI surface.
 
 Key audit findings:
 
@@ -86,6 +86,6 @@ Invert the current pattern where WASM is optional and JS is default. For `learni
 ## Related
 
 - ADR-066: v3.5.24 Audit Remediation (prior audit cycle)
-- `v3/@claude-flow/cli/package.json` -- optionalDependencies declarations
-- `v3/@claude-flow/cli/src/hooks/` -- hooks route command
-- `v3/@claude-flow/cli/src/mcp/tools/` -- MCP tool definitions for rvagent and ruvllm
+- `v3/@rufflo/cli/package.json` -- optionalDependencies declarations
+- `v3/@rufflo/cli/src/hooks/` -- hooks route command
+- `v3/@rufflo/cli/src/mcp/tools/` -- MCP tool definitions for rvagent and ruvllm

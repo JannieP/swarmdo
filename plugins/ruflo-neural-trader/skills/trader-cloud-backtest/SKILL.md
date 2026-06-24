@@ -1,7 +1,7 @@
 ---
 name: trader-cloud-backtest
 description: Run a heavy neural-trader job (long walk-forward, big Monte-Carlo, parameter sweep, model training) on the Anthropic Managed Agent cloud runtime instead of locally
-allowed-tools: mcp__claude-flow__managed_agent_create mcp__claude-flow__managed_agent_prompt mcp__claude-flow__managed_agent_events mcp__claude-flow__managed_agent_status mcp__claude-flow__managed_agent_terminate mcp__claude-flow__memory_store mcp__claude-flow__memory_retrieve mcp__claude-flow__memory_search mcp__claude-flow__agentdb_pattern-store Bash Read
+allowed-tools: mcp__rufflo__managed_agent_create mcp__rufflo__managed_agent_prompt mcp__rufflo__managed_agent_events mcp__rufflo__managed_agent_status mcp__rufflo__managed_agent_terminate mcp__rufflo__memory_store mcp__rufflo__memory_retrieve mcp__rufflo__memory_search mcp__rufflo__agentdb_pattern-store Bash Read
 argument-hint: "<backtest|train|sweep> <strategy-or-model> --symbol <TICKER> [--period 2020-2024] [--mc-paths 1000]"
 ---
 
@@ -56,8 +56,8 @@ Prereq: `ANTHROPIC_API_KEY` (or `CLAUDE_API_KEY`) + Managed Agents beta access. 
 5. **Pull artifacts (if needed):** `managed_agent_prompt({ sessionId, message: "cat /tmp/equity.csv" })` or `managed_agent_events` and read the tool_result.
 
 6. **Ingest locally + Ed25519 verify (ADR-126 Phase 4 fail-closed gate):**
-   - Build the `SignedBacktestArtifact` body from the cloud-returned metrics + params hash + runs hash. Sign it locally with `signBacktestArtifact(body, privateKeyHex)` from `plugins/ruflo-neural-trader/src/signed-artifact.mjs` (key resolution same as `trader-backtest`: `RUFLO_WITNESS_KEY_PATH` → `verification/witness-key.json` → degraded-unsigned warning).
-   - **Before storing OR promoting the artifact to a live strategy**: call `await verifyBacktestArtifact(artifact, trustedPublicKey)` where `trustedPublicKey` is the pinned project-config Ed25519 public key (NOT the `artifact.witnessPublicKey` field — that's attacker-controllable; see CWE-347 / #1922). If verification returns `false`: **REFUSE to promote** — emit a loud error `"[ERROR] ruflo-neural-trader: SignedBacktestArtifact signature INVALID against trusted key — refusing to promote to live strategy"` and return early. This is the fail-closed gate per ADR-126.
+   - Build the `SignedBacktestArtifact` body from the cloud-returned metrics + params hash + runs hash. Sign it locally with `signBacktestArtifact(body, privateKeyHex)` from `plugins/rufflo-neural-trader/src/signed-artifact.mjs` (key resolution same as `trader-backtest`: `RUFLO_WITNESS_KEY_PATH` → `verification/witness-key.json` → degraded-unsigned warning).
+   - **Before storing OR promoting the artifact to a live strategy**: call `await verifyBacktestArtifact(artifact, trustedPublicKey)` where `trustedPublicKey` is the pinned project-config Ed25519 public key (NOT the `artifact.witnessPublicKey` field — that's attacker-controllable; see CWE-347 / #1922). If verification returns `false`: **REFUSE to promote** — emit a loud error `"[ERROR] rufflo-neural-trader: SignedBacktestArtifact signature INVALID against trusted key — refusing to promote to live strategy"` and return early. This is the fail-closed gate per ADR-126.
    - On verify success: `memory_store({ key: "backtest-<strategy>-<ts>", value: JSON.stringify(signedArtifact), namespace: "trading-backtests" })`. The stored value carries `witnessSignature` + `witnessPublicKey`.
    - If Sharpe > 1.5: `agentdb_pattern-store({ pattern: "profitable-<strategy-type>", data: "<params + results>" })`.
    - Record the run's container time + token cost to the `cost-tracking` namespace (per ADR-117 — cloud sessions bill until terminated).
@@ -66,7 +66,7 @@ Prereq: `ANTHROPIC_API_KEY` (or `CLAUDE_API_KEY`) + Managed Agents beta access. 
    ```
    managed_agent_terminate({ sessionId, environmentId })   → { sessionDeleted: true, environmentDeleted: true }
    ```
-   Never leave an idle billing container. (`ruflo doctor` / GC catches orphans — #1931.)
+   Never leave an idle billing container. (`rufflo doctor` / GC catches orphans — #1931.)
 
 ## Cost rules (don't skip)
 

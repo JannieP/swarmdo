@@ -6,7 +6,7 @@
  * Pre-P2: buildRvfFromTemplate silently dropped template.mcp_tools (the
  * field existed in GalleryTemplateDetail but was never passed to
  * WasmRvfBuilder.addMcpTools()).  No wasm_agent_compose tool existed.
- * WasmAgents were isolated from ruflo's 314 MCP tools.
+ * WasmAgents were isolated from rufflo's 314 MCP tools.
  *
  * P2 fix:
  *   1. buildRvfContainer gains mcpTools parameter → builder.addMcpTools()
@@ -27,8 +27,8 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const TOOLS = resolve(__dirname, '../v3/@claude-flow/cli/src/mcp-tools/wasm-agent-tools.ts');
-const WASM = resolve(__dirname, '../v3/@claude-flow/cli/src/ruvector/agent-wasm.ts');
+const TOOLS = resolve(__dirname, '../v3/@rufflo/cli/src/mcp-tools/wasm-agent-tools.ts');
+const WASM = resolve(__dirname, '../v3/@rufflo/cli/src/ruvector/agent-wasm.ts');
 
 function fail(msg) { console.error(`✗ ${msg}`); process.exitCode = 1; }
 function pass(msg) { console.log(`✓ ${msg}`); }

@@ -8,7 +8,7 @@
 
 ## Context
 
-The `@claude-flow/cli` package requires integration with `ruvector` for advanced code intelligence features:
+The `@rufflo/cli` package requires integration with `ruvector` for advanced code intelligence features:
 
 1. **Q-Learning Agent Router** - ML-based task routing (80%+ accuracy)
 2. **AST Analysis** - Symbol extraction and complexity metrics
@@ -16,11 +16,11 @@ The `@claude-flow/cli` package requires integration with `ruvector` for advanced
 4. **Coverage Routing** - Test-aware agent selection
 5. **Graph Analysis** - Code boundaries (MinCut/Louvain)
 
-These features are unique to ruvector and complement claude-flow's existing capabilities without duplicating functionality already present in `@claude-flow/embeddings` or `@claude-flow/memory`.
+These features are unique to ruvector and complement rufflo's existing capabilities without duplicating functionality already present in `@rufflo/embeddings` or `@rufflo/memory`.
 
 ## Decision
 
-Implement ruvector as an **OPTIONAL dependency** with graceful fallback, following the existing patterns in `@claude-flow/cli`.
+Implement ruvector as an **OPTIONAL dependency** with graceful fallback, following the existing patterns in `@rufflo/cli`.
 
 ### Design Principles
 
@@ -35,7 +35,7 @@ Implement ruvector as an **OPTIONAL dependency** with graceful fallback, followi
 ## File Structure
 
 ```
-v3/@claude-flow/cli/src/
+v3/@rufflo/cli/src/
 ├── commands/
 │   ├── route.ts              # NEW: Q-Learning routing command
 │   ├── analyze.ts            # NEW: AST/Diff/Graph analysis commands
@@ -62,7 +62,7 @@ v3/@claude-flow/cli/src/
 ### 1. RuVector Availability Interface
 
 ```typescript
-// v3/@claude-flow/cli/src/ruvector/availability.ts
+// v3/@rufflo/cli/src/ruvector/availability.ts
 
 /**
  * RuVector availability state
@@ -102,7 +102,7 @@ export async function requireRuVector(feature: keyof RuVectorFeatures): Promise<
 ### 2. Router Adapter Interface
 
 ```typescript
-// v3/@claude-flow/cli/src/ruvector/adapters/router-adapter.ts
+// v3/@rufflo/cli/src/ruvector/adapters/router-adapter.ts
 
 export interface RouteRequest {
   task: string;
@@ -148,7 +148,7 @@ export async function routeWithCoverage(request: RouteRequest): Promise<RouteRes
 ### 3. AST Adapter Interface
 
 ```typescript
-// v3/@claude-flow/cli/src/ruvector/adapters/ast-adapter.ts
+// v3/@rufflo/cli/src/ruvector/adapters/ast-adapter.ts
 
 export interface ASTAnalysisRequest {
   path: string;
@@ -210,7 +210,7 @@ export async function getComplexity(path: string): Promise<ComplexityMetrics>;
 ### 4. Diff Adapter Interface
 
 ```typescript
-// v3/@claude-flow/cli/src/ruvector/adapters/diff-adapter.ts
+// v3/@rufflo/cli/src/ruvector/adapters/diff-adapter.ts
 
 export interface DiffAnalysisRequest {
   diff?: string;
@@ -264,7 +264,7 @@ export async function classifyDiffRisk(diff: string): Promise<number>;
 ### 5. Graph Adapter Interface
 
 ```typescript
-// v3/@claude-flow/cli/src/ruvector/adapters/graph-adapter.ts
+// v3/@rufflo/cli/src/ruvector/adapters/graph-adapter.ts
 
 export interface GraphAnalysisRequest {
   path: string;
@@ -317,7 +317,7 @@ export async function analyzeGraphBoundaries(request: GraphAnalysisRequest): Pro
 ### 1. Route Command
 
 ```typescript
-// v3/@claude-flow/cli/src/commands/route.ts
+// v3/@rufflo/cli/src/commands/route.ts
 
 export const routeCommand: Command = {
   name: 'route',
@@ -361,11 +361,11 @@ export const routeCommand: Command = {
   ],
   examples: [
     {
-      command: 'claude-flow route -t "Implement user authentication" --q-learning',
+      command: 'rufflo route -t "Implement user authentication" --q-learning',
       description: 'Route with Q-Learning model'
     },
     {
-      command: 'claude-flow route -t "Fix login bug" --coverage-aware',
+      command: 'rufflo route -t "Fix login bug" --coverage-aware',
       description: 'Route with coverage awareness'
     }
   ],
@@ -376,7 +376,7 @@ export const routeCommand: Command = {
 ### 2. Analyze Command
 
 ```typescript
-// v3/@claude-flow/cli/src/commands/analyze.ts
+// v3/@rufflo/cli/src/commands/analyze.ts
 
 export const analyzeCommand: Command = {
   name: 'analyze',
@@ -418,8 +418,8 @@ const astSubcommand: Command = {
     }
   ],
   examples: [
-    { command: 'claude-flow analyze ast -p src/', description: 'Analyze src directory' },
-    { command: 'claude-flow analyze ast -p src/api.ts --complexity', description: 'Get complexity for file' }
+    { command: 'rufflo analyze ast -p src/', description: 'Analyze src directory' },
+    { command: 'rufflo analyze ast -p src/api.ts --complexity', description: 'Get complexity for file' }
   ],
   action: astAction
 };
@@ -455,9 +455,9 @@ const diffSubcommand: Command = {
     }
   ],
   examples: [
-    { command: 'claude-flow analyze diff --risk', description: 'Analyze current diff with risk' },
-    { command: 'claude-flow analyze diff --base main --target feature', description: 'Compare branches' },
-    { command: 'git diff | claude-flow analyze diff --stdin --risk', description: 'Pipe diff from git' }
+    { command: 'rufflo analyze diff --risk', description: 'Analyze current diff with risk' },
+    { command: 'rufflo analyze diff --base main --target feature', description: 'Compare branches' },
+    { command: 'git diff | rufflo analyze diff --stdin --risk', description: 'Pipe diff from git' }
   ],
   action: diffAction
 };
@@ -489,8 +489,8 @@ const boundariesSubcommand: Command = {
     }
   ],
   examples: [
-    { command: 'claude-flow analyze boundaries -p src/', description: 'Detect boundaries in src' },
-    { command: 'claude-flow analyze boundaries -a louvain', description: 'Use Louvain algorithm' }
+    { command: 'rufflo analyze boundaries -p src/', description: 'Detect boundaries in src' },
+    { command: 'rufflo analyze boundaries -a louvain', description: 'Use Louvain algorithm' }
   ],
   action: boundariesAction
 };
@@ -503,7 +503,7 @@ const boundariesSubcommand: Command = {
 ### 1. RuVector Not Available Error
 
 ```typescript
-// v3/@claude-flow/cli/src/ruvector/errors.ts
+// v3/@rufflo/cli/src/ruvector/errors.ts
 
 export class RuVectorNotAvailableError extends CLIError {
   constructor(feature: string) {
@@ -536,7 +536,7 @@ export class RuVectorFeatureDisabledError extends CLIError {
 ### 2. Graceful Degradation Pattern
 
 ```typescript
-// v3/@claude-flow/cli/src/ruvector/availability.ts
+// v3/@rufflo/cli/src/ruvector/availability.ts
 
 let cachedStatus: RuVectorStatus | null = null;
 
@@ -651,7 +651,7 @@ async function routeAction(ctx: CommandContext): Promise<CommandResult> {
 ### 1. MCP Tool Definitions
 
 ```typescript
-// v3/@claude-flow/cli/src/mcp-tools/ruvector-tools.ts
+// v3/@rufflo/cli/src/mcp-tools/ruvector-tools.ts
 
 import type { MCPTool } from './types.js';
 
@@ -771,7 +771,7 @@ export const ruvectorTools: MCPTool[] = [
 ### 2. Lazy Loading Pattern
 
 ```typescript
-// v3/@claude-flow/cli/src/ruvector/index.ts
+// v3/@rufflo/cli/src/ruvector/index.ts
 
 /**
  * RuVector Integration Module
@@ -819,7 +819,7 @@ export async function getGraphAdapter() {
 
 ```json
 {
-  "name": "@claude-flow/cli",
+  "name": "@rufflo/cli",
   "version": "3.0.0-alpha.16",
   "optionalDependencies": {
     "ruvector": "^0.1.95"
@@ -840,7 +840,7 @@ export async function getGraphAdapter() {
 ## Command Index Updates
 
 ```typescript
-// v3/@claude-flow/cli/src/commands/index.ts
+// v3/@rufflo/cli/src/commands/index.ts
 
 // Existing imports...
 import { routeCommand } from './route.js';
@@ -896,7 +896,7 @@ export const commands: Command[] = [
 ### 1. Availability Tests
 
 ```typescript
-// v3/@claude-flow/cli/tests/ruvector/availability.test.ts
+// v3/@rufflo/cli/tests/ruvector/availability.test.ts
 
 import { describe, it, expect, vi } from 'vitest';
 import { checkRuVectorAvailability } from '../../src/ruvector/availability.js';
@@ -930,7 +930,7 @@ describe('RuVector Availability', () => {
 ### 2. Command Tests
 
 ```typescript
-// v3/@claude-flow/cli/tests/commands/route.test.ts
+// v3/@rufflo/cli/tests/commands/route.test.ts
 
 import { describe, it, expect, vi } from 'vitest';
 import { routeCommand } from '../../src/commands/route.js';
@@ -1217,17 +1217,17 @@ const checkResults = await Promise.allSettled(checksToRun.map(check => check()))
 
 ### Cache Utility Functions
 
-All cache utilities exported from `@claude-flow/cli/ruvector`:
+All cache utilities exported from `@rufflo/cli/ruvector`:
 
 ```typescript
 // Diff caches
-import { clearDiffCache, clearAllDiffCaches } from '@claude-flow/cli/ruvector';
+import { clearDiffCache, clearAllDiffCaches } from '@rufflo/cli/ruvector';
 
 // Graph caches
-import { clearGraphCaches, getGraphCacheStats } from '@claude-flow/cli/ruvector';
+import { clearGraphCaches, getGraphCacheStats } from '@rufflo/cli/ruvector';
 
 // Coverage caches
-import { clearCoverageCache, getCoverageCacheStats } from '@claude-flow/cli/ruvector';
+import { clearCoverageCache, getCoverageCacheStats } from '@rufflo/cli/ruvector';
 ```
 
 ### Published Versions
@@ -1261,7 +1261,7 @@ Five high-impact, low-effort optimizations were implemented to achieve measurabl
 **Impact:** ~200ms CLI startup time reduction
 
 **Changes Made:**
-- `@claude-flow/cli/src/commands/index.ts` - Refactored to use dynamic imports
+- `@rufflo/cli/src/commands/index.ts` - Refactored to use dynamic imports
 
 **Before:**
 ```typescript
@@ -1298,7 +1298,7 @@ import { agentCommand } from './agent.js';
 **Impact:** 2-3x faster bulk operations
 
 **Changes Made:**
-- `@claude-flow/memory/src/agentdb-adapter.ts` - Optimized bulk methods
+- `@rufflo/memory/src/agentdb-adapter.ts` - Optimized bulk methods
 
 **Optimizations:**
 ```typescript
@@ -1365,9 +1365,9 @@ await pooledTransport.withConnection(async (transport) => {
 
 **Changes Made:**
 - Added `"sideEffects": false` to package.json files:
-  - `claude-flow/package.json`
-  - `@claude-flow/cli/package.json`
-  - `@claude-flow/mcp/package.json`
+  - `rufflo/package.json`
+  - `@rufflo/cli/package.json`
+  - `@rufflo/mcp/package.json`
 
 **How It Works:**
 - Bundlers (webpack, rollup, esbuild) can now tree-shake unused exports
@@ -1388,15 +1388,15 @@ await pooledTransport.withConnection(async (transport) => {
 
 | Package | Before | After |
 |---------|--------|-------|
-| `claude-flow` | 3.0.0-alpha.17 | 3.0.0-alpha.18 |
-| `@claude-flow/cli` | 3.0.0-alpha.24 | 3.0.0-alpha.25 |
-| `@claude-flow/mcp` | 3.0.0-alpha.7 | 3.0.0-alpha.8 |
+| `rufflo` | 3.0.0-alpha.17 | 3.0.0-alpha.18 |
+| `@rufflo/cli` | 3.0.0-alpha.24 | 3.0.0-alpha.25 |
+| `@rufflo/mcp` | 3.0.0-alpha.7 | 3.0.0-alpha.8 |
 
 ### Usage Examples
 
 **Lazy Command Loading:**
 ```typescript
-import { getCommandAsync, loadAllCommands } from '@claude-flow/cli';
+import { getCommandAsync, loadAllCommands } from '@rufflo/cli';
 
 // Get single command (loads on demand)
 const neuralCmd = await getCommandAsync('neural');
@@ -1407,7 +1407,7 @@ const allCommands = await loadAllCommands();
 
 **Batch Memory Operations:**
 ```typescript
-import { UnifiedMemoryService } from '@claude-flow/memory';
+import { UnifiedMemoryService } from '@rufflo/memory';
 
 const memory = new UnifiedMemoryService();
 await memory.initialize();
@@ -1465,18 +1465,18 @@ console.log(pool.getStats());
 
 ### Published Versions
 
-- `claude-flow@3.0.0-alpha.18`
-- `@claude-flow/cli@3.0.0-alpha.25`
-- `@claude-flow/mcp@3.0.0-alpha.8`
-- `@claude-flow/memory@3.0.0-alpha.2`
+- `rufflo@3.0.0-alpha.18`
+- `@rufflo/cli@3.0.0-alpha.25`
+- `@rufflo/mcp@3.0.0-alpha.8`
+- `@rufflo/memory@3.0.0-alpha.2`
 
 ### Performance Validation
 
 All builds pass successfully:
 ```
-✓ @claude-flow/cli build passed
-✓ @claude-flow/mcp build passed
-✓ @claude-flow/memory build passed
+✓ @rufflo/cli build passed
+✓ @rufflo/mcp build passed
+✓ @rufflo/memory build passed
 ```
 
 ---

@@ -31,7 +31,7 @@ hooks:
 
     # Initialize v3 coordination
     echo "🎯 Mission: ADR-001 to ADR-010 implementation"
-    echo "📊 Targets: 2.49x-7.47x performance, 150x search, 50-75% memory reduction"
+    echo "📊 Targets: unverified (no benchmark) performance, ~4.7x search, 50-75% memory reduction"
 
   post_execution: |
     echo "👑 V3 Queen coordination complete"
@@ -46,11 +46,11 @@ hooks:
 
 # V3 Queen Coordinator
 
-**🎯 15-Agent Swarm Orchestrator for Claude-Flow v3 Complete Reimagining**
+**🎯 15-Agent Swarm Orchestrator for Rufflo v3 Complete Reimagining**
 
 ## Core Mission
 
-Lead the hierarchical mesh coordination of 15 specialized agents to implement all 10 ADRs (Architecture Decision Records) within 14-week timeline, achieving 2.49x-7.47x performance improvements.
+Lead the hierarchical mesh coordination of 15 specialized agents to implement all 10 ADRs (Architecture Decision Records) within 14-week timeline, achieving unverified (no benchmark) performance improvements.
 
 ## Agent Topology
 
@@ -78,7 +78,7 @@ Lead the hierarchical mesh coordination of 15 specialized agents to implement al
 - **Agents #5-6**: Core architecture DDD design, type modernization
 
 ### Phase 2: Core Systems (Week 3-6)
-- **Agent #7**: Memory unification (AgentDB 150x improvement)
+- **Agent #7**: Memory unification (AgentDB ~4.7x measured improvement)
 - **Agent #8**: Swarm coordination (merge 4 systems)
 - **Agent #9**: MCP server optimization
 - **Agent #13**: TDD London School implementation
@@ -96,8 +96,8 @@ Lead the hierarchical mesh coordination of 15 specialized agents to implement al
 ## Success Metrics
 
 - **Parallel Efficiency**: >85% agent utilization
-- **Performance**: 2.49x-7.47x Flash Attention speedup
-- **Search**: 150x-12,500x AgentDB improvement
+- **Performance**: unverified (no benchmark) Flash Attention speedup
+- **Search**: ~1.9x-4.7x measured AgentDB improvement
 - **Memory**: 50-75% reduction
 - **Code**: <5,000 lines (vs 15,000+)
 - **Timeline**: 14-week delivery

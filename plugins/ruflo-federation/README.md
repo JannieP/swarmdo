@@ -1,4 +1,4 @@
-# ruflo-federation
+# rufflo-federation
 
 The comms layer for multi-agent AI. Cross-installation agent federation with zero-trust security, PII-gated data flow, and compliance-grade audit trails.
 
@@ -6,7 +6,7 @@ The comms layer for multi-agent AI. Cross-installation agent federation with zer
 
 ```
 /plugin marketplace add ruvnet/ruflo
-/plugin install ruflo-federation@ruflo
+/plugin install rufflo-federation@rufflo
 ```
 
 ## What's Included
@@ -40,7 +40,7 @@ The comms layer for multi-agent AI. Cross-installation agent federation with zer
 
 Validation rejects `NaN`, ±`Infinity`, negative numbers, and non-integer hop counts up front. Errors surface as constant strings with no remaining-budget echo, so a malicious caller cannot use response codes as an oracle to probe configured thresholds.
 
-Phase 1 enforces at the **send** side. Phase 2 (peer state machine: ACTIVE / SUSPENDED / EVICTED) and Phase 3 (`ruflo-cost-tracker` integration for unified spend reporting) ship in follow-up releases.
+Phase 1 enforces at the **send** side. Phase 2 (peer state machine: ACTIVE / SUSPENDED / EVICTED) and Phase 3 (`rufflo-cost-tracker` integration for unified spend reporting) ship in follow-up releases.
 
 ## Commands
 
@@ -58,18 +58,18 @@ Phase 1 enforces at the **send** side. Phase 2 (peer state machine: ACTIVE / SUS
 
 ## Requires
 
-- `ruflo-core` plugin (provides MCP server)
-- `@claude-flow/security` (cryptographic primitives)
+- `rufflo-core` plugin (provides MCP server)
+- `@rufflo/security` (cryptographic primitives)
 
 ## Compatibility
 
-- **CLI:** pinned to `@claude-flow/cli` v3.6 major+minor.
-- **Federation runtime:** `@claude-flow/plugin-agent-federation` (resolved via `npx -y -p`).
-- **Verification:** `bash plugins/ruflo-federation/scripts/smoke.sh` is the contract.
+- **CLI:** pinned to `@rufflo/cli` v3.6 major+minor.
+- **Federation runtime:** `@rufflo/plugin-agent-federation` (resolved via `npx -y -p`).
+- **Verification:** `bash plugins/rufflo-federation/scripts/smoke.sh` is the contract.
 
 ## Alignment with the canonical 3-gate pattern
 
-Federation's "PII Pipeline" feature is a richer specialization of the canonical 3-gate pattern owned by [ruflo-aidefence ADR-0001](../ruflo-aidefence/docs/adrs/0001-aidefence-contract.md). The mapping:
+Federation's "PII Pipeline" feature is a richer specialization of the canonical 3-gate pattern owned by [rufflo-aidefence ADR-0001](../rufflo-aidefence/docs/adrs/0001-aidefence-contract.md). The mapping:
 
 | Canonical gate | Federation specialization |
 |----------------|--------------------------|
@@ -83,17 +83,17 @@ With the [`aidefence@2.3.0` upgrade (ADR-118)](../../v3/docs/adr/ADR-118-aidefen
 
 ## Namespace coordination
 
-This plugin owns the `federation` AgentDB namespace. This is the documented exception to the kebab-case `<plugin-stem>-<intent>` rule: when a plugin's name *is* the intent, the namespace can match the plugin stem. See [ruflo-agentdb ADR-0001 §"Namespace convention"](../ruflo-agentdb/docs/adrs/0001-agentdb-optimization.md). Reserved namespaces (`pattern`, `claude-memories`, `default`) MUST NOT be shadowed.
+This plugin owns the `federation` AgentDB namespace. This is the documented exception to the kebab-case `<plugin-stem>-<intent>` rule: when a plugin's name *is* the intent, the namespace can match the plugin stem. See [rufflo-agentdb ADR-0001 §"Namespace convention"](../rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md). Reserved namespaces (`pattern`, `claude-memories`, `default`) MUST NOT be shadowed.
 
 `federation` is accessed via `memory_*` tools (namespace-routed). Used for: peer registry, trust score history, audit log indices, message envelope receipts.
 
 ## Verification
 
 ```bash
-bash plugins/ruflo-federation/scripts/smoke.sh
+bash plugins/rufflo-federation/scripts/smoke.sh
 # Expected: "10 passed, 0 failed"
 ```
 
 ## Architecture Decisions
 
-- [`ADR-0001` — ruflo-federation plugin contract (3-gate alignment, ADR-097 budget integration, namespace coordination, smoke as contract)](./docs/adrs/0001-federation-contract.md)
+- [`ADR-0001` — rufflo-federation plugin contract (3-gate alignment, ADR-097 budget integration, namespace coordination, smoke as contract)](./docs/adrs/0001-federation-contract.md)

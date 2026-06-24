@@ -1,4 +1,4 @@
-// Text rendering of results. In the full system these surfaces become Ruflo dashboard
+// Text rendering of results. In the full system these surfaces become Rufflo dashboard
 // panels fed by RuVector read-models (ADR-149/198/202). Here we render to text so the
 // plugin is observable with zero UI dependencies.
 

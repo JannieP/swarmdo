@@ -2,12 +2,12 @@
 
 **Status:** Accepted — Partially Implemented (Phases 1–3 executed; Phase 4 publication deferred — scores below 90% target)
 **Date:** 2026-04-08 · **Updated:** 2026-05-09
-**Author:** ruflo team  
+**Author:** rufflo team  
 **Relates to:** ADR-076 (Memory Bridge), ADR-077 (DiskANN), ADR-075 (Learning Pipeline)
 
 ## Context
 
-[MemPalace](https://github.com/milla-jovovich/mempalace), a new open-source AI memory system, reported a **96.6% raw score** and **100% hybrid score** on [LongMemEval](https://github.com/xiaowu0162/LongMemEval) (ICLR 2025) — a benchmark of 500 questions testing long-term conversational memory across 6 question types. This prompted the question: how does Ruflo's AgentDB memory system compare?
+[MemPalace](https://github.com/milla-jovovich/mempalace), a new open-source AI memory system, reported a **96.6% raw score** and **100% hybrid score** on [LongMemEval](https://github.com/xiaowu0162/LongMemEval) (ICLR 2025) — a benchmark of 500 questions testing long-term conversational memory across 6 question types. This prompted the question: how does Rufflo's AgentDB memory system compare?
 
 ### LongMemEval Landscape (April 2026)
 
@@ -55,7 +55,7 @@ Implement a full LongMemEval benchmark harness for AgentDB and publish results t
 ### Architecture
 
 ```
-v3/@claude-flow/memory/benchmarks/longmemeval/
+v3/@rufflo/memory/benchmarks/longmemeval/
 ├── README.md                    # Setup & reproduction instructions
 ├── harness.ts                   # Main benchmark runner
 ├── adapters/
@@ -173,7 +173,7 @@ Following the honesty audit standards from v3.5.71+:
 - First published LongMemEval score for AgentDB — fills a credibility gap
 - Identifies specific areas where AgentDB's retrieval can be improved
 - Provides a reproducible benchmark for regression testing
-- Positions Ruflo in the growing "AI memory leaderboard" conversation
+- Positions Rufflo in the growing "AI memory leaderboard" conversation
 
 ### Negative
 - If AgentDB scores significantly below 90%, it's a public admission of weakness
@@ -190,10 +190,10 @@ Phases 1–3 executed. Phase 4 (publication) deferred — Content@1 peaked at 26
 
 | Phase | Status | Files | Commit(s) |
 |---|---|---|---|
-| **Phase 1** — Harness setup: ingest pipeline, agentdb-adapter, baseline-adapter, download/run scripts | Implemented | `v3/@claude-flow/memory/benchmarks/longmemeval/harness.ts`, `adapters/agentdb-adapter.ts`, `adapters/baseline-adapter.ts`, `scripts/*.sh`, `types.ts` | `b395d1255 feat: ADR-088 LongMemEval benchmark harness for AgentDB (#1566)` |
-| **Phase 2** — Retrieval parameter tuning (efSearch, M, top-k, recency weighting, BM25+RRF hybrid) | Implemented | `v3/@claude-flow/memory/benchmarks/longmemeval/` (session files + run artifacts) | `6bbbdbe2a bench(adr-088): BM25 + RRF hybrid retrieval` · `f88e99ba1 docs(adr-088): add 2026-05-01 run results` |
+| **Phase 1** — Harness setup: ingest pipeline, agentdb-adapter, baseline-adapter, download/run scripts | Implemented | `v3/@rufflo/memory/benchmarks/longmemeval/harness.ts`, `adapters/agentdb-adapter.ts`, `adapters/baseline-adapter.ts`, `scripts/*.sh`, `types.ts` | `b395d1255 feat: ADR-088 LongMemEval benchmark harness for AgentDB (#1566)` |
+| **Phase 2** — Retrieval parameter tuning (efSearch, M, top-k, recency weighting, BM25+RRF hybrid) | Implemented | `v3/@rufflo/memory/benchmarks/longmemeval/` (session files + run artifacts) | `6bbbdbe2a bench(adr-088): BM25 + RRF hybrid retrieval` · `f88e99ba1 docs(adr-088): add 2026-05-01 run results` |
 | **Phase 3** — Comparative evaluation: n=500, all modes, per-category breakdown, ablations, SOTA config | Implemented | `v3/docs/adr/ADR-088-longmemeval-benchmark.md` (Run Results + Optimization Roadmap sections) | `edf5c6ed1 bench(adr-088): smart-pipeline ablations + bge-large hybrid; metric ceiling reached` · `b6ca2dd5d docs(adr-088): record smart+hybrid SOTA (C@1=26.8%, MRR=0.3269)` |
-| **Phase 3 — QA eval harness** (RAG + LLM judge, comparable to leaderboard) | Implemented | `v3/@claude-flow/memory/benchmarks/longmemeval/evaluate-qa.ts` | `cd198a5c6 bench(adr-088): wire LongMemEval QA eval harness (RAG + LLM judge)` |
+| **Phase 3 — QA eval harness** (RAG + LLM judge, comparable to leaderboard) | Implemented | `v3/@rufflo/memory/benchmarks/longmemeval/evaluate-qa.ts` | `cd198a5c6 bench(adr-088): wire LongMemEval QA eval harness (RAG + LLM judge)` |
 | **Phase 4** — Publish results, GitHub issue, README/CLAUDE.md update, benchmark page | **Deferred** | — | — |
 
 ### Key results (SOTA config: smart hybrid hash+BM25, n=500)
