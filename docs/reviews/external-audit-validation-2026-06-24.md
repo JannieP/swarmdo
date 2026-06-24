@@ -196,13 +196,33 @@ real issue worth scoping carefully:
   package is absent on essentially every install, so `agentdb_pattern-search` /
   `memory_search` degrade — a stored pattern isn't found by semantic search
   even though embeddings (via unscoped `ruvector`) are real.
-- **Why it's not a quick fix:** the right change is a brute-force cosine
-  fallback over the stored real embeddings when `@ruvector/core`'s HNSW is
-  unavailable (so search works wherever `ruvector` embeddings do — most
-  machines). This sits in an intricate path whose own comments warn of an
-  async recursion-OOM (#2312), a false-"not loaded" probe bug (#2356), and the
-  ADR-053 bridge cycle — exactly where a hasty change risks regressions. Scope
-  it deliberately with tests, don't hot-patch.
+- **Why it's not a quick fix (deeper trace):** `searchEntries`
+  (`memory-initializer.ts:2414`) ALREADY degrades past HNSW — it falls back to
+  raw sql.js with a RaBitQ pre-filter + exact-cosine rerank, none of which need
+  `@ruvector/core`. So the residual failures are NOT a missing fallback; they
+  are (a) **embedding quality** — when neither a real ONNX embedder nor the
+  bridge is present, `generateEmbedding` returns deterministic *hash* vectors
+  (`backend: 'mock'`) that can't semantically surface a stored pattern, and
+  (b) the separate `agentdb_pattern_*` path. The path is intricate (its own
+  comments warn of an async recursion-OOM #2312, a false-"not loaded" probe
+  #2356, and the ADR-053 bridge cycle).
+- **Partially fixed (embedding-backend unification, 2026-06-25):** the memory
+  loader degraded straight to `mock` hash even where `ruvector.isOnnxAvailable()`
+  is `true`, because its only ruvector path used `getOptimizedOnnxEmbedder()`
+  (whose ONNX session fails to init on some hosts) and never tried the
+  proven-working `ruvector.embed()` API that `neural-tools`/`demo` use. A new,
+  additive, bridge-FREE tier (`memory-initializer.ts` `loadEmbeddingModel`) now
+  uses `ruvector.embed()` gated by a non-zero probe, so `generateEmbedding` /
+  `generateLocalEmbedding` return `backend: 'onnx'` wherever ruvector works
+  (verified: `__tests__/memory-embeddings-ruvector.test.ts`). Bounded + safe —
+  outside the bridge cycle, skips honestly when ONNX is genuinely absent.
+- **Still open (deliberate, separate):** real embeddings are necessary but not
+  sufficient — `memory_search` / `agentdb_pattern-search` *retrieval* and
+  `memory list` still fail in native-less environments, pointing at the
+  retrieval/store path (HNSW absent → sql.js/RaBitQ rerank, and a db-init issue
+  in `memory list`). That's the remaining intricate work; declaring
+  `@ruvector/core` in `optionalDependencies` is also worth doing. Scope with
+  tests; don't hot-patch.
 
 ### What that means for the test suite
 

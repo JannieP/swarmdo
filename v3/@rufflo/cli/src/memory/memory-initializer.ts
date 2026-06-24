@@ -1814,6 +1814,45 @@ export async function loadEmbeddingModel(options?: {
       }
     }
 
+    // Direct `ruvector.embed()` tier — the SAME API neural-tools + demo use and
+    // that resolves the embedding on hosts where the OptimizedOnnxEmbedder
+    // session above fails to init. Without this, those hosts fell straight to
+    // the `mock` hash backend, silently breaking semantic memory/pattern
+    // search even though a working ONNX embedder was right there. Gated by
+    // `isOnnxAvailable()` and a non-zero probe so we never mislabel hash as ONNX.
+    if ((ruvector as any)?.embed && (ruvector as any).isOnnxAvailable?.()) {
+      try {
+        const unwrap = (r: unknown): number[] | null => {
+          const v = (r && typeof r === 'object' && 'embedding' in (r as Record<string, unknown>))
+            ? (r as { embedding: unknown }).embedding
+            : r;
+          if (Array.isArray(v)) return v as number[];
+          if (v && typeof (v as ArrayLike<number>).length === 'number') return Array.from(v as ArrayLike<number>);
+          return null;
+        };
+        const probe = unwrap(await (ruvector as any).embed('test'));
+        if (probe && probe.length > 0 && probe.some((x) => x !== 0)) {
+          if (verbose) {
+            console.log(`Loading ruvector embedder via embed() (all-MiniLM-L6-v2, ${probe.length}d)...`);
+          }
+          embeddingModelState = {
+            loaded: true,
+            model: async (text: string) => unwrap(await (ruvector as any).embed(text)) ?? [],
+            tokenizer: null,
+            dimensions: probe.length,
+          };
+          return {
+            success: true,
+            dimensions: probe.length,
+            modelName: 'ruvector (all-MiniLM-L6-v2)',
+            loadTime: Date.now() - startTime,
+          };
+        }
+      } catch {
+        // ruvector.embed() probe failed — continue to next fallback.
+      }
+    }
+
     // Legacy fallback: Check for agentic-flow core embeddings
     const agenticFlow = await import('agentic-flow').catch(() => null);
 
