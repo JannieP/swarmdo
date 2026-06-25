@@ -92,6 +92,7 @@
     "publish:all": "./scripts/publish.sh"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.0",
     "typescript": "^5.3.0",
     "vitest": "^4.0.16"
   },
@@ -106,6 +107,7 @@
     "yaml": "^2.8.0"
   },
   "optionalDependencies": {
+    "better-sqlite3": "^12.9.0",
     "@rufflo/aidefence": "workspace:*",
     "@rufflo/codex": "workspace:*",
     "@rufflo/embeddings": "workspace:*",
