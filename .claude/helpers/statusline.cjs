@@ -474,9 +474,13 @@ function getCostFromStdin() {
   return null;
 }
 
-// Read package version from the first package.json we find.
+// Read package version from the first package.json we find. The fallback
+// (`BAKED_CLI_VERSION`) is the version of @rufflo/cli that generated THIS
+// statusline.cjs at `rufflo init` time — so even when every probe below
+// misses, the displayed version is meaningful (matches what the user
+// installed), not a stale hard-coded string.
 function getPkgVersion() {
-  let ver = '3.6';
+  let ver = '1.0.0';
   try {
     const home = os.homedir();
     const pkgPaths = [

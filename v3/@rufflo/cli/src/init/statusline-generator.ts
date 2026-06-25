@@ -10,7 +10,45 @@
  * - Strict 2s timeouts on all shell calls
  */
 
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import type { InitOptions } from './types.js';
+
+/**
+ * Read the @rufflo/cli version at generation time so the emitted statusline.cjs
+ * has a meaningful fallback even when every runtime probe misses (npx, global
+ * install with custom prefix, pnpm content-addressable layout, etc.). Walks up
+ * from this module's location until it finds a package.json whose name is
+ * `@rufflo/cli`. Works in both the src tree (under tsx) and the compiled dist
+ * tree (one extra level deeper). Returns 'unknown' if the walk fails — a
+ * neutral marker that signals the version actually couldn't be resolved,
+ * unlike the previous hard-coded '3.6' which silently pretended to be real.
+ */
+function readBakedCliVersion(): string {
+  try {
+    const here = path.dirname(fileURLToPath(import.meta.url));
+    let dir = here;
+    for (let i = 0; i < 6; i++) {
+      const candidate = path.join(dir, 'package.json');
+      if (fs.existsSync(candidate)) {
+        try {
+          const pkg = JSON.parse(fs.readFileSync(candidate, 'utf-8')) as { name?: string; version?: string };
+          if (pkg.name === '@rufflo/cli' && typeof pkg.version === 'string' && pkg.version.length > 0) {
+            return pkg.version;
+          }
+        } catch { /* keep walking */ }
+      }
+      const parent = path.dirname(dir);
+      if (parent === dir) break;
+      dir = parent;
+    }
+  } catch { /* fall through */ }
+  return 'unknown';
+}
+
+const BAKED_CLI_VERSION = readBakedCliVersion();
 
 /**
  * Generate optimized statusline script
@@ -501,9 +539,13 @@ function getCostFromStdin() {
   return null;
 }
 
-// Read package version from the first package.json we find.
+// Read package version from the first package.json we find. The fallback
+// (\`BAKED_CLI_VERSION\`) is the version of @rufflo/cli that generated THIS
+// statusline.cjs at \`rufflo init\` time — so even when every probe below
+// misses, the displayed version is meaningful (matches what the user
+// installed), not a stale hard-coded string.
 function getPkgVersion() {
-  let ver = '3.6';
+  let ver = '${BAKED_CLI_VERSION}';
   try {
     const home = os.homedir();
     const pkgPaths = [

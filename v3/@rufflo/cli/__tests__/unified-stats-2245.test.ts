@@ -46,7 +46,7 @@ describe('UnifiedLearningStats shape (ADR-075)', () => {
     expect(Array.isArray(stats.consistency.notes)).toBe(true);
     expect(typeof stats.consistency.sonaTracksGlobal).toBe('boolean');
     expect(typeof stats.generatedAt).toBe('string');
-  });
+  }, 30_000); // cold-start ONNX model load (~3s) + memory-bridge init exceeds the 5s default under suite load
 });
 
 describe('Driving each path moves the right counter in the unified view (#2245)', () => {
