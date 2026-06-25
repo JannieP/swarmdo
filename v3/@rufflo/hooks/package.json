@@ -60,9 +60,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@rufflo/memory": "workspace:*",
-    "@rufflo/neural": "workspace:*",
-    "@rufflo/shared": "workspace:*",
+    "@rufflo/memory": "file:../memory",
+    "@rufflo/neural": "file:../neural",
+    "@rufflo/shared": "file:../shared",
     "zod": "^3.23.0"
   },
   "optionalDependencies": {
@@ -75,7 +75,7 @@
     "vitest": "^4.0.16"
   },
   "peerDependencies": {
-    "@rufflo/shared": "workspace:*"
+    "@rufflo/shared": "file:../shared"
   },
   "engines": {
     "node": ">=20.0.0"

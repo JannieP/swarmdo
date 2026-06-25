@@ -140,9 +140,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@rufflo/hooks": "workspace:*",
-    "@rufflo/memory": "workspace:*",
-    "@rufflo/shared": "workspace:*"
+    "@rufflo/hooks": "file:../hooks",
+    "@rufflo/memory": "file:../memory",
+    "@rufflo/shared": "file:../shared"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",

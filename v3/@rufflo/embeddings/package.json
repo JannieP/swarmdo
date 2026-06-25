@@ -48,7 +48,7 @@
     "vitest": "^4.0.16"
   },
   "peerDependencies": {
-    "@rufflo/shared": "workspace:*",
+    "@rufflo/shared": "file:../shared",
     "agentic-flow": "^2.0.0",
     "@huggingface/transformers": "^4.0.0"
   },
