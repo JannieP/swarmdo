@@ -424,7 +424,6 @@
       },
       "npm_headline_total": 4255420,
       "npm": {
-        "rufflo": 765750,
         "rufflo": 298601,
         "@rufflo/cli": 537029,
         "@rufflo/memory": 272833,
@@ -485,7 +484,6 @@
       },
       "npm_headline_total": 4255420,
       "npm": {
-        "rufflo": 765750,
         "rufflo": 298601,
         "@rufflo/cli": 537029,
         "@rufflo/memory": 272833,
@@ -546,7 +544,6 @@
       },
       "npm_headline_total": 4595811,
       "npm": {
-        "rufflo": 785214,
         "rufflo": 341975,
         "@rufflo/cli": 589175,
         "@rufflo/memory": 318622,
@@ -607,7 +604,6 @@
       },
       "npm_headline_total": 4831624,
       "npm": {
-        "rufflo": 795590,
         "rufflo": 370919,
         "@rufflo/cli": 624020,
         "@rufflo/memory": 351840,
@@ -668,7 +664,6 @@
       },
       "npm_headline_total": 5298606,
       "npm": {
-        "rufflo": 827832,
         "rufflo": 445603,
         "@rufflo/cli": 700351,
         "@rufflo/memory": 405476,
@@ -729,15 +724,74 @@
       },
       "npm_headline_total": 6156712,
       "npm": {
-        "rufflo": 883014,
         "rufflo": 548443,
         "@rufflo/cli": 797305,
         "@rufflo/memory": 523555,
         "agentdb": 2120329,
         "agentic-flow": 1284066
       }
+    },
+    {
+      "id": "2026-06-27T07:23:51.210Z-c8c79029",
+      "captured_at": "2026-06-27T07:23:51.210Z",
+      "vector": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "totals": {
+        "clones": 0,
+        "uniques": 0
+      },
+      "repos": {
+        "ruvnet/ruflo": {
+          "count": 0,
+          "uniques": 0,
+          "days": [],
+          "error": "fetch-failed"
+        },
+        "ruvnet/agentdb": {
+          "count": 0,
+          "uniques": 0,
+          "days": [],
+          "error": "fetch-failed"
+        },
+        "ruvnet/agentic-flow": {
+          "count": 0,
+          "uniques": 0,
+          "days": [],
+          "error": "fetch-failed"
+        },
+        "ruvnet/ruvector": {
+          "count": 0,
+          "uniques": 0,
+          "days": [],
+          "error": "fetch-failed"
+        },
+        "ruvnet/ruv-FANN": {
+          "count": 0,
+          "uniques": 0,
+          "days": [],
+          "error": "fetch-failed"
+        }
+      },
+      "npm_headline_total": 3792259,
+      "npm": {
+        "rufflo": 0,
+        "@rufflo/cli": 0,
+        "@rufflo/memory": 0,
+        "agentdb": 2368787,
+        "agentic-flow": 1423472
+      }
     }
   ],
-  "updated_at": "2026-06-14T07:54:57.046Z",
-  "snapshot_count": 6
+  "updated_at": "2026-06-27T07:23:51.210Z",
+  "snapshot_count": 7
 }
