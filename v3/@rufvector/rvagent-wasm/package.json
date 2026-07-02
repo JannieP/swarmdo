@@ -1,0 +1,21 @@
+{
+  "name": "@rufvector/rvagent-wasm",
+  "type": "module",
+  "description": "rvAgent WASM bindings \u2014 browser and Node.js agent execution",
+  "version": "0.1.0",
+  "license": "MIT OR Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ruvnet/RuVector"
+  },
+  "files": [
+    "rvagent_wasm_bg.wasm",
+    "rvagent_wasm.js",
+    "rvagent_wasm.d.ts"
+  ],
+  "main": "rvagent_wasm.js",
+  "types": "rvagent_wasm.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
