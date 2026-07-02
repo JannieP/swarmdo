@@ -110,9 +110,14 @@ export class AttentionBridge {
 
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const wasmModule = await (import('@ruvector/attention-wasm' as any) as Promise<unknown>).catch(() => null);
+      const wasmModule = await (import('@rufvector/attention-wasm' as any) as Promise<unknown>).catch(() => null);
 
-      if (wasmModule) {
+      // Only adopt the WASM module if it actually exposes the attention API this
+      // bridge calls. The forked @rufvector/attention-wasm resolves (unlike the
+      // never-installed upstream package), but its native surface differs, so a
+      // bare truthiness check would swap in a module missing flashAttention()
+      // etc. Fall back to the JS mock module when the interface is absent.
+      if (wasmModule && typeof (wasmModule as { flashAttention?: unknown }).flashAttention === 'function') {
         this._module = wasmModule as unknown as AttentionModule;
       } else {
         this._module = this.createMockModule();

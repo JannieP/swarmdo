@@ -24,9 +24,19 @@ const require = createRequire(import.meta.url);
  * signal by the suite).
  */
 function locateSqlWasm(): string | null {
+  // Resolve the wasm directly. Newer sql.js (>=1.14) ships an `exports` map
+  // that no longer exposes `./package.json`, so the old
+  // `require.resolve('sql.js/package.json')` trick throws. Resolving the wasm
+  // (or the package main and deriving its sibling) works across versions.
   try {
-    const sqljsPkg = require.resolve('sql.js/package.json');
-    const wasmPath = sqljsPkg.replace(/package\.json$/, 'dist/sql-wasm.wasm');
+    const wasmPath = require.resolve('sql.js/dist/sql-wasm.wasm');
+    if (existsSync(wasmPath)) return wasmPath;
+  } catch {
+    /* fall through to main-entry derivation */
+  }
+  try {
+    const main = require.resolve('sql.js'); // e.g. .../sql.js/dist/sql-wasm.js
+    const wasmPath = main.replace(/[^/\\]*$/, 'sql-wasm.wasm');
     return existsSync(wasmPath) ? wasmPath : null;
   } catch {
     return null;
