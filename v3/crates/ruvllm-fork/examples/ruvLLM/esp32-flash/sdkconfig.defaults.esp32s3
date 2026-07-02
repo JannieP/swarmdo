@@ -1,0 +1,30 @@
+# ESP32-S3 sdkconfig overrides for ruvllm-esp32 tiny-agent (ADR-165).
+# Loaded by esp-idf-sys when target = xtensa-esp32s3-espidf.
+
+# CPU & memory
+CONFIG_ESP32S3_DEFAULT_CPU_FREQ_240=y
+CONFIG_SPIRAM=n
+CONFIG_ESP32S3_INSTRUCTION_CACHE_32KB=y
+CONFIG_ESP32S3_DATA_CACHE_64KB=y
+
+# Stack — needs to fit a TinyAgent which holds optional HNSW(256×~150B) +
+# RAG(64×~160B) + SemanticMemory(32×~150B) + LoRA. Bumping to 96 KB headroom.
+CONFIG_ESP_MAIN_TASK_STACK_SIZE=98304
+
+# Console: native USB-Serial/JTAG (esptool detected USB mode `USB-Serial/JTAG`).
+# Setting USB_SERIAL_JTAG=y in the Kconfig "choice" disables the UART default
+# automatically. CONFIG_ESP_CONSOLE_SECONDARY_NONE keeps stdout from being
+# duplicated to UART0 (which has no physical pins on the dev board USB).
+CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y
+CONFIG_ESP_CONSOLE_SECONDARY_NONE=y
+
+# Flash
+CONFIG_ESPTOOLPY_FLASHSIZE_8MB=y
+CONFIG_ESPTOOLPY_FLASHFREQ_80M=y
+
+# Logging
+CONFIG_LOG_DEFAULT_LEVEL_INFO=y
+
+# Trim
+CONFIG_MBEDTLS_SSL_IN_CONTENT_LEN=4096
+CONFIG_MBEDTLS_SSL_OUT_CONTENT_LEN=2048

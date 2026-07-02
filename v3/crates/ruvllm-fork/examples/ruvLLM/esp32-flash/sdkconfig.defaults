@@ -1,0 +1,16 @@
+# Base sdkconfig defaults shared by all ESP32 variants (ADR-165 §2.5).
+# Per-variant tweaks live in `sdkconfig.defaults.<target>`.
+
+# Memory
+CONFIG_SPIRAM_SUPPORT=n
+
+# Logging
+CONFIG_LOG_DEFAULT_LEVEL_INFO=y
+
+# Stack — TinyAgent allocates HNSW/RAG/etc. on stack; per-variant files
+# may bump this further.
+CONFIG_ESP_MAIN_TASK_STACK_SIZE=98304
+
+# Trim
+CONFIG_MBEDTLS_SSL_IN_CONTENT_LEN=4096
+CONFIG_MBEDTLS_SSL_OUT_CONTENT_LEN=2048
