@@ -89,7 +89,8 @@
     "@noble/ed25519": "2.3.0",
     "semver": "7.7.3",
     "zod": "3.25.76",
-    "@rufvector/rabitq-wasm": "file:v3/@rufvector/rabitq-wasm"
+    "@rufvector/rabitq-wasm": "file:v3/@rufvector/rabitq-wasm",
+    "rufvector": "file:v3/vendor/rufvector"
   },
   "optionalDependencies": {
     "@rufflo/aidefence": "file:v3/@rufflo/aidefence",

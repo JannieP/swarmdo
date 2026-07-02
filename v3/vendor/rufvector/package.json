@@ -82,7 +82,7 @@
     "ora": "^5.4.1"
   },
   "optionalDependencies": {
-    "@rufvector/rvf": "^0.1.0",
+    "@rufvector/rvf": "file:../../@rufvector/rvf",
     "@rufvector/tiny-dancer": "file:../../@rufvector/tiny-dancer"
   },
   "devDependencies": {
