@@ -110,6 +110,10 @@ mcp-server.log
 memory/backups/
 node_modules/
 npm-debug.log*
+# Rust build artifacts from the forked native crates (v3/crates/**)
+target/
+**/target/
+*.rlib
 out/
 output/
 package
