@@ -2,7 +2,7 @@
  * ReasoningBank Integration Plugin
  *
  * Stores successful reasoning trajectories and retrieves them for similar problems.
- * Uses @ruvector/wasm for vector storage with HNSW indexing (<1ms search).
+ * Uses @rufvector/wasm for vector storage with HNSW indexing (<1ms search).
  *
  * Features:
  * - Store reasoning chains with embeddings
@@ -438,7 +438,7 @@ async function getReasoningBank(): Promise<ReasoningBank> {
 }
 
 export const reasoningBankPlugin = new PluginBuilder('reasoning-bank', '1.0.0')
-  .withDescription('Store and retrieve reasoning trajectories using @ruvector/wasm HNSW indexing')
+  .withDescription('Store and retrieve reasoning trajectories using @rufvector/wasm HNSW indexing')
   .withAuthor('Rufflo Team')
   .withTags(['reasoning', 'memory', 'learning', 'ruvector', 'hnsw'])
   .withMCPTools([
@@ -600,7 +600,7 @@ export const reasoningBankPlugin = new PluginBuilder('reasoning-bank', '1.0.0')
             type: 'text',
             text: `📊 **ReasoningBank Statistics:**\n\n` +
               `**Total Trajectories:** ${stats.total}\n` +
-              `**Backend:** @ruvector/wasm HNSW\n\n` +
+              `**Backend:** @rufvector/wasm HNSW\n\n` +
               `**By Outcome:**\n` +
               `  ✅ Success: ${stats.byOutcome.success}\n` +
               `  ❌ Failure: ${stats.byOutcome.failure}\n` +
@@ -648,7 +648,7 @@ export const reasoningBankPlugin = new PluginBuilder('reasoning-bank', '1.0.0')
       .build(),
   ])
   .onInitialize(async (ctx) => {
-    ctx.logger.info('ReasoningBank plugin initializing with @ruvector/wasm...');
+    ctx.logger.info('ReasoningBank plugin initializing with @rufvector/wasm...');
     await getReasoningBank();
     ctx.logger.info('ReasoningBank ready - HNSW indexing enabled');
   })

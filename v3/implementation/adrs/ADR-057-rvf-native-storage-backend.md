@@ -671,7 +671,7 @@ The `rvf` provider is **not a replacement for neural embeddings** — it provide
 
 ### The Problem
 
-The ruvLLM learning system (`@ruvector/ruvllm`) generates persistent state that currently lives in scattered locations:
+The ruvLLM learning system (`@rufvector/rufllm`) generates persistent state that currently lives in scattered locations:
 
 | Component | Current Storage | Size | Format |
 |-----------|----------------|------|--------|
@@ -701,7 +701,7 @@ learning.rvf
 
 ```typescript
 import { RvfDatabase } from '@ruvector/rvf';
-import { ReasoningBank, EwcManager, LoraAdapter, SonaCoordinator } from '@ruvector/ruvllm';
+import { ReasoningBank, EwcManager, LoraAdapter, SonaCoordinator } from '@rufvector/rufllm';
 
 export class RvfLearningStore {
   private db: RvfDatabase;
@@ -1500,7 +1500,7 @@ The progressive download approach replaces npm's `optionalDependencies`:
 - [RuVector Format Specification](https://github.com/ruvnet/ruvector/blob/main/crates/rvf/README.md)
 - [ruvLLM Self-Learning LLM Engine](https://github.com/ruvnet/ruvector/blob/main/crates/ruvllm/README.md)
 - [@ruvector/rvf npm SDK](https://www.npmjs.com/package/@ruvector/rvf)
-- [@ruvector/ruvllm npm SDK](https://www.npmjs.com/package/@ruvector/ruvllm)
+- [@rufvector/rufllm npm SDK](https://www.npmjs.com/package/@rufvector/rufllm)
 - [ruvector npm package](https://www.npmjs.com/package/ruvector)
 - [ADR-053: AgentDB v3 Controller Activation](./ADR-053-agentdb-v3-controller-activation.md)
 - [ADR-054: RVF-Powered Plugin Marketplace](./ADR-054-rvf-powered-plugin-marketplace.md)

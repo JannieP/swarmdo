@@ -15,10 +15,10 @@ import { createRequire } from 'node:module';
 import { readFileMaybeEncrypted, writeFileRestricted } from '../fs-secure.js';
 
 /**
- * #2356 — cached, synchronous capability probe for @ruvector/core. `getHNSWStatus`
+ * #2356 — cached, synchronous capability probe for @rufvector/core. `getHNSWStatus`
  * is sync and is called by `neural status` in a fresh process that never warms
  * the lazy HNSW singleton, so reporting availability off the warm singleton
- * alone produced a false "Not loaded — @ruvector/core not available" even when
+ * alone produced a false "Not loaded — @rufvector/core not available" even when
  * the package is installed and exposes VectorDb. Resolving the module (without
  * importing/initializing it) is a faithful, cheap availability signal.
  */
@@ -27,7 +27,7 @@ function isRuvectorCoreResolvable(): boolean {
   if (_ruvectorCoreResolvable !== undefined) return _ruvectorCoreResolvable;
   try {
     const req = createRequire(import.meta.url);
-    req.resolve('@ruvector/core');
+    req.resolve('@rufvector/core');
     _ruvectorCoreResolvable = true;
   } catch {
     _ruvectorCoreResolvable = false;
@@ -39,12 +39,12 @@ function isRuvectorCoreResolvable(): boolean {
  * #1854: previously every site that needed the memory directory hardcoded
  * `getMemoryRoot()`, so the documented config entry
  * points (`memory.persistPath` config field, `memory configure --path`,
- * `CLAUDE_FLOW_MEMORY_PATH` env var) all silently no-op'd. This helper
+ * `RUFFLO_MEMORY_PATH` env var) all silently no-op'd. This helper
  * is the single source of truth — every `.swarm/memory.db` resolution in
  * this file flows through it.
  *
  * Precedence (highest → lowest):
- *   1. CLAUDE_FLOW_MEMORY_PATH env var
+ *   1. RUFFLO_MEMORY_PATH env var
  *   2. memory.persistPath / memory.path in rufflo.config.json (cwd or
  *      the directory the CLI was invoked from)
  *   3. Default: cwd/.swarm
@@ -55,11 +55,11 @@ function isRuvectorCoreResolvable(): boolean {
 let _memoryRootCache: string | undefined;
 export function getMemoryRoot(): string {
   // 1. Env var — checked FIRST and honored DYNAMICALLY (never cached). An
-  //    explicit CLAUDE_FLOW_MEMORY_PATH should take effect immediately whenever
+  //    explicit RUFFLO_MEMORY_PATH should take effect immediately whenever
   //    it's set or changed (it's a cheap read + resolve), so a process — or a
   //    test isolating its store to a temp dir — always gets the path it asked
   //    for, regardless of any earlier cached config/default resolution.
-  const envPath = process.env.CLAUDE_FLOW_MEMORY_PATH;
+  const envPath = process.env.RUFFLO_MEMORY_PATH;
   if (envPath && envPath.trim().length > 0) {
     return path.resolve(envPath);
   }
@@ -100,15 +100,15 @@ export function _resetMemoryRootCache(): void {
  * #2105: Resolve the full path to the SQLite memory database.
  * Precedence (highest to lowest):
  *   1. cliFlag             - explicit --path flag passed by a subcommand
- *   2. CLAUDE_FLOW_DB_PATH - full file-path override (new in #2105)
- *   3. getMemoryRoot()/memory.db - directory from CLAUDE_FLOW_MEMORY_PATH /
+ *   2. RUFFLO_DB_PATH - full file-path override (new in #2105)
+ *   3. getMemoryRoot()/memory.db - directory from RUFFLO_MEMORY_PATH /
  *                                  config / default cwd/.swarm
  */
 export function resolveDbPath(cliFlag?: string): string {
   if (cliFlag && cliFlag.trim().length > 0) {
     return path.resolve(cliFlag);
   }
-  const envDb = process.env.CLAUDE_FLOW_DB_PATH;
+  const envDb = process.env.RUFFLO_DB_PATH;
   if (envDb && envDb.trim().length > 0) {
     return path.resolve(envDb);
   }
@@ -123,7 +123,7 @@ async function getBridge(): Promise<typeof import('./memory-bridge.js') | null> 
   // fallback, so smokes that verify legacy-DB migration semantics need a
   // way to bypass the bridge. Also useful when the bridge would hang on
   // network-bound init (Xenova model fetch) in offline CI.
-  if (process.env.CLAUDE_FLOW_DISABLE_BRIDGE === '1') return null;
+  if (process.env.RUFFLO_DISABLE_BRIDGE === '1') return null;
   if (_bridge === null) return null;
   if (_bridge) return _bridge;
   try {
@@ -462,7 +462,7 @@ CREATE TABLE IF NOT EXISTS metadata (
 
 // ============================================================================
 // HNSW INDEX SINGLETON (150x faster vector search)
-// Uses @ruvector/core from agentic-flow for WASM-accelerated HNSW
+// Uses @rufvector/core from agentic-flow for WASM-accelerated HNSW
 // ============================================================================
 
 interface HNSWEntry {
@@ -510,9 +510,9 @@ export async function getHNSWIndex(options?: {
   hnswInitializing = true;
 
   try {
-    // Import @ruvector/core dynamically
+    // Import @rufvector/core dynamically
     // Handle both ESM (default export) and CJS patterns
-    const ruvectorModule = await import('@ruvector/core').catch(() => null);
+    const ruvectorModule = await import('@rufvector/core').catch(() => null);
     if (!ruvectorModule) {
       hnswInitializing = false;
       return null; // HNSW not available
@@ -537,7 +537,7 @@ export async function getHNSWIndex(options?: {
     const dbPath = options?.dbPath ? path.resolve(options.dbPath) : path.join(swarmDir, 'memory.db');
 
     // Create HNSW index with persistent storage
-    // @ruvector/core uses string enum for distanceMetric: 'Cosine', 'Euclidean', 'DotProduct', 'Manhattan'
+    // @rufvector/core uses string enum for distanceMetric: 'Cosine', 'Euclidean', 'DotProduct', 'Manhattan'
     const db = new VectorDb({
       dimensions,
       distanceMetric: 'Cosine',
@@ -720,7 +720,7 @@ export async function searchHNSWIndex(
       }
 
       // Convert cosine distance to similarity score (1 - distance)
-      // Cosine distance from @ruvector/core: 0 = identical, 2 = opposite
+      // Cosine distance from @rufvector/core: 0 = identical, 2 = opposite
       const score = 1 - (result.score / 2);
 
       filtered.push({
@@ -764,7 +764,7 @@ export function getHNSWStatus(): {
   }
 
   // #2356: `available` now reflects real capability (index already loaded OR
-  // @ruvector/core installed and resolvable), not merely whether the lazy
+  // @rufvector/core installed and resolvable), not merely whether the lazy
   // singleton happens to be warm in this process. `initialized` still reports
   // whether the in-process index is actually loaded, so callers can tell
   // "installed but not yet loaded" apart from "loaded".
@@ -1784,7 +1784,7 @@ export async function loadEmbeddingModel(options?: {
     // v0.2.16: LoRA B=0 fix makes AdaptiveEmbedder safe (identity when untrained)
     // Note: isReady() returns false until first embed() call (lazy init), so we
     // skip the isReady() gate and verify with a probe embed instead.
-    const ruvector = await import('ruvector').catch(() => null);
+    const ruvector = await import('rufvector').catch(() => null);
 
     if (ruvector?.initOnnxEmbedder) {
       try {

@@ -48,7 +48,7 @@ describe('terminal-tools encryption-at-rest (ADR-096 Phase 3)', () => {
   let cwdSpy: ReturnType<typeof vi.spyOn> | null = null;
 
   beforeEach(() => {
-    saveEnv('CLAUDE_FLOW_ENCRYPT_AT_REST', 'CLAUDE_FLOW_ENCRYPTION_KEY');
+    saveEnv('RUFFLO_ENCRYPT_AT_REST', 'RUFFLO_ENCRYPTION_KEY');
     workdir = mkdtempSync(join(tmpdir(), 'term-enc-'));
     cwdSpy = vi.spyOn(process, 'cwd').mockReturnValue(workdir);
   });
@@ -61,8 +61,8 @@ describe('terminal-tools encryption-at-rest (ADR-096 Phase 3)', () => {
 
   describe('encryption disabled (legacy plaintext)', () => {
     beforeEach(() => {
-      delete process.env.CLAUDE_FLOW_ENCRYPT_AT_REST;
-      delete process.env.CLAUDE_FLOW_ENCRYPTION_KEY;
+      delete process.env.RUFFLO_ENCRYPT_AT_REST;
+      delete process.env.RUFFLO_ENCRYPTION_KEY;
     });
 
     it('writes plaintext JSON to disk', async () => {
@@ -90,8 +90,8 @@ describe('terminal-tools encryption-at-rest (ADR-096 Phase 3)', () => {
 
   describe('encryption enabled (RFE1 wire format)', () => {
     beforeEach(() => {
-      process.env.CLAUDE_FLOW_ENCRYPT_AT_REST = '1';
-      process.env.CLAUDE_FLOW_ENCRYPTION_KEY = randomBytes(32).toString('hex');
+      process.env.RUFFLO_ENCRYPT_AT_REST = '1';
+      process.env.RUFFLO_ENCRYPTION_KEY = randomBytes(32).toString('hex');
     });
 
     it('writes a blob that starts with the RFE1 magic', async () => {
@@ -124,13 +124,13 @@ describe('terminal-tools encryption-at-rest (ADR-096 Phase 3)', () => {
   describe('migration: legacy plaintext readable after gate flips on', () => {
     it('reads a legacy plaintext store after encryption is enabled', async () => {
       // Step 1: write plaintext (gate off)
-      delete process.env.CLAUDE_FLOW_ENCRYPT_AT_REST;
-      delete process.env.CLAUDE_FLOW_ENCRYPTION_KEY;
+      delete process.env.RUFFLO_ENCRYPT_AT_REST;
+      delete process.env.RUFFLO_ENCRYPTION_KEY;
       await runCreate('legacy-readable');
 
       // Step 2: flip encryption on for the read
-      process.env.CLAUDE_FLOW_ENCRYPT_AT_REST = '1';
-      process.env.CLAUDE_FLOW_ENCRYPTION_KEY = randomBytes(32).toString('hex');
+      process.env.RUFFLO_ENCRYPT_AT_REST = '1';
+      process.env.RUFFLO_ENCRYPTION_KEY = randomBytes(32).toString('hex');
 
       // Step 3: list should still find the legacy session via the
       // magic-byte sniff (legacy file → not encrypted → returned as-is)
@@ -145,16 +145,16 @@ describe('terminal-tools encryption-at-rest (ADR-096 Phase 3)', () => {
   describe('mixed: same store, plaintext write then encrypted overwrite', () => {
     it('rewrites the file as encrypted on the next write after gate flips on', async () => {
       // Step 1: legacy plaintext write
-      delete process.env.CLAUDE_FLOW_ENCRYPT_AT_REST;
-      delete process.env.CLAUDE_FLOW_ENCRYPTION_KEY;
+      delete process.env.RUFFLO_ENCRYPT_AT_REST;
+      delete process.env.RUFFLO_ENCRYPTION_KEY;
       await runCreate('plain-first');
       expect(isEncryptedBlob(readFileSync(getStoreFile(workdir)))).toBe(false);
 
       // Step 2: enable encryption and add a second session — saveTerminalStore
       // rewrites the WHOLE file, so the result is encrypted bytes that
       // contain both sessions.
-      process.env.CLAUDE_FLOW_ENCRYPT_AT_REST = '1';
-      process.env.CLAUDE_FLOW_ENCRYPTION_KEY = randomBytes(32).toString('hex');
+      process.env.RUFFLO_ENCRYPT_AT_REST = '1';
+      process.env.RUFFLO_ENCRYPTION_KEY = randomBytes(32).toString('hex');
       await runCreate('encrypted-second');
 
       const onDisk = readFileSync(getStoreFile(workdir));

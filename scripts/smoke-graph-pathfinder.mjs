@@ -30,7 +30,7 @@ function assert(c, l, r = '') { c ? pass(l) : fail(l, r || 'assertion false'); }
 
 const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'adr130-p5-'));
 const dbPath = path.join(tmpDir, 'memory.db');
-process.env.CLAUDE_FLOW_MEMORY_PATH = tmpDir;
+process.env.RUFFLO_MEMORY_PATH = tmpDir;
 
 async function cleanup() {
   try { fs.rmSync(tmpDir, { recursive: true, force: true }); } catch {}

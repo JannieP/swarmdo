@@ -80,24 +80,36 @@
     "vitest": "^4.0.16"
   },
   "peerDependencies": {
-    "@ruvector/micro-hnsw-wasm": ">=0.1.0",
-    "@ruvector/attention-wasm": ">=0.1.0",
-    "@ruvector/gnn-wasm": ">=0.1.0",
-    "@ruvector/hyperbolic-hnsw-wasm": ">=0.1.0",
-    "@ruvector/learning-wasm": ">=0.1.0",
-    "@ruvector/exotic-wasm": ">=0.1.0",
-    "@ruvector/cognitum-gate-kernel": ">=0.1.0",
-    "@ruvector/sona": ">=0.1.0"
+    "@rufvector/sona": ">=0.1.0",
+    "@rufvector/attention-wasm": "file:../../@rufvector/attention-wasm",
+    "@rufvector/learning-wasm": "file:../../@rufvector/learning-wasm",
+    "@rufvector/exotic-wasm": "file:../../@rufvector/exotic-wasm"
   },
   "peerDependenciesMeta": {
-    "@ruvector/micro-hnsw-wasm": { "optional": true },
-    "@ruvector/attention-wasm": { "optional": true },
-    "@ruvector/gnn-wasm": { "optional": true },
-    "@ruvector/hyperbolic-hnsw-wasm": { "optional": true },
-    "@ruvector/learning-wasm": { "optional": true },
-    "@ruvector/exotic-wasm": { "optional": true },
-    "@ruvector/cognitum-gate-kernel": { "optional": true },
-    "@ruvector/sona": { "optional": true }
+    "@rufvector/micro-hnsw-wasm": {
+      "optional": true
+    },
+    "@rufvector/attention-wasm": {
+      "optional": true
+    },
+    "@rufvector/gnn-wasm": {
+      "optional": true
+    },
+    "@rufvector/hyperbolic-hnsw-wasm": {
+      "optional": true
+    },
+    "@rufvector/learning-wasm": {
+      "optional": true
+    },
+    "@rufvector/exotic-wasm": {
+      "optional": true
+    },
+    "@rufvector/cognitum-gate-kernel": {
+      "optional": true
+    },
+    "@rufvector/sona": {
+      "optional": true
+    }
   },
   "engines": {
     "node": ">=18.0.0"
@@ -105,5 +117,11 @@
   "publishConfig": {
     "access": "public",
     "tag": "v3alpha"
+  },
+  "optionalDependencies": {
+    "@rufvector/micro-hnsw-wasm": ">=0.1.0",
+    "@rufvector/gnn-wasm": ">=0.1.0",
+    "@rufvector/hyperbolic-hnsw-wasm": ">=0.1.0",
+    "@rufvector/cognitum-gate-kernel": ">=0.1.0"
   }
 }

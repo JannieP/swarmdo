@@ -97,14 +97,14 @@ Usage: /vector <subcommand> [options]
 57. **brain share `<title>`** — `npx -y ruvector@0.2.25 brain share "TITLE"`
 58. **brain list / get / vote / delete / drift / partition / transfer / sync / page** — full Brainpedia + LoRA-weight management.
 
-## SONA (Self-Optimizing Neural Architecture) — needs `@ruvector/ruvllm`
+## SONA (Self-Optimizing Neural Architecture) — needs `@rufvector/rufllm`
 
 59. **sona status / info / stats** — `npx -y ruvector@0.2.25 sona status`
 60. **sona patterns `<query>`** — `npx -y ruvector@0.2.25 sona patterns "QUERY"`
 61. **sona train `<data>`** — `npx -y ruvector@0.2.25 sona train <data>` (record a training trajectory)
 62. **sona export** — `npx -y ruvector@0.2.25 sona export` (export learned weights)
 
-## LLM orchestration — needs `@ruvector/ruvllm`
+## LLM orchestration — needs `@rufvector/rufllm`
 
 63. **llm models** — `npx -y ruvector@0.2.25 llm models`
 64. **llm embed `<text>`** — `npx -y ruvector@0.2.25 llm embed "TEXT"` (RuvLLM-backed embeddings)

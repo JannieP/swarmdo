@@ -93,12 +93,12 @@ Before any tool response from an MCP server enters agent reasoning:
 | P4 | MCP auth validator wired before tool result processing | `@rufflo/cli/src/mcp/auth-validator.ts` |
 | P5 | Provenance log + dual-graph audit CLI | `@rufflo/cli/src/commands/audit.ts` |
 
-P2–P5 ship behind `CLAUDE_FLOW_STRICT_AUTH=true` so existing pipelines continue to work in legacy permissive mode until v4.0.
+P2–P5 ship behind `RUFFLO_STRICT_AUTH=true` so existing pipelines continue to work in legacy permissive mode until v4.0.
 
 ### Backwards compatibility
 
 - The `scope` field on the envelope is **optional** in v1. Agents that don't set scope operate in legacy mode (all tools allowed, depth unlimited, server auth unchecked).
-- `CLAUDE_FLOW_STRICT_AUTH=true` enables enforcement. This env var is a documented escape hatch (registered in `audit-env-var-precedence.mjs`).
+- `RUFFLO_STRICT_AUTH=true` enables enforcement. This env var is a documented escape hatch (registered in `audit-env-var-precedence.mjs`).
 - Existing `SafeExecutor` is unchanged.
 
 ## Alternatives considered

@@ -237,7 +237,7 @@ export class QLearningRouter {
    */
   async initialize(): Promise<void> {
     try {
-      const ruvector = await import('@ruvector/core');
+      const ruvector = await import('@rufvector/core');
       this.ruvectorEngine = (ruvector as any).createQLearning?.(this.config);
       this.useNative = !!this.ruvectorEngine;
     } catch {

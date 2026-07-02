@@ -661,7 +661,7 @@ For complete instructions, see \`AGENTS.md\`.
 
 \`\`\`bash
 # Development settings
-CLAUDE_FLOW_LOG_LEVEL=debug
+RUFFLO_LOG_LEVEL=debug
 \`\`\`
 
 ## Personal Preferences

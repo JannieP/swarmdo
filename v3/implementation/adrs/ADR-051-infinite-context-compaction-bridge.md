@@ -528,14 +528,14 @@ State is persisted to `.rufflo/data/autopilot-state.json`:
 
 | Environment Variable | Default | Description |
 |---------------------|---------|-------------|
-| `CLAUDE_FLOW_COMPACT_RESTORE_BUDGET` | `4000` | Max chars for restored context in SessionStart |
-| `CLAUDE_FLOW_COMPACT_INSTRUCTION_BUDGET` | `2000` | Max chars for custom compact instructions |
-| `CLAUDE_FLOW_AUTO_OPTIMIZE` | `true` | Enable importance ranking, pruning, RuVector sync |
-| `CLAUDE_FLOW_RETENTION_DAYS` | `30` | Auto-prune never-accessed entries older than N days |
-| `CLAUDE_FLOW_CONTEXT_AUTOPILOT` | `true` | Enable Context Autopilot tracking |
-| `CLAUDE_FLOW_CONTEXT_WINDOW` | `200000` | Context window size in tokens |
-| `CLAUDE_FLOW_AUTOPILOT_WARN` | `0.70` | Warning threshold (70%) |
-| `CLAUDE_FLOW_AUTOPILOT_PRUNE` | `0.85` | Critical threshold (85%) — session rotation advised |
+| `RUFFLO_COMPACT_RESTORE_BUDGET` | `4000` | Max chars for restored context in SessionStart |
+| `RUFFLO_COMPACT_INSTRUCTION_BUDGET` | `2000` | Max chars for custom compact instructions |
+| `RUFFLO_AUTO_OPTIMIZE` | `true` | Enable importance ranking, pruning, RuVector sync |
+| `RUFFLO_RETENTION_DAYS` | `30` | Auto-prune never-accessed entries older than N days |
+| `RUFFLO_CONTEXT_AUTOPILOT` | `true` | Enable Context Autopilot tracking |
+| `RUFFLO_CONTEXT_WINDOW` | `200000` | Context window size in tokens |
+| `RUFFLO_AUTOPILOT_WARN` | `0.70` | Warning threshold (70%) |
+| `RUFFLO_AUTOPILOT_PRUNE` | `0.85` | Critical threshold (85%) — session rotation advised |
 
 ### RuVector PostgreSQL (Optional)
 
@@ -597,7 +597,7 @@ State is persisted to `.rufflo/data/autopilot-state.json`:
 
 ## Self-Learning Optimization Pipeline
 
-When `CLAUDE_FLOW_AUTO_OPTIMIZE` is not `false` (default: enabled), the system
+When `RUFFLO_AUTO_OPTIMIZE` is not `false` (default: enabled), the system
 automatically optimizes storage and retrieval using 5 self-learning stages:
 
 ### Stage 1: Confidence Decay
@@ -628,7 +628,7 @@ survive regardless of age, while irrelevant entries are pruned quickly.
 
 Standard retention policy as safety net:
 - **Criteria**: `access_count = 0` AND `created_at < now - RETENTION_DAYS`
-- **Default retention**: 30 days (configurable via `CLAUDE_FLOW_RETENTION_DAYS`)
+- **Default retention**: 30 days (configurable via `RUFFLO_RETENTION_DAYS`)
 - **Never prunes accessed entries**: If it was ever restored, it's kept
 
 ### Stage 4: ONNX Embedding Generation (384-dim)

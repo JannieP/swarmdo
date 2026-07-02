@@ -19,11 +19,11 @@ let prevCwd: string | undefined;
 
 beforeEach(() => {
   dir = mkdtempSync(join(tmpdir(), 'rufflo-disp-'));
-  prevCwd = process.env.CLAUDE_FLOW_CWD;
-  process.env.CLAUDE_FLOW_CWD = dir; // getProjectCwd() honors this
+  prevCwd = process.env.RUFFLO_CWD;
+  process.env.RUFFLO_CWD = dir; // getProjectCwd() honors this
 });
 afterEach(() => {
-  if (prevCwd === undefined) delete process.env.CLAUDE_FLOW_CWD; else process.env.CLAUDE_FLOW_CWD = prevCwd;
+  if (prevCwd === undefined) delete process.env.RUFFLO_CWD; else process.env.RUFFLO_CWD = prevCwd;
   try { rmSync(dir, { recursive: true, force: true }); } catch { /* ignore */ }
 });
 

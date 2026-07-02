@@ -245,7 +245,7 @@ const benchmarkCommand: Command = {
       spinner.setText('Benchmarking HNSW search...');
       // Trigger lazy initialization before reading status (#1698) — without
       // this the singleton stays null and we report "No index" even when
-      // @ruvector/core is loadable and the index has data on disk.
+      // @rufvector/core is loadable and the index has data on disk.
       await getHNSWIndex().catch(() => null);
       const hnswStatus = getHNSWStatus();
 

@@ -76,7 +76,7 @@ Full command reference: [`USERGUIDE.md`](USERGUIDE.md).
 
 **Encryption at rest — [ADR-096](../v3/docs/adr/ADR-096-encryption-at-rest.md), all 4 phases shipped**:
 - AES-256-GCM vault module with magic-byte format (`RFE1`) for backward-compat migration.
-- Opt-in via `CLAUDE_FLOW_ENCRYPT_AT_REST=1`; off-by-default preserves the 1865-test baseline.
+- Opt-in via `RUFFLO_ENCRYPT_AT_REST=1`; off-by-default preserves the 1865-test baseline.
 - High-tier stores wired: `sessions/`, `terminals/`, `.swarm/memory.db` (sql.js SQLite + ONNX embeddings).
 - 76 dedicated tests across vault primitives, integration, tamper detection, migration paths.
 

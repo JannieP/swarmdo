@@ -33,7 +33,7 @@ let bridgeAvailable: boolean | null = null;
  * or the special ':memory:' path.
  *
  * #1945: the previous hard-coded `<cwd>/.swarm/memory.db` default ignored
- * `CLAUDE_FLOW_MEMORY_PATH` / `rufflo.config.json#memory.persistPath`
+ * `RUFFLO_MEMORY_PATH` / `rufflo.config.json#memory.persistPath`
  * — so users with non-default memory paths had `memory init` write to e.g.
  * `data/memory/memory.db` while `bridgeStoreEntry()` wrote to
  * `.swarm/memory.db`. CLI store reported success against the wrong file and
@@ -46,7 +46,7 @@ let bridgeAvailable: boolean | null = null;
 function getDbPath(customPath?: string): string {
   let defaultDir = path.resolve(process.cwd(), '.swarm');
   try {
-    // `getMemoryRoot()` honors $CLAUDE_FLOW_MEMORY_PATH, then the
+    // `getMemoryRoot()` honors $RUFFLO_MEMORY_PATH, then the
     // rufflo.config.json `memory.persistPath`, then defaults to `.swarm`.
     const cjsRequire = createRequire(import.meta.url);
     const mod = cjsRequire('./memory-initializer.js') as { getMemoryRoot?: () => string };
@@ -175,7 +175,7 @@ async function getRegistry(dbPath?: string): Promise<any | null> {
 
             // ADR-093 F9: probe multiple router class names across agentdb
             // alpha versions (alpha.10 had SemanticRouter; alpha.11+ removed
-            // it in favor of @ruvector/router; future versions may
+            // it in favor of @rufvector/router; future versions may
             // reintroduce). Wire only if .route() is callable.
             try {
               const candidates = ['SemanticRouter', 'IntentRouter', 'TaskRouter'] as const;
@@ -2486,7 +2486,7 @@ export async function bridgeContextSynthesize(params: { query: string; maxEntrie
 
 /**
  * Route via SemanticRouter.
- * Available since agentdb 3.0.0-alpha.10 — uses @ruvector/router for
+ * Available since agentdb 3.0.0-alpha.10 — uses @rufvector/router for
  * semantic matching with keyword fallback.
  */
 export async function bridgeSemanticRoute(params: { input: string }): Promise<any> {

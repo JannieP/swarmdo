@@ -94,7 +94,7 @@ on:
       - 'scripts/smoke-memory-stats-legacy-db.mjs'
       # ADR-125 Phase 7 — no stray DB artifacts after `npm test` in
       # @rufflo/memory. vitest.setup.ts must wipe *.db / *.rvf /
-      # *.redb files written by agentdb / @ruvector/rvf bindings.
+      # *.redb files written by agentdb / @rufvector/rvf bindings.
       - 'v3/@rufflo/memory/vitest.setup.ts'
       - 'v3/@rufflo/memory/vitest.config.ts'
       - 'v3/@rufflo/memory/vitest.config.mts'
@@ -1187,7 +1187,7 @@ jobs:
   memory-no-stray-db-smoke:
     # Regression guard for ADR-125 Phase 7 — vitest.setup.ts in
     # @rufflo/memory must wipe any *.db / *.db-journal / *.db-wal /
-    # *.rvf / *.redb files written by agentdb / @ruvector/rvf native
+    # *.rvf / *.redb files written by agentdb / @rufvector/rvf native
     # bindings during the test run. This smoke:
     #   1. records `git status --porcelain` baseline in v3/@rufflo/memory
     #   2. runs `npm test` inside that package
@@ -1660,7 +1660,7 @@ jobs:
       - name: Run env-var-precedence audit (ADR-125 / ADR-130)
         # Guards the "CLI flag > ENV var > default" precedence rule added in
         # ADR-125 (rvagent integration) and ADR-130 (graph intelligence).
-        # Scans v3/cli/src and plugins/ for any CLAUDE_FLOW_* / RUFLO_* env
+        # Scans v3/cli/src and plugins/ for any RUFFLO_* / RUFLO_* env
         # var read that lacks a documented CLI-flag override path or is not
         # registered as an intentional escape hatch (CI/credential/process
         # signal). Fails closed (exit 1) — prevents future contributors from
@@ -1999,7 +1999,7 @@ jobs:
           # Use the project-agnostic verifier from rufflo-core plugin. This
           # is the same script external adopters use — dogfooding ensures
           # the plugin pathway works and avoids CI-specific cli build
-          # issues (e.g. missing @ruvector/sona, sharp native postinstall).
+          # issues (e.g. missing @rufvector/sona, sharp native postinstall).
           # Capture both streams; analyze regardless of exit code so we
           # always see WHY a verification failed.
           # OS-specific manifest path (verification/<os>/manifest.md.json).

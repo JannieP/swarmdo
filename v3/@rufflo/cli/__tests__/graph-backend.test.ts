@@ -1,5 +1,5 @@
 /**
- * ADR-087: @ruvector/graph-node native graph database backend tests
+ * ADR-087: @rufvector/graph-node native graph database backend tests
  *
  * Tests the wrapper module's exports and CJS import pattern.
  * The actual graph-node integration is verified by the e2e node script.
@@ -62,12 +62,12 @@ describe('ADR-087: graph-node backend', () => {
   });
 
   describe('CJS import pattern', () => {
-    it('source uses createRequire for @ruvector/graph-node', async () => {
+    it('source uses createRequire for @rufvector/graph-node', async () => {
       const { readFileSync } = await import('fs');
       const { join } = await import('path');
       const content = readFileSync(join(import.meta.dirname, '..', 'src', 'ruvector', 'graph-backend.ts'), 'utf8');
       expect(content).toContain('createRequire');
-      expect(content).toContain("'@ruvector/graph-node'");
+      expect(content).toContain("'@rufvector/graph-node'");
       // Should NOT use ESM dynamic import for graph-node
       expect(content).not.toMatch(/await import\(['"]@ruvector\/graph-node['"]\)/);
     });

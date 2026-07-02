@@ -81,7 +81,7 @@ const INVARIANTS = [
     why: 'Windows `cmd /c IF EXIST … ELSE …` fallback — Win32 equivalent of the sh probe.',
   },
 
-  // #1945 / #1946 — memory bridge + doctor honor CLAUDE_FLOW_MEMORY_PATH
+  // #1945 / #1946 — memory bridge + doctor honor RUFFLO_MEMORY_PATH
   {
     issue: '#1945',
     file: 'v3/@rufflo/cli/src/memory/memory-bridge.ts',

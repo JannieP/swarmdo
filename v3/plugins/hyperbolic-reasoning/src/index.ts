@@ -131,10 +131,10 @@ export const pluginMetadata = {
   ],
   bridges: ['hyperbolic-bridge', 'gnn-bridge'],
   wasmPackages: [
-    '@ruvector/hyperbolic-hnsw-wasm',
-    '@ruvector/attention-wasm',
-    '@ruvector/gnn-wasm',
-    '@ruvector/sona',
+    '@rufvector/hyperbolic-hnsw-wasm',
+    '@rufvector/attention-wasm',
+    '@rufvector/gnn-wasm',
+    '@rufvector/sona',
   ],
 } as const;
 

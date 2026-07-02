@@ -23,8 +23,8 @@ beforeAll(async () => {
 
   // Set test environment variables
   process.env.NODE_ENV = 'test';
-  process.env.CLAUDE_FLOW_ENV = 'test';
-  process.env.CLAUDE_FLOW_MEMORY_PATH = TEST_DB_DIR;
+  process.env.RUFFLO_ENV = 'test';
+  process.env.RUFFLO_MEMORY_PATH = TEST_DB_DIR;
 
   // Increase file descriptor limit for concurrent operations
   if (process.platform !== 'win32') {
@@ -49,8 +49,8 @@ afterAll(async () => {
   }
 
   // Clear environment variables
-  delete process.env.CLAUDE_FLOW_ENV;
-  delete process.env.CLAUDE_FLOW_MEMORY_PATH;
+  delete process.env.RUFFLO_ENV;
+  delete process.env.RUFFLO_MEMORY_PATH;
 });
 
 /**

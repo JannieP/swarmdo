@@ -1,5 +1,5 @@
 /**
- * V3 RuVector Provider (via @ruvector/ruvllm)
+ * V3 RuVector Provider (via @rufvector/rufllm)
  *
  * Self-learning LLM orchestration with:
  * - SONA adaptive learning
@@ -167,7 +167,7 @@ export class RuVectorProvider extends BaseProvider {
   private baseUrl: string = 'http://localhost:3000'; // ruvLLM default port
   private ollamaUrl: string = 'http://localhost:11434';
   private ruvectorConfig: RuVectorConfig = {};
-  private ruvllm: unknown; // Dynamic import of @ruvector/ruvllm
+  private ruvllm: unknown; // Dynamic import of @rufvector/rufllm
   private useOllamaFallback: boolean = false;
   private ruvllmAvailable: boolean = false;
 
@@ -181,9 +181,9 @@ export class RuVectorProvider extends BaseProvider {
     this.baseUrl = this.config.apiUrl || 'http://localhost:3000';
     this.ollamaUrl = (this.config.providerOptions as any)?.ollamaUrl || 'http://localhost:11434';
 
-    // Try to dynamically import @ruvector/ruvllm native module
+    // Try to dynamically import @rufvector/rufllm native module
     try {
-      this.ruvllm = await import('@ruvector/ruvllm').catch(() => null);
+      this.ruvllm = await import('@rufvector/rufllm').catch(() => null);
       if (this.ruvllm) {
         this.logger.info('RuVector ruvLLM native module loaded');
         this.ruvllmAvailable = true;
@@ -522,7 +522,7 @@ export class RuVectorProvider extends BaseProvider {
         error: error instanceof Error ? error.message : 'RuVector server not reachable',
         timestamp: new Date(),
         details: {
-          hint: 'Start RuVector server: npx @ruvector/ruvllm serve',
+          hint: 'Start RuVector server: npx @rufvector/rufllm serve',
         },
       };
     }
@@ -633,7 +633,7 @@ export class RuVectorProvider extends BaseProvider {
     if (response.status === 0 || message.includes('connection')) {
       throw new ProviderUnavailableError('custom', {
         message,
-        hint: 'Start RuVector server: npx @ruvector/ruvllm serve',
+        hint: 'Start RuVector server: npx @rufvector/rufllm serve',
       });
     }
 

@@ -60,7 +60,7 @@ describe('session-tools encryption-at-rest (ADR-096 Phase 2)', () => {
   let cwdSpy: ReturnType<typeof vi.spyOn> | null = null;
 
   beforeEach(() => {
-    saveEnv('CLAUDE_FLOW_ENCRYPT_AT_REST', 'CLAUDE_FLOW_ENCRYPTION_KEY');
+    saveEnv('RUFFLO_ENCRYPT_AT_REST', 'RUFFLO_ENCRYPTION_KEY');
     workdir = mkdtempSync(join(tmpdir(), 'session-enc-'));
     // Pin process.cwd() so session-tools writes into our temp dir
     cwdSpy = vi.spyOn(process, 'cwd').mockReturnValue(workdir);
@@ -74,8 +74,8 @@ describe('session-tools encryption-at-rest (ADR-096 Phase 2)', () => {
 
   describe('encryption disabled (legacy plaintext)', () => {
     beforeEach(() => {
-      delete process.env.CLAUDE_FLOW_ENCRYPT_AT_REST;
-      delete process.env.CLAUDE_FLOW_ENCRYPTION_KEY;
+      delete process.env.RUFFLO_ENCRYPT_AT_REST;
+      delete process.env.RUFFLO_ENCRYPTION_KEY;
     });
 
     it('writes plaintext JSON to disk', async () => {
@@ -103,8 +103,8 @@ describe('session-tools encryption-at-rest (ADR-096 Phase 2)', () => {
 
   describe('encryption enabled (RFE1 wire format)', () => {
     beforeEach(() => {
-      process.env.CLAUDE_FLOW_ENCRYPT_AT_REST = '1';
-      process.env.CLAUDE_FLOW_ENCRYPTION_KEY = randomBytes(32).toString('hex');
+      process.env.RUFFLO_ENCRYPT_AT_REST = '1';
+      process.env.RUFFLO_ENCRYPTION_KEY = randomBytes(32).toString('hex');
     });
 
     it('writes a blob that starts with the RFE1 magic', async () => {
@@ -137,13 +137,13 @@ describe('session-tools encryption-at-rest (ADR-096 Phase 2)', () => {
   describe('migration: encrypt-on-write only, plaintext stays readable', () => {
     it('reads a legacy plaintext file even after encryption is enabled', async () => {
       // Step 1: save with encryption OFF → plaintext on disk
-      delete process.env.CLAUDE_FLOW_ENCRYPT_AT_REST;
-      delete process.env.CLAUDE_FLOW_ENCRYPTION_KEY;
+      delete process.env.RUFFLO_ENCRYPT_AT_REST;
+      delete process.env.RUFFLO_ENCRYPTION_KEY;
       const saved = (await runSave('legacy-plain')) as { sessionId: string };
 
       // Step 2: turn encryption ON for the read
-      process.env.CLAUDE_FLOW_ENCRYPT_AT_REST = '1';
-      process.env.CLAUDE_FLOW_ENCRYPTION_KEY = randomBytes(32).toString('hex');
+      process.env.RUFFLO_ENCRYPT_AT_REST = '1';
+      process.env.RUFFLO_ENCRYPTION_KEY = randomBytes(32).toString('hex');
 
       // Step 3: restore should still find the plaintext file via the
       // magic-byte sniff (legacy file → not encrypted → returned as-is)
@@ -159,13 +159,13 @@ describe('session-tools encryption-at-rest (ADR-096 Phase 2)', () => {
   describe('listSessions handles a mixed dir', () => {
     it('enumerates plaintext + encrypted sessions in one call', async () => {
       // First session: plaintext
-      delete process.env.CLAUDE_FLOW_ENCRYPT_AT_REST;
-      delete process.env.CLAUDE_FLOW_ENCRYPTION_KEY;
+      delete process.env.RUFFLO_ENCRYPT_AT_REST;
+      delete process.env.RUFFLO_ENCRYPTION_KEY;
       await runSave('plain-1');
 
       // Second session: encrypted
-      process.env.CLAUDE_FLOW_ENCRYPT_AT_REST = '1';
-      process.env.CLAUDE_FLOW_ENCRYPTION_KEY = randomBytes(32).toString('hex');
+      process.env.RUFFLO_ENCRYPT_AT_REST = '1';
+      process.env.RUFFLO_ENCRYPTION_KEY = randomBytes(32).toString('hex');
       await runSave('encrypted-1');
 
       const result = (await sessionListTool.handler({} as Record<string, unknown>)) as {

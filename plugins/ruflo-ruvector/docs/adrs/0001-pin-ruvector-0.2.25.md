@@ -47,7 +47,7 @@ Rationale: the `-y` flag suppresses the npm interactive prompt; the version pin 
 |---------|---------|------------------------------|
 | `ruvector-onnx-embeddings-wasm` | ONNX runtime | `embed text`, `embed adaptive`, `llm embed` |
 | `@ruvector/pi-brain` | Collective brain | `brain *` |
-| `@ruvector/ruvllm` | RuvLLM + SONA JS fallback | `sona *`, `llm *` |
+| `@rufvector/rufllm` | RuvLLM + SONA JS fallback | `sona *`, `llm *` |
 | `@ruvector/graph-node` | Graph database (Cypher) | `graph -q ...` |
 | `@ruvector/router` | Semantic router | `router --route ...` |
 
@@ -100,7 +100,7 @@ The plugin's own `version` field in `.claude-plugin/plugin.json` is bumped (patc
 **Negative:**
 
 - Bumping the pin requires a deliberate test pass. New ruvector features land in the plugin only after a manual review.
-- Add-on packages (`ruvector-onnx-embeddings-wasm`, `@ruvector/pi-brain`, `@ruvector/ruvllm`) must be installed manually or via `/vector-setup`. Users who skip this and try `embed text` will hit the documented error.
+- Add-on packages (`ruvector-onnx-embeddings-wasm`, `@ruvector/pi-brain`, `@rufvector/rufllm`) must be installed manually or via `/vector-setup`. Users who skip this and try `embed text` will hit the documented error.
 
 **Neutral:**
 

@@ -1114,7 +1114,7 @@ Enable debug mode for troubleshooting:
 
 ```bash
 # Enable debug output
-export CLAUDE_FLOW_DEBUG=true
+export RUFFLO_DEBUG=true
 
 # Test specific hook with verbose output
 npx rufflo hook pre-edit --file "test.js" --debug

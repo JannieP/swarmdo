@@ -1657,7 +1657,7 @@ On Windows, MCP servers require a `cmd /c` wrapper to execute npx commands. With
       "command": "cmd",
       "args": ["/c", "npx", "@rufflo/cli@latest", "mcp", "start"],
       "env": {
-        "CLAUDE_FLOW_LOG_LEVEL": "info"
+        "RUFFLO_LOG_LEVEL": "info"
       }
     }
   }
@@ -1673,7 +1673,7 @@ On Windows, MCP servers require a `cmd /c` wrapper to execute npx commands. With
       "command": "npx",
       "args": ["@rufflo/cli@latest", "mcp", "start"],
       "env": {
-        "CLAUDE_FLOW_LOG_LEVEL": "info"
+        "RUFFLO_LOG_LEVEL": "info"
       }
     }
   }
@@ -1709,7 +1709,7 @@ function generateMcpConfig(): MCPConfig {
           command: 'cmd',
           args: ['/c', 'npx', '@rufflo/cli@latest', 'mcp', 'start'],
           env: {
-            CLAUDE_FLOW_LOG_LEVEL: 'info'
+            RUFFLO_LOG_LEVEL: 'info'
           }
         }
       }
@@ -1722,7 +1722,7 @@ function generateMcpConfig(): MCPConfig {
         command: 'npx',
         args: ['@rufflo/cli@latest', 'mcp', 'start'],
         env: {
-          CLAUDE_FLOW_LOG_LEVEL: 'info'
+          RUFFLO_LOG_LEVEL: 'info'
         }
       }
     }

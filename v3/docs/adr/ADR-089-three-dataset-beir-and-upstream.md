@@ -89,7 +89,7 @@ Measured parallel-embedder throughput on this CPU: **6.2× per-doc speedup** (cl
 
 | Finding | Status | Fix |
 |---|---|---|
-| **#1** memory_search_unified hardcoded 6 namespaces (silently misses ~95% of an 8789-entry store) | **FIXED** | New `namespaces: string[]` param + `CLAUDE_FLOW_MEMORY_SEARCH_NAMESPACES` env + dynamic enumeration via `listEntries({})` as the new default + `namespaceSource` audit field. 9 regression tests covering all 5 priority paths. |
+| **#1** memory_search_unified hardcoded 6 namespaces (silently misses ~95% of an 8789-entry store) | **FIXED** | New `namespaces: string[]` param + `RUFFLO_MEMORY_SEARCH_NAMESPACES` env + dynamic enumeration via `listEntries({})` as the new default + `namespaceSource` audit field. 9 regression tests covering all 5 priority paths. |
 | **#2** `npm install -g rufflo` silently overwrites `dist/` patches | **acknowledged** | Tracked for a separate release (postinstall checksum + warning). |
 | **#3** agentdb `addCausalEdge()` silently orphans edges when `NodeIdMapper.getNodeId()` returns undefined | **forwarded** | Filed as [ruvnet/agentdb#7](https://github.com/ruvnet/agentdb/issues/7). Will pull when agentdb pin bumps. |
 | **#4** `graph_edges DB unavailable` on fresh env | **FIXED** | `getBridgeDb({createIfMissing: true})` lazy-creates empty memory.db + graph_edges schema; pathfinder call sites updated; error message gains a `hint` field. |

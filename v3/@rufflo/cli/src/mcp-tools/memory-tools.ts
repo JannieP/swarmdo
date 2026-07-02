@@ -1079,7 +1079,7 @@ export const memoryTools: MCPTool[] = [
       // #2246 fix: namespace resolution priority is
       //   1. explicit single `namespace` (back-compat)
       //   2. explicit `namespaces: string[]` (new in 3.10.29)
-      //   3. env var CLAUDE_FLOW_MEMORY_SEARCH_NAMESPACES (CSV)
+      //   3. env var RUFFLO_MEMORY_SEARCH_NAMESPACES (CSV)
       //   4. dynamic enumeration via listEntries({}) over the actual store
       //   5. legacy 6-namespace hardcode as last-resort fallback
       // The legacy default was silently missing ~95% of entries on stores with
@@ -1091,8 +1091,8 @@ export const memoryTools: MCPTool[] = [
         namespaces = [ns]; namespaceSource = 'param-single';
       } else if (nsList && nsList.length > 0) {
         namespaces = nsList; namespaceSource = 'param-list';
-      } else if (process.env.CLAUDE_FLOW_MEMORY_SEARCH_NAMESPACES) {
-        namespaces = process.env.CLAUDE_FLOW_MEMORY_SEARCH_NAMESPACES.split(',').map(s => s.trim()).filter(Boolean);
+      } else if (process.env.RUFFLO_MEMORY_SEARCH_NAMESPACES) {
+        namespaces = process.env.RUFFLO_MEMORY_SEARCH_NAMESPACES.split(',').map(s => s.trim()).filter(Boolean);
         namespaceSource = 'env';
       } else {
         // Dynamic enumeration — list all entries and collect distinct namespaces.

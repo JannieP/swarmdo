@@ -71,7 +71,7 @@ function saveTerminalStore(store: TerminalStore): void {
   // audit_1776853149979: terminal command history can contain credentials
   // pasted into commands; restrict to owner read/write (mode 0600).
   // ADR-096 Phase 3: opt-in AES-256-GCM encrypt-at-rest. Honored only
-  // when CLAUDE_FLOW_ENCRYPT_AT_REST is set; otherwise legacy plaintext
+  // when RUFFLO_ENCRYPT_AT_REST is set; otherwise legacy plaintext
   // path runs unchanged.
   writeFileRestricted(
     getTerminalPath(),

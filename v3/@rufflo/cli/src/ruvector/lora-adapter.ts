@@ -130,7 +130,7 @@ const DEFAULT_CONFIG: LoRAConfig = {
 };
 
 // ============================================================================
-// @ruvector/ruvllm TrainingPipeline (lazy-loaded)
+// @rufvector/rufllm TrainingPipeline (lazy-loaded)
 // ============================================================================
 
 let ruvllmPipeline: any = null;
@@ -142,7 +142,7 @@ async function loadTrainingPipeline(adapter: LoRAAdapter): Promise<any> {
   try {
     const { createRequire } = await import('module');
     const requireCjs = createRequire(import.meta.url);
-    const ruvllm = requireCjs('@ruvector/ruvllm');
+    const ruvllm = requireCjs('@rufvector/rufllm');
     const config = adapter.getConfig();
     // Create a ruvllm LoraAdapter that mirrors our JS adapter's config
     const nativeAdapter = new (ruvllm as any).LoraAdapter(config.inputDim, config.outputDim, config.rank);

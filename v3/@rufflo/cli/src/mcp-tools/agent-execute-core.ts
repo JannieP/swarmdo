@@ -532,9 +532,9 @@ export async function executeAgentTask(input: AgentExecuteInput): Promise<AgentE
   // timeout). When the cost-optimal neural backend picked a specific
   // model id and that model fails for a transient reason, fall back to
   // the next-cheapest candidate that clears the quality bar. Budget is
-  // bounded by CLAUDE_FLOW_ROUTER_FALLBACK_MAX_RETRIES (default 1) so
+  // bounded by RUFFLO_ROUTER_FALLBACK_MAX_RETRIES (default 1) so
   // upstream outages don't cause retry storms.
-  const fallbackBudget = Math.max(0, parseInt(process.env.CLAUDE_FLOW_ROUTER_FALLBACK_MAX_RETRIES ?? '1', 10) || 1);
+  const fallbackBudget = Math.max(0, parseInt(process.env.RUFFLO_ROUTER_FALLBACK_MAX_RETRIES ?? '1', 10) || 1);
   const fallbackHistory: Array<{ modelId: string; error: string }> = [];
   if (!result.success && agent.modelId && fallbackBudget > 0) {
     const isRetryable = /\b(429|500|502|503|504|timeout|ECONNRESET|ETIMEDOUT)\b/i.test(result.error ?? '');
@@ -601,7 +601,7 @@ export async function executeAgentTask(input: AgentExecuteInput): Promise<AgentE
       recordModelOutcomeByModelId(input.prompt, agent.modelId, outcome);
     }
     // ADR-149 iter 17 — close the production-data side of the feedback loop.
-    // The trajectory recorder (CLAUDE_FLOW_ROUTER_TRAJECTORY=1) writes
+    // The trajectory recorder (RUFFLO_ROUTER_TRAJECTORY=1) writes
     // per-decision rows to .swarm/model-router-trajectories.jsonl from the
     // model-router itself. Now we ALSO write outcome rows here so future
     // training (scripts/train-from-trajectories.mjs, follow-up) can pair
@@ -609,7 +609,7 @@ export async function executeAgentTask(input: AgentExecuteInput): Promise<AgentE
     // rows from real production traffic. quality = 1.0 on success, 0.0 on
     // failure (coarse signal; finer-grained quality from user ratings or
     // regression-detection is a separate hook).
-    if (process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY === '1') {
+    if (process.env.RUFFLO_ROUTER_TRAJECTORY === '1') {
       try {
         const { recordTrajectoryOutcome } = await import('../ruvector/router-trajectory.js');
         const scores: Record<string, number> | undefined = agent.modelId

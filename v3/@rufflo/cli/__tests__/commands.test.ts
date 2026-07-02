@@ -543,11 +543,11 @@ describe('Memory Commands', () => {
   beforeEach(() => {
     // Isolate each test's memory store to a fresh temp dir so they don't read
     // or pollute the repo's shared `.swarm/memory.db` (getMemoryRoot honors
-    // CLAUDE_FLOW_MEMORY_PATH dynamically). A fresh project = empty store, so
+    // RUFFLO_MEMORY_PATH dynamically). A fresh project = empty store, so
     // list/search succeed-with-empty rather than erroring on a shared/corrupt db.
     memDir = mkdtempSync(join(tmpdir(), 'rufflo-cmd-mem-'));
-    prevMemPath = process.env.CLAUDE_FLOW_MEMORY_PATH;
-    process.env.CLAUDE_FLOW_MEMORY_PATH = memDir;
+    prevMemPath = process.env.RUFFLO_MEMORY_PATH;
+    process.env.RUFFLO_MEMORY_PATH = memDir;
     ctx = {
       args: [],
       flags: { _: [] },
@@ -557,8 +557,8 @@ describe('Memory Commands', () => {
   });
 
   afterEach(() => {
-    if (prevMemPath === undefined) delete process.env.CLAUDE_FLOW_MEMORY_PATH;
-    else process.env.CLAUDE_FLOW_MEMORY_PATH = prevMemPath;
+    if (prevMemPath === undefined) delete process.env.RUFFLO_MEMORY_PATH;
+    else process.env.RUFFLO_MEMORY_PATH = prevMemPath;
     try { rmSync(memDir, { recursive: true, force: true }); } catch { /* ignore */ }
   });
 

@@ -2,7 +2,7 @@
  * neural-router.test.ts — ADR-148 / #2334
  *
  * Verifies the gated, graceful integration of `@metaharness/router` (with
- * optional `@ruvector/tiny-dancer` acceleration) into the model-routing
+ * optional `@rufvector/tiny-dancer` acceleration) into the model-routing
  * path. The contract under test:
  *
  *   1. Default behavior is byte-identical: with no env vars set,
@@ -36,25 +36,25 @@ function makeEmbedding(seed: number, dim = 32): number[] {
   return v;
 }
 const ENV_KEYS = [
-  'CLAUDE_FLOW_ROUTER_NEURAL',
-  'CLAUDE_FLOW_ROUTER_TRAJECTORY',
-  'CLAUDE_FLOW_ROUTER_MODEL_PATH',
-  'CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH',
-  'CLAUDE_FLOW_ROUTER_SEED_CORPUS',
-  'CLAUDE_FLOW_SWARM_DIR',
-  'CLAUDE_FLOW_ROUTER_PROVIDER',
-  'CLAUDE_FLOW_ROUTER_OPENROUTER_ALTS',
-  'CLAUDE_FLOW_ROUTER_LATENCY_BUDGET_MS',
-  'CLAUDE_FLOW_ROUTER_BANDIT_PER_MODEL',
-  'CLAUDE_FLOW_ROUTER_CALIBRATE',           // iter 24 — default-on; tests should not leak overrides
-  'CLAUDE_FLOW_ROUTER_CALIBRATOR_PATH',
-  'CLAUDE_FLOW_ROUTER_COST_CEILING_USD_PER_MTOK',  // iter 29
-  'CLAUDE_FLOW_ROUTER_AB',                          // iter 37
-  'CLAUDE_FLOW_ROUTER_AB_SAMPLE_RATE',
-  'CLAUDE_FLOW_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD',  // iter 44
-  'CLAUDE_FLOW_ROUTER_BANDIT_WARMUP_RANGE',           // iter 52
-  'CLAUDE_FLOW_ROUTER_BANDIT_FULL_INFLUENCE',         // iter 53
-  'CLAUDE_FLOW_ROUTER_BANDIT_SHRINKAGE_LAMBDA',       // iter 57
+  'RUFFLO_ROUTER_NEURAL',
+  'RUFFLO_ROUTER_TRAJECTORY',
+  'RUFFLO_ROUTER_MODEL_PATH',
+  'RUFFLO_ROUTER_TRAJECTORY_PATH',
+  'RUFFLO_ROUTER_SEED_CORPUS',
+  'RUFFLO_SWARM_DIR',
+  'RUFFLO_ROUTER_PROVIDER',
+  'RUFFLO_ROUTER_OPENROUTER_ALTS',
+  'RUFFLO_ROUTER_LATENCY_BUDGET_MS',
+  'RUFFLO_ROUTER_BANDIT_PER_MODEL',
+  'RUFFLO_ROUTER_CALIBRATE',           // iter 24 — default-on; tests should not leak overrides
+  'RUFFLO_ROUTER_CALIBRATOR_PATH',
+  'RUFFLO_ROUTER_COST_CEILING_USD_PER_MTOK',  // iter 29
+  'RUFFLO_ROUTER_AB',                          // iter 37
+  'RUFFLO_ROUTER_AB_SAMPLE_RATE',
+  'RUFFLO_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD',  // iter 44
+  'RUFFLO_ROUTER_BANDIT_WARMUP_RANGE',           // iter 52
+  'RUFFLO_ROUTER_BANDIT_FULL_INFLUENCE',         // iter 53
+  'RUFFLO_ROUTER_BANDIT_SHRINKAGE_LAMBDA',       // iter 57
   'OPENROUTER_API_KEY',
   'ANTHROPIC_API_KEY',
 ];
@@ -70,13 +70,13 @@ describe('neural-router (ADR-148)', () => {
   });
   afterEach(() => clearEnv());
 
-  it('returns null when CLAUDE_FLOW_ROUTER_NEURAL is not set (gate closed)', async () => {
+  it('returns null when RUFFLO_ROUTER_NEURAL is not set (gate closed)', async () => {
     const result = await tryCostOptimalRoute(makeEmbedding(42));
     expect(result).toBeNull();
   });
 
   it('returns null when embedding is missing or empty (even with gate open)', async () => {
-    process.env.CLAUDE_FLOW_ROUTER_NEURAL = '1';
+    process.env.RUFFLO_ROUTER_NEURAL = '1';
     __resetNeuralRouterForTests();
     // @ts-expect-error — testing the invalid-input branch
     expect(await tryCostOptimalRoute(undefined)).toBeNull();
@@ -90,7 +90,7 @@ describe('neural-router (ADR-148)', () => {
   });
 
   it('returns a cost-optimal pick when gate is open and seed corpus loads', async () => {
-    process.env.CLAUDE_FLOW_ROUTER_NEURAL = '1';
+    process.env.RUFFLO_ROUTER_NEURAL = '1';
     __resetNeuralRouterForTests();
     // ADR-149 v2 — the seed corpus now carries real 384-dim MiniLM embeddings.
     // A zero-vector probe is a neutral query; we don't predict a specific tier
@@ -115,7 +115,7 @@ describe('neural-router (ADR-148)', () => {
   });
 
   it('returns a per-model pick with modelId (ADR-149)', async () => {
-    process.env.CLAUDE_FLOW_ROUTER_NEURAL = '1';
+    process.env.RUFFLO_ROUTER_NEURAL = '1';
     __resetNeuralRouterForTests();
     const e = new Array(32).fill(0);
     e[0] = -0.85; e[1] = 0.7;
@@ -133,7 +133,7 @@ describe('neural-router (ADR-148)', () => {
   });
 
   it('caches the resolved backend across calls', async () => {
-    process.env.CLAUDE_FLOW_ROUTER_NEURAL = '1';
+    process.env.RUFFLO_ROUTER_NEURAL = '1';
     __resetNeuralRouterForTests();
     const e = makeEmbedding(3);
     e[0] = 0.85;
@@ -143,13 +143,13 @@ describe('neural-router (ADR-148)', () => {
     expect(s1.routedBy).toBe(s2.routedBy);
   });
 
-  it('calibration is default-ON; CLAUDE_FLOW_ROUTER_CALIBRATE=0 opts out (ADR-149 iter 24)', async () => {
+  it('calibration is default-ON; RUFFLO_ROUTER_CALIBRATE=0 opts out (ADR-149 iter 24)', async () => {
     // Iter 23 OOS validation moved this from opt-in to opt-out: ECE 0.1604 →
     // 0.0335 with calibration enabled. Verify the env-var semantics flipped:
     //   unset      → calibration applied (status reason contains 'calibrated')
     //   = '1'      → calibration applied (back-compat)
     //   = '0'      → calibration bypassed (raw KRR behavior)
-    process.env.CLAUDE_FLOW_ROUTER_NEURAL = '1';
+    process.env.RUFFLO_ROUTER_NEURAL = '1';
 
     // Default: no env var → calibrated.
     __resetNeuralRouterForTests();
@@ -158,13 +158,13 @@ describe('neural-router (ADR-148)', () => {
     expect(sDefault.reason).toContain('calibrated');
 
     // Back-compat: '1' still works.
-    process.env.CLAUDE_FLOW_ROUTER_CALIBRATE = '1';
+    process.env.RUFFLO_ROUTER_CALIBRATE = '1';
     __resetNeuralRouterForTests();
     const sOn = await neuralRouterStatus();
     expect(sOn.reason).toContain('calibrated');
 
     // Opt-out: '0' bypasses.
-    process.env.CLAUDE_FLOW_ROUTER_CALIBRATE = '0';
+    process.env.RUFFLO_ROUTER_CALIBRATE = '0';
     __resetNeuralRouterForTests();
     const sOff = await neuralRouterStatus();
     expect(sOff.reason).not.toContain('calibrated');
@@ -331,7 +331,7 @@ describe('neural-router (ADR-148)', () => {
     // to fall back. With the bundled seed corpus, unified vs specialist
     // KRR rarely predict EXACTLY the same value, so the low threshold
     // should reliably trigger null.
-    process.env.CLAUDE_FLOW_ROUTER_NEURAL = '1';
+    process.env.RUFFLO_ROUTER_NEURAL = '1';
     const e = new Array(384).fill(0).map((_, i) => Math.cos(i * 0.07));
 
     // Baseline: no threshold → result returned (or skip if KRR not loadable).
@@ -341,7 +341,7 @@ describe('neural-router (ADR-148)', () => {
     expect(baseline.routedBy).toBe('metaharness-krr');
 
     // Tight threshold: ANY non-zero disagreement → null.
-    process.env.CLAUDE_FLOW_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD = '0.0001';
+    process.env.RUFFLO_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD = '0.0001';
     __resetNeuralRouterForTests();
     const tight = await tryCostOptimalRoute(e, { complexityBucket: 'med' });
     // Either null (caught a disagreement) OR identical values (unlikely
@@ -357,23 +357,23 @@ describe('neural-router (ADR-148)', () => {
 
     // Loose threshold: 0.99 → no realistic disagreement triggers, result
     // matches baseline.
-    process.env.CLAUDE_FLOW_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD = '0.99';
+    process.env.RUFFLO_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD = '0.99';
     __resetNeuralRouterForTests();
     const loose = await tryCostOptimalRoute(e, { complexityBucket: 'med' });
     expect(loose).not.toBeNull();
     expect(loose!.modelId).toBe(baseline.modelId);
 
     // No bucket → no ensemble check (no specialist queried) → baseline.
-    process.env.CLAUDE_FLOW_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD = '0.0001';
+    process.env.RUFFLO_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD = '0.0001';
     __resetNeuralRouterForTests();
     const noBucket = await tryCostOptimalRoute(e);   // no opts.complexityBucket
     expect(noBucket).not.toBeNull();                  // unified used as activeRouter; check disabled
   });
 
   it('cost-ceiling mode picks highest-quality candidate under budget (ADR-149 iter 29)', async () => {
-    // When CLAUDE_FLOW_ROUTER_COST_CEILING_USD_PER_MTOK is set, the selector
+    // When RUFFLO_ROUTER_COST_CEILING_USD_PER_MTOK is set, the selector
     // changes from "cheapest above qualityBar" to "best quality under ceiling".
-    process.env.CLAUDE_FLOW_ROUTER_NEURAL = '1';
+    process.env.RUFFLO_ROUTER_NEURAL = '1';
 
     // Baseline (no ceiling) — pick is cost-optimal-above-bar.
     __resetNeuralRouterForTests();
@@ -387,7 +387,7 @@ describe('neural-router (ADR-148)', () => {
     // ($1.33), Ling-2.6 ($0.10). The selector should switch to picking the
     // HIGHEST-quality candidate among those — which on the bundled corpus
     // is typically GPT-4.1 or Haiku, not Ling (which is cheapest).
-    process.env.CLAUDE_FLOW_ROUTER_COST_CEILING_USD_PER_MTOK = '30';
+    process.env.RUFFLO_ROUTER_COST_CEILING_USD_PER_MTOK = '30';
     __resetNeuralRouterForTests();
     const ceiling = await tryCostOptimalRoute(e);
     if (!ceiling) return;
@@ -412,7 +412,7 @@ describe('neural-router (ADR-148)', () => {
     // Iter 25 ships seed-router.calibrator.{low,med,high}.json alongside the
     // unified calibrator. When all are present, status reason should reflect
     // every loaded calibrator. When CALIBRATE=0, none should load.
-    process.env.CLAUDE_FLOW_ROUTER_NEURAL = '1';
+    process.env.RUFFLO_ROUTER_NEURAL = '1';
 
     __resetNeuralRouterForTests();
     const s = await neuralRouterStatus();
@@ -427,7 +427,7 @@ describe('neural-router (ADR-148)', () => {
     expect(hasBucket).toBe(true);
 
     // Opt-out kills all calibrators.
-    process.env.CLAUDE_FLOW_ROUTER_CALIBRATE = '0';
+    process.env.RUFFLO_ROUTER_CALIBRATE = '0';
     __resetNeuralRouterForTests();
     const sOff = await neuralRouterStatus();
     expect(sOff.reason).not.toContain('calibrated');
@@ -453,7 +453,7 @@ describe('router-trajectory (ADR-148)', () => {
 
   it('writes nothing when gate is closed', () => {
     const path = join(tmpDir, 'trajectories.jsonl');
-    process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH = path;
+    process.env.RUFFLO_ROUTER_TRAJECTORY_PATH = path;
     __resetTrajectoryRecorderForTests();
     recordDecision({
       task: 'add console.log to cache',
@@ -465,8 +465,8 @@ describe('router-trajectory (ADR-148)', () => {
 
   it('writes one JSONL row per call when gate is open', () => {
     const path = join(tmpDir, 'trajectories.jsonl');
-    process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY = '1';
-    process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH = path;
+    process.env.RUFFLO_ROUTER_TRAJECTORY = '1';
+    process.env.RUFFLO_ROUTER_TRAJECTORY_PATH = path;
     __resetTrajectoryRecorderForTests();
     recordDecision({
       task: 'add console.log to cache',
@@ -496,9 +496,9 @@ describe('router-trajectory (ADR-148)', () => {
 
   it('truncates task text to the configured limit', () => {
     const path = join(tmpDir, 'trajectories.jsonl');
-    process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY = '1';
-    process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH = path;
-    process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_TASKLEN = '10';
+    process.env.RUFFLO_ROUTER_TRAJECTORY = '1';
+    process.env.RUFFLO_ROUTER_TRAJECTORY_PATH = path;
+    process.env.RUFFLO_ROUTER_TRAJECTORY_TASKLEN = '10';
     __resetTrajectoryRecorderForTests();
     recordDecision({
       task: 'a'.repeat(500),
@@ -516,8 +516,8 @@ describe('router-trajectory (ADR-148)', () => {
   });
 
   it('exposes accurate status via trajectoryRecorderStatus()', () => {
-    process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY = '1';
-    process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH = '/tmp/x.jsonl';
+    process.env.RUFFLO_ROUTER_TRAJECTORY = '1';
+    process.env.RUFFLO_ROUTER_TRAJECTORY_PATH = '/tmp/x.jsonl';
     __resetTrajectoryRecorderForTests();
     const s = trajectoryRecorderStatus();
     expect(s.enabled).toBe(true);
@@ -589,8 +589,8 @@ describe('router-trajectory (ADR-148)', () => {
     const tmp = mkdtempSync(join(tmpdir(), 'iter46-'));
     try {
       const path = join(tmp, 'trajectories.jsonl');
-      process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY = '1';
-      process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH = path;
+      process.env.RUFFLO_ROUTER_TRAJECTORY = '1';
+      process.env.RUFFLO_ROUTER_TRAJECTORY_PATH = path;
       __resetTrajectoryRecorderForTests();
       const { recordDecision } = await import('../src/ruvector/router-trajectory.js');
 
@@ -619,8 +619,8 @@ describe('router-trajectory (ADR-148)', () => {
       expect(lines[0].ensemble_disagreement).toBe(0.234);
       expect(lines[1].ensemble_disagreement).toBeUndefined();
     } finally {
-      delete process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY;
-      delete process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH;
+      delete process.env.RUFFLO_ROUTER_TRAJECTORY;
+      delete process.env.RUFFLO_ROUTER_TRAJECTORY_PATH;
       rmSync(tmp, { recursive: true, force: true });
     }
   });
@@ -629,8 +629,8 @@ describe('router-trajectory (ADR-148)', () => {
     const tmp = mkdtempSync(join(tmpdir(), 'iter31-'));
     try {
       const path = join(tmp, 'trajectories.jsonl');
-      process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY = '1';
-      process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH = path;
+      process.env.RUFFLO_ROUTER_TRAJECTORY = '1';
+      process.env.RUFFLO_ROUTER_TRAJECTORY_PATH = path;
       __resetTrajectoryRecorderForTests();
       const { recordTrajectoryOutcome } = await import('../src/ruvector/router-trajectory.js');
       const { MODEL_PRICES } = await import('../src/ruvector/model-prices.js');
@@ -658,7 +658,7 @@ describe('router-trajectory (ADR-148)', () => {
       // Backward-compat: omitting tokens means no cost field.
       __resetTrajectoryRecorderForTests();
       const path2 = join(tmp, 'no-tokens.jsonl');
-      process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH = path2;
+      process.env.RUFFLO_ROUTER_TRAJECTORY_PATH = path2;
       __resetTrajectoryRecorderForTests();
       recordTrajectoryOutcome({ task: 'no tokens', quality: 0.5 });
       const row2 = JSON.parse(readFileSync(path2, 'utf8').trim());
@@ -668,7 +668,7 @@ describe('router-trajectory (ADR-148)', () => {
       // Unknown model falls back to $1/Mtok blended, doesn't drop.
       __resetTrajectoryRecorderForTests();
       const path3 = join(tmp, 'unknown.jsonl');
-      process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH = path3;
+      process.env.RUFFLO_ROUTER_TRAJECTORY_PATH = path3;
       __resetTrajectoryRecorderForTests();
       recordTrajectoryOutcome({
         task: 'unknown model task',
@@ -679,8 +679,8 @@ describe('router-trajectory (ADR-148)', () => {
       const row3 = JSON.parse(readFileSync(path3, 'utf8').trim());
       expect(row3.cost_usd).toBeCloseTo(0.002, 5); // 2000 tokens × $1/Mtok blended = $0.002
     } finally {
-      delete process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY;
-      delete process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH;
+      delete process.env.RUFFLO_ROUTER_TRAJECTORY;
+      delete process.env.RUFFLO_ROUTER_TRAJECTORY_PATH;
       rmSync(tmp, { recursive: true, force: true });
     }
   });
@@ -772,7 +772,7 @@ describe('ModelRouter integration (ADR-148)', () => {
   });
 
   it('result carries routedBy="heuristic" even with neural gate open if no embedding supplied', async () => {
-    process.env.CLAUDE_FLOW_ROUTER_NEURAL = '1';
+    process.env.RUFFLO_ROUTER_NEURAL = '1';
     const { resetModelRouter, routeToModelFull } = await import('../src/ruvector/model-router.js');
     resetModelRouter();
     const result = await routeToModelFull('add console.log to cache');
@@ -781,7 +781,7 @@ describe('ModelRouter integration (ADR-148)', () => {
   });
 
   it('routedBy reflects active neural backend when gate + embedding + corpus all align', async () => {
-    process.env.CLAUDE_FLOW_ROUTER_NEURAL = '1';
+    process.env.RUFFLO_ROUTER_NEURAL = '1';
     __resetNeuralRouterForTests();
     const { resetModelRouter, routeToModelFull } = await import('../src/ruvector/model-router.js');
     resetModelRouter();
@@ -822,7 +822,7 @@ describe('ModelRouter integration (ADR-148)', () => {
   });
 
   it('nextCostOptimalAlternative returns a different model when the picked one is excluded (ADR-149 iter 7)', async () => {
-    process.env.CLAUDE_FLOW_ROUTER_NEURAL = '1';
+    process.env.RUFFLO_ROUTER_NEURAL = '1';
     __resetNeuralRouterForTests();
     const { nextCostOptimalAlternative, tryCostOptimalRoute } = await import('../src/ruvector/neural-router.js');
     const e = new Array(384).fill(0);
@@ -838,7 +838,7 @@ describe('ModelRouter integration (ADR-148)', () => {
   });
 
   it('nextCostOptimalAlternative returns null when every candidate is excluded (ADR-149 iter 7)', async () => {
-    process.env.CLAUDE_FLOW_ROUTER_NEURAL = '1';
+    process.env.RUFFLO_ROUTER_NEURAL = '1';
     __resetNeuralRouterForTests();
     const { nextCostOptimalAlternative, tryCostOptimalRoute } = await import('../src/ruvector/neural-router.js');
     const e = new Array(384).fill(0);
@@ -856,8 +856,8 @@ describe('ModelRouter integration (ADR-148)', () => {
     const tmp = mkdtempSync(join(tmpdir(), 'iter17-'));
     try {
       const path = join(tmp, 'trajectories.jsonl');
-      process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY = '1';
-      process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH = path;
+      process.env.RUFFLO_ROUTER_TRAJECTORY = '1';
+      process.env.RUFFLO_ROUTER_TRAJECTORY_PATH = path;
       __resetTrajectoryRecorderForTests();
       const { recordDecision, recordTrajectoryOutcome, taskHash } = await import('../src/ruvector/router-trajectory.js');
 
@@ -880,8 +880,8 @@ describe('ModelRouter integration (ADR-148)', () => {
       expect(lines[1].scores).toBeDefined();
       expect(lines[1].quality).toBe(1.0);
     } finally {
-      delete process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY;
-      delete process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH;
+      delete process.env.RUFFLO_ROUTER_TRAJECTORY;
+      delete process.env.RUFFLO_ROUTER_TRAJECTORY_PATH;
       rmSync(tmp, { recursive: true, force: true });
     }
   });
@@ -909,8 +909,8 @@ describe('ModelRouter integration (ADR-148)', () => {
     expect(totalAlpha).toBeGreaterThan(0); // ≥1 outcome accumulated
 
     // Verify the selector path runs with the gate on
-    process.env.CLAUDE_FLOW_ROUTER_NEURAL = '1';
-    process.env.CLAUDE_FLOW_ROUTER_BANDIT_PER_MODEL = '1';
+    process.env.RUFFLO_ROUTER_NEURAL = '1';
+    process.env.RUFFLO_ROUTER_BANDIT_PER_MODEL = '1';
     __resetNeuralRouterForTests();
     const { tryCostOptimalRoute } = await import('../src/ruvector/neural-router.js');
     const e = new Array(384).fill(0); e[0] = 0.3;
@@ -924,7 +924,7 @@ describe('ModelRouter integration (ADR-148)', () => {
     // With no budget, the router picks the cost-optimal candidate (often Ling).
     // With a tight budget (200ms), candidates whose measured p50 exceeds it
     // should be filtered out — the picked modelId may change.
-    process.env.CLAUDE_FLOW_ROUTER_NEURAL = '1';
+    process.env.RUFFLO_ROUTER_NEURAL = '1';
     __resetNeuralRouterForTests();
     const { tryCostOptimalRoute } = await import('../src/ruvector/neural-router.js');
     const e = new Array(384).fill(0); e[0] = 0.3;
@@ -934,7 +934,7 @@ describe('ModelRouter integration (ADR-148)', () => {
 
     // Now apply a stricter budget — should still produce a result, possibly
     // the same model id (if it was already fast) or a different one.
-    process.env.CLAUDE_FLOW_ROUTER_LATENCY_BUDGET_MS = '300';
+    process.env.RUFFLO_ROUTER_LATENCY_BUDGET_MS = '300';
     __resetNeuralRouterForTests();
     const constrained = await tryCostOptimalRoute(e);
     expect(constrained).not.toBeNull();
@@ -968,7 +968,7 @@ describe('ModelRouter integration (ADR-148)', () => {
   });
 
   it('tryCostOptimalRouteBatch matches single-call shape (ADR-149 iter 11)', async () => {
-    process.env.CLAUDE_FLOW_ROUTER_NEURAL = '1';
+    process.env.RUFFLO_ROUTER_NEURAL = '1';
     __resetNeuralRouterForTests();
     const { tryCostOptimalRoute, tryCostOptimalRouteBatch } = await import('../src/ruvector/neural-router.js');
     const e1 = new Array(384).fill(0); e1[0] = 0.5;
@@ -992,7 +992,7 @@ describe('ModelRouter integration (ADR-148)', () => {
   });
 
   it('tryCostOptimalRouteBatch returns null entries for invalid embeddings (ADR-149 iter 11)', async () => {
-    process.env.CLAUDE_FLOW_ROUTER_NEURAL = '1';
+    process.env.RUFFLO_ROUTER_NEURAL = '1';
     __resetNeuralRouterForTests();
     const { tryCostOptimalRouteBatch } = await import('../src/ruvector/neural-router.js');
     const valid = new Array(384).fill(0);
@@ -1086,8 +1086,8 @@ describe('OpenRouter alternates (ADR-148 phase 2)', () => {
     expect(r.openrouterModel).toBeUndefined();
   });
 
-  it('switches to "openrouter" when CLAUDE_FLOW_ROUTER_PROVIDER=openrouter', async () => {
-    process.env.CLAUDE_FLOW_ROUTER_PROVIDER = 'openrouter';
+  it('switches to "openrouter" when RUFFLO_ROUTER_PROVIDER=openrouter', async () => {
+    process.env.RUFFLO_ROUTER_PROVIDER = 'openrouter';
     process.env.OPENROUTER_API_KEY = 'sk-or-test';
     const { resetModelRouter, routeToModelFull } = await import('../src/ruvector/model-router.js');
     resetModelRouter();
@@ -1113,15 +1113,15 @@ describe('OpenRouter alternates (ADR-148 phase 2)', () => {
   it('respects explicit ANTHROPIC_API_KEY presence even when OpenRouter key is also set', async () => {
     process.env.ANTHROPIC_API_KEY = 'sk-ant-test';
     process.env.OPENROUTER_API_KEY = 'sk-or-test';
-    // No explicit CLAUDE_FLOW_ROUTER_PROVIDER — defaults to anthropic
+    // No explicit RUFFLO_ROUTER_PROVIDER — defaults to anthropic
     const { resetModelRouter, routeToModelFull } = await import('../src/ruvector/model-router.js');
     resetModelRouter();
     const r = await routeToModelFull('add console.log to cache');
     expect(r.provider).toBe('anthropic');
   });
 
-  it('explicit CLAUDE_FLOW_ROUTER_PROVIDER=anthropic overrides both keys', async () => {
-    process.env.CLAUDE_FLOW_ROUTER_PROVIDER = 'anthropic';
+  it('explicit RUFFLO_ROUTER_PROVIDER=anthropic overrides both keys', async () => {
+    process.env.RUFFLO_ROUTER_PROVIDER = 'anthropic';
     process.env.OPENROUTER_API_KEY = 'sk-or-test';
     const { resetModelRouter, routeToModelFull } = await import('../src/ruvector/model-router.js');
     resetModelRouter();

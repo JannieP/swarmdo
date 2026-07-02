@@ -573,13 +573,13 @@ const indexCommand: Command = {
       const { getHNSWStatus, getHNSWIndex, searchHNSWIndex, generateEmbedding } = await import('../memory/memory-initializer.js');
 
       // Trigger lazy initialization before reading status, otherwise the
-      // singleton stays null and produces a misleading "@ruvector/core not
+      // singleton stays null and produces a misleading "@rufvector/core not
       // available" warning even when the package is present (#1698).
       await getHNSWIndex().catch(() => null);
 
-      // Probe whether @ruvector/core is loadable so we can distinguish
+      // Probe whether @rufvector/core is loadable so we can distinguish
       // "package missing" from "package present but index empty".
-      const ruvectorAvailable = await import('@ruvector/core').then(() => true).catch(() => false);
+      const ruvectorAvailable = await import('@rufvector/core').then(() => true).catch(() => false);
 
       // Get real HNSW status
       const status = getHNSWStatus();
@@ -592,7 +592,7 @@ const indexCommand: Command = {
             { key: 'value', header: 'Value', width: 30 },
           ],
           data: [
-            { metric: 'HNSW Available', value: status.available ? output.success('Yes (@ruvector/core)') : output.warning('No') },
+            { metric: 'HNSW Available', value: status.available ? output.success('Yes (@rufvector/core)') : output.warning('No') },
             { metric: 'Index Initialized', value: status.initialized ? output.success('Yes') : output.dim('No') },
             { metric: 'Vector Count', value: status.entryCount.toLocaleString() },
             { metric: 'Dimensions', value: String(status.dimensions) },
@@ -626,11 +626,11 @@ const indexCommand: Command = {
           ].join('\n'), 'Search Performance');
         } else if (!status.available && !ruvectorAvailable) {
           output.writeln();
-          output.printWarning('@ruvector/core not available');
-          output.printInfo('Install: npm install @ruvector/core');
+          output.printWarning('@rufvector/core not available');
+          output.printInfo('Install: npm install @rufvector/core');
         } else if (!status.available) {
           output.writeln();
-          output.printWarning('HNSW index not initialized (but @ruvector/core is installed)');
+          output.printWarning('HNSW index not initialized (but @rufvector/core is installed)');
           output.printInfo('This usually means no embeddings have been stored yet.');
           output.printInfo('Run: rufflo memory store -k "key" --value "text"');
         } else {
@@ -660,8 +660,8 @@ const indexCommand: Command = {
         const index = await getHNSWIndex({ forceRebuild: action === 'rebuild' });
 
         if (!index) {
-          spinner.fail('@ruvector/core not available');
-          output.printInfo('Install: npm install @ruvector/core');
+          spinner.fail('@rufvector/core not available');
+          output.printInfo('Install: npm install @rufvector/core');
           return { success: false, exitCode: 1 };
         }
 

@@ -279,7 +279,7 @@ describe('Scenario 6: Browser eval length limit and pattern blocking (defense-in
     expect(source).toContain('DEFAULT_MAX_EVAL_SCRIPT_LENGTH = 20_000');
 
     // Should be configurable via env var
-    expect(source).toContain('CLAUDE_FLOW_MAX_EVAL_SCRIPT_LENGTH');
+    expect(source).toContain('RUFFLO_MAX_EVAL_SCRIPT_LENGTH');
 
     // Must check length before eval
     expect(source).toContain('script.length > MAX_EVAL_SCRIPT_LENGTH');

@@ -650,7 +650,7 @@ enabled = true
 tool_timeout_sec = 120
 
 [mcp_servers.rufflo.env]
-CLAUDE_FLOW_LOG_LEVEL = "info"
+RUFFLO_LOG_LEVEL = "info"
 
 # =============================================================================
 # Profiles

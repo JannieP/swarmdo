@@ -4,7 +4,7 @@
       "command": "npx",
       "args": ["-y", "@rufflo/cli@latest"],
       "env": {
-        "CLAUDE_FLOW_MCP_TRANSPORT": "stdio"
+        "RUFFLO_MCP_TRANSPORT": "stdio"
       }
     }
   }

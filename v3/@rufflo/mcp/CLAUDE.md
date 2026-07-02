@@ -568,8 +568,8 @@ Bash("npx @rufflo/cli@latest neural patterns --list")
 
 ```bash
 # Configuration
-CLAUDE_FLOW_CONFIG=./rufflo.config.json
-CLAUDE_FLOW_LOG_LEVEL=info
+RUFFLO_CONFIG=./rufflo.config.json
+RUFFLO_LOG_LEVEL=info
 
 # Provider API Keys
 ANTHROPIC_API_KEY=sk-ant-...
@@ -577,13 +577,13 @@ OPENAI_API_KEY=sk-...
 GOOGLE_API_KEY=...
 
 # MCP Server
-CLAUDE_FLOW_MCP_PORT=3000
-CLAUDE_FLOW_MCP_HOST=localhost
-CLAUDE_FLOW_MCP_TRANSPORT=stdio
+RUFFLO_MCP_PORT=3000
+RUFFLO_MCP_HOST=localhost
+RUFFLO_MCP_TRANSPORT=stdio
 
 # Memory
-CLAUDE_FLOW_MEMORY_BACKEND=hybrid
-CLAUDE_FLOW_MEMORY_PATH=./data/memory
+RUFFLO_MEMORY_BACKEND=hybrid
+RUFFLO_MEMORY_PATH=./data/memory
 ```
 
 ## 🔍 Doctor Health Checks

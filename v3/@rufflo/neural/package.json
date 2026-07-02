@@ -122,7 +122,7 @@
   ],
   "dependencies": {
     "@rufflo/memory": "file:../memory",
-    "@ruvector/sona": "0.1.5"
+    "@rufvector/sona": "file:../../@rufvector/sona"
   },
   "optionalDependencies": {
     "agentdb": "^2.0.0 || ^3.0.0-alpha.1"

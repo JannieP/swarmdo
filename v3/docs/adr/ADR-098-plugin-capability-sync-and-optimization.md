@@ -14,7 +14,7 @@ Recent shipped work (ADR-094, 095, 096, 097) added or modified capabilities that
 
 | Recent capability | Plugin that should know about it | Current coverage |
 |---|---|---|
-| ADR-096 encryption-at-rest (CLAUDE_FLOW_ENCRYPT_AT_REST gate, fs-secure helpers) | `rufflo-aidefence`, `rufflo-security-audit`, `rufflo-rag-memory`, `rufflo-rvf` | None of these mention it |
+| ADR-096 encryption-at-rest (RUFFLO_ENCRYPT_AT_REST gate, fs-secure helpers) | `rufflo-aidefence`, `rufflo-security-audit`, `rufflo-rag-memory`, `rufflo-rvf` | None of these mention it |
 | ADR-097 federation budget circuit breaker (`maxHops`, `maxTokens`, `maxUsd`) | `rufflo-federation` ✅, `rufflo-cost-tracker` should consume `federation_spend` events | Federation has it; cost-tracker doesn't |
 | `validateEnv()` loader-hijack denylist | `rufflo-aidefence`, `rufflo-security-audit` (relevant for threat agents) | Not surfaced |
 | `validateBudget()` / `enforceBudget()` (federation) | `rufflo-cost-tracker` | Not surfaced |
@@ -80,7 +80,7 @@ For every plugin whose surface meaningfully overlaps a post-3.6.13 capability, a
 |---|---|
 | `rufflo-aidefence` | `validateEnv` loader-hijack denylist; chmod 0600 file mode; encryption-at-rest gate (defense-in-depth pairing) |
 | `rufflo-security-audit` | Same set, plus the github-tools / update/executor shell injection patterns to scan for |
-| `rufflo-rag-memory`, `rufflo-rvf` | Encryption-at-rest gate (memory.db wraps under `CLAUDE_FLOW_ENCRYPT_AT_REST=1`) |
+| `rufflo-rag-memory`, `rufflo-rvf` | Encryption-at-rest gate (memory.db wraps under `RUFFLO_ENCRYPT_AT_REST=1`) |
 | `rufflo-cost-tracker` | Federation budget breaker; `federation_spend` events; per-peer rolling aggregation API (when ADR-097 P3 lands) |
 | `rufflo-agentdb`, `rufflo-knowledge-graph` | The 5 activated G7 controllers (gnn, rvf, mut, att, gvb) and their MCP tools |
 | `rufflo-federation` | Already done in v0.2.0 |

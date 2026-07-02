@@ -48,7 +48,7 @@ const DEFAULT_CONFIG: UpdateConfig = {
 };
 
 // Packages to check for updates
-const CLAUDE_FLOW_PACKAGES = [
+const RUFFLO_PACKAGES = [
   '@rufflo/cli',
   '@rufflo/embeddings',
   '@rufflo/security',
@@ -177,7 +177,7 @@ export async function checkForUpdates(
   const versionCache: Record<string, string> = {};
 
   // Check each package
-  const packagesToCheck = CLAUDE_FLOW_PACKAGES.filter(
+  const packagesToCheck = RUFFLO_PACKAGES.filter(
     (pkg) => !config.exclude.includes(pkg)
   );
 

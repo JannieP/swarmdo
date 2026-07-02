@@ -266,7 +266,7 @@ export class RvfBackend implements IMemoryBackend {
 
     this.initialized = true;
     if (this.config.verbose) {
-      const mode = this.nativeDb ? 'native @ruvector/rvf' : 'pure-TS fallback';
+      const mode = this.nativeDb ? 'native @rufvector/rvf' : 'pure-TS fallback';
       console.log(`[RvfBackend] Initialized (${mode}), ${this.entries.size} entries loaded`);
     }
   }
@@ -493,7 +493,7 @@ export class RvfBackend implements IMemoryBackend {
     if (!this.initialized) issues.push('Backend not initialized');
     if (!this.hnswIndex && !this.nativeDb) {
       issues.push('No vector index available');
-      recommendations.push('Install @ruvector/rvf for native HNSW performance');
+      recommendations.push('Install @rufvector/rvf for native HNSW performance');
     }
 
     const status = issues.length === 0
@@ -515,7 +515,7 @@ export class RvfBackend implements IMemoryBackend {
 
   private async tryNativeInit(): Promise<boolean> {
     try {
-      const rvf = await import('@ruvector/rvf' as string);
+      const rvf = await import('@rufvector/rvf' as string);
       this.nativeDb = new rvf.RvfDatabase({
         path: this.config.databasePath,
         dimensions: this.config.dimensions,
@@ -527,12 +527,12 @@ export class RvfBackend implements IMemoryBackend {
       });
       await this.nativeDb.open();
       if (this.config.verbose) {
-        console.log('[RvfBackend] Native @ruvector/rvf loaded successfully');
+        console.log('[RvfBackend] Native @rufvector/rvf loaded successfully');
       }
       return true;
     } catch {
       if (this.config.verbose) {
-        console.log('[RvfBackend] @ruvector/rvf not available, using pure-TS fallback');
+        console.log('[RvfBackend] @rufvector/rvf not available, using pure-TS fallback');
       }
       return false;
     }

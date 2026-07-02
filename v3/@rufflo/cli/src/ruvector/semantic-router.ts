@@ -2,7 +2,7 @@
  * Pure JavaScript SemanticRouter implementation
  *
  * Provides intent routing using cosine similarity.
- * This is a fallback implementation since @ruvector/router's native VectorDb has bugs.
+ * This is a fallback implementation since @rufvector/router's native VectorDb has bugs.
  *
  * Performance: ~50,000 routes/sec with 100 intents (sufficient for agent routing)
  */

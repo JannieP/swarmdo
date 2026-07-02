@@ -95,7 +95,7 @@ RUN ln -sf /usr/local/lib/node_modules/rufflo/bin/rufflo.js /usr/local/bin/ruffl
 ENV NODE_ENV=production \
     CLAUDE_CODE_HEADLESS=true \
     CLAUDE_CODE_SANDBOX_MODE=strict \
-    CLAUDE_FLOW_LOG_LEVEL=info \
+    RUFFLO_LOG_LEVEL=info \
     HOME=/home/rufflo
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \

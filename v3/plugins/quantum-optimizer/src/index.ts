@@ -104,9 +104,9 @@ export const pluginMetadata = {
   ],
   bridges: ['exotic-bridge', 'dag-bridge'],
   wasmPackages: [
-    '@ruvector/exotic-wasm',
-    '@ruvector/dag-wasm',
-    '@ruvector/sparse-inference-wasm',
+    '@rufvector/exotic-wasm',
+    '@rufvector/dag-wasm',
+    '@rufvector/sparse-inference-wasm',
   ],
 } as const;
 

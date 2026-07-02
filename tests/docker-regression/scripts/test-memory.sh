@@ -42,7 +42,7 @@ run_test() {
 echo "── Memory Initialization ──"
 
 run_test "Memory status" "npx rufflo memory status 2>/dev/null || echo 'memory status ok'"
-run_test "Memory path config" "echo 'memory path: ${CLAUDE_FLOW_MEMORY_PATH:-./data}' && echo 'ok'"
+run_test "Memory path config" "echo 'memory path: ${RUFFLO_MEMORY_PATH:-./data}' && echo 'ok'"
 run_test "AgentDB initialization" "echo 'AgentDB init' && echo 'ok'"
 run_test "SQLite backend" "echo 'SQLite backend' && echo 'ok'"
 run_test "Hybrid backend" "echo 'Hybrid backend (SQLite + AgentDB)' && echo 'ok'"

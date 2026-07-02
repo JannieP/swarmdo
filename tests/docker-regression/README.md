@@ -109,10 +109,10 @@ bash scripts/run-all-tests.sh
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `TEST_REPORT_PATH` | `/app/reports` | Report output directory |
-| `CLAUDE_FLOW_MODE` | `test` | Operating mode |
-| `CLAUDE_FLOW_MEMORY_PATH` | `/app/data` | Memory storage path |
-| `CLAUDE_FLOW_LOG_LEVEL` | `debug` | Log verbosity |
-| `CLAUDE_FLOW_MAX_AGENTS` | `15` | Max concurrent agents |
+| `RUFFLO_MODE` | `test` | Operating mode |
+| `RUFFLO_MEMORY_PATH` | `/app/data` | Memory storage path |
+| `RUFFLO_LOG_LEVEL` | `debug` | Log verbosity |
+| `RUFFLO_MAX_AGENTS` | `15` | Max concurrent agents |
 | `MCP_SERVER_HOST` | `mcp-server` | MCP server hostname |
 | `MCP_SERVER_PORT` | `3000` | MCP server port |
 

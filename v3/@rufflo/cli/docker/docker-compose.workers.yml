@@ -10,8 +10,8 @@
 #   ANTHROPIC_API_KEY - Your Anthropic API key
 #
 # Optional:
-#   CLAUDE_FLOW_WORKERS - Comma-separated list of workers to enable
-#   CLAUDE_FLOW_SANDBOX - Sandbox mode (strict, permissive, disabled)
+#   RUFFLO_WORKERS - Comma-separated list of workers to enable
+#   RUFFLO_SANDBOX - Sandbox mode (strict, permissive, disabled)
 
 version: '3.8'
 
@@ -38,8 +38,8 @@ services:
     environment:
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
       - CLAUDE_CODE_HEADLESS=true
-      - CLAUDE_CODE_SANDBOX_MODE=${CLAUDE_FLOW_SANDBOX:-strict}
-      - CLAUDE_FLOW_WORKERS=${CLAUDE_FLOW_WORKERS:-audit,optimize,testgaps}
+      - CLAUDE_CODE_SANDBOX_MODE=${RUFFLO_SANDBOX:-strict}
+      - RUFFLO_WORKERS=${RUFFLO_WORKERS:-audit,optimize,testgaps}
       - REDIS_URL=redis://redis:6379
       - NODE_ENV=production
     volumes:

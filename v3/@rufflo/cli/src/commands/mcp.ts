@@ -321,7 +321,7 @@ const statusCommand: Command = {
       // If PID-based check says not running, detect stdio mode
       if (!status.running) {
         const isStdio = !process.stdin.isTTY;
-        const envTransport = process.env.CLAUDE_FLOW_MCP_TRANSPORT;
+        const envTransport = process.env.RUFFLO_MCP_TRANSPORT;
         if (isStdio || envTransport === 'stdio') {
           status = {
             running: true,

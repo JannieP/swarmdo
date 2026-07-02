@@ -30,7 +30,7 @@ try {
   // the type-load-success-but-runtime-fails trap from ADR-086).
   // NOTE: ruvector's embed() returns `{embedding, dimension, timeMs}` — we
   // unwrap to plain number[] for the shared interface.
-  const rv = await import('ruvector').catch(() => null) as any;
+  const rv = await import('rufvector').catch(() => null) as any;
   if (rv?.embed && typeof rv.embed === 'function' && rv.isOnnxAvailable?.()) {
     try {
       if (typeof rv.initOnnxEmbedder === 'function') await rv.initOnnxEmbedder();

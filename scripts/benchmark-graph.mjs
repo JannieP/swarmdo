@@ -34,7 +34,7 @@ const jsonMode = process.argv.includes('--json');
 
 const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'adr130-bench-'));
 const dbPath = path.join(tmpDir, 'memory.db');
-process.env.CLAUDE_FLOW_MEMORY_PATH = tmpDir;
+process.env.RUFFLO_MEMORY_PATH = tmpDir;
 
 function percentile(sorted, p) {
   const idx = Math.ceil((p / 100) * sorted.length) - 1;

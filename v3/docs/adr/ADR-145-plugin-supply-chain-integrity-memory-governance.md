@@ -47,14 +47,14 @@ Add `PluginIntegrityVerifier` to `@rufflo/security` with two verification stages
 **Stage 1 — Signature verification** (blocks DDIPE's static-payload variants):
 
 - Every plugin published to the IPFS registry MUST carry a detached **Ed25519 signature** over its manifest hash. The signature lives alongside the manifest in IPFS; the registry index records the signing key's fingerprint.
-- `discovery.ts` MUST refuse to install unsigned plugins when `CLAUDE_FLOW_STRICT_PLUGINS=true` (default: warn-only for backwards compatibility).
+- `discovery.ts` MUST refuse to install unsigned plugins when `RUFFLO_STRICT_PLUGINS=true` (default: warn-only for backwards compatibility).
 - Trust anchors (publisher keys we vouch for) live in `v3/@rufflo/cli/src/plugins/trust/trust-anchors.json`. Edits are gated on CODEOWNERS review.
 
 **Stage 2 — Semantic intent scan** (blocks SCH):
 
 - During `plugins install`, the verifier pipes every natural-language field (description, README excerpt, "compliance rules", any field that ends up in agent context) through a lightweight intent classifier.
 - The classifier scores against a taxonomy of malicious-intent categories: credential exfiltration, RCE, data poisoning, privilege escalation, persistence.
-- Install blocks if confidence exceeds `CLAUDE_FLOW_PLUGIN_SCH_THRESHOLD` (default `0.8`).
+- Install blocks if confidence exceeds `RUFFLO_PLUGIN_SCH_THRESHOLD` (default `0.8`).
 - Fallback: LLM-free pattern rules covering the top-5 SCH families from arXiv:2605.14460 (Table 3 of the paper). The pattern fallback is what makes this safe to run during `plugins install` in environments without LLM credentials.
 
 **Implementation targets**:
@@ -89,8 +89,8 @@ Address governance primitives 1–3 from the Mnemonic Sovereignty taxonomy (writ
 
 ### Backwards compatibility
 
-- Plugin verification defaults to **warn-only** (`CLAUDE_FLOW_STRICT_PLUGINS=false`). Existing unsigned plugins continue to install with a warning.
-- Memory namespace ACLs are **additive**: agents spawned without `writeNamespaces` retain legacy full-access until `CLAUDE_FLOW_STRICT_MEMORY=true` is set.
+- Plugin verification defaults to **warn-only** (`RUFFLO_STRICT_PLUGINS=false`). Existing unsigned plugins continue to install with a warning.
+- Memory namespace ACLs are **additive**: agents spawned without `writeNamespaces` retain legacy full-access until `RUFFLO_STRICT_MEMORY=true` is set.
 - Both strict modes become default in v4.0.0. The next-major release will be the breaking change.
 - The two new env vars are documented escape hatches and MUST be registered in `audit-env-var-precedence.mjs` with rationale.
 
@@ -124,7 +124,7 @@ Address governance primitives 1–3 from the Mnemonic Sovereignty taxonomy (writ
 
 P1 lands with:
 - Unit tests covering signature verification against the existing official-plugin keys (round-trip sign → verify; tamper-flips fail).
-- Smoke test: `plugins install ./unsigned-plugin` warns by default, errors under `CLAUDE_FLOW_STRICT_PLUGINS=true`.
+- Smoke test: `plugins install ./unsigned-plugin` warns by default, errors under `RUFFLO_STRICT_PLUGINS=true`.
 - Pattern-fallback test corpus drawn from arXiv:2605.14460's Table 3 examples.
 - Integration test: agent spawned with `writeNamespaces: ['a']` cannot `memory_store` to namespace `b` under strict-memory mode; legacy mode allows it with a warning log.
 

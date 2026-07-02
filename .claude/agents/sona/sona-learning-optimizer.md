@@ -61,5 +61,5 @@ npx rufflo@alpha hooks post-task --task-id "$ID" --success true
 
 ## References
 
-- **Package**: @ruvector/sona@0.1.1
+- **Package**: @rufvector/sona@0.1.1
 - **Integration Guide**: docs/RUVECTOR_SONA_INTEGRATION.md

@@ -7,8 +7,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { ASTAnalyzer, createASTAnalyzer, type ASTAnalysis } from '../../src/ruvector/ast-analyzer';
 
-// Mock the @ruvector/ast module
-vi.mock('@ruvector/ast', () => ({
+// Mock the @rufvector/ast module
+vi.mock('@rufvector/ast', () => ({
   createASTAnalyzer: vi.fn(() => null),
 }));
 

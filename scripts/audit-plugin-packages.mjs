@@ -12,7 +12,7 @@
  *      `npm install <plugin>` fail with E404.
  *
  *   B. (#1902) A `peerDependencies` range for a `@rufflo/*` or
- *      `@ruvector/*` target that is a "bare stable" range (`>=X.Y.Z`,
+ *      `@rufvector/*` target that is a "bare stable" range (`>=X.Y.Z`,
  *      `^X.Y.Z`, `~X.Y.Z`, `X.Y.Z`) with no prerelease component. Those
  *      ranges DON'T satisfy a prerelease publish like `3.0.0-alpha.15`, so
  *      npm can't find a matching version. Use `>=X.Y.Z-0` or `*`.
@@ -156,7 +156,7 @@ for (const dir of plugins) {
   // All @rufflo packages currently publish as 3.x prereleases, so a bare
   // ">=3.0.0" can never resolve. We only flag @rufflo/* here (and only
   // when non-optional, or optional-but-@rufflo since the project always
-  // ships those as prereleases). Optional @ruvector/* WASM peers are exempt —
+  // ships those as prereleases). Optional @rufvector/* WASM peers are exempt —
   // a bare range there at worst means the optional dep doesn't get installed.
   for (const [name, range] of Object.entries(peers)) {
     if (!name.startsWith('@rufflo/')) continue;

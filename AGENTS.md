@@ -447,9 +447,9 @@ npx rufflo mcp start
 
 ### Environment Variables
 ```bash
-CLAUDE_FLOW_CONFIG=./rufflo.config.json
-CLAUDE_FLOW_LOG_LEVEL=info
-CLAUDE_FLOW_MEMORY_BACKEND=hybrid
+RUFFLO_CONFIG=./rufflo.config.json
+RUFFLO_LOG_LEVEL=info
+RUFFLO_MEMORY_BACKEND=hybrid
 ```
 
 ---

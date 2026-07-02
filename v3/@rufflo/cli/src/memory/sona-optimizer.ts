@@ -95,7 +95,7 @@ export interface SONAStats {
   qLearningEnabled: boolean;
   /** Time of last learning update */
   lastUpdate: number | null;
-  /** Contrastive trainer status (from @ruvector/ruvllm) */
+  /** Contrastive trainer status (from @rufvector/rufllm) */
   _contrastiveTrainer?: { triplets: number; agents: number } | 'unavailable';
 }
 
@@ -131,7 +131,7 @@ const DECAY_RATE = 0.01; // Per day
 const MAX_PATTERNS = 1000;
 
 // ============================================================================
-// Contrastive Trainer (lazy-loaded from @ruvector/ruvllm)
+// Contrastive Trainer (lazy-loaded from @rufvector/rufllm)
 // ============================================================================
 
 let contrastiveTrainer: any = null;
@@ -143,7 +143,7 @@ async function loadContrastiveTrainer(): Promise<any> {
   try {
     const { createRequire } = await import('module');
     const requireCjs = createRequire(import.meta.url);
-    const ruvllm = requireCjs('@ruvector/ruvllm');
+    const ruvllm = requireCjs('@rufvector/rufllm');
     contrastiveTrainer = new ruvllm.ContrastiveTrainer({ batchSize: 32, margin: 0.5 });
     return contrastiveTrainer;
   } catch {
@@ -233,7 +233,7 @@ export class SONAOptimizer {
   private qLearningRouter: any = null;
   private qLearningEnabled = false;
 
-  /** Real @ruvector/sona engine — null if native not available, undefined if not yet tried */
+  /** Real @rufvector/sona engine — null if native not available, undefined if not yet tried */
   private sonaEngine: any | null | undefined = undefined;
 
   constructor(options?: { persistencePath?: string }) {
@@ -241,16 +241,16 @@ export class SONAOptimizer {
   }
 
   /**
-   * Attempt to load the native @ruvector/sona engine (once).
+   * Attempt to load the native @rufvector/sona engine (once).
    * Sets `sonaEngine` to the engine instance or null if unavailable.
    */
   private async loadSonaEngine(): Promise<void> {
     if (this.sonaEngine !== undefined) return; // already attempted
     try {
-      // @ts-ignore — @ruvector/sona is in optionalDependencies and ships
+      // @ts-ignore — @rufvector/sona is in optionalDependencies and ships
       // no .d.ts. Runtime is gated by try/catch; TS errors here on hosts
       // without the module resolved (e.g. CI before postinstall).
-      const sona: any = await import('@ruvector/sona');
+      const sona: any = await import('@rufvector/sona');
       const EngineCtor = sona.SonaEngine || sona.default?.SonaEngine;
       if (EngineCtor) {
         this.sonaEngine = new EngineCtor({ mode: 'real-time' });
@@ -397,14 +397,14 @@ export class SONAOptimizer {
    * Get routing suggestion based on learned patterns.
    *
    * Priority order:
-   * 1. Real @ruvector/sona native engine (if available and has matches)
+   * 1. Real @rufvector/sona native engine (if available and has matches)
    * 2. SONA learned pattern matching (keyword overlap + confidence)
    * 3. Q-learning router (if enabled)
    * 4. Keyword heuristic
    * 5. Default fallback
    */
   async getRoutingSuggestion(task: string): Promise<RoutingSuggestion> {
-    // Priority 1: Try real @ruvector/sona native engine
+    // Priority 1: Try real @rufvector/sona native engine
     await this.loadSonaEngine();
     if (this.sonaEngine) {
       try {

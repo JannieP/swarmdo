@@ -1486,9 +1486,9 @@ All configurations support these environment variables:
 | `ANTHROPIC_API_KEY` | Your Anthropic API key | Yes (for Claude models) |
 | `OPENAI_API_KEY` | OpenAI API key | Optional (for GPT models) |
 | `GOOGLE_API_KEY` | Google AI API key | Optional (for Gemini) |
-| `CLAUDE_FLOW_LOG_LEVEL` | Logging level (debug, info, warn, error) | Optional |
-| `CLAUDE_FLOW_TOOL_GROUPS` | MCP tool groups to enable (comma-separated) | Optional |
-| `CLAUDE_FLOW_TOOL_MODE` | Preset tool mode (develop, pr-review, devops, etc.) | Optional |
+| `RUFFLO_LOG_LEVEL` | Logging level (debug, info, warn, error) | Optional |
+| `RUFFLO_TOOL_GROUPS` | MCP tool groups to enable (comma-separated) | Optional |
+| `RUFFLO_TOOL_MODE` | Preset tool mode (develop, pr-review, devops, etc.) | Optional |
 
 #### MCP Tool Groups
 
@@ -1496,10 +1496,10 @@ Control which MCP tools are loaded to reduce latency and token usage:
 
 ```bash
 # Enable specific tool groups
-export CLAUDE_FLOW_TOOL_GROUPS=implement,test,fix,memory
+export RUFFLO_TOOL_GROUPS=implement,test,fix,memory
 
 # Or use a preset mode
-export CLAUDE_FLOW_TOOL_MODE=develop
+export RUFFLO_TOOL_MODE=develop
 ```
 
 **Available Groups:** `create`, `issue`, `branch`, `implement`, `test`, `fix`, `optimize`, `monitor`, `security`, `memory`, `all`, `minimal`
@@ -3101,13 +3101,13 @@ The statusline shows live context metrics read from `autopilot-state.json`:
 
 ```bash
 # Context Autopilot (all have sensible defaults)
-CLAUDE_FLOW_CONTEXT_AUTOPILOT=true        # Enable/disable autopilot (default: true)
-CLAUDE_FLOW_CONTEXT_WINDOW=200000         # Context window size in tokens
-CLAUDE_FLOW_AUTOPILOT_WARN=0.70           # Warning threshold (70%)
-CLAUDE_FLOW_AUTOPILOT_PRUNE=0.85          # Optimization threshold (85%)
-CLAUDE_FLOW_COMPACT_RESTORE_BUDGET=4000   # Max chars restored after compaction
-CLAUDE_FLOW_RETENTION_DAYS=30             # Auto-prune never-accessed entries
-CLAUDE_FLOW_AUTO_OPTIMIZE=true            # Importance ranking + pruning + sync
+RUFFLO_CONTEXT_AUTOPILOT=true        # Enable/disable autopilot (default: true)
+RUFFLO_CONTEXT_WINDOW=200000         # Context window size in tokens
+RUFFLO_AUTOPILOT_WARN=0.70           # Warning threshold (70%)
+RUFFLO_AUTOPILOT_PRUNE=0.85          # Optimization threshold (85%)
+RUFFLO_COMPACT_RESTORE_BUDGET=4000   # Max chars restored after compaction
+RUFFLO_RETENTION_DAYS=30             # Auto-prune never-accessed entries
+RUFFLO_AUTO_OPTIMIZE=true            # Importance ranking + pruning + sync
 ```
 
 ### Commands
@@ -3253,8 +3253,8 @@ RVF validates inputs at every boundary:
 
 ```bash
 # Environment variables
-CLAUDE_FLOW_MEMORY_BACKEND=hybrid   # auto-selects RVF
-CLAUDE_FLOW_MEMORY_PATH=./data/memory
+RUFFLO_MEMORY_BACKEND=hybrid   # auto-selects RVF
+RUFFLO_MEMORY_PATH=./data/memory
 
 # Or via CLI
 rufflo memory init --force
@@ -6956,21 +6956,21 @@ Environment setup, configuration options, and platform support.
 
 ```powershell
 npx @rufflo/security@latest audit --platform windows
-$env:CLAUDE_FLOW_MODE = "integration"
+$env:RUFFLO_MODE = "integration"
 ```
 
 ### macOS (Bash/Zsh)
 
 ```bash
 npx @rufflo/security@latest audit --platform darwin
-export CLAUDE_FLOW_SECURITY_MODE="strict"
+export RUFFLO_SECURITY_MODE="strict"
 ```
 
 ### Linux (Bash)
 
 ```bash
 npx @rufflo/security@latest audit --platform linux
-export CLAUDE_FLOW_MEMORY_PATH="./data"
+export RUFFLO_MEMORY_PATH="./data"
 ```
 
 </details>
@@ -6984,40 +6984,40 @@ export CLAUDE_FLOW_MEMORY_PATH="./data"
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `CLAUDE_FLOW_MODE` | Operation mode (`development`, `production`, `integration`) | `development` |
-| `CLAUDE_FLOW_ENV` | Environment name for test/dev isolation | - |
-| `CLAUDE_FLOW_DATA_DIR` | Root data directory | `./data` |
-| `CLAUDE_FLOW_MEMORY_PATH` | Directory for persistent memory storage | `./data` |
-| `CLAUDE_FLOW_MEMORY_TYPE` | Memory backend type (`json`, `sqlite`, `agentdb`, `hybrid`) | `hybrid` |
-| `CLAUDE_FLOW_SECURITY_MODE` | Security level (`strict`, `standard`, `permissive`) | `standard` |
-| `CLAUDE_FLOW_LOG_LEVEL` | Logging verbosity (`debug`, `info`, `warn`, `error`) | `info` |
-| `CLAUDE_FLOW_CONFIG` | Path to configuration file | `./rufflo.config.json` |
+| `RUFFLO_MODE` | Operation mode (`development`, `production`, `integration`) | `development` |
+| `RUFFLO_ENV` | Environment name for test/dev isolation | - |
+| `RUFFLO_DATA_DIR` | Root data directory | `./data` |
+| `RUFFLO_MEMORY_PATH` | Directory for persistent memory storage | `./data` |
+| `RUFFLO_MEMORY_TYPE` | Memory backend type (`json`, `sqlite`, `agentdb`, `hybrid`) | `hybrid` |
+| `RUFFLO_SECURITY_MODE` | Security level (`strict`, `standard`, `permissive`) | `standard` |
+| `RUFFLO_LOG_LEVEL` | Logging verbosity (`debug`, `info`, `warn`, `error`) | `info` |
+| `RUFFLO_CONFIG` | Path to configuration file | `./rufflo.config.json` |
 | `NODE_ENV` | Node.js environment (`development`, `production`, `test`) | `development` |
 
 ### Swarm & Agents
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `CLAUDE_FLOW_MAX_AGENTS` | Default concurrent agent limit | `15` |
-| `CLAUDE_FLOW_TOPOLOGY` | Default swarm topology (`hierarchical`, `mesh`, `ring`, `star`) | `hierarchical` |
-| `CLAUDE_FLOW_HEADLESS` | Run in headless mode (no interactive prompts) | `false` |
+| `RUFFLO_MAX_AGENTS` | Default concurrent agent limit | `15` |
+| `RUFFLO_TOPOLOGY` | Default swarm topology (`hierarchical`, `mesh`, `ring`, `star`) | `hierarchical` |
+| `RUFFLO_HEADLESS` | Run in headless mode (no interactive prompts) | `false` |
 | `CLAUDE_CODE_HEADLESS` | Claude Code headless mode compatibility | `false` |
 
 ### MCP Server
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `CLAUDE_FLOW_MCP_PORT` | MCP server port | `3000` |
-| `CLAUDE_FLOW_MCP_HOST` | MCP server host | `localhost` |
-| `CLAUDE_FLOW_MCP_TRANSPORT` | Transport type (`stdio`, `http`, `websocket`) | `stdio` |
+| `RUFFLO_MCP_PORT` | MCP server port | `3000` |
+| `RUFFLO_MCP_HOST` | MCP server host | `localhost` |
+| `RUFFLO_MCP_TRANSPORT` | Transport type (`stdio`, `http`, `websocket`) | `stdio` |
 
 ### Vector Search (HNSW)
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `CLAUDE_FLOW_HNSW_M` | HNSW index M parameter (connectivity, higher = more accurate) | `16` |
-| `CLAUDE_FLOW_HNSW_EF` | HNSW search ef parameter (accuracy, higher = slower) | `200` |
-| `CLAUDE_FLOW_EMBEDDING_DIM` | Vector embedding dimensions | `384` |
+| `RUFFLO_HNSW_M` | HNSW index M parameter (connectivity, higher = more accurate) | `16` |
+| `RUFFLO_HNSW_EF` | HNSW search ef parameter (accuracy, higher = slower) | `200` |
+| `RUFFLO_EMBEDDING_DIM` | Vector embedding dimensions | `384` |
 | `SQLJS_WASM_PATH` | Custom path to sql.js WASM binary | - |
 
 ### AI Provider API Keys
@@ -7057,8 +7057,8 @@ export CLAUDE_FLOW_MEMORY_PATH="./data"
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `CLAUDE_FLOW_AUTO_UPDATE` | Enable/disable auto-updates | `true` |
-| `CLAUDE_FLOW_FORCE_UPDATE` | Force update check | `false` |
+| `RUFFLO_AUTO_UPDATE` | Enable/disable auto-updates | `true` |
+| `RUFFLO_FORCE_UPDATE` | Force update check | `false` |
 | `CI` | CI environment detection (disables updates) | - |
 | `CONTINUOUS_INTEGRATION` | Alternative CI detection | - |
 
@@ -7069,7 +7069,7 @@ export CLAUDE_FLOW_MEMORY_PATH="./data"
 | `GITHUB_TOKEN` | GitHub API token for repository operations | Optional |
 | `JWT_SECRET` | JWT secret for authentication | Production |
 | `HMAC_SECRET` | HMAC secret for request signing | Production |
-| `CLAUDE_FLOW_TOKEN` | Internal authentication token | Optional |
+| `RUFFLO_TOKEN` | Internal authentication token | Optional |
 
 ### Output Formatting
 
@@ -7084,25 +7084,25 @@ export CLAUDE_FLOW_MEMORY_PATH="./data"
 
 ```bash
 # Core
-CLAUDE_FLOW_MODE=development
-CLAUDE_FLOW_LOG_LEVEL=info
-CLAUDE_FLOW_MAX_AGENTS=15
+RUFFLO_MODE=development
+RUFFLO_LOG_LEVEL=info
+RUFFLO_MAX_AGENTS=15
 
 # AI Providers
 ANTHROPIC_API_KEY=sk-ant-api03-...
 OPENAI_API_KEY=sk-...
 
 # MCP Server
-CLAUDE_FLOW_MCP_PORT=3000
-CLAUDE_FLOW_MCP_TRANSPORT=stdio
+RUFFLO_MCP_PORT=3000
+RUFFLO_MCP_TRANSPORT=stdio
 
 # Memory
-CLAUDE_FLOW_MEMORY_TYPE=hybrid
-CLAUDE_FLOW_MEMORY_PATH=./data
+RUFFLO_MEMORY_TYPE=hybrid
+RUFFLO_MEMORY_PATH=./data
 
 # Vector Search
-CLAUDE_FLOW_HNSW_M=16
-CLAUDE_FLOW_HNSW_EF=200
+RUFFLO_HNSW_M=16
+RUFFLO_HNSW_EF=200
 
 # Optional: IPFS Storage
 # PINATA_API_KEY=...
@@ -7397,7 +7397,7 @@ npx rufflo@latest mcp start
 # Check available memory
 free -m
 # Reduce max agents if memory constrained
-export CLAUDE_FLOW_MAX_AGENTS=5
+export RUFFLO_MAX_AGENTS=5
 ```
 
 **Pattern search returning no results**
@@ -7411,9 +7411,9 @@ npx rufflo@latest hooks pretrain
 **Windows path issues**
 ```powershell
 # Use forward slashes or escape backslashes
-$env:CLAUDE_FLOW_MEMORY_PATH = "./data"
+$env:RUFFLO_MEMORY_PATH = "./data"
 # Or use absolute path
-$env:CLAUDE_FLOW_MEMORY_PATH = "C:/Users/name/rufflo/data"
+$env:RUFFLO_MEMORY_PATH = "C:/Users/name/rufflo/data"
 ```
 
 **Permission denied errors**
@@ -7428,8 +7428,8 @@ sudo chown -R $(whoami) ~/.npm
 # Enable garbage collection
 node --expose-gc node_modules/.bin/rufflo
 # Reduce HNSW parameters for lower memory
-export CLAUDE_FLOW_HNSW_M=8
-export CLAUDE_FLOW_HNSW_EF=100
+export RUFFLO_HNSW_M=8
+export RUFFLO_HNSW_EF=100
 ```
 
 </details>

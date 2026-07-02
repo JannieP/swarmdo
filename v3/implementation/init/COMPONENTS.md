@@ -175,11 +175,11 @@ Claude Code statusline module showing:
       "command": "npx",
       "args": ["@rufflo/cli", "mcp", "start"],
       "env": {
-        "CLAUDE_FLOW_MODE": "v3",
-        "CLAUDE_FLOW_HOOKS_ENABLED": "true",
-        "CLAUDE_FLOW_TOPOLOGY": "hierarchical-mesh",
-        "CLAUDE_FLOW_MAX_AGENTS": "15",
-        "CLAUDE_FLOW_MEMORY_BACKEND": "hybrid"
+        "RUFFLO_MODE": "v3",
+        "RUFFLO_HOOKS_ENABLED": "true",
+        "RUFFLO_TOPOLOGY": "hierarchical-mesh",
+        "RUFFLO_MAX_AGENTS": "15",
+        "RUFFLO_MEMORY_BACKEND": "hybrid"
       }
     }
   }

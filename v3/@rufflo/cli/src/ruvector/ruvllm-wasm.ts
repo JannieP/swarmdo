@@ -1,7 +1,7 @@
 /**
  * RuVector LLM WASM Integration
  *
- * Wraps @ruvector/ruvllm-wasm for browser-native LLM inference utilities.
+ * Wraps @rufvector/rufllm-wasm for browser-native LLM inference utilities.
  * Provides HNSW routing, SONA instant adaptation, MicroLoRA fine-tuning,
  * chat template formatting, KV cache management, and inference arena.
  *
@@ -88,11 +88,11 @@ export interface RuvllmStatus {
 let _wasmReady = false;
 
 /**
- * Check if @ruvector/ruvllm-wasm is installed and loadable.
+ * Check if @rufvector/rufllm-wasm is installed and loadable.
  */
 export async function isRuvllmWasmAvailable(): Promise<boolean> {
   try {
-    const mod = await import('@ruvector/ruvllm-wasm');
+    const mod = await import('@rufvector/rufllm-wasm');
     return typeof mod.RuvLLMWasm === 'function';
   } catch {
     return false;
@@ -106,15 +106,15 @@ export async function isRuvllmWasmAvailable(): Promise<boolean> {
 export async function initRuvllmWasm(): Promise<void> {
   if (_wasmReady) return;
   try {
-    const mod = await import('@ruvector/ruvllm-wasm');
+    const mod = await import('@rufvector/rufllm-wasm');
     const require_ = createRequire(import.meta.url);
-    const wasmPath = require_.resolve('@ruvector/ruvllm-wasm/ruvllm_wasm_bg.wasm');
+    const wasmPath = require_.resolve('@rufvector/rufllm-wasm/ruvllm_wasm_bg.wasm');
     const wasmBytes = readFileSync(wasmPath);
     // MUST use object form — initSync(bytes) is deprecated
     mod.initSync({ module: wasmBytes });
     _wasmReady = true;
   } catch (err) {
-    throw new Error(`Failed to initialize @ruvector/ruvllm-wasm: ${err}`);
+    throw new Error(`Failed to initialize @rufvector/rufllm-wasm: ${err}`);
   }
 }
 
@@ -127,7 +127,7 @@ export async function getRuvllmStatus(): Promise<RuvllmStatus> {
     return { available: false, initialized: false, version: null };
   }
   try {
-    const mod = await import('@ruvector/ruvllm-wasm');
+    const mod = await import('@rufvector/rufllm-wasm');
     // version is a standalone function, not on RuvLLMWasm class
     const version = typeof mod.getVersion === 'function' ? mod.getVersion() : null;
     return { available: true, initialized: _wasmReady, version };
@@ -158,7 +158,7 @@ export async function createHnswRouter(config: HnswRouterConfig): Promise<{
   toJson: () => string;
 }> {
   await initRuvllmWasm();
-  const mod = await import('@ruvector/ruvllm-wasm');
+  const mod = await import('@rufvector/rufllm-wasm');
 
   const router = new mod.HnswRouterWasm(config.dimensions, config.maxPatterns);
   if (config.efSearch) {
@@ -216,7 +216,7 @@ export async function createSonaInstant(config: SonaConfig = {}): Promise<{
   toJson: () => string;
 }> {
   await initRuvllmWasm();
-  const mod = await import('@ruvector/ruvllm-wasm');
+  const mod = await import('@rufvector/rufllm-wasm');
 
   const sonaConfig = new mod.SonaConfigWasm();
   if (config.hiddenDim !== undefined) sonaConfig.hiddenDim = config.hiddenDim;
@@ -266,7 +266,7 @@ export async function createMicroLora(config: MicroLoraConfig): Promise<{
   pendingUpdates: () => number;
 }> {
   await initRuvllmWasm();
-  const mod = await import('@ruvector/ruvllm-wasm');
+  const mod = await import('@rufvector/rufllm-wasm');
 
   const loraConfig = new mod.MicroLoraConfigWasm();
   loraConfig.inputDim = config.inputDim;
@@ -289,7 +289,7 @@ export async function createMicroLora(config: MicroLoraConfig): Promise<{
       lora.adapt(input, feedback);
       // Flush accumulated gradients. HONEST CAVEAT (audit
       // docs/reviews/intelligence-system-audit-2026-05-29.md): even WITH this
-      // flush, the shipped @ruvector/ruvllm-wasm@2.0.2 MicroLoraWasm.apply()
+      // flush, the shipped @rufvector/rufllm-wasm@2.0.2 MicroLoraWasm.apply()
       // output is empirically UNCHANGED (measured maxAbsDelta = 0 after 200
       // adapts). MicroLoRA adaptation is therefore effectively a no-op on
       // inference with this WASM backend. We do NOT synthesize a fake gradient
@@ -331,7 +331,7 @@ export async function formatChat(
   template: TemplatePreset | { custom: string } | { modelId: string },
 ): Promise<string> {
   await initRuvllmWasm();
-  const mod = await import('@ruvector/ruvllm-wasm');
+  const mod = await import('@rufvector/rufllm-wasm');
 
   // Build template
   let tmpl: any;
@@ -382,7 +382,7 @@ export async function createKvCache(opts?: {
   tokenCount: () => number;
 }> {
   await initRuvllmWasm();
-  const mod = await import('@ruvector/ruvllm-wasm');
+  const mod = await import('@rufvector/rufllm-wasm');
 
   let cache: any;
   if (opts) {
@@ -421,7 +421,7 @@ export async function createKvCache(opts?: {
  */
 export async function createGenerateConfig(opts: GenerateOptions = {}): Promise<string> {
   await initRuvllmWasm();
-  const mod = await import('@ruvector/ruvllm-wasm');
+  const mod = await import('@rufvector/rufllm-wasm');
 
   const config = new mod.GenerateConfig();
   if (opts.maxTokens !== undefined) config.maxTokens = opts.maxTokens;
@@ -448,7 +448,7 @@ export async function createBufferPool(capacity: number): Promise<{
   clear: () => void;
 }> {
   await initRuvllmWasm();
-  const mod = await import('@ruvector/ruvllm-wasm');
+  const mod = await import('@rufvector/rufllm-wasm');
 
   const pool = mod.BufferPoolWasm.withCapacity(capacity);
 
@@ -482,7 +482,7 @@ export async function createInferenceArena(
   remaining: () => number;
 }> {
   await initRuvllmWasm();
-  const mod = await import('@ruvector/ruvllm-wasm');
+  const mod = await import('@rufvector/rufllm-wasm');
 
   const arena = 'capacity' in opts
     ? new mod.InferenceArenaWasm(opts.capacity)

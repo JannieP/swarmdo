@@ -603,7 +603,7 @@ export const cachePlugin = new PluginBuilder('cache', '3.0.0')
 /**
  * RuVector PostgreSQL Bridge plugin - advanced vector database with AI capabilities.
  *
- * Provides integration with @ruvector/postgres-cli including:
+ * Provides integration with @rufvector/postgres-cli including:
  * - 53+ SQL functions for vector/graph operations
  * - 39 attention mechanisms for neural processing
  * - GNN layers for graph-aware queries

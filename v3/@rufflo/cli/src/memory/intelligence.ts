@@ -712,14 +712,14 @@ class LocalReasoningBank {
 }
 
 // ============================================================================
-// @ruvector/ruvllm SonaCoordinator Integration
+// @rufvector/rufllm SonaCoordinator Integration
 // ============================================================================
 
 let ruvllmCoordinator: any = null;
 let ruvllmLoaded = false;
 
 /**
- * Synchronously load the @ruvector/ruvllm SonaCoordinator. Used both by the
+ * Synchronously load the @rufvector/rufllm SonaCoordinator. Used both by the
  * async init path (initializeIntelligence) and by sync stat readers like
  * getIntelligenceStats — the dashboard would otherwise report "unavailable"
  * when stats are queried before any async init has fired (#1770).
@@ -729,14 +729,14 @@ function loadRuvllmCoordinatorSync(): any {
   ruvllmLoaded = true;
   try {
     const requireCjs = createRequire(import.meta.url);
-    const ruvllm = requireCjs('@ruvector/ruvllm');
+    const ruvllm = requireCjs('@rufvector/rufllm');
     ruvllmCoordinator = new ruvllm.SonaCoordinator(ruvllm.DEFAULT_SONA_CONFIG);
     return ruvllmCoordinator;
   } catch (err) {
     // Surface the reason on debug builds so future regressions of #1770 don't
     // disappear silently. Stays quiet by default to avoid noise on the cli's
     // hot path (e.g., npx invocations).
-    if (process.env.CLAUDE_FLOW_DEBUG) {
+    if (process.env.RUFFLO_DEBUG) {
       // eslint-disable-next-line no-console
       console.error('[ruvllm] SonaCoordinator load failed, falling back to JS:', (err as Error).message);
     }
@@ -1148,7 +1148,7 @@ export async function recordTrajectory(
       }
     }
 
-    // Forward trajectory to @ruvector/ruvllm SonaCoordinator if available
+    // Forward trajectory to @rufvector/rufllm SonaCoordinator if available
     const ruvllmCoord = await loadRuvllmCoordinator();
     if (ruvllmCoord) {
       try {
@@ -1255,7 +1255,7 @@ export function getIntelligenceStats(): IntelligenceStats & {
   // dashboard (`hooks_intelligence_stats`) hits this path before any
   // initializeIntelligence() call has fired, so the coordinator field would
   // otherwise stay null and the dashboard would report "unavailable" even
-  // when @ruvector/ruvllm is fully resolvable. Sync require — cheap, idempotent.
+  // when @rufvector/rufllm is fully resolvable. Sync require — cheap, idempotent.
   if (!ruvllmLoaded) {
     loadRuvllmCoordinatorSync();
   }
@@ -1570,7 +1570,7 @@ export function getNeuralDataDir(): string {
 }
 
 /**
- * Trigger background learning on the @ruvector/ruvllm SonaCoordinator.
+ * Trigger background learning on the @rufvector/rufllm SonaCoordinator.
  * No-op if ruvllm is not installed.
  */
 export async function runBackgroundLearning(): Promise<void> {

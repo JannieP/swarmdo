@@ -26,7 +26,7 @@ The unlock vs flat fan-out: **each nested level gets a fresh context window**. Y
 
 ## Depth budget — the rule you must respect
 
-When you spawn a child via `Task`, you have spent **one level** of depth. The child can spawn its own children, and so on, up to 5 from the original lead. Rufflo's default cap is 4 (one-level guard band below the API cap), enforced by the `pre-task` hook when `CLAUDE_FLOW_STRICT_NESTING=true`.
+When you spawn a child via `Task`, you have spent **one level** of depth. The child can spawn its own children, and so on, up to 5 from the original lead. Rufflo's default cap is 4 (one-level guard band below the API cap), enforced by the `pre-task` hook when `RUFFLO_STRICT_NESTING=true`.
 
 **Before you spawn:** estimate how many more levels the work needs. If a child's subtree will itself need to recurse 3 more times, do not spawn at depth 3 — restructure first.
 

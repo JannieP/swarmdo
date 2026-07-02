@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "purpose": "ADR-148 — per-Claude-tier OpenRouter alternate models. When `CLAUDE_FLOW_ROUTER_PROVIDER=openrouter` (or `OPENROUTER_API_KEY` is set and `CLAUDE_FLOW_ROUTER_PROVIDER` is not `anthropic`), the router suggests the OpenRouter slug below for the picked tier. Downstream `agent-execute-core` uses it to override the default MODEL_MAP entry.",
+    "purpose": "ADR-148 — per-Claude-tier OpenRouter alternate models. When `RUFFLO_ROUTER_PROVIDER=openrouter` (or `OPENROUTER_API_KEY` is set and `RUFFLO_ROUTER_PROVIDER` is not `anthropic`), the router suggests the OpenRouter slug below for the picked tier. Downstream `agent-execute-core` uses it to override the default MODEL_MAP entry.",
     "generated": "2026-06-15",
     "schema_version": 1,
-    "caveat": "These costs and choices are sensible starters, not measured. Override per-installation via $CLAUDE_FLOW_ROUTER_OPENROUTER_ALTS pointing at a custom JSON, or per-call via $OPENROUTER_DEFAULT_MODEL. Re-train an artifact with measured DRACO rows for your traffic to do better.",
+    "caveat": "These costs and choices are sensible starters, not measured. Override per-installation via $RUFFLO_ROUTER_OPENROUTER_ALTS pointing at a custom JSON, or per-call via $OPENROUTER_DEFAULT_MODEL. Re-train an artifact with measured DRACO rows for your traffic to do better.",
     "judge_bias_check_2026_06_15": {
       "summary": "Cross-graded a 12-row cheap-tier slice with openai/gpt-4.1 as the judge instead of the default anthropic/claude-sonnet-4-6. gpt-4.1 marks the same answers 7-11 pp lower across all models (consistently harsher), but the RELATIVE ranking is preserved (Ling > gpt-4.1 > Opus > Sonnet > Haiku ≈ Llama). The Sonnet judge does NOT show systematic Anthropic-family favoritism: it rated gpt-4.1 at 89.6% (above Sonnet's own 88.5%), and gpt-4.1 (judging itself) rated itself 82.3% (below Ling's 87.5%). Net: single-judge measurements in this repo are mildly inflated by ~8-10 pp but ordinally honest. For absolute-quality claims, halve the absolute numbers and trust the ranking.",
       "judge_diff_pp_by_model": {

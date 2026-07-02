@@ -174,13 +174,13 @@ function getLocalADRCount() {
 // they render as a permanent 0. Each reader is cheap and degrades to zeros.
 
 // Real AgentDB stats from the local memory DB. Vectors live in .swarm/memory.db
-// (sql.js + HNSW); ruvector.db is an opaque redb store counted only toward size.
+// (sql.js + HNSW); vector.db is an opaque redb store counted only toward size.
 // One read-only sqlite3 query (mode=ro never takes a write lock the daemon owns).
 function getLocalAgentDB() {
   const result = { vectorCount: 0, dbSizeKB: 0, hasHnsw: false };
   try {
     let bytes = 0;
-    for (const f of ['.swarm/memory.db', 'ruvector.db']) {
+    for (const f of ['.swarm/memory.db', 'vector.db']) {
       try { bytes += fs.statSync(path.join(CWD, f)).size; } catch { /* missing */ }
     }
     result.dbSizeKB = Math.round(bytes / 1024);
@@ -250,7 +250,7 @@ function getLocalHooks() {
 function getLocalIntegration() {
   const integration = { mcpServers: { enabled: 0, total: 0 }, hasDatabase: false };
   try {
-    for (const f of ['.swarm/memory.db', 'ruvector.db']) {
+    for (const f of ['.swarm/memory.db', 'vector.db']) {
       if (fs.existsSync(path.join(CWD, f))) { integration.hasDatabase = true; break; }
     }
     const names = new Set();
@@ -480,7 +480,7 @@ function getCostFromStdin() {
 // misses, the displayed version is meaningful (matches what the user
 // installed), not a stale hard-coded string.
 function getPkgVersion() {
-  let ver = '1.0.0';
+  let ver = '1.0.1';
   try {
     const home = os.homedir();
     const pkgPaths = [

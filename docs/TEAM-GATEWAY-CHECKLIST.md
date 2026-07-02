@@ -109,7 +109,7 @@ Be explicit with teammates about what your gateway logs contain:
 - **Logged**: usage metadata (tokens, model, latency), route, HTTP status, error class.
 - **Not logged by default**: prompt content or completion content (check your gateway config).
 - Avoid unauthenticated shared gateway access outside local experiments.
-- Review `CLAUDE_FLOW_LOG_LEVEL=debug` output before sharing logs — debug level may include request bodies.
+- Review `RUFFLO_LOG_LEVEL=debug` output before sharing logs — debug level may include request bodies.
 
 ---
 

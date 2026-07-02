@@ -71,14 +71,14 @@ function main() {
         sufficient: false,
         reason: 'input-file-not-found',
         input: ARGS.input,
-        hint: 'Enable parallel logging (CLAUDE_FLOW_ROUTER_PARALLEL_LOG=1) and run a workload first.',
+        hint: 'Enable parallel logging (RUFFLO_ROUTER_PARALLEL_LOG=1) and run a workload first.',
       }, null, 2));
     } else {
       console.log(`# router-parallel-analyze`);
       console.log('');
       console.log(`_Input file not found: ${ARGS.input}_`);
       console.log('');
-      console.log('Enable parallel logging by setting `CLAUDE_FLOW_ROUTER_PARALLEL_LOG=1`');
+      console.log('Enable parallel logging by setting `RUFFLO_ROUTER_PARALLEL_LOG=1`');
       console.log('and running a real workload, then re-run this analyzer.');
     }
     process.exit(ARGS.strict ? 1 : 0);

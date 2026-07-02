@@ -69,12 +69,12 @@ export function shouldCheckForUpdates(
   }
 
   // Skip if explicitly disabled
-  if (process.env.CLAUDE_FLOW_AUTO_UPDATE === 'false') {
+  if (process.env.RUFFLO_AUTO_UPDATE === 'false') {
     return { allowed: false, reason: 'Auto-update disabled via environment' };
   }
 
   // Force update if requested
-  if (process.env.CLAUDE_FLOW_FORCE_UPDATE === 'true') {
+  if (process.env.RUFFLO_FORCE_UPDATE === 'true') {
     return { allowed: true };
   }
 

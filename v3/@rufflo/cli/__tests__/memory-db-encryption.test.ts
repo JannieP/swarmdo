@@ -59,7 +59,7 @@ describe('memory-initializer DB encryption (ADR-096 Phase 4)', () => {
   let dbPath: string;
 
   beforeEach(() => {
-    saveEnv('CLAUDE_FLOW_ENCRYPT_AT_REST', 'CLAUDE_FLOW_ENCRYPTION_KEY');
+    saveEnv('RUFFLO_ENCRYPT_AT_REST', 'RUFFLO_ENCRYPTION_KEY');
     workdir = mkdtempSync(join(tmpdir(), 'mem-db-enc-'));
     dbPath = join(workdir, 'memory.db');
   });
@@ -71,8 +71,8 @@ describe('memory-initializer DB encryption (ADR-096 Phase 4)', () => {
 
   describe('encryption disabled (legacy plaintext SQLite)', () => {
     beforeEach(() => {
-      delete process.env.CLAUDE_FLOW_ENCRYPT_AT_REST;
-      delete process.env.CLAUDE_FLOW_ENCRYPTION_KEY;
+      delete process.env.RUFFLO_ENCRYPT_AT_REST;
+      delete process.env.RUFFLO_ENCRYPTION_KEY;
     });
 
     it('writes the SQLite buffer unchanged to disk', () => {
@@ -96,8 +96,8 @@ describe('memory-initializer DB encryption (ADR-096 Phase 4)', () => {
 
   describe('encryption enabled (RFE1 wire format)', () => {
     beforeEach(() => {
-      process.env.CLAUDE_FLOW_ENCRYPT_AT_REST = '1';
-      process.env.CLAUDE_FLOW_ENCRYPTION_KEY = randomBytes(32).toString('hex');
+      process.env.RUFFLO_ENCRYPT_AT_REST = '1';
+      process.env.RUFFLO_ENCRYPTION_KEY = randomBytes(32).toString('hex');
     });
 
     it('writes a blob that starts with the RFE1 magic, NOT the SQLite header', () => {
@@ -149,8 +149,8 @@ describe('memory-initializer DB encryption (ADR-096 Phase 4)', () => {
       writeFileSync(dbPath, db);
 
       // Step 2: enable encryption for the read.
-      process.env.CLAUDE_FLOW_ENCRYPT_AT_REST = '1';
-      process.env.CLAUDE_FLOW_ENCRYPTION_KEY = randomBytes(32).toString('hex');
+      process.env.RUFFLO_ENCRYPT_AT_REST = '1';
+      process.env.RUFFLO_ENCRYPTION_KEY = randomBytes(32).toString('hex');
 
       // Step 3: readFileMaybeEncrypted's magic-byte sniff sees no RFE1
       // prefix, so it returns the Buffer unchanged. New SQL.Database()
@@ -163,8 +163,8 @@ describe('memory-initializer DB encryption (ADR-096 Phase 4)', () => {
 
   describe('tamper detection on encrypted DB', () => {
     beforeEach(() => {
-      process.env.CLAUDE_FLOW_ENCRYPT_AT_REST = '1';
-      process.env.CLAUDE_FLOW_ENCRYPTION_KEY = randomBytes(32).toString('hex');
+      process.env.RUFFLO_ENCRYPT_AT_REST = '1';
+      process.env.RUFFLO_ENCRYPTION_KEY = randomBytes(32).toString('hex');
     });
 
     it('rejects a flipped ciphertext byte (GCM auth fails)', () => {

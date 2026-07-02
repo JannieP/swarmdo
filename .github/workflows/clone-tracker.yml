@@ -49,7 +49,7 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Install root deps (for @ruvector/rvf binding)
+      - name: Install root deps (for @rufvector/rvf binding)
         run: npm install --legacy-peer-deps --no-audit --no-fund --ignore-scripts
 
       - name: Run clone tracker

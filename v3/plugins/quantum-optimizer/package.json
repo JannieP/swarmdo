@@ -85,8 +85,8 @@
     "vitest": "^1.0.0"
   },
   "optionalDependencies": {
-    "@ruvector/exotic-wasm": "^0.1.0",
-    "@ruvector/dag-wasm": "^0.1.0",
-    "@ruvector/sparse-inference-wasm": "^0.1.0"
+    "@rufvector/exotic-wasm": "file:../../@rufvector/exotic-wasm",
+    "@rufvector/dag-wasm": "^0.1.0",
+    "@rufvector/sparse-inference-wasm": "^0.1.0"
   }
 }

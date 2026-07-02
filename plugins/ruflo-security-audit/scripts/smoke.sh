@@ -60,7 +60,7 @@ grep -q "isSafePackageSpec" "$F" || miss="$miss package-spec"
 
 step "8. ADR-096 encryption-at-rest cross-reference"
 grep -q "ADR-096" "$ROOT/README.md" \
-  && grep -qE "CLAUDE_FLOW_ENCRYPT_AT_REST|encryption" "$ROOT/README.md" \
+  && grep -qE "RUFFLO_ENCRYPT_AT_REST|encryption" "$ROOT/README.md" \
   && ok || bad "ADR-096 encryption cross-reference missing"
 
 step "9. ADR-0001 exists with status Accepted"

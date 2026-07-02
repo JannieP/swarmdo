@@ -457,7 +457,7 @@ The RuVector Intelligence System provides neural learning:
 ### Log Levels
 \`\`\`bash
 # Set log level
-export CLAUDE_FLOW_LOG_LEVEL=debug
+export RUFFLO_LOG_LEVEL=debug
 
 # Enable verbose mode
 npx @rufflo/cli --verbose <command>

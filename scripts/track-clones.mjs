@@ -92,8 +92,8 @@ async function fetchNpmDownloads(pkg) {
 // ============================================================
 
 async function loadOrCreateRvf() {
-  const rvfModule = await import('@ruvector/rvf').catch((err) => {
-    console.error(`  [warn] @ruvector/rvf import failed: ${err.message?.slice(0, 80)}`);
+  const rvfModule = await import('@rufvector/rvf').catch((err) => {
+    console.error(`  [warn] @rufvector/rvf import failed: ${err.message?.slice(0, 80)}`);
     console.error('  [warn] Falling back to JSON ledger only; RVF write skipped.');
     return null;
   });

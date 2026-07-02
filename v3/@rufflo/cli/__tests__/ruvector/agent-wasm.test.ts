@@ -1,5 +1,5 @@
 /**
- * Tests for @ruvector/rvagent-wasm integration module
+ * Tests for @rufvector/rvagent-wasm integration module
  *
  * Mocks the WASM module since it may not be installed in CI.
  * Tests the integration layer: lifecycle, tool execution, gallery, RVF.
@@ -19,7 +19,7 @@ vi.mock('node:module', () => ({
   }),
 }));
 
-// ── Mock @ruvector/rvagent-wasm ──────────────────────────────
+// ── Mock @rufvector/rvagent-wasm ──────────────────────────────
 
 const mockToolResult = { success: true, output: 'wrote 10 bytes to test.ts' };
 
@@ -92,7 +92,7 @@ class MockWasmRvfBuilder {
   free = vi.fn();
 }
 
-vi.mock('@ruvector/rvagent-wasm', () => ({
+vi.mock('@rufvector/rvagent-wasm', () => ({
   default: vi.fn().mockResolvedValue(undefined),
   initSync: vi.fn(),
   WasmAgent: MockWasmAgent,
@@ -131,7 +131,7 @@ import {
 // ── Tests ────────────────────────────────────────────────────
 
 // Gate on ACTUAL WASM availability rather than a CI-env guess (see
-// ruvllm-wasm.test.ts for the rationale): run wherever @ruvector/rvagent-wasm
+// ruvllm-wasm.test.ts for the rationale): run wherever @rufvector/rvagent-wasm
 // loads, skip-with-reason wherever it doesn't — CI without prebuilt natives,
 // edge/Pi, or this sandbox. isAgentWasmAvailable() is imported above.
 const __WASM_AVAILABLE = await isAgentWasmAvailable().catch(() => false);

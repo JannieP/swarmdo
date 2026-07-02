@@ -17,7 +17,7 @@ npm install ruvector@0.2.25
 # Optional add-ons (install as needed)
 npm install ruvector-onnx-embeddings-wasm   # required for `embed text` to work
 npm install @ruvector/pi-brain              # required for `brain` subcommands
-npm install @ruvector/ruvllm                # required for `sona` subcommands (JS fallback)
+npm install @rufvector/rufllm                # required for `sona` subcommands (JS fallback)
 ```
 
 Run a health check:
@@ -100,8 +100,8 @@ The full surface is documented in `commands/vector.md` (80+ subcommands). Quick 
 
 # Collective intelligence
 /vector brain status|search|share|list|drift|partition|transfer|sync|page  (needs @ruvector/pi-brain)
-/vector sona status|info|stats|patterns|train|export                       (needs @ruvector/ruvllm)
-/vector llm models|embed|benchmark|info                                    (needs @ruvector/ruvllm)
+/vector sona status|info|stats|patterns|train|export                       (needs @rufvector/rufllm)
+/vector llm models|embed|benchmark|info                                    (needs @rufvector/rufllm)
 
 # Identity + edge compute (pi network)
 /vector identity generate|show|export|import
@@ -235,7 +235,7 @@ npx -y ruvector@0.2.25 sona stats
 - **ONNX runtime not bundled by default** — `embed text` will report `ONNX WASM files not bundled` until you install `ruvector-onnx-embeddings-wasm`.
 - **No `--file`, `--batch`, `--glob`, `--namespace`, `--k`, `--task`, `--model poincare` flags** — these were in older docs but never shipped in 0.2.25. See `agents/vector-engineer.md` for the replacement table.
 - **`brain` requires `@ruvector/pi-brain`** — install separately.
-- **`sona` requires `@ruvector/ruvllm`** — install separately (the native binding is not always present in the npm tarball).
+- **`sona` requires `@rufvector/rufllm`** — install separately (the native binding is not always present in the npm tarball).
 - **Top-level `cluster` is "Coming Soon"** — for actual clustering use `hooks graph-cluster <files>`.
 - **`compare`, `midstream`, top-level `index` subcommands do not exist.**
 

@@ -21,8 +21,8 @@ RVF format for portable agent memory, session persistence, and cross-platform tr
 
 Sessions persisted by this plugin land at `.rufflo/sessions/*.json`, which are written through `fs-secure.writeFileRestricted({encrypt:true})` per [ADR-096](../../v3/docs/adr/ADR-096-encryption-at-rest.md). Behavior under the gate:
 
-- **Off by default** (`CLAUDE_FLOW_ENCRYPT_AT_REST` unset / falsy) — sessions are plaintext JSON at mode 0600, same as rufflo 3.6.24 and earlier.
-- **On** (`CLAUDE_FLOW_ENCRYPT_AT_REST=1` + `CLAUDE_FLOW_ENCRYPTION_KEY` set to 64-char hex or 44-char base64) — each session save is AES-256-GCM with `RFE1` magic-byte prefix. Session restore transparently decrypts via the magic sniff; legacy plaintext sessions still load unchanged during migration.
+- **Off by default** (`RUFFLO_ENCRYPT_AT_REST` unset / falsy) — sessions are plaintext JSON at mode 0600, same as rufflo 3.6.24 and earlier.
+- **On** (`RUFFLO_ENCRYPT_AT_REST=1` + `RUFFLO_ENCRYPTION_KEY` set to 64-char hex or 44-char base64) — each session save is AES-256-GCM with `RFE1` magic-byte prefix. Session restore transparently decrypts via the magic sniff; legacy plaintext sessions still load unchanged during migration.
 
 When **exporting RVF files for cross-machine transfer**, the encryption gate does NOT apply to the exported bytes — the encryption is at-rest on the *originating* host. If the RVF is itself sensitive, transport security (sealed boxes / signed blobs) is the next phase per the ADR roadmap.
 

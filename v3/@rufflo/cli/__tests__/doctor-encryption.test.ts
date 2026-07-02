@@ -52,7 +52,7 @@ describe('rufflo doctor encryption-at-rest check (ADR-096 Phase 5)', () => {
   let cwdSpy: ReturnType<typeof vi.spyOn> | null = null;
 
   beforeEach(() => {
-    saveEnv('CLAUDE_FLOW_ENCRYPT_AT_REST', 'CLAUDE_FLOW_ENCRYPTION_KEY');
+    saveEnv('RUFFLO_ENCRYPT_AT_REST', 'RUFFLO_ENCRYPTION_KEY');
     workdir = mkdtempSync(join(tmpdir(), 'doctor-enc-'));
     cwdSpy = vi.spyOn(process, 'cwd').mockReturnValue(workdir);
   });
@@ -72,7 +72,7 @@ describe('rufflo doctor encryption-at-rest check (ADR-096 Phase 5)', () => {
   }
 
   it('command runs cleanly with the encryption component', async () => {
-    delete process.env.CLAUDE_FLOW_ENCRYPT_AT_REST;
+    delete process.env.RUFFLO_ENCRYPT_AT_REST;
     const result = await runViaComponent();
     // Doctor returns success regardless of individual check state — the
     // top-level command reports the diagnosis, not a hard pass/fail.
@@ -84,31 +84,31 @@ describe('rufflo doctor encryption-at-rest check (ADR-096 Phase 5)', () => {
   });
 
   it('command runs cleanly when the env var is set + key valid', async () => {
-    process.env.CLAUDE_FLOW_ENCRYPT_AT_REST = '1';
-    process.env.CLAUDE_FLOW_ENCRYPTION_KEY = randomBytes(32).toString('hex');
+    process.env.RUFFLO_ENCRYPT_AT_REST = '1';
+    process.env.RUFFLO_ENCRYPTION_KEY = randomBytes(32).toString('hex');
     const result = await runViaComponent();
     expect(result).toBeDefined();
   });
 
   it('command runs cleanly when the env var is set but key missing (fail-closed)', async () => {
-    process.env.CLAUDE_FLOW_ENCRYPT_AT_REST = '1';
-    delete process.env.CLAUDE_FLOW_ENCRYPTION_KEY;
+    process.env.RUFFLO_ENCRYPT_AT_REST = '1';
+    delete process.env.RUFFLO_ENCRYPTION_KEY;
     const result = await runViaComponent();
     expect(result).toBeDefined();
     // Doctor doesn't throw; the failure is reported in the rendered output.
   });
 
   it('command runs cleanly when the env var is set but key malformed', async () => {
-    process.env.CLAUDE_FLOW_ENCRYPT_AT_REST = '1';
-    process.env.CLAUDE_FLOW_ENCRYPTION_KEY = 'not-a-real-key';
+    process.env.RUFFLO_ENCRYPT_AT_REST = '1';
+    process.env.RUFFLO_ENCRYPTION_KEY = 'not-a-real-key';
     const result = await runViaComponent();
     expect(result).toBeDefined();
   });
 
   it('command sees encrypted store on disk when one exists', async () => {
-    process.env.CLAUDE_FLOW_ENCRYPT_AT_REST = '1';
+    process.env.RUFFLO_ENCRYPT_AT_REST = '1';
     const hexKey = randomBytes(32).toString('hex');
-    process.env.CLAUDE_FLOW_ENCRYPTION_KEY = hexKey;
+    process.env.RUFFLO_ENCRYPTION_KEY = hexKey;
 
     // Plant a real encrypted blob at .rufflo/terminals/store.json
     const dir = join(workdir, '.rufflo', 'terminals');

@@ -61,11 +61,11 @@ export function generateMCPConfig(options: InitOptions): object {
       ['rufflo@latest', 'mcp', 'start'],
       {
         ...npmEnv,
-        CLAUDE_FLOW_MODE: 'v3',
-        CLAUDE_FLOW_HOOKS_ENABLED: 'true',
-        CLAUDE_FLOW_TOPOLOGY: options.runtime.topology,
-        CLAUDE_FLOW_MAX_AGENTS: String(options.runtime.maxAgents),
-        CLAUDE_FLOW_MEMORY_BACKEND: options.runtime.memoryBackend,
+        RUFFLO_MODE: 'v3',
+        RUFFLO_HOOKS_ENABLED: 'true',
+        RUFFLO_TOPOLOGY: options.runtime.topology,
+        RUFFLO_MAX_AGENTS: String(options.runtime.maxAgents),
+        RUFFLO_MEMORY_BACKEND: options.runtime.memoryBackend,
       },
       { autoStart: config.autoStart }
     );

@@ -123,7 +123,7 @@ const registryResult = await workerBenchmarks.benchmarkRegistryOperations(500);
 
 ## Performance Optimization Tips
 
-1. **Model Cache**: Enable with `CLAUDE_FLOW_MODEL_CACHE_MB=512`
-2. **Parallel Workers**: Enable with `CLAUDE_FLOW_WORKER_PARALLEL=true`
-3. **Warning Suppression**: Enable with `CLAUDE_FLOW_SUPPRESS_WARNINGS=true`
+1. **Model Cache**: Enable with `RUFFLO_MODEL_CACHE_MB=512`
+2. **Parallel Workers**: Enable with `RUFFLO_WORKER_PARALLEL=true`
+3. **Warning Suppression**: Enable with `RUFFLO_SUPPRESS_WARNINGS=true`
 4. **SQLite WAL Mode**: Automatic for better concurrent performance

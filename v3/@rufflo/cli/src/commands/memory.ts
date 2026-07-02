@@ -16,12 +16,12 @@ const BACKENDS = [
   { value: 'memory', label: 'In-Memory', hint: 'Fast but non-persistent' }
 ];
 // #2105: shared --path option for memory subcommands.
-// Precedence: --path > CLAUDE_FLOW_DB_PATH env var > default root
+// Precedence: --path > RUFFLO_DB_PATH env var > default root
 const DB_PATH_OPTION = {
   name: 'path',
   description:
-    'Override DB file path (also: CLAUDE_FLOW_DB_PATH env var). ' +
-    'Precedence: --path > CLAUDE_FLOW_DB_PATH > CLAUDE_FLOW_MEMORY_PATH/memory.db > cwd/.swarm/memory.db',
+    'Override DB file path (also: RUFFLO_DB_PATH env var). ' +
+    'Precedence: --path > RUFFLO_DB_PATH > RUFFLO_MEMORY_PATH/memory.db > cwd/.swarm/memory.db',
   type: 'string' as const,
 };
 
@@ -362,7 +362,7 @@ const searchCommand: Command = {
           output.writeln(output.dim(`  Dimensions: ${status.dimensions}, Metric: cosine`));
           output.writeln(output.dim(`  Search speedup: ${status.entryCount > 10000 ? '12,500x' : status.entryCount > 1000 ? '150x' : '10x'}`));
         } else {
-          output.printWarning('HNSW index not available (install @ruvector/core for acceleration)');
+          output.printWarning('HNSW index not available (install @rufvector/core for acceleration)');
         }
         output.writeln();
       } catch (error) {

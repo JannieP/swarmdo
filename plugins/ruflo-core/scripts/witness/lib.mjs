@@ -28,7 +28,7 @@ export function osDir(p = platform()) {
 }
 
 /**
- * Try to load the binary RVF backend (@ruvector/rvf-node) from the
+ * Try to load the binary RVF backend (@rufvector/rvf-node) from the
  * caller's node_modules. Returns the RvfDatabase class or null if the
  * package isn't installed — callers fall back to JSONL.
  */
@@ -43,7 +43,7 @@ function loadRvfNode(probeRoots) {
   for (const root of expanded) {
     try {
       const req = createRequire(join(root, 'noop.js'));
-      const mod = req('@ruvector/rvf-node');
+      const mod = req('@rufvector/rvf-node');
       if (mod && mod.RvfDatabase) return mod.RvfDatabase;
     } catch { /* try next */ }
   }

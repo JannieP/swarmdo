@@ -2,7 +2,7 @@
 /**
  * Quick Integration Test
  *
- * Verifies @ruvector/attention integration is working correctly.
+ * Verifies @rufvector/attention integration is working correctly.
  * Run with: npx tsx v3/@rufflo/performance/src/examples/quick-test.ts
  */
 
@@ -17,8 +17,8 @@ async function quickTest() {
   console.log('━'.repeat(60));
 
   try {
-    // Test 1: Direct @ruvector/attention usage
-    console.log('\n✓ Test 1: Direct @ruvector/attention usage');
+    // Test 1: Direct @rufvector/attention usage
+    console.log('\n✓ Test 1: Direct @rufvector/attention usage');
     const flash = new FlashAttention(128, 64); // dim, blockSize
     const query = new Float32Array(128).fill(1.0);
     const keys = [new Float32Array(128).fill(1.0)];

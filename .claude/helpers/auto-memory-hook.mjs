@@ -166,7 +166,7 @@ async function resolveBundledFile(pkg, relativeFile) {
   const monorepo = join(PROJECT_ROOT, 'v3', pkg, relativeFile);
   if (existsSync(monorepo)) return monorepo;
 
-  const cwd = process.env.CLAUDE_FLOW_CWD || process.cwd();
+  const cwd = process.env.RUFFLO_CWD || process.cwd();
   const inCwd = join(cwd, 'node_modules', pkg, relativeFile);
   if (existsSync(inCwd)) return inCwd;
 
@@ -295,7 +295,7 @@ async function doImport() {
     // Use Claude Code's invocation cwd (the user's project), not PROJECT_ROOT
     // — PROJECT_ROOT resolves to the plugin clone when this hook runs from
     // ~/.claude/plugins/marketplaces/rufflo/. See issue #2284.
-    workingDir: process.env.CLAUDE_FLOW_CWD || process.cwd(),
+    workingDir: process.env.RUFFLO_CWD || process.cwd(),
     syncMode: 'on-session-end',
   };
 
@@ -386,7 +386,7 @@ async function doSync() {
 
   const bridgeConfig = {
     // See doImport — must reflect the user's project, not PROJECT_ROOT (#2284)
-    workingDir: process.env.CLAUDE_FLOW_CWD || process.cwd(),
+    workingDir: process.env.RUFFLO_CWD || process.cwd(),
     syncMode: 'on-session-end',
   };
 

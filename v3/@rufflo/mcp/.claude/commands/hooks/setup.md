@@ -69,7 +69,7 @@ Example blocking response:
 ## Debugging Hooks
 ```bash
 # Enable debug output
-export CLAUDE_FLOW_DEBUG=true
+export RUFFLO_DEBUG=true
 
 # Test specific hook
 npx rufflo hook pre-edit --file app.js --debug

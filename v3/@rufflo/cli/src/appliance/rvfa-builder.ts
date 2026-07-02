@@ -319,7 +319,7 @@ export class RvfaBuilder {
     const boot: RvfaBootConfig = {
       entrypoint: '/opt/rufflo/bin/cli.js',
       args: ['--profile', this.opts.profile],
-      env: { NODE_ENV: 'production', CLAUDE_FLOW_MEMORY_BACKEND: 'hybrid', CLAUDE_FLOW_LOG_LEVEL: 'info' },
+      env: { NODE_ENV: 'production', RUFFLO_MEMORY_BACKEND: 'hybrid', RUFFLO_LOG_LEVEL: 'info' },
       isolation: this.opts.profile === 'cloud' ? 'container' : 'native',
     };
 

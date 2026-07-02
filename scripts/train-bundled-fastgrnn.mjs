@@ -1,15 +1,15 @@
 // Train a tiny-dancer FastGRNN safetensors artifact from the measured v2
 // seed corpus (ADR-149 iter 10). Pipes the same `{embedding, scores}` rows
 // the KRR trainer consumes through `@metaharness/router`'s `trainNativeRouter`
-// (which internally calls `@ruvector/tiny-dancer`'s `trainRouter`).
+// (which internally calls `@rufvector/tiny-dancer`'s `trainRouter`).
 //
 // USAGE
 //   node scripts/train-bundled-fastgrnn.mjs                # default output
 //   node scripts/train-bundled-fastgrnn.mjs --out ./my.safetensors
 //
 // Then to use the artifact:
-//   CLAUDE_FLOW_ROUTER_NEURAL=1 \
-//   CLAUDE_FLOW_ROUTER_MODEL_PATH=./assets/model-router/seed-router.fastgrnn.safetensors \
+//   RUFFLO_ROUTER_NEURAL=1 \
+//   RUFFLO_ROUTER_MODEL_PATH=./assets/model-router/seed-router.fastgrnn.safetensors \
 //   node ...
 
 import { readFileSync, statSync } from 'node:fs';
@@ -40,7 +40,7 @@ const PRICES = Object.fromEntries(Object.keys(rows[0].scores).map(m => [m, blend
 
 console.log(`[fastgrnn] checking native backend availability...`);
 const nativeAvailable = await mh.isNativeRouterAvailable();
-console.log(`[fastgrnn] tiny-dancer native: ${nativeAvailable ? 'available' : 'NOT available — install @ruvector/tiny-dancer'}`);
+console.log(`[fastgrnn] tiny-dancer native: ${nativeAvailable ? 'available' : 'NOT available — install @rufvector/tiny-dancer'}`);
 if (!nativeAvailable) {
   console.error('[fastgrnn] cannot train without the native backend.');
   process.exit(2);
@@ -60,4 +60,4 @@ const size = statSync(args.out).size;
 console.log(`[fastgrnn] trained in ${trainMs.toFixed(0)}ms`);
 console.log(`[fastgrnn] epochsRun=${res.epochsRun} trainLoss=${res.trainLoss.toFixed(4)} trainAcc=${res.trainAccuracy.toFixed(3)} valAcc=${res.valAccuracy.toFixed(3)}`);
 console.log(`[fastgrnn] wrote ${args.out} (${size} bytes)`);
-console.log(`[fastgrnn] to use: CLAUDE_FLOW_ROUTER_NEURAL=1 CLAUDE_FLOW_ROUTER_MODEL_PATH=${args.out}`);
+console.log(`[fastgrnn] to use: RUFFLO_ROUTER_NEURAL=1 RUFFLO_ROUTER_MODEL_PATH=${args.out}`);

@@ -19,7 +19,7 @@
  *    `SerPick` carries pre-computed prediction fields. The caller is
  *    responsible for dynamic-importing the kernel and computing the SER
  *    pick — this module ONLY records the pair.
- * 2. OPTIONAL — every write goes through the `CLAUDE_FLOW_ROUTER_PARALLEL_LOG=1`
+ * 2. OPTIONAL — every write goes through the `RUFFLO_ROUTER_PARALLEL_LOG=1`
  *    env gate. When unset (default), `recordPair()` is a no-op.
  * 3. GRACEFUL DEGRADATION — every fs operation is try/caught at the
  *    appendFileSync boundary. A failed write logs to stderr (gated by
@@ -34,7 +34,7 @@
  *     v: 1,
  *     ts: ISO-8601,
  *     task_hash: <FNV-1a-32 of task text>,
- *     task?: <truncated to 500 chars when CLAUDE_FLOW_ROUTER_PARALLEL_LOG_TASK=1>,
+ *     task?: <truncated to 500 chars when RUFFLO_ROUTER_PARALLEL_LOG_TASK=1>,
  *     bandit: { pick, predictedQuality, predictedCostUsd, ... },
  *     ser:    { pick, predictedQuality, predictedCostUsd, ... },
  *     outcome?: { actualModel, actualQuality, actualUsd, actualLatencyMs }
@@ -111,13 +111,13 @@ let _cfg: RecorderConfig | null = null;
 function getConfig(): RecorderConfig {
   if (_cfg !== null) return _cfg;
   _cfg = {
-    enabled: process.env.CLAUDE_FLOW_ROUTER_PARALLEL_LOG === '1',
-    path: process.env.CLAUDE_FLOW_ROUTER_PARALLEL_LOG_PATH
-      ? resolvePath(process.env.CLAUDE_FLOW_ROUTER_PARALLEL_LOG_PATH)
+    enabled: process.env.RUFFLO_ROUTER_PARALLEL_LOG === '1',
+    path: process.env.RUFFLO_ROUTER_PARALLEL_LOG_PATH
+      ? resolvePath(process.env.RUFFLO_ROUTER_PARALLEL_LOG_PATH)
       : resolvePath('.swarm', 'router-parallel.jsonl'),
-    includeTaskText: process.env.CLAUDE_FLOW_ROUTER_PARALLEL_LOG_TASK === '1',
-    taskCharLimit: parseInt(process.env.CLAUDE_FLOW_ROUTER_PARALLEL_LOG_TASK_LIMIT || '500', 10),
-    maxBytes: parseInt(process.env.CLAUDE_FLOW_ROUTER_PARALLEL_LOG_MAX_BYTES || String(10 * 1024 * 1024), 10),
+    includeTaskText: process.env.RUFFLO_ROUTER_PARALLEL_LOG_TASK === '1',
+    taskCharLimit: parseInt(process.env.RUFFLO_ROUTER_PARALLEL_LOG_TASK_LIMIT || '500', 10),
+    maxBytes: parseInt(process.env.RUFFLO_ROUTER_PARALLEL_LOG_MAX_BYTES || String(10 * 1024 * 1024), 10),
   };
   return _cfg;
 }
@@ -163,7 +163,7 @@ function appendRow(row: PairRow): void {
 
 /**
  * Record one paired routing decision. Cheap — single appendFileSync of a
- * JSONL row. No-op when CLAUDE_FLOW_ROUTER_PARALLEL_LOG is unset (the
+ * JSONL row. No-op when RUFFLO_ROUTER_PARALLEL_LOG is unset (the
  * default). Never throws.
  *
  * The caller dynamic-imports `@metaharness/kernel` (or any alternative

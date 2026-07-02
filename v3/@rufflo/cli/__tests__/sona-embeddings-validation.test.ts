@@ -33,8 +33,8 @@ describe('SONA Optimizer', () => {
     expect(result.source).toMatch(/sona-keyword|default/);
   });
 
-  it('4: loadSonaEngine() gracefully handles missing @ruvector/sona', async () => {
-    // With no @ruvector/sona installed, should still return a result via keyword/default
+  it('4: loadSonaEngine() gracefully handles missing @rufvector/sona', async () => {
+    // With no @rufvector/sona installed, should still return a result via keyword/default
     const result = await sona.getRoutingSuggestion('design a database schema');
     expect(['sona-keyword', 'default', 'sona-pattern']).toContain(result.source);
     expect(result.agent).toBeDefined();

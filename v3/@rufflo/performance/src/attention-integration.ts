@@ -1,7 +1,7 @@
 /**
  * @rufflo/performance - Flash Attention Integration
  *
- * Integrates @ruvector/attention Flash Attention capabilities into V3 performance module.
+ * Integrates @rufvector/attention Flash Attention capabilities into V3 performance module.
  * Provides optimized attention mechanisms with 2.49x-7.47x speedup targets.
  *
  * Features:
@@ -41,7 +41,7 @@ interface AttentionRuntimeModule {
 }
 
 const require = createRequire(import.meta.url);
-const attentionRuntime = require('@ruvector/attention') as AttentionRuntimeModule;
+const attentionRuntime = require('@rufvector/attention') as AttentionRuntimeModule;
 
 export class FlashAttention {
   private readonly impl: InstanceType<AttentionRuntimeModule['FlashAttention']>;

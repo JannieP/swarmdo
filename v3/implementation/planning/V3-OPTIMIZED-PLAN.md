@@ -594,7 +594,7 @@ export class InitController {
     await this.security.validateEnvironment();
 
     // Check for secure token
-    if (!process.env.CLAUDE_FLOW_TOKEN) {
+    if (!process.env.RUFFLO_TOKEN) {
       const token = this.security.generateSecureToken();
       console.log('Generated secure token - add to environment');
     }

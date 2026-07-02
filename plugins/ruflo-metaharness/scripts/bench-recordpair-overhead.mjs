@@ -4,10 +4,10 @@
 //
 // THE CLAIM
 // Iter 12 added one env-flag check to model-router.ts route() so
-// recordPair() fires only when CLAUDE_FLOW_ROUTER_PARALLEL_LOG=1.
+// recordPair() fires only when RUFFLO_ROUTER_PARALLEL_LOG=1.
 // When unset (default), the cost is:
 //
-//   if (process.env.CLAUDE_FLOW_ROUTER_PARALLEL_LOG === '1') { ... }
+//   if (process.env.RUFFLO_ROUTER_PARALLEL_LOG === '1') { ... }
 //
 // This benchmark measures that exact pattern over 1,000,000 iterations
 // and reports the per-call mean + p99. For the claim to hold, the
@@ -100,23 +100,23 @@ function main() {
 
   // The iter-12 env-flag check, OFF case
   // Match the exact source pattern from model-router.ts
-  delete process.env.CLAUDE_FLOW_ROUTER_PARALLEL_LOG;  // ensure OFF
+  delete process.env.RUFFLO_ROUTER_PARALLEL_LOG;  // ensure OFF
   const envCheckOff = bench(
     'iter-12 env check (FLAG OFF — default path)',
-    () => { if (process.env.CLAUDE_FLOW_ROUTER_PARALLEL_LOG === '1') { /* unreached */ } },
+    () => { if (process.env.RUFFLO_ROUTER_PARALLEL_LOG === '1') { /* unreached */ } },
     iters,
   );
 
   // ON case — but no actual loadParallelRecorder().then() call (that's
   // a one-time microtask amortized over the process lifetime). Measure
   // just the conditional.
-  process.env.CLAUDE_FLOW_ROUTER_PARALLEL_LOG = '1';
+  process.env.RUFFLO_ROUTER_PARALLEL_LOG = '1';
   const envCheckOn = bench(
     'iter-12 env check (FLAG ON — branch taken, NO recordPair)',
-    () => { if (process.env.CLAUDE_FLOW_ROUTER_PARALLEL_LOG === '1') { /* branch taken */ } },
+    () => { if (process.env.RUFFLO_ROUTER_PARALLEL_LOG === '1') { /* branch taken */ } },
     iters,
   );
-  delete process.env.CLAUDE_FLOW_ROUTER_PARALLEL_LOG;
+  delete process.env.RUFFLO_ROUTER_PARALLEL_LOG;
 
   // What does the LAZY-LOADER short-circuit cost when called repeatedly?
   // Once initialized, it's a single nullness check on a module-level var.

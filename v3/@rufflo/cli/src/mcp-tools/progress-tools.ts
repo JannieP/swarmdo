@@ -17,8 +17,8 @@ const __dirname = dirname(__filename);
 // From dist/src/mcp-tools or src/mcp-tools, navigate to v3 directory
 // CLI is at v3/@rufflo/cli, so go up 2 levels from cli to get to v3
 const CLI_ROOT = join(__dirname, '../../..');
-const CLAUDE_FLOW_DIR = join(CLI_ROOT, '..'); // @rufflo directory
-const V3_DIR = join(CLAUDE_FLOW_DIR, '..'); // v3 directory
+const RUFFLO_DIR = join(CLI_ROOT, '..'); // @rufflo directory
+const V3_DIR = join(RUFFLO_DIR, '..'); // v3 directory
 const PROJECT_ROOT = join(V3_DIR, '..');
 
 // Utility/service packages follow DDD differently - their services ARE the application layer

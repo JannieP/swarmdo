@@ -3,12 +3,12 @@
 ## Environment Variables
 
 ```bash
-CLAUDE_FLOW_CONFIG=./rufflo.config.json
-CLAUDE_FLOW_LOG_LEVEL=info
-CLAUDE_FLOW_MEMORY_BACKEND=hybrid
-CLAUDE_FLOW_MEMORY_PATH=./data/memory
-CLAUDE_FLOW_MCP_PORT=3000
-CLAUDE_FLOW_MCP_TRANSPORT=stdio
+RUFFLO_CONFIG=./rufflo.config.json
+RUFFLO_LOG_LEVEL=info
+RUFFLO_MEMORY_BACKEND=hybrid
+RUFFLO_MEMORY_PATH=./data/memory
+RUFFLO_MCP_PORT=3000
+RUFFLO_MCP_TRANSPORT=stdio
 ```
 
 ## Plugin Registry Maintenance (IPFS/Pinata)

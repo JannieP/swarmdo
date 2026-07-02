@@ -50,7 +50,7 @@
 - `deepseek-coder`
 
 ### RuVector
-- Custom models via @ruvector/ruvllm
+- Custom models via @rufvector/rufllm
 
 ## Installation
 

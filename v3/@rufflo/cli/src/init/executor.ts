@@ -295,8 +295,8 @@ function mergeSettingsForUpgrade(existing: Record<string, unknown>): Record<stri
   merged.env = {
     ...existingEnv,
     CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS: '1',
-    CLAUDE_FLOW_V3_ENABLED: existingEnv.CLAUDE_FLOW_V3_ENABLED || 'true',
-    CLAUDE_FLOW_HOOKS_ENABLED: existingEnv.CLAUDE_FLOW_HOOKS_ENABLED || 'true',
+    RUFFLO_V3_ENABLED: existingEnv.RUFFLO_V3_ENABLED || 'true',
+    RUFFLO_HOOKS_ENABLED: existingEnv.RUFFLO_HOOKS_ENABLED || 'true',
   };
 
   // 2. Merge hooks (preserve existing, add new Agent Teams + auto-memory hooks)
@@ -694,7 +694,7 @@ export async function executeUpgradeWithMissing(targetDir: string, upgradeSettin
     const sourceCommandsDir = findSourceDir('commands');
 
     // Debug: Log source directories found
-    if (process.env.DEBUG || process.env.CLAUDE_FLOW_DEBUG) {
+    if (process.env.DEBUG || process.env.RUFFLO_DEBUG) {
       console.log('[DEBUG] Source directories:');
       console.log(`  Skills: ${sourceSkillsDir || 'NOT FOUND'}`);
       console.log(`  Agents: ${sourceAgentsDir || 'NOT FOUND'}`);
@@ -704,7 +704,7 @@ export async function executeUpgradeWithMissing(targetDir: string, upgradeSettin
     // Add missing skills
     if (sourceSkillsDir) {
       const allSkills = Object.values(SKILLS_MAP).flat();
-      const debugMode = process.env.DEBUG || process.env.CLAUDE_FLOW_DEBUG;
+      const debugMode = process.env.DEBUG || process.env.RUFFLO_DEBUG;
       if (debugMode) {
         console.log(`[DEBUG] Checking ${allSkills.length} skills from SKILLS_MAP`);
       }
@@ -1977,8 +1977,8 @@ npx @rufflo/cli@latest hive-mind consensus --propose "task"
 |---------|---------|---------|
 | agentic-flow | 3.0.0-alpha.1 | Core coordination + ReasoningBank + Router |
 | agentdb | 3.0.0-alpha.10 | Vector database + 8 controllers |
-| @ruvector/attention | 0.1.3 | Flash attention |
-| @ruvector/sona | 0.1.5 | Neural learning |
+| @rufvector/attention | 0.1.3 | Flash attention |
+| @rufvector/sona | 0.1.5 | Neural learning |
 
 ### Optional Integrations
 | Package | Command |

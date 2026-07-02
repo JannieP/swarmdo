@@ -9,7 +9,7 @@
  *   npx @rufflo/cli headless --benchmark
  *
  * Environment:
- *   CLAUDE_FLOW_HEADLESS=true
+ *   RUFFLO_HEADLESS=true
  *   CLAUDE_CODE_HEADLESS=true
  *
  * @module v3/cli/runtime/headless
@@ -118,7 +118,7 @@ Options:
   -h, --help            Show help
 
 Environment:
-  CLAUDE_FLOW_HEADLESS=true   Enable headless mode
+  RUFFLO_HEADLESS=true   Enable headless mode
   CLAUDE_CODE_HEADLESS=true   Enable Claude Code headless
 
 Examples:
@@ -302,7 +302,7 @@ async function showStatus(): Promise<void> {
   console.log(`  Entries: ${hnsw.entryCount}`);
 
   console.log('\nEnvironment:');
-  console.log(`  CLAUDE_FLOW_HEADLESS: ${process.env.CLAUDE_FLOW_HEADLESS || 'not set'}`);
+  console.log(`  RUFFLO_HEADLESS: ${process.env.RUFFLO_HEADLESS || 'not set'}`);
   console.log(`  CLAUDE_CODE_HEADLESS: ${process.env.CLAUDE_CODE_HEADLESS || 'not set'}`);
   console.log(`  NODE_ENV: ${process.env.NODE_ENV || 'development'}`);
 }
@@ -312,7 +312,7 @@ async function showStatus(): Promise<void> {
  */
 async function main(): Promise<void> {
   // Set headless environment
-  process.env.CLAUDE_FLOW_HEADLESS = 'true';
+  process.env.RUFFLO_HEADLESS = 'true';
 
   const config = parseArgs();
 

@@ -29,7 +29,7 @@
  * -----------------------
  * `scope` on the envelope is optional in v1. Agents without scope set
  * operate in legacy permissive mode (all tools allowed, depth unlimited,
- * server auth unchecked). `CLAUDE_FLOW_STRICT_AUTH=true` enables enforcement.
+ * server auth unchecked). `RUFFLO_STRICT_AUTH=true` enables enforcement.
  *
  * Reference: ADR-144, arXiv:2605.05440 (Authorization Propagation),
  * arXiv:2605.28914 (AIRGuard), arXiv:2605.22333 (MCP auth survey).

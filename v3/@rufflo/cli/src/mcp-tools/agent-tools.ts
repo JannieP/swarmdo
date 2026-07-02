@@ -419,7 +419,7 @@ export const agentTools: MCPTool[] = [
     // round-trip, same cost-tracking + swarm-coordination + graph-DB side
     // effects as agent_spawn. Blocks ~2-5s on the LLM call; `agent_spawn`
     // stays cheap (<100ms) to preserve the swarm coordinator latency budget
-    // documented at @claude-flow/swarm/src/unified-coordinator.ts:7-8.
+    // documented at @rufflo/swarm/src/unified-coordinator.ts:7-8.
     name: 'agent_run',
     description: 'Spawn a Rufflo-tracked agent AND execute a task on it in one call. Reuses the same model routing, cost attribution, swarm registration, and graph-DB record as agent_spawn, then immediately calls the Anthropic Messages API (or OpenRouter / Ollama per RUFLO_PROVIDER) with the supplied prompt. Use this when you want a one-shot result with full Rufflo tracking — most common case. Blocks ~2-5s on the LLM round-trip. For cheap registration without execution (preserves <100ms swarm budget for topology setup), use agent_spawn separately. For multi-turn work against an already-registered agent, use agent_execute with the agentId.',
     category: 'agent',

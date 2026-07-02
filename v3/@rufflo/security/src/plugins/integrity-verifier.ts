@@ -26,7 +26,7 @@
  * - Ed25519 signature verification of a detached signature over the manifest.
  * - Trust-anchor allowlist: the publisher's signing key fingerprint must be
  *   in `trust-anchors.json`, gated on CODEOWNERS review.
- * - Backwards compatible: default mode is warn-only. `CLAUDE_FLOW_STRICT_PLUGINS=true`
+ * - Backwards compatible: default mode is warn-only. `RUFFLO_STRICT_PLUGINS=true`
  *   makes verification a hard gate.
  *
  * Non-goals (P1)

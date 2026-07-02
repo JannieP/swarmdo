@@ -41,8 +41,8 @@ const KEY_LEN = 32;             // AES-256
 const ALG = 'aes-256-gcm' as const;
 const MIN_BLOB_LEN = MAGIC_LEN + IV_LEN + TAG_LEN; // empty plaintext still has these
 
-const ENV_ENABLE_FLAG = 'CLAUDE_FLOW_ENCRYPT_AT_REST';
-const ENV_KEY_VAR = 'CLAUDE_FLOW_ENCRYPTION_KEY';
+const ENV_ENABLE_FLAG = 'RUFFLO_ENCRYPT_AT_REST';
+const ENV_KEY_VAR = 'RUFFLO_ENCRYPTION_KEY';
 
 // ── Public API ───────────────────────────────────────────────────────────────
 
@@ -62,7 +62,7 @@ export function isEncryptionEnabled(): boolean {
 }
 
 /**
- * Resolve a 32-byte encryption key from CLAUDE_FLOW_ENCRYPTION_KEY.
+ * Resolve a 32-byte encryption key from RUFFLO_ENCRYPTION_KEY.
  *
  * Phase 1 supports only the env-var source; keychain and passphrase
  * resolution are deferred to a follow-up iteration (see ADR-096). When

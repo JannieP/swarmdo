@@ -2,7 +2,7 @@
  * MCP Tool Optimizer Plugin
  *
  * Learn tool usage patterns and suggest optimal tool sequences.
- * Uses @ruvector/wasm for pattern storage and @ruvector/learning-wasm for optimization.
+ * Uses @rufvector/wasm for pattern storage and @rufvector/learning-wasm for optimization.
  *
  * Features:
  * - Track tool usage patterns
@@ -338,7 +338,7 @@ async function getOptimizer(): Promise<MCPToolOptimizer> {
 }
 
 export const mcpToolOptimizerPlugin = new PluginBuilder('mcp-tool-optimizer', '1.0.0')
-  .withDescription('Learn tool patterns and suggest optimal sequences using @ruvector/wasm + @ruvector/learning-wasm')
+  .withDescription('Learn tool patterns and suggest optimal sequences using @rufvector/wasm + @rufvector/learning-wasm')
   .withAuthor('Rufflo Team')
   .withTags(['optimization', 'tools', 'patterns', 'ruvector', 'learning', 'hnsw'])
   .withMCPTools([
@@ -383,7 +383,7 @@ export const mcpToolOptimizerPlugin = new PluginBuilder('mcp-tool-optimizer', '1
         const optimizer = await getOptimizer();
         const stats = optimizer.getStats();
         const topToolsOutput = stats.topTools.slice(0, 5).map((t, i) => `  ${i + 1}. ${t.name}: ${t.usageCount} uses (${(t.successRate * 100).toFixed(0)}%)`).join('\n');
-        return { content: [{ type: 'text', text: `📊 **Tool Optimizer:**\n\n**Patterns:** ${stats.totalPatterns}\n**Sequences:** ${stats.totalSequences}\n**Efficiency:** ${(stats.avgEfficiency * 100).toFixed(1)}%\n\n**Top Tools:**\n${topToolsOutput || '  None'}\n\n**Backend:** @ruvector/wasm + @ruvector/learning-wasm` }] };
+        return { content: [{ type: 'text', text: `📊 **Tool Optimizer:**\n\n**Patterns:** ${stats.totalPatterns}\n**Sequences:** ${stats.totalSequences}\n**Efficiency:** ${(stats.avgEfficiency * 100).toFixed(1)}%\n\n**Top Tools:**\n${topToolsOutput || '  None'}\n\n**Backend:** @rufvector/wasm + @rufvector/learning-wasm` }] };
       })
       .build(),
   ])
@@ -415,7 +415,7 @@ export const mcpToolOptimizerPlugin = new PluginBuilder('mcp-tool-optimizer', '1
       .build(),
   ])
   .onInitialize(async (ctx) => {
-    ctx.logger.info('MCP Tool Optimizer initializing with @ruvector/wasm + @ruvector/learning-wasm...');
+    ctx.logger.info('MCP Tool Optimizer initializing with @rufvector/wasm + @rufvector/learning-wasm...');
     await getOptimizer();
     ctx.logger.info('MCP Tool Optimizer ready - HNSW + LoRA enabled');
   })

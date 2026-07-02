@@ -16,14 +16,14 @@ services:
       - test-logs:/app/logs
     environment:
       - NODE_ENV=test
-      - CLAUDE_FLOW_MODE=test
-      - CLAUDE_FLOW_MEMORY_PATH=/app/data
-      - CLAUDE_FLOW_LOG_LEVEL=debug
-      - CLAUDE_FLOW_MAX_AGENTS=15
-      - CLAUDE_FLOW_SECURITY_MODE=strict
-      - CLAUDE_FLOW_HNSW_M=16
-      - CLAUDE_FLOW_HNSW_EF=200
-      - CLAUDE_FLOW_EMBEDDING_DIM=384
+      - RUFFLO_MODE=test
+      - RUFFLO_MEMORY_PATH=/app/data
+      - RUFFLO_LOG_LEVEL=debug
+      - RUFFLO_MAX_AGENTS=15
+      - RUFFLO_SECURITY_MODE=strict
+      - RUFFLO_HNSW_M=16
+      - RUFFLO_HNSW_EF=200
+      - RUFFLO_EMBEDDING_DIM=384
       - CI=true
       - TEST_REPORT_PATH=/app/reports
       - MCP_SERVER_HOST=localhost
@@ -43,9 +43,9 @@ services:
       - test-logs:/app/logs
     environment:
       - NODE_ENV=test
-      - CLAUDE_FLOW_MODE=test
-      - CLAUDE_FLOW_MEMORY_PATH=/app/data
-      - CLAUDE_FLOW_LOG_LEVEL=info
+      - RUFFLO_MODE=test
+      - RUFFLO_MEMORY_PATH=/app/data
+      - RUFFLO_LOG_LEVEL=info
       - MCP_PORT=3000
     ports:
       - "3000:3000"
@@ -86,8 +86,8 @@ services:
       - test-reports:/app/reports
     environment:
       - NODE_ENV=test
-      - CLAUDE_FLOW_MODE=test
-      - CLAUDE_FLOW_MEMORY_PATH=/app/data
+      - RUFFLO_MODE=test
+      - RUFFLO_MEMORY_PATH=/app/data
       - CI=true
       - TEST_REPORT_PATH=/app/reports
       - MCP_SERVER_HOST=mcp-server
@@ -110,8 +110,8 @@ services:
       - test-reports:/app/reports
     environment:
       - NODE_ENV=test
-      - CLAUDE_FLOW_MODE=test
-      - CLAUDE_FLOW_MEMORY_PATH=/app/data
+      - RUFFLO_MODE=test
+      - RUFFLO_MEMORY_PATH=/app/data
       - CI=true
       - TEST_REPORT_PATH=/app/reports
     networks:
@@ -128,7 +128,7 @@ services:
       - test-reports:/app/reports
     environment:
       - NODE_ENV=test
-      - CLAUDE_FLOW_SECURITY_MODE=strict
+      - RUFFLO_SECURITY_MODE=strict
       - CI=true
       - TEST_REPORT_PATH=/app/reports
     networks:

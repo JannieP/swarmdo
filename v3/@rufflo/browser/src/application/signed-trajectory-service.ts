@@ -5,7 +5,7 @@
  * Ed25519-signed envelope and for verifying / replaying received envelopes.
  *
  * Phase 1 ships a JSON-on-disk container; Phase 1.5 will swap the on-disk
- * format for the binary RVF format from `@ruvector/rvf@0.2.1` once we have
+ * format for the binary RVF format from `@rufvector/rvf@0.2.1` once we have
  * a working dependency story for it.
  */
 

@@ -1,11 +1,11 @@
-# ADR-086: Wire @ruvector/ruvllm as Intelligence Coordinator
+# ADR-086: Wire @rufvector/rufllm as Intelligence Coordinator
 
 **Status**: Accepted — Implemented (SonaCoordinator, ContrastiveTrainer, TrainingPipeline wired; selective JS retained for cosine/EWC/LoRA forward/HNSW)
 **Date**: 2026-04-07 · **Updated**: 2026-05-09
 
 ## Context
 
-The rufflo intelligence pipeline (ReasoningBank, EWC++, LoRA, SONA, cosine similarity) is implemented in pure JavaScript using Float32Array operations. `@ruvector/ruvllm@2.5.4` is installed and provides structured ML components.
+The rufflo intelligence pipeline (ReasoningBank, EWC++, LoRA, SONA, cosine similarity) is implemented in pure JavaScript using Float32Array operations. `@rufvector/rufllm@2.5.4` is installed and provides structured ML components.
 
 ### API Testing Results (2026-04-07)
 
@@ -27,11 +27,11 @@ A well-structured JS library with SIMD support flag. NOT native Rust/NAPI for mo
 
 ### ESM/CJS Import Resolution
 
-`@ruvector/ruvllm` exports CJS only (`dist/cjs/index.js`). ESM `await import()` fails due to broken ESM export path. Resolution: use `createRequire(import.meta.url)` pattern (same as `diskann-backend.ts`, `ruvector-training.ts`).
+`@rufvector/rufllm` exports CJS only (`dist/cjs/index.js`). ESM `await import()` fails due to broken ESM export path. Resolution: use `createRequire(import.meta.url)` pattern (same as `diskann-backend.ts`, `ruvector-training.ts`).
 
 ## Decision
 
-Selectively integrate `@ruvector/ruvllm` as the intelligence **coordinator**, not a wholesale replacement:
+Selectively integrate `@rufvector/rufllm` as the intelligence **coordinator**, not a wholesale replacement:
 
 ### USE ruvllm for (coordination & learning):
 1. **`SonaCoordinator`** — Trajectory-based learning pipeline in `intelligence.ts`

@@ -63,31 +63,31 @@ function loadEnvConfig(): Partial<SystemConfig> {
   const config: Partial<SystemConfig> = {};
 
   // Orchestrator settings
-  if (process.env.CLAUDE_FLOW_MAX_AGENTS) {
+  if (process.env.RUFFLO_MAX_AGENTS) {
     config.orchestrator = {
       ...defaultSystemConfig.orchestrator,
       lifecycle: {
         ...defaultSystemConfig.orchestrator.lifecycle,
-        maxConcurrentAgents: parseInt(process.env.CLAUDE_FLOW_MAX_AGENTS, 10),
+        maxConcurrentAgents: parseInt(process.env.RUFFLO_MAX_AGENTS, 10),
       },
     };
   }
 
   // Data directory
-  if (process.env.CLAUDE_FLOW_DATA_DIR) {
+  if (process.env.RUFFLO_DATA_DIR) {
     config.orchestrator = {
       ...config.orchestrator,
       ...defaultSystemConfig.orchestrator,
       session: {
         ...defaultSystemConfig.orchestrator.session,
-        dataDir: process.env.CLAUDE_FLOW_DATA_DIR,
+        dataDir: process.env.RUFFLO_DATA_DIR,
       },
     };
   }
 
   // Memory type
-  if (process.env.CLAUDE_FLOW_MEMORY_TYPE) {
-    const memoryType = process.env.CLAUDE_FLOW_MEMORY_TYPE as NonNullable<SystemConfig['memory']>['type'];
+  if (process.env.RUFFLO_MEMORY_TYPE) {
+    const memoryType = process.env.RUFFLO_MEMORY_TYPE as NonNullable<SystemConfig['memory']>['type'];
     if (['sqlite', 'agentdb', 'hybrid', 'redis', 'memory'].includes(memoryType)) {
       config.memory = {
         ...(defaultSystemConfig.memory ?? { type: 'hybrid' }),
@@ -98,8 +98,8 @@ function loadEnvConfig(): Partial<SystemConfig> {
 
   // MCP transport
   const defaultMcp = defaultSystemConfig.mcp ?? { name: 'rufflo', version: '3.0.0', transport: { type: 'stdio' as const } };
-  if (process.env.CLAUDE_FLOW_MCP_TRANSPORT) {
-    const transport = process.env.CLAUDE_FLOW_MCP_TRANSPORT as 'stdio' | 'http' | 'websocket';
+  if (process.env.RUFFLO_MCP_TRANSPORT) {
+    const transport = process.env.RUFFLO_MCP_TRANSPORT as 'stdio' | 'http' | 'websocket';
     if (['stdio', 'http', 'websocket'].includes(transport)) {
       config.mcp = {
         ...defaultMcp,
@@ -111,22 +111,22 @@ function loadEnvConfig(): Partial<SystemConfig> {
     }
   }
 
-  if (process.env.CLAUDE_FLOW_MCP_PORT) {
+  if (process.env.RUFFLO_MCP_PORT) {
     config.mcp = {
       ...config.mcp,
       ...defaultMcp,
       transport: {
         ...config.mcp?.transport,
         ...defaultMcp.transport,
-        port: parseInt(process.env.CLAUDE_FLOW_MCP_PORT, 10),
+        port: parseInt(process.env.RUFFLO_MCP_PORT, 10),
       },
     };
   }
 
   // Swarm topology
   const defaultSwarm = defaultSystemConfig.swarm ?? { topology: 'hierarchical-mesh' as const, maxAgents: 20 };
-  if (process.env.CLAUDE_FLOW_SWARM_TOPOLOGY) {
-    const topology = process.env.CLAUDE_FLOW_SWARM_TOPOLOGY as NonNullable<SystemConfig['swarm']>['topology'];
+  if (process.env.RUFFLO_SWARM_TOPOLOGY) {
+    const topology = process.env.RUFFLO_SWARM_TOPOLOGY as NonNullable<SystemConfig['swarm']>['topology'];
     if (['hierarchical', 'mesh', 'ring', 'star', 'adaptive', 'hierarchical-mesh'].includes(topology)) {
       config.swarm = {
         ...defaultSwarm,

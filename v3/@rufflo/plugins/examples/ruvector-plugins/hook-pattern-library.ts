@@ -2,7 +2,7 @@
  * Hook Pattern Library Plugin
  *
  * Learn which hooks work best for which file types/operations.
- * Uses @ruvector/wasm for pattern storage and @ruvector/learning-wasm for optimization.
+ * Uses @rufvector/wasm for pattern storage and @rufvector/learning-wasm for optimization.
  *
  * Features:
  * - Track hook effectiveness by file type
@@ -340,7 +340,7 @@ async function getLibrary(): Promise<HookPatternLibrary> {
 }
 
 export const hookPatternLibraryPlugin = new PluginBuilder('hook-pattern-library', '1.0.0')
-  .withDescription('Learn optimal hook patterns for file types using @ruvector/wasm')
+  .withDescription('Learn optimal hook patterns for file types using @rufvector/wasm')
   .withAuthor('Rufflo Team')
   .withTags(['hooks', 'patterns', 'learning', 'ruvector', 'optimization'])
   .withMCPTools([
@@ -430,7 +430,7 @@ export const hookPatternLibraryPlugin = new PluginBuilder('hook-pattern-library'
             text: `📊 **Hook Pattern Library:**\n\n` +
               `**Total Patterns:** ${stats.totalPatterns}\n` +
               `**Avg Effectiveness:** ${(stats.avgEffectiveness * 100).toFixed(1)}%\n` +
-              `**Backend:** @ruvector/wasm HNSW\n\n` +
+              `**Backend:** @rufvector/wasm HNSW\n\n` +
               `**By Event:**\n${eventOutput || '  None'}\n\n` +
               `**Top Hooks:**\n${topHooksOutput || '  None'}`,
           }],
@@ -476,7 +476,7 @@ export const hookPatternLibraryPlugin = new PluginBuilder('hook-pattern-library'
       .build(),
   ])
   .onInitialize(async (ctx) => {
-    ctx.logger.info('Hook Pattern Library initializing with @ruvector/wasm...');
+    ctx.logger.info('Hook Pattern Library initializing with @rufvector/wasm...');
     const library = await getLibrary();
     const stats = library.getStats();
     ctx.logger.info(`Hook Pattern Library ready - ${stats.totalPatterns} patterns loaded`);

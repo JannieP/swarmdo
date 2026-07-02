@@ -2005,7 +2005,7 @@ npm install @community/rufflo-security
 
 1. **Programmatic** (highest) - `core.configure({ ... })`
 2. **CLI flags** - `--swarm-topology=mesh`
-3. **Environment variables** - `CLAUDE_FLOW_SWARM_TOPOLOGY=mesh`
+3. **Environment variables** - `RUFFLO_SWARM_TOPOLOGY=mesh`
 4. **Project config** - `.rufflo.json` or `rufflo.config.js`
 5. **User config** - `~/.rufflo/config.json`
 6. **Defaults** (lowest) - Built-in defaults
@@ -2051,11 +2051,11 @@ npm install @community/rufflo-security
 #### Environment Variable Mapping
 
 ```bash
-# Pattern: CLAUDE_FLOW_<MODULE>_<OPTION>
-CLAUDE_FLOW_LEARNING_ALGORITHM=PPO
-CLAUDE_FLOW_SWARM_TOPOLOGY=mesh
-CLAUDE_FLOW_MEMORY_BACKEND=sqlite
-CLAUDE_FLOW_HOOKS_TIMEOUT=10000
+# Pattern: RUFFLO_<MODULE>_<OPTION>
+RUFFLO_LEARNING_ALGORITHM=PPO
+RUFFLO_SWARM_TOPOLOGY=mesh
+RUFFLO_MEMORY_BACKEND=sqlite
+RUFFLO_HOOKS_TIMEOUT=10000
 ```
 
 #### Configuration API

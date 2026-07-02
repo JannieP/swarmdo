@@ -178,7 +178,7 @@ These are forecasts from per-call measured costs, not measured end-to-end. The P
 
 ## Open questions
 
-1. **`qualityBar` default.** ADR-148 set it to 0.8. With measured rows (not synthetic), 0.8 may be too aggressive — the LLM-judged mid-tier corpus has Sonnet at 0.767 (just below the bar). Proposal: default to **0.7** to keep Sonnet in the "clears the bar" set; configurable as before via `CLAUDE_FLOW_ROUTER_QUALITY_BAR`.
+1. **`qualityBar` default.** ADR-148 set it to 0.8. With measured rows (not synthetic), 0.8 may be too aggressive — the LLM-judged mid-tier corpus has Sonnet at 0.767 (just below the bar). Proposal: default to **0.7** to keep Sonnet in the "clears the bar" set; configurable as before via `RUFFLO_ROUTER_QUALITY_BAR`.
 2. **How many candidates ship in the bundled registry.** Initial proposal: ~8 (3 Anthropic tiers + Ling + GPT-4.1 + Gemini-Flash + Llama-3.3-70b + Nemotron-free). Larger registries are more flexible but every candidate adds a column to the seed-corpus measurement. Open to growing it post-launch.
 3. **Re-measurement cadence.** OpenRouter pricing and model availability shift. Proposal: run `benchmark-seed-corpus.mjs` quarterly, or whenever a candidate's pricing changes by >20%. CLI surface: `rufflo neural router measure --candidates <list>`.
 4. **Online retraining.** Trajectory-collected outcomes (ADR-148 phase 1) accumulate per-model evidence. When do we retrain the bundled KRR from them? Proposal: a follow-up ADR once we have a few weeks of real trajectory data.

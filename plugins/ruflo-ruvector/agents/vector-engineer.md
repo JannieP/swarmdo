@@ -61,7 +61,7 @@ Key tool categories:
 - `hooks_security_scan` — vulnerability detection
 - `hooks_rag_context` — semantic context retrieval
 - `brain_search`, `brain_share`, `brain_status` — shared brain knowledge (needs `@ruvector/pi-brain`)
-- `sona_status`, `sona_patterns`, `sona_stats` — SONA learning (needs `@ruvector/ruvllm`)
+- `sona_status`, `sona_patterns`, `sona_stats` — SONA learning (needs `@rufvector/rufllm`)
 - `attention_list`, `attention_compute` — attention mechanism dispatch
 - `gnn_info`, `gnn_layer`, `gnn_search` — graph neural net ops
 - `rvf_create`, `rvf_query`, `rvf_status` — cognitive container management

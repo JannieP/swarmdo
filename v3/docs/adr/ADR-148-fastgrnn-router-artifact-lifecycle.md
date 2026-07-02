@@ -114,7 +114,7 @@ clear" — is exactly the **uncertainty escalation** ADR-142 / #2250 introduced
 in the bandit; the new router exposes it natively.
 
 `qualityBar` starts at `0.80` (a defensible default for production routing) and
-is configurable via `CLAUDE_FLOW_ROUTER_QUALITY_BAR`.
+is configurable via `RUFFLO_ROUTER_QUALITY_BAR`.
 
 ### 4. Observability: `routedBy`, not inferred (ADR-074, ADR-086)
 
@@ -133,7 +133,7 @@ failed.
 ### 5. Training: DRACO-shaped trajectories, opt-in
 
 `RouterTrajectoryRecorder` writes one JSONL row per decision to
-`.swarm/model-router-trajectories.jsonl` when `CLAUDE_FLOW_ROUTER_TRAJECTORY=1`.
+`.swarm/model-router-trajectories.jsonl` when `RUFFLO_ROUTER_TRAJECTORY=1`.
 Default: **off** (rows carry full task text + raw embeddings).
 
 Row schema (versioned `"v": 1`):
@@ -161,7 +161,7 @@ reshaping.
   a fallback when the KRR artifact is missing or fails to parse.
 - **Trained (optional)**: a `TrainedRouter` JSON written via `toJSON()` from
   a larger corpus, distributed via IPFS using the existing `hooks transfer`
-  channel. `CLAUDE_FLOW_ROUTER_MODEL_PATH` can point at a local path or an
+  channel. `RUFFLO_ROUTER_MODEL_PATH` can point at a local path or an
   `ipfs://` URI.
 - **Native-accelerated (optional)**: a `.safetensors` written by
   `trainNativeRouter`. Loaded only when tiny-dancer is installed *and* the
@@ -199,7 +199,7 @@ ADR-086 footgun.
   router` is pure TS with no transitive deps, tiny-dancer adds the native
   binary. The marginal install-size cost is ~40 kB of JS + ~6 kB of model.
 - Storing trajectory rows on disk introduces a PII/retention surface that the
-  bandit (aggregates-only) did not have. Mitigation: `CLAUDE_FLOW_ROUTER_TRAJECTORY`
+  bandit (aggregates-only) did not have. Mitigation: `RUFFLO_ROUTER_TRAJECTORY`
   is opt-in, rotation policy documented, rows are local and never uploaded by
   default.
 - The benchmark below uses a **synthetic corpus with strong signal-to-noise
@@ -317,13 +317,13 @@ Sequenced for the smallest credible PR first:
 - Add `v3/@rufflo/cli/src/ruvector/neural-router.ts` exporting one
   function: `tryCostOptimalRoute(embedding) → Promise<{model, predictedQuality,
   metBar, routedBy} | null>`. Returns `null` unless
-  `CLAUDE_FLOW_ROUTER_NEURAL=1` is set, a seed corpus or trained artifact
+  `RUFFLO_ROUTER_NEURAL=1` is set, a seed corpus or trained artifact
   resolves, and the backend selects.
 - Bundle `assets/model-router/seed-rows.json` (~50 queries) for the k-NN cold
   path so the gate-on result is non-empty out of the box.
 - Thread the embedding through `ModelRouter.route(task, embedding?)` for the
   inference call only.
-- Add `RouterTrajectoryRecorder` (gated by `CLAUDE_FLOW_ROUTER_TRAJECTORY=1`)
+- Add `RouterTrajectoryRecorder` (gated by `RUFFLO_ROUTER_TRAJECTORY=1`)
   writing DRACO-shaped JSONL.
 - Add `routedBy` to every result.
 - Tests: graceful-degradation (both optional deps missing → bandit-fallback),
@@ -339,7 +339,7 @@ Sequenced for the smallest credible PR first:
 **PR 3 — flip default**
 
 - Once the acceptance bar is met on a real corpus, set
-  `CLAUDE_FLOW_ROUTER_NEURAL=1` as the package default and document the
+  `RUFFLO_ROUTER_NEURAL=1` as the package default and document the
   opt-out.
 
 ## References

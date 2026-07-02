@@ -1,7 +1,7 @@
 /**
  * SONA Integration for V3 Neural Module
  *
- * Wraps @ruvector/sona package for V3 usage with:
+ * Wraps @rufvector/sona package for V3 usage with:
  * - Trajectory tracking and verdict judgment
  * - Pattern extraction and memory distillation
  * - Sub-0.05ms learning performance target
@@ -10,7 +10,7 @@
  * @module sona-integration
  */
 
-import { SonaEngine, type JsSonaConfig, type JsLearnedPattern } from '@ruvector/sona';
+import { SonaEngine, type JsSonaConfig, type JsLearnedPattern } from '@rufvector/sona';
 import type {
   Trajectory,
   TrajectoryStep,
@@ -71,7 +71,7 @@ export interface SONAStats {
 // =============================================================================
 
 /**
- * Convert V3 SONA mode to @ruvector/sona config
+ * Convert V3 SONA mode to @rufvector/sona config
  */
 function modeToConfig(mode: SONAMode, modeConfig: SONAModeConfig): JsSonaConfig {
   const baseConfig: JsSonaConfig = {
@@ -130,7 +130,7 @@ function modeToConfig(mode: SONAMode, modeConfig: SONAModeConfig): JsSonaConfig 
 // =============================================================================
 
 /**
- * SONA Learning Engine - wraps @ruvector/sona for V3 usage
+ * SONA Learning Engine - wraps @rufvector/sona for V3 usage
  *
  * Performance targets:
  * - learn(): <0.05ms

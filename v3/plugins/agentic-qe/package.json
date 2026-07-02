@@ -75,13 +75,13 @@
     "@rufflo/browser": {
       "optional": true
     },
-    "@ruvector/attention": {
+    "@rufvector/attention": {
       "optional": true
     },
-    "@ruvector/gnn": {
+    "@rufvector/gnn": {
       "optional": true
     },
-    "@ruvector/sona": {
+    "@rufvector/sona": {
       "optional": true
     }
   },

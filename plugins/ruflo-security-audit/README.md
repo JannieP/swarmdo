@@ -26,7 +26,7 @@ The 3.6.25 release closed a class of shell-injection bugs. When auditing downstr
 - **Numeric MCP inputs cast as `number`** — TypeScript casts don't run at runtime. A `prNumber: "1; rm -rf /"` slips through. Mitigate via `toPositiveInt(value)` (see `src/mcp-tools/github-tools.ts`).
 - **Untrusted package specs flowing into `npm install`** — gate via `isSafePackageSpec(pkg, version)` regex check (see `src/update/executor.ts`). Defense-in-depth even with `execFileSync`.
 - **Loader-hijack env vars** (`LD_PRELOAD`, `NODE_OPTIONS`, `DYLD_*`) flowing into a child process env — gate via `validateEnv()` (see `src/mcp-tools/validate-input.ts`).
-- **Plaintext secrets at rest** in `.rufflo/sessions/`, `.rufflo/terminals/store.json`, `.swarm/memory.db` — paired with [ADR-096](../../v3/docs/adr/ADR-096-encryption-at-rest.md) opt-in encryption (`CLAUDE_FLOW_ENCRYPT_AT_REST=1`). Confirm gate state via `rufflo doctor -c encryption`.
+- **Plaintext secrets at rest** in `.rufflo/sessions/`, `.rufflo/terminals/store.json`, `.swarm/memory.db` — paired with [ADR-096](../../v3/docs/adr/ADR-096-encryption-at-rest.md) opt-in encryption (`RUFFLO_ENCRYPT_AT_REST=1`). Confirm gate state via `rufflo doctor -c encryption`.
 - **MCP stdin DoS** — un-newlined input piped into the MCP server. The host caps the buffer at 10MB by default; downstream MCP wrappers should enforce equivalent limits.
 
 A `rufflo verify` round-trip confirms 55 witnesses (27 regression-fix + 28 per-source-file capability) match the signed manifest byte-for-byte.

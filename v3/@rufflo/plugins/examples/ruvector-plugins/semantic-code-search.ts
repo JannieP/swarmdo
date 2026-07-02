@@ -1,7 +1,7 @@
 /**
  * Semantic Code Search Plugin
  *
- * Index and search code semantically using @ruvector/wasm vector database.
+ * Index and search code semantically using @rufvector/wasm vector database.
  * Enables natural language queries like "find functions that handle authentication".
  *
  * Features:
@@ -400,7 +400,7 @@ async function getCodeSearch(): Promise<SemanticCodeSearch> {
 }
 
 export const semanticCodeSearchPlugin = new PluginBuilder('semantic-code-search', '1.0.0')
-  .withDescription('Semantic code search using @ruvector/wasm HNSW indexing (<1ms search)')
+  .withDescription('Semantic code search using @rufvector/wasm HNSW indexing (<1ms search)')
   .withAuthor('Rufflo Team')
   .withTags(['search', 'code', 'semantic', 'ruvector', 'hnsw'])
   .withMCPTools([
@@ -460,7 +460,7 @@ export const semanticCodeSearchPlugin = new PluginBuilder('semantic-code-search'
       .withHandler(async () => {
         const search = await getCodeSearch();
         const stats = search.getStats();
-        return { content: [{ type: 'text', text: `📊 **Code Index:**\n\n**Chunks:** ${stats.totalChunks}\n**Files:** ${stats.totalFiles}\n**Backend:** @ruvector/wasm HNSW` }] };
+        return { content: [{ type: 'text', text: `📊 **Code Index:**\n\n**Chunks:** ${stats.totalChunks}\n**Files:** ${stats.totalFiles}\n**Backend:** @rufvector/wasm HNSW` }] };
       })
       .build(),
   ])
@@ -489,7 +489,7 @@ export const semanticCodeSearchPlugin = new PluginBuilder('semantic-code-search'
       .build(),
   ])
   .onInitialize(async (ctx) => {
-    ctx.logger.info('Semantic Code Search initializing with @ruvector/wasm...');
+    ctx.logger.info('Semantic Code Search initializing with @rufvector/wasm...');
     await getCodeSearch();
     ctx.logger.info('Semantic Code Search ready - HNSW indexing enabled');
   })

@@ -20,11 +20,11 @@ let prev: string | undefined;
 
 beforeEach(() => {
   dir = mkdtempSync(join(tmpdir(), 'rufflo-demo-doc-'));
-  prev = process.env.CLAUDE_FLOW_CWD;
-  process.env.CLAUDE_FLOW_CWD = dir; // getProjectCwd() honors this for persistence
+  prev = process.env.RUFFLO_CWD;
+  process.env.RUFFLO_CWD = dir; // getProjectCwd() honors this for persistence
 });
 afterEach(() => {
-  if (prev === undefined) delete process.env.CLAUDE_FLOW_CWD; else process.env.CLAUDE_FLOW_CWD = prev;
+  if (prev === undefined) delete process.env.RUFFLO_CWD; else process.env.RUFFLO_CWD = prev;
   try { rmSync(dir, { recursive: true, force: true }); } catch { /* ignore */ }
 });
 

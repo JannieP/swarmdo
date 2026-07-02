@@ -91,8 +91,8 @@ export class DiffClassifier {
 
   async initialize(): Promise<void> {
     try {
-      // @ruvector/diff is optional - gracefully fallback if not installed
-      const ruvector = await import('@ruvector/diff' as string).catch(() => null);
+      // @rufvector/diff is optional - gracefully fallback if not installed
+      const ruvector = await import('@rufvector/diff' as string).catch(() => null);
       if (ruvector) {
         this.ruvectorEngine = (ruvector as any).createDiffClassifier?.(this.config);
         this.useNative = !!this.ruvectorEngine;

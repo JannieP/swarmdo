@@ -1990,7 +1990,7 @@ miss=""
 [[ -x "$F" ]] || miss="$miss not-executable"
 node --check "$F" 2>/dev/null || miss="$miss syntax-error"
 # Benchmark targets the exact iter-12 source pattern
-grep -q "CLAUDE_FLOW_ROUTER_PARALLEL_LOG === '1'" "$F" || miss="$miss no-flag-literal"
+grep -q "RUFFLO_ROUTER_PARALLEL_LOG === '1'" "$F" || miss="$miss no-flag-literal"
 # Both flag-OFF and flag-ON variants measured
 grep -q "FLAG OFF" "$F" || miss="$miss no-off-variant"
 grep -q "FLAG ON" "$F" || miss="$miss no-on-variant"
@@ -2040,7 +2040,7 @@ grep -q "no-metaharness-smoke.yml" "$F" || miss="$miss no-ci-gate-ref"
 grep -q "npx rufflo metaharness score" "$F" || miss="$miss no-cli-example"
 grep -q "mcp__rufflo__metaharness_" "$F" || miss="$miss no-mcp-tool-list"
 # Routing + parallel-log integration both mentioned
-grep -q "CLAUDE_FLOW_ROUTER_NEURAL\|CLAUDE_FLOW_ROUTER_PARALLEL_LOG" "$F" || miss="$miss no-routing-flags"
+grep -q "RUFFLO_ROUTER_NEURAL\|RUFFLO_ROUTER_PARALLEL_LOG" "$F" || miss="$miss no-routing-flags"
 # 3-criteria gate
 grep -q "quality > 2% AND cost < 1% AND latency < 5%" "$F" || miss="$miss no-3-criteria-gate"
 [[ -z "$miss" ]] && ok || bad "$miss"
@@ -2164,7 +2164,7 @@ miss=""
 grep -q "loadParallelRecorder" "$F" || miss="$miss no-lazy-loader"
 grep -q "router-parallel-recorder" "$F" || miss="$miss no-recorder-import"
 # Env-gated (additive, off-by-default)
-grep -q "CLAUDE_FLOW_ROUTER_PARALLEL_LOG === '1'" "$F" || miss="$miss no-env-gate-in-router"
+grep -q "RUFFLO_ROUTER_PARALLEL_LOG === '1'" "$F" || miss="$miss no-env-gate-in-router"
 # Call site present
 grep -q "mod.recordPair({" "$F" || miss="$miss no-recordPair-call"
 # Never-throws guarantee (ADR-150 rule #3)
@@ -2179,7 +2179,7 @@ F="$ROOT/../../v3/@rufflo/cli/src/ruvector/router-parallel-recorder.ts"
 miss=""
 [[ -f "$F" ]] || miss="$miss missing-file"
 # Architectural constraint #2: env-gated optional behavior
-grep -q "CLAUDE_FLOW_ROUTER_PARALLEL_LOG" "$F" || miss="$miss no-env-gate"
+grep -q "RUFFLO_ROUTER_PARALLEL_LOG" "$F" || miss="$miss no-env-gate"
 # Constraint #3: graceful degradation — every appendFileSync is wrapped
 grep -q "ADR-150" "$F" || miss="$miss no-adr-anchor"
 grep -qE "never (throws|throw|block)|never throw" "$F" || miss="$miss no-no-throw-doc"

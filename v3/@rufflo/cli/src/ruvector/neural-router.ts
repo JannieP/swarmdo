@@ -2,12 +2,12 @@
  * neural-router.ts — Optional cost-optimal neural routing path (ADR-148).
  *
  * Wires `@metaharness/router` (pure-TS k-NN/KRR + optional FastGRNN via
- * `@ruvector/tiny-dancer`) into the model-routing path as a graceful, gated
+ * `@rufvector/tiny-dancer`) into the model-routing path as a graceful, gated
  * addition. The shipped heuristic + Thompson bandit stays as the default;
  * this module only contributes a decision when:
  *
- *   1. `CLAUDE_FLOW_ROUTER_NEURAL=1` is set
- *   2. Either a trained artifact path resolves (`CLAUDE_FLOW_ROUTER_MODEL_PATH`)
+ *   1. `RUFFLO_ROUTER_NEURAL=1` is set
+ *   2. Either a trained artifact path resolves (`RUFFLO_ROUTER_MODEL_PATH`)
  *      OR the bundled seed corpus loads
  *   3. The dynamic `import('@metaharness/router')` succeeds
  *
@@ -65,7 +65,7 @@ export interface NeuralRouteResult {
    * in predicted quality for the PICKED model between the unified KRR and
    * the bucket specialist (iter 16). Set only when both are loaded AND a
    * complexityBucket was supplied. Operators tuning iter 44's
-   * `CLAUDE_FLOW_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD` need to observe
+   * `RUFFLO_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD` need to observe
    * realistic disagreement values to pick a sensible cutoff.
    */
   ensembleDisagreement?: number;
@@ -97,7 +97,7 @@ interface NeuralRouterConfig {
    * showed ECE drops from 0.1604 (POORLY-CALIBRATED) to 0.0335
    * (WELL-CALIBRATED) — a 79% reduction with only a 0.0144 train/test gap,
    * confirming the calibrator generalizes. Set
-   * `CLAUDE_FLOW_ROUTER_CALIBRATE=0` to opt out and recover iter 0-21 raw
+   * `RUFFLO_ROUTER_CALIBRATE=0` to opt out and recover iter 0-21 raw
    * KRR behavior.
    */
   calibrateEnabled: boolean;
@@ -256,8 +256,8 @@ function getConfig(): NeuralRouterConfig {
   }
 
   _config = {
-    enabled: process.env.CLAUDE_FLOW_ROUTER_NEURAL === '1',
-    modelPath: process.env.CLAUDE_FLOW_ROUTER_MODEL_PATH || undefined,
+    enabled: process.env.RUFFLO_ROUTER_NEURAL === '1',
+    modelPath: process.env.RUFFLO_ROUTER_MODEL_PATH || undefined,
     bundledKrrPath: join(assetsDir, 'seed-router.krr.json'),
     // ADR-149 v2 — measured against the richer code-context corpus
     // (gen-seed-corpus-v2.mjs). On that corpus, cheap models (Ling 2.6
@@ -266,23 +266,23 @@ function getConfig(): NeuralRouterConfig {
     // models win cheap+mid (cost-optimal) but escalates to capable models
     // on strong queries where cheap predictions fall below the bar.
     // Override per-installation; 0.25 = always-cheapest, 0.70 = quality-strict.
-    qualityBar: parseFloat(process.env.CLAUDE_FLOW_ROUTER_QUALITY_BAR ?? '0.50') || 0.50,
-    seedCorpusPath: process.env.CLAUDE_FLOW_ROUTER_SEED_CORPUS
+    qualityBar: parseFloat(process.env.RUFFLO_ROUTER_QUALITY_BAR ?? '0.50') || 0.50,
+    seedCorpusPath: process.env.RUFFLO_ROUTER_SEED_CORPUS
       ?? join(assetsDir, 'seed-rows.json'),
-    k: parseInt(process.env.CLAUDE_FLOW_ROUTER_KNN_K ?? '5', 10) || 5,
-    latencyBudgetMs: Math.max(0, parseInt(process.env.CLAUDE_FLOW_ROUTER_LATENCY_BUDGET_MS ?? '0', 10) || 0),
+    k: parseInt(process.env.RUFFLO_ROUTER_KNN_K ?? '5', 10) || 5,
+    latencyBudgetMs: Math.max(0, parseInt(process.env.RUFFLO_ROUTER_LATENCY_BUDGET_MS ?? '0', 10) || 0),
     // ADR-149 iter 24 — DEFAULT ON. Opt out with `=0`. Iter 23 OOS
     // validation: ECE 0.1604 → 0.0335 (-79%), well-calibrated.
-    calibrateEnabled: process.env.CLAUDE_FLOW_ROUTER_CALIBRATE !== '0',
+    calibrateEnabled: process.env.RUFFLO_ROUTER_CALIBRATE !== '0',
     // ADR-149 iter 29 — orthogonal selector mode. Blended $/Mtok ceiling;
     // 0 disables (preserves cost-optimal-above-bar). Typical values:
     //   $5    → cheap+mid tier only (Ling 2.6, Gemini Flash Lite, Llama 3.3, GPT-4.1)
     //   $20   → exclude Sonnet ($48 blended) and Opus ($240)
     //   $50   → exclude Opus only
-    costCeilingPerMTok: Math.max(0, parseFloat(process.env.CLAUDE_FLOW_ROUTER_COST_CEILING_USD_PER_MTOK ?? '0') || 0),
+    costCeilingPerMTok: Math.max(0, parseFloat(process.env.RUFFLO_ROUTER_COST_CEILING_USD_PER_MTOK ?? '0') || 0),
     // iter 44 — ensemble disagreement threshold; 0 disables.
-    ensembleUncertaintyThreshold: Math.max(0, parseFloat(process.env.CLAUDE_FLOW_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD ?? '0') || 0),
-    calibratorPath: process.env.CLAUDE_FLOW_ROUTER_CALIBRATOR_PATH
+    ensembleUncertaintyThreshold: Math.max(0, parseFloat(process.env.RUFFLO_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD ?? '0') || 0),
+    calibratorPath: process.env.RUFFLO_ROUTER_CALIBRATOR_PATH
       ?? join(assetsDir, 'seed-router.calibrator.json'),
   };
   return _config;
@@ -394,7 +394,7 @@ async function resolveBackend(cfg: NeuralRouterConfig): Promise<ResolvedBackend>
       // bucket-specialist KRR routers are wrapped with the bucket-matched
       // calibrator (closes mid-tier residual ECE; mid in-sample MAE drops
       // 0.36 → 0.17 with tier-specific fit). Set
-      // `CLAUDE_FLOW_ROUTER_CALIBRATE=0` to opt out of all calibration.
+      // `RUFFLO_ROUTER_CALIBRATE=0` to opt out of all calibration.
       type Cal = { transform: (x: number) => number };
       let unifiedCalibrator: Cal | null = null;
       const calibratorByBucket: Partial<Record<'low' | 'med' | 'high', Cal>> = {};
@@ -593,7 +593,7 @@ export async function tryCostOptimalRoute(
     const allRaw = activeRouter.predictAll(embedding);
 
     // ADR-149 iter 14 — per-modelId Thompson sampling. When
-    // CLAUDE_FLOW_ROUTER_BANDIT_PER_MODEL=1, perturb each candidate's
+    // RUFFLO_ROUTER_BANDIT_PER_MODEL=1, perturb each candidate's
     // predicted quality by a Beta sample from its persisted per-modelId
     // prior. Lets the bandit learn "Ling outperforms Haiku-4.5 within
     // the cheap tier" without changing the neural backend's prediction.
@@ -603,7 +603,7 @@ export async function tryCostOptimalRoute(
     // Otherwise the bandit's signal is uninformative noise and we'd
     // sabotage the well-trained neural prediction.
     let all = allRaw;
-    if (process.env.CLAUDE_FLOW_ROUTER_BANDIT_PER_MODEL === '1') {
+    if (process.env.RUFFLO_ROUTER_BANDIT_PER_MODEL === '1') {
       try {
         const { getModelRouterPriorsById, sampleBeta } = await import('./model-router.js');
         const priorsById = getModelRouterPriorsById();
@@ -614,7 +614,7 @@ export async function tryCostOptimalRoute(
           // marginal-across-buckets prior. Classic James-Stein-style
           // shrinkage: rich cells trust themselves, thin cells borrow
           // strength from neighbors. Default λ = 4 (set =0 to disable).
-          const shrinkageLambda = Math.max(0, parseFloat(process.env.CLAUDE_FLOW_ROUTER_BANDIT_SHRINKAGE_LAMBDA ?? '4') || 0);
+          const shrinkageLambda = Math.max(0, parseFloat(process.env.RUFFLO_ROUTER_BANDIT_SHRINKAGE_LAMBDA ?? '4') || 0);
           all = allRaw.map(a => {
             // Compute marginal-across-buckets prior for this modelId ONCE
             // (used either as the primary prior OR as the shrinkage anchor).
@@ -665,9 +665,9 @@ export async function tryCostOptimalRoute(
             //                       At s=1000 → bandit ~99% influence.
             //                       Use when you have lots of bandit data
             //                       and want it to dominate the neural prior.
-            //                       Gate: CLAUDE_FLOW_ROUTER_BANDIT_FULL_INFLUENCE=1.
-            const warmupRange = Math.max(1, parseFloat(process.env.CLAUDE_FLOW_ROUTER_BANDIT_WARMUP_RANGE ?? '8') || 8);
-            const fullInfluence = process.env.CLAUDE_FLOW_ROUTER_BANDIT_FULL_INFLUENCE === '1';
+            //                       Gate: RUFFLO_ROUTER_BANDIT_FULL_INFLUENCE=1.
+            const warmupRange = Math.max(1, parseFloat(process.env.RUFFLO_ROUTER_BANDIT_WARMUP_RANGE ?? '8') || 8);
+            const fullInfluence = process.env.RUFFLO_ROUTER_BANDIT_FULL_INFLUENCE === '1';
             const banditScore = sampleBeta(alpha, beta);
             const blendFactor = fullInfluence
               ? (samples - 2) / (samples + warmupRange)
@@ -678,7 +678,7 @@ export async function tryCostOptimalRoute(
       } catch { /* best-effort */ }
     }
 
-    // ADR-149 iter 12 — latency-aware filtering. When CLAUDE_FLOW_ROUTER_
+    // ADR-149 iter 12 — latency-aware filtering. When RUFFLO_ROUTER_
     // LATENCY_BUDGET_MS is set, drop candidates whose measured latency
     // exceeds the budget BEFORE the cost-optimal pick. The unfiltered
     // alternatives stay on the result for observability — only the chosen
@@ -686,7 +686,7 @@ export async function tryCostOptimalRoute(
     let main = activeRouter.route(embedding);
     // Re-derive `main` from the post-Thompson `all` list when per-modelId
     // is on (otherwise the bandit adjustment is invisible to the selector).
-    if (process.env.CLAUDE_FLOW_ROUTER_BANDIT_PER_MODEL === '1') {
+    if (process.env.RUFFLO_ROUTER_BANDIT_PER_MODEL === '1') {
       const clearing = all.filter(a => a.predictedQuality >= cfg.qualityBar)
         .sort((a, b) => a.costPerMTok - b.costPerMTok);
       const pick = clearing[0] ?? [...all].sort((a, b) => b.predictedQuality - a.predictedQuality)[0];
@@ -879,7 +879,7 @@ export async function tryCostOptimalRouteBatch(embeddings: number[][]): Promise<
  */
 export async function neuralRouterStatus(): Promise<{ enabled: boolean; available: boolean; routedBy: NeuralRoutedBy | null; reason: string; config: NeuralRouterConfig }> {
   const cfg = getConfig();
-  if (!cfg.enabled) return { enabled: false, available: false, routedBy: null, reason: 'CLAUDE_FLOW_ROUTER_NEURAL!=1', config: cfg };
+  if (!cfg.enabled) return { enabled: false, available: false, routedBy: null, reason: 'RUFFLO_ROUTER_NEURAL!=1', config: cfg };
   const backend = await getBackend();
   return { enabled: true, available: backend.available, routedBy: backend.routedBy, reason: backend.reason, config: cfg };
 }

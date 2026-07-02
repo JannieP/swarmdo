@@ -1466,30 +1466,30 @@ describe('Update Rate Limiter', () => {
 
   it('should block when auto-update disabled', () => {
     const origCI = process.env.CI;
-    const origAutoUpdate = process.env.CLAUDE_FLOW_AUTO_UPDATE;
+    const origAutoUpdate = process.env.RUFFLO_AUTO_UPDATE;
     delete process.env.CI;
     delete process.env.CONTINUOUS_INTEGRATION;
-    process.env.CLAUDE_FLOW_AUTO_UPDATE = 'false';
+    process.env.RUFFLO_AUTO_UPDATE = 'false';
     const result = shouldCheckForUpdates();
     expect(result.allowed).toBe(false);
     expect(result.reason).toContain('disabled');
     if (origCI) process.env.CI = origCI;
-    if (origAutoUpdate) process.env.CLAUDE_FLOW_AUTO_UPDATE = origAutoUpdate;
-    else delete process.env.CLAUDE_FLOW_AUTO_UPDATE;
+    if (origAutoUpdate) process.env.RUFFLO_AUTO_UPDATE = origAutoUpdate;
+    else delete process.env.RUFFLO_AUTO_UPDATE;
   });
 
   it('should allow when force update requested', () => {
     const origCI = process.env.CI;
-    const origForce = process.env.CLAUDE_FLOW_FORCE_UPDATE;
+    const origForce = process.env.RUFFLO_FORCE_UPDATE;
     delete process.env.CI;
     delete process.env.CONTINUOUS_INTEGRATION;
-    delete process.env.CLAUDE_FLOW_AUTO_UPDATE;
-    process.env.CLAUDE_FLOW_FORCE_UPDATE = 'true';
+    delete process.env.RUFFLO_AUTO_UPDATE;
+    process.env.RUFFLO_FORCE_UPDATE = 'true';
     const result = shouldCheckForUpdates();
     expect(result.allowed).toBe(true);
     if (origCI) process.env.CI = origCI;
-    if (origForce) process.env.CLAUDE_FLOW_FORCE_UPDATE = origForce;
-    else delete process.env.CLAUDE_FLOW_FORCE_UPDATE;
+    if (origForce) process.env.RUFFLO_FORCE_UPDATE = origForce;
+    else delete process.env.RUFFLO_FORCE_UPDATE;
   });
 });
 

@@ -48,8 +48,8 @@
   "peerDependencies": {
     "@rufflo/hooks": "workspace:*",
     "@rufflo/memory": "workspace:*",
-    "@ruvector/learning-wasm": "^0.1.0",
-    "@ruvector/wasm": "^0.1.0"
+    "@rufvector/learning-wasm": "file:../../@rufvector/learning-wasm",
+    "@rufvector/wasm": "file:../../@rufvector/wasm"
   },
   "peerDependenciesMeta": {
     "@rufflo/hooks": {
@@ -58,10 +58,10 @@
     "@rufflo/memory": {
       "optional": true
     },
-    "@ruvector/wasm": {
+    "@rufvector/wasm": {
       "optional": true
     },
-    "@ruvector/learning-wasm": {
+    "@rufvector/learning-wasm": {
       "optional": true
     }
   },

@@ -34,7 +34,7 @@ import { IsotonicCalibrator } from '../v3/@rufflo/cli/dist/src/ruvector/router-c
 
 const ARGS = (() => {
   const a = {
-    in: process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH
+    in: process.env.RUFFLO_ROUTER_TRAJECTORY_PATH
       ?? resolve('.swarm', 'model-router-trajectories.jsonl'),
     artifact: resolve('v3/@rufflo/cli/assets/model-router/seed-router.krr.json'),
     out: resolve('v3/@rufflo/cli/assets/model-router/seed-router.calibrator.production.json'),
@@ -85,7 +85,7 @@ function printTable(p) {
     console.log('  --dry-run: not writing.');
   } else if (p.written) {
     console.log(`  Wrote: ${p.written}`);
-    console.log('  To use in production, point CLAUDE_FLOW_ROUTER_CALIBRATOR_PATH at it,');
+    console.log('  To use in production, point RUFFLO_ROUTER_CALIBRATOR_PATH at it,');
     console.log('  OR atomically rename over the bundled calibrator after validation.');
   }
   console.log('');

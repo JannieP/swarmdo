@@ -2,7 +2,7 @@
 //
 // The router's cost-optimal selector picks the cheapest candidate whose
 // predicted quality ≥ qualityBar. The bar is currently set via
-// CLAUDE_FLOW_ROUTER_QUALITY_BAR (default 0.50). Which value is best for
+// RUFFLO_ROUTER_QUALITY_BAR (default 0.50). Which value is best for
 // a given workload? This script answers from existing data.
 //
 // METHOD:
@@ -42,7 +42,7 @@ import { IsotonicCalibrator } from '../v3/@rufflo/cli/dist/src/ruvector/router-c
 
 const ARGS = (() => {
   const a = {
-    in: process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH
+    in: process.env.RUFFLO_ROUTER_TRAJECTORY_PATH
       ?? resolve('.swarm', 'model-router-trajectories.jsonl'),
     artifact: resolve('v3/@rufflo/cli/assets/model-router/seed-router.krr.json'),
     calibratorDir: resolve('v3/@rufflo/cli/assets/model-router'),

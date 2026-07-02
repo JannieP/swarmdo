@@ -164,8 +164,8 @@ describe('CredentialGenerator', () => {
       const creds = generator.generateInstallationCredentials();
       const script = generator.createEnvScript(creds);
 
-      expect(script).toContain('CLAUDE_FLOW_ADMIN_PASSWORD');
-      expect(script).toContain('CLAUDE_FLOW_JWT_SECRET');
+      expect(script).toContain('RUFFLO_ADMIN_PASSWORD');
+      expect(script).toContain('RUFFLO_JWT_SECRET');
       expect(script).toContain('export');
     });
 

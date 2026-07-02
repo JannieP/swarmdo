@@ -80,7 +80,7 @@ mcp__rufflo__memory_backup({
 ls .rufflo/memory/
 
 # Disable memory
-export CLAUDE_FLOW_MEMORY_PERSIST=false
+export RUFFLO_MEMORY_PERSIST=false
 ```
 
 ## Benefits

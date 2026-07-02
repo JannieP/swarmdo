@@ -69,7 +69,7 @@ The output is a real spawn tree per request, not a flat list — needed by P3 (d
 
 **Where**: `v3/@rufflo/hooks/src/handlers/pre-task.ts`.
 
-Before any new spawn, the hook reads the current chain depth from P2's AgentDB row (or the OTel context if the row hasn't landed yet) and refuses spawns at or beyond `swarm.maxNestingDepth` in `rufflo.config.json`. Default cap: `4` (one less than Anthropic's announced 5, to preserve a guard band — rufflo's refusal should fire before Anthropic's does, with a clearer error). Configurable per-deployment; gated behind `CLAUDE_FLOW_STRICT_NESTING=true` (default off) to avoid regressing existing pipelines until P1 + P2 telemetry is collected.
+Before any new spawn, the hook reads the current chain depth from P2's AgentDB row (or the OTel context if the row hasn't landed yet) and refuses spawns at or beyond `swarm.maxNestingDepth` in `rufflo.config.json`. Default cap: `4` (one less than Anthropic's announced 5, to preserve a guard band — rufflo's refusal should fire before Anthropic's does, with a clearer error). Configurable per-deployment; gated behind `RUFFLO_STRICT_NESTING=true` (default off) to avoid regressing existing pipelines until P1 + P2 telemetry is collected.
 
 Refusal returns a typed `NESTING_DEPTH_EXCEEDED` error with the full chain in the payload so the parent agent can decide whether to summarize, hand off, or abort.
 
@@ -87,7 +87,7 @@ The current "swarm orchestration" sections in `CLAUDE.md` describe a flat fan-ou
 
 **Track depth via a custom HTTP header instead of OTel.** The binary already emits `parent_agent_id` as an OTel span tag. Using a parallel custom header creates two sources of truth. Use what's already on the wire.
 
-**Set `CLAUDE_FLOW_STRICT_NESTING=true` by default in P3.** Premature — P1 ships before the depth probe results are known. Strict mode flips to default-on once the probe data lands and the default cap is tuned (the same pattern ADR-146 uses for `CLAUDE_FLOW_STRICT_CONSENSUS_GUARDRAIL`).
+**Set `RUFFLO_STRICT_NESTING=true` by default in P3.** Premature — P1 ships before the depth probe results are known. Strict mode flips to default-on once the probe data lands and the default cap is tuned (the same pattern ADR-146 uses for `RUFFLO_STRICT_CONSENSUS_GUARDRAIL`).
 
 ## Consequences
 
@@ -155,7 +155,7 @@ Cherny's tweet ("going out in today's release", 2026-06-09) most likely refers t
 - `pre-task` hook reads `parent_agent_id` chain depth and returns `NESTING_DEPTH_EXCEEDED` when at cap.
 - Unit test: chain at cap → refusal; chain at cap−1 → allowed.
 - Integration test: a 6-level spawn chain with default cap=4 refuses at level 5, payload contains full chain.
-- `CLAUDE_FLOW_STRICT_NESTING` env var documented and registered in `audit-env-var-precedence.mjs`.
+- `RUFFLO_STRICT_NESTING` env var documented and registered in `audit-env-var-precedence.mjs`.
 
 **P4** lands with:
 - `CLAUDE.md` queen-coordinator section rewritten to use `Task({subagent_type: "v3-queen-coordinator", ...})` nested pattern — flagged as "shipping but pending runtime activation" until the probe returns a positive verdict.
@@ -171,7 +171,7 @@ Cherny's tweet ("going out in today's release", 2026-06-09) most likely refers t
 - `pre-task` hook reads `parent_agent_id` chain depth and returns `NESTING_DEPTH_EXCEEDED` when at cap.
 - Unit test: chain at cap → refusal; chain at cap−1 → allowed.
 - Integration test: a 6-level spawn chain with default cap=4 refuses at level 5, payload contains full chain.
-- `CLAUDE_FLOW_STRICT_NESTING` env var documented and registered in `audit-env-var-precedence.mjs`.
+- `RUFFLO_STRICT_NESTING` env var documented and registered in `audit-env-var-precedence.mjs`.
 
 **P4** lands with:
 - `CLAUDE.md` queen-coordinator section rewritten to use `Task({subagent_type: "v3-queen-coordinator", ...})` nested pattern.

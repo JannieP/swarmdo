@@ -17,7 +17,7 @@ export { QLearningRouter, createQLearningRouter, type QLearningRouterConfig, typ
 // #1773 item 4 — moe-router migrated to @rufflo/neural. Direct
 // consumers (hooks-tools.ts) import from '@rufflo/neural' explicitly;
 // re-exporting through this barrel would force vitest to resolve the
-// neural pkg's transitive @ruvector/sona dep eagerly. Keep imports direct.
+// neural pkg's transitive @rufvector/sona dep eagerly. Keep imports direct.
 export { ASTAnalyzer, createASTAnalyzer, type ASTAnalysis, type ASTNode, type ASTAnalyzerConfig } from './ast-analyzer.js';
 export {
   DiffClassifier,
@@ -93,7 +93,7 @@ export {
 // #1773 item 4 — flash-attention migrated to @rufflo/neural. Direct
 // consumers (hooks-tools.ts, neural-tools.ts) import from '@rufflo/neural'
 // explicitly; re-exporting through this barrel pulls the package's
-// transitive @ruvector/sona dep into vitest's eager resolution.
+// transitive @rufvector/sona dep into vitest's eager resolution.
 export {
   LoRAAdapter,
   getLoRAAdapter,
@@ -195,7 +195,7 @@ export {
  */
 export async function isRuvectorAvailable(): Promise<boolean> {
   try {
-    await import('@ruvector/core');
+    await import('@rufvector/core');
     return true;
   } catch {
     return false;
@@ -203,11 +203,11 @@ export async function isRuvectorAvailable(): Promise<boolean> {
 }
 
 /**
- * Check if @ruvector/learning-wasm is available and loadable
+ * Check if @rufvector/learning-wasm is available and loadable
  */
 export async function isWasmBackendAvailable(): Promise<boolean> {
   try {
-    const wasm = await import('@ruvector/learning-wasm');
+    const wasm = await import('@rufvector/learning-wasm');
     return typeof wasm.WasmMicroLoRA === 'function' && typeof wasm.initSync === 'function';
   } catch {
     return false;
@@ -219,7 +219,7 @@ export async function isWasmBackendAvailable(): Promise<boolean> {
  */
 export async function getRuvectorVersion(): Promise<string | null> {
   try {
-    const ruvector = await import('@ruvector/core');
+    const ruvector = await import('@rufvector/core');
     return (ruvector as any).version || '1.0.0';
   } catch {
     return null;

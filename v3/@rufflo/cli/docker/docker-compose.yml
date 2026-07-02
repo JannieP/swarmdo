@@ -24,7 +24,7 @@ services:
     stdin_open: true
     environment:
       - NODE_ENV=production
-      - CLAUDE_FLOW_MCP_TRANSPORT=stdio
+      - RUFFLO_MCP_TRANSPORT=stdio
     deploy:
       resources:
         limits:
@@ -50,8 +50,8 @@ services:
     environment:
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
       - NODE_ENV=production
-      - CLAUDE_FLOW_LOG_LEVEL=${CLAUDE_FLOW_LOG_LEVEL:-info}
-      - CLAUDE_FLOW_MEMORY_BACKEND=hybrid
+      - RUFFLO_LOG_LEVEL=${RUFFLO_LOG_LEVEL:-info}
+      - RUFFLO_MEMORY_BACKEND=hybrid
     volumes:
       - rufflo-state:/home/rufflo/.rufflo
       - rufflo-logs:/var/log/rufflo
@@ -83,8 +83,8 @@ services:
     environment:
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
       - CLAUDE_CODE_HEADLESS=true
-      - CLAUDE_CODE_SANDBOX_MODE=${CLAUDE_FLOW_SANDBOX:-strict}
-      - CLAUDE_FLOW_WORKERS=${CLAUDE_FLOW_WORKERS:-audit,optimize,testgaps}
+      - CLAUDE_CODE_SANDBOX_MODE=${RUFFLO_SANDBOX:-strict}
+      - RUFFLO_WORKERS=${RUFFLO_WORKERS:-audit,optimize,testgaps}
       - NODE_ENV=production
     volumes:
       - worker-state:/home/rufflo/.rufflo

@@ -11,7 +11,7 @@
  */
 import { describe, it, expect } from 'vitest';
 
-const ruvectorOnnx = await import('ruvector')
+const ruvectorOnnx = await import('rufvector')
   .then((rv: any) => typeof rv.isOnnxAvailable === 'function' && rv.isOnnxAvailable())
   .catch(() => false);
 

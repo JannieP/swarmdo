@@ -459,13 +459,13 @@ process.on('SIGINT', async () => {
 
 ```bash
 # Force specific provider
-CLAUDE_FLOW_DB_PROVIDER=sql.js
+RUFFLO_DB_PROVIDER=sql.js
 
 # Enable verbose logging
-CLAUDE_FLOW_DB_VERBOSE=true
+RUFFLO_DB_VERBOSE=true
 
 # Set auto-persist interval (ms)
-CLAUDE_FLOW_DB_PERSIST_INTERVAL=10000
+RUFFLO_DB_PERSIST_INTERVAL=10000
 ```
 
 ## Docker Support

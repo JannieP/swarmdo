@@ -1,7 +1,7 @@
 /**
  * SONA Learning Plugin
  *
- * Self-Optimizing Neural Adaptation using @ruvector/learning-wasm.
+ * Self-Optimizing Neural Adaptation using @rufvector/learning-wasm.
  * Enables <100μs real-time adaptation through LoRA fine-tuning.
  *
  * Features:
@@ -115,7 +115,7 @@ export class SONALearning {
   }
 
   /**
-   * Learn a new pattern (<100μs with @ruvector/learning-wasm).
+   * Learn a new pattern (<100μs with @rufvector/learning-wasm).
    */
   async learn(
     category: string,
@@ -353,7 +353,7 @@ async function getSONALearning(): Promise<SONALearning> {
 }
 
 export const sonaLearningPlugin = new PluginBuilder('sona-learning', '1.0.0')
-  .withDescription('Self-Optimizing Neural Adaptation with @ruvector/learning-wasm (<100μs LoRA)')
+  .withDescription('Self-Optimizing Neural Adaptation with @rufvector/learning-wasm (<100μs LoRA)')
   .withAuthor('Rufflo Team')
   .withTags(['learning', 'neural', 'adaptation', 'lora', 'ruvector', 'sona', 'ewc'])
   .withMCPTools([
@@ -414,7 +414,7 @@ export const sonaLearningPlugin = new PluginBuilder('sona-learning', '1.0.0')
       .withHandler(async () => {
         const sona = await getSONALearning();
         const stats = sona.getStats();
-        return { content: [{ type: 'text', text: `🧠 **SONA Stats:**\n\n**Patterns:** ${stats.totalPatterns}\n**LoRA Adapters:** ${stats.totalAdapters}\n**Avg Quality:** ${(stats.avgQuality * 100).toFixed(1)}%\n**Backend:** @ruvector/learning-wasm` }] };
+        return { content: [{ type: 'text', text: `🧠 **SONA Stats:**\n\n**Patterns:** ${stats.totalPatterns}\n**LoRA Adapters:** ${stats.totalAdapters}\n**Avg Quality:** ${(stats.avgQuality * 100).toFixed(1)}%\n**Backend:** @rufvector/learning-wasm` }] };
       })
       .build(),
   ])
@@ -436,7 +436,7 @@ export const sonaLearningPlugin = new PluginBuilder('sona-learning', '1.0.0')
       .build(),
   ])
   .onInitialize(async (ctx) => {
-    ctx.logger.info('SONA Learning initializing with @ruvector/learning-wasm...');
+    ctx.logger.info('SONA Learning initializing with @rufvector/learning-wasm...');
     await getSONALearning();
     ctx.logger.info('SONA ready - LoRA adaptation <100μs, EWC++ enabled');
   })

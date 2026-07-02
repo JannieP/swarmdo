@@ -349,12 +349,12 @@ These are the structural-distance verdicts surfaced by `audit-trend` and `drift-
 
 ## Router integration (ADR-148/149)
 
-`@metaharness/router@~0.3.2` is wired as the cost-optimal model router behind the `CLAUDE_FLOW_ROUTER_NEURAL=1` triple-gate. When the neural path is active, the `routedBy` field carries `'metaharness-knn' | 'metaharness-krr' | 'fastgrnn'` so you can audit which engine made each decision.
+`@metaharness/router@~0.3.2` is wired as the cost-optimal model router behind the `RUFFLO_ROUTER_NEURAL=1` triple-gate. When the neural path is active, the `routedBy` field carries `'metaharness-knn' | 'metaharness-krr' | 'fastgrnn'` so you can audit which engine made each decision.
 
 ### Parallel-logging (ADR-150 Phase 2)
 
 ```bash
-export CLAUDE_FLOW_ROUTER_PARALLEL_LOG=1
+export RUFFLO_ROUTER_PARALLEL_LOG=1
 # … run your normal workload …
 node plugins/rufflo-metaharness/scripts/router-parallel-analyze.mjs \
   --input .swarm/router-parallel.jsonl --strict

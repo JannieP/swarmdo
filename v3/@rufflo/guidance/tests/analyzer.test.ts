@@ -762,9 +762,9 @@ Performance: perf-analyzer, performance-benchmarker
 ## Environment Variables
 
 \`\`\`bash
-CLAUDE_FLOW_CONFIG=./rufflo.config.json
+RUFFLO_CONFIG=./rufflo.config.json
 ANTHROPIC_API_KEY=sk-ant-...
-CLAUDE_FLOW_MCP_PORT=3000
+RUFFLO_MCP_PORT=3000
 \`\`\`
 
 ## Publishing to npm

@@ -17,8 +17,8 @@ Out of the box, several `/vector` subcommands fail with a confusing dep error:
 |-------|-----------------|
 | `ONNX WASM files not bundled. The onnx/ directory is missing.` | `ruvector-onnx-embeddings-wasm` |
 | `Brain commands require @ruvector/pi-brain` | `@ruvector/pi-brain` |
-| `SONA not available. Native error: Cannot find module '/.../@ruvector/sona/index.js'` | `@ruvector/ruvllm` (JS fallback) |
-| `LLM commands require @ruvector/ruvllm` | `@ruvector/ruvllm` |
+| `SONA not available. Native error: Cannot find module '/.../@ruvector/sona/index.js'` | `@rufvector/rufllm` (JS fallback) |
+| `LLM commands require @rufvector/rufllm` | `@rufvector/rufllm` |
 
 This skill installs them in one pass.
 
@@ -32,13 +32,13 @@ This skill installs them in one pass.
    ```bash
    npm install ruvector-onnx-embeddings-wasm \
                @ruvector/pi-brain \
-               @ruvector/ruvllm
+               @rufvector/rufllm
    ```
    For a leaner install, pass `--full` to also pull `@ruvector/graph-node` and `@ruvector/router`:
    ```bash
    npm install ruvector-onnx-embeddings-wasm \
                @ruvector/pi-brain \
-               @ruvector/ruvllm \
+               @rufvector/rufllm \
                @ruvector/graph-node \
                @ruvector/router
    ```
@@ -77,6 +77,6 @@ It checks: version pin, top-level subcommand visibility, `hooks ast-analyze`, `h
 
 - Native Rust toolchain (optional; only needed for source builds)
 - Platform-specific native bindings (auto-detected by `@ruvector/core`)
-- `@ruvector/sona` native binding (the JS fallback via `@ruvector/ruvllm` is sufficient on macOS arm64; Linux x64 has its own native binding)
+- `@ruvector/sona` native binding (the JS fallback via `@rufvector/rufllm` is sufficient on macOS arm64; Linux x64 has its own native binding)
 
 If `doctor` still reports a problem after this skill runs, paste its output verbatim and ask.

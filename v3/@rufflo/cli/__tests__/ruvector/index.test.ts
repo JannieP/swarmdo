@@ -29,24 +29,24 @@ import {
 } from '../../src/ruvector/index.js';
 
 // Mock all ruvector modules
-vi.mock('@ruvector/core', () => ({
+vi.mock('@rufvector/core', () => ({
   createQLearning: vi.fn(() => null),
   version: '1.0.0',
 }));
 
-vi.mock('@ruvector/ast', () => ({
+vi.mock('@rufvector/ast', () => ({
   createASTAnalyzer: vi.fn(() => null),
 }));
 
-vi.mock('@ruvector/diff', () => ({
+vi.mock('@rufvector/diff', () => ({
   createDiffClassifier: vi.fn(() => null),
 }));
 
-vi.mock('@ruvector/coverage', () => ({
+vi.mock('@rufvector/coverage', () => ({
   createCoverageRouter: vi.fn(() => null),
 }));
 
-vi.mock('@ruvector/wasm', () => ({
+vi.mock('@rufvector/wasm', () => ({
   minCut: vi.fn(() => null),
   louvain: vi.fn(() => null),
 }));
@@ -63,7 +63,7 @@ describe('RuVector Module Exports', () => {
     });
 
     it('returns true when ruvector resolves (mocked at top of file)', async () => {
-      // The top-level vi.mock('@ruvector/core', ...) makes the dynamic
+      // The top-level vi.mock('@rufvector/core', ...) makes the dynamic
       // import inside isRuvectorAvailable resolve, so the value must be
       // true. The previous test used vi.doMock to flip this at runtime,
       // but vi.doMock is too late: the module graph is already resolved

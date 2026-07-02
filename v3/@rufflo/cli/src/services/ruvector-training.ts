@@ -18,9 +18,9 @@ import type {
   WasmMicroLoRA,
   WasmScopedLoRA,
   WasmTrajectoryBuffer,
-} from '@ruvector/learning-wasm';
+} from '@rufvector/learning-wasm';
 
-// @ruvector/attention types — use any since the NAPI exports vary across versions
+// @rufvector/attention types — use any since the NAPI exports vary across versions
 type FlashAttention = any;
 type MoEAttention = any;
 type HyperbolicAttention = any;
@@ -30,7 +30,7 @@ type CurriculumScheduler = any;
 type HardNegativeMiner = any;
 type BenchmarkResult = any;
 
-// SONA Engine type (from @ruvector/sona)
+// SONA Engine type (from @rufvector/sona)
 interface SonaEngineInstance {
   forceLearn(embedding: Float32Array, reward: number): void;
   findPatterns(embedding: number[], k: number): unknown[];
@@ -296,7 +296,7 @@ class JsTrajectoryBuffer implements Pick<WasmTrajectoryBuffer, 'record' | 'is_em
 
 /**
  * Initialize the RuVector training system.
- * Attempts to load @ruvector/learning-wasm for WASM-accelerated training.
+ * Attempts to load @rufvector/learning-wasm for WASM-accelerated training.
  * Falls back to a pure-JS implementation if WASM is unavailable.
  */
 export async function initializeTraining(config: TrainingConfig = {}): Promise<{
@@ -317,10 +317,10 @@ export async function initializeTraining(config: TrainingConfig = {}): Promise<{
     const { createRequire } = await import('module');
     const require = createRequire(import.meta.url);
 
-    const wasmPath = require.resolve('@ruvector/learning-wasm/ruvector_learning_wasm_bg.wasm');
+    const wasmPath = require.resolve('@rufvector/learning-wasm/ruvector_learning_wasm_bg.wasm');
     const wasmBuffer = fs.readFileSync(wasmPath);
 
-    const learningWasm = await import('@ruvector/learning-wasm');
+    const learningWasm = await import('@rufvector/learning-wasm');
     learningWasm.initSync({ module: wasmBuffer });
 
     microLoRA = new learningWasm.WasmMicroLoRA(dim, alpha, lr);
@@ -361,7 +361,7 @@ export async function initializeTraining(config: TrainingConfig = {}): Promise<{
 
   // --- Attention mechanisms (optional, independent of WASM) ---
   try {
-    const attention: any = await importWithInterop('@ruvector/attention');
+    const attention: any = await importWithInterop('@rufvector/attention');
 
     if (config.useFlashAttention !== false) {
       flashAttention = new attention.FlashAttention(dim, 64);
@@ -399,15 +399,15 @@ export async function initializeTraining(config: TrainingConfig = {}): Promise<{
       // Mining not available, continue without it
     }
   } catch (attentionError) {
-    // @ruvector/attention not available - attention features skipped
+    // @rufvector/attention not available - attention features skipped
     const reason = attentionError instanceof Error ? attentionError.message : String(attentionError);
-    console.warn(`[ruvector] @ruvector/attention unavailable (${reason}), attention features disabled`);
+    console.warn(`[ruvector] @rufvector/attention unavailable (${reason}), attention features disabled`);
   }
 
   // --- SONA (optional, backward compatible) ---
   if (config.useSona !== false) {
     try {
-      const sona = await importWithInterop('@ruvector/sona');
+      const sona = await importWithInterop('@rufvector/sona');
       const sonaRank = config.sonaRank || 4;
       sonaEngine = new sona.SonaEngine(dim, sonaRank, alpha, lr) as SonaEngineInstance;
       sonaAvailable = true;
@@ -675,7 +675,7 @@ export async function benchmarkTraining(
   dim?: number,
   iterations?: number
 ): Promise<BenchmarkResult[]> {
-  const attention: any = await importWithInterop('@ruvector/attention');
+  const attention: any = await importWithInterop('@rufvector/attention');
   lastBenchmark = attention.benchmarkAttention(dim || 256, 100, iterations || 1000);
   return lastBenchmark ?? [];
 }

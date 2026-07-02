@@ -2,7 +2,7 @@
 // namespace list correctly comes from each priority source:
 //   1. param `namespace` (single)
 //   2. param `namespaces` (array)
-//   3. env CLAUDE_FLOW_MEMORY_SEARCH_NAMESPACES
+//   3. env RUFFLO_MEMORY_SEARCH_NAMESPACES
 //   4. dynamic enumeration via listEntries
 //   5. legacy 6-namespace fallback
 //
@@ -18,12 +18,12 @@ import { memoryTools } from '../src/mcp-tools/memory-tools.js';
 const tool = memoryTools.find((t) => t.name === 'memory_search_unified');
 
 function snapshotEnv() {
-  return process.env.CLAUDE_FLOW_MEMORY_SEARCH_NAMESPACES;
+  return process.env.RUFFLO_MEMORY_SEARCH_NAMESPACES;
 }
 
 function restoreEnv(v: string | undefined) {
-  if (v === undefined) delete process.env.CLAUDE_FLOW_MEMORY_SEARCH_NAMESPACES;
-  else process.env.CLAUDE_FLOW_MEMORY_SEARCH_NAMESPACES = v;
+  if (v === undefined) delete process.env.RUFFLO_MEMORY_SEARCH_NAMESPACES;
+  else process.env.RUFFLO_MEMORY_SEARCH_NAMESPACES = v;
 }
 
 describe('memory_search_unified namespace fan-out (#2246)', () => {
@@ -34,9 +34,9 @@ describe('memory_search_unified namespace fan-out (#2246)', () => {
   // that enumeration easily exceeds the 5s test timeout. A fresh empty store
   // makes the call instant.
   //
-  // CLAUDE_FLOW_MEMORY_PATH alone is not enough: the AgentDB bridge is
+  // RUFFLO_MEMORY_PATH alone is not enough: the AgentDB bridge is
   // module-cached on first import and won't re-bind to the new path. Setting
-  // CLAUDE_FLOW_DISABLE_BRIDGE=1 forces the per-call sql.js fallback path,
+  // RUFFLO_DISABLE_BRIDGE=1 forces the per-call sql.js fallback path,
   // which DOES re-resolve via getMemoryRoot() (and which now reads a missing
   // store as empty rather than erroring — see commit 007f5e974).
   let memDir: string;
@@ -45,17 +45,17 @@ describe('memory_search_unified namespace fan-out (#2246)', () => {
   beforeEach(() => {
     savedEnv = snapshotEnv();
     memDir = mkdtempSync(path.join(tmpdir(), 'rufflo-2246-'));
-    prevMemPath = process.env.CLAUDE_FLOW_MEMORY_PATH;
-    prevDisableBridge = process.env.CLAUDE_FLOW_DISABLE_BRIDGE;
-    process.env.CLAUDE_FLOW_MEMORY_PATH = memDir;
-    process.env.CLAUDE_FLOW_DISABLE_BRIDGE = '1';
+    prevMemPath = process.env.RUFFLO_MEMORY_PATH;
+    prevDisableBridge = process.env.RUFFLO_DISABLE_BRIDGE;
+    process.env.RUFFLO_MEMORY_PATH = memDir;
+    process.env.RUFFLO_DISABLE_BRIDGE = '1';
   });
   afterEach(() => {
     restoreEnv(savedEnv);
-    if (prevMemPath === undefined) delete process.env.CLAUDE_FLOW_MEMORY_PATH;
-    else process.env.CLAUDE_FLOW_MEMORY_PATH = prevMemPath;
-    if (prevDisableBridge === undefined) delete process.env.CLAUDE_FLOW_DISABLE_BRIDGE;
-    else process.env.CLAUDE_FLOW_DISABLE_BRIDGE = prevDisableBridge;
+    if (prevMemPath === undefined) delete process.env.RUFFLO_MEMORY_PATH;
+    else process.env.RUFFLO_MEMORY_PATH = prevMemPath;
+    if (prevDisableBridge === undefined) delete process.env.RUFFLO_DISABLE_BRIDGE;
+    else process.env.RUFFLO_DISABLE_BRIDGE = prevDisableBridge;
     try { rmSync(memDir, { recursive: true, force: true }); } catch { /* ignore */ }
   });
 
@@ -67,7 +67,7 @@ describe('memory_search_unified namespace fan-out (#2246)', () => {
   });
 
   it('with no params, reports `namespaceSource` (not the legacy hardcode silently)', async () => {
-    delete process.env.CLAUDE_FLOW_MEMORY_SEARCH_NAMESPACES;
+    delete process.env.RUFFLO_MEMORY_SEARCH_NAMESPACES;
     const r = await tool!.handler({ query: 'test query for the namespace fan-out' }) as {
       success?: boolean;
       searchedNamespaces?: string[];
@@ -99,8 +99,8 @@ describe('memory_search_unified namespace fan-out (#2246)', () => {
     expect(r.namespaceSource).toBe('param-list');
   });
 
-  it('with env CLAUDE_FLOW_MEMORY_SEARCH_NAMESPACES, reports namespaceSource=env', async () => {
-    process.env.CLAUDE_FLOW_MEMORY_SEARCH_NAMESPACES = 'foo,bar,baz';
+  it('with env RUFFLO_MEMORY_SEARCH_NAMESPACES, reports namespaceSource=env', async () => {
+    process.env.RUFFLO_MEMORY_SEARCH_NAMESPACES = 'foo,bar,baz';
     const r = await tool!.handler({ query: 'test' }) as {
       searchedNamespaces?: string[]; namespaceSource?: string;
     };
@@ -109,7 +109,7 @@ describe('memory_search_unified namespace fan-out (#2246)', () => {
   });
 
   it('explicit `namespaces` array beats env (priority 2 > priority 3)', async () => {
-    process.env.CLAUDE_FLOW_MEMORY_SEARCH_NAMESPACES = 'env-a,env-b';
+    process.env.RUFFLO_MEMORY_SEARCH_NAMESPACES = 'env-a,env-b';
     const r = await tool!.handler({ query: 'test', namespaces: ['param-only'] }) as {
       searchedNamespaces?: string[]; namespaceSource?: string;
     };

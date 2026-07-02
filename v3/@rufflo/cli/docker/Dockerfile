@@ -112,7 +112,7 @@ RUN ln -sf /usr/local/lib/node_modules/rufflo/bin/rufflo.js /usr/local/bin/ruffl
     && chmod +x /usr/local/bin/rufflo 2>/dev/null || true
 
 ENV NODE_ENV=production \
-    CLAUDE_FLOW_LOG_LEVEL=info \
+    RUFFLO_LOG_LEVEL=info \
     HOME=/home/rufflo
 
 # Healthcheck via CLI doctor (timeout after 10s)

@@ -366,16 +366,16 @@ Examples:
 
 ```bash
 # Hook execution timeout (milliseconds)
-CLAUDE_FLOW_HOOK_TIMEOUT=5000
+RUFFLO_HOOK_TIMEOUT=5000
 
 # Enable/disable ReasoningBank integration
-CLAUDE_FLOW_REASONINGBANK_ENABLED=true
+RUFFLO_REASONINGBANK_ENABLED=true
 
 # Learning namespace
-CLAUDE_FLOW_HOOKS_NAMESPACE=hooks-learning
+RUFFLO_HOOKS_NAMESPACE=hooks-learning
 
 # Logging level
-CLAUDE_FLOW_HOOKS_LOG_LEVEL=info
+RUFFLO_HOOKS_LOG_LEVEL=info
 ```
 
 ## V2 Compatibility
@@ -1087,12 +1087,12 @@ npx rufflo swarm task --description "<task>" [options]
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `CLAUDE_FLOW_CONFIG` | Config file path | `.rufflo/config.json` |
-| `CLAUDE_FLOW_LOG_LEVEL` | Log level | `info` |
-| `CLAUDE_FLOW_MEMORY_BACKEND` | Memory backend | `agentdb` |
-| `CLAUDE_FLOW_EMBEDDING_PROVIDER` | Embedding provider | `transformers` |
-| `CLAUDE_FLOW_HOOK_TIMEOUT` | Hook timeout (ms) | `5000` |
-| `CLAUDE_FLOW_REASONINGBANK_ENABLED` | ReasoningBank integration | `true` |
+| `RUFFLO_CONFIG` | Config file path | `.rufflo/config.json` |
+| `RUFFLO_LOG_LEVEL` | Log level | `info` |
+| `RUFFLO_MEMORY_BACKEND` | Memory backend | `agentdb` |
+| `RUFFLO_EMBEDDING_PROVIDER` | Embedding provider | `transformers` |
+| `RUFFLO_HOOK_TIMEOUT` | Hook timeout (ms) | `5000` |
+| `RUFFLO_REASONINGBANK_ENABLED` | ReasoningBank integration | `true` |
 | `ANTHROPIC_API_KEY` | Anthropic API key | - |
 | `OPENAI_API_KEY` | OpenAI API key | - |
 

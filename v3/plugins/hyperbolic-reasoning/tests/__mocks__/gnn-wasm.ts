@@ -1,5 +1,5 @@
 /**
- * Mock for @ruvector/gnn-wasm
+ * Mock for @rufvector/gnn-wasm
  *
  * This mock provides stub implementations for testing
  * without requiring the actual WASM module.

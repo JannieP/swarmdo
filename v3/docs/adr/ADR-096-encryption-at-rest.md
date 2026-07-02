@@ -38,7 +38,7 @@ Ship encryption at rest in three phases. Each phase is independently shippable a
 
 ### Phase 1 (this ADR's scope) — opt-in encrypted vault
 
-**Posture**: opt-in via `CLAUDE_FLOW_ENCRYPT_AT_REST=1`. Default off so the 1865 existing tests and current users keep working unchanged.
+**Posture**: opt-in via `RUFFLO_ENCRYPT_AT_REST=1`. Default off so the 1865 existing tests and current users keep working unchanged.
 
 **What's encrypted**: only the **High** tier (`sessions/`, `.swarm/memory.db`, `terminals/`). The Medium and Low tier stores stay plaintext for now — they hold nothing the audit specifically flagged.
 
@@ -55,11 +55,11 @@ Magic `"RFE1"` (Rufflo File Encrypted v1) — distinguishes from plaintext on re
 
 **Key source** (precedence, fail closed):
 
-1. `CLAUDE_FLOW_ENCRYPTION_KEY` — base64-encoded 32 bytes. Highest precedence, useful for CI / containers / users who already have a secret manager.
+1. `RUFFLO_ENCRYPTION_KEY` — base64-encoded 32 bytes. Highest precedence, useful for CI / containers / users who already have a secret manager.
 2. OS keychain — `keytar`-style lookup under service `rufflo`, account `default`. macOS Keychain, Windows DPAPI, libsecret on Linux. **Optional dependency**: `keytar` is a native module; if unavailable, fall back to (3).
 3. Passphrase prompt + scrypt KDF — interactive only. Stored derived key in process memory for the session, never on disk. Salt persisted at `~/.rufflo/.kdf-salt` (16 bytes random, mode 0600).
 
-If `CLAUDE_FLOW_ENCRYPT_AT_REST=1` and *no* key source resolves, the CLI **errors immediately** rather than silently writing plaintext. Fail-closed posture.
+If `RUFFLO_ENCRYPT_AT_REST=1` and *no* key source resolves, the CLI **errors immediately** rather than silently writing plaintext. Fail-closed posture.
 
 **Migration**: lazy. On read, sniff the magic. If `"RFE1"`, decrypt; otherwise treat as plaintext (backward compatible). On the *first write* after enable, the file is rewritten encrypted. A `rufflo migrate encrypt` subcommand (also opt-in) does an eager pass for users who want it now.
 
@@ -105,7 +105,7 @@ This ADR proposes the design; the implementation iteration ships in a separate c
 
 6. **Doctor check** — `rufflo doctor` reports encryption status (off / on with env-var / on with keychain / on with passphrase).
 
-7. **Documentation** — `docs/security/encryption.md` covers user-facing setup, recovery if a key is lost (the data is gone — by design), and CI guidance (set `CLAUDE_FLOW_ENCRYPTION_KEY` in repo secrets).
+7. **Documentation** — `docs/security/encryption.md` covers user-facing setup, recovery if a key is lost (the data is gone — by design), and CI guidance (set `RUFFLO_ENCRYPTION_KEY` in repo secrets).
 
 ## Trade-offs
 
@@ -128,17 +128,17 @@ This ADR proposes the design; the implementation iteration ships in a separate c
 ## Open questions
 
 - **Daemon vs CLI**: the daemon long-lived process and the CLI one-shot process need to share a key. For env-var/keychain, they both read the same source. For passphrase, the daemon would need to be started with the passphrase or a derived key passed in via stdin. Document the daemon-mode setup explicitly.
-- **MCP server mode**: when started by Claude Code via `claude mcp add`, the MCP server inherits Claude Code's environment. The user has to set `CLAUDE_FLOW_ENCRYPTION_KEY` in the env Claude Code launches with — which is doable but non-obvious. A `~/.rufflo/encryption.json` config (mode 0600, keychain reference) might be cleaner than env-var-everywhere. Decide in implementation.
+- **MCP server mode**: when started by Claude Code via `claude mcp add`, the MCP server inherits Claude Code's environment. The user has to set `RUFFLO_ENCRYPTION_KEY` in the env Claude Code launches with — which is doable but non-obvious. A `~/.rufflo/encryption.json` config (mode 0600, keychain reference) might be cleaner than env-var-everywhere. Decide in implementation.
 - **AgentDB v3 native encryption**: if AgentDB ever exposes a transparent column-encryption API, switch to it for the memory DB. Until then, file-level on the whole DB blob is correct.
 
 ## Acceptance criteria
 
 The implementation iteration is done when:
 
-- [x] `CLAUDE_FLOW_ENCRYPT_AT_REST=1` round-trips a session save → restore unchanged — pinned by `__tests__/session-encryption.test.ts:run_save → run_restore` (commit `98aa256`).
+- [x] `RUFFLO_ENCRYPT_AT_REST=1` round-trips a session save → restore unchanged — pinned by `__tests__/session-encryption.test.ts:run_save → run_restore` (commit `98aa256`).
 - [x] A plaintext `.rufflo/sessions/foo.json` from before the upgrade is still readable after the upgrade (magic-sniff backward compat) — pinned by `__tests__/session-encryption.test.ts > migration` and the analogous case in `terminal-encryption.test.ts` + `memory-db-encryption.test.ts` (commits `98aa256`, `49c8019`, `841365f`).
 - [x] A flipped byte in any encrypted file produces a decrypt error, not a panic — pinned by `__tests__/encryption-vault.test.ts > tamper detection` (6 cases) and `memory-db-encryption.test.ts > tamper > flipped ciphertext byte` (commits `cb9a9f3`, `841365f`).
-- [x] The 1865-test baseline stays green with `CLAUDE_FLOW_ENCRYPT_AT_REST` unset — full vitest run is now **1933/1933 passing, 46 skipped, 0 failures** with the env var unset (started this loop at 1865 + 25 pre-existing failures; +68 new tests across the encryption track).
+- [x] The 1865-test baseline stays green with `RUFFLO_ENCRYPT_AT_REST` unset — full vitest run is now **1933/1933 passing, 46 skipped, 0 failures** with the env var unset (started this loop at 1865 + 25 pre-existing failures; +68 new tests across the encryption track).
 - [x] A new test file `__tests__/encryption-vault.test.ts` exercises every path above — 45 cases (commit `cb9a9f3`). Plus `fs-secure.test.ts` (8 cases), `session-encryption.test.ts` (7), `terminal-encryption.test.ts` (7), `memory-db-encryption.test.ts` (9). Total **76 encryption-track tests across 5 files**.
 - [ ] `rufflo doctor` reports encryption status — **deferred to Phase 5**. The doctor surface needs a separate small change; not blocking the high-tier scope shipping.
 - [ ] The witness manifest (`verification.md.json`) gains a fix entry covering the new vault module so `rufflo verify` confirms it after publish — **deferred until the batch publish iteration** (per the loop directive of "do not publish on every iteration"). Will land alongside the 3.6.25 bump.
@@ -152,7 +152,7 @@ The implementation iteration is done when:
 | 3 | Wire terminal-tools `saveTerminalStore` + `loadTerminalStore` | `49c8019` | +7 (`terminal-encryption.test.ts`) | 1917 → 1924 |
 | 4 | Wire memory-initializer — 7 `dbPath` writes + 9 `dbPath` reads (Buffer-only sql.js SQLite blobs) | `841365f` | +9 (`memory-db-encryption.test.ts`) | 1924 → 1933 |
 
-**High-tier targets shipped end-to-end opt-in encrypted under `CLAUDE_FLOW_ENCRYPT_AT_REST=1`:**
+**High-tier targets shipped end-to-end opt-in encrypted under `RUFFLO_ENCRYPT_AT_REST=1`:**
 - `.rufflo/sessions/*.json` (memory snapshots + agent prompts)
 - `.rufflo/terminals/store.json` (pasted shell command history → frequent credentials)
 - `.swarm/memory.db` (sql.js SQLite + 384-dim ONNX embeddings)

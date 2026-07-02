@@ -176,14 +176,14 @@ Add to your `.claude/settings.json`:
 ### Environment Variables (Optional)
 ```bash
 # Linux/macOS
-export CLAUDE_FLOW_V3_MODE=enabled
-export CLAUDE_FLOW_HELPERS_DIR=.claude/helpers
-export CLAUDE_FLOW_PLATFORM=auto
+export RUFFLO_V3_MODE=enabled
+export RUFFLO_HELPERS_DIR=.claude/helpers
+export RUFFLO_PLATFORM=auto
 
 # Windows (PowerShell)
-$env:CLAUDE_FLOW_V3_MODE = "enabled"
-$env:CLAUDE_FLOW_HELPERS_DIR = ".claude\helpers"
-$env:CLAUDE_FLOW_PLATFORM = "auto"
+$env:RUFFLO_V3_MODE = "enabled"
+$env:RUFFLO_HELPERS_DIR = ".claude\helpers"
+$env:RUFFLO_PLATFORM = "auto"
 ```
 
 ## 🔧 Post-Installation Verification

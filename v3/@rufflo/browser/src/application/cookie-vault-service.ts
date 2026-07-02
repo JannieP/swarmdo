@@ -6,7 +6,7 @@
  * verifyAttestation() before attaching a sealed handle to a live session.
  *
  * Phase 3 implementation is in-memory with optional JSON-on-disk persistence;
- * Phase 3.5 swaps storage for an RVF cognitive container (`@ruvector/rvf`).
+ * Phase 3.5 swaps storage for an RVF cognitive container (`@rufvector/rvf`).
  * The public surface does not change.
  */
 

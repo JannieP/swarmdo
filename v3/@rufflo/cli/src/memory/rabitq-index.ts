@@ -1,7 +1,7 @@
 /**
  * RaBitQ Index — 1-bit quantized vector pre-filter (32× compression)
  *
- * Wraps @ruvector/rabitq-wasm to provide Hamming-scan pre-filtering
+ * Wraps @rufvector/rabitq-wasm to provide Hamming-scan pre-filtering
  * over quantized embeddings. Candidates are reranked with exact cosine
  * similarity from the full-precision source (HNSW or SQLite).
  *
@@ -41,12 +41,12 @@ async function loadRabitqModule(): Promise<{
   version: () => string;
 } | null> {
   try {
-    const mod = await import('@ruvector/rabitq-wasm');
+    const mod = await import('@rufvector/rabitq-wasm');
 
     // Node.js: use initSync with the WASM bytes
     const { createRequire } = await import('module');
     const require = createRequire(import.meta.url);
-    const wasmPath = require.resolve('@ruvector/rabitq-wasm/ruvector_rabitq_wasm_bg.wasm');
+    const wasmPath = require.resolve('@rufvector/rabitq-wasm/ruvector_rabitq_wasm_bg.wasm');
     const wasmBytes = fs.readFileSync(wasmPath);
     mod.initSync({ module: wasmBytes });
 
@@ -88,7 +88,7 @@ export async function buildRabitqIndex(options?: {
     const mod = await loadRabitqModule();
     if (!mod) {
       rabitqInitializing = false;
-      return { success: false, vectorCount: 0, dimensions: 0, compressionRatio: 0, buildTimeMs: 0, error: '@ruvector/rabitq-wasm not available' };
+      return { success: false, vectorCount: 0, dimensions: 0, compressionRatio: 0, buildTimeMs: 0, error: '@rufvector/rabitq-wasm not available' };
     }
 
     const dimensions = options?.dimensions ?? 384;

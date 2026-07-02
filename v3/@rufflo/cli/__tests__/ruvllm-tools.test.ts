@@ -56,7 +56,7 @@ function findTool(name: string) {
 }
 
 // Same WASM-init issue as ruvllm-wasm.test.ts — mocks intercept the
-// integration layer but the real @ruvector/ruvllm-wasm package still
+// integration layer but the real @rufvector/rufllm-wasm package still
 // loads transitively and crashes in CI without prebuilds.
 const __SKIP_WASM_TESTS = process.env.CI === 'true';
 

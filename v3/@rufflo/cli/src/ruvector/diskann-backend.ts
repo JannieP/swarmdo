@@ -2,7 +2,7 @@
  * DiskANN Vector Search Backend
  *
  * SSD-friendly approximate nearest neighbor search using Vamana graph.
- * Falls back gracefully to HNSW (@ruvector/router VectorDb) or
+ * Falls back gracefully to HNSW (@rufvector/router VectorDb) or
  * pure-JS cosine similarity when DiskANN is unavailable.
  *
  * @module v3/cli/ruvector/diskann-backend
@@ -35,14 +35,14 @@ let diskannAvailable: boolean | null = null;
 let activeBackend: VectorBackend = 'cosine-js';
 
 /**
- * Check if @ruvector/diskann is available
+ * Check if @rufvector/diskann is available
  */
 export async function isDiskAnnAvailable(): Promise<boolean> {
   if (diskannAvailable !== null) return diskannAvailable;
   try {
     const { createRequire } = await import('module');
     const require2 = createRequire(import.meta.url);
-    const mod = require2('@ruvector/diskann');
+    const mod = require2('@rufvector/diskann');
     diskannAvailable = typeof mod.DiskAnn === 'function';
     return diskannAvailable;
   } catch {
@@ -65,7 +65,7 @@ export async function getDiskAnnIndex(config: DiskAnnConfig): Promise<{
     try {
       const { createRequire } = await import('module');
       const require2 = createRequire(import.meta.url);
-      const { DiskAnn } = require2('@ruvector/diskann');
+      const { DiskAnn } = require2('@rufvector/diskann');
 
       const index = new DiskAnn({
         dim: config.dim,
@@ -85,11 +85,11 @@ export async function getDiskAnnIndex(config: DiskAnnConfig): Promise<{
     }
   }
 
-  // Try HNSW (@ruvector/router VectorDb) as fallback
+  // Try HNSW (@rufvector/router VectorDb) as fallback
   try {
     const { createRequire } = await import('module');
     const require2 = createRequire(import.meta.url);
-    const router = require2('@ruvector/router');
+    const router = require2('@rufvector/router');
     if (router.VectorDb && router.DistanceMetric) {
       const index = new router.VectorDb({
         dimensions: config.dim,
@@ -308,13 +308,13 @@ export async function benchmark(opts: {
         if (!(await isDiskAnnAvailable())) continue;
         const { createRequire } = await import('module');
         const require2 = createRequire(import.meta.url);
-        const { DiskAnn } = require2('@ruvector/diskann');
+        const { DiskAnn } = require2('@rufvector/diskann');
         index = new DiskAnn({ dim, maxDegree: 64, buildBeam: 128, searchBeam: 64 });
       } else if (backendName === 'hnsw') {
         try {
           const { createRequire } = await import('module');
           const require2 = createRequire(import.meta.url);
-          const router = require2('@ruvector/router');
+          const router = require2('@rufvector/router');
           if (!router.VectorDb) continue;
           index = new router.VectorDb({ dimensions: dim, distanceMetric: router.DistanceMetric.Cosine });
         } catch { continue; }

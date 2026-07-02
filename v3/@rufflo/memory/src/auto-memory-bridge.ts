@@ -168,7 +168,7 @@ type ResolvedConfig = Required<Omit<AutoMemoryBridgeConfig, 'learning' | 'graph'
 
 const DEFAULT_CONFIG: ResolvedConfig = {
   memoryDir: '',
-  workingDir: process.env.CLAUDE_FLOW_CWD || process.cwd(),
+  workingDir: process.env.RUFFLO_CWD || process.cwd(),
   maxIndexLines: 180,
   topicMapping: DEFAULT_TOPIC_MAPPING,
   syncMode: 'on-session-end',

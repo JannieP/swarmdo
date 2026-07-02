@@ -10,7 +10,7 @@
 | trivial: always cheap | 46.7% | — | 0ms | — | — |
 | trivial: always strong | 53.3% | — | 0ms | — | — |
 | **heuristic+thompson-bandit (shipped, cold)** | **53.3%** | 10.40 | 0.076ms | 0.052ms | 0.176ms |
-| **INTEGRATED rufflo path (CLAUDE_FLOW_ROUTER_NEURAL=1)** | **95.0%** | 54.27 | 0.072ms | 0.067ms | 0.094ms |
+| **INTEGRATED rufflo path (RUFFLO_ROUTER_NEURAL=1)** | **95.0%** | 54.27 | 0.072ms | 0.067ms | 0.094ms |
 | **@metaharness/router 0.3.2 k-NN (pure TS, no training)** | **100.0%** | 60.27 | 0.107ms | 0.094ms | 0.133ms |
 | **@metaharness/router 0.3.2 KRR (pure TS, LOO-tuned)** | **100.0%** | 60.27 | 0.019ms | 0.019ms | 0.021ms |
 | **tiny-dancer fastgrnn score() (0.1.22)** | **100.0%** | 63.11 | 0.037ms | 0.036ms | 0.044ms |

@@ -45,7 +45,7 @@ const startCommand: Command = {
     // #1914: a forked daemon child receives --workspace <root>; the launcher
     // and interactive invocations have no flag and fall back to cwd.
     const projectRoot = resolveWorkspaceFlag(ctx.flags.workspace) ?? process.cwd();
-    const isDaemonProcess = process.env.CLAUDE_FLOW_DAEMON === '1';
+    const isDaemonProcess = process.env.RUFFLO_DAEMON === '1';
 
     // Parse resource threshold overrides from CLI flags
     const config: Partial<DaemonConfig> = {};
@@ -425,7 +425,7 @@ async function startBackgroundDaemon(projectRoot: string, quiet: boolean, forwar
     windowsHide: true,
     env: {
       ...process.env,
-      CLAUDE_FLOW_DAEMON: '1',
+      RUFFLO_DAEMON: '1',
       // Prevent macOS SIGHUP kill when terminal closes
       ...(process.platform === 'darwin' ? { NOHUP: '1' } : {}),
     },
@@ -1194,7 +1194,7 @@ const installSupervisorCommand: Command = {
     <key>StandardErrorPath</key><string>${logDir}/supervisor.err.log</string>
     <key>EnvironmentVariables</key>
     <dict>
-        <key>CLAUDE_FLOW_DAEMON</key><string>1</string>
+        <key>RUFFLO_DAEMON</key><string>1</string>
     </dict>
 </dict>
 </plist>
@@ -1241,7 +1241,7 @@ After=default.target
 [Service]
 Type=simple
 WorkingDirectory=${projectRoot}
-Environment=CLAUDE_FLOW_DAEMON=1
+Environment=RUFFLO_DAEMON=1
 ExecStart=${nodeBin} ${cliJs} daemon start --foreground --quiet
 Restart=on-failure
 RestartSec=10

@@ -7,11 +7,11 @@
  * ADR-125 (rvagent integration) and ADR-130 (graph intelligence backend)
  * introduced several new env vars that configure runtime behaviour:
  *
- *   CLAUDE_FLOW_MEMORY_PATH        — override memory root directory
- *   CLAUDE_FLOW_DISABLE_BRIDGE     — bypass AgentDB v3 bridge
- *   CLAUDE_FLOW_GRAPH_BACKEND      — select graph backend (sqlite | agentdb)
- *   CLAUDE_FLOW_GRAPH_DECAY_RATE   — default temporal decay rate
- *   CLAUDE_FLOW_EMBED_DIMS         — embedding dimension override
+ *   RUFFLO_MEMORY_PATH        — override memory root directory
+ *   RUFFLO_DISABLE_BRIDGE     — bypass AgentDB v3 bridge
+ *   RUFFLO_GRAPH_BACKEND      — select graph backend (sqlite | agentdb)
+ *   RUFFLO_GRAPH_DECAY_RATE   — default temporal decay rate
+ *   RUFFLO_EMBED_DIMS         — embedding dimension override
  *
  * The project's documented resolution order for every config value is:
  *
@@ -21,7 +21,7 @@
  * have a corresponding CLI-flag precedence guard (i.e., where `process.env`
  * is the ONLY source of the value and no CLI argument can override it).
  *
- * Concretely it checks that every `process.env.CLAUDE_FLOW_*` read site
+ * Concretely it checks that every `process.env.RUFFLO_*` read site
  * either:
  *   (a) is inside a function that accepts an explicit argument (meaning the
  *       caller CAN pass a CLI-derived value and the env var is only a
@@ -52,30 +52,30 @@ const REPO_ROOT = resolve(__dirname, '..');
 // They are explicitly exempt from the "CLI flag must win" requirement.
 const KNOWN_ESCAPE_HATCHES = new Set([
   // ── CI / test escape hatches ────────────────────────────────────────────────
-  'CLAUDE_FLOW_DISABLE_BRIDGE',   // CI/test: force raw sql.js path — intentionally no CLI flag
+  'RUFFLO_DISABLE_BRIDGE',   // CI/test: force raw sql.js path — intentionally no CLI flag
   'RUFLO_HOOK_SKIP_NPX',          // CI: suppress cold-install latency in smoke tests
   'RUFLO_SUBLINEAR_NATIVE',       // Manual override for native vs WASM sublinear — CI/perf knob
 
   // ── Feature flags (set by init into settings.json, not user-typed CLI) ──────
-  'CLAUDE_FLOW_V3_ENABLED',
-  'CLAUDE_FLOW_HOOKS_ENABLED',
+  'RUFFLO_V3_ENABLED',
+  'RUFFLO_HOOKS_ENABLED',
   'CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS',
 
   // ── Process-internal / inter-process signalling ─────────────────────────────
-  'CLAUDE_FLOW_HEADLESS',         // Set/read within same process invocation lifecycle
-  'CLAUDE_FLOW_FORCE_UPDATE',     // Set by --force flag internally, then cleared — not external
-  'CLAUDE_FLOW_AUTO_UPDATE',      // Auto-update cadence — env-only documented design
+  'RUFFLO_HEADLESS',         // Set/read within same process invocation lifecycle
+  'RUFFLO_FORCE_UPDATE',     // Set by --force flag internally, then cleared — not external
+  'RUFFLO_AUTO_UPDATE',      // Auto-update cadence — env-only documented design
 
   // ── Logging / diagnostics ───────────────────────────────────────────────────
-  'CLAUDE_FLOW_LOG_LEVEL',
+  'RUFFLO_LOG_LEVEL',
   'DEBUG',
-  'CLAUDE_FLOW_DEBUG',
+  'RUFFLO_DEBUG',
 
   // ── Provider credentials ─────────────────────────────────────────────────────
   'ANTHROPIC_API_KEY',
   'OPENAI_API_KEY',
   'GOOGLE_API_KEY',
-  'CLAUDE_FLOW_ENCRYPTION_KEY',   // Encryption key — credential, never a CLI flag
+  'RUFFLO_ENCRYPTION_KEY',   // Encryption key — credential, never a CLI flag
   'RUFLO_GRAPH_INTELLIGENCE_WITNESS_KEY', // Ed25519 witness signing key — credential
   'RUFLO_PROVIDER',               // Provider selection in headless agent context
   'PINATA_API_KEY',
@@ -83,21 +83,21 @@ const KNOWN_ESCAPE_HATCHES = new Set([
   'PINATA_API_JWT',
 
   // ── Bootstrap / process-level bindings (can't chicken-egg with CLI parsing) ──
-  'CLAUDE_FLOW_CONFIG',
-  'CLAUDE_FLOW_MEMORY_BACKEND',
-  'CLAUDE_FLOW_MCP_PORT',
-  'CLAUDE_FLOW_MCP_HOST',
-  'CLAUDE_FLOW_MCP_TRANSPORT',
+  'RUFFLO_CONFIG',
+  'RUFFLO_MEMORY_BACKEND',
+  'RUFFLO_MCP_PORT',
+  'RUFFLO_MCP_HOST',
+  'RUFFLO_MCP_TRANSPORT',
 
   // ── CLI-flag-dominated env vars: documented precedence, large context window ─
   // These have explicit precedence docs that appear >10 lines before the read.
   // The audit's 10-line context window misses them; they are tracked here to
   // prevent noisy false positives. Each must have the precedence documented
   // in the source file (checked manually and confirmed below).
-  //   CLAUDE_FLOW_MEMORY_PATH — memory-initializer.ts lines 19-28 doc
-  //     "Precedence (highest → lowest): 1. CLAUDE_FLOW_MEMORY_PATH env var"
-  //   See also memory.ts line 12: "#2105: --path > CLAUDE_FLOW_DB_PATH > CLAUDE_FLOW_MEMORY_PATH"
-  'CLAUDE_FLOW_MEMORY_PATH',
+  //   RUFFLO_MEMORY_PATH — memory-initializer.ts lines 19-28 doc
+  //     "Precedence (highest → lowest): 1. RUFFLO_MEMORY_PATH env var"
+  //   See also memory.ts line 12: "#2105: --path > RUFFLO_DB_PATH > RUFFLO_MEMORY_PATH"
+  'RUFFLO_MEMORY_PATH',
 
   // ── Statusline cosmetics (no CLI on the statusline; init-time settings.json) ─
   // Added 2026-06-02: statusline is invoked by Claude Code via hook config,
@@ -111,7 +111,7 @@ const KNOWN_ESCAPE_HATCHES = new Set([
   // Added 2026-06-02: model-router uses this as a runtime escalation threshold
   // tuned by ops, not selected per-command. No CLI flag is wired because no
   // single CLI invocation owns the router's lifetime.
-  'CLAUDE_FLOW_MAX_UNCERTAINTY',
+  'RUFFLO_MAX_UNCERTAINTY',
 
   // ── MCP-tool-shaped tunables (param wins over env; env is documented fallback) ─
   // Added 2026-06-02 (ADR-089 #2246): memory_search_unified resolves namespaces
@@ -119,7 +119,7 @@ const KNOWN_ESCAPE_HATCHES = new Set([
   // dynamic enumeration. The `namespaces[]` MCP-tool parameter IS the
   // CLI-flag-equivalent and takes precedence (memory-tools.ts:1079-1109). The
   // env is the documented operator fallback.
-  'CLAUDE_FLOW_MEMORY_SEARCH_NAMESPACES',
+  'RUFFLO_MEMORY_SEARCH_NAMESPACES',
 
   // ── OS / runtime standard env ────────────────────────────────────────────────
   'HOME',
@@ -138,41 +138,41 @@ const KNOWN_ESCAPE_HATCHES = new Set([
   //   - Most are CI/benchmark knobs (KNN_K, LATENCY_BUDGET_MS, COST_CEILING),
   //     not user-typed inputs.
   //   - Several are feature flags (NEURAL=1, BANDIT_PER_MODEL=1, TRAJECTORY=1)
-  //     that, like CLAUDE_FLOW_V3_ENABLED above, get baked into settings
+  //     that, like RUFFLO_V3_ENABLED above, get baked into settings
   //     by `rufflo init` rather than passed on the command line.
   //   - SEED_CORPUS / CALIBRATOR_PATH / MODEL_PATH are file-path inputs to
   //     long-running daemons, not transient CLI flags.
   // If a router knob graduates to user-facing surface, add a CLI flag override
   // per ADR-125 and remove its entry here.
-  'CLAUDE_FLOW_ROUTER_AB',
-  'CLAUDE_FLOW_ROUTER_AB_SAMPLE_RATE',
-  'CLAUDE_FLOW_ROUTER_BANDIT_FULL_INFLUENCE',
-  'CLAUDE_FLOW_ROUTER_BANDIT_PER_MODEL',
-  'CLAUDE_FLOW_ROUTER_BANDIT_SHRINKAGE_LAMBDA',
-  'CLAUDE_FLOW_ROUTER_BANDIT_WARMUP_RANGE',
-  'CLAUDE_FLOW_ROUTER_CALIBRATE',
-  'CLAUDE_FLOW_ROUTER_CALIBRATOR_PATH',
-  'CLAUDE_FLOW_ROUTER_COST_CEILING_USD_PER_MTOK',
-  'CLAUDE_FLOW_ROUTER_EMBED_CACHE_SIZE',
-  'CLAUDE_FLOW_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD',
-  'CLAUDE_FLOW_ROUTER_FALLBACK_MAX_RETRIES',
-  'CLAUDE_FLOW_ROUTER_KNN_K',
-  'CLAUDE_FLOW_ROUTER_LATENCY_BUDGET_MS',
-  'CLAUDE_FLOW_ROUTER_MODEL_PATH',
-  'CLAUDE_FLOW_ROUTER_NEURAL',
-  'CLAUDE_FLOW_ROUTER_NEURAL_WEIGHT',
-  'CLAUDE_FLOW_ROUTER_OPENROUTER_ALTS',
-  'CLAUDE_FLOW_ROUTER_PARALLEL_LOG',
-  'CLAUDE_FLOW_ROUTER_PARALLEL_LOG_PATH',
-  'CLAUDE_FLOW_ROUTER_PROVIDER',
-  'CLAUDE_FLOW_ROUTER_QUALITY_BAR',
-  'CLAUDE_FLOW_ROUTER_SEED_CORPUS',
-  'CLAUDE_FLOW_ROUTER_TRAJECTORY',
-  'CLAUDE_FLOW_ROUTER_TRAJECTORY_MAXROTATIONS',
-  'CLAUDE_FLOW_ROUTER_TRAJECTORY_MAXSIZE',
-  'CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH',
-  'CLAUDE_FLOW_ROUTER_TRAJECTORY_TASKLEN',
-  'CLAUDE_FLOW_SWARM_DIR',  // Set by rufflo init / inter-process — not user-typed
+  'RUFFLO_ROUTER_AB',
+  'RUFFLO_ROUTER_AB_SAMPLE_RATE',
+  'RUFFLO_ROUTER_BANDIT_FULL_INFLUENCE',
+  'RUFFLO_ROUTER_BANDIT_PER_MODEL',
+  'RUFFLO_ROUTER_BANDIT_SHRINKAGE_LAMBDA',
+  'RUFFLO_ROUTER_BANDIT_WARMUP_RANGE',
+  'RUFFLO_ROUTER_CALIBRATE',
+  'RUFFLO_ROUTER_CALIBRATOR_PATH',
+  'RUFFLO_ROUTER_COST_CEILING_USD_PER_MTOK',
+  'RUFFLO_ROUTER_EMBED_CACHE_SIZE',
+  'RUFFLO_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD',
+  'RUFFLO_ROUTER_FALLBACK_MAX_RETRIES',
+  'RUFFLO_ROUTER_KNN_K',
+  'RUFFLO_ROUTER_LATENCY_BUDGET_MS',
+  'RUFFLO_ROUTER_MODEL_PATH',
+  'RUFFLO_ROUTER_NEURAL',
+  'RUFFLO_ROUTER_NEURAL_WEIGHT',
+  'RUFFLO_ROUTER_OPENROUTER_ALTS',
+  'RUFFLO_ROUTER_PARALLEL_LOG',
+  'RUFFLO_ROUTER_PARALLEL_LOG_PATH',
+  'RUFFLO_ROUTER_PROVIDER',
+  'RUFFLO_ROUTER_QUALITY_BAR',
+  'RUFFLO_ROUTER_SEED_CORPUS',
+  'RUFFLO_ROUTER_TRAJECTORY',
+  'RUFFLO_ROUTER_TRAJECTORY_MAXROTATIONS',
+  'RUFFLO_ROUTER_TRAJECTORY_MAXSIZE',
+  'RUFFLO_ROUTER_TRAJECTORY_PATH',
+  'RUFFLO_ROUTER_TRAJECTORY_TASKLEN',
+  'RUFFLO_SWARM_DIR',  // Set by rufflo init / inter-process — not user-typed
 ]);
 
 // ── Source directories to scan ────────────────────────────────────────────────
@@ -185,8 +185,8 @@ const SCAN_ROOTS = [
 const SKIP_DIRS = new Set(['node_modules', '.git', 'dist', 'build', 'coverage', '__tests__', 'tests']);
 const SCAN_EXTS = new Set(['.ts', '.mjs', '.cjs', '.js']);
 
-// ── Regex to find process.env.CLAUDE_FLOW_* reads ────────────────────────────
-// Matches: process.env.CLAUDE_FLOW_FOO or process.env['CLAUDE_FLOW_FOO']
+// ── Regex to find process.env.RUFFLO_* reads ────────────────────────────
+// Matches: process.env.RUFFLO_FOO or process.env['RUFFLO_FOO']
 const ENV_READ_RE = /process\.env(?:\.([A-Z_]+)|\[['"]([A-Z_]+)['"]\])/g;
 
 // ── Indicator that a CLI arg takes precedence ─────────────────────────────────
@@ -240,7 +240,7 @@ for (const root of SCAN_ROOTS) {
     while ((match = ENV_READ_RE.exec(text)) !== null) {
       const varName = match[1] || match[2];
       if (!varName) continue;
-      if (!varName.startsWith('CLAUDE_FLOW_') && !varName.startsWith('RUFLO_')) continue;
+      if (!varName.startsWith('RUFFLO_') && !varName.startsWith('RUFLO_')) continue;
       if (KNOWN_ESCAPE_HATCHES.has(varName)) continue;
 
       // Find the line number
@@ -291,7 +291,7 @@ if (warnings.length > 0) {
 }
 
 if (violations.length === 0) {
-  console.log('\n  ok: all CLAUDE_FLOW_* / RUFLO_* env var reads have documented CLI-flag precedence');
+  console.log('\n  ok: all RUFFLO_* / RUFLO_* env var reads have documented CLI-flag precedence');
   console.log('  ok: or are registered as known escape-hatch env vars (CI/test/credential use)');
   process.exit(0);
 }
@@ -304,9 +304,9 @@ for (const v of violations) {
 console.error(`
 Remediation:
   Option A — Wire a CLI flag that takes precedence:
-    Before: const val = process.env.CLAUDE_FLOW_FOO;
-    After:  const val = options.foo ?? process.env.CLAUDE_FLOW_FOO ?? DEFAULT;
-    Then add "// CLI flag options.foo takes precedence over CLAUDE_FLOW_FOO env var"
+    Before: const val = process.env.RUFFLO_FOO;
+    After:  const val = options.foo ?? process.env.RUFFLO_FOO ?? DEFAULT;
+    Then add "// CLI flag options.foo takes precedence over RUFFLO_FOO env var"
 
   Option B — Register as an escape hatch (CI/test/credential only):
     Add the env var name to KNOWN_ESCAPE_HATCHES in scripts/audit-env-var-precedence.mjs

@@ -168,7 +168,7 @@ export async function loadRuVector(): Promise<boolean> {
 
   try {
     // Dynamic import to handle missing dependency gracefully
-    const ruvector = await import('ruvector').catch(() => null);
+    const ruvector = await import('rufvector').catch(() => null);
 
     // ruvector exports VectorDB class, not createVectorDB function
     if (ruvector && (typeof ruvector.VectorDB === 'function' || typeof ruvector.VectorDb === 'function')) {
@@ -197,7 +197,7 @@ export async function loadRuVector(): Promise<boolean> {
           const db = new VectorDBClass({
             dimensions,
             hnswConfig: { m: 32, efConstruction: 200 },
-            storagePath: path.join(os.tmpdir(), `ruvector-${process.pid}-${randomUUID()}.rvf`),
+            storagePath: path.join(os.tmpdir(), `vector-${process.pid}-${randomUUID()}.rvf`),
           });
           // Wrap ruvector's VectorDB to match our interface
           return {

@@ -235,7 +235,7 @@ async function checkDaemonStatus(): Promise<HealthCheck> {
 // Check memory database
 async function checkMemoryDatabase(): Promise<HealthCheck> {
   // Authoritative path comes from `getMemoryRoot()` (honors
-  // `CLAUDE_FLOW_MEMORY_PATH`, rufflo.config.json's `memory.persistPath`,
+  // `RUFFLO_MEMORY_PATH`, rufflo.config.json's `memory.persistPath`,
   // then defaults to `.swarm/`). #1946: the previous hard-coded list missed
   // `data/memory/memory.db` (a common config) and ignored the env var
   // entirely, so doctor reported "Not initialized" on perfectly-init'd DBs.
@@ -250,7 +250,7 @@ async function checkMemoryDatabase(): Promise<HealthCheck> {
   candidates.push(
     '.swarm/memory.db',
     '.rufflo/memory.db',
-    'data/memory/memory.db', // matches `CLAUDE_FLOW_MEMORY_PATH=data/memory`
+    'data/memory/memory.db', // matches `RUFFLO_MEMORY_PATH=data/memory`
     'data/memory.db',
   );
 
@@ -934,8 +934,8 @@ async function checkAgenticFlow(): Promise<HealthCheck> {
 // Check encryption-at-rest status (ADR-096 Phase 5)
 //
 // Reports four facets without disclosing the key itself:
-//   1. Gate status — is CLAUDE_FLOW_ENCRYPT_AT_REST set?
-//   2. Key resolution — does CLAUDE_FLOW_ENCRYPTION_KEY resolve to a valid
+//   1. Gate status — is RUFFLO_ENCRYPT_AT_REST set?
+//   2. Key resolution — does RUFFLO_ENCRYPTION_KEY resolve to a valid
 //      32-byte key (env-var path only; keychain/passphrase are deferred)?
 //   3. Key fingerprint — first 16 hex chars of sha256(key) so users can
 //      sanity-check across machines without ever logging the key bytes.
@@ -947,18 +947,18 @@ async function checkEncryptionAtRest(): Promise<HealthCheck> {
       name: 'Encryption at Rest',
       status: 'warn',
       message: 'Off — session/terminal/memory stores are plaintext (mode 0600 only)',
-      fix: 'export CLAUDE_FLOW_ENCRYPT_AT_REST=1 && export CLAUDE_FLOW_ENCRYPTION_KEY=<64-char-hex>',
+      fix: 'export RUFFLO_ENCRYPT_AT_REST=1 && export RUFFLO_ENCRYPTION_KEY=<64-char-hex>',
     };
   }
 
   // Gate is on — try to resolve the key. Fail-closed if missing or malformed.
-  const rawKey = process.env.CLAUDE_FLOW_ENCRYPTION_KEY;
+  const rawKey = process.env.RUFFLO_ENCRYPTION_KEY;
   if (!rawKey) {
     return {
       name: 'Encryption at Rest',
       status: 'fail',
-      message: 'Gate is on but CLAUDE_FLOW_ENCRYPTION_KEY is unset (fail-closed)',
-      fix: 'Generate a key: openssl rand -hex 32 → export CLAUDE_FLOW_ENCRYPTION_KEY=<value>',
+      message: 'Gate is on but RUFFLO_ENCRYPTION_KEY is unset (fail-closed)',
+      fix: 'Generate a key: openssl rand -hex 32 → export RUFFLO_ENCRYPTION_KEY=<value>',
     };
   }
   let keyFingerprint: string;
@@ -969,7 +969,7 @@ async function checkEncryptionAtRest(): Promise<HealthCheck> {
     return {
       name: 'Encryption at Rest',
       status: 'fail',
-      message: `CLAUDE_FLOW_ENCRYPTION_KEY invalid: ${err instanceof Error ? err.message : String(err)}`,
+      message: `RUFFLO_ENCRYPTION_KEY invalid: ${err instanceof Error ? err.message : String(err)}`,
       fix: 'Provide a 64-char hex or 44-char base64 key (32 bytes)',
     };
   }

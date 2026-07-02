@@ -1,6 +1,6 @@
 /**
  * Tests for ruvllm-wasm integration module.
- * Mocks @ruvector/ruvllm-wasm since it may not be installed in CI.
+ * Mocks @rufvector/rufllm-wasm since it may not be installed in CI.
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
@@ -103,7 +103,7 @@ const mockChatTemplate = {
 
 // Use class syntax for mocks that are invoked with `new` — vi.fn().mockImplementation(() => ...)
 // returns an arrow function which is NOT constructable and throws "is not a constructor".
-vi.mock('@ruvector/ruvllm-wasm', () => ({
+vi.mock('@rufvector/rufllm-wasm', () => ({
   default: vi.fn(),
   initSync: vi.fn(),
   RuvLLMWasm: class {
@@ -212,7 +212,7 @@ vi.mock('node:module', () => ({
 // ── Tests ────────────────────────────────────────────────────
 
 // The mocks above target node:module.createRequire and node:fs, but the
-// real `await import('@ruvector/ruvllm-wasm')` still resolves to the actual
+// real `await import('@rufvector/rufllm-wasm')` still resolves to the actual
 // package, which crashes during init when the WASM binary isn't built
 // (pnpm's `neverBuiltDependencies: ['sharp']`-style policy doesn't fetch
 // prebuilt natives in CI). The mocks intercept some paths but not the

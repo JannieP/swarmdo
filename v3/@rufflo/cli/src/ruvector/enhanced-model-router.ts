@@ -267,7 +267,7 @@ const LANGUAGE_MAP: Record<string, string> = {
 export class EnhancedModelRouter {
   private config: EnhancedModelRouterConfig;
   // The base text-routing path delegated to here is the local
-  // heuristic + Thompson-bandit ModelRouter — NOT the @ruvector/tiny-dancer
+  // heuristic + Thompson-bandit ModelRouter — NOT the @rufvector/tiny-dancer
   // neural router that an earlier design (ADR-026) described (#2329). The
   // public `getStats()` return still exposes the field as `tinyDancerStats`
   // for telemetry-schema stability.
@@ -657,7 +657,7 @@ export class EnhancedModelRouter {
       config: { ...this.config },
       // Field name kept as `tinyDancerStats` for telemetry-schema
       // stability; the underlying router is the local heuristic + bandit
-      // ModelRouter, not @ruvector/tiny-dancer. See #2329.
+      // ModelRouter, not @rufvector/tiny-dancer. See #2329.
       tinyDancerStats: this.baseRouter.getStats(),
     };
   }

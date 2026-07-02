@@ -75,7 +75,7 @@ Claude Code Auto-Memory (~/.claude/projects/*/memory/*.md)
 
 ## Encryption at rest (rufflo 3.6.25+)
 
-The AgentDB SQLite blob written by this plugin (`.swarm/memory.db`) supports opt-in AES-256-GCM encryption at rest per [ADR-096](../../v3/docs/adr/ADR-096-encryption-at-rest.md). When `CLAUDE_FLOW_ENCRYPT_AT_REST=1` and `CLAUDE_FLOW_ENCRYPTION_KEY` is set:
+The AgentDB SQLite blob written by this plugin (`.swarm/memory.db`) supports opt-in AES-256-GCM encryption at rest per [ADR-096](../../v3/docs/adr/ADR-096-encryption-at-rest.md). When `RUFFLO_ENCRYPT_AT_REST=1` and `RUFFLO_ENCRYPTION_KEY` is set:
 
 - Each write of `.swarm/memory.db` is encrypted with a fresh 12-byte IV (`writeFileRestricted({encrypt:true})`).
 - Reads use `readFileMaybeEncrypted(path, null)` — magic-byte sniff (`RFE1`) so legacy plaintext memory.db files keep working unchanged during the migration window.

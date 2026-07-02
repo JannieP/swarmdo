@@ -63,27 +63,27 @@
     "@rufflo/hooks": "file:v3/@rufflo/hooks",
     "@rufflo/guidance": "file:v3/@rufflo/guidance",
     "@noble/ed25519": "2.3.0",
-    "@ruvector/rabitq-wasm": "0.1.0",
     "semver": "7.7.3",
-    "zod": "3.25.76"
+    "zod": "3.25.76",
+    "@rufvector/rabitq-wasm": "file:v3/@rufvector/rabitq-wasm"
   },
   "optionalDependencies": {
     "@rufflo/aidefence": "file:v3/@rufflo/aidefence",
     "@rufflo/codex": "file:v3/@rufflo/codex",
     "@rufflo/embeddings": "file:v3/@rufflo/embeddings",
-    "@ruvector/attention": "^0.1.3",
-    "@ruvector/core": "^0.1.30",
-    "@ruvector/router": "^0.1.30",
-    "@ruvector/router-linux-x64-gnu": "^0.1.30",
-    "@ruvector/sona": "^0.1.5",
-    "agentdb": "^3.0.0-alpha.17",
-    "agentic-flow": "^2.0.14"
+    "@rufvector/attention": "file:v3/@rufvector/attention",
+    "@rufvector/core": "file:v3/@rufvector/core",
+    "@rufvector/router": "file:v3/@rufvector/router",
+    "@rufvector/rvf-node": "file:v3/@rufvector/rvf-node",
+    "@rufvector/sona": "file:v3/@rufvector/sona",
+    "agentdb": "file:v3/vendor/agentdb",
+    "agentic-flow": "file:v3/vendor/agentic-flow"
   },
   "overrides": {
-    "ruvector": "^0.2.27",
+    "rufvector": "file:v3/vendor/rufvector",
     "better-sqlite3": ">=12.8.0",
     "hono": ">=4.11.4",
-    "@ruvector/rvf-wasm": "0.1.5",
+    "@rufvector/rvf-wasm": "0.1.5",
     "@hono/node-server": ">=1.19.10",
     "flatted": ">=3.4.0",
     "tar": ">=7.5.11",

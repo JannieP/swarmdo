@@ -14,11 +14,11 @@ let dir: string;
 let prev: string | undefined;
 beforeEach(() => {
   dir = mkdtempSync(join(tmpdir(), 'rufflo-empty-'));
-  prev = process.env.CLAUDE_FLOW_MEMORY_PATH;
-  process.env.CLAUDE_FLOW_MEMORY_PATH = dir; // fresh, no memory.db
+  prev = process.env.RUFFLO_MEMORY_PATH;
+  process.env.RUFFLO_MEMORY_PATH = dir; // fresh, no memory.db
 });
 afterEach(() => {
-  if (prev === undefined) delete process.env.CLAUDE_FLOW_MEMORY_PATH; else process.env.CLAUDE_FLOW_MEMORY_PATH = prev;
+  if (prev === undefined) delete process.env.RUFFLO_MEMORY_PATH; else process.env.RUFFLO_MEMORY_PATH = prev;
   try { rmSync(dir, { recursive: true, force: true }); } catch { /* ignore */ }
 });
 

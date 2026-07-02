@@ -316,9 +316,9 @@ export const PLUGIN_METADATA = {
     ],
     optional: [
       '@rufflo/browser',
-      '@ruvector/attention',
-      '@ruvector/gnn',
-      '@ruvector/sona',
+      '@rufvector/attention',
+      '@rufvector/gnn',
+      '@rufvector/sona',
     ],
   },
 } as const;

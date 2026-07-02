@@ -26,8 +26,8 @@
  *
  * Note (ADR-148, #2334): The cost-optimal neural router is now wired as an
  * optional, gated addition via `./neural-router.ts` (which uses
- * `@metaharness/router`, optionally accelerated by `@ruvector/tiny-dancer`).
- * It is double-gated on `CLAUDE_FLOW_ROUTER_NEURAL=1` + an embedding being
+ * `@metaharness/router`, optionally accelerated by `@rufvector/tiny-dancer`).
+ * It is double-gated on `RUFFLO_ROUTER_NEURAL=1` + an embedding being
  * supplied + a corpus/artifact being loadable. When any gate is closed the
  * shipped heuristic + bandit path runs unchanged and the result carries
  * `routedBy: 'heuristic'` (default) or `'bandit-fallback'` (neural enabled
@@ -57,7 +57,7 @@ function loadTrajectoryRecorder(): Promise<typeof import('./router-trajectory.js
 }
 // ADR-150 iter 11–12 — parallel-decision recorder for the SelfEvolvingRouter
 // promotion gate. Dynamic-imported lazily so the routing hot path never
-// pays the load cost when CLAUDE_FLOW_ROUTER_PARALLEL_LOG is unset.
+// pays the load cost when RUFFLO_ROUTER_PARALLEL_LOG is unset.
 let _parallelRecorderMod: Promise<typeof import('./router-parallel-recorder.js')> | null = null;
 function loadParallelRecorder(): Promise<typeof import('./router-parallel-recorder.js')> {
   if (_parallelRecorderMod === null) _parallelRecorderMod = import('./router-parallel-recorder.js');
@@ -85,7 +85,7 @@ function loadOpenRouterAlts(): OpenRouterAlts | null {
   try {
     // Probe candidate paths: explicit env override, then asset locations
     // relative to this file (src dev) and the dist build.
-    const explicit = process.env.CLAUDE_FLOW_ROUTER_OPENROUTER_ALTS;
+    const explicit = process.env.RUFFLO_ROUTER_OPENROUTER_ALTS;
     const candidates: string[] = [];
     if (explicit) candidates.push(explicit);
     // Probe asset dirs without using import.meta.url so this stays compatible
@@ -106,7 +106,7 @@ function loadOpenRouterAlts(): OpenRouterAlts | null {
 
 /** Return the resolved provider + OpenRouter model for the picked tier. */
 function resolveExecutionProvider(model: ClaudeModel): { provider: 'anthropic' | 'openrouter'; openrouterModel?: string } {
-  const explicit = process.env.CLAUDE_FLOW_ROUTER_PROVIDER?.toLowerCase();
+  const explicit = process.env.RUFFLO_ROUTER_PROVIDER?.toLowerCase();
   // Default: anthropic unless explicitly set to openrouter, or OPENROUTER_API_KEY
   // is the only credential present (matches agent-execute-core's selection).
   const hasOpenRouter = !!process.env.OPENROUTER_API_KEY;
@@ -248,13 +248,13 @@ export interface ModelRoutingResult {
    * Execution provider hint (ADR-148 phase 2). 'anthropic' = default
    * Anthropic API path (MODEL_MAP). 'openrouter' = call through
    * OpenRouter using `openrouterModel`. Resolved per-call from
-   * `CLAUDE_FLOW_ROUTER_PROVIDER` / `OPENROUTER_API_KEY`.
+   * `RUFFLO_ROUTER_PROVIDER` / `OPENROUTER_API_KEY`.
    */
   provider?: 'anthropic' | 'openrouter';
   /**
    * Concrete OpenRouter model slug for this tier when `provider==='openrouter'`,
    * loaded from `assets/model-router/openrouter-alts.json` (overridable via
-   * `CLAUDE_FLOW_ROUTER_OPENROUTER_ALTS=<path>`). Downstream consumers can
+   * `RUFFLO_ROUTER_OPENROUTER_ALTS=<path>`). Downstream consumers can
    * use this to override the default MODEL_MAP-derived Anthropic slug.
    */
   openrouterModel?: string;
@@ -493,7 +493,7 @@ function migratePriors(p: unknown): BucketedPriors {
 // escalation without recompiling. Parsed once at module load; invalid /
 // out-of-range values fall through to the default below.
 function envMaxUncertainty(): number | undefined {
-  const raw = process.env.CLAUDE_FLOW_MAX_UNCERTAINTY;
+  const raw = process.env.RUFFLO_MAX_UNCERTAINTY;
   if (!raw) return undefined;
   const n = Number(raw);
   if (!Number.isFinite(n) || n < 0 || n > 1) return undefined;
@@ -560,7 +560,7 @@ export class ModelRouter {
   /**
    * Route a task to the optimal model.
    *
-   * When `embedding` is supplied and `CLAUDE_FLOW_ROUTER_NEURAL=1` is set,
+   * When `embedding` is supplied and `RUFFLO_ROUTER_NEURAL=1` is set,
    * the cost-optimal neural backend (ADR-148) is consulted first; its
    * decision is used when its `metBar` clears the configured quality bar
    * and `routedBy` reflects which backend produced the decision. Otherwise
@@ -595,7 +595,7 @@ export class ModelRouter {
     // persist it to the trajectory below; downstream tuners (future) can
     // analyze the distribution to recommend an iter 44 threshold.
     let neuralEnsembleDisagreement: number | undefined = undefined;
-    if (embedding && embedding.length > 0 && process.env.CLAUDE_FLOW_ROUTER_NEURAL === '1') {
+    if (embedding && embedding.length > 0 && process.env.RUFFLO_ROUTER_NEURAL === '1') {
       try {
         const { tryCostOptimalRoute } = await loadNeuralRouter();
         // ADR-149 iter 15 — pass the task's complexity bucket through so
@@ -636,7 +636,7 @@ export class ModelRouter {
           for (let i = 0; i < tierOrder.length && i < rankQ.length; i++) {
             qualities[tierOrder[i]] = rankQ[i];
           }
-          const weight = parseFloat(process.env.CLAUDE_FLOW_ROUTER_NEURAL_WEIGHT ?? '5') || 5;
+          const weight = parseFloat(process.env.RUFFLO_ROUTER_NEURAL_WEIGHT ?? '5') || 5;
           neuralPrior = { qualities, weight };
           neuralBackend = nr.routedBy;
         } else {
@@ -656,15 +656,15 @@ export class ModelRouter {
     // measuring real lift before flipping defaults.
     //
     // iter 37 — TWO knobs:
-    //   CLAUDE_FLOW_ROUTER_AB=1                    → A/B on every call (orig)
-    //   CLAUDE_FLOW_ROUTER_AB_SAMPLE_RATE=<0..1>   → A/B on a sampled subset,
+    //   RUFFLO_ROUTER_AB=1                    → A/B on every call (orig)
+    //   RUFFLO_ROUTER_AB_SAMPLE_RATE=<0..1>   → A/B on a sampled subset,
     //     keyed deterministically by task_hash so the same task always falls
     //     in or out of the sample. Lets production accumulate ab_pair data
     //     passively at low overhead (e.g. 0.05 = 5% of decisions).
     //   Both set → SAMPLE_RATE wins (more specific).
-    const rateRaw = process.env.CLAUDE_FLOW_ROUTER_AB_SAMPLE_RATE;
+    const rateRaw = process.env.RUFFLO_ROUTER_AB_SAMPLE_RATE;
     const rate = rateRaw ? Math.max(0, Math.min(1, parseFloat(rateRaw) || 0)) : 0;
-    const allOn = process.env.CLAUDE_FLOW_ROUTER_AB === '1';
+    const allOn = process.env.RUFFLO_ROUTER_AB === '1';
     let inSample = false;
     if (rate > 0) {
       // Deterministic sample by FNV-1a-32 of the task text. Same task always
@@ -696,10 +696,10 @@ export class ModelRouter {
       if (abPair.disagree) this.abDisagreements++;
 
       // ADR-150 iter 12 — opt-in parallel-decision recorder. No-op when
-      // CLAUDE_FLOW_ROUTER_PARALLEL_LOG is unset (the default), so this
+      // RUFFLO_ROUTER_PARALLEL_LOG is unset (the default), so this
       // adds zero overhead to the default routing path. Fire-and-forget
       // dynamic-import + recordPair; never blocks the route() return.
-      if (process.env.CLAUDE_FLOW_ROUTER_PARALLEL_LOG === '1') {
+      if (process.env.RUFFLO_ROUTER_PARALLEL_LOG === '1') {
         loadParallelRecorder().then((mod) => {
           try {
             mod.recordPair({
@@ -781,7 +781,7 @@ export class ModelRouter {
     this.trackDecision(task, result);
 
     // ADR-148 — opt-in DRACO-shaped trajectory collection
-    if (process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY === '1') {
+    if (process.env.RUFFLO_ROUTER_TRAJECTORY === '1') {
       try {
         const { recordDecision } = await loadTrajectoryRecorder();
         recordDecision({
@@ -1472,7 +1472,7 @@ export function recordModelOutcomeByModelId(
 /**
  * ADR-149 iter 14 — read-only access to the per-modelId Beta priors. The
  * neural-router consumes this to apply per-model Thompson sampling on top
- * of its predicted-quality vector when CLAUDE_FLOW_ROUTER_BANDIT_PER_MODEL=1.
+ * of its predicted-quality vector when RUFFLO_ROUTER_BANDIT_PER_MODEL=1.
  * Returns the legacy bucketed priors (`priorsById[bucket][modelId]`) when
  * present, else null.
  */

@@ -247,7 +247,7 @@ export async function callMCPTool<T = unknown>(
  * ADR-146 P2 — content-boundary screen on the MCP tool dispatch path.
  *
  * Default behaviour (3.10.34, legacy mode): returns the result unchanged.
- * With `CLAUDE_FLOW_STRICT_GUARDRAIL=true`, scans every string field of the
+ * With `RUFFLO_STRICT_GUARDRAIL=true`, scans every string field of the
  * result; `reject` substitutes the field with a typed marker so the caller
  * can surface the rejection. The class itself (`ToolOutputGuardrail`)
  * shipped in ADR-131 P1; this call site is what closes #2149.
@@ -258,7 +258,7 @@ export async function callMCPTool<T = unknown>(
  */
 let _guardrailInstance: { scanAndEnforce: (s: string) => { content: string; action: string; result: { severity: string; category: string; pattern: string } } } | null = null;
 function applyContentBoundaryGuardrail(toolName: string, result: unknown): unknown {
-  if (process.env.CLAUDE_FLOW_STRICT_GUARDRAIL !== 'true') return result;
+  if (process.env.RUFFLO_STRICT_GUARDRAIL !== 'true') return result;
   if (typeof result !== 'object' || result === null) return result;
 
   // Lazy-resolve the guardrail singleton to avoid hot-path import cost.

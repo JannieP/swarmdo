@@ -1,12 +1,11 @@
 {
-  "model": "claude-opus-4-7",
   "_comment_skillListingBudgetFraction": "#1834 — repo has 367 SKILL.md files (5x duplicates of common skills) across .agents/skills, .claude/skills, archive/v2/.claude/skills, v3/@rufflo/{cli,mcp}/.claude/skills. With Claude Code's default 1% budget, ~378 descriptions get truncated. Bumping to 6% covers the actual usage (5.5%). Long-term fix is to prune the duplicates and archive paths (see #1834).",
   "skillListingBudgetFraction": 0.06,
   "customInstructions": "Follow the project's CLAUDE.md guidelines. Use concurrent execution for all operations. Prioritize v3 implementation with security-first development, 15-agent swarm coordination, phased performance optimization, and cross-platform helper automation.",
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
-    "CLAUDE_FLOW_V3_ENABLED": "true",
-    "CLAUDE_FLOW_HOOKS_ENABLED": "true"
+    "RUFFLO_V3_ENABLED": "true",
+    "RUFFLO_HOOKS_ENABLED": "true"
   },
   "permissions": {
     "allow": [

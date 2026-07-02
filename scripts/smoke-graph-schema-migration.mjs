@@ -7,7 +7,7 @@
  *  3. Legacy unprefixed ID is auto-prefixed as "mem:" with deprecation warning
  *  4. Double-write to graph-node native retained (tested via isGraphBackendAvailable guard)
  *
- * Runs without @ruvector/graph-node — tests the sql.js fallback path.
+ * Runs without @rufvector/graph-node — tests the sql.js fallback path.
  *
  * Usage: node scripts/smoke-graph-schema-migration.mjs
  */

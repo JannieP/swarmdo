@@ -51,8 +51,8 @@ RUN ln -sf /usr/local/lib/node_modules/rufflo/bin/rufflo.js /usr/local/bin/ruffl
     && chmod +x /usr/local/bin/rufflo 2>/dev/null || true
 
 ENV NODE_ENV=production \
-    CLAUDE_FLOW_LOG_LEVEL=info \
-    CLAUDE_FLOW_MEMORY_BACKEND=hybrid \
+    RUFFLO_LOG_LEVEL=info \
+    RUFFLO_MEMORY_BACKEND=hybrid \
     HOME=/home/rufflo
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \

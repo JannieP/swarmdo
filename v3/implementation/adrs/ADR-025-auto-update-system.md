@@ -195,10 +195,10 @@ npx rufflo config set update.checkIntervalHours 12
 
 ```bash
 # Disable auto-update entirely
-CLAUDE_FLOW_AUTO_UPDATE=false
+RUFFLO_AUTO_UPDATE=false
 
 # Force update check
-CLAUDE_FLOW_FORCE_UPDATE=true
+RUFFLO_FORCE_UPDATE=true
 
 # CI/CD mode (no interactive prompts, no auto-update)
 CI=true

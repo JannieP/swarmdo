@@ -424,7 +424,7 @@ export class FeatureFlagManager extends EventEmitter {
 
   private loadFromEnvironment(): void {
     for (const flag of Object.keys(FEATURE_FLAG_DEFINITIONS)) {
-      const envVar = `CLAUDE_FLOW_${flag.replace(/([A-Z])/g, '_$1').toUpperCase()}`;
+      const envVar = `RUFFLO_${flag.replace(/([A-Z])/g, '_$1').toUpperCase()}`;
       const envValue = process.env[envVar];
 
       if (envValue !== undefined) {

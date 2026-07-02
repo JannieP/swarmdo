@@ -68,8 +68,8 @@ export function generateSettings(options: InitOptions): object {
     // Enable Claude Code Agent Teams for multi-agent coordination
     CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS: '1',
     // Rufflo specific environment
-    CLAUDE_FLOW_V3_ENABLED: 'true',
-    CLAUDE_FLOW_HOOKS_ENABLED: 'true',
+    RUFFLO_V3_ENABLED: 'true',
+    RUFFLO_HOOKS_ENABLED: 'true',
   };
 
   // Detect platform for platform-aware configuration

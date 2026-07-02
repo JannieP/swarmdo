@@ -84,8 +84,8 @@ try {
   //    bridge DISABLED via env hint — we test the raw sql.js fallback
   //    path because the AgentDB v3 bridge optionally pulls a Xenova
   //    embedding model on init which hangs CI without network.
-  process.env.CLAUDE_FLOW_MEMORY_PATH = swarmDir;
-  process.env.CLAUDE_FLOW_DISABLE_BRIDGE = '1';
+  process.env.RUFFLO_MEMORY_PATH = swarmDir;
+  process.env.RUFFLO_DISABLE_BRIDGE = '1';
   // Reset getMemoryRoot cache so the env var takes effect.
   const init = await import(resolve(REPO_ROOT, 'v3/@rufflo/cli/dist/src/memory/memory-initializer.js'));
   if (typeof init._resetMemoryRootCache === 'function') init._resetMemoryRootCache();

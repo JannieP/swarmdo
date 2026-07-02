@@ -1,7 +1,7 @@
 // Cost-ceiling hyperparameter tuning from recorded trajectories (ADR-149 iter 40).
 //
 // Iter 29 added a quality-best-under-budget selector mode keyed on
-// CLAUDE_FLOW_ROUTER_COST_CEILING_USD_PER_MTOK. Iter 39 tuned the cost-
+// RUFFLO_ROUTER_COST_CEILING_USD_PER_MTOK. Iter 39 tuned the cost-
 // optimal mode's qualityBar from trajectory data; this iter does the
 // same for cost-ceiling.
 //
@@ -37,7 +37,7 @@ import { IsotonicCalibrator } from '../v3/@rufflo/cli/dist/src/ruvector/router-c
 
 const ARGS = (() => {
   const a = {
-    in: process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH
+    in: process.env.RUFFLO_ROUTER_TRAJECTORY_PATH
       ?? resolve('.swarm', 'model-router-trajectories.jsonl'),
     artifact: resolve('v3/@rufflo/cli/assets/model-router/seed-router.krr.json'),
     calibratorDir: resolve('v3/@rufflo/cli/assets/model-router'),

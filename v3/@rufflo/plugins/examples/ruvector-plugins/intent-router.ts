@@ -1,7 +1,7 @@
 /**
  * Intent Router Plugin
  *
- * Smart query → agent/tool mapping using @ruvector/wasm semantic matching.
+ * Smart query → agent/tool mapping using @rufvector/wasm semantic matching.
  * Routes user intents to optimal handlers with confidence scoring.
  *
  * Features:
@@ -283,7 +283,7 @@ async function getRouter(): Promise<IntentRouter> {
 }
 
 export const intentRouterPlugin = new PluginBuilder('intent-router', '1.0.0')
-  .withDescription('Smart intent → handler routing using @ruvector/wasm HNSW (<1ms)')
+  .withDescription('Smart intent → handler routing using @rufvector/wasm HNSW (<1ms)')
   .withAuthor('Rufflo Team')
   .withTags(['routing', 'intent', 'semantic', 'ruvector', 'hnsw'])
   .withMCPTools([
@@ -324,7 +324,7 @@ export const intentRouterPlugin = new PluginBuilder('intent-router', '1.0.0')
       .withHandler(async () => {
         const router = await getRouter();
         const stats = router.getStats();
-        return { content: [{ type: 'text', text: `📊 **Intent Router:**\n\n**Intents:** ${stats.totalIntents}\n**Routes:** ${stats.recentRoutes}\n**Backend:** @ruvector/wasm HNSW` }] };
+        return { content: [{ type: 'text', text: `📊 **Intent Router:**\n\n**Intents:** ${stats.totalIntents}\n**Routes:** ${stats.recentRoutes}\n**Backend:** @rufvector/wasm HNSW` }] };
       })
       .build(),
   ])
@@ -345,7 +345,7 @@ export const intentRouterPlugin = new PluginBuilder('intent-router', '1.0.0')
       .build(),
   ])
   .onInitialize(async (ctx) => {
-    ctx.logger.info('Intent Router initializing with @ruvector/wasm...');
+    ctx.logger.info('Intent Router initializing with @rufvector/wasm...');
     const router = await getRouter();
     ctx.logger.info(`Intent Router ready - ${router.listIntents().length} intents, HNSW enabled`);
   })

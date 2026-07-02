@@ -79,11 +79,11 @@ RUN mkdir -p /app/data /app/reports /app/logs
 
 # Set environment variables
 ENV NODE_ENV=test
-ENV CLAUDE_FLOW_MODE=test
-ENV CLAUDE_FLOW_MEMORY_PATH=/app/data
-ENV CLAUDE_FLOW_LOG_LEVEL=debug
-ENV CLAUDE_FLOW_MAX_AGENTS=15
-ENV CLAUDE_FLOW_SECURITY_MODE=strict
+ENV RUFFLO_MODE=test
+ENV RUFFLO_MEMORY_PATH=/app/data
+ENV RUFFLO_LOG_LEVEL=debug
+ENV RUFFLO_MAX_AGENTS=15
+ENV RUFFLO_SECURITY_MODE=strict
 ENV CI=true
 
 # Health check

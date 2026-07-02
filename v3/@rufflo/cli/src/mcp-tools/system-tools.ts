@@ -327,7 +327,7 @@ export const systemTools: MCPTool[] = [
           join(projectCwd, '.rufflo', 'memory', 'store.rvf'),
           join(projectCwd, '.rufflo', 'memory', 'rufflo.db'),   // sql.js
           join(projectCwd, '.swarm', 'memory.db'),                        // swarm
-          join(projectCwd, 'ruvector.db'),                                // ruvector
+          join(projectCwd, 'vector.db'),                                // ruvector
           join(projectCwd, 'agentdb.rvf'),                                // root rvf
         ];
         const memoryExists = memoryCandidates.some(existsSync);
@@ -591,8 +591,8 @@ export const systemTools: MCPTool[] = [
       // When Claude Code launches us via `claude mcp add`, stdin is piped (not a TTY)
       // and the process IS the MCP server, so it is running.
       const isStdio = !process.stdin.isTTY;
-      const transport = process.env.CLAUDE_FLOW_MCP_TRANSPORT || (isStdio ? 'stdio' : 'http');
-      const port = parseInt(process.env.CLAUDE_FLOW_MCP_PORT || '3000', 10);
+      const transport = process.env.RUFFLO_MCP_TRANSPORT || (isStdio ? 'stdio' : 'http');
+      const port = parseInt(process.env.RUFFLO_MCP_PORT || '3000', 10);
 
       if (transport === 'stdio' || isStdio) {
         // In stdio mode the MCP server is this process itself
@@ -606,7 +606,7 @@ export const systemTools: MCPTool[] = [
       }
 
       // For HTTP/WebSocket, try to check if the server is listening
-      const host = process.env.CLAUDE_FLOW_MCP_HOST || 'localhost';
+      const host = process.env.RUFFLO_MCP_HOST || 'localhost';
       try {
         const { createConnection } = await import('node:net');
         const connected = await new Promise<boolean>((resolve) => {
@@ -689,8 +689,8 @@ export const systemTools: MCPTool[] = [
       const isStdio = !process.stdin.isTTY;
       return {
         serverId: `in-process-${process.pid}`,
-        port: typeof input.port === 'number' ? input.port : (parseInt(process.env.CLAUDE_FLOW_MCP_PORT || '0', 10) || null),
-        transport: (input.transport as string) || process.env.CLAUDE_FLOW_MCP_TRANSPORT || (isStdio ? 'stdio' : 'in-process'),
+        port: typeof input.port === 'number' ? input.port : (parseInt(process.env.RUFFLO_MCP_PORT || '0', 10) || null),
+        transport: (input.transport as string) || process.env.RUFFLO_MCP_TRANSPORT || (isStdio ? 'stdio' : 'in-process'),
         startedAt: new Date().toISOString(),
         note: 'MCP tools run in-process via the CLI; no separate server process was started. Use `rufflo mcp start` for a standalone server.',
       };

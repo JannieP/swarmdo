@@ -1,7 +1,7 @@
 /**
  * RuVector LLM WASM MCP Tools
  *
- * Exposes @ruvector/ruvllm-wasm operations via MCP protocol.
+ * Exposes @rufvector/rufllm-wasm operations via MCP protocol.
  * All tools gracefully degrade when the WASM package is not installed.
  */
 

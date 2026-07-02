@@ -234,7 +234,7 @@ async function measureAgentRun(verbose: boolean): Promise<DemoResults['agentRun'
 
 async function measureEmbeddingBackend(): Promise<DemoResults['embeddingBackend']> {
   try {
-    const rv = await import('ruvector').catch(() => null) as unknown as {
+    const rv = await import('rufvector').catch(() => null) as unknown as {
       embed?: (s: string) => Promise<{ embedding?: number[] } | number[]>;
       isOnnxAvailable?: () => boolean;
       initOnnxEmbedder?: () => Promise<void>;

@@ -1,5 +1,5 @@
 /**
- * ADR-086: @ruvector/ruvllm native intelligence backend integration tests
+ * ADR-086: @rufvector/rufllm native intelligence backend integration tests
  *
  * Validates that SonaCoordinator, ContrastiveTrainer, and TrainingPipeline
  * load via createRequire (CJS bridge) and function correctly.
@@ -38,13 +38,13 @@ const mockRuvllm = {
 vi.mock('module', () => ({
   createRequire: vi.fn().mockReturnValue(
     vi.fn().mockImplementation((specifier: string) => {
-      if (specifier === '@ruvector/ruvllm') return mockRuvllm;
+      if (specifier === '@rufvector/rufllm') return mockRuvllm;
       throw new Error(`Cannot find module '${specifier}'`);
     })
   ),
 }));
 
-// Skip in CI — even though the @ruvector/ruvllm package resolves, the
+// Skip in CI — even though the @rufvector/rufllm package resolves, the
 // native bindings don't load without postinstall, so 3 of 11 tests fail
 // at the native call boundary. Mocks intercept the createRequire path
 // but not the underlying init.
@@ -109,8 +109,8 @@ describe.skipIf(__SKIP_WASM_TESTS)('ADR-086: ruvllm native intelligence backend'
 
   describe('CJS import pattern (createRequire)', () => {
     it('uses createRequire instead of ESM dynamic import', async () => {
-      // The source files should NOT contain `await import('@ruvector/ruvllm')`
-      // They should use createRequire(import.meta.url)('@ruvector/ruvllm')
+      // The source files should NOT contain `await import('@rufvector/rufllm')`
+      // They should use createRequire(import.meta.url)('@rufvector/rufllm')
       const { readFileSync } = await import('fs');
       const { join } = await import('path');
       const srcDir = join(import.meta.dirname, '..', 'src');
@@ -127,7 +127,7 @@ describe.skipIf(__SKIP_WASM_TESTS)('ADR-086: ruvllm native intelligence backend'
         expect(content).not.toMatch(/await import\(['"]@ruvector\/ruvllm['"]\)/);
         // Should have createRequire pattern
         expect(content).toContain('createRequire');
-        expect(content).toContain("requireCjs('@ruvector/ruvllm')");
+        expect(content).toContain("requireCjs('@rufvector/rufllm')");
       }
     });
   });

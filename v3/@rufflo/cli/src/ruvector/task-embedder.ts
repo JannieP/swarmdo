@@ -105,7 +105,7 @@ async function loadEmbedderBatch(): Promise<EmbedBatchFn | null> {
 // ============================================================================
 
 const MAX_SIZE = (() => {
-  const v = parseInt(process.env.CLAUDE_FLOW_ROUTER_EMBED_CACHE_SIZE ?? '500', 10);
+  const v = parseInt(process.env.RUFFLO_ROUTER_EMBED_CACHE_SIZE ?? '500', 10);
   return Number.isFinite(v) && v >= 0 ? v : 500;
 })();
 

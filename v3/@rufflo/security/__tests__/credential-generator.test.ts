@@ -197,11 +197,11 @@ describe('CredentialGenerator', () => {
       const credentials = generator.generateInstallationCredentials();
       const script = generator.createEnvScript(credentials);
 
-      expect(script).toContain('export CLAUDE_FLOW_ADMIN_PASSWORD=');
-      expect(script).toContain('export CLAUDE_FLOW_SERVICE_PASSWORD=');
-      expect(script).toContain('export CLAUDE_FLOW_JWT_SECRET=');
-      expect(script).toContain('export CLAUDE_FLOW_SESSION_SECRET=');
-      expect(script).toContain('export CLAUDE_FLOW_ENCRYPTION_KEY=');
+      expect(script).toContain('export RUFFLO_ADMIN_PASSWORD=');
+      expect(script).toContain('export RUFFLO_SERVICE_PASSWORD=');
+      expect(script).toContain('export RUFFLO_JWT_SECRET=');
+      expect(script).toContain('export RUFFLO_SESSION_SECRET=');
+      expect(script).toContain('export RUFFLO_ENCRYPTION_KEY=');
     });
 
     it('should include warning comment', () => {

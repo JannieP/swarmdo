@@ -50,12 +50,12 @@ The CLI loads configuration in the following priority order:
 
 Configuration can also be overridden via environment variables:
 
-- `CLAUDE_FLOW_MAX_AGENTS` - Maximum concurrent agents
-- `CLAUDE_FLOW_DATA_DIR` - Data directory path
-- `CLAUDE_FLOW_MEMORY_TYPE` - Memory backend type
-- `CLAUDE_FLOW_MCP_TRANSPORT` - MCP transport type
-- `CLAUDE_FLOW_MCP_PORT` - MCP server port
-- `CLAUDE_FLOW_SWARM_TOPOLOGY` - Swarm topology type
+- `RUFFLO_MAX_AGENTS` - Maximum concurrent agents
+- `RUFFLO_DATA_DIR` - Data directory path
+- `RUFFLO_MEMORY_TYPE` - Memory backend type
+- `RUFFLO_MCP_TRANSPORT` - MCP transport type
+- `RUFFLO_MCP_PORT` - MCP server port
+- `RUFFLO_SWARM_TOPOLOGY` - Swarm topology type
 
 ## Configuration Schema
 
@@ -126,7 +126,7 @@ rufflo agent spawn -t coder
 rufflo agent spawn -t coder --config ./custom-config.json
 
 # Override with environment variables
-CLAUDE_FLOW_MAX_AGENTS=20 rufflo swarm init
+RUFFLO_MAX_AGENTS=20 rufflo swarm init
 ```
 
 ### Example Config File

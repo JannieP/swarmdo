@@ -7,8 +7,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { CoverageRouter, createCoverageRouter, type CoverageReport, type FileCoverage } from '../../src/ruvector/coverage-router';
 
-// Mock the @ruvector/coverage module
-vi.mock('@ruvector/coverage', () => ({
+// Mock the @rufvector/coverage module
+vi.mock('@rufvector/coverage', () => ({
   createCoverageRouter: vi.fn(() => null),
 }));
 

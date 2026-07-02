@@ -207,7 +207,7 @@ export class MCPServerManager extends EventEmitter {
       // No PID file found. Detect if we are running in stdio mode
       // (e.g., launched by Claude Code via `claude mcp add`).
       const isStdio = !process.stdin.isTTY;
-      const envTransport = process.env.CLAUDE_FLOW_MCP_TRANSPORT;
+      const envTransport = process.env.RUFFLO_MCP_TRANSPORT;
       if (isStdio || envTransport === 'stdio' || this.options.transport === 'stdio') {
         return {
           running: true,
@@ -311,7 +311,7 @@ export class MCPServerManager extends EventEmitter {
   private async startStdioServer(): Promise<void> {
     // rufflo#1910 — protect the JSON-RPC stdout from any stray
     // console.log/info/debug emitted by lazily-loaded modules
-    // (@ruvector/router, @rufflo/neural, transformers.js, ONNX,
+    // (@rufvector/router, @rufflo/neural, transformers.js, ONNX,
     // semantic-router init, etc.). Codex closes the MCP transport
     // the moment it sees a non-JSON line on stdout, and one such
     // line during a tool batch bricked the whole session.
@@ -749,7 +749,7 @@ export class MCPServerManager extends EventEmitter {
     }
     // Also clean up legacy PID file location from older versions
     try {
-      const legacyPath = path.join(process.env.CLAUDE_FLOW_CWD || process.cwd(), '.rufflo', 'mcp-server.pid');
+      const legacyPath = path.join(process.env.RUFFLO_CWD || process.cwd(), '.rufflo', 'mcp-server.pid');
       if (legacyPath !== this.options.pidFile) {
         await fs.promises.unlink(legacyPath);
       }

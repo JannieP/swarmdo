@@ -49,9 +49,9 @@ Rufflo wins on breadth and coordination sophistication, but three structural gap
 
 ---
 
-## Item 4 — `CLAUDE_FLOW_DB_PATH` env var and `--path` flag on memory sub-commands (#2105)
+## Item 4 — `RUFFLO_DB_PATH` env var and `--path` flag on memory sub-commands (#2105)
 
-**Pitch**: Memory sub-commands hard-code the SQLite DB path to `~/.swarm/memory.db` and ignore `memory init -p <path>`. On Windows, this forces the DB onto the system drive. On multi-project setups, all projects share one memory DB. The fix is a three-level path precedence: `--path` flag > `CLAUDE_FLOW_DB_PATH` env var > default. This is a contributor-ready issue with a clear spec and no architectural complexity.
+**Pitch**: Memory sub-commands hard-code the SQLite DB path to `~/.swarm/memory.db` and ignore `memory init -p <path>`. On Windows, this forces the DB onto the system drive. On multi-project setups, all projects share one memory DB. The fix is a three-level path precedence: `--path` flag > `RUFFLO_DB_PATH` env var > default. This is a contributor-ready issue with a clear spec and no architectural complexity.
 
 **Effort**: S (flag plumbing in the memory command handlers; grep target: `~/.swarm/memory.db` hardcoded in `v3/@rufflo/cli/src/commands/memory.ts`)
 
@@ -126,7 +126,7 @@ Rufflo wins on breadth and coordination sophistication, but three structural gap
 | 1 | Fix 4 skipped integration tests (#1872) | M | reliability | 3.8.x |
 | 2 | Witness manifest drift fix (#2047) | S | security/trust | 3.8.x |
 | 3 | Real-model validation M5 (#2125) | S–M | benchmark credibility | 3.8.x |
-| 4 | `CLAUDE_FLOW_DB_PATH` env var (#2105) | S | DX | 3.8.x |
+| 4 | `RUFFLO_DB_PATH` env var (#2105) | S | DX | 3.8.x |
 | 5 | Skill synthesis loop (ADR-113/R-3) | M | capability | 3.9.0 |
 | 6 | Branding cleanup (#1861, #1858) | S | DX/positioning | 3.8.x |
 | 7 | Windows daemon persistence (#1766) | S–M | reliability | 3.8.x |

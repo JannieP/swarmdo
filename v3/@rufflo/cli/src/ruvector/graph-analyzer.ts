@@ -7,7 +7,7 @@
  * - Circular dependency detection
  * - DOT format export for visualization
  *
- * Falls back to built-in implementations when @ruvector/wasm is not available.
+ * Falls back to built-in implementations when @rufvector/wasm is not available.
  *
  * @module @rufflo/cli/ruvector/graph-analyzer
  */
@@ -173,7 +173,7 @@ async function loadRuVector(): Promise<IRuVectorGraph | null> {
   // Use dynamic module names to bypass TypeScript static analysis
   // These modules are optional and may not be installed
   const ruvectorModule = 'ruvector';
-  const wasmModule = '@ruvector/wasm';
+  const wasmModule = '@rufvector/wasm';
 
   try {
     // Try to load ruvector's graph module

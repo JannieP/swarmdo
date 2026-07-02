@@ -53,10 +53,10 @@
     "vitest": "^4.0.16"
   },
   "peerDependencies": {
-    "@ruvector/ruvllm": "^0.2.3"
+    "@rufvector/rufllm": "file:../..//rufllm"
   },
   "peerDependenciesMeta": {
-    "@ruvector/ruvllm": {
+    "@rufvector/rufllm": {
       "optional": true
     }
   },

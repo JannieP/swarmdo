@@ -70,7 +70,7 @@ export class ConfigFileManager {
       }
     }
     // Check env var
-    const envPath = process.env.CLAUDE_FLOW_CONFIG;
+    const envPath = process.env.RUFFLO_CONFIG;
     if (envPath && fs.existsSync(envPath)) {
       return path.resolve(envPath);
     }

@@ -14,7 +14,7 @@
  * stay intact for now — Phase 1 just proves the wiring works without
  * breaking the 769 cli tests. Phase 2+ migrates functions one at a time.
  *
- * Why lazy: instantiating NeuralLearningSystem pulls in @ruvector/sona and
+ * Why lazy: instantiating NeuralLearningSystem pulls in @rufvector/sona and
  * a few transitive WASM modules — not free at process startup. The bridge
  * defers until something actually asks for it.
  */
@@ -44,10 +44,10 @@ export async function getNeuralPackage(mode: SONAMode = 'balanced'): Promise<Neu
       pkgInstance = sys;
       return sys;
     } catch (err) {
-      // CLAUDE_FLOW_DEBUG-gated log so future regressions of this shape
+      // RUFFLO_DEBUG-gated log so future regressions of this shape
       // don't disappear silently — same convention as the ruvllm coordinator
       // bridge (#1770).
-      if (process.env.CLAUDE_FLOW_DEBUG) {
+      if (process.env.RUFFLO_DEBUG) {
         // eslint-disable-next-line no-console
         console.error('[neural-package] @rufflo/neural load failed:', (err as Error).message);
       }

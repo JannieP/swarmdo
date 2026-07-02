@@ -30,7 +30,7 @@
 //       Leave-one-out validation of the calibrator itself: for each row,
 //       fit calibrator on pairs from the OTHER 39 rows and apply to this
 //       row's predictions. Properly out-of-sample. Use this to decide
-//       whether to default-on CLAUDE_FLOW_ROUTER_CALIBRATE.
+//       whether to default-on RUFFLO_ROUTER_CALIBRATE.
 //
 // Exits 0 on success, 1 on I/O error.
 

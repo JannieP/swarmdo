@@ -22,11 +22,11 @@ export interface MCPToolResult {
 
 /**
  * Returns the effective project working directory.
- * Prefers CLAUDE_FLOW_CWD (set by the install script for global/MCP installs
+ * Prefers RUFFLO_CWD (set by the install script for global/MCP installs
  * where process.cwd() may resolve to '/') over the real process.cwd().
  */
 export function getProjectCwd(): string {
-  const envCwd = process.env.CLAUDE_FLOW_CWD;
+  const envCwd = process.env.RUFFLO_CWD;
   if (envCwd && envCwd !== '/' && envCwd !== process.env.HOME) {
     return envCwd;
   }

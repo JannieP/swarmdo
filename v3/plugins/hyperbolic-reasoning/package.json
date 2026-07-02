@@ -85,9 +85,9 @@
     "vitest": "^1.0.0"
   },
   "optionalDependencies": {
-    "@ruvector/hyperbolic-hnsw-wasm": "^0.1.0",
-    "@ruvector/attention-wasm": "^0.1.0",
-    "@ruvector/gnn-wasm": "^0.1.0",
-    "@ruvector/sona": "^0.1.0"
+    "@rufvector/sona": "^0.1.0",
+    "@rufvector/hyperbolic-hnsw-wasm": "^0.1.0",
+    "@rufvector/attention-wasm": "file:../../@rufvector/attention-wasm",
+    "@rufvector/gnn-wasm": "^0.1.0"
   }
 }

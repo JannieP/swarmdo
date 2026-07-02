@@ -107,7 +107,7 @@ async function main() {
   assert(/export function recordPair\b/.test(recorderSrc), 'recordPair exported');
   assert(/export function recordPairOutcome\b/.test(recorderSrc), 'recordPairOutcome exported');
   assert(/export function parallelRecorderStatus\b/.test(recorderSrc), 'parallelRecorderStatus exported');
-  assert(/CLAUDE_FLOW_ROUTER_PARALLEL_LOG/.test(recorderSrc), 'env-gated by CLAUDE_FLOW_ROUTER_PARALLEL_LOG');
+  assert(/RUFFLO_ROUTER_PARALLEL_LOG/.test(recorderSrc), 'env-gated by RUFFLO_ROUTER_PARALLEL_LOG');
   // ADR-150 rule #3 — never throw
   assert(/never throws|never (throw|block)/i.test(recorderSrc), 'no-throw doc invariant present');
   // Try/catch around fs operations

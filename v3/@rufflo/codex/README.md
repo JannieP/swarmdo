@@ -768,15 +768,15 @@ enabled = false
 
 ```bash
 # Configuration paths
-CLAUDE_FLOW_CONFIG=./rufflo.config.json
-CLAUDE_FLOW_MEMORY_PATH=./.rufflo/data
+RUFFLO_CONFIG=./rufflo.config.json
+RUFFLO_MEMORY_PATH=./.rufflo/data
 
 # Provider keys
 ANTHROPIC_API_KEY=sk-ant-...
 OPENAI_API_KEY=sk-...
 
 # MCP settings
-CLAUDE_FLOW_MCP_PORT=3000
+RUFFLO_MCP_PORT=3000
 ```
 
 </details>

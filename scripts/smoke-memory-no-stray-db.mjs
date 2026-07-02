@@ -2,8 +2,8 @@
 /**
  * Smoke: ADR-125 Phase 7 — no stray DB artifacts after `npm test` in @rufflo/memory.
  *
- * The agentdb / @ruvector/rvf native bindings have a habit of writing
- * `ruvector.db` (and friends) to whatever cwd they're invoked from. ADR-125
+ * The agentdb / @rufvector/rvf native bindings have a habit of writing
+ * `vector.db` (and friends) to whatever cwd they're invoked from. ADR-125
  * Phase 7 wipes the artifacts via `vitest.setup.ts`; this smoke is the
  * behavioural guard that verifies the wipe actually works.
  *

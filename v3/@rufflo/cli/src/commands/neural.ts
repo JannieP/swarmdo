@@ -379,7 +379,7 @@ const trainCommand: Command = {
         const backendUsed = ruvectorStats?.backend || 'unknown';
         const backendMsg = backendUsed === 'wasm'
           ? `RuVector WASM backend: ${wasmFeatures.join(', ')}`
-          : `RuVector JS fallback (install @ruvector/learning-wasm for native speed): ${wasmFeatures.join(', ')}`;
+          : `RuVector JS fallback (install @rufvector/learning-wasm for native speed): ${wasmFeatures.join(', ')}`;
         output.writeln(output.highlight(`✓ ${backendMsg}`));
       }
 
@@ -488,7 +488,7 @@ const statusCommand: Command = {
             // #2356: distinguish "loaded in this process" from "installed but
             // not yet loaded" from "not installed". Previously `neural status`
             // always printed "Not loaded" because it never warms the lazy
-            // singleton — a false negative even when @ruvector/core is present.
+            // singleton — a false negative even when @rufvector/core is present.
             component: 'HNSW Index',
             status: hnswStatus.initialized
               ? output.success('Ready')
@@ -498,8 +498,8 @@ const statusCommand: Command = {
             details: hnswStatus.initialized
               ? `${hnswStatus.entryCount} vectors, ${hnswStatus.dimensions}-dim`
               : hnswStatus.available
-                ? '@ruvector/core installed (loads on first vector search)'
-                : '@ruvector/core not available',
+                ? '@rufvector/core installed (loads on first vector search)'
+                : '@rufvector/core not available',
           },
           {
             component: 'Embedding Model',
@@ -521,14 +521,14 @@ const statusCommand: Command = {
             status: stats._ruvllmBackend === 'active' ? output.success('Active') : output.dim('Unavailable'),
             details: stats._ruvllmBackend === 'active'
               ? `SonaCoordinator | ${stats._ruvllmTrajectories} trajectories`
-              : 'Install @ruvector/ruvllm',
+              : 'Install @rufvector/rufllm',
           },
           {
             component: 'Contrastive Trainer',
             status: stats._contrastiveTrainer && stats._contrastiveTrainer !== 'unavailable' ? output.success('Active') : output.dim('Unavailable'),
             details: stats._contrastiveTrainer && stats._contrastiveTrainer !== 'unavailable'
               ? `${(stats._contrastiveTrainer as any).triplets ?? 0} triplets, ${(stats._contrastiveTrainer as any).agents ?? 0} agents`
-              : 'Install @ruvector/ruvllm',
+              : 'Install @rufvector/rufllm',
           },
           {
             component: 'Training Pipeline',
@@ -546,7 +546,7 @@ const statusCommand: Command = {
                 status: gs.backend === 'graph-node' ? output.success('Active') : output.dim('Unavailable'),
                 details: gs.backend === 'graph-node'
                   ? `${gs.totalNodes} nodes, ${gs.totalEdges} edges`
-                  : 'Install @ruvector/graph-node',
+                  : 'Install @rufvector/graph-node',
               };
             } catch { return { component: 'Graph Database', status: output.dim('Unavailable'), details: 'Not loaded' }; }
           })(),
@@ -1636,7 +1636,7 @@ const benchmarkCommand: Command = {
 
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic import of optional native WASM module with no type declarations
-      const attention = await import('@ruvector/attention') as unknown as Record<string, new (...args: number[]) => { computeRaw: (q: Float32Array, k: Float32Array[], v: Float32Array[]) => Float32Array }>;
+      const attention = await import('@rufvector/attention') as unknown as Record<string, new (...args: number[]) => { computeRaw: (q: Float32Array, k: Float32Array[], v: Float32Array[]) => Float32Array }>;
 
       // Manual benchmark since benchmarkAttention has a binding bug
       const benchmarkMechanism = async (name: string, mechanism: { computeRaw: (q: Float32Array, k: Float32Array[], v: Float32Array[]) => Float32Array }) => {
@@ -1731,10 +1731,10 @@ const benchmarkCommand: Command = {
       const fs = await import('fs');
       const { createRequire } = await import('module');
       const require = createRequire(import.meta.url);
-      const wasmPath = require.resolve('@ruvector/learning-wasm/ruvector_learning_wasm_bg.wasm');
+      const wasmPath = require.resolve('@rufvector/learning-wasm/ruvector_learning_wasm_bg.wasm');
       const wasmBuffer = fs.readFileSync(wasmPath);
 
-      const learningWasm = await import('@ruvector/learning-wasm');
+      const learningWasm = await import('@rufvector/learning-wasm');
       learningWasm.initSync({ module: wasmBuffer });
 
       const lora = new learningWasm.WasmMicroLoRA(dim, 0.1, 0.01);
@@ -1789,7 +1789,7 @@ const routerStatusCommand: Command = {
   ],
   examples: [
     { command: 'rufflo neural router status', description: 'Show router state' },
-    { command: 'CLAUDE_FLOW_ROUTER_NEURAL=1 rufflo neural router status', description: 'Show status with gate open' },
+    { command: 'RUFFLO_ROUTER_NEURAL=1 rufflo neural router status', description: 'Show status with gate open' },
   ],
   action: async (ctx: CommandContext): Promise<CommandResult> => {
     const format = (ctx.flags.format as string) || 'table';
@@ -1805,7 +1805,7 @@ const routerStatusCommand: Command = {
     output.writeln();
     output.writeln(output.bold('Cost-Optimal Neural Router (ADR-148)'));
     output.writeln(output.dim('─'.repeat(60)));
-    output.writeln(`  Gate (CLAUDE_FLOW_ROUTER_NEURAL=1): ${status.enabled ? output.success('open') : output.warning('closed')}`);
+    output.writeln(`  Gate (RUFFLO_ROUTER_NEURAL=1): ${status.enabled ? output.success('open') : output.warning('closed')}`);
     output.writeln(`  Backend available:                  ${status.available ? output.success('yes') : output.warning('no')}`);
     output.writeln(`  Active backend (routedBy):          ${status.routedBy ?? '—'}`);
     output.writeln(`  Reason:                             ${status.reason}`);
@@ -1877,7 +1877,7 @@ const routerTrainCommand: Command = {
     const bytes = fs.statSync(outPath).size;
     output.writeln(`Wrote ${bytes} bytes → ${outPath}`);
     output.writeln();
-    output.writeln(output.dim('Use: CLAUDE_FLOW_ROUTER_NEURAL=1 CLAUDE_FLOW_ROUTER_MODEL_PATH=' + outPath + ' …'));
+    output.writeln(output.dim('Use: RUFFLO_ROUTER_NEURAL=1 RUFFLO_ROUTER_MODEL_PATH=' + outPath + ' …'));
     output.writeln();
     return { success: true, data: { lambda, looQuality, trainMs: ms, modelPath: outPath, modelBytes: bytes } };
   },
@@ -1890,7 +1890,7 @@ const routerTrainFromTrajectoriesCommand: Command = {
   name: 'train-from-trajectories',
   description: 'Pair production decision+outcome JSONL rows into seed-corpus-shaped training rows (ADR-149 iter 18/19)',
   options: [
-    { name: 'in', short: 'i', type: 'string', description: 'Trajectory JSONL path (default: $CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH or .swarm/model-router-trajectories.jsonl)' },
+    { name: 'in', short: 'i', type: 'string', description: 'Trajectory JSONL path (default: $RUFFLO_ROUTER_TRAJECTORY_PATH or .swarm/model-router-trajectories.jsonl)' },
     { name: 'write', short: 'w', type: 'string', description: 'Write paired rows to this path (seed-rows.json-compatible JSON array)' },
     { name: 'union', short: 'u', type: 'string', description: 'Union paired rows with an existing seed-rows.json — production rows win on task-text collision' },
     { name: 'filter-source', type: 'string', description: 'Only keep outcomes whose source matches (e.g. llm-judge, agent-execute)' },
@@ -1909,7 +1909,7 @@ const routerTrainFromTrajectoriesCommand: Command = {
     const { pairTrajectoryRows } = await import('../ruvector/router-trajectory.js');
 
     const inPath = (ctx.flags.in as string | undefined)
-      ?? process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH
+      ?? process.env.RUFFLO_ROUTER_TRAJECTORY_PATH
       ?? path.resolve(process.cwd(), '.swarm', 'model-router-trajectories.jsonl');
     const writePath = ctx.flags.write as string | undefined;
     const unionPath = ctx.flags.union as string | undefined;
@@ -1921,10 +1921,10 @@ const routerTrainFromTrajectoriesCommand: Command = {
     if (!fs.existsSync(inPath)) {
       const msg = `Trajectory file not found at ${inPath}`;
       if (fmt === 'json') {
-        output.writeln(JSON.stringify({ error: msg, hint: 'Set CLAUDE_FLOW_ROUTER_TRAJECTORY=1 and run any agent_spawn → executeAgentTask flow to accumulate rows.' }, null, 2));
+        output.writeln(JSON.stringify({ error: msg, hint: 'Set RUFFLO_ROUTER_TRAJECTORY=1 and run any agent_spawn → executeAgentTask flow to accumulate rows.' }, null, 2));
       } else {
         output.printError(msg);
-        output.writeln(output.dim('  Set CLAUDE_FLOW_ROUTER_TRAJECTORY=1 to enable trajectory recording.'));
+        output.writeln(output.dim('  Set RUFFLO_ROUTER_TRAJECTORY=1 to enable trajectory recording.'));
       }
       return { success: false, exitCode: 1 };
     }
@@ -2004,7 +2004,7 @@ const routerTrainFromTrajectoriesCommand: Command = {
     if (writePath) output.writeln(`  Written:           ${writePath}`);
     output.writeln();
     if (stats.totalRows === 0) {
-      output.writeln(output.dim('  Empty trajectory file. Enable recording with `export CLAUDE_FLOW_ROUTER_TRAJECTORY=1` and run agent_spawn flows.'));
+      output.writeln(output.dim('  Empty trajectory file. Enable recording with `export RUFFLO_ROUTER_TRAJECTORY=1` and run agent_spawn flows.'));
     } else if (pairs.length > 0 && writePath) {
       output.writeln(output.dim(`  Next: rufflo neural router train -c ${writePath} -o router.krr.json`));
     }
@@ -2170,7 +2170,7 @@ const routerDecisionsCommand: Command = {
   name: 'decisions',
   description: 'Query the routing-decision JSONL (iter 17+): filter, aggregate, paginate (ADR-149 iter 28)',
   options: [
-    { name: 'in', short: 'i', type: 'string', description: 'Trajectory JSONL path (default: $CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH or .swarm/model-router-trajectories.jsonl)' },
+    { name: 'in', short: 'i', type: 'string', description: 'Trajectory JSONL path (default: $RUFFLO_ROUTER_TRAJECTORY_PATH or .swarm/model-router-trajectories.jsonl)' },
     { name: 'since', short: 's', type: 'string', description: 'Time window suffix: 1h, 24h, 7d, 30d (default: all)' },
     { name: 'routed-by', type: 'string', description: 'Filter by decision mechanism: hybrid | bandit-fallback | heuristic' },
     { name: 'model', short: 'm', type: 'string', description: 'Filter by chosen model id (substring match, e.g. haiku, gpt-4)' },
@@ -2190,7 +2190,7 @@ const routerDecisionsCommand: Command = {
     const path = await import('node:path');
 
     const inPath = (ctx.flags.in as string | undefined)
-      ?? process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH
+      ?? process.env.RUFFLO_ROUTER_TRAJECTORY_PATH
       ?? path.resolve(process.cwd(), '.swarm', 'model-router-trajectories.jsonl');
     const since = ctx.flags.since as string | undefined;
     const routedByFilter = (ctx.flags['routed-by'] ?? ctx.flags.routedBy) as string | undefined;
@@ -2216,10 +2216,10 @@ const routerDecisionsCommand: Command = {
     if (!fs.existsSync(inPath)) {
       const msg = `Trajectory file not found at ${inPath}`;
       if (fmt === 'json') {
-        output.writeln(JSON.stringify({ error: msg, hint: 'Set CLAUDE_FLOW_ROUTER_TRAJECTORY=1 to enable recording.' }, null, 2));
+        output.writeln(JSON.stringify({ error: msg, hint: 'Set RUFFLO_ROUTER_TRAJECTORY=1 to enable recording.' }, null, 2));
       } else {
         output.printError(msg);
-        output.writeln(output.dim('  Set CLAUDE_FLOW_ROUTER_TRAJECTORY=1 to enable trajectory recording.'));
+        output.writeln(output.dim('  Set RUFFLO_ROUTER_TRAJECTORY=1 to enable trajectory recording.'));
       }
       return { success: false, exitCode: 1 };
     }
@@ -2495,7 +2495,7 @@ const routerDecideCommand: Command = {
   examples: [
     { command: 'rufflo neural router decide "fix typo in cache.ts"', description: 'See the routing decision for a small task' },
     { command: 'rufflo neural router decide -t "design distributed consensus" -f json', description: 'JSON output for the routing decision' },
-    { command: 'CLAUDE_FLOW_ROUTER_COST_CEILING_USD_PER_MTOK=5 rufflo neural router decide -t "..."', description: 'See iter 29 cost-ceiling mode in action' },
+    { command: 'RUFFLO_ROUTER_COST_CEILING_USD_PER_MTOK=5 rufflo neural router decide -t "..."', description: 'See iter 29 cost-ceiling mode in action' },
   ],
   action: async (ctx: CommandContext): Promise<CommandResult> => {
     const task = (ctx.flags.task as string | undefined) ?? (ctx.args && ctx.args[0]) ?? null;
@@ -2562,13 +2562,13 @@ const routerDecideCommand: Command = {
         reason: status.reason,
       },
       activeEnv: {
-        CLAUDE_FLOW_ROUTER_NEURAL: process.env.CLAUDE_FLOW_ROUTER_NEURAL ?? null,
-        CLAUDE_FLOW_ROUTER_CALIBRATE: process.env.CLAUDE_FLOW_ROUTER_CALIBRATE ?? null,
-        CLAUDE_FLOW_ROUTER_COST_CEILING_USD_PER_MTOK: process.env.CLAUDE_FLOW_ROUTER_COST_CEILING_USD_PER_MTOK ?? null,
-        CLAUDE_FLOW_ROUTER_LATENCY_BUDGET_MS: process.env.CLAUDE_FLOW_ROUTER_LATENCY_BUDGET_MS ?? null,
-        CLAUDE_FLOW_ROUTER_QUALITY_BAR: process.env.CLAUDE_FLOW_ROUTER_QUALITY_BAR ?? null,
-        CLAUDE_FLOW_ROUTER_BANDIT_PER_MODEL: process.env.CLAUDE_FLOW_ROUTER_BANDIT_PER_MODEL ?? null,
-        CLAUDE_FLOW_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD: process.env.CLAUDE_FLOW_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD ?? null,
+        RUFFLO_ROUTER_NEURAL: process.env.RUFFLO_ROUTER_NEURAL ?? null,
+        RUFFLO_ROUTER_CALIBRATE: process.env.RUFFLO_ROUTER_CALIBRATE ?? null,
+        RUFFLO_ROUTER_COST_CEILING_USD_PER_MTOK: process.env.RUFFLO_ROUTER_COST_CEILING_USD_PER_MTOK ?? null,
+        RUFFLO_ROUTER_LATENCY_BUDGET_MS: process.env.RUFFLO_ROUTER_LATENCY_BUDGET_MS ?? null,
+        RUFFLO_ROUTER_QUALITY_BAR: process.env.RUFFLO_ROUTER_QUALITY_BAR ?? null,
+        RUFFLO_ROUTER_BANDIT_PER_MODEL: process.env.RUFFLO_ROUTER_BANDIT_PER_MODEL ?? null,
+        RUFFLO_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD: process.env.RUFFLO_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD ?? null,
       },
       elapsedMs: Math.round(ms * 100) / 100,
     };
@@ -2643,7 +2643,7 @@ const routerCostSavingsCommand: Command = {
   name: 'cost-savings',
   description: 'Compute actual vs heuristic-counterfactual cost from paired decision+outcome rows (ADR-149 iter 32)',
   options: [
-    { name: 'in', short: 'i', type: 'string', description: 'Trajectory JSONL path (default: $CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH or .swarm/...)' },
+    { name: 'in', short: 'i', type: 'string', description: 'Trajectory JSONL path (default: $RUFFLO_ROUTER_TRAJECTORY_PATH or .swarm/...)' },
     { name: 'since', short: 's', type: 'string', description: 'Time window suffix: 1h, 24h, 7d, 30d' },
     { name: 'format', short: 'f', type: 'string', description: 'Output format: table, json', default: 'table' },
     { name: 'top-n', type: 'number', description: 'Show top-N largest individual savings (default 5)', default: '5' },
@@ -2664,7 +2664,7 @@ const routerCostSavingsCommand: Command = {
     const { MODEL_PRICES } = await import('../ruvector/model-prices.js');
 
     const inPath = (ctx.flags.in as string | undefined)
-      ?? process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH
+      ?? process.env.RUFFLO_ROUTER_TRAJECTORY_PATH
       ?? path.resolve(process.cwd(), '.swarm', 'model-router-trajectories.jsonl');
     const since = ctx.flags.since as string | undefined;
     const fmt = (ctx.flags.format as string) || 'table';
@@ -3051,7 +3051,7 @@ const routerTrajectoryHealthCommand: Command = {
   name: 'trajectory-health',
   description: 'Show health of the routing-decision JSONL log: size, rotations, parse rate, pair-join rate (ADR-149 iter 36)',
   options: [
-    { name: 'in', short: 'i', type: 'string', description: 'Trajectory JSONL path (default: $CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH or .swarm/...)' },
+    { name: 'in', short: 'i', type: 'string', description: 'Trajectory JSONL path (default: $RUFFLO_ROUTER_TRAJECTORY_PATH or .swarm/...)' },
     { name: 'format', short: 'f', type: 'string', description: 'Output format: table, json', default: 'table' },
   ],
   examples: [
@@ -3063,14 +3063,14 @@ const routerTrajectoryHealthCommand: Command = {
     const path = await import('node:path');
 
     const inPath = (ctx.flags.in as string | undefined)
-      ?? process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH
+      ?? process.env.RUFFLO_ROUTER_TRAJECTORY_PATH
       ?? path.resolve(process.cwd(), '.swarm', 'model-router-trajectories.jsonl');
     const fmt = (ctx.flags.format as string) || 'table';
 
     // Recorder config (mirrors router-trajectory.ts defaults).
-    const recorderEnabled = process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY === '1';
-    const maxSizeBytes = parseInt(process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_MAXSIZE ?? `${10 * 1024 * 1024}`, 10) | 0;
-    const maxRotations = Math.max(0, parseInt(process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_MAXROTATIONS ?? '3', 10) || 3);
+    const recorderEnabled = process.env.RUFFLO_ROUTER_TRAJECTORY === '1';
+    const maxSizeBytes = parseInt(process.env.RUFFLO_ROUTER_TRAJECTORY_MAXSIZE ?? `${10 * 1024 * 1024}`, 10) | 0;
+    const maxRotations = Math.max(0, parseInt(process.env.RUFFLO_ROUTER_TRAJECTORY_MAXROTATIONS ?? '3', 10) || 3);
 
     if (!fs.existsSync(inPath)) {
       const payload = {
@@ -3080,7 +3080,7 @@ const routerTrajectoryHealthCommand: Command = {
         message: 'No trajectory file at the configured path.',
         hint: recorderEnabled
           ? 'Recorder is enabled — file should appear after the next routing decision.'
-          : 'Recorder is OFF. Set CLAUDE_FLOW_ROUTER_TRAJECTORY=1 to enable.',
+          : 'Recorder is OFF. Set RUFFLO_ROUTER_TRAJECTORY=1 to enable.',
       };
       if (fmt === 'json') output.writeln(JSON.stringify(payload, null, 2));
       else {
@@ -3088,7 +3088,7 @@ const routerTrajectoryHealthCommand: Command = {
         output.writeln(output.bold('Trajectory health'));
         output.writeln(output.dim('─'.repeat(60)));
         output.writeln(`  Path:           ${inPath}`);
-        output.writeln(`  Recorder gate:  ${recorderEnabled ? output.success('ON') : output.warning('OFF (CLAUDE_FLOW_ROUTER_TRAJECTORY=1 to enable)')}`);
+        output.writeln(`  Recorder gate:  ${recorderEnabled ? output.success('ON') : output.warning('OFF (RUFFLO_ROUTER_TRAJECTORY=1 to enable)')}`);
         output.writeln(`  Status:         ${output.warning('file does not exist')}`);
         output.writeln(`  Hint:           ${payload.hint}`);
         output.writeln('');
@@ -3226,13 +3226,13 @@ const routerTrajectoryHealthCommand: Command = {
 };
 
 // ADR-149 iter 54 — consolidated env-var inspection. The router has ~15
-// CLAUDE_FLOW_ROUTER_* env vars accumulated across iters 12-53. Operators
+// RUFFLO_ROUTER_* env vars accumulated across iters 12-53. Operators
 // need a single command that lists each with its current value (or default),
 // effect, and which iter introduced it. Color-coded: green = override set,
 // dim = default.
 const routerConfigCommand: Command = {
   name: 'config',
-  description: 'List all CLAUDE_FLOW_ROUTER_* env vars with current values + effects (ADR-149 iter 54)',
+  description: 'List all RUFFLO_ROUTER_* env vars with current values + effects (ADR-149 iter 54)',
   options: [
     { name: 'format', short: 'f', type: 'string', description: 'Output format: table, json', default: 'table' },
     { name: 'only-overrides', type: 'boolean', description: 'Only show env vars that are explicitly set (hide defaults)', default: false },
@@ -3256,36 +3256,36 @@ const routerConfigCommand: Command = {
     }
     const rows: EnvVarRow[] = [
       // Core gate (iter 0)
-      { name: 'CLAUDE_FLOW_ROUTER_NEURAL',                       iter: 0,  defaultValue: 'unset (0)',   currentValue: process.env.CLAUDE_FLOW_ROUTER_NEURAL ?? '',     isOverride: !!process.env.CLAUDE_FLOW_ROUTER_NEURAL,                       effect: 'Gate. =1 enables neural router; otherwise pure-bandit heuristic.' },
-      { name: 'CLAUDE_FLOW_ROUTER_MODEL_PATH',                   iter: 0,  defaultValue: 'unset',       currentValue: process.env.CLAUDE_FLOW_ROUTER_MODEL_PATH ?? '', isOverride: !!process.env.CLAUDE_FLOW_ROUTER_MODEL_PATH,                   effect: 'Override the KRR artifact path. Defaults to bundled.' },
-      { name: 'CLAUDE_FLOW_ROUTER_QUALITY_BAR',                  iter: 0,  defaultValue: '0.50',        currentValue: process.env.CLAUDE_FLOW_ROUTER_QUALITY_BAR ?? '',isOverride: !!process.env.CLAUDE_FLOW_ROUTER_QUALITY_BAR,                  effect: 'Cost-optimal mode: minimum predicted quality to pick a candidate.' },
+      { name: 'RUFFLO_ROUTER_NEURAL',                       iter: 0,  defaultValue: 'unset (0)',   currentValue: process.env.RUFFLO_ROUTER_NEURAL ?? '',     isOverride: !!process.env.RUFFLO_ROUTER_NEURAL,                       effect: 'Gate. =1 enables neural router; otherwise pure-bandit heuristic.' },
+      { name: 'RUFFLO_ROUTER_MODEL_PATH',                   iter: 0,  defaultValue: 'unset',       currentValue: process.env.RUFFLO_ROUTER_MODEL_PATH ?? '', isOverride: !!process.env.RUFFLO_ROUTER_MODEL_PATH,                   effect: 'Override the KRR artifact path. Defaults to bundled.' },
+      { name: 'RUFFLO_ROUTER_QUALITY_BAR',                  iter: 0,  defaultValue: '0.50',        currentValue: process.env.RUFFLO_ROUTER_QUALITY_BAR ?? '',isOverride: !!process.env.RUFFLO_ROUTER_QUALITY_BAR,                  effect: 'Cost-optimal mode: minimum predicted quality to pick a candidate.' },
       // Trajectory (iter 17)
-      { name: 'CLAUDE_FLOW_ROUTER_TRAJECTORY',                   iter: 17, defaultValue: 'unset (0)',   currentValue: process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY ?? '', isOverride: !!process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY,                   effect: 'Gate. =1 writes decision+outcome rows to .swarm/model-router-trajectories.jsonl.' },
-      { name: 'CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH',              iter: 17, defaultValue: '.swarm/model-router-trajectories.jsonl', currentValue: process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH ?? '', isOverride: !!process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH, effect: 'Override the trajectory JSONL path.' },
-      { name: 'CLAUDE_FLOW_ROUTER_TRAJECTORY_MAXSIZE',           iter: 17, defaultValue: '10485760 (10MB)', currentValue: process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_MAXSIZE ?? '', isOverride: !!process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_MAXSIZE, effect: 'Bytes before rotation. Set 0 to disable rotation.' },
-      { name: 'CLAUDE_FLOW_ROUTER_TRAJECTORY_MAXROTATIONS',      iter: 17, defaultValue: '3',           currentValue: process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_MAXROTATIONS ?? '', isOverride: !!process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_MAXROTATIONS, effect: 'Max .bak files to keep when rotating.' },
-      { name: 'CLAUDE_FLOW_ROUTER_TRAJECTORY_TASKLEN',           iter: 17, defaultValue: '500',         currentValue: process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_TASKLEN ?? '', isOverride: !!process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_TASKLEN, effect: 'Max chars of task text to persist per row (truncated above this).' },
+      { name: 'RUFFLO_ROUTER_TRAJECTORY',                   iter: 17, defaultValue: 'unset (0)',   currentValue: process.env.RUFFLO_ROUTER_TRAJECTORY ?? '', isOverride: !!process.env.RUFFLO_ROUTER_TRAJECTORY,                   effect: 'Gate. =1 writes decision+outcome rows to .swarm/model-router-trajectories.jsonl.' },
+      { name: 'RUFFLO_ROUTER_TRAJECTORY_PATH',              iter: 17, defaultValue: '.swarm/model-router-trajectories.jsonl', currentValue: process.env.RUFFLO_ROUTER_TRAJECTORY_PATH ?? '', isOverride: !!process.env.RUFFLO_ROUTER_TRAJECTORY_PATH, effect: 'Override the trajectory JSONL path.' },
+      { name: 'RUFFLO_ROUTER_TRAJECTORY_MAXSIZE',           iter: 17, defaultValue: '10485760 (10MB)', currentValue: process.env.RUFFLO_ROUTER_TRAJECTORY_MAXSIZE ?? '', isOverride: !!process.env.RUFFLO_ROUTER_TRAJECTORY_MAXSIZE, effect: 'Bytes before rotation. Set 0 to disable rotation.' },
+      { name: 'RUFFLO_ROUTER_TRAJECTORY_MAXROTATIONS',      iter: 17, defaultValue: '3',           currentValue: process.env.RUFFLO_ROUTER_TRAJECTORY_MAXROTATIONS ?? '', isOverride: !!process.env.RUFFLO_ROUTER_TRAJECTORY_MAXROTATIONS, effect: 'Max .bak files to keep when rotating.' },
+      { name: 'RUFFLO_ROUTER_TRAJECTORY_TASKLEN',           iter: 17, defaultValue: '500',         currentValue: process.env.RUFFLO_ROUTER_TRAJECTORY_TASKLEN ?? '', isOverride: !!process.env.RUFFLO_ROUTER_TRAJECTORY_TASKLEN, effect: 'Max chars of task text to persist per row (truncated above this).' },
       // Latency budget (iter 12)
-      { name: 'CLAUDE_FLOW_ROUTER_LATENCY_BUDGET_MS',            iter: 12, defaultValue: '0 (unbounded)', currentValue: process.env.CLAUDE_FLOW_ROUTER_LATENCY_BUDGET_MS ?? '', isOverride: !!process.env.CLAUDE_FLOW_ROUTER_LATENCY_BUDGET_MS, effect: 'Drop candidates whose measured p50 latency > this many ms before selection.' },
+      { name: 'RUFFLO_ROUTER_LATENCY_BUDGET_MS',            iter: 12, defaultValue: '0 (unbounded)', currentValue: process.env.RUFFLO_ROUTER_LATENCY_BUDGET_MS ?? '', isOverride: !!process.env.RUFFLO_ROUTER_LATENCY_BUDGET_MS, effect: 'Drop candidates whose measured p50 latency > this many ms before selection.' },
       // Per-modelId bandit (iter 14)
-      { name: 'CLAUDE_FLOW_ROUTER_BANDIT_PER_MODEL',             iter: 14, defaultValue: 'unset (0)',   currentValue: process.env.CLAUDE_FLOW_ROUTER_BANDIT_PER_MODEL ?? '', isOverride: !!process.env.CLAUDE_FLOW_ROUTER_BANDIT_PER_MODEL, effect: 'Gate. =1 enables per-modelId Thompson sampling perturbation of neural prediction.' },
+      { name: 'RUFFLO_ROUTER_BANDIT_PER_MODEL',             iter: 14, defaultValue: 'unset (0)',   currentValue: process.env.RUFFLO_ROUTER_BANDIT_PER_MODEL ?? '', isOverride: !!process.env.RUFFLO_ROUTER_BANDIT_PER_MODEL, effect: 'Gate. =1 enables per-modelId Thompson sampling perturbation of neural prediction.' },
       // k-NN backend (iter 0)
-      { name: 'CLAUDE_FLOW_ROUTER_KNN_K',                        iter: 0,  defaultValue: '5',           currentValue: process.env.CLAUDE_FLOW_ROUTER_KNN_K ?? '',      isOverride: !!process.env.CLAUDE_FLOW_ROUTER_KNN_K,                        effect: 'k for the k-NN backend when KRR is not loadable.' },
-      { name: 'CLAUDE_FLOW_ROUTER_SEED_CORPUS',                  iter: 0,  defaultValue: 'bundled seed-rows.json', currentValue: process.env.CLAUDE_FLOW_ROUTER_SEED_CORPUS ?? '', isOverride: !!process.env.CLAUDE_FLOW_ROUTER_SEED_CORPUS, effect: 'Override the DRACO seed corpus path.' },
+      { name: 'RUFFLO_ROUTER_KNN_K',                        iter: 0,  defaultValue: '5',           currentValue: process.env.RUFFLO_ROUTER_KNN_K ?? '',      isOverride: !!process.env.RUFFLO_ROUTER_KNN_K,                        effect: 'k for the k-NN backend when KRR is not loadable.' },
+      { name: 'RUFFLO_ROUTER_SEED_CORPUS',                  iter: 0,  defaultValue: 'bundled seed-rows.json', currentValue: process.env.RUFFLO_ROUTER_SEED_CORPUS ?? '', isOverride: !!process.env.RUFFLO_ROUTER_SEED_CORPUS, effect: 'Override the DRACO seed corpus path.' },
       // Calibration (iter 22-25)
-      { name: 'CLAUDE_FLOW_ROUTER_CALIBRATE',                    iter: 24, defaultValue: 'unset (default ON)', currentValue: process.env.CLAUDE_FLOW_ROUTER_CALIBRATE ?? '', isOverride: !!process.env.CLAUDE_FLOW_ROUTER_CALIBRATE, effect: 'Isotonic calibration of KRR predictions. =0 opts out (recovers raw KRR). Default-on since iter 24 (OOS validated).' },
-      { name: 'CLAUDE_FLOW_ROUTER_CALIBRATOR_PATH',              iter: 22, defaultValue: 'bundled seed-router.calibrator.json', currentValue: process.env.CLAUDE_FLOW_ROUTER_CALIBRATOR_PATH ?? '', isOverride: !!process.env.CLAUDE_FLOW_ROUTER_CALIBRATOR_PATH, effect: 'Override the unified calibrator path. Per-tier files (low/med/high) load from the same dir.' },
+      { name: 'RUFFLO_ROUTER_CALIBRATE',                    iter: 24, defaultValue: 'unset (default ON)', currentValue: process.env.RUFFLO_ROUTER_CALIBRATE ?? '', isOverride: !!process.env.RUFFLO_ROUTER_CALIBRATE, effect: 'Isotonic calibration of KRR predictions. =0 opts out (recovers raw KRR). Default-on since iter 24 (OOS validated).' },
+      { name: 'RUFFLO_ROUTER_CALIBRATOR_PATH',              iter: 22, defaultValue: 'bundled seed-router.calibrator.json', currentValue: process.env.RUFFLO_ROUTER_CALIBRATOR_PATH ?? '', isOverride: !!process.env.RUFFLO_ROUTER_CALIBRATOR_PATH, effect: 'Override the unified calibrator path. Per-tier files (low/med/high) load from the same dir.' },
       // Cost ceiling (iter 29)
-      { name: 'CLAUDE_FLOW_ROUTER_COST_CEILING_USD_PER_MTOK',    iter: 29, defaultValue: '0 (disabled)', currentValue: process.env.CLAUDE_FLOW_ROUTER_COST_CEILING_USD_PER_MTOK ?? '', isOverride: !!process.env.CLAUDE_FLOW_ROUTER_COST_CEILING_USD_PER_MTOK, effect: 'Orthogonal selector mode: pick BEST quality among candidates ≤ ceiling $/Mtok blended.' },
+      { name: 'RUFFLO_ROUTER_COST_CEILING_USD_PER_MTOK',    iter: 29, defaultValue: '0 (disabled)', currentValue: process.env.RUFFLO_ROUTER_COST_CEILING_USD_PER_MTOK ?? '', isOverride: !!process.env.RUFFLO_ROUTER_COST_CEILING_USD_PER_MTOK, effect: 'Orthogonal selector mode: pick BEST quality among candidates ≤ ceiling $/Mtok blended.' },
       // A/B mode (iter 5/37)
-      { name: 'CLAUDE_FLOW_ROUTER_AB',                           iter: 5,  defaultValue: 'unset (0)',   currentValue: process.env.CLAUDE_FLOW_ROUTER_AB ?? '',         isOverride: !!process.env.CLAUDE_FLOW_ROUTER_AB,                           effect: 'Legacy all-on A/B mode. Records bandit_pick + hybrid_pick on every decision.' },
-      { name: 'CLAUDE_FLOW_ROUTER_AB_SAMPLE_RATE',               iter: 37, defaultValue: '0 (disabled)', currentValue: process.env.CLAUDE_FLOW_ROUTER_AB_SAMPLE_RATE ?? '', isOverride: !!process.env.CLAUDE_FLOW_ROUTER_AB_SAMPLE_RATE, effect: 'Sampled A/B mode. 0..1 fraction of decisions to A/B (deterministic by task_hash). Overrides legacy AB=1.' },
+      { name: 'RUFFLO_ROUTER_AB',                           iter: 5,  defaultValue: 'unset (0)',   currentValue: process.env.RUFFLO_ROUTER_AB ?? '',         isOverride: !!process.env.RUFFLO_ROUTER_AB,                           effect: 'Legacy all-on A/B mode. Records bandit_pick + hybrid_pick on every decision.' },
+      { name: 'RUFFLO_ROUTER_AB_SAMPLE_RATE',               iter: 37, defaultValue: '0 (disabled)', currentValue: process.env.RUFFLO_ROUTER_AB_SAMPLE_RATE ?? '', isOverride: !!process.env.RUFFLO_ROUTER_AB_SAMPLE_RATE, effect: 'Sampled A/B mode. 0..1 fraction of decisions to A/B (deterministic by task_hash). Overrides legacy AB=1.' },
       // Ensemble uncertainty (iter 44)
-      { name: 'CLAUDE_FLOW_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD', iter: 44, defaultValue: '0 (disabled)', currentValue: process.env.CLAUDE_FLOW_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD ?? '', isOverride: !!process.env.CLAUDE_FLOW_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD, effect: 'When > 0: if |unified_q - specialist_q| > threshold for picked model, fall back to bandit.' },
+      { name: 'RUFFLO_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD', iter: 44, defaultValue: '0 (disabled)', currentValue: process.env.RUFFLO_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD ?? '', isOverride: !!process.env.RUFFLO_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD, effect: 'When > 0: if |unified_q - specialist_q| > threshold for picked model, fall back to bandit.' },
       // Bandit warmup (iter 52/53)
-      { name: 'CLAUDE_FLOW_ROUTER_BANDIT_WARMUP_RANGE',          iter: 52, defaultValue: '8',           currentValue: process.env.CLAUDE_FLOW_ROUTER_BANDIT_WARMUP_RANGE ?? '', isOverride: !!process.env.CLAUDE_FLOW_ROUTER_BANDIT_WARMUP_RANGE, effect: 'Continuous warmup denominator. Smaller = bandit ramps faster; larger = more conservative.' },
-      { name: 'CLAUDE_FLOW_ROUTER_BANDIT_FULL_INFLUENCE',        iter: 53, defaultValue: 'unset (0)',   currentValue: process.env.CLAUDE_FLOW_ROUTER_BANDIT_FULL_INFLUENCE ?? '', isOverride: !!process.env.CLAUDE_FLOW_ROUTER_BANDIT_FULL_INFLUENCE, effect: 'Gate. =1 uses asymptotic curve (samples-2)/(samples+WARMUP) — bandit dominates at scale.' },
-      { name: 'CLAUDE_FLOW_ROUTER_BANDIT_SHRINKAGE_LAMBDA',      iter: 57, defaultValue: '4',           currentValue: process.env.CLAUDE_FLOW_ROUTER_BANDIT_SHRINKAGE_LAMBDA ?? '', isOverride: !!process.env.CLAUDE_FLOW_ROUTER_BANDIT_SHRINKAGE_LAMBDA, effect: 'Cross-bucket shrinkage strength. λ=0 disables; higher λ = more bias toward marginal anchor for cold cells.' },
+      { name: 'RUFFLO_ROUTER_BANDIT_WARMUP_RANGE',          iter: 52, defaultValue: '8',           currentValue: process.env.RUFFLO_ROUTER_BANDIT_WARMUP_RANGE ?? '', isOverride: !!process.env.RUFFLO_ROUTER_BANDIT_WARMUP_RANGE, effect: 'Continuous warmup denominator. Smaller = bandit ramps faster; larger = more conservative.' },
+      { name: 'RUFFLO_ROUTER_BANDIT_FULL_INFLUENCE',        iter: 53, defaultValue: 'unset (0)',   currentValue: process.env.RUFFLO_ROUTER_BANDIT_FULL_INFLUENCE ?? '', isOverride: !!process.env.RUFFLO_ROUTER_BANDIT_FULL_INFLUENCE, effect: 'Gate. =1 uses asymptotic curve (samples-2)/(samples+WARMUP) — bandit dominates at scale.' },
+      { name: 'RUFFLO_ROUTER_BANDIT_SHRINKAGE_LAMBDA',      iter: 57, defaultValue: '4',           currentValue: process.env.RUFFLO_ROUTER_BANDIT_SHRINKAGE_LAMBDA ?? '', isOverride: !!process.env.RUFFLO_ROUTER_BANDIT_SHRINKAGE_LAMBDA, effect: 'Cross-bucket shrinkage strength. λ=0 disables; higher λ = more bias toward marginal anchor for cold cells.' },
     ];
 
     const visible = onlyOverrides ? rows.filter(r => r.isOverride) : rows;
@@ -3318,7 +3318,7 @@ const routerConfigCommand: Command = {
 // Iter 29 added quality-best-under-budget; iter 30 added `decide` for the
 // default cost-optimal mode. This subcommand runs BOTH on the same task
 // so operators can see which mode is right for their workload BEFORE
-// flipping CLAUDE_FLOW_ROUTER_COST_CEILING_USD_PER_MTOK on for production.
+// flipping RUFFLO_ROUTER_COST_CEILING_USD_PER_MTOK on for production.
 const routerCompareModesCommand: Command = {
   name: 'compare-modes',
   description: 'Compare selector modes side-by-side for a hypothetical task (cost-optimal vs cost-ceiling) — ADR-149 iter 55',
@@ -3355,18 +3355,18 @@ const routerCompareModesCommand: Command = {
     }
 
     // Mode 1: cost-optimal (default — no ceiling)
-    process.env.CLAUDE_FLOW_ROUTER_NEURAL = '1';
-    delete process.env.CLAUDE_FLOW_ROUTER_COST_CEILING_USD_PER_MTOK;
+    process.env.RUFFLO_ROUTER_NEURAL = '1';
+    delete process.env.RUFFLO_ROUTER_COST_CEILING_USD_PER_MTOK;
     __resetNeuralRouterForTests();
     const costOptimal = await tryCostOptimalRoute(embedding, { complexityBucket: bucket });
 
     // Mode 2: cost-ceiling
-    process.env.CLAUDE_FLOW_ROUTER_COST_CEILING_USD_PER_MTOK = String(ceiling);
+    process.env.RUFFLO_ROUTER_COST_CEILING_USD_PER_MTOK = String(ceiling);
     __resetNeuralRouterForTests();
     const costCeiling = await tryCostOptimalRoute(embedding, { complexityBucket: bucket });
 
     // Clean up
-    delete process.env.CLAUDE_FLOW_ROUTER_COST_CEILING_USD_PER_MTOK;
+    delete process.env.RUFFLO_ROUTER_COST_CEILING_USD_PER_MTOK;
     __resetNeuralRouterForTests();
 
     const payload = {
@@ -3474,7 +3474,7 @@ const routerStatsSummaryCommand: Command = {
     const stats = getModelRouterStats();
 
     // 2. Trajectory existence + basic counts
-    const trajectoryPath = process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH
+    const trajectoryPath = process.env.RUFFLO_ROUTER_TRAJECTORY_PATH
       ?? path.resolve(process.cwd(), '.swarm', 'model-router-trajectories.jsonl');
     let trajectory: {
       exists: boolean; rows: number; decisions: number; outcomes: number;
@@ -3678,7 +3678,7 @@ const routerBanditStateCommand: Command = {
 
     if (!fs.existsSync(statePath)) {
       const msg = `Bandit state file not found at ${statePath}`;
-      if (fmt === 'json') output.writeln(JSON.stringify({ error: msg, hint: 'State is created on first routing decision. Run any agent_spawn flow with CLAUDE_FLOW_ROUTER_NEURAL=1.' }, null, 2));
+      if (fmt === 'json') output.writeln(JSON.stringify({ error: msg, hint: 'State is created on first routing decision. Run any agent_spawn flow with RUFFLO_ROUTER_NEURAL=1.' }, null, 2));
       else {
         output.printError(msg);
         output.writeln(output.dim('  State is created on first routing decision. Run any agent_spawn flow.'));
@@ -3805,20 +3805,20 @@ const routerAbStatsCommand: Command = {
   name: 'ab-stats',
   description: 'Aggregate A/B (bandit-vs-hybrid) disagreement from trajectory ab_pair rows (ADR-149 iter 38)',
   options: [
-    { name: 'in', short: 'i', type: 'string', description: 'Trajectory JSONL path (default: $CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH or .swarm/...)' },
+    { name: 'in', short: 'i', type: 'string', description: 'Trajectory JSONL path (default: $RUFFLO_ROUTER_TRAJECTORY_PATH or .swarm/...)' },
     { name: 'since', short: 's', type: 'string', description: 'Time window suffix: 1h, 24h, 7d, 30d' },
     { name: 'format', short: 'f', type: 'string', description: 'Output format: table, json', default: 'table' },
   ],
   examples: [
     { command: 'rufflo neural router ab-stats', description: 'All A/B comparisons recorded so far' },
     { command: 'rufflo neural router ab-stats --since 7d --format json', description: 'Last 7 days, pipe-friendly' },
-    { command: 'CLAUDE_FLOW_ROUTER_AB_SAMPLE_RATE=0.05 ... && rufflo neural router ab-stats', description: 'After running with iter 37 sampling on' },
+    { command: 'RUFFLO_ROUTER_AB_SAMPLE_RATE=0.05 ... && rufflo neural router ab-stats', description: 'After running with iter 37 sampling on' },
   ],
   action: async (ctx: CommandContext): Promise<CommandResult> => {
     const fs = await import('node:fs');
     const path = await import('node:path');
     const inPath = (ctx.flags.in as string | undefined)
-      ?? process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH
+      ?? process.env.RUFFLO_ROUTER_TRAJECTORY_PATH
       ?? path.resolve(process.cwd(), '.swarm', 'model-router-trajectories.jsonl');
     const since = ctx.flags.since as string | undefined;
     const fmt = (ctx.flags.format as string) || 'table';
@@ -3828,7 +3828,7 @@ const routerAbStatsCommand: Command = {
       if (fmt === 'json') output.writeln(JSON.stringify({ error: msg }, null, 2));
       else {
         output.printError(msg);
-        output.writeln(output.dim('  Set CLAUDE_FLOW_ROUTER_TRAJECTORY=1 + CLAUDE_FLOW_ROUTER_AB_SAMPLE_RATE=0.05 to start collecting ab_pair data.'));
+        output.writeln(output.dim('  Set RUFFLO_ROUTER_TRAJECTORY=1 + RUFFLO_ROUTER_AB_SAMPLE_RATE=0.05 to start collecting ab_pair data.'));
       }
       return { success: false, exitCode: 1 };
     }
@@ -3931,8 +3931,8 @@ const routerAbStatsCommand: Command = {
     output.writeln('');
     if (abRows.length === 0) {
       output.writeln(output.dim('  No ab_pair rows found. Enable iter 37 sampling:'));
-      output.writeln(output.dim('    export CLAUDE_FLOW_ROUTER_TRAJECTORY=1'));
-      output.writeln(output.dim('    export CLAUDE_FLOW_ROUTER_AB_SAMPLE_RATE=0.05  # 5% sampling'));
+      output.writeln(output.dim('    export RUFFLO_ROUTER_TRAJECTORY=1'));
+      output.writeln(output.dim('    export RUFFLO_ROUTER_AB_SAMPLE_RATE=0.05  # 5% sampling'));
       output.writeln('');
       return { success: true, data: payload };
     }
@@ -4027,7 +4027,7 @@ const routerCostProjectionCommand: Command = {
   name: 'cost-projection',
   description: 'Project monthly/quarterly cost from measured rate (ADR-149 iter 41)',
   options: [
-    { name: 'in', short: 'i', type: 'string', description: 'Trajectory JSONL path (default: $CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH or .swarm/...)' },
+    { name: 'in', short: 'i', type: 'string', description: 'Trajectory JSONL path (default: $RUFFLO_ROUTER_TRAJECTORY_PATH or .swarm/...)' },
     { name: 'window', short: 'w', type: 'string', description: 'Measurement window to extrapolate FROM (default 7d). Format: 1h, 24h, 7d, 30d' },
     { name: 'horizons', type: 'string', description: 'Projection horizons (CSV of duration suffixes). Default: 7d,30d,90d,365d' },
     { name: 'format', short: 'f', type: 'string', description: 'Output format: table, json', default: 'table' },
@@ -4043,7 +4043,7 @@ const routerCostProjectionCommand: Command = {
     const { MODEL_PRICES } = await import('../ruvector/model-prices.js');
 
     const inPath = (ctx.flags.in as string | undefined)
-      ?? process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH
+      ?? process.env.RUFFLO_ROUTER_TRAJECTORY_PATH
       ?? path.resolve(process.cwd(), '.swarm', 'model-router-trajectories.jsonl');
     const windowSpec = (ctx.flags.window as string | undefined) ?? '7d';
     const horizonSpecs = ((ctx.flags.horizons as string | undefined) ?? '7d,30d,90d,365d').split(',').map(s => s.trim());
@@ -4123,7 +4123,7 @@ const routerCostProjectionCommand: Command = {
 
     if (pairCount === 0) {
       const msg = `No paired cost-bearing rows in the last ${windowSpec}. Cannot project.`;
-      const payload = { error: msg, windowSpec, hint: 'Enable CLAUDE_FLOW_ROUTER_TRAJECTORY=1 and run some routed agent calls first.' };
+      const payload = { error: msg, windowSpec, hint: 'Enable RUFFLO_ROUTER_TRAJECTORY=1 and run some routed agent calls first.' };
       if (fmt === 'json') output.writeln(JSON.stringify(payload, null, 2));
       else {
         output.printError(msg);
@@ -4222,7 +4222,7 @@ const routerCommand: Command = {
     { command: 'rufflo neural router status', description: 'Show router state, gate, counters' },
     { command: 'rufflo neural router models', description: 'List candidate registry with measured stats (ADR-149)' },
     { command: 'rufflo neural router prices', description: 'Show the canonical $/Mtok price table (iter 43)' },
-    { command: 'rufflo neural router config', description: 'Inventory all CLAUDE_FLOW_ROUTER_* env vars (iter 54)' },
+    { command: 'rufflo neural router config', description: 'Inventory all RUFFLO_ROUTER_* env vars (iter 54)' },
     { command: 'rufflo neural router train -o ./router.krr.json', description: 'Train a KRR artifact' },
     { command: 'rufflo neural router train-from-trajectories -w production-rows.json', description: 'Pair production JSONL into a training corpus (iter 18)' },
     { command: 'rufflo neural router decide "fix typo in cache.ts"', description: 'Inspect decision for a hypothetical task (iter 30)' },

@@ -141,4 +141,4 @@ if (ARGS.perTier) {
 }
 
 console.log('');
-console.log('[calibrate] Default ON since iter 24 — opt out with: export CLAUDE_FLOW_ROUTER_CALIBRATE=0');
+console.log('[calibrate] Default ON since iter 24 — opt out with: export RUFFLO_ROUTER_CALIBRATE=0');

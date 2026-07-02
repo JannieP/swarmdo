@@ -125,8 +125,8 @@ RUN ln -sf /usr/local/lib/node_modules/rufflo/bin/rufflo.js /usr/local/bin/ruffl
 # Production environment
 ENV NODE_ENV=production \
     RUFLO_HOME=/home/rufflo/.rufflo \
-    CLAUDE_FLOW_MEMORY_PATH=/home/rufflo/data/memory \
-    CLAUDE_FLOW_LOG_LEVEL=info
+    RUFFLO_MEMORY_PATH=/home/rufflo/data/memory \
+    RUFFLO_LOG_LEVEL=info
 
 # Switch to non-root user
 USER rufflo

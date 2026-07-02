@@ -43,7 +43,7 @@ Skip this skill when flat fan-out (`Task` × N in one message) suffices — nest
 |---|---|
 | Anthropic API | 5 levels (announced 2026-06-09) |
 | Rufflo default (`pre-task` hook) | 4 levels — one-level guard band, configurable in `rufflo.config.json` |
-| Strict-mode env var | `CLAUDE_FLOW_STRICT_NESTING=true` to enforce the rufflo cap |
+| Strict-mode env var | `RUFFLO_STRICT_NESTING=true` to enforce the rufflo cap |
 
 The hook returns a typed `NESTING_DEPTH_EXCEEDED` error at the cap, with the full chain in the payload so the parent can decide to summarize, hand off, or abort.
 

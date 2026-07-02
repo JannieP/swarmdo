@@ -384,13 +384,13 @@ class StatuslineGenerator {
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `CLAUDE_FLOW_HOOK_TIMEOUT` | Hook execution timeout (ms) | `5000` |
-| `CLAUDE_FLOW_REASONINGBANK_ENABLED` | Enable ReasoningBank | `true` |
-| `CLAUDE_FLOW_HOOKS_NAMESPACE` | Learning namespace | `hooks-learning` |
-| `CLAUDE_FLOW_HOOKS_LOG_LEVEL` | Logging level | `info` |
-| `CLAUDE_FLOW_SHOW_HOOKS_METRICS` | Show hooks in statusline | `true` |
-| `CLAUDE_FLOW_SHOW_SWARM_ACTIVITY` | Show swarm in statusline | `true` |
-| `CLAUDE_FLOW_SHOW_PERFORMANCE` | Show performance targets | `true` |
+| `RUFFLO_HOOK_TIMEOUT` | Hook execution timeout (ms) | `5000` |
+| `RUFFLO_REASONINGBANK_ENABLED` | Enable ReasoningBank | `true` |
+| `RUFFLO_HOOKS_NAMESPACE` | Learning namespace | `hooks-learning` |
+| `RUFFLO_HOOKS_LOG_LEVEL` | Logging level | `info` |
+| `RUFFLO_SHOW_HOOKS_METRICS` | Show hooks in statusline | `true` |
+| `RUFFLO_SHOW_SWARM_ACTIVITY` | Show swarm in statusline | `true` |
+| `RUFFLO_SHOW_PERFORMANCE` | Show performance targets | `true` |
 
 ## Integration with Claude Code
 

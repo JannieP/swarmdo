@@ -26,7 +26,7 @@
  *
  * Pattern: mirrors v3/@rufflo/guidance/scripts/bench-phase-1.mjs.
  * Standalone — does NOT require the test runner, only Node ≥20 + the WASM
- * package (@ruvector/rvagent-wasm must be installed for realistic numbers;
+ * package (@rufvector/rvagent-wasm must be installed for realistic numbers;
  * the bench gracefully degrades to timing the WASM-unavailable error path).
  */
 
@@ -309,4 +309,4 @@ for (const r of results) {
 
 console.log('');
 console.log('Note: ms values measure in-process overhead including WASM unavailable error path.');
-console.log('When @ruvector/rvagent-wasm is not installed, timings reflect the import error cost only.');
+console.log('When @rufvector/rvagent-wasm is not installed, timings reflect the import error cost only.');

@@ -336,14 +336,14 @@ async function getSemanticRouter() {
   }
   semanticRouterInitialized = true;
 
-  // STEP 1: Try native VectorDb from @ruvector/router (HNSW-backed)
+  // STEP 1: Try native VectorDb from @rufvector/router (HNSW-backed)
   // Note: Native VectorDb uses a persistent database file which can have lock issues
   // in concurrent environments. We try it first but fall back gracefully to pure JS.
   try {
     // Use createRequire for ESM compatibility with native modules
     const { createRequire } = await import('module');
     const require = createRequire(import.meta.url);
-    const router = require('@ruvector/router');
+    const router = require('@rufvector/router');
 
     if (router.VectorDb && router.DistanceMetric) {
       // Try to create VectorDb - may fail with lock error in concurrent envs
@@ -2389,14 +2389,14 @@ export const hooksIntelligence: MCPTool = {
           try {
             const { getIntelligenceStats } = await import('../memory/intelligence.js');
             const s = getIntelligenceStats();
-            return { status: s._ruvllmBackend || 'unavailable', trajectories: s._ruvllmTrajectories || 0, note: s._ruvllmBackend === 'active' ? 'SonaCoordinator forwarding trajectories' : '@ruvector/ruvllm not loaded' };
+            return { status: s._ruvllmBackend || 'unavailable', trajectories: s._ruvllmTrajectories || 0, note: s._ruvllmBackend === 'active' ? 'SonaCoordinator forwarding trajectories' : '@rufvector/rufllm not loaded' };
           } catch { return { status: 'unavailable', trajectories: 0, note: 'Not initialized' }; }
         })(),
         contrastiveTrainer: await (async () => {
           try {
             const { getSONAStats } = await import('../memory/sona-optimizer.js');
             const s = await getSONAStats();
-            return { status: s._contrastiveTrainer !== 'unavailable' ? 'active' : 'unavailable', details: s._contrastiveTrainer, note: s._contrastiveTrainer !== 'unavailable' ? 'Agent embedding learning active' : '@ruvector/ruvllm not loaded' };
+            return { status: s._contrastiveTrainer !== 'unavailable' ? 'active' : 'unavailable', details: s._contrastiveTrainer, note: s._contrastiveTrainer !== 'unavailable' ? 'Agent embedding learning active' : '@rufvector/rufllm not loaded' };
           } catch { return { status: 'unavailable', details: null, note: 'Not initialized' }; }
         })(),
         trainingPipeline: await (async () => {
@@ -2410,7 +2410,7 @@ export const hooksIntelligence: MCPTool = {
           try {
             const { getGraphStats } = await import('../ruvector/graph-backend.js');
             const gs = await getGraphStats();
-            return { status: gs.backend, totalNodes: gs.totalNodes, totalEdges: gs.totalEdges, avgDegree: gs.avgDegree, note: gs.backend === 'graph-node' ? 'Native Rust graph with hyperedges and k-hop queries' : '@ruvector/graph-node not loaded' };
+            return { status: gs.backend, totalNodes: gs.totalNodes, totalEdges: gs.totalEdges, avgDegree: gs.avgDegree, note: gs.backend === 'graph-node' ? 'Native Rust graph with hyperedges and k-hop queries' : '@rufvector/graph-node not loaded' };
           } catch { return { status: 'unavailable', totalNodes: 0, totalEdges: 0, avgDegree: 0, note: 'Not initialized' }; }
         })(),
       },
@@ -3291,7 +3291,7 @@ export const hooksIntelligenceStats: MCPTool = {
     try {
       const fs = await import('node:fs');
       const pathMod = await import('node:path');
-      const trajectoryPath = process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH
+      const trajectoryPath = process.env.RUFFLO_ROUTER_TRAJECTORY_PATH
         ?? pathMod.resolve(process.cwd(), '.swarm', 'model-router-trajectories.jsonl');
       if (fs.existsSync(trajectoryPath)) {
         const { MODEL_PRICES } = await import('../ruvector/model-prices.js');
@@ -3359,7 +3359,7 @@ export const hooksIntelligenceStats: MCPTool = {
     try {
       const fs = await import('node:fs');
       const pathMod = await import('node:path');
-      const trajectoryPath = process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH
+      const trajectoryPath = process.env.RUFFLO_ROUTER_TRAJECTORY_PATH
         ?? pathMod.resolve(process.cwd(), '.swarm', 'model-router-trajectories.jsonl');
       if (fs.existsSync(trajectoryPath)) {
         const cutoffMs = Date.now() - 24 * 3600_000;
@@ -3815,7 +3815,7 @@ export const hooksIntelligenceAttention: MCPTool = {
         implementation,
         _embeddingSource: embeddingSource,
         _stub: implementation === 'none',
-        _note: implementation === 'none' ? 'No attention backend available. Install @ruvector/attention for real computation.' : undefined,
+        _note: implementation === 'none' ? 'No attention backend available. Install @rufvector/attention for real computation.' : undefined,
         ...(embeddingSource === 'hash-fallback' && implementation !== 'none'
           ? { _embeddingNote: 'Query embeddings are hash-based (not semantic). Install @rufflo/embeddings for real ONNX embeddings.' }
           : {}),

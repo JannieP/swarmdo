@@ -63,7 +63,7 @@ cat ~/.rufflo/config.json > v2-config-backup.json
 npx agentic-flow --list > v2-agents-list.txt
 
 # Export environment variables
-env | grep CLAUDE_FLOW > v2-env-backup.txt
+env | grep RUFFLO > v2-env-backup.txt
 ```
 
 ### 3. System Requirements Check
@@ -276,31 +276,31 @@ npx agentic-flow@3.0.0-alpha.1 init --v3
 # Follow new schema from v3/config/schema.json
 
 # 3. Set environment variables
-export CLAUDE_FLOW_VERSION=3
-export CLAUDE_FLOW_MODE=production
-export CLAUDE_FLOW_MEMORY_BACKEND=agentdb
+export RUFFLO_VERSION=3
+export RUFFLO_MODE=production
+export RUFFLO_MEMORY_BACKEND=agentdb
 ```
 
 #### Windows Configuration
 ```powershell
 # PowerShell
-setx CLAUDE_FLOW_VERSION "3"
-setx CLAUDE_FLOW_MODE "production"
-setx CLAUDE_FLOW_MEMORY_BACKEND "agentdb"
+setx RUFFLO_VERSION "3"
+setx RUFFLO_MODE "production"
+setx RUFFLO_MEMORY_BACKEND "agentdb"
 
 # Update config path
-$env:CLAUDE_FLOW_CONFIG = "$env:APPDATA\rufflo\config.json"
+$env:RUFFLO_CONFIG = "$env:APPDATA\rufflo\config.json"
 ```
 
 #### macOS/Linux Configuration
 ```bash
 # Bash/Zsh
-export CLAUDE_FLOW_VERSION=3
-export CLAUDE_FLOW_MODE=production
-export CLAUDE_FLOW_MEMORY_BACKEND=agentdb
+export RUFFLO_VERSION=3
+export RUFFLO_MODE=production
+export RUFFLO_MEMORY_BACKEND=agentdb
 
 # Update config path
-export CLAUDE_FLOW_CONFIG="$HOME/.rufflo/config.json"
+export RUFFLO_CONFIG="$HOME/.rufflo/config.json"
 
 # Add to ~/.bashrc or ~/.zshrc for persistence
 ```
@@ -778,38 +778,38 @@ console.log(`Peak usage: ${profile.peakMB}MB`);
 
 #### v2 Environment Variables
 ```bash
-CLAUDE_FLOW_VERSION=2
-CLAUDE_FLOW_MEMORY_PATH=./memory
-CLAUDE_FLOW_COORDINATOR=hierarchical
+RUFFLO_VERSION=2
+RUFFLO_MEMORY_PATH=./memory
+RUFFLO_COORDINATOR=hierarchical
 ```
 
 #### v3 Environment Variables
 ```bash
 # Core
-CLAUDE_FLOW_VERSION=3
-CLAUDE_FLOW_MODE=production
-CLAUDE_FLOW_CONFIG=~/.rufflo/config.json
+RUFFLO_VERSION=3
+RUFFLO_MODE=production
+RUFFLO_CONFIG=~/.rufflo/config.json
 
 # Memory
-CLAUDE_FLOW_MEMORY_BACKEND=agentdb
-CLAUDE_FLOW_MEMORY_PATH=./data
-CLAUDE_FLOW_AGENTDB_HNSW=true
+RUFFLO_MEMORY_BACKEND=agentdb
+RUFFLO_MEMORY_PATH=./data
+RUFFLO_AGENTDB_HNSW=true
 
 # Security
-CLAUDE_FLOW_SECURITY_STRICT=true
-CLAUDE_FLOW_SECURITY_MODE=strict
+RUFFLO_SECURITY_STRICT=true
+RUFFLO_SECURITY_MODE=strict
 
 # Performance
-CLAUDE_FLOW_FLASH_ATTENTION=true
-CLAUDE_FLOW_SONA_LEARNING=true
+RUFFLO_FLASH_ATTENTION=true
+RUFFLO_SONA_LEARNING=true
 
 # Platform-specific (Windows)
 APPDATA=C:\Users\YourName\AppData\Roaming
-CLAUDE_FLOW_CONFIG=%APPDATA%\rufflo\config.json
+RUFFLO_CONFIG=%APPDATA%\rufflo\config.json
 
 # Platform-specific (macOS/Linux)
 HOME=/home/yourname
-CLAUDE_FLOW_CONFIG=$HOME/.rufflo/config.json
+RUFFLO_CONFIG=$HOME/.rufflo/config.json
 ```
 
 ---
@@ -1216,7 +1216,7 @@ npx @rufflo/security configure \
 npx @rufflo/security check-paths --fix
 
 # 4. Re-run with strict mode disabled (temporary)
-export CLAUDE_FLOW_SECURITY_STRICT=false
+export RUFFLO_SECURITY_STRICT=false
 ```
 
 ### Issue 4: Vitest Test Failures
@@ -1359,7 +1359,7 @@ If you encounter issues not covered in this guide:
 
 3. **Try safe mode**:
    ```bash
-   export CLAUDE_FLOW_SAFE_MODE=true
+   export RUFFLO_SAFE_MODE=true
    npx agentic-flow --agent coder --task "Test safe mode"
    ```
 

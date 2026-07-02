@@ -84,11 +84,11 @@ describe('#2250 — escalation does not override learned opus suppression', () =
     expect(['haiku', 'sonnet', 'opus']).toContain(r.model);
   }, 10_000);
 
-  it('respects CLAUDE_FLOW_MAX_UNCERTAINTY env override', async () => {
+  it('respects RUFFLO_MAX_UNCERTAINTY env override', async () => {
     // With maxUncertainty=0.99 the escalation gate effectively never fires,
     // so the selected model is always the Thompson-sampled winner unmodified.
-    const old = process.env.CLAUDE_FLOW_MAX_UNCERTAINTY;
-    process.env.CLAUDE_FLOW_MAX_UNCERTAINTY = '0.99';
+    const old = process.env.RUFFLO_MAX_UNCERTAINTY;
+    process.env.RUFFLO_MAX_UNCERTAINTY = '0.99';
     try {
       // The env is read at module load via `envMaxUncertainty()` in
       // DEFAULT_CONFIG. Pass it through config explicitly so the test
@@ -97,8 +97,8 @@ describe('#2250 — escalation does not override learned opus suppression', () =
       const r = await router.route('simple low-complexity task');
       expect(['haiku', 'sonnet', 'opus']).toContain(r.model);
     } finally {
-      if (old === undefined) delete process.env.CLAUDE_FLOW_MAX_UNCERTAINTY;
-      else process.env.CLAUDE_FLOW_MAX_UNCERTAINTY = old;
+      if (old === undefined) delete process.env.RUFFLO_MAX_UNCERTAINTY;
+      else process.env.RUFFLO_MAX_UNCERTAINTY = old;
     }
   });
 });

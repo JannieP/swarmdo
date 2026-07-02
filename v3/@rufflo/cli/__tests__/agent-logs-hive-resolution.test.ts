@@ -28,8 +28,8 @@ describe('#1916 — agent_logs registered + hive-worker resolution', () => {
 
   beforeEach(() => {
     dir = mkdtempSync(join(tmpdir(), 'rufflo-1916-'));
-    prevCwd = process.env.CLAUDE_FLOW_CWD;
-    process.env.CLAUDE_FLOW_CWD = dir;
+    prevCwd = process.env.RUFFLO_CWD;
+    process.env.RUFFLO_CWD = dir;
     // hive-mind_spawn writes here:
     mkdirSync(join(dir, '.rufflo'), { recursive: true });
     writeFileSync(
@@ -52,8 +52,8 @@ describe('#1916 — agent_logs registered + hive-worker resolution', () => {
   });
 
   afterEach(() => {
-    if (prevCwd === undefined) delete process.env.CLAUDE_FLOW_CWD;
-    else process.env.CLAUDE_FLOW_CWD = prevCwd;
+    if (prevCwd === undefined) delete process.env.RUFFLO_CWD;
+    else process.env.RUFFLO_CWD = prevCwd;
     rmSync(dir, { recursive: true, force: true });
   });
 

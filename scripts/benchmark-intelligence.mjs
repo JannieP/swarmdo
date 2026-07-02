@@ -350,7 +350,7 @@ async function benchSona() {
   out.wasmAvailable = available;
   if (!available) {
     out.adaptMsPerCall = null;
-    out.note = 'not measured: @ruvector/ruvllm-wasm not available on this machine';
+    out.note = 'not measured: @rufvector/rufllm-wasm not available on this machine';
     log('  SONA: WASM not available');
     return out;
   }

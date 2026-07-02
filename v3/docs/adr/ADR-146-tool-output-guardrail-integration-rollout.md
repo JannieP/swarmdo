@@ -61,7 +61,7 @@ A reject finding here returns the entry with `content: <removed-by-guardrail>` a
 
 **Constraint**: Raft must not deadlock on a rejected payload. If a proposal triggers a `reject`, the proposer's commit step substitutes a `proposalRejected` no-op with the same term/index, so the log advances and other nodes don't time out waiting for the original. The original proposal hash is recorded in the rejection telemetry for post-incident analysis.
 
-P4 is the highest-risk phase. It ships behind `CLAUDE_FLOW_STRICT_CONSENSUS_GUARDRAIL=true` (default off) until at least two weeks of P2/P3 production telemetry are available to tune the swarm-layer pattern set.
+P4 is the highest-risk phase. It ships behind `RUFFLO_STRICT_CONSENSUS_GUARDRAIL=true` (default off) until at least two weeks of P2/P3 production telemetry are available to tune the swarm-layer pattern set.
 
 ### P5 — Per-tool policy overrides + structured telemetry
 

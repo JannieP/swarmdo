@@ -28,8 +28,8 @@ import { mkdir, writeFile, rm } from 'fs/promises';
 import { join } from 'path';
 import { tmpdir } from 'os';
 
-// Mock the @ruvector/wasm module
-vi.mock('@ruvector/wasm', () => ({
+// Mock the @rufvector/wasm module
+vi.mock('@rufvector/wasm', () => ({
   minCut: vi.fn(() => null),
   louvain: vi.fn(() => null),
 }));

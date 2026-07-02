@@ -16,7 +16,7 @@ export default defineConfig({
         // module resolution at transform time.
         if (source.startsWith('agentic-flow')) return { id: source, external: true };
         if (source.startsWith('agentdb')) return { id: source, external: true };
-        if (source.startsWith('@ruvector/')) return { id: source, external: true };
+        if (source.startsWith('@rufvector/')) return { id: source, external: true };
         if (source.startsWith('@huggingface/transformers')) return { id: source, external: true };
         if (source.startsWith('@xenova/transformers')) return { id: source, external: true };
         if (source.startsWith('@noble/ed25519')) return { id: source, external: true };

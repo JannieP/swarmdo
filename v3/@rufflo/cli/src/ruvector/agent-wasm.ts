@@ -1,7 +1,7 @@
 /**
  * RuVector Agent WASM Integration
  *
- * Wraps @ruvector/rvagent-wasm for sandboxed AI agent execution.
+ * Wraps @rufvector/rvagent-wasm for sandboxed AI agent execution.
  * Provides WasmAgent lifecycle, gallery templates, RVF container building,
  * and MCP server bridge — all running in WASM without OS access.
  *
@@ -62,11 +62,11 @@ export interface ToolResult {
 let _wasmReady = false;
 
 /**
- * Check if @ruvector/rvagent-wasm is installed and loadable.
+ * Check if @rufvector/rvagent-wasm is installed and loadable.
  */
 export async function isAgentWasmAvailable(): Promise<boolean> {
   try {
-    const mod = await import('@ruvector/rvagent-wasm');
+    const mod = await import('@rufvector/rvagent-wasm');
     return typeof mod.WasmAgent === 'function';
   } catch {
     return false;
@@ -80,15 +80,15 @@ export async function isAgentWasmAvailable(): Promise<boolean> {
 export async function initAgentWasm(): Promise<void> {
   if (_wasmReady) return;
   try {
-    const mod = await import('@ruvector/rvagent-wasm');
+    const mod = await import('@rufvector/rvagent-wasm');
     // In Node.js, load WASM bytes from disk and use initSync
     const require_ = createRequire(import.meta.url);
-    const wasmPath = require_.resolve('@ruvector/rvagent-wasm/rvagent_wasm_bg.wasm');
+    const wasmPath = require_.resolve('@rufvector/rvagent-wasm/rvagent_wasm_bg.wasm');
     const wasmBytes = readFileSync(wasmPath);
     mod.initSync(wasmBytes);
     _wasmReady = true;
   } catch (err) {
-    throw new Error(`Failed to initialize @ruvector/rvagent-wasm: ${err}`);
+    throw new Error(`Failed to initialize @rufvector/rvagent-wasm: ${err}`);
   }
 }
 
@@ -108,7 +108,7 @@ function generateId(): string {
  */
 export async function createWasmAgent(config: WasmAgentConfig = {}): Promise<WasmAgentInfo> {
   await initAgentWasm();
-  const mod = await import('@ruvector/rvagent-wasm');
+  const mod = await import('@rufvector/rvagent-wasm');
 
   // #1810 — was hardcoded `anthropic:claude-sonnet-4-20250514`. Updated to
   // current Sonnet (4.6) so new gallery agents don't silently inherit a
@@ -159,7 +159,7 @@ export async function createWasmAgent(config: WasmAgentConfig = {}): Promise<Was
 async function attachJsModelProvider(agent: any, config: WasmAgentConfig): Promise<boolean> {
   const hasAny = !!(process.env.ANTHROPIC_API_KEY || process.env.OPENROUTER_API_KEY || process.env.OLLAMA_API_KEY);
   if (!hasAny) return false;
-  const mod = await import('@ruvector/rvagent-wasm');
+  const mod = await import('@rufvector/rvagent-wasm');
   const { callAnthropicMessages, resolveAnthropicModel } = await import('../mcp-tools/agent-execute-core.js');
   const model = resolveAnthropicModel(config.model);
   const systemPrompt = config.instructions || 'You are a helpful coding assistant running in a Rufflo WASM agent sandbox.';
@@ -348,7 +348,7 @@ export async function createWasmMcpServer(agentId: string): Promise<(jsonRpc: st
   const entry = agents.get(agentId);
   if (!entry) throw new Error(`WASM agent not found: ${agentId}`);
 
-  const mod = await import('@ruvector/rvagent-wasm');
+  const mod = await import('@rufvector/rvagent-wasm');
   const server = new mod.WasmMcpServer(entry.agent);
 
   return (jsonRpc: string) => server.handle_request(jsonRpc);
@@ -361,7 +361,7 @@ let _gallery: any | null = null;
 async function getGallery(): Promise<any> {
   if (_gallery) return _gallery;
   await initAgentWasm();
-  const mod = await import('@ruvector/rvagent-wasm');
+  const mod = await import('@rufvector/rvagent-wasm');
   _gallery = new mod.WasmGallery();
   return _gallery;
 }
@@ -449,7 +449,7 @@ export async function buildRvfContainer(opts: {
   mcpTools?: McpToolDescriptor[];
 }): Promise<Uint8Array> {
   await initAgentWasm();
-  const mod = await import('@ruvector/rvagent-wasm');
+  const mod = await import('@rufvector/rvagent-wasm');
   const builder = new mod.WasmRvfBuilder();
 
   for (const p of opts.prompts ?? []) {

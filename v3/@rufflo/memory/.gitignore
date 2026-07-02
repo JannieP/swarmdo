@@ -4,9 +4,10 @@
 # we re-state them here so the package is self-contained and contributors
 # editing inside the package directory get the same behaviour.
 
-# Test pollution from agentdb / @ruvector/rvf — these files are written
+# Test pollution from agentdb / @rufvector/rvf — these files are written
 # to the package root at runtime and must not be committed.
-ruvector.db
+vector.db
+ruvector.db   # legacy pre-fork name (still emitted until the engine is recompiled)
 *.db
 *.db-journal
 *.db-wal

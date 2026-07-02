@@ -42,7 +42,7 @@ export interface WriteOptions {
   /** Buffer encoding when `data` is a string. Ignored for Buffer payloads. */
   encoding?: BufferEncoding;
   /**
-   * If true AND encryption is globally enabled (CLAUDE_FLOW_ENCRYPT_AT_REST),
+   * If true AND encryption is globally enabled (RUFFLO_ENCRYPT_AT_REST),
    * encrypt the payload with AES-256-GCM before writing. If encryption is
    * NOT enabled, this flag is silently ignored — the legacy plaintext path
    * runs unchanged. Default: false.

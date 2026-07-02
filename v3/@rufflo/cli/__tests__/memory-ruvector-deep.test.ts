@@ -250,12 +250,12 @@ describe('Memory Initializer', () => {
 
   describe('HNSW status', () => {
     // #2356: `getHNSWStatus()` now separates "loaded in this process"
-    // (`initialized`) from "@ruvector/core capability present" (`available`).
+    // (`initialized`) from "@rufvector/core capability present" (`available`).
     // Previously `available` tracked the lazy in-process singleton, so a fresh
     // `neural status` process always reported "Not loaded" even when the
     // package was installed — a false negative. After clearing the index the
     // contract is: not initialized, 0 entries, 384-dim; `available` reflects
-    // whether @ruvector/core is resolvable (env-dependent, so not hard-asserted).
+    // whether @rufvector/core is resolvable (env-dependent, so not hard-asserted).
     it('should report not-initialized after the index is cleared', async () => {
       const { getHNSWStatus, clearHNSWIndex } = await import('../src/memory/memory-initializer.js');
       clearHNSWIndex();
@@ -272,29 +272,29 @@ describe('Memory Initializer', () => {
   // fallback (inverted/meaningless semantics) even when `model` reports a
   // real-looking name.
   describe('generateEmbedding backend field', () => {
-    const prevDisableBridge = process.env.CLAUDE_FLOW_DISABLE_BRIDGE;
+    const prevDisableBridge = process.env.RUFFLO_DISABLE_BRIDGE;
 
     afterEach(() => {
       vi.resetModules();
       vi.doUnmock('@huggingface/transformers');
       vi.doUnmock('@xenova/transformers');
-      vi.doUnmock('ruvector');
+      vi.doUnmock('rufvector');
       vi.doUnmock('agentic-flow');
       vi.doUnmock('agentic-flow/reasoningbank');
-      if (prevDisableBridge === undefined) delete process.env.CLAUDE_FLOW_DISABLE_BRIDGE;
-      else process.env.CLAUDE_FLOW_DISABLE_BRIDGE = prevDisableBridge;
+      if (prevDisableBridge === undefined) delete process.env.RUFFLO_DISABLE_BRIDGE;
+      else process.env.RUFFLO_DISABLE_BRIDGE = prevDisableBridge;
     });
 
     it("reports backend='mock' when no real embedding model is available", async () => {
       // Force the raw fallback path (no AgentDB bridge) and make every real
       // embedding provider import fail so loadEmbeddingModel lands on the
       // hash fallback (model = null).
-      process.env.CLAUDE_FLOW_DISABLE_BRIDGE = '1';
+      process.env.RUFFLO_DISABLE_BRIDGE = '1';
       vi.resetModules();
       const fail = () => { throw new Error('unavailable in test'); };
       vi.doMock('@huggingface/transformers', fail);
       vi.doMock('@xenova/transformers', fail);
-      vi.doMock('ruvector', fail);
+      vi.doMock('rufvector', fail);
       vi.doMock('agentic-flow', fail);
       vi.doMock('agentic-flow/reasoningbank', fail);
 
@@ -310,7 +310,7 @@ describe('Memory Initializer', () => {
     it("always sets backend, and 'mock' implies the hash-fallback model", async () => {
       // Invariant check that holds regardless of which providers are installed:
       // backend is one of the two known values, and mock <=> hash-fallback.
-      process.env.CLAUDE_FLOW_DISABLE_BRIDGE = '1';
+      process.env.RUFFLO_DISABLE_BRIDGE = '1';
       vi.resetModules();
       const { generateEmbedding } = await import('../src/memory/memory-initializer.js');
       const result = await generateEmbedding('audit-3 backend invariant');
@@ -429,7 +429,7 @@ describe('Intelligence Module', () => {
 // =============================================================================
 
 // SONAOptimizer's processTrajectoryOutcome / getRoutingSuggestion paths
-// pull in the optional native @ruvector/sona engine. Without the binary
+// pull in the optional native @rufvector/sona engine. Without the binary
 // (CI without postinstall scripts), 14 assertions fail because intent
 // detection returns empty results — even though the package resolves,
 // the WASM binary doesn't load. Skip in CI.

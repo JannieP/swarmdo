@@ -25,7 +25,7 @@
 //   node scripts/auto-retrain-router.mjs                       # swap if gate passes
 //   node scripts/auto-retrain-router.mjs --margin 0.01         # tighter improvement bar
 //   node scripts/auto-retrain-router.mjs --min-new-rows 50     # require ≥50 production rows
-//   CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH=... node scripts/auto-retrain-router.mjs
+//   RUFFLO_ROUTER_TRAJECTORY_PATH=... node scripts/auto-retrain-router.mjs
 //
 // Exits 0 on every gated outcome (no-swap is success). Exits 1 only on
 // I/O errors. JSON report goes to stdout; the decision and reason are in
@@ -42,7 +42,7 @@ import { blendedPrice } from '../v3/@rufflo/cli/dist/src/ruvector/model-prices.j
 
 const ARGS = (() => {
   const a = {
-    in: process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH
+    in: process.env.RUFFLO_ROUTER_TRAJECTORY_PATH
       ?? resolve('.swarm', 'model-router-trajectories.jsonl'),
     seedRows: resolve('v3/@rufflo/cli/assets/model-router/seed-rows.json'),
     artifact: resolve('v3/@rufflo/cli/assets/model-router/seed-router.krr.json'),

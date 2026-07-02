@@ -74,7 +74,7 @@ function saveSession(session: SessionRecord): void {
   // audit_1776853149979: session JSON contains memory snapshots and agent
   // prompts — restrict to owner read/write.
   // ADR-096 Phase 2: opt-in encrypt-at-rest. The encrypt flag is honored
-  // only when CLAUDE_FLOW_ENCRYPT_AT_REST is set; otherwise the legacy
+  // only when RUFFLO_ENCRYPT_AT_REST is set; otherwise the legacy
   // plaintext path runs unchanged.
   writeFileRestricted(
     getSessionPath(session.sessionId),

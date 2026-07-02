@@ -75,7 +75,7 @@ function parseResult(result: { content: Array<{ type: string; text: string }> })
 // ── Tests ────────────────────────────────────────────────────
 
 // Same WASM-init issue as agent-wasm.test.ts — mocks intercept the
-// agent-wasm module but the real @ruvector/rvagent-wasm package still
+// agent-wasm module but the real @rufvector/rvagent-wasm package still
 // loads transitively and crashes in CI without prebuilds.
 const __SKIP_WASM_TESTS = process.env.CI === 'true';
 

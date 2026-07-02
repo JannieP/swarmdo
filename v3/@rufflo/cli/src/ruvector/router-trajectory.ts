@@ -6,7 +6,7 @@
  * shared `.swarm/model-router-trajectories.jsonl`. Outcome rows are
  * matched to their decision via `task_hash` (FNV-1a-32 of the task text).
  *
- * Gated behind `CLAUDE_FLOW_ROUTER_TRAJECTORY=1`. Default: **off** — rows
+ * Gated behind `RUFFLO_ROUTER_TRAJECTORY=1`. Default: **off** — rows
  * carry full task text + raw embeddings, which is a PII/retention surface
  * we do not enable without explicit consent.
  *
@@ -43,7 +43,7 @@ export interface TrajectoryDecisionRow {
   /** Underlying neural backend when routed_by='hybrid', else absent. */
   neural_backend?: 'metaharness-knn' | 'metaharness-krr' | 'fastgrnn';
   /**
-   * A/B mode (CLAUDE_FLOW_ROUTER_AB=1) attaches both the bandit-only pick
+   * A/B mode (RUFFLO_ROUTER_AB=1) attaches both the bandit-only pick
    * and the hybrid pick so disagreement rate is measurable over time.
    */
   ab_pair?: {
@@ -132,16 +132,16 @@ let _cachedSize = -1;
 
 function getConfig(): RecorderConfig {
   if (_cfg !== null) return _cfg;
-  const enabled = process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY === '1';
-  const swarmDir = process.env.CLAUDE_FLOW_SWARM_DIR
+  const enabled = process.env.RUFFLO_ROUTER_TRAJECTORY === '1';
+  const swarmDir = process.env.RUFFLO_SWARM_DIR
     ?? resolvePath(process.cwd(), '.swarm');
   _cfg = {
     enabled,
-    path: process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_PATH
+    path: process.env.RUFFLO_ROUTER_TRAJECTORY_PATH
       ?? join(swarmDir, 'model-router-trajectories.jsonl'),
-    taskCharLimit: parseInt(process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_TASKLEN ?? '500', 10) || 500,
-    maxSizeBytes: parseInt(process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_MAXSIZE ?? `${10 * 1024 * 1024}`, 10) | 0,
-    maxRotations: Math.max(0, parseInt(process.env.CLAUDE_FLOW_ROUTER_TRAJECTORY_MAXROTATIONS ?? '3', 10) || 3),
+    taskCharLimit: parseInt(process.env.RUFFLO_ROUTER_TRAJECTORY_TASKLEN ?? '500', 10) || 500,
+    maxSizeBytes: parseInt(process.env.RUFFLO_ROUTER_TRAJECTORY_MAXSIZE ?? `${10 * 1024 * 1024}`, 10) | 0,
+    maxRotations: Math.max(0, parseInt(process.env.RUFFLO_ROUTER_TRAJECTORY_MAXROTATIONS ?? '3', 10) || 3),
   };
   return _cfg;
 }

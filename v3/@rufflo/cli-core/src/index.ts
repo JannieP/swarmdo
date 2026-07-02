@@ -115,7 +115,7 @@ Working subcommands:
 
 Storage:
   JsonMemoryBackend writes to .swarm/memory.json by default. Override with
-  CLAUDE_FLOW_MEMORY_PATH or --path. Search is substring-only — for semantic
+  RUFFLO_MEMORY_PATH or --path. Search is substring-only — for semantic
   vector search, install the heavy @rufflo/cli@alpha.
 
 Programmatic use:

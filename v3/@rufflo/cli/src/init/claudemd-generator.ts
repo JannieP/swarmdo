@@ -290,10 +290,10 @@ function envVars(): string {
   return `## Environment
 
 \`\`\`bash
-CLAUDE_FLOW_CONFIG=./rufflo.config.json
-CLAUDE_FLOW_LOG_LEVEL=info
-CLAUDE_FLOW_MEMORY_BACKEND=hybrid
-CLAUDE_FLOW_MEMORY_PATH=./data/memory
+RUFFLO_CONFIG=./rufflo.config.json
+RUFFLO_LOG_LEVEL=info
+RUFFLO_MEMORY_BACKEND=hybrid
+RUFFLO_MEMORY_PATH=./data/memory
 \`\`\``;
 }
 

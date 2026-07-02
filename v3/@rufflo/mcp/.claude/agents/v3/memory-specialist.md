@@ -145,7 +145,7 @@ class HybridMemoryBackend {
   constructor() {
     // SQLite for structured data (relations, metadata, sessions)
     this.sqlite = new SQLiteBackend({
-      path: process.env.CLAUDE_FLOW_MEMORY_PATH || './data/memory',
+      path: process.env.RUFFLO_MEMORY_PATH || './data/memory',
       walMode: true,
       cacheSize: 10000,
       mmap: true

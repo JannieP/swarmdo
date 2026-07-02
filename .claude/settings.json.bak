@@ -23,15 +23,15 @@
     "AGENTIC_FLOW_PATTERN_BROADCAST_THRESHOLD": "0.7",
     "AGENTIC_FLOW_CONSENSUS_TIMEOUT": "30000",
     "AGENTIC_FLOW_AUTO_BROADCAST_PATTERNS": "true",
-    "CLAUDE_FLOW_AUTO_COMMIT": "true",
-    "CLAUDE_FLOW_AUTO_PUSH": "true",
-    "CLAUDE_FLOW_HOOKS_ENABLED": "true",
-    "CLAUDE_FLOW_TELEMETRY_ENABLED": "true",
-    "CLAUDE_FLOW_REMOTE_EXECUTION": "true",
-    "CLAUDE_FLOW_CHECKPOINTS_ENABLED": "true",
-    "CLAUDE_FLOW_V3_CLI_ENABLED": "true",
-    "CLAUDE_FLOW_V3_CLI_PATH": "/workspaces/claude-flow/v3/@claude-flow/cli/bin/cli.js",
-    "CLAUDE_FLOW_V3_INTELLIGENCE": "true"
+    "RUFFLO_AUTO_COMMIT": "true",
+    "RUFFLO_AUTO_PUSH": "true",
+    "RUFFLO_HOOKS_ENABLED": "true",
+    "RUFFLO_TELEMETRY_ENABLED": "true",
+    "RUFFLO_REMOTE_EXECUTION": "true",
+    "RUFFLO_CHECKPOINTS_ENABLED": "true",
+    "RUFFLO_V3_CLI_ENABLED": "true",
+    "RUFFLO_V3_CLI_PATH": "/workspaces/claude-flow/v3/@claude-flow/cli/bin/cli.js",
+    "RUFFLO_V3_INTELLIGENCE": "true"
   },
   "permissions": {
     "allowedTools": [

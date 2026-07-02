@@ -140,12 +140,12 @@ declare module 'ruvector' {
   }
 }
 
-declare module '@ruvector/core' {
+declare module '@rufvector/core' {
   const core: any;
   export default core;
 }
 
-declare module '@ruvector/rvagent-wasm' {
+declare module '@rufvector/rvagent-wasm' {
   /** Initialize the WASM module (browser — uses fetch for .wasm file). */
   export default function init(): Promise<void>;
 
@@ -227,7 +227,7 @@ declare module '@ruvector/rvagent-wasm' {
   }
 }
 
-declare module '@ruvector/ruvllm-wasm' {
+declare module '@rufvector/rufllm-wasm' {
   export default function init(): Promise<void>;
 
   /** Initialize WASM synchronously (Node.js). Must use object form: initSync({ module: bytes }) */

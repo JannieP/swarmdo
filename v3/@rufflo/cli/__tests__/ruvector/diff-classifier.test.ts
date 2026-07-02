@@ -7,8 +7,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { DiffClassifier, createDiffClassifier, type DiffAnalysis, type FileDiff } from '../../src/ruvector/diff-classifier';
 
-// Mock the @ruvector/diff module
-vi.mock('@ruvector/diff', () => ({
+// Mock the @rufvector/diff module
+vi.mock('@rufvector/diff', () => ({
   createDiffClassifier: vi.fn(() => null),
 }));
 

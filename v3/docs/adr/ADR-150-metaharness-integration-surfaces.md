@@ -13,7 +13,7 @@ We just shipped `rufflo@3.11.0` (also `@rufflo/cli@3.11.0`, `rufflo@3.11.0`). AD
 Three signals make this the right time to commit a broader integration:
 
 1. **MetaHarness is first-party.** Same author (`ruv@ruv.net`), same ADR numbering convention (kernel docs reference ADR-011/022/033/036/040/041/043), explicit framing: *"Scaffold your own focused AI agent harness — like rufflo, uniquely yours."* The `buildRegistryEntry()` doc comment says: *"Mirrors the rufflo plugin registry shape so the same UI can browse it."* The `@metaharness/host-claude-code` adapter emits `.claude/settings.json` in exactly rufflo's format.
-2. **The router integration is already live but underutilized.** `@metaharness/router@^0.3.2` is in `optionalDependencies`; `neural-router.ts` imports it behind `CLAUDE_FLOW_ROUTER_NEURAL=1`. The bundled KRR is trained on hand-coded seed scores rather than measured routing outcomes — leaving the DRACO Pareto win unrealized.
+2. **The router integration is already live but underutilized.** `@metaharness/router@^0.3.2` is in `optionalDependencies`; `neural-router.ts` imports it behind `RUFFLO_ROUTER_NEURAL=1`. The bundled KRR is trained on hand-coded seed scores rather than measured routing outcomes — leaving the DRACO Pareto win unrealized.
 3. **No rufflo skill exposes scaffolding/score/genome/threat-model to Claude Code today.** Users discover MetaHarness independently and are confused about the relationship.
 
 ### Evidence baseline (measured 2026-06-16)
@@ -47,7 +47,7 @@ The intent of this constraint is to prevent rufflo from becoming a hidden second
 Adopt MetaHarness as rufflo's downstream sibling tool, surfaced through three integration channels that match its three distinct contributions:
 
 1. **Static-analysis MCP tools** — `harness-score`, `harness-genome`, `harness-threat-model`, `harness-mcp-scan` as a new `plugins/rufflo-metaharness/` plugin. Subprocess invocation of the `metaharness` / `harness` CLI binaries; no static library dependency added to rufflo's boot path. Read-only operations only.
-2. **Live router data pipeline** — replace the hand-coded seed corpus for the bundled KRR with measured routing trajectories collected via the existing `CLAUDE_FLOW_ROUTER_TRAJECTORY=1` recorder; retrain `train-bundled-krr.mjs` against real data. This unlocks the Pareto win ADR-149 forecast but never measured.
+2. **Live router data pipeline** — replace the hand-coded seed corpus for the bundled KRR with measured routing trajectories collected via the existing `RUFFLO_ROUTER_TRAJECTORY=1` recorder; retrain `train-bundled-krr.mjs` against real data. This unlocks the Pareto win ADR-149 forecast but never measured.
 3. **CI security gates** — add `harness mcp scan .` and `metaharness score . --json` to `v3-ci.yml`. Both are static, fast, and machine-readable. Asserts no HIGH MCP findings and a non-zero readiness score on every PR.
 
 Three concrete things we ARE NOT doing in this ADR (deferred to Phase 2+):
@@ -60,7 +60,7 @@ Three concrete things we ARE NOT doing in this ADR (deferred to Phase 2+):
 
 **Phase 0 — Measurement spike (1–3 days, no code shipped to npm).**
 - Run `npx metaharness score .` and `npx metaharness genome .` against the rufflo repo to establish baseline scorecards.
-- Enable `CLAUDE_FLOW_ROUTER_TRAJECTORY=1` for ≥50 routing decisions; verify the `.swarm/model-router-trajectories.jsonl` shape matches what `train-bundled-krr.mjs` expects.
+- Enable `RUFFLO_ROUTER_TRAJECTORY=1` for ≥50 routing decisions; verify the `.swarm/model-router-trajectories.jsonl` shape matches what `train-bundled-krr.mjs` expects.
 - Confirm `import('@metaharness/router')` succeeds from `v3/@rufflo/cli` and exercise `Router.fromExamples(...)` with the existing benchmark corpus.
 - Run `harness mcp scan .` to baseline rufflo's own MCP threat-model score.
 
@@ -131,7 +131,7 @@ Rejected. `buildRepoScorecard()`, `buildGenomeReport()`, `scanMcp()`, `buildThre
 Partially adopted (this is the Phase-1 plugin posture). Wrong for `@metaharness/router` — sub-ms routing latency demands a library import, which ADR-148/149 already accepted.
 
 **Alternative C: Promote `@metaharness/router` from `optionalDependency` to `dependency`.**
-Rejected for now. The triple gate (`CLAUDE_FLOW_ROUTER_NEURAL=1` + artifact + import success) is the right posture until the API stabilizes at 1.0.
+Rejected for now. The triple gate (`RUFFLO_ROUTER_NEURAL=1` + artifact + import success) is the right posture until the API stabilizes at 1.0.
 
 **Alternative D: Wait for MetaHarness 1.0 before any further integration beyond ADR-148/149.**
 Rejected. The static-analysis surface (`score`, `genome`, `mcp scan`, `threat-model`) is already mature (475 files, well-typed, pure reads). Waiting creates a window where users discover MetaHarness independently and are confused about its relationship to rufflo. The Phase-1 plugin answers that question without incurring API-stability risk because the integration is via CLI subprocess, not library import.
@@ -209,7 +209,7 @@ The integration shipped across eight `/loop` iterations on branch
     `v3/@rufflo/cli/src/ruvector/router-parallel-recorder.ts`
     exports `recordPair(task, bandit, ser)` + `recordPairOutcome(task,
     outcome)` + `parallelRecorderStatus()`. Env-gated via
-    `CLAUDE_FLOW_ROUTER_PARALLEL_LOG=1` — no-op when unset (default).
+    `RUFFLO_ROUTER_PARALLEL_LOG=1` — no-op when unset (default).
     Every `appendFileSync` wrapped in try/catch with debug-only stderr
     logging; ADR-150 rule #3 satisfied (never throws from the routing
     path). 10MB rotation. Default output path
@@ -221,7 +221,7 @@ The integration shipped across eight `/loop` iterations on branch
     Fire-and-forget `recordPair({task, bandit, ser})` inside the
     existing `if (abEnabled)` block — same place the A/B disagreement
     counter already lives. Env-gated by
-    `CLAUDE_FLOW_ROUTER_PARALLEL_LOG === '1'`; no-op when unset, which
+    `RUFFLO_ROUTER_PARALLEL_LOG === '1'`; no-op when unset, which
     means ZERO overhead on the default routing path. The dynamic-import
     is lazy (one Promise per process); the recordPair call is wrapped
     in try/catch with `.catch(() => {})` on the import promise — the
@@ -239,7 +239,7 @@ The integration shipped across eight `/loop` iterations on branch
 
 ### Phase-1 item #3 — Real seed corpus retraining 🔄 PENDING
 Requires production trajectory data. The pipeline is wired:
-`CLAUDE_FLOW_ROUTER_TRAJECTORY=1` writes JSONL;
+`RUFFLO_ROUTER_TRAJECTORY=1` writes JSONL;
 `scripts/train-bundled-krr.mjs` rebuilds the artifact. The blocker is
 data collection — needs a 50+ decision production sample. Plan: enable
 the recorder on the next merged-to-main release; collect a week of

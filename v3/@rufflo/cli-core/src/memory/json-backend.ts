@@ -2,7 +2,7 @@
  * JsonMemoryBackend — the lite memory implementation that ships in cli-core.
  *
  * Persists entries to a JSON file (default: `.swarm/memory.json`, override
- * via CLAUDE_FLOW_MEMORY_PATH). No SQLite, no HNSW, no ONNX embeddings —
+ * via RUFFLO_MEMORY_PATH). No SQLite, no HNSW, no ONNX embeddings —
  * deliberately so that cli-core stays under 250 KB packed.
  *
  * Search degrades to substring matching (case-insensitive). For real
@@ -51,7 +51,7 @@ export class JsonMemoryBackend implements MemoryBackend {
   private cache: FileShape | null = null;
 
   constructor(opts?: { path?: string }) {
-    this.path = resolve(opts?.path || process.env.CLAUDE_FLOW_MEMORY_PATH || DEFAULT_PATH);
+    this.path = resolve(opts?.path || process.env.RUFFLO_MEMORY_PATH || DEFAULT_PATH);
   }
 
   private load(): FileShape {

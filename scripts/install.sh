@@ -16,9 +16,9 @@
 #   --version=X.X.X       Specific version
 #
 # Options (via environment - requires export):
-#   export CLAUDE_FLOW_VERSION=alpha
-#   export CLAUDE_FLOW_MINIMAL=1
-#   export CLAUDE_FLOW_GLOBAL=1
+#   export RUFFLO_VERSION=alpha
+#   export RUFFLO_MINIMAL=1
+#   export RUFFLO_GLOBAL=1
 #
 
 set -euo pipefail
@@ -34,12 +34,12 @@ DIM='\033[2m'
 NC='\033[0m' # No Color
 
 # Default configuration (can be overridden by env vars)
-VERSION="${RUFLO_VERSION:-${CLAUDE_FLOW_VERSION:-latest}}"
-MINIMAL="${CLAUDE_FLOW_MINIMAL:-0}"
-GLOBAL="${CLAUDE_FLOW_GLOBAL:-0}"
-SETUP_MCP="${CLAUDE_FLOW_SETUP_MCP:-0}"
-RUN_DOCTOR="${CLAUDE_FLOW_DOCTOR:-0}"
-RUN_INIT="${CLAUDE_FLOW_INIT:-1}"
+VERSION="${RUFLO_VERSION:-${RUFFLO_VERSION:-latest}}"
+MINIMAL="${RUFFLO_MINIMAL:-0}"
+GLOBAL="${RUFFLO_GLOBAL:-0}"
+SETUP_MCP="${RUFFLO_SETUP_MCP:-0}"
+RUN_DOCTOR="${RUFFLO_DOCTOR:-0}"
+RUN_INIT="${RUFFLO_INIT:-1}"
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
@@ -327,16 +327,16 @@ setup_mcp_server() {
         return 0
     fi
 
-    # Add MCP server (pass CLAUDE_FLOW_CWD so tools resolve paths correctly
+    # Add MCP server (pass RUFFLO_CWD so tools resolve paths correctly
     # even when the MCP server is spawned with cwd='/')
     if [ "$GLOBAL" = "1" ]; then
-        claude mcp add rufflo -e CLAUDE_FLOW_CWD="$HOME" -- rufflo mcp start 2>/dev/null && \
+        claude mcp add rufflo -e RUFFLO_CWD="$HOME" -- rufflo mcp start 2>/dev/null && \
             print_substep "MCP server configured ✓" || \
-            print_warning "MCP setup failed - run manually: claude mcp add rufflo -e CLAUDE_FLOW_CWD=\"\$HOME\" -- rufflo mcp start"
+            print_warning "MCP setup failed - run manually: claude mcp add rufflo -e RUFFLO_CWD=\"\$HOME\" -- rufflo mcp start"
     else
-        claude mcp add rufflo -e CLAUDE_FLOW_CWD="$HOME" -- npx -y rufflo@${VERSION} mcp start 2>/dev/null && \
+        claude mcp add rufflo -e RUFFLO_CWD="$HOME" -- npx -y rufflo@${VERSION} mcp start 2>/dev/null && \
             print_substep "MCP server configured ✓" || \
-            print_warning "MCP setup failed - run manually: claude mcp add rufflo -e CLAUDE_FLOW_CWD=\"\$HOME\" -- npx -y rufflo@latest mcp start"
+            print_warning "MCP setup failed - run manually: claude mcp add rufflo -e RUFFLO_CWD=\"\$HOME\" -- npx -y rufflo@latest mcp start"
     fi
     echo ""
 }

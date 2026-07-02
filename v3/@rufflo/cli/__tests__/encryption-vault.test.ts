@@ -34,7 +34,7 @@ function restoreEnv() {
 
 describe('vault (ADR-096 Phase 1)', () => {
   beforeEach(() => {
-    saveEnv('CLAUDE_FLOW_ENCRYPT_AT_REST', 'CLAUDE_FLOW_ENCRYPTION_KEY');
+    saveEnv('RUFFLO_ENCRYPT_AT_REST', 'RUFFLO_ENCRYPTION_KEY');
   });
   afterEach(() => {
     restoreEnv();
@@ -42,14 +42,14 @@ describe('vault (ADR-096 Phase 1)', () => {
 
   describe('isEncryptionEnabled', () => {
     it('is false when the env var is unset', () => {
-      delete process.env.CLAUDE_FLOW_ENCRYPT_AT_REST;
+      delete process.env.RUFFLO_ENCRYPT_AT_REST;
       expect(isEncryptionEnabled()).toBe(false);
     });
 
     it.each(['1', 'true', 'TRUE', 'yes', 'on', '  on  '])(
       'is true for "%s"',
       (v) => {
-        process.env.CLAUDE_FLOW_ENCRYPT_AT_REST = v;
+        process.env.RUFFLO_ENCRYPT_AT_REST = v;
         expect(isEncryptionEnabled()).toBe(true);
       },
     );
@@ -57,7 +57,7 @@ describe('vault (ADR-096 Phase 1)', () => {
     it.each(['0', 'false', 'no', 'off', 'maybe', ''])(
       'is false for "%s"',
       (v) => {
-        process.env.CLAUDE_FLOW_ENCRYPT_AT_REST = v;
+        process.env.RUFFLO_ENCRYPT_AT_REST = v;
         expect(isEncryptionEnabled()).toBe(false);
       },
     );
@@ -105,12 +105,12 @@ describe('vault (ADR-096 Phase 1)', () => {
 
   describe('getKey', () => {
     it('throws with a clear message when the env var is unset', () => {
-      delete process.env.CLAUDE_FLOW_ENCRYPTION_KEY;
-      expect(() => getKey()).toThrow(/CLAUDE_FLOW_ENCRYPTION_KEY/);
+      delete process.env.RUFFLO_ENCRYPTION_KEY;
+      expect(() => getKey()).toThrow(/RUFFLO_ENCRYPTION_KEY/);
     });
 
     it('returns a 32-byte buffer when the env var holds valid hex', () => {
-      process.env.CLAUDE_FLOW_ENCRYPTION_KEY = 'c'.repeat(64);
+      process.env.RUFFLO_ENCRYPTION_KEY = 'c'.repeat(64);
       expect(getKey().length).toBe(32);
     });
   });

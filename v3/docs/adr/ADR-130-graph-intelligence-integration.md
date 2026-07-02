@@ -341,7 +341,7 @@ Existing `agentdb_causal-edge` data lives in three places: graph-node native `.r
 
 ### 2. Double-write cost during transition (MEDIUM)
 
-Between Phase 1 and Phase 3, every `agentdb_causal-edge` call writes to: (a) graph-node native, (b) AgentDB bridge, and (c) the new `graph_edges` table — three writes per edge. For high-frequency callers (SONA trajectory steps in busy sessions) this triples the write load. Mitigation: add a `CLAUDE_FLOW_GRAPH_DUAL_WRITE=0` env var to suppress the legacy writes once Phase 3 lands. The double-write can be removed in 3.10.0 after a single minor version of parallel operation.
+Between Phase 1 and Phase 3, every `agentdb_causal-edge` call writes to: (a) graph-node native, (b) AgentDB bridge, and (c) the new `graph_edges` table — three writes per edge. For high-frequency callers (SONA trajectory steps in busy sessions) this triples the write load. Mitigation: add a `RUFFLO_GRAPH_DUAL_WRITE=0` env var to suppress the legacy writes once Phase 3 lands. The double-write can be removed in 3.10.0 after a single minor version of parallel operation.
 
 ### 3. Query language compatibility (LOW)
 

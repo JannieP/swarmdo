@@ -150,11 +150,11 @@ interface MCPConfig {
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `CLAUDE_FLOW_MODE` | `v3` | Operation mode |
-| `CLAUDE_FLOW_HOOKS_ENABLED` | `true` | Enable hooks |
-| `CLAUDE_FLOW_TOPOLOGY` | `hierarchical-mesh` | Swarm topology |
-| `CLAUDE_FLOW_MAX_AGENTS` | `15` | Maximum agents |
-| `CLAUDE_FLOW_MEMORY_BACKEND` | `hybrid` | Memory backend |
+| `RUFFLO_MODE` | `v3` | Operation mode |
+| `RUFFLO_HOOKS_ENABLED` | `true` | Enable hooks |
+| `RUFFLO_TOPOLOGY` | `hierarchical-mesh` | Swarm topology |
+| `RUFFLO_MAX_AGENTS` | `15` | Maximum agents |
+| `RUFFLO_MEMORY_BACKEND` | `hybrid` | Memory backend |
 
 ## Runtime Configuration
 

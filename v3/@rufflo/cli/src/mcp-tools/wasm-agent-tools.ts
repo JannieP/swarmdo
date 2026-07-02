@@ -1,7 +1,7 @@
 /**
  * WASM Agent MCP Tools
  *
- * Exposes @ruvector/rvagent-wasm operations via MCP protocol.
+ * Exposes @rufvector/rvagent-wasm operations via MCP protocol.
  * All tools gracefully degrade when the WASM package is not installed.
  *
  * ADR-129: Phase 2 adds wasm_agent_compose + addMcpTools bridge.

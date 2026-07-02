@@ -1957,7 +1957,7 @@
     {
       "name": "rufflo-agent",
       "version": "0.2.0",
-      "description": "Sandboxed WASM agent creation, execution, and gallery sharing — wraps 10 wasm_* MCP tools (agent_create/prompt/tool/list/terminate/files/export + gallery_list/search/create); built on @ruvector/rvagent-wasm + @ruvector/ruvllm-wasm per ADR-070 (Implemented)",
+      "description": "Sandboxed WASM agent creation, execution, and gallery sharing — wraps 10 wasm_* MCP tools (agent_create/prompt/tool/list/terminate/files/export + gallery_list/search/create); built on @rufvector/rvagent-wasm + @rufvector/rufllm-wasm per ADR-070 (Implemented)",
       "sourceFile": "plugins\\rufflo-agent\\.claude-plugin\\plugin.json"
     },
     {

@@ -142,17 +142,17 @@ describe('audit #1 — negative reward keeps its sign across all flag syntaxes',
 describe('#2226 — pattern store and search share a backend', () => {
   // Isolate the store to a fresh temp dir so this test neither reads a
   // shared/corrupt `.swarm/memory.db` nor pollutes other suites'
-  // (getMemoryRoot honors CLAUDE_FLOW_MEMORY_PATH dynamically).
+  // (getMemoryRoot honors RUFFLO_MEMORY_PATH dynamically).
   let memDir: string;
   let prevMemPath: string | undefined;
   beforeEach(() => {
     memDir = mkdtempSync(path.join(tmpdir(), 'rufflo-2226-'));
-    prevMemPath = process.env.CLAUDE_FLOW_MEMORY_PATH;
-    process.env.CLAUDE_FLOW_MEMORY_PATH = memDir;
+    prevMemPath = process.env.RUFFLO_MEMORY_PATH;
+    process.env.RUFFLO_MEMORY_PATH = memDir;
   });
   afterEach(() => {
-    if (prevMemPath === undefined) delete process.env.CLAUDE_FLOW_MEMORY_PATH;
-    else process.env.CLAUDE_FLOW_MEMORY_PATH = prevMemPath;
+    if (prevMemPath === undefined) delete process.env.RUFFLO_MEMORY_PATH;
+    else process.env.RUFFLO_MEMORY_PATH = prevMemPath;
     try { rmSync(memDir, { recursive: true, force: true }); } catch { /* ignore */ }
   });
 
@@ -174,7 +174,7 @@ describe('#2226 — pattern store and search share a backend', () => {
     });
 
     expect(Array.isArray(found.results)).toBe(true);
-    // Semantic retrieval needs a real vector index (HNSW via @ruvector/core).
+    // Semantic retrieval needs a real vector index (HNSW via @rufvector/core).
     // Where that backend is absent (this sandbox, edge/CI) search returns no
     // candidates — we can't verify the store↔search round-trip, so skip rather
     // than fail. The invariant under test (they SHARE a backend) is exercised

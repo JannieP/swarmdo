@@ -45,7 +45,7 @@ export interface LoRAAdapter {
 // ============================================================================
 
 /**
- * Fallback vector database when @ruvector/wasm is not available.
+ * Fallback vector database when @rufvector/wasm is not available.
  * Uses in-memory Map with brute-force cosine similarity search.
  */
 export class FallbackVectorDB implements IVectorDB {
@@ -83,7 +83,7 @@ export class FallbackVectorDB implements IVectorDB {
 }
 
 /**
- * Fallback LoRA engine when @ruvector/learning-wasm is not available.
+ * Fallback LoRA engine when @rufvector/learning-wasm is not available.
  * Uses simple gradient descent with in-memory weights.
  */
 export class FallbackLoRAEngine implements ILoRAEngine {
@@ -136,12 +136,12 @@ export class FallbackLoRAEngine implements ILoRAEngine {
 // ============================================================================
 
 /**
- * Create a vector database - uses @ruvector/wasm in production, fallback otherwise.
+ * Create a vector database - uses @rufvector/wasm in production, fallback otherwise.
  */
 export async function createVectorDB(dimensions: number): Promise<IVectorDB> {
   try {
-    // @ts-expect-error - @ruvector/wasm types may not be available
-    const { VectorDB: RuVectorDB } = await import('@ruvector/wasm');
+    // @ts-expect-error - @rufvector/wasm types may not be available
+    const { VectorDB: RuVectorDB } = await import('@rufvector/wasm');
     const db = new RuVectorDB({
       dimensions,
       indexType: 'hnsw',
@@ -152,23 +152,23 @@ export async function createVectorDB(dimensions: number): Promise<IVectorDB> {
     await db.initialize?.();
     return db as IVectorDB;
   } catch {
-    console.warn('[@rufflo/plugins] @ruvector/wasm not available, using fallback');
+    console.warn('[@rufflo/plugins] @rufvector/wasm not available, using fallback');
     return new FallbackVectorDB(dimensions);
   }
 }
 
 /**
- * Create a LoRA engine - uses @ruvector/learning-wasm in production, fallback otherwise.
+ * Create a LoRA engine - uses @rufvector/learning-wasm in production, fallback otherwise.
  */
 export async function createLoRAEngine(): Promise<ILoRAEngine> {
   try {
-    // @ts-expect-error - @ruvector/learning-wasm types may not be available
-    const { LoRAEngine } = await import('@ruvector/learning-wasm');
+    // @ts-expect-error - @rufvector/learning-wasm types may not be available
+    const { LoRAEngine } = await import('@rufvector/learning-wasm');
     const engine = new LoRAEngine({ defaultRank: 8, defaultAlpha: 16 });
     await engine.initialize?.();
     return engine as ILoRAEngine;
   } catch {
-    console.warn('[@rufflo/plugins] @ruvector/learning-wasm not available, using fallback');
+    console.warn('[@rufflo/plugins] @rufvector/learning-wasm not available, using fallback');
     return new FallbackLoRAEngine();
   }
 }

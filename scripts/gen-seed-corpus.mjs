@@ -121,6 +121,6 @@ writeFileSync(provPath, JSON.stringify({
   },
   scores_by_tier: SCORES_BY_TIER,
   templates: { cheap: CHEAP_TEMPLATES.map(t=>t[0]), mid: MID_TEMPLATES.map(t=>t[0]), strong: STRONG_TEMPLATES.map(t=>t[0]) },
-  caveat: 'Synthetic deterministic corpus with hand-set scores per ADR-148. To be replaced by real DRACO trajectories once CLAUDE_FLOW_ROUTER_TRAJECTORY=1 collection runs in production.',
+  caveat: 'Synthetic deterministic corpus with hand-set scores per ADR-148. To be replaced by real DRACO trajectories once RUFFLO_ROUTER_TRAJECTORY=1 collection runs in production.',
 }, null, 2));
 console.log(`wrote provenance: ${provPath}`);

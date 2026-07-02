@@ -321,11 +321,11 @@ export class CredentialGenerator {
 # Generated: ${credentials.generatedAt.toISOString()}
 # IMPORTANT: Store these securely and delete this file after use
 
-export CLAUDE_FLOW_ADMIN_PASSWORD="${credentials.adminPassword}"
-export CLAUDE_FLOW_SERVICE_PASSWORD="${credentials.servicePassword}"
-export CLAUDE_FLOW_JWT_SECRET="${credentials.jwtSecret}"
-export CLAUDE_FLOW_SESSION_SECRET="${credentials.sessionSecret}"
-export CLAUDE_FLOW_ENCRYPTION_KEY="${credentials.encryptionKey}"
+export RUFFLO_ADMIN_PASSWORD="${credentials.adminPassword}"
+export RUFFLO_SERVICE_PASSWORD="${credentials.servicePassword}"
+export RUFFLO_JWT_SECRET="${credentials.jwtSecret}"
+export RUFFLO_SESSION_SECRET="${credentials.sessionSecret}"
+export RUFFLO_ENCRYPTION_KEY="${credentials.encryptionKey}"
 `;
   }
 

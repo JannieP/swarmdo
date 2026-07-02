@@ -849,7 +849,7 @@ export const embeddingsTools: MCPTool[] = [
         };
       }
 
-      // ADR-093 F5: distinguish "@ruvector/core installed" from "wired into
+      // ADR-093 F5: distinguish "@rufvector/core installed" from "wired into
       // the embedding pipeline". Previously this collapsed both into a
       // single `ruvector: boolean` field, which gave callers no way to
       // tell whether re-running embeddings_init would help (#1698 partial
@@ -857,7 +857,7 @@ export const embeddingsTools: MCPTool[] = [
       let ruvectorAvailable = false;
       let ruvectorVersion: string | undefined;
       try {
-        const mod = await import('@ruvector/core');
+        const mod = await import('@rufvector/core');
         ruvectorAvailable = !!(mod as Record<string, unknown>);
         try {
           // Best-effort: many packages expose a `version` constant

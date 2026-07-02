@@ -1,5 +1,5 @@
 /**
- * @ruvector/graph-node native graph database backend (ADR-087)
+ * @rufvector/graph-node native graph database backend (ADR-087)
  *
  * Provides persistent graph storage for agent relationships, causal edges,
  * task dependencies, and swarm topology using native Rust bindings.
@@ -23,7 +23,7 @@ let graphBackendAvailable = false;
 const DEFAULT_EMBEDDING_DIM = 8; // Minimal embedding for graph structure
 
 /**
- * Load @ruvector/graph-node via createRequire (CJS package)
+ * Load @rufvector/graph-node via createRequire (CJS package)
  */
 async function loadGraphNode(): Promise<any> {
   if (graphBackendLoaded) return graphNodeModule;
@@ -31,7 +31,7 @@ async function loadGraphNode(): Promise<any> {
   try {
     const { createRequire } = await import('module');
     const requireCjs = createRequire(import.meta.url);
-    graphNodeModule = requireCjs('@ruvector/graph-node');
+    graphNodeModule = requireCjs('@rufvector/graph-node');
     graphBackendAvailable = true;
     return graphNodeModule;
   } catch {

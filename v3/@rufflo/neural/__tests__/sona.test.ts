@@ -1,7 +1,7 @@
 /**
  * SONA Learning Engine Tests
  *
- * Tests for SONA integration with @ruvector/sona package.
+ * Tests for SONA integration with @rufvector/sona package.
  * Covers initialization, learning, adaptation, mode switching, and performance.
  *
  * Performance targets:
@@ -49,8 +49,8 @@ function createMockEngine() {
   };
 }
 
-// Mock @ruvector/sona
-vi.mock('@ruvector/sona', () => {
+// Mock @rufvector/sona
+vi.mock('@rufvector/sona', () => {
   return {
     SonaEngine: {
       withConfig: vi.fn(() => createMockEngine()),
@@ -306,7 +306,7 @@ describe('SONALearningEngine', () => {
     });
 
     it('should handle adaptation with no patterns found', async () => {
-      const { SonaEngine } = await import('@ruvector/sona');
+      const { SonaEngine } = await import('@rufvector/sona');
       // Create a complete mock with findPatterns returning empty array
       const emptyPatternsEngine = {
         beginTrajectory: vi.fn().mockReturnValue(1),

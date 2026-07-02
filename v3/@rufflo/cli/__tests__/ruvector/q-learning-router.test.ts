@@ -7,8 +7,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { QLearningRouter, createQLearningRouter, type RouteDecision } from '../../src/ruvector/q-learning-router';
 
-// Mock the @ruvector/core module
-vi.mock('@ruvector/core', () => ({
+// Mock the @rufvector/core module
+vi.mock('@rufvector/core', () => ({
   createQLearning: vi.fn(() => null),
 }));
 
@@ -52,7 +52,7 @@ describe('QLearningRouter', () => {
     });
 
     it('should handle ruvector import failure gracefully', async () => {
-      vi.doMock('@ruvector/core', () => {
+      vi.doMock('@rufvector/core', () => {
         throw new Error('Module not found');
       });
       await router.initialize();

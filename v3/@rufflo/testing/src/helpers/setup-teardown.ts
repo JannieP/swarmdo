@@ -632,7 +632,7 @@ export function setupV3Tests(config: V3TestConfig = {}): void {
     suppressConsole: config.suppressConsole ?? false,
     env: {
       NODE_ENV: 'test',
-      CLAUDE_FLOW_MODE: 'test',
+      RUFFLO_MODE: 'test',
       ...config.env,
     },
   });
