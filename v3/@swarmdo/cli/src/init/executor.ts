@@ -83,7 +83,7 @@ const SKILLS_MAP: Record<string, string[]> = {
  * truth, verify) default false per ADR-128 §Phase 3 opt-in rationale.
  */
 const COMMANDS_MAP: Record<string, string[]> = {
-  core: ['swarmdo-help.md', 'swarmdo-swarm.md', 'swarmdo-memory.md'],
+  core: ['swarmdo-help.md', 'swarmdo-swarm.md', 'swarmdo-memory.md', 'statusline.md'],
   analysis: ['analysis'],
   automation: ['automation'],
   github: ['github'],
