@@ -6,6 +6,35 @@
 <title>swarmdo — agent swarms for Claude Code</title>
 <meta name="description" content="swarmdo — agent swarm orchestration for Claude Code. 60+ agent roles, hive-mind consensus, vector memory, and a Postgres vector extension.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐝</text></svg>">
+<link rel="canonical" href="https://swarmdo.com/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#0f1317">
+<meta name="keywords" content="swarmdo, Claude Code, AI agents, agent orchestration, multi-agent, agent swarm, MCP, Model Context Protocol, vector memory, HNSW, Postgres vector extension, pgvector alternative, hive-mind consensus, swarmvector">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="swarmdo">
+<meta property="og:url" content="https://swarmdo.com/">
+<meta property="og:title" content="swarmdo — agent swarms for Claude Code">
+<meta property="og:description" content="One prompt in. A swarm of agents out. 60+ agent roles, hive-mind consensus, persistent vector memory, and a Postgres vector extension — fully self-contained and MIT licensed.">
+<meta property="og:image" content="https://swarmdo.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="swarmdo — agent swarms for Claude Code">
+<meta name="twitter:description" content="One prompt in. A swarm of agents out. Multi-agent orchestration, vector memory, and a Postgres vector extension for Claude Code.">
+<meta name="twitter:image" content="https://swarmdo.com/og-image.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+ {"@type":"SoftwareApplication","name":"swarmdo","url":"https://swarmdo.com/","applicationCategory":"DeveloperApplication","operatingSystem":"macOS, Linux, Windows","description":"Agent swarm orchestration for Claude Code: 60+ agent roles, hive-mind consensus, persistent vector memory with HNSW, and the swarmvector Postgres extension.","license":"https://opensource.org/licenses/MIT","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"softwareVersion":"1.2.0","downloadUrl":"https://github.com/JannieP/swarmdo/releases"},
+ {"@type":"WebSite","name":"swarmdo","url":"https://swarmdo.com/"},
+ {"@type":"FAQPage","mainEntity":[
+  {"@type":"Question","name":"What is swarmdo?","acceptedAnswer":{"@type":"Answer","text":"swarmdo turns Claude Code into a coordinated multi-agent system. One prompt spawns a swarm of named agents — researcher, architect, coder, tester, reviewer — that coordinate over messages, share persistent vector memory, and learn from what worked."}},
+  {"@type":"Question","name":"Does swarmdo work with Claude Code?","acceptedAnswer":{"@type":"Answer","text":"Yes — swarmdo is built for Claude Code. It registers as an MCP server (200+ tools), ships agent definitions and skills into .claude/, and adds slash commands like /statusline. Codex is supported through the @swarmdo/codex dual-mode package."}},
+  {"@type":"Question","name":"Is swarmdo free and open source?","acceptedAnswer":{"@type":"Answer","text":"Yes. swarmdo is MIT licensed and based on the original popular ruflo project, with attribution preserved in the repository's LICENSE and NOTICE files. Every engine it uses is vendored in the repository — no external runtime dependencies."}},
+  {"@type":"Question","name":"What is swarmvector?","acceptedAnswer":{"@type":"Answer","text":"swarmvector is swarmdo's vector engine family: an embedded vector database with HNSW indexing and ONNX embeddings, plus a pgvector-compatible PostgreSQL extension (CREATE EXTENSION swarmvector) with 230+ SQL functions, SIMD acceleration, and quantization, verified on PostgreSQL 16."}},
+  {"@type":"Question","name":"How do I install swarmdo?","acceptedAnswer":{"@type":"Answer","text":"Run npx swarmdo init --wizard to scaffold your project, then claude mcp add swarmdo -- npx -y @swarmdo/cli@latest to register the MCP server. From there, ask Claude Code to use a swarm and swarmdo coordinates the agents."}}
+ ]}
+]}
+</script>
 </head>
 <body>
 
@@ -155,6 +184,15 @@
   .code .ps{color:var(--honey)} .code .cm{color:var(--mute)}
   .step p{margin:8px 0 0;font-size:14.5px;color:var(--mute)}
 
+
+  .faq-list{max-width:760px;display:grid;gap:10px}
+  details{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:0}
+  summary{cursor:pointer;font-family:var(--mono);font-size:14.5px;color:var(--bright);padding:15px 18px;list-style:none;position:relative}
+  summary::before{content:"+";color:var(--honey);margin-right:12px;font-weight:700}
+  details[open] summary::before{content:"–"}
+  details p{margin:0;padding:0 18px 16px 40px;font-size:15px}
+  details code{font-family:var(--mono);font-size:13px;color:var(--bright)}
+
   /* footer */
   footer{padding:44px 0 60px;font-size:14px;color:var(--mute)}
   .foot-i{display:flex;gap:28px;flex-wrap:wrap;align-items:baseline}
@@ -181,6 +219,7 @@
       <a href="#features">features</a>
       <a href="#engines">engines</a>
       <a href="#install">install</a>
+      <a href="#faq">faq</a>
       <a href="https://github.com/JannieP/swarmdo">github</a>
     </div>
   </div>
@@ -314,6 +353,21 @@
         <div class="code"><span class="ps">$</span> claude <span class="cm"># then: "use a swarm to build the feature"</span></div>
         <p>Claude Code spawns the agents; swarmdo coordinates, remembers, and learns.</p>
       </div></div>
+    </div>
+  </div>
+</section>
+
+
+<section id="faq">
+  <div class="wrap">
+    <p class="sec-label">FAQ</p>
+    <h2>Questions people actually ask.</h2>
+    <div class="faq-list">
+      <details><summary>What is swarmdo?</summary><p>swarmdo turns Claude Code into a coordinated multi-agent system. One prompt spawns a swarm of named agents — researcher, architect, coder, tester, reviewer — that coordinate over messages, share persistent vector memory, and learn from what worked.</p></details>
+      <details><summary>Does it work with Claude Code?</summary><p>Yes — it&rsquo;s built for it. swarmdo registers as an MCP server (200+ tools), ships agents and skills into <code>.claude/</code>, and adds slash commands like <code>/statusline</code>. Codex runs alongside through the dual-mode package.</p></details>
+      <details><summary>Is it free and open source?</summary><p>MIT licensed, based on the original popular ruflo — attribution preserved in LICENSE and NOTICE. Every engine is vendored in the repo; nothing phones home.</p></details>
+      <details><summary>What is swarmvector?</summary><p>The vector engine family: an embedded vector database with HNSW indexing and ONNX embeddings, plus a pgvector-compatible Postgres extension — <code>CREATE EXTENSION swarmvector</code> — with 230+ SQL functions, verified on PostgreSQL 16.</p></details>
+      <details><summary>How do I install it?</summary><p><code>npx swarmdo init --wizard</code>, then <code>claude mcp add swarmdo -- npx -y @swarmdo/cli@latest</code>. Ask Claude Code to &ldquo;use a swarm&rdquo; and swarmdo does the coordinating.</p></details>
     </div>
   </div>
 </section>
