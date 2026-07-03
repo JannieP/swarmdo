@@ -28,7 +28,7 @@
     }
   },
   "bin": {
-    "ruvllm": "./bin/cli.js"
+    "rufllm": "./bin/cli.js"
   },
   "napi": {
     "binaryName": "ruvllm",

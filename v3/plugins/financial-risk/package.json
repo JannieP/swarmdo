@@ -89,9 +89,9 @@
   },
   "optionalDependencies": {
     "micro-hnsw-wasm": "^0.2.0",
-    "ruvector-sparse-inference-wasm": "^0.1.0",
-    "ruvector-gnn-wasm": "^0.1.0",
-    "ruvector-economy-wasm": "^0.1.0",
-    "ruvector-learning-wasm": "^0.1.0"
+    "rufvector-gnn-wasm": "file:../../vendor/rufvector-gnn-wasm",
+    "rufvector-economy-wasm": "^0.1.0",
+    "rufvector-learning-wasm": "^0.1.0",
+    "rufvector-sparse-inference-wasm": "^0.1.0"
   }
 }

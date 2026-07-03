@@ -145,7 +145,7 @@ export async function getCachedOnnxEmbedder() {
             return originalEmit.apply(process, [name, data, ...args]);
         };
         try {
-            const onnxModule = await import('ruvector-onnx-embeddings-wasm');
+            const onnxModule = await import('rufvector-onnx-embeddings-wasm');
             const EmbedderClass = onnxModule.OnnxEmbeddings || onnxModule.default;
             if (EmbedderClass) {
                 const embedder = new EmbedderClass();

@@ -2,7 +2,7 @@
  * Learning Bridge for Test Intelligence
  *
  * Provides RL-based test selection and prioritization using
- * ruvector-learning-wasm for Q-Learning, PPO, and Decision Transformer.
+ * rufvector-learning-wasm for Q-Learning, PPO, and Decision Transformer.
  */
 
 import type {

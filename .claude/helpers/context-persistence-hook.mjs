@@ -4,12 +4,12 @@
  *
  * Intercepts Claude Code's PreCompact, SessionStart, and UserPromptSubmit
  * lifecycle events to persist conversation history in SQLite (primary),
- * RuVector PostgreSQL (optional), or JSON (fallback), enabling "infinite
+ * RufVector PostgreSQL (optional), or JSON (fallback), enabling "infinite
  * context" across compaction boundaries.
  *
  * Backend priority:
  *   1. better-sqlite3 (native, WAL mode, indexed queries, ACID transactions)
- *   2. RuVector PostgreSQL (if RUVECTOR_* env vars set - TB-scale, GNN search)
+ *   2. RufVector PostgreSQL (if RUVECTOR_* env vars set - TB-scale, GNN search)
  *   3. AgentDB from @rufflo/memory (HNSW vector search)
  *   4. JsonFileBackend (zero dependencies, always works)
  *
@@ -465,10 +465,10 @@ class JsonFileBackend {
 }
 
 // ============================================================================
-// RuVector PostgreSQL Backend (optional, TB-scale, GNN-enhanced)
+// RufVector PostgreSQL Backend (optional, TB-scale, GNN-enhanced)
 // ============================================================================
 
-class RuVectorBackend {
+class RufVectorBackend {
   constructor(config) {
     this.config = config;
     this.pool = null;
@@ -706,10 +706,10 @@ class RuVectorBackend {
 }
 
 /**
- * Parse RuVector config from environment variables.
+ * Parse RufVector config from environment variables.
  * Returns null if required vars are not set.
  */
-function getRuVectorConfig() {
+function getRufVectorConfig() {
   const host = process.env.RUVECTOR_HOST || process.env.PGHOST;
   const database = process.env.RUVECTOR_DATABASE || process.env.PGDATABASE;
   const user = process.env.RUVECTOR_USER || process.env.PGUSER;
@@ -728,7 +728,7 @@ function getRuVectorConfig() {
 }
 
 // ============================================================================
-// Backend resolution: SQLite > RuVector PostgreSQL > AgentDB > JSON
+// Backend resolution: SQLite > RufVector PostgreSQL > AgentDB > JSON
 // ============================================================================
 
 async function resolveBackend() {
@@ -739,13 +739,13 @@ async function resolveBackend() {
     return { backend: trackBackend(backend), type: 'sqlite' };
   } catch { /* fall through */ }
 
-  // Tier 2: RuVector PostgreSQL (TB-scale, vector search, GNN)
+  // Tier 2: RufVector PostgreSQL (TB-scale, vector search, GNN)
   try {
-    const rvConfig = getRuVectorConfig();
+    const rvConfig = getRufVectorConfig();
     if (rvConfig) {
-      const backend = new RuVectorBackend(rvConfig);
+      const backend = new RufVectorBackend(rvConfig);
       await backend.initialize();
-      return { backend: trackBackend(backend), type: 'ruvector' };
+      return { backend: trackBackend(backend), type: 'rufvector' };
     }
   } catch { /* fall through */ }
 
@@ -1350,18 +1350,18 @@ async function autoOptimize(backend, backendType) {
     } catch { /* non-critical */ }
   }
 
-  // Step 5: Auto-sync to RuVector if available
+  // Step 5: Auto-sync to RufVector if available
   let synced = 0;
   if (backendType === 'sqlite' && backend.allForSync) {
     try {
-      const rvConfig = getRuVectorConfig();
+      const rvConfig = getRufVectorConfig();
       if (rvConfig) {
-        const rvBackend = new RuVectorBackend(rvConfig);
+        const rvBackend = new RufVectorBackend(rvConfig);
         await rvBackend.initialize();
 
         const allEntries = backend.allForSync(NAMESPACE);
         if (allEntries.length > 0) {
-          // Add hash embeddings for vector search in RuVector
+          // Add hash embeddings for vector search in RufVector
           const entriesToSync = allEntries.map(e => ({
             ...e,
             _embedding: createHashEmbedding(e.content),
@@ -1372,7 +1372,7 @@ async function autoOptimize(backend, backendType) {
 
         await rvBackend.shutdown();
       }
-    } catch { /* RuVector sync is best-effort */ }
+    } catch { /* RufVector sync is best-effort */ }
   }
 
   return { pruned, synced, decayed, embedded };
@@ -1692,7 +1692,7 @@ async function doPreCompact() {
 
   const archiveResult = await storeChunks(backend, chunks, sessionId, trigger || 'auto');
 
-  // Auto-optimize: prune stale entries + sync to RuVector if available
+  // Auto-optimize: prune stale entries + sync to RufVector if available
   const optimizeResult = await autoOptimize(backend, type);
 
   const total = await backend.count(NAMESPACE);
@@ -1861,7 +1861,7 @@ async function doStatus() {
   console.log('\n=== Context Persistence Archive Status ===\n');
   const backendLabel = {
     sqlite: ARCHIVE_DB_PATH,
-    ruvector: `${process.env.RUVECTOR_HOST || 'N/A'}:${process.env.RUVECTOR_PORT || '5432'}`,
+    rufvector: `${process.env.RUVECTOR_HOST || 'N/A'}:${process.env.RUVECTOR_PORT || '5432'}`,
     agentdb: 'in-memory HNSW',
     json: ARCHIVE_JSON_PATH,
   };
@@ -1874,8 +1874,8 @@ async function doStatus() {
   console.log(`  Proactive:   enabled (UserPromptSubmit hook)`);
   console.log(`  Auto-opt:    ${AUTO_OPTIMIZE ? 'enabled' : 'disabled'} (importance ranking, pruning, sync)`);
   console.log(`  Retention:   ${RETENTION_DAYS} days (prune never-accessed entries)`);
-  const rvConfig = getRuVectorConfig();
-  console.log(`  RuVector:    ${rvConfig ? `${rvConfig.host}:${rvConfig.port}/${rvConfig.database} (auto-sync enabled)` : 'not configured'}`);
+  const rvConfig = getRufVectorConfig();
+  console.log(`  RufVector:    ${rvConfig ? `${rvConfig.host}:${rvConfig.port}/${rvConfig.database} (auto-sync enabled)` : 'not configured'}`);
 
   // Self-learning stats
   if (type === 'sqlite' && backend.db) {
@@ -1935,10 +1935,10 @@ async function doStatus() {
 
 export {
   SQLiteBackend,
-  RuVectorBackend,
+  RufVectorBackend,
   JsonFileBackend,
   resolveBackend,
-  getRuVectorConfig,
+  getRufVectorConfig,
   createEmbedding,
   createHashEmbedding,
   getOnnxPipeline,

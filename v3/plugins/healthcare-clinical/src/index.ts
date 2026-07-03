@@ -70,9 +70,9 @@ export const pluginMetadata = {
   tags: ['healthcare', 'clinical', 'hipaa', 'fhir', 'patient-similarity', 'drug-interactions'],
   wasmPackages: [
     'micro-hnsw-wasm',
-    'ruvector-gnn-wasm',
-    'ruvector-hyperbolic-hnsw-wasm',
-    'ruvector-sparse-inference-wasm',
+    'rufvector-gnn-wasm',
+    'rufvector-hyperbolic-hnsw-wasm',
+    'rufvector-sparse-inference-wasm',
   ],
 };
 

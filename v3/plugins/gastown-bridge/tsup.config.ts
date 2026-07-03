@@ -65,7 +65,7 @@ export default defineConfig([
       '@rufflo/memory',
       // WASM modules - loaded dynamically
       'gastown-formula-wasm',
-      'ruvector-gnn-wasm',
+      'rufvector-gnn-wasm',
       // Node built-ins
       'child_process',
       'util',

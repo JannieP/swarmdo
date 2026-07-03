@@ -27,7 +27,7 @@ describe('AttentionBridge', () => {
     });
 
     it('should have correct name and version', () => {
-      expect(bridge.name).toBe('ruvector-attention-wasm');
+      expect(bridge.name).toBe('rufvector-attention-wasm');
       expect(bridge.version).toBe('0.1.0');
     });
 

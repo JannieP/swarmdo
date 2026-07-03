@@ -75,7 +75,7 @@ export class AttentionWASMManager {
      * Uses global cache to share instances across AttentionService instances
      */
     async loadWASMModule() {
-        const cacheKey = 'ruvector-attention-wasm';
+        const cacheKey = 'rufvector-attention-wasm';
         // Check cache first (optimization: 2-5s → <10ms)
         if (wasmInstanceCache.has(cacheKey)) {
             this.wasmModule = wasmInstanceCache.get(cacheKey);
@@ -83,8 +83,8 @@ export class AttentionWASMManager {
             return;
         }
         try {
-            // Try to import ruvector-attention-wasm
-            const mod = await import('ruvector-attention-wasm').catch(() => null);
+            // Try to import rufvector-attention-wasm
+            const mod = await import('rufvector-attention-wasm').catch(() => null);
             if (!mod) {
                 throw new Error('WASM module not available');
             }
@@ -98,7 +98,7 @@ export class AttentionWASMManager {
         }
         catch (error) {
             const errorMessage = error instanceof Error ? error.message : String(error);
-            console.warn(`⚠️  Failed to load ruvector-attention-wasm: ${errorMessage}`);
+            console.warn(`⚠️  Failed to load rufvector-attention-wasm: ${errorMessage}`);
             console.warn('   Falling back to JavaScript implementation');
             this.wasmModule = null;
         }

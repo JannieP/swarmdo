@@ -181,8 +181,7 @@
     "onnxruntime-node": "^1.23.2",
     "sharp": "^0.32.6",
     "sql.js": "^1.11.0",
-    "@rufvector/edge-full": "^0.1.0",
-    "ruvector-onnx-embeddings-wasm": "^0.1.2"
+    "@rufvector/edge-full": "^0.1.0"
   },
   "overrides": {
     "protobufjs": ">=7.5.5",

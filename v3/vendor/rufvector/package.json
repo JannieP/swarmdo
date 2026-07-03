@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "ruvector": "./bin/cli.js"
+    "rufvector": "./bin/cli.js"
   },
   "scripts": {
     "build": "tsc && node -e \"require('fs').cpSync('src/core/onnx','dist/core/onnx',{recursive:true})\"",
@@ -30,8 +30,8 @@
     "rust",
     "wasm",
     "native",
-    "ruv",
-    "ruvector",
+    "ruf",
+    "rufvector",
     "attention",
     "transformer",
     "flash-attention",

@@ -65,7 +65,7 @@ let wasmLoadAttempted = false;
 let napiLoadAttempted = false;
 
 /**
- * Attempt to load the ruvector-attention-wasm module
+ * Attempt to load the rufvector-attention-wasm module
  */
 async function loadWasmModule(): Promise<boolean> {
   if (wasmLoadAttempted) return wasmInitialized;
@@ -73,7 +73,7 @@ async function loadWasmModule(): Promise<boolean> {
 
   try {
     // Dynamic import for WASM module
-    const wasm = await import('ruvector-attention-wasm');
+    const wasm = await import('rufvector-attention-wasm');
     if (wasm.default) {
       await wasm.default(); // Initialize WASM
     } else if (wasm.init) {

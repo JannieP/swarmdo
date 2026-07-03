@@ -27,11 +27,11 @@ const TOOL_GROUPS = {
     source: "builtin",
   },
 
-  // --- Intelligence (ruvector) ---
+  // --- Intelligence (rufvector) ---
   intelligence: {
     enabled: process.env.MCP_GROUP_INTELLIGENCE !== "false",
-    description: "Self-learning intelligence — routing, memory, pattern training (ruvector)",
-    source: "ruvector",
+    description: "Self-learning intelligence — routing, memory, pattern training (rufvector)",
+    source: "rufvector",
     prefixes: ["hooks_"],
   },
 
@@ -251,7 +251,7 @@ class StdioMcpClient {
 // =============================================================================
 
 const BACKEND_DEFS = [
-  { name: "ruvector",       command: "npx", args: ["-y", "ruvector", "mcp", "start"],   groups: ["intelligence"] },
+  { name: "rufvector",       command: "npx", args: ["-y", "rufvector", "mcp", "start"],   groups: ["intelligence"] },
   { name: "rufflo",          command: "npx", args: ["-y", "rufflo", "mcp", "start"],      groups: ["agents", "memory", "devtools", "security", "browser", "neural"] },
   { name: "agentic-flow",   command: "npx", args: ["-y", "agentic-flow@alpha", "mcp", "start"], groups: ["agentic-flow"] },
   { name: "claude",         command: "claude", args: ["mcp", "serve"],                  groups: ["claude-code"] },
@@ -429,17 +429,17 @@ ${inactiveGroups.map(([name, g]) => `- **${name}** — ${g.description}`).join("
 
   // Specific group guidance
   const groupGuides = {
-    intelligence: `# Intelligence Group (ruvector)
+    intelligence: `# Intelligence Group (rufvector)
 
 Self-learning intelligence tools for routing and vector memory.
 
 ## Key Tools
-- **ruvector__hooks_route** — Route a task to the best agent type. Call with a task description.
-- **ruvector__hooks_remember** — Store context/knowledge in vector memory for later recall.
-- **ruvector__hooks_recall** — Search vector memory semantically. Good for finding past context.
-- **ruvector__hooks_pretrain** — Bootstrap intelligence from a code repository.
-- **ruvector__hooks_build_agents** — Generate optimized agent configurations.
-- **ruvector__hooks_stats** — Get intelligence statistics and learning metrics.
+- **rufvector__hooks_route** — Route a task to the best agent type. Call with a task description.
+- **rufvector__hooks_remember** — Store context/knowledge in vector memory for later recall.
+- **rufvector__hooks_recall** — Search vector memory semantically. Good for finding past context.
+- **rufvector__hooks_pretrain** — Bootstrap intelligence from a code repository.
+- **rufvector__hooks_build_agents** — Generate optimized agent configurations.
+- **rufvector__hooks_stats** — Get intelligence statistics and learning metrics.
 
 ## When to Use
 - Before starting complex tasks: route to find the best agent approach
@@ -1021,7 +1021,7 @@ IMPORTANT: Call \`guidance\` with topic='overview' if you are ever unsure which 
 
 # Tool Groups
 
-Your tools are organized into groups. Each tool name is prefixed with its backend (e.g., \`rufflo__agent_spawn\`, \`ruvector__hooks_route\`). Always use the full prefixed name when calling tools.
+Your tools are organized into groups. Each tool name is prefixed with its backend (e.g., \`rufflo__agent_spawn\`, \`rufvector__hooks_route\`). Always use the full prefixed name when calling tools.
 
 ## Group 1: Core Tools (always on)
 Built-in tools available in every conversation.
@@ -1035,39 +1035,39 @@ Built-in tools available in every conversation.
   Topics: \`overview\`, \`groups\`, \`agents\`, \`memory\`, \`intelligence\`, \`devtools\`
   For specific tool help: \`guidance(topic='tool', tool_name='rufflo__agent_spawn')\`
 
-## Group 2: Intelligence & Learning (ruvector)
+## Group 2: Intelligence & Learning (rufvector)
 Pattern learning, routing, code analysis, and trajectory tracking. ${TOOL_GROUPS.intelligence.enabled ? "ACTIVE" : "DISABLED"}
 
 ### Essential Intelligence Tools:
-- **ruvector__hooks_route** — Route a task to the optimal agent type. Call this FIRST for complex tasks.
+- **rufvector__hooks_route** — Route a task to the optimal agent type. Call this FIRST for complex tasks.
   \`{"task": "describe what needs to be done", "context": ["relevant info"]}\`
   Returns ranked agent recommendations with confidence scores.
-- **ruvector__hooks_remember** — Store a key-value pair in persistent memory for cross-session recall.
+- **rufvector__hooks_remember** — Store a key-value pair in persistent memory for cross-session recall.
   \`{"key": "pattern-name", "value": "what to remember", "namespace": "patterns"}\`
-- **ruvector__hooks_recall** — Retrieve a previously stored memory by key.
-- **ruvector__hooks_suggest_context** — Get contextual suggestions based on current work.
-- **ruvector__hooks_swarm_recommend** — Get swarm topology recommendation for a task type.
-- **ruvector__hooks_capabilities** — List all intelligence system capabilities.
+- **rufvector__hooks_recall** — Retrieve a previously stored memory by key.
+- **rufvector__hooks_suggest_context** — Get contextual suggestions based on current work.
+- **rufvector__hooks_swarm_recommend** — Get swarm topology recommendation for a task type.
+- **rufvector__hooks_capabilities** — List all intelligence system capabilities.
 
 ### Code Analysis:
-- **ruvector__hooks_ast_analyze** — Analyze code structure (AST) of a file.
-- **ruvector__hooks_ast_complexity** — Get complexity metrics for code.
-- **ruvector__hooks_security_scan** — Scan code for security vulnerabilities.
-- **ruvector__hooks_diff_analyze** — Analyze a code diff for risk and impact.
-- **ruvector__hooks_diff_similar** — Find similar past diffs/changes.
+- **rufvector__hooks_ast_analyze** — Analyze code structure (AST) of a file.
+- **rufvector__hooks_ast_complexity** — Get complexity metrics for code.
+- **rufvector__hooks_security_scan** — Scan code for security vulnerabilities.
+- **rufvector__hooks_diff_analyze** — Analyze a code diff for risk and impact.
+- **rufvector__hooks_diff_similar** — Find similar past diffs/changes.
 
 ### Trajectory Learning (for multi-step tasks):
-- **ruvector__hooks_trajectory_begin** — Start tracking a multi-step task for learning.
-- **ruvector__hooks_trajectory_step** — Record a step in the current trajectory.
-- **ruvector__hooks_trajectory_end** — End trajectory, triggering pattern extraction.
+- **rufvector__hooks_trajectory_begin** — Start tracking a multi-step task for learning.
+- **rufvector__hooks_trajectory_step** — Record a step in the current trajectory.
+- **rufvector__hooks_trajectory_end** — End trajectory, triggering pattern extraction.
 
 ### Memory & Compression:
-- **ruvector__hooks_compress** — Compress/summarize long text for efficient storage.
-- **ruvector__hooks_rag_context** — Get RAG context for a query from stored knowledge.
-- **ruvector__hooks_learn** — Force the system to learn from provided examples.
-- **ruvector__hooks_batch_learn** — Learn from multiple examples at once.
-- **ruvector__hooks_stats** — View learning statistics and metrics.
-- **ruvector__hooks_doctor** — Run diagnostics on the intelligence system.
+- **rufvector__hooks_compress** — Compress/summarize long text for efficient storage.
+- **rufvector__hooks_rag_context** — Get RAG context for a query from stored knowledge.
+- **rufvector__hooks_learn** — Force the system to learn from provided examples.
+- **rufvector__hooks_batch_learn** — Learn from multiple examples at once.
+- **rufvector__hooks_stats** — View learning statistics and metrics.
+- **rufvector__hooks_doctor** — Run diagnostics on the intelligence system.
 
 ## Group 3: Agents & Orchestration (rufflo)
 Spawn agents, coordinate swarms, manage tasks and workflows. ${TOOL_GROUPS.agents.enabled ? "ACTIVE" : "DISABLED"}
@@ -1222,7 +1222,7 @@ When the user asks you something, follow this decision tree:
 
 1. **Knowledge question** ("how do I...", "what is...") → \`search\` first, then \`web_research\` if not found
 2. **Research request** ("look up", "compare", "find out") → \`web_research\` with appropriate action (use \`goap\` for important questions)
-3. **Code task** ("write", "fix", "implement") → \`ruvector__hooks_route\` to find best approach, then \`rufflo__agent_spawn\`
+3. **Code task** ("write", "fix", "implement") → \`rufvector__hooks_route\` to find best approach, then \`rufflo__agent_spawn\`
 4. **Analysis request** ("analyze", "review", "audit") → spawn reviewer/security agents + analysis tools
 5. **Multi-step project** → \`rufflo__task_create\` for tracking, \`rufflo__swarm_init\` for coordination
 6. **Memory/recall** ("remember", "save", "what did we...") → \`rufflo__memory_store\` / \`rufflo__memory_search\`
@@ -1240,13 +1240,13 @@ When the user asks you something, follow this decision tree:
 \`web_research(action='goap')\` → analyze → respond with citations
 
 ### Code Implementation
-\`ruvector__hooks_route\` → \`rufflo__agent_spawn(coder)\` → track with \`rufflo__task_create\` → report
+\`rufvector__hooks_route\` → \`rufflo__agent_spawn(coder)\` → track with \`rufflo__task_create\` → report
 
 ### Multi-Agent Analysis
 \`rufflo__swarm_init(hierarchical)\` → spawn agents → coordinate → synthesize results
 
 ### Learning & Memory
-\`rufflo__memory_search\` (check existing) → do work → \`rufflo__memory_store\` (save results) → \`ruvector__hooks_learn\`
+\`rufflo__memory_search\` (check existing) → do work → \`rufflo__memory_store\` (save results) → \`rufvector__hooks_learn\`
 
 # Parallel Execution
 
@@ -1272,7 +1272,7 @@ NEVER call tools sequentially when they could run in parallel.
 - Raw JSON, similarity scores, chunk IDs, internal IDs, task IDs
 - Tool names, function names, API endpoints, backend names
 - References to "MCP", "tool calls", "vectors", "embeddings", infrastructure
-- The prefixes "rufflo__" or "ruvector__" — just describe what you're doing naturally
+- The prefixes "rufflo__" or "rufvector__" — just describe what you're doing naturally
 - Error stack traces — summarize errors in plain language`;
 }
 

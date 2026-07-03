@@ -52,8 +52,8 @@ const ARGS = (() => {
     tie: null,
     bench: null,
     mutator: 'deterministic',
-    ruvllmUrl: null,
-    ruvllmModel: null,
+    rufllmUrl: null,
+    rufllmModel: null,
     confirm: false,
     alertOnNoImprovement: false,
     format: 'json',
@@ -76,8 +76,8 @@ const ARGS = (() => {
     else if (v === '--tie') a.tie = process.argv[++i];
     else if (v === '--bench') a.bench = process.argv[++i];
     else if (v === '--mutator') a.mutator = process.argv[++i];
-    else if (v === '--ruvllm-url') a.ruvllmUrl = process.argv[++i];
-    else if (v === '--ruvllm-model') a.ruvllmModel = process.argv[++i];
+    else if (v === '--rufllm-url') a.rufllmUrl = process.argv[++i];
+    else if (v === '--rufllm-model') a.rufllmModel = process.argv[++i];
     else if (v === '--confirm') a.confirm = true;
     else if (v === '--alert-on-no-improvement') a.alertOnNoImprovement = true;
     else if (v === '--format') a.format = process.argv[++i];
@@ -112,8 +112,8 @@ function safetyChecks() {
     console.error(`evolve: --selection must be one of quality-diversity|behavioral-diversity|niche-steering|clade|pareto`);
     process.exit(2);
   }
-  if (!['deterministic', 'ruvllm'].includes(ARGS.mutator)) {
-    console.error(`evolve: --mutator must be deterministic|ruvllm`);
+  if (!['deterministic', 'rufllm'].includes(ARGS.mutator)) {
+    console.error(`evolve: --mutator must be deterministic|rufllm`);
     process.exit(2);
   }
   return repoPath;
@@ -177,8 +177,8 @@ async function main() {
   if (ARGS.fdr != null) cliArgs.push('--fdr', String(ARGS.fdr));
   if (ARGS.tie) cliArgs.push('--tie', ARGS.tie);
   if (ARGS.bench) cliArgs.push('--bench', ARGS.bench);
-  if (ARGS.ruvllmUrl) cliArgs.push('--ruvllm-url', ARGS.ruvllmUrl);
-  if (ARGS.ruvllmModel) cliArgs.push('--ruvllm-model', ARGS.ruvllmModel);
+  if (ARGS.rufllmUrl) cliArgs.push('--rufllm-url', ARGS.rufllmUrl);
+  if (ARGS.rufllmModel) cliArgs.push('--rufllm-model', ARGS.rufllmModel);
 
   // Forward progress lines to stderr so the user sees per-generation activity
   // (subprocess-of-an-MCP-tool case: this still surfaces in the agent log).

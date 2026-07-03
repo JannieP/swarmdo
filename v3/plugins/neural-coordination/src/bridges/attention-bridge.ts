@@ -1,7 +1,7 @@
 /**
  * Attention Bridge
  *
- * Bridge to ruvector-attention-wasm for multi-head attention computation.
+ * Bridge to rufvector-attention-wasm for multi-head attention computation.
  * Enables agent-to-agent communication weighting and focus management.
  */
 
@@ -83,7 +83,7 @@ interface AttentionModule {
  * Attention Bridge implementation
  */
 export class AttentionBridge {
-  readonly name = 'ruvector-attention-wasm';
+  readonly name = 'rufvector-attention-wasm';
   readonly version = '0.1.0';
 
   private _status: WasmModuleStatus = 'unloaded';

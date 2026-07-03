@@ -3,7 +3,7 @@
  *
  * Provides sparse inference capabilities for efficient processing
  * of high-dimensional financial data. Integrates with
- * ruvector-sparse-inference-wasm for anomaly detection and
+ * rufvector-sparse-inference-wasm for anomaly detection and
  * market regime classification.
  *
  * Features:
@@ -34,7 +34,7 @@ const defaultLogger: Logger = {
 };
 
 /**
- * WASM module interface for ruvector-sparse-inference-wasm
+ * WASM module interface for rufvector-sparse-inference-wasm
  */
 interface SparseWasmModule {
   create_sparse_model(inputDim: number, hiddenDim: number, sparsity: number): number;
@@ -526,7 +526,7 @@ export class FinancialSparseBridge implements SparseBridge {
 
   private async resolveWasmPath(): Promise<string | null> {
     try {
-      const module = await import(/* webpackIgnore: true */ 'ruvector-sparse-inference-wasm' as string) as { default?: string };
+      const module = await import(/* webpackIgnore: true */ 'rufvector-sparse-inference-wasm' as string) as { default?: string };
       return module.default ?? null;
     } catch {
       return null;

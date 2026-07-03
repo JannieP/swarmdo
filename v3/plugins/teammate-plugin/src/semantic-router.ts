@@ -17,7 +17,7 @@ async function loadNeuralBMSSP(): Promise<void> {
   if (WasmNeuralBMSSP) return;
 
   try {
-    const bmssp = await import('@ruvnet/bmssp');
+    const bmssp = await import('@rufnet/bmssp');
     await bmssp.default(); // Initialize WASM
     WasmNeuralBMSSP = bmssp.WasmNeuralBMSSP;
   } catch (error) {

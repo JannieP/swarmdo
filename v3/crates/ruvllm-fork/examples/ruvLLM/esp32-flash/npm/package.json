@@ -36,7 +36,7 @@
     "url": "https://github.com/ruvnet/ruvector/issues"
   },
   "bin": {
-    "ruvllm-esp32": "./bin/cli.js"
+    "rufllm-esp32": "./bin/cli.js"
   },
   "files": [
     "bin/",

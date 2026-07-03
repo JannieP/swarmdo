@@ -1,7 +1,7 @@
 /**
  * ONNX Embeddings WASM Integration
  *
- * Provides browser-compatible embeddings using ruvector-onnx-embeddings-wasm.
+ * Provides browser-compatible embeddings using rufvector-onnx-embeddings-wasm.
  *
  * Features:
  * - Pure WASM: No native dependencies, runs in browser
@@ -40,7 +40,7 @@ export async function initOnnxEmbeddingsWasm() {
         return initPromise;
     initPromise = (async () => {
         try {
-            const mod = await import('ruvector-onnx-embeddings-wasm');
+            const mod = await import('rufvector-onnx-embeddings-wasm');
             wasmModule = mod;
             // Initialize WASM runtime
             if (wasmModule.initialize) {

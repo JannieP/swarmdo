@@ -2,7 +2,7 @@
  * Sparse Inference Bridge for Performance Optimizer
  *
  * Provides efficient trace analysis using sparse inference techniques
- * from ruvector-sparse-inference-wasm for processing large performance traces.
+ * from rufvector-sparse-inference-wasm for processing large performance traces.
  */
 
 import type {
