@@ -45,6 +45,7 @@
     "v3/vendor/*/*.js",
     "v3/vendor/*/*.mjs",
     "v3/vendor/*/*.d.ts",
+    "v3/vendor/*/*.wasm",
     "v3/vendor/*/dist/**",
     "v3/vendor/*/scripts/**",
     "v3/vendor/*/bin/**",
@@ -90,7 +91,11 @@
     "semver": "7.7.3",
     "zod": "3.25.76",
     "@rufvector/rabitq-wasm": "file:v3/@rufvector/rabitq-wasm",
-    "rufvector": "file:v3/vendor/rufvector"
+    "rufvector": "file:v3/vendor/rufvector",
+    "rufvector-attention-wasm": "file:v3/vendor/rufvector-attention-wasm",
+    "rufvector-graph-transformer-wasm": "file:v3/vendor/rufvector-graph-transformer-wasm",
+    "rufvector-onnx-embeddings-wasm": "file:v3/vendor/rufvector-onnx-embeddings-wasm",
+    "agentic-flow": "file:v3/vendor/agentic-flow"
   },
   "optionalDependencies": {
     "@rufflo/aidefence": "file:v3/@rufflo/aidefence",
@@ -101,8 +106,7 @@
     "@rufvector/router": "file:v3/@rufvector/router",
     "@rufvector/rvf-node": "file:v3/@rufvector/rvf-node",
     "@rufvector/sona": "file:v3/@rufvector/sona",
-    "agentdb": "file:v3/vendor/agentdb",
-    "agentic-flow": "file:v3/vendor/agentic-flow"
+    "agentdb": "file:v3/vendor/agentdb"
   },
   "overrides": {
     "rufvector": "file:v3/vendor/rufvector",

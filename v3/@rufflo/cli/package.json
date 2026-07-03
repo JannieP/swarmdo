@@ -124,7 +124,7 @@
     "@rufvector/sona": "file:../../@rufvector/sona",
     "@rufvector/tiny-dancer": "file:../../@rufvector/tiny-dancer",
     "agentdb": "^3.0.0-alpha.17",
-    "agentic-flow": "^3.0.0-alpha.1",
+    "agentic-flow": "^2.0.0",
     "better-sqlite3": "^12.9.0",
     "metaharness": "~0.2.6",
     "rufvector": "file:../../vendor/rufvector",
