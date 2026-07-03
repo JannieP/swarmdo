@@ -1,3 +1,21 @@
 {
-  "mcpServers": {}
+  "mcpServers": {
+    "swarmdo": {
+      "command": "node",
+      "args": [
+        "v3/@swarmdo/cli/bin/mcp-server.js"
+      ],
+      "env": {
+        "SWARMDO_MCP_TRANSPORT": "stdio"
+      }
+    },
+    "swarmdo-swarm": {
+      "command": "node",
+      "args": [
+        "v3/vendor/swarmdo-swarm/bin/swarmdo-swarm-secure.js",
+        "mcp",
+        "start"
+      ]
+    }
+  }
 }
