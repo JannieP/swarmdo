@@ -1,6 +1,6 @@
 {
   "name": "swarmdo-bridge",
-  "version": "3.0.0",
+  "version": "1.0.0",
   "private": true,
   "description": "Swarmdo MCP-bridge + docker tooling (NOT published \u2014 the canonical `swarmdo` npm package is the repo root). Resolves the post-rename name collision where this wrapper and the root umbrella both became `swarmdo`.",
   "main": "bin/swarmdo.js",
@@ -37,7 +37,7 @@
     "package:rvf": "bash src/scripts/package-rvf.sh"
   },
   "dependencies": {
-    "@swarmdo/cli": "^3.0.0"
+    "@swarmdo/cli": "^1.0.0"
   },
   "optionalDependencies": {
     "metaharness": "~0.2.6",
