@@ -929,7 +929,7 @@ export const agentTools: MCPTool[] = [
     // response. The shape matches what the CLI `logs` subcommand expects:
     // `{ agentId, entries: [{timestamp,level,message,context?}], total }`.
     name: 'agent_logs',
-    description: 'Return recorded activity-log entries for a tracked agent (idle/running history, last task result). Use when native Task tool is wrong because you need the agent\'s log across turns (what it did, last error/result, swarm context) rather than a one-shot Task transcript. For a Task you just ran, native Task output is fine. Pair with agent_list to find the agentId. (Hive-mind-spawned workers are resolved here too.) Today this returns the last task result as a synthetic entry — full per-agent activity logs land with hive worker execution wiring (ruvnet/swarmdo#1916).',
+    description: 'Return recorded activity-log entries for a tracked agent (idle/running history, last task result). Use when native Task tool is wrong because you need the agent\'s log across turns (what it did, last error/result, swarm context) rather than a one-shot Task transcript. For a Task you just ran, native Task output is fine. Pair with agent_list to find the agentId. (Hive-mind-spawned workers are resolved here too.) Today this returns the last task result as a synthetic entry — full per-agent activity logs land with hive worker execution wiring (upstream/swarmdo#1916).',
     category: 'agent',
     inputSchema: {
       type: 'object',
@@ -963,7 +963,7 @@ export const agentTools: MCPTool[] = [
         agentId: agent.agentId,
         entries: sliced,
         total: entries.length,
-        note: 'per-agent activity logging is not yet wired; entries are synthetic (ruvnet/swarmdo#1916)',
+        note: 'per-agent activity logging is not yet wired; entries are synthetic (upstream/swarmdo#1916)',
       };
     },
   },

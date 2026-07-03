@@ -7,7 +7,7 @@
 
 **Advanced metadata filtering for Swarmvector vector search.**
 
-`swarmvector-filter` provides a powerful filter expression language for combining vector similarity search with metadata constraints. Supports complex boolean expressions, range queries, and efficient filter evaluation. Part of the [Swarmvector](https://github.com/ruvnet/swarmvector) ecosystem.
+`swarmvector-filter` provides a powerful filter expression language for combining vector similarity search with metadata constraints. Supports complex boolean expressions, range queries, and efficient filter evaluation. Part of the [Swarmvector](the upstream project (see NOTICE)) ecosystem.
 
 ## Why Swarmvector Filter?
 
@@ -207,7 +207,7 @@ impl FilterExpr {
 
 - **[Main README](../../README.md)** - Complete project overview
 - **[API Documentation](https://docs.rs/swarmvector-filter)** - Full API reference
-- **[GitHub Repository](https://github.com/ruvnet/swarmvector)** - Source code
+- **[GitHub Repository](the upstream project (see NOTICE))** - Source code
 
 ## License
 
@@ -217,10 +217,10 @@ impl FilterExpr {
 
 <div align="center">
 
-**Part of [Swarmvector](https://github.com/ruvnet/swarmvector) - Built by [rUv](https://ruv.io)**
+**Part of [Swarmvector](the upstream project (see NOTICE)) - Built by [the upstream author](https://swarmdo.com)**
 
-[![Star on GitHub](https://img.shields.io/github/stars/ruvnet/swarmvector?style=social)](https://github.com/ruvnet/swarmvector)
+[![Star on GitHub](https://img.shields.io/github/stars/upstream/swarmvector?style=social)](the upstream project (see NOTICE))
 
-[Documentation](https://docs.rs/swarmvector-filter) | [Crates.io](https://crates.io/crates/swarmvector-filter) | [GitHub](https://github.com/ruvnet/swarmvector)
+[Documentation](https://docs.rs/swarmvector-filter) | [Crates.io](https://crates.io/crates/swarmvector-filter) | [GitHub](the upstream project (see NOTICE))
 
 </div>

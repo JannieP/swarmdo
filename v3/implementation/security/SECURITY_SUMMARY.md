@@ -31,7 +31,7 @@
    - **Fix:** Implement bcrypt with salt
 
 3. **Hardcoded Credentials** - Default admin password in code
-   - Username: `admin@rufflo.local`
+   - Username: `admin@swarmdo.local`
    - Password: `admin123` (in public repo!)
    - **Fix:** Generate random passwords on first run
 
@@ -137,8 +137,8 @@ Full reports available in:
 
 ## Contact
 
-Security issues: security@rufflo.io  
-GitHub: https://github.com/ruvnet/claude-code-flow/security
+Security issues: security@swarmdo.io  
+GitHub: the upstream project (see NOTICE)
 
 ---
 

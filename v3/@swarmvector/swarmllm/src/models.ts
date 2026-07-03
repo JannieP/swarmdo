@@ -1,11 +1,11 @@
 /**
- * RuvLTRA Model Registry and Downloader
+ * SwarmLTRA Model Registry and Downloader
  *
  * Automatically downloads GGUF models from HuggingFace Hub.
  *
  * @example
  * ```typescript
- * import { ModelDownloader, RUVLTRA_MODELS } from '@swarmvector/swarmllm';
+ * import { ModelDownloader, SWARMLTRA_MODELS } from '@swarmvector/swarmllm';
  *
  * // Download the Claude Code optimized model
  * const downloader = new ModelDownloader();
@@ -78,46 +78,46 @@ export interface DownloadOptions {
 }
 
 /** HuggingFace repository */
-const HF_REPO = 'ruv/ruvltra';
+const HF_REPO = 'swarmdo/swarmltra';
 const HF_BASE_URL = `https://huggingface.co/${HF_REPO}/resolve/main`;
 
-/** Available RuvLTRA models */
-export const RUVLTRA_MODELS: Record<string, ModelInfo> = {
+/** Available SwarmLTRA models */
+export const SWARMLTRA_MODELS: Record<string, ModelInfo> = {
   'claude-code': {
     id: 'claude-code',
-    name: 'RuvLTRA Claude Code',
-    filename: 'ruvltra-claude-code-0.5b-q4_k_m.gguf',
+    name: 'SwarmLTRA Claude Code',
+    filename: 'swarmltra-claude-code-0.5b-q4_k_m.gguf',
     sizeBytes: 398_000_000,
     size: '398 MB',
     parameters: '0.5B',
     useCase: 'Claude Code workflows, agentic coding',
     quantization: 'Q4_K_M',
     contextLength: 4096,
-    url: `${HF_BASE_URL}/ruvltra-claude-code-0.5b-q4_k_m.gguf`,
+    url: `${HF_BASE_URL}/swarmltra-claude-code-0.5b-q4_k_m.gguf`,
   },
   'small': {
     id: 'small',
-    name: 'RuvLTRA Small',
-    filename: 'ruvltra-small-0.5b-q4_k_m.gguf',
+    name: 'SwarmLTRA Small',
+    filename: 'swarmltra-small-0.5b-q4_k_m.gguf',
     sizeBytes: 398_000_000,
     size: '398 MB',
     parameters: '0.5B',
     useCase: 'Edge devices, IoT, resource-constrained environments',
     quantization: 'Q4_K_M',
     contextLength: 4096,
-    url: `${HF_BASE_URL}/ruvltra-small-0.5b-q4_k_m.gguf`,
+    url: `${HF_BASE_URL}/swarmltra-small-0.5b-q4_k_m.gguf`,
   },
   'medium': {
     id: 'medium',
-    name: 'RuvLTRA Medium',
-    filename: 'ruvltra-medium-1.1b-q4_k_m.gguf',
+    name: 'SwarmLTRA Medium',
+    filename: 'swarmltra-medium-1.1b-q4_k_m.gguf',
     sizeBytes: 669_000_000,
     size: '669 MB',
     parameters: '1.1B',
     useCase: 'General purpose, balanced performance',
     quantization: 'Q4_K_M',
     contextLength: 8192,
-    url: `${HF_BASE_URL}/ruvltra-medium-1.1b-q4_k_m.gguf`,
+    url: `${HF_BASE_URL}/swarmltra-medium-1.1b-q4_k_m.gguf`,
   },
 };
 
@@ -147,7 +147,7 @@ export function resolveModelId(modelIdOrAlias: string): string | null {
   const normalized = modelIdOrAlias.toLowerCase().trim();
 
   // Direct match
-  if (RUVLTRA_MODELS[normalized]) {
+  if (SWARMLTRA_MODELS[normalized]) {
     return normalized;
   }
 
@@ -164,18 +164,18 @@ export function resolveModelId(modelIdOrAlias: string): string | null {
  */
 export function getModelInfo(modelIdOrAlias: string): ModelInfo | null {
   const id = resolveModelId(modelIdOrAlias);
-  return id ? RUVLTRA_MODELS[id] : null;
+  return id ? SWARMLTRA_MODELS[id] : null;
 }
 
 /**
  * List all available models
  */
 export function listModels(): ModelInfo[] {
-  return Object.values(RUVLTRA_MODELS);
+  return Object.values(SWARMLTRA_MODELS);
 }
 
 /**
- * Model downloader for RuvLTRA GGUF models
+ * Model downloader for SwarmLTRA GGUF models
  */
 export class ModelDownloader {
   private modelsDir: string;

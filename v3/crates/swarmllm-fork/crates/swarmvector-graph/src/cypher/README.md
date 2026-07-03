@@ -85,7 +85,7 @@ END
 The lexer converts raw text into a stream of tokens:
 
 ```rust
-use ruvector_graph::cypher::lexer::tokenize;
+use swarmvector_graph::cypher::lexer::tokenize;
 
 let tokens = tokenize("MATCH (n:Person) RETURN n")?;
 // Returns: [MATCH, (, Identifier("n"), :, Identifier("Person"), ), RETURN, Identifier("n")]
@@ -103,7 +103,7 @@ let tokens = tokenize("MATCH (n:Person) RETURN n")?;
 Recursive descent parser using nom combinators:
 
 ```rust
-use ruvector_graph::cypher::parse_cypher;
+use swarmvector_graph::cypher::parse_cypher;
 
 let query = "MATCH (n:Person) WHERE n.age > 30 RETURN n.name";
 let ast = parse_cypher(query)?;
@@ -157,7 +157,7 @@ pub struct HyperedgePattern {
 Type checking and validation:
 
 ```rust
-use ruvector_graph::cypher::semantic::SemanticAnalyzer;
+use swarmvector_graph::cypher::semantic::SemanticAnalyzer;
 
 let mut analyzer = SemanticAnalyzer::new();
 analyzer.analyze_query(&ast)?;
@@ -175,7 +175,7 @@ analyzer.analyze_query(&ast)?;
 Query plan optimization:
 
 ```rust
-use ruvector_graph::cypher::optimizer::QueryOptimizer;
+use swarmvector_graph::cypher::optimizer::QueryOptimizer;
 
 let optimizer = QueryOptimizer::new();
 let plan = optimizer.optimize(query);
@@ -195,7 +195,7 @@ println!("Estimated cost: {}", plan.estimated_cost);
 ### Basic Query Parsing
 
 ```rust
-use ruvector_graph::cypher::{parse_cypher, Query};
+use swarmvector_graph::cypher::{parse_cypher, Query};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let query = r#"
@@ -218,7 +218,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Hyperedge Queries
 
 ```rust
-use ruvector_graph::cypher::parse_cypher;
+use swarmvector_graph::cypher::parse_cypher;
 
 // Parse a hyperedge pattern (N-ary relationship)
 let query = r#"
@@ -238,7 +238,7 @@ assert!(ast.has_hyperedges());
 ### Semantic Analysis
 
 ```rust
-use ruvector_graph::cypher::{parse_cypher, semantic::SemanticAnalyzer};
+use swarmvector_graph::cypher::{parse_cypher, semantic::SemanticAnalyzer};
 
 let query = "MATCH (n:Person) RETURN COUNT(n), AVG(n.age)";
 let ast = parse_cypher(query)?;
@@ -253,7 +253,7 @@ match analyzer.analyze_query(&ast) {
 ### Query Optimization
 
 ```rust
-use ruvector_graph::cypher::{parse_cypher, optimizer::QueryOptimizer};
+use swarmvector_graph::cypher::{parse_cypher, optimizer::QueryOptimizer};
 
 let query = r#"
     MATCH (a:Person), (b:Person)
@@ -322,7 +322,7 @@ pub struct HyperedgePattern {
 The parser provides detailed error messages with position information:
 
 ```rust
-use ruvector_graph::cypher::parse_cypher;
+use swarmvector_graph::cypher::parse_cypher;
 
 match parse_cypher("MATCH (n:Person WHERE n.age > 30") {
     Ok(ast) => { /* ... */ },
@@ -342,7 +342,7 @@ match parse_cypher("MATCH (n:Person WHERE n.age > 30") {
 Benchmarks available in `benches/cypher_parser.rs`:
 
 ```bash
-cargo bench --package ruvector-graph --bench cypher_parser
+cargo bench --package swarmvector-graph --bench cypher_parser
 ```
 
 ## Testing
@@ -351,13 +351,13 @@ Comprehensive test coverage across all modules:
 
 ```bash
 # Run all Cypher tests
-cargo test --package ruvector-graph --lib cypher
+cargo test --package swarmvector-graph --lib cypher
 
 # Run parser integration tests
-cargo test --package ruvector-graph --test cypher_parser_integration
+cargo test --package swarmvector-graph --test cypher_parser_integration
 
 # Run specific test
-cargo test --package ruvector-graph test_hyperedge_pattern
+cargo test --package swarmvector-graph test_hyperedge_pattern
 ```
 
 ## Implementation Details

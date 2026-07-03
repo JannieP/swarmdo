@@ -1,5 +1,5 @@
 /**
- * Utility functions for RuvSwarm
+ * Utility functions for SwarmSwarm
  */
 
 import { CognitiveProfile, SwarmTopology, AgentType, TaskPriority } from './types';

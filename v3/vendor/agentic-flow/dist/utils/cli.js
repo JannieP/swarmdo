@@ -348,7 +348,7 @@ PARALLEL EXECUTION & SWARM OPTIMIZATION (v2.0):
   See: /agentic-flow/src/prompts/parallel-execution-guide.md (v2.0)
        /docs/swarm-optimization-report.md
 
-For more information, visit: https://github.com/ruvnet/agentic-flow
+For more information, visit: the upstream project (see NOTICE)
   `);
 }
 export function validateOptions(options) {

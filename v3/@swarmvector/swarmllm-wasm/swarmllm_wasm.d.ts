@@ -770,12 +770,12 @@ export class RouteResultWasm {
 }
 
 /**
- * Main RuvLLM WASM interface.
+ * Main SwarmLLM WASM interface.
  *
  * Provides the primary entry point for LLM inference in the browser.
  * Manages KV cache, memory pools, and inference state.
  */
-export class RuvLLMWasm {
+export class SwarmLLMWasm {
     free(): void;
     [Symbol.dispose](): void;
     /**
@@ -795,7 +795,7 @@ export class RuvLLMWasm {
      */
     initializeWithConfig(config: KvCacheConfigWasm): void;
     /**
-     * Create a new RuvLLM WASM instance.
+     * Create a new SwarmLLM WASM instance.
      */
     constructor();
     /**
@@ -1222,7 +1222,7 @@ export interface InitOutput {
     readonly __wbg_parallelinference_free: (a: number, b: number) => void;
     readonly __wbg_patternwasm_free: (a: number, b: number) => void;
     readonly __wbg_routeresultwasm_free: (a: number, b: number) => void;
-    readonly __wbg_ruvllmwasm_free: (a: number, b: number) => void;
+    readonly __wbg_swarmllmwasm_free: (a: number, b: number) => void;
     readonly __wbg_sonaadaptresultwasm_free: (a: number, b: number) => void;
     readonly __wbg_sonaconfigwasm_free: (a: number, b: number) => void;
     readonly __wbg_sonainstantwasm_free: (a: number, b: number) => void;
@@ -1354,12 +1354,12 @@ export interface InitOutput {
     readonly routeresultwasm_metadata: (a: number, b: number) => void;
     readonly routeresultwasm_name: (a: number, b: number) => void;
     readonly routeresultwasm_score: (a: number) => number;
-    readonly ruvllmwasm_getPoolStats: (a: number, b: number) => void;
-    readonly ruvllmwasm_initialize: (a: number, b: number) => void;
-    readonly ruvllmwasm_initializeWithConfig: (a: number, b: number, c: number) => void;
-    readonly ruvllmwasm_isInitialized: (a: number) => number;
-    readonly ruvllmwasm_new: () => number;
-    readonly ruvllmwasm_reset: (a: number) => void;
+    readonly swarmllmwasm_getPoolStats: (a: number, b: number) => void;
+    readonly swarmllmwasm_initialize: (a: number, b: number) => void;
+    readonly swarmllmwasm_initializeWithConfig: (a: number, b: number, c: number) => void;
+    readonly swarmllmwasm_isInitialized: (a: number) => number;
+    readonly swarmllmwasm_new: () => number;
+    readonly swarmllmwasm_reset: (a: number) => void;
     readonly sonaadaptresultwasm_applied: (a: number) => number;
     readonly sonaadaptresultwasm_currentRank: (a: number) => number;
     readonly sonaadaptresultwasm_latencyUs: (a: number) => bigint;
@@ -1400,13 +1400,13 @@ export interface InitOutput {
     readonly timer_stop: (a: number) => number;
     readonly warn: (a: number, b: number) => void;
     readonly init: () => void;
-    readonly ruvllmwasm_version: (a: number) => void;
+    readonly swarmllmwasm_version: (a: number) => void;
     readonly kvcacheconfigwasm_set_headDim: (a: number, b: number) => void;
     readonly microloraconfigwasm_set_alpha: (a: number, b: number) => void;
     readonly microloraconfigwasm_set_inFeatures: (a: number, b: number) => void;
     readonly microloraconfigwasm_set_outFeatures: (a: number, b: number) => void;
     readonly sonaconfigwasm_set_hiddenDim: (a: number, b: number) => void;
-    readonly ruvllmwasm_formatChat: (a: number, b: number, c: number, d: number) => void;
+    readonly swarmllmwasm_formatChat: (a: number, b: number, c: number, d: number) => void;
     readonly optimal_worker_count: () => number;
     readonly detectChatTemplate: (a: number, b: number) => number;
     readonly now_ms: () => number;

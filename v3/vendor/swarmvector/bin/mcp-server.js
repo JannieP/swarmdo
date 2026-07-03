@@ -26,7 +26,7 @@ const path = require('path');
 const fs = require('fs');
 const { execSync, execFileSync } = require('child_process');
 
-// ADR-256: default-deny MCP tool-access policy (RUVECTOR_MCP_ALLOW/DENY/PROFILE)
+// ADR-256: default-deny MCP tool-access policy (SWARMVECTOR_MCP_ALLOW/DENY/PROFILE)
 const { buildToolPolicy, isToolAllowed, filterAllowedTools } = require('./mcp-policy.js');
 const MCP_TOOL_POLICY = buildToolPolicy(process.env);
 
@@ -264,7 +264,7 @@ class Intelligence {
   }
 
   /**
-   * Non-throwing write gate honoring RUVECTOR_REEMBED (D5): refuse (default)
+   * Non-throwing write gate honoring SWARMVECTOR_REEMBED (D5): refuse (default)
    * rethrows; warn skips the write with one stderr warning per process.
    */
   guardVectorWrite(active) {
@@ -276,11 +276,11 @@ class Intelligence {
       if (policy === 'warn') {
         if (!Intelligence._reembedWarned) {
           Intelligence._reembedWarned = true;
-          console.error(`swarmvector: ${e.message} (RUVECTOR_REEMBED=warn: store stays read-only, write skipped)`);
+          console.error(`swarmvector: ${e.message} (SWARMVECTOR_REEMBED=warn: store stays read-only, write skipped)`);
         }
         return { ok: false, skipped: true, error: e.message };
       }
-      if (policy === 'auto') e.message += ` (RUVECTOR_REEMBED=auto: run 'swarmvector hooks reembed' — in-place re-embedding needs the CLI)`;
+      if (policy === 'auto') e.message += ` (SWARMVECTOR_REEMBED=auto: run 'swarmvector hooks reembed' — in-place re-embedding needs the CLI)`;
       throw e;
     }
   }
@@ -1576,7 +1576,7 @@ const TOOLS = [
   },
   {
     name: 'edge_balance',
-    description: 'Check rUv balance',
+    description: 'Check the upstream author balance',
     inputSchema: {
       type: 'object',
       properties: {
@@ -1705,7 +1705,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
   const { name, arguments: args } = request.params;
 
-  // ADR-256 default-deny gate: refuse tools excluded by RUVECTOR_MCP_ALLOW/DENY/PROFILE
+  // ADR-256 default-deny gate: refuse tools excluded by SWARMVECTOR_MCP_ALLOW/DENY/PROFILE
   if (!isToolAllowed(name, MCP_TOOL_POLICY)) {
     return {
       content: [{
@@ -1713,7 +1713,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         text: JSON.stringify({
           success: false,
           error: `Tool '${name}' is denied by the MCP access policy (ADR-256). ` +
-            `Adjust RUVECTOR_MCP_ALLOW / RUVECTOR_MCP_DENY / RUVECTOR_MCP_PROFILE to permit it.`,
+            `Adjust SWARMVECTOR_MCP_ALLOW / SWARMVECTOR_MCP_DENY / SWARMVECTOR_MCP_PROFILE to permit it.`,
         }, null, 2),
       }],
       isError: true,
@@ -1753,7 +1753,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'hooks_remember': {
         // ADR-210 D0: provenance refusals throw and surface via the catch-all
-        // as isError; RUVECTOR_REEMBED=warn skips return { stored: false }.
+        // as isError; SWARMVECTOR_REEMBED=warn skips return { stored: false }.
         const result = await intel.remember(args.content, args.type || 'general');
         return {
           content: [{
@@ -3371,7 +3371,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
 
       case 'rvf_examples': {
-        const BASE_URL = 'https://raw.githubusercontent.com/ruvnet/swarmvector/main/examples/rvf/output';
+        const BASE_URL = 'https://raw.githubusercontent.com/upstream/swarmvector/main/examples/rvf/output';
         const examples = [
           { name: 'basic_store', size: '152 KB', desc: '1,000 vectors, dim 128' },
           { name: 'semantic_search', size: '755 KB', desc: 'Semantic search with HNSW' },
@@ -3396,7 +3396,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           total: 45,
           shown: filtered.length,
           examples: filtered.map(e => ({ ...e, url: `${BASE_URL}/${e.name}.rvf` })),
-          catalog: 'https://github.com/ruvnet/swarmvector/tree/main/examples/rvf/output'
+          catalog: 'the upstream project (see NOTICE)'
         }, null, 2) }] };
       }
 
@@ -3499,7 +3499,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         try {
           const piBrain = require('@swarmvector/pi-brain');
           const PiBrainClient = piBrain.PiBrainClient || piBrain.default;
-          const url = process.env.BRAIN_URL || 'https://pi.ruv.io';
+          const url = process.env.BRAIN_URL || 'https://pi.swarmdo.com';
           const key = process.env.PI || '';
           const client = new PiBrainClient({ url, key });
           const results = await client.search(args.query, { limit: args.limit || 10, category: args.category });
@@ -3516,7 +3516,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         try {
           const piBrain = require('@swarmvector/pi-brain');
           const PiBrainClient = piBrain.PiBrainClient || piBrain.default;
-          const url = process.env.BRAIN_URL || 'https://pi.ruv.io';
+          const url = process.env.BRAIN_URL || 'https://pi.swarmdo.com';
           const key = process.env.PI || '';
           const client = new PiBrainClient({ url, key });
           const result = await client.share({ title: args.title, content: args.content, category: args.category || 'pattern', tags: args.tags });
@@ -3533,7 +3533,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         try {
           const piBrain = require('@swarmvector/pi-brain');
           const PiBrainClient = piBrain.PiBrainClient || piBrain.default;
-          const url = process.env.BRAIN_URL || 'https://pi.ruv.io';
+          const url = process.env.BRAIN_URL || 'https://pi.swarmdo.com';
           const key = process.env.PI || '';
           const client = new PiBrainClient({ url, key });
           const result = await client.get(args.id);
@@ -3550,7 +3550,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         try {
           const piBrain = require('@swarmvector/pi-brain');
           const PiBrainClient = piBrain.PiBrainClient || piBrain.default;
-          const url = process.env.BRAIN_URL || 'https://pi.ruv.io';
+          const url = process.env.BRAIN_URL || 'https://pi.swarmdo.com';
           const key = process.env.PI || '';
           const client = new PiBrainClient({ url, key });
           const result = await client.vote(args.id, args.direction);
@@ -3567,7 +3567,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         try {
           const piBrain = require('@swarmvector/pi-brain');
           const PiBrainClient = piBrain.PiBrainClient || piBrain.default;
-          const url = process.env.BRAIN_URL || 'https://pi.ruv.io';
+          const url = process.env.BRAIN_URL || 'https://pi.swarmdo.com';
           const key = process.env.PI || '';
           const client = new PiBrainClient({ url, key });
           const results = await client.list({ category: args.category, limit: args.limit || 20 });
@@ -3584,7 +3584,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         try {
           const piBrain = require('@swarmvector/pi-brain');
           const PiBrainClient = piBrain.PiBrainClient || piBrain.default;
-          const url = process.env.BRAIN_URL || 'https://pi.ruv.io';
+          const url = process.env.BRAIN_URL || 'https://pi.swarmdo.com';
           const key = process.env.PI || '';
           const client = new PiBrainClient({ url, key });
           const result = await client.delete(args.id);
@@ -3601,7 +3601,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         try {
           const piBrain = require('@swarmvector/pi-brain');
           const PiBrainClient = piBrain.PiBrainClient || piBrain.default;
-          const url = process.env.BRAIN_URL || 'https://pi.ruv.io';
+          const url = process.env.BRAIN_URL || 'https://pi.swarmdo.com';
           const key = process.env.PI || '';
           const client = new PiBrainClient({ url, key });
           const result = await client.status();
@@ -3618,7 +3618,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         try {
           const piBrain = require('@swarmvector/pi-brain');
           const PiBrainClient = piBrain.PiBrainClient || piBrain.default;
-          const url = process.env.BRAIN_URL || 'https://pi.ruv.io';
+          const url = process.env.BRAIN_URL || 'https://pi.swarmdo.com';
           const key = process.env.PI || '';
           const client = new PiBrainClient({ url, key });
           const result = await client.drift({ domain: args.domain });
@@ -3635,7 +3635,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         try {
           const piBrain = require('@swarmvector/pi-brain');
           const PiBrainClient = piBrain.PiBrainClient || piBrain.default;
-          const url = process.env.BRAIN_URL || 'https://pi.ruv.io';
+          const url = process.env.BRAIN_URL || 'https://pi.swarmdo.com';
           const key = process.env.PI || '';
           const client = new PiBrainClient({ url, key });
           const result = await client.partition({ domain: args.domain, min_cluster_size: args.min_cluster_size || 3 });
@@ -3652,7 +3652,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         try {
           const piBrain = require('@swarmvector/pi-brain');
           const PiBrainClient = piBrain.PiBrainClient || piBrain.default;
-          const url = process.env.BRAIN_URL || 'https://pi.ruv.io';
+          const url = process.env.BRAIN_URL || 'https://pi.swarmdo.com';
           const key = process.env.PI || '';
           const client = new PiBrainClient({ url, key });
           const result = await client.transfer(args.source, args.target);
@@ -3669,7 +3669,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         try {
           const piBrain = require('@swarmvector/pi-brain');
           const PiBrainClient = piBrain.PiBrainClient || piBrain.default;
-          const url = process.env.BRAIN_URL || 'https://pi.ruv.io';
+          const url = process.env.BRAIN_URL || 'https://pi.swarmdo.com';
           const key = process.env.PI || '';
           const client = new PiBrainClient({ url, key });
           const result = await client.sync({ direction: args.direction || 'both' });

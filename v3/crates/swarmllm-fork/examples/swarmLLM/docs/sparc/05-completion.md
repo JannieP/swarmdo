@@ -1,4 +1,4 @@
-# RuvLLM: Integration and Deployment
+# SwarmLLM: Integration and Deployment
 
 ## SPARC Phase 5: Completion
 
@@ -9,22 +9,22 @@
 ### 1.1 Crate Structure
 
 ```
-ruvector/
+swarmvector/
 ├── crates/
-│   ├── ruvector-core/           # Existing: Vector DB
-│   ├── ruvector-gnn/            # Existing: GNN + EWC + Replay
-│   ├── ruvector-attention/      # Existing: Attention mechanisms
-│   ├── ruvector-graph/          # Existing: Graph storage
-│   └── ruvector-router-core/    # Existing: Routing primitives
+│   ├── swarmvector-core/           # Existing: Vector DB
+│   ├── swarmvector-gnn/            # Existing: GNN + EWC + Replay
+│   ├── swarmvector-attention/      # Existing: Attention mechanisms
+│   ├── swarmvector-graph/          # Existing: Graph storage
+│   └── swarmvector-router-core/    # Existing: Routing primitives
 │
 └── examples/
-    └── ruvLLM/                  # NEW: Self-learning LLM
+    └── swarmLLM/                  # NEW: Self-learning LLM
         ├── src/
         │   ├── lib.rs           # Main library entry
         │   ├── orchestrator.rs  # Request orchestration
         │   ├── embedding.rs     # LFM2 embedding service
         │   ├── router.rs        # FastGRNN router
-        │   ├── memory.rs        # Ruvector memory layer
+        │   ├── memory.rs        # Swarmvector memory layer
         │   ├── attention.rs     # Graph attention wrapper
         │   ├── inference.rs     # LFM2 model pool
         │   ├── learning.rs      # Self-learning service
@@ -43,20 +43,20 @@ ruvector/
 ### 1.2 Dependency Integration
 
 ```toml
-# examples/ruvLLM/Cargo.toml
+# examples/swarmLLM/Cargo.toml
 [package]
-name = "ruvllm"
+name = "swarmllm"
 version = "0.1.0"
 edition = "2021"
-description = "Self-learning LLM with LFM2 and Ruvector integration"
+description = "Self-learning LLM with LFM2 and Swarmvector integration"
 
 [dependencies]
 # Internal dependencies (path-based for development)
-ruvector-core = { path = "../../crates/ruvector-core" }
-ruvector-gnn = { path = "../../crates/ruvector-gnn" }
-ruvector-attention = { path = "../../crates/ruvector-attention" }
-ruvector-graph = { path = "../../crates/ruvector-graph" }
-ruvector-router-core = { path = "../../crates/ruvector-router-core" }
+swarmvector-core = { path = "../../crates/swarmvector-core" }
+swarmvector-gnn = { path = "../../crates/swarmvector-gnn" }
+swarmvector-attention = { path = "../../crates/swarmvector-attention" }
+swarmvector-graph = { path = "../../crates/swarmvector-graph" }
+swarmvector-router-core = { path = "../../crates/swarmvector-router-core" }
 
 # LLM inference
 llama-cpp-rs = "0.3"           # CPU inference via llama.cpp
@@ -119,20 +119,20 @@ harness = false
 ### 1.3 API Surface
 
 ```rust
-//! # RuvLLM - Self-Learning LLM
+//! # SwarmLLM - Self-Learning LLM
 //!
-//! A self-learning language model system integrating LFM2 with Ruvector.
+//! A self-learning language model system integrating LFM2 with Swarmvector.
 //!
 //! ## Architecture
 //!
 //! - **LFM2**: Frozen reasoning engine (350M-2.6B parameters)
-//! - **Ruvector**: Living memory that adapts continuously
+//! - **Swarmvector**: Living memory that adapts continuously
 //! - **FastGRNN**: Control circuit for intelligent routing
 //!
 //! ## Quick Start
 //!
 //! ```rust,ignore
-//! use ruvllm::{RuvLLM, Config};
+//! use swarmllm::{SwarmLLM, Config};
 //!
 //! #[tokio::main]
 //! async fn main() -> Result<()> {
@@ -143,7 +143,7 @@ harness = false
 //!         .model_path_700m("./models/lfm2-700m-q4.gguf")
 //!         .build()?;
 //!
-//!     let llm = RuvLLM::new(config).await?;
+//!     let llm = SwarmLLM::new(config).await?;
 //!
 //!     // Process query
 //!     let response = llm.query("What is machine learning?").await?;
@@ -177,7 +177,7 @@ pub mod types;
 // Re-exports for convenience
 pub use config::{Config, ConfigBuilder};
 pub use error::{Error, Result};
-pub use orchestrator::RuvLLM;
+pub use orchestrator::SwarmLLM;
 pub use types::{Request, Response, Session};
 
 /// Library version
@@ -405,22 +405,22 @@ set -e
 CONFIG=${1:-"config/server-cpu.toml"}
 LOG_LEVEL=${LOG_LEVEL:-"info"}
 
-echo "Starting RuvLLM with config: $CONFIG"
+echo "Starting SwarmLLM with config: $CONFIG"
 
 # 1. Validate configuration
-cargo run --release --bin ruvllm-validate -- --config "$CONFIG"
+cargo run --release --bin swarmllm-validate -- --config "$CONFIG"
 
 # 2. Initialize database if needed
 if [ ! -f "data/memory.db" ]; then
     echo "Initializing database..."
-    cargo run --release --bin ruvllm-init -- --config "$CONFIG"
+    cargo run --release --bin swarmllm-init -- --config "$CONFIG"
 fi
 
 # 3. Download models if needed
-cargo run --release --bin ruvllm-models -- --config "$CONFIG" --check-or-download
+cargo run --release --bin swarmllm-models -- --config "$CONFIG" --check-or-download
 
 # 4. Start server
-RUST_LOG=$LOG_LEVEL cargo run --release --bin ruvllm-server -- \
+RUST_LOG=$LOG_LEVEL cargo run --release --bin swarmllm-server -- \
     --config "$CONFIG" \
     --metrics-port 9090 \
     --http-port 8080
@@ -431,7 +431,7 @@ RUST_LOG=$LOG_LEVEL cargo run --release --bin ruvllm-server -- \
 ```rust
 /// Health check endpoint implementation
 pub struct HealthCheck {
-    memory: Arc<RuvectorMemory>,
+    memory: Arc<SwarmvectorMemory>,
     router: Arc<FastGRNNRouter>,
     inference: Arc<InferencePool>,
 }
@@ -482,18 +482,18 @@ impl HealthCheck {
 ```yaml
 # Prometheus alerting rules
 groups:
-  - name: ruvllm
+  - name: swarmllm
     rules:
       - alert: HighLatency
-        expr: histogram_quantile(0.95, ruvllm_request_latency_seconds_bucket) > 1.0
+        expr: histogram_quantile(0.95, swarmllm_request_latency_seconds_bucket) > 1.0
         for: 5m
         labels:
           severity: warning
         annotations:
-          summary: "RuvLLM P95 latency above 1s"
+          summary: "SwarmLLM P95 latency above 1s"
 
       - alert: LowQualityScore
-        expr: avg(ruvllm_quality_score) < 0.7
+        expr: avg(swarmllm_quality_score) < 0.7
         for: 10m
         labels:
           severity: warning
@@ -501,7 +501,7 @@ groups:
           summary: "Average quality score dropped below 0.7"
 
       - alert: MemoryPressure
-        expr: ruvllm_memory_usage_bytes / ruvllm_memory_limit_bytes > 0.9
+        expr: swarmllm_memory_usage_bytes / swarmllm_memory_limit_bytes > 0.9
         for: 5m
         labels:
           severity: critical
@@ -509,7 +509,7 @@ groups:
           summary: "Memory usage above 90%"
 
       - alert: RouterLowConfidence
-        expr: avg(ruvllm_router_confidence) < 0.5
+        expr: avg(swarmllm_router_confidence) < 0.5
         for: 15m
         labels:
           severity: warning
@@ -517,7 +517,7 @@ groups:
           summary: "Router confidence consistently low"
 
       - alert: HighErrorRate
-        expr: rate(ruvllm_errors_total[5m]) > 0.1
+        expr: rate(swarmllm_errors_total[5m]) > 0.1
         for: 5m
         labels:
           severity: critical
@@ -531,7 +531,7 @@ groups:
 #!/bin/bash
 # scripts/backup.sh
 
-BACKUP_DIR="/backups/ruvllm/$(date +%Y%m%d_%H%M%S)"
+BACKUP_DIR="/backups/swarmllm/$(date +%Y%m%d_%H%M%S)"
 mkdir -p "$BACKUP_DIR"
 
 echo "Creating backup in $BACKUP_DIR"
@@ -555,7 +555,7 @@ cp -r config/ "$BACKUP_DIR/config/"
 cat > "$BACKUP_DIR/manifest.json" << EOF
 {
   "timestamp": "$(date -Iseconds)",
-  "version": "$(cargo run --release --bin ruvllm-version)",
+  "version": "$(cargo run --release --bin swarmllm-version)",
   "components": {
     "memory_db": "memory.db",
     "router_weights": "router_weights.bin",
@@ -652,9 +652,9 @@ Monthly
 ```yaml
 openapi: "3.0.0"
 info:
-  title: RuvLLM API
+  title: SwarmLLM API
   version: "0.1.0"
-  description: Self-learning LLM with LFM2 and Ruvector
+  description: Self-learning LLM with LFM2 and Swarmvector
 
 paths:
   /v1/query:
@@ -747,15 +747,15 @@ paths:
 ### 6.2 Rust SDK
 
 ```rust
-use ruvllm::{RuvLLM, Config, Request, Response};
+use swarmllm::{SwarmLLM, Config, Request, Response};
 
 /// Simple query
-async fn simple_query(llm: &RuvLLM) -> Result<Response> {
+async fn simple_query(llm: &SwarmLLM) -> Result<Response> {
     llm.query("What is Rust?").await
 }
 
 /// Query with options
-async fn query_with_options(llm: &RuvLLM) -> Result<Response> {
+async fn query_with_options(llm: &SwarmLLM) -> Result<Response> {
     llm.query_with(Request {
         query: "Explain backpropagation".into(),
         session_id: Some("user-123".into()),
@@ -769,7 +769,7 @@ async fn query_with_options(llm: &RuvLLM) -> Result<Response> {
 }
 
 /// Multi-turn conversation
-async fn conversation(llm: &RuvLLM) -> Result<()> {
+async fn conversation(llm: &SwarmLLM) -> Result<()> {
     let session = llm.new_session();
 
     let r1 = llm.query_session(&session, "What is a neural network?").await?;
@@ -785,7 +785,7 @@ async fn conversation(llm: &RuvLLM) -> Result<()> {
 }
 
 /// Provide feedback
-async fn with_feedback(llm: &RuvLLM) -> Result<()> {
+async fn with_feedback(llm: &SwarmLLM) -> Result<()> {
     let response = llm.query("What is 2+2?").await?;
 
     llm.feedback(Feedback {
@@ -798,7 +798,7 @@ async fn with_feedback(llm: &RuvLLM) -> Result<()> {
 }
 
 /// Stream response
-async fn streaming(llm: &RuvLLM) -> Result<()> {
+async fn streaming(llm: &SwarmLLM) -> Result<()> {
     let mut stream = llm.query_stream("Tell me a story").await?;
 
     while let Some(chunk) = stream.next().await {
@@ -867,10 +867,10 @@ async fn streaming(llm: &RuvLLM) -> Result<()> {
 
 ## 9. Conclusion
 
-RuvLLM represents a paradigm shift from static LLMs to adaptive, self-learning systems. By treating:
+SwarmLLM represents a paradigm shift from static LLMs to adaptive, self-learning systems. By treating:
 
 - **LFM2 as the stable cortex** (reasoning)
-- **Ruvector as the living synaptic mesh** (memory)
+- **Swarmvector as the living synaptic mesh** (memory)
 - **FastGRNN as the control circuit** (routing)
 
 We create intelligence that emerges from the loop, not just the model.
@@ -883,4 +883,4 @@ The three learning loops—memory growth, router optimization, and concept compr
 
 *Document Version: 1.0*
 *Last Updated: 2025-12-02*
-*Author: RuvLLM Architecture Team*
+*Author: SwarmLLM Architecture Team*

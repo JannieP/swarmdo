@@ -118,7 +118,7 @@ async function probeMidstreamerTransport(
   try {
     // Lazy + indirect so bundlers don't try to resolve at compile time.
     // Prefer the `midstreamer/quic` sub-path (added in midstreamer@0.3.1
-    // per upstream ruvnet/midstream#81) which exposes
+    // per upstream upstream/midstream#81) which exposes
     // `loadQuicTransport` directly without WASM init. Fall back to the
     // root `midstreamer` package for older versions that put the QUIC
     // surface on the default export.
@@ -164,7 +164,7 @@ async function probeMidstreamerTransport(
   // QuicMultistream as a counter-tracking stub with no real UDP, TLS,
   // or protocol — using it would silently downgrade the federation
   // path. midstreamer@0.3.1+ ships a real QUIC transport via
-  // `midstreamer/quic` (ADR-120, Step 1 — upstream PR ruvnet/midstream#81)
+  // `midstreamer/quic` (ADR-120, Step 1 — upstream PR upstream/midstream#81)
   // and reports `isNative() === true`. Older versions either expose
   // `isStub()` returning true or omit both probes.
   if (typeof surface.isStub === 'function' && surface.isStub()) {

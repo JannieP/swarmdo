@@ -6,7 +6,7 @@
 
 ## Context
 
-Comprehensive tool verification (~190 MCP tools across 4 servers) revealed 6 bugs in input validation and WASM serialization within `@rufflo/cli`. All stem from overly strict or mismatched validators, null safety gaps, and raw WASM objects leaking through the MCP JSON layer.
+Comprehensive tool verification (~190 MCP tools across 4 servers) revealed 6 bugs in input validation and WASM serialization within `@swarmdo/cli`. All stem from overly strict or mismatched validators, null safety gaps, and raw WASM objects leaking through the MCP JSON layer.
 
 ## Bugs Fixed
 
@@ -19,7 +19,7 @@ Comprehensive tool verification (~190 MCP tools across 4 servers) revealed 6 bug
 
 ### Bug 2 — `transfer_plugin-info` rejects `@` in npm package names (v3.6.1)
 
-**Symptom**: `transfer_plugin-info(name: "@rufflo/embeddings")` → error "name contains invalid characters".  
+**Symptom**: `transfer_plugin-info(name: "@swarmdo/embeddings")` → error "name contains invalid characters".  
 **Root cause**: Plugin name passed through `validateIdentifier()` which rejects `@` and `/`.  
 **Fix**: Added `validatePackageName()` with npm-scoped name regex `(@[a-zA-Z0-9_\-]+\/)?[a-zA-Z0-9_\-][a-zA-Z0-9_\-.]{0,213}` and switched `transfer_plugin-info` to use it.  
 **Files**: `validate-input.ts`, `transfer-tools.ts`
@@ -31,19 +31,19 @@ Comprehensive tool verification (~190 MCP tools across 4 servers) revealed 6 bug
 **Fix**: Added guard checking `insertEpisodes` availability and a try/catch that surfaces actionable error ("Use memory_store instead" or "run embeddings_init first"). Also updated tool description to clarify that batch entries go to the AgentDB episodes table, not the `memory_search` namespace.  
 **Files**: `memory-bridge.ts`, `agentdb-tools.ts`
 
-### Bug 4 — `ruvllm_hnsw_route` returns raw WASM pointers (v3.6.1)
+### Bug 4 — `swarmllm_hnsw_route` returns raw WASM pointers (v3.6.1)
 
 **Symptom**: Route results contain `[{__wbg_ptr: 1205504}]` instead of pattern data.  
 **Root cause**: `router.route()` returns WASM objects that JSON.stringify converts to `{__wbg_ptr: N}` instead of extracting the underlying fields.  
 **Fix**: Added serialization step in `createHnswRouter().route()` that maps WASM results to plain `{name, score, metadata}` objects.  
-**Files**: `ruvllm-wasm.ts`
+**Files**: `swarmllm-wasm.ts`
 
-### Bug 5 — `ruvllm_microlora_adapt` hardcoded 768 dimension (v3.6.1)
+### Bug 5 — `swarmllm_microlora_adapt` hardcoded 768 dimension (v3.6.1)
 
 **Symptom**: Creating with `inputDim: 16` then calling adapt → "Input size mismatch: expected 768, got 16".  
 **Root cause**: The WASM binary internally validates against a fixed 768-dim expectation regardless of the configured `inputDim`. The JS wrapper correctly creates a `Float32Array(config.inputDim)` but the WASM rejects non-768 sizes.  
 **Fix**: Added try/catch in `adapt()` that detects the mismatch error and surfaces an actionable message explaining the 768-dim requirement.  
-**Files**: `ruvllm-wasm.ts`
+**Files**: `swarmllm-wasm.ts`
 
 ### Bug 6 — `agentdb_batch` entries not findable via `memory_search` (v3.6.1)
 
@@ -63,6 +63,6 @@ Comprehensive tool verification (~190 MCP tools across 4 servers) revealed 6 bug
 - `analyze_diff` now accepts all standard git revision syntax
 - `transfer_plugin-info` now accepts npm-scoped package names
 - `agentdb_batch` returns a clear error instead of a null dereference crash
-- `ruvllm_hnsw_route` returns usable JSON data instead of opaque WASM pointers
-- `ruvllm_microlora_adapt` explains the 768-dim requirement instead of a cryptic mismatch error
+- `swarmllm_hnsw_route` returns usable JSON data instead of opaque WASM pointers
+- `swarmllm_microlora_adapt` explains the 768-dim requirement instead of a cryptic mismatch error
 - Users are guided to `memory_store` when they need `memory_search`-compatible storage

@@ -6,7 +6,7 @@
 
 ## Overview
 
-ADR-003 mandates a **single canonical coordination engine** for rufflo v3. This document tracks the implementation of consolidating `UnifiedSwarmCoordinator` + `SwarmHub` into a unified approach.
+ADR-003 mandates a **single canonical coordination engine** for swarmdo v3. This document tracks the implementation of consolidating `UnifiedSwarmCoordinator` + `SwarmHub` into a unified approach.
 
 ## Architecture Decision
 
@@ -25,7 +25,7 @@ ADR-003 mandates a **single canonical coordination engine** for rufflo v3. This 
 
 ### 1. UnifiedSwarmCoordinator (Canonical)
 
-**Location**: `/workspaces/rufflo/v3/@rufflo/swarm/src/unified-coordinator.ts`
+**Location**: `/workspaces/swarmdo/v3/@swarmdo/swarm/src/unified-coordinator.ts`
 
 **Responsibilities**:
 - Agent lifecycle management (spawn, terminate, health checks)
@@ -47,7 +47,7 @@ ADR-003 mandates a **single canonical coordination engine** for rufflo v3. This 
 
 ### 2. SwarmHub (Compatibility Layer)
 
-**Location**: `/workspaces/rufflo/v3/@rufflo/swarm/src/coordination/swarm-hub.ts`
+**Location**: `/workspaces/swarmdo/v3/@swarmdo/swarm/src/coordination/swarm-hub.ts`
 
 **Status**: ✅ Refactored to thin facade
 
@@ -130,7 +130,7 @@ export { SwarmHub, createSwarmHub, type ISwarmHub } from './coordination/swarm-h
 
 ### 4. Duplicate File Marked
 
-**Location**: `/workspaces/rufflo/v3/coordination/swarm-hub.ts`
+**Location**: `/workspaces/swarmdo/v3/coordination/swarm-hub.ts`
 
 **Status**: Marked as duplicate with clear warning
 
@@ -141,7 +141,7 @@ export { SwarmHub, createSwarmHub, type ISwarmHub } from './coordination/swarm-h
  * ⚠️ DEPRECATION WARNING:
  * This file is a DUPLICATE and should NOT be used.
  * Use the canonical implementation at:
- * /workspaces/rufflo/v3/@rufflo/swarm/src/coordination/swarm-hub.ts
+ * /workspaces/swarmdo/v3/@swarmdo/swarm/src/coordination/swarm-hub.ts
  */
 ```
 
@@ -150,7 +150,7 @@ export { SwarmHub, createSwarmHub, type ISwarmHub } from './coordination/swarm-h
 ### For New Code (Recommended)
 
 ```typescript
-import { createUnifiedSwarmCoordinator } from '@rufflo/swarm';
+import { createUnifiedSwarmCoordinator } from '@swarmdo/swarm';
 
 const coordinator = createUnifiedSwarmCoordinator({
   topology: { type: 'hierarchical', maxAgents: 15 },
@@ -173,7 +173,7 @@ const results = await coordinator.executeParallel([
 ### For Legacy Code (Compatibility)
 
 ```typescript
-import { createSwarmHub } from '@rufflo/swarm';
+import { createSwarmHub } from '@swarmdo/swarm';
 
 const hub = createSwarmHub();
 await hub.initialize();

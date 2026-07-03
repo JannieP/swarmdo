@@ -58,7 +58,7 @@ This means:
 ## Cross-links
 
 - [ADR-150](../../v3/docs/adr/ADR-150-metaharness-integration-surfaces.md) — decision + architectural constraint
-- [Issue #2399](https://github.com/ruvnet/swarmdo/issues/2399) — phase rollout tracker
-- [Research dossier](https://gist.github.com/ruvnet/19d166ff9acf368c9da4172d91ac9113) — full graded-evidence sourcing
-- [Upstream](https://github.com/ruvnet/agent-harness-generator) — `metaharness` source
+- [Issue #2399](the upstream project (see NOTICE)) — phase rollout tracker
+- [Research dossier](https://gist.the upstream project (see NOTICE)) — full graded-evidence sourcing
+- [Upstream](the upstream project (see NOTICE)) — `metaharness` source
 - ADR-148/149 — `@metaharness/router` cost-optimal routing (sibling integration)

@@ -12,7 +12,7 @@
 //! ```
 
 use swarmllm::lora::{
-    RuvLtraAdapters, AdapterTrainer, AdapterTrainingConfig, SyntheticDataGenerator,
+    SwarmLtraAdapters, AdapterTrainer, AdapterTrainingConfig, SyntheticDataGenerator,
     AdapterMerger, MergeConfig, MergeStrategy, HotSwapManager, AdaptFeedback,
 };
 use std::collections::HashMap;
@@ -24,7 +24,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("📋 Available Adapters:");
     println!("═══════════════════════\n");
 
-    let adapters = RuvLtraAdapters::new();
+    let adapters = SwarmLtraAdapters::new();
     for name in adapters.list_names() {
         if let Some(config) = adapters.get(&name) {
             println!("  🔧 {}", name);

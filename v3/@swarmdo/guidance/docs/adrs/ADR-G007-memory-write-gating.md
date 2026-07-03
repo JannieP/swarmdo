@@ -8,7 +8,7 @@ Accepted
 
 ## Context
 
-In a multi-agent swarm, agents share state through a memory subsystem (AgentDB with HNSW indexing in Rufflo V3). Without governance, agents can:
+In a multi-agent swarm, agents share state through a memory subsystem (AgentDB with HNSW indexing in Swarmdo V3). Without governance, agents can:
 
 1. **Overwrite critical state.** A coder agent overwrites the architect's design decisions. A tester overwrites the coordinator's task assignments.
 2. **Flood memory.** An agent in a loop writes thousands of entries, degrading search performance and consuming storage.
@@ -94,16 +94,16 @@ Add a `memory-write` gate alongside the four existing gates. Rejected because it
 Implement a full role-based access control system with cryptographic agent identity. Rejected as over-engineered for the current use case. The rule-based approach achieves authority separation without a token infrastructure. RBAC can be layered on if multi-tenant scenarios require it.
 
 ### 3. CRDT-based conflict resolution for memory writes
-Use Conflict-free Replicated Data Types to automatically resolve write conflicts. Rejected because CRDTs solve a different problem (convergence under partition) and do not address authorization or staleness. CRDTs are available in the broader Rufflo hive-mind system for distributed consensus, but memory governance is about policy, not data structures.
+Use Conflict-free Replicated Data Types to automatically resolve write conflicts. Rejected because CRDTs solve a different problem (convergence under partition) and do not address authorization or staleness. CRDTs are available in the broader Swarmdo hive-mind system for distributed consensus, but memory governance is about policy, not data structures.
 
 ### 4. No memory governance, rely on agent prompts
 Instruct agents via their prompts to "only write to your assigned namespace." Rejected for the same reason as relying on CLAUDE.md rules: prompts are advisory. Agents can and do ignore them, especially in long sessions.
 
 ## References
 
-- `v3/@rufflo/guidance/src/gates.ts` -- `EnforcementGates.evaluateToolUse()` for MCP tool gating
-- `v3/@rufflo/guidance/src/retriever.ts` -- `areContradictory()`, `selectWithContradictionCheck()`
-- `v3/@rufflo/guidance/src/ledger.ts` -- `ViolationRateEvaluator`, `RunLedger.addEvaluator()`, `computeMetrics()`
-- `v3/@rufflo/guidance/src/types.ts` -- `GuidanceRule.domains`, `GuidanceRule.repoScopes`, `GuidanceRule.toolClasses`
+- `v3/@swarmdo/guidance/src/gates.ts` -- `EnforcementGates.evaluateToolUse()` for MCP tool gating
+- `v3/@swarmdo/guidance/src/retriever.ts` -- `areContradictory()`, `selectWithContradictionCheck()`
+- `v3/@swarmdo/guidance/src/ledger.ts` -- `ViolationRateEvaluator`, `RunLedger.addEvaluator()`, `computeMetrics()`
+- `v3/@swarmdo/guidance/src/types.ts` -- `GuidanceRule.domains`, `GuidanceRule.repoScopes`, `GuidanceRule.toolClasses`
 - ADR-G004 -- Four enforcement gates that memory gating builds on
 - ADR-G008 -- Optimizer loop that evolves memory governance rules

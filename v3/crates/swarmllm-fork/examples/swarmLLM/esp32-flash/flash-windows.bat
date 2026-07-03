@@ -1,5 +1,5 @@
 @echo off
-REM RuvLLM ESP32 Flash Script for Windows
+REM SwarmLLM ESP32 Flash Script for Windows
 REM Usage: flash-windows.bat COM6
 
 setlocal enabledelayedexpansion
@@ -8,7 +8,7 @@ set PORT=%1
 if "%PORT%"=="" set PORT=COM6
 
 echo ========================================
-echo   RuvLLM ESP32 Flash Tool
+echo   SwarmLLM ESP32 Flash Tool
 echo ========================================
 echo.
 
@@ -49,7 +49,7 @@ echo.
 echo Flashing to %PORT%...
 echo.
 
-espflash flash --port %PORT% --monitor target\xtensa-esp32-espidf\release\ruvllm-esp32-flash
+espflash flash --port %PORT% --monitor target\xtensa-esp32-espidf\release\swarmllm-esp32-flash
 if errorlevel 1 (
     echo [ERROR] Flash failed!
     echo Make sure:

@@ -1,4 +1,4 @@
-# ADR-033: RuVector + Rufflo MCP Tool Integration
+# ADR-033: SwarmVector + Swarmdo MCP Tool Integration
 
 **Status:** Accepted
 **Date:** 2026-03-04
@@ -6,18 +6,18 @@
 
 ## Context
 
-The MCP bridge initially shipped with 3 built-in tools (search, web_research, system_guide). Users want access to the full ruvector (10 tools) and rufflo (205+ tools) ecosystems from within the HF Chat UI without running separate MCP servers.
+The MCP bridge initially shipped with 3 built-in tools (search, web_research, system_guide). Users want access to the full swarmvector (10 tools) and swarmdo (205+ tools) ecosystems from within the HF Chat UI without running separate MCP servers.
 
 ### Tool Inventory
 
 | Backend | Tools | Categories |
 |---------|-------|------------|
-| **ruvector** | 10 | Intelligence (hooks_stats, hooks_route, hooks_remember, hooks_recall, hooks_init, hooks_pretrain, hooks_build_agents, hooks_verify, hooks_doctor, hooks_export) |
-| **rufflo** | 205+ | Agent (7), Swarm (4), Memory (7), Config (6), Hooks (40+), Task (6), Session (5), Hive-mind (9), Workflow (9), Analyze (4), Progress (4), AIDefence (6), AgentDB (14+) |
+| **swarmvector** | 10 | Intelligence (hooks_stats, hooks_route, hooks_remember, hooks_recall, hooks_init, hooks_pretrain, hooks_build_agents, hooks_verify, hooks_doctor, hooks_export) |
+| **swarmdo** | 205+ | Agent (7), Swarm (4), Memory (7), Config (6), Hooks (40+), Task (6), Session (5), Hive-mind (9), Workflow (9), Analyze (4), Progress (4), AIDefence (6), AgentDB (14+) |
 
 ## Decision
 
-Integrate ruvector and rufflo as **stdio MCP child processes** spawned by the bridge, with tool calls proxied through the existing `/mcp` HTTP endpoint.
+Integrate swarmvector and swarmdo as **stdio MCP child processes** spawned by the bridge, with tool calls proxied through the existing `/mcp` HTTP endpoint.
 
 ### Architecture
 
@@ -34,25 +34,25 @@ Integrate ruvector and rufflo as **stdio MCP child processes** spawned by the br
 │  ┌──────────────────┐  ┌─────────────────────┐ │
 │  │  Built-in Tools   │  │  StdioMcpClient    │ │
 │  │  • search         │  │  ┌───────────────┐ │ │
-│  │  • web_research   │  │  │ ruvector (10) │ │ │
+│  │  • web_research   │  │  │ swarmvector (10) │ │ │
 │  │  • system_guide   │  │  └───────────────┘ │ │
 │  └──────────────────┘  │  ┌───────────────┐ │ │
-│                         │  │ rufflo (205+)  │ │ │
+│                         │  │ swarmdo (205+)  │ │ │
 │                         │  └───────────────┘ │ │
 │                         └─────────────────────┘ │
 └─────────────────────────────────────────────────┘
         ▲  stdin/stdout (JSON-RPC)  ▲
         │                           │
-   npx ruvector mcp start    npx rufflo mcp start
+   npx swarmvector mcp start    npx swarmdo mcp start
 ```
 
 ### Key Design Decisions
 
-1. **Namespaced tool names**: External tools are prefixed with `{backend}__` (e.g., `ruvector__hooks_route`, `rufflo__agent_spawn`) to avoid name collisions with built-in tools.
+1. **Namespaced tool names**: External tools are prefixed with `{backend}__` (e.g., `swarmvector__hooks_route`, `swarmdo__agent_spawn`) to avoid name collisions with built-in tools.
 
 2. **Lazy startup**: Backends initialize after Express starts listening, so the bridge is immediately available for health checks. If a backend fails to start, built-in tools still work.
 
-3. **Environment toggle**: Each backend can be disabled via `ENABLE_RUVECTOR=false` or `ENABLE_RUFLO=false` for deployments that don't need all tools.
+3. **Environment toggle**: Each backend can be disabled via `ENABLE_SWARMVECTOR=false` or `ENABLE_SWARMDO=false` for deployments that don't need all tools.
 
 4. **Graceful shutdown**: SIGTERM/SIGINT handlers kill child processes cleanly.
 
@@ -82,8 +82,8 @@ tools/call request
 
 ```env
 # In docker-compose.yml or .env
-ENABLE_RUVECTOR=true    # default: true
-ENABLE_RUFLO=true       # default: true
+ENABLE_SWARMVECTOR=true    # default: true
+ENABLE_SWARMDO=true       # default: true
 ```
 
 ## Consequences

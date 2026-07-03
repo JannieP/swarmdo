@@ -108,7 +108,7 @@ impl UploadConfig {
             create_repo: true,
             include_sona_weights: true,
             auto_model_card: true,
-            commit_message: "Upload RuvLTRA model".to_string(),
+            commit_message: "Upload SwarmLTRA model".to_string(),
         }
     }
 
@@ -213,8 +213,8 @@ impl ModelUploader {
     /// ```rust,ignore
     /// let uploader = ModelUploader::new("hf_token");
     /// uploader.upload(
-    ///     "./ruvltra-custom.gguf",
-    ///     "username/ruvltra-custom",
+    ///     "./swarmltra-custom.gguf",
+    ///     "username/swarmltra-custom",
     ///     Some(metadata),
     /// )?;
     /// ```
@@ -423,7 +423,7 @@ mod tests {
     #[test]
     fn test_model_metadata() {
         let metadata = ModelMetadata {
-            name: "RuvLTRA Test".to_string(),
+            name: "SwarmLTRA Test".to_string(),
             description: Some("Test model".to_string()),
             architecture: "llama".to_string(),
             params_b: 0.5,

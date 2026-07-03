@@ -48,7 +48,7 @@ export interface SkillMdOptions {
   description: string;
   /** Skill version (default: "1.0.0") */
   version?: string;
-  /** Skill author (default: "rUv") */
+  /** Skill author (default: "the upstream author") */
   author?: string;
   /** Discovery tags (default: derived from the skill name) */
   tags?: string[];

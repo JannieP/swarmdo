@@ -437,4 +437,4 @@ Add to your Claude settings (`~/.claude/settings.json`):
 
 ## License
 
-MIT © [Swarmdo Team](https://github.com/ruvnet/claude-flow)
+MIT © [Swarmdo Team](the upstream project (see NOTICE))

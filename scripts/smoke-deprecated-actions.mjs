@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Deprecated-action regression guard for ruvnet/swarmdo#2089 — ADR-127 Phase 3.
+ * Deprecated-action regression guard for upstream/swarmdo#2089 — ADR-127 Phase 3.
  *
  * Fails if any file in scope references:
  *   - actions/checkout@v3   (replaced by @v4 in Phase 3)
@@ -10,7 +10,7 @@
  *   - softprops/action-gh-release@v1  (mutable floating ref — use SHA pin or @v2+)
  *
  * The archived actions (create-release, upload-release-asset) are the same
- * ones replaced in ruvnet/neural-trader's release workflow. Catching them
+ * ones replaced in upstream/neural-trader's release workflow. Catching them
  * here prevents the pattern from re-entering the skill/agent templates.
  *
  * Scope:

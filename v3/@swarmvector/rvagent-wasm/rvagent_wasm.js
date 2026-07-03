@@ -835,7 +835,7 @@ if (Symbol.dispose) WasmMcpServer.prototype[Symbol.dispose] = WasmMcpServer.prot
  * RVF Container Builder for WASM.
  *
  * Build RVF cognitive containers that package tools, prompts, skills,
- * orchestrator configs, MCP tools, and Ruvix capabilities.
+ * orchestrator configs, MCP tools, and Swarmix capabilities.
  *
  * # Example (JavaScript)
  * ```js
@@ -858,7 +858,7 @@ export class WasmRvfBuilder {
         wasm.__wbg_wasmrvfbuilder_free(ptr, 0);
     }
     /**
-     * Add Ruvix capability definitions.
+     * Add Swarmix capability definitions.
      * @param {string} caps_json
      */
     addCapabilities(caps_json) {

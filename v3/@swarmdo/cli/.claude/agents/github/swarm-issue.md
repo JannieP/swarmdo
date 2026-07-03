@@ -288,7 +288,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Process Issue
-        uses: ruvnet/swarm-action@v1
+        uses: upstream/swarm-action@v1
         with:
           command: |
             if [[ "${{ github.event.label.name }}" == "swarm-ready" ]]; then

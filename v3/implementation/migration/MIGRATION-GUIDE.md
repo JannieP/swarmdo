@@ -1,13 +1,13 @@
-# Rufflo v2 to v3 Migration Guide
+# Swarmdo v2 to v3 Migration Guide
 
 ## Overview
 
-This guide walks you through migrating from Rufflo v2.x to v3.0. The migration is designed to be **zero-breaking-changes** - all v2 code continues to work while you gradually adopt v3 features.
+This guide walks you through migrating from Swarmdo v2.x to v3.0. The migration is designed to be **zero-breaking-changes** - all v2 code continues to work while you gradually adopt v3 features.
 
 ## Prerequisites
 
 - Node.js >= 18.0.0
-- Rufflo v2.7.x installed
+- Swarmdo v2.7.x installed
 - Git for version control
 
 ## Quick Migration (5 minutes)
@@ -16,7 +16,7 @@ This guide walks you through migrating from Rufflo v2.x to v3.0. The migration i
 
 ```bash
 # Update to v3
-npm install rufflo@3.0.0
+npm install swarmdo@3.0.0
 
 # Install new optional dependencies
 npm install sql.js  # Windows support
@@ -25,7 +25,7 @@ npm install sql.js  # Windows support
 ### Step 2: Run Auto-Migration
 
 ```bash
-npx rufflo migrate --to v3
+npx swarmdo migrate --to v3
 ```
 
 This command:
@@ -41,7 +41,7 @@ This command:
 npm run test:compatibility
 
 # Check migration status
-npx rufflo status --check-migration
+npx swarmdo status --check-migration
 ```
 
 ## Manual Migration Steps
@@ -118,13 +118,13 @@ Single source in `config.json`:
     "PreToolUse": [
       {
         "matcher": "Bash",
-        "commands": ["npx rufflo hooks pre-tool --tool=$TOOL_NAME"]
+        "commands": ["npx swarmdo hooks pre-tool --tool=$TOOL_NAME"]
       }
     ],
     "PostToolUse": [
       {
         "matcher": "*",
-        "commands": ["npx rufflo hooks post-tool --tool=$TOOL_NAME"]
+        "commands": ["npx swarmdo hooks post-tool --tool=$TOOL_NAME"]
       }
     ]
   }
@@ -175,7 +175,7 @@ const coordinator = new SwarmCoordinator();
 const agentId = await coordinator.spawnAgent({ type: 'coder' });
 
 // v3 enhanced (opt-in)
-import { AgenticFlowAdapter } from 'rufflo/v3';
+import { AgenticFlowAdapter } from 'swarmdo/v3';
 const adapter = new AgenticFlowAdapter({ sona: 'research' });
 const agentId = await adapter.createAgent('coder', {
   learning: true,       // +55% quality
@@ -191,7 +191,7 @@ const memory = new MemoryManager();
 const results = await memory.search('query');
 
 // v3 enhanced (opt-in)
-import { HybridMemorySystem } from 'rufflo/v3';
+import { HybridMemorySystem } from 'swarmdo/v3';
 const memory = new HybridMemorySystem();
 const results = await memory.search('query', {
   semantic: true,       // AgentDB vector search
@@ -207,7 +207,7 @@ const results = await memory.search('query', {
 npm install sql.js
 ```
 
-Rufflo v3 automatically detects Windows and uses sql.js.
+Swarmdo v3 automatically detects Windows and uses sql.js.
 
 ### Manual Configuration
 
@@ -293,7 +293,7 @@ rm -rf archive/
 ### GNN-Enhanced Search
 
 ```typescript
-import { AgenticFlowAdapter } from 'rufflo/v3';
+import { AgenticFlowAdapter } from 'swarmdo/v3';
 
 const adapter = new AgenticFlowAdapter({ enableGNN: true });
 const results = await adapter.searchPatterns(query, {
@@ -311,7 +311,7 @@ If you need to rollback to v2:
 cp .claude/config.json.v2.backup .claude/config.json
 
 # Downgrade package
-npm install rufflo@2.7.47
+npm install swarmdo@2.7.47
 
 # Restore v2 settings (if needed)
 git checkout HEAD~1 -- .claude/settings-*.json
@@ -352,9 +352,9 @@ Manual resolution needed:
 
 ## Support
 
-- Documentation: https://github.com/ruvnet/claude-flow/docs/v3
-- Issues: https://github.com/ruvnet/claude-flow/issues
-- Discussions: https://github.com/ruvnet/claude-flow/discussions
+- Documentation: the upstream project (see NOTICE)
+- Issues: the upstream project (see NOTICE)
+- Discussions: the upstream project (see NOTICE)
 
 ---
 

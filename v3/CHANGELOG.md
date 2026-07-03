@@ -1,4 +1,4 @@
-# Changelog - Rufflo v3
+# Changelog - Swarmdo v3
 
 All notable changes to this project will be documented in this file.
 
@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **ADR-010**: Removed Deno support, focused on Node.js 20+ LTS
 
 #### Module Constellation
-Complete restructure into 10 independent @rufflo modules:
+Complete restructure into 10 independent @swarmdo modules:
 - Code reduced from 15,000+ lines to <5,000 lines
 - Each module independently versioned and publishable
 - Cross-platform Windows/macOS/Linux support
@@ -33,13 +33,13 @@ Complete restructure into 10 independent @rufflo modules:
 ### ⚡ Performance Improvements
 
 #### Flash Attention Integration
-- **unverified (no benchmark) speedup** via @ruvector/attention
+- **unverified (no benchmark) speedup** via @swarmvector/attention
 - 50-75% memory reduction during large context processing
 - Native NAPI (fastest), WebAssembly, and JavaScript fallback runtimes
 - Automatic runtime selection based on environment
 
 #### SONA Learning System
-- **<0.05ms adaptation time** via @ruvector/sona
+- **<0.05ms adaptation time** via @swarmvector/sona
 - Self-organizing neural architecture for agent routing
 - Continuous learning from all agent interactions
 - 84.8% SWE-Bench solve rate improvement
@@ -56,9 +56,9 @@ Complete restructure into 10 independent @rufflo modules:
 - **Memory reduction**: 83.1% achieved
 - **Task orchestration**: 2.8-4.4x parallel speedup
 
-### 🔧 New @rufflo Modules
+### 🔧 New @swarmdo Modules
 
-#### 1. `@rufflo/security` - Security Module
+#### 1. `@swarmdo/security` - Security Module
 - CVE-1, CVE-2, CVE-3 remediation
 - Input validation and sanitization
 - Secure credential management
@@ -66,7 +66,7 @@ Complete restructure into 10 independent @rufflo modules:
 - Command injection prevention
 - Cross-platform ACL/keychain integration
 
-#### 2. `@rufflo/memory` - Memory Unification
+#### 2. `@swarmdo/memory` - Memory Unification
 - AgentDB as primary backend
 - HNSW vector indexing (~4.7x faster)
 - Hybrid SQLite + vector storage
@@ -74,7 +74,7 @@ Complete restructure into 10 independent @rufflo modules:
 - GNN-enhanced retrieval
 - 4-32x quantization support
 
-#### 3. `@rufflo/integration` - Agentic Flow Integration
+#### 3. `@swarmdo/integration` - Agentic Flow Integration
 - Deep integration with agentic-flow@alpha
 - Eliminates 10,000+ duplicate lines
 - Extends rather than reimplements
@@ -82,7 +82,7 @@ Complete restructure into 10 independent @rufflo modules:
 - Unified task orchestration
 - Plugin architecture compliance
 
-#### 4. `@rufflo/performance` - Performance & Benchmarking
+#### 4. `@swarmdo/performance` - Performance & Benchmarking
 - Flash Attention integration
 - SONA learning optimization
 - Real-time performance monitoring
@@ -90,7 +90,7 @@ Complete restructure into 10 independent @rufflo modules:
 - Memory profiling tools
 - Benchmark suite with unverified (no benchmark) targets
 
-#### 5. `@rufflo/swarm` - Swarm Coordination
+#### 5. `@swarmdo/swarm` - Swarm Coordination
 - Unified SwarmCoordinator (single implementation)
 - 15-agent hierarchical mesh topology
 - Attention-based consensus mechanisms
@@ -98,7 +98,7 @@ Complete restructure into 10 independent @rufflo modules:
 - Self-healing workflows
 - Smart auto-spawning
 
-#### 6. `@rufflo/cli` - CLI Modernization
+#### 6. `@swarmdo/cli` - CLI Modernization
 - Interactive prompts with validation
 - Command decomposition engine
 - Enhanced hooks integration
@@ -106,7 +106,7 @@ Complete restructure into 10 independent @rufflo modules:
 - Cross-platform compatibility
 - 20ms cold start performance
 
-#### 7. `@rufflo/neural` - Neural Features
+#### 7. `@swarmdo/neural` - Neural Features
 - SONA learning integration
 - ReasoningBank adaptive learning
 - Pattern recognition and optimization
@@ -114,7 +114,7 @@ Complete restructure into 10 independent @rufflo modules:
 - Continuous improvement tracking
 - Neural training pipelines
 
-#### 8. `@rufflo/testing` - TDD Framework
+#### 8. `@swarmdo/testing` - TDD Framework
 - London School TDD methodology
 - Mock-first approach
 - Vitest test runner (10x faster)
@@ -122,7 +122,7 @@ Complete restructure into 10 independent @rufflo modules:
 - Security-focused test patterns
 - Comprehensive coverage reporting
 
-#### 9. `@rufflo/deployment` - Release Management
+#### 9. `@swarmdo/deployment` - Release Management
 - Automated versioning
 - CI/CD pipeline integration
 - Multi-platform builds
@@ -130,7 +130,7 @@ Complete restructure into 10 independent @rufflo modules:
 - Rollback mechanisms
 - Health check monitoring
 
-#### 10. `@rufflo/shared` - Shared Utilities
+#### 10. `@swarmdo/shared` - Shared Utilities
 - Common types and interfaces
 - Platform detection and adaptation
 - Configuration management
@@ -176,8 +176,8 @@ Complete restructure into 10 independent @rufflo modules:
 {
   "agentic-flow": "2.0.1-alpha.74",
   "agentdb": "2.0.0-alpha.3.4",
-  "@ruvector/attention": "0.1.3",
-  "@ruvector/sona": "0.1.5",
+  "@swarmvector/attention": "0.1.3",
+  "@swarmvector/sona": "0.1.5",
   "vitest": "^2.1.8",
   "typescript": "^5.7.3"
 }
@@ -248,7 +248,7 @@ See [MIGRATION.md](./MIGRATION.md) for detailed upgrade instructions from v2 to 
 ### 🙏 Acknowledgments
 - Built on agentic-flow@alpha by the Anthropic community
 - AgentDB integration for unified memory
-- RuVector for Flash Attention and SONA learning
+- SwarmVector for Flash Attention and SONA learning
 - Community feedback and testing
 
 ### 🔮 Coming Soon (v3.0.0-beta)
@@ -271,9 +271,9 @@ See [MIGRATION.md](./MIGRATION.md) for detailed upgrade instructions from v2 to 
 npm install agentic-flow@3.0.0-alpha.1
 
 # Or specific modules
-npm install @rufflo/security@latest
-npm install @rufflo/memory@latest
-npm install @rufflo/integration@latest
+npm install @swarmdo/security@latest
+npm install @swarmdo/memory@latest
+npm install @swarmdo/integration@latest
 ```
 
 ### Getting Started
@@ -282,20 +282,20 @@ npm install @rufflo/integration@latest
 npx agentic-flow@3.0.0-alpha.1 init --v3
 
 # Run security audit
-npx @rufflo/security audit
+npx @swarmdo/security audit
 
 # Start with unified memory
-npx @rufflo/memory unify --backend agentdb
+npx @swarmdo/memory unify --backend agentdb
 
 # Spawn v3 swarm
-npx @rufflo/swarm coordinate --agents 15
+npx @swarmdo/swarm coordinate --agents 15
 ```
 
 ### Support & Feedback
-- **GitHub Issues**: https://github.com/ruvnet/agentic-flow/issues
-- **Documentation**: https://github.com/ruvnet/agentic-flow/tree/v3/docs
+- **GitHub Issues**: the upstream project (see NOTICE)
+- **Documentation**: the upstream project (see NOTICE)
 - **Migration Guide**: [MIGRATION.md](./MIGRATION.md)
 
 ---
 
-**Full Changelog**: https://github.com/ruvnet/agentic-flow/compare/v2.0.1...v3.0.0-alpha.1
+**Full Changelog**: the upstream project (see NOTICE)

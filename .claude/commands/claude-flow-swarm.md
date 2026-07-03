@@ -202,4 +202,4 @@ Swarms automatically use distributed memory for collaboration:
 - Resource-aware
 - Adaptive
 
-For detailed documentation, see: https://github.com/ruvnet/claude-code-flow/docs/swarm-system.md
+For detailed documentation, see: the upstream project (see NOTICE)

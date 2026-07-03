@@ -1,7 +1,7 @@
 /**
- * RuvLTRA Benchmark Suite
+ * SwarmLTRA Benchmark Suite
  *
- * Comprehensive benchmarks for evaluating RuvLTRA models
+ * Comprehensive benchmarks for evaluating SwarmLTRA models
  * on Claude Code-specific use cases.
  */
 
@@ -61,7 +61,7 @@ export function formatFullResults(results: FullBenchmarkResults): string {
 
   lines.push('');
   lines.push('╔═══════════════════════════════════════════════════════════════════════════╗');
-  lines.push('║                    RUVLTRA BENCHMARK SUITE                                ║');
+  lines.push('║                    SWARMLTRA BENCHMARK SUITE                                ║');
   lines.push('║            Claude Code Use Case Evaluation                                ║');
   lines.push('╠═══════════════════════════════════════════════════════════════════════════╣');
   lines.push(`║  Model: ${results.model.padEnd(64)}║`);

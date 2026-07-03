@@ -9,10 +9,10 @@ description: |
   O(log n) coverage analysis, defect prediction, security compliance,
   contract testing, visual/accessibility testing, and chaos engineering.
 
-author: rUv
+author: the upstream author
 license: MIT
-homepage: https://github.com/ruvnet/swarmdo/tree/main/v3/plugins/agentic-qe
-repository: https://github.com/ruvnet/swarmdo
+homepage: the upstream project (see NOTICE)
+repository: the upstream project (see NOTICE)
 
 # Plugin metadata
 metadata:

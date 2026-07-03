@@ -1,19 +1,19 @@
-# RuvLLM
+# SwarmLLM
 
-[![Crates.io](https://img.shields.io/crates/v/ruvllm.svg)](https://crates.io/crates/ruvllm)
-[![docs.rs](https://docs.rs/ruvllm/badge.svg)](https://docs.rs/ruvllm)
-[![npm](https://img.shields.io/npm/v/@ruvector/ruvllm.svg)](https://www.npmjs.com/package/@ruvector/ruvllm)
+[![Crates.io](https://img.shields.io/crates/v/swarmllm.svg)](https://crates.io/crates/swarmllm)
+[![docs.rs](https://docs.rs/swarmllm/badge.svg)](https://docs.rs/swarmllm)
+[![npm](https://img.shields.io/npm/v/@swarmvector/swarmllm.svg)](https://www.npmjs.com/package/@swarmvector/swarmllm)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 **The local LLM inference engine that learns from every request -- Metal, CUDA, WebGPU, no cloud APIs.**
 
 ```bash
-cargo add ruvllm
+cargo add swarmllm
 ```
 
-RuvLLM loads GGUF models and runs them on your hardware with full acceleration -- Apple Silicon, NVIDIA GPUs, WebAssembly, whatever you have. Unlike other local inference tools, it gets smarter over time: SONA (Self-Optimizing Neural Architecture) watches how you use it and adapts automatically, so responses improve without manual tuning. It's part of [SwarmVector](https://github.com/ruvnet/ruvector), the self-learning vector database with graph intelligence.
+SwarmLLM loads GGUF models and runs them on your hardware with full acceleration -- Apple Silicon, NVIDIA GPUs, WebAssembly, whatever you have. Unlike other local inference tools, it gets smarter over time: SONA (Self-Optimizing Neural Architecture) watches how you use it and adapts automatically, so responses improve without manual tuning. It's part of [SwarmVector](the upstream project (see NOTICE)), the self-learning vector database with graph intelligence.
 
-| | RuvLLM | OpenAI API | llama.cpp | Ollama | vLLM |
+| | SwarmLLM | OpenAI API | llama.cpp | Ollama | vLLM |
 |---|---|---|---|---|---|
 | **Cost** | Free after hardware | Per-token billing | Free | Free | Free |
 | **Privacy** | Data stays on your machine | Sent to third party | Local | Local | Local |
@@ -42,12 +42,12 @@ RuvLLM loads GGUF models and runs them on your hardware with full acceleration -
 | **mistral-rs backend** | PagedAttention, X-LoRA, ISQ for production serving | Scale to 50+ concurrent users |
 | **Task-specific adapters** | 5 pre-trained LoRA adapters (coder, researcher, security, architect, reviewer) | Instant specialization with hot-swap |
 
-> Part of the [SwarmVector](https://github.com/ruvnet/ruvector) ecosystem -- the self-learning vector database with graph intelligence, local AI, and PostgreSQL built in.
+> Part of the [SwarmVector](the upstream project (see NOTICE)) ecosystem -- the self-learning vector database with graph intelligence, local AI, and PostgreSQL built in.
 
 ## Quick Start
 
 ```rust
-use ruvllm::prelude::*;
+use swarmllm::prelude::*;
 
 let mut backend = CandleBackend::with_device(DeviceType::Metal)?;
 backend.load_gguf("models/qwen2.5-7b-q4_k.gguf", ModelConfig::default())?;
@@ -71,19 +71,19 @@ Add to your `Cargo.toml`:
 ```toml
 [dependencies]
 # Recommended for Apple Silicon Mac
-ruvllm = { version = "2.1", features = ["inference-metal", "coreml", "parallel"] }
+swarmllm = { version = "2.1", features = ["inference-metal", "coreml", "parallel"] }
 
 # For NVIDIA GPUs
-ruvllm = { version = "2.1", features = ["inference-cuda", "parallel"] }
+swarmllm = { version = "2.1", features = ["inference-cuda", "parallel"] }
 
 # Minimal (CPU only)
-ruvllm = { version = "2.1" }
+swarmllm = { version = "2.1" }
 ```
 
 Or install the npm package:
 
 ```bash
-npm install @ruvector/ruvllm
+npm install @swarmvector/swarmllm
 ```
 
 ## What's New in v2.6
@@ -93,9 +93,9 @@ npm install @ruvector/ruvllm
 | **Sparse Attention Kernel** | Subquadratic O(N log N) attention via local window + log-stride + landmarks | 29× fewer edge comparisons at seq=8192 vs dense |
 | **Hailo-10H Edge Inference** | GQA/MQA support fits Mistral-7B KV cache in 2.1 GB | Runs on Raspberry Pi 5 + AI HAT+ cluster |
 | **KV Cache Incremental Decode** | `decode_step()` — O(log T) per token instead of O(T log T) | Sustained generation on memory-constrained edge nodes |
-| **Zero Runtime Deps** | `ruvllm_sparse_attention` has no runtime dependencies | Minimal binary footprint for embedded / WASM targets |
+| **Zero Runtime Deps** | `swarmllm_sparse_attention` has no runtime dependencies | Minimal binary footprint for embedded / WASM targets |
 
-See [`ruvllm_sparse_attention`](../ruvllm_sparse_attention/README.md) for the full kernel documentation (ADR-183 – ADR-190).
+See [`swarmllm_sparse_attention`](../swarmllm_sparse_attention/README.md) for the full kernel documentation (ADR-183 – ADR-190).
 
 ## What's New in v2.5
 
@@ -110,7 +110,7 @@ See [`ruvllm_sparse_attention`](../ruvllm_sparse_attention/README.md) for the fu
 
 | Feature | Description | Benefit |
 |---------|-------------|---------|
-| **RuvLTRA-Medium 3B** | Purpose-built 3B model for Claude Flow | 42 layers, 256K context, speculative decode |
+| **SwarmLTRA-Medium 3B** | Purpose-built 3B model for Claude Flow | 42 layers, 256K context, speculative decode |
 | **HuggingFace Hub** | Full Hub integration (download/upload) | Easy model sharing and distribution |
 | **Task-Specific LoRA** | 5 pre-trained adapters for agent types | Optimized for coder/researcher/security/architect/reviewer |
 | **Adapter Merging** | TIES, DARE, SLERP, Task Arithmetic | Combine adapters for multi-task models |
@@ -176,7 +176,7 @@ See [`ruvllm_sparse_attention`](../ruvllm_sparse_attention/README.md) for the fu
 +----------------------------------+
                |
 +----------------------------------+
-|        RuvLLM Backend            |
+|        SwarmLLM Backend            |
 |  +----------------------------+  |
 |  |   Hybrid Pipeline Router   |  |
 |  |  ┌─────────┐ ┌──────────┐  |  |
@@ -209,20 +209,20 @@ See [`ruvllm_sparse_attention`](../ruvllm_sparse_attention/README.md) for the fu
 
 | Model Family | Sizes | Quantization | Backend |
 |--------------|-------|--------------|---------|
-| **RuvLTRA-Small** | 0.5B | Q4K, Q5K, Q8, FP16 | Candle/Metal/ANE |
-| **RuvLTRA-Medium** | 3B | Q4K, Q5K, Q8, FP16 | Candle/Metal |
+| **SwarmLTRA-Small** | 0.5B | Q4K, Q5K, Q8, FP16 | Candle/Metal/ANE |
+| **SwarmLTRA-Medium** | 3B | Q4K, Q5K, Q8, FP16 | Candle/Metal |
 | Qwen 2.5 | 0.5B-72B | Q4K, Q8, FP16 | Candle/Metal |
 | Llama 3.x | 8B-70B | Q4K, Q8, FP16 | Candle/Metal |
 | Mistral | 7B-22B | Q4K, Q8, FP16 | Candle/Metal |
 | Phi-3 | 3.8B-14B | Q4K, Q8, FP16 | Candle/Metal |
 | Gemma-2 | 2B-27B | Q4K, Q8, FP16 | Candle/Metal |
 
-### RuvLTRA Models (Claude Flow Optimized)
+### SwarmLTRA Models (Claude Flow Optimized)
 
 | Model | Parameters | Hidden | Layers | Context | Features |
 |-------|------------|--------|--------|---------|----------|
-| RuvLTRA-Small | 494M | 896 | 24 | 32K | GQA 7:1, SONA hooks |
-| RuvLTRA-Medium | 3.0B | 2560 | 42 | 256K | Flash Attention 2, Speculative Decode |
+| SwarmLTRA-Small | 494M | 896 | 24 | 32K | GQA 7:1, SONA hooks |
+| SwarmLTRA-Medium | 3.0B | 2560 | 42 | 256K | Flash Attention 2, Speculative Decode |
 
 <details>
 <summary>📊 Performance Benchmarks (M4 Pro 14-core)</summary>
@@ -263,16 +263,16 @@ See [`ruvllm_sparse_attention`](../ruvllm_sparse_attention/README.md) for the fu
 <details>
 <summary>🍎 Apple Neural Engine (ANE) Integration</summary>
 
-RuvLLM v2.0 includes full ANE support via Core ML:
+SwarmLLM v2.0 includes full ANE support via Core ML:
 
 ```rust
-use ruvllm::backends::coreml::{CoreMLBackend, AneStrategy};
+use swarmllm::backends::coreml::{CoreMLBackend, AneStrategy};
 
 // Create ANE-optimized backend
 let backend = CoreMLBackend::new(AneStrategy::PreferAneForMlp)?;
 
 // Or use hybrid pipeline for best performance
-use ruvllm::backends::HybridPipeline;
+use swarmllm::backends::HybridPipeline;
 
 let pipeline = HybridPipeline::new(HybridConfig {
     ane_strategy: AneStrategy::Adaptive,
@@ -297,10 +297,10 @@ let pipeline = HybridPipeline::new(HybridConfig {
 
 ## MicroLoRA Real-Time Adaptation
 
-RuvLLM supports per-request fine-tuning using MicroLoRA:
+SwarmLLM supports per-request fine-tuning using MicroLoRA:
 
 ```rust
-use ruvllm::lora::{MicroLoRA, MicroLoraConfig, AdaptFeedback};
+use swarmllm::lora::{MicroLoRA, MicroLoraConfig, AdaptFeedback};
 
 // Create MicroLoRA adapter
 let config = MicroLoraConfig::for_hidden_dim(4096);
@@ -323,7 +323,7 @@ println!("Samples: {}, Avg quality: {:.2}", stats.samples, stats.avg_quality);
 Continuous improvement with three learning loops:
 
 ```rust
-use ruvllm::optimization::{SonaLlm, SonaLlmConfig, ConsolidationStrategy};
+use swarmllm::optimization::{SonaLlm, SonaLlmConfig, ConsolidationStrategy};
 
 let config = SonaLlmConfig {
     instant_lr: 0.01,
@@ -363,7 +363,7 @@ println!("Accumulated quality: {:.2}", stats.accumulated_quality);
 Memory-efficient caching with automatic tiering:
 
 ```rust
-use ruvllm::kv_cache::{TwoTierKvCache, KvCacheConfig};
+use swarmllm::kv_cache::{TwoTierKvCache, KvCacheConfig};
 
 let config = KvCacheConfig {
     tail_length: 256,              // Recent tokens in FP16
@@ -390,7 +390,7 @@ println!("Memory saved: {:.1} MB", stats.memory_saved_mb);
 Aggressive quantization for long-context inference:
 
 ```rust
-use ruvllm::quantize::turbo_quant::{
+use swarmllm::quantize::turbo_quant::{
     TurboQuantCompressor, TurboQuantConfig, TurboQuantBits,
     TurboQuantCacheTier, TurboQuantEmbeddingStore,
 };
@@ -437,7 +437,7 @@ let results = store.search(&query, top_k)?; // Returns (id, score) pairs
 High-throughput serving with dynamic batching:
 
 ```rust
-use ruvllm::serving::{ContinuousBatchScheduler, SchedulerConfig, InferenceRequest};
+use swarmllm::serving::{ContinuousBatchScheduler, SchedulerConfig, InferenceRequest};
 
 let scheduler = ContinuousBatchScheduler::new(SchedulerConfig {
     max_batch_size: 32,
@@ -467,7 +467,7 @@ println!("Batch utilization: {:.1}%", stats.avg_batch_utilization * 100.0);
 Accelerate generation with draft models:
 
 ```rust
-use ruvllm::speculative::{SpeculativeDecoder, SpeculativeConfig};
+use swarmllm::speculative::{SpeculativeDecoder, SpeculativeConfig};
 
 let config = SpeculativeConfig {
     draft_tokens: 4,           // Tokens to draft per step
@@ -496,7 +496,7 @@ println!("Speedup: {:.2}x", output.stats.speedup);
 Efficient loading with memory mapping:
 
 ```rust
-use ruvllm::gguf::{GgufLoader, GgufConfig};
+use swarmllm::gguf::{GgufLoader, GgufConfig};
 
 let loader = GgufLoader::new(GgufConfig {
     mmap_enabled: true,       // Memory-map for fast loading
@@ -518,7 +518,7 @@ backend.load_tensors(tensors)?;
 <details>
 <summary>🚀 mistral-rs Backend (Production Serving)</summary>
 
-RuvLLM v2.3 includes integration with [mistral-rs](https://github.com/EricLBuehler/mistral.rs) for production-scale LLM serving with advanced memory management.
+SwarmLLM v2.3 includes integration with [mistral-rs](https://github.com/EricLBuehler/mistral.rs) for production-scale LLM serving with advanced memory management.
 
 > **Note**: The mistral-rs crate is not yet published to crates.io. The integration is designed and ready—enable it when mistral-rs becomes available.
 
@@ -533,7 +533,7 @@ RuvLLM v2.3 includes integration with [mistral-rs](https://github.com/EricLBuehl
 ### Usage Example
 
 ```rust
-use ruvllm::backends::mistral::{
+use swarmllm::backends::mistral::{
     MistralBackend, MistralBackendConfig,
     PagedAttentionConfig, XLoraConfig, IsqConfig
 };
@@ -589,13 +589,13 @@ let response = backend.generate("Write secure authentication code", GeneratePara
 
 ```toml
 # Enable mistral-rs (when available on crates.io)
-ruvllm = { version = "2.1", features = ["mistral-rs"] }
+swarmllm = { version = "2.1", features = ["mistral-rs"] }
 
 # With Metal acceleration (Apple Silicon)
-ruvllm = { version = "2.1", features = ["mistral-rs-metal"] }
+swarmllm = { version = "2.1", features = ["mistral-rs-metal"] }
 
 # With CUDA acceleration (NVIDIA)
-ruvllm = { version = "2.1", features = ["mistral-rs-cuda"] }
+swarmllm = { version = "2.1", features = ["mistral-rs-cuda"] }
 ```
 
 See [ADR-008: mistral-rs Integration](../../docs/adr/ADR-008-mistral-rs-integration.md) for detailed architecture decisions.
@@ -608,11 +608,11 @@ See [ADR-008: mistral-rs Integration](../../docs/adr/ADR-008-mistral-rs-integrat
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `RUVLLM_CACHE_DIR` | Model cache directory | `~/.cache/ruvllm` |
-| `RUVLLM_LOG_LEVEL` | Logging level | `info` |
-| `RUVLLM_METAL_DEVICE` | Metal device index | `0` |
-| `RUVLLM_ANE_ENABLED` | Enable ANE routing | `true` |
-| `RUVLLM_SONA_ENABLED` | Enable SONA learning | `true` |
+| `SWARMLLM_CACHE_DIR` | Model cache directory | `~/.cache/swarmllm` |
+| `SWARMLLM_LOG_LEVEL` | Logging level | `info` |
+| `SWARMLLM_METAL_DEVICE` | Metal device index | `0` |
+| `SWARMLLM_ANE_ENABLED` | Enable ANE routing | `true` |
+| `SWARMLLM_SONA_ENABLED` | Enable SONA learning | `true` |
 
 ### Model Configuration
 
@@ -657,24 +657,24 @@ cargo bench --bench serving_bench --features inference-metal
 Download and upload models to HuggingFace Hub:
 
 ```rust
-use ruvllm::hub::{ModelDownloader, ModelUploader, RuvLtraRegistry, DownloadConfig};
+use swarmllm::hub::{ModelDownloader, ModelUploader, SwarmLtraRegistry, DownloadConfig};
 
 // Download from Hub
 let downloader = ModelDownloader::new(DownloadConfig::default());
 let model_path = downloader.download(
-    "ruvector/ruvltra-small-q4km",
+    "swarmvector/swarmltra-small-q4km",
     Some("./models"),
 )?;
 
-// Or use the registry for RuvLTRA models
-let registry = RuvLtraRegistry::new();
-let model = registry.get("ruvltra-medium", "Q4_K_M")?;
+// Or use the registry for SwarmLTRA models
+let registry = SwarmLtraRegistry::new();
+let model = registry.get("swarmltra-medium", "Q4_K_M")?;
 
 // Upload to Hub (requires HF_TOKEN)
 let uploader = ModelUploader::new("hf_your_token");
 let url = uploader.upload(
     "./my-model.gguf",
-    "username/my-ruvltra-model",
+    "username/my-swarmltra-model",
     Some(metadata),
 )?;
 println!("Uploaded to: {}", url);
@@ -686,10 +686,10 @@ println!("Uploaded to: {}", url);
 Pre-trained adapters optimized for Claude Flow agent types:
 
 ```rust
-use ruvllm::lora::{RuvLtraAdapters, AdapterTrainer, AdapterMerger, HotSwapManager};
+use swarmllm::lora::{SwarmLtraAdapters, AdapterTrainer, AdapterMerger, HotSwapManager};
 
 // Create adapter for specific task
-let adapters = RuvLtraAdapters::new();
+let adapters = SwarmLtraAdapters::new();
 let coder = adapters.create_lora("coder", 768)?;       // Rank 16, code generation
 let security = adapters.create_lora("security", 768)?; // Rank 16, vulnerability detection
 
@@ -727,10 +727,10 @@ manager.swap()?; // Zero-downtime switch
 <details>
 <summary>🧪 Evaluation Harness (v2.3)</summary>
 
-RuvLLM includes a comprehensive evaluation harness for benchmarking model quality:
+SwarmLLM includes a comprehensive evaluation harness for benchmarking model quality:
 
 ```rust
-use ruvllm::evaluation::{RealEvaluationHarness, EvalConfig, AblationMode};
+use swarmllm::evaluation::{RealEvaluationHarness, EvalConfig, AblationMode};
 
 // Create harness with GGUF model
 let harness = RealEvaluationHarness::with_gguf(
@@ -768,7 +768,7 @@ for (mode, metrics) in &report.mode_metrics {
 ### SWE-Bench Task Loader
 
 ```rust
-use ruvllm::evaluation::swe_bench::SweBenchLoader;
+use swarmllm::evaluation::swe_bench::SweBenchLoader;
 
 // Load SWE-Bench tasks
 let loader = SweBenchLoader::new();
@@ -808,8 +808,8 @@ The evaluation harness automatically detects model embedding dimensions:
 // HNSW router automatically uses model's hidden_size
 // TinyLlama 1.1B → 2048 dimensions
 // Qwen2 0.5B → 896 dimensions
-// RuvLTRA-Small → 896 dimensions
-// RuvLTRA-Medium → 2560 dimensions
+// SwarmLTRA-Small → 896 dimensions
+// SwarmLTRA-Medium → 2560 dimensions
 
 let harness = RealEvaluationHarness::with_config(
     EvalConfig::default(),
@@ -841,30 +841,30 @@ See the `/examples` directory for:
 ## Error Handling
 
 ```rust
-use ruvllm::error::{Result, RuvLLMError};
+use swarmllm::error::{Result, SwarmLLMError};
 
 match backend.generate(prompt, params) {
     Ok(response) => println!("{}", response),
-    Err(RuvLLMError::Model(e)) => eprintln!("Model error: {}", e),
-    Err(RuvLLMError::OutOfMemory(e)) => eprintln!("OOM: {}", e),
-    Err(RuvLLMError::Generation(e)) => eprintln!("Generation failed: {}", e),
-    Err(RuvLLMError::Ane(e)) => eprintln!("ANE error: {}", e),
-    Err(RuvLLMError::Gguf(e)) => eprintln!("GGUF loading error: {}", e),
+    Err(SwarmLLMError::Model(e)) => eprintln!("Model error: {}", e),
+    Err(SwarmLLMError::OutOfMemory(e)) => eprintln!("OOM: {}", e),
+    Err(SwarmLLMError::Generation(e)) => eprintln!("Generation failed: {}", e),
+    Err(SwarmLLMError::Ane(e)) => eprintln!("ANE error: {}", e),
+    Err(SwarmLLMError::Gguf(e)) => eprintln!("GGUF loading error: {}", e),
     Err(e) => eprintln!("Error: {}", e),
 }
 ```
 
 ## Sparse Attention — Edge / Hailo-10H
 
-`ruvllm_sparse_attention` is the companion crate that provides the subquadratic attention kernel used for edge inference on the cognitum Pi 5 cluster. It implements ADR-183 through ADR-190 and ships as a standalone zero-runtime-dep library.
+`swarmllm_sparse_attention` is the companion crate that provides the subquadratic attention kernel used for edge inference on the cognitum Pi 5 cluster. It implements ADR-183 through ADR-190 and ships as a standalone zero-runtime-dep library.
 
 ```toml
 [dependencies]
-ruvllm_sparse_attention = "2.2"
+swarmllm_sparse_attention = "2.2"
 ```
 
 ```rust
-use ruvllm_sparse_attention::{
+use swarmllm_sparse_attention::{
     SubquadraticSparseAttention, SparseAttentionConfig, KvCache, Tensor3, AttentionBackend,
 };
 
@@ -888,25 +888,25 @@ let out = attn.decode_step(&Tensor3::zeros(1, 32, 128), &cache).unwrap();
 | 2048 | 60.1 ms | 401.0 ms | 7.7× |
 | 4096 | 126.5 ms | 836.2 ms | 15.0× |
 
-Validated: 17/17 tests on all 4 cognitum cluster nodes (cognitum-v0/v1/cluster-2/cluster-3). See the [kernel README](../ruvllm_sparse_attention/README.md) for full documentation.
+Validated: 17/17 tests on all 4 cognitum cluster nodes (cognitum-v0/v1/cluster-2/cluster-3). See the [kernel README](../swarmllm_sparse_attention/README.md) for full documentation.
 
 ## npm Package
 
-RuvLLM is also available as an npm package with native bindings:
+SwarmLLM is also available as an npm package with native bindings:
 
 ```bash
-npm install @ruvector/ruvllm
+npm install @swarmvector/swarmllm
 ```
 
 ```typescript
-import { RuvLLM } from '@ruvector/ruvllm';
+import { SwarmLLM } from '@swarmvector/swarmllm';
 
-const llm = new RuvLLM();
+const llm = new SwarmLLM();
 const response = llm.query('Explain quantum computing');
 console.log(response.text);
 ```
 
-See [@ruvector/ruvllm on npm](https://www.npmjs.com/package/@ruvector/ruvllm) for full documentation.
+See [@swarmvector/swarmllm on npm](https://www.npmjs.com/package/@swarmvector/swarmllm) for full documentation.
 
 ## License
 
@@ -918,11 +918,11 @@ Contributions welcome! Please see [CONTRIBUTING.md](../../CONTRIBUTING.md) for g
 
 ## Links
 
-- [GitHub Repository](https://github.com/ruvnet/ruvector)
-- [API Documentation](https://docs.rs/ruvllm)
-- [npm Package](https://www.npmjs.com/package/@ruvector/ruvllm)
-- [Issue Tracker](https://github.com/ruvnet/ruvector/issues)
+- [GitHub Repository](the upstream project (see NOTICE))
+- [API Documentation](https://docs.rs/swarmllm)
+- [npm Package](https://www.npmjs.com/package/@swarmvector/swarmllm)
+- [Issue Tracker](the upstream project (see NOTICE))
 
 ---
 
-Part of [SwarmVector](https://github.com/ruvnet/ruvector) -- the self-learning vector database.
+Part of [SwarmVector](the upstream project (see NOTICE)) -- the self-learning vector database.

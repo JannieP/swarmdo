@@ -1,8 +1,8 @@
-# Rufflo v3: Agent, Skills, Commands & Hooks Optimization
+# Swarmdo v3: Agent, Skills, Commands & Hooks Optimization
 
 ## Overview
 
-This document details the optimization strategy for the four core extensibility systems in Rufflo v3:
+This document details the optimization strategy for the four core extensibility systems in Swarmdo v3:
 - **Agents**: 76 specialized agent definitions
 - **Skills**: 28 skill definitions with progressive disclosure
 - **Commands**: 93 slash commands
@@ -352,9 +352,9 @@ tools:
   - Task
   - TodoWrite
   - Bash
-  - mcp__rufflo__swarm_init
-  - mcp__rufflo__agent_spawn
-  - mcp__rufflo__task_orchestrate
+  - mcp__swarmdo__swarm_init
+  - mcp__swarmdo__agent_spawn
+  - mcp__swarmdo__task_orchestrate
 ---
 
 # Swarm Orchestration Skill
@@ -589,7 +589,7 @@ All hooks defined in `.claude/config.json`:
       {
         "matcher": "Bash",
         "commands": [
-          "npx rufflo hooks pre-tool --tool=$TOOL_NAME --command=\"$BASH_COMMAND\""
+          "npx swarmdo hooks pre-tool --tool=$TOOL_NAME --command=\"$BASH_COMMAND\""
         ],
         "timeout": 5000,
         "failOnError": false
@@ -597,7 +597,7 @@ All hooks defined in `.claude/config.json`:
       {
         "matcher": "Write|Edit",
         "commands": [
-          "npx rufflo hooks pre-edit --file=$FILE_PATH"
+          "npx swarmdo hooks pre-edit --file=$FILE_PATH"
         ]
       }
     ],
@@ -606,13 +606,13 @@ All hooks defined in `.claude/config.json`:
       {
         "matcher": "*",
         "commands": [
-          "npx rufflo hooks post-tool --tool=$TOOL_NAME --success=$SUCCESS"
+          "npx swarmdo hooks post-tool --tool=$TOOL_NAME --success=$SUCCESS"
         ]
       },
       {
         "matcher": "Write|Edit",
         "commands": [
-          "npx rufflo hooks post-edit --file=$FILE_PATH --memory-key=\"edits/$FILE_PATH\""
+          "npx swarmdo hooks post-edit --file=$FILE_PATH --memory-key=\"edits/$FILE_PATH\""
         ]
       }
     ],
@@ -620,7 +620,7 @@ All hooks defined in `.claude/config.json`:
     "PreCompact": [
       {
         "commands": [
-          "npx rufflo hooks pre-compact --session=$SESSION_ID"
+          "npx swarmdo hooks pre-compact --session=$SESSION_ID"
         ]
       }
     ],
@@ -628,7 +628,7 @@ All hooks defined in `.claude/config.json`:
     "Stop": [
       {
         "commands": [
-          "npx rufflo hooks session-end --export-metrics true"
+          "npx swarmdo hooks session-end --export-metrics true"
         ]
       }
     ]

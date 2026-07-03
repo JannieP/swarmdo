@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document defines the domain model for the Coherence Engine, including entities, value objects, aggregates, and domain services that implement mathematical AI interpretability for Rufflo V3.
+This document defines the domain model for the Coherence Engine, including entities, value objects, aggregates, and domain services that implement mathematical AI interpretability for Swarmdo V3.
 
 ## Core Domain Objects
 

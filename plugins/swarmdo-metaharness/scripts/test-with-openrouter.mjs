@@ -91,7 +91,7 @@ async function cheapInferenceCall(apiKey) {
     headers: {
       Authorization: `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
-      'HTTP-Referer': 'https://github.com/ruvnet/swarmdo',
+      'HTTP-Referer': 'the upstream project (see NOTICE)',
       'X-Title': 'swarmdo-metaharness-test',
     },
     body: JSON.stringify({

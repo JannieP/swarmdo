@@ -211,7 +211,7 @@ export function validateBackend(
     throw new Error(
       'SwarmVector backend requested but not available.\n' +
         'Install with: npm install @swarmvector/core\n' +
-        'See: https://github.com/ruvnet/swarmvector'
+        'See: the upstream project (see NOTICE)'
     );
   }
 

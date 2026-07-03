@@ -1,0 +1,16 @@
+NOTICE — attribution
+
+swarmdo is a derivative work. Lineage, preserved per the MIT license terms
+of each ancestor (see LICENSE for the governing license text):
+
+- claude-flow / ruflo / rufflo — Copyright (c) 2024-2026 ruvnet (rUv)
+  Original work from which this project was forked, including the agent
+  orchestration core, the vendored vector/LLM/swarm engines, the AgentDB and
+  agentic-flow packages, the bmssp pathfinder, and the Postgres vector
+  extension. All were renamed in this repository; upstream copyright and the
+  MIT license notice are retained in LICENSE and in the per-package LICENSE
+  files under v3/.
+
+The MIT license requires preservation of the above copyright notice and the
+license text. It does not imply endorsement of this derivative by the
+original authors.

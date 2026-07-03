@@ -16,7 +16,7 @@ Conveyor AI has 6 Airtable custom extensions in `/conveyor_ai/extensions/`:
 These extensions are currently deployed as Airtable Blocks with limited distribution. We need to:
 1. Make them accessible as standalone web applications
 2. Support both desktop and mobile users
-3. Maintain Airtable integration while adding PostgreSQL/RuVector capabilities
+3. Maintain Airtable integration while adding PostgreSQL/SwarmVector capabilities
 4. Enable independent scaling and deployment
 
 ## Decision
@@ -58,7 +58,7 @@ We will port all 6 extensions to **Google Cloud Run** as containerized web appli
 - **Shared AI Core**: Deployed as npm package or Cloud Function
 - **Authentication**: Google Cloud Identity / OAuth 2.0
 - **Secrets**: Google Secret Manager
-- **Database**: Cloud SQL PostgreSQL (existing `conveyor-ruvector-db`)
+- **Database**: Cloud SQL PostgreSQL (existing `conveyor-swarmvector-db`)
 
 ## Consequences
 
@@ -114,6 +114,6 @@ We will port all 6 extensions to **Google Cloud Run** as containerized web appli
 - [Cloud Run Documentation](https://cloud.google.com/run/docs)
 - [ViteJS Guide](https://vitejs.dev/guide/)
 - [HeroUI Components](https://heroui.com/)
-- ADR-004: RuVector PostgreSQL Database Deployment
+- ADR-004: SwarmVector PostgreSQL Database Deployment
 - ADR-012: ViteJS + HeroUI Frontend Stack
 - ADR-013: Hybrid Data Layer Architecture

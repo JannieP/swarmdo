@@ -43,9 +43,9 @@ function loadNativeModule() {
     for (const attempt of attempts) {
         try {
             const raw = attempt();
-            // Normalize: native exports RuvLlmEngine, we expose as SwarmLLMEngine
+            // Normalize: native exports SwarmLlmEngine, we expose as SwarmLLMEngine
             nativeModule = {
-                SwarmLLMEngine: raw.SwarmLLMEngine ?? raw.RuvLlmEngine,
+                SwarmLLMEngine: raw.SwarmLLMEngine ?? raw.SwarmLlmEngine,
                 SimdOperations: raw.SimdOperations,
                 version: raw.version,
                 hasSimdSupport: raw.hasSimdSupport,

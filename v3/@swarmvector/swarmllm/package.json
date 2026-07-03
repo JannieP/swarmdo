@@ -98,16 +98,15 @@
     "local-llm",
     "model-compression"
   ],
-  "author": "rUv Team <team@ruv.io>",
   "license": "MIT OR Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ruvnet/swarmvector.git",
+    "url": "the upstream project (see NOTICE)",
     "directory": "npm/packages/swarmllm"
   },
-  "homepage": "https://github.com/ruvnet/swarmvector/tree/main/examples/swarmLLM",
+  "homepage": "the upstream project (see NOTICE)",
   "bugs": {
-    "url": "https://github.com/ruvnet/swarmvector/issues"
+    "url": "the upstream project (see NOTICE)"
   },
   "engines": {
     "node": ">= 18"

@@ -534,7 +534,7 @@ await adapter.retrieveWithReasoning(queryEmbedding, {
 ## Learn More
 
 - **Algorithm Papers**: See docs$algorithms/ for detailed papers
-- **GitHub**: https:/$github.com$ruvnet$agentic-flow$tree$main$packages$agentdb
+- **GitHub**: https:/$github.com$upstream$agentic-flow$tree$main$packages$agentdb
 - **MCP Integration**: `npx agentdb@latest mcp`
 
 ---

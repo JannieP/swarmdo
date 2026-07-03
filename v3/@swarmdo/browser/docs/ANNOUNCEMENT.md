@@ -120,7 +120,7 @@ console.log(compiler.toYaml(workflow));
 ## References
 
 - ADR-122: `v3/docs/adr/ADR-122-browser-beyond-sota.md`
-- Tracking issue: ruvnet/swarmdo#2041
+- Tracking issue: upstream/swarmdo#2041
 - Branch: `feat/adr-122-browser-beyond-sota`
 - Reflective MCTS for web agents — https://arxiv.org/abs/2410.02052
 - Surfer-H + Holo1 — https://arxiv.org/abs/2506.02865

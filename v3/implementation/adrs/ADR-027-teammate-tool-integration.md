@@ -1,9 +1,9 @@
-# ADR-027: Native TeammateTool Integration for Rufflo
+# ADR-027: Native TeammateTool Integration for Swarmdo
 
 **Status:** Implemented ✅
 **Date:** 2026-01-25
 **Updated:** 2026-01-25
-**Author:** Rufflo Architecture Team
+**Author:** Swarmdo Architecture Team
 **Version:** 1.0.0
 **Requires:** Claude Code >= 2.1.19
 
@@ -11,7 +11,7 @@
 
 ## Implementation Summary
 
-The `@rufflo/teammate-plugin` package has been fully implemented with:
+The `@swarmdo/teammate-plugin` package has been fully implemented with:
 
 | Component | Lines | Features |
 |-----------|-------|----------|
@@ -44,7 +44,7 @@ The `@rufflo/teammate-plugin` package has been fully implemented with:
 ### Package Structure
 
 ```
-v3/@rufflo/teammate-plugin/
+v3/@swarmdo/teammate-plugin/
 ├── package.json           # npm package (requires Claude Code >= 2.1.19)
 ├── tsconfig.json          # TypeScript configuration
 ├── README.md              # Full documentation
@@ -59,7 +59,7 @@ v3/@rufflo/teammate-plugin/
 
 ## Executive Summary
 
-This ADR defines the architecture for deep integration between Rufflo and Claude Code's native **TeammateTool** multi-agent orchestration system. By leveraging TeammateTool's built-in capabilities for team management, inter-agent communication, and plan approval workflows, Rufflo can eliminate redundant coordination code and provide seamless native multi-agent experiences.
+This ADR defines the architecture for deep integration between Swarmdo and Claude Code's native **TeammateTool** multi-agent orchestration system. By leveraging TeammateTool's built-in capabilities for team management, inter-agent communication, and plan approval workflows, Swarmdo can eliminate redundant coordination code and provide seamless native multi-agent experiences.
 
 ---
 
@@ -124,7 +124,7 @@ CLAUDE_CODE_TEAMMATE_COMMAND   # Spawn command override
 
 ### 1.3 Problem Statement
 
-Rufflo currently implements its own multi-agent orchestration via:
+Swarmdo currently implements its own multi-agent orchestration via:
 - MCP-based swarm coordination
 - Custom message bus implementation
 - Hierarchical/mesh topology management
@@ -140,12 +140,12 @@ This creates **redundancy** with Claude Code's native TeammateTool, which provid
 
 ## 2. Decision
 
-**Implement a Rufflo plugin that acts as a bridge to TeammateTool**, providing:
+**Implement a Swarmdo plugin that acts as a bridge to TeammateTool**, providing:
 
 1. **Native Team Management** - Use TeammateTool for spawning instead of MCP
-2. **Mailbox Integration** - Bridge teammate_mailbox to Rufflo's memory system
+2. **Mailbox Integration** - Bridge teammate_mailbox to Swarmdo's memory system
 3. **Plan Mode Orchestration** - Leverage launchSwarm for coordinated execution
-4. **Hybrid Topology** - Combine Rufflo's advanced topologies with native spawning
+4. **Hybrid Topology** - Combine Swarmdo's advanced topologies with native spawning
 
 ### 2.1 Architecture Principles
 
@@ -153,7 +153,7 @@ This creates **redundancy** with Claude Code's native TeammateTool, which provid
 |-----------|----------------|
 | **Native First** | Use TeammateTool when available, fallback to MCP |
 | **Zero Duplication** | Delegate spawning to Claude Code entirely |
-| **Transparent Bridge** | Rufflo APIs unchanged, backend swapped |
+| **Transparent Bridge** | Swarmdo APIs unchanged, backend swapped |
 | **Version Adaptive** | Detect Claude Code version, enable features accordingly |
 
 ---
@@ -163,7 +163,7 @@ This creates **redundancy** with Claude Code's native TeammateTool, which provid
 ### 3.1 Plugin Structure
 
 ```
-v3/@rufflo/teammate-plugin/
+v3/@swarmdo/teammate-plugin/
 ├── src/
 │   ├── index.ts                 # Plugin entry point
 │   ├── teammate-bridge.ts       # Core TeammateTool bridge
@@ -312,7 +312,7 @@ import type {
 } from './types.js';
 
 /**
- * Bridge between Rufflo and Claude Code's TeammateTool
+ * Bridge between Swarmdo and Claude Code's TeammateTool
  *
  * Provides unified API for multi-agent orchestration using
  * native TeammateTool capabilities when available.
@@ -983,16 +983,16 @@ export async function createTeammateBridge(
 }
 ```
 
-### 3.4 Rufflo Integration Layer
+### 3.4 Swarmdo Integration Layer
 
 ```typescript
-// rufflo-integration.ts
+// swarmdo-integration.ts
 
 import { TeammateBridge, createTeammateBridge } from './teammate-bridge.js';
 import type { TeamConfig, TeammateSpawnConfig, TeamState } from './types.js';
 
 /**
- * Integration layer between Rufflo's swarm system
+ * Integration layer between Swarmdo's swarm system
  * and Claude Code's native TeammateTool
  */
 export class ClaudeFlowTeammateIntegration {
@@ -1018,7 +1018,7 @@ export class ClaudeFlowTeammateIntegration {
   }
 
   /**
-   * Map Rufflo topology to team configuration
+   * Map Swarmdo topology to team configuration
    */
   mapTopologyToTeamConfig(
     topology: 'hierarchical' | 'mesh' | 'adaptive',
@@ -1039,7 +1039,7 @@ export class ClaudeFlowTeammateIntegration {
   }
 
   /**
-   * Map Rufflo agent type to teammate spawn config
+   * Map Swarmdo agent type to teammate spawn config
    */
   mapAgentToTeammateConfig(
     agentType: string,
@@ -1049,7 +1049,7 @@ export class ClaudeFlowTeammateIntegration {
       allowedTools?: string[];
     }
   ): TeammateSpawnConfig {
-    // Map common Rufflo agent types to roles
+    // Map common Swarmdo agent types to roles
     const roleMap: Record<string, { role: string; defaultTools: string[] }> = {
       'coder': { role: 'coder', defaultTools: ['Edit', 'Write', 'Read', 'Bash'] },
       'tester': { role: 'tester', defaultTools: ['Read', 'Bash', 'Glob'] },
@@ -1147,9 +1147,9 @@ The plugin provides **16 MCP tools** for complete TeammateTool integration:
 | `teammate_cleanup` | Clean up resources | Utility |
 
 ```typescript
-// mcp-tools.ts - Complete implementation in v3/@rufflo/teammate-plugin/src/mcp-tools.ts
+// mcp-tools.ts - Complete implementation in v3/@swarmdo/teammate-plugin/src/mcp-tools.ts
 
-import { TEAMMATE_MCP_TOOLS, handleMCPTool } from '@rufflo/teammate-plugin';
+import { TEAMMATE_MCP_TOOLS, handleMCPTool } from '@swarmdo/teammate-plugin';
 
 // List all tools
 console.log(TEAMMATE_MCP_TOOLS.map(t => t.name));
@@ -1173,7 +1173,7 @@ const result = await handleMCPTool(bridge, 'teammate_spawn_team', {
 // In Claude Code conversation:
 
 // 1. Initialize team via MCP
-mcp__rufflo__teammate_spawn_team({
+mcp__swarmdo__teammate_spawn_team({
   name: "feature-dev-team",
   topology: "hierarchical",
   maxTeammates: 6,
@@ -1268,7 +1268,7 @@ const teammateConfig: TeammateSpawnConfig = {
 - [x] Team spawn/cleanup
 - [x] Mailbox read/write
 
-### Phase 2: Rufflo Integration ✅ COMPLETE
+### Phase 2: Swarmdo Integration ✅ COMPLETE
 - [x] Topology mapping (`flat`, `hierarchical`, `mesh`)
 - [x] Agent type mapping (8 role presets)
 - [x] MCP tool registration (16 tools)
@@ -1300,11 +1300,11 @@ const teammateConfig: TeammateSpawnConfig = {
 
 ## 7. Migration Path
 
-### From Rufflo MCP-only to Hybrid
+### From Swarmdo MCP-only to Hybrid
 
 ```typescript
 // Before: Pure MCP coordination
-mcp__rufflo__swarm_init({ topology: 'hierarchical' })
+mcp__swarmdo__swarm_init({ topology: 'hierarchical' })
 
 // After: Native when available, MCP fallback
 const integration = new ClaudeFlowTeammateIntegration();
@@ -1316,7 +1316,7 @@ if (mode === 'native') {
   // Pass agentInputs to Task tool
 } else {
   // Fallback to MCP
-  mcp__rufflo__swarm_init({ topology: 'hierarchical' })
+  mcp__swarmdo__swarm_init({ topology: 'hierarchical' })
 }
 ```
 
@@ -1354,13 +1354,13 @@ if (mode === 'native') {
 ---
 
 **Status:** Implemented ✅
-**Package:** `@rufflo/teammate-plugin` (v1.0.0-alpha.1)
-**Location:** `v3/@rufflo/teammate-plugin/`
+**Package:** `@swarmdo/teammate-plugin` (v1.0.0-alpha.1)
+**Location:** `v3/@swarmdo/teammate-plugin/`
 
 ## Next Steps
 
 1. **Publish to npm** - Run `npm publish --tag alpha` from package directory
 2. **Test with Claude Code 2.1.19+** - Verify native TeammateTool integration
 3. **Monitor feedback** - Track issues and feature requests
-4. **Phase 6: Memory Bridge** - Integrate with Rufflo's HNSW memory system
-5. **Phase 7: Consensus Integration** - Bridge TeammateTool approval with Rufflo consensus protocols
+4. **Phase 6: Memory Bridge** - Integrate with Swarmdo's HNSW memory system
+5. **Phase 7: Consensus Integration** - Bridge TeammateTool approval with Swarmdo consensus protocols

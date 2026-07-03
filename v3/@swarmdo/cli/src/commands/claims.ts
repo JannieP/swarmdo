@@ -2,7 +2,7 @@
  * V3 CLI Claims Command
  * Claims-based authorization, permissions, and access control
  *
- * Created with ❤️ by ruv.io
+ * Created with ❤️ by swarmdo.com
  */
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync, renameSync } from 'node:fs';
@@ -669,7 +669,7 @@ export const claimsCommand: Command = {
       'admin:*   - Administrative operations',
     ]);
     output.writeln();
-    output.writeln(output.dim('Created with ❤️ by ruv.io'));
+    output.writeln(output.dim('Created with ❤️ by swarmdo.com'));
     return { success: true };
   },
 };

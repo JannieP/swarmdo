@@ -16,7 +16,7 @@ export declare function init(): string
  *
  * # Example
  * ```javascript
- * const { GraphTransformer } = require('ruvector-graph-transformer-node');
+ * const { GraphTransformer } = require('swarmvector-graph-transformer-node');
  * const gt = new GraphTransformer();
  * console.log(gt.version());
  * ```

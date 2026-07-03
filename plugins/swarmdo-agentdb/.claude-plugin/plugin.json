@@ -3,8 +3,8 @@
   "description": "Substrate plugin for Swarmdo memory: AgentDB controller bridge (15 agentdb_* MCP tools), SwarmVector ONNX embeddings (10 embeddings_* tools incl. RaBitQ 32x quantization), and WASM HNSW pattern router (3 swarmllm_hnsw_* tools)",
   "version": "0.3.0",
   "author": {
-    "name": "ruvnet",
-    "url": "https://github.com/ruvnet"
+    "name": "upstream",
+    "url": "https://the upstream project (see NOTICE)"
   },
   "homepage": "https://github.com/JannieP/swarmdo",
   "license": "MIT",

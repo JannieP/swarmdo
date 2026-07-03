@@ -7,11 +7,11 @@
 2026-03-17
 
 ## Authors
-- Rufflo Maintainers
+- Swarmdo Maintainers
 
 ## Context
 
-Rufflo v3.5.22 achieved 100% capability audit (76/76 checks, 259 MCP tools). With the project gaining traction (5,900+ commits, growing community), external contributors are submitting PRs that fix real bugs and add valuable features. This ADR documents the review process, verdicts, and merge plan for the first batch of community PRs.
+Swarmdo v3.5.22 achieved 100% capability audit (76/76 checks, 259 MCP tools). With the project gaining traction (5,900+ commits, growing community), external contributors are submitting PRs that fix real bugs and add valuable features. This ADR documents the review process, verdicts, and merge plan for the first batch of community PRs.
 
 ### Review Criteria
 
@@ -50,7 +50,7 @@ Each PR is evaluated on 4 axes:
 - **Files**: hooks-tools.ts
 - **Additions**: 161 / **Deletions**: 6
 - **Issue**: #1310 — router never improves from task outcomes
-- **Fix**: File-based persistence to `.rufflo/routing-outcomes.json`, 500-entry FIFO cap
+- **Fix**: File-based persistence to `.swarmdo/routing-outcomes.json`, 500-entry FIFO cap
 - **Verdict**: ACCEPT WITH CHANGES
 - **Security**: No input validation on `agent`/`task` before JSON persistence. Add length + character whitelist: `agent.length > 100 || !/^[a-zA-Z0-9_-]+$/.test(agent)`.
 - **Required changes**: (1) Hoist `getMergedTaskPatterns()` out of `.map()` callback — currently N file reads per route call. (2) Add agent name validation. (3) Replace regex dir extraction with `dirname()`. (4) Consider in-memory cache for `loadRoutingOutcomes()`.
@@ -58,17 +58,17 @@ Each PR is evaluated on 4 axes:
 
 ### Tier 2: Build & Interop Fixes
 
-#### PR #1346 — fix(cli): prevent TS2307 for optional @rufflo/codex import
+#### PR #1346 — fix(cli): prevent TS2307 for optional @swarmdo/codex import
 - **Author**: @TimChesko
 - **Files**: init.ts
 - **Additions**: 3 / **Deletions**: 1
 - **Fix**: Move import specifier to variable to prevent static TS resolution
 - **Verdict**: ACCEPT
-- **Security**: No risk — `const` string literal, no user input. Existing precedent in `ruvllm-bridge.ts:310`.
+- **Security**: No risk — `const` string literal, no user input. Existing precedent in `swarmllm-bridge.ts:310`.
 
-#### PR #1334 — fix: resolve ESM/CJS interop in ruvector-training.ts
+#### PR #1334 — fix: resolve ESM/CJS interop in swarmvector-training.ts
 - **Author**: @fjdevel
-- **Files**: ruvector-training.ts
+- **Files**: swarmvector-training.ts
 - **Additions**: 12 / **Deletions**: 3
 - **Fix**: `.default || module` pattern for CJS environments
 - **Verdict**: REJECT (Rebase Required)
@@ -92,7 +92,7 @@ Each PR is evaluated on 4 axes:
 #### PR #1338 — Fix performance attention runtime interop
 - **Author**: @Gujiassh
 - **Verdict**: ACCEPT WITH CHANGES
-- **Details**: Creates CJS/ESM compatibility layer for `@ruvector/attention` using `createRequire`. Correct approach, no security concerns.
+- **Details**: Creates CJS/ESM compatibility layer for `@swarmvector/attention` using `createRequire`. Correct approach, no security concerns.
 - **Required changes**: (1) Add wrappers for `MultiHeadAttention` and `LinearAttention` (imported by benchmarks but dropped by PR). (2) Add comment explaining `computeRaw` alias exists for backward compat.
 
 #### PR #1337 — Fix benchmark environment lookup in ESM
@@ -132,7 +132,7 @@ Phase 2 — Accept with changes (request fixes, then merge):
   #1338 (attention interop — request missing wrappers from @Gujiassh)
 
 Phase 3 — Rejected (request rebase):
-  #1334 (ESM/CJS ruvector — needs rebase onto post-v3.5.22 main)
+  #1334 (ESM/CJS swarmvector — needs rebase onto post-v3.5.22 main)
 ```
 
 ## Security Review Checklist

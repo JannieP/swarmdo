@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Static scan guard for ruvnet/swarmdo#2089 — ADR-127 Phase 1.
+ * Static scan guard for upstream/swarmdo#2089 — ADR-127 Phase 1.
  *
  * Scans every `uses:` line in:
  *   - .claude/agents/github/*.md

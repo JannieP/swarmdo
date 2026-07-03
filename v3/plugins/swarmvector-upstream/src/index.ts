@@ -2,7 +2,7 @@
  * @swarmdo/swarmvector-upstream
  *
  * SwarmVector WASM package bridges for Swarmdo plugins.
- * Provides unified access to 15+ WASM packages from ruvnet/swarmvector.
+ * Provides unified access to 15+ WASM packages from upstream/swarmvector.
  */
 
 // Bridge exports

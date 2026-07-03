@@ -1,5 +1,5 @@
 /**
- * @ruvector/rvf-wasm — JS glue for the RVF WASM microkernel.
+ * @swarmvector/rvf-wasm — JS glue for the RVF WASM microkernel.
  *
  * Loads the .wasm binary and re-exports all C-ABI functions plus the
  * WASM linear memory object.

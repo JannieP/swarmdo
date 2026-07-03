@@ -2,11 +2,11 @@
 
 [![npm version](https://img.shields.io/npm/v/@swarmdo/guidance.svg?style=flat-square&label=npm)](https://www.npmjs.com/package/@swarmdo/guidance)
 [![npm downloads](https://img.shields.io/npm/dm/@swarmdo/guidance.svg?style=flat-square&label=downloads)](https://www.npmjs.com/package/@swarmdo/guidance)
-[![license](https://img.shields.io/npm/l/@swarmdo/guidance.svg?style=flat-square)](https://github.com/ruvnet/claude-flow/blob/main/LICENSE)
-[![tests](https://img.shields.io/badge/tests-1%2C328%20passing-brightgreen?style=flat-square)](https://github.com/ruvnet/claude-flow)
+[![license](https://img.shields.io/npm/l/@swarmdo/guidance.svg?style=flat-square)](the upstream project (see NOTICE))
+[![tests](https://img.shields.io/badge/tests-1%2C328%20passing-brightgreen?style=flat-square)](the upstream project (see NOTICE))
 [![node](https://img.shields.io/badge/node-%3E%3D20-blue?style=flat-square)](https://nodejs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3+-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![GitHub stars](https://img.shields.io/github/stars/ruvnet/claude-flow?style=flat-square&logo=github)](https://github.com/ruvnet/claude-flow)
+[![GitHub stars](https://img.shields.io/github/stars/upstream/claude-flow?style=flat-square&logo=github)](the upstream project (see NOTICE))
 [![swarmdo](https://img.shields.io/npm/v/swarmdo.svg?style=flat-square&label=swarmdo&color=blueviolet)](https://www.npmjs.com/package/swarmdo)
 [![swarmbot](https://img.shields.io/npm/v/swarmbot.svg?style=flat-square&label=swarmbot&color=orange)](https://www.npmjs.com/package/swarmbot)
 
@@ -1181,15 +1181,15 @@ Take 20 real Swarmdo tasks from repo history. Run A without control plane, run B
 
 | Resource | URL |
 |----------|-----|
-| **GitHub** | [github.com/ruvnet/claude-flow](https://github.com/ruvnet/claude-flow) |
+| **GitHub** | [the upstream project (see NOTICE)](the upstream project (see NOTICE)) |
 | **npm: @swarmdo/guidance** | [npmjs.com/package/@swarmdo/guidance](https://www.npmjs.com/package/@swarmdo/guidance) |
 | **npm: swarmdo** | [npmjs.com/package/swarmdo](https://www.npmjs.com/package/swarmdo) |
 | **npm: swarmbot** | [npmjs.com/package/swarmbot](https://www.npmjs.com/package/swarmbot) |
-| **ruv.io** | [ruv.io](https://ruv.io) |
-| **Issues** | [github.com/ruvnet/claude-flow/issues](https://github.com/ruvnet/claude-flow/issues) |
+| **swarmdo.com** | [swarmdo.com](https://swarmdo.com) |
+| **Issues** | [the upstream project (see NOTICE)](the upstream project (see NOTICE)) |
 | **API Reference** | [docs/reference/api-quick-reference.md](docs/reference/api-quick-reference.md) |
 | **ADR Index** | [docs/adrs/](docs/adrs/) |
 
 ## License
 
-MIT — see [LICENSE](https://github.com/ruvnet/claude-flow/blob/main/LICENSE) for details.
+MIT — see [LICENSE](the upstream project (see NOTICE)) for details.

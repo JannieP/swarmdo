@@ -2,7 +2,7 @@
  * Route Hook - Intelligent agent selection with SONA-style routing
  * Uses learned patterns, context, and exploration/exploitation balance
  *
- * NOW WITH FULL RUVECTOR INTELLIGENCE:
+ * NOW WITH FULL SWARMVECTOR INTELLIGENCE:
  * - @swarmvector/sona: Micro-LoRA (~0.05ms), trajectories
  * - @swarmvector/attention: MoE attention-based ranking
  * - swarmvector: HNSW indexing (150x faster search)
@@ -14,7 +14,7 @@ import { routeTaskIntelligent, findSimilarPatterns, getIntelligenceStats } from 
 // Exploration rate for epsilon-greedy selection
 const EXPLORATION_RATE = 0.1;
 // Flag to use SwarmVector intelligence (can be toggled)
-const USE_RUVECTOR_INTELLIGENCE = process.env.RUVECTOR_INTELLIGENCE_ENABLED !== 'false';
+const USE_SWARMVECTOR_INTELLIGENCE = process.env.SWARMVECTOR_INTELLIGENCE_ENABLED !== 'false';
 // Available agent types
 const availableAgents = [
     'coder',
@@ -50,8 +50,8 @@ export const hookRouteTool = {
     }),
     execute: async ({ task, context, explore }, { onProgress }) => {
         const startTime = Date.now();
-        // TRY RUVECTOR INTELLIGENCE FIRST (Micro-LoRA + HNSW + MoE)
-        if (USE_RUVECTOR_INTELLIGENCE && !explore) {
+        // TRY SWARMVECTOR INTELLIGENCE FIRST (Micro-LoRA + HNSW + MoE)
+        if (USE_SWARMVECTOR_INTELLIGENCE && !explore) {
             try {
                 const intelligentResult = await routeTaskIntelligent(task, context);
                 // Also check for similar patterns from ReasoningBank

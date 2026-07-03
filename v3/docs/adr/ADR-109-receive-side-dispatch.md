@@ -2,7 +2,7 @@
 
 - Status: **Accepted — Implemented (alpha.10)**
 - Date: 2026-05-09
-- Authors: claude (drafted with rUv)
+- Authors: claude (drafted with the upstream author)
 - Related: [ADR-097](./ADR-097-federation-budget-circuit-breaker.md), [ADR-104](./ADR-104-federation-wire-transport.md), [ADR-105](./ADR-105-federation-v1-state-snapshot.md)
 
 ## Context
@@ -96,7 +96,7 @@ ws.on('message', (raw: RawData) => {
 
 ### Step 2 — Federation plugin subscribes
 
-In `v3/@rufflo/plugin-agent-federation/src/plugin.ts`, after `transport.listen()`:
+In `v3/@swarmdo/plugin-agent-federation/src/plugin.ts`, after `transport.listen()`:
 
 ```typescript
 if (transport && typeof transport.onMessage === 'function') {
@@ -151,7 +151,7 @@ if (transport && typeof transport.onMessage === 'function') {
 | `inbound-dispatcher.ts` | **Implemented** |
 | `plugin.ts` subscription wiring | **Implemented** |
 | Tests | **Implemented (5 specs)** |
-| Validated mac↔ruvultra round-trip with both directions | **Implemented — alpha.10 release smoke** |
+| Validated mac↔swarmultra round-trip with both directions | **Implemented — alpha.10 release smoke** |
 
 ## Decision review trigger
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
- * RuvLLM ESP32 CLI
+ * SwarmLLM ESP32 CLI
  *
- * Cross-platform installation and flashing tool for RuvLLM on ESP32
+ * Cross-platform installation and flashing tool for SwarmLLM on ESP32
  */
 
 const { spawn, execSync } = require('child_process');
@@ -42,11 +42,11 @@ function logError(msg) {
 
 function showHelp() {
     console.log(`
-${colors.bright}RuvLLM ESP32 v${VERSION}${colors.reset}
+${colors.bright}SwarmLLM ESP32 v${VERSION}${colors.reset}
 Full-featured LLM inference engine for ESP32
 
 ${colors.yellow}USAGE:${colors.reset}
-    npx ruvllm-esp32 <command> [options]
+    npx swarmllm-esp32 <command> [options]
 
 ${colors.yellow}COMMANDS:${colors.reset}
     install          Install ESP32 toolchain (espup, espflash)
@@ -66,11 +66,11 @@ ${colors.yellow}OPTIONS:${colors.reset}
     --version, -v    Show version
 
 ${colors.yellow}EXAMPLES:${colors.reset}
-    npx ruvllm-esp32 install
-    npx ruvllm-esp32 build --target esp32s3 --release
-    npx ruvllm-esp32 flash --port COM6
-    npx ruvllm-esp32 flash /dev/ttyUSB0
-    npx ruvllm-esp32 cluster --chips 5
+    npx swarmllm-esp32 install
+    npx swarmllm-esp32 build --target esp32s3 --release
+    npx swarmllm-esp32 flash --port COM6
+    npx swarmllm-esp32 flash /dev/ttyUSB0
+    npx swarmllm-esp32 cluster --chips 5
 
 ${colors.yellow}FEATURES:${colors.reset}
     - INT8/Binary quantized inference (~20KB RAM)
@@ -281,12 +281,12 @@ async function flash(port, options = {}) {
                 execSync(`powershell ${psArgs}`, { stdio: 'inherit', cwd: process.cwd() });
             } else {
                 // Fallback
-                const binary = `target\\${rustTarget}\\release\\ruvllm-esp32`;
+                const binary = `target\\${rustTarget}\\release\\swarmllm-esp32`;
                 execSync(`espflash flash --monitor --port ${actualPort} ${binary}`, { stdio: 'inherit' });
             }
         } else {
             // Linux/macOS
-            const binary = `target/${rustTarget}/release/ruvllm-esp32`;
+            const binary = `target/${rustTarget}/release/swarmllm-esp32`;
             execSync(`espflash flash --monitor --port ${actualPort} ${binary}`, { stdio: 'inherit' });
         }
 
@@ -314,7 +314,7 @@ function showInfo() {
     const hasToolchain = checkToolchain();
 
     console.log(`
-${colors.bright}RuvLLM ESP32 System Information${colors.reset}
+${colors.bright}SwarmLLM ESP32 System Information${colors.reset}
 ${'─'.repeat(40)}
 Version:       ${VERSION}
 Platform:      ${platform}

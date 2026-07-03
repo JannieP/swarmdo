@@ -10,7 +10,7 @@
  * - 0.452ms per-layer cost
  * - Sub-millisecond token latency
  *
- * Based on: https://github.com/ruvnet/vibecast/tree/claude/test-swarmvector-sona-01Raj3Q3P4qjff4JGVipJhvz
+ * Based on: the upstream project (see NOTICE)
  */
 import { SonaEngine } from '@swarmvector/sona';
 import { EventEmitter } from 'events';

@@ -5,7 +5,7 @@ Documentation generation, drift detection, and API docs automation.
 ## Install
 
 ```
-/plugin marketplace add ruvnet/swarmdo
+/plugin marketplace add upstream/swarmdo
 /plugin install swarmdo-docs@swarmdo
 ```
 

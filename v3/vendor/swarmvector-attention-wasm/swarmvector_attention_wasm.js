@@ -1199,7 +1199,7 @@ export function softmax(vec) {
 }
 
 /**
- * Get the version of the ruvector-attention-wasm crate
+ * Get the version of the swarmvector-attention-wasm crate
  * @returns {string}
  */
 export function version() {
@@ -1477,7 +1477,7 @@ async function __wbg_init(module_or_path) {
     }
 
     if (typeof module_or_path === 'undefined') {
-        module_or_path = new URL('ruvector_attention_wasm_bg.wasm', import.meta.url);
+        module_or_path = new URL('swarmvector_attention_wasm_bg.wasm', import.meta.url);
     }
     const imports = __wbg_get_imports();
 

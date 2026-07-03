@@ -1,5 +1,5 @@
 /**
- * Tests for ToolOutputGuardrail (ADR-131, ruvnet/swarmdo#2149).
+ * Tests for ToolOutputGuardrail (ADR-131, upstream/swarmdo#2149).
  *
  * Covers:
  *  - Safe content passes unchanged

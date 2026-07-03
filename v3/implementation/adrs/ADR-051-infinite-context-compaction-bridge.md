@@ -2,9 +2,9 @@
 
 **Status:** Implemented
 **Date:** 2026-02-10
-**Authors:** RuvNet, Rufflo Team
+**Authors:** the upstream author, Swarmdo Team
 **Version:** 2.0.0
-**Related:** ADR-006 (Unified Memory), ADR-009 (Hybrid Memory Backend), ADR-027 (RuVector PostgreSQL), ADR-048 (Auto Memory Integration), ADR-049 (Self-Learning Memory GNN), ADR-052 (Statusline Observability)
+**Related:** ADR-006 (Unified Memory), ADR-009 (Hybrid Memory Backend), ADR-027 (SwarmVector PostgreSQL), ADR-048 (Auto Memory Integration), ADR-049 (Self-Learning Memory GNN), ADR-052 (Statusline Observability)
 **Implementation:** `.claude/helpers/context-persistence-hook.mjs` (~1600 lines), `.claude/helpers/patch-aggressive-prune.mjs` (~120 lines)
 
 ## Context
@@ -52,7 +52,7 @@ transcript is gone.
 
 An "infinite context" system where:
 1. Before compaction, conversation turns are chunked, summarized, embedded, and stored
-   in the AgentDB/RuVector memory backend
+   in the AgentDB/SwarmVector memory backend
 2. After compaction, the most relevant stored context is retrieved and injected back
    into the new context window via `additionalContext`
 3. Across sessions, accumulated transcript archives enable cross-session context
@@ -62,7 +62,7 @@ An "infinite context" system where:
 
 Implement a **Compaction-to-Memory Bridge** as a hook script that intercepts the
 PreCompact lifecycle and stores conversation history in the AgentDB memory backend
-(with optional RuVector PostgreSQL scaling). On post-compaction SessionStart, the
+(with optional SwarmVector PostgreSQL scaling). On post-compaction SessionStart, the
 bridge retrieves and injects the most relevant archived context.
 
 ### Design Principles
@@ -70,7 +70,7 @@ bridge retrieves and injects the most relevant archived context.
 1. **Hook-Native**: Uses Claude Code's official PreCompact and SessionStart hooks
 2. **SDK-Patched**: Extends Claude Code's micro-compaction (`Vd()`) to also prune
    old conversation text, not just tool results -- the only way to prevent compaction
-3. **Backend-Agnostic**: Works with SQLite, RuVector PostgreSQL, AgentDB, or JSON
+3. **Backend-Agnostic**: Works with SQLite, SwarmVector PostgreSQL, AgentDB, or JSON
 4. **Timeout-Safe**: All operations complete within the 5-second hook timeout using
    local I/O and hash-based embeddings (no LLM calls, no network)
 5. **Dedup-Aware**: Content hashing prevents re-storing on repeated compactions
@@ -210,19 +210,19 @@ instead of blocking.
 |  |              Memory Backend (tiered)                        |   |
 |  |                                                            |   |
 |  |  Tier 1: SQLite (better-sqlite3)                           |   |
-|  |    -> .rufflo/data/transcript-archive.db              |   |
+|  |    -> .swarmdo/data/transcript-archive.db              |   |
 |  |    -> WAL mode, indexed queries, ACID transactions         |   |
 |  |                                                            |   |
-|  |  Tier 2: RuVector PostgreSQL (if RUVECTOR_* env set)       |   |
+|  |  Tier 2: SwarmVector PostgreSQL (if SWARMVECTOR_* env set)       |   |
 |  |    -> TB-scale storage, pgvector embeddings                |   |
 |  |    -> GNN-enhanced retrieval, self-learning optimizer       |   |
 |  |                                                            |   |
-|  |  Tier 3: AgentDB + HNSW  (if @rufflo/memory built)   |   |
+|  |  Tier 3: AgentDB + HNSW  (if @swarmdo/memory built)   |   |
 |  |    -> ~1.9x-4.7x measured faster semantic search                  |   |
 |  |    -> Vector-indexed retrieval                             |   |
 |  |                                                            |   |
 |  |  Tier 4: JsonFileBackend                                   |   |
-|  |    -> .rufflo/data/transcript-archive.json            |   |
+|  |    -> .swarmdo/data/transcript-archive.json            |   |
 |  |    -> Zero dependencies, always available                  |   |
 |  +-----------------------------------------------------------+   |
 |                                                                   |
@@ -265,7 +265,7 @@ archive **proactively on every user prompt** via the `UserPromptSubmit` hook:
 
 Result: Compaction becomes invisible. The "Context left until auto-compact: 11%"
 warning is no longer a threat because all information is already persisted in
-the SQLite/RuVector database and will be restored after compaction.
+the SQLite/SwarmVector database and will be restored after compaction.
 
 ### Transcript Parsing
 
@@ -478,7 +478,7 @@ The autopilot state is read by the statusline script to display real-time metric
 
 ### Autopilot State Persistence
 
-State is persisted to `.rufflo/data/autopilot-state.json`:
+State is persisted to `.swarmdo/data/autopilot-state.json`:
 
 ```json
 {
@@ -506,7 +506,7 @@ State is persisted to `.rufflo/data/autopilot-state.json`:
 | Generate hash embeddings | 100ms | <1ms total |
 | Content hash (SHA-256) | 100ms | <5ms |
 | Store to SQLite (WAL) | 500ms | ~20ms |
-| Store to RuVector PG | 500ms | ~100ms (network) |
+| Store to SwarmVector PG | 500ms | ~100ms (network) |
 | **Total (UserPromptSubmit)** | **5000ms** | **~50ms (incremental)** |
 | Build compact instructions | 100ms | ~5ms |
 | **Total (PreCompact)** | **5000ms** | **~25ms (mostly deduped)** |
@@ -528,39 +528,39 @@ State is persisted to `.rufflo/data/autopilot-state.json`:
 
 | Environment Variable | Default | Description |
 |---------------------|---------|-------------|
-| `RUFFLO_COMPACT_RESTORE_BUDGET` | `4000` | Max chars for restored context in SessionStart |
-| `RUFFLO_COMPACT_INSTRUCTION_BUDGET` | `2000` | Max chars for custom compact instructions |
-| `RUFFLO_AUTO_OPTIMIZE` | `true` | Enable importance ranking, pruning, RuVector sync |
-| `RUFFLO_RETENTION_DAYS` | `30` | Auto-prune never-accessed entries older than N days |
-| `RUFFLO_CONTEXT_AUTOPILOT` | `true` | Enable Context Autopilot tracking |
-| `RUFFLO_CONTEXT_WINDOW` | `200000` | Context window size in tokens |
-| `RUFFLO_AUTOPILOT_WARN` | `0.70` | Warning threshold (70%) |
-| `RUFFLO_AUTOPILOT_PRUNE` | `0.85` | Critical threshold (85%) — session rotation advised |
+| `SWARMDO_COMPACT_RESTORE_BUDGET` | `4000` | Max chars for restored context in SessionStart |
+| `SWARMDO_COMPACT_INSTRUCTION_BUDGET` | `2000` | Max chars for custom compact instructions |
+| `SWARMDO_AUTO_OPTIMIZE` | `true` | Enable importance ranking, pruning, SwarmVector sync |
+| `SWARMDO_RETENTION_DAYS` | `30` | Auto-prune never-accessed entries older than N days |
+| `SWARMDO_CONTEXT_AUTOPILOT` | `true` | Enable Context Autopilot tracking |
+| `SWARMDO_CONTEXT_WINDOW` | `200000` | Context window size in tokens |
+| `SWARMDO_AUTOPILOT_WARN` | `0.70` | Warning threshold (70%) |
+| `SWARMDO_AUTOPILOT_PRUNE` | `0.85` | Critical threshold (85%) — session rotation advised |
 
-### RuVector PostgreSQL (Optional)
+### SwarmVector PostgreSQL (Optional)
 
 | Environment Variable | Default | Description |
 |---------------------|---------|-------------|
-| `RUVECTOR_HOST` | - | PostgreSQL host for RuVector backend |
-| `RUVECTOR_DATABASE` | - | PostgreSQL database name |
-| `RUVECTOR_USER` | - | PostgreSQL username |
-| `RUVECTOR_PASSWORD` | - | PostgreSQL password |
-| `RUVECTOR_PORT` | `5432` | PostgreSQL port |
-| `RUVECTOR_SSL` | `false` | Enable SSL for PostgreSQL connection |
+| `SWARMVECTOR_HOST` | - | PostgreSQL host for SwarmVector backend |
+| `SWARMVECTOR_DATABASE` | - | PostgreSQL database name |
+| `SWARMVECTOR_USER` | - | PostgreSQL username |
+| `SWARMVECTOR_PASSWORD` | - | PostgreSQL password |
+| `SWARMVECTOR_PORT` | `5432` | PostgreSQL port |
+| `SWARMVECTOR_SSL` | `false` | Enable SSL for PostgreSQL connection |
 
 ## Security Considerations
 
 1. **No credentials in transcript**: Tool inputs may contain file paths but not secrets
    (Claude Code already redacts sensitive content before tool execution)
-2. **Local storage default**: SQLite writes to `.rufflo/data/` which is
-   gitignored. No network calls unless RuVector PostgreSQL is configured.
-3. **Parameterized queries**: SQLite uses prepared statements, RuVector uses `$N`
+2. **Local storage default**: SQLite writes to `.swarmdo/data/` which is
+   gitignored. No network calls unless SwarmVector PostgreSQL is configured.
+3. **Parameterized queries**: SQLite uses prepared statements, SwarmVector uses `$N`
    parameterized queries -- no SQL injection risk.
 4. **Content hashing**: Uses `crypto.createHash('sha256')` for dedup -- standard Node.js
 5. **Graceful failure**: All operations wrapped in try/catch. Hook failures produce
    empty output -- compaction always proceeds normally.
-6. **RuVector credentials**: Read from `RUVECTOR_*` or `PG*` env vars only.
-   Never hardcoded. Connection uses SSL when `RUVECTOR_SSL=true`.
+6. **SwarmVector credentials**: Read from `SWARMVECTOR_*` or `PG*` env vars only.
+   Never hardcoded. Connection uses SSL when `SWARMVECTOR_SSL=true`.
 
 ## Migration Path
 
@@ -573,21 +573,21 @@ State is persisted to `.rufflo/data/autopilot-state.json`:
 - Auto-pruning of never-accessed entries after configurable retention period
 - Custom compact instructions guiding Claude's compaction summary
 
-### Phase 2: RuVector PostgreSQL (COMPLETE - Code Ready, Awaiting Configuration)
-- `RuVectorBackend` class fully implemented (lines 361-596 of hook script)
-- Set `RUVECTOR_HOST`, `RUVECTOR_DATABASE`, `RUVECTOR_USER`, `RUVECTOR_PASSWORD`
+### Phase 2: SwarmVector PostgreSQL (COMPLETE - Code Ready, Awaiting Configuration)
+- `SwarmVectorBackend` class fully implemented (lines 361-596 of hook script)
+- Set `SWARMVECTOR_HOST`, `SWARMVECTOR_DATABASE`, `SWARMVECTOR_USER`, `SWARMVECTOR_PASSWORD`
 - pgvector extension for 768-dim embedding storage and similarity search
 - TB-scale storage with connection pooling (max 3 connections)
 - JSONB metadata columns with importance-ranked queries
-- Auto-sync from SQLite to RuVector when env vars configured
+- Auto-sync from SQLite to SwarmVector when env vars configured
 - `ON CONFLICT (id) DO NOTHING` for database-level dedup
 - Automatic fallback to SQLite if PostgreSQL connection fails
 
 ### Phase 3: AgentDB Integration (COMPLETE - Code Ready, Awaiting Build)
-- `resolveBackend()` checks for `@rufflo/memory` dist at Tier 3
+- `resolveBackend()` checks for `@swarmdo/memory` dist at Tier 3
 - If `AgentDBBackend` class exists, uses HNSW-indexed embeddings
 - Cross-session retrieval: semantic search across archived transcripts
-- Transparent upgrade when `@rufflo/memory` package is built
+- Transparent upgrade when `@swarmdo/memory` package is built
 
 ### Phase 4: JsonFileBackend (COMPLETE - Always Available)
 - `JsonFileBackend` class implemented (lines 278-355 of hook script)
@@ -597,7 +597,7 @@ State is persisted to `.rufflo/data/autopilot-state.json`:
 
 ## Self-Learning Optimization Pipeline
 
-When `RUFFLO_AUTO_OPTIMIZE` is not `false` (default: enabled), the system
+When `SWARMDO_AUTO_OPTIMIZE` is not `false` (default: enabled), the system
 automatically optimizes storage and retrieval using 5 self-learning stages:
 
 ### Stage 1: Confidence Decay
@@ -628,7 +628,7 @@ survive regardless of age, while irrelevant entries are pruned quickly.
 
 Standard retention policy as safety net:
 - **Criteria**: `access_count = 0` AND `created_at < now - RETENTION_DAYS`
-- **Default retention**: 30 days (configurable via `RUFFLO_RETENTION_DAYS`)
+- **Default retention**: 30 days (configurable via `SWARMDO_RETENTION_DAYS`)
 - **Never prunes accessed entries**: If it was ever restored, it's kept
 
 ### Stage 4: ONNX Embedding Generation (384-dim)
@@ -651,11 +651,11 @@ find entries about "authentication performance" — hash embeddings cannot do th
 
 Once all entries are embedded, this stage only processes newly archived turns.
 
-### Stage 5: RuVector Sync
+### Stage 5: SwarmVector Sync
 
-When SQLite is the primary backend but RuVector PostgreSQL env vars are configured:
-- All entries are synced to RuVector with hash embeddings attached
-- RuVector's `pgvector` extension enables true semantic search
+When SQLite is the primary backend but SwarmVector PostgreSQL env vars are configured:
+- All entries are synced to SwarmVector with hash embeddings attached
+- SwarmVector's `pgvector` extension enables true semantic search
 - ON CONFLICT DO NOTHING prevents duplicate inserts
 - Sync is best-effort — failures don't block the archive pipeline
 
@@ -732,7 +732,7 @@ All capabilities confirmed working (2026-02-10):
    context is always persisted before it can be lost
 4. **Cross-session recall**: Archived transcripts accumulate across sessions, enabling
    "What did we do last time?" queries
-5. **4-tier scaling**: SQLite (local, fast) -> RuVector PostgreSQL (TB-scale,
+5. **4-tier scaling**: SQLite (local, fast) -> SwarmVector PostgreSQL (TB-scale,
    vector search) -> AgentDB (HNSW) -> JSON (zero deps)
 6. **Self-learning**: Confidence decay + access boosting creates a reinforcement loop
    where frequently useful entries survive and irrelevant entries naturally fade
@@ -787,15 +787,15 @@ All capabilities confirmed working (2026-02-10):
 
 | Class | Lines | Storage | Features |
 |-------|-------|---------|----------|
-| `SQLiteBackend` | 57-272 | `.rufflo/data/transcript-archive.db` | WAL mode, indexed queries, prepared statements, importance-ranked queries, access tracking, stale pruning |
-| `JsonFileBackend` | 278-355 | `.rufflo/data/transcript-archive.json` | Zero dependencies, Map-based in-memory with JSON persist |
-| `RuVectorBackend` | 361-596 | PostgreSQL with pgvector | Connection pooling (max 3), JSONB metadata, 768-dim vector column, ON CONFLICT dedup, async hash check |
+| `SQLiteBackend` | 57-272 | `.swarmdo/data/transcript-archive.db` | WAL mode, indexed queries, prepared statements, importance-ranked queries, access tracking, stale pruning |
+| `JsonFileBackend` | 278-355 | `.swarmdo/data/transcript-archive.json` | Zero dependencies, Map-based in-memory with JSON persist |
+| `SwarmVectorBackend` | 361-596 | PostgreSQL with pgvector | Connection pooling (max 3), JSONB metadata, 768-dim vector column, ON CONFLICT dedup, async hash check |
 
 ### Exported Functions (for testing)
 
 All core functions are exported from the hook module:
 
-- **Backends**: `SQLiteBackend`, `RuVectorBackend`, `JsonFileBackend`, `resolveBackend`, `getRuVectorConfig`
+- **Backends**: `SQLiteBackend`, `SwarmVectorBackend`, `JsonFileBackend`, `resolveBackend`, `getSwarmVectorConfig`
 - **Parsing**: `parseTranscript`, `extractTextContent`, `extractToolCalls`, `extractFilePaths`, `chunkTranscript`, `extractSummary`
 - **Storage**: `buildEntry`, `storeChunks`, `hashContent`, `createHashEmbedding`
 - **Retrieval**: `retrieveContext`, `retrieveContextSmart`, `computeImportance`
@@ -850,7 +850,7 @@ is saved at `cli.js.backup` before patching. Must be re-applied after
 - **Decision detection**: `buildCompactInstructions()` scans assistant text for decision
   keywords (`decided`, `choosing`, `approach`, `instead of`, `rather than`) to extract
   key decisions for compact preservation
-- **RuVector dedup**: Synchronous `hashExists()` returns false for RuVector (async DB);
+- **SwarmVector dedup**: Synchronous `hashExists()` returns false for SwarmVector (async DB);
   dedup is handled at the database level via `ON CONFLICT (id) DO NOTHING`
 - **Graceful failure**: Top-level try/catch ensures hook never crashes Claude Code;
   errors are written to stderr as `[ContextPersistence] Error (non-critical): ...`
@@ -869,7 +869,7 @@ node --test tests/context-persistence-hook.test.mjs
 
 - ADR-006: Unified Memory Service
 - ADR-009: Hybrid Memory Backend (AgentDB + SQLite)
-- ADR-027: RuVector PostgreSQL Integration
+- ADR-027: SwarmVector PostgreSQL Integration
 - ADR-048: Auto Memory Integration
 - ADR-049: Self-Learning Memory with GNN
 - Claude Agent SDK: `@anthropic-ai/claude-agent-sdk` PreCompact hook types

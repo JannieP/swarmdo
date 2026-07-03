@@ -225,7 +225,7 @@ export class EnhancedAgentDBWrapper {
                     throw new Error('GraphNeuralNetwork not found in @swarmvector/gnn');
                 }
                 // Pre-validate the heads/dimension alignment that @swarmvector/gnn
-                // RuvectorLayer panics on (issue #118 / swarmvector#216). The constraint
+                // SwarmvectorLayer panics on (issue #118 / swarmvector#216). The constraint
                 // is `EMBEDDING_DIM % num_heads == 0` per layer; if violated, the
                 // native side panics through the FFI boundary and tears down the
                 // process. We refuse to construct in that case and disable GNN.
@@ -238,7 +238,7 @@ export class EnhancedAgentDBWrapper {
                     const outFeatures = hiddenDim;
                     if (inFeatures % numHeads !== 0 || outFeatures % numHeads !== 0) {
                         throw new Error(`GNN layer ${i} dimensions (in=${inFeatures}, out=${outFeatures}) ` +
-                            `must both be divisible by numHeads=${numHeads} (RuvectorLayer ` +
+                            `must both be divisible by numHeads=${numHeads} (SwarmvectorLayer ` +
                             `would panic). Adjust gnnConfig.numHeads or hiddenDim.`);
                     }
                     layers.push({ inFeatures, outFeatures, numHeads });

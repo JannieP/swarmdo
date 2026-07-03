@@ -66,7 +66,7 @@ Setting `CLI_CORE=1` opts into the lite path. Leaving it unset preserves the exi
 
 1. **Pick one plugin script** (e.g. cost-tracker's `track.mjs`) and apply the env-flag pattern above.
 2. **Run with both flags** in your dev workflow for a few days. Observe whether the JSON backend's substring-search regression bites you.
-3. **If yes**, fall back to `cli@latest` for the affected call sites and document the gap; ping us on issue [#1760](https://github.com/ruvnet/swarmdo/issues/1760) so we can prioritize.
+3. **If yes**, fall back to `cli@latest` for the affected call sites and document the gap; ping us on issue [#1760](the upstream project (see NOTICE)) so we can prioritize.
 4. **If no**, flip the default in your plugin's package.json by setting `CLI_CORE=1` in your scripts' env — done.
 
 ## Storage backend coexistence
@@ -92,7 +92,7 @@ Or replace the conditional with the bare `'@swarmdo/cli@latest'` and re-run. cli
 
 ## Reporting issues
 
-cli-core is alpha — please file feedback at https://github.com/ruvnet/swarmdo/issues with the label `cli-core-alpha`. Specifically helpful:
+cli-core is alpha — please file feedback at the upstream project (see NOTICE) with the label `cli-core-alpha`. Specifically helpful:
 
 - Cold-cache wall-time on your network (run `rm -rf ~/.npm/_npx; time npx -y @swarmdo/cli-core@alpha --version`)
 - Substring-search false negatives (cases where you expected semantic match)
@@ -126,6 +126,6 @@ This is intentionally **not** part of alpha.5 itself. The cli@3.6.30 tarball is 
 ## Cross-references
 
 - [ADR-100](../../docs/adr/ADR-100-cli-core-split-lazy-load.md) — design rationale
-- [Issue #1748 #3](https://github.com/ruvnet/swarmdo/issues/1748) — the cold-cache problem this addresses
-- [Issue #1760](https://github.com/ruvnet/swarmdo/issues/1760) — alpha tracking
-- Branch [`feat/cli-core-split`](https://github.com/ruvnet/swarmdo/tree/feat/cli-core-split) — work in progress
+- [Issue #1748 #3](the upstream project (see NOTICE)) — the cold-cache problem this addresses
+- [Issue #1760](the upstream project (see NOTICE)) — alpha tracking
+- Branch [`feat/cli-core-split`](the upstream project (see NOTICE)) — work in progress

@@ -1,7 +1,7 @@
 {
-  "name": "ruvllm-esp32",
+  "name": "swarmllm-esp32",
   "version": "0.3.1",
-  "description": "RuvLLM ESP32 - Tiny LLM inference for ESP32 microcontrollers with INT8 quantization, RAG, HNSW vector search, and multi-chip federation. Run AI on $4 hardware.",
+  "description": "SwarmLLM ESP32 - Tiny LLM inference for ESP32 microcontrollers with INT8 quantization, RAG, HNSW vector search, and multi-chip federation. Run AI on $4 hardware.",
   "keywords": [
     "esp32",
     "llm",
@@ -28,12 +28,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ruvnet/ruvector.git",
-    "directory": "examples/ruvLLM/esp32-flash"
+    "url": "the upstream project (see NOTICE)",
+    "directory": "examples/swarmLLM/esp32-flash"
   },
-  "homepage": "https://github.com/ruvnet/ruvector/tree/main/examples/ruvLLM/esp32-flash",
+  "homepage": "the upstream project (see NOTICE)",
   "bugs": {
-    "url": "https://github.com/ruvnet/ruvector/issues"
+    "url": "the upstream project (see NOTICE)"
   },
   "bin": {
     "swarmllm-esp32": "./bin/cli.js"

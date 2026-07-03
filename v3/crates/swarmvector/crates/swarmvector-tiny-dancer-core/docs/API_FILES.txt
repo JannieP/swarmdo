@@ -1,7 +1,7 @@
 TINY DANCER ADMIN API - FILE LOCATIONS
 ======================================
 
-All files are located at: /home/user/ruvector/crates/ruvector-tiny-dancer-core/
+All files are located at: /home/user/swarmvector/crates/swarmvector-tiny-dancer-core/
 
 Core Implementation:
 ├── src/api.rs                           (625 lines) - Main API module
@@ -22,16 +22,16 @@ ABSOLUTE PATHS
 ==============
 
 Core:
-/home/user/ruvector/crates/ruvector-tiny-dancer-core/src/api.rs
-/home/user/ruvector/crates/ruvector-tiny-dancer-core/Cargo.toml
-/home/user/ruvector/crates/ruvector-tiny-dancer-core/src/lib.rs
+/home/user/swarmvector/crates/swarmvector-tiny-dancer-core/src/api.rs
+/home/user/swarmvector/crates/swarmvector-tiny-dancer-core/Cargo.toml
+/home/user/swarmvector/crates/swarmvector-tiny-dancer-core/src/lib.rs
 
 Examples:
-/home/user/ruvector/crates/ruvector-tiny-dancer-core/examples/admin-server.rs
-/home/user/ruvector/crates/ruvector-tiny-dancer-core/examples/README.md
+/home/user/swarmvector/crates/swarmvector-tiny-dancer-core/examples/admin-server.rs
+/home/user/swarmvector/crates/swarmvector-tiny-dancer-core/examples/README.md
 
 Documentation:
-/home/user/ruvector/crates/ruvector-tiny-dancer-core/docs/API.md
-/home/user/ruvector/crates/ruvector-tiny-dancer-core/docs/ADMIN_API_QUICKSTART.md
-/home/user/ruvector/crates/ruvector-tiny-dancer-core/docs/API_IMPLEMENTATION_SUMMARY.md
-/home/user/ruvector/crates/ruvector-tiny-dancer-core/docs/API_FILES.txt
+/home/user/swarmvector/crates/swarmvector-tiny-dancer-core/docs/API.md
+/home/user/swarmvector/crates/swarmvector-tiny-dancer-core/docs/ADMIN_API_QUICKSTART.md
+/home/user/swarmvector/crates/swarmvector-tiny-dancer-core/docs/API_IMPLEMENTATION_SUMMARY.md
+/home/user/swarmvector/crates/swarmvector-tiny-dancer-core/docs/API_FILES.txt

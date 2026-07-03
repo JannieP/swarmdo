@@ -1,4 +1,4 @@
-# RuvLLM: Algorithm Design
+# SwarmLLM: Algorithm Design
 
 ## SPARC Phase 2: Pseudocode
 
@@ -1010,7 +1010,7 @@ ALGORITHM LogTelemetry(
 ### 7.1 System Initialization
 
 ```pseudocode
-ALGORITHM InitializeRuvLLM(config: RuvLLMConfig) -> RuvLLMSystem:
+ALGORITHM InitializeSwarmLLM(config: SwarmLLMConfig) -> SwarmLLMSystem:
     // 1. Initialize vector database
     db ← VectorDB.open(config.db_path, {
         dimensions: config.embedding_dim,
@@ -1052,7 +1052,7 @@ ALGORITHM InitializeRuvLLM(config: RuvLLMConfig) -> RuvLLMSystem:
         config.training_interval
     )
 
-    RETURN RuvLLMSystem {
+    RETURN SwarmLLMSystem {
         db, embedder, router, models,
         graph_attention, replay_buffer, ewc,
         judge, telemetry_service, training_service
@@ -1062,7 +1062,7 @@ ALGORITHM InitializeRuvLLM(config: RuvLLMConfig) -> RuvLLMSystem:
 ### 7.2 Graceful Shutdown
 
 ```pseudocode
-ALGORITHM ShutdownRuvLLM(system: RuvLLMSystem):
+ALGORITHM ShutdownSwarmLLM(system: SwarmLLMSystem):
     // 1. Stop accepting new requests
     system.accepting_requests ← FALSE
 
@@ -1088,11 +1088,11 @@ ALGORITHM ShutdownRuvLLM(system: RuvLLMSystem):
     // 8. Unload models
     system.models.unload_all()
 
-    LOG("RuvLLM shutdown complete")
+    LOG("SwarmLLM shutdown complete")
 ```
 
 ---
 
 *Document Version: 1.0*
 *Last Updated: 2025-12-02*
-*Author: RuvLLM Architecture Team*
+*Author: SwarmLLM Architecture Team*

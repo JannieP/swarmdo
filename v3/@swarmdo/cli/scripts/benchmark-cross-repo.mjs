@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 // benchmark-cross-repo.mjs — cross-repo generalisation proof (ADR-084).
 //
-// Pretrains on a DIFFERENT repo's history (default: ruvnet/agentdb) and runs
+// Pretrains on a DIFFERENT repo's history (default: upstream/agentdb) and runs
 // labelled queries about THAT repo's work. If the retrieval system genuinely
 // generalises (vs overfits to the swarmdo corpus it was tuned on), nDCG@3
 // should stay near 0.96.
 //
 // Usage:
 //   1. cd /tmp/agentdb-bench
-//   2. REPO_ROOT=/tmp/agentdb-bench GH_REPO=ruvnet/agentdb \
+//   2. REPO_ROOT=/tmp/agentdb-bench GH_REPO=upstream/agentdb \
 //        node /path/to/pretrain-from-github.mjs    # writes /tmp/agentdb-bench/.swarmdo/neural/
 //   3. cd /tmp/agentdb-bench && node /path/to/benchmark-cross-repo.mjs
 //
@@ -25,7 +25,7 @@ const SWARMDO_ROOT = resolve(SCRIPT_DIR, '../../../..');
 const RUNS_DIR = join(SWARMDO_ROOT, 'docs', 'benchmarks', 'runs');
 
 // Labelled queries about agentdb's actual history (commits + issues
-// observed via `git log` + `gh issue list` on ruvnet/agentdb).
+// observed via `git log` + `gh issue list` on upstream/agentdb).
 // Each query targets a specific piece of work; labels are case-insensitive
 // substring matches against the pattern name.
 const QUERIES_AGENTDB = [
@@ -77,8 +77,8 @@ const QUERIES_AGENTIC_FLOW = [
 
 // Auto-pick query set based on GH_REPO env var.
 const QUERY_SETS = {
-  'ruvnet/agentdb': QUERIES_AGENTDB,
-  'ruvnet/agentic-flow': QUERIES_AGENTIC_FLOW,
+  'upstream/agentdb': QUERIES_AGENTDB,
+  'upstream/agentic-flow': QUERIES_AGENTIC_FLOW,
 };
 const QUERIES = QUERY_SETS[process.env.GH_REPO] || QUERIES_AGENTDB;
 const TOP_K = 5;

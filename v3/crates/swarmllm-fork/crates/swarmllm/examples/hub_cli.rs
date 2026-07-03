@@ -13,25 +13,25 @@
 )]
 //! SwarmLLM Hub CLI - Manage models on HuggingFace Hub
 //!
-//! This CLI provides commands for downloading, uploading, and listing RuvLTRA models.
+//! This CLI provides commands for downloading, uploading, and listing SwarmLTRA models.
 //!
 //! ## Usage
 //!
 //! ```bash
 //! # Pull a model from the registry
-//! cargo run -p swarmllm --example hub_cli -- pull ruvltra-small
+//! cargo run -p swarmllm --example hub_cli -- pull swarmltra-small
 //!
 //! # Push a custom model to HuggingFace Hub
 //! HF_TOKEN=your_token cargo run -p swarmllm --example hub_cli -- push \
 //!   --model ./my-model.gguf \
-//!   --repo username/my-ruvltra \
-//!   --description "My custom RuvLTRA model"
+//!   --repo username/my-swarmltra \
+//!   --description "My custom SwarmLTRA model"
 //!
 //! # List available models in registry
 //! cargo run -p swarmllm --example hub_cli -- list
 //!
 //! # Show detailed model information
-//! cargo run -p swarmllm --example hub_cli -- info ruvltra-small
+//! cargo run -p swarmllm --example hub_cli -- info swarmltra-small
 //! ```
 //!
 //! ## Environment Variables
@@ -41,7 +41,7 @@
 
 use swarmllm::hub::{
     default_cache_dir, get_hf_token, DownloadConfig, ModelDownloader, ModelMetadata, ModelUploader,
-    RuvLtraRegistry, UploadConfig,
+    SwarmLtraRegistry, UploadConfig,
 };
 use std::env;
 use std::path::PathBuf;
@@ -96,7 +96,7 @@ fn cmd_pull(args: &[String]) {
         i += 1;
     }
 
-    let registry = RuvLtraRegistry::new();
+    let registry = SwarmLtraRegistry::new();
     let model_info = match registry.get(model_id) {
         Some(info) => info,
         None => {
@@ -276,7 +276,7 @@ fn cmd_push(args: &[String]) {
         quantization,
         license: Some("MIT".to_string()),
         datasets: vec![],
-        tags: vec!["ruvltra".to_string()],
+        tags: vec!["swarmltra".to_string()],
     };
 
     // Configure uploader
@@ -300,9 +300,9 @@ fn cmd_push(args: &[String]) {
 
 /// List available models
 fn cmd_list(_args: &[String]) {
-    let registry = RuvLtraRegistry::new();
+    let registry = SwarmLtraRegistry::new();
 
-    println!("📚 Available RuvLTRA Models\n");
+    println!("📚 Available SwarmLTRA Models\n");
 
     // Base models
     println!("Base Models:");
@@ -347,8 +347,8 @@ fn cmd_list(_args: &[String]) {
 
     println!();
     println!("💡 Recommendations:");
-    println!("   • Edge devices (< 2GB RAM): ruvltra-small");
-    println!("   • General purpose (4-8GB RAM): ruvltra-medium");
+    println!("   • Edge devices (< 2GB RAM): swarmltra-small");
+    println!("   • General purpose (4-8GB RAM): swarmltra-medium");
     println!("   • Higher quality: Use Q8 quantization variants");
 }
 
@@ -361,7 +361,7 @@ fn cmd_info(args: &[String]) {
     }
 
     let model_id = &args[0];
-    let registry = RuvLtraRegistry::new();
+    let registry = SwarmLtraRegistry::new();
 
     let model = match registry.get(model_id) {
         Some(m) => m,
@@ -463,13 +463,13 @@ fn print_help() {
     println!("    help      Print this help message\n");
     println!("EXAMPLES:");
     println!("    # Download a model");
-    println!("    hub_cli pull ruvltra-small\n");
+    println!("    hub_cli pull swarmltra-small\n");
     println!("    # Upload a custom model");
     println!("    HF_TOKEN=xxx hub_cli push --model ./model.gguf --repo user/model\n");
     println!("    # List all models");
     println!("    hub_cli list\n");
     println!("    # Show model details");
-    println!("    hub_cli info ruvltra-medium\n");
+    println!("    hub_cli info swarmltra-medium\n");
     println!("For more details on a specific command:");
     println!("    hub_cli <command> --help");
 }

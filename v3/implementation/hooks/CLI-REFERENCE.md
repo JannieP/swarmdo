@@ -1,8 +1,8 @@
-# Rufflo V3 Complete CLI Reference
+# Swarmdo V3 Complete CLI Reference
 
 ## Overview
 
-Complete command reference for the rufflo V3 CLI including hooks, workflow execution, hive-mind coordination, process management, and all subcommands with SONA/MoE/HNSW integration.
+Complete command reference for the swarmdo V3 CLI including hooks, workflow execution, hive-mind coordination, process management, and all subcommands with SONA/MoE/HNSW integration.
 
 ## Table of Contents
 
@@ -24,11 +24,11 @@ The V3 hooks CLI provides command-line access to the hooks system for shell scri
 ## Installation
 
 ```bash
-# Hooks are available through the main rufflo CLI
-npm install -g @rufflo/cli
+# Hooks are available through the main swarmdo CLI
+npm install -g @swarmdo/cli
 
 # Or via npx
-npx rufflo hooks --help
+npx swarmdo hooks --help
 ```
 
 ## Commands
@@ -40,7 +40,7 @@ npx rufflo hooks --help
 Get context and suggestions before editing a file.
 
 ```bash
-npx rufflo hooks pre-edit <filePath> [options]
+npx swarmdo hooks pre-edit <filePath> [options]
 
 Options:
   --operation, -o    Edit operation type (create|modify|delete) [default: modify]
@@ -49,9 +49,9 @@ Options:
   --format           Output format (json|text) [default: text]
 
 Examples:
-  npx rufflo hooks pre-edit src/auth.ts
-  npx rufflo hooks pre-edit src/new-file.ts --operation create
-  npx rufflo hooks pre-edit src/legacy.ts --no-suggestions --format json
+  npx swarmdo hooks pre-edit src/auth.ts
+  npx swarmdo hooks pre-edit src/new-file.ts --operation create
+  npx swarmdo hooks pre-edit src/legacy.ts --no-suggestions --format json
 ```
 
 #### post-edit
@@ -59,7 +59,7 @@ Examples:
 Record edit outcome for learning.
 
 ```bash
-npx rufflo hooks post-edit <filePath> [options]
+npx swarmdo hooks post-edit <filePath> [options]
 
 Options:
   --success, -s      Whether edit was successful [required]
@@ -69,11 +69,11 @@ Options:
   --memory-key       Memory storage key (V2 compatibility)
 
 Examples:
-  npx rufflo hooks post-edit src/auth.ts --success true
-  npx rufflo hooks post-edit src/auth.ts --success false --outcome "Type error on line 42"
+  npx swarmdo hooks post-edit src/auth.ts --success true
+  npx swarmdo hooks post-edit src/auth.ts --success false --outcome "Type error on line 42"
 
   # V2 compatibility
-  npx rufflo hooks post-edit --file src/auth.ts --success true --memory-key "swarm/coder/edit1"
+  npx swarmdo hooks post-edit --file src/auth.ts --success true --memory-key "swarm/coder/edit1"
 ```
 
 ---
@@ -85,7 +85,7 @@ Examples:
 Assess risk before executing a command.
 
 ```bash
-npx rufflo hooks pre-command "<command>" [options]
+npx swarmdo hooks pre-command "<command>" [options]
 
 Options:
   --working-dir, -d  Working directory for command
@@ -94,9 +94,9 @@ Options:
   --format           Output format (json|text) [default: text]
 
 Examples:
-  npx rufflo hooks pre-command "npm test"
-  npx rufflo hooks pre-command "rm -rf ./dist" --working-dir /project
-  npx rufflo hooks pre-command "docker compose up" --format json
+  npx swarmdo hooks pre-command "npm test"
+  npx swarmdo hooks pre-command "rm -rf ./dist" --working-dir /project
+  npx swarmdo hooks pre-command "docker compose up" --format json
 ```
 
 #### post-command
@@ -104,7 +104,7 @@ Examples:
 Record command execution outcome.
 
 ```bash
-npx rufflo hooks post-command "<command>" [options]
+npx swarmdo hooks post-command "<command>" [options]
 
 Options:
   --success, -s      Whether command was successful [required]
@@ -114,8 +114,8 @@ Options:
   --time             Execution time in milliseconds
 
 Examples:
-  npx rufflo hooks post-command "npm test" --success true --time 5230
-  npx rufflo hooks post-command "npm build" --success false --exit-code 1 --error "Module not found"
+  npx swarmdo hooks post-command "npm test" --success true --time 5230
+  npx swarmdo hooks post-command "npm build" --success false --exit-code 1 --error "Module not found"
 ```
 
 ---
@@ -127,7 +127,7 @@ Examples:
 Record task start for coordination.
 
 ```bash
-npx rufflo hooks pre-task [options]
+npx swarmdo hooks pre-task [options]
 
 Options:
   --description, -d  Task description [required]
@@ -135,8 +135,8 @@ Options:
   --agent            Assigned agent type
 
 Examples:
-  npx rufflo hooks pre-task --description "Implement OAuth2 flow"
-  npx rufflo hooks pre-task -d "Fix login bug" --agent debugger --task-id task-123
+  npx swarmdo hooks pre-task --description "Implement OAuth2 flow"
+  npx swarmdo hooks pre-task -d "Fix login bug" --agent debugger --task-id task-123
 ```
 
 #### post-task
@@ -144,7 +144,7 @@ Examples:
 Record task completion.
 
 ```bash
-npx rufflo hooks post-task [options]
+npx swarmdo hooks post-task [options]
 
 Options:
   --task-id          Task identifier [required]
@@ -153,8 +153,8 @@ Options:
   --metrics          Include task metrics
 
 Examples:
-  npx rufflo hooks post-task --task-id task-123 --success true
-  npx rufflo hooks post-task --task-id task-123 --success false --result "Blocked by dependency"
+  npx swarmdo hooks post-task --task-id task-123 --success true
+  npx swarmdo hooks post-task --task-id task-123 --success false --result "Blocked by dependency"
 ```
 
 ---
@@ -166,7 +166,7 @@ Examples:
 Restore previous session context.
 
 ```bash
-npx rufflo hooks session-restore [options]
+npx swarmdo hooks session-restore [options]
 
 Options:
   --session-id       Session identifier to restore [required]
@@ -174,8 +174,8 @@ Options:
   --include-agents   Restore agent states [default: true]
 
 Examples:
-  npx rufflo hooks session-restore --session-id swarm-abc123
-  npx rufflo hooks session-restore --session-id previous --include-memory false
+  npx swarmdo hooks session-restore --session-id swarm-abc123
+  npx swarmdo hooks session-restore --session-id previous --include-memory false
 ```
 
 #### session-end
@@ -183,7 +183,7 @@ Examples:
 End session and persist state.
 
 ```bash
-npx rufflo hooks session-end [options]
+npx swarmdo hooks session-end [options]
 
 Options:
   --export-metrics   Export session metrics [default: true]
@@ -191,8 +191,8 @@ Options:
   --summary          Generate session summary
 
 Examples:
-  npx rufflo hooks session-end
-  npx rufflo hooks session-end --export-metrics true --summary
+  npx swarmdo hooks session-end
+  npx swarmdo hooks session-end --export-metrics true --summary
 ```
 
 ---
@@ -204,7 +204,7 @@ Examples:
 Route a task to the optimal agent.
 
 ```bash
-npx rufflo hooks route "<task>" [options]
+npx swarmdo hooks route "<task>" [options]
 
 Options:
   --context, -c      Additional context
@@ -213,9 +213,9 @@ Options:
   --format           Output format (json|text) [default: text]
 
 Examples:
-  npx rufflo hooks route "Implement user authentication"
-  npx rufflo hooks route "Fix CSS bug" --prefer "coder,reviewer"
-  npx rufflo hooks route "Research API options" --context "REST vs GraphQL" --format json
+  npx swarmdo hooks route "Implement user authentication"
+  npx swarmdo hooks route "Fix CSS bug" --prefer "coder,reviewer"
+  npx swarmdo hooks route "Research API options" --context "REST vs GraphQL" --format json
 ```
 
 #### explain
@@ -223,7 +223,7 @@ Examples:
 Explain routing decision with transparency.
 
 ```bash
-npx rufflo hooks explain "<task>" [options]
+npx swarmdo hooks explain "<task>" [options]
 
 Options:
   --context, -c      Additional context
@@ -231,8 +231,8 @@ Options:
   --format           Output format (json|text) [default: text]
 
 Examples:
-  npx rufflo hooks explain "Implement OAuth2 authentication"
-  npx rufflo hooks explain "Security audit" --verbose
+  npx swarmdo hooks explain "Implement OAuth2 authentication"
+  npx swarmdo hooks explain "Security audit" --verbose
 ```
 
 ---
@@ -244,7 +244,7 @@ Examples:
 Bootstrap intelligence from repository analysis.
 
 ```bash
-npx rufflo hooks pretrain [options]
+npx swarmdo hooks pretrain [options]
 
 Options:
   --path, -p         Repository path [default: current directory]
@@ -254,9 +254,9 @@ Options:
   --force            Force retraining even if data exists
 
 Examples:
-  npx rufflo hooks pretrain
-  npx rufflo hooks pretrain --path /project --max-patterns 5000
-  npx rufflo hooks pretrain --force --no-include-git
+  npx swarmdo hooks pretrain
+  npx swarmdo hooks pretrain --path /project --max-patterns 5000
+  npx swarmdo hooks pretrain --force --no-include-git
 ```
 
 #### build-agents
@@ -264,7 +264,7 @@ Examples:
 Generate optimized agent configurations from pretrain data.
 
 ```bash
-npx rufflo hooks build-agents [options]
+npx swarmdo hooks build-agents [options]
 
 Options:
   --focus            Focus area (all|security|performance|testing) [default: all]
@@ -272,9 +272,9 @@ Options:
   --v3-mode          Use V3 agent definitions
 
 Examples:
-  npx rufflo hooks build-agents --focus security
-  npx rufflo hooks build-agents --output agents.json
-  npx rufflo hooks build-agents --v3-mode --focus performance
+  npx swarmdo hooks build-agents --focus security
+  npx swarmdo hooks build-agents --output agents.json
+  npx swarmdo hooks build-agents --v3-mode --focus performance
 ```
 
 #### transfer
@@ -282,7 +282,7 @@ Examples:
 Transfer learned patterns from another project.
 
 ```bash
-npx rufflo hooks transfer <sourceProject> [options]
+npx swarmdo hooks transfer <sourceProject> [options]
 
 Options:
   --filter           Pattern filter (glob pattern)
@@ -290,9 +290,9 @@ Options:
   --dry-run          Show what would be transferred
 
 Examples:
-  npx rufflo hooks transfer /other-project
-  npx rufflo hooks transfer ../shared-project --filter "security/*"
-  npx rufflo hooks transfer /template --dry-run
+  npx swarmdo hooks transfer /other-project
+  npx swarmdo hooks transfer ../shared-project --filter "security/*"
+  npx swarmdo hooks transfer /template --dry-run
 ```
 
 ---
@@ -304,7 +304,7 @@ Examples:
 View learning metrics dashboard.
 
 ```bash
-npx rufflo hooks metrics [options]
+npx swarmdo hooks metrics [options]
 
 Options:
   --category, -c     Category (all|routing|edits|commands|patterns) [default: all]
@@ -314,10 +314,10 @@ Options:
   --v3-dashboard     Use V3 metrics dashboard
 
 Examples:
-  npx rufflo hooks metrics
-  npx rufflo hooks metrics --category routing --time-range week
-  npx rufflo hooks metrics --detailed --format json
-  npx rufflo hooks metrics --v3-dashboard
+  npx swarmdo hooks metrics
+  npx swarmdo hooks metrics --category routing --time-range week
+  npx swarmdo hooks metrics --detailed --format json
+  npx swarmdo hooks metrics --v3-dashboard
 ```
 
 #### list
@@ -325,7 +325,7 @@ Examples:
 List registered hooks.
 
 ```bash
-npx rufflo hooks list [options]
+npx swarmdo hooks list [options]
 
 Options:
   --category, -c     Filter by category
@@ -334,9 +334,9 @@ Options:
   --format           Output format (json|text|table) [default: table]
 
 Examples:
-  npx rufflo hooks list
-  npx rufflo hooks list --category routing
-  npx rufflo hooks list --include-disabled --format json
+  npx swarmdo hooks list
+  npx swarmdo hooks list --category routing
+  npx swarmdo hooks list --include-disabled --format json
 ```
 
 ---
@@ -348,7 +348,7 @@ Examples:
 Send notification message (V2 compatibility).
 
 ```bash
-npx rufflo hooks notify [options]
+npx swarmdo hooks notify [options]
 
 Options:
   --message, -m      Notification message [required]
@@ -356,8 +356,8 @@ Options:
   --channel          Notification channel
 
 Examples:
-  npx rufflo hooks notify --message "Task completed successfully"
-  npx rufflo hooks notify -m "Build failed" --level error
+  npx swarmdo hooks notify --message "Task completed successfully"
+  npx swarmdo hooks notify -m "Build failed" --level error
 ```
 
 ---
@@ -366,16 +366,16 @@ Examples:
 
 ```bash
 # Hook execution timeout (milliseconds)
-RUFFLO_HOOK_TIMEOUT=5000
+SWARMDO_HOOK_TIMEOUT=5000
 
 # Enable/disable ReasoningBank integration
-RUFFLO_REASONINGBANK_ENABLED=true
+SWARMDO_REASONINGBANK_ENABLED=true
 
 # Learning namespace
-RUFFLO_HOOKS_NAMESPACE=hooks-learning
+SWARMDO_HOOKS_NAMESPACE=hooks-learning
 
 # Logging level
-RUFFLO_HOOKS_LOG_LEVEL=info
+SWARMDO_HOOKS_LOG_LEVEL=info
 ```
 
 ## V2 Compatibility
@@ -384,12 +384,12 @@ All V2 hook commands are supported for backward compatibility:
 
 ```bash
 # V2 syntax (still works)
-npx rufflo hooks pre-task --description "[task]"
-npx rufflo hooks session-restore --session-id "swarm-[id]"
-npx rufflo hooks post-edit --file "[file]" --memory-key "swarm/[agent]/[step]"
-npx rufflo hooks notify --message "[what was done]"
-npx rufflo hooks post-task --task-id "[task]"
-npx rufflo hooks session-end --export-metrics true
+npx swarmdo hooks pre-task --description "[task]"
+npx swarmdo hooks session-restore --session-id "swarm-[id]"
+npx swarmdo hooks post-edit --file "[file]" --memory-key "swarm/[agent]/[step]"
+npx swarmdo hooks notify --message "[what was done]"
+npx swarmdo hooks post-task --task-id "[task]"
+npx swarmdo hooks session-end --export-metrics true
 ```
 
 ## Exit Codes
@@ -408,7 +408,7 @@ npx rufflo hooks session-end --export-metrics true
 ### Text Format (Default)
 
 ```
-$ npx rufflo hooks route "Implement authentication"
+$ npx swarmdo hooks route "Implement authentication"
 
 Task Routing Result
 ==================
@@ -428,7 +428,7 @@ Alternative Agents:
 ### JSON Format
 
 ```bash
-$ npx rufflo hooks route "Implement authentication" --format json
+$ npx swarmdo hooks route "Implement authentication" --format json
 ```
 
 ```json
@@ -447,7 +447,7 @@ $ npx rufflo hooks route "Implement authentication" --format json
 ### Table Format
 
 ```
-$ npx rufflo hooks metrics --format table
+$ npx swarmdo hooks metrics --format table
 
 Hooks Learning Metrics
 ======================
@@ -464,10 +464,10 @@ Total       1547        89%           279
 
 ## Intelligence Command
 
-The `hooks intelligence` command provides RuVector intelligence with SONA, MoE, and HNSW integration.
+The `hooks intelligence` command provides SwarmVector intelligence with SONA, MoE, and HNSW integration.
 
 ```bash
-npx rufflo hooks intelligence [options]
+npx swarmdo hooks intelligence [options]
 ```
 
 **Options:**
@@ -518,7 +518,7 @@ npx rufflo hooks intelligence [options]
 
 **Example Output:**
 ```
-🧠 RuVector Intelligence System
+🧠 SwarmVector Intelligence System
 
 Mode: balanced
 Components:
@@ -542,7 +542,7 @@ Workflow templates and execution management.
 Execute a workflow by name or file.
 
 ```bash
-npx rufflo workflow run <name|file> [options]
+npx swarmdo workflow run <name|file> [options]
 ```
 
 **Options:**
@@ -556,14 +556,14 @@ npx rufflo workflow run <name|file> [options]
 
 **Example:**
 ```bash
-npx rufflo workflow run development --input '{"feature": "auth"}' --parallel 6
+npx swarmdo workflow run development --input '{"feature": "auth"}' --parallel 6
 ```
 
 ### `workflow validate`
 Validate a workflow definition.
 
 ```bash
-npx rufflo workflow validate <file> [options]
+npx swarmdo workflow validate <file> [options]
 ```
 
 **Options:**
@@ -576,7 +576,7 @@ npx rufflo workflow validate <file> [options]
 List available workflows.
 
 ```bash
-npx rufflo workflow list [options]
+npx swarmdo workflow list [options]
 ```
 
 **Options:**
@@ -589,7 +589,7 @@ npx rufflo workflow list [options]
 Show status of running workflows.
 
 ```bash
-npx rufflo workflow status [options]
+npx swarmdo workflow status [options]
 ```
 
 **Options:**
@@ -602,7 +602,7 @@ npx rufflo workflow status [options]
 Stop a running workflow.
 
 ```bash
-npx rufflo workflow stop [options]
+npx swarmdo workflow stop [options]
 ```
 
 **Options:**
@@ -617,13 +617,13 @@ Manage workflow templates.
 
 ```bash
 # List templates
-npx rufflo workflow template list
+npx swarmdo workflow template list
 
 # Show template details
-npx rufflo workflow template show <name>
+npx swarmdo workflow template show <name>
 
 # Create new template
-npx rufflo workflow template create --name <name> --output <file>
+npx swarmdo workflow template create --name <name> --output <file>
 ```
 
 **Built-in Templates:**
@@ -647,7 +647,7 @@ Queen-led consensus-based multi-agent coordination.
 Initialize a new hive-mind swarm.
 
 ```bash
-npx rufflo hive-mind init [options]
+npx swarmdo hive-mind init [options]
 ```
 
 **Options:**
@@ -674,14 +674,14 @@ npx rufflo hive-mind init [options]
 
 **Example:**
 ```bash
-npx rufflo hive-mind init --topology hierarchical-mesh --consensus byzantine --workers 15
+npx swarmdo hive-mind init --topology hierarchical-mesh --consensus byzantine --workers 15
 ```
 
 ### `hive-mind spawn`
 Spawn new worker agents.
 
 ```bash
-npx rufflo hive-mind spawn [options]
+npx swarmdo hive-mind spawn [options]
 ```
 
 **Options:**
@@ -698,7 +698,7 @@ npx rufflo hive-mind spawn [options]
 Show hive status and metrics.
 
 ```bash
-npx rufflo hive-mind status [options]
+npx swarmdo hive-mind status [options]
 ```
 
 **Options:**
@@ -711,7 +711,7 @@ npx rufflo hive-mind status [options]
 Submit tasks to the hive.
 
 ```bash
-npx rufflo hive-mind task [options]
+npx swarmdo hive-mind task [options]
 ```
 
 **Options:**
@@ -727,7 +727,7 @@ npx rufflo hive-mind task [options]
 Optimize hive collective memory.
 
 ```bash
-npx rufflo hive-mind optimize-memory [options]
+npx swarmdo hive-mind optimize-memory [options]
 ```
 
 **Options:**
@@ -740,7 +740,7 @@ npx rufflo hive-mind optimize-memory [options]
 Gracefully shutdown the hive.
 
 ```bash
-npx rufflo hive-mind shutdown [options]
+npx swarmdo hive-mind shutdown [options]
 ```
 
 **Options:**
@@ -758,7 +758,7 @@ npx rufflo hive-mind shutdown [options]
 Spawn a new agent.
 
 ```bash
-npx rufflo agent spawn [options]
+npx swarmdo agent spawn [options]
 ```
 
 **Options:**
@@ -775,14 +775,14 @@ npx rufflo agent spawn [options]
 List active agents.
 
 ```bash
-npx rufflo agent list [options]
+npx swarmdo agent list [options]
 ```
 
 ### `agent pool`
 Manage agent pool.
 
 ```bash
-npx rufflo agent pool [options]
+npx swarmdo agent pool [options]
 ```
 
 **Options:**
@@ -819,7 +819,7 @@ Agent Distribution:
 Monitor agent health.
 
 ```bash
-npx rufflo agent health [options]
+npx swarmdo agent health [options]
 ```
 
 **Options:**
@@ -833,7 +833,7 @@ npx rufflo agent health [options]
 View agent activity logs.
 
 ```bash
-npx rufflo agent logs [options]
+npx swarmdo agent logs [options]
 ```
 
 **Options:**
@@ -853,21 +853,21 @@ npx rufflo agent logs [options]
 Store data in memory.
 
 ```bash
-npx rufflo memory store --key <key> --value <value> [options]
+npx swarmdo memory store --key <key> --value <value> [options]
 ```
 
 ### `memory retrieve`
 Retrieve data from memory.
 
 ```bash
-npx rufflo memory retrieve --key <key> [options]
+npx swarmdo memory retrieve --key <key> [options]
 ```
 
 ### `memory search`
 Semantic vector search.
 
 ```bash
-npx rufflo memory search --query "<query>" [options]
+npx swarmdo memory search --query "<query>" [options]
 ```
 
 **Options:**
@@ -881,14 +881,14 @@ npx rufflo memory search --query "<query>" [options]
 Show memory statistics.
 
 ```bash
-npx rufflo memory stats [options]
+npx swarmdo memory stats [options]
 ```
 
 ### `memory cleanup`
 Clean up stale/expired entries.
 
 ```bash
-npx rufflo memory cleanup [options]
+npx swarmdo memory cleanup [options]
 ```
 
 **Options:**
@@ -903,7 +903,7 @@ npx rufflo memory cleanup [options]
 Compress and optimize storage.
 
 ```bash
-npx rufflo memory compress [options]
+npx swarmdo memory compress [options]
 ```
 
 **Options:**
@@ -938,10 +938,10 @@ Backup and restore memory.
 
 ```bash
 # Export memory
-npx rufflo memory export --output <file> [options]
+npx swarmdo memory export --output <file> [options]
 
 # Import memory
-npx rufflo memory import --input <file> [options]
+npx swarmdo memory import --input <file> [options]
 ```
 
 ---
@@ -952,7 +952,7 @@ npx rufflo memory import --input <file> [options]
 Manage background daemon.
 
 ```bash
-npx rufflo process daemon --action <action> [options]
+npx swarmdo process daemon --action <action> [options]
 ```
 
 **Actions:** `start`, `stop`, `restart`, `status`
@@ -961,15 +961,15 @@ npx rufflo process daemon --action <action> [options]
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `--port` | number | `3847` | Daemon HTTP API port |
-| `--pid-file` | string | `.rufflo/daemon.pid` | PID file location |
-| `--log-file` | string | `.rufflo/daemon.log` | Log file location |
+| `--pid-file` | string | `.swarmdo/daemon.pid` | PID file location |
+| `--log-file` | string | `.swarmdo/daemon.log` | Log file location |
 | `--detach` | boolean | `true` | Run detached |
 
 ### `process monitor`
 Real-time process monitoring.
 
 ```bash
-npx rufflo process monitor [options]
+npx swarmdo process monitor [options]
 ```
 
 **Options:**
@@ -1006,7 +1006,7 @@ npx rufflo process monitor [options]
 Manage background workers.
 
 ```bash
-npx rufflo process workers --action <action> [options]
+npx swarmdo process workers --action <action> [options]
 ```
 
 **Actions:** `list`, `spawn`, `kill`, `scale`
@@ -1022,7 +1022,7 @@ npx rufflo process workers --action <action> [options]
 Send signals to processes.
 
 ```bash
-npx rufflo process signals --target <target> --signal <signal> [options]
+npx swarmdo process signals --target <target> --signal <signal> [options]
 ```
 
 **Signals:** `graceful-shutdown`, `force-kill`, `pause`, `resume`, `reload-config`
@@ -1031,7 +1031,7 @@ npx rufflo process signals --target <target> --signal <signal> [options]
 View process logs.
 
 ```bash
-npx rufflo process logs [options]
+npx swarmdo process logs [options]
 ```
 
 **Options:**
@@ -1051,7 +1051,7 @@ npx rufflo process logs [options]
 Initialize a swarm.
 
 ```bash
-npx rufflo swarm init [options]
+npx swarmdo swarm init [options]
 ```
 
 **Options:**
@@ -1064,21 +1064,21 @@ npx rufflo swarm init [options]
 Spawn agents into swarm.
 
 ```bash
-npx rufflo swarm spawn [options]
+npx swarmdo swarm spawn [options]
 ```
 
 ### `swarm status`
 Show swarm status.
 
 ```bash
-npx rufflo swarm status [options]
+npx swarmdo swarm status [options]
 ```
 
 ### `swarm task`
 Submit task to swarm.
 
 ```bash
-npx rufflo swarm task --description "<task>" [options]
+npx swarmdo swarm task --description "<task>" [options]
 ```
 
 ---
@@ -1087,12 +1087,12 @@ npx rufflo swarm task --description "<task>" [options]
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `RUFFLO_CONFIG` | Config file path | `.rufflo/config.json` |
-| `RUFFLO_LOG_LEVEL` | Log level | `info` |
-| `RUFFLO_MEMORY_BACKEND` | Memory backend | `agentdb` |
-| `RUFFLO_EMBEDDING_PROVIDER` | Embedding provider | `transformers` |
-| `RUFFLO_HOOK_TIMEOUT` | Hook timeout (ms) | `5000` |
-| `RUFFLO_REASONINGBANK_ENABLED` | ReasoningBank integration | `true` |
+| `SWARMDO_CONFIG` | Config file path | `.swarmdo/config.json` |
+| `SWARMDO_LOG_LEVEL` | Log level | `info` |
+| `SWARMDO_MEMORY_BACKEND` | Memory backend | `agentdb` |
+| `SWARMDO_EMBEDDING_PROVIDER` | Embedding provider | `transformers` |
+| `SWARMDO_HOOK_TIMEOUT` | Hook timeout (ms) | `5000` |
+| `SWARMDO_REASONINGBANK_ENABLED` | ReasoningBank integration | `true` |
 | `ANTHROPIC_API_KEY` | Anthropic API key | - |
 | `OPENAI_API_KEY` | OpenAI API key | - |
 
@@ -1114,4 +1114,4 @@ npx rufflo swarm task --description "<task>" [options]
 
 - [CLAUDE.md](/CLAUDE.md) - Project configuration
 - [Architecture Decision Records](/v3/implementation/architecture/) - V3 ADRs
-- [agentic-flow@alpha](https://github.com/ruvnet/agentic-flow) - Core framework
+- [agentic-flow@alpha](the upstream project (see NOTICE)) - Core framework

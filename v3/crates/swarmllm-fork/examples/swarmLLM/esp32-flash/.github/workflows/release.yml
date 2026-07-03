@@ -3,7 +3,7 @@ name: Release Binaries
 on:
   push:
     tags:
-      - 'ruvllm-esp32-v*'
+      - 'swarmllm-esp32-v*'
   workflow_dispatch:
     inputs:
       version:
@@ -28,16 +28,16 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Package npm module
-        working-directory: examples/ruvLLM/esp32-flash/npm
+        working-directory: examples/swarmLLM/esp32-flash/npm
         run: |
           npm pack
-          mv *.tgz ../ruvllm-esp32-npm.tgz
+          mv *.tgz ../swarmllm-esp32-npm.tgz
 
       - name: Upload npm artifact
         uses: actions/upload-artifact@v4
         with:
           name: npm-package
-          path: examples/ruvLLM/esp32-flash/ruvllm-esp32-npm.tgz
+          path: examples/swarmLLM/esp32-flash/swarmllm-esp32-npm.tgz
 
   build-rust:
     name: Build Rust (${{ matrix.target }})
@@ -49,32 +49,32 @@ jobs:
           # Linux x86_64
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-            artifact: ruvllm-esp32-linux-x64
+            artifact: swarmllm-esp32-linux-x64
             features: host-test
 
           # Linux ARM64
           - os: ubuntu-latest
             target: aarch64-unknown-linux-gnu
-            artifact: ruvllm-esp32-linux-arm64
+            artifact: swarmllm-esp32-linux-arm64
             features: host-test
             cross: true
 
           # macOS x86_64
           - os: macos-latest
             target: x86_64-apple-darwin
-            artifact: ruvllm-esp32-darwin-x64
+            artifact: swarmllm-esp32-darwin-x64
             features: host-test
 
           # macOS ARM64
           - os: macos-latest
             target: aarch64-apple-darwin
-            artifact: ruvllm-esp32-darwin-arm64
+            artifact: swarmllm-esp32-darwin-arm64
             features: host-test
 
           # Windows x86_64
           - os: windows-latest
             target: x86_64-pc-windows-msvc
-            artifact: ruvllm-esp32-win-x64
+            artifact: swarmllm-esp32-win-x64
             features: host-test
 
     steps:
@@ -90,7 +90,7 @@ jobs:
         run: cargo install cross --git https://github.com/cross-rs/cross
 
       - name: Build binary
-        working-directory: examples/ruvLLM/esp32-flash
+        working-directory: examples/swarmLLM/esp32-flash
         shell: bash
         run: |
           if [ "${{ matrix.cross }}" = "true" ]; then
@@ -101,26 +101,26 @@ jobs:
 
       - name: Prepare artifacts (Unix)
         if: runner.os != 'Windows'
-        working-directory: examples/ruvLLM/esp32-flash
+        working-directory: examples/swarmLLM/esp32-flash
         run: |
           mkdir -p dist
-          cp target/${{ matrix.target }}/release/ruvllm-esp32 dist/${{ matrix.artifact }} 2>/dev/null || echo "Binary not found"
+          cp target/${{ matrix.target }}/release/swarmllm-esp32 dist/${{ matrix.artifact }} 2>/dev/null || echo "Binary not found"
           chmod +x dist/${{ matrix.artifact }} 2>/dev/null || true
 
       - name: Prepare artifacts (Windows)
         if: runner.os == 'Windows'
-        working-directory: examples/ruvLLM/esp32-flash
+        working-directory: examples/swarmLLM/esp32-flash
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path dist
-          Copy-Item target/${{ matrix.target }}/release/ruvllm-esp32.exe dist/${{ matrix.artifact }}.exe -ErrorAction SilentlyContinue
+          Copy-Item target/${{ matrix.target }}/release/swarmllm-esp32.exe dist/${{ matrix.artifact }}.exe -ErrorAction SilentlyContinue
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact }}
           path: |
-            examples/ruvLLM/esp32-flash/dist/*
+            examples/swarmLLM/esp32-flash/dist/*
           if-no-files-found: warn
 
   build-wasm:
@@ -138,12 +138,12 @@ jobs:
         run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
       - name: Build WASM
-        working-directory: examples/ruvLLM/esp32-flash
+        working-directory: examples/swarmLLM/esp32-flash
         run: |
           wasm-pack build --target web --features wasm --no-default-features || echo "WASM build skipped"
 
       - name: Package WASM
-        working-directory: examples/ruvLLM/esp32-flash
+        working-directory: examples/swarmLLM/esp32-flash
         run: |
           mkdir -p wasm-dist
           if [ -d "pkg" ]; then
@@ -155,8 +155,8 @@ jobs:
       - name: Upload WASM artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ruvllm-esp32-wasm
-          path: examples/ruvLLM/esp32-flash/wasm-dist/
+          name: swarmllm-esp32-wasm
+          path: examples/swarmLLM/esp32-flash/wasm-dist/
 
   release:
     name: Create Release
@@ -180,10 +180,10 @@ jobs:
           cp artifacts/npm-package/*.tgz release/ 2>/dev/null || true
 
           # Copy binaries
-          for dir in artifacts/ruvllm-esp32-*; do
+          for dir in artifacts/swarmllm-esp32-*; do
             if [ -d "$dir" ]; then
               name=$(basename $dir)
-              if [ "$name" != "ruvllm-esp32-wasm" ]; then
+              if [ "$name" != "swarmllm-esp32-wasm" ]; then
                 for f in $dir/*; do
                   cp "$f" release/ 2>/dev/null || true
                 done
@@ -192,8 +192,8 @@ jobs:
           done
 
           # Copy WASM
-          if [ -d "artifacts/ruvllm-esp32-wasm" ]; then
-            cd artifacts/ruvllm-esp32-wasm && zip -r ../../release/ruvllm-esp32-wasm.zip . && cd ../..
+          if [ -d "artifacts/swarmllm-esp32-wasm" ]; then
+            cd artifacts/swarmllm-esp32-wasm && zip -r ../../release/swarmllm-esp32-wasm.zip . && cd ../..
           fi
 
           ls -la release/
@@ -210,16 +210,16 @@ jobs:
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
           else
-            echo "version=${GITHUB_REF#refs/tags/ruvllm-esp32-}" >> $GITHUB_OUTPUT
+            echo "version=${GITHUB_REF#refs/tags/swarmllm-esp32-}" >> $GITHUB_OUTPUT
           fi
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ruvllm-esp32-${{ steps.version.outputs.version }}
-          name: RuvLLM ESP32 ${{ steps.version.outputs.version }}
+          tag_name: swarmllm-esp32-${{ steps.version.outputs.version }}
+          name: SwarmLLM ESP32 ${{ steps.version.outputs.version }}
           body: |
-            ## RuvLLM ESP32 ${{ steps.version.outputs.version }}
+            ## SwarmLLM ESP32 ${{ steps.version.outputs.version }}
 
             Full-featured LLM inference engine for ESP32 microcontrollers.
 
@@ -237,9 +237,9 @@ jobs:
 
             **Via npm (recommended):**
             ```bash
-            npx ruvllm-esp32 install
-            npx ruvllm-esp32 build --target esp32s3
-            npx ruvllm-esp32 flash
+            npx swarmllm-esp32 install
+            npx swarmllm-esp32 build --target esp32s3
+            npx swarmllm-esp32 flash
             ```
 
             **Direct binary:**
@@ -277,7 +277,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Publish to npm
-        working-directory: examples/ruvLLM/esp32-flash/npm
+        working-directory: examples/swarmLLM/esp32-flash/npm
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

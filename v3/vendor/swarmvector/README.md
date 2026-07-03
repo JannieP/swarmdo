@@ -4,19 +4,19 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Node Version](https://img.shields.io/node/v/swarmvector)](https://nodejs.org)
 [![Downloads](https://img.shields.io/npm/dm/swarmvector)](https://www.npmjs.com/package/swarmvector)
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/ruvnet/swarmvector)
-[![Performance](https://img.shields.io/badge/latency-<0.5ms-green.svg)](https://github.com/ruvnet/swarmvector)
-[![GitHub Stars](https://img.shields.io/github/stars/ruvnet/swarmvector?style=social)](https://github.com/ruvnet/swarmvector)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](the upstream project (see NOTICE))
+[![Performance](https://img.shields.io/badge/latency-<0.5ms-green.svg)](the upstream project (see NOTICE))
+[![GitHub Stars](https://img.shields.io/github/stars/upstream/swarmvector?style=social)](the upstream project (see NOTICE))
 
 **The fastest vector database for Node.js—built in Rust, runs everywhere**
 
-Ruvector is a self-learning vector database with **enterprise-grade semantic search**, hybrid retrieval (sparse + dense), Graph RAG, FlashAttention-3, and DiskANN — all in a single npm package. Unlike cloud-only solutions or Python-first databases, Ruvector is designed for JavaScript/TypeScript developers who need **blazing-fast vector search** without external services.
+Swarmvector is a self-learning vector database with **enterprise-grade semantic search**, hybrid retrieval (sparse + dense), Graph RAG, FlashAttention-3, and DiskANN — all in a single npm package. Unlike cloud-only solutions or Python-first databases, Swarmvector is designed for JavaScript/TypeScript developers who need **blazing-fast vector search** without external services.
 
 > 🚀 **Sub-millisecond queries** • 🎯 **52,000+ inserts/sec** • 💾 **~50 bytes per vector** • 🌍 **Runs anywhere** • 🧠 **859 tests passing**
 
-Built by [rUv](https://ruv.io) with production-grade Rust performance and intelligent platform detection—**automatically uses native bindings when available, falls back to WebAssembly when needed**.
+Built by [the upstream author](https://swarmdo.com) with production-grade Rust performance and intelligent platform detection—**automatically uses native bindings when available, falls back to WebAssembly when needed**.
 
-🌐 **[Visit ruv.io](https://ruv.io)** | 📦 **[GitHub](https://github.com/ruvnet/swarmvector)** | 📚 **[Documentation](https://github.com/ruvnet/swarmvector/tree/main/docs)**
+🌐 **[Visit swarmdo.com](https://swarmdo.com)** | 📦 **[GitHub](the upstream project (see NOTICE))** | 📚 **[Documentation](the upstream project (see NOTICE))**
 
 ---
 
@@ -65,7 +65,7 @@ npx swarmvector hooks init --pretrain --build-agents quality
 | HNSW search | ~0.045ms | 8,800x |
 | Memory cache | ~0.01ms | **40,000x** |
 
-📖 **[Full Hooks Documentation →](https://github.com/ruvnet/swarmvector/blob/main/npm/packages/swarmvector/HOOKS.md)**
+📖 **[Full Hooks Documentation →](the upstream project (see NOTICE))**
 
 ### MCP Server Integration
 
@@ -97,13 +97,13 @@ tool surface with environment variables — useful for least-privilege deploymen
 
 ```bash
 # Only expose specific tools (everything else is denied)
-RUVECTOR_MCP_ALLOW="hooks_route,hooks_recall" npx swarmvector mcp start
+SWARMVECTOR_MCP_ALLOW="hooks_route,hooks_recall" npx swarmvector mcp start
 
 # Block specific tools (deny wins over allow)
-RUVECTOR_MCP_DENY="hooks_force_learn" npx swarmvector mcp start
+SWARMVECTOR_MCP_DENY="hooks_force_learn" npx swarmvector mcp start
 
 # Apply a curated read-only profile (safe, non-mutating subset)
-RUVECTOR_MCP_PROFILE=readonly npx swarmvector mcp start
+SWARMVECTOR_MCP_PROFILE=readonly npx swarmvector mcp start
 ```
 
 Precedence is **DENY > ALLOW/PROFILE > allow-all**. With no policy set, all tools
@@ -122,11 +122,11 @@ npx swarmvector harness status --json   # structured, for tooling/CI
 ```
 
 Memory + learning loops use a stable namespace (default `swarmvector`), overridable per
-deployment with `RUVECTOR_MEMORY_NAMESPACE` and reported under `memory.namespace`.
+deployment with `SWARMVECTOR_MEMORY_NAMESPACE` and reported under `memory.namespace`.
 
 ### Brain AGI Commands
 
-Access all 8 AGI subsystems deployed at π.ruv.io:
+Access all 8 AGI subsystems deployed at π.swarmdo.com:
 
 ```bash
 npx swarmvector brain agi status          # Combined AGI + midstream diagnostics
@@ -150,7 +150,7 @@ npx swarmvector midstream benchmark       # Latency benchmark (p50/p90/p99)
 
 ---
 
-## 🌟 Why Ruvector?
+## 🌟 Why Swarmvector?
 
 ### The Problem with Existing Vector Databases
 
@@ -160,11 +160,11 @@ Most vector databases force you to choose between three painful trade-offs:
 2. **Python-First Solutions** (ChromaDB, Faiss) - Poor Node.js support, require separate Python processes
 3. **Self-Hosted Complexity** (Milvus, Qdrant) - Heavy infrastructure, Docker orchestration, operational overhead
 
-**Ruvector eliminates these trade-offs.**
+**Swarmvector eliminates these trade-offs.**
 
-### The Ruvector Advantage
+### The Swarmvector Advantage
 
-Ruvector is purpose-built for **modern JavaScript/TypeScript applications** that need vector search:
+Swarmvector is purpose-built for **modern JavaScript/TypeScript applications** that need vector search:
 
 🎯 **Native Node.js Integration**
 - Drop-in npm package—no Docker, no Python, no external services
@@ -211,7 +211,7 @@ Ruvector is purpose-built for **modern JavaScript/TypeScript applications** that
 
 ### Step 1: Installation
 
-Install Ruvector with a single npm command:
+Install Swarmvector with a single npm command:
 
 ```bash
 npm install swarmvector
@@ -348,7 +348,7 @@ tutorial().catch(console.error);
 
 ### Step 3: TypeScript Tutorial
 
-Ruvector provides full TypeScript support with complete type safety. Here's how to use it:
+Swarmvector provides full TypeScript support with complete type safety. Here's how to use it:
 
 ```typescript
 import { VectorDb, VectorEntry, SearchQuery, SearchResult } from 'swarmvector';
@@ -426,7 +426,7 @@ typescriptTutorial().catch(console.error);
 
 ## 🎯 Platform Detection
 
-Ruvector automatically detects the best implementation for your platform:
+Swarmvector automatically detects the best implementation for your platform:
 
 ```javascript
 const { getImplementationType, isNative, isWasm } = require('swarmvector');
@@ -442,7 +442,7 @@ console.log(isWasm()); // true if using WebAssembly fallback
 
 ## 🔧 CLI Tools
 
-Ruvector includes a full command-line interface for database management:
+Swarmvector includes a full command-line interface for database management:
 
 ### Create Database
 
@@ -523,14 +523,14 @@ npx swarmvector info
 
 ### Install Optional Packages
 
-Ruvector supports optional packages that extend functionality. Use the `install` command to add them:
+Swarmvector supports optional packages that extend functionality. Use the `install` command to add them:
 
 ```bash
 # List available packages
 npx swarmvector install
 
 # Output:
-#   Available Ruvector Packages:
+#   Available Swarmvector Packages:
 #
 #     gnn      not installed
 #              Graph Neural Network layers, tensor compression, differentiable search
@@ -554,7 +554,7 @@ The install command auto-detects your package manager (npm, yarn, pnpm, bun).
 
 ### GNN Commands
 
-Ruvector includes Graph Neural Network (GNN) capabilities for advanced tensor compression and differentiable search.
+Swarmvector includes Graph Neural Network (GNN) capabilities for advanced tensor compression and differentiable search.
 
 #### GNN Info
 
@@ -569,7 +569,7 @@ npx swarmvector gnn info
 #     Architecture:   x64
 #
 #   Available Features:
-#     • RuvectorLayer   - GNN layer with multi-head attention
+#     • SwarmvectorLayer   - GNN layer with multi-head attention
 #     • TensorCompress  - Adaptive tensor compression (5 levels)
 #     • differentiableSearch - Soft attention-based search
 #     • hierarchicalForward  - Multi-layer GNN processing
@@ -625,7 +625,7 @@ npx swarmvector gnn search -q "[1.0,0.0,0.0]" -c candidates.json -k 5
 
 ### Attention Commands
 
-Ruvector includes high-performance attention mechanisms for transformer-based operations, hyperbolic embeddings, and graph attention.
+Swarmvector includes high-performance attention mechanisms for transformer-based operations, hyperbolic embeddings, and graph attention.
 
 ```bash
 # Install the attention module (optional)
@@ -767,7 +767,7 @@ npx swarmvector hooks rag-context "how does auth work"
 
 ### 🧠 Self-Learning Hooks v2.0
 
-Ruvector includes **self-learning intelligence hooks** for Claude Code integration with ONNX embeddings, AST analysis, and coverage-aware routing.
+Swarmvector includes **self-learning intelligence hooks** for Claude Code integration with ONNX embeddings, AST analysis, and coverage-aware routing.
 
 #### Initialize Hooks
 
@@ -939,13 +939,13 @@ The hooks integrate with Claude Code via `.claude/settings.json`:
 ```json
 {
   "env": {
-    "RUVECTOR_INTELLIGENCE_ENABLED": "true",
-    "RUVECTOR_LEARNING_RATE": "0.1",
-    "RUVECTOR_AST_ENABLED": "true",
-    "RUVECTOR_DIFF_EMBEDDINGS": "true",
-    "RUVECTOR_COVERAGE_ROUTING": "true",
-    "RUVECTOR_GRAPH_ALGORITHMS": "true",
-    "RUVECTOR_SECURITY_SCAN": "true"
+    "SWARMVECTOR_INTELLIGENCE_ENABLED": "true",
+    "SWARMVECTOR_LEARNING_RATE": "0.1",
+    "SWARMVECTOR_AST_ENABLED": "true",
+    "SWARMVECTOR_DIFF_EMBEDDINGS": "true",
+    "SWARMVECTOR_COVERAGE_ROUTING": "true",
+    "SWARMVECTOR_GRAPH_ALGORITHMS": "true",
+    "SWARMVECTOR_SECURITY_SCAN": "true"
   },
   "hooks": {
     "PreToolUse": [
@@ -999,8 +999,8 @@ Tested on AMD Ryzen 9 5950X, 128-dimensional vectors:
 
 | Database | Insert (ops/sec) | Search (ops/sec) | Memory per Vector | Node.js | Browser |
 |----------|------------------|------------------|-------------------|---------|---------|
-| **Ruvector (Native)** | **52,341** | **11,234** | **50 bytes** | ✅ | ❌ |
-| **Ruvector (WASM)** | **~1,000** | **~100** | **50 bytes** | ✅ | ✅ |
+| **Swarmvector (Native)** | **52,341** | **11,234** | **50 bytes** | ✅ | ❌ |
+| **Swarmvector (WASM)** | **~1,000** | **~100** | **50 bytes** | ✅ | ✅ |
 | Faiss (HNSW) | 38,200 | 9,800 | 68 bytes | ❌ | ❌ |
 | Hnswlib | 41,500 | 10,200 | 62 bytes | ✅ | ❌ |
 | ChromaDB | ~1,000 | ~20 | 150 bytes | ✅ | ❌ |
@@ -1009,9 +1009,9 @@ Tested on AMD Ryzen 9 5950X, 128-dimensional vectors:
 
 ## 🔍 Comparison with Other Vector Databases
 
-Comprehensive comparison of Ruvector against popular vector database solutions:
+Comprehensive comparison of Swarmvector against popular vector database solutions:
 
-| Feature | Ruvector | Pinecone | Qdrant | Weaviate | Milvus | ChromaDB | Faiss |
+| Feature | Swarmvector | Pinecone | Qdrant | Weaviate | Milvus | ChromaDB | Faiss |
 |---------|----------|----------|--------|----------|--------|----------|-------|
 | **Deployment** |
 | Installation | `npm install` ✅ | Cloud API ☁️ | Docker 🐳 | Docker 🐳 | Docker/K8s 🐳 | `pip install` 🐍 | `pip install` 🐍 |
@@ -1059,7 +1059,7 @@ Comprehensive comparison of Ruvector against popular vector database solutions:
 | Production Scale (100M+) | ⚠️ Single node | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Excellent | ⚠️ Limited | ⚠️ Manual |
 | Embedded Apps | ✅ Excellent | ❌ No | ❌ No | ❌ No | ❌ No | ⚠️ Possible | ✅ Good |
 
-### When to Choose Ruvector
+### When to Choose Swarmvector
 
 ✅ **Perfect for:**
 - **Node.js/TypeScript applications** needing embedded vector search
@@ -1077,7 +1077,7 @@ Comprehensive comparison of Ruvector against popular vector database solutions:
 - **Distributed systems** - Milvus provides better horizontal scaling
 - **Zero-ops cloud solution** - Pinecone handles all infrastructure
 
-### Why Choose Ruvector Over...
+### Why Choose Swarmvector Over...
 
 **vs Pinecone:**
 - ✅ No API costs (save $1000s/month)
@@ -1250,8 +1250,8 @@ async function main() {
   const documents = [
     {
       id: 'doc1',
-      title: 'Ruvector Introduction',
-      content: 'Ruvector is a high-performance vector database for Node.js built in Rust. It provides sub-millisecond query latency and supports over 52,000 inserts per second.',
+      title: 'Swarmvector Introduction',
+      content: 'Swarmvector is a high-performance vector database for Node.js built in Rust. It provides sub-millisecond query latency and supports over 52,000 inserts per second.',
       source: 'documentation'
     },
     {
@@ -1273,7 +1273,7 @@ async function main() {
   // Step 2: Ask questions
   console.log('\n' + '='.repeat(60) + '\n');
 
-  const result = await rag.answer('What is Ruvector and what are its performance characteristics?');
+  const result = await rag.answer('What is Swarmvector and what are its performance characteristics?');
 
   console.log('📝 Answer:', result.answer);
   console.log('\n📚 Sources:', result.sources.join(', '));
@@ -1286,7 +1286,7 @@ main().catch(console.error);
 ```
 ✅ RAG System initialized
 📚 Indexing 3 documents...
-  ✅ Indexed: Ruvector Introduction
+  ✅ Indexed: Swarmvector Introduction
   ✅ Indexed: Vector Databases Explained
   ✅ Indexed: HNSW Algorithm
 
@@ -1294,17 +1294,17 @@ main().catch(console.error);
 
 ============================================================
 
-🔍 Searching for: "What is Ruvector and what are its performance characteristics?"
+🔍 Searching for: "What is Swarmvector and what are its performance characteristics?"
 📄 Found 2 relevant documents
 
 🤖 Generating answer...
 
-📝 Answer: Ruvector is a high-performance vector database built in Rust for Node.js applications. Its key performance characteristics include:
+📝 Answer: Swarmvector is a high-performance vector database built in Rust for Node.js applications. Its key performance characteristics include:
 - Sub-millisecond query latency
 - Over 52,000 inserts per second
 - Optimized for semantic similarity search
 
-📚 Sources: Ruvector Introduction, Vector Databases Explained
+📚 Sources: Swarmvector Introduction, Vector Databases Explained
 ```
 
 **Production Tips:**
@@ -1987,7 +1987,7 @@ If you need to rebuild the native module:
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 # Clone repository
-git clone https://github.com/ruvnet/swarmvector.git
+git clone the upstream project (see NOTICE)
 cd swarmvector
 
 # Build native module
@@ -2031,7 +2031,7 @@ npm test
 
 ## RVF Cognitive Containers
 
-Ruvector integrates with [RVF (SwarmVector Format)](https://github.com/ruvnet/swarmvector/tree/main/crates/rvf) — a universal binary substrate that stores vectors, models, graphs, compute kernels, and attestation in a single `.rvf` file.
+Swarmvector integrates with [RVF (SwarmVector Format)](the upstream project (see NOTICE)) — a universal binary substrate that stores vectors, models, graphs, compute kernels, and attestation in a single `.rvf` file.
 
 ### Enable RVF Backend
 
@@ -2040,7 +2040,7 @@ Ruvector integrates with [RVF (SwarmVector Format)](https://github.com/ruvnet/sw
 npm install @swarmvector/rvf
 
 # Set backend via environment variable
-export RUVECTOR_BACKEND=rvf
+export SWARMVECTOR_BACKEND=rvf
 
 # Or detect automatically (native -> rvf -> wasm fallback)
 npx swarmvector info
@@ -2098,7 +2098,7 @@ npx swarmvector rvf export mydb.rvf --output dump.json
 
 ```bash
 # Download a specific example
-curl -LO https://raw.githubusercontent.com/ruvnet/swarmvector/main/examples/rvf/output/basic_store.rvf
+curl -LO https://raw.githubusercontent.com/upstream/swarmvector/main/examples/rvf/output/basic_store.rvf
 
 # Popular examples:
 #   basic_store.rvf (152 KB)        — 1,000 vectors, dim 128
@@ -2112,7 +2112,7 @@ curl -LO https://raw.githubusercontent.com/ruvnet/swarmvector/main/examples/rvf/
 cd crates/rvf && cargo run --example generate_all
 ```
 
-Full catalog: [examples/rvf/output/](https://github.com/ruvnet/swarmvector/tree/main/examples/rvf/output)
+Full catalog: [examples/rvf/output/](the upstream project (see NOTICE))
 
 ### Working Examples: Cognitive Containers
 
@@ -2238,18 +2238,18 @@ If you're using WASM fallback and need better performance:
 
 ## 📚 Documentation
 
-- 🏠 [Homepage](https://ruv.io)
-- 📦 [GitHub Repository](https://github.com/ruvnet/swarmvector)
-- 📚 [Full Documentation](https://github.com/ruvnet/swarmvector/tree/main/docs)
-- 🚀 [Getting Started Guide](https://github.com/ruvnet/swarmvector/blob/main/docs/guide/GETTING_STARTED.md)
-- 📖 [API Reference](https://github.com/ruvnet/swarmvector/blob/main/docs/api/NODEJS_API.md)
-- 🎯 [Performance Tuning](https://github.com/ruvnet/swarmvector/blob/main/docs/optimization/PERFORMANCE_TUNING_GUIDE.md)
-- 🐛 [Issue Tracker](https://github.com/ruvnet/swarmvector/issues)
-- 💬 [Discussions](https://github.com/ruvnet/swarmvector/discussions)
+- 🏠 [Homepage](https://swarmdo.com)
+- 📦 [GitHub Repository](the upstream project (see NOTICE))
+- 📚 [Full Documentation](the upstream project (see NOTICE))
+- 🚀 [Getting Started Guide](the upstream project (see NOTICE))
+- 📖 [API Reference](the upstream project (see NOTICE))
+- 🎯 [Performance Tuning](the upstream project (see NOTICE))
+- 🐛 [Issue Tracker](the upstream project (see NOTICE))
+- 💬 [Discussions](the upstream project (see NOTICE))
 
 ## 🤝 Contributing
 
-We welcome contributions! See [CONTRIBUTING.md](https://github.com/ruvnet/swarmvector/blob/main/docs/development/CONTRIBUTING.md) for guidelines.
+We welcome contributions! See [CONTRIBUTING.md](the upstream project (see NOTICE)) for guidelines.
 
 ### Quick Start
 
@@ -2261,20 +2261,20 @@ We welcome contributions! See [CONTRIBUTING.md](https://github.com/ruvnet/swarmv
 
 ## 🌐 Community & Support
 
-- **GitHub**: [github.com/ruvnet/swarmvector](https://github.com/ruvnet/swarmvector) - ⭐ Star and follow
-- **Discord**: [Join our community](https://discord.gg/ruvnet) - Chat with developers
-- **Twitter**: [@ruvnet](https://twitter.com/ruvnet) - Follow for updates
-- **Issues**: [Report bugs](https://github.com/ruvnet/swarmvector/issues)
+- **GitHub**: [the upstream project (see NOTICE)](the upstream project (see NOTICE)) - ⭐ Star and follow
+- **Discord**: [Join our community](https://discord.gg/upstream) - Chat with developers
+- **Twitter**: [@upstream](https://twitter.com/upstream) - Follow for updates
+- **Issues**: [Report bugs](the upstream project (see NOTICE))
 
 ### Enterprise Support
 
 Need custom development or consulting?
 
-📧 [enterprise@ruv.io](mailto:enterprise@ruv.io)
+📧 [enterprise@swarmdo.com](mailto:enterprise@swarmdo.com)
 
 ## 📜 License
 
-**MIT License** - see [LICENSE](https://github.com/ruvnet/swarmvector/blob/main/LICENSE) for details.
+**MIT License** - see [LICENSE](the upstream project (see NOTICE)) for details.
 
 Free for commercial and personal use.
 
@@ -2292,12 +2292,12 @@ Built with battle-tested technologies:
 
 <div align="center">
 
-**Built with ❤️ by [rUv](https://ruv.io)**
+**Built with ❤️ by [the upstream author](https://swarmdo.com)**
 
 [![npm](https://img.shields.io/npm/v/swarmvector.svg)](https://www.npmjs.com/package/swarmvector)
-[![GitHub Stars](https://img.shields.io/github/stars/ruvnet/swarmvector?style=social)](https://github.com/ruvnet/swarmvector)
-[![Twitter](https://img.shields.io/twitter/follow/ruvnet?style=social)](https://twitter.com/ruvnet)
+[![GitHub Stars](https://img.shields.io/github/stars/upstream/swarmvector?style=social)](the upstream project (see NOTICE))
+[![Twitter](https://img.shields.io/twitter/follow/upstream?style=social)](https://twitter.com/upstream)
 
-**[Get Started](https://github.com/ruvnet/swarmvector/blob/main/docs/guide/GETTING_STARTED.md)** • **[Documentation](https://github.com/ruvnet/swarmvector/tree/main/docs)** • **[API Reference](https://github.com/ruvnet/swarmvector/blob/main/docs/api/NODEJS_API.md)** • **[Contributing](https://github.com/ruvnet/swarmvector/blob/main/docs/development/CONTRIBUTING.md)**
+**[Get Started](the upstream project (see NOTICE))** • **[Documentation](the upstream project (see NOTICE))** • **[API Reference](the upstream project (see NOTICE))** • **[Contributing](the upstream project (see NOTICE))**
 
 </div>

@@ -1,9 +1,9 @@
-//! Cross-integration helpers for ruvnet crate ecosystem.
+//! Cross-integration helpers for upstream crate ecosystem.
 //!
 //! This module provides ergonomic adapters that make it straightforward to use
-//! `swarmvector-core` as a dependency from other ruvnet crates:
+//! `swarmvector-core` as a dependency from other upstream crates:
 //!
-//! - **ruv-FANN**: neural-network weights can be stored and retrieved via
+//! - **the upstream repo**: neural-network weights can be stored and retrieved via
 //!   [`FannAdapter`] using cosine similarity search across layer embeddings.
 //! - **sparc / semantic file search**: [`SemanticSearchAdapter`] wraps
 //!   [`VectorDB`] with file-path metadata so sparc can locate relevant source
@@ -17,9 +17,9 @@ use crate::types::{DbOptions, DistanceMetric, HnswConfig, SearchQuery, SearchRes
 use crate::vector_db::VectorDB;
 use std::collections::HashMap;
 
-// ── ruv-FANN integration ────────────────────────────────────────────────────
+// ── the upstream repo integration ────────────────────────────────────────────────────
 
-/// Adapter that lets ruv-FANN store and retrieve layer-weight embeddings.
+/// Adapter that lets the upstream repo store and retrieve layer-weight embeddings.
 ///
 /// Each neural-network layer can be fingerprinted as a flat `f32` embedding
 /// (e.g. the flattened weight matrix or its PCA projection).  Storing these

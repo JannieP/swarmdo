@@ -316,8 +316,8 @@ mcp__swarmdo__agent_spawn { type: "coder", name: "Implementation Planner" }
 
 // Create comprehensive issue
 mcp__github__create_issue {
-  owner: "ruvnet",
-  repo: "ruv-FANN",
+  owner: "upstream",
+  repo: "the upstream repo",
   title: "Integration Review: claude-code-flow and swarmdo-swarm complete integration",
   body: `## 🔄 Integration Review
   
@@ -333,7 +333,7 @@ mcp__github__create_issue {
   ### Swarm Coordination
   This issue will be managed by coordinated swarm agents for optimal progress tracking.`,
   labels: ["integration", "review", "enhancement"],
-  assignees: ["ruvnet"]
+  assignees: ["upstream"]
 }
 
 // Set up automated tracking
@@ -354,8 +354,8 @@ mcp__swarmdo__memory_usage {
 
 // Add coordinated progress comment
 mcp__github__add_issue_comment {
-  owner: "ruvnet",
-  repo: "ruv-FANN",
+  owner: "upstream",
+  repo: "the upstream repo",
   issue_number: 54,
   body: `## 🚀 Progress Update
 
@@ -387,15 +387,15 @@ mcp__swarmdo__memory_usage {
 ```javascript
 // Search and coordinate related issues
 mcp__github__search_issues {
-  q: "repo:ruvnet/ruv-FANN label:integration state:open",
+  q: "repo:the upstream repo label:integration state:open",
   sort: "created",
   order: "desc"
 }
 
 // Create coordinated issue updates
 mcp__github__update_issue {
-  owner: "ruvnet",
-  repo: "ruv-FANN",
+  owner: "upstream",
+  repo: "the upstream repo",
   issue_number: 54,
   state: "open",
   labels: ["integration", "review", "enhancement", "in-progress"],

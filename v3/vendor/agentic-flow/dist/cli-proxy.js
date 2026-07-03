@@ -1252,8 +1252,8 @@ QUIC TRANSPORT (Ultra-Low Latency Agent Communication):
   • Low-latency RPC for distributed agent systems
 
 DOCUMENTATION:
-  https://github.com/ruvnet/agentic-flow
-  https://ruv.io
+  the upstream project (see NOTICE)
+  https://swarmdo.com
     `);
     }
 }

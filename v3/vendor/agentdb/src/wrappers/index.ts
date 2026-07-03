@@ -15,7 +15,7 @@
  * @example
  * ```typescript
  * // GNN operations
- * import { differentiableSearch, RuvectorLayer } from 'agentdb/wrappers';
+ * import { differentiableSearch, SwarmvectorLayer } from 'agentdb/wrappers';
  *
  * // AgentDB operations
  * import { createFastAgentDB } from 'agentdb/wrappers';
@@ -32,7 +32,7 @@
 export {
   differentiableSearch,
   hierarchicalForward,
-  RuvectorLayer,
+  SwarmvectorLayer,
   TensorCompress,
   getCompressionLevel,
   type SearchResult,

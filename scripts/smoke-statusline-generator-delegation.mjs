@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Regression guard for ruvnet/swarmdo#2195.
+ * Regression guard for upstream/swarmdo#2195.
  *
  * The statusline generator previously re-implemented all data readers
  * locally with fragile file probes that returned wrong values:

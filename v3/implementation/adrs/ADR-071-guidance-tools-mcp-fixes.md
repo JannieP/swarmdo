@@ -20,7 +20,7 @@ Three areas needed attention in v3.5.43:
 
 ### 1. Guidance MCP Tools
 
-Add 5 new MCP tools to the `@rufflo/cli` package:
+Add 5 new MCP tools to the `@swarmdo/cli` package:
 
 | Tool | Purpose |
 |------|---------|
@@ -53,9 +53,9 @@ Changes:
 
 **Self-detection fix**: `start()` now skips the "already running" check when the reported PID matches the current process. `getStatus()` reports `running: true` with `process.pid` for stdio transport even before startup — this is correct for health checks but must not block the initial `start()` call.
 
-**PID reuse guard**: `isProcessRunning()` now verifies the process is actually `node`/`rufflo`/`npx` by inspecting `/proc/{pid}/cmdline` (Linux) or `ps -p` (macOS). Falls back to `kill -0` on platforms where this isn't available.
+**PID reuse guard**: `isProcessRunning()` now verifies the process is actually `node`/`swarmdo`/`npx` by inspecting `/proc/{pid}/cmdline` (Linux) or `ps -p` (macOS). Falls back to `kill -0` on platforms where this isn't available.
 
-**Legacy cleanup**: `removePidFile()` now also removes `.rufflo/mcp-server.pid` from older versions that wrote to a different path than the current `/tmp/rufflo-mcp.pid`.
+**Legacy cleanup**: `removePidFile()` now also removes `.swarmdo/mcp-server.pid` from older versions that wrote to a different path than the current `/tmp/swarmdo-mcp.pid`.
 
 ## Consequences
 
@@ -66,15 +66,15 @@ Changes:
 - `init` generates clean agents when scaffolding new projects
 
 ### Negative
-- `hooks` fields were removed from agent frontmatter (they contained Rufflo shell scripts, not Claude Code hook references — functionality preserved in CLI hooks system)
+- `hooks` fields were removed from agent frontmatter (they contained Swarmdo shell scripts, not Claude Code hook references — functionality preserved in CLI hooks system)
 - Guidance tools use a static catalog that must be updated when new capabilities are added
 
 ## Files Changed
 
-- `v3/@rufflo/cli/src/mcp-tools/guidance-tools.ts` — new (5 tools)
-- `v3/@rufflo/cli/src/mcp-tools/index.ts` — export guidance tools
-- `v3/@rufflo/cli/src/mcp-client.ts` — register guidance tools
-- `v3/@rufflo/cli/src/mcp-server.ts` — PID self-detection + reuse guard + legacy cleanup
-- `v3/@rufflo/cli/src/init/executor.ts` — stop counting .yaml files
+- `v3/@swarmdo/cli/src/mcp-tools/guidance-tools.ts` — new (5 tools)
+- `v3/@swarmdo/cli/src/mcp-tools/index.ts` — export guidance tools
+- `v3/@swarmdo/cli/src/mcp-client.ts` — register guidance tools
+- `v3/@swarmdo/cli/src/mcp-server.ts` — PID self-detection + reuse guard + legacy cleanup
+- `v3/@swarmdo/cli/src/init/executor.ts` — stop counting .yaml files
 - `.claude/agents/**/*.md` — 100+ files standardized
 - `.claude/skills/**/SKILL.md` — 17 files standardized

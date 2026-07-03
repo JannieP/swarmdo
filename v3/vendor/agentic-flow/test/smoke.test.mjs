@@ -1,7 +1,7 @@
 /**
  * agentic-flow smoke test (node:test).
  * Vendored fork of the upstream `agentic-flow@2.0.14` published tarball
- * (internal ruv->ruf sweep; name kept). swarmdo imports these subpaths via
+ * (internal swarm->ruf sweep; name kept). swarmdo imports these subpaths via
  * `await import('agentic-flow/<subpath>')` (all optional / safeImport).
  */
 import { test } from 'node:test';

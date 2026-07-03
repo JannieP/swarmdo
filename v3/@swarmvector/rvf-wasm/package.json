@@ -22,7 +22,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ruvnet/swarmvector"
+    "url": "the upstream project (see NOTICE)"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",

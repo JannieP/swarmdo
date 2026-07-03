@@ -1,6 +1,6 @@
 # ADR-111 Phase 7 — Cross-OS WG mesh bringup
 
-Step-by-step procedure for activating the opt-in WireGuard mesh between two federation peers. This is the **operator-mediated** step that follows Phases 1-6 (which ship as code in `@rufflo/plugin-agent-federation`).
+Step-by-step procedure for activating the opt-in WireGuard mesh between two federation peers. This is the **operator-mediated** step that follows Phases 1-6 (which ship as code in `@swarmdo/plugin-agent-federation`).
 
 > **⚠️ Phase 7 is destructive.** It modifies host networking and requires root. A typo in the firewall projection can drop ssh. Operator review of the staged configs is **mandatory** before activation.
 
@@ -8,7 +8,7 @@ Step-by-step procedure for activating the opt-in WireGuard mesh between two fede
 
 - WireGuard installed on both hosts (`brew install wireguard-tools` on mac, `apt install wireguard` on linux).
 - Both hosts reachable on a common UDP port (default `51820`). Tailscale, a LAN, or a VPN concentrator works. ADR-111 does NOT do NAT traversal.
-- Federation plugin built on both hosts (`pnpm install && pnpm run build` in `v3/@rufflo/plugin-agent-federation`).
+- Federation plugin built on both hosts (`pnpm install && pnpm run build` in `v3/@swarmdo/plugin-agent-federation`).
 - Federation Ed25519 identity already initialized — Phase 7 reuses it for manifest signing.
 
 ## Step 1 — Stage configs on each host
@@ -16,13 +16,13 @@ Step-by-step procedure for activating the opt-in WireGuard mesh between two fede
 On **host A** (mac mini in this example):
 
 ```bash
-cd v3/@rufflo/plugin-agent-federation
+cd v3/@swarmdo/plugin-agent-federation
 node scripts/phase7-stage.mjs \
-  ruv-mac-mini \
-  ruvultra \
+  swarm-mac-mini \
+  swarmultra \
   '<placeholder-pubkey>' \
   '10.50.0.0/32' \
-  'ruvultra-tailnet-name:51820'
+  'swarmultra-tailnet-name:51820'
 ```
 
 The script will print host A's freshly-generated pubkey, e.g.:
@@ -32,12 +32,12 @@ publicKey:   61005ZbEMJq0tTIYwSHINdmJEsBM39sM5TIV6p4UfHA=
 meshIP:      10.50.119.95/32
 ```
 
-On **host B** (ruvultra):
+On **host B** (swarmultra):
 
 ```bash
 node scripts/phase7-stage.mjs \
-  ruvultra \
-  ruv-mac-mini \
+  swarmultra \
+  swarm-mac-mini \
   '<placeholder-pubkey>' \
   '10.50.0.0/32' \
   'mac-mini-tailnet-name:51820'
@@ -58,19 +58,19 @@ On host A:
 
 ```bash
 node scripts/phase7-stage.mjs \
-  ruv-mac-mini \
-  ruvultra \
+  swarm-mac-mini \
+  swarmultra \
   'v+cwXZ3BoYZZAodDI38RYf9UO5c9xz+TkjaAZg8mzhs=' \
   '10.50.242.138/32' \
-  'ruvultra-tailnet:51820'
+  'swarmultra-tailnet:51820'
 ```
 
 On host B:
 
 ```bash
 node scripts/phase7-stage.mjs \
-  ruvultra \
-  ruv-mac-mini \
+  swarmultra \
+  swarm-mac-mini \
   '61005ZbEMJq0tTIYwSHINdmJEsBM39sM5TIV6p4UfHA=' \
   '10.50.119.95/32' \
   'mac-mini-tailnet:51820'
@@ -83,13 +83,13 @@ Each host now has cross-coherent staged configs in `/tmp/adr-111-stage/`.
 Before activating, inspect each staged file:
 
 ```bash
-cat /tmp/adr-111-stage/rufflo-fed.conf
-cat /tmp/adr-111-stage/rufflo-fed.nft     # linux only
-cat /tmp/adr-111-stage/rufflo-fed.pf      # macos only
+cat /tmp/adr-111-stage/swarmdo-fed.conf
+cat /tmp/adr-111-stage/swarmdo-fed.nft     # linux only
+cat /tmp/adr-111-stage/swarmdo-fed.pf      # macos only
 ```
 
 Checklist:
-- [ ] `rufflo-fed.conf` has exactly one `[Peer]` block (per peer expected)
+- [ ] `swarmdo-fed.conf` has exactly one `[Peer]` block (per peer expected)
 - [ ] The `[Peer]` block's `PublicKey` matches the OTHER host's emitted pubkey
 - [ ] `AllowedIPs` lists ONLY the peer's mesh IP — no broader CIDR
 - [ ] `ListenPort` is what you expect (default `51820`)
@@ -97,7 +97,7 @@ Checklist:
 - [ ] Default policy is `drop` (nftables) / not affecting main pf ruleset (pf anchor-scoped)
 - [ ] No mention of UNTRUSTED peers anywhere
 
-If anything looks off, **stop and re-stage** with corrected inputs — `rufflo-fed.conf` is what `wg-quick up` parses, and a misconfigured rule can drop ssh.
+If anything looks off, **stop and re-stage** with corrected inputs — `swarmdo-fed.conf` is what `wg-quick up` parses, and a misconfigured rule can drop ssh.
 
 ## Step 4 — Activate (per host)
 
@@ -105,16 +105,16 @@ After the checklist passes:
 
 ```bash
 # Install the wg-quick config
-sudo install -m 0600 /tmp/adr-111-stage/rufflo-fed.conf /etc/wireguard/rufflo-fed.conf
+sudo install -m 0600 /tmp/adr-111-stage/swarmdo-fed.conf /etc/wireguard/swarmdo-fed.conf
 
 # Load the firewall rules (atomic, scoped to the WG interface or pf anchor)
 # Linux:
-sudo nft -f /tmp/adr-111-stage/rufflo-fed.nft
+sudo nft -f /tmp/adr-111-stage/swarmdo-fed.nft
 # macOS:
-sudo pfctl -a rufflo-fed -f /tmp/adr-111-stage/rufflo-fed.pf
+sudo pfctl -a swarmdo-fed -f /tmp/adr-111-stage/swarmdo-fed.pf
 
 # Bring up the WG interface
-sudo wg-quick up rufflo-fed
+sudo wg-quick up swarmdo-fed
 ```
 
 ## Step 5 — Verify reachability
@@ -122,17 +122,17 @@ sudo wg-quick up rufflo-fed
 On host A:
 
 ```bash
-sudo wg show rufflo-fed
-# Expected: [Peer] section shows ruvultra's pubkey, last handshake timestamp,
+sudo wg show swarmdo-fed
+# Expected: [Peer] section shows swarmultra's pubkey, last handshake timestamp,
 # transfer counters update after activity.
 
-ping 10.50.242.138       # ruvultra's mesh IP — should respond
+ping 10.50.242.138       # swarmultra's mesh IP — should respond
 ```
 
 On host B (mirror):
 
 ```bash
-sudo wg show rufflo-fed
+sudo wg show swarmdo-fed
 ping 10.50.119.95
 ```
 
@@ -141,12 +141,12 @@ ping 10.50.119.95
 Trigger an operator-initiated evict on host A and confirm L3 isolation propagates:
 
 ```bash
-# On host A, evict ruvultra at the federation layer
-rufflo federation evict --node-id ruvultra
+# On host A, evict swarmultra at the federation layer
+swarmdo federation evict --node-id swarmultra
 # Or via MCP: federation_evict
 
 # Confirm WG layer responded
-sudo wg show rufflo-fed     # ruvultra peer's [Peer] line should be gone
+sudo wg show swarmdo-fed     # swarmultra peer's [Peer] line should be gone
 
 # From host A:
 ping 10.50.242.138         # NOW unreachable — L3 followed L7 trust eviction
@@ -155,10 +155,10 @@ ping 10.50.242.138         # NOW unreachable — L3 followed L7 trust eviction
 To restore:
 
 ```bash
-rufflo federation reactivate --node-id ruvultra
-# A wg set rufflo-fed peer ... allowed-ips ... command is emitted via the
+swarmdo federation reactivate --node-id swarmultra
+# A wg set swarmdo-fed peer ... allowed-ips ... command is emitted via the
 # wgCommandSink the operator wired during plugin init.
-sudo wg show rufflo-fed     # ruvultra back in [Peer] list
+sudo wg show swarmdo-fed     # swarmultra back in [Peer] list
 ping 10.50.242.138         # responsive again
 ```
 
@@ -167,25 +167,25 @@ ping 10.50.242.138         # responsive again
 If `WgWitnessService` is wired into your federation plugin lifecycle (Phase 5 integration — operator-supplied):
 
 ```bash
-cat .rufflo/federation/wg-changes.log   # append-only chain
-node plugins/rufflo-core/scripts/witness/verify.mjs \
-  --manifest .rufflo/federation/wg-witness.md.json
+cat .swarmdo/federation/wg-changes.log   # append-only chain
+node plugins/swarmdo-core/scripts/witness/verify.mjs \
+  --manifest .swarmdo/federation/wg-witness.md.json
 # Expected: Ed25519 signature valid, chain link verified end-to-end
 ```
 
 ## Rollback
 
 ```bash
-sudo wg-quick down rufflo-fed
+sudo wg-quick down swarmdo-fed
 
 # Linux:
-sudo nft delete table inet rufflo_fed
+sudo nft delete table inet swarmdo_fed
 
 # macOS:
-sudo pfctl -a rufflo-fed -F all
+sudo pfctl -a swarmdo-fed -F all
 ```
 
-The configs in `/tmp/adr-111-stage/` and `/etc/wireguard/rufflo-fed.conf` stay on disk — re-run `wg-quick up rufflo-fed` to reactivate. To fully tear down also delete `/etc/wireguard/rufflo-fed.conf` (private key inside).
+The configs in `/tmp/adr-111-stage/` and `/etc/wireguard/swarmdo-fed.conf` stay on disk — re-run `wg-quick up swarmdo-fed` to reactivate. To fully tear down also delete `/etc/wireguard/swarmdo-fed.conf` (private key inside).
 
 ## Known limitations (v1)
 

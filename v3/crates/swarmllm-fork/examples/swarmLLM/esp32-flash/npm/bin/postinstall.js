@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Post-install script for ruvllm-esp32
+ * Post-install script for swarmllm-esp32
  * Downloads platform-specific binaries and checks prerequisites
  */
 
@@ -11,7 +11,7 @@ const fs = require('fs');
 const platform = os.platform();
 const arch = os.arch();
 
-console.log('\n🔧 RuvLLM ESP32 Post-Install Setup\n');
+console.log('\n🔧 SwarmLLM ESP32 Post-Install Setup\n');
 console.log(`Platform: ${platform}/${arch}`);
 
 // Check for Rust
@@ -31,5 +31,5 @@ try {
 }
 
 console.log('\n📦 Installation complete!');
-console.log('Run: npx ruvllm-esp32 install    to setup ESP32 toolchain');
-console.log('Run: npx ruvllm-esp32 --help     for all commands\n');
+console.log('Run: npx swarmllm-esp32 install    to setup ESP32 toolchain');
+console.log('Run: npx swarmllm-esp32 --help     for all commands\n');

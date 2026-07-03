@@ -141,8 +141,8 @@ mcp__swarmdo__swarm_init({
   Task("Integration Tester", "Validate synchronization", "tester")
 
   // Read package states
-  Read("/workspaces/ruv-FANN/claude-code-flow/claude-code-flow/package.json")
-  Read("/workspaces/ruv-FANN/ruv-swarm/npm/package.json")
+  Read("/workspaces/upstream")
+  Read("/workspaces/upstream")
 
   // Align versions using gh CLI
   Bash(`gh api repos/:owner/:repo/git/refs \
@@ -173,7 +173,7 @@ mcp__swarmdo__swarm_init({
 // Synchronize CLAUDE.md files across packages
 [Documentation Sync]:
   // Get source documentation
-  Bash(`gh api repos/:owner/:repo/contents/ruv-swarm/docs/CLAUDE.md \
+  Bash(`gh api repos/:owner/:repo/contents/swarmdo-swarm/docs/CLAUDE.md \
     --jq '.content' | base64 -d > /tmp/claude-source.md`)
 
   // Update target documentation
@@ -243,8 +243,8 @@ mcp__swarmdo__swarm_init({
   Task("Best Practices Researcher", "Research architecture patterns", "researcher")
 
   // Analyze current structures
-  LS("/workspaces/ruv-FANN/claude-code-flow/claude-code-flow")
-  LS("/workspaces/ruv-FANN/ruv-swarm/npm")
+  LS("/workspaces/upstream")
+  LS("/workspaces/upstream")
 
   // Search for best practices
   Bash(`gh search repos "language:javascript template architecture" \
@@ -323,7 +323,7 @@ mcp__swarmdo__swarm_init({
   // Update common files across all repositories
   repositories.forEach(repo => {
     mcp__github__create_or_update_file({
-      repo: "ruv-FANN",
+      repo: "the upstream repo",
       path: `${repo}/.github/workflows/integration.yml`,
       content: `name: Integration Tests
 on: [push, pull_request]
@@ -607,7 +607,7 @@ npx swarmdo skill run github-multi-repo org-policy \
 
 ### Monorepo Structure
 ```
-ruv-FANN/
+the upstream repo/
 ├── packages/
 │   ├── claude-code-flow/
 │   │   ├── src/
@@ -851,8 +851,8 @@ npx swarmdo skill run github-multi-repo cross-team \
 
 ## Support and Resources
 
-- Documentation: https://github.com/ruvnet/claude-flow
-- Issues: https://github.com/ruvnet/claude-flow/issues
+- Documentation: the upstream project (see NOTICE)
+- Issues: the upstream project (see NOTICE)
 - Examples: `.claude/examples/github-multi-repo/`
 
 ---

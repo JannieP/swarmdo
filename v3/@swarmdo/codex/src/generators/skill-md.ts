@@ -15,7 +15,7 @@ export async function generateSkillMd(options: SkillMdOptions): Promise<string> 
     name,
     description,
     version = '1.0.0',
-    author = 'rUv',
+    author = 'the upstream author',
     tags,
     triggers = [],
     skipWhen = [],

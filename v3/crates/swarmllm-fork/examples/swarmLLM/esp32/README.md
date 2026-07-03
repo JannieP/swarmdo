@@ -1,19 +1,19 @@
-# RuvLLM ESP32
+# SwarmLLM ESP32
 
 <p align="center">
-  <a href="https://github.com/ruvnet/ruvector"><img src="https://img.shields.io/badge/rust-1.75+-orange.svg?style=flat-square&logo=rust" alt="Rust 1.75+"></a>
+  <a href="the upstream project (see NOTICE)"><img src="https://img.shields.io/badge/rust-1.75+-orange.svg?style=flat-square&logo=rust" alt="Rust 1.75+"></a>
   <a href="#"><img src="https://img.shields.io/badge/no__std-compatible-brightgreen.svg?style=flat-square" alt="no_std"></a>
   <a href="#"><img src="https://img.shields.io/badge/ESP32-S2%20|%20S3%20|%20C3%20|%20C6-blue.svg?style=flat-square&logo=espressif" alt="ESP32"></a>
   <a href="#"><img src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square" alt="MIT License"></a>
-  <a href="https://crates.io/crates/ruvllm-esp32"><img src="https://img.shields.io/crates/v/ruvllm-esp32.svg?style=flat-square" alt="crates.io"></a>
-  <a href="https://www.npmjs.com/package/ruvllm-esp32"><img src="https://img.shields.io/npm/v/ruvllm-esp32.svg?style=flat-square&logo=npm" alt="npm"></a>
+  <a href="https://crates.io/crates/swarmllm-esp32"><img src="https://img.shields.io/crates/v/swarmllm-esp32.svg?style=flat-square" alt="crates.io"></a>
+  <a href="https://www.npmjs.com/package/swarmllm-esp32"><img src="https://img.shields.io/npm/v/swarmllm-esp32.svg?style=flat-square&logo=npm" alt="npm"></a>
   <a href="#"><img src="https://img.shields.io/badge/SwarmVector-integrated-ff69b4.svg?style=flat-square" alt="SwarmVector"></a>
 </p>
 
 ```
     ╭──────────────────────────────────────────────────────────────────╮
     │                                                                  │
-    │     🧠  RuvLLM ESP32  -  AI That Fits in Your Pocket            │
+    │     🧠  SwarmLLM ESP32  -  AI That Fits in Your Pocket            │
     │                                                                  │
     │     Run language models on $4 microcontrollers                   │
     │     No cloud • No internet • No subscriptions                    │
@@ -48,12 +48,12 @@
 
 ## 🎯 What Is This? (30-Second Explanation)
 
-**RuvLLM ESP32** lets you run AI language models—like tiny versions of ChatGPT—on a chip that costs less than a coffee.
+**SwarmLLM ESP32** lets you run AI language models—like tiny versions of ChatGPT—on a chip that costs less than a coffee.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                             │
-│   BEFORE: Cloud AI                       AFTER: RuvLLM ESP32                │
+│   BEFORE: Cloud AI                       AFTER: SwarmLLM ESP32                │
 │   ──────────────                         ─────────────────                  │
 │                                                                             │
 │   📱 Your Device                         📱 Your Device                     │
@@ -69,7 +69,7 @@
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**Think of it like this:** If ChatGPT is a supercomputer that fills a room, RuvLLM ESP32 is a clever pocket calculator that does 90% of what you need for 0.001% of the cost.
+**Think of it like this:** If ChatGPT is a supercomputer that fills a room, SwarmLLM ESP32 is a clever pocket calculator that does 90% of what you need for 0.001% of the cost.
 
 ---
 
@@ -217,18 +217,18 @@ Most projects do **one** of these. We attempt to integrate **all four**:
 
 ```bash
 # Add to your Cargo.toml
-cargo add ruvllm-esp32
+cargo add swarmllm-esp32
 ```
 
 ```toml
 # Or manually add to Cargo.toml:
 [dependencies]
-ruvllm-esp32 = "0.2.0"
+swarmllm-esp32 = "0.2.0"
 ```
 
 ```rust
-use ruvllm_esp32::prelude::*;
-use ruvllm_esp32::ruvector::{MicroRAG, RAGConfig, AnomalyDetector};
+use swarmllm_esp32::prelude::*;
+use swarmllm_esp32::swarmvector::{MicroRAG, RAGConfig, AnomalyDetector};
 
 // Create a tiny LLM engine
 let config = ModelConfig::for_variant(Esp32Variant::Esp32);
@@ -244,7 +244,7 @@ rag.add_knowledge("The kitchen light is called 'main light'", &embed)?;
 
 ```bash
 # 1. Clone and enter
-git clone https://github.com/ruvnet/ruvector && cd ruvector/examples/ruvLLM/esp32
+git clone the upstream project (see NOTICE) && cd swarmvector/examples/swarmLLM/esp32
 
 # 2. Run the demo (no hardware needed!)
 cargo run --example embedding_demo
@@ -263,28 +263,28 @@ That's it! You just ran AI inference on simulated ESP32 hardware.
 
 ```bash
 cargo install espflash
-espflash flash --monitor target/release/ruvllm-esp32
+espflash flash --monitor target/release/swarmllm-esp32
 ```
 
 ### Option C: npx CLI (Zero Setup - Recommended for Flashing)
 
-The fastest way to get RuvLLM running on real hardware. No Rust toolchain required!
+The fastest way to get SwarmLLM running on real hardware. No Rust toolchain required!
 
 ```bash
 # Install ESP32 toolchain automatically
-npx ruvllm-esp32 install
+npx swarmllm-esp32 install
 
 # Initialize a new project with templates
-npx ruvllm-esp32 init my-ai-project
+npx swarmllm-esp32 init my-ai-project
 
 # Build for your target
-npx ruvllm-esp32 build --target esp32s3
+npx swarmllm-esp32 build --target esp32s3
 
 # Flash to device
-npx ruvllm-esp32 flash --port /dev/ttyUSB0
+npx swarmllm-esp32 flash --port /dev/ttyUSB0
 
 # All-in-one: build and flash
-npx ruvllm-esp32 build --target esp32s3 --flash
+npx swarmllm-esp32 build --target esp32s3 --flash
 ```
 
 **Available Commands:**
@@ -303,17 +303,17 @@ For a complete flashable project with all features, see [`../esp32-flash/`](../e
 
 ```bash
 cd ../esp32-flash
-npx ruvllm-esp32 build --target esp32s3 --flash
+npx swarmllm-esp32 build --target esp32s3 --flash
 ```
 
 ### Crate & Package Links
 
 | Resource | Link |
 |----------|------|
-| **crates.io** | [crates.io/crates/ruvllm-esp32](https://crates.io/crates/ruvllm-esp32) |
-| **docs.rs** | [docs.rs/ruvllm-esp32](https://docs.rs/ruvllm-esp32) |
-| **npm** | [npmjs.com/package/ruvllm-esp32](https://www.npmjs.com/package/ruvllm-esp32) |
-| **GitHub** | [github.com/ruvnet/ruvector](https://github.com/ruvnet/ruvector) |
+| **crates.io** | [crates.io/crates/swarmllm-esp32](https://crates.io/crates/swarmllm-esp32) |
+| **docs.rs** | [docs.rs/swarmllm-esp32](https://docs.rs/swarmllm-esp32) |
+| **npm** | [npmjs.com/package/swarmllm-esp32](https://www.npmjs.com/package/swarmllm-esp32) |
+| **GitHub** | [the upstream project (see NOTICE)](the upstream project (see NOTICE)) |
 | **Flashable Project** | [esp32-flash/](../esp32-flash/) |
 
 ---
@@ -497,7 +497,7 @@ Running AI on a microcontroller is like fitting an elephant in a phone booth. He
 │                         COMPRESSION TECHNIQUES                              │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│   NORMAL AI MODEL              →    RUVLLM ESP32                            │
+│   NORMAL AI MODEL              →    SWARMLLM ESP32                            │
 │   ─────────────────                 ────────────                            │
 │                                                                             │
 │   32-bit floating point        →    8-bit integers     (4x smaller)         │
@@ -758,7 +758,7 @@ We normalize by model capability (logarithmic scale based on parameters):
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│                           WHY RUVLLM ESP32 WINS                                 │
+│                           WHY SWARMLLM ESP32 WINS                                 │
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                 │
 │   ✅ 107x energy savings with SNN gating (4.7mW vs 500mW always-on)             │
@@ -780,7 +780,7 @@ We normalize by model capability (logarithmic scale based on parameters):
 
 ## 🆚 Quick Comparison
 
-| Feature | RuvLLM ESP32 | RuvLLM + SNN Gate | Cloud API | Raspberry Pi | NVIDIA Jetson |
+| Feature | SwarmLLM ESP32 | SwarmLLM + SNN Gate | Cloud API | Raspberry Pi | NVIDIA Jetson |
 |---------|--------------|-------------------|-----------|--------------|---------------|
 | **Cost** | $4-$1,024 | $4-$1,024 | $0 + API fees | $35-$75 | $199-$599 |
 | **$/Watt** | **$8** ⭐ | **$850** ⭐⭐ | ∞ | $15 | $20-$33 |
@@ -794,7 +794,7 @@ We normalize by model capability (logarithmic scale based on parameters):
 | **RAG/Memory** | ✅ Yes | ✅ Yes | ✅ Yes | ⚠️ Limited | ✅ Yes |
 | **Vector Search** | ✅ HNSW | ✅ HNSW | ❌ External | ⚠️ Slow | ✅ Yes |
 
-**Bottom line**: RuvLLM ESP32 with SNN gating offers **107x energy savings** for event-driven workloads. Perfect for always-on sensors, wearables, and IoT devices where 99% of the time is silence.
+**Bottom line**: SwarmLLM ESP32 with SNN gating offers **107x energy savings** for event-driven workloads. Perfect for always-on sensors, wearables, and IoT devices where 99% of the time is silence.
 
 ---
 
@@ -805,15 +805,15 @@ We normalize by model capability (logarithmic scale based on parameters):
 ```toml
 # Cargo.toml
 [dependencies]
-ruvllm-esp32 = "0.2.0"
+swarmllm-esp32 = "0.2.0"
 
 # Enable features as needed:
-# ruvllm-esp32 = { version = "0.1.0", features = ["federation", "self-learning"] }
+# swarmllm-esp32 = { version = "0.1.0", features = ["federation", "self-learning"] }
 ```
 
 ```rust
 // main.rs
-use ruvllm_esp32::prelude::*;
+use swarmllm_esp32::prelude::*;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let config = ModelConfig::for_variant(Esp32Variant::Esp32);
@@ -830,7 +830,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ```bash
 # Clone the repo first
-git clone https://github.com/ruvnet/ruvector && cd ruvector/examples/ruvLLM/esp32
+git clone the upstream project (see NOTICE) && cd swarmvector/examples/swarmLLM/esp32
 
 # Core demos
 cargo run --example embedding_demo     # Basic inference
@@ -863,7 +863,7 @@ Run WebAssembly modules on ESP32 for sandboxed, portable, and hot-swappable AI p
 ```toml
 # Cargo.toml - Add WASM runtime
 [dependencies]
-ruvllm-esp32 = "0.2.0"
+swarmllm-esp32 = "0.2.0"
 wasm3 = "0.5"  # Lightweight WASM interpreter
 ```
 
@@ -876,7 +876,7 @@ let rt = env.create_runtime(1024)?; // 1KB stack
 let module = Module::parse(&env, &wasm_bytes)?;
 let instance = rt.load_module(module)?;
 
-// Call WASM function from RuvLLM pipeline
+// Call WASM function from SwarmLLM pipeline
 let preprocess = instance.find_function::<(i32,), i32>("preprocess")?;
 let filtered = preprocess.call(sensor_data)?;
 
@@ -1061,7 +1061,7 @@ espup install
 ### Build for ESP32
 
 ```bash
-cd examples/ruvLLM/esp32
+cd examples/swarmLLM/esp32
 
 # Build for ESP32 (Xtensa)
 cargo build --release --target xtensa-esp32-none-elf
@@ -1099,7 +1099,7 @@ cargo test --test simulation_tests -- --nocapture
 cargo install espflash
 
 # Flash and monitor
-espflash flash --monitor target/xtensa-esp32-none-elf/release/ruvllm-esp32
+espflash flash --monitor target/xtensa-esp32-none-elf/release/swarmllm-esp32
 ```
 
 ## Federation (Multi-Chip Clusters)
@@ -1161,7 +1161,7 @@ Add **speculative decoding** (guess 4 tokens, verify in parallel) and we hit **4
 ### Federation Usage
 
 ```rust
-use ruvllm_esp32::federation::{
+use swarmllm_esp32::federation::{
     FederationConfig, FederationMode,
     PipelineNode, PipelineConfig,
     FederationCoordinator,
@@ -1199,7 +1199,7 @@ node.process_step(|layer, data| {
 Lightweight gated RNN for intelligent chip routing:
 
 ```rust
-use ruvllm_esp32::federation::{MicroFastGRNN, MicroGRNNConfig, RoutingFeatures};
+use swarmllm_esp32::federation::{MicroFastGRNN, MicroGRNNConfig, RoutingFeatures};
 
 let config = MicroGRNNConfig {
     input_dim: 8,
@@ -1261,7 +1261,7 @@ For extreme scale deployments, we support hierarchical topologies that can scale
 ### Massive Scale Usage
 
 ```rust
-use ruvllm_esp32::federation::{
+use swarmllm_esp32::federation::{
     MassiveTopology, MassiveScaleConfig, MassiveScaleSimulator,
     DistributedCoordinator, GossipProtocol, FaultTolerance,
 };
@@ -1461,7 +1461,7 @@ ModelConfig {
 ## API Usage
 
 ```rust
-use ruvllm_esp32::prelude::*;
+use swarmllm_esp32::prelude::*;
 
 // Create model for your ESP32 variant
 let config = ModelConfig::for_variant(Esp32Variant::Esp32);
@@ -1480,12 +1480,12 @@ let result = engine.generate(&prompt, &gen_config)?;
 println!("Generated: {:?}", result.tokens);
 ```
 
-## Optimizations (from Ruvector)
+## Optimizations (from Swarmvector)
 
 ### MicroLoRA (Self-Learning)
 
 ```rust
-use ruvllm_esp32::optimizations::{MicroLoRA, LoRAConfig};
+use swarmllm_esp32::optimizations::{MicroLoRA, LoRAConfig};
 
 let config = LoRAConfig {
     rank: 1,           // Rank-1 for minimal memory
@@ -1502,7 +1502,7 @@ lora.backward(grad)?;  // 2KB gradient accumulation
 ### Sparse Attention
 
 ```rust
-use ruvllm_esp32::optimizations::{SparseAttention, AttentionPattern};
+use swarmllm_esp32::optimizations::{SparseAttention, AttentionPattern};
 
 let attention = SparseAttention::new(
     AttentionPattern::SlidingWindow { window: 8 },
@@ -1517,7 +1517,7 @@ let output = attention.forward(query, key, value)?;
 ### Binary Embeddings
 
 ```rust
-use ruvllm_esp32::optimizations::{BinaryEmbedding, hamming_distance};
+use swarmllm_esp32::optimizations::{BinaryEmbedding, hamming_distance};
 
 // 32x compression via 1-bit weights
 let embed: BinaryEmbedding<512, 8> = BinaryEmbedding::new(42);
@@ -1635,7 +1635,7 @@ Example federation output:
 
 ```
 ╔═══════════════════════════════════════════════════════════════╗
-║     RuvLLM ESP32 - 5-Chip Federation Benchmark                ║
+║     SwarmLLM ESP32 - 5-Chip Federation Benchmark                ║
 ╚═══════════════════════════════════════════════════════════════╝
 
 ═══ Federation Mode Comparison ═══
@@ -1706,11 +1706,11 @@ SwarmVector brings vector database capabilities to ESP32, enabling:
 - **Anomaly Detection**: Pattern recognition for industrial/IoT monitoring
 - **Federated Vector Search**: Distributed similarity search across chip clusters
 
-### Architecture: SNN for Gating, RuvLLM for Generation
+### Architecture: SNN for Gating, SwarmLLM for Generation
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│              THE OPTIMAL ARCHITECTURE: SNN + SwarmVector + RuvLLM              │
+│              THE OPTIMAL ARCHITECTURE: SNN + SwarmVector + SwarmLLM              │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │   ❌ Wrong: "SNN replaces the LLM"                                          │
@@ -1718,7 +1718,7 @@ SwarmVector brings vector database capabilities to ESP32, enabling:
 │                                                                             │
 │   ┌─────────────────────────────────────────────────────────────────────┐   │
 │   │                                                                     │   │
-│   │   Sensors ──▶ SNN Front-End ──▶ Event? ──▶ SwarmVector ──▶ RuvLLM     │   │
+│   │   Sensors ──▶ SNN Front-End ──▶ Event? ──▶ SwarmVector ──▶ SwarmLLM     │   │
 │   │   (always on)   (μW power)        │         (query)   (only on     │   │
 │   │                                   │                    event)      │   │
 │   │                                   │                                │   │
@@ -1781,7 +1781,7 @@ cargo run --example snn_gated_inference --features federation
 ### Example: Smart Home RAG
 
 ```rust
-use ruvllm_esp32::ruvector::{MicroRAG, RAGConfig};
+use swarmllm_esp32::swarmvector::{MicroRAG, RAGConfig};
 
 // Create RAG engine
 let mut rag = MicroRAG::new(RAGConfig::default());
@@ -1799,7 +1799,7 @@ let result = rag.retrieve(&query_embed);
 ### Example: Industrial Anomaly Detection
 
 ```rust
-use ruvllm_esp32::ruvector::{AnomalyDetector, AnomalyConfig};
+use swarmllm_esp32::swarmvector::{AnomalyDetector, AnomalyConfig};
 
 let mut detector = AnomalyDetector::new(AnomalyConfig::default());
 
@@ -1819,7 +1819,7 @@ if result.is_anomaly {
 ### Example: SNN-Gated Pipeline
 
 ```rust
-use ruvllm_esp32::ruvector::snn::{SNNEventDetector, SNNRouter};
+use swarmllm_esp32::swarmvector::snn::{SNNEventDetector, SNNRouter};
 
 let mut snn = SNNEventDetector::new();
 let mut router = SNNRouter::new();
@@ -1832,7 +1832,7 @@ match router.route(event, confidence) {
     RouteDecision::Sleep => { /* 99% of time, 10μW */ }
     RouteDecision::LocalResponse => { /* Quick response, 500μW */ }
     RouteDecision::FetchMemory => { /* Query SwarmVector, 2mW */ }
-    RouteDecision::RunLLM => { /* Full RuvLLM, 50mW */ }
+    RouteDecision::RunLLM => { /* Full SwarmLLM, 50mW */ }
 }
 // Result: 10-100x energy reduction vs always-on LLM
 ```
@@ -1862,8 +1862,8 @@ match router.route(event, confidence) {
 
 Build a three-stage benchmark to validate:
 
-1. **Stage A (Baseline)**: ESP32 polls, runs RuvLLM on every window
-2. **Stage B (SNN Gate)**: SNN runs continuously, RuvLLM runs only on spikes
+1. **Stage A (Baseline)**: ESP32 polls, runs SwarmLLM on every window
+2. **Stage B (SNN Gate)**: SNN runs continuously, SwarmLLM runs only on spikes
 3. **Stage C (SNN + Coherence)**: Add min-cut gating for conservative mode
 
 **Metrics**: Average power, false positives, missed events, time to action, tokens/hour
@@ -1907,8 +1907,8 @@ MIT License - See [LICENSE](LICENSE)
 
 ## Related
 
-- [RuvLLM](../README.md) - Full LLM orchestration system
-- [Ruvector](../../README.md) - Vector database with HNSW indexing
+- [SwarmLLM](../README.md) - Full LLM orchestration system
+- [Swarmvector](../../README.md) - Vector database with HNSW indexing
 - [ESP-IDF](https://github.com/espressif/esp-idf) - ESP32 development framework
-- [ruvllm-esp32 npm](https://www.npmjs.com/package/ruvllm-esp32) - Cross-platform CLI for flashing
+- [swarmllm-esp32 npm](https://www.npmjs.com/package/swarmllm-esp32) - Cross-platform CLI for flashing
 - [esp32-flash/](../esp32-flash/) - Ready-to-flash project with all features

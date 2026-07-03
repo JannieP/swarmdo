@@ -71,12 +71,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ruvnet/swarmvector.git",
+    "url": "the upstream project (see NOTICE)",
     "directory": "crates/swarmvector-node"
   },
-  "homepage": "https://github.com/ruvnet/swarmvector#readme",
+  "homepage": "the upstream project (see NOTICE)#readme",
   "bugs": {
-    "url": "https://github.com/ruvnet/swarmvector/issues"
+    "url": "the upstream project (see NOTICE)"
   },
   "optionalDependencies": {
     "@swarmvector/node-win32-x64-msvc": "0.1.19",

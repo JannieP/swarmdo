@@ -80,23 +80,23 @@
 | swarm_status | OK | swarm/status |
 | swarm/get-status | OK | swarm/status |
 | swarm/get-comprehensive-status | OK | swarm/status |
-| mcp__ruv-swarm__swarm_init | OK | swarm/init |
-| mcp__ruv-swarm__swarm_status | OK | swarm/status |
-| mcp__ruv-swarm__agent_spawn | OK | agent/spawn |
-| mcp__ruv-swarm__agent_list | OK | agent/list |
-| mcp__ruv-swarm__agent_metrics | OK | agent/status |
+| mcp__swarmdo-swarm__swarm_init | OK | swarm/init |
+| mcp__swarmdo-swarm__swarm_status | OK | swarm/status |
+| mcp__swarmdo-swarm__agent_spawn | OK | agent/spawn |
+| mcp__swarmdo-swarm__agent_list | OK | agent/list |
+| mcp__swarmdo-swarm__agent_metrics | OK | agent/status |
 | memory/query | OK | memory/search |
 | memory/store | OK | memory/store |
 | memory/delete | OK | memory/delete |
-| mcp__ruv-swarm__memory_usage | OK | memory/list |
+| mcp__swarmdo-swarm__memory_usage | OK | memory/list |
 | config/get | OK | config/load |
 | config/update | OK | config/save |
 | task/create | OK | task/create |
 | task/assign | OK | task/assign |
 | task/status | OK | task/status |
 | task/complete | OK | task/complete |
-| mcp__ruv-swarm__neural_status | OK | hooks/metrics |
-| mcp__ruv-swarm__neural_train | OK | hooks/pretrain |
+| mcp__swarmdo-swarm__neural_status | OK | hooks/metrics |
+| mcp__swarmdo-swarm__neural_train | OK | hooks/pretrain |
 | github/pr-create | OK | github/pr-create |
 | github/pr-review | OK | github/pr-review |
 | github/issue-create | OK | github/issue-create |
@@ -224,12 +224,12 @@ const server = createMCPServer({
 
 ```bash
 # V2 (deprecated but supported)
-npx rufflo hive-mind init
-npx rufflo hive-mind status
+npx swarmdo hive-mind init
+npx swarmdo hive-mind status
 
 # V3 (recommended)
-npx @rufflo/cli swarm init
-npx @rufflo/cli swarm status
+npx @swarmdo/cli swarm init
+npx @swarmdo/cli swarm status
 ```
 
 #### MCP Tool Migration
@@ -261,12 +261,12 @@ const agent = await mcp.callTool('agent/spawn', {
 
 ```typescript
 // V2 imports
-import { HiveMind } from 'rufflo/hive-mind';
-import { MemoryManager } from 'rufflo/memory';
+import { HiveMind } from 'swarmdo/hive-mind';
+import { MemoryManager } from 'swarmdo/memory';
 
 // V3 imports with aliases
-import { UnifiedSwarmCoordinator as HiveMind } from '@rufflo/swarm';
-import { UnifiedMemoryService as MemoryManager } from '@rufflo/memory';
+import { UnifiedSwarmCoordinator as HiveMind } from '@swarmdo/swarm';
+import { UnifiedMemoryService as MemoryManager } from '@swarmdo/memory';
 
 // Usage remains the same
 const hive = new HiveMind();
@@ -280,29 +280,29 @@ const agent = await hive.spawn('coder');
 
 ```bash
 # Run the V3 migration tool
-npx @rufflo/cli migrate --from v2 --to v3
+npx @swarmdo/cli migrate --from v2 --to v3
 
 # Migrate configuration
-npx @rufflo/cli migrate config --input .rufflo/config.yaml
+npx @swarmdo/cli migrate config --input .swarmdo/config.yaml
 
 # Migrate memory database
-npx @rufflo/cli migrate memory --input .rufflo/memory.db
+npx @swarmdo/cli migrate memory --input .swarmdo/memory.db
 ```
 
 #### Manual Configuration Migration
 
 ```yaml
-# V2 Configuration (.rufflo/config.yaml)
+# V2 Configuration (.swarmdo/config.yaml)
 orchestrator:
   maxAgents: 10
   defaultStrategy: balanced
 memory:
   backend: sqlite
-  path: ./.rufflo/memory.db
+  path: ./.swarmdo/memory.db
 coordination:
   topology: hierarchical
 
-# V3 Configuration (.rufflo/config.yaml)
+# V3 Configuration (.swarmdo/config.yaml)
 swarm:
   topology: hierarchical-mesh
   maxAgents: 15
@@ -312,7 +312,7 @@ swarm:
 memory:
   backend: hybrid
   sqlite:
-    path: ./.rufflo/memory.db
+    path: ./.swarmdo/memory.db
   agentdb:
     enableHNSW: true
     dimensions: 384
@@ -325,10 +325,10 @@ hooks:
 
 1. Enable V2 compatibility mode in MCP server configuration
 2. Update tool calls to use new naming convention (e.g., agent/spawn)
-3. Update import statements to use @rufflo/* packages
+3. Update import statements to use @swarmdo/* packages
 4. Use provided import aliases for backward compatibility
 5. Consider using tool name translation layer for gradual migration
-6. Run migration script: npx @rufflo/cli migrate
+6. Run migration script: npx @swarmdo/cli migrate
 7. Update to Node.js 20+ (Deno support removed)
 
 ## Feature Compatibility Matrix
@@ -358,30 +358,30 @@ hooks:
 | swarm_status | swarm/status |
 | swarm/get-status | swarm/status |
 | swarm/get-comprehensive-status | swarm/status |
-| mcp__ruv-swarm__swarm_init | swarm/init |
-| mcp__ruv-swarm__swarm_status | swarm/status |
-| mcp__ruv-swarm__agent_spawn | agent/spawn |
-| mcp__ruv-swarm__agent_list | agent/list |
-| mcp__ruv-swarm__agent_metrics | agent/status |
+| mcp__swarmdo-swarm__swarm_init | swarm/init |
+| mcp__swarmdo-swarm__swarm_status | swarm/status |
+| mcp__swarmdo-swarm__agent_spawn | agent/spawn |
+| mcp__swarmdo-swarm__agent_list | agent/list |
+| mcp__swarmdo-swarm__agent_metrics | agent/status |
 | memory/query | memory/search |
-| mcp__ruv-swarm__memory_usage | memory/list |
+| mcp__swarmdo-swarm__memory_usage | memory/list |
 | config/get | config/load |
 | config/update | config/save |
-| mcp__ruv-swarm__neural_status | hooks/metrics |
-| mcp__ruv-swarm__neural_train | hooks/pretrain |
+| mcp__swarmdo-swarm__neural_status | hooks/metrics |
+| mcp__swarmdo-swarm__neural_train | hooks/pretrain |
 
 ### B. V2 to V3 Import Aliases
 
 | V2 Import | V3 Import |
 |-----------|-----------|
-| rufflo/hive-mind | @rufflo/swarm |
-| rufflo/swarm | @rufflo/swarm |
-| rufflo/memory | @rufflo/memory |
-| rufflo/agents | @rufflo/agent-lifecycle |
-| rufflo/tasks | @rufflo/task-execution |
-| rufflo/hooks | @rufflo/hooks |
-| rufflo/config | @rufflo/config |
-| rufflo | @rufflo/core |
+| swarmdo/hive-mind | @swarmdo/swarm |
+| swarmdo/swarm | @swarmdo/swarm |
+| swarmdo/memory | @swarmdo/memory |
+| swarmdo/agents | @swarmdo/agent-lifecycle |
+| swarmdo/tasks | @swarmdo/task-execution |
+| swarmdo/hooks | @swarmdo/hooks |
+| swarmdo/config | @swarmdo/config |
+| swarmdo | @swarmdo/core |
 
 ### C. V2 to V3 Class Aliases
 

@@ -1,11 +1,11 @@
-# @ruvector/rvf-node
+# @swarmvector/rvf-node
 
-Native Node.js bindings for the [SwarmVector Format](https://github.com/ruvnet/ruvector/tree/main/crates/rvf) (RVF) vector database. Built with Rust via N-API for native speed with zero serialization overhead.
+Native Node.js bindings for the [SwarmVector Format](the upstream project (see NOTICE)) (RVF) vector database. Built with Rust via N-API for native speed with zero serialization overhead.
 
 ## Install
 
 ```bash
-npm install @ruvector/rvf-node
+npm install @swarmvector/rvf-node
 ```
 
 ## Features
@@ -22,7 +22,7 @@ npm install @ruvector/rvf-node
 ## Quick Start
 
 ```javascript
-const { RvfDatabase } = require('@ruvector/rvf-node');
+const { RvfDatabase } = require('@swarmvector/rvf-node');
 
 // Create a store
 const db = RvfDatabase.create('vectors.rvf', {
@@ -268,9 +268,9 @@ npm run build
 
 | Package | Description |
 |---------|-------------|
-| [`@ruvector/rvf`](https://www.npmjs.com/package/@ruvector/rvf) | Unified TypeScript SDK |
-| [`@ruvector/rvf-wasm`](https://www.npmjs.com/package/@ruvector/rvf-wasm) | Browser WASM package |
-| [`@ruvector/rvf-mcp-server`](https://www.npmjs.com/package/@ruvector/rvf-mcp-server) | MCP server for AI agents |
+| [`@swarmvector/rvf`](https://www.npmjs.com/package/@swarmvector/rvf) | Unified TypeScript SDK |
+| [`@swarmvector/rvf-wasm`](https://www.npmjs.com/package/@swarmvector/rvf-wasm) | Browser WASM package |
+| [`@swarmvector/rvf-mcp-server`](https://www.npmjs.com/package/@swarmvector/rvf-mcp-server) | MCP server for AI agents |
 | [`rvf-runtime`](https://crates.io/crates/rvf-runtime) | Rust runtime (powers this package) |
 
 ## License

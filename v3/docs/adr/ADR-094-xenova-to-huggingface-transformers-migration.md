@@ -2,7 +2,7 @@
 
 **Status**: Accepted — Implemented (provider-agnostic loader shipped; both call sites migrated; `@xenova/transformers` demoted to optional dep)
 **Date**: 2026-05-03 (proposed) · **Updated**: 2026-05-09
-**Version**: shipped in `@rufflo/embeddings@3.0.0-alpha.15` / v3.6.19
+**Version**: shipped in `@swarmdo/embeddings@3.0.0-alpha.15` / v3.6.19
 **Supersedes**: nothing
 **Related**: ADR-093, npm audit CVE chain through `protobufjs`
 
@@ -23,8 +23,8 @@ Only two call sites import `@xenova/transformers` in the v3 monorepo:
 
 | File | Import | Usage |
 |---|---|---|
-| `v3/@rufflo/embeddings/src/embedding-service.ts:387` | `const { pipeline } = await import('@xenova/transformers')` | Used as the ONNX backend for `feature-extraction` |
-| `v3/@rufflo/cli/src/memory/memory-initializer.ts:1539` | `const transformers = await import('@xenova/transformers').catch(() => null)` | Optional ONNX provider for embedding generation |
+| `v3/@swarmdo/embeddings/src/embedding-service.ts:387` | `const { pipeline } = await import('@xenova/transformers')` | Used as the ONNX backend for `feature-extraction` |
+| `v3/@swarmdo/cli/src/memory/memory-initializer.ts:1539` | `const transformers = await import('@xenova/transformers').catch(() => null)` | Optional ONNX provider for embedding generation |
 
 Both are dynamic imports wrapped in try/catch — the migration risk is bounded.
 
@@ -43,10 +43,10 @@ Pipeline calls in both packages:
 
 ## Decision
 
-Migrate both call sites to a **provider-agnostic loader** that prefers `@huggingface/transformers`, falls back to `@xenova/transformers` for backwards compat with consumers who haven't installed the new package, and reports honest status via `embeddings_status.ruvectorStatus` (already structured per ADR-093 F5).
+Migrate both call sites to a **provider-agnostic loader** that prefers `@huggingface/transformers`, falls back to `@xenova/transformers` for backwards compat with consumers who haven't installed the new package, and reports honest status via `embeddings_status.swarmvectorStatus` (already structured per ADR-093 F5).
 
 ```ts
-// New helper in @rufflo/embeddings/src/transformers-loader.ts
+// New helper in @swarmdo/embeddings/src/transformers-loader.ts
 export async function loadTransformersPipeline(): Promise<{
   pipeline: PipelineFn;
   source: '@huggingface/transformers' | '@xenova/transformers';
@@ -82,12 +82,12 @@ this.transformersSource = t.source;
 
 ### Dependency changes
 
-`@rufflo/embeddings/package.json`:
+`@swarmdo/embeddings/package.json`:
 - Move `@xenova/transformers` from `dependencies` to `optionalDependencies` (keeps install size small for users who don't need ONNX)
 - Add `@huggingface/transformers: "^4.2.0"` as a `peerDependency` (optional) and `optionalDependencies` (auto-install)
 - Document in README that consumers can install either; the loader will use whichever is present
 
-`@rufflo/cli/package.json`: no direct change (transformers is a transitive of @rufflo/embeddings).
+`@swarmdo/cli/package.json`: no direct change (transformers is a transitive of @swarmdo/embeddings).
 
 ### Validation plan
 
@@ -107,7 +107,7 @@ this.transformersSource = t.source;
 
 **Negative:**
 - Bigger dependency tree (HF has more bundled features). Mitigated by making `@xenova/transformers` optional rather than removing entirely (consumers can opt for the smaller package).
-- One more peer/optional dependency for `@rufflo/embeddings` consumers to be aware of.
+- One more peer/optional dependency for `@swarmdo/embeddings` consumers to be aware of.
 
 **Risk:**
 - HF's `pipeline('feature-extraction', model)` might produce subtly different outputs vs xenova for the same model (e.g. different default normalization). Validation step #1 (byte-identical output check) catches this before merge.
@@ -123,10 +123,10 @@ All three files listed in the Decision shipped in a single commit. The `memory-i
 
 | Component | Status | Files | Commit(s) |
 |---|---|---|---|
-| **`transformers-loader.ts`** — provider-agnostic loader, prefers `@huggingface/transformers`, falls back to `@xenova/transformers`, caches resolved source | Implemented | `v3/@rufflo/embeddings/src/transformers-loader.ts` (new, 89 lines) | `21f668c55 feat: implement ADR-094 transformers migration + ADR-095 gap tracking` |
-| **`embedding-service.ts`** call site — replaced direct `@xenova` import with loader | Implemented | `v3/@rufflo/embeddings/src/embedding-service.ts:387` | `21f668c55` |
-| **`memory-initializer.ts`** call site — inlined try-prefer-fallback (avoids circular optional-dep) | Implemented | `v3/@rufflo/cli/src/memory/memory-initializer.ts:1539` | `21f668c55` |
-| **`@rufflo/embeddings/package.json`** — `@huggingface/transformers@^4.2.0` added to `optionalDependencies`; `@xenova/transformers` demoted to `optionalDependencies` | Implemented | `v3/@rufflo/embeddings/package.json` | `21f668c55` · `6369151ac chore: bump to 3.6.19 + @rufflo/embeddings@3.0.0-alpha.15` |
+| **`transformers-loader.ts`** — provider-agnostic loader, prefers `@huggingface/transformers`, falls back to `@xenova/transformers`, caches resolved source | Implemented | `v3/@swarmdo/embeddings/src/transformers-loader.ts` (new, 89 lines) | `21f668c55 feat: implement ADR-094 transformers migration + ADR-095 gap tracking` |
+| **`embedding-service.ts`** call site — replaced direct `@xenova` import with loader | Implemented | `v3/@swarmdo/embeddings/src/embedding-service.ts:387` | `21f668c55` |
+| **`memory-initializer.ts`** call site — inlined try-prefer-fallback (avoids circular optional-dep) | Implemented | `v3/@swarmdo/cli/src/memory/memory-initializer.ts:1539` | `21f668c55` |
+| **`@swarmdo/embeddings/package.json`** — `@huggingface/transformers@^4.2.0` added to `optionalDependencies`; `@xenova/transformers` demoted to `optionalDependencies` | Implemented | `v3/@swarmdo/embeddings/package.json` | `21f668c55` · `6369151ac chore: bump to 3.6.19 + @swarmdo/embeddings@3.0.0-alpha.15` |
 
 ### Validation status
 

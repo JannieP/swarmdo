@@ -1,7 +1,7 @@
 # @swarmdo/plugin-neural-coordination
 
 [![npm version](https://img.shields.io/npm/v/@swarmdo/plugin-neural-coordination.svg)](https://www.npmjs.com/package/@swarmdo/plugin-neural-coordination)
-[![license](https://img.shields.io/npm/l/@swarmdo/plugin-neural-coordination.svg)](https://github.com/ruvnet/claude-flow/blob/main/LICENSE)
+[![license](https://img.shields.io/npm/l/@swarmdo/plugin-neural-coordination.svg)](the upstream project (see NOTICE))
 [![downloads](https://img.shields.io/npm/dm/@swarmdo/plugin-neural-coordination.svg)](https://www.npmjs.com/package/@swarmdo/plugin-neural-coordination)
 
 A cutting-edge multi-agent coordination plugin combining the SONA self-optimizing neural architecture with graph neural networks for agent communication topology optimization. The plugin enables emergent protocol development, neural consensus mechanisms, collective memory formation, and adaptive swarm behavior while maintaining interpretability of agent interactions.

@@ -6,7 +6,7 @@ import { dirname, join } from 'node:path';
 
 const pkgDir = dirname(dirname(fileURLToPath(import.meta.url)));
 
-// swarmdo-swarm — renamed fork of swarmdo-swarm@1.0.20 (github.com/ruvnet/ruv-FANN),
+// swarmdo-swarm — renamed fork of swarmdo-swarm@1.0.20 (the upstream project (see NOTICE)),
 // the optional MCP swarm server (`npx swarmdo-swarm mcp start`; tools surface as
 // mcp__swarmdo-swarm__*). Upstream quirks preserved verbatim: the main module
 // starts persistent handles at import, and the bin initializes its

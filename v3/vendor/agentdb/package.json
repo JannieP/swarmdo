@@ -148,16 +148,15 @@
     "napi",
     "typescript"
   ],
-  "author": "ruv",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ruvnet/agentdb.git"
+    "url": "git+the upstream project (see NOTICE)"
   },
   "bugs": {
-    "url": "https://github.com/ruvnet/agentdb/issues"
+    "url": "the upstream project (see NOTICE)"
   },
-  "homepage": "https://github.com/ruvnet/agentdb#readme",
+  "homepage": "the upstream project (see NOTICE)#readme",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.20.1",
     "@opentelemetry/api": "^1.9.0",

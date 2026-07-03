@@ -10,10 +10,10 @@ Heavy jobs — multi-year walk-forward backtests, large Monte-Carlo runs, parame
 
 ## Prerequisites
 
-> ✅ **`neural-trader@^2.8.11`** (shipped 2026-05-14; see [post-mortem gist](https://gist.github.com/ruvnet/a1aca90a5c299d89fa92e905dab11041) and [announcement #1981](https://github.com/ruvnet/swarmdo/issues/1981)).
+> ✅ **`neural-trader@^2.8.11`** (shipped 2026-05-14; see [post-mortem gist](https://gist.the upstream project (see NOTICE)) and [announcement #1981](the upstream project (see NOTICE))).
 > Resolves four compounding bugs that made the package unusable since v2.5.0:
-> 1. Install-hook fork-bomb (#1974 — 120 GB RAM on Apple Silicon) — fixed in 2.7.2 ([neural-trader#109](https://github.com/ruvnet/neural-trader/pull/109)).
-> 2. `require('neural-trader')` always threw `Cannot find module './src/cli/lib/napi-loader-shared'` — missing files restored in 2.7.5 ([neural-trader#111](https://github.com/ruvnet/neural-trader/pull/111)).
+> 1. Install-hook fork-bomb (#1974 — 120 GB RAM on Apple Silicon) — fixed in 2.7.2 ([neural-trader#109](the upstream project (see NOTICE))).
+> 2. `require('neural-trader')` always threw `Cannot find module './src/cli/lib/napi-loader-shared'` — missing files restored in 2.7.5 ([neural-trader#111](the upstream project (see NOTICE))).
 > 3. `cargo build` aborted on `aarch64-apple-darwin` (`fasthash-sys` x86-only SIMD) — placeholder hash replaced with stdlib `DefaultHasher` in 2.7.5.
 > 4. npm tarball claimed 5 platform binaries, shipped 1 — `darwin-arm64` + `darwin-x64` added in 2.7.6.
 >

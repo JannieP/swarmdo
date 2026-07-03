@@ -1,4 +1,4 @@
-# Audit Validation Report: Ruflo v3.14.1 vs. External Audit (v3.5.51, April 2026)
+# Audit Validation Report: Swarmdo v3.14.1 vs. External Audit (v3.5.51, April 2026)
 
 > **Validated:** 2026-06-24 against current `main` (v3.14.1)
 > **Source audit:** https://gist.github.com/roman-rr/ed603b676af019b8740423d2bb8e4bf6
@@ -9,7 +9,7 @@
 
 ## Bottom line
 
-The audit was **substantially valid for v3.5.51 in April 2026** — it accurately identified a real architectural gap: many MCP tools recorded state without invoking work. The team appears to have read it and responded. **In current v3.14.1 (June 2026), roughly half the audit's specific code-level claims are now REFUTED or PARTIALLY FIXED, but its core thesis — that ruflo over-claims capabilities — still has bite, just in subtler ways.**
+The audit was **substantially valid for v3.5.51 in April 2026** — it accurately identified a real architectural gap: many MCP tools recorded state without invoking work. The team appears to have read it and responded. **In current v3.14.1 (June 2026), roughly half the audit's specific code-level claims are now REFUTED or PARTIALLY FIXED, but its core thesis — that swarmdo over-claims capabilities — still has bite, just in subtler ways.**
 
 ---
 
@@ -168,8 +168,8 @@ The audit's framing ("99% theater") is no longer fair to v3.14.1; **"feature-ric
 - Source audit: https://gist.github.com/roman-rr/ed603b676af019b8740423d2bb8e4bf6
 - Internal performance audit: [`docs/reviews/intelligence-system-audit-2026-05-29.md`](./intelligence-system-audit-2026-05-29.md)
 - ADR-026 (model routing): `v3/implementation/adrs/ADR-026-agent-booster-model-routing.md`
-- ADR-095 G2 (Raft transport): `v3/@rufflo/swarm/src/consensus/raft.ts:336`
-- Federation Ed25519 fix: `v3/@rufflo/plugin-agent-federation/src/plugin.ts:131-140` (audit_1776483149979)
+- ADR-095 G2 (Raft transport): `v3/@swarmdo/swarm/src/consensus/raft.ts:336`
+- Federation Ed25519 fix: `v3/@swarmdo/plugin-agent-federation/src/plugin.ts:131-140` (audit_1776483149979)
 
 ---
 
@@ -180,7 +180,7 @@ addressing every actionable audit finding: `agent_run` (spawn-stub),
 `task dispatch` + a daemon `dispatch` worker (no-task-worker), honest
 self-measuring perf via `demo` / `performance benchmark` / `doctor`,
 `mcp start --tools-profile` (275-tool bloat), the corrected `150x-12,500x`
-claims across 146 files, the clean-break `rufflo` rename, plus two new surfaces
+claims across 146 files, the clean-break `swarmdo` rename, plus two new surfaces
 (GitHub Copilot, Raspberry Pi / edge).
 
 ### One root-caused gap remains (recommended, deliberately NOT hot-patched)
@@ -188,18 +188,18 @@ claims across 146 files, the clean-break `rufflo` rename, plus two new surfaces
 Post-merge full-suite testing left a handful of failures that trace to a single
 real issue worth scoping carefully:
 
-- **Memory / HNSW semantic search depends on the undeclared `@ruvector/core`.**
-  `package.json` declares only `ruvector` (unscoped, ~0.2.27 — works, provides
-  ONNX embeddings) and `@ruvector/learning-wasm`. But the memory subsystem
-  (`v3/@rufflo/cli/src/memory/memory-initializer.ts`, `src/ruvector/index.ts`)
-  imports `@ruvector/core` for HNSW + its availability probe. That scoped
+- **Memory / HNSW semantic search depends on the undeclared `@swarmvector/core`.**
+  `package.json` declares only `swarmvector` (unscoped, ~0.2.27 — works, provides
+  ONNX embeddings) and `@swarmvector/learning-wasm`. But the memory subsystem
+  (`v3/@swarmdo/cli/src/memory/memory-initializer.ts`, `src/swarmvector/index.ts`)
+  imports `@swarmvector/core` for HNSW + its availability probe. That scoped
   package is absent on essentially every install, so `agentdb_pattern-search` /
   `memory_search` degrade — a stored pattern isn't found by semantic search
-  even though embeddings (via unscoped `ruvector`) are real.
+  even though embeddings (via unscoped `swarmvector`) are real.
 - **Why it's not a quick fix (deeper trace):** `searchEntries`
   (`memory-initializer.ts:2414`) ALREADY degrades past HNSW — it falls back to
   raw sql.js with a RaBitQ pre-filter + exact-cosine rerank, none of which need
-  `@ruvector/core`. So the residual failures are NOT a missing fallback; they
+  `@swarmvector/core`. So the residual failures are NOT a missing fallback; they
   are (a) **embedding quality** — when neither a real ONNX embedder nor the
   bridge is present, `generateEmbedding` returns deterministic *hash* vectors
   (`backend: 'mock'`) that can't semantically surface a stored pattern, and
@@ -207,28 +207,28 @@ real issue worth scoping carefully:
   comments warn of an async recursion-OOM #2312, a false-"not loaded" probe
   #2356, and the ADR-053 bridge cycle).
 - **Partially fixed (embedding-backend unification, 2026-06-25):** the memory
-  loader degraded straight to `mock` hash even where `ruvector.isOnnxAvailable()`
-  is `true`, because its only ruvector path used `getOptimizedOnnxEmbedder()`
+  loader degraded straight to `mock` hash even where `swarmvector.isOnnxAvailable()`
+  is `true`, because its only swarmvector path used `getOptimizedOnnxEmbedder()`
   (whose ONNX session fails to init on some hosts) and never tried the
-  proven-working `ruvector.embed()` API that `neural-tools`/`demo` use. A new,
+  proven-working `swarmvector.embed()` API that `neural-tools`/`demo` use. A new,
   additive, bridge-FREE tier (`memory-initializer.ts` `loadEmbeddingModel`) now
-  uses `ruvector.embed()` gated by a non-zero probe, so `generateEmbedding` /
-  `generateLocalEmbedding` return `backend: 'onnx'` wherever ruvector works
-  (verified: `__tests__/memory-embeddings-ruvector.test.ts`). Bounded + safe —
+  uses `swarmvector.embed()` gated by a non-zero probe, so `generateEmbedding` /
+  `generateLocalEmbedding` return `backend: 'onnx'` wherever swarmvector works
+  (verified: `__tests__/memory-embeddings-swarmvector.test.ts`). Bounded + safe —
   outside the bridge cycle, skips honestly when ONNX is genuinely absent.
 - **Still open (deliberate, separate):** real embeddings are necessary but not
   sufficient — `memory_search` / `agentdb_pattern-search` *retrieval* and
   `memory list` still fail in native-less environments, pointing at the
   retrieval/store path (HNSW absent → sql.js/RaBitQ rerank, and a db-init issue
   in `memory list`). That's the remaining intricate work; declaring
-  `@ruvector/core` in `optionalDependencies` is also worth doing. Scope with
+  `@swarmvector/core` in `optionalDependencies` is also worth doing. Scope with
   tests; don't hot-patch.
 
 ### What that means for the test suite
 
 After merge + the fixes above, the CLI suite is **2303 passing**. The ~5
 remaining failures are environment-only (absent native/optional deps:
-`@ruvector/core`, `transformers`/`sharp`, `better-sqlite3`) and pass on a
+`@swarmvector/core`, `transformers`/`sharp`, `better-sqlite3`) and pass on a
 provisioned host. The WASM suites now skip-with-reason via a real availability
 probe rather than hard-failing, so CI and edge/Pi report green for everything
 that *can* run.

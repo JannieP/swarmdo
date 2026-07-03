@@ -1,7 +1,7 @@
 # @swarmvector/swarmllm-wasm
 
 [![npm](https://img.shields.io/npm/v/@swarmvector/swarmllm-wasm.svg)](https://www.npmjs.com/package/@swarmvector/swarmllm-wasm)
-[![License](https://img.shields.io/crates/l/swarmllm-wasm.svg)](https://github.com/ruvnet/swarmvector/blob/main/LICENSE)
+[![License](https://img.shields.io/crates/l/swarmllm-wasm.svg)](the upstream project (see NOTICE))
 
 Browser-compatible LLM inference runtime with WebAssembly. Semantic routing, adaptive learning, KV cache management, and chat template formatting — directly in the browser, no server required.
 

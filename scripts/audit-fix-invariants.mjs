@@ -155,7 +155,7 @@ const INVARIANTS = [
   // The regression vector is closed by ARCHITECTURE: if a future refactor
   // reintroduces raw-bytes reading from a memory.db path, the #2196 guard
   // (presence of the delegation pattern) catches it before the SQLite
-  // magic-check would ever be relevant. See ruvnet/swarmdo#2216 for the
+  // magic-check would ever be relevant. See upstream/swarmdo#2216 for the
   // user-deployed (pre-#2196) statusline still having the bug.
   {
     issue: '#2196',
@@ -285,13 +285,13 @@ const INVARIANTS = [
     issue: 'ADR-120',
     file: 'v3/crates/swarmdo-federation-peer/Cargo.toml',
     substring: 'midstreamer-quic = { version = "0.3.0"',
-    why: 'Step 3 crate pins midstreamer-quic@0.3.0 (ruvnet/midstream PR #82 added the QuicTransport embedding trait this crate needs for its TransportProvider blanket impl).',
+    why: 'Step 3 crate pins midstreamer-quic@0.3.0 (upstream/midstream PR #82 added the QuicTransport embedding trait this crate needs for its TransportProvider blanket impl).',
   },
   {
     issue: 'ADR-120',
     file: 'v3/crates/swarmdo-federation-peer/Cargo.toml',
     substring: 'aimds-core = { version = "0.2.0"',
-    why: 'Step 3 crate pins aimds-core@0.2.0 (ruvnet/midstream PR #82 added the SafetyGate composing trait this crate adapts in native_gate).',
+    why: 'Step 3 crate pins aimds-core@0.2.0 (upstream/midstream PR #82 added the SafetyGate composing trait this crate adapts in native_gate).',
   },
   {
     issue: 'ADR-120',

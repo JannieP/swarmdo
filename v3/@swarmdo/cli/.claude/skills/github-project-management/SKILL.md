@@ -972,7 +972,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Process Issue
-        uses: ruvnet/swarm-action@v1
+        uses: upstream/swarm-action@v1
         with:
           command: |
             if [[ "${{ github.event.label.name }}" == "swarm-ready" ]]; then
@@ -1252,8 +1252,8 @@ npx swarmdo-swarm github board-kpis
 
 - [GitHub CLI Documentation](https://cli.github.com/manual/)
 - [GitHub Projects Documentation](https://docs.github.com/en/issues/planning-and-tracking-with-projects)
-- [Swarm Coordination Guide](https://github.com/ruvnet/swarmdo-swarm)
-- [Swarmdo Documentation](https://github.com/ruvnet/claude-flow)
+- [Swarm Coordination Guide](the upstream project (see NOTICE))
+- [Swarmdo Documentation](the upstream project (see NOTICE))
 
 ---
 

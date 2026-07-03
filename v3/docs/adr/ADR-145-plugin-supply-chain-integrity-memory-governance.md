@@ -2,12 +2,12 @@
 
 **Status**: Proposed
 **Date**: 2026-06-02
-**Issue**: [ruvnet/ruflo#2254](https://github.com/ruvnet/ruflo/issues/2254)
+**Issue**: [upstream/swarmdo#2254](the upstream project (see NOTICE))
 **Related**: ADR-004 (Plugin Architecture), ADR-006 (Unified Memory), ADR-015 (Unified Plugin System), ADR-131 (ToolOutputGuardrail — content layer), ADR-144 (Authorization Propagation — runtime layer)
 
 ## Context
 
-ADR-131 closed the content boundary and ADR-144 closes the runtime action boundary. Both assume the *code that's about to run* is trustworthy in the first place. Two Grade A papers published April–May 2026 demonstrate that assumption is broken under current Rufflo defenses.
+ADR-131 closed the content boundary and ADR-144 closes the runtime action boundary. Both assume the *code that's about to run* is trustworthy in the first place. Two Grade A papers published April–May 2026 demonstrate that assumption is broken under current Swarmdo defenses.
 
 ### Threat: plugin supply-chain attacks
 
@@ -15,7 +15,7 @@ ADR-131 closed the content boundary and ADR-144 closes the runtime action bounda
 
 **DDIPE** (arXiv:2604.03081, Apr 3, 2026, Grade A): Document-Driven Implicit Payload Execution embeds malicious logic in plugin documentation and configuration templates. Tested across 4 frameworks, 5 models, 1,070 adversarial skills covering 15 MITRE ATT&CK categories. **Bypass rate 11.6–33.5%; 2.5% of adversarial skills evade both detection and alignment systems.** Four CVEs were disclosed from this research.
 
-Rufflo's current plugin install path (`v3/@rufflo/cli/src/plugins/store/discovery.ts`) fetches manifests from IPFS via Pinata. It carries **no signature verification** and **no semantic intent analysis**.
+Swarmdo's current plugin install path (`v3/@swarmdo/cli/src/plugins/store/discovery.ts`) fetches manifests from IPFS via Pinata. It carries **no signature verification** and **no semantic intent analysis**.
 
 ### Threat: memory-namespace poisoning
 
@@ -23,7 +23,7 @@ Rufflo's current plugin install path (`v3/@rufflo/cli/src/plugins/store/discover
 
 **Plan Injection** (arXiv:2506.17318, Jun 2026, Grade A): Context-chained memory attacks achieve **3× higher attack success** than prompt-based injection and **+17.7% exfiltration gain** by creating logical bridges between unrelated memory entries. The fix is **namespace isolation with explicit write grants** — agents cannot poison a namespace they have no business writing to.
 
-**Mnemonic Sovereignty survey** (arXiv:2604.16548, Apr 2026, Grade A): Catalogs nine governance primitives required for secure long-term agent memory. No existing published architecture satisfies all nine. The Rufflo gap: the shared `collaboration` namespace (and all AgentDB namespaces) accepts writes from any agent with no per-namespace authorization. ADR-131 catches *what gets read out*; this ADR catches *who is allowed to write in*.
+**Mnemonic Sovereignty survey** (arXiv:2604.16548, Apr 2026, Grade A): Catalogs nine governance primitives required for secure long-term agent memory. No existing published architecture satisfies all nine. The Swarmdo gap: the shared `collaboration` namespace (and all AgentDB namespaces) accepts writes from any agent with no per-namespace authorization. ADR-131 catches *what gets read out*; this ADR catches *who is allowed to write in*.
 
 ### Why this is architectural
 
@@ -42,25 +42,25 @@ ADR-145 introduces two new trust boundaries, two new module surfaces, a protocol
 
 ### Part A — `PluginIntegrityVerifier`
 
-Add `PluginIntegrityVerifier` to `@rufflo/security` with two verification stages run at `plugins install` time.
+Add `PluginIntegrityVerifier` to `@swarmdo/security` with two verification stages run at `plugins install` time.
 
 **Stage 1 — Signature verification** (blocks DDIPE's static-payload variants):
 
 - Every plugin published to the IPFS registry MUST carry a detached **Ed25519 signature** over its manifest hash. The signature lives alongside the manifest in IPFS; the registry index records the signing key's fingerprint.
-- `discovery.ts` MUST refuse to install unsigned plugins when `RUFFLO_STRICT_PLUGINS=true` (default: warn-only for backwards compatibility).
-- Trust anchors (publisher keys we vouch for) live in `v3/@rufflo/cli/src/plugins/trust/trust-anchors.json`. Edits are gated on CODEOWNERS review.
+- `discovery.ts` MUST refuse to install unsigned plugins when `SWARMDO_STRICT_PLUGINS=true` (default: warn-only for backwards compatibility).
+- Trust anchors (publisher keys we vouch for) live in `v3/@swarmdo/cli/src/plugins/trust/trust-anchors.json`. Edits are gated on CODEOWNERS review.
 
 **Stage 2 — Semantic intent scan** (blocks SCH):
 
 - During `plugins install`, the verifier pipes every natural-language field (description, README excerpt, "compliance rules", any field that ends up in agent context) through a lightweight intent classifier.
 - The classifier scores against a taxonomy of malicious-intent categories: credential exfiltration, RCE, data poisoning, privilege escalation, persistence.
-- Install blocks if confidence exceeds `RUFFLO_PLUGIN_SCH_THRESHOLD` (default `0.8`).
+- Install blocks if confidence exceeds `SWARMDO_PLUGIN_SCH_THRESHOLD` (default `0.8`).
 - Fallback: LLM-free pattern rules covering the top-5 SCH families from arXiv:2605.14460 (Table 3 of the paper). The pattern fallback is what makes this safe to run during `plugins install` in environments without LLM credentials.
 
 **Implementation targets**:
-- `v3/@rufflo/security/src/plugins/integrity-verifier.ts` (new)
-- `v3/@rufflo/cli/src/plugins/store/discovery.ts` — verification hook on install
-- `v3/@rufflo/cli/src/plugins/trust/trust-anchors.json` (new)
+- `v3/@swarmdo/security/src/plugins/integrity-verifier.ts` (new)
+- `v3/@swarmdo/cli/src/plugins/store/discovery.ts` — verification hook on install
+- `v3/@swarmdo/cli/src/plugins/trust/trust-anchors.json` (new)
 
 ### Part B — Memory namespace write ACLs
 
@@ -73,24 +73,24 @@ Address governance primitives 1–3 from the Mnemonic Sovereignty taxonomy (writ
 - A `readNamespaces` grant is *optional* in v1 and becomes required in v4 (matching the strict-mode escalation in ADR-144).
 
 **Implementation targets**:
-- `v3/@rufflo/memory/src/namespaces/authorization.ts` (new)
-- `v3/@rufflo/memory/src/agent-db.ts` — grant enforcement
-- `v3/@rufflo/cli/src/agent/spawn.ts` — `writeNamespaces` parameter
+- `v3/@swarmdo/memory/src/namespaces/authorization.ts` (new)
+- `v3/@swarmdo/memory/src/agent-db.ts` — grant enforcement
+- `v3/@swarmdo/cli/src/agent/spawn.ts` — `writeNamespaces` parameter
 
 ### Integration plan (phased — P1 is the first PR)
 
 | Phase | Scope | Where |
 |---|---|---|
-| **P1** | `PluginIntegrityVerifier` skeleton + Stage-1 signature path; trust-anchors file with the existing official-plugin keys | `@rufflo/security/src/plugins/`, `@rufflo/cli/src/plugins/trust/` |
+| **P1** | `PluginIntegrityVerifier` skeleton + Stage-1 signature path; trust-anchors file with the existing official-plugin keys | `@swarmdo/security/src/plugins/`, `@swarmdo/cli/src/plugins/trust/` |
 | P2 | Stage-2 semantic scan (pattern fallback first, classifier opt-in) | same files |
-| P3 | Memory namespace ACL primitives 1–3 in AgentDB | `@rufflo/memory/src/namespaces/` |
-| P4 | `agent spawn --write-namespaces` plumbing through every spawn callsite | `@rufflo/cli/src/agent/spawn.ts`, hooks |
+| P3 | Memory namespace ACL primitives 1–3 in AgentDB | `@swarmdo/memory/src/namespaces/` |
+| P4 | `agent spawn --write-namespaces` plumbing through every spawn callsite | `@swarmdo/cli/src/agent/spawn.ts`, hooks |
 | P5 | Strict-mode flips to default in v4.0; legacy mode requires explicit env var to re-enable | release docs + breaking-change ADR |
 
 ### Backwards compatibility
 
-- Plugin verification defaults to **warn-only** (`RUFFLO_STRICT_PLUGINS=false`). Existing unsigned plugins continue to install with a warning.
-- Memory namespace ACLs are **additive**: agents spawned without `writeNamespaces` retain legacy full-access until `RUFFLO_STRICT_MEMORY=true` is set.
+- Plugin verification defaults to **warn-only** (`SWARMDO_STRICT_PLUGINS=false`). Existing unsigned plugins continue to install with a warning.
+- Memory namespace ACLs are **additive**: agents spawned without `writeNamespaces` retain legacy full-access until `SWARMDO_STRICT_MEMORY=true` is set.
 - Both strict modes become default in v4.0.0. The next-major release will be the breaking change.
 - The two new env vars are documented escape hatches and MUST be registered in `audit-env-var-precedence.mjs` with rationale.
 
@@ -108,10 +108,10 @@ Address governance primitives 1–3 from the Mnemonic Sovereignty taxonomy (writ
 - Closes the **77.67% breach / 0.00% detection** SCH gap (arXiv:2605.14460) at the semantic layer.
 - Closes DDIPE static-payload variants via Stage-1 signature check.
 - Reduces memory-poisoning propagation across agent boundaries (write ACLs are the only mechanism that scales with namespace count).
-- Positions Rufflo's memory governance ahead of every 2026 competitor surveyed — none satisfy more than 4 of the 9 Mnemonic Sovereignty primitives.
+- Positions Swarmdo's memory governance ahead of every 2026 competitor surveyed — none satisfy more than 4 of the 9 Mnemonic Sovereignty primitives.
 
 **Negative / risks**:
-- Plugin publishers must generate Ed25519 keypairs and sign manifests (new workflow). The rufflo-plugin-creator skill MUST be updated to scaffold the signing step.
+- Plugin publishers must generate Ed25519 keypairs and sign manifests (new workflow). The swarmdo-plugin-creator skill MUST be updated to scaffold the signing step.
 - Semantic intent scan adds **~50–200 ms** to `plugins install` — acceptable at install time, would be unacceptable at runtime.
 - Write-ACL migration requires updating every existing `agent_spawn` callsite that uses shared namespaces. Existing pipelines fail open in legacy mode until v4.
 
@@ -124,7 +124,7 @@ Address governance primitives 1–3 from the Mnemonic Sovereignty taxonomy (writ
 
 P1 lands with:
 - Unit tests covering signature verification against the existing official-plugin keys (round-trip sign → verify; tamper-flips fail).
-- Smoke test: `plugins install ./unsigned-plugin` warns by default, errors under `RUFFLO_STRICT_PLUGINS=true`.
+- Smoke test: `plugins install ./unsigned-plugin` warns by default, errors under `SWARMDO_STRICT_PLUGINS=true`.
 - Pattern-fallback test corpus drawn from arXiv:2605.14460's Table 3 examples.
 - Integration test: agent spawned with `writeNamespaces: ['a']` cannot `memory_store` to namespace `b` under strict-memory mode; legacy mode allows it with a warning log.
 

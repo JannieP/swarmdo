@@ -69,7 +69,7 @@ class MockAQEPlugin {
       name: 'agentic-qe',
       version: '3.2.3',
       description: 'Quality Engineering plugin for Swarmdo V3',
-      author: 'rUv',
+      author: 'the upstream author',
       license: 'MIT',
       dependencies: [
         '@swarmdo/plugins',

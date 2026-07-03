@@ -82,9 +82,9 @@ function hierarchicalForwardFallback(input, weights, inputDim, outputDim) {
     return output;
 }
 /**
- * RuvectorLayer wrapper with fallback
+ * SwarmvectorLayer wrapper with fallback
  */
-export class RuvectorLayer {
+export class SwarmvectorLayer {
     inputDim;
     outputDim;
     weights;
@@ -96,13 +96,13 @@ export class RuvectorLayer {
         // constructor expects an integer dimension; surface that as a typed
         // error rather than a panic.
         if (typeof inputDim !== 'number' || !Number.isFinite(inputDim) || inputDim <= 0 || !Number.isInteger(inputDim)) {
-            throw new TypeError(`RuvectorLayer: inputDim must be a positive integer, got ${typeof inputDim} ${String(inputDim)}`);
+            throw new TypeError(`SwarmvectorLayer: inputDim must be a positive integer, got ${typeof inputDim} ${String(inputDim)}`);
         }
         if (typeof outputDim !== 'number' || !Number.isFinite(outputDim) || outputDim <= 0 || !Number.isInteger(outputDim)) {
-            throw new TypeError(`RuvectorLayer: outputDim must be a positive integer, got ${typeof outputDim} ${String(outputDim)}`);
+            throw new TypeError(`SwarmvectorLayer: outputDim must be a positive integer, got ${typeof outputDim} ${String(outputDim)}`);
         }
         if (!['relu', 'tanh', 'sigmoid', 'none'].includes(activation)) {
-            throw new TypeError(`RuvectorLayer: activation must be one of relu|tanh|sigmoid|none, got ${String(activation)}`);
+            throw new TypeError(`SwarmvectorLayer: activation must be one of relu|tanh|sigmoid|none, got ${String(activation)}`);
         }
         this.inputDim = inputDim;
         this.outputDim = outputDim;

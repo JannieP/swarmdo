@@ -1,5 +1,5 @@
 /**
- * Regression guard for ruvnet/swarmdo#1916.
+ * Regression guard for upstream/swarmdo#1916.
  *
  *  (a) `agent_logs` MCP tool must be registered — the `swarmdo agent logs <id>`
  *      CLI subcommand called `callMCPTool('agent_logs', …)` against a tool

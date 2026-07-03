@@ -1,6 +1,6 @@
 # ADR-087 — RRF Fusion: Honest Negative Result + Ablation Infrastructure
 
-**Status**: Accepted — Implemented in rufflo 3.10.27
+**Status**: Accepted — Implemented in swarmdo 3.10.27
 **Date**: 2026-05-30
 **Tracking**: continuation of BEIR public-benchmark work (ADR-085, ADR-086)
 **Related**: ADR-088 (cross-encoder rerank — planned)
@@ -58,7 +58,7 @@ Our BM25 implementation is weaker than the Lucene baselines that published RRF r
 - Published Lucene NFCorpus BM25 baseline: **0.325** (Thakur et al. 2021)
 - Gap: ~0.046, i.e., we're 14% relative below standard
 
-The gap comes from our multi-field BM25's tokenisation choices: no Snowball stemmer, smaller stopword list (~25 vs Lucene's ~120), no Lucene-style length normalisation. We optimised it for rufflo commit-history retrieval (where stemming hurts) — but BEIR's medical/scientific corpora reward stemming.
+The gap comes from our multi-field BM25's tokenisation choices: no Snowball stemmer, smaller stopword list (~25 vs Lucene's ~120), no Lucene-style length normalisation. We optimised it for swarmdo commit-history retrieval (where stemming hurts) — but BEIR's medical/scientific corpora reward stemming.
 
 **The interesting confirmation:** Recall@100 *does* improve with RRF on both datasets (NFCorpus 0.305 → 0.321, SciFact 0.828 → 0.951). RRF correctly surfaces a *broader* candidate pool — but the top-K ranking is hurt because BM25's noise sits at low ranks in the fused list, displacing dense's correct top-1 picks. This is exactly the failure mode predicted for "asymmetric system strength" fusion.
 
@@ -81,22 +81,22 @@ The gap comes from our multi-field BM25's tokenisation choices: no Snowball stem
 
 1. **Cross-encoder rerank on RRF's wider candidate pool**: Recall@100 IS up (0.95 on SciFact). If we rerank that broader top-100 with `Xenova/ms-marco-MiniLM-L-6-v2`, the rerank's stronger pairwise scoring should pull the genuine top-K out. This is the bet for 3.10.28.
 2. **Lucene-style BM25** would make RRF actually work as designed. Porter/Snowball + Lucene stopwords + proper length norm. Tracked for a future ADR.
-3. **Use ruvector's bundled embedder** (per [ruvnet/ruvector#524](https://github.com/ruvnet/ruvector/issues/524) we filed) instead of our local @xenova path — once BGE is bundled in ruvector, downstream packages stop hitting the sharp dependency issue.
+3. **Use swarmvector's bundled embedder** (per [upstream/swarmvector#524](the upstream project (see NOTICE)) we filed) instead of our local @xenova path — once BGE is bundled in swarmvector, downstream packages stop hitting the sharp dependency issue.
 
 ## Verification
 
 ```bash
-git clone https://github.com/ruvnet/ruflo && cd rufflo
-npm install && ( cd v3/@rufflo/cli && npx tsc )
+git clone the upstream project (see NOTICE) && cd swarmdo
+npm install && ( cd v3/@swarmdo/cli && npx tsc )
 
 # Pretrain caches (once each)
 mkdir -p /tmp/beir-nfcorpus && cd /tmp/beir-nfcorpus
 curl -sL -o nf.zip 'https://public.ukp.informatik.tu-darmstadt.de/thakur/BEIR/datasets/nfcorpus.zip' && unzip -q nf.zip
-node /path/to/v3/@rufflo/cli/scripts/run-beir-bge.mjs   # writes bge-cache/
+node /path/to/v3/@swarmdo/cli/scripts/run-beir-bge.mjs   # writes bge-cache/
 
 mkdir -p /tmp/beir-scifact && cd /tmp/beir-scifact
 curl -sL -o sf.zip 'https://public.ukp.informatik.tu-darmstadt.de/thakur/BEIR/datasets/scifact.zip' && unzip -q sf.zip
-BEIR_DATA_DIR=/tmp/beir-scifact/scifact node /path/to/v3/@rufflo/cli/scripts/run-beir-bge.mjs
+BEIR_DATA_DIR=/tmp/beir-scifact/scifact node /path/to/v3/@swarmdo/cli/scripts/run-beir-bge.mjs
 
 # Ablation matrix (cached embeds, ~5 min each)
 cd /tmp/beir-nfcorpus && node /path/to/scripts/run-beir-rrf-ablation.mjs

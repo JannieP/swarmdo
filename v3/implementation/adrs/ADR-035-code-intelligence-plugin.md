@@ -14,11 +14,11 @@ Modern codebases are complex, distributed, and constantly evolving. Developers n
 
 ## Decision
 
-Create an **Advanced Code Intelligence Plugin** that leverages RuVector WASM packages for semantic code search, architectural analysis, and intelligent refactoring with support for 20+ programming languages.
+Create an **Advanced Code Intelligence Plugin** that leverages SwarmVector WASM packages for semantic code search, architectural analysis, and intelligent refactoring with support for 20+ programming languages.
 
 ## Plugin Name
 
-`@rufflo/plugin-code-intelligence`
+`@swarmdo/plugin-code-intelligence`
 
 ## Description
 
@@ -29,10 +29,10 @@ A comprehensive code intelligence plugin combining graph neural networks for cod
 | Package | Purpose |
 |---------|---------|
 | `micro-hnsw-wasm` | Semantic code search and clone detection (150x faster) |
-| `ruvector-gnn-wasm` | Code dependency graphs, call graphs, and control flow analysis |
-| `ruvector-mincut-wasm` | Module boundary detection and optimal code splitting |
+| `swarmvector-gnn-wasm` | Code dependency graphs, call graphs, and control flow analysis |
+| `swarmvector-mincut-wasm` | Module boundary detection and optimal code splitting |
 | `sona` | Self-optimizing learning from code review patterns |
-| `ruvector-dag-wasm` | Build dependency analysis and incremental compilation |
+| `swarmvector-dag-wasm` | Build dependency analysis and incremental compilation |
 
 ## MCP Tools
 
@@ -407,9 +407,9 @@ function maskSecrets(codeSnippet: string): string {
 {
   "dependencies": {
     "micro-hnsw-wasm": "^0.2.0",
-    "ruvector-gnn-wasm": "^0.1.0",
-    "ruvector-mincut-wasm": "^0.1.0",
-    "ruvector-dag-wasm": "^0.1.0",
+    "swarmvector-gnn-wasm": "^0.1.0",
+    "swarmvector-mincut-wasm": "^0.1.0",
+    "swarmvector-dag-wasm": "^0.1.0",
     "sona": "^0.1.0",
     "@babel/parser": "^7.23.0",
     "typescript": "^5.3.0"
@@ -437,7 +437,7 @@ function maskSecrets(codeSnippet: string): string {
 | ADR | Relationship |
 |-----|--------------|
 | ADR-004: Plugin Architecture | Foundation - Defines plugin structure |
-| ADR-017: RuVector Integration | Dependency - Provides WASM packages |
+| ADR-017: SwarmVector Integration | Dependency - Provides WASM packages |
 | ADR-036: Test Intelligence | Related - Code-test mapping |
 | ADR-037: Performance Optimizer | Related - Code profiling integration |
 | ADR-041: Hyperbolic Reasoning | Related - Code hierarchy embeddings |
@@ -446,7 +446,7 @@ function maskSecrets(codeSnippet: string): string {
 
 - Tree-sitter: https://tree-sitter.github.io/tree-sitter/
 - LSP Specification: https://microsoft.github.io/language-server-protocol/
-- ADR-017: RuVector Integration
+- ADR-017: SwarmVector Integration
 - ADR-004: Plugin Architecture
 
 ---

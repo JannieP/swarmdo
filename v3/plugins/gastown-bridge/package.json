@@ -64,7 +64,6 @@
     "wasm",
     "multi-agent"
   ],
-  "author": "rUv",
   "license": "MIT",
   "repository": {
     "type": "git",

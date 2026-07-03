@@ -349,7 +349,7 @@ DOCUMENTATION:
   📖 AgentDB Integration:
      docs/architecture/AGENTDB-INTEGRATION-COMPLETE.md
 
-  📖 GitHub: https://github.com/ruvnet/agentic-flow
+  📖 GitHub: the upstream project (see NOTICE)
 `);
     }
 }

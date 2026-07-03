@@ -1,10 +1,10 @@
-# RuvLLM ESP32 - Docker Build Environment
+# SwarmLLM ESP32 - Docker Build Environment
 # Provides complete ESP32 toolchain without local installation
 #
 # Usage:
-#   docker build -t ruvllm-esp32-builder .
-#   docker run -v $(pwd):/app -v /dev:/dev --privileged ruvllm-esp32-builder build
-#   docker run -v $(pwd):/app -v /dev:/dev --privileged ruvllm-esp32-builder flash /dev/ttyUSB0
+#   docker build -t swarmllm-esp32-builder .
+#   docker run -v $(pwd):/app -v /dev:/dev --privileged swarmllm-esp32-builder build
+#   docker run -v $(pwd):/app -v /dev:/dev --privileged swarmllm-esp32-builder flash /dev/ttyUSB0
 
 FROM rust:1.75-bookworm
 
@@ -50,14 +50,14 @@ source /root/export-esp.sh 2>/dev/null || true
 
 case "$1" in
     build)
-        echo "Building RuvLLM ESP32..."
+        echo "Building SwarmLLM ESP32..."
         cargo build --release
         ;;
     flash)
         PORT="${2:-/dev/ttyUSB0}"
         echo "Flashing to $PORT..."
         cargo build --release
-        espflash flash --port "$PORT" target/xtensa-esp32-espidf/release/ruvllm-esp32-flash
+        espflash flash --port "$PORT" target/xtensa-esp32-espidf/release/swarmllm-esp32-flash
         ;;
     monitor)
         PORT="${2:-/dev/ttyUSB0}"

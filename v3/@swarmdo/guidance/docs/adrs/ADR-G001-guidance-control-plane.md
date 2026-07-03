@@ -18,11 +18,11 @@ Claude Code loads `CLAUDE.md` into its context window as a system prompt at sess
 
 These limitations compound in autonomous agent scenarios (swarms, long-running daemon tasks) where human oversight is intermittent and context windows are shared across sub-agents.
 
-The existing Rufflo V3 infrastructure provides hooks (`pre-edit`, `pre-command`, `post-task`), a memory subsystem (AgentDB + HNSW), and a headless execution mode (`claude -p --output-format json`). A control plane can leverage all three without modifying Claude Code itself.
+The existing Swarmdo V3 infrastructure provides hooks (`pre-edit`, `pre-command`, `post-task`), a memory subsystem (AgentDB + HNSW), and a headless execution mode (`claude -p --output-format json`). A control plane can leverage all three without modifying Claude Code itself.
 
 ## Decision
 
-Build a separate package, `@rufflo/guidance`, that runs **beside** Claude Code as a parallel control plane. The control plane has five components:
+Build a separate package, `@swarmdo/guidance`, that runs **beside** Claude Code as a parallel control plane. The control plane has five components:
 
 1. **Compiler** (`GuidanceCompiler` in `src/compiler.ts`) -- Parses `CLAUDE.md` and optional `CLAUDE.local.md` into a `PolicyBundle` containing a constitution, rule shards, and a machine-readable manifest. The compiler extracts rule IDs, risk classes, tool classes, intent tags, repo scopes, domain tags, verifiers, and priority annotations using deterministic regex patterns.
 
@@ -68,11 +68,11 @@ Route all enforcement through MCP server endpoints. Rejected for latency reasons
 
 ## References
 
-- `v3/@rufflo/guidance/src/index.ts` -- `GuidanceControlPlane` orchestrator class
-- `v3/@rufflo/guidance/src/compiler.ts` -- `GuidanceCompiler`
-- `v3/@rufflo/guidance/src/retriever.ts` -- `ShardRetriever`
-- `v3/@rufflo/guidance/src/gates.ts` -- `EnforcementGates`
-- `v3/@rufflo/guidance/src/ledger.ts` -- `RunLedger`
-- `v3/@rufflo/guidance/src/optimizer.ts` -- `OptimizerLoop`
-- `v3/@rufflo/guidance/src/headless.ts` -- `HeadlessRunner`
-- `v3/@rufflo/guidance/src/types.ts` -- All type definitions
+- `v3/@swarmdo/guidance/src/index.ts` -- `GuidanceControlPlane` orchestrator class
+- `v3/@swarmdo/guidance/src/compiler.ts` -- `GuidanceCompiler`
+- `v3/@swarmdo/guidance/src/retriever.ts` -- `ShardRetriever`
+- `v3/@swarmdo/guidance/src/gates.ts` -- `EnforcementGates`
+- `v3/@swarmdo/guidance/src/ledger.ts` -- `RunLedger`
+- `v3/@swarmdo/guidance/src/optimizer.ts` -- `OptimizerLoop`
+- `v3/@swarmdo/guidance/src/headless.ts` -- `HeadlessRunner`
+- `v3/@swarmdo/guidance/src/types.ts` -- All type definitions

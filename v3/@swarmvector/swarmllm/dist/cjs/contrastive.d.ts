@@ -1,5 +1,5 @@
 /**
- * Contrastive Fine-tuning for RuvLTRA Claude Code Router
+ * Contrastive Fine-tuning for SwarmLTRA Claude Code Router
  *
  * Uses triplet loss to fine-tune embeddings:
  * - Anchor: task description
@@ -126,7 +126,7 @@ export declare function infoNCELoss(anchorEmb: Embedding, positiveEmb: Embedding
  */
 export declare function computeGradient(anchorEmb: Embedding, positiveEmb: Embedding, negativeEmb: Embedding, lr?: number): Embedding;
 /**
- * Contrastive Trainer for RuvLTRA models
+ * Contrastive Trainer for SwarmLTRA models
  *
  * Implements triplet loss and InfoNCE loss for embedding fine-tuning.
  */

@@ -25,7 +25,7 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Initialize Swarm
-        uses: ruvnet/swarm-action@v1
+        uses: upstream/swarm-action@v1
         with:
           topology: mesh
           max-agents: 6

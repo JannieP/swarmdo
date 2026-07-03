@@ -26,7 +26,7 @@ Speedup: FastGRNN is 4.7× faster at mean, 3.7× faster at p95.
 ## When to flip the default
 
 - Run benchmark-seed-corpus.mjs over a corpus of ≥500 measured rows.
-- If FastGRNN's valAcc ≥ KRR's looQuality, set RUFFLO_ROUTER_MODEL_PATH
+- If FastGRNN's valAcc ≥ KRR's looQuality, set SWARMDO_ROUTER_MODEL_PATH
   default to the safetensors and benefit from the 4-5× inference speedup.
 - Until then, stick with the bundled KRR: it picks correctly more often
   on this small-corpus regime.

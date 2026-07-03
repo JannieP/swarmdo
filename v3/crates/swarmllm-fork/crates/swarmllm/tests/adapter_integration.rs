@@ -17,13 +17,13 @@
 mod tests {
     use swarmllm::lora::{
         AdaptFeedback, AdapterMerger, AdapterTrainer, AdapterTrainingConfig, HotSwapManager,
-        MergeConfig, MergeStrategy, RuvLtraAdapters, SyntheticDataGenerator, TargetModule,
+        MergeConfig, MergeStrategy, SwarmLtraAdapters, SyntheticDataGenerator, TargetModule,
     };
     use std::collections::HashMap;
 
     #[test]
     fn test_adapter_creation_all() {
-        let adapters = RuvLtraAdapters::new();
+        let adapters = SwarmLtraAdapters::new();
 
         // Test all 5 pre-defined adapters
         for name in &["coder", "researcher", "security", "architect", "reviewer"] {
@@ -60,7 +60,7 @@ mod tests {
 
     #[test]
     fn test_adapter_training() {
-        let adapters = RuvLtraAdapters::new();
+        let adapters = SwarmLtraAdapters::new();
         let lora = adapters.create_lora("coder", 256).unwrap();
 
         let generator = SyntheticDataGenerator::new(256, 42);
@@ -83,7 +83,7 @@ mod tests {
 
     #[test]
     fn test_adapter_inference() {
-        let adapters = RuvLtraAdapters::new();
+        let adapters = SwarmLtraAdapters::new();
         let lora = adapters.create_lora("coder", 256).unwrap();
 
         let input = vec![0.5; 256];
@@ -97,7 +97,7 @@ mod tests {
 
     #[test]
     fn test_merge_average() {
-        let adapters = RuvLtraAdapters::new();
+        let adapters = SwarmLtraAdapters::new();
         let lora1 = adapters.create_lora("coder", 256).unwrap();
         let lora2 = adapters.create_lora("researcher", 256).unwrap();
 
@@ -121,7 +121,7 @@ mod tests {
 
     #[test]
     fn test_merge_weighted() {
-        let adapters = RuvLtraAdapters::new();
+        let adapters = SwarmLtraAdapters::new();
         let lora1 = adapters.create_lora("coder", 256).unwrap();
         let lora2 = adapters.create_lora("security", 256).unwrap();
 
@@ -146,7 +146,7 @@ mod tests {
 
     #[test]
     fn test_merge_slerp() {
-        let adapters = RuvLtraAdapters::new();
+        let adapters = SwarmLtraAdapters::new();
         let lora1 = adapters.create_lora("coder", 256).unwrap();
         let lora2 = adapters.create_lora("reviewer", 256).unwrap();
 
@@ -167,7 +167,7 @@ mod tests {
 
     #[test]
     fn test_hot_swap() {
-        let adapters = RuvLtraAdapters::new();
+        let adapters = SwarmLtraAdapters::new();
         let lora1 = adapters.create_lora("coder", 256).unwrap();
         let lora2 = adapters.create_lora("security", 256).unwrap();
 
@@ -185,7 +185,7 @@ mod tests {
 
     #[test]
     fn test_per_request_adaptation() {
-        let adapters = RuvLtraAdapters::new();
+        let adapters = SwarmLtraAdapters::new();
         let lora = adapters.create_lora("coder", 256).unwrap();
 
         let input = vec![0.5; 256];
@@ -213,7 +213,7 @@ mod tests {
 
     #[test]
     fn test_persistence() {
-        let adapters = RuvLtraAdapters::new();
+        let adapters = SwarmLtraAdapters::new();
         let lora = adapters.create_lora("coder", 256).unwrap();
 
         // Adapt the model
@@ -240,7 +240,7 @@ mod tests {
 
     #[test]
     fn test_adapter_memory_footprint() {
-        let adapters = RuvLtraAdapters::new();
+        let adapters = SwarmLtraAdapters::new();
 
         for name in &["coder", "researcher", "security", "architect", "reviewer"] {
             let config = adapters.get(name).unwrap();
@@ -260,7 +260,7 @@ mod tests {
 
     #[test]
     fn test_adapter_composition() {
-        let adapters = RuvLtraAdapters::new();
+        let adapters = SwarmLtraAdapters::new();
         let generator = SyntheticDataGenerator::new(256, 42);
 
         // Create and train 3 adapters

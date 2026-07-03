@@ -7,9 +7,9 @@
 
 ## Context
 
-Claude Code's auto-memory system stores project knowledge in `~/.claude/projects/*/memory/MEMORY.md` files with YAML frontmatter. Rufflo's AgentDB stores data in sql.js with ONNX embeddings (all-MiniLM-L6-v2, 384d) for semantic vector search. These two systems were disconnected.
+Claude Code's auto-memory system stores project knowledge in `~/.claude/projects/*/memory/MEMORY.md` files with YAML frontmatter. Swarmdo's AgentDB stores data in sql.js with ONNX embeddings (all-MiniLM-L6-v2, 384d) for semantic vector search. These two systems were disconnected.
 
-[ruDevolution](https://github.com/ruvnet/rudevolution) research (`07-context-and-session-management.md`) documents Claude Code's memory internals: auto-memory paths, env vars (`autoMemoryEnabled`, `CLAUDE_CODE_DISABLE_AUTO_MEMORY`), session persistence, dream mode, and compaction system.
+[ruDevolution](the upstream project (see NOTICE)) research (`07-context-and-session-management.md`) documents Claude Code's memory internals: auto-memory paths, env vars (`autoMemoryEnabled`, `CLAUDE_CODE_DISABLE_AUTO_MEMORY`), session persistence, dream mode, and compaction system.
 
 ## Decision
 
@@ -40,31 +40,31 @@ Move bridge logic into proper MCP tools for real-time access:
 
 CLI equivalents:
 ```bash
-rufflo memory import-claude          # Import current project memories
-rufflo memory import-claude --all    # Import all projects
-rufflo memory bridge-status          # Show bridge status
-rufflo memory bridge-sync            # Sync back to MEMORY.md
-rufflo memory search --unified       # Search both stores
+swarmdo memory import-claude          # Import current project memories
+swarmdo memory import-claude --all    # Import all projects
+swarmdo memory bridge-status          # Show bridge status
+swarmdo memory bridge-sync            # Sync back to MEMORY.md
+swarmdo memory search --unified       # Search both stores
 ```
 
 **Why MCP over helpers:**
 - Accessible during sessions (not just start/end)
 - Discoverable via ToolSearch
 - Testable via CLI
-- Works via `npx rufflo` without file path dependencies
+- Works via `npx swarmdo` without file path dependencies
 - Composable with other MCP tools (swarm, hooks, hive-mind)
 - Claude Code can call them directly through the MCP server
 
 ### Phase 3: MicroLoRA Embedding Adaptation (Future)
 
-Once `@ruvector/learning-wasm` MicroLoRA is functional (currently identity pass-through due to zero-initialized weights), adapt the base MiniLM-L6-v2 embeddings for Claude Code's domain vocabulary:
+Once `@swarmvector/learning-wasm` MicroLoRA is functional (currently identity pass-through due to zero-initialized weights), adapt the base MiniLM-L6-v2 embeddings for Claude Code's domain vocabulary:
 
 - Tool names, agent types, MCP concepts cluster closer
 - Successful trajectory patterns reinforce embedding neighborhoods
 - Contrastive loss from (anchor, positive, negative) triplets
 - ~2.6μs per adaptation step
 
-**Current blocker**: WASM binding issues in `computeContrastiveLoss` (array type mismatch) and `optimizerStep` (Buffer reference). Tracked in `@ruvector/learning-wasm`.
+**Current blocker**: WASM binding issues in `computeContrastiveLoss` (array type mismatch) and `optimizerStep` (Buffer reference). Tracked in `@swarmvector/learning-wasm`.
 
 ## Architecture
 
@@ -96,7 +96,7 @@ Not available mid-session              MCP Tool: memory_search_unified
 | Embedding model | ONNX all-MiniLM-L6-v2, 384 dimensions |
 | Search "security vulnerability" | → security_analysis (score: 0.435) |
 | Search "npm publish feedback" | → publish workflow (score: 0.624) |
-| Search "ruvector package" | → ruvector analysis (score: 0.678) |
+| Search "swarmvector package" | → swarmvector analysis (score: 0.678) |
 | Vectorization time | ~2s for 5 entries |
 
 ## Files
@@ -105,12 +105,12 @@ Not available mid-session              MCP Tool: memory_search_unified
 - `.claude/helpers/auto-memory-hook.mjs` — vectorization bridge + import-all + pattern flush
 
 ### Phase 2 (Proposed)
-- `v3/@rufflo/cli/src/mcp-tools/memory-tools.ts` — add MCP tool handlers
-- `v3/@rufflo/cli/src/commands/memory.ts` — add CLI subcommands
+- `v3/@swarmdo/cli/src/mcp-tools/memory-tools.ts` — add MCP tool handlers
+- `v3/@swarmdo/cli/src/commands/memory.ts` — add CLI subcommands
 
 ## References
 
-- [ruDevolution](https://github.com/ruvnet/rudevolution) — Claude Code internals via decompilation
+- [ruDevolution](the upstream project (see NOTICE)) — Claude Code internals via decompilation
 - `07-context-and-session-management.md` — auto-memory paths, env vars, session persistence
 - `13-extension-points.md` — hooks, MCP, agents, skills integration catalog
 - ADR-048: AutoMemoryBridge design

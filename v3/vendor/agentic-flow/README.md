@@ -1730,7 +1730,7 @@ npm install agentic-flow@2.0.0-alpha
 
 ```bash
 # Clone repository
-git clone https://github.com/ruvnet/agentic-flow.git
+git clone the upstream project (see NOTICE)
 cd agentic-flow
 
 # Install dependencies
@@ -1922,7 +1922,7 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 
 ```bash
 # Clone repository
-git clone https://github.com/ruvnet/agentic-flow.git
+git clone the upstream project (see NOTICE)
 cd agentic-flow
 
 # Install dependencies
@@ -1989,9 +1989,9 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## 📞 Support
 
-- **GitHub Issues**: https://github.com/ruvnet/agentic-flow/issues
-- **Documentation**: https://github.com/ruvnet/agentic-flow#readme
-- **Email**: contact@ruv.io
+- **GitHub Issues**: the upstream project (see NOTICE)
+- **Documentation**: the upstream project (see NOTICE)#readme
+- **Email**: contact@swarmdo.com
 
 ---
 
@@ -2024,7 +2024,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## ⭐ Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=ruvnet/agentic-flow&type=Date)](https://star-history.com/#ruvnet/agentic-flow&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=upstream/agentic-flow&type=Date)](https://star-history.com/#upstream/agentic-flow&Date)
 
 ---
 
@@ -2038,7 +2038,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 npm install agentic-flow@alpha
 ```
 
-**Made with ❤️ by [@ruvnet](https://github.com/ruvnet)**
+**Made with ❤️ by [@upstream](https://the upstream project (see NOTICE))**
 
 ---
 

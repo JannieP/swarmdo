@@ -1,4 +1,4 @@
-# ADR-043: Gas Town Bridge Plugin for Rufflo V3
+# ADR-043: Gas Town Bridge Plugin for Swarmdo V3
 
 ## Status
 **Implemented** - Ultra-Optimized (2026-01-24)
@@ -20,7 +20,7 @@
 - **GUPP**: Gastown Universal Propulsion Principle for crash-resilient execution
 - **Molecules/Wisps**: Chained work units for durable workflows
 
-Rufflo V3 would benefit from:
+Swarmdo V3 would benefit from:
 1. Interoperability with Gas Town installations
 2. Adopting Gas Town's durable workflow patterns
 3. Bridging Beads with AgentDB for unified work tracking
@@ -34,14 +34,14 @@ Rufflo V3 would benefit from:
 
 ## Decision
 
-Create `@rufflo/plugin-gastown-bridge` with a **WASM-centric hybrid architecture**:
+Create `@swarmdo/plugin-gastown-bridge` with a **WASM-centric hybrid architecture**:
 
 1. **CLI Bridge**: Wraps `gt` and `bd` commands for I/O operations only
 2. **WASM Computation**: Pure computation logic in Rust→WASM for 352x speedup
 3. **Beads Sync**: Bidirectional sync between Beads and AgentDB
 4. **Formula Engine**: WASM-based TOML formula parser/executor
 5. **Graph Analysis**: WASM-based dependency resolution and DAG operations
-6. **GUPP Adapter**: Translate GUPP hooks to Rufflo session persistence
+6. **GUPP Adapter**: Translate GUPP hooks to Swarmdo session persistence
 
 ## Architecture
 
@@ -49,7 +49,7 @@ Create `@rufflo/plugin-gastown-bridge` with a **WASM-centric hybrid architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                      Rufflo V3 Plugin Host                      │
+│                      Swarmdo V3 Plugin Host                      │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                      │
 │  ┌─────────────────────┐    ┌─────────────────────────────────────┐ │
@@ -57,7 +57,7 @@ Create `@rufflo/plugin-gastown-bridge` with a **WASM-centric hybrid architecture
 │  │  (I/O Operations)   │    │           (352x faster)              │ │
 │  │                     │    │                                      │ │
 │  │  • gt commands      │    │  ┌──────────────┐ ┌──────────────┐  │ │
-│  │  • bd commands      │    │  │ gastown-     │ │ ruvector-    │  │ │
+│  │  • bd commands      │    │  │ gastown-     │ │ swarmvector-    │  │ │
 │  │  • File read/write  │    │  │ formula-wasm │ │ gnn-wasm     │  │ │
 │  │  • SQLite queries   │    │  │              │ │              │  │ │
 │  │                     │    │  │ • TOML parse │ │ • DAG ops    │  │ │
@@ -69,7 +69,7 @@ Create `@rufflo/plugin-gastown-bridge` with a **WASM-centric hybrid architecture
 │            │                │                   └──────────────┘  │ │
 │            │                │                                      │ │
 │            │                │  ┌──────────────┐ ┌──────────────┐  │ │
-│            │                │  │ micro-hnsw-  │ │ ruvector-    │  │ │
+│            │                │  │ micro-hnsw-  │ │ swarmvector-    │  │ │
 │            │                │  │ wasm         │ │ learning-wasm│  │ │
 │            │                │  │              │ │              │  │ │
 │            │                │  │ • Pattern    │ │ • SONA       │  │ │
@@ -97,9 +97,9 @@ Create `@rufflo/plugin-gastown-bridge` with a **WASM-centric hybrid architecture
 | Module | Purpose | Performance |
 |--------|---------|-------------|
 | `gastown-formula-wasm` | TOML parsing, variable cooking, molecule generation | 352x vs JS |
-| `ruvector-gnn-wasm` | DAG operations, topological sort, cycle detection, critical path | ~4.7x vs JS |
+| `swarmvector-gnn-wasm` | DAG operations, topological sort, cycle detection, critical path | ~4.7x vs JS |
 | `micro-hnsw-wasm` | Pattern similarity search, formula matching | ~1.9x-4.7x measured |
-| `ruvector-learning-wasm` | SONA patterns, success rate optimization | 50x vs JS |
+| `swarmvector-learning-wasm` | SONA patterns, success rate optimization | 50x vs JS |
 
 ### Component Boundaries
 
@@ -116,9 +116,9 @@ Create `@rufflo/plugin-gastown-bridge` with a **WASM-centric hybrid architecture
 
 ```json
 {
-  "name": "@rufflo/plugin-gastown-bridge",
+  "name": "@swarmdo/plugin-gastown-bridge",
   "version": "0.1.0",
-  "description": "Gas Town orchestrator integration for Rufflo V3",
+  "description": "Gas Town orchestrator integration for Swarmdo V3",
   "keywords": ["gastown", "beads", "orchestration", "workflows", "formulas"]
 }
 ```
@@ -306,7 +306,7 @@ export class GasTownBridge {
 #### Beads-AgentDB Sync
 
 ```typescript
-import { AgentDB } from '@rufflo/agentdb';
+import { AgentDB } from '@swarmdo/agentdb';
 
 export class BeadsSyncService {
   private bridge: GasTownBridge;
@@ -355,7 +355,7 @@ export class BeadsSyncService {
           title: parsed.title || task.key,
           description: parsed.description || '',
           priority: parsed.priority || 2,
-          labels: ['from-rufflo'],
+          labels: ['from-swarmdo'],
         });
         pushed++;
       }
@@ -483,7 +483,7 @@ v3/plugins/gastown-bridge/
 │   │   │   ├── cooker.rs      # Variable substitution
 │   │   │   └── molecule.rs    # Molecule generation
 │   │   └── pkg/               # wasm-pack output
-│   ├── ruvector-gnn-wasm/     # Graph operations
+│   ├── swarmvector-gnn-wasm/     # Graph operations
 │   │   ├── Cargo.toml
 │   │   ├── src/
 │   │   │   ├── lib.rs
@@ -492,9 +492,9 @@ v3/plugins/gastown-bridge/
 │   │   │   └── critical.rs    # Critical path analysis
 │   │   └── pkg/
 │   ├── micro-hnsw-wasm/       # Pattern search (shared)
-│   │   └── ...                # From @rufflo/plugin-micro-hnsw
-│   └── ruvector-learning-wasm/ # SONA patterns (shared)
-│       └── ...                # From @rufflo/plugin-ruvector-learning
+│   │   └── ...                # From @swarmdo/plugin-micro-hnsw
+│   └── swarmvector-learning-wasm/ # SONA patterns (shared)
+│       └── ...                # From @swarmdo/plugin-swarmvector-learning
 ├── tests/
 │   ├── bridges.test.ts
 │   ├── formula.test.ts
@@ -546,10 +546,10 @@ export interface GasTownConfig {
   // Enable native formula execution (vs. shelling to gt)
   nativeFormulas: boolean;
 
-  // Enable convoy tracking in Rufflo
+  // Enable convoy tracking in Swarmdo
   enableConvoys: boolean;
 
-  // Auto-create beads from Rufflo tasks
+  // Auto-create beads from Swarmdo tasks
   autoCreateBeads: boolean;
 
   // GUPP integration
@@ -573,7 +573,7 @@ export interface GasTownConfig {
   - Variable substitution engine
   - Molecule generation logic
   - wasm-bindgen exports
-- **ruvector-gnn-wasm** integration:
+- **swarmvector-gnn-wasm** integration:
   - DAG construction from beads
   - Topological sort for execution order
   - Cycle detection for dependency validation
@@ -590,7 +590,7 @@ export interface GasTownConfig {
 
 ### Phase 4: Sync & Convoys (Week 5)
 - Beads-AgentDB bidirectional sync with WASM graph analysis
-- Convoy tracking with Rufflo tasks
+- Convoy tracking with Swarmdo tasks
 - 3 Convoy MCP tools
 - 3 Orchestration MCP tools
 - WASM-based convoy optimization
@@ -598,7 +598,7 @@ export interface GasTownConfig {
 ### Phase 5: GUPP Adapter & Polish (Week 6)
 - Translate GUPP hooks to session persistence
 - Automatic work continuation on restart
-- Integration with Rufflo daemon
+- Integration with Swarmdo daemon
 - Performance profiling and optimization
 - Documentation and examples
 
@@ -739,9 +739,9 @@ export class FormulaWasm {
 ```json
 {
   "dependencies": {
-    "@rufflo/plugin-micro-hnsw": "^0.1.0",
-    "@rufflo/plugin-ruvector-gnn": "^0.1.0",
-    "@rufflo/plugin-ruvector-learning": "^0.1.0"
+    "@swarmdo/plugin-micro-hnsw": "^0.1.0",
+    "@swarmdo/plugin-swarmvector-gnn": "^0.1.0",
+    "@swarmdo/plugin-swarmvector-learning": "^0.1.0"
   },
   "devDependencies": {
     "@aspect-js/bazel-lib": "^1.0.0"
@@ -899,9 +899,9 @@ Gas Town operations fall into two categories:
 | Module | Source | Reuse Strategy |
 |--------|--------|----------------|
 | `gastown-formula-wasm` | New | Custom for Gas Town formulas |
-| `ruvector-gnn-wasm` | Existing | From ADR-035, graph operations |
+| `swarmvector-gnn-wasm` | Existing | From ADR-035, graph operations |
 | `micro-hnsw-wasm` | Existing | From ADR-036, pattern search |
-| `ruvector-learning-wasm` | Existing | From ADR-037, optimization |
+| `swarmvector-learning-wasm` | Existing | From ADR-037, optimization |
 
 ### Data Flow
 
@@ -933,12 +933,12 @@ User Request → MCP Tool → Route Decision
 - [Gas Town Plugin System](https://github.com/steveyegge/gastown/blob/main/internal/plugin/types.go)
 - [Welcome to Gas Town (Steve Yegge)](https://steve-yegge.medium.com/welcome-to-gas-town-4f25ee16dd04)
 
-### RuVector WASM Plugins (Shared Dependencies)
-- [ADR-035: RuVector GNN WASM](./ADR-035-ruvector-gnn-wasm.md) - Graph operations
+### SwarmVector WASM Plugins (Shared Dependencies)
+- [ADR-035: SwarmVector GNN WASM](./ADR-035-swarmvector-gnn-wasm.md) - Graph operations
 - [ADR-036: Micro HNSW WASM](./ADR-036-micro-hnsw-wasm.md) - Pattern search
-- [ADR-037: RuVector Learning WASM](./ADR-037-ruvector-learning-wasm.md) - Optimization
-- [ADR-032: RuVector WASM Plugins Architecture](./ADR-032-ruvector-wasm-plugins.md)
+- [ADR-037: SwarmVector Learning WASM](./ADR-037-swarmvector-learning-wasm.md) - Optimization
+- [ADR-032: SwarmVector WASM Plugins Architecture](./ADR-032-swarmvector-wasm-plugins.md)
 
-### Rufflo V3
+### Swarmdo V3
 - [ADR-006: Unified Memory Service](./ADR-006-unified-memory-service.md)
 - [ADR-001: Deep Agentic Flow Integration](./ADR-001-deep-agentic-flow-integration.md)

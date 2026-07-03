@@ -13,8 +13,8 @@
  *   - the provenance record type + compare/refuse logic (D0),
  *   - legacy-default derivation for pre-ADR-210 stores (D0),
  *   - per-model query/passage prefix policies (D4),
- *   - rollout flag resolution: RUVECTOR_EMBEDDER / RUVECTOR_ONNX /
- *     RUVECTOR_REEMBED (D5),
+ *   - rollout flag resolution: SWARMVECTOR_EMBEDDER / SWARMVECTOR_ONNX /
+ *     SWARMVECTOR_REEMBED (D5),
  *   - the once-per-process loud hash-fallback warning (D1).
  */
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -160,7 +160,7 @@ class ProvenanceMismatchError extends Error {
             `Store records ${describeProvenance(store)} but the active embedder is ` +
             `${describeProvenance(active)} (differs on: ${mismatches.join(', ')}). ` +
             `Mixed stores are never created — re-embed the store ('swarmvector hooks reembed') ` +
-            `or switch the active embedder (RUVECTOR_EMBEDDER=auto|minilm|hash).`);
+            `or switch the active embedder (SWARMVECTOR_EMBEDDER=auto|minilm|hash).`);
         this.code = 'ERR_EMBEDDING_PROVENANCE';
         this.name = 'ProvenanceMismatchError';
         this.store = store;
@@ -180,16 +180,16 @@ function assertProvenanceMatch(store, active, storeName = 'vector store') {
 // D5 — rollout flags (env overrides config)
 // ============================================================================
 /**
- * Resolve RUVECTOR_EMBEDDER / RUVECTOR_ONNX.
- * Precedence: RUVECTOR_EMBEDDER wins when both are set; RUVECTOR_ONNX=0 is
+ * Resolve SWARMVECTOR_EMBEDDER / SWARMVECTOR_ONNX.
+ * Precedence: SWARMVECTOR_EMBEDDER wins when both are set; SWARMVECTOR_ONNX=0 is
  * shorthand for `hash`, =1 for `minilm`. Unrecognized values fall back to
  * 'auto' (MiniLM when loadable, loud hash fallback otherwise).
  */
 function resolveEmbedderSelection(env = process.env) {
-    const embedder = (env.RUVECTOR_EMBEDDER || '').trim().toLowerCase();
+    const embedder = (env.SWARMVECTOR_EMBEDDER || '').trim().toLowerCase();
     if (embedder === 'auto' || embedder === 'minilm' || embedder === 'hash')
         return embedder;
-    const onnx = (env.RUVECTOR_ONNX || '').trim();
+    const onnx = (env.SWARMVECTOR_ONNX || '').trim();
     if (onnx === '0')
         return 'hash';
     if (onnx === '1')
@@ -197,14 +197,14 @@ function resolveEmbedderSelection(env = process.env) {
     return 'auto';
 }
 /**
- * Resolve RUVECTOR_REEMBED: what happens when opening a store whose
+ * Resolve SWARMVECTOR_REEMBED: what happens when opening a store whose
  * provenance mismatches the active embedder.
  *   refuse (default) — error;
  *   warn             — open read-only with a single warning;
  *   auto             — re-embed in place when source text exists, refuse otherwise.
  */
 function resolveReembedPolicy(env = process.env) {
-    const v = (env.RUVECTOR_REEMBED || '').trim().toLowerCase();
+    const v = (env.SWARMVECTOR_REEMBED || '').trim().toLowerCase();
     if (v === 'refuse' || v === 'warn' || v === 'auto')
         return v;
     return 'refuse';
@@ -225,7 +225,7 @@ function warnHashFallbackOnce(reason) {
     const detail = reason ? ` Reason: ${reason}.` : '';
     process.stderr.write(`swarmvector: ONNX semantic embedder unavailable — using deterministic hash-fallback embeddings ` +
         `(no semantic signal, reduced search quality).${detail} ` +
-        `Set RUVECTOR_EMBEDDER=hash to silence this or RUVECTOR_EMBEDDER=minilm to hard-require the model. ` +
+        `Set SWARMVECTOR_EMBEDDER=hash to silence this or SWARMVECTOR_EMBEDDER=minilm to hard-require the model. ` +
         `(warned once per process)\n`);
     return true;
 }

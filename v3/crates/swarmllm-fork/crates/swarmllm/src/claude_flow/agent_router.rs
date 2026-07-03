@@ -1,6 +1,6 @@
 //! Agent Router for Claude Flow
 //!
-//! Routes tasks to optimal agent types using RuvLTRA embeddings and SONA learning.
+//! Routes tasks to optimal agent types using SwarmLTRA embeddings and SONA learning.
 
 use super::{ClaudeFlowAgent, ClaudeFlowTask};
 use crate::sona::{RoutingRecommendation, SonaConfig, SonaIntegration, Trajectory};
@@ -64,7 +64,7 @@ pub struct RoutingDecision {
     pub learned_patterns: usize,
 }
 
-/// Agent router using RuvLTRA + SONA
+/// Agent router using SwarmLTRA + SONA
 pub struct AgentRouter {
     /// SONA integration for learning
     sona: Arc<RwLock<SonaIntegration>>,

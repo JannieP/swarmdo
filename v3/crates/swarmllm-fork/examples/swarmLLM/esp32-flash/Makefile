@@ -1,4 +1,4 @@
-# RuvLLM ESP32 - Makefile
+# SwarmLLM ESP32 - Makefile
 # Cross-platform build and flash targets
 
 .PHONY: all install deps build flash clean cluster monitor help
@@ -42,11 +42,11 @@ deps:
 
 # Build release binary
 build:
-	@echo "Building RuvLLM ESP32..."
+	@echo "Building SwarmLLM ESP32..."
 	@. $$HOME/export-esp.sh 2>/dev/null || true
 	cargo build --release
 	@echo "✓ Build complete"
-	@ls -lh target/$(TARGET)/release/ruvllm-esp32-flash 2>/dev/null || true
+	@ls -lh target/$(TARGET)/release/swarmllm-esp32-flash 2>/dev/null || true
 
 # Build with federation
 build-federation:
@@ -57,11 +57,11 @@ build-federation:
 # Flash single chip
 flash: build
 	@echo "Flashing to $(PORT)..."
-	espflash flash --port $(PORT) --monitor target/$(TARGET)/release/ruvllm-esp32-flash
+	espflash flash --port $(PORT) --monitor target/$(TARGET)/release/swarmllm-esp32-flash
 
 # Flash without monitor
 flash-only: build
-	espflash flash --port $(PORT) target/$(TARGET)/release/ruvllm-esp32-flash
+	espflash flash --port $(PORT) target/$(TARGET)/release/swarmllm-esp32-flash
 
 # Monitor serial
 monitor:
@@ -90,8 +90,8 @@ clean:
 # Show binary size
 size: build
 	@echo "Binary size:"
-	@ls -lh target/$(TARGET)/release/ruvllm-esp32-flash
-	@size target/$(TARGET)/release/ruvllm-esp32-flash 2>/dev/null || true
+	@ls -lh target/$(TARGET)/release/swarmllm-esp32-flash
+	@size target/$(TARGET)/release/swarmllm-esp32-flash 2>/dev/null || true
 
 # Run host simulation (no ESP32 needed)
 sim:
@@ -100,7 +100,7 @@ sim:
 
 # Help
 help:
-	@echo "RuvLLM ESP32 - Makefile Targets"
+	@echo "SwarmLLM ESP32 - Makefile Targets"
 	@echo ""
 	@echo "Single Chip:"
 	@echo "  make install          - Install deps and build"

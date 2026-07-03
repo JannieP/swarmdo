@@ -88,7 +88,7 @@ class MockPrimeRadiantPlugin {
       name: 'prime-radiant',
       version: '0.1.3',
       description: 'Mathematical AI interpretability plugin',
-      author: 'rUv',
+      author: 'the upstream author',
       license: 'MIT',
       wasmSize: '92KB',
       dependencies: ['@swarmdo/memory', '@swarmdo/security', '@swarmdo/coordination'],

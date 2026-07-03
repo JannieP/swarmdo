@@ -14,11 +14,11 @@ Legal professionals spend significant time reviewing contracts, identifying risk
 
 ## Decision
 
-Create a **Legal Contract Analysis Plugin** that leverages RuVector WASM packages for semantic clause matching, risk identification, and contract comparison with support for multiple jurisdictions and regulatory frameworks.
+Create a **Legal Contract Analysis Plugin** that leverages SwarmVector WASM packages for semantic clause matching, risk identification, and contract comparison with support for multiple jurisdictions and regulatory frameworks.
 
 ## Plugin Name
 
-`@rufflo/plugin-legal-contracts`
+`@swarmdo/plugin-legal-contracts`
 
 ## Description
 
@@ -29,9 +29,9 @@ A comprehensive legal contract analysis plugin combining hyperbolic embeddings f
 | Package | Purpose |
 |---------|---------|
 | `micro-hnsw-wasm` | Fast semantic search for clause similarity and precedent matching |
-| `ruvector-hyperbolic-hnsw-wasm` | Legal taxonomy navigation (contract types, clause hierarchies) |
-| `ruvector-attention-wasm` | Cross-attention for contract comparison (redline analysis) |
-| `ruvector-dag-wasm` | Contract dependency graphs (obligations, conditions, timelines) |
+| `swarmvector-hyperbolic-hnsw-wasm` | Legal taxonomy navigation (contract types, clause hierarchies) |
+| `swarmvector-attention-wasm` | Cross-attention for contract comparison (redline analysis) |
+| `swarmvector-dag-wasm` | Contract dependency graphs (obligations, conditions, timelines) |
 
 ## MCP Tools
 
@@ -436,9 +436,9 @@ function sanitizeDocument(content: string): string {
 {
   "dependencies": {
     "micro-hnsw-wasm": "^0.2.0",
-    "ruvector-hyperbolic-hnsw-wasm": "^0.1.0",
-    "ruvector-attention-wasm": "^0.1.0",
-    "ruvector-dag-wasm": "^0.1.0",
+    "swarmvector-hyperbolic-hnsw-wasm": "^0.1.0",
+    "swarmvector-attention-wasm": "^0.1.0",
+    "swarmvector-dag-wasm": "^0.1.0",
     "pdf-parse": "^1.1.1",
     "mammoth": "^1.6.0"
   }
@@ -466,7 +466,7 @@ function sanitizeDocument(content: string): string {
 | ADR | Relationship |
 |-----|--------------|
 | ADR-004: Plugin Architecture | Foundation - Defines plugin structure |
-| ADR-017: RuVector Integration | Dependency - Provides WASM packages |
+| ADR-017: SwarmVector Integration | Dependency - Provides WASM packages |
 | ADR-041: Hyperbolic Reasoning | Related - Legal taxonomy navigation |
 | ADR-035: Code Intelligence | Related - Shares DAG analysis patterns |
 
@@ -474,7 +474,7 @@ function sanitizeDocument(content: string): string {
 
 - Model Rules of Professional Conduct: https://www.americanbar.org/groups/professional_responsibility/
 - IACCM Contract Complexity Index
-- ADR-017: RuVector Integration
+- ADR-017: SwarmVector Integration
 - ADR-004: Plugin Architecture
 
 ---

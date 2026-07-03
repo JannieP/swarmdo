@@ -9,7 +9,7 @@ updates:
       time: "09:00"
     open-pull-requests-limit: 10
     reviewers:
-      - "ruvnet"
+      - "upstream"
     labels:
       - "dependencies"
       - "npm"
@@ -26,7 +26,7 @@ updates:
       time: "09:00"
     open-pull-requests-limit: 5
     reviewers:
-      - "ruvnet"
+      - "upstream"
     labels:
       - "dependencies"
       - "npm"
@@ -49,7 +49,7 @@ updates:
       time: "09:00"
     open-pull-requests-limit: 5
     reviewers:
-      - "ruvnet"
+      - "upstream"
     labels:
       - "dependencies"
       - "npm"
@@ -70,7 +70,7 @@ updates:
       time: "09:00"
     open-pull-requests-limit: 5
     reviewers:
-      - "ruvnet"
+      - "upstream"
     labels:
       - "dependencies"
       - "github-actions"
@@ -87,7 +87,7 @@ updates:
       time: "09:00"
     open-pull-requests-limit: 5
     reviewers:
-      - "ruvnet"
+      - "upstream"
     labels:
       - "dependencies"
       - "deno"

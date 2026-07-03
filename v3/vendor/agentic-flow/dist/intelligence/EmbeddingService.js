@@ -31,7 +31,7 @@ async function detectOnnx() {
         return onnxAvailable;
     }
     catch (error) {
-        // Ruvector loading failed - fall back to simple embeddings
+        // Swarmvector loading failed - fall back to simple embeddings
         onnxAvailable = false;
         return false;
     }

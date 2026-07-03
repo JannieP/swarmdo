@@ -6,7 +6,7 @@
 
 **Node.js bindings for Tiny Dancer neural routing via NAPI-RS.**
 
-`swarmvector-tiny-dancer-node` provides native Node.js bindings for production-grade AI agent routing. Run FastGRNN neural inference at native speed for intelligent request routing in server-side applications. Part of the [Swarmvector](https://github.com/ruvnet/swarmvector) ecosystem.
+`swarmvector-tiny-dancer-node` provides native Node.js bindings for production-grade AI agent routing. Run FastGRNN neural inference at native speed for intelligent request routing in server-side applications. Part of the [Swarmvector](the upstream project (see NOTICE)) ecosystem.
 
 ## Why Tiny Dancer Node?
 
@@ -247,7 +247,7 @@ app.listen(3000);
 
 ```bash
 # Clone repository
-git clone https://github.com/ruvnet/swarmvector.git
+git clone the upstream project (see NOTICE)
 cd swarmvector/crates/swarmvector-tiny-dancer-node
 
 # Install dependencies
@@ -270,7 +270,7 @@ npm test
 
 - **[Main README](../../README.md)** - Complete project overview
 - **[API Documentation](https://docs.rs/swarmvector-tiny-dancer-node)** - Full API reference
-- **[GitHub Repository](https://github.com/ruvnet/swarmvector)** - Source code
+- **[GitHub Repository](the upstream project (see NOTICE))** - Source code
 
 ## License
 
@@ -280,10 +280,10 @@ npm test
 
 <div align="center">
 
-**Part of [Swarmvector](https://github.com/ruvnet/swarmvector) - Built by [rUv](https://ruv.io)**
+**Part of [Swarmvector](the upstream project (see NOTICE)) - Built by [the upstream author](https://swarmdo.com)**
 
-[![Star on GitHub](https://img.shields.io/github/stars/ruvnet/swarmvector?style=social)](https://github.com/ruvnet/swarmvector)
+[![Star on GitHub](https://img.shields.io/github/stars/upstream/swarmvector?style=social)](the upstream project (see NOTICE))
 
-[Documentation](https://docs.rs/swarmvector-tiny-dancer-node) | [npm](https://www.npmjs.com/package/@swarmvector/tiny-dancer-node) | [GitHub](https://github.com/ruvnet/swarmvector)
+[Documentation](https://docs.rs/swarmvector-tiny-dancer-node) | [npm](https://www.npmjs.com/package/@swarmvector/tiny-dancer-node) | [GitHub](the upstream project (see NOTICE))
 
 </div>

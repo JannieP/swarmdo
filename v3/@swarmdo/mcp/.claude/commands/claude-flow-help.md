@@ -98,6 +98,6 @@ npx -y swarmdo@latest init --sparc
 - Use background mode for tasks > 30 minutes
 
 ## 📚 Resources
-- Documentation: https://github.com/ruvnet/claude-code-flow/docs
-- Examples: https://github.com/ruvnet/claude-code-flow/examples
-- Issues: https://github.com/ruvnet/claude-code-flow/issues
+- Documentation: the upstream project (see NOTICE)
+- Examples: the upstream project (see NOTICE)
+- Issues: the upstream project (see NOTICE)

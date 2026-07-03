@@ -3,8 +3,8 @@
   "description": "Security review, dependency scanning, policy gates, and CVE monitoring",
   "version": "0.2.0",
   "author": {
-    "name": "ruvnet",
-    "url": "https://github.com/ruvnet"
+    "name": "upstream",
+    "url": "https://the upstream project (see NOTICE)"
   },
   "homepage": "https://github.com/JannieP/swarmdo",
   "license": "MIT",

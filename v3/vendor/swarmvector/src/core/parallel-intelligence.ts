@@ -62,12 +62,12 @@ export class ParallelIntelligence {
   private initialized = false;
 
   constructor(config: ParallelConfig = {}) {
-    const isCLI = process.env.RUVECTOR_CLI === '1';
+    const isCLI = process.env.SWARMVECTOR_CLI === '1';
     const isMCP = process.env.MCP_SERVER === '1';
 
     this.config = {
       numWorkers: config.numWorkers ?? Math.max(1, os.cpus().length - 1),
-      enabled: config.enabled ?? (isMCP || (!isCLI && process.env.RUVECTOR_PARALLEL === '1')),
+      enabled: config.enabled ?? (isMCP || (!isCLI && process.env.SWARMVECTOR_PARALLEL === '1')),
       batchThreshold: config.batchThreshold ?? 4,
     };
   }

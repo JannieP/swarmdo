@@ -3,11 +3,11 @@
 **Status**: Proposed
 **Date**: 2026-06-15
 **Related**: ADR-026 (3-tier model routing), ADR-074 (observable-not-inferred), ADR-086 (graceful-degradation), ADR-124 (optional native dependencies), ADR-142 (per-task bandit priors), ADR-148 (cost-optimal router lifecycle via `@metaharness/router`), #2334 (Option B), #2329
-**External reference**: [`ruvnet/agent-harness-generator` ADR-040 — DRACO routing finding](https://github.com/ruvnet/agent-harness-generator) — the productized methodology that `@metaharness/router` exposes.
+**External reference**: [`upstream/agent-harness-generator` ADR-040 — DRACO routing finding](the upstream project (see NOTICE)) — the productized methodology that `@metaharness/router` exposes.
 
 ## Context
 
-ADR-148 wired the cost-optimal router (`@metaharness/router` + optional `@ruvector/tiny-dancer` FastGRNN backend) behind a 3-tier abstraction (`haiku` / `sonnet` / `opus`) and a per-tier OpenRouter alternate. That was the right Phase A — small, reversible, byte-identical default — but it forecloses real Pareto wins that the bench evidence now makes visible.
+ADR-148 wired the cost-optimal router (`@metaharness/router` + optional `@swarmvector/tiny-dancer` FastGRNN backend) behind a 3-tier abstraction (`haiku` / `sonnet` / `opus`) and a per-tier OpenRouter alternate. That was the right Phase A — small, reversible, byte-identical default — but it forecloses real Pareto wins that the bench evidence now makes visible.
 
 ### What the measurements showed
 
@@ -43,13 +43,13 @@ ADR-148's `openrouter-alts.json` maps each Claude tier to **one** OpenRouter alt
 
 ### The DRACO finding (external reference)
 
-`ruvnet/agent-harness-generator` ADR-040 found that for cross-domain agent work, **structure/fusion does not beat a strong model on quality, but routing each query to the *right, cheapest* model is a measured Pareto win**. A learned embedding router with `(query embedding → quality each model achieved)` examples beats the best fixed model on the DRACO benchmark, and its accuracy rises monotonically with training-data size (the DRACO "learning curve").
+`upstream/agent-harness-generator` ADR-040 found that for cross-domain agent work, **structure/fusion does not beat a strong model on quality, but routing each query to the *right, cheapest* model is a measured Pareto win**. A learned embedding router with `(query embedding → quality each model achieved)` examples beats the best fixed model on the DRACO benchmark, and its accuracy rises monotonically with training-data size (the DRACO "learning curve").
 
 `@metaharness/router` is the productized form of that finding. Its `Router.fromExamples(rows, prices, { qualityBar })` is *literally* a per-model cost-optimal selector — given measured `{embedding, scores: {model_id: quality}}` rows and a per-model price table, it returns the cheapest model predicted to clear the bar. We are currently using a fraction of its capability.
 
 ### The Phase 1 seed corpus is unmeasured
 
-`v3/@rufflo/cli/assets/model-router/seed-rows.json` carries `scores: { haiku: 0.94, sonnet: 0.92, opus: 0.93 }` — **hand-coded, not measured.** The bundled KRR artifact was fit to these assumptions, not to real model behavior. The 100% accuracy on `scripts/benchmark-router.mjs` is a property of the synthetic corpus, not real-world routing fidelity.
+`v3/@swarmdo/cli/assets/model-router/seed-rows.json` carries `scores: { haiku: 0.94, sonnet: 0.92, opus: 0.93 }` — **hand-coded, not measured.** The bundled KRR artifact was fit to these assumptions, not to real model behavior. The 100% accuracy on `scripts/benchmark-router.mjs` is a property of the synthetic corpus, not real-world routing fidelity.
 
 ## Decision
 
@@ -141,7 +141,7 @@ Existing per-tier state migrates forward: `state.priors.haiku` becomes the prior
 - **Measured ~$0.15/1k passes savings vs Haiku 4.5** on the cheap-tier corpus by routing to Ling 2.6 Flash (151× cheaper).
 - **Measured ~$0.11/quality savings vs Sonnet 4.6** on the mid-tier corpus by routing to GPT-4.1 (4× cheaper at higher quality), or **~$0.14/quality** via Llama 3.3 70B (70× cheaper at 91% quality).
 - Online learning per model id — the bandit can now distinguish GPT-4.1 from Sonnet, and Ling from Haiku, instead of aggregating them.
-- New candidates are extensible: `rufflo neural router add-model <id> --cost-in X --cost-out Y` (CLI follow-up).
+- New candidates are extensible: `swarmdo neural router add-model <id> --cost-in X --cost-out Y` (CLI follow-up).
 - DRACO's measured-data lifecycle becomes the actual lifecycle: the seed corpus is regenerable, retrainable, and improvable with more data.
 
 ### Negative
@@ -178,9 +178,9 @@ These are forecasts from per-call measured costs, not measured end-to-end. The P
 
 ## Open questions
 
-1. **`qualityBar` default.** ADR-148 set it to 0.8. With measured rows (not synthetic), 0.8 may be too aggressive — the LLM-judged mid-tier corpus has Sonnet at 0.767 (just below the bar). Proposal: default to **0.7** to keep Sonnet in the "clears the bar" set; configurable as before via `RUFFLO_ROUTER_QUALITY_BAR`.
+1. **`qualityBar` default.** ADR-148 set it to 0.8. With measured rows (not synthetic), 0.8 may be too aggressive — the LLM-judged mid-tier corpus has Sonnet at 0.767 (just below the bar). Proposal: default to **0.7** to keep Sonnet in the "clears the bar" set; configurable as before via `SWARMDO_ROUTER_QUALITY_BAR`.
 2. **How many candidates ship in the bundled registry.** Initial proposal: ~8 (3 Anthropic tiers + Ling + GPT-4.1 + Gemini-Flash + Llama-3.3-70b + Nemotron-free). Larger registries are more flexible but every candidate adds a column to the seed-corpus measurement. Open to growing it post-launch.
-3. **Re-measurement cadence.** OpenRouter pricing and model availability shift. Proposal: run `benchmark-seed-corpus.mjs` quarterly, or whenever a candidate's pricing changes by >20%. CLI surface: `rufflo neural router measure --candidates <list>`.
+3. **Re-measurement cadence.** OpenRouter pricing and model availability shift. Proposal: run `benchmark-seed-corpus.mjs` quarterly, or whenever a candidate's pricing changes by >20%. CLI surface: `swarmdo neural router measure --candidates <list>`.
 4. **Online retraining.** Trajectory-collected outcomes (ADR-148 phase 1) accumulate per-model evidence. When do we retrain the bundled KRR from them? Proposal: a follow-up ADR once we have a few weeks of real trajectory data.
 
 ## Implementation plan
@@ -205,9 +205,9 @@ Sequenced for the smallest credible PR first:
 **PR 3 — Observability + CLI**
 - `getModelRouterStats()` extends to per-model distribution + cost-optimality saved
 - `hooks_intelligence_stats` surfaces it
-- `rufflo neural router models` — lists registry with measured stats
-- `rufflo neural router measure` — re-runs the seed-corpus bench against the registry
-- `rufflo neural router add-model <id> --cost-in X --cost-out Y` — extend at runtime
+- `swarmdo neural router models` — lists registry with measured stats
+- `swarmdo neural router measure` — re-runs the seed-corpus bench against the registry
+- `swarmdo neural router add-model <id> --cost-in X --cost-out Y` — extend at runtime
 
 **PR 4 — Compat sunset**
 - Remove the `openrouter-alts.json` shim
@@ -217,9 +217,9 @@ Sequenced for the smallest credible PR first:
 
 - Issues: #2334 (Option B), #2329 (Option A, closed)
 - ADRs: ADR-026, ADR-074, ADR-086, ADR-124, ADR-142, ADR-143, ADR-148
-- External: [`ruvnet/agent-harness-generator` ADR-040 (DRACO)](https://github.com/ruvnet/agent-harness-generator)
-- Code: `v3/@rufflo/cli/src/ruvector/{model-router,neural-router,router-trajectory}.ts`
-- Upstream: `@metaharness/router@0.3.2`, `@ruvector/tiny-dancer@0.1.22`
+- External: [`upstream/agent-harness-generator` ADR-040 (DRACO)](the upstream project (see NOTICE))
+- Code: `v3/@swarmdo/cli/src/swarmvector/{model-router,neural-router,router-trajectory}.ts`
+- Upstream: `@metaharness/router@0.3.2`, `@swarmvector/tiny-dancer@0.1.22`
 - Measured benches (this branch):
   - `docs/benchmarks/runs/cheap-models-2026-06-15-20-3*.json` — variance + Pareto
   - `docs/benchmarks/runs/midtier-models-2026-06-15-20-53-55Z.json` — LLM-judged mid-tier

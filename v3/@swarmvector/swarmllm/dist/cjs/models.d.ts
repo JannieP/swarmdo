@@ -1,11 +1,11 @@
 /**
- * RuvLTRA Model Registry and Downloader
+ * SwarmLTRA Model Registry and Downloader
  *
  * Automatically downloads GGUF models from HuggingFace Hub.
  *
  * @example
  * ```typescript
- * import { ModelDownloader, RUVLTRA_MODELS } from '@swarmvector/swarmllm';
+ * import { ModelDownloader, SWARMLTRA_MODELS } from '@swarmvector/swarmllm';
  *
  * // Download the Claude Code optimized model
  * const downloader = new ModelDownloader();
@@ -66,8 +66,8 @@ export interface DownloadOptions {
     /** Verify file integrity after download */
     verify?: boolean;
 }
-/** Available RuvLTRA models */
-export declare const RUVLTRA_MODELS: Record<string, ModelInfo>;
+/** Available SwarmLTRA models */
+export declare const SWARMLTRA_MODELS: Record<string, ModelInfo>;
 /** Model aliases for convenience */
 export declare const MODEL_ALIASES: Record<string, string>;
 /**
@@ -87,7 +87,7 @@ export declare function getModelInfo(modelIdOrAlias: string): ModelInfo | null;
  */
 export declare function listModels(): ModelInfo[];
 /**
- * Model downloader for RuvLTRA GGUF models
+ * Model downloader for SwarmLTRA GGUF models
  */
 export declare class ModelDownloader {
     private modelsDir;

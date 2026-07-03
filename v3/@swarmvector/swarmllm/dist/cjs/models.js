@@ -1,12 +1,12 @@
 "use strict";
 /**
- * RuvLTRA Model Registry and Downloader
+ * SwarmLTRA Model Registry and Downloader
  *
  * Automatically downloads GGUF models from HuggingFace Hub.
  *
  * @example
  * ```typescript
- * import { ModelDownloader, RUVLTRA_MODELS } from '@swarmvector/swarmllm';
+ * import { ModelDownloader, SWARMLTRA_MODELS } from '@swarmvector/swarmllm';
  *
  * // Download the Claude Code optimized model
  * const downloader = new ModelDownloader();
@@ -50,7 +50,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ModelDownloader = exports.MODEL_ALIASES = exports.RUVLTRA_MODELS = void 0;
+exports.ModelDownloader = exports.MODEL_ALIASES = exports.SWARMLTRA_MODELS = void 0;
 exports.getDefaultModelsDir = getDefaultModelsDir;
 exports.resolveModelId = resolveModelId;
 exports.getModelInfo = getModelInfo;
@@ -59,45 +59,45 @@ const fs_1 = require("fs");
 const path_1 = require("path");
 const os_1 = require("os");
 /** HuggingFace repository */
-const HF_REPO = 'ruv/ruvltra';
+const HF_REPO = 'swarmdo/swarmltra';
 const HF_BASE_URL = `https://huggingface.co/${HF_REPO}/resolve/main`;
-/** Available RuvLTRA models */
-exports.RUVLTRA_MODELS = {
+/** Available SwarmLTRA models */
+exports.SWARMLTRA_MODELS = {
     'claude-code': {
         id: 'claude-code',
-        name: 'RuvLTRA Claude Code',
-        filename: 'ruvltra-claude-code-0.5b-q4_k_m.gguf',
+        name: 'SwarmLTRA Claude Code',
+        filename: 'swarmltra-claude-code-0.5b-q4_k_m.gguf',
         sizeBytes: 398000000,
         size: '398 MB',
         parameters: '0.5B',
         useCase: 'Claude Code workflows, agentic coding',
         quantization: 'Q4_K_M',
         contextLength: 4096,
-        url: `${HF_BASE_URL}/ruvltra-claude-code-0.5b-q4_k_m.gguf`,
+        url: `${HF_BASE_URL}/swarmltra-claude-code-0.5b-q4_k_m.gguf`,
     },
     'small': {
         id: 'small',
-        name: 'RuvLTRA Small',
-        filename: 'ruvltra-small-0.5b-q4_k_m.gguf',
+        name: 'SwarmLTRA Small',
+        filename: 'swarmltra-small-0.5b-q4_k_m.gguf',
         sizeBytes: 398000000,
         size: '398 MB',
         parameters: '0.5B',
         useCase: 'Edge devices, IoT, resource-constrained environments',
         quantization: 'Q4_K_M',
         contextLength: 4096,
-        url: `${HF_BASE_URL}/ruvltra-small-0.5b-q4_k_m.gguf`,
+        url: `${HF_BASE_URL}/swarmltra-small-0.5b-q4_k_m.gguf`,
     },
     'medium': {
         id: 'medium',
-        name: 'RuvLTRA Medium',
-        filename: 'ruvltra-medium-1.1b-q4_k_m.gguf',
+        name: 'SwarmLTRA Medium',
+        filename: 'swarmltra-medium-1.1b-q4_k_m.gguf',
         sizeBytes: 669000000,
         size: '669 MB',
         parameters: '1.1B',
         useCase: 'General purpose, balanced performance',
         quantization: 'Q4_K_M',
         contextLength: 8192,
-        url: `${HF_BASE_URL}/ruvltra-medium-1.1b-q4_k_m.gguf`,
+        url: `${HF_BASE_URL}/swarmltra-medium-1.1b-q4_k_m.gguf`,
     },
 };
 /** Model aliases for convenience */
@@ -123,7 +123,7 @@ function getDefaultModelsDir() {
 function resolveModelId(modelIdOrAlias) {
     const normalized = modelIdOrAlias.toLowerCase().trim();
     // Direct match
-    if (exports.RUVLTRA_MODELS[normalized]) {
+    if (exports.SWARMLTRA_MODELS[normalized]) {
         return normalized;
     }
     // Alias match
@@ -137,16 +137,16 @@ function resolveModelId(modelIdOrAlias) {
  */
 function getModelInfo(modelIdOrAlias) {
     const id = resolveModelId(modelIdOrAlias);
-    return id ? exports.RUVLTRA_MODELS[id] : null;
+    return id ? exports.SWARMLTRA_MODELS[id] : null;
 }
 /**
  * List all available models
  */
 function listModels() {
-    return Object.values(exports.RUVLTRA_MODELS);
+    return Object.values(exports.SWARMLTRA_MODELS);
 }
 /**
- * Model downloader for RuvLTRA GGUF models
+ * Model downloader for SwarmLTRA GGUF models
  */
 class ModelDownloader {
     constructor(modelsDir) {

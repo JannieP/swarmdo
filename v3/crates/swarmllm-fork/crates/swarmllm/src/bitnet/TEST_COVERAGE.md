@@ -197,16 +197,16 @@ For block_size = 256:
 
 ```bash
 # Run all bitnet tests
-cargo test --package ruvllm --lib bitnet::tests
+cargo test --package swarmllm --lib bitnet::tests
 
 # Run specific test category
-cargo test --package ruvllm --lib bitnet::tests::test_pack
+cargo test --package swarmllm --lib bitnet::tests::test_pack
 
 # Run with verbose output
-cargo test --package ruvllm --lib bitnet::tests -- --nocapture
+cargo test --package swarmllm --lib bitnet::tests -- --nocapture
 
 # Run single test
-cargo test --package ruvllm --lib bitnet::tests::test_quantize_known_example
+cargo test --package swarmllm --lib bitnet::tests::test_quantize_known_example
 ```
 
 ## Test Coverage Gaps

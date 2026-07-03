@@ -1,6 +1,6 @@
 ---
 id: ADR-0001
-title: rufflo-daa plugin contract — pinning, namespace coordination, intelligence-pipeline alignment, smoke as contract
+title: swarmdo-daa plugin contract — pinning, namespace coordination, intelligence-pipeline alignment, smoke as contract
 status: Accepted
 date: 2026-05-04
 updated: 2026-05-09
@@ -11,7 +11,7 @@ tags: [plugin, daa, cognitive, adaptive, knowledge-sharing, namespace, smoke-tes
 
 ## Context
 
-`rufflo-daa` (v0.1.0) wraps 8 `daa_*` MCP tools at `v3/@rufflo/cli/src/mcp-tools/daa-tools.ts:90, 161, 223, 271, 322, 388, 444, 512`:
+`swarmdo-daa` (v0.1.0) wraps 8 `daa_*` MCP tools at `v3/@swarmdo/cli/src/mcp-tools/daa-tools.ts:90, 161, 223, 271, 322, 388, 444, 512`:
 
 | Tool | Purpose |
 |------|---------|
@@ -29,7 +29,7 @@ All 8 are correctly referenced across the agent + 2 skills + 1 command. What's m
 ## Decision
 
 1. Add this ADR (Proposed).
-2. README augment: Compatibility (pin v3.6), Namespace coordination (claims `daa-patterns`; defers to rufflo-agentdb ADR-0001), 8-tool surface table, intelligence-pipeline alignment note (DAA cognitive patterns feed the JUDGE phase per rufflo-intelligence ADR-0001), Verification + Architecture Decisions sections.
+2. README augment: Compatibility (pin v3.6), Namespace coordination (claims `daa-patterns`; defers to swarmdo-agentdb ADR-0001), 8-tool surface table, intelligence-pipeline alignment note (DAA cognitive patterns feed the JUDGE phase per swarmdo-intelligence ADR-0001), Verification + Architecture Decisions sections.
 3. Bump `0.1.0 → 0.2.0`. Keywords add `cognitive-patterns`, `workflows`, `mcp`.
 4. `scripts/smoke.sh` — 10 structural checks: version + keywords; all 8 daa_* tools referenced; both skills + 1 command + 1 agent present with valid frontmatter; v3.6 pin; namespace coordination; intelligence-pipeline cross-reference; ADR Proposed; no wildcard tools.
 
@@ -42,17 +42,17 @@ All 8 are correctly referenced across the agent + 2 skills + 1 command. What's m
 ## Verification
 
 ```bash
-bash plugins/rufflo-daa/scripts/smoke.sh
+bash plugins/swarmdo-daa/scripts/smoke.sh
 # Expected: "10 passed, 0 failed"
 ```
 
 ## Related
 
-- `plugins/rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md` — namespace convention
-- `plugins/rufflo-intelligence/docs/adrs/0001-intelligence-surface-completeness.md` — 4-step pipeline DAA feeds
-- `plugins/rufflo-ruvector/docs/adrs/0001-pin-ruvector-0.2.25.md`
-- `v3/@rufflo/cli/src/mcp-tools/daa-tools.ts` — 8 daa_* tools
+- `plugins/swarmdo-agentdb/docs/adrs/0001-agentdb-optimization.md` — namespace convention
+- `plugins/swarmdo-intelligence/docs/adrs/0001-intelligence-surface-completeness.md` — 4-step pipeline DAA feeds
+- `plugins/swarmdo-swarmvector/docs/adrs/0001-pin-swarmvector-0.2.25.md`
+- `v3/@swarmdo/cli/src/mcp-tools/daa-tools.ts` — 8 daa_* tools
 
 ## Implementation status
 
-Plugin version v0.2.0 shipped and listed in marketplace.json. Source exists at `plugins/rufflo-daa/`. Contract elements implemented: 8 `daa_*` MCP tools covered; namespace `daa-patterns` claimed per convention; intelligence-pipeline alignment (feeds cognitive patterns into RETRIEVE/JUDGE/DISTILL/CONSOLIDATE steps) documented; smoke-as-contract gate defined in `scripts/smoke.sh`.
+Plugin version v0.2.0 shipped and listed in marketplace.json. Source exists at `plugins/swarmdo-daa/`. Contract elements implemented: 8 `daa_*` MCP tools covered; namespace `daa-patterns` claimed per convention; intelligence-pipeline alignment (feeds cognitive patterns into RETRIEVE/JUDGE/DISTILL/CONSOLIDATE steps) documented; smoke-as-contract gate defined in `scripts/smoke.sh`.

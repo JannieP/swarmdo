@@ -57,8 +57,8 @@ export const pluginMetadata = {
   author: 'Swarmdo Team',
   category: 'legal',
   keywords: ['legal', 'contracts', 'clause', 'risk', 'compliance'],
-  homepage: 'https://github.com/ruvnet/claude-flow',
-  repository: 'https://github.com/ruvnet/claude-flow.git',
+  homepage: 'the upstream project (see NOTICE)',
+  repository: 'the upstream project (see NOTICE)',
 };
 
 /**

@@ -10,12 +10,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ruvnet/bmssp.git"
+    "url": "the upstream project (see NOTICE)"
   },
   "bugs": {
-    "url": "https://github.com/ruvnet/bmssp/issues"
+    "url": "the upstream project (see NOTICE)"
   },
-  "homepage": "https://github.com/ruvnet/bmssp#readme",
+  "homepage": "the upstream project (see NOTICE)#readme",
   "files": [
     "bmssp_rust_bg.wasm",
     "bmssp_rust.js",

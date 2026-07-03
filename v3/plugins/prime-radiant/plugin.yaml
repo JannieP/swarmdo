@@ -8,10 +8,10 @@ description: |
   spectral analysis, causal inference, and quantum topology for coherence
   validation, consensus verification, and hallucination prevention.
 
-author: rUv
+author: the upstream author
 license: MIT
-repository: https://github.com/ruvnet/claude-flow
-documentation: https://github.com/ruvnet/claude-flow/blob/main/v3/plugins/prime-radiant/README.md
+repository: the upstream project (see NOTICE)
+documentation: the upstream project (see NOTICE)
 
 # Plugin metadata
 metadata:

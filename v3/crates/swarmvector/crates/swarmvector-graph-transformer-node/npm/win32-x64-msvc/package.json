@@ -1,16 +1,32 @@
 {
   "name": "@swarmvector/graph-transformer-win32-x64-msvc",
   "version": "2.0.4",
-  "os": ["win32"],
-  "cpu": ["x64"],
-  
-  "main": "ruvector-graph-transformer.win32-x64-msvc.node",
-  "files": ["ruvector-graph-transformer.win32-x64-msvc.node"],
+  "os": [
+    "win32"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "main": "swarmvector-graph-transformer.win32-x64-msvc.node",
+  "files": [
+    "swarmvector-graph-transformer.win32-x64-msvc.node"
+  ],
   "description": "Proof-gated graph transformer - win32-x64-msvc platform binary",
-  "keywords": ["ruvector", "graph-transformer", "napi-rs"],
-  "author": "Ruvector Team",
+  "keywords": [
+    "swarmvector",
+    "graph-transformer",
+    "napi-rs"
+  ],
   "license": "MIT",
-  "repository": {"type": "git", "url": "https://github.com/ruvnet/ruvector"},
-  "engines": {"node": ">= 10"},
-  "publishConfig": {"registry": "https://registry.npmjs.org/", "access": "public"}
+  "repository": {
+    "type": "git",
+    "url": "the upstream project (see NOTICE)"
+  },
+  "engines": {
+    "node": ">= 10"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  }
 }

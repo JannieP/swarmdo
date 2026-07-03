@@ -32,7 +32,7 @@ Most AI systems stop learning the moment they leave training. When a user gives 
 | **WASM Support** | Runs the full learning engine in browsers at near-native speed | On-device personalization with zero server costs |
 | **Node.js Bindings** | Native N-API bindings -- no child processes or HTTP calls | Drop into any JavaScript backend with one `npm install` |
 
-> Part of the [SwarmVector](https://github.com/ruvnet/swarmvector) ecosystem -- the self-learning vector database with graph intelligence.
+> Part of the [SwarmVector](the upstream project (see NOTICE)) ecosystem -- the self-learning vector database with graph intelligence.
 
 ---
 
@@ -81,7 +81,7 @@ pnpm add @swarmvector/sona
 
 ```bash
 # Clone and build WASM package
-git clone https://github.com/ruvnet/swarmvector.git
+git clone the upstream project (see NOTICE)
 cd swarmvector/crates/sona
 wasm-pack build --target web --features wasm
 
@@ -1483,7 +1483,7 @@ at your option.
 
 ## Contributing
 
-Contributions welcome! Please see our [Contributing Guide](https://github.com/ruvnet/swarmvector/blob/main/CONTRIBUTING.md).
+Contributions welcome! Please see our [Contributing Guide](the upstream project (see NOTICE)).
 
 ## Acknowledgments
 
@@ -1495,7 +1495,7 @@ Contributions welcome! Please see our [Contributing Guide](https://github.com/ru
 
 <div align="center">
 
-**[Documentation](https://docs.rs/swarmvector-sona)** | **[GitHub](https://github.com/ruvnet/swarmvector)** | **[npm](https://www.npmjs.com/package/@swarmvector/sona)** | **[crates.io](https://crates.io/crates/swarmvector-sona)**
+**[Documentation](https://docs.rs/swarmvector-sona)** | **[GitHub](the upstream project (see NOTICE))** | **[npm](https://www.npmjs.com/package/@swarmvector/sona)** | **[crates.io](https://crates.io/crates/swarmvector-sona)**
 
 Made with 🦀 Rust by the SwarmVector Team
 

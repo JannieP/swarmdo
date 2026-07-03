@@ -56,7 +56,7 @@ interface CacheEntry {
 // module's closure.
 //
 // Long-running consumers that re-instantiate backends without explicit close
-// leak MEMFS files unbounded. Downstream report: ruvnet/swarmdo#2432 observed
+// leak MEMFS files unbounded. Downstream report: upstream/swarmdo#2432 observed
 // ~36 GB external memory growth over 6 weeks (~11 MB per orphaned wrapper).
 //
 // The defensive fix: a FinalizationRegistry that closes the underlying

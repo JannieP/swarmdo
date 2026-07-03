@@ -1,5 +1,5 @@
 #!/bin/bash
-# RuvLLM ESP32 - Cluster Flash Script
+# SwarmLLM ESP32 - Cluster Flash Script
 # Flashes multiple ESP32s with configured roles
 
 set -e
@@ -18,7 +18,7 @@ NC='\033[0m'
 
 echo -e "${BLUE}"
 echo "╔══════════════════════════════════════════════════════════╗"
-echo "║          RuvLLM ESP32 - Cluster Flash Tool               ║"
+echo "║          SwarmLLM ESP32 - Cluster Flash Tool               ║"
 echo "╚══════════════════════════════════════════════════════════╝"
 echo -e "${NC}"
 
@@ -60,8 +60,8 @@ for PORT in $PORTS; do
     fi
 
     # Set chip ID via environment (embedded in binary)
-    RUVLLM_CHIP_ID=$CHIP_ID RUVLLM_TOTAL_CHIPS=$NUM_CHIPS \
-        espflash flash --port "$PORT" target/xtensa-esp32-espidf/release/ruvllm-esp32-flash
+    SWARMLLM_CHIP_ID=$CHIP_ID SWARMLLM_TOTAL_CHIPS=$NUM_CHIPS \
+        espflash flash --port "$PORT" target/xtensa-esp32-espidf/release/swarmllm-esp32-flash
 
     echo -e "${GREEN}✓ Chip $CHIP_ID flashed successfully${NC}"
 

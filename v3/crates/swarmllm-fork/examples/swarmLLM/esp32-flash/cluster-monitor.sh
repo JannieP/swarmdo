@@ -1,5 +1,5 @@
 #!/bin/bash
-# RuvLLM ESP32 - Cluster Monitor
+# SwarmLLM ESP32 - Cluster Monitor
 # Opens serial monitors for all chips in cluster
 
 set -e
@@ -10,7 +10,7 @@ cd "$SCRIPT_DIR"
 CONFIG_FILE="${1:-cluster.toml}"
 
 echo "╔══════════════════════════════════════════════════════════╗"
-echo "║          RuvLLM ESP32 - Cluster Monitor                  ║"
+echo "║          SwarmLLM ESP32 - Cluster Monitor                  ║"
 echo "╚══════════════════════════════════════════════════════════╝"
 echo ""
 
@@ -31,7 +31,7 @@ if command -v tmux &> /dev/null; then
     echo "Using tmux for multi-pane view..."
 
     # Create new tmux session
-    SESSION="ruvllm-cluster"
+    SESSION="swarmllm-cluster"
     tmux kill-session -t $SESSION 2>/dev/null || true
     tmux new-session -d -s $SESSION
 

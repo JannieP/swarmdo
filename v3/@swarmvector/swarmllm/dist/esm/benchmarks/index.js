@@ -1,7 +1,7 @@
 /**
- * RuvLTRA Benchmark Suite
+ * SwarmLTRA Benchmark Suite
  *
- * Comprehensive benchmarks for evaluating RuvLTRA models
+ * Comprehensive benchmarks for evaluating SwarmLTRA models
  * on Claude Code-specific use cases.
  */
 export * from './routing-benchmark';
@@ -29,7 +29,7 @@ export function formatFullResults(results) {
     const lines = [];
     lines.push('');
     lines.push('╔═══════════════════════════════════════════════════════════════════════════╗');
-    lines.push('║                    RUVLTRA BENCHMARK SUITE                                ║');
+    lines.push('║                    SWARMLTRA BENCHMARK SUITE                                ║');
     lines.push('║            Claude Code Use Case Evaluation                                ║');
     lines.push('╠═══════════════════════════════════════════════════════════════════════════╣');
     lines.push(`║  Model: ${results.model.padEnd(64)}║`);

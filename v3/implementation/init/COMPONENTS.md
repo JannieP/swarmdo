@@ -14,7 +14,7 @@ project/
 │   ├── helpers/                # Utility scripts
 │   ├── statusline.sh           # Unix/macOS statusline
 │   └── statusline.mjs          # ESM statusline module
-├── .rufflo/               # V3 runtime
+├── .swarmdo/               # V3 runtime
 │   ├── config.yaml             # Runtime configuration
 │   ├── data/                   # Persistent data
 │   ├── logs/                   # Log files
@@ -80,9 +80,9 @@ Skills are installed to `.claude/skills/` and provide specialized capabilities.
 Commands are installed to `.claude/commands/` and provide quick actions.
 
 ### Core Commands
-- `rufflo-help.md` - Help documentation
-- `rufflo-swarm.md` - Swarm operations
-- `rufflo-memory.md` - Memory operations
+- `swarmdo-help.md` - Help documentation
+- `swarmdo-swarm.md` - Swarm operations
+- `swarmdo-memory.md` - Memory operations
 
 ### Command Groups
 | Group | Contents |
@@ -171,15 +171,15 @@ Claude Code statusline module showing:
 ```json
 {
   "mcpServers": {
-    "rufflo": {
+    "swarmdo": {
       "command": "npx",
-      "args": ["@rufflo/cli", "mcp", "start"],
+      "args": ["@swarmdo/cli", "mcp", "start"],
       "env": {
-        "RUFFLO_MODE": "v3",
-        "RUFFLO_HOOKS_ENABLED": "true",
-        "RUFFLO_TOPOLOGY": "hierarchical-mesh",
-        "RUFFLO_MAX_AGENTS": "15",
-        "RUFFLO_MEMORY_BACKEND": "hybrid"
+        "SWARMDO_MODE": "v3",
+        "SWARMDO_HOOKS_ENABLED": "true",
+        "SWARMDO_TOPOLOGY": "hierarchical-mesh",
+        "SWARMDO_MAX_AGENTS": "15",
+        "SWARMDO_MEMORY_BACKEND": "hybrid"
       }
     }
   }
@@ -188,7 +188,7 @@ Claude Code statusline module showing:
 
 ## Runtime Configuration
 
-`.rufflo/config.yaml` configures V3 runtime.
+`.swarmdo/config.yaml` configures V3 runtime.
 
 ```yaml
 version: "3.0.0"
@@ -202,12 +202,12 @@ swarm:
 memory:
   backend: hybrid
   enableHNSW: true
-  persistPath: .rufflo/data
+  persistPath: .swarmdo/data
   cacheSize: 100
 
 neural:
   enabled: true
-  modelPath: .rufflo/neural
+  modelPath: .swarmdo/neural
 
 hooks:
   enabled: true

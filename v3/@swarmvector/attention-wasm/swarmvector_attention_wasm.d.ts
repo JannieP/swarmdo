@@ -354,7 +354,7 @@ export function scaled_dot_attention(query: Float32Array, keys: any, values: any
 export function softmax(vec: Float32Array): void;
 
 /**
- * Get the version of the ruvector-attention-wasm crate
+ * Get the version of the swarmvector-attention-wasm crate
  */
 export function version(): string;
 

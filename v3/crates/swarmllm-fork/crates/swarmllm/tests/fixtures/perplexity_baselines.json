@@ -1,8 +1,8 @@
 {
   "metadata": {
     "version": "1.0.0",
-    "description": "Perplexity baselines for RuvLTRA-Small quality validation",
-    "model": "ruvltra-small",
+    "description": "Perplexity baselines for SwarmLTRA-Small quality validation",
+    "model": "swarmltra-small",
     "quantization_tested": ["Q4_K", "Q5_K", "Q8_0", "F16"],
     "last_updated": "2024-01-19"
   },

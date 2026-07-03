@@ -1,14 +1,14 @@
-# ADR-099: Dossier-Investigator — Recursive Parallel Multi-Source Research for `rufflo-goals`
+# ADR-099: Dossier-Investigator — Recursive Parallel Multi-Source Research for `swarmdo-goals`
 
 **Status**: Accepted — Implemented
 **Date**: 2026-05-03 · **Updated**: 2026-05-09
-**Version**: shipped in `plugins/rufflo-goals` (0.1.0 → 0.2.0)
+**Version**: shipped in `plugins/swarmdo-goals` (0.1.0 → 0.2.0)
 **Supersedes**: nothing
-**Related**: ADR-098 (plugin capability sync), `plugins/rufflo-goals/agents/deep-researcher.md`, `plugins/rufflo-knowledge-graph`, `plugins/rufflo-rag-memory`
+**Related**: ADR-098 (plugin capability sync), `plugins/swarmdo-goals/agents/deep-researcher.md`, `plugins/swarmdo-knowledge-graph`, `plugins/swarmdo-rag-memory`
 
 ## Context
 
-The `rufflo-goals` plugin currently ships three agents:
+The `swarmdo-goals` plugin currently ships three agents:
 
 | Agent | Pattern | Output |
 |---|---|---|
@@ -24,24 +24,24 @@ Inspired by [maigret](https://github.com/soxoj/maigret) (3,000+ source parallel 
 
 `deep-researcher` does evidence-graded synthesis but expects a human-curated source list and runs essentially linearly. It has no recursive seeding loop and no parallel fan-out primitive.
 
-Rufflo already ships every primitive needed to assemble a maigret-style investigator without adding new external dependencies:
+Swarmdo already ships every primitive needed to assemble a maigret-style investigator without adding new external dependencies:
 
 | Capability | Existing tool |
 |---|---|
-| Hybrid sparse+dense semantic search | `mcp__rufflo__memory_search_unified`, `rufflo-rag-memory:memory-search` |
-| Vector search (HNSW, RaBitQ) | `mcp__rufflo__embeddings_search`, `embeddings_rabitq_search` |
-| Pattern recall | `mcp__rufflo__agentdb_pattern-search`, `agentdb_hierarchical-recall` |
-| Knowledge-graph traversal + extraction | `rufflo-knowledge-graph:kg-traverse`, `kg-extract` |
+| Hybrid sparse+dense semantic search | `mcp__swarmdo__memory_search_unified`, `swarmdo-rag-memory:memory-search` |
+| Vector search (HNSW, RaBitQ) | `mcp__swarmdo__embeddings_search`, `embeddings_rabitq_search` |
+| Pattern recall | `mcp__swarmdo__agentdb_pattern-search`, `agentdb_hierarchical-recall` |
+| Knowledge-graph traversal + extraction | `swarmdo-knowledge-graph:kg-traverse`, `kg-extract` |
 | Web search & fetch | `WebSearch`, `WebFetch` |
 | Codebase queries | `Grep`, `Glob`, `Read` |
-| ADR index lookup | `rufflo-adr:adr-index` |
-| Git intelligence | `rufflo-jujutsu:diff-analyze` |
-| Parallel agent fan-out | `rufflo-swarm:swarm-init` (mesh topology) |
-| Trajectory recording | `mcp__rufflo__hooks_intelligence_trajectory-*` |
+| ADR index lookup | `swarmdo-adr:adr-index` |
+| Git intelligence | `swarmdo-jujutsu:diff-analyze` |
+| Parallel agent fan-out | `swarmdo-swarm:swarm-init` (mesh topology) |
+| Trajectory recording | `mcp__swarmdo__hooks_intelligence_trajectory-*` |
 
 ## Decision
 
-Add a new agent `dossier-investigator` and a companion skill `dossier-collect` to `plugins/rufflo-goals`.
+Add a new agent `dossier-investigator` and a companion skill `dossier-collect` to `plugins/swarmdo-goals`.
 
 ### Agent: `dossier-investigator`
 
@@ -57,7 +57,7 @@ User-facing slash skill that drives the agent. Steps:
 1. **Seed validation** — normalize seed (entity type detection: file path / symbol / username / URL / ADR-id / concept).
 2. **Source plan** — pick which of the available tools apply to the seed type; user can override via `--sources`.
 3. **Round 0 fan-out** — issue all source queries in parallel via a single batched message (one Task call per source where useful, otherwise direct MCP calls).
-4. **Entity extraction** — for each hit, run `rufflo-knowledge-graph:kg-extract` (or a lightweight regex pass for obvious cases) to surface new entities.
+4. **Entity extraction** — for each hit, run `swarmdo-knowledge-graph:kg-extract` (or a lightweight regex pass for obvious cases) to surface new entities.
 5. **Recursive expansion** — for each new entity not already in the dossier, schedule round *k+1* until `maxDepth` or `budget` is hit. Apply de-duplication via embedding similarity (threshold 0.92).
 6. **Aggregation** — collapse hits into a graph: nodes = entities, edges = "discovered-via" with source provenance.
 7. **Reporting** — render markdown + JSON; optionally export to KG via `kg-extract` ingest.
@@ -69,7 +69,7 @@ User-facing slash skill that drives the agent. Steps:
 |---|---|
 | **Extend `deep-researcher`** | Would couple two structurally different loops (linear-graded vs parallel-recursive) into one prompt; would push the prompt past the 80-line guideline flagged in ADR-098. |
 | **Bundle Python `maigret` as an MCP wrapper** | Adds a Python runtime dependency, network egress to 3,000+ sites, and a privacy/abuse posture that's out of scope for a developer-research tool. We want maigret's *pattern*, not its target list. |
-| **Build into `rufflo-knowledge-graph`** | KG plugin is about graph operations on already-extracted data; investigator is about *acquisition*. Keeping it in `rufflo-goals` puts it next to its peers (`deep-researcher`, `goal-planner`). |
+| **Build into `swarmdo-knowledge-graph`** | KG plugin is about graph operations on already-extracted data; investigator is about *acquisition*. Keeping it in `swarmdo-goals` puts it next to its peers (`deep-researcher`, `goal-planner`). |
 
 ### Tradeoff: ~40% overlap with `deep-researcher`
 
@@ -86,7 +86,7 @@ If the overlap proves excessive after first usage, we can refactor a shared `mul
 ### Positive
 
 - Fills a real gap (recursive parallel investigation) without external deps.
-- Reuses the full rufflo tool surface — no new MCP servers.
+- Reuses the full swarmdo tool surface — no new MCP servers.
 - Unblocks a class of tasks (`investigate this symbol / module / dependency / ADR`) that today require manual fan-out.
 - Trajectory recording feeds the SONA pattern store, so future investigations get faster routing.
 
@@ -98,19 +98,19 @@ If the overlap proves excessive after first usage, we can refactor a shared `mul
 
 ### Neutral
 
-- No CLI surface change (`/rufflo-goals:dossier-collect` is the only new entry point).
+- No CLI surface change (`/swarmdo-goals:dossier-collect` is the only new entry point).
 - No persistence schema change — uses existing `dossier` namespace under AgentDB memory.
 
 ## Implementation plan
 
 | Step | File | Owner |
 |---|---|---|
-| 1. Agent prompt | `plugins/rufflo-goals/agents/dossier-investigator.md` | coder |
-| 2. Skill markdown | `plugins/rufflo-goals/skills/dossier-collect/SKILL.md` | coder |
-| 3. Slash command | `plugins/rufflo-goals/commands/goals.md` (add `dossier` subcommand) | coder |
-| 4. Plugin manifest bump | `plugins/rufflo-goals/.claude-plugin/plugin.json` (0.1.0 → 0.2.0) | coder |
-| 5. README update | `plugins/rufflo-goals/README.md` | coder |
-| 6. Smoke test | `tests/plugins/rufflo-goals/dossier.spec.ts` | tester |
+| 1. Agent prompt | `plugins/swarmdo-goals/agents/dossier-investigator.md` | coder |
+| 2. Skill markdown | `plugins/swarmdo-goals/skills/dossier-collect/SKILL.md` | coder |
+| 3. Slash command | `plugins/swarmdo-goals/commands/goals.md` (add `dossier` subcommand) | coder |
+| 4. Plugin manifest bump | `plugins/swarmdo-goals/.claude-plugin/plugin.json` (0.1.0 → 0.2.0) | coder |
+| 5. README update | `plugins/swarmdo-goals/README.md` | coder |
+| 6. Smoke test | `tests/plugins/swarmdo-goals/dossier.spec.ts` | tester |
 | 7. Ship behind a flag | `dossierInvestigator.enabled` defaulting `true` for first release | coder |
 
 Acceptance criteria:
@@ -127,15 +127,15 @@ All implementation plan steps are complete on `main`.
 
 | Step | File | Status | Commit(s) |
 |---|---|---|---|
-| 1. Agent prompt | `plugins/rufflo-goals/agents/dossier-investigator.md` | Implemented | `1e11ac84e feat(rufflo-goals): dossier-investigator agent + dossier-collect skill (ADR-099) (#1726)` |
-| 2. Skill markdown | `plugins/rufflo-goals/skills/dossier-collect/SKILL.md` | Implemented | same |
-| 3. Slash command | `plugins/rufflo-goals/commands/goals.md` (dossier subcommand) | Implemented | same |
-| 4. Plugin manifest bump | `plugins/rufflo-goals/.claude-plugin/plugin.json` (0.1.0 → 0.2.0) | Implemented | same |
-| 5. README update | `plugins/rufflo-goals/README.md` | Implemented | same |
-| 6. Smoke test | `tests/plugins/rufflo-goals/dossier.spec.ts` | Implemented | same |
+| 1. Agent prompt | `plugins/swarmdo-goals/agents/dossier-investigator.md` | Implemented | `1e11ac84e feat(swarmdo-goals): dossier-investigator agent + dossier-collect skill (ADR-099) (#1726)` |
+| 2. Skill markdown | `plugins/swarmdo-goals/skills/dossier-collect/SKILL.md` | Implemented | same |
+| 3. Slash command | `plugins/swarmdo-goals/commands/goals.md` (dossier subcommand) | Implemented | same |
+| 4. Plugin manifest bump | `plugins/swarmdo-goals/.claude-plugin/plugin.json` (0.1.0 → 0.2.0) | Implemented | same |
+| 5. README update | `plugins/swarmdo-goals/README.md` | Implemented | same |
+| 6. Smoke test | `tests/plugins/swarmdo-goals/dossier.spec.ts` | Implemented | same |
 | 7. Feature flag | `dossierInvestigator.enabled` (default `true`) | Implemented | same |
-| Plugin contract adoption | `plugins/rufflo-goals/` — legacy-vs-canonical namespace mapping + ADR-099 anchor | Implemented | `714cd534c feat(rufflo-goals): adopt plugin contract — legacy-vs-canonical namespace mapping + ADR-099 anchor (ADR-0001)` |
-| Dossier examples | `docs/examples/` — 3 examples (ruvnet, ADR-088, rufflo-goals) | Implemented | `ba0479612 docs(examples): add 3 dossier examples` |
+| Plugin contract adoption | `plugins/swarmdo-goals/` — legacy-vs-canonical namespace mapping + ADR-099 anchor | Implemented | `714cd534c feat(swarmdo-goals): adopt plugin contract — legacy-vs-canonical namespace mapping + ADR-099 anchor (ADR-0001)` |
+| Dossier examples | `docs/examples/` — 3 examples (upstream, ADR-088, swarmdo-goals) | Implemented | `ba0479612 docs(examples): add 3 dossier examples` |
 
 ### Open questions resolved during implementation
 
@@ -153,6 +153,6 @@ All implementation plan steps are complete on `main`.
 ## References
 
 - maigret — https://github.com/soxoj/maigret (recursive-parallel pattern reference, not a runtime dep)
-- `plugins/rufflo-goals/agents/deep-researcher.md` (sibling agent)
+- `plugins/swarmdo-goals/agents/deep-researcher.md` (sibling agent)
 - ADR-098 (plugin token-cost guidelines)
 - ADR-026 (3-tier model routing — sonnet justified for orchestration)

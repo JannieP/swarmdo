@@ -1,7 +1,7 @@
 # @swarmdo/plugin-quantum-optimizer
 
 [![npm version](https://img.shields.io/npm/v/@swarmdo/plugin-quantum-optimizer.svg)](https://www.npmjs.com/package/@swarmdo/plugin-quantum-optimizer)
-[![license](https://img.shields.io/npm/l/@swarmdo/plugin-quantum-optimizer.svg)](https://github.com/ruvnet/claude-flow/blob/main/LICENSE)
+[![license](https://img.shields.io/npm/l/@swarmdo/plugin-quantum-optimizer.svg)](the upstream project (see NOTICE))
 [![downloads](https://img.shields.io/npm/dm/@swarmdo/plugin-quantum-optimizer.svg)](https://www.npmjs.com/package/@swarmdo/plugin-quantum-optimizer)
 
 An exotic optimization plugin implementing quantum-inspired algorithms including Quantum Annealing simulation, QAOA (Quantum Approximate Optimization Algorithm) emulation, and Grover-inspired search acceleration. The plugin provides dramatic speedups for dependency resolution, optimal scheduling, and constraint satisfaction while running entirely on classical WASM-accelerated hardware.

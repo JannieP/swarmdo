@@ -49,6 +49,6 @@ Hook fires (session-start / post-task)
 
 ## References
 
-- Intelligence module: `v3/@rufflo/cli/src/memory/intelligence.ts`
-- Memory bridge: `v3/@rufflo/cli/src/memory/memory-bridge.ts`
-- Hooks wiring: `v3/@rufflo/cli/src/mcp-tools/hooks-tools.ts`
+- Intelligence module: `v3/@swarmdo/cli/src/memory/intelligence.ts`
+- Memory bridge: `v3/@swarmdo/cli/src/memory/memory-bridge.ts`
+- Hooks wiring: `v3/@swarmdo/cli/src/mcp-tools/hooks-tools.ts`

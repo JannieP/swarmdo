@@ -1,24 +1,24 @@
-# ADR-129 — `@ruvector/rvagent-wasm` Full Integration: JsModelProvider, RVF Composer, Gallery CRUD, and Plugin Bridge
+# ADR-129 — `@swarmvector/rvagent-wasm` Full Integration: JsModelProvider, RVF Composer, Gallery CRUD, and Plugin Bridge
 
 **Status**: Accepted — Implemented in v3.8.0 (2026-05-27)
 **Date**: 2026-05-24
-**Authors**: claude (drafted with rUv)
+**Authors**: claude (drafted with the upstream author)
 **Related**: ADR-115 (rvagent / Managed Agents two-runtime architecture), ADR-026 (3-tier model routing), ADR-112 (MCP tool discoverability), ADR-118 (AIDefence 2.3.0), ADR-126 (neural-trader substrate integration), ADR-127 (GitHub stack modernization), issues #2042 (provider routing fix), #1810 (model pin regression)
 **Supersedes**: nothing — extends the `rvagent` surface established by ADR-115
 
 ## Context
 
-Rufflo 3.7.0 is the first stable (post-alpha) release. The `@ruvector/rvagent-wasm@0.1.0` package ships five classes: `WasmAgent`, `WasmGallery`, `JsModelProvider`, `WasmRvfBuilder`, and `WasmMcpServer`. The current MCP surface covers 10 tools (7 agent + 3 gallery). Precise gaps, verified by source inspection:
+Swarmdo 3.7.0 is the first stable (post-alpha) release. The `@swarmvector/rvagent-wasm@0.1.0` package ships five classes: `WasmAgent`, `WasmGallery`, `JsModelProvider`, `WasmRvfBuilder`, and `WasmMcpServer`. The current MCP surface covers 10 tools (7 agent + 3 gallery). Precise gaps, verified by source inspection:
 
 ### Gap 1 — JsModelProvider wired around, not through (HIGH severity)
 
-`promptWasmAgent` (`v3/@rufflo/cli/src/ruvector/agent-wasm.ts:154-196`) calls `entry.agent.prompt(input)`, detects the echo stub, and only then routes through `callAnthropicMessages` (`agent-execute-core.ts:102`). `set_model_provider()` and `new JsModelProvider(callback)` are never called anywhere in the codebase (`grep -rn "new JsModelProvider"` returns zero hits). The consequence: the WASM agent's internal loop — multi-turn conversation state, tool dispatch, turn count, stop conditions — never actually runs against a real LLM. The echo-detection bypass is a workaround, not an integration. When `@ruvector/rvagent-wasm@0.2.x` ships a working LLM bridge, this bypass will compete with the provider callback, producing unpredictable double-routing.
+`promptWasmAgent` (`v3/@swarmdo/cli/src/swarmvector/agent-wasm.ts:154-196`) calls `entry.agent.prompt(input)`, detects the echo stub, and only then routes through `callAnthropicMessages` (`agent-execute-core.ts:102`). `set_model_provider()` and `new JsModelProvider(callback)` are never called anywhere in the codebase (`grep -rn "new JsModelProvider"` returns zero hits). The consequence: the WASM agent's internal loop — multi-turn conversation state, tool dispatch, turn count, stop conditions — never actually runs against a real LLM. The echo-detection bypass is a workaround, not an integration. When `@swarmvector/rvagent-wasm@0.2.x` ships a working LLM bridge, this bypass will compete with the provider callback, producing unpredictable double-routing.
 
-The fix template already exists: `callAnthropicMessages` at `agent-execute-core.ts:102` has Anthropic / OpenRouter / Ollama branch dispatch per `RUFLO_PROVIDER` and key-presence precedence. `resolveAnthropicModel` (`agent-execute-core.ts:398`) handles model normalization. The JS callback shape of `JsModelProvider` is `async (messagesJson: string) => string`, which maps cleanly to a thin adapter over `callAnthropicMessages`.
+The fix template already exists: `callAnthropicMessages` at `agent-execute-core.ts:102` has Anthropic / OpenRouter / Ollama branch dispatch per `SWARMDO_PROVIDER` and key-presence precedence. `resolveAnthropicModel` (`agent-execute-core.ts:398`) handles model normalization. The JS callback shape of `JsModelProvider` is `async (messagesJson: string) => string`, which maps cleanly to a thin adapter over `callAnthropicMessages`.
 
 ### Gap 2 — `WasmRvfBuilder.addMcpTools()` not exposed (HIGH severity)
 
-`buildRvfContainer` (`agent-wasm.ts:395-415`) instantiates `WasmRvfBuilder` and calls `addPrompt`, `addTool`, `addSkill` — but never `addMcpTools`. The `GalleryTemplateDetail` interface at `agent-wasm.ts:51` includes `mcp_tools: Array<...>`, but `buildRvfFromTemplate` (`agent-wasm.ts:420-429`) drops `template.mcp_tools` silently when building the RVF. No `wasm_agent_compose` MCP tool exists (confirmed: `grep -rn "wasm_agent_compose" src/mcp-tools/` returns nothing). This means sandboxed WASM agents cannot call any of rufflo's 314 MCP tools. WasmAgents are isolated from the swarm they are supposed to participate in.
+`buildRvfContainer` (`agent-wasm.ts:395-415`) instantiates `WasmRvfBuilder` and calls `addPrompt`, `addTool`, `addSkill` — but never `addMcpTools`. The `GalleryTemplateDetail` interface at `agent-wasm.ts:51` includes `mcp_tools: Array<...>`, but `buildRvfFromTemplate` (`agent-wasm.ts:420-429`) drops `template.mcp_tools` silently when building the RVF. No `wasm_agent_compose` MCP tool exists (confirmed: `grep -rn "wasm_agent_compose" src/mcp-tools/` returns nothing). This means sandboxed WASM agents cannot call any of swarmdo's 314 MCP tools. WasmAgents are isolated from the swarm they are supposed to participate in.
 
 ### Gap 3 — Six agent-introspection methods not exposed (MEDIUM severity)
 
@@ -30,7 +30,7 @@ The fix template already exists: `callAnthropicMessages` at `agent-execute-core.
 
 ### Gap 5 — No plugin bridge contract (LOW severity, HIGH leverage)
 
-Rufflo has 35 plugins across `/plugins/rufflo-*/` and `/v3/plugins/`. Each plugin exposes agents, skills, and commands. None of them can declare capabilities to the WASM agent runtime: there is no `"rvagent"` field in `.claude-plugin/plugin.json` (checked against `rufflo-core/plugin.json` as the reference). A WASM agent that needs to call a domain-specific plugin's skills — e.g. `rufflo-neural-trader`'s `trader-signal` or `rufflo-browser`'s session tools — has no mechanism to receive them at creation time.
+Swarmdo has 35 plugins across `/plugins/swarmdo-*/` and `/v3/plugins/`. Each plugin exposes agents, skills, and commands. None of them can declare capabilities to the WASM agent runtime: there is no `"rvagent"` field in `.claude-plugin/plugin.json` (checked against `swarmdo-core/plugin.json` as the reference). A WASM agent that needs to call a domain-specific plugin's skills — e.g. `swarmdo-neural-trader`'s `trader-signal` or `swarmdo-browser`'s session tools — has no mechanism to receive them at creation time.
 
 ### Why this matters now
 
@@ -50,7 +50,7 @@ In `agent-wasm.ts`, replace the echo-stub bypass in `promptWasmAgent` with a `Js
 
 ```typescript
 // pseudocode — not implementation
-import { JsModelProvider } from '@ruvector/rvagent-wasm';
+import { JsModelProvider } from '@swarmvector/rvagent-wasm';
 import { callAnthropicMessages, resolveAnthropicModel } from '../mcp-tools/agent-execute-core.js';
 
 const provider = new JsModelProvider(async (messagesJson: string) => {
@@ -88,7 +88,7 @@ The echo-stub detection block (`agent-wasm.ts:165-196`) becomes dead code once t
    - Returns the resulting RVF as a base64 string plus a manifest of what was packed.
    - Optionally accepts `agentId` to wire the resulting RVF into a live agent.
 
-3. Expose a helper `listRuffloMcpTools(): McpToolDescriptor[]` that reads the registered tool registry (the same registry that backs `mcp_tool_list`) and returns the descriptor array that `addMcpTools` expects. This is the wire that lets WasmAgents call any of the 314 rufflo MCP tools.
+3. Expose a helper `listSwarmdoMcpTools(): McpToolDescriptor[]` that reads the registered tool registry (the same registry that backs `mcp_tool_list`) and returns the descriptor array that `addMcpTools` expects. This is the wire that lets WasmAgents call any of the 314 swarmdo MCP tools.
 
 **Security note (does NOT require a separate ADR)**: `addMcpTools` embeds tool *descriptors* (name, description, input schema) into the RVF container. It does not embed credentials or give the WASM agent host-OS access. Actual tool execution still routes through the MCP server, which has its own authorization layer. Flag in the tool description that callers should pass only the tool subset the agent needs — principle of least privilege.
 
@@ -166,7 +166,7 @@ The contract is intentionally minimal: plugins opt in by adding the `"rvagent"` 
 
 ### Positive
 
-- **WasmAgents become real participants in the swarm.** Phase 2 closes the isolation gap: sandboxed agents can call any of the 314 rufflo MCP tools via the descriptor bridge, enabling use cases like a WASM-sandboxed code-execution agent that calls `memory_search` or `hooks_post_task` without OS access.
+- **WasmAgents become real participants in the swarm.** Phase 2 closes the isolation gap: sandboxed agents can call any of the 314 swarmdo MCP tools via the descriptor bridge, enabling use cases like a WASM-sandboxed code-execution agent that calls `memory_search` or `hooks_post_task` without OS access.
 - **Provider routing consistency.** Phase 1 brings WasmAgents under the same Anthropic / OpenRouter / Ollama routing as `agent_execute` (#2042). Users with `OPENROUTER_API_KEY` or `OLLAMA_API_KEY` will get working WASM agent responses without any additional configuration.
 - **Composable agent templates.** Phases 2 and 4 enable domain-specific agents composed at runtime (e.g. a neural-trader agent with `trader-signal` skills pre-wired) without requiring a new gallery template entry for every configuration permutation.
 - **Introspectability for orchestrators.** Phase 3's `wasm_agent_todos` and `wasm_agent_state` tools let swarm coordinators inspect WASM agent progress mid-task without polling the prompt interface.
@@ -175,11 +175,11 @@ The contract is intentionally minimal: plugins opt in by adding the `"rvagent"` 
 
 1. **Cost surface expansion.** Phase 1 means every `wasm_agent_prompt` call with `ANTHROPIC_API_KEY` set will make a billable LLM call. The echo-bypass currently used by some integrations (e.g. sandboxed test runners that don't set a key) is preserved via the fallback path, but callers who previously relied on echo behavior for cost-free sandboxing need to know the behaviour has changed. The `wasm_agent_create` description should be updated to note the billing implication.
 
-2. **`addMcpTools` blast radius.** Phase 2 gives a WASM agent descriptors for any of the 314 MCP tools. If `listRuffloMcpTools()` returns the full set by default, an agent could be configured to call dangerous tools (`memory_delete`, `federation_*`, `aidefence_*`). Mitigation: `wasm_agent_compose` should accept an explicit `mcpTools` allowlist; `listRuffloMcpTools()` should require the caller to pass a scope (e.g. `"memory-read-only"`, `"all"`). The tool description must document this prominently.
+2. **`addMcpTools` blast radius.** Phase 2 gives a WASM agent descriptors for any of the 314 MCP tools. If `listSwarmdoMcpTools()` returns the full set by default, an agent could be configured to call dangerous tools (`memory_delete`, `federation_*`, `aidefence_*`). Mitigation: `wasm_agent_compose` should accept an explicit `mcpTools` allowlist; `listSwarmdoMcpTools()` should require the caller to pass a scope (e.g. `"memory-read-only"`, `"all"`). The tool description must document this prominently.
 
 3. **`importCustom` prompt-injection surface.** Phase 3's `wasm_gallery_import` deserializes user-supplied JSON inside the WASM runtime. A malicious `system_prompt` field in an imported template could direct a WasmAgent toward harmful behavior. The AIDefence gate required by the acceptance criteria is the primary mitigation, but it depends on AIDefence's prompt-injection detection coverage — which is probabilistic, not guaranteed. The tool should be marked `HIGH_RISK` in the MCP tool registry and require explicit user confirmation in the CLI wrapper.
 
-4. **Plugin bridge maintenance burden.** Phase 4 introduces a new field in `plugin.json` that every plugin author must learn. The field is optional and has no effect unless used, but it creates documentation debt. The `rufflo-plugin-creator` scaffold (`plugins/rufflo-plugin-creator/`) should be updated to include the `"rvagent"` stub commented out, so new plugins are aware of the option without being forced to use it.
+4. **Plugin bridge maintenance burden.** Phase 4 introduces a new field in `plugin.json` that every plugin author must learn. The field is optional and has no effect unless used, but it creates documentation debt. The `swarmdo-plugin-creator` scaffold (`plugins/swarmdo-plugin-creator/`) should be updated to include the `"rvagent"` stub commented out, so new plugins are aware of the option without being forced to use it.
 
 ## Acceptance criteria per phase (summary)
 
@@ -203,8 +203,8 @@ All four phases shipped in a single PR (#2123, merged 2026-05-24). Release v3.8.
 ### Gap 2 implementation summary (Phase 2)
 
 **Files changed**:
-- `v3/@rufflo/cli/src/ruvector/agent-wasm.ts` — `buildRvfContainer` gains `mcpTools?: McpToolDescriptor[]`; calls `builder.addMcpTools(JSON.stringify(mcpTools))`. `buildRvfFromTemplate` now passes `template.mcp_tools` (was silently dropped).
-- `v3/@rufflo/cli/src/mcp-tools/wasm-agent-tools.ts` — `wasm_agent_compose` MCP tool added with full `DESTRUCTIVE_TOOL_PATTERNS` gate, `SAFE_MCP_TOOLS` allowlist (28 tools), `mcpToolsAllowDestructive` opt-in flag, and `includePlugins` for Phase 4 plugin wiring.
+- `v3/@swarmdo/cli/src/swarmvector/agent-wasm.ts` — `buildRvfContainer` gains `mcpTools?: McpToolDescriptor[]`; calls `builder.addMcpTools(JSON.stringify(mcpTools))`. `buildRvfFromTemplate` now passes `template.mcp_tools` (was silently dropped).
+- `v3/@swarmdo/cli/src/mcp-tools/wasm-agent-tools.ts` — `wasm_agent_compose` MCP tool added with full `DESTRUCTIVE_TOOL_PATTERNS` gate, `SAFE_MCP_TOOLS` allowlist (28 tools), `mcpToolsAllowDestructive` opt-in flag, and `includePlugins` for Phase 4 plugin wiring.
 
 **Smoke results (smoke-wasm-rvf-compose.mjs)**: 7/7 PASS
 1. `wasm_agent_compose` tool registered
@@ -217,4 +217,4 @@ All four phases shipped in a single PR (#2123, merged 2026-05-24). Release v3.8.
 
 **Backward compat**: `wasm_agent_create` and `wasm_agent_prompt` unaffected — `mcpTools` parameter is optional with empty-array default. Existing agents with no `mcp_tools` field continue to work identically.
 
-**MCP tools accessible to WASM agents**: 314 (full rufflo surface, gated by allowlist)
+**MCP tools accessible to WASM agents**: 314 (full swarmdo surface, gated by allowlist)

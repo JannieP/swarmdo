@@ -18,8 +18,8 @@ npx swarmdo-swarm github-coordinate
 # Or use directly in your swarm
 const GHCoordinator = require('./gh-cli-coordinator');
 const coordinator = new GHCoordinator({
-  owner: 'ruvnet',
-  repo: 'ruv-FANN'
+  owner: 'upstream',
+  repo: 'the upstream repo'
 });
 
 # Get available tasks
@@ -49,8 +49,8 @@ Add automatic GitHub coordination to your Claude Code sessions:
 
 2. Set environment variables:
 ```bash
-export GITHUB_OWNER=ruvnet
-export GITHUB_REPO=ruv-FANN
+export GITHUB_OWNER=upstream
+export GITHUB_REPO=the upstream repo
 export CLAUDE_SWARM_ID=my-swarm-123  # Optional, auto-generated if not set
 ```
 
@@ -101,8 +101,8 @@ The system uses GitHub labels to coordinate work:
 ```javascript
 // Initialize coordinator
 const coordinator = new GHCoordinator({
-  owner: 'ruvnet',
-  repo: 'ruv-FANN',
+  owner: 'upstream',
+  repo: 'the upstream repo',
   labelPrefix: 'swarm-'  // default
 });
 

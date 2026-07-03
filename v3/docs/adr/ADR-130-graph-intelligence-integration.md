@@ -2,8 +2,8 @@
 
 **Status**: Proposed (2026-05-24)
 **Date**: 2026-05-24
-**Authors**: claude (drafted with rUv)
-**Related**: ADR-087 (graph-node native backend), ADR-123 (sublinear integration / graph intelligence engine), ADR-053 (AgentDB MCP tools), ADR-097 (federation budget circuit breaker), ADR-103 (witness temporal history), ADR-121 (embeddings RuVector upgrade), issues #2047 (witness manifest drift), #1872 (integration test bugs), #1907 (ADR-113 strategic gaps)
+**Authors**: claude (drafted with the upstream author)
+**Related**: ADR-087 (graph-node native backend), ADR-123 (sublinear integration / graph intelligence engine), ADR-053 (AgentDB MCP tools), ADR-097 (federation budget circuit breaker), ADR-103 (witness temporal history), ADR-121 (embeddings SwarmVector upgrade), issues #2047 (witness manifest drift), #1872 (integration test bugs), #1907 (ADR-113 strategic gaps)
 **Supersedes**: nothing — consolidates graph surfaces established by ADR-087 and ADR-123
 
 ---
@@ -12,30 +12,30 @@
 
 ### Status quo: four graph layers that do not know about each other
 
-Rufflo 3.8.0 ships four independent graph-layer implementations. All four are live in production and have real users, but they share no schema, no query contract, and no indexing strategy. Each was added in a separate ADR and each solves a slice of the graph problem in isolation.
+Swarmdo 3.8.0 ships four independent graph-layer implementations. All four are live in production and have real users, but they share no schema, no query contract, and no indexing strategy. Each was added in a separate ADR and each solves a slice of the graph problem in isolation.
 
-**Layer 1 — `@ruvector/graph-node` native backend (ADR-087)**
-File: `v3/@rufflo/cli/src/ruvector/graph-backend.ts`
+**Layer 1 — `@swarmvector/graph-node` native backend (ADR-087)**
+File: `v3/@swarmdo/cli/src/swarmvector/graph-backend.ts`
 
-The Rust-native graph store. Exposes `createNode`, `createEdge`, `createHyperedge`, `kHopNeighbors`, and `stats`. Used by `agentdb_causal-edge` as the preferred write path (`agentdb-tools.ts:341–356`) and by `agent_spawn` to record agent nodes (`agent-tools.ts:315`). Persistence path is `.rufflo/graph/agents.db` (`graph-backend.ts:53`). Embeddings at insertion time are 8-dimensional character-hash stubs (`graph-backend.ts:68–79`) — not semantically meaningful. k-hop neighbors are returned as opaque string IDs with no relevance scores.
+The Rust-native graph store. Exposes `createNode`, `createEdge`, `createHyperedge`, `kHopNeighbors`, and `stats`. Used by `agentdb_causal-edge` as the preferred write path (`agentdb-tools.ts:341–356`) and by `agent_spawn` to record agent nodes (`agent-tools.ts:315`). Persistence path is `.swarmdo/graph/agents.db` (`graph-backend.ts:53`). Embeddings at insertion time are 8-dimensional character-hash stubs (`graph-backend.ts:68–79`) — not semantically meaningful. k-hop neighbors are returned as opaque string IDs with no relevance scores.
 
 **Layer 2 — AgentDB CausalMemoryGraph (ADR-053)**
-File: `v3/@rufflo/cli/src/mcp-tools/agentdb-tools.ts:312–370`, `v3/@rufflo/cli/src/memory/memory-bridge.ts`
+File: `v3/@swarmdo/cli/src/mcp-tools/agentdb-tools.ts:312–370`, `v3/@swarmdo/cli/src/memory/memory-bridge.ts`
 
 The AgentDB bridge's `CausalMemoryGraph` controller. Accepts `{ sourceId, targetId, relation, weight }` via `agentdb_causal-edge`. Falls back to SQLite rows when graph-node is unavailable. Has no graph traversal primitives — only insert and delete. `agentdb_causal-edge-delete` is marked `controller="native-unsupported"` for graph-node edges because the native backend lacks a delete API (`memory-bridge.ts:1748–1821`).
 
-**Layer 3 — rufflo-knowledge-graph plugin (v0.2.0)**
-Files: `plugins/rufflo-knowledge-graph/`, including `agents/graph-navigator.md`, `skills/kg-extract/SKILL.md`, `skills/kg-traverse/SKILL.md`
+**Layer 3 — swarmdo-knowledge-graph plugin (v0.2.0)**
+Files: `plugins/swarmdo-knowledge-graph/`, including `agents/graph-navigator.md`, `skills/kg-extract/SKILL.md`, `skills/kg-traverse/SKILL.md`
 
 A pure-skill-layer plugin. Stores entities via `agentdb_hierarchical-store`, relations via `agentdb_causal-edge`, and traverses using `agentdb_semantic-route` + `agentdb_pattern-search`. The graph-navigator agent runs a custom pathfinder algorithm in its prompt (seed, expand, score, prune, rank) with no native graph query behind it — it issues O(depth) sequential MCP calls. The plugin has no knowledge of Layers 1, 2, or 4.
 
-**Layer 4 — rufflo-graph-intelligence plugin (0.1.0-alpha.1, ADR-123)**
-Files: `plugins/rufflo-graph-intelligence/src/`, including `mcp-tools/index.ts` (6 tools), `adapters/` (8 adapter modules), `application/streaming-bridge.ts`, `domain/types.ts`
+**Layer 4 — swarmdo-graph-intelligence plugin (0.1.0-alpha.1, ADR-123)**
+Files: `plugins/swarmdo-graph-intelligence/src/`, including `mcp-tools/index.ts` (6 tools), `adapters/` (8 adapter modules), `application/streaming-bridge.ts`, `domain/types.ts`
 
 The sublinear-solver layer. Provides complexity-governed PageRank (`sublinear/page-rank-entry`), linear solve, incremental solve (`sublinear/solve-on-change`), feasibility checking, JL-embed, and diagnostics. Consumes graphs via the `SublinearAdapter` interface — implementors call `exportAsSparseMatrix()`. Eight adapters exist: `knowledge-graph-adapter.ts`, `rag-memory-adapter.ts`, `cost-attribution-adapter.ts`, `federation-trust-adapter.ts`, `browser-causal-adapter.ts`, `observability-span-adapter.ts`, `jujutsu-blast-radius-adapter.ts`, and `portfolio-cg-adapter.ts`. Layer 4 is independent of Layers 1–3; the `KnowledgeGraphAdapter` (`adapters/knowledge-graph-adapter.ts`) defines its own `KnowledgeGraphSource` interface that callers must implement manually.
 
 **Layer 5 (ambient) — MemoryGraph (ADR-049)**
-References: `v3/@rufflo/cli/src/init/executor.ts:1762`, `init/types.ts:221`
+References: `v3/@swarmdo/cli/src/init/executor.ts:1762`, `init/types.ts:221`
 
 A PageRank knowledge graph described in init-generated CAPABILITIES.md files but with no dedicated implementation file found in the source tree. Referenced in `init/settings-generator.ts:123` as `enableMemoryGraph`. Its current implementation status is unclear — the feature appears in generated documentation but there is no `memory-graph.ts` module in `src/`. This is an unknown that would need user clarification before Phase 1 scope is finalized.
 
@@ -43,15 +43,15 @@ A PageRank knowledge graph described in init-generated CAPABILITIES.md files but
 
 1. **Double writes on causal edges.** `agentdb_causal-edge` writes to graph-node native storage and then also to the AgentDB bridge (`agentdb-tools.ts:351–353`) "for compatibility". Every edge is stored twice in different formats with no reconciliation.
 
-2. **No semantic graph traversal.** graph-node's `kHopNeighbors` returns raw node IDs. The knowledge-graph plugin's pathfinder is a prompt-level loop with no graph-native scoring. rufflo-graph-intelligence's PageRank operates on SparseMatrix snapshots that must be re-exported from scratch on every query. There is no path from a query string to a semantically-ranked subgraph.
+2. **No semantic graph traversal.** graph-node's `kHopNeighbors` returns raw node IDs. The knowledge-graph plugin's pathfinder is a prompt-level loop with no graph-native scoring. swarmdo-graph-intelligence's PageRank operates on SparseMatrix snapshots that must be re-exported from scratch on every query. There is no path from a query string to a semantically-ranked subgraph.
 
 3. **No cross-layer visibility.** SONA trajectory steps (`hooks_intelligence_trajectory-step`) are stored as memory entries with no graph edges. When a task succeeds, the causal relationship between the triggering context and the solution pattern is not recorded as a graph edge — it is only stored as a flat memory row. The RETRIEVE step of the 4-step intelligence pipeline has no graph backbone.
 
-4. **Embedding mismatch.** graph-node uses 8-dimensional char-hash embeddings (not semantically useful). AgentDB uses ONNX all-MiniLM-L6-v2 384-dimensional embeddings. rufflo-graph-intelligence operates on weight matrices with no embedding layer at all. Three incompatible embedding regimes for three layers that are supposed to describe the same graph.
+4. **Embedding mismatch.** graph-node uses 8-dimensional char-hash embeddings (not semantically useful). AgentDB uses ONNX all-MiniLM-L6-v2 384-dimensional embeddings. swarmdo-graph-intelligence operates on weight matrices with no embedding layer at all. Three incompatible embedding regimes for three layers that are supposed to describe the same graph.
 
 5. **No shared query language.** There is no way to ask "which memory entries caused the current agent's trajectory?" using a single MCP call. A client must coordinate across `agentdb_causal-edge`, `agentdb_hierarchical-recall`, `sublinear/page-rank-entry`, and the knowledge-graph agent's pathfinder — with no shared node ID namespace.
 
-6. **Plugin is alpha-only.** `rufflo-graph-intelligence@0.1.0-alpha.1` is unpublished to npm (version string is pre-1.0 alpha, not in the marketplace). The knowledge-graph plugin is `v0.2.0` and listed but does not appear in the plugin registry's `featured` or `official` sections in `discovery.ts`.
+6. **Plugin is alpha-only.** `swarmdo-graph-intelligence@0.1.0-alpha.1` is unpublished to npm (version string is pre-1.0 alpha, not in the marketplace). The knowledge-graph plugin is `v0.2.0` and listed but does not appear in the plugin registry's `featured` or `official` sections in `discovery.ts`.
 
 ### What "integration" means concretely
 
@@ -59,11 +59,11 @@ The goal of ADR-130 is not to build a new graph database. It is to give all four
 
 - Graph nodes use a single namespace (UUIDs prefixed by domain, e.g. `mem:<id>`, `agent:<id>`, `task:<id>`, `entity:<id>`).
 - All edges share one backing table in AgentDB sql.js (the `vector_indexes` + a new `graph_edges` table), queryable via the existing MCP surface.
-- rufflo-graph-intelligence adapters can read live edges from AgentDB without requiring a manual `exportAsSparseMatrix()` re-implementation per adapter.
+- swarmdo-graph-intelligence adapters can read live edges from AgentDB without requiring a manual `exportAsSparseMatrix()` re-implementation per adapter.
 - SONA trajectory steps become graph edges automatically via a post-step hook.
 - A single `graph_query` MCP tool answers k-hop, semantic-neighbor, and PageRank queries using the backend appropriate to the query size and complexity budget.
 
-The canonical backend is: **AgentDB sql.js** for persistence (cross-platform, no native compilation required), **@ruvector/graph-node** for native operations when available (k-hop, hyperedges, stats), and **rufflo-graph-intelligence's SublinearAdapter** for complexity-governed analytics queries. The three are not competing — they are complementary layers of the same stack.
+The canonical backend is: **AgentDB sql.js** for persistence (cross-platform, no native compilation required), **@swarmvector/graph-node** for native operations when available (k-hop, hyperedges, stats), and **swarmdo-graph-intelligence's SublinearAdapter** for complexity-governed analytics queries. The three are not competing — they are complementary layers of the same stack.
 
 ---
 
@@ -79,7 +79,7 @@ Land six independently shippable phases targeting 3.9.0 (Phases 1–3) and 3.10.
 
 Define a canonical node ID format: `{domain}:{uuid-v4}` where domain is one of `mem`, `agent`, `task`, `entity`, `span`, `pattern`. All graph-producing code must prefix IDs on write. Existing unprefixed IDs in graph-node storage are soft-migrated on first read: if an ID contains no `:` separator it is treated as legacy and prefixed `mem:` for AgentDB compatibility.
 
-Add a `graph_edges` table to the sql.js schema alongside the existing `vector_indexes` table (`v3/@rufflo/cli/src/commands/ruvector/setup.ts:197–253`):
+Add a `graph_edges` table to the sql.js schema alongside the existing `vector_indexes` table (`v3/@swarmdo/cli/src/commands/swarmvector/setup.ts:197–253`):
 
 ```sql
 CREATE TABLE IF NOT EXISTS claude_flow.graph_edges (
@@ -111,7 +111,7 @@ CREATE INDEX IF NOT EXISTS idx_graph_edges_reinforced ON claude_flow.graph_edges
 
 1. **Default (Phase 1)**: store as PQ-compressed `int8[384]` (4× shrink, ~0.4 KB/edge); call out exactly that float32 is *never* primary.
 2. **Vector index reference**: write the embedding once into the existing `vector_indexes` HNSW table and store only the row ID in `embedding_ref` — amortizes duplicate embeddings across edges sharing a `(relation, source, target)` shape.
-3. **Cold tier** (Phase 6 work, optional earlier): for projects that exceed 5 M edges, route embeddings to `ruvector-postgres` or RVF cold tiers; sql.js keeps only the structural columns. This is the same tiering pattern used by ADR-125 memory consolidation.
+3. **Cold tier** (Phase 6 work, optional earlier): for projects that exceed 5 M edges, route embeddings to `swarmvector-postgres` or RVF cold tiers; sql.js keeps only the structural columns. This is the same tiering pattern used by ADR-125 memory consolidation.
 
 The 8-dim char-hash in `graph-backend.ts:68–79` is replaced by a 384-dim ONNX embedding call via the existing `getEmbeddingService()` pattern (used in `embeddings-tools.ts`), then run through the PQ encoder before storage. The ONNX call is async and adds ~50ms per edge insert; this is acceptable for write paths but must not block the read path.
 
@@ -124,9 +124,9 @@ The existing `agentdb_causal-edge` handler in `agentdb-tools.ts:312–370` is up
 1. `agentdb_causal-edge { sourceId: "agent:abc", targetId: "task:xyz", relation: "assigned_to" }` inserts one row in `graph_edges` with a valid 384-dim embedding blob.
 2. `agentdb_causal-edge { sourceId: "legacy-id-no-prefix" }` inserts with source auto-prefixed as `mem:legacy-id-no-prefix` and logs a deprecation warning.
 3. Double-write to graph-node native storage is retained as before (no regression to existing `kHopNeighbors` consumers).
-4. `graph_edges` table created by `ruvector setup` (`setup.ts` migration) without error.
+4. `graph_edges` table created by `swarmvector setup` (`setup.ts` migration) without error.
 
-**CI smoke**: `scripts/smoke-graph-schema-migration.mjs` — runs setup, inserts one edge, verifies row + 384-dim embedding present. Runs without `@ruvector/graph-node` (tests sql.js fallback path).
+**CI smoke**: `scripts/smoke-graph-schema-migration.mjs` — runs setup, inserts one edge, verifies row + 384-dim embedding present. Runs without `@swarmvector/graph-node` (tests sql.js fallback path).
 
 ---
 
@@ -141,7 +141,7 @@ agentdb_graph-query({
   nodeId: string,         // domain-prefixed; required
   mode: "k-hop"           // k-hop neighbor expansion
        | "semantic"        // cosine-nearest via ONNX embeddings on graph_edges
-       | "pagerank",       // single-entry PPR via rufflo-graph-intelligence
+       | "pagerank",       // single-entry PPR via swarmdo-graph-intelligence
   depth?: number,          // for k-hop (default 2)
   topK?: number,           // for semantic + pagerank (default 10)
   relation?: string,       // optional edge filter
@@ -158,15 +158,15 @@ Dispatch logic (in order of capability):
 1. If `mode === "k-hop"` and graph-node native is available: call `db.kHopNeighbors(nodeId, depth)`.
 2. If `mode === "k-hop"` and graph-node unavailable: SQL `SELECT target_id FROM graph_edges WHERE source_id = ?` recursively (CTE up to depth 3).
 3. If `mode === "semantic"`: cosine search over `graph_edges.embedding` column via the HNSW index.
-4. If `mode === "pagerank"`: load edges from `graph_edges` into a `SparseMatrix`, call `runPageRank` from `rufflo-graph-intelligence`'s `solver-bridge.ts`. This is the integration point where the sublinear solver reads from the unified schema.
+4. If `mode === "pagerank"`: load edges from `graph_edges` into a `SparseMatrix`, call `runPageRank` from `swarmdo-graph-intelligence`'s `solver-bridge.ts`. This is the integration point where the sublinear solver reads from the unified schema.
 
-The `KnowledgeGraphSource` interface in `plugins/rufflo-graph-intelligence/src/adapters/knowledge-graph-adapter.ts:17` gains a default implementation that reads from `graph_edges` via the bridge, so the `KnowledgeGraphAdapter` no longer requires callers to implement their own edge source.
+The `KnowledgeGraphSource` interface in `plugins/swarmdo-graph-intelligence/src/adapters/knowledge-graph-adapter.ts:17` gains a default implementation that reads from `graph_edges` via the bridge, so the `KnowledgeGraphAdapter` no longer requires callers to implement their own edge source.
 
 **Acceptance criteria**
 
 1. `agentdb_graph-query({ nodeId: "agent:abc", mode: "k-hop", depth: 2 })` returns neighbor IDs without error when graph-node is available.
 2. Same call with graph-node unavailable returns results from SQL CTE fallback.
-3. `agentdb_graph-query({ nodeId: "entity:xyz", mode: "pagerank", topK: 5 })` returns ranked node list using rufflo-graph-intelligence's `runPageRank`. Requires `rufflo-graph-intelligence` to be importable (optional dependency; graceful error if absent).
+3. `agentdb_graph-query({ nodeId: "entity:xyz", mode: "pagerank", topK: 5 })` returns ranked node list using swarmdo-graph-intelligence's `runPageRank`. Requires `swarmdo-graph-intelligence` to be importable (optional dependency; graceful error if absent).
 4. `mode === "semantic"` returns nodes ranked by embedding cosine similarity.
 
 **CI smoke**: `scripts/smoke-graph-query-dispatch.mjs` — tests all three modes against a seeded `graph_edges` table. Native-backend mode tests are guarded by `isGraphBackendAvailable()` and skipped if unavailable.
@@ -199,7 +199,7 @@ These are additive writes — no existing read paths change. Both side-effects a
 
 **What changes**
 
-Plugins that produce graph-meaningful data (agent activity, cost events, browser spans, etc.) currently each implement their own `SublinearAdapter` with custom `exportAsSparseMatrix()` logic. The eight existing adapters in `plugins/rufflo-graph-intelligence/src/adapters/` each re-implement edge loading from different sources with no shared contract.
+Plugins that produce graph-meaningful data (agent activity, cost events, browser spans, etc.) currently each implement their own `SublinearAdapter` with custom `exportAsSparseMatrix()` logic. The eight existing adapters in `plugins/swarmdo-graph-intelligence/src/adapters/` each re-implement edge loading from different sources with no shared contract.
 
 Define an optional `"graph_adapter"` section in `.claude-plugin/plugin.json`:
 
@@ -215,13 +215,13 @@ Define an optional `"graph_adapter"` section in `.claude-plugin/plugin.json`:
 
 When `autoRegister: true`, the plugin's edges are automatically included in `graph_edges` writes by the core graph layer, rather than requiring a custom `SublinearAdapter` implementation. The plugin declares which relation types it produces; the core writes them when the relevant MCP tools are called (e.g., `observe-trace` writes `span` nodes; `browser_session_record` writes `session` nodes).
 
-The eight existing adapters in `plugins/rufflo-graph-intelligence/src/adapters/` are updated to read from `graph_edges` as their primary source, falling back to their current plugin-specific sources when rows are absent (backward compatibility).
+The eight existing adapters in `plugins/swarmdo-graph-intelligence/src/adapters/` are updated to read from `graph_edges` as their primary source, falling back to their current plugin-specific sources when rows are absent (backward compatibility).
 
 **Acceptance criteria**
 
 1. A fixture plugin with `"graph_adapter": { "edgeRelations": ["test-event"], "autoRegister": true }` causes writes to `graph_edges` with `relation = "test-event"` when its MCP tool is called.
 2. The eight existing adapters pass their existing tests unchanged (backward compat via fallback).
-3. `rufflo-plugin-creator` scaffold includes the `"graph_adapter"` stub (commented out) in generated `plugin.json`.
+3. `swarmdo-plugin-creator` scaffold includes the `"graph_adapter"` stub (commented out) in generated `plugin.json`.
 
 **CI smoke**: `scripts/smoke-graph-plugin-adapter.mjs` — fixture plugin, one MCP call, verify `graph_edges` row.
 
@@ -231,7 +231,7 @@ The eight existing adapters in `plugins/rufflo-graph-intelligence/src/adapters/`
 
 **What changes**
 
-The `rufflo-knowledge-graph` plugin's graph-navigator agent currently runs its pathfinder algorithm in its system prompt, issuing sequential `agentdb_causal-edge` and `agentdb_semantic-route` calls in a loop. This is O(depth × branching-factor) sequential MCP calls — expensive, slow, and not reproducible.
+The `swarmdo-knowledge-graph` plugin's graph-navigator agent currently runs its pathfinder algorithm in its system prompt, issuing sequential `agentdb_causal-edge` and `agentdb_semantic-route` calls in a loop. This is O(depth × branching-factor) sequential MCP calls — expensive, slow, and not reproducible.
 
 Add `agentdb_graph-pathfinder` to `agentdb-tools.ts`:
 
@@ -271,7 +271,7 @@ agentdb_graph-pathfinder({
 
 Each algorithm respects `complexityBudget` and aborts cleanly with a partial result when any cap is hit. The budget is forwarded to the sublinear solver and also enforced at the dispatcher level for non-solver algorithms.
 
-Implementation: expand k-hop neighbors from `graph_edges`, score each candidate node by the algorithm's per-edge cost function, prune paths below threshold, rank. This matches the pathfinder algorithm described in `plugins/rufflo-knowledge-graph/agents/graph-navigator.md:26–40` for the default `personalized-pagerank` mode but executes as a single native operation instead of a prompt loop.
+Implementation: expand k-hop neighbors from `graph_edges`, score each candidate node by the algorithm's per-edge cost function, prune paths below threshold, rank. This matches the pathfinder algorithm described in `plugins/swarmdo-knowledge-graph/agents/graph-navigator.md:26–40` for the default `personalized-pagerank` mode but executes as a single native operation instead of a prompt loop.
 
 The `graph-navigator` agent's SKILL.md and agent prompt are updated to use `agentdb_graph-pathfinder` as the primary traversal tool. The manual loop steps remain documented for cases where the tool is unavailable (graceful degradation).
 
@@ -291,7 +291,7 @@ The `graph-navigator` agent's SKILL.md and agent prompt are updated to use `agen
 
 **What changes**
 
-The SOTA comparator drive (PR #2124, gist `298f8c668c8859b369f91734a0e9cbbe`) measured rufflo winning 3 of 5 dimensions vs LangGraph/AutoGen/CrewAI. Graph traversal latency, edge insert throughput, and k-hop query cost are not currently in the benchmark suite — they are "what we don't measure" caveats.
+The SOTA comparator drive (PR #2124, gist `298f8c668c8859b369f91734a0e9cbbe`) measured swarmdo winning 3 of 5 dimensions vs LangGraph/AutoGen/CrewAI. Graph traversal latency, edge insert throughput, and k-hop query cost are not currently in the benchmark suite — they are "what we don't measure" caveats.
 
 Add graph benchmarks to `scripts/benchmark-graph.mjs`:
 
@@ -306,12 +306,12 @@ Comparator angle: LangGraph's graph traversal latency is approximately 10–50ms
 
 | Fix marker | File | Hash basis |
 |---|---|---|
-| `graph-schema-migration-v1` | `src/commands/ruvector/setup.ts` | sha256 of the `graph_edges` CREATE TABLE block |
+| `graph-schema-migration-v1` | `src/commands/swarmvector/setup.ts` | sha256 of the `graph_edges` CREATE TABLE block |
 | `agentdb-graph-query-tool` | `src/mcp-tools/agentdb-tools.ts` | sha256 of `agentdb_graph-query` handler |
 | `agentdb-graph-pathfinder-tool` | `src/mcp-tools/agentdb-tools.ts` | sha256 of `agentdb_graph-pathfinder` handler |
 | `trajectory-graph-hook` | `src/mcp-tools/hooks-tools.ts` | sha256 of trajectory-step graph-write block |
 
-Registration via `npx rufflo witness regen` after each phase lands.
+Registration via `npx swarmdo witness regen` after each phase lands.
 
 ---
 
@@ -337,11 +337,11 @@ For the comparator angle: target graph query latency < 10ms at 1,000 nodes, whic
 
 ### 1. Schema migration of existing causal-edge data (HIGH)
 
-Existing `agentdb_causal-edge` data lives in three places: graph-node native `.rufflo/graph/agents.db`, AgentDB bridge SQL tables, and the pilot "double-write" rows added by `agentdb-tools.ts:351–353`. Phase 1 adds a fourth table (`graph_edges`). Without a migration, data is split across all four locations and the unified query in Phase 2 will miss historical edges. Mitigation: Phase 1 must include a one-time migration that reads existing bridge rows and inserts them into `graph_edges`. The graph-node native database lacks an enumeration API (no `listAllEdges()` confirmed in `graph-backend.ts`), so native-only edges cannot be automatically migrated — this is an acknowledged gap. Users who rely on native-only k-hop queries will not lose data, but those edges will not be queryable via `agentdb_graph-query` mode "semantic" or "pagerank" until Phase 4's adapter registers them.
+Existing `agentdb_causal-edge` data lives in three places: graph-node native `.swarmdo/graph/agents.db`, AgentDB bridge SQL tables, and the pilot "double-write" rows added by `agentdb-tools.ts:351–353`. Phase 1 adds a fourth table (`graph_edges`). Without a migration, data is split across all four locations and the unified query in Phase 2 will miss historical edges. Mitigation: Phase 1 must include a one-time migration that reads existing bridge rows and inserts them into `graph_edges`. The graph-node native database lacks an enumeration API (no `listAllEdges()` confirmed in `graph-backend.ts`), so native-only edges cannot be automatically migrated — this is an acknowledged gap. Users who rely on native-only k-hop queries will not lose data, but those edges will not be queryable via `agentdb_graph-query` mode "semantic" or "pagerank" until Phase 4's adapter registers them.
 
 ### 2. Double-write cost during transition (MEDIUM)
 
-Between Phase 1 and Phase 3, every `agentdb_causal-edge` call writes to: (a) graph-node native, (b) AgentDB bridge, and (c) the new `graph_edges` table — three writes per edge. For high-frequency callers (SONA trajectory steps in busy sessions) this triples the write load. Mitigation: add a `RUFFLO_GRAPH_DUAL_WRITE=0` env var to suppress the legacy writes once Phase 3 lands. The double-write can be removed in 3.10.0 after a single minor version of parallel operation.
+Between Phase 1 and Phase 3, every `agentdb_causal-edge` call writes to: (a) graph-node native, (b) AgentDB bridge, and (c) the new `graph_edges` table — three writes per edge. For high-frequency callers (SONA trajectory steps in busy sessions) this triples the write load. Mitigation: add a `SWARMDO_GRAPH_DUAL_WRITE=0` env var to suppress the legacy writes once Phase 3 lands. The double-write can be removed in 3.10.0 after a single minor version of parallel operation.
 
 ### 3. Query language compatibility (LOW)
 
@@ -349,7 +349,7 @@ The `agentdb_graph-pathfinder` tool (Phase 5) exposes a simplified subset of gra
 
 ### 4. Plugin breakage from adapter changes (LOW)
 
-The eight adapters in `plugins/rufflo-graph-intelligence/src/adapters/` currently read from plugin-specific sources. Phase 4 makes `graph_edges` the primary source and the plugin-specific source a fallback. If a plugin's edges are not yet migrated to `graph_edges`, its adapter will silently return stale or empty data. Mitigation: Phase 4 must include a `validateAdapterSource()` diagnostic that warns (not errors) when `graph_edges` returns fewer rows than the plugin-specific source.
+The eight adapters in `plugins/swarmdo-graph-intelligence/src/adapters/` currently read from plugin-specific sources. Phase 4 makes `graph_edges` the primary source and the plugin-specific source a fallback. If a plugin's edges are not yet migrated to `graph_edges`, its adapter will silently return stale or empty data. Mitigation: Phase 4 must include a `validateAdapterSource()` diagnostic that warns (not errors) when `graph_edges` returns fewer rows than the plugin-specific source.
 
 ### 5. Witness manifest drift (#2047, HIGH — existing issue)
 
@@ -357,7 +357,7 @@ Issue #2047 reports `missing=95 drift=2` on all three platforms. Phase 1's schem
 
 ### 6. MemoryGraph (ADR-049) status unknown
 
-The `enableMemoryGraph` flag referenced in `v3/@rufflo/cli/src/init/types.ts:221` and `init/executor.ts:1762` appears in init-generated docs but has no corresponding implementation module in the source tree. If MemoryGraph is a live feature with its own edge storage, it represents a fifth independent layer not captured above. This requires user clarification before Phase 1's migration scope is finalized.
+The `enableMemoryGraph` flag referenced in `v3/@swarmdo/cli/src/init/types.ts:221` and `init/executor.ts:1762` appears in init-generated docs but has no corresponding implementation module in the source tree. If MemoryGraph is a live feature with its own edge storage, it represents a fifth independent layer not captured above. This requires user clarification before Phase 1's migration scope is finalized.
 
 ---
 
@@ -378,8 +378,8 @@ The `enableMemoryGraph` flag referenced in `v3/@rufflo/cli/src/init/types.ts:221
 - Phase 3 is independent and can land as a separate PR.
 - Phases 4 and 5 can land in either order.
 - Phase 6 is gated on Phases 1–5 being complete enough to produce meaningful benchmark numbers.
-- No code changes to `rufflo-graph-intelligence@0.1.0-alpha.1` are required in Phases 1–3; the plugin is consumed, not modified.
-- Phase 4 requires changes inside `plugins/rufflo-graph-intelligence/src/adapters/` — bump the plugin to `0.2.0-alpha.1` and register in the plugin marketplace.
+- No code changes to `swarmdo-graph-intelligence@0.1.0-alpha.1` are required in Phases 1–3; the plugin is consumed, not modified.
+- Phase 4 requires changes inside `plugins/swarmdo-graph-intelligence/src/adapters/` — bump the plugin to `0.2.0-alpha.1` and register in the plugin marketplace.
 
 ---
 
@@ -391,7 +391,7 @@ What this ADR is really converging on, named explicitly: **a layered cognition a
 |---|---|---|
 | AgentDB sql.js | Canonical persistence | This ADR (`graph_edges` table) |
 | graph-node | Fast structural traversal | Existing, dispatched via Phase 2 |
-| rufflo-graph-intelligence | Complexity-bounded reasoning | Existing, called via solver bridge |
+| swarmdo-graph-intelligence | Complexity-bounded reasoning | Existing, called via solver bridge |
 | HNSW / embeddings | Semantic locality | Existing, indexed on `embedding_ref` |
 | SONA hooks | Temporal reinforcement learning | Phase 3 |
 
@@ -413,7 +413,7 @@ Most systems today solve one or two of these. Combining all four behind a single
 | Mem0 / Zep | Memory layers (vector-only, no graph algorithms) |
 | CrewAI | Orchestration (no persistent graph) |
 | MCP | Tool transport (no memory at all) |
-| **Rufflo (post-ADR-130)** | **Unified cognitive graph runtime — vector + symbolic + temporal + operational memory behind one bounded query surface** |
+| **Swarmdo (post-ADR-130)** | **Unified cognitive graph runtime — vector + symbolic + temporal + operational memory behind one bounded query surface** |
 
 The most important architectural line in the 4-step intelligence pipeline today: **RETRIEVE has no graph backbone**. It searches HNSW only. This ADR is what gives RETRIEVE a graph backbone, and once that lands, every step downstream (JUDGE, DISTILL, CONSOLIDATE) gets first-class access to causal lineage instead of similarity-only ranking.
 

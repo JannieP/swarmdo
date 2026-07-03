@@ -11,9 +11,9 @@
     unused_must_use,
     unused_parens
 )]
-//! RuvLTRA-Small Model Benchmark Suite
+//! SwarmLTRA-Small Model Benchmark Suite
 //!
-//! Comprehensive benchmarks for the RuvLTRA-Small (0.5B parameter) model
+//! Comprehensive benchmarks for the SwarmLTRA-Small (0.5B parameter) model
 //! optimized for Apple Silicon M4 Pro.
 //!
 //! ## Performance Targets (M4 Pro)
@@ -53,19 +53,19 @@
 //!
 //! ```bash
 //! # Full benchmark suite
-//! cargo bench -p swarmllm --bench ruvltra_benchmark
+//! cargo bench -p swarmllm --bench swarmltra_benchmark
 //!
 //! # Specific scenario
-//! cargo bench -p swarmllm --bench ruvltra_benchmark -- short_prompt
+//! cargo bench -p swarmllm --bench swarmltra_benchmark -- short_prompt
 //!
 //! # With Metal GPU
-//! cargo bench -p swarmllm --features metal-compute --bench ruvltra_benchmark
+//! cargo bench -p swarmllm --features metal-compute --bench swarmltra_benchmark
 //!
 //! # With ANE
-//! cargo bench -p swarmllm --features coreml --bench ruvltra_benchmark
+//! cargo bench -p swarmllm --features coreml --bench swarmltra_benchmark
 //!
 //! # With parallel execution
-//! cargo bench -p swarmllm --features parallel --bench ruvltra_benchmark
+//! cargo bench -p swarmllm --features parallel --bench swarmltra_benchmark
 //! ```
 
 use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criterion, Throughput};
@@ -75,10 +75,10 @@ use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{Duration, Instant};
 
 // ============================================================================
-// RuvLTRA-Small Model Configuration
+// SwarmLTRA-Small Model Configuration
 // ============================================================================
 
-/// RuvLTRA-Small model configuration (0.5B parameters)
+/// SwarmLTRA-Small model configuration (0.5B parameters)
 ///
 /// Architecture: LLaMA-style with optimizations for edge deployment
 /// - 24 layers (reduced from 32 for 7B)
@@ -90,7 +90,7 @@ use std::time::{Duration, Instant};
 /// - 32000 vocab size
 /// - 4096 max context
 #[derive(Debug, Clone, Copy)]
-pub struct RuvLtraSmallConfig {
+pub struct SwarmLtraSmallConfig {
     pub hidden_size: usize,
     pub intermediate_size: usize,
     pub num_attention_heads: usize,
@@ -102,7 +102,7 @@ pub struct RuvLtraSmallConfig {
     pub rope_theta: f32,
 }
 
-impl Default for RuvLtraSmallConfig {
+impl Default for SwarmLtraSmallConfig {
     fn default() -> Self {
         Self {
             hidden_size: 2048,
@@ -118,7 +118,7 @@ impl Default for RuvLtraSmallConfig {
     }
 }
 
-impl RuvLtraSmallConfig {
+impl SwarmLtraSmallConfig {
     /// Total parameters (approximate)
     pub fn total_params(&self) -> usize {
         // Embedding: vocab * hidden
@@ -277,9 +277,9 @@ impl Drop for TrackedBuffer {
 // Simulated Transformer Operations
 // ============================================================================
 
-/// Simulated transformer layer for RuvLTRA-Small
-struct RuvLtraLayer {
-    config: RuvLtraSmallConfig,
+/// Simulated transformer layer for SwarmLTRA-Small
+struct SwarmLtraLayer {
+    config: SwarmLtraSmallConfig,
     // Weights (simulated as random data)
     q_proj: Vec<f32>,
     k_proj: Vec<f32>,
@@ -292,8 +292,8 @@ struct RuvLtraLayer {
     post_attn_norm: Vec<f32>,
 }
 
-impl RuvLtraLayer {
-    fn new(config: RuvLtraSmallConfig) -> Self {
+impl SwarmLtraLayer {
+    fn new(config: SwarmLtraSmallConfig) -> Self {
         let hidden = config.hidden_size;
         let kv_hidden = config.num_kv_heads * config.head_dim;
         let intermediate = config.intermediate_size;
@@ -459,11 +459,11 @@ struct KvCache {
     keys: Vec<f32>,
     values: Vec<f32>,
     num_tokens: usize,
-    config: RuvLtraSmallConfig,
+    config: SwarmLtraSmallConfig,
 }
 
 impl KvCache {
-    fn new(config: RuvLtraSmallConfig, max_seq_len: usize) -> Self {
+    fn new(config: SwarmLtraSmallConfig, max_seq_len: usize) -> Self {
         let capacity = max_seq_len * config.num_kv_heads * config.head_dim * config.num_layers;
         Self {
             keys: vec![0.0; capacity],
@@ -487,18 +487,18 @@ impl KvCache {
 }
 
 /// Full model for benchmarking
-struct RuvLtraModel {
-    config: RuvLtraSmallConfig,
-    layers: Vec<RuvLtraLayer>,
+struct SwarmLtraModel {
+    config: SwarmLtraSmallConfig,
+    layers: Vec<SwarmLtraLayer>,
     embed_weights: Vec<f32>,
     lm_head: Vec<f32>,
     final_norm: Vec<f32>,
 }
 
-impl RuvLtraModel {
-    fn new(config: RuvLtraSmallConfig) -> Self {
+impl SwarmLtraModel {
+    fn new(config: SwarmLtraSmallConfig) -> Self {
         let layers: Vec<_> = (0..config.num_layers)
-            .map(|_| RuvLtraLayer::new(config))
+            .map(|_| SwarmLtraLayer::new(config))
             .collect();
 
         Self {
@@ -758,11 +758,11 @@ fn apply_rope(x: &mut [f32], head_dim: usize, position: usize, theta: f32) {
 
 /// Benchmark prefill phase (prompt processing)
 fn bench_prefill(c: &mut Criterion) {
-    let mut group = c.benchmark_group("ruvltra_prefill");
+    let mut group = c.benchmark_group("swarmltra_prefill");
     group.sample_size(20);
 
-    let config = RuvLtraSmallConfig::default();
-    let model = RuvLtraModel::new(config);
+    let config = SwarmLtraSmallConfig::default();
+    let model = SwarmLtraModel::new(config);
 
     // Test different prompt lengths
     let prompt_lengths = [32, 256, 1024];
@@ -788,11 +788,11 @@ fn bench_prefill(c: &mut Criterion) {
 
 /// Benchmark decode phase (token generation)
 fn bench_decode(c: &mut Criterion) {
-    let mut group = c.benchmark_group("ruvltra_decode");
+    let mut group = c.benchmark_group("swarmltra_decode");
     group.sample_size(50);
 
-    let config = RuvLtraSmallConfig::default();
-    let model = RuvLtraModel::new(config);
+    let config = SwarmLtraSmallConfig::default();
+    let model = SwarmLtraModel::new(config);
 
     // Test with different KV cache lengths
     let kv_lengths = [32, 256, 1024];
@@ -814,11 +814,11 @@ fn bench_decode(c: &mut Criterion) {
 
 /// Benchmark E2E latency (first token + total time)
 fn bench_e2e_latency(c: &mut Criterion) {
-    let mut group = c.benchmark_group("ruvltra_e2e_latency");
+    let mut group = c.benchmark_group("swarmltra_e2e_latency");
     group.sample_size(10);
 
-    let config = RuvLtraSmallConfig::default();
-    let model = RuvLtraModel::new(config);
+    let config = SwarmLtraSmallConfig::default();
+    let model = SwarmLtraModel::new(config);
 
     // Benchmark scenarios
     let scenarios = [
@@ -854,11 +854,11 @@ fn bench_e2e_latency(c: &mut Criterion) {
 
 /// Benchmark throughput (tokens/sec)
 fn bench_throughput(c: &mut Criterion) {
-    let mut group = c.benchmark_group("ruvltra_throughput");
+    let mut group = c.benchmark_group("swarmltra_throughput");
     group.sample_size(10);
 
-    let config = RuvLtraSmallConfig::default();
-    let model = RuvLtraModel::new(config);
+    let config = SwarmLtraSmallConfig::default();
+    let model = SwarmLtraModel::new(config);
 
     // Measure decode throughput at different batch points
     let decode_batches = [10, 50, 100];
@@ -892,13 +892,13 @@ fn bench_throughput(c: &mut Criterion) {
 
 /// Benchmark memory usage
 fn bench_memory(c: &mut Criterion) {
-    let mut group = c.benchmark_group("ruvltra_memory");
+    let mut group = c.benchmark_group("swarmltra_memory");
     group.sample_size(20);
 
-    let config = RuvLtraSmallConfig::default();
+    let config = SwarmLtraSmallConfig::default();
 
     // Print memory estimates
-    println!("\n=== RuvLTRA-Small Memory Estimates ===");
+    println!("\n=== SwarmLTRA-Small Memory Estimates ===");
     println!("Total parameters: {}M", config.total_params() / 1_000_000);
 
     for quant in [
@@ -943,10 +943,10 @@ fn bench_memory(c: &mut Criterion) {
 
 /// Benchmark quantization comparison
 fn bench_quantization(c: &mut Criterion) {
-    let mut group = c.benchmark_group("ruvltra_quantization");
+    let mut group = c.benchmark_group("swarmltra_quantization");
     group.sample_size(30);
 
-    let config = RuvLtraSmallConfig::default();
+    let config = SwarmLtraSmallConfig::default();
 
     // Simulate quantized weight loading and dequant
     let hidden = config.hidden_size;
@@ -1000,10 +1000,10 @@ fn bench_quantization(c: &mut Criterion) {
 
 /// Benchmark SONA overhead
 fn bench_sona_overhead(c: &mut Criterion) {
-    let mut group = c.benchmark_group("ruvltra_sona_overhead");
+    let mut group = c.benchmark_group("swarmltra_sona_overhead");
     group.sample_size(100);
 
-    let config = RuvLtraSmallConfig::default();
+    let config = SwarmLtraSmallConfig::default();
     let mut sona = SonaOverhead::new(config.hidden_size);
 
     let query_embedding = random_tensor(config.hidden_size);
@@ -1034,7 +1034,7 @@ fn bench_sona_overhead(c: &mut Criterion) {
     }
 
     // Combined: with vs without SONA
-    let model = RuvLtraModel::new(config);
+    let model = SwarmLtraModel::new(config);
     let mut kv_cache = KvCache::new(config, config.max_seq_len);
     kv_cache.num_tokens = 256;
 
@@ -1055,10 +1055,10 @@ fn bench_sona_overhead(c: &mut Criterion) {
 
 /// Benchmark backend comparison (simulated)
 fn bench_backend_comparison(c: &mut Criterion) {
-    let mut group = c.benchmark_group("ruvltra_backend_comparison");
+    let mut group = c.benchmark_group("swarmltra_backend_comparison");
     group.sample_size(30);
 
-    let config = RuvLtraSmallConfig::default();
+    let config = SwarmLtraSmallConfig::default();
     let hidden = config.hidden_size;
 
     // Simulate different backend speeds with scaling factors
@@ -1128,11 +1128,11 @@ fn bench_backend_comparison(c: &mut Criterion) {
 
 /// Summary benchmark with target metrics
 fn bench_targets_summary(c: &mut Criterion) {
-    let mut group = c.benchmark_group("ruvltra_targets");
+    let mut group = c.benchmark_group("swarmltra_targets");
     group.sample_size(10);
 
-    let config = RuvLtraSmallConfig::default();
-    let model = RuvLtraModel::new(config);
+    let config = SwarmLtraSmallConfig::default();
+    let model = SwarmLtraModel::new(config);
 
     // Target: 80+ tok/s decode (Q4)
     // Measure actual throughput

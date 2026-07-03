@@ -23,7 +23,7 @@
       "topK": [
         {
           "id": "pattern-1780161237213-1o-860k",
-          "name": "Is Rufflo safe on Claude Opus 4.8? — `opus` alias still pins to 4.7, and literal model ids silently d",
+          "name": "Is Swarmdo safe on Claude Opus 4.8? — `opus` alias still pins to 4.7, and literal model ids silently d",
           "type": "history-issue",
           "score": 0.6843424344550606,
           "cosineScore": 0.003778643529534665,
@@ -41,7 +41,7 @@
         },
         {
           "id": "pattern-1780161324702-4r-00fd",
-          "name": "feat(graph-intelligence): #2044 ADR-123 Phase 1 — rufflo-graph-intelligence plugin foundation",
+          "name": "feat(graph-intelligence): #2044 ADR-123 Phase 1 — swarmdo-graph-intelligence plugin foundation",
           "type": "history-commit",
           "score": 0.6,
           "cosineScore": 0.14559488017897365,
@@ -167,7 +167,7 @@
         },
         {
           "id": "pattern-1780161324695-3k-3187",
-          "name": "Merge pull request #2067 from ruvnet/docs/trim-redundant-badges",
+          "name": "Merge pull request #2067 from upstream/docs/trim-redundant-badges",
           "type": "history-commit",
           "score": 0.6,
           "cosineScore": 0.11852022008519922,
@@ -266,7 +266,7 @@
         },
         {
           "id": "pattern-1780159888525-1o-qiri",
-          "name": "Is Rufflo safe on Claude Opus 4.8? — `opus` alias still pins to 4.7, and literal model ids silently d",
+          "name": "Is Swarmdo safe on Claude Opus 4.8? — `opus` alias still pins to 4.7, and literal model ids silently d",
           "type": "history-issue",
           "score": 0.5092437110657281,
           "cosineScore": 0.10722082498011774,
@@ -311,7 +311,7 @@
         },
         {
           "id": "pattern-1780161324689-22-p22q",
-          "name": "Merge pull request #2101 from ruvnet/fix/2078-claudemd-coauthor-rule",
+          "name": "Merge pull request #2101 from upstream/fix/2078-claudemd-coauthor-rule",
           "type": "history-commit",
           "score": 0.6,
           "cosineScore": 0.11741462257643585,
@@ -320,7 +320,7 @@
         },
         {
           "id": "pattern-1780159888519-h-o34h",
-          "name": "docs: rufflo-workflows v0.4.0 native-Workflow orchestration + ADR-141 (taubench campaign)",
+          "name": "docs: swarmdo-workflows v0.4.0 native-Workflow orchestration + ADR-141 (taubench campaign)",
           "type": "history-commit",
           "score": 0.574352690368402,
           "cosineScore": 0.1069707732645887,
@@ -347,7 +347,7 @@
       "topK": [
         {
           "id": "pattern-1780161324687-1s-ibq9",
-          "name": "fix(security): patch CVEs, shell injection, SSRF in rufflo (#2114)",
+          "name": "fix(security): patch CVEs, shell injection, SSRF in swarmdo (#2114)",
           "type": "history-commit",
           "score": 0.6996019746310844,
           "cosineScore": 0.013552514538906218,
@@ -356,7 +356,7 @@
         },
         {
           "id": "pattern-1780161324691-2i-tm1b",
-          "name": "Merge pull request #2090 from ruvnet/docs/adr-127-github-stack-modernization",
+          "name": "Merge pull request #2090 from upstream/docs/adr-127-github-stack-modernization",
           "type": "history-commit",
           "score": 0.6,
           "cosineScore": 0.15794464752821977,
@@ -464,7 +464,7 @@
         },
         {
           "id": "pattern-1780161237213-1s-xof1",
-          "name": "Statusline shows `Rufflo V3.6` for global npm installs — statusline-generator version probe never che",
+          "name": "Statusline shows `Swarmdo V3.6` for global npm installs — statusline-generator version probe never che",
           "type": "history-issue",
           "score": 0.5830575779016265,
           "cosineScore": 0.10389287629109815,
@@ -491,7 +491,7 @@
         },
         {
           "id": "pattern-1780161324698-3u-c1g1",
-          "name": "chore(release): publish 3.7.0-alpha.71 + @rufflo/memory@3.0.0-alpha.18",
+          "name": "chore(release): publish 3.7.0-alpha.71 + @swarmdo/memory@3.0.0-alpha.18",
           "type": "history-commit",
           "score": 0.5888669420076869,
           "cosineScore": 0.10356354291635028,

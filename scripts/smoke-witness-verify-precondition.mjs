@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Regression guard for ruvnet/swarmdo#1880.
+ * Regression guard for upstream/swarmdo#1880.
  *
  * The 12-hour scheduled witness verification runs `verify.mjs` in a
  * source-only checkout (no `npm ci`, no `npm run build`) and conflates

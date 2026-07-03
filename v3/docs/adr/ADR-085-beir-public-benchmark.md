@@ -1,13 +1,13 @@
 # ADR-085 — Public Benchmark Harness (BEIR NFCorpus) + BGE Embedder Swap
 
-**Status**: Accepted — Implemented in rufflo 3.10.25
+**Status**: Accepted — Implemented in swarmdo 3.10.25
 **Date**: 2026-05-30
 **Tracking**: continuation of self-learning hardening cluster (ADR-077 → ... → 084)
 **Related**: ADR-081 (labelled corpus), ADR-084 (cross-repo generalisation)
 
 ## Context
 
-ADR-084 proved cross-repo generalisation on small bespoke corpora (rufflo + agentdb + agentic-flow, all owned by the same author). The next step in honest SOTA validation is **a public benchmark** — a corpus + qrels + published baselines maintained by external researchers. BEIR is the standard zero-shot IR benchmark suite; NFCorpus (3,633 docs, 323 test queries, medical domain) is the smallest dataset and runs end-to-end in under 20 minutes.
+ADR-084 proved cross-repo generalisation on small bespoke corpora (swarmdo + agentdb + agentic-flow, all owned by the same author). The next step in honest SOTA validation is **a public benchmark** — a corpus + qrels + published baselines maintained by external researchers. BEIR is the standard zero-shot IR benchmark suite; NFCorpus (3,633 docs, 323 test queries, medical domain) is the smallest dataset and runs end-to-end in under 20 minutes.
 
 The first run also surfaced an environment bug: `@xenova/transformers` requires `sharp` for image preprocessing, and `sharp-darwin-arm64v8.node` was missing from the pnpm-installed copy. The neural store's `agentic-flow/reasoningbank` embedder silently fell back to hash embeddings, producing essentially-random cosine similarity. The hybrid path was reduced to pure BM25 in practice.
 
@@ -46,7 +46,7 @@ Standalone runner that bypasses the neural-tools BM25/hybrid pipeline entirely �
 | Recall@100 | 0.219 | — |
 | Latency | ~950 ms/query | — |
 
-Why we're slightly below: our multi-field BM25 (subjectWeight=2.0) was tuned for rufflo's commit-style corpus where the "subject" field carries different IDF distribution than NFCorpus's title field. With `subjectWeight=0` (pure body BM25) we get **the same 0.289** — meaning the doc `_id` we passed as the "subject" carries no signal. A tighter BEIR-specific tokenizer + stopword list (Lucene-style) would close the remaining 0.04 gap.
+Why we're slightly below: our multi-field BM25 (subjectWeight=2.0) was tuned for swarmdo's commit-style corpus where the "subject" field carries different IDF distribution than NFCorpus's title field. With `subjectWeight=0` (pure body BM25) we get **the same 0.289** — meaning the doc `_id` we passed as the "subject" carries no signal. A tighter BEIR-specific tokenizer + stopword list (Lucene-style) would close the remaining 0.04 gap.
 
 ### BGE-base-en-v1.5 (dense retrieval) — **TOP-2 on BEIR NFCorpus** (1 dataset, not the BEIR average)
 
@@ -67,7 +67,7 @@ Measured N=323 test queries, full corpus 3,633 docs:
 | Rank | Method | nDCG@10 |
 |---:|---|---:|
 | 1 | BGE-large-v1.5 (published, 335M params) | 0.380 |
-| **2** | **rufflo + BGE-base-en-v1.5 (110M params) ← us** | **0.352** |
+| **2** | **swarmdo + BGE-base-en-v1.5 (110M params) ← us** | **0.352** |
 | 3 | SPLADE++ | 0.347 |
 | 4 | GTR-XL | 0.343 |
 | 5 | DocT5query | 0.328 |
@@ -87,7 +87,7 @@ We beat SPLADE++ (the published "best" before BGE-large landed), GTR-XL, and eve
 
 ## Cumulative SOTA context
 
-Internal benches (3.10.17 → 3.10.24, rufflo/agentdb/agentic-flow corpora) hit nDCG@3 = 0.963-1.000 with hand-curated labels. Those numbers measured *engineering quality* on small bespoke corpora.
+Internal benches (3.10.17 → 3.10.24, swarmdo/agentdb/agentic-flow corpora) hit nDCG@3 = 0.963-1.000 with hand-curated labels. Those numbers measured *engineering quality* on small bespoke corpora.
 
 Public benchmark (BEIR NFCorpus) is different — a standardised zero-shot eval against published baselines. Hitting BM25 baseline (0.32) with no fine-tuning is competent. Beating BM25 with a generic-purpose bi-encoder (BGE-base) is the right next milestone. Reaching SPLADE++ / BGE-large territory (0.35+) on a single dataset would be top-3 evidence of architecture quality.
 
@@ -114,8 +114,8 @@ Public benchmark (BEIR NFCorpus) is different — a standardised zero-shot eval 
 ## Verification
 
 ```bash
-git clone https://github.com/ruvnet/ruflo && cd rufflo
-npm install && ( cd v3/@rufflo/cli && npx tsc )
+git clone the upstream project (see NOTICE) && cd swarmdo
+npm install && ( cd v3/@swarmdo/cli && npx tsc )
 
 # Download BEIR NFCorpus
 mkdir -p /tmp/beir-nfcorpus && cd /tmp/beir-nfcorpus
@@ -123,14 +123,14 @@ curl -sL -o nfcorpus.zip 'https://public.ukp.informatik.tu-darmstadt.de/thakur/B
 unzip -q nfcorpus.zip
 
 # Hybrid (BM25-dominant in current env) — ~15 min
-rm -rf .rufflo
-node /path/to/rufflo/v3/@rufflo/cli/scripts/run-beir-nfcorpus.mjs
+rm -rf .swarmdo
+node /path/to/swarmdo/v3/@swarmdo/cli/scripts/run-beir-nfcorpus.mjs
 # → nDCG@10 0.289
 
 # BGE-base dense — ~20 min ingest + 1 min query
-node /path/to/rufflo/v3/@rufflo/cli/scripts/run-beir-bge.mjs
+node /path/to/swarmdo/v3/@swarmdo/cli/scripts/run-beir-bge.mjs
 # → nDCG@10 pending (see run JSON)
 
 # Cached subsequent runs (~1 min)
-SKIP_INGEST=1 node /path/to/rufflo/v3/@rufflo/cli/scripts/run-beir-bge.mjs
+SKIP_INGEST=1 node /path/to/swarmdo/v3/@swarmdo/cli/scripts/run-beir-bge.mjs
 ```

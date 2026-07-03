@@ -14,11 +14,11 @@ Financial institutions require real-time risk analysis capabilities that can pro
 
 ## Decision
 
-Create a **Financial Risk Analysis Plugin** that leverages RuVector WASM packages for real-time market analysis, fraud detection, portfolio optimization, and regulatory compliance reporting.
+Create a **Financial Risk Analysis Plugin** that leverages SwarmVector WASM packages for real-time market analysis, fraud detection, portfolio optimization, and regulatory compliance reporting.
 
 ## Plugin Name
 
-`@rufflo/plugin-financial-risk`
+`@swarmdo/plugin-financial-risk`
 
 ## Description
 
@@ -29,10 +29,10 @@ A high-performance financial risk analysis plugin combining sparse inference for
 | Package | Purpose |
 |---------|---------|
 | `micro-hnsw-wasm` | Fast similarity search for historical pattern matching (market regimes) |
-| `ruvector-sparse-inference-wasm` | Efficient processing of sparse financial features (tick data) |
-| `ruvector-gnn-wasm` | Transaction network analysis for fraud detection |
-| `ruvector-economy-wasm` | Token economics and market microstructure modeling |
-| `ruvector-learning-wasm` | Reinforcement learning for adaptive risk thresholds |
+| `swarmvector-sparse-inference-wasm` | Efficient processing of sparse financial features (tick data) |
+| `swarmvector-gnn-wasm` | Transaction network analysis for fraud detection |
+| `swarmvector-economy-wasm` | Token economics and market microstructure modeling |
+| `swarmvector-learning-wasm` | Reinforcement learning for adaptive risk thresholds |
 
 ## MCP Tools
 
@@ -399,10 +399,10 @@ interface RiskCalculationProof {
 {
   "dependencies": {
     "micro-hnsw-wasm": "^0.2.0",
-    "ruvector-sparse-inference-wasm": "^0.1.0",
-    "ruvector-gnn-wasm": "^0.1.0",
-    "ruvector-economy-wasm": "^0.1.0",
-    "ruvector-learning-wasm": "^0.1.0"
+    "swarmvector-sparse-inference-wasm": "^0.1.0",
+    "swarmvector-gnn-wasm": "^0.1.0",
+    "swarmvector-economy-wasm": "^0.1.0",
+    "swarmvector-learning-wasm": "^0.1.0"
   }
 }
 ```
@@ -427,7 +427,7 @@ interface RiskCalculationProof {
 | ADR | Relationship |
 |-----|--------------|
 | ADR-004: Plugin Architecture | Foundation - Defines plugin structure |
-| ADR-017: RuVector Integration | Dependency - Provides WASM packages |
+| ADR-017: SwarmVector Integration | Dependency - Provides WASM packages |
 | ADR-040: Quantum Optimizer | Related - Portfolio optimization algorithms |
 | ADR-038: Neural Coordination | Related - Multi-agent trading simulations |
 
@@ -435,7 +435,7 @@ interface RiskCalculationProof {
 
 - Basel III Framework: https://www.bis.org/basel_framework/
 - MiFID II: https://www.esma.europa.eu/policy-rules/mifid-ii-and-mifir
-- ADR-017: RuVector Integration
+- ADR-017: SwarmVector Integration
 - ADR-004: Plugin Architecture
 
 ---

@@ -1,4 +1,4 @@
-# ADR-028: Neural Attention Mechanisms for Rufflo V3
+# ADR-028: Neural Attention Mechanisms for Swarmdo V3
 
 **Status:** Proposed
 **Date:** 2026-01-16
@@ -7,7 +7,7 @@
 
 ## Context
 
-Rufflo v3 requires advanced attention mechanisms for several critical operations:
+Swarmdo v3 requires advanced attention mechanisms for several critical operations:
 
 1. **Agent Memory Retrieval**: Current memory lookups use basic vector similarity (cosine/dot product). More sophisticated attention mechanisms can improve retrieval quality by weighing relevance, recency, and contextual importance.
 
@@ -17,11 +17,11 @@ Rufflo v3 requires advanced attention mechanisms for several critical operations
 
 4. **Swarm Coordination Signals**: Multi-agent coordination requires cross-attention mechanisms to share relevant context between agents while filtering noise.
 
-The RuVector intelligence system provides 39 attention mechanism implementations optimized for AI agent workloads. Integrating these into Rufflo v3 will significantly improve memory retrieval, context management, and agent coordination.
+The SwarmVector intelligence system provides 39 attention mechanism implementations optimized for AI agent workloads. Integrating these into Swarmdo v3 will significantly improve memory retrieval, context management, and agent coordination.
 
 ## Decision
 
-Integrate RuVector's 39 attention mechanism types into Rufflo v3 via a unified **AttentionService** that provides:
+Integrate SwarmVector's 39 attention mechanism types into Swarmdo v3 via a unified **AttentionService** that provides:
 
 1. **Pluggable attention backends** - Select mechanisms based on use case
 2. **Automatic fallback** - Graceful degradation when GPU unavailable
@@ -215,7 +215,7 @@ interface MoEAttentionConfig {
 
 ---
 
-## Use Cases in Rufflo V3
+## Use Cases in Swarmdo V3
 
 ### 1. Agent Memory Retrieval
 
@@ -398,9 +398,9 @@ class SwarmAttentionCoordinator {
 ### 1. Memory Service (ADR-006)
 
 ```typescript
-// v3/@rufflo/memory/src/attention-enhanced-memory.ts
+// v3/@swarmdo/memory/src/attention-enhanced-memory.ts
 
-import { AttentionService } from '@rufflo/attention';
+import { AttentionService } from '@swarmdo/attention';
 import { UnifiedMemoryService } from './unified-memory-service.js';
 
 export class AttentionEnhancedMemoryService extends UnifiedMemoryService {
@@ -443,9 +443,9 @@ export class AttentionEnhancedMemoryService extends UnifiedMemoryService {
 ### 2. SONA Neural Architecture
 
 ```typescript
-// v3/@rufflo/intelligence/src/sona-attention.ts
+// v3/@swarmdo/intelligence/src/sona-attention.ts
 
-import { AttentionService, FlashAttentionConfig } from '@rufflo/attention';
+import { AttentionService, FlashAttentionConfig } from '@swarmdo/attention';
 
 export class SONAWithAttention {
   private flashAttention: AttentionService;
@@ -494,9 +494,9 @@ export class SONAWithAttention {
 ### 3. Plugin Hook System
 
 ```typescript
-// v3/@rufflo/cli/src/hooks/attention-hooks.ts
+// v3/@swarmdo/cli/src/hooks/attention-hooks.ts
 
-import { AttentionService } from '@rufflo/attention';
+import { AttentionService } from '@swarmdo/attention';
 
 export const attentionHooks = {
   /**
@@ -679,7 +679,7 @@ class AttentionKVCache {
 
 ### Phase 1: Core Attention Service (Week 1-2)
 
-1. Create `@rufflo/attention` package
+1. Create `@swarmdo/attention` package
 2. Implement base `AttentionService` interface
 3. Add 7 multi-head attention types
 4. Add 6 self-attention variants
@@ -711,7 +711,7 @@ class AttentionKVCache {
 ## File Structure
 
 ```
-v3/@rufflo/attention/
+v3/@swarmdo/attention/
 ├── package.json
 ├── src/
 │   ├── index.ts                    # Public API exports
@@ -797,7 +797,7 @@ v3/@rufflo/attention/
 ## Configuration Schema
 
 ```typescript
-// rufflo.config.json
+// swarmdo.config.json
 {
   "attention": {
     // Default mechanism for general use
@@ -841,19 +841,19 @@ v3/@rufflo/attention/
 
 ```bash
 # List available attention mechanisms
-npx @rufflo/cli@latest attention list
+npx @swarmdo/cli@latest attention list
 
 # Benchmark attention mechanism
-npx @rufflo/cli@latest attention benchmark --mechanism longformer --sequence-length 16384
+npx @swarmdo/cli@latest attention benchmark --mechanism longformer --sequence-length 16384
 
 # Set default attention mechanism
-npx @rufflo/cli@latest attention set-default --mechanism flash-attention-v2
+npx @swarmdo/cli@latest attention set-default --mechanism flash-attention-v2
 
 # Show attention statistics
-npx @rufflo/cli@latest attention stats
+npx @swarmdo/cli@latest attention stats
 
 # Clear attention cache
-npx @rufflo/cli@latest attention cache clear
+npx @swarmdo/cli@latest attention cache clear
 ```
 
 ---
@@ -911,13 +911,13 @@ npx @rufflo/cli@latest attention cache clear
 ## References
 
 - ADR-006: Unified Memory Service
-- ADR-017: RuVector Integration Architecture
+- ADR-017: SwarmVector Integration Architecture
 - ADR-026: Agent Booster Model Routing
 - Flash Attention Paper: https://arxiv.org/abs/2205.14135
 - Longformer Paper: https://arxiv.org/abs/2004.05150
 - BigBird Paper: https://arxiv.org/abs/2007.14062
 - Performer Paper: https://arxiv.org/abs/2009.14794
-- RuVector Documentation: https://github.com/ruvnet/ruvector
+- SwarmVector Documentation: the upstream project (see NOTICE)
 
 ---
 
@@ -925,11 +925,11 @@ npx @rufflo/cli@latest attention cache clear
 
 ## WASM-Native Implementations (2026-03-17 Update)
 
-The `@ruvector/ruvllm-wasm@2.0.0` package now provides native WASM implementations of several attention and intelligence components described in this ADR. These run at near-native speed without GPU requirements.
+The `@swarmvector/swarmllm-wasm@2.0.0` package now provides native WASM implementations of several attention and intelligence components described in this ADR. These run at near-native speed without GPU requirements.
 
 ### Available WASM Components
 
-| This ADR Concept | ruvllm-wasm Class | Status |
+| This ADR Concept | swarmllm-wasm Class | Status |
 |------------------|-------------------|--------|
 | HNSW Search (~1.9x-4.7x measured) | `HnswRouterWasm` | Published, working (v2.0.1) |
 | SONA Adaptation (<0.05ms) | `SonaInstantWasm` | Published, working |
@@ -951,10 +951,10 @@ The `@ruvector/ruvllm-wasm@2.0.0` package now provides native WASM implementatio
 
 ```typescript
 // Detection and fallback
-import { isRuvllmWasmAvailable, initRuvllmWasm } from '../ruvector/ruvllm-wasm.js';
+import { isSwarmllmWasmAvailable, initSwarmllmWasm } from '../swarmvector/swarmllm-wasm.js';
 
-if (await isRuvllmWasmAvailable()) {
-  await initRuvllmWasm();
+if (await isSwarmllmWasmAvailable()) {
+  await initSwarmllmWasm();
   // Use WASM-native HNSW, SONA, LoRA
 } else {
   // Fallback to existing JS implementations
@@ -969,14 +969,14 @@ if (await isRuvllmWasmAvailable()) {
 
 ### References
 
-- ADR-017: RuVector Integration Architecture (updated 2026-03-17 with WASM packages)
-- ADR-059: @ruvector/rvagent-wasm Integration
-- Package: `@ruvector/ruvllm-wasm@2.0.1` on npm
+- ADR-017: SwarmVector Integration Architecture (updated 2026-03-17 with WASM packages)
+- ADR-059: @swarmvector/rvagent-wasm Integration
+- Package: `@swarmvector/swarmllm-wasm@2.0.1` on npm
 
 ---
 
 **Status:** Proposed (WASM implementations partially available)
 **Priority:** High
 **Estimated Effort:** 5 weeks (reduced with WASM components)
-**Dependencies:** ADR-006 (Memory), ADR-017 (RuVector)
+**Dependencies:** ADR-006 (Memory), ADR-017 (SwarmVector)
 **Updated:** 2026-03-17

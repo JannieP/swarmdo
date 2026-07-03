@@ -1,6 +1,6 @@
 # ADR-082 — Grid-Search Retrieval Defaults Against Labelled Metric
 
-**Status**: Accepted — Implemented in rufflo 3.10.22
+**Status**: Accepted — Implemented in swarmdo 3.10.22
 **Date**: 2026-05-30
 **Tracking**: continuation of self-learning hardening cluster (ADR-077 → 078 → 079 → 080 → 081 → 082)
 **Related**: ADR-078 (hybrid retrieval), ADR-079 (multi-field BM25), ADR-080 (cross-encoder), ADR-081 (labelled corpus)
@@ -104,14 +104,14 @@ Rerank's trade-off: top-1/MRR/P3 up, nDCG@3/top-3 marginally down. Net: positive
 ## Verification
 
 ```bash
-git clone https://github.com/ruvnet/ruflo && cd rufflo
-npm install && ( cd v3/@rufflo/cli && npx tsc )
+git clone the upstream project (see NOTICE) && cd swarmdo
+npm install && ( cd v3/@swarmdo/cli && npx tsc )
 
 # Pretrain
-node v3/@rufflo/cli/scripts/pretrain-from-github.mjs
+node v3/@swarmdo/cli/scripts/pretrain-from-github.mjs
 
 # Grid-search (full grid, ~1 min)
-cd v3/@rufflo/cli && node scripts/grid-search-retrieval.mjs
+cd v3/@swarmdo/cli && node scripts/grid-search-retrieval.mjs
 
 # Confirm new defaults on canonical bench
 BENCH_NO_WRITE=1 node scripts/benchmark-pretrained-retrieval.mjs            # hybrid → nDCG@3 0.963

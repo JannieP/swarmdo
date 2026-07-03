@@ -995,7 +995,7 @@ avx512 = ["simd"]
 neon = ["simd"]
 
 # Optional integrations
-postgres = ["sqlx", "ruvector-postgres"]
+postgres = ["sqlx", "swarmvector-postgres"]
 exo = ["exo-core", "exo-temporal", "exo-exotic"]
 
 # All features

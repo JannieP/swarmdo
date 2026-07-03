@@ -540,7 +540,7 @@ const result = await adapter.retrieveWithReasoning(queryEmbedding, {
 
 - **QUIC Protocol**: docs/quic-synchronization.pdf
 - **Hybrid Search**: docs/hybrid-search-guide.md
-- **GitHub**: https://github.com/ruvnet/agentic-flow/tree/main/packages/agentdb
+- **GitHub**: the upstream project (see NOTICE)
 
 ---
 

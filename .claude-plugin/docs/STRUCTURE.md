@@ -55,7 +55,7 @@ swarmdo/
 Users install with:
 
 ```
-/plugin add ruvnet/claude-flow
+/plugin add upstream/claude-flow
 /restart
 ```
 
@@ -118,7 +118,7 @@ The plugin configures 3 MCP servers:
 
 - **Version**: 2.5.0
 - **License**: MIT
-- **Author**: rUv
+- **Author**: the upstream author
 - **Compatibility**: Claude Code >= 2.0.0
 
 ## Status

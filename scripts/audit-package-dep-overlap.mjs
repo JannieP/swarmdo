@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Package dependency overlap audit (regression guard for ruvnet/swarmdo#1147 and #2018).
+ * Package dependency overlap audit (regression guard for upstream/swarmdo#1147 and #2018).
  *
  * Both issues are the same failure shape:
  *   `npm error Invalid Version: ` (empty) thrown by `new SemVer('')` inside
@@ -87,7 +87,7 @@ if (JSON_OUT) {
     for (const i of issues) {
       console.log(`  fail [${i.code}] ${i.pkg}: ${i.message}`);
     }
-    console.log(`\n${issues.length} issue(s) — see ruvnet/swarmdo#1147 and #2018 for context`);
+    console.log(`\n${issues.length} issue(s) — see upstream/swarmdo#1147 and #2018 for context`);
   }
 }
 

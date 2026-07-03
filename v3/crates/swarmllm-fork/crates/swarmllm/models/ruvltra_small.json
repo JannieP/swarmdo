@@ -1,12 +1,12 @@
 {
   "model_info": {
-    "name": "RuvLTRA-Small-0.5B",
+    "name": "SwarmLTRA-Small-0.5B",
     "version": "1.0.0",
     "description": "ANE-optimized small language model based on Qwen2.5-0.5B-Instruct for edge deployment",
     "base_model": "Qwen/Qwen2.5-0.5B-Instruct",
     "license": "Apache-2.0",
     "created": "2026-01-19",
-    "author": "RuvVector Team"
+    "author": "SwarmVector Team"
   },
   "architecture": {
     "model_type": "qwen2",
@@ -142,7 +142,7 @@
       "max": 32768
     }
   },
-  "ruvllm_integration": {
+  "swarmllm_integration": {
     "loader": "gguf",
     "backend_priority": ["ane", "metal", "cpu"],
     "tokenizer": "qwen2",

@@ -42,7 +42,7 @@ export const pluginMetadata = {
   tags: ['performance', 'optimization', 'tracing', 'memory', 'database', 'bundle'],
   author: 'Swarmdo Team',
   license: 'MIT',
-  repository: 'https://github.com/ruvnet/claude-flow',
+  repository: 'the upstream project (see NOTICE)',
   engines: {
     'swarmdo': '>=3.0.0-alpha.1',
     node: '>=18.0.0',

@@ -570,8 +570,8 @@ export function __wbg_require_60cc747a6bc5215a() { return handleError(function (
         return module.require;
     }
     // ESM fallback: create require function from import.meta.url
-    if (typeof globalThis !== 'undefined' && globalThis.__ruvector_require) {
-        return globalThis.__ruvector_require;
+    if (typeof globalThis !== 'undefined' && globalThis.__swarmvector_require) {
+        return globalThis.__swarmvector_require;
     }
     // Return undefined to signal require not available (will use crypto.getRandomValues instead)
     return undefined;

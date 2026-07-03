@@ -19,89 +19,89 @@ V3 CLI is streamlined with 7 core commands. Many V2 commands need migration or h
 ### agent
 ```bash
 # V2
-npx rufflo agent spawn --type coder --name my-coder
-npx rufflo agent list --detailed
-npx rufflo agent info <agentId>
-npx rufflo agent terminate <agentId>
+npx swarmdo agent spawn --type coder --name my-coder
+npx swarmdo agent list --detailed
+npx swarmdo agent info <agentId>
+npx swarmdo agent terminate <agentId>
 
 # V3 (same)
-npx rufflo agent spawn --type coder --id my-coder
-npx rufflo agent list --detailed
-npx rufflo agent status <agentId>
-npx rufflo agent terminate <agentId>
+npx swarmdo agent spawn --type coder --id my-coder
+npx swarmdo agent list --detailed
+npx swarmdo agent status <agentId>
+npx swarmdo agent terminate <agentId>
 ```
 
 ### memory
 ```bash
 # V2
-npx rufflo memory store --namespace default --content "data"
-npx rufflo memory query --search "keyword" --limit 10
-npx rufflo memory list --namespace default
+npx swarmdo memory store --namespace default --content "data"
+npx swarmdo memory query --search "keyword" --limit 10
+npx swarmdo memory list --namespace default
 
 # V3 (enhanced)
-npx rufflo memory store --type episodic --content "data"
-npx rufflo memory search --query "keyword" --search-type hybrid
-npx rufflo memory list --type all --sort-by relevance
+npx swarmdo memory store --type episodic --content "data"
+npx swarmdo memory search --query "keyword" --search-type hybrid
+npx swarmdo memory list --type all --sort-by relevance
 ```
 
 ### swarm
 ```bash
 # V2
-npx rufflo swarm --strategy auto --max-agents 5
+npx swarmdo swarm --strategy auto --max-agents 5
 
 # V3 (enhanced)
-npx rufflo swarm init --topology hierarchical-mesh --max-agents 15
-npx rufflo swarm status --include-metrics
-npx rufflo swarm scale --target 10 --strategy gradual
+npx swarmdo swarm init --topology hierarchical-mesh --max-agents 15
+npx swarmdo swarm status --include-metrics
+npx swarmdo swarm scale --target 10 --strategy gradual
 ```
 
 ### hooks
 ```bash
 # V2
-npx rufflo hooks pre-edit --file src/app.ts
-npx rufflo hooks post-edit --file src/app.ts --success true
+npx swarmdo hooks pre-edit --file src/app.ts
+npx swarmdo hooks post-edit --file src/app.ts --success true
 
 # V3 (enhanced with learning)
-npx rufflo hooks pre-edit src/app.ts
-npx rufflo hooks post-edit src/app.ts --success true
-npx rufflo hooks route "implement feature X"
-npx rufflo hooks explain "implement feature X"
-npx rufflo hooks pretrain
-npx rufflo hooks metrics
+npx swarmdo hooks pre-edit src/app.ts
+npx swarmdo hooks post-edit src/app.ts --success true
+npx swarmdo hooks route "implement feature X"
+npx swarmdo hooks explain "implement feature X"
+npx swarmdo hooks pretrain
+npx swarmdo hooks metrics
 ```
 
 ### mcp
 ```bash
 # V2
-npx rufflo mcp start --port 3000 --transport stdio
-npx rufflo mcp stop
-npx rufflo mcp status
+npx swarmdo mcp start --port 3000 --transport stdio
+npx swarmdo mcp stop
+npx swarmdo mcp status
 
 # V3 (same)
-npx rufflo mcp start --port 3000 --transport stdio
-npx rufflo mcp stop
-npx rufflo mcp status
+npx swarmdo mcp start --port 3000 --transport stdio
+npx swarmdo mcp stop
+npx swarmdo mcp status
 ```
 
 ### config
 ```bash
 # V2
-npx rufflo config get orchestrator
-npx rufflo config set orchestrator.maxAgents 10
+npx swarmdo config get orchestrator
+npx swarmdo config set orchestrator.maxAgents 10
 
 # V3
-npx rufflo config load --scope project
-npx rufflo config save --create-backup
-npx rufflo config validate --strict
+npx swarmdo config load --scope project
+npx swarmdo config save --create-backup
+npx swarmdo config validate --strict
 ```
 
 ### migrate
 ```bash
 # V3 only
-npx rufflo migrate status
-npx rufflo migrate run --target all --backup
-npx rufflo migrate verify
-npx rufflo migrate rollback --backup-id <id>
+npx swarmdo migrate status
+npx swarmdo migrate run --target all --backup
+npx swarmdo migrate verify
+npx swarmdo migrate rollback --backup-id <id>
 ```
 
 ## Missing Commands ❌
@@ -111,12 +111,12 @@ npx rufflo migrate rollback --backup-id <id>
 #### init
 ```bash
 # V2
-npx rufflo init
-npx rufflo init --minimal
-npx rufflo init --flow-nexus
+npx swarmdo init
+npx swarmdo init --minimal
+npx swarmdo init --flow-nexus
 
 # V3 Migration needed:
-# Add to v3/@rufflo/cli/src/commands/init.ts
+# Add to v3/@swarmdo/cli/src/commands/init.ts
 export const initCommand = {
   command: 'init',
   description: 'Initialize Claude Code integration files',
@@ -139,12 +139,12 @@ export const initCommand = {
 #### start
 ```bash
 # V2
-npx rufflo start
-npx rufflo start --daemon
-npx rufflo start --port 3000
+npx swarmdo start
+npx swarmdo start --daemon
+npx swarmdo start --port 3000
 
 # V3 Migration needed:
-# Add to v3/@rufflo/cli/src/commands/start.ts
+# Add to v3/@swarmdo/cli/src/commands/start.ts
 export const startCommand = {
   command: 'start',
   description: 'Start the orchestration system',
@@ -165,13 +165,13 @@ export const startCommand = {
 #### status
 ```bash
 # V2
-npx rufflo status
-npx rufflo status --watch
-npx rufflo status --json
-npx rufflo status --health-check
+npx swarmdo status
+npx swarmdo status --watch
+npx swarmdo status --json
+npx swarmdo status --health-check
 
 # V3 Migration needed:
-# Add to v3/@rufflo/cli/src/commands/status.ts
+# Add to v3/@swarmdo/cli/src/commands/status.ts
 export const statusCommand = {
   command: 'status',
   description: 'Show enhanced system status',
@@ -198,14 +198,14 @@ export const statusCommand = {
 #### task
 ```bash
 # V2
-npx rufflo task create --type implementation --description "Build feature"
-npx rufflo task list --status running
-npx rufflo task status <taskId>
-npx rufflo task cancel <taskId>
-npx rufflo task assign <taskId> --agent <agentId>
+npx swarmdo task create --type implementation --description "Build feature"
+npx swarmdo task list --status running
+npx swarmdo task status <taskId>
+npx swarmdo task cancel <taskId>
+npx swarmdo task assign <taskId> --agent <agentId>
 
 # V3 Migration needed:
-# Add to v3/@rufflo/cli/src/commands/task.ts
+# Add to v3/@swarmdo/cli/src/commands/task.ts
 export const taskCommand = {
   command: 'task',
   description: 'Manage tasks',
@@ -230,18 +230,18 @@ export const taskCommand = {
 #### session
 ```bash
 # V2
-npx rufflo session list
-npx rufflo session save --description "Checkpoint"
-npx rufflo session restore <sessionId>
-npx rufflo session delete <sessionId>
-npx rufflo session export --include-memory
-npx rufflo session import <file>
+npx swarmdo session list
+npx swarmdo session save --description "Checkpoint"
+npx swarmdo session restore <sessionId>
+npx swarmdo session delete <sessionId>
+npx swarmdo session export --include-memory
+npx swarmdo session import <file>
 
 # V3 Migration needed:
-# Add to v3/@rufflo/cli/src/commands/session.ts
+# Add to v3/@swarmdo/cli/src/commands/session.ts
 export const sessionCommand = {
   command: 'session',
-  description: 'Manage Rufflo sessions',
+  description: 'Manage Swarmdo sessions',
   subcommands: [
     { command: 'list', options: [{ flags: '-a, --active' }] },
     { command: 'save', options: [{ flags: '-d, --description <desc>' }] },
@@ -258,18 +258,18 @@ export const sessionCommand = {
 #### hive
 ```bash
 # V2
-npx rufflo hive --topology mesh --consensus quorum --max-agents 8
-npx rufflo hive-mind init
-npx rufflo hive-mind status
-npx rufflo hive-mind spawn --type queen
-npx rufflo hive-mind task --description "Task"
-npx rufflo hive-mind wizard
-npx rufflo hive-mind pause
-npx rufflo hive-mind resume
-npx rufflo hive-mind stop
+npx swarmdo hive --topology mesh --consensus quorum --max-agents 8
+npx swarmdo hive-mind init
+npx swarmdo hive-mind status
+npx swarmdo hive-mind spawn --type queen
+npx swarmdo hive-mind task --description "Task"
+npx swarmdo hive-mind wizard
+npx swarmdo hive-mind pause
+npx swarmdo hive-mind resume
+npx swarmdo hive-mind stop
 
 # V3 Migration needed:
-# Add to v3/@rufflo/cli/src/commands/hive.ts
+# Add to v3/@swarmdo/cli/src/commands/hive.ts
 export const hiveCommand = {
   command: 'hive',
   description: 'Hive Mind multi-agent coordination',
@@ -294,14 +294,14 @@ export const hiveCommand = {
 #### sparc
 ```bash
 # V2
-npx rufflo sparc modes
-npx rufflo sparc info <mode>
-npx rufflo sparc run --mode specification
-npx rufflo sparc tdd --sequential
-npx rufflo sparc workflow --dry-run
+npx swarmdo sparc modes
+npx swarmdo sparc info <mode>
+npx swarmdo sparc run --mode specification
+npx swarmdo sparc tdd --sequential
+npx swarmdo sparc workflow --dry-run
 
 # V3 Migration needed:
-# Add to v3/@rufflo/cli/src/commands/sparc.ts
+# Add to v3/@swarmdo/cli/src/commands/sparc.ts
 export const sparcCommand = {
   command: 'sparc',
   description: 'SPARC methodology commands',
@@ -318,13 +318,13 @@ export const sparcCommand = {
 #### monitor
 ```bash
 # V2
-npx rufflo monitor
-npx rufflo monitor --interval 2
-npx rufflo monitor --compact
-npx rufflo monitor --focus agents
+npx swarmdo monitor
+npx swarmdo monitor --interval 2
+npx swarmdo monitor --compact
+npx swarmdo monitor --focus agents
 
 # V3 Migration needed:
-# Add to v3/@rufflo/cli/src/commands/monitor.ts
+# Add to v3/@swarmdo/cli/src/commands/monitor.ts
 export const monitorCommand = {
   command: 'monitor',
   description: 'Start live monitoring dashboard',
@@ -343,16 +343,16 @@ export const monitorCommand = {
 #### github
 ```bash
 # V2
-npx rufflo github init
-npx rufflo github gh-coordinator
-npx rufflo github pr-manager
-npx rufflo github issue-tracker
-npx rufflo github release-manager
-npx rufflo github repo-architect
-npx rufflo github sync-coordinator
+npx swarmdo github init
+npx swarmdo github gh-coordinator
+npx swarmdo github pr-manager
+npx swarmdo github issue-tracker
+npx swarmdo github release-manager
+npx swarmdo github repo-architect
+npx swarmdo github sync-coordinator
 
 # V3 Migration needed:
-# Add to v3/@rufflo/cli/src/commands/github.ts
+# Add to v3/@swarmdo/cli/src/commands/github.ts
 export const githubCommand = {
   command: 'github',
   description: 'GitHub workflow automation',
@@ -377,29 +377,29 @@ export const githubCommand = {
 #### neural
 ```bash
 # V2
-npx rufflo neural init
-npx rufflo neural init --force --target .claude/agents/neural
+npx swarmdo neural init
+npx swarmdo neural init --force --target .claude/agents/neural
 
 # V3: Replaced by hooks pretrain
-npx rufflo hooks pretrain
+npx swarmdo hooks pretrain
 ```
 
 #### goal
 ```bash
 # V2
-npx rufflo goal init
+npx swarmdo goal init
 
 # V3: Replaced by hooks system
-npx rufflo hooks pretrain --include-goap
+npx swarmdo hooks pretrain --include-goap
 ```
 
 #### claude
 ```bash
 # V2
-npx rufflo claude spawn --tools View,Edit,Bash --mode full
+npx swarmdo claude spawn --tools View,Edit,Bash --mode full
 
 # V3 Migration needed:
-# Add to v3/@rufflo/cli/src/commands/claude.ts
+# Add to v3/@swarmdo/cli/src/commands/claude.ts
 export const claudeCommand = {
   command: 'claude',
   description: 'Spawn Claude instances',
@@ -419,21 +419,21 @@ export const claudeCommand = {
 #### workflow
 ```bash
 # V2
-npx rufflo workflow create --name "my-workflow"
-npx rufflo workflow execute <workflow>
-npx rufflo workflow list
+npx swarmdo workflow create --name "my-workflow"
+npx swarmdo workflow execute <workflow>
+npx swarmdo workflow list
 
 # V3 Migration needed:
-# Add to v3/@rufflo/cli/src/commands/workflow.ts
+# Add to v3/@swarmdo/cli/src/commands/workflow.ts
 ```
 
 #### repl
 ```bash
 # V2
-npx rufflo repl
+npx swarmdo repl
 
 # V3 Migration needed:
-# Add to v3/@rufflo/cli/src/commands/repl.ts
+# Add to v3/@swarmdo/cli/src/commands/repl.ts
 export const replCommand = {
   command: 'repl',
   description: 'Start interactive REPL mode',
@@ -447,8 +447,8 @@ export const replCommand = {
 #### version
 ```bash
 # V2
-npx rufflo version
-npx rufflo version --short
+npx swarmdo version
+npx swarmdo version --short
 
 # V3 Migration needed:
 # Add version flag to CLI root
@@ -457,11 +457,11 @@ npx rufflo version --short
 #### completion
 ```bash
 # V2
-npx rufflo completion bash
-npx rufflo completion --install
+npx swarmdo completion bash
+npx swarmdo completion --install
 
 # V3 Migration needed:
-# Add to v3/@rufflo/cli/src/commands/completion.ts
+# Add to v3/@swarmdo/cli/src/commands/completion.ts
 ```
 
 ## Implementation Plan

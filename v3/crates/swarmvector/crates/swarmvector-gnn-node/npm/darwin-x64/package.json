@@ -7,22 +7,21 @@
   "cpu": [
     "x64"
   ],
-  "main": "ruvector-gnn.darwin-x64.node",
+  "main": "swarmvector-gnn.darwin-x64.node",
   "files": [
-    "ruvector-gnn.darwin-x64.node"
+    "swarmvector-gnn.darwin-x64.node"
   ],
-  "description": "Graph Neural Network capabilities for Ruvector - darwin-x64 platform",
+  "description": "Graph Neural Network capabilities for Swarmvector - darwin-x64 platform",
   "keywords": [
-    "ruvector",
+    "swarmvector",
     "gnn",
     "graph-neural-network",
     "napi-rs"
   ],
-  "author": "Ruvector Team",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ruvnet/ruvector"
+    "url": "the upstream project (see NOTICE)"
   },
   "engines": {
     "node": ">= 10"

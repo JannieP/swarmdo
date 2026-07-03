@@ -1,1 +1,1 @@
-# RuvLLM Configuration\n\nPlace configuration files here (e.g., ruvllm.toml)
+# SwarmLLM Configuration\n\nPlace configuration files here (e.g., swarmllm.toml)

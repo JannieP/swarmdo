@@ -14,11 +14,11 @@ Multi-agent systems require sophisticated coordination mechanisms to achieve eme
 
 ## Decision
 
-Create a **Multi-Agent Neural Coordination Plugin** that leverages RuVector WASM packages for neural-based agent coordination, emergent communication protocols, and collective decision-making with support for heterogeneous agent populations.
+Create a **Multi-Agent Neural Coordination Plugin** that leverages SwarmVector WASM packages for neural-based agent coordination, emergent communication protocols, and collective decision-making with support for heterogeneous agent populations.
 
 ## Plugin Name
 
-`@rufflo/plugin-neural-coordination`
+`@swarmdo/plugin-neural-coordination`
 
 ## Description
 
@@ -29,10 +29,10 @@ A cutting-edge multi-agent coordination plugin combining the SONA self-optimizin
 | Package | Purpose |
 |---------|---------|
 | `sona` | Self-Optimizing Neural Architecture for agent adaptation |
-| `ruvector-gnn-wasm` | Communication graph optimization and message routing |
-| `ruvector-nervous-system-wasm` | Neural coordination layer for collective behavior |
-| `ruvector-attention-wasm` | Multi-head attention for agent-to-agent communication |
-| `ruvector-learning-wasm` | Multi-agent reinforcement learning (MARL) |
+| `swarmvector-gnn-wasm` | Communication graph optimization and message routing |
+| `swarmvector-nervous-system-wasm` | Neural coordination layer for collective behavior |
+| `swarmvector-attention-wasm` | Multi-head attention for agent-to-agent communication |
+| `swarmvector-learning-wasm` | Multi-agent reinforcement learning (MARL) |
 
 ## MCP Tools
 
@@ -489,10 +489,10 @@ The plugin supports developing emergent communication protocols:
 {
   "dependencies": {
     "sona": "^0.1.0",
-    "ruvector-gnn-wasm": "^0.1.0",
-    "ruvector-nervous-system-wasm": "^0.1.0",
-    "ruvector-attention-wasm": "^0.1.0",
-    "ruvector-learning-wasm": "^0.1.0"
+    "swarmvector-gnn-wasm": "^0.1.0",
+    "swarmvector-nervous-system-wasm": "^0.1.0",
+    "swarmvector-attention-wasm": "^0.1.0",
+    "swarmvector-learning-wasm": "^0.1.0"
   }
 }
 ```
@@ -517,7 +517,7 @@ The plugin supports developing emergent communication protocols:
 | ADR | Relationship |
 |-----|--------------|
 | ADR-004: Plugin Architecture | Foundation - Defines plugin structure |
-| ADR-017: RuVector Integration | Dependency - Provides WASM packages |
+| ADR-017: SwarmVector Integration | Dependency - Provides WASM packages |
 | ADR-039: Cognitive Kernel | Related - Agent cognitive capabilities |
 | ADR-040: Quantum Optimizer | Related - Resource allocation optimization |
 | ADR-041: Hyperbolic Reasoning | Related - Agent hierarchy embeddings |
@@ -526,7 +526,7 @@ The plugin supports developing emergent communication protocols:
 
 - Multi-Agent RL Survey: https://arxiv.org/abs/1911.10635
 - Emergent Communication: https://arxiv.org/abs/1612.07182
-- ADR-017: RuVector Integration
+- ADR-017: SwarmVector Integration
 - ADR-004: Plugin Architecture
 
 ---

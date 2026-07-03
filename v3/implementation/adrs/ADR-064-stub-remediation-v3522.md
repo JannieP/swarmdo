@@ -13,7 +13,7 @@ The ADR-063 audit flagged several items as "stub" or "missing" that are in fact 
 | Item | Finding | Evidence |
 |------|---------|----------|
 | **Session restore --latest** | Fully implemented with MCP integration | `session.ts:274-432` — interactive selector when no ID given |
-| **Workflow persistence** | Saves to `.rufflo/workflows/store.json` | `workflow-tools.ts:52-78` — `loadWorkflowStore()`/`saveWorkflowStore()` |
+| **Workflow persistence** | Saves to `.swarmdo/workflows/store.json` | `workflow-tools.ts:52-78` — `loadWorkflowStore()`/`saveWorkflowStore()` |
 | **Daemon scheduler** | Working process management with PID files | `daemon.ts:234-458` — detached process, signal handling |
 | **Flash Attention JS** | CPU-optimized block-wise implementation | `flash-attention.ts:67-150` — top-K sparse, fused softmax-matmul |
 | **MCP path resolution** | Properly sanitized with `process.cwd()` | `session-tools.ts:34-39` — path sanitization regex |
@@ -23,27 +23,27 @@ The ADR-063 audit flagged several items as "stub" or "missing" that are in fact 
 
 | Priority | Item | Current State | Target |
 |----------|------|---------------|--------|
-| **P0** | @ruvector/learning-wasm integration | Not wired in CLI | Wire `@ruvector/learning-wasm@0.1.29` into neural commands |
+| **P0** | @swarmvector/learning-wasm integration | Not wired in CLI | Wire `@swarmvector/learning-wasm@0.1.29` into neural commands |
 | **P0** | Consensus vote counting | Proposals queued but no quorum validation | BFT 2/3 majority, Raft leader election, configurable quorum |
 | **P1** | Memory delete HNSW cleanup | SQL row deleted, vector remains | Delete embedding row + rebuild search index |
 | **P1** | SONA reinforcement learning | Signal recording only | Trajectory → reward → weight update loop |
 | **P1** | EWC++ consolidation execution | Algorithm defined, not executed | Fisher matrix computation + penalty application |
 | **P2** | Coverage hooks test integration | Returns 0% always | Read lcov.info / jest coverage-summary.json from disk |
-| **P2** | Intelligence stats → neural bridge | Stats counter disconnected | Read from ReasoningBank `.rufflo/neural/patterns.json` |
+| **P2** | Intelligence stats → neural bridge | Stats counter disconnected | Read from ReasoningBank `.swarmdo/neural/patterns.json` |
 
 ## Implementation Plan
 
-### P0-1: @ruvector/learning-wasm Integration
+### P0-1: @swarmvector/learning-wasm Integration
 
-Wire the published `@ruvector/learning-wasm@0.1.29` package into the CLI:
+Wire the published `@swarmvector/learning-wasm@0.1.29` package into the CLI:
 
 ```
-neural train → ruvector.initTraining() with WASM backend
-neural predict → ruvector.predict() with Flash Attention
-neural optimize → ruvector.quantize() for Int8
+neural train → swarmvector.initTraining() with WASM backend
+neural predict → swarmvector.predict() with Flash Attention
+neural optimize → swarmvector.quantize() for Int8
 ```
 
-**Files:** `src/commands/neural.ts`, `src/ruvector/index.ts`
+**Files:** `src/commands/neural.ts`, `src/swarmvector/index.ts`
 **Test:** `neural train --wasm` should use WASM backend, report >2x speedup
 
 ### P0-2: Consensus Protocol Implementation
@@ -128,8 +128,8 @@ Read real coverage data from common test tools:
 
 Connect `hooks intelligence stats` to ReasoningBank data:
 
-- Read pattern count from `.rufflo/neural/patterns.json`
-- Read trajectory count from `.rufflo/neural/stats.json`
+- Read pattern count from `.swarmdo/neural/patterns.json`
+- Read trajectory count from `.swarmdo/neural/stats.json`
 - Read SONA adaptation metrics from intelligence system
 
 **File:** `src/commands/hooks.ts` (intelligence stats handler)
@@ -151,8 +151,8 @@ Connect `hooks intelligence stats` to ReasoningBank data:
 
 | Package | Version | Purpose |
 |---------|---------|---------|
-| `@ruvector/learning-wasm` | 0.1.29 | MicroLoRA, Flash Attention WASM, Int8 quantization |
-| `@rufflo/memory` | 3.0.0-alpha.12 | AgentDB + ControllerRegistry |
+| `@swarmvector/learning-wasm` | 0.1.29 | MicroLoRA, Flash Attention WASM, Int8 quantization |
+| `@swarmdo/memory` | 3.0.0-alpha.12 | AgentDB + ControllerRegistry |
 
 ## Success Criteria
 
@@ -174,7 +174,7 @@ Connect `hooks intelligence stats` to ReasoningBank data:
 - RL loop makes the learning system genuinely adaptive
 
 ### Negative
-- `@ruvector/learning-wasm` adds ~2MB to package size
+- `@swarmvector/learning-wasm` adds ~2MB to package size
 - Consensus overhead adds latency to hive-mind operations
 - Real RL requires more computation than stub signal recording
 

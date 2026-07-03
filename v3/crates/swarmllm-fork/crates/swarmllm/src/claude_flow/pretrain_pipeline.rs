@@ -1,4 +1,4 @@
-//! Advanced Pretraining Pipeline for RuvLTRA Claude Flow Integration
+//! Advanced Pretraining Pipeline for SwarmLTRA Claude Flow Integration
 //!
 //! This module provides a multi-phase pretraining pipeline optimized for Claude Flow tasks:
 //!
@@ -33,7 +33,7 @@
 use super::task_generator::{GeneratedTask, TaskCategory, TaskComplexity, TaskGenerator};
 use super::{ClaudeFlowAgent, ClaudeFlowTask};
 use crate::sona::{
-    PretrainSample, RoutingPretrainResult, RuvLtraPretrainConfig, RuvLtraPretrainer, SeedingResult,
+    PretrainSample, RoutingPretrainResult, SwarmLtraPretrainConfig, SwarmLtraPretrainer, SeedingResult,
     SonaConfig, SonaIntegration, Trajectory,
 };
 use parking_lot::RwLock;
@@ -626,7 +626,7 @@ pub struct PretrainPipeline {
     /// Task generator
     task_generator: TaskGenerator,
     /// SONA pretrainer
-    pretrainer: RuvLtraPretrainer,
+    pretrainer: SwarmLtraPretrainer,
     /// Curriculum scheduler
     curriculum: CurriculumScheduler,
     /// Quality gate
@@ -653,7 +653,7 @@ struct TrajectoryRecord {
 impl PretrainPipeline {
     /// Create a new pretraining pipeline
     pub fn new(config: PretrainConfig) -> Self {
-        let pretrain_config = RuvLtraPretrainConfig {
+        let pretrain_config = SwarmLtraPretrainConfig {
             sona: config.sona_config.clone(),
             dataset: crate::sona::DatasetConfig {
                 max_routing_prompts: config.samples_per_phase,
@@ -684,7 +684,7 @@ impl PretrainPipeline {
             },
         };
 
-        let pretrainer = RuvLtraPretrainer::new(pretrain_config);
+        let pretrainer = SwarmLtraPretrainer::new(pretrain_config);
         let curriculum =
             CurriculumScheduler::new(config.curriculum_stages, config.samples_per_stage);
         let quality_gate = QualityGate::new(config.quality_threshold);
@@ -1273,7 +1273,7 @@ impl PretrainPipeline {
     }
 
     /// Get the trained pretrainer
-    pub fn into_pretrainer(self) -> RuvLtraPretrainer {
+    pub fn into_pretrainer(self) -> SwarmLtraPretrainer {
         self.pretrainer
     }
 }

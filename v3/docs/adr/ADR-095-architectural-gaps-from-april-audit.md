@@ -18,7 +18,7 @@ This ADR is the canonical tracking record for those gaps. Each row below is a ca
 
 **Current state.** `agent_spawn` writes a JSON record into an in-memory `Map`: `{ agentId, status: 'idle', taskCount: 0, lastResult: null }`. No subprocess. No `fork()`. No LLM call. The status field never advances on its own. The schema-honesty work in ADR-093 made the lifecycle observable (the audit's `taskCount: 0 forever` is now reachable as the genuine state) but did not wire up an executor.
 
-**Wire that exists, unused.** The `AnthropicProvider` class in `v3/@rufflo/providers/` makes real `fetch` calls to `api.anthropic.com`. The `ProviderManager` does round-robin and latency-based routing. Neither is imported by the agent spawn / task / swarm code paths.
+**Wire that exists, unused.** The `AnthropicProvider` class in `v3/@swarmdo/providers/` makes real `fetch` calls to `api.anthropic.com`. The `ProviderManager` does round-robin and latency-based routing. Neither is imported by the agent spawn / task / swarm code paths.
 
 **What a real fix requires.**
 - A worker pool that picks up `task_assign` events and runs them against `ProviderManager`.
@@ -48,7 +48,7 @@ The *handler* underneath is still EventEmitter-based and runs in a single Node p
 
 ### G3 — Workflow execution lacks a runtime
 
-**Current state.** `workflow_create` persists a workflow record to `.rufflo/workflows/store.json`. `workflow_execute` returns `{error: "Workflow not found"}` even when called with a workflow ID that DOES exist in the store. The state machine definition (steps, conditions, deps) is present but no executor walks it.
+**Current state.** `workflow_create` persists a workflow record to `.swarmdo/workflows/store.json`. `workflow_execute` returns `{error: "Workflow not found"}` even when called with a workflow ID that DOES exist in the store. The state machine definition (steps, conditions, deps) is present but no executor walks it.
 
 **What a real fix requires.**
 - A workflow runner that reads the persisted definition, walks the dependency graph, dispatches step actions to the agent layer (which itself needs G1 done first), and persists progress.
@@ -152,22 +152,22 @@ Independent re-audit by AlphaSignal AI (May 7, targeting v3.6.30) re-surfaced th
 
 ### G1 — agent_spawn → REMEDIATED via `agent_execute` wire
 
-The execution wire shipped as a sibling MCP tool, not by modifying `agent_spawn` (which intentionally remains a registry-only write for cost attribution + swarm coordination). File: `v3/@rufflo/cli/src/mcp-tools/agent-execute-core.ts:117` — `fetch('https://api.anthropic.com/v1/messages', ...)`. Workflow steps go through this wire (see G3).
+The execution wire shipped as a sibling MCP tool, not by modifying `agent_spawn` (which intentionally remains a registry-only write for cost attribution + swarm coordination). File: `v3/@swarmdo/cli/src/mcp-tools/agent-execute-core.ts:117` — `fetch('https://api.anthropic.com/v1/messages', ...)`. Workflow steps go through this wire (see G3).
 
 ### G3 — workflow_execute → REMEDIATED with real step executor
 
-`v3/@rufflo/cli/src/mcp-tools/workflow-tools.ts:308+` contains the step-walking executor with variable interpolation, step-output binding, pause/cancel, and persistence-after-each-step. The `'Workflow not found'` error only fires when `store.workflows[workflowId]` is undefined (correct missing-ID handling, not a stub).
+`v3/@swarmdo/cli/src/mcp-tools/workflow-tools.ts:308+` contains the step-walking executor with variable interpolation, step-output binding, pause/cancel, and persistence-after-each-step. The `'Workflow not found'` error only fires when `store.workflows[workflowId]` is undefined (correct missing-ID handling, not a stub).
 
 ### G4 — WASM agent prompt → REMEDIATED with echo-stub detection + Anthropic fallback
 
-`v3/@rufflo/cli/src/ruvector/agent-wasm.ts:154` (`promptWasmAgent`) detects the bundled WASM agent's `echo: <input>` stub and routes through `callAnthropicMessages` when `ANTHROPIC_API_KEY` is set. When unset, surfaces the stub honestly with a `[NOTE: …set ANTHROPIC_API_KEY to enable real responses]` hint.
+`v3/@swarmdo/cli/src/swarmvector/agent-wasm.ts:154` (`promptWasmAgent`) detects the bundled WASM agent's `echo: <input>` stub and routes through `callAnthropicMessages` when `ANTHROPIC_API_KEY` is set. When unset, surfaces the stub honestly with a `[NOTE: …set ANTHROPIC_API_KEY to enable real responses]` hint.
 
 ### G6 — Auto-memory bloat → REFUTED on current main
 
 The 5,706-entries-per-message claim does not match current behavior:
-1. Global `~/.claude/settings.json` UserPromptSubmit hook is `[ -n "$PROMPT" ] && npx @rufflo/cli@latest hooks route --task "$PROMPT" || true` — single routing call, no bulk injection.
-2. `plugins/rufflo-core/hooks/hooks.json` defines only `PreToolUse`, `PostToolUse`, `PreCompact`, `Stop` — no UserPromptSubmit / SessionStart context injection.
-3. No `trigram` / `jaccard` symbols in plugin/helper hooks (only one reference in `plugins/rufflo-rag-memory/README.md` documenting MMR diversity reranking — different code path).
+1. Global `~/.claude/settings.json` UserPromptSubmit hook is `[ -n "$PROMPT" ] && npx @swarmdo/cli@latest hooks route --task "$PROMPT" || true` — single routing call, no bulk injection.
+2. `plugins/swarmdo-core/hooks/hooks.json` defines only `PreToolUse`, `PostToolUse`, `PreCompact`, `Stop` — no UserPromptSubmit / SessionStart context injection.
+3. No `trigram` / `jaccard` symbols in plugin/helper hooks (only one reference in `plugins/swarmdo-rag-memory/README.md` documenting MMR diversity reranking — different code path).
 4. Live measurement: session-start reminder showed `[AutoMemory] ✓ Imported 0 entries (0 skipped) Backend entries: 8`.
 
 The 100 MB `graph-state.json` artifact may still exist on machines with long-lived `~/.claude/projects/` histories, but the runtime injection path no longer reads it. Recommend a separate one-shot cleanup script for users with bloated state files from earlier versions.
@@ -181,7 +181,7 @@ Both specific artifacts called out in the AlphaSignal article have been cleaned 
 
 ### G2 — in progress (consensus transport abstraction)
 
-The first piece landed: `v3/@rufflo/swarm/src/consensus/transport.ts` introduces a `ConsensusTransport` interface that separates the **inter-node-message** dimension from the **observability-event** dimension. The consensus protocols (raft/byzantine/gossip) historically used a local `EventEmitter` for both — the inter-node side never crossed a process boundary (a node "sent" a message by `emit`ting it locally and synthesizing the peer's reply inline).
+The first piece landed: `v3/@swarmdo/swarm/src/consensus/transport.ts` introduces a `ConsensusTransport` interface that separates the **inter-node-message** dimension from the **observability-event** dimension. The consensus protocols (raft/byzantine/gossip) historically used a local `EventEmitter` for both — the inter-node side never crossed a process boundary (a node "sent" a message by `emit`ting it locally and synthesizing the peer's reply inline).
 
 **Landed (PR #1905, branch `feat/adr-095-g2-hive-mind-ws-transport`):**
 - `ConsensusTransport` interface — `send` (request-response), `broadcast`, `onMessage`, `peers`, `close`. Separates inter-node messaging from observability events.
@@ -190,15 +190,15 @@ The first piece landed: `v3/@rufflo/swarm/src/consensus/transport.ts` introduces
 - `FederationTransport` — `ConsensusTransport` over the federation plugin's ADR-104 WS wire (`agentic-flow/transport/loader`). Structural dep (swarm stays zero-dep — the wiring layer supplies the transport instance). Request-response layered on fire-and-forget WS via correlation ids; ADR-104 stream-mux; Ed25519 + replay defense; fail-closed.
 - **All three protocols wired** to accept an injected `transport`: `RaftConsensus` (real RequestVote/AppendEntries RPCs with proper receiver rules — term comparison, vote-once-per-term, log-up-to-date check, commitIndex advance), `ByzantineConsensus` (PBFT messages over the transport, sha256 digests replacing the 32-bit toy hash, inbound routing), `GossipConsensus` (gossip messages to neighbors over the transport, inbound merge with dedup-by-id). Legacy no-transport path preserved in all three.
 - **BFT fault-tolerance correctness**: `f` now derived from the actual cluster size (`floor((n-1)/3)`, clamped to ≥1) rather than hardcoded to 1; `config.maxFaultyNodes` (when set) acts as an upper cap. Quorum `2f+1` checks now use the cluster-derived `f`.
-- CI guard: `plugins/rufflo-core/scripts/test-consensus-transport.mjs` (in the `mcp-roundtrip-smoke` job) — asserts exports present (incl. `FederationTransport`), `LocalTransport` round-trips, Ed25519 verify is real (no `return true` stub regression).
+- CI guard: `plugins/swarmdo-core/scripts/test-consensus-transport.mjs` (in the `mcp-roundtrip-smoke` job) — asserts exports present (incl. `FederationTransport`), `LocalTransport` round-trips, Ed25519 verify is real (no `return true` stub regression).
 - Tests: 210/210 swarm suite (+28 new across transport/byzantine/raft/federation/gossip).
 
 Remaining for G2:
 - Failure-injection tests (f<n/3 for BFT, f<n/2 for Raft) — drive a multi-node `LocalTransport` cluster with simulated faulty/silent nodes; assert correct commits below threshold, no incorrect commits above.
-- Cross-host validation (mac ↔ ruvultra over tailscale, root) once `FederationTransport` is wired into a real hive-mind + federation setup.
+- Cross-host validation (mac ↔ swarmultra over tailscale, root) once `FederationTransport` is wired into a real hive-mind + federation setup.
 - Build + publish; merge PR #1905.
 
-Tracked in [#1872](https://github.com/ruvnet/ruflo/issues/1872) and PR #1905.
+Tracked in [#1872](the upstream project (see NOTICE)) and PR #1905.
 
 ### Still open
 
@@ -208,6 +208,6 @@ Tracked in [#1872](https://github.com/ruvnet/ruflo/issues/1872) and PR #1905.
 
 ### Tracking
 
-- [#1896](https://github.com/ruvnet/ruflo/issues/1896) — external audit response with the per-gap measurement evidence above.
+- [#1896](the upstream project (see NOTICE)) — external audit response with the per-gap measurement evidence above.
 
 This update does NOT supersede the original ADR-095 problem statement; it records that 4 of the 7 originally-named gaps have been quietly fixed by the v3.7.0-alpha work that landed without ceremony.

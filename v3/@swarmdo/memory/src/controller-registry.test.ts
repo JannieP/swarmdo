@@ -405,7 +405,7 @@ describe('ControllerRegistry', () => {
       expect(registry.isEnabled('learningBridge')).toBe(false);
     });
 
-    // Regression guard for ruvnet/swarmdo#2019.
+    // Regression guard for upstream/swarmdo#2019.
     //
     // agentdb@3.0.0-alpha.14's `getController()` switch only handles
     // memory/reflexion/skills/causal/causalGraph and THROWS

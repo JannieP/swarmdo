@@ -83,7 +83,7 @@ Adopt a **Domain-Driven Design (DDD)** approach with a **constellation of 6 inde
 |   |                    INFRASTRUCTURE                            |       |
 |   |  +---------------+  +---------------+  +---------------+     |       |
 |   |  | Cloud Run     |  | Cloud SQL     |  | Secret Mgr    |     |       |
-|   |  | (6 services)  |  | (RuVector PG) |  | (Credentials) |     |       |
+|   |  | (6 services)  |  | (SwarmVector PG) |  | (Credentials) |     |       |
 |   |  +---------------+  +---------------+  +---------------+     |       |
 |   +-------------------------------------------------------------+       |
 |                                                                          |
@@ -167,10 +167,10 @@ Each extension deploys as an independent Cloud Run service:
 
 ## Shared Infrastructure
 
-### 1. Cloud SQL PostgreSQL with RuVector
+### 1. Cloud SQL PostgreSQL with SwarmVector
 
-All extensions connect to a shared Cloud SQL instance with the RuVector extension:
-- **Instance**: `conveyor-ruvector-db`
+All extensions connect to a shared Cloud SQL instance with the SwarmVector extension:
+- **Instance**: `conveyor-swarmvector-db`
 - **Database**: `conveyor_ai`
 - **Performance**: ~1.9x-4.7x measured faster vector search via HNSW indexing
 
@@ -210,7 +210,7 @@ User Request
      v
 +------------------+
 | Cloud SQL + AI   |-----> Vector Search, Predictions
-| (RuVector)       |-----> Q-Learning State
+| (SwarmVector)       |-----> Q-Learning State
 +------------------+
      |
      v

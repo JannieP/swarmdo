@@ -57,7 +57,7 @@ edition = "2021"
 rust-version = "1.77"
 license = "MIT"
 authors = ["Swarmvector Team"]
-repository = "https://github.com/ruvnet/swarmvector"
+repository = "the upstream project (see NOTICE)"
 
 [workspace.dependencies]
 serde = { version = "1.0", features = ["derive"] }
@@ -149,13 +149,13 @@ RUN ls -la /workspace/target/release/swarmvector-pg17/usr/share/postgresql/17/ex
 FROM postgres:17-bookworm
 
 # Labels
-LABEL maintainer="swarmvector team <info@ruv.io>"
+LABEL maintainer="swarmvector team <maintainers@swarmdo.com>"
 LABEL description="PostgreSQL with swarmvector extension - high-performance vector database with 270+ SQL functions, Graph/Cypher/SPARQL, GNN, hybrid search, multi-tenancy, self-healing, SONA self-learning, and local embeddings"
 LABEL version="0.3.1"
 LABEL org.opencontainers.image.title="swarmvector-postgres"
 LABEL org.opencontainers.image.version="0.3.1"
-LABEL org.opencontainers.image.vendor="ruv.io"
-LABEL org.opencontainers.image.source="https://github.com/ruvnet/swarmvector"
+LABEL org.opencontainers.image.vendor="swarmdo.com"
+LABEL org.opencontainers.image.source="the upstream project (see NOTICE)"
 LABEL org.opencontainers.image.description="Drop-in pgvector replacement with SIMD, Flash Attention, GNN, Cypher, SPARQL, hybrid search, multi-tenancy, self-healing, and SONA"
 
 # Set embedding model cache path - models are pre-downloaded during build

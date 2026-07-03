@@ -1,4 +1,4 @@
-# RuvLLM: TDD and Iterative Refinement
+# SwarmLLM: TDD and Iterative Refinement
 
 ## SPARC Phase 4: Refinement
 
@@ -10,9 +10,9 @@
 
 > **"The intelligence is not in one model anymore. It is in the loop."**
 
-RuvLLM treats:
+SwarmLLM treats:
 - **LFM2 weights** as a **stable cortex** (fixed core reasoning engine)
-- **Ruvector** as the **living synaptic mesh** (adapts continuously)
+- **Swarmvector** as the **living synaptic mesh** (adapts continuously)
 - **FastGRNN** as the **control circuit** (learns when to use what)
 
 This creates a system that genuinely learns from experience without requiring constant model retraining.
@@ -40,7 +40,7 @@ Request → Response → Outcome
 │                    Memory Growth Loop                          │
 ├────────────────────────────────────────────────────────────────┤
 │                                                                  │
-│  1. WRITE to ruvector:                                          │
+│  1. WRITE to swarmvector:                                          │
 │     ┌─────────────────────────────────────────────────────────┐│
 │     │  - Question (query embedding + text)                     ││
 │     │  - Answer (response embedding + text)                    ││
@@ -75,7 +75,7 @@ mod memory_growth_tests {
     #[test]
     fn test_successful_interaction_strengthens_edges() {
         // Given: A memory with two related nodes
-        let mut memory = RuvectorMemory::new_test();
+        let mut memory = SwarmvectorMemory::new_test();
         let node_a = memory.insert_node("Machine learning is a subset of AI");
         let node_b = memory.insert_node("Neural networks are ML models");
         memory.insert_edge(node_a, node_b, EdgeType::SameTopic, 0.5);
@@ -96,7 +96,7 @@ mod memory_growth_tests {
     #[test]
     fn test_failed_interaction_weakens_edges() {
         // Given: A memory with edge
-        let mut memory = RuvectorMemory::new_test();
+        let mut memory = SwarmvectorMemory::new_test();
         let node_a = memory.insert_node("Topic A");
         let node_b = memory.insert_node("Unrelated B");
         memory.insert_edge(node_a, node_b, EdgeType::SameTopic, 0.5);
@@ -117,7 +117,7 @@ mod memory_growth_tests {
     #[test]
     fn test_unused_edges_decay_over_time() {
         // Given: An edge that hasn't been used
-        let mut memory = RuvectorMemory::new_test();
+        let mut memory = SwarmvectorMemory::new_test();
         let edge = memory.create_edge_with_last_used(
             "node_a", "node_b",
             0.5,
@@ -349,7 +349,7 @@ mod compression_tests {
     #[test]
     fn test_cluster_detection_finds_dense_neighborhoods() {
         // Given: Graph with clear clusters
-        let mut memory = RuvectorMemory::new_test();
+        let mut memory = SwarmvectorMemory::new_test();
 
         // Cluster 1: ML topics (densely connected)
         let ml_nodes = vec![
@@ -404,7 +404,7 @@ mod compression_tests {
     #[test]
     fn test_concept_nodes_are_prioritized_in_retrieval() {
         // Given: Memory with concept and detail nodes
-        let mut memory = RuvectorMemory::new_test();
+        let mut memory = SwarmvectorMemory::new_test();
         let concept = memory.insert_node_typed(
             "Rust programming overview",
             NodeType::Concept
@@ -428,7 +428,7 @@ mod compression_tests {
     #[test]
     fn test_archival_moves_old_nodes_to_cold_storage() {
         // Given: Nodes with different access patterns
-        let mut memory = RuvectorMemory::new_test();
+        let mut memory = SwarmvectorMemory::new_test();
         let hot_node = memory.insert_node_with_access(
             "Recently used content",
             AccessStats { last_used: now(), use_count: 50 }
@@ -503,7 +503,7 @@ mod compression_tests {
 │  │  2. Optionally run preference objective on pairs         │   │
 │  │  3. Validate on fixed holdout + public benchmarks        │   │
 │  │                                                           │   │
-│  │  Output: "LFM2-ruv-edition-vN"                           │   │
+│  │  Output: "LFM2-swarm-edition-vN"                           │   │
 │  └─────────────────────────────────────────────────────────┘   │
 │                           │                                     │
 │                           ▼                                     │
@@ -840,7 +840,7 @@ mod integration_tests {
     /// Test full request-response cycle
     #[tokio::test]
     async fn test_end_to_end_query() {
-        let system = RuvLLMSystem::new_test().await;
+        let system = SwarmLLMSystem::new_test().await;
 
         let response = system.process(Request {
             query: "What is machine learning?",
@@ -856,7 +856,7 @@ mod integration_tests {
     /// Test multi-turn conversation with context
     #[tokio::test]
     async fn test_multi_turn_context() {
-        let system = RuvLLMSystem::new_test().await;
+        let system = SwarmLLMSystem::new_test().await;
         let session = "multi-turn-test";
 
         // Turn 1
@@ -882,7 +882,7 @@ mod integration_tests {
     /// Test that learning loop updates memory
     #[tokio::test]
     async fn test_learning_updates_memory() {
-        let system = RuvLLMSystem::new_test().await;
+        let system = SwarmLLMSystem::new_test().await;
         let initial_node_count = system.memory.node_count();
 
         // Process high-quality interaction
@@ -899,7 +899,7 @@ mod integration_tests {
     /// Test router learns from experience
     #[tokio::test]
     async fn test_router_adaptation() {
-        let mut system = RuvLLMSystem::new_test().await;
+        let mut system = SwarmLLMSystem::new_test().await;
 
         // Process many simple queries
         for _ in 0..100 {
@@ -949,7 +949,7 @@ fn embedding_benchmark(c: &mut Criterion) {
 }
 
 fn hnsw_search_benchmark(c: &mut Criterion) {
-    let memory = RuvectorMemory::new_with_data(100_000);  // 100K vectors
+    let memory = SwarmvectorMemory::new_with_data(100_000);  // 100K vectors
     let query = random_vector(384);
 
     let mut group = c.benchmark_group("hnsw_search");
@@ -1007,7 +1007,7 @@ pub struct QualityBenchmark {
 }
 
 impl QualityBenchmark {
-    pub async fn run(&self, system: &RuvLLMSystem) -> QualityResults {
+    pub async fn run(&self, system: &SwarmLLMSystem) -> QualityResults {
         let mut results = QualityResults::default();
 
         for sample in &self.dataset.samples {
@@ -1156,4 +1156,4 @@ impl QualityBenchmark {
 
 *Document Version: 1.0*
 *Last Updated: 2025-12-02*
-*Author: RuvLLM Architecture Team*
+*Author: SwarmLLM Architecture Team*

@@ -2,15 +2,15 @@
 
 ## Overview
 
-This document describes the implementation of **ADR-001: Adopt agentic-flow as Core Foundation** for agent lifecycle management in Rufflo v3.
+This document describes the implementation of **ADR-001: Adopt agentic-flow as Core Foundation** for agent lifecycle management in Swarmdo v3.
 
 ## Implementation Summary
 
-Created two new core classes that bridge Rufflo's DDD agent architecture with agentic-flow's optimized agent implementations:
+Created two new core classes that bridge Swarmdo's DDD agent architecture with agentic-flow's optimized agent implementations:
 
 ### 1. AgenticFlowAgent (`agentic-flow-agent.ts`)
 
-**Purpose**: Base class for all Rufflo v3 agents with automatic delegation to agentic-flow
+**Purpose**: Base class for all Swarmdo v3 agents with automatic delegation to agentic-flow
 
 **Key Features**:
 - Implements `IAgent` interface for DDD compliance
@@ -33,7 +33,7 @@ Created two new core classes that bridge Rufflo's DDD agent architecture with ag
 
 ### 2. AgentAdapter (`agent-adapter.ts`)
 
-**Purpose**: Bidirectional adapter between Rufflo and agentic-flow agent formats
+**Purpose**: Bidirectional adapter between Swarmdo and agentic-flow agent formats
 
 **Key Features**:
 - Converts between agent representations
@@ -43,7 +43,7 @@ Created two new core classes that bridge Rufflo's DDD agent architecture with ag
 - Provides factory methods for agent creation
 
 **Capabilities**:
-- `fromAgenticFlow()`: Convert external agents to Rufflo format
+- `fromAgenticFlow()`: Convert external agents to Swarmdo format
 - `toAgenticFlow()`: Export agents in agentic-flow format
 - `createWithDelegation()`: Create agents with automatic delegation
 - Agent pool management (add, get, remove)
@@ -145,7 +145,7 @@ Comprehensive test suites included:
 ### Exports from Integration Module
 
 ```typescript
-// From @rufflo/integration
+// From @swarmdo/integration
 import {
   // Agent classes
   AgenticFlowAgent,
@@ -162,7 +162,7 @@ import {
   TaskResult,
   Message,
   AgentHealth,
-} from '@rufflo/integration';
+} from '@swarmdo/integration';
 ```
 
 ### Following Existing Patterns
@@ -181,7 +181,7 @@ All adapters use:
 ## Files Created
 
 ```
-v3/@rufflo/integration/src/
+v3/@swarmdo/integration/src/
 ├── agentic-flow-agent.ts          # 799 lines - Base agent class
 ├── agent-adapter.ts                # 625 lines - Adapter class
 ├── __tests__/
@@ -299,10 +299,10 @@ console.log(health.metrics.tasksCompleted); // Task count
 ## References
 
 - **ADR-001**: Adopt agentic-flow as Core Foundation
-- **SONAAdapter**: `/v3/@rufflo/integration/src/sona-adapter.ts`
-- **AttentionCoordinator**: `/v3/@rufflo/integration/src/attention-coordinator.ts`
-- **AgenticFlowBridge**: `/v3/@rufflo/integration/src/agentic-flow-bridge.ts`
-- **Shared Interfaces**: `/v3/@rufflo/shared/src/core/interfaces/agent.interface.ts`
+- **SONAAdapter**: `/v3/@swarmdo/integration/src/sona-adapter.ts`
+- **AttentionCoordinator**: `/v3/@swarmdo/integration/src/attention-coordinator.ts`
+- **AgenticFlowBridge**: `/v3/@swarmdo/integration/src/agentic-flow-bridge.ts`
+- **Shared Interfaces**: `/v3/@swarmdo/shared/src/core/interfaces/agent.interface.ts`
 
 ---
 

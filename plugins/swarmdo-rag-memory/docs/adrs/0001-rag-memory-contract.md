@@ -1,6 +1,6 @@
 ---
 id: ADR-0001
-title: rufflo-rag-memory plugin contract — pinning, claude-memories reserved-namespace consumer, smoke as contract
+title: swarmdo-rag-memory plugin contract — pinning, claude-memories reserved-namespace consumer, smoke as contract
 status: Accepted
 date: 2026-05-04
 updated: 2026-05-09
@@ -11,9 +11,9 @@ tags: [plugin, rag-memory, hnsw, claude-memories, namespace, smoke-test]
 
 ## Context
 
-`rufflo-rag-memory` (v0.2.0) — simple memory + HNSW semantic retrieval. 1 agent (`memory-specialist`), 2 skills (`memory-bridge`, `memory-search`), 2 commands (`/recall`, `/rufflo-memory`).
+`swarmdo-rag-memory` (v0.2.0) — simple memory + HNSW semantic retrieval. 1 agent (`memory-specialist`), 2 skills (`memory-bridge`, `memory-search`), 2 commands (`/recall`, `/swarmdo-memory`).
 
-This plugin is **the canonical consumer of the `claude-memories` reserved namespace** (per [rufflo-agentdb ADR-0001](../../rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md) §"Namespace convention"). Claude Code's `SessionStart` hook auto-imports `~/.claude/projects/*/memory/*.md` into AgentDB via `memory_import_claude` → `claude-memories`. This plugin's `memory-bridge` skill exposes that bridge to users.
+This plugin is **the canonical consumer of the `claude-memories` reserved namespace** (per [swarmdo-agentdb ADR-0001](../../swarmdo-agentdb/docs/adrs/0001-agentdb-optimization.md) §"Namespace convention"). Claude Code's `SessionStart` hook auto-imports `~/.claude/projects/*/memory/*.md` into AgentDB via `memory_import_claude` → `claude-memories`. This plugin's `memory-bridge` skill exposes that bridge to users.
 
 ## Decision
 
@@ -31,15 +31,15 @@ This plugin is **the canonical consumer of the `claude-memories` reserved namesp
 ## Verification
 
 ```bash
-bash plugins/rufflo-rag-memory/scripts/smoke.sh
+bash plugins/swarmdo-rag-memory/scripts/smoke.sh
 # Expected: "10 passed, 0 failed"
 ```
 
 ## Related
 
-- `plugins/rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md` — owns the `claude-memories` reserved namespace and the auto-import bridge
-- `plugins/rufflo-ruvector/docs/adrs/0001-pin-ruvector-0.2.25.md` — sibling substrate plugin
+- `plugins/swarmdo-agentdb/docs/adrs/0001-agentdb-optimization.md` — owns the `claude-memories` reserved namespace and the auto-import bridge
+- `plugins/swarmdo-swarmvector/docs/adrs/0001-pin-swarmvector-0.2.25.md` — sibling substrate plugin
 
 ## Implementation status
 
-Plugin version v0.2.0 shipped and listed in marketplace.json. Source exists at `plugins/rufflo-rag-memory/`. Contract elements implemented: canonical consumer of `claude-memories` reserved namespace documented; `memory_import_claude` + `memory_bridge_status` + `memory_search_unified` MCP tools covered; auto-import via SessionStart hook cross-referenced; smoke-as-contract gate defined in `scripts/smoke.sh`.
+Plugin version v0.2.0 shipped and listed in marketplace.json. Source exists at `plugins/swarmdo-rag-memory/`. Contract elements implemented: canonical consumer of `claude-memories` reserved namespace documented; `memory_import_claude` + `memory_bridge_status` + `memory_search_unified` MCP tools covered; auto-import via SessionStart hook cross-referenced; smoke-as-contract gate defined in `scripts/smoke.sh`.

@@ -1,5 +1,5 @@
 /**
- * Contrastive Fine-tuning for RuvLTRA Claude Code Router
+ * Contrastive Fine-tuning for SwarmLTRA Claude Code Router
  *
  * Uses triplet loss to fine-tune embeddings:
  * - Anchor: task description
@@ -94,7 +94,7 @@ export function computeGradient(anchorEmb, positiveEmb, negativeEmb, lr = 0.0001
     return gradient;
 }
 /**
- * Contrastive Trainer for RuvLTRA models
+ * Contrastive Trainer for SwarmLTRA models
  *
  * Implements triplet loss and InfoNCE loss for embedding fine-tuning.
  */
@@ -252,7 +252,7 @@ export class ContrastiveTrainer {
     generateTrainingScript(outputPath) {
         const outDir = outputPath || this.config.outputPath;
         const script = `#!/bin/bash
-# RuvLTRA Fine-tuning Script
+# SwarmLTRA Fine-tuning Script
 # Prerequisites: pip install transformers peft accelerate
 
 set -e
@@ -260,7 +260,7 @@ set -e
 MODEL_PATH="${outDir}"
 BASE_MODEL="Qwen/Qwen2.5-0.5B"
 
-echo "=== RuvLTRA Contrastive Fine-tuning ==="
+echo "=== SwarmLTRA Contrastive Fine-tuning ==="
 echo "Base model: $BASE_MODEL"
 echo "Output: $MODEL_PATH"
 

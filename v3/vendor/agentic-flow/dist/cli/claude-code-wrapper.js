@@ -230,8 +230,8 @@ Environment Variables:
   ONNX_MODEL_PATH       Optional for --provider onnx
 
 Documentation:
-  https://github.com/ruvnet/agentic-flow#claude-code-mode
-  https://ruv.io
+  the upstream project (see NOTICE)#claude-code-mode
+  https://swarmdo.com
 `)
         .option('--provider <provider>', 'AI provider (anthropic, openrouter, gemini, onnx)', 'anthropic')
         .option('--port <port>', 'Proxy server port', '3000')

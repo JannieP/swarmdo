@@ -2,7 +2,7 @@
  * V3 CLI Performance Command
  * Performance profiling, benchmarking, optimization, metrics
  *
- * Created with ❤️ by ruv.io
+ * Created with ❤️ by swarmdo.com
  */
 
 import * as os from 'node:os';
@@ -764,7 +764,7 @@ export const performanceCommand: Command = {
       'Memory: 50-75% reduction with quantization',
     ]);
     output.writeln();
-    output.writeln(output.dim('Created with ❤️ by ruv.io'));
+    output.writeln(output.dim('Created with ❤️ by swarmdo.com'));
     return { success: true };
   },
 };

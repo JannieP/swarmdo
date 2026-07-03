@@ -33,7 +33,7 @@
  * are longer (~200 input / ~400 output). Projected: ~$1-3 USD. Default
  * --max-cost gate is $5.00.
  *
- * Co-Authored-By: Swarmdo <ruv@ruv.net>
+ * Co-Authored-By: Swarmdo <maintainers@swarmdo.com>
  */
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
@@ -265,7 +265,7 @@ async function callOR(modelId, prompt, apiKey, opts = {}) {
     headers: {
       'Authorization': `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
-      'HTTP-Referer': 'https://github.com/ruvnet/swarmdo',
+      'HTTP-Referer': 'the upstream project (see NOTICE)',
       'X-Title': 'swarmdo-benchmark-seed-corpus',
     },
     body: JSON.stringify({

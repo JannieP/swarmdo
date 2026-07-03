@@ -5,7 +5,7 @@ Foundation plugin. Registers the `swarmdo` MCP server (300+ tools), provides thr
 ## Install
 
 ```
-/plugin marketplace add ruvnet/swarmdo
+/plugin marketplace add upstream/swarmdo
 /plugin install swarmdo-core@swarmdo
 ```
 

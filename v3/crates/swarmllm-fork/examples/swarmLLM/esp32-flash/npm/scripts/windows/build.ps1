@@ -1,4 +1,4 @@
-# build.ps1 - Auto-configure and build RuvLLM ESP32
+# build.ps1 - Auto-configure and build SwarmLLM ESP32
 # Automatically detects toolchain paths - no manual configuration needed
 
 param(
@@ -9,7 +9,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-Write-Host "`n=== RuvLLM ESP32 Build ===" -ForegroundColor Cyan
+Write-Host "`n=== SwarmLLM ESP32 Build ===" -ForegroundColor Cyan
 Write-Host ""
 
 # Auto-detect paths

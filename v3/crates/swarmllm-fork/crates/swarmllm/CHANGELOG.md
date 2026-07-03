@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to the ruvllm crate will be documented in this file.
+All notable changes to the swarmllm crate will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -13,8 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - INT8/INT4/Q4_K quantized inference kernels (4-8x memory reduction)
 - Optimized Metal GPU shaders (simdgroup_matrix)
 - Memory pool with arena allocator (zero-alloc inference)
-- WASM support via ruvllm-wasm crate
-- npm package integration (@ruvector/ruvllm v2)
+- WASM support via swarmllm-wasm crate
+- npm package integration (@swarmvector/swarmllm v2)
 - Paged attention for non-contiguous KV cache
 - Grouped-Query Attention (GQA) and Multi-Query Attention (MQA) support
 - Two-tier KV cache with FP16 tail and quantized cold storage
@@ -52,15 +52,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.32] - 2025-01-18
 
 ### Added
-- Initial ruvllm-integration crate with basic LLM serving runtime
+- Initial swarmllm-integration crate with basic LLM serving runtime
 - Paged attention implementation
 - KV cache management
 - SONA learning integration scaffolding
 - Basic NEON SIMD kernels for ARM64
 
 ### Dependencies
-- ruvector-core for storage backend
-- ruvector-sona for learning integration
+- swarmvector-core for storage backend
+- swarmvector-sona for learning integration
 - candle-core, candle-nn, candle-transformers for ML backend
 - tokenizers for text processing
 - hf-hub for model downloads

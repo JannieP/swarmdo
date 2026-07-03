@@ -960,10 +960,10 @@ mcp__swarmdo__swarm_init({ topology: "mesh", maxAgents: 4 })
 
 ## References
 
-- [Swarmdo Documentation](https:/$github.com$ruvnet$swarmdo)
-- [Swarm Orchestration Guide](https:/$github.com$ruvnet$swarmdo$wiki$swarm)
-- [MCP Tools Reference](https:/$github.com$ruvnet$swarmdo$wiki$mcp)
-- [Performance Optimization](https:/$github.com$ruvnet$swarmdo$wiki$performance)
+- [Swarmdo Documentation](https:/$github.com$upstream$swarmdo)
+- [Swarm Orchestration Guide](https:/$github.com$upstream$swarmdo$wiki$swarm)
+- [MCP Tools Reference](https:/$github.com$upstream$swarmdo$wiki$mcp)
+- [Performance Optimization](https:/$github.com$upstream$swarmdo$wiki$performance)
 
 ---
 

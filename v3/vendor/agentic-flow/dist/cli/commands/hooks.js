@@ -3,7 +3,7 @@
  * CLI Hooks Commands
  * Provides CLI interface for agentic-flow hook tools
  *
- * NOW WITH FULL RUVECTOR INTELLIGENCE:
+ * NOW WITH FULL SWARMVECTOR INTELLIGENCE:
  * - @swarmvector/sona: Micro-LoRA (~0.05ms), EWC++, Trajectory tracking
  * - @swarmvector/attention: MoE, Flash, Hyperbolic, Graph attention
  * - swarmvector core: HNSW indexing (150x faster)
@@ -690,7 +690,7 @@ console.log(lines.join('\\n'));
         }
     });
     // ============================================
-    // RUVECTOR INTELLIGENCE COMMANDS
+    // SWARMVECTOR INTELLIGENCE COMMANDS
     // SONA Micro-LoRA + MoE Attention + HNSW
     // ============================================
     // Create intelligence subcommand group

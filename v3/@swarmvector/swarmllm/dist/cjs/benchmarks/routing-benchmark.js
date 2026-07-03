@@ -1,6 +1,6 @@
 "use strict";
 /**
- * Routing Benchmark for RuvLTRA Models
+ * Routing Benchmark for SwarmLTRA Models
  *
  * Tests whether the model correctly routes tasks to appropriate agents.
  * This measures the actual value proposition for Claude Code workflows.

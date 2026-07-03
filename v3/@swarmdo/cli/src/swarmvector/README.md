@@ -2,7 +2,7 @@
 
 Version: 0.1.95
 Package: `swarmvector`
-Repository: https://github.com/ruvnet/swarmvector
+Repository: the upstream project (see NOTICE)
 
 ## Overview
 
@@ -669,5 +669,5 @@ npx swarmvector hooks import backup.json --merge
 ## Links
 
 - [npm Package](https://www.npmjs.com/package/swarmvector)
-- [GitHub Repository](https://github.com/ruvnet/swarmvector)
-- [Hooks Documentation](https://github.com/ruvnet/swarmvector/blob/main/npm/packages/swarmvector/HOOKS.md)
+- [GitHub Repository](the upstream project (see NOTICE))
+- [Hooks Documentation](the upstream project (see NOTICE))

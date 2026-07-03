@@ -7,7 +7,7 @@
 
 **High-performance collection management for Swarmvector vector databases.**
 
-`swarmvector-collections` provides multi-tenant collection support with isolated namespaces, schema management, and collection-level configuration. Part of the [Swarmvector](https://github.com/ruvnet/swarmvector) ecosystem.
+`swarmvector-collections` provides multi-tenant collection support with isolated namespaces, schema management, and collection-level configuration. Part of the [Swarmvector](the upstream project (see NOTICE)) ecosystem.
 
 ## Why Swarmvector Collections?
 
@@ -177,7 +177,7 @@ impl CollectionManager {
 
 - **[Main README](../../README.md)** - Complete project overview
 - **[API Documentation](https://docs.rs/swarmvector-collections)** - Full API reference
-- **[GitHub Repository](https://github.com/ruvnet/swarmvector)** - Source code
+- **[GitHub Repository](the upstream project (see NOTICE))** - Source code
 
 ## License
 
@@ -187,10 +187,10 @@ impl CollectionManager {
 
 <div align="center">
 
-**Part of [Swarmvector](https://github.com/ruvnet/swarmvector) - Built by [rUv](https://ruv.io)**
+**Part of [Swarmvector](the upstream project (see NOTICE)) - Built by [the upstream author](https://swarmdo.com)**
 
-[![Star on GitHub](https://img.shields.io/github/stars/ruvnet/swarmvector?style=social)](https://github.com/ruvnet/swarmvector)
+[![Star on GitHub](https://img.shields.io/github/stars/upstream/swarmvector?style=social)](the upstream project (see NOTICE))
 
-[Documentation](https://docs.rs/swarmvector-collections) | [Crates.io](https://crates.io/crates/swarmvector-collections) | [GitHub](https://github.com/ruvnet/swarmvector)
+[Documentation](https://docs.rs/swarmvector-collections) | [Crates.io](https://crates.io/crates/swarmvector-collections) | [GitHub](the upstream project (see NOTICE))
 
 </div>

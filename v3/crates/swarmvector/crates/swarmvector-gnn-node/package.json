@@ -1,11 +1,11 @@
 {
   "name": "@swarmvector/gnn",
   "version": "0.1.25",
-  "description": "Graph Neural Network capabilities for Ruvector - Node.js bindings",
+  "description": "Graph Neural Network capabilities for Swarmvector - Node.js bindings",
   "main": "index.js",
   "types": "index.d.ts",
   "napi": {
-    "name": "ruvector-gnn",
+    "name": "swarmvector-gnn",
     "triples": {
       "defaults": false,
       "additional": [
@@ -27,7 +27,7 @@
     "version": "napi version"
   },
   "keywords": [
-    "ruvector",
+    "swarmvector",
     "gnn",
     "graph-neural-network",
     "machine-learning",
@@ -35,11 +35,10 @@
     "hnsw",
     "napi-rs"
   ],
-  "author": "Ruvector Team",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ruvnet/ruvector"
+    "url": "the upstream project (see NOTICE)"
   },
   "devDependencies": {
     "@napi-rs/cli": "^2.16.0"

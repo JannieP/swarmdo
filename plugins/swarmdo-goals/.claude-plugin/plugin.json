@@ -3,8 +3,8 @@
   "description": "Long-horizon goal planning, deep research orchestration, and adaptive replanning using GOAP algorithms",
   "version": "0.2.0",
   "author": {
-    "name": "ruvnet",
-    "url": "https://github.com/ruvnet"
+    "name": "upstream",
+    "url": "https://the upstream project (see NOTICE)"
   },
   "homepage": "https://github.com/JannieP/swarmdo",
   "license": "MIT",

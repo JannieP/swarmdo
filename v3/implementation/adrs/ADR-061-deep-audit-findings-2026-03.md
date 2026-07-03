@@ -156,7 +156,7 @@ Document all actionable findings from the deep system audit. File size (>500 lin
 | Plugins + Transfer | `plugins-transfer-deep.test.ts` | 204 |
 | Docker + Integration | `integration-docker.test.ts` | 95 |
 | Existing Fixes + Coverage | `cli.test.ts` (fixed), `parser.test.ts`, `output.test.ts`, `suggest.test.ts`, `config-adapter-deep.test.ts` | 182 |
-| Memory + RuVector | `memory-ruvector-deep.test.ts` | 145 |
+| Memory + SwarmVector | `memory-swarmvector-deep.test.ts` | 145 |
 | Security Audit | `security-audit.test.ts` | 25 |
 | **Existing (pre-audit)** | 13 files | 441 |
 | **Total** | **22 files** | **~1,600** |

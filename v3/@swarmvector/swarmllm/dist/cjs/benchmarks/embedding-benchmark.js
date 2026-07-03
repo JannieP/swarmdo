@@ -1,6 +1,6 @@
 "use strict";
 /**
- * Embedding Quality Benchmark for RuvLTRA Models
+ * Embedding Quality Benchmark for SwarmLTRA Models
  *
  * Tests embedding quality for Claude Code use cases:
  * - Code similarity detection

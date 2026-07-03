@@ -5,7 +5,7 @@
 
 ## Context
 
-Rufflo V3 uses embeddings extensively for:
+Swarmdo V3 uses embeddings extensively for:
 - Memory vector search (HNSW-indexed)
 - Neural pattern recognition
 - Semantic drift detection
@@ -21,7 +21,7 @@ Currently, embeddings are initialized lazily when first used. This causes:
 ### Current Architecture
 
 ```
-@rufflo/embeddings
+@swarmdo/embeddings
 ├── embedding-service.ts      # Core embedding providers
 ├── hyperbolic.ts            # Poincaré ball transformations
 ├── neural-integration.ts    # agentic-flow substrate wrapper
@@ -96,10 +96,10 @@ function getMigrationSteps(target: string) {
       name: 'Embedding Models',
       description: 'Download ONNX embedding model for V3',
       source: 'N/A (cloud download)',
-      dest: '.rufflo/models/',
+      dest: '.swarmdo/models/',
       execute: async () => {
-        const { downloadEmbeddingModel } = await import('@rufflo/embeddings');
-        await downloadEmbeddingModel('all-MiniLM-L6-v2', '.rufflo/models/');
+        const { downloadEmbeddingModel } = await import('@swarmdo/embeddings');
+        await downloadEmbeddingModel('all-MiniLM-L6-v2', '.swarmdo/models/');
       }
     });
   }
@@ -112,7 +112,7 @@ Add embedding-specific pretraining:
 
 ```bash
 # New pretrain options
-npx rufflo@v3alpha hooks pretrain \
+npx swarmdo@v3alpha hooks pretrain \
   --model-type embeddings \
   --source-model all-MiniLM-L6-v2 \
   --hyperbolic true \
@@ -128,14 +128,14 @@ npx rufflo@v3alpha hooks pretrain \
 
 ### 4. Configuration Schema
 
-Add to `rufflo.config.json`:
+Add to `swarmdo.config.json`:
 
 ```json
 {
   "embeddings": {
     "provider": "agentic-flow",
     "model": "all-MiniLM-L6-v2",
-    "modelPath": ".rufflo/models/",
+    "modelPath": ".swarmdo/models/",
     "dimension": 384,
     "cacheSize": 256,
     "hyperbolic": {
@@ -158,7 +158,7 @@ Add to `rufflo.config.json`:
 #### `embeddings init`
 ```bash
 # Initialize embeddings subsystem
-npx rufflo@v3alpha embeddings init [options]
+npx swarmdo@v3alpha embeddings init [options]
 
 Options:
   --model <id>      Model to download (default: all-MiniLM-L6-v2)
@@ -171,7 +171,7 @@ Options:
 #### `embeddings status`
 ```bash
 # Check embeddings status
-npx rufflo@v3alpha embeddings status
+npx swarmdo@v3alpha embeddings status
 
 Output:
 ╭────────────────────────────────────────────────────╮
@@ -189,10 +189,10 @@ Output:
 #### `embeddings download`
 ```bash
 # Download specific model
-npx rufflo@v3alpha embeddings download <model-id>
+npx swarmdo@v3alpha embeddings download <model-id>
 
 # Example
-npx rufflo@v3alpha embeddings download all-mpnet-base-v2
+npx swarmdo@v3alpha embeddings download all-mpnet-base-v2
 Downloading all-mpnet-base-v2... [████████░░] 80% (88/110 MB)
 ```
 
@@ -210,7 +210,7 @@ Downloading all-mpnet-base-v2... [████████░░] 80% (88/110 MB
 │                          │                    │              │
 │                          ▼                    ▼              │
 │                  ┌──────────────┐    ┌─────────────────┐   │
-│                  │ Config write │    │ .rufflo/   │   │
+│                  │ Config write │    │ .swarmdo/   │   │
 │                  │ embeddings{} │    │ models/<model>  │   │
 │                  └──────────────┘    └─────────────────┘   │
 │                                                              │
@@ -312,7 +312,7 @@ export const DEFAULT_INIT_OPTIONS: InitOptions = {
 async function initializeEmbeddings(options: InitOptions): Promise<void> {
   if (!options.embeddings.enabled) return;
 
-  const configDir = path.join(options.targetDir, '.rufflo');
+  const configDir = path.join(options.targetDir, '.swarmdo');
   const modelDir = path.join(configDir, 'models');
 
   // Create model directory
@@ -320,7 +320,7 @@ async function initializeEmbeddings(options: InitOptions): Promise<void> {
 
   // Download model if requested
   if (options.embeddings.predownload) {
-    const { downloadEmbeddingModel } = await import('@rufflo/embeddings');
+    const { downloadEmbeddingModel } = await import('@swarmdo/embeddings');
     await downloadEmbeddingModel(
       options.embeddings.model,
       modelDir,
@@ -359,17 +359,17 @@ async function migrateEmbeddings(ctx: CommandContext): Promise<void> {
   output.writeln('Migrating embeddings...');
 
   // 1. Check for V2 embedding cache
-  const v2CachePath = path.join(ctx.cwd, '.rufflo', 'cache', 'embeddings.db');
+  const v2CachePath = path.join(ctx.cwd, '.swarmdo', 'cache', 'embeddings.db');
   const v2Exists = fs.existsSync(v2CachePath);
 
   // 2. Download V3 model
-  const { downloadEmbeddingModel, listEmbeddingModels } = await import('@rufflo/embeddings');
+  const { downloadEmbeddingModel, listEmbeddingModels } = await import('@swarmdo/embeddings');
   const models = await listEmbeddingModels();
   const targetModel = models.find(m => m.id === 'all-MiniLM-L6-v2');
 
   if (!targetModel?.downloaded) {
     output.writeln(output.dim('  Downloading ONNX model...'));
-    await downloadEmbeddingModel('all-MiniLM-L6-v2', '.rufflo/models/');
+    await downloadEmbeddingModel('all-MiniLM-L6-v2', '.swarmdo/models/');
     output.writeln(output.success('  ✓ Model downloaded'));
   }
 
@@ -417,14 +417,14 @@ const pretrainCommand: Command = {
 
       // 1. Ensure model downloaded
       const { downloadEmbeddingModel, createEmbeddingService } =
-        await import('@rufflo/embeddings');
+        await import('@swarmdo/embeddings');
 
-      await downloadEmbeddingModel('all-MiniLM-L6-v2', '.rufflo/models/');
+      await downloadEmbeddingModel('all-MiniLM-L6-v2', '.swarmdo/models/');
 
       // 2. Initialize embedding service
       const embedder = createEmbeddingService({
         provider: 'agentic-flow',
-        modelPath: '.rufflo/models/all-MiniLM-L6-v2',
+        modelPath: '.swarmdo/models/all-MiniLM-L6-v2',
       });
 
       // 3. Warm cache with common patterns
@@ -479,11 +479,11 @@ const initSubcommand: Command = {
 
     try {
       const { downloadEmbeddingModel, createEmbeddingService } =
-        await import('@rufflo/embeddings');
+        await import('@swarmdo/embeddings');
 
       // Download model
       spinner.text = 'Downloading ONNX model...';
-      await downloadEmbeddingModel(model, '.rufflo/models/', (p) => {
+      await downloadEmbeddingModel(model, '.swarmdo/models/', (p) => {
         spinner.text = `Downloading ${model}... ${p.percent}%`;
       });
 
@@ -491,7 +491,7 @@ const initSubcommand: Command = {
       spinner.text = 'Initializing embedding service...';
       const service = createEmbeddingService({
         provider: 'agentic-flow',
-        modelPath: `.rufflo/models/${model}`,
+        modelPath: `.swarmdo/models/${model}`,
       });
 
       // Test embedding
@@ -517,7 +517,7 @@ const statusSubcommand: Command = {
   description: 'Show embedding system status',
   action: async (ctx: CommandContext): Promise<CommandResult> => {
     const { listEmbeddingModels, isNeuralAvailable } =
-      await import('@rufflo/embeddings');
+      await import('@swarmdo/embeddings');
 
     const models = await listEmbeddingModels();
     const neuralAvailable = await isNeuralAvailable();
@@ -551,11 +551,11 @@ const downloadSubcommand: Command = {
   action: async (ctx: CommandContext): Promise<CommandResult> => {
     const modelId = ctx.args[0] || 'all-MiniLM-L6-v2';
 
-    const { downloadEmbeddingModel } = await import('@rufflo/embeddings');
+    const { downloadEmbeddingModel } = await import('@swarmdo/embeddings');
 
     output.writeln(`Downloading ${modelId}...`);
 
-    await downloadEmbeddingModel(modelId, '.rufflo/models/', (p) => {
+    await downloadEmbeddingModel(modelId, '.swarmdo/models/', (p) => {
       const bar = '█'.repeat(Math.floor(p.percent / 5)) +
                   '░'.repeat(20 - Math.floor(p.percent / 5));
       process.stdout.write(`\r[${bar}] ${p.percent}%`);
@@ -616,19 +616,19 @@ export default embeddingsCommand;
 ## Migration Path
 
 ### For Existing V2 Projects
-1. Run `rufflo migrate run -t embeddings`
+1. Run `swarmdo migrate run -t embeddings`
 2. Downloads ONNX model
 3. Migrates any cached embeddings
 4. Enables hyperbolic by default
 
 ### For New V3 Projects
-1. Run `rufflo init` or `rufflo init wizard`
+1. Run `swarmdo init` or `swarmdo init wizard`
 2. Embeddings step auto-runs
 3. Model pre-downloaded
 4. Hyperbolic enabled by default
 
 ### For Pretraining
-1. Run `rufflo hooks pretrain --embeddings`
+1. Run `swarmdo hooks pretrain --embeddings`
 2. Ensures model downloaded
 3. Warms cache with codebase terms
 4. Pre-computes hierarchical patterns
@@ -650,12 +650,12 @@ export default embeddingsCommand;
 ### Neutral
 - Adds `embeddings` command to CLI
 - Adds `embeddings` step to init/migrate
-- Requires `@rufflo/embeddings` package
+- Requires `@swarmdo/embeddings` package
 
 ## Related ADRs
 
 - ADR-006: Unified Memory Service (HNSW integration)
-- ADR-017: RuVector Integration (neural substrate)
+- ADR-017: SwarmVector Integration (neural substrate)
 - ADR-009: Implementation Details (memory backend)
 
 ## References

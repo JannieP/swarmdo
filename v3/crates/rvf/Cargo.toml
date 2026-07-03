@@ -13,8 +13,8 @@ version = "0.1.0"
 edition = "2021"
 rust-version = "1.87"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/ruvnet/swarmvector"
-authors = ["ruv.io", "SwarmVector Team"]
+repository = "the upstream project (see NOTICE)"
+authors = ["swarmdo.com", "SwarmVector Team"]
 
 [workspace.dependencies]
 # Internal

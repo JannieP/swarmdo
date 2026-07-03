@@ -5,7 +5,7 @@ Cache-aware /loop workers and CronCreate background automation. Substrate plugin
 ## Install
 
 ```
-/plugin marketplace add ruvnet/swarmdo
+/plugin marketplace add upstream/swarmdo
 /plugin install swarmdo-loop-workers@swarmdo
 ```
 

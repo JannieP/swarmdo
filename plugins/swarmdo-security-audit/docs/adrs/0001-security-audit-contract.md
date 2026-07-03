@@ -1,6 +1,6 @@
 ---
 id: ADR-0001
-title: rufflo-security-audit plugin contract — pinning, namespace coordination, AIDefence + audit_1776853149979 cross-references, smoke as contract
+title: swarmdo-security-audit plugin contract — pinning, namespace coordination, AIDefence + audit_1776853149979 cross-references, smoke as contract
 status: Accepted
 date: 2026-05-04
 updated: 2026-05-09
@@ -11,13 +11,13 @@ tags: [plugin, security, audit, cve, namespace, smoke-test]
 
 ## Context
 
-`rufflo-security-audit` (v0.2.0) — security review + dependency scanning + policy gates + CVE monitoring. 1 agent (`security-auditor`), 2 skills (`security-scan`, `dependency-check`), 1 command (`/audit`).
+`swarmdo-security-audit` (v0.2.0) — security review + dependency scanning + policy gates + CVE monitoring. 1 agent (`security-auditor`), 2 skills (`security-scan`, `dependency-check`), 1 command (`/audit`).
 
-Drives `npx @rufflo/cli@latest security scan|audit|cve|threats|validate|report` (CLI commands, not dedicated MCP tools — the security CLI command surface lives in `v3/@rufflo/cli/src/commands/security.ts`).
+Drives `npx @swarmdo/cli@latest security scan|audit|cve|threats|validate|report` (CLI commands, not dedicated MCP tools — the security CLI command surface lives in `v3/@swarmdo/cli/src/commands/security.ts`).
 
 Pairs with two sibling contracts:
 
-- **AIDefence** ([rufflo-aidefence ADR-0001](../../rufflo-aidefence/docs/adrs/0001-aidefence-contract.md)) — owns the canonical 3-gate pattern (PII pre-storage, sanitization, prompt-injection). This plugin adds CVE / dependency / shell-injection scanning on top of those runtime gates.
+- **AIDefence** ([swarmdo-aidefence ADR-0001](../../swarmdo-aidefence/docs/adrs/0001-aidefence-contract.md)) — owns the canonical 3-gate pattern (PII pre-storage, sanitization, prompt-injection). This plugin adds CVE / dependency / shell-injection scanning on top of those runtime gates.
 - **audit_1776853149979 patterns** (existing README block) — class of shell-injection bugs the 3.6.25 release closed. The scanner is the regression-prevention mechanism for that class.
 
 ## Decision
@@ -36,17 +36,17 @@ Pairs with two sibling contracts:
 ## Verification
 
 ```bash
-bash plugins/rufflo-security-audit/scripts/smoke.sh
+bash plugins/swarmdo-security-audit/scripts/smoke.sh
 # Expected: "10 passed, 0 failed"
 ```
 
 ## Related
 
-- `plugins/rufflo-aidefence/docs/adrs/0001-aidefence-contract.md` — canonical 3-gate runtime pattern this plugin's static analysis complements
-- `plugins/rufflo-jujutsu/docs/adrs/0001-jujutsu-contract.md` — diff analysis substrate this plugin runs on for PR-time auditing
-- `plugins/rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md` — namespace convention
-- `v3/@rufflo/cli/src/commands/security.ts` — `security scan|audit|cve|threats|validate|report` CLI command surface
+- `plugins/swarmdo-aidefence/docs/adrs/0001-aidefence-contract.md` — canonical 3-gate runtime pattern this plugin's static analysis complements
+- `plugins/swarmdo-jujutsu/docs/adrs/0001-jujutsu-contract.md` — diff analysis substrate this plugin runs on for PR-time auditing
+- `plugins/swarmdo-agentdb/docs/adrs/0001-agentdb-optimization.md` — namespace convention
+- `v3/@swarmdo/cli/src/commands/security.ts` — `security scan|audit|cve|threats|validate|report` CLI command surface
 
 ## Implementation status
 
-Plugin version v0.2.0 shipped and listed in marketplace.json. Source exists at `plugins/rufflo-security-audit/`. Contract elements implemented: 3-gate pattern alignment with rufflo-aidefence (runtime gates) documented; `audit_1776853149979` shell-injection regression class covered by scanner; namespace `security-findings` claimed; smoke-as-contract gate defined in `scripts/smoke.sh`.
+Plugin version v0.2.0 shipped and listed in marketplace.json. Source exists at `plugins/swarmdo-security-audit/`. Contract elements implemented: 3-gate pattern alignment with swarmdo-aidefence (runtime gates) documented; `audit_1776853149979` shell-injection regression class covered by scanner; namespace `security-findings` claimed; smoke-as-contract gate defined in `scripts/smoke.sh`.

@@ -15,7 +15,7 @@
  * @example
  * ```typescript
  * // GNN operations
- * import { differentiableSearch, RuvectorLayer } from 'agentdb/wrappers';
+ * import { differentiableSearch, SwarmvectorLayer } from 'agentdb/wrappers';
  *
  * // AgentDB operations
  * import { createFastAgentDB } from 'agentdb/wrappers';
@@ -27,7 +27,7 @@
  * import { createEmbeddingService } from 'agentdb/wrappers';
  * ```
  */
-export { differentiableSearch, hierarchicalForward, RuvectorLayer, TensorCompress, getCompressionLevel, type SearchResult, type CompressionConfig, } from './gnn-wrapper.js';
+export { differentiableSearch, hierarchicalForward, SwarmvectorLayer, TensorCompress, getCompressionLevel, type SearchResult, type CompressionConfig, } from './gnn-wrapper.js';
 export { AgentDBFast, createFastAgentDB, type Episode, type Pattern, type EpisodeSearchOptions, } from './agentdb-fast.js';
 export { MultiHeadAttention, FlashAttention, LinearAttention, HyperbolicAttention, MoEAttention, type AttentionConfig, } from './attention-fallbacks.js';
 export { EmbeddingService, OpenAIEmbeddingService, TransformersEmbeddingService, MockEmbeddingService, createEmbeddingService, getEmbedding, benchmarkEmbeddings, type EmbeddingConfig, type EmbeddingResult, } from './embedding-service.js';

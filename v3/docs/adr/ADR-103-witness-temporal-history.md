@@ -2,7 +2,7 @@
 
 **Status**: Accepted
 **Date**: 2026-05-08
-**Version**: rufflo-core@0.2.1+ / @rufflo/cli@3.7.0-alpha.18+
+**Version**: swarmdo-core@0.2.1+ / @swarmdo/cli@3.7.0-alpha.18+
 **Related**: ADR-102 (CI smoke harness), #1867, #1859, #1862, project memory `project_verification_process.md`
 
 ## Context
@@ -23,14 +23,14 @@ commit X and Y, on date D, in PR #N". For a project with 80+ tracked
 fixes across rapid alpha churn, this turns regression triage into a
 manual git-bisect every time.
 
-### Gap 2 — Toolkit is rufflo-internal
+### Gap 2 — Toolkit is swarmdo-internal
 
 The regen logic was originally inline in shell heredocs (per the
 `project_verification_process.md` memory) and later extracted to
-`scripts/regen-witness.mjs`. Both forms hard-code rufflo's paths and
+`scripts/regen-witness.mjs`. Both forms hard-code swarmdo's paths and
 fix list. Other projects can't adopt the witness pattern without
 copy-pasting and rewriting. Given that several downstream consumers
-of `rufflo` and `@rufflo/cli` ship their own fixes, this is a
+of `swarmdo` and `@swarmdo/cli` ship their own fixes, this is a
 real adoption blocker.
 
 ## Decision
@@ -66,9 +66,9 @@ The file is committed alongside `verification.md.json`. They must move
 as a pair — the manifest is the latest signed snapshot, the JSONL is
 the timeline that proves it's the latest.
 
-### 2. Ship the toolkit as a `rufflo-core` plugin asset
+### 2. Ship the toolkit as a `swarmdo-core` plugin asset
 
-The witness scripts move to `plugins/rufflo-core/scripts/witness/`:
+The witness scripts move to `plugins/swarmdo-core/scripts/witness/`:
 
 | File | Purpose |
 |---|---|
@@ -82,16 +82,16 @@ Plus exposure as Claude Code surface area:
 
 | File | Purpose |
 |---|---|
-| `plugins/rufflo-core/skills/witness/SKILL.md` | Workflow doc + anti-patterns |
-| `plugins/rufflo-core/commands/witness.md` | Slash-command thin wrapper |
-| `plugins/rufflo-core/agents/witness-curator.md` | Agent for adding fixes / interpreting regressions |
+| `plugins/swarmdo-core/skills/witness/SKILL.md` | Workflow doc + anti-patterns |
+| `plugins/swarmdo-core/commands/witness.md` | Slash-command thin wrapper |
+| `plugins/swarmdo-core/agents/witness-curator.md` | Agent for adding fixes / interpreting regressions |
 
 The scripts are project-agnostic: they take `--manifest`, `--history`,
 `--fixes`, `--root` flags. They probe `<root>` and `<root>/v3` for
 `@noble/ed25519`, so they work in monorepo and flat layouts.
 
-The rufflo internal entrypoint at `scripts/regen-witness.mjs` is now a
-thin wrapper that hard-codes rufflo's paths and reads the
+The swarmdo internal entrypoint at `scripts/regen-witness.mjs` is now a
+thin wrapper that hard-codes swarmdo's paths and reads the
 project-specific fix list from `witness-fixes.json`. Single source of
 truth lives in the plugin.
 
@@ -123,8 +123,8 @@ to a small set of commits to read.
 - The JSONL keeps fixes keyed by id (object), not array. This makes
   per-fix lookups O(1) without scanning, which matters once history
   reaches 100+ entries.
-- `verify.mjs` is parallel to the bundled `rufflo verify` command but
-  has no rufflo CLI dependency — adopters who only want the witness
+- `verify.mjs` is parallel to the bundled `swarmdo verify` command but
+  has no swarmdo CLI dependency — adopters who only want the witness
   toolkit can install one tiny package (`@noble/ed25519`) and run it.
 
 ## Consequences
@@ -135,7 +135,7 @@ to a small set of commits to read.
 - Per-fix status timelines for trend analysis (which fixes flap, which
   drift consistently, which regress permanently).
 - Other projects can adopt the witness pattern by copying
-  `plugins/rufflo-core/scripts/witness/` and `init`-ing — no rufflo
+  `plugins/swarmdo-core/scripts/witness/` and `init`-ing — no swarmdo
   install required.
 - The CI surface gains a soft gate that highlights *what* regressed,
   not just *that* something regressed.
@@ -151,21 +151,21 @@ to a small set of commits to read.
 ### Not addressed (residual)
 
 - No vector-graph similarity over snapshots. The user's original
-  question floated `/ruvector` as a substrate. JSONL is sufficient for
+  question floated `/swarmvector` as a substrate. JSONL is sufficient for
   the queries we need today; an HNSW-backed similarity index over
   snapshot fingerprints is a follow-up if pattern-based queries
   ("snapshots most similar to commit X") become valuable.
 - No cross-project history aggregation. Each project's JSONL is local.
   Multi-project rollups would need a separate ingestion service.
 - The `verify.mjs` script duplicates a small amount of logic with
-  `v3/@rufflo/cli/src/commands/verify.ts`. Acceptable for now
+  `v3/@swarmdo/cli/src/commands/verify.ts`. Acceptable for now
   (the standalone needs to work without the CLI installed); could be
   unified later if both move to the plugin.
 
 ## References
 
-- `plugins/rufflo-core/skills/witness/SKILL.md` — adoption guide
-- `plugins/rufflo-core/agents/witness-curator.md` — agent definition
+- `plugins/swarmdo-core/skills/witness/SKILL.md` — adoption guide
+- `plugins/swarmdo-core/agents/witness-curator.md` — agent definition
 - `~/.claude/.../project_verification_process.md` — original inline
   regen process; superseded by this ADR's plugin-extracted form
 - ADR-102 — CI smoke harness pattern (this ADR generalizes the

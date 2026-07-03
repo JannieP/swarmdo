@@ -3,8 +3,8 @@
   "description": "Cache-aware /loop workers and CronCreate background automation — wraps 5 hooks_worker-* MCP tools (list/dispatch/status/detect/cancel) and exposes 12 background worker triggers (ultralearn, optimize, consolidate, predict, audit, map, preload, deepdive, document, refactor, benchmark, testgaps)",
   "version": "0.2.0",
   "author": {
-    "name": "ruvnet",
-    "url": "https://github.com/ruvnet"
+    "name": "upstream",
+    "url": "https://the upstream project (see NOTICE)"
   },
   "homepage": "https://github.com/JannieP/swarmdo",
   "license": "MIT",

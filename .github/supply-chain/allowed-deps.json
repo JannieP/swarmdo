@@ -49,14 +49,14 @@
     }
   },
   "actions": {
-    "comment": "ADR-127 Phase 1 — all uses: refs in .claude/agents/github/, .claude/skills/github-*/, and v3/@swarmdo/cli/.claude/commands/github/ must be either SHA-pinned or present in this list. Phase 3 will upgrade @v3 refs to @v4; until then the non-SHA refs are tracked here. ruvnet/swarm-action@v1 is a first-party action requiring SHA-pin in a future phase (ADR-127 Phase 3 note).",
+    "comment": "ADR-127 Phase 1 — all uses: refs in .claude/agents/github/, .claude/skills/github-*/, and v3/@swarmdo/cli/.claude/commands/github/ must be either SHA-pinned or present in this list. Phase 3 will upgrade @v3 refs to @v4; until then the non-SHA refs are tracked here. upstream/swarm-action@v1 is a first-party action requiring SHA-pin in a future phase (ADR-127 Phase 3 note).",
     "allowed": [
       "actions/checkout",
       "actions/setup-node",
       "pnpm/action-setup",
       "actions/cache",
       "actions/upload-artifact",
-      "ruvnet/swarm-action",
+      "upstream/swarm-action",
       "aws-actions/configure-aws-credentials"
     ],
     "minimumVersion": {

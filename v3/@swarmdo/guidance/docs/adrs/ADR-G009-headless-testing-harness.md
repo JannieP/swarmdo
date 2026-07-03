@@ -153,9 +153,9 @@ Run all tasks concurrently for speed. Considered but deferred. Parallel executio
 
 ## References
 
-- `v3/@rufflo/guidance/src/headless.ts` -- `HeadlessRunner`, `TestTask`, `TaskAssertion`, `SuiteRunSummary`, `ProcessExecutor`, `createComplianceSuite()`
-- `v3/@rufflo/guidance/src/types.ts` -- `RunEvent`, `Violation`, `EvaluatorResult`
-- `v3/@rufflo/guidance/src/ledger.ts` -- `RunLedger.createEvent()`, `finalizeEvent()`, `evaluate()`
-- `v3/@rufflo/guidance/src/index.ts` -- `GuidanceControlPlane.getHeadlessRunner()`
+- `v3/@swarmdo/guidance/src/headless.ts` -- `HeadlessRunner`, `TestTask`, `TaskAssertion`, `SuiteRunSummary`, `ProcessExecutor`, `createComplianceSuite()`
+- `v3/@swarmdo/guidance/src/types.ts` -- `RunEvent`, `Violation`, `EvaluatorResult`
+- `v3/@swarmdo/guidance/src/ledger.ts` -- `RunLedger.createEvent()`, `finalizeEvent()`, `evaluate()`
+- `v3/@swarmdo/guidance/src/index.ts` -- `GuidanceControlPlane.getHeadlessRunner()`
 - ADR-G005 -- Proof envelopes that headless runs populate
 - ADR-G008 -- Optimizer loop that uses headless suites for A/B testing

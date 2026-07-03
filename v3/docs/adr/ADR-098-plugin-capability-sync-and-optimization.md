@@ -4,21 +4,21 @@
 **Date**: 2026-05-04 · **Updated**: 2026-05-09
 **Version**: Parts 1–4 shipped across v3.6.25–v3.6.26 plugin releases
 **Supersedes**: nothing
-**Related**: ADR-094 (transformers loader), ADR-095 (architectural gaps), ADR-096 (encryption-at-rest), ADR-097 (federation budget circuit breaker), `plugins/rufflo-*` directory
+**Related**: ADR-094 (transformers loader), ADR-095 (architectural gaps), ADR-096 (encryption-at-rest), ADR-097 (federation budget circuit breaker), `plugins/swarmdo-*` directory
 
 ## Context
 
-The `plugins/rufflo-*` tree is the user-facing surface of Rufflo on Claude Code — 32 plugins distributed via the Rufflo marketplace, each bundling agent prompts, skills, slash commands, and (in some cases) hooks. End users install via `/plugin install rufflo-X@rufflo` and immediately get the agent / commands.
+The `plugins/swarmdo-*` tree is the user-facing surface of Swarmdo on Claude Code — 32 plugins distributed via the Swarmdo marketplace, each bundling agent prompts, skills, slash commands, and (in some cases) hooks. End users install via `/plugin install swarmdo-X@swarmdo` and immediately get the agent / commands.
 
 Recent shipped work (ADR-094, 095, 096, 097) added or modified capabilities that the plugin tree doesn't yet surface:
 
 | Recent capability | Plugin that should know about it | Current coverage |
 |---|---|---|
-| ADR-096 encryption-at-rest (RUFFLO_ENCRYPT_AT_REST gate, fs-secure helpers) | `rufflo-aidefence`, `rufflo-security-audit`, `rufflo-rag-memory`, `rufflo-rvf` | None of these mention it |
-| ADR-097 federation budget circuit breaker (`maxHops`, `maxTokens`, `maxUsd`) | `rufflo-federation` ✅, `rufflo-cost-tracker` should consume `federation_spend` events | Federation has it; cost-tracker doesn't |
-| `validateEnv()` loader-hijack denylist | `rufflo-aidefence`, `rufflo-security-audit` (relevant for threat agents) | Not surfaced |
-| `validateBudget()` / `enforceBudget()` (federation) | `rufflo-cost-tracker` | Not surfaced |
-| AgentDB controllers activated in 3.6.24 (G7 — gnn, rvf, mut, att, gvb) | `rufflo-agentdb`, `rufflo-rag-memory`, `rufflo-knowledge-graph` | Skill docs don't mention them |
+| ADR-096 encryption-at-rest (SWARMDO_ENCRYPT_AT_REST gate, fs-secure helpers) | `swarmdo-aidefence`, `swarmdo-security-audit`, `swarmdo-rag-memory`, `swarmdo-rvf` | None of these mention it |
+| ADR-097 federation budget circuit breaker (`maxHops`, `maxTokens`, `maxUsd`) | `swarmdo-federation` ✅, `swarmdo-cost-tracker` should consume `federation_spend` events | Federation has it; cost-tracker doesn't |
+| `validateEnv()` loader-hijack denylist | `swarmdo-aidefence`, `swarmdo-security-audit` (relevant for threat agents) | Not surfaced |
+| `validateBudget()` / `enforceBudget()` (federation) | `swarmdo-cost-tracker` | Not surfaced |
+| AgentDB controllers activated in 3.6.24 (G7 — gnn, rvf, mut, att, gvb) | `swarmdo-agentdb`, `swarmdo-rag-memory`, `swarmdo-knowledge-graph` | Skill docs don't mention them |
 | 3-tier model routing (haiku / sonnet / opus per ADR-026) | All plugins with agents | Some plugins use `model: opus` where haiku would do |
 
 A scan of the 32 plugin trees (auto-extracted via `scripts/inventory-capabilities.mjs`) surfaced four categories of debt:
@@ -27,7 +27,7 @@ A scan of the 32 plugin trees (auto-extracted via `scripts/inventory-capabilitie
 
 **1. Capability sync (high priority — user-visible)**
 
-Only `rufflo-federation` references ADR-096 / ADR-097 / encryption / budget concepts. The other 31 plugins don't reference any post-3.6.13 capabilities. End users installing `rufflo-aidefence` or `rufflo-security-audit` see no mention of the new file-mode-0600 default, the encryption-at-rest gate, or the loader-hijack denylist — even though those plugins' agent prompts are explicitly about security posture.
+Only `swarmdo-federation` references ADR-096 / ADR-097 / encryption / budget concepts. The other 31 plugins don't reference any post-3.6.13 capabilities. End users installing `swarmdo-aidefence` or `swarmdo-security-audit` see no mention of the new file-mode-0600 default, the encryption-at-rest gate, or the loader-hijack denylist — even though those plugins' agent prompts are explicitly about security posture.
 
 **2. Token-cost overage (medium priority — runtime cost)**
 
@@ -35,10 +35,10 @@ Per-agent prompt sizes vary 19 → 105 lines. Outliers above 80 lines:
 
 | Plugin | Agent | Lines | Reason |
 |---|---|---|---|
-| `rufflo-cost-tracker` | cost-analyst | 105 | Heavy command-table inlining |
-| `rufflo-adr` | adr-architect | 96 | Lifecycle-state machine inlined |
-| `rufflo-ddd` | domain-modeler | 93 | DDD vocabulary table inlined |
-| `rufflo-iot-cognitum` | device-coordinator | ~80 | Trust-tier table inlined |
+| `swarmdo-cost-tracker` | cost-analyst | 105 | Heavy command-table inlining |
+| `swarmdo-adr` | adr-architect | 96 | Lifecycle-state machine inlined |
+| `swarmdo-ddd` | domain-modeler | 93 | DDD vocabulary table inlined |
+| `swarmdo-iot-cognitum` | device-coordinator | ~80 | Trust-tier table inlined |
 
 Each line in the agent prompt is loaded into context every time the agent is spawned. A 100-line prompt at ~12 tokens/line is ~1200 tokens per spawn just for the agent definition — multiplied by spawn frequency, that's measurable spend. Reference tables and command catalogs belong in skills (loaded on-demand) or in a sibling `REFERENCE.md` file, not in the agent prompt itself.
 
@@ -46,9 +46,9 @@ Each line in the agent prompt is loaded into context every time the agent is spa
 
 Three agents use `model: opus` (the highest tier). Two are clearly justified by task complexity:
 
-- `rufflo-federation/federation-coordinator` — multi-phase coordination, trust scoring, audit-grade logging.
-- `rufflo-neural-trader/trading-strategist` — real-money trading decisions; opus is correct.
-- `rufflo-security-audit/security-auditor` — debatable; security review work is sonnet-tier in practice.
+- `swarmdo-federation/federation-coordinator` — multi-phase coordination, trust scoring, audit-grade logging.
+- `swarmdo-neural-trader/trading-strategist` — real-money trading decisions; opus is correct.
+- `swarmdo-security-audit/security-auditor` — debatable; security review work is sonnet-tier in practice.
 
 The third should drop to sonnet (~5× cheaper per token) unless the task scope actually warrants opus.
 
@@ -78,12 +78,12 @@ For every plugin whose surface meaningfully overlaps a post-3.6.13 capability, a
 
 | Plugin | Add reference to |
 |---|---|
-| `rufflo-aidefence` | `validateEnv` loader-hijack denylist; chmod 0600 file mode; encryption-at-rest gate (defense-in-depth pairing) |
-| `rufflo-security-audit` | Same set, plus the github-tools / update/executor shell injection patterns to scan for |
-| `rufflo-rag-memory`, `rufflo-rvf` | Encryption-at-rest gate (memory.db wraps under `RUFFLO_ENCRYPT_AT_REST=1`) |
-| `rufflo-cost-tracker` | Federation budget breaker; `federation_spend` events; per-peer rolling aggregation API (when ADR-097 P3 lands) |
-| `rufflo-agentdb`, `rufflo-knowledge-graph` | The 5 activated G7 controllers (gnn, rvf, mut, att, gvb) and their MCP tools |
-| `rufflo-federation` | Already done in v0.2.0 |
+| `swarmdo-aidefence` | `validateEnv` loader-hijack denylist; chmod 0600 file mode; encryption-at-rest gate (defense-in-depth pairing) |
+| `swarmdo-security-audit` | Same set, plus the github-tools / update/executor shell injection patterns to scan for |
+| `swarmdo-rag-memory`, `swarmdo-rvf` | Encryption-at-rest gate (memory.db wraps under `SWARMDO_ENCRYPT_AT_REST=1`) |
+| `swarmdo-cost-tracker` | Federation budget breaker; `federation_spend` events; per-peer rolling aggregation API (when ADR-097 P3 lands) |
+| `swarmdo-agentdb`, `swarmdo-knowledge-graph` | The 5 activated G7 controllers (gnn, rvf, mut, att, gvb) and their MCP tools |
+| `swarmdo-federation` | Already done in v0.2.0 |
 
 Bump plugin versions where the surface materially changed (0.1.0 → 0.2.0).
 
@@ -92,16 +92,16 @@ Bump plugin versions where the surface materially changed (0.1.0 → 0.2.0).
 Move reference tables / command catalogs out of the agent prompt and into either (a) a skill that the agent can load on-demand, or (b) a sibling `REFERENCE.md` file the agent reads only when needed. Target: keep agent prompts ≤ 60 lines.
 
 Affected:
-- `rufflo-cost-tracker/agents/cost-analyst.md` (105 → ≤ 60)
-- `rufflo-adr/agents/adr-architect.md` (96 → ≤ 60)
-- `rufflo-ddd/agents/domain-modeler.md` (93 → ≤ 60)
-- `rufflo-iot-cognitum/agents/device-coordinator.md` (~80 → ≤ 60)
+- `swarmdo-cost-tracker/agents/cost-analyst.md` (105 → ≤ 60)
+- `swarmdo-adr/agents/adr-architect.md` (96 → ≤ 60)
+- `swarmdo-ddd/agents/domain-modeler.md` (93 → ≤ 60)
+- `swarmdo-iot-cognitum/agents/device-coordinator.md` (~80 → ≤ 60)
 
 Acceptance: agent prompts under 60 lines AND agent still passes its existing skill tests (those that have them).
 
 ### Part 3 — Model-tier rightsizing
 
-Change `rufflo-security-audit/agents/security-auditor.md` from `model: opus` → `model: sonnet`. Justification: security review is bounded-scope analysis that sonnet handles cleanly; opus's long-context advantage isn't load-bearing here. Track for a release cycle and revert if quality drops.
+Change `swarmdo-security-audit/agents/security-auditor.md` from `model: opus` → `model: sonnet`. Justification: security review is bounded-scope analysis that sonnet handles cleanly; opus's long-context advantage isn't load-bearing here. Track for a release cycle and revert if quality drops.
 
 ### Part 4 — Intelligence / learning hook standardization
 
@@ -110,7 +110,7 @@ For every plugin agent without `hooks post-task --train-neural true`, append the
 ```bash
 ### Neural learning
 After completing tasks, store the outcome:
-`npx @rufflo/cli@latest hooks post-task --task-id "$TASK_ID" --success $SUCCESS --train-neural true`
+`npx @swarmdo/cli@latest hooks post-task --task-id "$TASK_ID" --success $SUCCESS --train-neural true`
 ```
 
 Targets the 7 agents flagged by audit. Adds ~3 lines per agent — ~21 lines net repository-wide. Standardizes the learning-feedback contract.
@@ -122,7 +122,7 @@ For agents whose work materially contributes to long-term quality (coder, review
 ```bash
 ### Self-optimization
 On successful completion, trigger background optimization:
-`npx @rufflo/cli@latest hooks worker dispatch --trigger <relevant-worker> --task-id "$TASK_ID"`
+`npx @swarmdo/cli@latest hooks worker dispatch --trigger <relevant-worker> --task-id "$TASK_ID"`
 ```
 
 Worker mapping per agent class:
@@ -139,7 +139,7 @@ Lower priority than Parts 1-4 because workers run async and benefit from stable 
 
 ## Scope guardrails
 
-- This ADR does **not** change runtime code in `@rufflo/cli`. All edits are in `plugins/rufflo-*/`.
+- This ADR does **not** change runtime code in `@swarmdo/cli`. All edits are in `plugins/swarmdo-*/`.
 - Each part is independently shippable.
 - No new ADR cycle unless a part surfaces a runtime gap (e.g. Part 5 might need a new MCP tool for worker telemetry; if so, separate ADR).
 - Per-plugin version bumps follow semver: capability sync = minor (0.1.0 → 0.2.0); token diet alone = patch (0.1.0 → 0.1.1).
@@ -151,7 +151,7 @@ Parts 1–4 are fully landed on `main`. Part 5 (worker dispatch) remains deferre
 | Part | Scope | Status | Commit(s) |
 |---|---|---|---|
 | **Part 1** — Capability sync (6 plugins) | Implemented | 4 slices: `6a4057474` (security plugins), `6130f4061` (memory plugins), `00a9d13b5` (cost-tracker federation pairing), `cf96a562c` (agentdb + knowledge-graph G7 controllers) |
-| **Part 2** — Token diet (4 fat agent prompts → ≤60 lines) | Implemented | 4 slices: `f1bb3cf84` (iot-cognitum), `1e5a8ec89` (rufflo-ddd), `85eab480e` (rufflo-adr), `5addd83b4` (rufflo-cost-tracker) |
+| **Part 2** — Token diet (4 fat agent prompts → ≤60 lines) | Implemented | 4 slices: `f1bb3cf84` (iot-cognitum), `1e5a8ec89` (swarmdo-ddd), `85eab480e` (swarmdo-adr), `5addd83b4` (swarmdo-cost-tracker) |
 | **Part 3** — Model-tier rightsizing (security-auditor: opus → sonnet) | Implemented | `29542ce6d feat(plugins): ADR-098 Part 3 — security-auditor opus → sonnet` |
 | **Part 4** — Neural training hook standardization (7 agents) | Implemented | `2e5c90c90 feat(plugins): ADR-098 Part 4 — standardize neural-learning hook` |
 | **Part 5** — Self-optimization worker dispatch | Deferred | — |
@@ -166,11 +166,11 @@ The pass is done when:
 
 - [ ] Each affected plugin (per Part 1) has a paragraph or bullet list referencing the relevant ADR-094/095/096/097 capability.
 - [ ] All 4 outlier agent prompts are ≤ 60 lines.
-- [ ] `rufflo-security-audit/security-auditor.md` is on `model: sonnet`.
+- [ ] `swarmdo-security-audit/security-auditor.md` is on `model: sonnet`.
 - [ ] All 43 plugin agents include a `hooks post-task --train-neural true` invocation.
 - [ ] At least 8 work-producing agents include a `hooks worker dispatch` invocation tied to the right background worker.
-- [ ] No regression in the plugin marketplace install path (`/plugin install rufflo-X@rufflo` still resolves).
-- [ ] Spot-check: `rufflo doctor -c agentic-flow` and the broader doctor output stays green.
+- [ ] No regression in the plugin marketplace install path (`/plugin install swarmdo-X@swarmdo` still resolves).
+- [ ] Spot-check: `swarmdo doctor -c agentic-flow` and the broader doctor output stays green.
 
 ## Trade-offs
 

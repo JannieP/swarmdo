@@ -1,12 +1,12 @@
-# RuvLLM ESP32 - Tiny LLM Inference Engine for ESP32 Microcontrollers
+# SwarmLLM ESP32 - Tiny LLM Inference Engine for ESP32 Microcontrollers
 
-[![crates.io](https://img.shields.io/crates/v/ruvllm-esp32.svg)](https://crates.io/crates/ruvllm-esp32)
-[![npm](https://img.shields.io/npm/v/ruvllm-esp32.svg)](https://www.npmjs.com/package/ruvllm-esp32)
+[![crates.io](https://img.shields.io/crates/v/swarmllm-esp32.svg)](https://crates.io/crates/swarmllm-esp32)
+[![npm](https://img.shields.io/npm/v/swarmllm-esp32.svg)](https://www.npmjs.com/package/swarmllm-esp32)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **Run AI locally on ESP32 microcontrollers** - A complete, production-ready LLM inference engine with INT8/Binary quantization, HNSW vector search, RAG (Retrieval-Augmented Generation), and multi-chip federation support. No cloud required.
 
-## Why RuvLLM ESP32?
+## Why SwarmLLM ESP32?
 
 Run AI directly on microcontrollers without cloud dependencies:
 
@@ -51,32 +51,32 @@ Run AI directly on microcontrollers without cloud dependencies:
 
 ```bash
 # Install ESP32 toolchain
-npx ruvllm-esp32 install
+npx swarmllm-esp32 install
 
 # Build firmware
-npx ruvllm-esp32 build --target esp32s3 --release
+npx swarmllm-esp32 build --target esp32s3 --release
 
 # Flash to device (auto-detects port)
-npx ruvllm-esp32 flash
+npx swarmllm-esp32 flash
 
 # Monitor serial output
-npx ruvllm-esp32 monitor
+npx swarmllm-esp32 monitor
 ```
 
 ### Option 2: One-Line Install Script
 
 **Linux/macOS:**
 ```bash
-git clone https://github.com/ruvnet/ruvector
-cd ruvector/examples/ruvLLM/esp32-flash
+git clone the upstream project (see NOTICE)
+cd swarmvector/examples/swarmLLM/esp32-flash
 ./install.sh              # Install deps + build
 ./install.sh flash        # Flash to auto-detected port
 ```
 
 **Windows (PowerShell):**
 ```powershell
-git clone https://github.com/ruvnet/ruvector
-cd ruvector\examples\ruvLLM\esp32-flash
+git clone the upstream project (see NOTICE)
+cd swarmvector\examples\swarmLLM\esp32-flash
 .\install.ps1             # Install deps (restart PowerShell after)
 .\install.ps1 build       # Build
 .\install.ps1 flash COM6  # Flash
@@ -91,13 +91,13 @@ espup install
 source ~/export-esp.sh  # Linux/macOS
 
 # Clone and build
-git clone https://github.com/ruvnet/ruvector
-cd ruvector/examples/ruvLLM/esp32-flash
+git clone the upstream project (see NOTICE)
+cd swarmvector/examples/swarmLLM/esp32-flash
 cargo build --release
 
 # Flash
 espflash flash --monitor --port /dev/ttyUSB0 \
-  target/xtensa-esp32-espidf/release/ruvllm-esp32
+  target/xtensa-esp32-espidf/release/swarmllm-esp32
 ```
 
 ---
@@ -210,7 +210,7 @@ Connect at 115200 baud after flashing:
 
 ```
 ════════════════════════════════════════════
-RuvLLM ESP32 Full-Feature v0.2
+SwarmLLM ESP32 Full-Feature v0.2
 ════════════════════════════════════════════
 Features: Binary Quant, PQ, LoRA, HNSW, RAG
           Semantic Memory, Anomaly Detection
@@ -248,7 +248,7 @@ espup install
 
 # Build and flash
 cargo build --release
-espflash flash --port COM6 --monitor target\xtensa-esp32-espidf\release\ruvllm-esp32
+espflash flash --port COM6 --monitor target\xtensa-esp32-espidf\release\swarmllm-esp32
 ```
 
 ### macOS
@@ -266,7 +266,7 @@ source ~/export-esp.sh
 
 # Build and flash
 cargo build --release
-espflash flash --port /dev/cu.usbserial-0001 --monitor target/xtensa-esp32-espidf/release/ruvllm-esp32
+espflash flash --port /dev/cu.usbserial-0001 --monitor target/xtensa-esp32-espidf/release/swarmllm-esp32
 ```
 
 ### Linux
@@ -288,7 +288,7 @@ sudo usermod -a -G dialout $USER
 
 # Build and flash
 cargo build --release
-espflash flash --port /dev/ttyUSB0 --monitor target/xtensa-esp32-espidf/release/ruvllm-esp32
+espflash flash --port /dev/ttyUSB0 --monitor target/xtensa-esp32-espidf/release/swarmllm-esp32
 ```
 
 ---
@@ -300,7 +300,7 @@ For models larger than single-chip memory:
 ### 1. Generate Config
 
 ```bash
-npx ruvllm-esp32 cluster --chips 5
+npx swarmllm-esp32 cluster --chips 5
 # or
 make cluster CHIPS=5
 ```
@@ -332,7 +332,7 @@ layers = [2, 3]
 ```bash
 ./cluster-flash.sh
 # or
-npx ruvllm-esp32 cluster flash
+npx swarmllm-esp32 cluster flash
 ```
 
 ### 4. Monitor Cluster
@@ -394,7 +394,7 @@ esp32-flash/
 │   │   ├── protocol.rs           # Multi-chip communication
 │   │   ├── pipeline.rs           # Pipeline parallelism
 │   │   └── speculative.rs        # Draft-verify decoding
-│   └── ruvector/
+│   └── swarmvector/
 │       ├── micro_hnsw.rs         # Vector index
 │       ├── semantic_memory.rs    # Context-aware memory
 │       ├── rag.rs                # Retrieval-augmented gen
@@ -486,7 +486,7 @@ cargo build --target wasm32-unknown-unknown --features wasm --no-default-feature
 Use as a Rust library:
 
 ```rust
-use ruvllm_esp32::prelude::*;
+use swarmllm_esp32::prelude::*;
 
 // Vector search
 let config = HNSWConfig::default();
@@ -527,13 +527,13 @@ let code = pq.encode(&vector)?;
 
 ```bash
 # Use directly with npx (no install needed)
-npx ruvllm-esp32 install
-npx ruvllm-esp32 build --target esp32s3
-npx ruvllm-esp32 flash
+npx swarmllm-esp32 install
+npx swarmllm-esp32 build --target esp32s3
+npx swarmllm-esp32 flash
 
 # Or install globally
-npm install -g ruvllm-esp32
-ruvllm-esp32 --help
+npm install -g swarmllm-esp32
+swarmllm-esp32 --help
 ```
 
 ### As Rust Library (For Custom Projects)
@@ -542,18 +542,18 @@ Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-ruvllm-esp32 = "0.2"
+swarmllm-esp32 = "0.2"
 ```
 
-The library crate is available at [crates.io/crates/ruvllm-esp32](https://crates.io/crates/ruvllm-esp32).
+The library crate is available at [crates.io/crates/swarmllm-esp32](https://crates.io/crates/swarmllm-esp32).
 
 ### Clone This Project (For Full Customization)
 
 This directory contains a complete, ready-to-flash project with all features:
 
 ```bash
-git clone https://github.com/ruvnet/ruvector
-cd ruvector/examples/ruvLLM/esp32-flash
+git clone the upstream project (see NOTICE)
+cd swarmvector/examples/swarmLLM/esp32-flash
 cargo build --release
 ```
 
@@ -567,11 +567,11 @@ MIT
 
 ## Links
 
-- [Main Repository](https://github.com/ruvnet/ruvector)
-- [Rust Library (crates.io)](https://crates.io/crates/ruvllm-esp32)
-- [npm CLI Tool](https://www.npmjs.com/package/ruvllm-esp32)
-- [Documentation](https://docs.rs/ruvllm-esp32)
-- [Issue Tracker](https://github.com/ruvnet/ruvector/issues)
+- [Main Repository](the upstream project (see NOTICE))
+- [Rust Library (crates.io)](https://crates.io/crates/swarmllm-esp32)
+- [npm CLI Tool](https://www.npmjs.com/package/swarmllm-esp32)
+- [Documentation](https://docs.rs/swarmllm-esp32)
+- [Issue Tracker](the upstream project (see NOTICE))
 
 ---
 

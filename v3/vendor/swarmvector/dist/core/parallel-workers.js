@@ -89,11 +89,11 @@ class ExtendedWorkerPool {
         this.initialized = false;
         this.speculativeCache = new Map();
         this.astCache = new Map();
-        const isCLI = process.env.RUVECTOR_CLI === '1';
+        const isCLI = process.env.SWARMVECTOR_CLI === '1';
         const isMCP = process.env.MCP_SERVER === '1';
         this.config = {
             numWorkers: config.numWorkers ?? Math.max(1, os.cpus().length - 1),
-            enabled: config.enabled ?? (isMCP || process.env.RUVECTOR_PARALLEL === '1'),
+            enabled: config.enabled ?? (isMCP || process.env.SWARMVECTOR_PARALLEL === '1'),
             taskTimeout: config.taskTimeout ?? 30000,
             maxQueueSize: config.maxQueueSize ?? 1000,
         };

@@ -8,7 +8,7 @@
  *
  * Gracefully degrades when swarmvector is not installed.
  *
- * Created with love by ruv.io
+ * Created with love by swarmdo.com
  */
 
 import os from 'node:os';

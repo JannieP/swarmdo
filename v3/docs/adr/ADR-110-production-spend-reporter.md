@@ -1,8 +1,8 @@
-# ADR-110 — Production SpendReporter: rufflo-memory adapter
+# ADR-110 — Production SpendReporter: swarmdo-memory adapter
 
 - Status: **Accepted — Implemented (alpha.10)**
 - Date: 2026-05-09
-- Authors: claude (drafted with rUv)
+- Authors: claude (drafted with the upstream author)
 - Related: [ADR-097](./ADR-097-federation-budget-circuit-breaker.md), [ADR-105](./ADR-105-federation-v1-state-snapshot.md)
 
 ## Context
@@ -12,10 +12,10 @@ ADR-097 Phase 3 upstream shipped:
 - `coordinator.reportSpend()` that fans out to a SpendReporter + breaker buffer in parallel
 - `InMemorySpendReporter` reference impl (in-memory buffer, fine for tests, NOT for production)
 
-The `cost-tracker` plugin's federation consumer (`plugins/rufflo-cost-tracker/scripts/federation.mjs`) reads from a specific contract:
+The `cost-tracker` plugin's federation consumer (`plugins/swarmdo-cost-tracker/scripts/federation.mjs`) reads from a specific contract:
 - **Namespace**: `federation-spend`
 - **Key pattern**: `fed-spend-<peerId>-<ts>`
-- **Storage**: rufflo memory CLI (`memory store --namespace federation-spend --key ...`)
+- **Storage**: swarmdo memory CLI (`memory store --namespace federation-spend --key ...`)
 
 Today, no SpendReporter actually writes to that namespace. The consumer runs against an empty namespace and reports zero spend. Federation's breaker correctly trips on its own in-memory buffer, but the cost-tracker dashboard sees nothing.
 
@@ -23,7 +23,7 @@ Today, no SpendReporter actually writes to that namespace. The consumer runs aga
 
 Ship a **`MemorySpendReporter`** in the federation plugin that satisfies the cost-tracker consumer contract.
 
-Implementation lives in `v3/@rufflo/plugin-agent-federation/src/application/spend-reporter.ts` alongside the existing `InMemorySpendReporter`:
+Implementation lives in `v3/@swarmdo/plugin-agent-federation/src/application/spend-reporter.ts` alongside the existing `InMemorySpendReporter`:
 
 ```typescript
 export interface MemoryStore {
@@ -31,7 +31,7 @@ export interface MemoryStore {
 }
 
 export interface MemorySpendReporterConfig {
-  /** Memory store impl. Integrators inject the rufflo memory CLI / MCP tool / direct memory client. */
+  /** Memory store impl. Integrators inject the swarmdo memory CLI / MCP tool / direct memory client. */
   readonly memoryStore: MemoryStore;
   /** Namespace per the cost-tracker consumer contract. Default: 'federation-spend' */
   readonly namespace?: string;
@@ -64,16 +64,16 @@ export class MemorySpendReporter implements SpendReporter {
 
 ### Why dependency-injection over hard-coupling to a specific memory client
 
-The federation plugin shouldn't pull `@rufflo/memory` (or any specific memory backend) as a hard dep. Reasons:
-- Federation is meant to be pluggable — some integrators run rufflo memory, others run their own KV store, some use Redis or DynamoDB
+The federation plugin shouldn't pull `@swarmdo/memory` (or any specific memory backend) as a hard dep. Reasons:
+- Federation is meant to be pluggable — some integrators run swarmdo memory, others run their own KV store, some use Redis or DynamoDB
 - Hard-coupling creates a circular dependency risk in the workspace
 - The interface (`MemoryStore.store(...)`) is small enough that ANY KV store can satisfy it with a 5-line adapter
 
 The integrator wires whatever memory backend they want:
 
 ```typescript
-// With rufflo memory MCP tool
-import { MemorySpendReporter } from '@rufflo/plugin-agent-federation';
+// With swarmdo memory MCP tool
+import { MemorySpendReporter } from '@swarmdo/plugin-agent-federation';
 
 const reporter = new MemorySpendReporter({
   memoryStore: {
@@ -141,11 +141,11 @@ export {
 
 Add example wire-up showing both:
 - Test setup with `InMemorySpendReporter`
-- Production setup with `MemorySpendReporter` + rufflo memory MCP tool
+- Production setup with `MemorySpendReporter` + swarmdo memory MCP tool
 
 ## Anti-goals
 
-- **No automatic memory backend selection.** The plugin doesn't try to detect rufflo memory and auto-wire — the integrator is explicit about which backend to use.
+- **No automatic memory backend selection.** The plugin doesn't try to detect swarmdo memory and auto-wire — the integrator is explicit about which backend to use.
 - **No batching layer.** Each `reportSpend` is one `memory.store` call. If memory backend latency is a concern, the integrator can wrap `MemorySpendReporter` in a batcher.
 - **No retry/backoff inside the reporter.** Throws bubble up. The integrator can wrap with their preferred retry strategy.
 

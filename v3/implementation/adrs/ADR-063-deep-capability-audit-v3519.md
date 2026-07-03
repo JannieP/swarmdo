@@ -2,7 +2,7 @@
 
 **Date:** 2026-03-17
 **Status:** Accepted — Remediation In Progress
-**Context:** Comprehensive 4-agent parallel audit of all 98 CLI capabilities in Docker environment (rufflo@latest). Covers CLI commands, memory/neural, hooks/sessions, MCP/hive-mind, and known platform limitations.
+**Context:** Comprehensive 4-agent parallel audit of all 98 CLI capabilities in Docker environment (swarmdo@latest). Covers CLI commands, memory/neural, hooks/sessions, MCP/hive-mind, and known platform limitations.
 
 ## Decision
 
@@ -10,7 +10,7 @@ Document all findings from the deep capability audit of v3.5.19. Categorize by s
 
 ## Audit Methodology
 
-- **Environment:** Docker (multi-stage build from rufflo@latest on npm)
+- **Environment:** Docker (multi-stage build from swarmdo@latest on npm)
 - **Agents:** 4 concurrent audit agents, each testing a different capability domain
 - **Scope:** 98 capabilities tested across CLI, memory, neural, hooks, sessions, MCP, hive-mind
 - **Branch:** `review/deep-capability-audit`
@@ -21,37 +21,37 @@ Document all findings from the deep capability audit of v3.5.19. Categorize by s
 - **Symptom:** `agent spawn -t coder` resolves `-t` to wrong option (e.g., `--text` from another subcommand)
 - **Root Cause:** Parser's `buildAliases()` iterates ALL commands/subcommands globally; last registered `-t` wins
 - **Fix:** Two-pass parsing in `parser.ts` — Pass 1 identifies command/subcommand, Pass 2 builds scoped aliases
-- **Files:** `v3/@rufflo/cli/src/parser.ts` (added `buildScopedAliases()`, `getScopedBooleanFlags()`)
+- **Files:** `v3/@swarmdo/cli/src/parser.ts` (added `buildScopedAliases()`, `getScopedBooleanFlags()`)
 
 ### C-2: FIXED — `--pattern-type` flag ignored in neural train
 - **Symptom:** `neural train --pattern-type security` always trains coordination patterns
 - **Root Cause:** Option name is `pattern` but parser normalizes `--pattern-type` to `patternType` (camelCase)
 - **Fix:** Check both `ctx.flags.pattern` and `ctx.flags.patternType`
-- **File:** `v3/@rufflo/cli/src/commands/neural.ts`
+- **File:** `v3/@swarmdo/cli/src/commands/neural.ts`
 
 ### C-3: FIXED — `neural predict` returns 0 results despite trained patterns
 - **Symptom:** After `neural train` stores 15+ patterns, `neural predict` finds nothing
 - **Root Cause:** Hash-fallback embeddings (128-dim) produce cosine similarities below the 0.5 default threshold
 - **Fix:** Auto-detect hash-fallback (dim=128) and lower threshold to 0.1
-- **File:** `v3/@rufflo/cli/src/memory/intelligence.ts`
+- **File:** `v3/@swarmdo/cli/src/memory/intelligence.ts`
 
 ### C-4: FIXED — `hooks pre-task` requires `--task-id` but docs say `--description` only
 - **Symptom:** `hooks pre-task --description "Fix auth bug"` fails with "Task ID required"
 - **Root Cause:** `--task-id` marked as `required: true` in option definition
 - **Fix:** Made `--task-id` optional with auto-generation via `task-${Date.now().toString(36)}`
-- **File:** `v3/@rufflo/cli/src/commands/hooks.ts`
+- **File:** `v3/@swarmdo/cli/src/commands/hooks.ts`
 
 ### C-5: FIXED — `hooks notify --message` dumps help instead of executing
 - **Symptom:** `hooks notify --message "Build complete"` shows hooks help text
 - **Root Cause:** `notify` subcommand was never implemented (referenced in docs but missing)
 - **Fix:** Added `notifyCommand` subcommand with `--message`, `--level`, `--channel` options
-- **File:** `v3/@rufflo/cli/src/commands/hooks.ts`
+- **File:** `v3/@swarmdo/cli/src/commands/hooks.ts`
 
 ### C-6: FIXED — `agent metrics` returns hardcoded demo data
 - **Symptom:** Always shows 4 agents, 127 tasks, 96.2% success regardless of actual state
 - **Root Cause:** Hardcoded metrics object with fake numbers
 - **Fix:** Read real state from `.swarm/agents/`, `swarm-activity.json`, and `memory.db`
-- **File:** `v3/@rufflo/cli/src/commands/agent.ts`
+- **File:** `v3/@swarmdo/cli/src/commands/agent.ts`
 
 ### C-7: IN PROGRESS — `hooks explain` flag collision with `-t`
 - **Symptom:** `hooks explain --topic "auth"` fails when `-t` is used
@@ -97,25 +97,25 @@ Document all findings from the deep capability audit of v3.5.19. Categorize by s
 ### L-1: Hash-fallback embeddings (128-dim) produce weak semantic ranking
 - **Context:** ONNX model is pruned in Docker multi-stage build for image size
 - **Impact:** Semantic search quality is lower than with transformer embeddings
-- **Mitigation:** Lowered default similarity threshold to 0.1 for hash-fallback (C-3 fix). For production, install `@rufflo/embeddings` with ONNX model.
+- **Mitigation:** Lowered default similarity threshold to 0.1 for hash-fallback (C-3 fix). For production, install `@swarmdo/embeddings` with ONNX model.
 - **Status:** By design — Docker prioritizes image size over model quality
 
 ### L-2: Flash Attention at 0.40x (below 2.49x target)
-- **Context:** WASM runtime (@ruvector/learning-wasm) not available in Docker
+- **Context:** WASM runtime (@swarmvector/learning-wasm) not available in Docker
 - **Impact:** Neural operations use JS fallback, ~6x slower than WASM target
 - **Mitigation:** Graceful fallback to JavaScript implementation works correctly
 - **Status:** Expected — WASM binaries are platform-specific and excluded from npm
 
-### L-3: @ruvector/learning-wasm missing
+### L-3: @swarmvector/learning-wasm missing
 - **Context:** Native WASM module for neural operations
 - **Impact:** Flash Attention, SIMD vector ops, and Int8 quantization run in JS fallback
 - **Mitigation:** All features work via JS polyfill, just slower
 - **Status:** Not published to npm yet — planned for v3.6.0
 
 ### L-4: Embeddings init is simulated
-- **Context:** `@rufflo/embeddings` package is pruned from Docker image
+- **Context:** `@swarmdo/embeddings` package is pruned from Docker image
 - **Impact:** `embeddings init` reports success but uses hash-fallback backend
-- **Mitigation:** Hash-fallback provides basic functionality; full embeddings available via `plugins install @rufflo/embeddings`
+- **Mitigation:** Hash-fallback provides basic functionality; full embeddings available via `plugins install @swarmdo/embeddings`
 - **Status:** By design for Docker image size
 
 ### L-5: Security audit log used hardcoded 2024 demo data

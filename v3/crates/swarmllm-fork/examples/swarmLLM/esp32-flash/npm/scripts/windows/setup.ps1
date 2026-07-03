@@ -1,9 +1,9 @@
-# setup.ps1 - One-time Windows setup for RuvLLM ESP32
+# setup.ps1 - One-time Windows setup for SwarmLLM ESP32
 # Run this once to install/configure the ESP32 Rust toolchain
 
 $ErrorActionPreference = "Stop"
 
-Write-Host "`n=== RuvLLM ESP32 Windows Setup ===" -ForegroundColor Cyan
+Write-Host "`n=== SwarmLLM ESP32 Windows Setup ===" -ForegroundColor Cyan
 Write-Host ""
 
 # Find Rust ESP toolchain dynamically

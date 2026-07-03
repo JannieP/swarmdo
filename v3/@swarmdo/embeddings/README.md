@@ -4,7 +4,7 @@
 [![npm downloads](https://img.shields.io/npm/dm/@swarmdo/embeddings.svg)](https://www.npmjs.com/package/@swarmdo/embeddings)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
-[![Performance](https://img.shields.io/badge/Performance-<5ms-brightgreen.svg)](https://github.com/ruvnet/claude-flow)
+[![Performance](https://img.shields.io/badge/Performance-<5ms-brightgreen.svg)](the upstream project (see NOTICE))
 
 > High-performance embedding generation module for Swarmdo V3 - multi-provider support with persistent caching, document chunking, normalization, hyperbolic embeddings, and neural substrate integration.
 

@@ -327,7 +327,7 @@ We welcome contributions to improve swarmdo-swarm-wasm! Areas of focus:
 
 ## Links
 
-- **Main Repository**: [https://github.com/ruvnet/ruv-FANN](https://github.com/ruvnet/ruv-FANN)
+- **Main Repository**: [the upstream project (see NOTICE)](the upstream project (see NOTICE))
 - **Documentation**: [https://docs.rs/swarmdo-swarm-wasm](https://docs.rs/swarmdo-swarm-wasm)
 - **NPM Package**: [https://www.npmjs.com/package/swarmdo-swarm-wasm](https://www.npmjs.com/package/swarmdo-swarm-wasm)
 - **Examples**: [examples/](examples/)
@@ -344,4 +344,4 @@ at your option.
 
 ---
 
-**Created by rUv** - Pushing the boundaries of neural network performance in web environments.
+**Created by the upstream author** - Pushing the boundaries of neural network performance in web environments.

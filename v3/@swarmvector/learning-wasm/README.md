@@ -45,5 +45,5 @@ MIT OR Apache-2.0
 
 ## Links
 
-- [GitHub Repository](https://github.com/ruvnet/swarmvector)
-- [Documentation](https://ruv.io)
+- [GitHub Repository](the upstream project (see NOTICE))
+- [Documentation](https://swarmdo.com)

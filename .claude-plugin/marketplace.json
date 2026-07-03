@@ -2,8 +2,8 @@
   "name": "swarmdo",
   "description": "Swarmdo Marketplace: Claude Code native agents, swarms, workers, and MCP tools for continuous software engineering",
   "owner": {
-    "name": "ruvnet",
-    "url": "https://github.com/ruvnet"
+    "name": "upstream",
+    "url": "https://the upstream project (see NOTICE)"
   },
   "plugins": [
     {

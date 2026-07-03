@@ -11,7 +11,7 @@
  * - Module communities using Louvain algorithm
  * - Circular dependency detection
  *
- * Created with ruv.io
+ * Created with swarmdo.com
  */
 
 import type { Command, CommandContext, CommandResult } from '../types.js';

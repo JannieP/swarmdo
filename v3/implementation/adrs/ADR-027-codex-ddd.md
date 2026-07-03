@@ -2,14 +2,14 @@
 
 ## Overview
 
-This document defines the Domain-Driven Design (DDD) architecture for integrating OpenAI Codex support into rufflo via the `@rufflo/codex` package. The design follows the existing V3 architecture patterns while introducing new bounded contexts for Codex-specific functionality.
+This document defines the Domain-Driven Design (DDD) architecture for integrating OpenAI Codex support into swarmdo via the `@swarmdo/codex` package. The design follows the existing V3 architecture patterns while introducing new bounded contexts for Codex-specific functionality.
 
 ## Package Information
 
-- **Package Name**: `@rufflo/codex`
-- **Location**: `v3/@rufflo/codex/`
+- **Package Name**: `@swarmdo/codex`
+- **Location**: `v3/@swarmdo/codex/`
 - **Future Umbrella**: `coflow` (npm/npx coflow)
-- **Compatibility**: Maintains `rufflo` branding during transition
+- **Compatibility**: Maintains `swarmdo` branding during transition
 
 ## Strategic Design
 
@@ -17,7 +17,7 @@ This document defines the Domain-Driven Design (DDD) architecture for integratin
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                           Rufflo V3 Core Domain                         │
+│                           Swarmdo V3 Core Domain                         │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────────────────┐ │
@@ -772,7 +772,7 @@ class InitializationApplicationService {
     return {
       claude: claudeResult,
       codex: codexResult,
-      syncConfigPath: path.join(options.projectPath, '.rufflo', 'platform-sync.yaml')
+      syncConfigPath: path.join(options.projectPath, '.swarmdo', 'platform-sync.yaml')
     };
   }
 }
@@ -851,7 +851,7 @@ class PlatformConversionCompleted implements DomainEvent {
 ## Package Structure
 
 ```
-v3/@rufflo/
+v3/@swarmdo/
 ├── cli/
 │   └── src/
 │       └── commands/
@@ -918,9 +918,9 @@ v3/@rufflo/
 ### With Existing Init System
 
 ```typescript
-// v3/@rufflo/cli/src/commands/init.ts
+// v3/@swarmdo/cli/src/commands/init.ts
 
-import { CodexInitializer } from '@rufflo/codex';
+import { CodexInitializer } from '@swarmdo/codex';
 
 // Add new options
 const initCommand: Command = {

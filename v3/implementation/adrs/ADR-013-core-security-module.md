@@ -21,7 +21,7 @@ These vulnerabilities required a complete security module rewrite for v3.
 
 ## Decision
 
-Create `@rufflo/security` package with defense-in-depth approach:
+Create `@swarmdo/security` package with defense-in-depth approach:
 
 ### 1. Password Hashing (CVE-2 Fix)
 
@@ -150,7 +150,7 @@ fs.readFile(safe.resolvedPath);
 ## Usage
 
 ```typescript
-import { createSecurityModule } from '@rufflo/security';
+import { createSecurityModule } from '@swarmdo/security';
 
 const security = createSecurityModule({
   projectRoot: process.cwd(),
@@ -177,6 +177,6 @@ const token = security.tokenGenerator.generateAccessToken('user-123', 3600);
 ## References
 
 - Security Audit Report: `v3/implementation/security/SECURITY_AUDIT_REPORT.md`
-- CVE Tracking: `v3/@rufflo/security/src/CVE-REMEDIATION.ts`
+- CVE Tracking: `v3/@swarmdo/security/src/CVE-REMEDIATION.ts`
 - OWASP Guidelines: https://owasp.org/www-project-top-ten/
 - bcrypt Best Practices: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html

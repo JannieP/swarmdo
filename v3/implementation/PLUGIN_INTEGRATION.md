@@ -1,8 +1,8 @@
-# Rufflo Plugin Integration
+# Swarmdo Plugin Integration
 
 ## Overview
 
-This document describes how rufflo integrates with the official Claude Code plugin system.
+This document describes how swarmdo integrates with the official Claude Code plugin system.
 
 ## Plugin Structure
 
@@ -24,7 +24,7 @@ plugin/
 
 ```json
 {
-  "name": "rufflo",
+  "name": "swarmdo",
   "version": "3.0.0",
   "capabilities": {
     "skills": true,
@@ -56,8 +56,8 @@ plugin/
 
 The plugin bundles three MCP servers:
 
-1. **rufflo** (required): Core swarm coordination
-2. **ruv-swarm** (optional): Enhanced topology patterns
+1. **swarmdo** (required): Core swarm coordination
+2. **swarmdo-swarm** (optional): Enhanced topology patterns
 3. **flow-nexus** (optional): Cloud orchestration
 
 ### 4. Skills Integration
@@ -78,7 +78,7 @@ allowed-tools: Read, Write, Bash
 
 ## V3 Hooks Bridge
 
-The `@rufflo/hooks` package includes an official hooks bridge:
+The `@swarmdo/hooks` package includes an official hooks bridge:
 
 ```typescript
 import {
@@ -86,7 +86,7 @@ import {
   processOfficialHookInput,
   outputOfficialHookResult,
   executeWithBridge,
-} from '@rufflo/hooks';
+} from '@swarmdo/hooks';
 
 // Process input from Claude Code
 const input = await processOfficialHookInput();
@@ -108,24 +108,24 @@ outputOfficialHookResult(output);
 
 ```bash
 # Add plugin marketplace
-/plugin marketplace add rufflo https://github.com/ruvnet/claude-flow
+/plugin marketplace add swarmdo the upstream project (see NOTICE)
 
 # Install plugin
-/plugin install rufflo
+/plugin install swarmdo
 ```
 
 ### Manual Installation
 
 ```bash
 # Clone and link
-git clone https://github.com/ruvnet/claude-flow
-claude --plugin-dir ./rufflo/plugin
+git clone the upstream project (see NOTICE)
+claude --plugin-dir ./swarmdo/plugin
 ```
 
 ### Via npx Init
 
 ```bash
-npx rufflo@alpha init --hooks
+npx swarmdo@alpha init --hooks
 ```
 
 ## Configuration
@@ -156,7 +156,7 @@ Enable only specific hooks by choosing matchers:
     "PreToolUse": [
       {
         "matcher": "^(Write|Edit)$",
-        "hooks": [{ "type": "command", "command": "npx rufflo@alpha hooks pre-edit" }]
+        "hooks": [{ "type": "command", "command": "npx swarmdo@alpha hooks pre-edit" }]
       }
     ]
   }
@@ -167,12 +167,12 @@ Enable only specific hooks by choosing matchers:
 
 After installation, MCP tools are available:
 
-- `mcp__rufflo__swarm_init`
-- `mcp__rufflo__agent_spawn`
-- `mcp__rufflo__task_orchestrate`
-- `mcp__rufflo__memory_usage`
-- `mcp__rufflo__hooks_route`
-- `mcp__rufflo__hooks_metrics`
+- `mcp__swarmdo__swarm_init`
+- `mcp__swarmdo__agent_spawn`
+- `mcp__swarmdo__task_orchestrate`
+- `mcp__swarmdo__memory_usage`
+- `mcp__swarmdo__hooks_route`
+- `mcp__swarmdo__hooks_metrics`
 
 ## Marketplace Publishing
 
@@ -180,10 +180,10 @@ After installation, MCP tools are available:
 
 ```json
 {
-  "name": "rufflo-marketplace",
+  "name": "swarmdo-marketplace",
   "plugins": [
     {
-      "name": "rufflo",
+      "name": "swarmdo",
       "description": "Multi-agent swarm coordination",
       "version": "3.0.0",
       "path": "plugin"
@@ -196,7 +196,7 @@ After installation, MCP tools are available:
 
 1. Push to repository
 2. Add marketplace: `/plugin marketplace add name https://github.com/user/repo`
-3. Users install: `/plugin install rufflo@name`
+3. Users install: `/plugin install swarmdo@name`
 
 ## Architecture
 
@@ -212,7 +212,7 @@ After installation, MCP tools are available:
 │         ▼             ▼             ▼             ▼          │
 │  ┌──────────────────────────────────────────────────────────┐│
 │  │              Official Hooks Bridge                        ││
-│  │  (v3/@rufflo/hooks/src/bridge/official-hooks-bridge)││
+│  │  (v3/@swarmdo/hooks/src/bridge/official-hooks-bridge)││
 │  └──────────────────────────────────────────────────────────┘│
 │         │             │             │             │          │
 │         ▼             ▼             ▼             ▼          │
@@ -222,7 +222,7 @@ After installation, MCP tools are available:
 │  └─────────────┴─────────────┴─────────────┴──────────────┘ │
 │                     V3 Hooks System                          │
 ├─────────────────────────────────────────────────────────────┤
-│                    @rufflo/hooks                        │
+│                    @swarmdo/hooks                        │
 │  ┌───────────┬───────────┬───────────┬───────────────────┐  │
 │  │ Registry  │ Executor  │ Daemons   │ MCP Tools         │  │
 │  └───────────┴───────────┴───────────┴───────────────────┘  │

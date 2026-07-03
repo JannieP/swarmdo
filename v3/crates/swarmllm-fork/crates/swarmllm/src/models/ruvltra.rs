@@ -1,6 +1,6 @@
-//! RuvLTRA Model Optimization Pipeline
+//! SwarmLTRA Model Optimization Pipeline
 //!
-//! RuvLTRA (Swarmvector Ultra-Lightweight Transformer Runtime Architecture) is an
+//! SwarmLTRA (Swarmvector Ultra-Lightweight Transformer Runtime Architecture) is an
 //! ANE-optimized model pipeline based on Qwen 0.5B architecture with SONA
 //! pretraining integration for continuous learning on Apple Silicon.
 //!
@@ -26,7 +26,7 @@
 //!
 //! ```text
 //! +-------------------+     +-------------------+
-//! | RuvLTRA Model     |---->| SONA Learning     |
+//! | SwarmLTRA Model     |---->| SONA Learning     |
 //! | (inference)       |     | - MicroLoRA       |
 //! +-------------------+     | - ReasoningBank   |
 //!                           | - EWC++           |
@@ -36,15 +36,15 @@
 //! ## Usage
 //!
 //! ```rust,ignore
-//! use swarmllm::models::ruvltra::{RuvLtraConfig, RuvLtraModel, AneOptimization};
+//! use swarmllm::models::swarmltra::{SwarmLtraConfig, SwarmLtraModel, AneOptimization};
 //!
 //! // Create ANE-optimized configuration
-//! let config = RuvLtraConfig::default()
+//! let config = SwarmLtraConfig::default()
 //!     .with_ane_optimization(AneOptimization::HybridDispatch)
 //!     .with_quantization(QuantizationType::Int4);
 //!
 //! // Initialize model with SONA pretraining
-//! let model = RuvLtraModel::new(&config)?;
+//! let model = SwarmLtraModel::new(&config)?;
 //! model.enable_sona_pretraining()?;
 //!
 //! // Run inference with continuous learning
@@ -164,15 +164,15 @@ pub enum MemoryLayout {
 }
 
 // =============================================================================
-// RuvLTRA Configuration
+// SwarmLTRA Configuration
 // =============================================================================
 
-/// RuvLTRA model configuration based on Qwen 0.5B architecture
+/// SwarmLTRA model configuration based on Qwen 0.5B architecture
 ///
 /// Optimized for Apple Neural Engine (ANE) with dimensions >= 768
 /// to ensure efficient matmul acceleration.
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct RuvLtraConfig {
+pub struct SwarmLtraConfig {
     /// Hidden size (embedding dimension) - 896 for ANE optimization
     pub hidden_size: usize,
     /// Intermediate size for MLP
@@ -223,14 +223,14 @@ pub struct RuvLtraConfig {
     pub sona_config: SonaConfig,
 }
 
-impl Default for RuvLtraConfig {
+impl Default for SwarmLtraConfig {
     fn default() -> Self {
         Self::qwen_0_5b()
     }
 }
 
-impl RuvLtraConfig {
-    /// Qwen 0.5B configuration - the primary RuvLTRA target
+impl SwarmLtraConfig {
+    /// Qwen 0.5B configuration - the primary SwarmLTRA target
     ///
     /// Optimized for ANE with hidden_size=896 (>= 768 threshold)
     pub fn qwen_0_5b() -> Self {
@@ -426,12 +426,12 @@ impl RuvLtraConfig {
 }
 
 // =============================================================================
-// RuvLTRA Attention Layer
+// SwarmLTRA Attention Layer
 // =============================================================================
 
-/// RuvLTRA Attention with ANE hybrid dispatch support
+/// SwarmLTRA Attention with ANE hybrid dispatch support
 #[derive(Debug)]
-pub struct RuvLtraAttention {
+pub struct SwarmLtraAttention {
     /// Query projection weights (hidden_size, hidden_size)
     pub q_proj: Vec<f32>,
     /// Key projection weights (hidden_size, num_kv_heads * head_dim)
@@ -441,14 +441,14 @@ pub struct RuvLtraAttention {
     /// Output projection weights (hidden_size, hidden_size)
     pub o_proj: Vec<f32>,
     /// Configuration
-    pub config: RuvLtraConfig,
+    pub config: SwarmLtraConfig,
     /// Precomputed RoPE tables
     pub rope_tables: RopeTables,
 }
 
-impl RuvLtraAttention {
+impl SwarmLtraAttention {
     /// Create a new attention layer
-    pub fn new(config: &RuvLtraConfig) -> Self {
+    pub fn new(config: &SwarmLtraConfig) -> Self {
         let hidden_size = config.hidden_size;
         let kv_dim = config.num_kv_heads * config.head_dim;
 
@@ -710,14 +710,14 @@ impl RuvLtraAttention {
 }
 
 // =============================================================================
-// RuvLTRA MLP with ANE Optimization
+// SwarmLTRA MLP with ANE Optimization
 // =============================================================================
 
-/// RuvLTRA MLP layer with SwiGLU activation
+/// SwarmLTRA MLP layer with SwiGLU activation
 ///
 /// ANE-optimized with dimensions >= 768 for efficient matmul dispatch.
 #[derive(Debug)]
-pub struct RuvLtraMLP {
+pub struct SwarmLtraMLP {
     /// Gate projection weights
     pub gate_proj: Vec<f32>,
     /// Up projection weights
@@ -732,9 +732,9 @@ pub struct RuvLtraMLP {
     pub use_ane: bool,
 }
 
-impl RuvLtraMLP {
+impl SwarmLtraMLP {
     /// Create a new MLP layer
-    pub fn new(config: &RuvLtraConfig) -> Self {
+    pub fn new(config: &SwarmLtraConfig) -> Self {
         Self {
             gate_proj: vec![0.0; config.intermediate_size * config.hidden_size],
             up_proj: vec![0.0; config.intermediate_size * config.hidden_size],
@@ -868,16 +868,16 @@ impl RuvLtraMLP {
 }
 
 // =============================================================================
-// RuvLTRA Decoder Layer
+// SwarmLTRA Decoder Layer
 // =============================================================================
 
-/// RuvLTRA Decoder Layer combining attention and MLP with ANE dispatch
+/// SwarmLTRA Decoder Layer combining attention and MLP with ANE dispatch
 #[derive(Debug)]
-pub struct RuvLtraDecoderLayer {
+pub struct SwarmLtraDecoderLayer {
     /// Self attention (dispatched to GPU in hybrid mode)
-    pub self_attn: RuvLtraAttention,
+    pub self_attn: SwarmLtraAttention,
     /// MLP (dispatched to ANE in hybrid mode)
-    pub mlp: RuvLtraMLP,
+    pub mlp: SwarmLtraMLP,
     /// Input layer norm weights
     pub input_layernorm: Vec<f32>,
     /// Post-attention layer norm weights
@@ -890,12 +890,12 @@ pub struct RuvLtraDecoderLayer {
     pub layer_idx: usize,
 }
 
-impl RuvLtraDecoderLayer {
+impl SwarmLtraDecoderLayer {
     /// Create a new decoder layer
-    pub fn new(config: &RuvLtraConfig, layer_idx: usize) -> Self {
+    pub fn new(config: &SwarmLtraConfig, layer_idx: usize) -> Self {
         Self {
-            self_attn: RuvLtraAttention::new(config),
-            mlp: RuvLtraMLP::new(config),
+            self_attn: SwarmLtraAttention::new(config),
+            mlp: SwarmLtraMLP::new(config),
             input_layernorm: vec![1.0; config.hidden_size],
             post_attention_layernorm: vec![1.0; config.hidden_size],
             rms_norm_eps: config.rms_norm_eps,
@@ -952,18 +952,18 @@ impl RuvLtraDecoderLayer {
 }
 
 // =============================================================================
-// Complete RuvLTRA Model
+// Complete SwarmLTRA Model
 // =============================================================================
 
-/// Complete RuvLTRA model with SONA pretraining integration
+/// Complete SwarmLTRA model with SONA pretraining integration
 #[derive(Debug)]
-pub struct RuvLtraModel {
+pub struct SwarmLtraModel {
     /// Model configuration
-    pub config: RuvLtraConfig,
+    pub config: SwarmLtraConfig,
     /// Token embeddings
     pub embed_tokens: Vec<f32>,
     /// Decoder layers
-    pub layers: Vec<RuvLtraDecoderLayer>,
+    pub layers: Vec<SwarmLtraDecoderLayer>,
     /// Final layer norm
     pub norm: Vec<f32>,
     /// LM head weights (often tied to embeddings)
@@ -974,12 +974,12 @@ pub struct RuvLtraModel {
     sona: Option<Arc<RwLock<SonaIntegration>>>,
 }
 
-impl RuvLtraModel {
-    /// Create a new RuvLTRA model
-    pub fn new(config: &RuvLtraConfig) -> Result<Self> {
+impl SwarmLtraModel {
+    /// Create a new SwarmLTRA model
+    pub fn new(config: &SwarmLtraConfig) -> Result<Self> {
         let mut layers = Vec::with_capacity(config.num_hidden_layers);
         for i in 0..config.num_hidden_layers {
-            layers.push(RuvLtraDecoderLayer::new(config, i));
+            layers.push(SwarmLtraDecoderLayer::new(config, i));
         }
 
         let sona = if config.sona_enabled {
@@ -1119,9 +1119,9 @@ impl RuvLtraModel {
     }
 
     /// Get model info
-    pub fn info(&self) -> RuvLtraModelInfo {
-        RuvLtraModelInfo {
-            name: "RuvLTRA".to_string(),
+    pub fn info(&self) -> SwarmLtraModelInfo {
+        SwarmLtraModelInfo {
+            name: "SwarmLTRA".to_string(),
             architecture: "Qwen".to_string(),
             num_params: self.config.estimate_params(),
             hidden_size: self.config.hidden_size,
@@ -1158,9 +1158,9 @@ impl RuvLtraModel {
     }
 }
 
-/// Model information for RuvLTRA
+/// Model information for SwarmLTRA
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct RuvLtraModelInfo {
+pub struct SwarmLtraModelInfo {
     /// Model name
     pub name: String,
     /// Architecture (Qwen)
@@ -1264,8 +1264,8 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_ruvltra_config_qwen() {
-        let config = RuvLtraConfig::qwen_0_5b();
+    fn test_swarmltra_config_qwen() {
+        let config = SwarmLtraConfig::qwen_0_5b();
         assert_eq!(config.hidden_size, 896);
         assert_eq!(config.num_hidden_layers, 24);
         assert_eq!(config.num_attention_heads, 14);
@@ -1275,22 +1275,22 @@ mod tests {
     }
 
     #[test]
-    fn test_ruvltra_config_tiny() {
-        let config = RuvLtraConfig::tiny();
+    fn test_swarmltra_config_tiny() {
+        let config = SwarmLtraConfig::tiny();
         assert_eq!(config.hidden_size, 768);
         assert!(config.is_ane_optimized());
     }
 
     #[test]
     fn test_ane_optimization() {
-        let config = RuvLtraConfig::qwen_0_5b();
+        let config = SwarmLtraConfig::qwen_0_5b();
         assert!(config.ane_optimization.uses_ane());
         assert!(config.ane_optimization.uses_gpu());
     }
 
     #[test]
     fn test_quantization_memory() {
-        let config = RuvLtraConfig::qwen_0_5b();
+        let config = SwarmLtraConfig::qwen_0_5b();
         let params = config.estimate_params();
         let memory_int4 = QuantizationType::Int4.estimate_memory_mb(params);
         let memory_fp16 = QuantizationType::Fp16.estimate_memory_mb(params);
@@ -1301,9 +1301,9 @@ mod tests {
     }
 
     #[test]
-    fn test_ruvltra_model_creation() {
-        let config = RuvLtraConfig::tiny();
-        let model = RuvLtraModel::new(&config).unwrap();
+    fn test_swarmltra_model_creation() {
+        let config = SwarmLtraConfig::tiny();
+        let model = SwarmLtraModel::new(&config).unwrap();
 
         assert_eq!(model.layers.len(), 4);
         assert_eq!(
@@ -1314,7 +1314,7 @@ mod tests {
 
     #[test]
     fn test_gqa_ratio() {
-        let config = RuvLtraConfig::qwen_0_5b();
+        let config = SwarmLtraConfig::qwen_0_5b();
         assert_eq!(config.gqa_ratio(), 7); // 14 heads / 2 KV heads = 7
     }
 
@@ -1336,7 +1336,7 @@ mod tests {
         ];
 
         let template =
-            RuvLtraModel::apply_chat_template(&messages, Some("You are a helpful assistant."));
+            SwarmLtraModel::apply_chat_template(&messages, Some("You are a helpful assistant."));
 
         assert!(template.contains("<|im_start|>system"));
         assert!(template.contains("<|im_start|>user"));
@@ -1347,11 +1347,11 @@ mod tests {
 
     #[test]
     fn test_model_info() {
-        let config = RuvLtraConfig::qwen_0_5b();
-        let model = RuvLtraModel::new(&config).unwrap();
+        let config = SwarmLtraConfig::qwen_0_5b();
+        let model = SwarmLtraModel::new(&config).unwrap();
         let info = model.info();
 
-        assert_eq!(info.name, "RuvLTRA");
+        assert_eq!(info.name, "SwarmLTRA");
         assert_eq!(info.architecture, "Qwen");
         assert_eq!(info.hidden_size, 896);
         assert!(info.ane_optimized);

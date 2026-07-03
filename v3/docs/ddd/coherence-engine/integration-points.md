@@ -2,13 +2,13 @@
 
 ## Overview
 
-This document describes how the Coherence Engine domain integrates with Rufflo V3 modules, including the Memory, Security, Coordination, and Hive-Mind domains.
+This document describes how the Coherence Engine domain integrates with Swarmdo V3 modules, including the Memory, Security, Coordination, and Hive-Mind domains.
 
 ## Integration Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│                              Rufflo V3                                      │
+│                              Swarmdo V3                                      │
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                  │
 │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐  ┌────────────┐ │

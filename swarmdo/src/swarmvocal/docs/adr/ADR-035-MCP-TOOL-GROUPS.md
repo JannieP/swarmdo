@@ -6,7 +6,7 @@
 
 ## Context
 
-The MCP bridge grew to 331+ tools from multiple backends (ruvector, rufflo, agentic-flow, Claude Code, Gemini, Codex). Exposing all tools simultaneously caused:
+The MCP bridge grew to 331+ tools from multiple backends (swarmvector, swarmdo, agentic-flow, Claude Code, Gemini, Codex). Exposing all tools simultaneously caused:
 
 1. **Context flooding** — AI models struggle to select the right tool from 300+ options
 2. **Startup overhead** — loading all backends when only a subset is needed
@@ -21,13 +21,13 @@ Reorganize all tools into **12 logical groups** that can be independently enable
 | Group | Source | Tools | Default | Env Var |
 |-------|--------|-------|---------|---------|
 | **core** | built-in | search, web_research, guidance | always on | — |
-| **intelligence** | ruvector | ~10 | enabled | `MCP_GROUP_INTELLIGENCE` |
-| **agents** | rufflo | ~50 | enabled | `MCP_GROUP_AGENTS` |
-| **memory** | rufflo | ~25 | enabled | `MCP_GROUP_MEMORY` |
-| **devtools** | rufflo | ~60 | enabled | `MCP_GROUP_DEVTOOLS` |
-| **security** | rufflo | ~25 | disabled | `MCP_GROUP_SECURITY` |
-| **browser** | rufflo | ~23 | disabled | `MCP_GROUP_BROWSER` |
-| **neural** | rufflo | ~20 | disabled | `MCP_GROUP_NEURAL` |
+| **intelligence** | swarmvector | ~10 | enabled | `MCP_GROUP_INTELLIGENCE` |
+| **agents** | swarmdo | ~50 | enabled | `MCP_GROUP_AGENTS` |
+| **memory** | swarmdo | ~25 | enabled | `MCP_GROUP_MEMORY` |
+| **devtools** | swarmdo | ~60 | enabled | `MCP_GROUP_DEVTOOLS` |
+| **security** | swarmdo | ~25 | disabled | `MCP_GROUP_SECURITY` |
+| **browser** | swarmdo | ~23 | disabled | `MCP_GROUP_BROWSER` |
+| **neural** | swarmdo | ~20 | disabled | `MCP_GROUP_NEURAL` |
 | **agentic-flow** | agentic-flow@alpha | 15 | disabled | `MCP_GROUP_AGENTIC_FLOW` |
 | **claude-code** | claude mcp serve | varies | disabled | `MCP_GROUP_CLAUDE_CODE` |
 | **gemini** | gemini-mcp-server | varies | disabled | `MCP_GROUP_GEMINI` |
@@ -52,7 +52,7 @@ Reorganize all tools into **12 logical groups** that can be independently enable
 │  └─────────────────────────────────────────────────┘   │
 │         ▼                    ▼                ▼         │
 │  ┌──────────┐  ┌──────────────┐  ┌─────────────────┐  │
-│  │ ruvector │  │    rufflo     │  │ agentic-flow    │  │
+│  │ swarmvector │  │    swarmdo     │  │ agentic-flow    │  │
 │  │ (stdio)  │  │   (stdio)   │  │    (stdio)      │  │
 │  └──────────┘  └──────────────┘  └─────────────────┘  │
 │                                                         │
@@ -70,15 +70,15 @@ Tools from external backends are filtered by matching their original tool name a
 ```javascript
 // Group definition
 agents: {
-  source: "rufflo",
+  source: "swarmdo",
   prefixes: ["agent_", "swarm_", "task_", "session_", "hive-mind_", "workflow_", "coordination_"],
 }
 
-// rufflo tool "agent_spawn" → matches "agent_" prefix → included if agents group enabled
-// rufflo tool "browser_open" → matches "browser_" prefix → only if browser group enabled
+// swarmdo tool "agent_spawn" → matches "agent_" prefix → included if agents group enabled
+// swarmdo tool "browser_open" → matches "browser_" prefix → only if browser group enabled
 ```
 
-A backend is only started if at least one of its groups is enabled. This means disabling all rufflo groups prevents the rufflo process from spawning entirely.
+A backend is only started if at least one of its groups is enabled. This means disabling all swarmdo groups prevents the swarmdo process from spawning entirely.
 
 ### Guidance Tool
 
@@ -88,7 +88,7 @@ The `guidance` tool replaces the old `system_guide`. It provides structured, AI-
 guidance(topic="overview")     → capabilities summary + decision guide
 guidance(topic="groups")       → table of all groups with status
 guidance(topic="agents")       → detailed usage for the agents group
-guidance(topic="tool", tool_name="rufflo__memory_search") → specific tool docs
+guidance(topic="tool", tool_name="swarmdo__memory_search") → specific tool docs
 ```
 
 The system prompt instructs the AI to call `guidance` when:
@@ -173,8 +173,8 @@ ANTHROPIC_API_KEY=sk-ant-...
 - New backends/groups can be added without touching existing code
 
 ### Negative
-- Some tools appear in multiple potential groups (e.g., rufflo `hooks_*` in both intelligence and devtools) — resolved by prefix matching
-- Group boundaries are somewhat arbitrary for the rufflo "Uncategorized" tools
+- Some tools appear in multiple potential groups (e.g., swarmdo `hooks_*` in both intelligence and devtools) — resolved by prefix matching
+- Group boundaries are somewhat arbitrary for the swarmdo "Uncategorized" tools
 
 ### Mitigations
 - `guidance` tool helps AI navigate regardless of how tools are grouped

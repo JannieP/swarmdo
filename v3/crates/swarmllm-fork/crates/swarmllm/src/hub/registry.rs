@@ -1,4 +1,4 @@
-//! RuvLTRA model registry with pre-configured models
+//! SwarmLTRA model registry with pre-configured models
 
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -71,11 +71,11 @@ pub struct HardwareRequirements {
 /// Model information in the registry
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ModelInfo {
-    /// Model identifier (e.g., "ruvltra-small")
+    /// Model identifier (e.g., "swarmltra-small")
     pub id: String,
     /// Display name
     pub name: String,
-    /// HuggingFace repository (e.g., "ruvnet/ruvltra-small")
+    /// HuggingFace repository (e.g., "upstream/swarmltra-small")
     pub repo: String,
     /// Model filename on HF Hub
     pub filename: String,
@@ -129,24 +129,24 @@ impl ModelInfo {
     }
 }
 
-/// RuvLTRA model registry
-pub struct RuvLtraRegistry {
+/// SwarmLTRA model registry
+pub struct SwarmLtraRegistry {
     models: HashMap<String, ModelInfo>,
 }
 
-impl RuvLtraRegistry {
+impl SwarmLtraRegistry {
     /// Create a new registry with pre-configured models
     pub fn new() -> Self {
         let mut models = HashMap::new();
 
-        // RuvLTRA-Small (0.5B) - Q4 quantization
+        // SwarmLTRA-Small (0.5B) - Q4 quantization
         models.insert(
-            "ruvltra-small".to_string(),
+            "swarmltra-small".to_string(),
             ModelInfo {
-                id: "ruvltra-small".to_string(),
-                name: "RuvLTRA Small (0.5B Q4)".to_string(),
-                repo: "ruv/ruvltra".to_string(),
-                filename: "ruvltra-small-0.5b-q4_k_m.gguf".to_string(),
+                id: "swarmltra-small".to_string(),
+                name: "SwarmLTRA Small (0.5B Q4)".to_string(),
+                repo: "swarmdo/swarmltra".to_string(),
+                filename: "swarmltra-small-0.5b-q4_k_m.gguf".to_string(),
                 size: ModelSize::Small,
                 quantization: QuantizationLevel::Q4,
                 size_bytes: 662_000_000, // ~662MB
@@ -161,7 +161,7 @@ impl RuvLtraRegistry {
                     supports_cuda: true,
                     min_vram_gb: Some(1.0),
                 },
-                description: "Compact RuvLTRA model optimized for edge devices. \
+                description: "Compact SwarmLTRA model optimized for edge devices. \
                              Includes SONA pre-trained weights for adaptive learning."
                     .to_string(),
                 is_adapter: false,
@@ -170,14 +170,14 @@ impl RuvLtraRegistry {
             },
         );
 
-        // RuvLTRA-Small (0.5B) - Q8 quantization
+        // SwarmLTRA-Small (0.5B) - Q8 quantization
         models.insert(
-            "ruvltra-small-q8".to_string(),
+            "swarmltra-small-q8".to_string(),
             ModelInfo {
-                id: "ruvltra-small-q8".to_string(),
-                name: "RuvLTRA Small (0.5B Q8)".to_string(),
-                repo: "ruv/ruvltra".to_string(),
-                filename: "ruvltra-small-0.5b-q8_0.gguf".to_string(),
+                id: "swarmltra-small-q8".to_string(),
+                name: "SwarmLTRA Small (0.5B Q8)".to_string(),
+                repo: "swarmdo/swarmltra".to_string(),
+                filename: "swarmltra-small-0.5b-q8_0.gguf".to_string(),
                 size: ModelSize::Small,
                 quantization: QuantizationLevel::Q8,
                 size_bytes: 1_324_000_000, // ~1.3GB
@@ -199,14 +199,14 @@ impl RuvLtraRegistry {
             },
         );
 
-        // RuvLTRA-Medium (3B) - Q4 quantization
+        // SwarmLTRA-Medium (3B) - Q4 quantization
         models.insert(
-            "ruvltra-medium".to_string(),
+            "swarmltra-medium".to_string(),
             ModelInfo {
-                id: "ruvltra-medium".to_string(),
-                name: "RuvLTRA Medium (3B Q4)".to_string(),
-                repo: "ruv/ruvltra".to_string(),
-                filename: "ruvltra-medium-1.1b-q4_k_m.gguf".to_string(),
+                id: "swarmltra-medium".to_string(),
+                name: "SwarmLTRA Medium (3B Q4)".to_string(),
+                repo: "swarmdo/swarmltra".to_string(),
+                filename: "swarmltra-medium-1.1b-q4_k_m.gguf".to_string(),
                 size: ModelSize::Medium,
                 quantization: QuantizationLevel::Q4,
                 size_bytes: 2_100_000_000, // ~2.1GB
@@ -221,7 +221,7 @@ impl RuvLtraRegistry {
                     supports_cuda: true,
                     min_vram_gb: Some(4.0),
                 },
-                description: "Balanced RuvLTRA model for general-purpose tasks. \
+                description: "Balanced SwarmLTRA model for general-purpose tasks. \
                              Extended context window with SONA learning."
                     .to_string(),
                 is_adapter: false,
@@ -230,14 +230,14 @@ impl RuvLtraRegistry {
             },
         );
 
-        // RuvLTRA-Medium (3B) - Q8 quantization
+        // SwarmLTRA-Medium (3B) - Q8 quantization
         models.insert(
-            "ruvltra-medium-q8".to_string(),
+            "swarmltra-medium-q8".to_string(),
             ModelInfo {
-                id: "ruvltra-medium-q8".to_string(),
-                name: "RuvLTRA Medium (3B Q8)".to_string(),
-                repo: "ruv/ruvltra".to_string(),
-                filename: "ruvltra-medium-1.1b-q8_0.gguf".to_string(),
+                id: "swarmltra-medium-q8".to_string(),
+                name: "SwarmLTRA Medium (3B Q8)".to_string(),
+                repo: "swarmdo/swarmltra".to_string(),
+                filename: "swarmltra-medium-1.1b-q8_0.gguf".to_string(),
                 size: ModelSize::Medium,
                 quantization: QuantizationLevel::Q8,
                 size_bytes: 4_200_000_000, // ~4.2GB
@@ -259,14 +259,14 @@ impl RuvLtraRegistry {
             },
         );
 
-        // RuvLTRA-Small-Coder (LoRA adapter)
+        // SwarmLTRA-Small-Coder (LoRA adapter)
         models.insert(
-            "ruvltra-small-coder".to_string(),
+            "swarmltra-small-coder".to_string(),
             ModelInfo {
-                id: "ruvltra-small-coder".to_string(),
-                name: "RuvLTRA Small Coder (LoRA)".to_string(),
-                repo: "ruv/ruvltra".to_string(),
-                filename: "ruvltra-small-coder-lora.safetensors".to_string(),
+                id: "swarmltra-small-coder".to_string(),
+                name: "SwarmLTRA Small Coder (LoRA)".to_string(),
+                repo: "swarmdo/swarmltra".to_string(),
+                filename: "swarmltra-small-coder-lora.safetensors".to_string(),
                 size: ModelSize::Tiny,
                 quantization: QuantizationLevel::FP16,
                 size_bytes: 50_000_000, // ~50MB (LoRA is small)
@@ -282,10 +282,10 @@ impl RuvLtraRegistry {
                     min_vram_gb: None,
                 },
                 description: "LoRA adapter for code completion. \
-                             Requires ruvltra-small or ruvltra-small-q8 base model."
+                             Requires swarmltra-small or swarmltra-small-q8 base model."
                     .to_string(),
                 is_adapter: true,
-                base_model: Some("ruvltra-small".to_string()),
+                base_model: Some("swarmltra-small".to_string()),
                 has_sona_weights: false,
             },
         );
@@ -351,7 +351,7 @@ impl RuvLtraRegistry {
     }
 }
 
-impl Default for RuvLtraRegistry {
+impl Default for SwarmLtraRegistry {
     fn default() -> Self {
         Self::new()
     }
@@ -359,7 +359,7 @@ impl Default for RuvLtraRegistry {
 
 /// Get model info by ID (convenience function)
 pub fn get_model_info(id: &str) -> Option<ModelInfo> {
-    RuvLtraRegistry::new().get(id).cloned()
+    SwarmLtraRegistry::new().get(id).cloned()
 }
 
 #[cfg(test)]
@@ -368,16 +368,16 @@ mod tests {
 
     #[test]
     fn test_registry_initialization() {
-        let registry = RuvLtraRegistry::new();
-        assert!(registry.get("ruvltra-small").is_some());
-        assert!(registry.get("ruvltra-medium").is_some());
+        let registry = SwarmLtraRegistry::new();
+        assert!(registry.get("swarmltra-small").is_some());
+        assert!(registry.get("swarmltra-medium").is_some());
         assert!(registry.get("nonexistent").is_none());
     }
 
     #[test]
     fn test_model_info() {
-        let registry = RuvLtraRegistry::new();
-        let model = registry.get("ruvltra-small").unwrap();
+        let registry = SwarmLtraRegistry::new();
+        let model = registry.get("swarmltra-small").unwrap();
 
         assert_eq!(model.params_b, 0.5);
         assert_eq!(model.quantization, QuantizationLevel::Q4);
@@ -387,22 +387,22 @@ mod tests {
 
     #[test]
     fn test_list_by_size() {
-        let registry = RuvLtraRegistry::new();
+        let registry = SwarmLtraRegistry::new();
         let small_models = registry.list_by_size(ModelSize::Small);
         assert!(!small_models.is_empty());
     }
 
     #[test]
     fn test_adapters() {
-        let registry = RuvLtraRegistry::new();
-        let adapters = registry.list_adapters("ruvltra-small");
+        let registry = SwarmLtraRegistry::new();
+        let adapters = registry.list_adapters("swarmltra-small");
         assert!(!adapters.is_empty());
         assert!(adapters[0].is_adapter);
     }
 
     #[test]
     fn test_ram_recommendation() {
-        let registry = RuvLtraRegistry::new();
+        let registry = SwarmLtraRegistry::new();
 
         // Should recommend small model for 2GB
         let model = registry.recommend_for_ram(2.0);
@@ -423,22 +423,22 @@ mod tests {
 
     #[test]
     fn test_model_urls() {
-        let registry = RuvLtraRegistry::new();
-        let model = registry.get("ruvltra-small").unwrap();
+        let registry = SwarmLtraRegistry::new();
+        let model = registry.get("swarmltra-small").unwrap();
 
         let url = model.download_url();
         assert!(url.contains("huggingface.co"));
-        assert!(url.contains("ruv/ruvltra"));
+        assert!(url.contains("swarmdo/swarmltra"));
         assert!(url.contains(".gguf"));
 
         let hub_url = model.hub_url();
-        assert_eq!(hub_url, "https://huggingface.co/ruv/ruvltra");
+        assert_eq!(hub_url, "https://huggingface.co/swarmdo/swarmltra");
     }
 
     #[test]
     fn test_download_time_estimation() {
-        let registry = RuvLtraRegistry::new();
-        let model = registry.get("ruvltra-small").unwrap();
+        let registry = SwarmLtraRegistry::new();
+        let model = registry.get("swarmltra-small").unwrap();
 
         // At 10 MB/s, should take ~66 seconds
         let time = model.estimate_download_time(10.0);

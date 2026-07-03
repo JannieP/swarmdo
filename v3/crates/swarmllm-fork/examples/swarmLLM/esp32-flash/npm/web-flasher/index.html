@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RuvLLM ESP32 Web Flasher</title>
+    <title>SwarmLLM ESP32 Web Flasher</title>
     <style>
         :root {
             --bg: #0d1117;
@@ -213,7 +213,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>⚡ RuvLLM ESP32 Web Flasher</h1>
+        <h1>⚡ SwarmLLM ESP32 Web Flasher</h1>
         <p class="subtitle">Flash AI firmware directly from your browser - no installation required</p>
 
         <div id="browser-check" class="warning-box">
@@ -255,7 +255,7 @@
         <!-- Step 3: Flash -->
         <div class="card">
             <h2><span class="step-number">3</span> Flash Firmware</h2>
-            <button id="flash-btn" class="primary" disabled>Flash RuvLLM</button>
+            <button id="flash-btn" class="primary" disabled>Flash SwarmLLM</button>
             <div class="progress" id="progress-container" style="display: none;">
                 <div class="progress-bar" id="progress-bar"></div>
             </div>
@@ -272,11 +272,11 @@
 
         <footer>
             <p>
-                <a href="https://github.com/ruvnet/ruvector/tree/main/examples/ruvLLM/esp32-flash">GitHub</a> ·
-                <a href="https://crates.io/crates/ruvllm-esp32">Crates.io</a> ·
-                <a href="https://www.npmjs.com/package/ruvllm-esp32">npm</a>
+                <a href="the upstream project (see NOTICE)">GitHub</a> ·
+                <a href="https://crates.io/crates/swarmllm-esp32">Crates.io</a> ·
+                <a href="https://www.npmjs.com/package/swarmllm-esp32">npm</a>
             </p>
-            <p style="margin-top: 0.5rem;">RuvLLM ESP32 - Tiny LLM Inference for Microcontrollers</p>
+            <p style="margin-top: 0.5rem;">SwarmLLM ESP32 - Tiny LLM Inference for Microcontrollers</p>
         </footer>
     </div>
 
@@ -284,7 +284,7 @@
         // ESP Web Serial Flasher
         // Uses esptool.js for actual flashing
 
-        const FIRMWARE_BASE_URL = 'https://github.com/ruvnet/ruvector/releases/latest/download';
+        const FIRMWARE_BASE_URL = 'the upstream project (see NOTICE)';
 
         let port = null;
         let connected = false;
@@ -378,16 +378,16 @@
             try {
                 // Step 1: Download firmware
                 updateProgress(10, 'Downloading firmware...');
-                log(`Downloading ruvllm-esp32-${target}...`);
+                log(`Downloading swarmllm-esp32-${target}...`);
 
-                const firmwareUrl = `${FIRMWARE_BASE_URL}/ruvllm-esp32-${target}`;
+                const firmwareUrl = `${FIRMWARE_BASE_URL}/swarmllm-esp32-${target}`;
 
                 // Note: In production, this would use esptool.js
                 // For now, show instructions
                 updateProgress(30, 'Preparing flash...');
 
                 log('Web Serial flashing requires esptool.js', 'warning');
-                log('For now, please use CLI: npx ruvllm-esp32 flash', 'info');
+                log('For now, please use CLI: npx swarmllm-esp32 flash', 'info');
 
                 // Simulated progress for demo
                 for (let i = 30; i <= 100; i += 10) {

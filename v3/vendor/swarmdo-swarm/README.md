@@ -5,7 +5,7 @@
 [![npm version](https://badge.fury.io/js/swarmdo-swarm.svg)](https://www.npmjs.com/package/swarmdo-swarm)
 [![npm downloads](https://img.shields.io/npm/dt/swarmdo-swarm.svg)](https://www.npmjs.com/package/swarmdo-swarm)
 [![npm downloads per month](https://img.shields.io/npm/dm/swarmdo-swarm.svg)](https://www.npmjs.com/package/swarmdo-swarm)
-[![MCP Registry](https://img.shields.io/badge/MCP%20Registry-io.github.ruvnet%2Fruv--swarm-blue)](https://registry.modelcontextprotocol.io/servers/io.github.ruvnet/swarmdo-swarm)
+[![MCP Registry](https://img.shields.io/badge/MCP%20Registry-io.github.upstream%2Fswarm--swarm-blue)](https://registry.modelcontextprotocol.io/servers/io.github.upstream/swarmdo-swarm)
 [![License: MIT OR Apache-2.0](https://img.shields.io/badge/License-MIT%20OR%20Apache--2.0-blue.svg)](https://opensource.org/licenses/MIT)
 [![WebAssembly](https://img.shields.io/badge/WebAssembly-654FF0?logo=webassembly&logoColor=white)](https://webassembly.org/)
 [![Rust](https://img.shields.io/badge/Built%20with-Rust-000000?logo=rust&logoColor=white)](https://www.rust-lang.org/)
@@ -150,7 +150,7 @@ npx swarmdo-swarm@1.0.19 mcp start
 npx swarmdo-swarm@1.0.19 mcp tools
 ```
 
-🔗 **Registry**: [io.github.ruvnet/swarmdo-swarm](https://registry.modelcontextprotocol.io/servers/io.github.ruvnet/swarmdo-swarm)
+🔗 **Registry**: [io.github.upstream/swarmdo-swarm](https://registry.modelcontextprotocol.io/servers/io.github.upstream/swarmdo-swarm)
 
 ### ⚠️ WASM Requirements
 
@@ -193,17 +193,17 @@ swarmdo-swarm = "1.0.5"
 
 ```bash
 # Official Docker image
-docker run -p 3000:3000 ruvnet/swarmdo-swarm:latest
+docker run -p 3000:3000 upstream/swarmdo-swarm:latest
 
 # With MCP server
-docker run -p 3000:3000 -e MCP_ENABLED=true ruvnet/swarmdo-swarm:latest
+docker run -p 3000:3000 -e MCP_ENABLED=true upstream/swarmdo-swarm:latest
 ```
 
 ### Source Build
 
 ```bash
-git clone https://github.com/ruvnet/ruv-FANN.git
-cd ruv-FANN/swarmdo-swarm/npm
+git clone the upstream project (see NOTICE)
+cd the upstream repo/swarmdo-swarm/npm
 npm install && npm run build:all
 ```
 
@@ -1005,8 +1005,8 @@ analyticsSwarm.metrics.track('custom_business_metric', {
 
 ```bash
 # Clone repository
-git clone https://github.com/ruvnet/ruv-FANN.git
-cd ruv-FANN/swarmdo-swarm
+git clone the upstream project (see NOTICE)
+cd the upstream repo/swarmdo-swarm
 
 # Install Rust toolchain
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
@@ -1540,8 +1540,8 @@ We welcome contributions! See our [Contributing Guide](../docs/guides/CONTRIBUTI
 
 ```bash
 # Fork and clone
-git clone https://github.com/your-username/ruv-FANN.git
-cd ruv-FANN/swarmdo-swarm/npm
+git clone https://github.com/your-username/the upstream repo.git
+cd the upstream repo/swarmdo-swarm/npm
 
 # Install dependencies
 npm install
@@ -1558,21 +1558,21 @@ npm test
 ## 🔗 Links & Resources
 
 ### Documentation
-- 📚 [Full Documentation](https://github.com/ruvnet/ruv-FANN/wiki)
-- 🚀 [Getting Started Guide](https://github.com/ruvnet/ruv-FANN/blob/main/swarmdo-swarm/guide/README.md)
+- 📚 [Full Documentation](the upstream project (see NOTICE))
+- 🚀 [Getting Started Guide](the upstream project (see NOTICE))
 - 📖 [API Reference](https://docs.rs/swarmdo-swarm)
-- 🎯 [Examples Repository](https://github.com/ruvnet/ruv-FANN/tree/main/swarmdo-swarm/examples)
+- 🎯 [Examples Repository](the upstream project (see NOTICE))
 
 ### Community
-- 💬 [Discussions](https://github.com/ruvnet/ruv-FANN/discussions)
-- 🐛 [Issues](https://github.com/ruvnet/ruv-FANN/issues)
-- 📰 [Release Notes](https://github.com/ruvnet/ruv-FANN/releases)
-- 🌟 [Roadmap](https://github.com/ruvnet/ruv-FANN/projects)
+- 💬 [Discussions](the upstream project (see NOTICE))
+- 🐛 [Issues](the upstream project (see NOTICE))
+- 📰 [Release Notes](the upstream project (see NOTICE))
+- 🌟 [Roadmap](the upstream project (see NOTICE))
 
 ### Technical
 - ⚡ [Performance Benchmarks](../docs/implementation/OPTIMIZATION_REPORT.md)
 - 🧪 [Testing Strategy](test/README.md)
-- 🔧 [Architecture Overview](https://github.com/ruvnet/ruv-FANN/blob/main/swarmdo-swarm/plans/swarmdo-swarm-architecture.md)
+- 🔧 [Architecture Overview](the upstream project (see NOTICE))
 
 ---
 
@@ -1588,11 +1588,11 @@ npm test
 
 <div align="center">
 
-**[⭐ Star us on GitHub](https://github.com/ruvnet/ruv-FANN)** | **[📦 NPM Package](https://www.npmjs.com/package/swarmdo-swarm)** | **[💬 Join Community](https://github.com/ruvnet/ruv-FANN/discussions)**
+**[⭐ Star us on GitHub](the upstream project (see NOTICE))** | **[📦 NPM Package](https://www.npmjs.com/package/swarmdo-swarm)** | **[💬 Join Community](the upstream project (see NOTICE))**
 
-*Built with 🧠 by the rUv community*
+*Built with 🧠 by the the upstream author community*
 
-[![GitHub stars](https://img.shields.io/github/stars/ruvnet/ruv-FANN?style=social)](https://github.com/ruvnet/ruv-FANN)
+[![GitHub stars](https://img.shields.io/github/stars/the upstream repo?style=social)](the upstream project (see NOTICE))
 [![NPM downloads](https://img.shields.io/npm/dm/swarmdo-swarm)](https://www.npmjs.com/package/swarmdo-swarm)
 [![Discord](https://img.shields.io/discord/YOUR_DISCORD_ID?logo=discord)](https://discord.gg/YOUR_DISCORD_LINK)
 

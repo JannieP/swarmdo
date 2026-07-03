@@ -14,7 +14,7 @@
  * Training is handled separately by the consuming application.
  */
 export class SwarmVectorLearning {
-    gnnLayer; // RuvectorLayer from @swarmvector/gnn
+    gnnLayer; // SwarmvectorLayer from @swarmvector/gnn
     config;
     initialized = false;
     differentiableSearch;
@@ -34,7 +34,7 @@ export class SwarmVectorLearning {
         try {
             // Dynamic import with runtime property access
             const gnnModule = await import('@swarmvector/gnn');
-            this.gnnLayer = new gnnModule.RuvectorLayer(this.config.inputDim, this.config.hiddenDim, this.config.heads, this.config.dropout);
+            this.gnnLayer = new gnnModule.SwarmvectorLayer(this.config.inputDim, this.config.hiddenDim, this.config.heads, this.config.dropout);
             this.differentiableSearch = gnnModule.differentiableSearch;
             this.hierarchicalForward = gnnModule.hierarchicalForward;
             this.initialized = true;
@@ -158,7 +158,7 @@ export class SwarmVectorLearning {
         await learning.initialize();
         try {
             const gnnModule = await import('@swarmvector/gnn');
-            learning.gnnLayer = gnnModule.RuvectorLayer.fromJson(json);
+            learning.gnnLayer = gnnModule.SwarmvectorLayer.fromJson(json);
             return learning;
         }
         catch (error) {

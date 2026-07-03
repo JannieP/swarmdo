@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Regression guard for ruvnet/swarmdo#1859 + #1862.
+ * Regression guard for upstream/swarmdo#1859 + #1862.
  *
  * Drives each PostToolUse hook command from `hooks/hooks.json` with synthetic
  * Claude-Code-style stdin against a locally built CLI, asserting:

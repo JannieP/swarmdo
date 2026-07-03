@@ -1,6 +1,6 @@
-//! RuvLTRA-Medium Model Architecture
+//! SwarmLTRA-Medium Model Architecture
 //!
-//! RuvLTRA-Medium is a 3B parameter model based on Qwen2.5-3B-Instruct, optimized
+//! SwarmLTRA-Medium is a 3B parameter model based on Qwen2.5-3B-Instruct, optimized
 //! for balanced performance on Apple Silicon with advanced learning capabilities.
 //!
 //! ## Architecture Overview
@@ -13,7 +13,7 @@
 //! - **intermediate_size**: 11008
 //! - **vocab_size**: 151936
 //!
-//! ## RuvLTRA Enhancements
+//! ## SwarmLTRA Enhancements
 //!
 //! ### SONA Learning Hooks
 //! - Layer 8: Early pattern recognition
@@ -23,7 +23,7 @@
 //! ### Memory Optimization
 //! - Paged KV cache with 64-token blocks
 //! - Flash Attention 2 for 2.49x-7.47x speedup
-//! - Speculative decoding with RuvLTRA-Small (0.5B) draft
+//! - Speculative decoding with SwarmLTRA-Small (0.5B) draft
 //!
 //! ### Integration
 //! - HNSW routing for agent selection
@@ -49,11 +49,11 @@
 //! ## Example Usage
 //!
 //! ```rust,ignore
-//! use swarmllm::models::ruvltra_medium::{RuvLtraMediumConfig, RuvLtraMediumModel};
+//! use swarmllm::models::swarmltra_medium::{SwarmLtraMediumConfig, SwarmLtraMediumModel};
 //!
 //! // Create base variant
-//! let config = RuvLtraMediumConfig::base();
-//! let model = RuvLtraMediumModel::new(&config)?;
+//! let config = SwarmLtraMediumConfig::base();
+//! let model = SwarmLtraMediumModel::new(&config)?;
 //!
 //! // Enable SONA learning with trajectory hooks
 //! model.enable_sona_with_hooks(&[8, 16, 24])?;
@@ -83,9 +83,9 @@ use std::sync::Arc;
 // Model Variants
 // =============================================================================
 
-/// RuvLTRA-Medium model variants for specialized use cases
+/// SwarmLTRA-Medium model variants for specialized use cases
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-pub enum RuvLtraMediumVariant {
+pub enum SwarmLtraMediumVariant {
     /// Base model for general-purpose inference
     Base,
     /// Code-focused variant with optimized parameters
@@ -94,19 +94,19 @@ pub enum RuvLtraMediumVariant {
     Agent,
 }
 
-impl Default for RuvLtraMediumVariant {
+impl Default for SwarmLtraMediumVariant {
     fn default() -> Self {
         Self::Base
     }
 }
 
-impl RuvLtraMediumVariant {
+impl SwarmLtraMediumVariant {
     /// Get variant name
     pub fn name(&self) -> &str {
         match self {
-            Self::Base => "RuvLTRA-Medium-Base",
-            Self::Coder => "RuvLTRA-Medium-Coder",
-            Self::Agent => "RuvLTRA-Medium-Agent",
+            Self::Base => "SwarmLTRA-Medium-Base",
+            Self::Coder => "SwarmLTRA-Medium-Coder",
+            Self::Agent => "SwarmLTRA-Medium-Agent",
         }
     }
 
@@ -133,9 +133,9 @@ impl RuvLtraMediumVariant {
 // Quantization Configuration
 // =============================================================================
 
-/// Supported quantization formats for RuvLTRA-Medium
+/// Supported quantization formats for SwarmLTRA-Medium
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-pub enum RuvLtraMediumQuant {
+pub enum SwarmLtraMediumQuant {
     /// No quantization (FP32/FP16)
     None,
     /// 4-bit K-quants medium (recommended)
@@ -148,13 +148,13 @@ pub enum RuvLtraMediumQuant {
     Mixed,
 }
 
-impl Default for RuvLtraMediumQuant {
+impl Default for SwarmLtraMediumQuant {
     fn default() -> Self {
         Self::Q4KM
     }
 }
 
-impl RuvLtraMediumQuant {
+impl SwarmLtraMediumQuant {
     /// Get bytes per parameter
     pub fn bytes_per_param(&self) -> f32 {
         match self {
@@ -218,12 +218,12 @@ impl Default for SonaHookConfig {
 }
 
 // =============================================================================
-// RuvLTRA-Medium Configuration
+// SwarmLTRA-Medium Configuration
 // =============================================================================
 
-/// Complete configuration for RuvLTRA-Medium (3B) model
+/// Complete configuration for SwarmLTRA-Medium (3B) model
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct RuvLtraMediumConfig {
+pub struct SwarmLtraMediumConfig {
     // Qwen2.5-3B architecture
     /// Hidden size (embedding dimension)
     pub hidden_size: usize,
@@ -258,9 +258,9 @@ pub struct RuvLtraMediumConfig {
 
     // Model variant
     /// Which specialized variant to use
-    pub variant: RuvLtraMediumVariant,
+    pub variant: SwarmLtraMediumVariant,
     /// Quantization format
-    pub quantization: RuvLtraMediumQuant,
+    pub quantization: SwarmLtraMediumQuant,
 
     // Memory optimization
     /// Enable paged KV cache
@@ -275,7 +275,7 @@ pub struct RuvLtraMediumConfig {
     pub use_speculative_decoding: bool,
     /// Speculative decoding configuration
     pub speculative_config: SpeculativeConfig,
-    /// Path to draft model (RuvLTRA-Small)
+    /// Path to draft model (SwarmLTRA-Small)
     pub draft_model_path: Option<String>,
 
     // SONA integration
@@ -293,13 +293,13 @@ pub struct RuvLtraMediumConfig {
     pub enable_reasoning_bank: bool,
 }
 
-impl Default for RuvLtraMediumConfig {
+impl Default for SwarmLtraMediumConfig {
     fn default() -> Self {
         Self::base()
     }
 }
 
-impl RuvLtraMediumConfig {
+impl SwarmLtraMediumConfig {
     /// Base variant configuration (Qwen2.5-3B)
     pub fn base() -> Self {
         Self {
@@ -321,8 +321,8 @@ impl RuvLtraMediumConfig {
             pad_token_id: 151643,
 
             // Variant settings
-            variant: RuvLtraMediumVariant::Base,
-            quantization: RuvLtraMediumQuant::Q4KM,
+            variant: SwarmLtraMediumVariant::Base,
+            quantization: SwarmLtraMediumQuant::Q4KM,
 
             // Memory optimization
             use_paged_attention: true,
@@ -375,7 +375,7 @@ impl RuvLtraMediumConfig {
     /// Coder variant optimized for code generation
     pub fn coder() -> Self {
         Self {
-            variant: RuvLtraMediumVariant::Coder,
+            variant: SwarmLtraMediumVariant::Coder,
             sona_config: SonaConfig {
                 pattern_capacity: 100000, // More patterns for code
                 quality_threshold: 0.7,   // Higher quality bar
@@ -392,7 +392,7 @@ impl RuvLtraMediumConfig {
     /// Agent variant optimized for routing and planning
     pub fn agent() -> Self {
         Self {
-            variant: RuvLtraMediumVariant::Agent,
+            variant: SwarmLtraMediumVariant::Agent,
             use_paged_attention: true,
             use_flash_attn_2: true, // Maximize speed
             sona_config: SonaConfig {
@@ -482,12 +482,12 @@ impl RuvLtraMediumConfig {
 }
 
 // =============================================================================
-// RuvLTRA-Medium Attention Layer
+// SwarmLTRA-Medium Attention Layer
 // =============================================================================
 
 /// Attention layer with GQA and Flash Attention 2 support
 #[derive(Debug)]
-pub struct RuvLtraMediumAttention {
+pub struct SwarmLtraMediumAttention {
     /// Query projection weights
     pub q_proj: Vec<f32>,
     /// Key projection weights (GQA-compressed)
@@ -497,16 +497,16 @@ pub struct RuvLtraMediumAttention {
     /// Output projection weights
     pub o_proj: Vec<f32>,
     /// Configuration
-    pub config: RuvLtraMediumConfig,
+    pub config: SwarmLtraMediumConfig,
     /// Precomputed RoPE tables
     pub rope_tables: RopeTables,
     /// Layer index
     pub layer_idx: usize,
 }
 
-impl RuvLtraMediumAttention {
+impl SwarmLtraMediumAttention {
     /// Create new attention layer
-    pub fn new(config: &RuvLtraMediumConfig, layer_idx: usize) -> Self {
+    pub fn new(config: &SwarmLtraMediumConfig, layer_idx: usize) -> Self {
         let hidden_size = config.hidden_size;
         let kv_dim = config.num_kv_heads * config.head_dim;
 
@@ -700,12 +700,12 @@ impl RuvLtraMediumAttention {
 }
 
 // =============================================================================
-// RuvLTRA-Medium MLP
+// SwarmLTRA-Medium MLP
 // =============================================================================
 
 /// MLP layer with SwiGLU activation
 #[derive(Debug)]
-pub struct RuvLtraMediumMLP {
+pub struct SwarmLtraMediumMLP {
     pub gate_proj: Vec<f32>,
     pub up_proj: Vec<f32>,
     pub down_proj: Vec<f32>,
@@ -713,8 +713,8 @@ pub struct RuvLtraMediumMLP {
     pub intermediate_size: usize,
 }
 
-impl RuvLtraMediumMLP {
-    pub fn new(config: &RuvLtraMediumConfig) -> Self {
+impl SwarmLtraMediumMLP {
+    pub fn new(config: &SwarmLtraMediumConfig) -> Self {
         Self {
             gate_proj: vec![0.0; config.intermediate_size * config.hidden_size],
             up_proj: vec![0.0; config.intermediate_size * config.hidden_size],
@@ -763,14 +763,14 @@ impl RuvLtraMediumMLP {
 }
 
 // =============================================================================
-// RuvLTRA-Medium Decoder Layer
+// SwarmLTRA-Medium Decoder Layer
 // =============================================================================
 
 /// Decoder layer with SONA hook support
 #[derive(Debug)]
-pub struct RuvLtraMediumDecoderLayer {
-    pub self_attn: RuvLtraMediumAttention,
-    pub mlp: RuvLtraMediumMLP,
+pub struct SwarmLtraMediumDecoderLayer {
+    pub self_attn: SwarmLtraMediumAttention,
+    pub mlp: SwarmLtraMediumMLP,
     pub input_layernorm: Vec<f32>,
     pub post_attention_layernorm: Vec<f32>,
     pub rms_norm_eps: f32,
@@ -779,11 +779,11 @@ pub struct RuvLtraMediumDecoderLayer {
     pub has_sona_hook: bool,
 }
 
-impl RuvLtraMediumDecoderLayer {
-    pub fn new(config: &RuvLtraMediumConfig, layer_idx: usize) -> Self {
+impl SwarmLtraMediumDecoderLayer {
+    pub fn new(config: &SwarmLtraMediumConfig, layer_idx: usize) -> Self {
         Self {
-            self_attn: RuvLtraMediumAttention::new(config, layer_idx),
-            mlp: RuvLtraMediumMLP::new(config),
+            self_attn: SwarmLtraMediumAttention::new(config, layer_idx),
+            mlp: SwarmLtraMediumMLP::new(config),
             input_layernorm: vec![1.0; config.hidden_size],
             post_attention_layernorm: vec![1.0; config.hidden_size],
             rms_norm_eps: config.rms_norm_eps,
@@ -868,15 +868,15 @@ impl RuvLtraMediumDecoderLayer {
 }
 
 // =============================================================================
-// Complete RuvLTRA-Medium Model
+// Complete SwarmLTRA-Medium Model
 // =============================================================================
 
-/// RuvLTRA-Medium 3B model with all enhancements
+/// SwarmLTRA-Medium 3B model with all enhancements
 #[derive(Debug)]
-pub struct RuvLtraMediumModel {
-    pub config: RuvLtraMediumConfig,
+pub struct SwarmLtraMediumModel {
+    pub config: SwarmLtraMediumConfig,
     pub embed_tokens: Vec<f32>,
-    pub layers: Vec<RuvLtraMediumDecoderLayer>,
+    pub layers: Vec<SwarmLtraMediumDecoderLayer>,
     pub norm: Vec<f32>,
     pub lm_head: Option<Vec<f32>>,
     pub tie_word_embeddings: bool,
@@ -884,11 +884,11 @@ pub struct RuvLtraMediumModel {
     paged_cache: Option<PagedKVCache>,
 }
 
-impl RuvLtraMediumModel {
-    pub fn new(config: &RuvLtraMediumConfig) -> Result<Self> {
+impl SwarmLtraMediumModel {
+    pub fn new(config: &SwarmLtraMediumConfig) -> Result<Self> {
         let mut layers = Vec::with_capacity(config.num_hidden_layers);
         for i in 0..config.num_hidden_layers {
-            layers.push(RuvLtraMediumDecoderLayer::new(config, i));
+            layers.push(SwarmLtraMediumDecoderLayer::new(config, i));
         }
 
         let sona = if config.sona_enabled {
@@ -990,8 +990,8 @@ impl RuvLtraMediumModel {
     }
 
     /// Get model info
-    pub fn info(&self) -> RuvLtraMediumModelInfo {
-        RuvLtraMediumModelInfo {
+    pub fn info(&self) -> SwarmLtraMediumModelInfo {
+        SwarmLtraMediumModelInfo {
             name: self.config.variant.name().to_string(),
             variant: self.config.variant,
             architecture: "Qwen2.5-3B".to_string(),
@@ -1010,14 +1010,14 @@ impl RuvLtraMediumModel {
 
 /// Model information
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct RuvLtraMediumModelInfo {
+pub struct SwarmLtraMediumModelInfo {
     pub name: String,
-    pub variant: RuvLtraMediumVariant,
+    pub variant: SwarmLtraMediumVariant,
     pub architecture: String,
     pub num_params: usize,
     pub hidden_size: usize,
     pub num_layers: usize,
-    pub quantization: RuvLtraMediumQuant,
+    pub quantization: SwarmLtraMediumQuant,
     pub paged_attention: bool,
     pub flash_attention_2: bool,
     pub sona_enabled: bool,
@@ -1031,28 +1031,28 @@ mod tests {
 
     #[test]
     fn test_config_variants() {
-        let base = RuvLtraMediumConfig::base();
-        assert_eq!(base.variant, RuvLtraMediumVariant::Base);
+        let base = SwarmLtraMediumConfig::base();
+        assert_eq!(base.variant, SwarmLtraMediumVariant::Base);
         assert_eq!(base.hidden_size, 2048);
         assert_eq!(base.num_hidden_layers, 32);
 
-        let coder = RuvLtraMediumConfig::coder();
-        assert_eq!(coder.variant, RuvLtraMediumVariant::Coder);
+        let coder = SwarmLtraMediumConfig::coder();
+        assert_eq!(coder.variant, SwarmLtraMediumVariant::Coder);
 
-        let agent = RuvLtraMediumConfig::agent();
-        assert_eq!(agent.variant, RuvLtraMediumVariant::Agent);
+        let agent = SwarmLtraMediumConfig::agent();
+        assert_eq!(agent.variant, SwarmLtraMediumVariant::Agent);
     }
 
     #[test]
     fn test_quantization() {
-        let config = RuvLtraMediumConfig::base();
+        let config = SwarmLtraMediumConfig::base();
         let params = config.estimate_params();
 
         // Should be approximately 3B params
         assert!(params > 2_500_000_000 && params < 3_500_000_000);
 
-        let size_q4 = RuvLtraMediumQuant::Q4KM.model_size_mb(params);
-        let size_q8 = RuvLtraMediumQuant::Q80.model_size_mb(params);
+        let size_q4 = SwarmLtraMediumQuant::Q4KM.model_size_mb(params);
+        let size_q8 = SwarmLtraMediumQuant::Q80.model_size_mb(params);
 
         // Q4 should be roughly half the size of Q8
         assert!(size_q8 > size_q4 * 1.5);
@@ -1060,7 +1060,7 @@ mod tests {
 
     #[test]
     fn test_sona_hooks() {
-        let config = RuvLtraMediumConfig::base();
+        let config = SwarmLtraMediumConfig::base();
         assert!(config.has_sona_hook(8));
         assert!(config.has_sona_hook(16));
         assert!(config.has_sona_hook(24));
@@ -1070,14 +1070,14 @@ mod tests {
 
     #[test]
     fn test_model_creation() {
-        let config = RuvLtraMediumConfig::base();
-        let model = RuvLtraMediumModel::new(&config).unwrap();
+        let config = SwarmLtraMediumConfig::base();
+        let model = SwarmLtraMediumModel::new(&config).unwrap();
 
         assert_eq!(model.layers.len(), 32);
         assert!(model.sona.is_some());
         assert!(model.paged_cache.is_some());
 
         let info = model.info();
-        assert_eq!(info.name, "RuvLTRA-Medium-Base");
+        assert_eq!(info.name, "SwarmLTRA-Medium-Base");
     }
 }

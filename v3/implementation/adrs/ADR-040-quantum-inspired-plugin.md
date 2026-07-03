@@ -14,11 +14,11 @@ Combinatorial optimization problems are ubiquitous in software development: depe
 
 ## Decision
 
-Create a **Quantum-Inspired Optimization Plugin** that leverages RuVector's exotic WASM packages to provide quantum-inspired solvers for combinatorial optimization problems commonly encountered in software engineering.
+Create a **Quantum-Inspired Optimization Plugin** that leverages SwarmVector's exotic WASM packages to provide quantum-inspired solvers for combinatorial optimization problems commonly encountered in software engineering.
 
 ## Plugin Name
 
-`@rufflo/plugin-quantum-optimizer`
+`@swarmdo/plugin-quantum-optimizer`
 
 ## Description
 
@@ -28,11 +28,11 @@ An exotic optimization plugin implementing quantum-inspired algorithms including
 
 | Package | Purpose |
 |---------|---------|
-| `ruvector-exotic-wasm` | Quantum-inspired optimization algorithms |
-| `ruvector-sparse-inference-wasm` | Efficient sparse matrix operations for quantum simulation |
+| `swarmvector-exotic-wasm` | Quantum-inspired optimization algorithms |
+| `swarmvector-sparse-inference-wasm` | Efficient sparse matrix operations for quantum simulation |
 | `micro-hnsw-wasm` | Amplitude-inspired search acceleration |
-| `ruvector-dag-wasm` | Quantum circuit DAG representation |
-| `ruvector-hyperbolic-hnsw-wasm` | Hyperbolic embeddings for quantum state spaces |
+| `swarmvector-dag-wasm` | Quantum circuit DAG representation |
+| `swarmvector-hyperbolic-hnsw-wasm` | Hyperbolic embeddings for quantum state spaces |
 
 ## MCP Tools
 
@@ -510,11 +510,11 @@ Classical Problem --> QUBO/Ising --> Quantum Circuit --> Solution
 ```json
 {
   "dependencies": {
-    "ruvector-exotic-wasm": "^0.1.0",
-    "ruvector-sparse-inference-wasm": "^0.1.0",
+    "swarmvector-exotic-wasm": "^0.1.0",
+    "swarmvector-sparse-inference-wasm": "^0.1.0",
     "micro-hnsw-wasm": "^0.2.0",
-    "ruvector-dag-wasm": "^0.1.0",
-    "ruvector-hyperbolic-hnsw-wasm": "^0.1.0"
+    "swarmvector-dag-wasm": "^0.1.0",
+    "swarmvector-hyperbolic-hnsw-wasm": "^0.1.0"
   }
 }
 ```
@@ -550,7 +550,7 @@ Amplitude amplification for unstructured search. Classical implementation uses i
 | ADR | Relationship |
 |-----|--------------|
 | ADR-004: Plugin Architecture | Foundation - Defines plugin structure |
-| ADR-017: RuVector Integration | Dependency - Provides WASM packages |
+| ADR-017: SwarmVector Integration | Dependency - Provides WASM packages |
 | ADR-033: Financial Risk | Related - Portfolio optimization |
 | ADR-036: Test Intelligence | Related - Test selection optimization |
 | ADR-038: Neural Coordination | Related - Task scheduling |
@@ -560,7 +560,7 @@ Amplitude amplification for unstructured search. Classical implementation uses i
 - Quantum Annealing: https://arxiv.org/abs/cond-mat/0701277
 - QAOA: https://arxiv.org/abs/1411.4028
 - Grover's Algorithm: https://arxiv.org/abs/quant-ph/9605043
-- ADR-017: RuVector Integration
+- ADR-017: SwarmVector Integration
 - ADR-004: Plugin Architecture
 
 ---

@@ -36,7 +36,7 @@ steps:
   # NOT for production. For persistence, follow up with either Atlas or
   # a Cloud Run multi-container revision (see ADR-033).
   #
-  # Provider keys come from existing ruv-dev Secret Manager secrets per
+  # Provider keys come from existing swarm-dev Secret Manager secrets per
   # ADR-029. Only one CPU is allocated; mongo is lightweight when used
   # only for chat session storage.
   # Deploy with image only — preserves manually configured env vars

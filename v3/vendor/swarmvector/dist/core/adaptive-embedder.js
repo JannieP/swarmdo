@@ -617,7 +617,7 @@ class AdaptiveEmbedder {
      * ONNX model. Note that `embed()` still works when this is `false` — it
      * falls back to a deterministic hash embedding — so callers that require
      * real semantic embeddings should check this after `init()`.
-     * See https://github.com/ruvnet/SwarmVector/issues/523.
+     * See the upstream project (see NOTICE)
      */
     isReady() {
         return this.onnxReady;

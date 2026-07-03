@@ -309,7 +309,7 @@ pub use hub::{
     ProgressStyle,
     QuantizationLevel,
     // Registry
-    RuvLtraRegistry,
+    SwarmLtraRegistry,
     TaskType as HubTaskType,
     UploadConfig,
     UploadError,
@@ -364,9 +364,9 @@ pub use quantize::{
     next_power_of_2,
     pad_to_power_of_2,
     // Quantization functions
-    quantize_ruvltra_q4,
-    quantize_ruvltra_q5,
-    quantize_ruvltra_q8,
+    quantize_swarmltra_q4,
+    quantize_swarmltra_q5,
+    quantize_swarmltra_q8,
     restore_incoherence,
     HadamardTransform,
     IncoherenceConfig,
@@ -384,7 +384,7 @@ pub use quantize::{
     QuantProgress,
     QuantStats,
     // Core quantizer
-    RuvltraQuantizer,
+    SwarmltraQuantizer,
     TargetFormat,
     MAX_LOG_DIM,
     SIMD_LANES,
@@ -435,7 +435,7 @@ pub use speculative::{
     SpeculativeStats, TreeNode, VerificationResult,
 };
 pub use tokenizer::{
-    ChatMessage, ChatTemplate, Role, RuvTokenizer, StreamingDecodeBuffer, TokenizerSpecialTokens,
+    ChatMessage, ChatTemplate, Role, SwarmTokenizer, StreamingDecodeBuffer, TokenizerSpecialTokens,
 };
 pub use training::{
     AugmentationConfig,
@@ -486,21 +486,21 @@ pub use witness_log::{
     AsyncWriteConfig, LatencyBreakdown, RoutingDecision, WitnessEntry, WitnessLog, WitnessLogStats,
 };
 
-// RuvLTRA model architecture exports
+// SwarmLTRA model architecture exports
 pub use models::{
     AneDispatcher,
     AneOptimization,
     MemoryLayout,
     QuantizationType,
-    RuvLtraAttention,
+    SwarmLtraAttention,
     // Configuration
-    RuvLtraConfig,
-    RuvLtraDecoderLayer,
-    RuvLtraMLP,
+    SwarmLtraConfig,
+    SwarmLtraDecoderLayer,
+    SwarmLtraMLP,
     // Model components
-    RuvLtraModel,
+    SwarmLtraModel,
     // Utilities
-    RuvLtraModelInfo,
+    SwarmLtraModelInfo,
 };
 
 // Swarmvector integration exports (unified entry point for all Swarmvector capabilities)

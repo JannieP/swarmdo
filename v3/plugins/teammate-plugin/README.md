@@ -663,7 +663,7 @@ This plugin is published to the Swarmdo Plugin Registry on IPFS for decentralize
   "description": "Native TeammateTool integration for Claude Code v2.1.19+",
   "author": "Swarmdo Team",
   "license": "MIT",
-  "repository": "https://github.com/ruvnet/claude-flow",
+  "repository": "the upstream project (see NOTICE)",
   "keywords": ["claude-code", "teammate", "multi-agent", "swarm"],
   "requirements": {
     "claudeCode": ">=2.1.19",
@@ -708,6 +708,6 @@ MIT
 
 ## Related
 
-- [Swarmdo](https://github.com/ruvnet/claude-flow) - Multi-agent orchestration framework
+- [Swarmdo](the upstream project (see NOTICE)) - Multi-agent orchestration framework
 - [Claude Code](https://github.com/anthropics/claude-code) - Anthropic's CLI for Claude
 - [ADR-027](../implementation/adrs/ADR-027-teammate-tool-integration.md) - Architecture decision record

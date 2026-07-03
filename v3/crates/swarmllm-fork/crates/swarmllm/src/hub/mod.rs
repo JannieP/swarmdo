@@ -1,22 +1,22 @@
-//! HuggingFace Hub integration for RuvLTRA model management
+//! HuggingFace Hub integration for SwarmLTRA model management
 //!
 //! This module provides comprehensive HuggingFace Hub integration for publishing,
-//! downloading, and managing RuvLTRA models. It supports:
+//! downloading, and managing SwarmLTRA models. It supports:
 //!
 //! - **Model Upload**: Push GGUF files and SONA weights to HF Hub
 //! - **Model Download**: Pull models with automatic quantization selection
-//! - **Model Registry**: Pre-configured RuvLTRA model collection
+//! - **Model Registry**: Pre-configured SwarmLTRA model collection
 //! - **Progress Tracking**: Visual progress bars with resume support
 //! - **Integrity Verification**: Checksum validation for downloads
 //!
 //! # Example
 //!
 //! ```rust,ignore
-//! use swarmllm::hub::{RuvLtraRegistry, ModelDownloader};
+//! use swarmllm::hub::{SwarmLtraRegistry, ModelDownloader};
 //!
 //! // Download a model
-//! let registry = RuvLtraRegistry::new();
-//! let model_info = registry.get("ruvltra-small")?;
+//! let registry = SwarmLtraRegistry::new();
+//! let model_info = registry.get("swarmltra-small")?;
 //! let downloader = ModelDownloader::new();
 //! let path = downloader.download(model_info, None).await?;
 //!
@@ -24,8 +24,8 @@
 //! let uploader = ModelUploader::new("hf_token_here");
 //! uploader.upload(
 //!     "./my-model.gguf",
-//!     "username/my-ruvltra",
-//!     Some("My custom RuvLTRA model"),
+//!     "username/my-swarmltra",
+//!     Some("My custom SwarmLTRA model"),
 //! ).await?;
 //! ```
 
@@ -46,7 +46,7 @@ pub use progress::{
     MultiProgress, ProgressBar, ProgressCallback, ProgressIndicator, ProgressStyle,
 };
 pub use registry::{
-    get_model_info, HardwareRequirements, ModelInfo, ModelSize, QuantizationLevel, RuvLtraRegistry,
+    get_model_info, HardwareRequirements, ModelInfo, ModelSize, QuantizationLevel, SwarmLtraRegistry,
 };
 pub use upload::{ModelMetadata, ModelUploader, UploadConfig, UploadError, UploadProgress};
 
@@ -108,7 +108,7 @@ pub fn default_cache_dir() -> PathBuf {
     dirs::cache_dir()
         .unwrap_or_else(|| PathBuf::from("."))
         .join("huggingface")
-        .join("ruvltra")
+        .join("swarmltra")
 }
 
 /// Get HuggingFace token from environment
@@ -127,7 +127,7 @@ mod tests {
     fn test_default_cache_dir() {
         let cache_dir = default_cache_dir();
         assert!(cache_dir.to_string_lossy().contains("huggingface"));
-        assert!(cache_dir.to_string_lossy().contains("ruvltra"));
+        assert!(cache_dir.to_string_lossy().contains("swarmltra"));
     }
 
     #[test]

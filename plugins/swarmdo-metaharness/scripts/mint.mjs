@@ -87,7 +87,7 @@ function main() {
   // ITER 27 FIX (forward-compatible) — at the time of writing,
   // metaharness@0.1.12 silently ignored the --target flag and wrote
   // to $CWD/<name> instead. Upstream issue #9
-  // (ruvnet/agent-harness-generator) was filed + fixed in 0.1.13
+  // (upstream/agent-harness-generator) was filed + fixed in 0.1.13
   // within ~20 min — but this workaround is intentionally
   // forward-compatible: setting `cwd: dirname(target)` + passing
   // `basename(target)` as <name> produces the same correct landing

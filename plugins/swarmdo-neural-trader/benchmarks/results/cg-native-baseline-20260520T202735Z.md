@@ -97,8 +97,8 @@ that path; this run does not.
 ## Refs
 
 - Task #55 (downstream tracker) — wire native sublinear CG dispatch
-- ruvnet/swarmdo#2068 — ADR-126 Phase 3 (the SublinearAdapter ships)
-- ruvnet/swarmdo#2070 — Phase 3 PR (the local-JS baseline this builds on)
+- upstream/swarmdo#2068 — ADR-126 Phase 3 (the SublinearAdapter ships)
+- upstream/swarmdo#2070 — Phase 3 PR (the local-JS baseline this builds on)
 - ADR-126 Phase 3 — `plugins/swarmdo-neural-trader/src/sublinear-adapter.ts`
 - ADR-123 §162 Row 8 — Wedge 8 portfolio CG (the 40-60× claim)
 - Upstream `sublinear-time-solver@1.7.0` — production CG kernel target

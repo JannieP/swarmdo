@@ -2,7 +2,7 @@
 
 **Status:** Accepted — Sprint 1+2 Verified
 **Date:** 2026-03-05 (updated 2026-03-05)
-**Author:** rufflo
+**Author:** swarmdo
 **Supersedes:** Remaining items from ADR-059
 
 ## Context
@@ -48,7 +48,7 @@ ADR-059 triaged 30 open issues and 11 were fixed in v3.5.3 (PR #1297, #1298). Th
 - **Effort:** Medium.
 - **Status:** ✅ **FIXED** in v3.5.6. Added SIGHUP handler (`process.on('SIGHUP', () => {})`) in foreground daemon mode. PID file now written after `child.unref()` + 100ms delay to prevent race condition.
 
-### 4. auto-memory-hook.mjs fails to resolve @rufflo/memory (#1287)
+### 4. auto-memory-hook.mjs fails to resolve @swarmdo/memory (#1287)
 - **Impact:** Auto-memory import fails when installed as nested dependency (npx, monorepos). Memory persistence across sessions is broken.
 - **Root cause:** ES module import resolution doesn't traverse node_modules correctly from hook context.
 - **Fix:** Use `createRequire(import.meta.url)` for CommonJS-style resolution, or bundle the memory module inline.
@@ -89,7 +89,7 @@ ADR-059 triaged 30 open issues and 11 were fixed in v3.5.3 (PR #1297, #1298). Th
 - **Effort:** Trivial.
 - **Status:** ✅ **FIXED** in PR #1300 (v3.5.4). Added `.unref()` to 6 `setInterval` calls across `mcp-server.ts`, `output.ts`, `worker-queue.ts`, `container-worker-pool.ts`.
 
-### 10. Zero swarms always: `rufflo spawn hive-mind --claude` (#1279)
+### 10. Zero swarms always: `swarmdo spawn hive-mind --claude` (#1279)
 - **Impact:** Hive-mind spawning returns zero agents. Multi-agent feature is non-functional via CLI.
 - **Fix:** Debug agent spawn path — likely missing topology init or agent pool connection.
 - **Effort:** Medium.
@@ -106,9 +106,9 @@ ADR-059 triaged 30 open issues and 11 were fixed in v3.5.3 (PR #1297, #1298). Th
 - **Effort:** Trivial.
 - **Status:** ✅ **FIXED** in PR #1300 (v3.5.4). Changed `df -h` to `df -Ph` for POSIX single-line output; added NaN guard for percentage parsing.
 
-### 13. SonaTrajectoryService does not use native @ruvector/sona API (#1243)
+### 13. SonaTrajectoryService does not use native @swarmvector/sona API (#1243)
 - **Impact:** SONA neural learning uses a stub. Learning is no-op.
-- **Fix:** Wire to actual `@ruvector/sona` package methods.
+- **Fix:** Wire to actual `@swarmvector/sona` package methods.
 - **Effort:** Medium.
 
 ### 14. Wire AgentMemoryScope 3-scope isolation (#1227)
@@ -122,7 +122,7 @@ ADR-059 triaged 30 open issues and 11 were fixed in v3.5.3 (PR #1297, #1298). Th
 - **Effort:** Medium.
 
 ### 16. npm ECOMPROMISED cache corruption (#1231)
-- **Impact:** Some users get ECOMPROMISED errors on `npx rufflo`. Related to the removed preinstall script.
+- **Impact:** Some users get ECOMPROMISED errors on `npx swarmdo`. Related to the removed preinstall script.
 - **Fix:** Document cache clear workaround: `npm cache clean --force`. The preinstall removal in v3.5.3 should prevent new occurrences.
 - **Effort:** Trivial — documentation only.
 
@@ -135,7 +135,7 @@ ADR-059 triaged 30 open issues and 11 were fixed in v3.5.3 (PR #1297, #1298). Th
 
 ## P3 — Low (Next Release Cycle)
 
-### 18. ruvi MCP server: Edge Functions failing (#1276)
+### 18. swarmdo MCP server: Edge Functions failing (#1276)
 - **Impact:** Supabase Edge Functions intermittently fail (cloud-only).
 - **Fix:** Add retry logic and auth token refresh.
 
@@ -153,7 +153,7 @@ ADR-059 triaged 30 open issues and 11 were fixed in v3.5.3 (PR #1297, #1298). Th
 ### 22. Ship `dsp` as bin entry (#1236)
 - **Type:** Feature request for convenience alias.
 
-### 23. ADR-058: Self-Contained rufflo.rvf Appliance (#1245)
+### 23. ADR-058: Self-Contained swarmdo.rvf Appliance (#1245)
 - **Type:** Enhancement. Phase 3-4 implementation exists.
 
 ### 24. ADR-057: Replace sql.js with RVF native storage (#1242)
@@ -222,11 +222,11 @@ ADR-059 triaged 30 open issues and 11 were fixed in v3.5.3 (PR #1297, #1298). Th
 | 1 | #1282 — Windows daemon | Platform-aware spawn: `windowsHide`, `shell: true` on Win; no `detached` on Win |
 | 3 | #1283 — macOS daemon | SIGHUP handler ignores terminal close; PID written after `unref()` + 100ms delay |
 | 5 | #1291 — Settings-generator | Added `PostToolUse:Bash`, `PreToolUse:Write\|Edit`, `SubagentEnd`, `Notification` hooks |
-| — | Daemon branding | "Worker Daemon" → "Rufflo Daemon" in 3 status displays |
+| — | Daemon branding | "Worker Daemon" → "Swarmdo Daemon" in 3 status displays |
 
 ### v3.5.5 (2026-03-05) — Branding Sweep
 
-All "Rufflo V3" → "Rufflo V3" across 30+ files (CLI source, helpers, statusline).
+All "Swarmdo V3" → "Swarmdo V3" across 30+ files (CLI source, helpers, statusline).
 
 ### v3.5.4 (2026-03-05) — Sprint 1: Intelligence Pipeline
 

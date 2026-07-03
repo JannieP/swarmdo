@@ -203,8 +203,8 @@ npx agentic-flow@alpha hooks intelligence
 
 ## Support
 
-- Documentation: https://github.com/ruvnet/agentic-flow
-- Issues: https://github.com/ruvnet/agentic-flow/issues
+- Documentation: the upstream project (see NOTICE)
+- Issues: the upstream project (see NOTICE)
 
 ---
 
@@ -469,7 +469,7 @@ export async function handleInitCommand(args) {
       npx agentic-flow@alpha --agent coder --task "Your task"
 
 📖 Documentation:
-   https://github.com/ruvnet/agentic-flow
+   the upstream project (see NOTICE)
 `);
     }
     catch (error) {

@@ -1,15 +1,15 @@
-# Ruvector Cluster
+# Swarmvector Cluster
 
-[![Crates.io](https://img.shields.io/crates/v/ruvector-cluster.svg)](https://crates.io/crates/ruvector-cluster)
-[![Documentation](https://docs.rs/ruvector-cluster/badge.svg)](https://docs.rs/ruvector-cluster)
+[![Crates.io](https://img.shields.io/crates/v/swarmvector-cluster.svg)](https://crates.io/crates/swarmvector-cluster)
+[![Documentation](https://docs.rs/swarmvector-cluster/badge.svg)](https://docs.rs/swarmvector-cluster)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Rust](https://img.shields.io/badge/rust-1.77%2B-orange.svg)](https://www.rust-lang.org)
 
-**Distributed clustering and sharding for Ruvector vector databases.**
+**Distributed clustering and sharding for Swarmvector vector databases.**
 
-`ruvector-cluster` provides horizontal scaling capabilities with consistent hashing, shard management, and cluster coordination. Enables Ruvector to scale to billions of vectors across multiple nodes. Part of the [Ruvector](https://github.com/ruvnet/ruvector) ecosystem.
+`swarmvector-cluster` provides horizontal scaling capabilities with consistent hashing, shard management, and cluster coordination. Enables Swarmvector to scale to billions of vectors across multiple nodes. Part of the [Swarmvector](the upstream project (see NOTICE)) ecosystem.
 
-## Why Ruvector Cluster?
+## Why Swarmvector Cluster?
 
 - **Horizontal Scaling**: Distribute data across multiple nodes
 - **Consistent Hashing**: Minimal rebalancing on cluster changes
@@ -37,11 +37,11 @@
 
 ## Installation
 
-Add `ruvector-cluster` to your `Cargo.toml`:
+Add `swarmvector-cluster` to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-ruvector-cluster = "0.1.1"
+swarmvector-cluster = "0.1.1"
 ```
 
 ## Quick Start
@@ -49,7 +49,7 @@ ruvector-cluster = "0.1.1"
 ### Initialize Cluster
 
 ```rust
-use ruvector_cluster::{Cluster, ClusterConfig, Node};
+use swarmvector_cluster::{Cluster, ClusterConfig, Node};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -79,7 +79,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Shard Operations
 
 ```rust
-use ruvector_cluster::{Cluster, ShardId};
+use swarmvector_cluster::{Cluster, ShardId};
 
 // Get shard for a vector ID
 let shard_id = cluster.get_shard_for_key("vector-123")?;
@@ -190,15 +190,15 @@ impl Cluster {
 
 ## Related Crates
 
-- **[ruvector-core](../ruvector-core/)** - Core vector database engine
-- **[ruvector-raft](../ruvector-raft/)** - RAFT consensus
-- **[ruvector-replication](../ruvector-replication/)** - Data replication
+- **[swarmvector-core](../swarmvector-core/)** - Core vector database engine
+- **[swarmvector-raft](../swarmvector-raft/)** - RAFT consensus
+- **[swarmvector-replication](../swarmvector-replication/)** - Data replication
 
 ## Documentation
 
 - **[Main README](../../README.md)** - Complete project overview
-- **[API Documentation](https://docs.rs/ruvector-cluster)** - Full API reference
-- **[GitHub Repository](https://github.com/ruvnet/ruvector)** - Source code
+- **[API Documentation](https://docs.rs/swarmvector-cluster)** - Full API reference
+- **[GitHub Repository](the upstream project (see NOTICE))** - Source code
 
 ## License
 
@@ -208,10 +208,10 @@ impl Cluster {
 
 <div align="center">
 
-**Part of [Ruvector](https://github.com/ruvnet/ruvector) - Built by [rUv](https://ruv.io)**
+**Part of [Swarmvector](the upstream project (see NOTICE)) - Built by [the upstream author](https://swarmdo.com)**
 
-[![Star on GitHub](https://img.shields.io/github/stars/ruvnet/ruvector?style=social)](https://github.com/ruvnet/ruvector)
+[![Star on GitHub](https://img.shields.io/github/stars/upstream/swarmvector?style=social)](the upstream project (see NOTICE))
 
-[Documentation](https://docs.rs/ruvector-cluster) | [Crates.io](https://crates.io/crates/ruvector-cluster) | [GitHub](https://github.com/ruvnet/ruvector)
+[Documentation](https://docs.rs/swarmvector-cluster) | [Crates.io](https://crates.io/crates/swarmvector-cluster) | [GitHub](the upstream project (see NOTICE))
 
 </div>

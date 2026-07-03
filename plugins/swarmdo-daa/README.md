@@ -5,7 +5,7 @@ Dynamic Agentic Architecture with cognitive patterns, knowledge sharing, and ada
 ## Install
 
 ```
-/plugin marketplace add ruvnet/swarmdo
+/plugin marketplace add upstream/swarmdo
 /plugin install swarmdo-daa@swarmdo
 ```
 

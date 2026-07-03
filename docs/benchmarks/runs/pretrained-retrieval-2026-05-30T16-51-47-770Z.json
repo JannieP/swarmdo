@@ -104,7 +104,7 @@
         },
         {
           "id": "pattern-1780159888525-1q-f8lc",
-          "name": "[Dream Cycle 2026-05-29] swarm: SWARM+ hierarchical PBFT 97-98% latency gain at 1K agents + ruview-i",
+          "name": "[Dream Cycle 2026-05-29] swarm: SWARM+ hierarchical PBFT 97-98% latency gain at 1K agents + swarmview-i",
           "type": "history-issue",
           "score": 0.09226441405704325
         },
@@ -128,13 +128,13 @@
         },
         {
           "id": "pattern-1780158992308-6-4r0m",
-          "name": "chore: remove conflicting root overrides.agentdb (kept in rufflo wrapper)",
+          "name": "chore: remove conflicting root overrides.agentdb (kept in swarmdo wrapper)",
           "type": "history-commit",
           "score": 0.10135302749253655
         },
         {
           "id": "pattern-1780159888517-6-tsjt",
-          "name": "chore: remove conflicting root overrides.agentdb (kept in rufflo wrapper)",
+          "name": "chore: remove conflicting root overrides.agentdb (kept in swarmdo wrapper)",
           "type": "history-commit",
           "score": 0.10135302749253655
         },
@@ -176,7 +176,7 @@
         },
         {
           "id": "pattern-1780159888525-1o-qiri",
-          "name": "Is Rufflo safe on Claude Opus 4.8? — `opus` alias still pins to 4.7, and literal model ids silently d",
+          "name": "Is Swarmdo safe on Claude Opus 4.8? — `opus` alias still pins to 4.7, and literal model ids silently d",
           "type": "history-issue",
           "score": 0.10722082498011774
         },
@@ -200,7 +200,7 @@
         },
         {
           "id": "pattern-1780159888519-h-o34h",
-          "name": "docs: rufflo-workflows v0.4.0 native-Workflow orchestration + ADR-141 (taubench campaign)",
+          "name": "docs: swarmdo-workflows v0.4.0 native-Workflow orchestration + ADR-141 (taubench campaign)",
           "type": "history-commit",
           "score": 0.1069707732645887
         },
@@ -290,7 +290,7 @@
         },
         {
           "id": "pattern-1780159888525-1s-i6i4",
-          "name": "Statusline shows `Rufflo V3.6` for global npm installs — statusline-generator version probe never che",
+          "name": "Statusline shows `Swarmdo V3.6` for global npm installs — statusline-generator version probe never che",
           "type": "history-issue",
           "score": 0.08543416419702778
         }
@@ -308,7 +308,7 @@
         },
         {
           "id": "pattern-1780159888525-1s-i6i4",
-          "name": "Statusline shows `Rufflo V3.6` for global npm installs — statusline-generator version probe never che",
+          "name": "Statusline shows `Swarmdo V3.6` for global npm installs — statusline-generator version probe never che",
           "type": "history-issue",
           "score": 0.10389287629109815
         },
@@ -350,7 +350,7 @@
         },
         {
           "id": "pattern-1780159888522-13-1b3c",
-          "name": "feat: #2105 RUFFLO_DB_PATH + #2058 team gateway checklist (#2146)",
+          "name": "feat: #2105 SWARMDO_DB_PATH + #2058 team gateway checklist (#2146)",
           "type": "history-commit",
           "score": 0.09500525455993265
         },

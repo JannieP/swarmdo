@@ -1,6 +1,6 @@
 # Intelligence / Self-Learning System — Empirical Capability Audit
 
-**Date:** 2026-05-29 · **Version audited:** `@rufflo/cli@3.10.6` (built `dist/`) · **Host:** darwin-arm64, Node 22
+**Date:** 2026-05-29 · **Version audited:** `@swarmdo/cli@3.10.6` (built `dist/`) · **Host:** darwin-arm64, Node 22
 **Method:** 6 parallel auditors ran **real measurements** against the built `dist` exports, CLI, and MCP tool handlers — not documentation. Every claim is graded by evidence. Throwaway scripts were deleted; no source was modified during the audit.
 
 > **Honesty mandate.** This audit was commissioned to *measure, benchmark, and confirm* — including confirming where claims do **not** hold. Headline performance multipliers in `CLAUDE.md` are largely hardcoded doc strings with no benchmark behind them; several are unsubstantiated and one is fabricated at runtime. At the same time, the **core self-learning loop is genuinely real and was measured end-to-end.** Both halves of that are reported plainly below.
@@ -23,14 +23,14 @@
 | Capability | Evidence (measured) |
 |---|---|
 | **4-step learning loop** RETRIEVE→JUDGE→DISTILL | Success verdict pushed pattern confidence **0.906→1.0**; subsequent failure pulled **1.0→0.952**; counters persist across separate processes. Steps share one `LocalReasoningBank`+`SonaCoordinator` and feed each other. |
-| **ReasoningBank file persistence** | Cross-process: stored in proc 1 → reloaded from disk in proc 2. `.rufflo/neural/patterns.json` (+`stats.json`). |
+| **ReasoningBank file persistence** | Cross-process: stored in proc 1 → reloaded from disk in proc 2. `.swarmdo/neural/patterns.json` (+`stats.json`). |
 | **Pattern store→search roundtrip** (#2226 fix) | Holds on both direct and MCP paths (`controller:"bridge-store", impl:"real-hnsw-indexed"`). 3.10.6 fix verified end-to-end. |
 | **Memory bridge** (import_claude / bridge_status / search_unified) | Real import (14 entries, 3 projects), results carry `source:"claude-code"` attribution. Persists to `.swarm/memory.db` ns `claude-memories`. |
 | **MoE — 8 experts + gating** | Genuine 384→128→8 softmax MLP + REINFORCE backprop. Measured: coder expert probability **0.081→0.994** after 200 rewards. |
 | **SONA <0.05 ms adaptation** (WASM) | `SonaInstantWasm.instantAdapt` measured **0.00417 ms/call** (200k warmed) — 12× under the claim. EMA + adaptive-rank schedule. |
 | **Q-learning self-improvement** (mechanism) | Q-table is read at inference and argmax'd (no static fallback). Cross-process: penalize `architect` → router switches greedy pick to `researcher`, persisted to `.swarm/q-learning-model.json`. |
 | **Int8 quantization 3.92×** | Measured **3.918×** (1536→392 bytes), reconstruction cosine **0.99999**. |
-| **RaBitQ 32× memory** | Real WASM (`@ruvector/rabitq-wasm@0.1.0`), builds a real 1-bit index, compressionRatio **32**. Not a stub. |
+| **RaBitQ 32× memory** | Real WASM (`@swarmvector/rabitq-wasm@0.1.0`), builds a real 1-bit index, compressionRatio **32**. Not a stub. |
 | **3-tier model routing** (hybrid) | "typo"→sonnet/11%, "architect distributed consensus"→opus/60%. Static keyword complexity + a **real persisted Beta (Thompson) bandit** that measurably shifts model choice after `model-outcome` feedback. |
 | **MCP trajectory start/end** | Real lifecycle; `end` triggers SONA learning (pattern @ 55% confidence), persists to `.swarm/memory.db` + `.swarm/sona-patterns.json`, cross-process verified. |
 
@@ -38,7 +38,7 @@
 
 | Capability | What's real / what's not |
 |---|---|
-| **EWC++** | Penalty math `½·Σ Fᵢ(θᵢ−θ*ᵢ)²` is correctly implemented and runs. **But "Fisher information" is a heuristic proxy** — `Fᵢ = \|wᵢ\|·λ` (ruvllm) / `embeddingᵢ²` (TS), not gradient curvature E[g²]. `forgettingRate = 1−e^(−tasks·0.1)` is a label, not a measurement. |
+| **EWC++** | Penalty math `½·Σ Fᵢ(θᵢ−θ*ᵢ)²` is correctly implemented and runs. **But "Fisher information" is a heuristic proxy** — `Fᵢ = \|wᵢ\|·λ` (swarmllm) / `embeddingᵢ²` (TS), not gradient curvature E[g²]. `forgettingRate = 1−e^(−tasks·0.1)` is a label, not a measurement. |
 | **MicroLoRA** | JS `LoraAdapter` forward/backward is real low-rank math. **The WASM adapter the MCP tools actually call is inert** — output L1 delta **0.000000** after 5000 adapts (B stays zero; gradients accumulate but never flush). |
 | **CONSOLIDATE (MCP path)** | Real `EWCConsolidator`, but MCP `trajectory-end` feeds it a **synthetic `Math.sin()` gradient** (`hooks-tools.js:2481`), not the embedding-derived one the library path uses. Fisher file didn't persist in a clean run. |
 | **ONNX embeddings** | 384-dim shape correct, but on this host `sharp` native build fails → **silent fallback to mock embeddings still labeled `Xenova/all-MiniLM-L6-v2`**. Synonyms scored **−0.988**, unrelated text **+0.775**. Operator cannot tell mock from real — an observability defect regardless of environment. |
@@ -61,13 +61,13 @@
 | # | Sev | Defect | Location |
 |---|-----|--------|----------|
 | 1 | 🔴 **Critical** | **CLI inverts negative reward.** `route feedback -r -1.0` (and `--reward -1.0`) parses as **+1.00** — negative feedback reinforces the bad agent. Only `--reward=-1.0` (equals form) preserves the sign; the command's own help example is broken. | `src/commands/route.ts` flag parser |
-| 2 | 🟠 High | **Fabricated speedup metric** reported as real telemetry via `Math.random()`. | `v3/@rufflo/swarm/src/attention-coordinator.ts:972` |
+| 2 | 🟠 High | **Fabricated speedup metric** reported as real telemetry via `Math.random()`. | `v3/@swarmdo/swarm/src/attention-coordinator.ts:972` |
 | 3 | 🟠 High | **Silent mock-embedding fallback mislabeled as the real ONNX model** — no way to distinguish mock from real output. | `memory-initializer.ts` embedding path; agentdb `EmbeddingService` |
 | 4 | 🟡 Med | **`hooks_intelligence_learn` is cosmetic** — reads/echoes stats; does not run a learning cycle despite its name. | `hooks-tools.js` (~:2920) |
 | 5 | 🟡 Med | **MCP `trajectory-end` consolidation uses a synthetic `Math.sin()` gradient**, not the trajectory's real embeddings. | `hooks-tools.js:2481` |
 | 6 | 🟡 Med | **CLI `hooks intelligence trajectory-*` subcommands are no-op stubs** (render the status dashboard). | `src/commands/hooks.js:1758` |
-| 7 | 🟡 Med | **WASM MicroLoRA `apply()` is inert** (B never flushed → output unchanged). | `@ruvector/ruvllm-wasm`; `ruvllm-wasm.ts` |
-| 8 | 🟢 Low | **Benchmark "recall" is a hardcoded `0.99`** constant, not measured. | `commands/ruvector/benchmark.js:377` |
+| 7 | 🟡 Med | **WASM MicroLoRA `apply()` is inert** (B never flushed → output unchanged). | `@swarmvector/swarmllm-wasm`; `swarmllm-wasm.ts` |
+| 8 | 🟢 Low | **Benchmark "recall" is a hardcoded `0.99`** constant, not measured. | `commands/swarmvector/benchmark.js:377` |
 | 9 | 🟢 Low | **`neural train` / `hooks intelligence` emit nothing in non-TTY**; documented `node dist/src/index.js` entry prints nothing (use `bin/cli.js`). | `commands/neural.js`, `commands/hooks.js` |
 | 10 | 🟢 Low | Q-router: stale route cache hides learning until 50 updates; `--explore false` is ignored; Beta bandit priors are global-per-model, not per-task. | `q-learning-router.ts`, `route.ts`, `model-router.ts` |
 
@@ -105,8 +105,8 @@ What does **not** hold up is the **performance-multiplier marketing**: the HNSW 
 - ✅ **#10 Bug C (`--explore false` ignored)** — the parser now consumes an explicit `true`/`false` value for boolean flags in the space form, so a default-true boolean can be disabled. Verified deterministic exploitation with `explore=false`.
 
 ### Deferred — with honest rationale (NOT fixed)
-- **SONA "default-path adapt is a stub"** — re-examined: the default intelligence path's pattern-confidence learning runs through `LocalSonaCoordinator`, which IS real and was confirmed working end-to-end (confidence 0.906→1.0). The inert piece is the *supplementary* `@rufvector/rufllm` `SonaCoordinator` forward, which is not load-bearing for the confirmed learning. The audit slightly overstated this as a default-path gap; wiring the WASM SONA into the default path is an *enhancement*, not a bug fix, and is left for a dedicated change.
-- **WASM MicroLoRA `apply()` inert** — lives in the `@rufvector/rufllm`/`-wasm` **published dependency**, not rufflo source; cannot be fixed by editing a node_module. Requires an upstream fix or a deliberate route-around (use the real JS `LoraAdapter` path). Tracked, not shipped here.
+- **SONA "default-path adapt is a stub"** — re-examined: the default intelligence path's pattern-confidence learning runs through `LocalSonaCoordinator`, which IS real and was confirmed working end-to-end (confidence 0.906→1.0). The inert piece is the *supplementary* `@swarmvector/swarmllm` `SonaCoordinator` forward, which is not load-bearing for the confirmed learning. The audit slightly overstated this as a default-path gap; wiring the WASM SONA into the default path is an *enhancement*, not a bug fix, and is left for a dedicated change.
+- **WASM MicroLoRA `apply()` inert** — lives in the `@swarmvector/swarmllm`/`-wasm` **published dependency**, not swarmdo source; cannot be fixed by editing a node_module. Requires an upstream fix or a deliberate route-around (use the real JS `LoraAdapter` path). Tracked, not shipped here.
 - **EWC++ "Fisher information" is a proxy** (`|w|`/`embedding²`, not gradient curvature) — functional regularizer; relabeling vs. real gradient-Fisher is a design decision, deferred.
 - **Bandit priors global-per-model, not per-task** — making them per-task changes the **persisted state schema** (`priors` → per-task-bucket map), so it needs an ADR + migration, not a patch. Deferred to a dedicated change.
 - **Embedding ONNX broken without native `sharp`** — now *observable* (3.10.7 `backend:mock`); a sharp-free transformers path / bundled binary is the real fix, deferred.
@@ -114,8 +114,8 @@ What does **not** hold up is the **performance-multiplier marketing**: the HNSW 
 ### Shipped in v3.10.9
 - ✅ **Per-task bandit priors** (ADR-142) — Beta priors now keyed by complexity bucket (low/med/high) instead of global-per-model, so failures on one task type no longer suppress a model for all types. Backward-compatible schema migration (v1 flat → seed all buckets). Proven by a per-bucket isolation test.
 - ✅ **EWC++ "Fisher" honesty** — header doc now states `F_i` is a heuristic embedding-importance proxy (`embedding_i^2`), not true gradient-curvature Fisher.
-- ✅ **HNSW backend label honesty** — `getStatus().backend` relabeled: `ruvector-native` (the healthy fast path) vs `ruvector-stub-search-disabled`. `isWasm()===true` means the broken stub (search returns []), NOT acceleration — so a regression into it is now visible instead of mistaken for a faster mode.
+- ✅ **HNSW backend label honesty** — `getStatus().backend` relabeled: `swarmvector-native` (the healthy fast path) vs `swarmvector-stub-search-disabled`. `isWasm()===true` means the broken stub (search returns []), NOT acceleration — so a regression into it is now visible instead of mistaken for a faster mode.
 
 ### Re-confirmed NOT fixable here (honest ceilings)
-- **WASM-accelerated HNSW** — there is NO WASM HNSW build in the installed stack (`ruvector`'s `isWasm()` flags the do-nothing stub). Native NAPI is already the fastest backend; measured ~1.9x–6.5x at N=20k (recall ~0.9), and "150x-12,500x" is unreachable here (would need N in the millions / a different build). `wasmAccelerated:false` is the correct, healthy state. No code change can raise this ceiling; docs already state it honestly.
-- **WASM MicroLoRA `apply()`** — empirically still inert AFTER the `applyUpdates()` flush (measured maxAbsDelta = 0 after 200 adapts in `@ruvector/ruvllm-wasm@2.0.2`). The genuine signature bug (the wrapper passed a `Float32Array` where the runtime wants a scalar learning rate) is fixed, but inference output does not change. We deliberately do NOT synthesize a gradient from the scalar quality signal to make output "move" — that would be a fabricated signal (the same class of dishonesty as the Flash `Math.random` metric). MicroLoRA adaptation is documented as a no-op on inference until the WASM backend flushes B or a caller supplies real gradients. Routing to the real JS `LoraAdapter` is possible but only legitimate with real gradients, not scalar-quality.
+- **WASM-accelerated HNSW** — there is NO WASM HNSW build in the installed stack (`swarmvector`'s `isWasm()` flags the do-nothing stub). Native NAPI is already the fastest backend; measured ~1.9x–6.5x at N=20k (recall ~0.9), and "150x-12,500x" is unreachable here (would need N in the millions / a different build). `wasmAccelerated:false` is the correct, healthy state. No code change can raise this ceiling; docs already state it honestly.
+- **WASM MicroLoRA `apply()`** — empirically still inert AFTER the `applyUpdates()` flush (measured maxAbsDelta = 0 after 200 adapts in `@swarmvector/swarmllm-wasm@2.0.2`). The genuine signature bug (the wrapper passed a `Float32Array` where the runtime wants a scalar learning rate) is fixed, but inference output does not change. We deliberately do NOT synthesize a gradient from the scalar quality signal to make output "move" — that would be a fabricated signal (the same class of dishonesty as the Flash `Math.random` metric). MicroLoRA adaptation is documented as a no-op on inference until the WASM backend flushes B or a caller supplies real gradients. Routing to the real JS `LoraAdapter` is possible but only legitimate with real gradients, not scalar-quality.

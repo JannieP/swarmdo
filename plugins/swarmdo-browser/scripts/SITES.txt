@@ -10,7 +10,7 @@ https://example.com/
 https://www.iana.org/domains/reserved
 https://en.wikipedia.org/wiki/Special:Random
 https://news.ycombinator.com/
-https://github.com/ruvnet/swarmdo
+the upstream project (see NOTICE)
 https://docs.python.org/3/
 https://playwright.dev/
 https://developer.mozilla.org/en-US/docs/Web/HTML

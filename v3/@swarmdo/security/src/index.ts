@@ -109,7 +109,7 @@ export {
   type VerificationCode,
 } from './token-generator.js';
 
-// Tool-Output Guardrail (ADR-131 — closes OWASP ASI01 gap; ruvnet/swarmdo#2149)
+// Tool-Output Guardrail (ADR-131 — closes OWASP ASI01 gap; upstream/swarmdo#2149)
 export {
   ToolOutputGuardrail,
   createToolOutputGuardrail,
@@ -122,7 +122,7 @@ export {
   type InjectionCategory,
 } from './tool-output-guardrail.js';
 
-// Agent Authorization Propagation (ADR-144 P1 — ruvnet/swarmdo#2248)
+// Agent Authorization Propagation (ADR-144 P1 — upstream/swarmdo#2248)
 // Action-layer: SendMessage envelope + per-action scope check + MCP server
 // identity probe. Wraps the comms layer in P2; wraps the dispatcher in P3.
 export {
@@ -134,7 +134,7 @@ export {
   type ToolCallDecision,
 } from './authorization/propagator.js';
 
-// Plugin Integrity Verifier (ADR-145 P1 — ruvnet/swarmdo#2254)
+// Plugin Integrity Verifier (ADR-145 P1 — upstream/swarmdo#2254)
 // Install-layer: Ed25519 signature verification + trust-anchor allowlist.
 // Stage-2 semantic-intent scan (SCH defence) lands in P2.
 export {

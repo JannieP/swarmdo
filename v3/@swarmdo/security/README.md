@@ -4,7 +4,7 @@
 [![npm downloads](https://img.shields.io/npm/dm/@swarmdo/security.svg)](https://www.npmjs.com/package/@swarmdo/security)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
-[![Security Audit](https://img.shields.io/badge/Security-Audited-green.svg)](https://github.com/ruvnet/claude-flow)
+[![Security Audit](https://img.shields.io/badge/Security-Audited-green.svg)](the upstream project (see NOTICE))
 
 > Comprehensive security module for Swarmdo V3 - CVE fixes, input validation, path security, and secure credential management.
 

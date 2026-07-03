@@ -3712,7 +3712,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rufllm"
+name = "swarmllm"
 version = "2.0.0"
 dependencies = [
  "ahash",
@@ -3745,12 +3745,12 @@ dependencies = [
  "rand 0.8.6",
  "rand_distr 0.4.3",
  "rayon",
- "rufllm 2.2.3",
- "rufvector-attention",
- "rufvector-core",
- "rufvector-gnn",
- "rufvector-graph",
- "rufvector-sona",
+ "swarmllm 2.2.3",
+ "swarmvector-attention",
+ "swarmvector-core",
+ "swarmvector-gnn",
+ "swarmvector-graph",
+ "swarmvector-sona",
  "serde",
  "serde_json",
  "simsimd",
@@ -3768,7 +3768,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rufllm"
+name = "swarmllm"
 version = "2.2.3"
 dependencies = [
  "anyhow",
@@ -3789,8 +3789,8 @@ dependencies = [
  "rand 0.8.6",
  "rayon",
  "regex",
- "rufvector-core",
- "rufvector-sona",
+ "swarmvector-core",
+ "swarmvector-sona",
  "serde",
  "serde_json",
  "sha2",
@@ -3804,7 +3804,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rufvector-attention"
+name = "swarmvector-attention"
 version = "2.2.3"
 dependencies = [
  "rand 0.8.6",
@@ -3814,7 +3814,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rufvector-core"
+name = "swarmvector-core"
 version = "2.2.3"
 dependencies = [
  "anyhow",
@@ -3841,7 +3841,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rufvector-gnn"
+name = "swarmvector-gnn"
 version = "2.2.3"
 dependencies = [
  "anyhow",
@@ -3852,14 +3852,14 @@ dependencies = [
  "rand 0.8.6",
  "rand_distr 0.4.3",
  "rayon",
- "rufvector-core",
+ "swarmvector-core",
  "serde",
  "serde_json",
  "thiserror 2.0.18",
 ]
 
 [[package]]
-name = "rufvector-graph"
+name = "swarmvector-graph"
 version = "2.2.3"
 dependencies = [
  "anyhow",
@@ -3888,7 +3888,7 @@ dependencies = [
  "redb",
  "rkyv",
  "roaring",
- "rufvector-core",
+ "swarmvector-core",
  "serde",
  "serde_json",
  "simsimd",
@@ -3900,7 +3900,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rufvector-sona"
+name = "swarmvector-sona"
 version = "0.2.1"
 dependencies = [
  "crossbeam",

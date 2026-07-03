@@ -7,7 +7,7 @@
 A **2-day, in-person ruFlo Summit** at Craft Conference in Budapest.
 Two working days, not presentations.
 
-Ruv will be there all week — this is very likely the only in-person ruFlo workshop he'll run in Europe this year.
+Swarm will be there all week — this is very likely the only in-person ruFlo workshop he'll run in Europe this year.
 
 ---
 
@@ -16,7 +16,7 @@ Ruv will be there all week — this is very likely the only in-person ruFlo work
 | Day | Date | Title | Lead |
 |---|---|---|---|
 | **Day 1** | Tue, June 2 | **Building Blocks of a Meta-Harness** | Robert Ranson |
-| **Day 2** | Wed, June 3 | **Masterclass: From the Meta-Harness and Beyond: ruFlo** | Ruv (Reuven Cohen) |
+| **Day 2** | Wed, June 3 | **Masterclass: From the Meta-Harness and Beyond: ruFlo** | Swarm (Reuven Cohen) |
 
 > Conference days follow immediately after: **June 4–5**.
 
@@ -40,9 +40,9 @@ It's the outer loop. If your system can't improve itself, you're the chokepoint.
 
 ---
 
-## 👤 About Ruv
+## 👤 About Swarm
 
-Ruv is currently the **#1 trending engineer on GitHub**.
+Swarm is currently the **#1 trending engineer on GitHub**.
 
 | Metric | |
 |---|---|
@@ -63,7 +63,7 @@ Ruv is currently the **#1 trending engineer on GitHub**.
 | 🚨 | Identifying failure modes early |
 | 🌱 | Getting to something that can **evolve**, not just run |
 
-### Day 2 — Ruv
+### Day 2 — Swarm
 
 | | |
 |---|---|
@@ -76,7 +76,7 @@ Ruv is currently the **#1 trending engineer on GitHub**.
 
 ## 🤝 The part people usually underestimate
 
-Ruv is there all week. We're also organizing:
+Swarm is there all week. We're also organizing:
 
 | | |
 |---|---|

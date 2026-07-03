@@ -5,7 +5,7 @@ RVF format for portable agent memory, session persistence, and cross-platform tr
 ## Install
 
 ```
-/plugin marketplace add ruvnet/swarmdo
+/plugin marketplace add upstream/swarmdo
 /plugin install swarmdo-rvf@swarmdo
 ```
 

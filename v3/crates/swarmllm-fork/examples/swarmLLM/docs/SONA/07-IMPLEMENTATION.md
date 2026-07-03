@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document outlines the **optimized, prioritized** implementation strategy for SONA (Self-Optimizing Neural Architecture). The roadmap leverages existing ruvLLM infrastructure and focuses on maximum value with minimum disruption.
+This document outlines the **optimized, prioritized** implementation strategy for SONA (Self-Optimizing Neural Architecture). The roadmap leverages existing swarmLLM infrastructure and focuses on maximum value with minimum disruption.
 
 ## Gap Analysis: Existing vs Required
 
@@ -1051,7 +1051,7 @@ pub struct DeepResult {
 - [ ] Loop coordinator
 - [ ] Metrics collection
 
-### 4.2 ruvector Integration
+### 4.2 swarmvector Integration
 
 **Deliverables**:
 - [ ] Pattern index with HNSW

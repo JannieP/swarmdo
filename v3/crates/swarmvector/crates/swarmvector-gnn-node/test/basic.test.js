@@ -1,10 +1,10 @@
-// Basic tests for Ruvector GNN Node.js bindings
+// Basic tests for Swarmvector GNN Node.js bindings
 
 const { test } = require('node:test');
 const assert = require('node:assert');
 
 const {
-  RuvectorLayer,
+  SwarmvectorLayer,
   TensorCompress,
   differentiableSearch,
   hierarchicalForward,
@@ -18,13 +18,13 @@ test('initialization', () => {
   assert.ok(result.includes('initialized'));
 });
 
-test('RuvectorLayer creation', () => {
-  const layer = new RuvectorLayer(4, 8, 2, 0.1);
-  assert.ok(layer instanceof RuvectorLayer);
+test('SwarmvectorLayer creation', () => {
+  const layer = new SwarmvectorLayer(4, 8, 2, 0.1);
+  assert.ok(layer instanceof SwarmvectorLayer);
 });
 
-test('RuvectorLayer forward pass', () => {
-  const layer = new RuvectorLayer(4, 8, 2, 0.1);
+test('SwarmvectorLayer forward pass', () => {
+  const layer = new SwarmvectorLayer(4, 8, 2, 0.1);
   const node = new Float32Array([1.0, 2.0, 3.0, 4.0]);
   const neighbors = [new Float32Array([0.5, 1.0, 1.5, 2.0]), new Float32Array([2.0, 3.0, 4.0, 5.0])];
   const weights = new Float32Array([0.3, 0.7]);
@@ -34,8 +34,8 @@ test('RuvectorLayer forward pass', () => {
   assert.ok(output instanceof Float32Array);
 });
 
-test('RuvectorLayer forward with no neighbors', () => {
-  const layer = new RuvectorLayer(4, 8, 2, 0.1);
+test('SwarmvectorLayer forward with no neighbors', () => {
+  const layer = new SwarmvectorLayer(4, 8, 2, 0.1);
   const node = new Float32Array([1.0, 2.0, 3.0, 4.0]);
   const neighbors = [];
   const weights = new Float32Array([]);
@@ -44,19 +44,19 @@ test('RuvectorLayer forward with no neighbors', () => {
   assert.strictEqual(output.length, 8);
 });
 
-test('RuvectorLayer serialization', () => {
-  const layer = new RuvectorLayer(4, 8, 2, 0.1);
+test('SwarmvectorLayer serialization', () => {
+  const layer = new SwarmvectorLayer(4, 8, 2, 0.1);
   const json = layer.toJson();
   assert.strictEqual(typeof json, 'string');
   assert.ok(json.length > 0);
 });
 
-test('RuvectorLayer deserialization', () => {
-  const layer1 = new RuvectorLayer(4, 8, 2, 0.1);
+test('SwarmvectorLayer deserialization', () => {
+  const layer1 = new SwarmvectorLayer(4, 8, 2, 0.1);
   const json = layer1.toJson();
-  const layer2 = RuvectorLayer.fromJson(json);
+  const layer2 = SwarmvectorLayer.fromJson(json);
 
-  assert.ok(layer2 instanceof RuvectorLayer);
+  assert.ok(layer2 instanceof SwarmvectorLayer);
 
   // Test that they produce same output
   const node = new Float32Array([1.0, 2.0, 3.0, 4.0]);
@@ -163,7 +163,7 @@ test('hierarchicalForward', () => {
     [new Float32Array([1.0, 0.0]), new Float32Array([0.0, 1.0])],
   ];
 
-  const layer = new RuvectorLayer(2, 2, 1, 0.0);
+  const layer = new SwarmvectorLayer(2, 2, 1, 0.0);
   const layers = [layer.toJson()];
 
   const result = hierarchicalForward(query, layerEmbeddings, layers);
@@ -174,11 +174,11 @@ test('hierarchicalForward', () => {
 
 test('invalid dropout rate throws error', () => {
   assert.throws(() => {
-    new RuvectorLayer(4, 8, 2, 1.5); // dropout > 1.0
+    new SwarmvectorLayer(4, 8, 2, 1.5); // dropout > 1.0
   });
 
   assert.throws(() => {
-    new RuvectorLayer(4, 8, 2, -0.1); // dropout < 0.0
+    new SwarmvectorLayer(4, 8, 2, -0.1); // dropout < 0.0
   });
 });
 

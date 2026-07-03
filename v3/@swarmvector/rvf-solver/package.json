@@ -30,7 +30,7 @@
     "agi"
   ],
   "license": "MIT",
-  "repository": "https://github.com/ruvnet/swarmvector",
+  "repository": "the upstream project (see NOTICE)",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"

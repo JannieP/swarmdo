@@ -36,7 +36,7 @@
       "topK": [
         {
           "id": "pattern-1780161237213-1o-860k",
-          "name": "Is Rufflo safe on Claude Opus 4.8? — `opus` alias still pins to 4.7, and literal model ids silently d",
+          "name": "Is Swarmdo safe on Claude Opus 4.8? — `opus` alias still pins to 4.7, and literal model ids silently d",
           "type": "history-issue",
           "score": 0.7369520287125506,
           "cosineScore": 0.003778643529534665,
@@ -63,7 +63,7 @@
         },
         {
           "id": "pattern-1780159888525-1o-qiri",
-          "name": "Is Rufflo safe on Claude Opus 4.8? — `opus` alias still pins to 4.7, and literal model ids silently d",
+          "name": "Is Swarmdo safe on Claude Opus 4.8? — `opus` alias still pins to 4.7, and literal model ids silently d",
           "type": "history-issue",
           "score": 0.5699954884514554,
           "cosineScore": 0.003778643529534665,
@@ -396,7 +396,7 @@
       "topK": [
         {
           "id": "pattern-1780161324687-1s-ibq9",
-          "name": "fix(security): patch CVEs, shell injection, SSRF in rufflo (#2114)",
+          "name": "fix(security): patch CVEs, shell injection, SSRF in swarmdo (#2114)",
           "type": "history-commit",
           "score": 0.7496683121925704,
           "cosineScore": 0.013552514538906218,

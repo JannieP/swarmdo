@@ -88,7 +88,7 @@ npm run test -- auth-service.test
 private initializeDefaultUsers(): void {
   const adminUser: User = {
     id: 'admin_default',
-    email: 'admin@rufflo.local',
+    email: 'admin@swarmdo.local',
     passwordHash: createHash('sha256').update('admin123' + 'salt').digest('hex'),
     // ...
   };
@@ -108,7 +108,7 @@ private async initializeDefaultUsers(): Promise<void> {
     console.log('IMPORTANT: SAVE THESE CREDENTIALS NOW');
     console.log('═══════════════════════════════════════════');
     console.log('Default Admin Credentials:');
-    console.log(`Email: admin@rufflo.local`);
+    console.log(`Email: admin@swarmdo.local`);
     console.log(`Password: ${randomPassword}`);
     console.log('═══════════════════════════════════════════');
     console.log('You will NOT see this password again!');
@@ -117,7 +117,7 @@ private async initializeDefaultUsers(): Promise<void> {
 
     const adminUser: User = {
       id: 'admin_default',
-      email: 'admin@rufflo.local',
+      email: 'admin@swarmdo.local',
       passwordHash: await this.hashPassword(randomPassword),
       role: 'admin',
       permissions: ROLE_PERMISSIONS.admin,
@@ -186,13 +186,13 @@ async authenticateUser(email: string, password: string, ...): Promise<...> {
 // File: src/cli/commands/hook.ts:184
 
 // BEFORE (VULNERABLE)
-const child = spawn('npx', ['ruv-swarm', 'hook', ...args], {
+const child = spawn('npx', ['swarmdo-swarm', 'hook', ...args], {
   stdio: 'inherit',
   shell: true,  // DANGEROUS
 });
 
 // AFTER (SECURE)
-const child = spawn('npx', ['ruv-swarm', 'hook', ...args], {
+const child = spawn('npx', ['swarmdo-swarm', 'hook', ...args], {
   stdio: 'inherit',
   shell: false,  // SAFE
 });
@@ -231,11 +231,11 @@ async function executeHook(hookType: string, options: Record<string, any>): Prom
 **Verification:**
 ```bash
 # Should fail with error
-rufflo hook pre-task --description "test; whoami"
-rufflo hook pre-task --description "test && ls"
+swarmdo hook pre-task --description "test; whoami"
+swarmdo hook pre-task --description "test && ls"
 
 # Should succeed
-rufflo hook pre-task --description "legitimate task description"
+swarmdo hook pre-task --description "legitimate task description"
 ```
 
 ---
@@ -311,7 +311,7 @@ export class PathValidator {
 
 export const defaultPathValidator = new PathValidator([
   process.cwd(),
-  join(process.cwd(), '.rufflo'),
+  join(process.cwd(), '.swarmdo'),
   join(process.cwd(), 'workflows'),
 ]);
 ```
@@ -339,13 +339,13 @@ import { defaultPathValidator } from '../../utils/path-validator.js';
 **Verification:**
 ```bash
 # Should fail
-rufflo task workflow ../../../etc/passwd
-rufflo task workflow ~/.ssh/id_rsa
-rufflo task workflow /etc/hosts
+swarmdo task workflow ../../../etc/passwd
+swarmdo task workflow ~/.ssh/id_rsa
+swarmdo task workflow /etc/hosts
 
 # Should succeed
-rufflo task workflow ./workflows/my-workflow.json
-rufflo task workflow workflows/test.json
+swarmdo task workflow ./workflows/my-workflow.json
+swarmdo task workflow workflows/test.json
 ```
 
 ---
@@ -436,13 +436,13 @@ const PROTECTED_KEYS = [
 **Verification:**
 ```bash
 # Should fail
-rufflo config set "authConfig.jwtSecret" "hacked"
-rufflo config set "__proto__.isAdmin" "true"
-rufflo config set "timeout" "999999999"
+swarmdo config set "authConfig.jwtSecret" "hacked"
+swarmdo config set "__proto__.isAdmin" "true"
+swarmdo config set "timeout" "999999999"
 
 # Should succeed
-rufflo config set "theme" "dark"
-rufflo config set "timeout" "30000"
+swarmdo config set "theme" "dark"
+swarmdo config set "timeout" "30000"
 ```
 
 ---

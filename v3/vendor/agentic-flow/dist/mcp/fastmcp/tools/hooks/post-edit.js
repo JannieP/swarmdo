@@ -2,7 +2,7 @@
  * Post-Edit Hook - Learn from edit outcomes
  * Updates Q-table patterns and stores successful patterns
  *
- * NOW WITH RUVECTOR INTELLIGENCE:
+ * NOW WITH SWARMVECTOR INTELLIGENCE:
  * - Completes trajectory tracking for reinforcement learning
  * - Stores patterns in ReasoningBank via SONA
  * - Uses EWC++ to prevent catastrophic forgetting
@@ -30,7 +30,7 @@ export const hookPostEditTool = {
         const intel = loadIntelligence();
         const ext = path.extname(filePath);
         const state = `edit:${ext}`;
-        // RUVECTOR INTELLIGENCE: Complete trajectory and learn
+        // SWARMVECTOR INTELLIGENCE: Complete trajectory and learn
         let learningOutcome = null;
         let intelligenceEnabled = false;
         try {

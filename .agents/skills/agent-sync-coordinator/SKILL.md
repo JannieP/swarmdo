@@ -72,8 +72,8 @@ mcp__swarmdo__agent_spawn { type: "coder", name: "Integration Developer" }
 mcp__swarmdo__agent_spawn { type: "tester", name: "Validation Engineer" }
 
 // Analyze current package states
-Read("$workspaces$ruv-FANN$claude-code-flow$claude-code-flow$package.json")
-Read("$workspaces$ruv-FANN$swarmdo-swarm$npm$package.json")
+Read("$workspaces$the upstream repo$claude-code-flow$claude-code-flow$package.json")
+Read("$workspaces$the upstream repo$swarmdo-swarm$npm$package.json")
 
 // Synchronize versions and dependencies using gh CLI
 // First create branch
@@ -125,8 +125,8 @@ mcp__swarmdo__memory_usage {
 ```javascript
 // Coordinate feature implementation across packages
 mcp__github__push_files {
-  owner: "ruvnet",
-  repo: "ruv-FANN",
+  owner: "upstream",
+  repo: "the upstream repo",
   branch: "feature$github-commands",
   files: [
     {
@@ -196,10 +196,10 @@ This integration uses swarmdo-swarm agents for:
   mcp__swarmdo__agent_spawn { type: "reviewer", name: "Quality Reviewer" }
   
   // Read current state of both packages
-  Read("$workspaces$ruv-FANN$claude-code-flow$claude-code-flow$package.json")
-  Read("$workspaces$ruv-FANN$swarmdo-swarm$npm$package.json")
-  Read("$workspaces$ruv-FANN$claude-code-flow$claude-code-flow/CLAUDE.md")
-  Read("$workspaces$ruv-FANN$swarmdo-swarm$docs/CLAUDE.md")
+  Read("$workspaces$the upstream repo$claude-code-flow$claude-code-flow$package.json")
+  Read("$workspaces$the upstream repo$swarmdo-swarm$npm$package.json")
+  Read("$workspaces$the upstream repo$claude-code-flow$claude-code-flow/CLAUDE.md")
+  Read("$workspaces$the upstream repo$swarmdo-swarm$docs/CLAUDE.md")
   
   // Synchronize multiple files simultaneously
   mcp__github__push_files {
@@ -213,9 +213,9 @@ This integration uses swarmdo-swarm agents for:
   }
   
   // Run validation tests
-  Bash("cd $workspaces$ruv-FANN$claude-code-flow$claude-code-flow && npm install")
-  Bash("cd $workspaces$ruv-FANN$claude-code-flow$claude-code-flow && npm test")
-  Bash("cd $workspaces$ruv-FANN$swarmdo-swarm$npm && npm test")
+  Bash("cd $workspaces$the upstream repo$claude-code-flow$claude-code-flow && npm install")
+  Bash("cd $workspaces$the upstream repo$claude-code-flow$claude-code-flow && npm test")
+  Bash("cd $workspaces$the upstream repo$swarmdo-swarm$npm && npm test")
   
   // Track synchronization progress
   TodoWrite { todos: [

@@ -111,7 +111,7 @@ impl ModelCard {
         content.push_str("---\n");
         content.push_str(&format!("language: en\n"));
         content.push_str(&format!("license: {}\n", self.license_str()));
-        content.push_str(&format!("library_name: ruvltra\n"));
+        content.push_str(&format!("library_name: swarmltra\n"));
 
         if !self.tags.is_empty() {
             content.push_str("tags:\n");
@@ -389,7 +389,7 @@ mod tests {
 
     #[test]
     fn test_model_card_markdown() {
-        let card = ModelCardBuilder::new("RuvLTRA Small")
+        let card = ModelCardBuilder::new("SwarmLTRA Small")
             .description("Compact model")
             .parameters(500_000_000)
             .add_dataset("dataset1", Some("Training data".to_string()))
@@ -397,7 +397,7 @@ mod tests {
             .build();
 
         let markdown = card.to_markdown();
-        assert!(markdown.contains("# RuvLTRA Small"));
+        assert!(markdown.contains("# SwarmLTRA Small"));
         assert!(markdown.contains("0.5B"));
         assert!(markdown.contains("dataset1"));
         assert!(markdown.contains("perplexity"));

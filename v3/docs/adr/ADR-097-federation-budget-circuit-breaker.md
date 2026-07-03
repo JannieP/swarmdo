@@ -2,18 +2,18 @@
 
 **Status**: Accepted — Partially Implemented (Phase 1 + Phase 3 consumer-side landed; Phases 2 and 4 deferred)
 **Date**: 2026-05-04 · **Updated**: 2026-05-09
-**Version**: Phase 1 shipped in `@rufflo/plugin-agent-federation` (v3.6.x); Phase 3 consumer in `rufflo-cost-tracker@0.14.0`
+**Version**: Phase 1 shipped in `@swarmdo/plugin-agent-federation` (v3.6.x); Phase 3 consumer in `swarmdo-cost-tracker@0.14.0`
 **Supersedes**: nothing
 **Related**: ADR-086 (Agent Federation), ADR-095 (Architectural gaps — G2 includes federation transport), issues #1723 and #1724 (#1724 closed as duplicate of #1723), commit `6f495369` (G2 Ed25519 signing in federation)
 
 ## Context
 
-Agent Federation (ADR-086) lets agents on one Rufflo node delegate tasks to peer nodes across trust boundaries. The implementation in `@rufflo/plugin-agent-federation` already covers identity (Ed25519 keypairs), trust scoring, and `federation_send` for cross-node delegation. What it does **not** cover today:
+Agent Federation (ADR-086) lets agents on one Swarmdo node delegate tasks to peer nodes across trust boundaries. The implementation in `@swarmdo/plugin-agent-federation` already covers identity (Ed25519 keypairs), trust scoring, and `federation_send` for cross-node delegation. What it does **not** cover today:
 
 - **Recursive delegation loops**. Node A → Node B → Node A → … If a peer wraps a received task and delegates it back, there is no hop counter to break the cycle. A pathological multi-node ring can run until process memory or the network gives out.
 - **Cost cascades**. A 200-token task delegated to a peer can spawn a sub-swarm of five worker agents on the remote, each potentially calling expensive frontier models. The originator never sees the bill until the cost-tracker reconciles after the fact.
 - **No backpressure on hostile / faulty peers**. A misbehaving peer that returns expensive responses cannot be muted automatically — the local trust score drifts but there's no mechanism that says "this peer is now too expensive, stop sending it work."
-- **No unified cost surface**. The `rufflo-cost-tracker` plugin tracks local agent token usage but federation traffic is invisible to it.
+- **No unified cost surface**. The `swarmdo-cost-tracker` plugin tracks local agent token usage but federation traffic is invisible to it.
 
 The original issue (#1723, #1724 dup) frames this as a stability + enterprise-readiness gap. The fix is a **federated circuit breaker** layered on top of the existing federation protocol — no breaking changes to the wire format, just additive metadata.
 
@@ -21,9 +21,9 @@ The original issue (#1723, #1724 dup) frames this as a stability + enterprise-re
 
 | Component | Path | Today |
 |---|---|---|
-| Federation MCP tool | `v3/@rufflo/plugin-agent-federation/src/mcp-tools.ts` (`federation_send`) | Sends a task to a peer; no cost / hop awareness |
-| Federation node entity | `v3/@rufflo/plugin-agent-federation/src/domain/entities/federation-node.ts` | `trustScore`, `trustLevel`, `lastSeen`; no `state: SUSPENDED` |
-| Cost tracker plugin | `plugins/rufflo-cost-tracker/` | Tracks local model spend per agent / per session |
+| Federation MCP tool | `v3/@swarmdo/plugin-agent-federation/src/mcp-tools.ts` (`federation_send`) | Sends a task to a peer; no cost / hop awareness |
+| Federation node entity | `v3/@swarmdo/plugin-agent-federation/src/domain/entities/federation-node.ts` | `trustScore`, `trustLevel`, `lastSeen`; no `state: SUSPENDED` |
+| Cost tracker plugin | `plugins/swarmdo-cost-tracker/` | Tracks local model spend per agent / per session |
 | Behavioral trust | ADR-086 §"Trust scoring" | Adjusts on protocol misbehavior; no cost-based decay yet |
 
 ## Decision
@@ -79,7 +79,7 @@ Cooldown + auto-recovery prevents the breaker from being a one-way door — same
 
 ### Part 3 — Cost-tracker integration
 
-Wire the federation layer into `rufflo-cost-tracker` so federated spend appears in the same dashboards as local spend:
+Wire the federation layer into `swarmdo-cost-tracker` so federated spend appears in the same dashboards as local spend:
 
 1. New event type `federation_spend` published to the cost-tracker bus on every `federation_send` completion: `{ peerId, taskId, tokensUsed, usdSpent, ts }`.
 2. Cost-tracker aggregates per-peer rolling windows (1h / 24h / 7d) and exposes them via the existing `cost-report` skill.
@@ -89,7 +89,7 @@ This is one direction (federation → cost-tracker). Cost-tracker doesn't need t
 
 ### Part 4 — Doctor + observability
 
-- `rufflo doctor` reports the current state of every known peer (`ACTIVE`/`SUSPENDED`/`EVICTED`) and the trailing-24h cost. A peer pinned in `SUSPENDED` for >1h shows up as a yellow warning.
+- `swarmdo doctor` reports the current state of every known peer (`ACTIVE`/`SUSPENDED`/`EVICTED`) and the trailing-24h cost. A peer pinned in `SUSPENDED` for >1h shows up as a yellow warning.
 - New MCP tool `federation_breaker_status` returns the same info programmatically for swarm coordinators that want to route around suspended peers.
 - Structured log line on every state transition with `{prevState, newState, reason, peerId}` so post-incident triage doesn't need a debugger.
 
@@ -130,17 +130,17 @@ Test surface:
 
 ## Implementation status (2026-05-09)
 
-**ADR-097 is functionally complete end-to-end.** All five phases are landed: Phase 1 (budget envelope), Phase 2.a (state machine entity), Phase 2.b (breaker service + outbound short-circuit), Phase 3 (consumer-side cost aggregation + upstream `reportSpend` emission with `SpendReporter` interface and breaker fan-out), Phase 4 (operator surface — `federation_breaker_status` / `federation_evict` / `federation_reactivate` MCP tools + `rufflo doctor --component federation`). Integrators wire a `SpendReporter` implementation to push to their cost-tracker / Datadog / accounting backend; the included `InMemorySpendReporter` covers tests + reference impl.
+**ADR-097 is functionally complete end-to-end.** All five phases are landed: Phase 1 (budget envelope), Phase 2.a (state machine entity), Phase 2.b (breaker service + outbound short-circuit), Phase 3 (consumer-side cost aggregation + upstream `reportSpend` emission with `SpendReporter` interface and breaker fan-out), Phase 4 (operator surface — `federation_breaker_status` / `federation_evict` / `federation_reactivate` MCP tools + `swarmdo doctor --component federation`). Integrators wire a `SpendReporter` implementation to push to their cost-tracker / Datadog / accounting backend; the included `InMemorySpendReporter` covers tests + reference impl.
 
 | Phase / Component | Status | Files | Commit(s) |
 |---|---|---|---|
-| **Phase 1** — Budget envelope + hop counter on `federation_send` | Implemented | `v3/@rufflo/plugin-agent-federation/src/domain/value-objects/federation-budget.ts` (new), `mcp-tools.ts` updated | `7e1cc06df feat(federation): ADR-097 Phase 1 — budget envelope + hop counter (#1723)` |
+| **Phase 1** — Budget envelope + hop counter on `federation_send` | Implemented | `v3/@swarmdo/plugin-agent-federation/src/domain/value-objects/federation-budget.ts` (new), `mcp-tools.ts` updated | `7e1cc06df feat(federation): ADR-097 Phase 1 — budget envelope + hop counter (#1723)` |
 | **Phase 2.a** — Peer state machine value object + entity transitions | Implemented | `domain/value-objects/federation-node-state.ts` (new), `domain/entities/federation-node.ts` (state field + suspend/evict/reactivate), `__tests__/unit/federation-node-state.test.ts` (27 tests) | `feat/adr-100-promote-097-phase2` |
 | **Phase 2.b** — Breaker service + outbound short-circuit | Implemented | `application/federation-breaker-service.ts` (new — pure `evaluatePolicy` + stateful `FederationBreakerService` with bounded per-peer buffer), `application/federation-coordinator.ts` (sendMessage gates on `!peer.isActive` with `PEER_SUSPENDED`/`PEER_EVICTED` constant errors), `__tests__/unit/federation-breaker-service.test.ts` (25 tests) | `feat/adr-100-promote-097-phase2` |
-| **Phase 3 consumer** — Cost-tracker bus event + per-peer rolling aggregation | Implemented | `plugins/rufflo-cost-tracker/scripts/federation.mjs`, `skills/cost-federation/SKILL.md` | `1c0804315 feat(cost-tracker): P6 — ADR-097 Phase 3 federation_spend consumer (v0.14.0)` |
+| **Phase 3 consumer** — Cost-tracker bus event + per-peer rolling aggregation | Implemented | `plugins/swarmdo-cost-tracker/scripts/federation.mjs`, `skills/cost-federation/SKILL.md` | `1c0804315 feat(cost-tracker): P6 — ADR-097 Phase 3 federation_spend consumer (v0.14.0)` |
 | **Phase 3 upstream** — Federation `reportSpend()` + `SpendReporter` interface + breaker fan-out + `federation_report_spend` MCP tool | Implemented | `application/spend-reporter.ts` (new — interface + `InMemorySpendReporter` reference impl), `application/federation-coordinator.ts` (new optional `spendReporter` + `breakerService` constructor integrations + `reportSpend` method), `mcp-tools.ts` (federation_report_spend), `__tests__/unit/coordinator-spend-reporting.test.ts` (10 tests) | `feat/adr-100-promote-097-phase2` |
-| **Phase 3 plugin wiring** — federation plugin adopts budget integration + ADR-097 doc | Implemented | `plugins/rufflo-federation/` (v0.2.0), `docs/adrs/0001-federation-contract.md` | `b0168e4a5 feat(rufflo-federation): adopt plugin contract — 3-gate alignment + ADR-097 budget integration + smoke` |
-| **Phase 4** — Operator surface: 3 MCP tools + doctor health-check | Implemented | `mcp-tools.ts` (federation_breaker_status / federation_evict / federation_reactivate), `application/federation-coordinator.ts` (getPeerStates / getPeerStateCounts / evictPeer / reactivatePeer), `v3/@rufflo/cli/src/commands/doctor.ts` (checkFederationBreaker), `__tests__/unit/federation-coordinator-breaker.test.ts` (11 tests) | `feat/adr-100-promote-097-phase2` |
+| **Phase 3 plugin wiring** — federation plugin adopts budget integration + ADR-097 doc | Implemented | `plugins/swarmdo-federation/` (v0.2.0), `docs/adrs/0001-federation-contract.md` | `b0168e4a5 feat(swarmdo-federation): adopt plugin contract — 3-gate alignment + ADR-097 budget integration + smoke` |
+| **Phase 4** — Operator surface: 3 MCP tools + doctor health-check | Implemented | `mcp-tools.ts` (federation_breaker_status / federation_evict / federation_reactivate), `application/federation-coordinator.ts` (getPeerStates / getPeerStateCounts / evictPeer / reactivatePeer), `v3/@swarmdo/cli/src/commands/doctor.ts` (checkFederationBreaker), `__tests__/unit/federation-coordinator-breaker.test.ts` (11 tests) | `feat/adr-100-promote-097-phase2` |
 
 ### Open questions resolved during implementation
 
@@ -153,7 +153,7 @@ Test surface:
 
 _All ADR-097 phases are landed. Future work is integrator-side wiring:_
 
-- **Production `SpendReporter` adapter** that persists to rufflo memory (`namespace=federation-spend`, `key=fed-spend-<peerId>-<ts>`) per the cost-tracker consumer convention. Reference implementation: `InMemorySpendReporter` (in-memory buffer, fine for tests, NOT for production). A real adapter is a thin shell around `memory_store` — left to the integrator since they own the credentials/quota policy.
+- **Production `SpendReporter` adapter** that persists to swarmdo memory (`namespace=federation-spend`, `key=fed-spend-<peerId>-<ts>`) per the cost-tracker consumer convention. Reference implementation: `InMemorySpendReporter` (in-memory buffer, fine for tests, NOT for production). A real adapter is a thin shell around `memory_store` — left to the integrator since they own the credentials/quota policy.
 - **Auto-emission from `federation_send`** — currently `reportSpend()` is an explicit caller-side call (correct since the federation layer doesn't own model pricing). A future enhancement could auto-emit a "send-completed" event with the budget enforcement's predicted cost as a placeholder, but the integrator overrides with actual cost on completion. Decision deferred until a concrete integration request justifies the additional state.
 
 ---
@@ -165,7 +165,7 @@ The full implementation is done when:
 - `federation_send` accepts and propagates `budget` + `maxHops` without breaking any existing test
 - A synthetic recursive delegation chain (peer A → B → A → …) terminates at `maxHops` with `HOP_LIMIT_EXCEEDED` on the originator
 - A peer that exceeds the cost threshold over 24h transitions to `SUSPENDED`, refuses sends for the cooldown window, and auto-recovers on a successful probe
-- `rufflo doctor` shows peer states + trailing-24h cost
+- `swarmdo doctor` shows peer states + trailing-24h cost
 - `federation_breaker_status` MCP tool returns structured state per peer
 - Cost-tracker `cost-report` shows federated spend grouped by peer
 - New tests cover budget arithmetic, hop counter, state transitions, and cost-tracker bus events

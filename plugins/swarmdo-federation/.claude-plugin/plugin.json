@@ -3,8 +3,8 @@
   "description": "Cross-installation agent federation with zero-trust security, peer discovery, consensus-based task routing, and per-call budget circuit breaker (ADR-097)",
   "version": "0.2.0",
   "author": {
-    "name": "ruvnet",
-    "url": "https://github.com/ruvnet"
+    "name": "upstream",
+    "url": "https://the upstream project (see NOTICE)"
   },
   "homepage": "https://github.com/JannieP/swarmdo",
   "license": "MIT",

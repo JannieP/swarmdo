@@ -19,8 +19,8 @@ export * from './services';
 let implementation: any;
 let implementationType: 'native' | 'rvf' | 'wasm' = 'wasm';
 
-// Check for explicit --backend rvf flag or RUVECTOR_BACKEND env var
-const rvfRequested = process.env.RUVECTOR_BACKEND === 'rvf' ||
+// Check for explicit --backend rvf flag or SWARMVECTOR_BACKEND env var
+const rvfRequested = process.env.SWARMVECTOR_BACKEND === 'rvf' ||
   process.argv.includes('--backend') && process.argv[process.argv.indexOf('--backend') + 1] === 'rvf';
 
 if (rvfRequested) {

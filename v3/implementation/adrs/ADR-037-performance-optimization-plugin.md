@@ -14,11 +14,11 @@ Application performance optimization requires deep understanding of runtime beha
 
 ## Decision
 
-Create a **Performance Optimization Plugin** that leverages RuVector WASM packages for intelligent performance analysis, bottleneck detection, and automated optimization suggestions with support for web, server, and native applications.
+Create a **Performance Optimization Plugin** that leverages SwarmVector WASM packages for intelligent performance analysis, bottleneck detection, and automated optimization suggestions with support for web, server, and native applications.
 
 ## Plugin Name
 
-`@rufflo/plugin-performance-optimizer`
+`@swarmdo/plugin-performance-optimizer`
 
 ## Description
 
@@ -28,10 +28,10 @@ A comprehensive performance optimization plugin combining sparse inference for e
 
 | Package | Purpose |
 |---------|---------|
-| `ruvector-sparse-inference-wasm` | Efficient processing of sparse performance traces |
-| `ruvector-gnn-wasm` | Dependency chain analysis and critical path detection |
+| `swarmvector-sparse-inference-wasm` | Efficient processing of sparse performance traces |
+| `swarmvector-gnn-wasm` | Dependency chain analysis and critical path detection |
 | `micro-hnsw-wasm` | Similar performance pattern matching for recommendations |
-| `ruvector-fpga-transformer-wasm` | Fast transformer inference for trace analysis |
+| `swarmvector-fpga-transformer-wasm` | Fast transformer inference for trace analysis |
 | `sona` | Learning optimal configurations from historical data |
 
 ## MCP Tools
@@ -406,10 +406,10 @@ return analysis; // Never execute
 ```json
 {
   "dependencies": {
-    "ruvector-sparse-inference-wasm": "^0.1.0",
-    "ruvector-gnn-wasm": "^0.1.0",
+    "swarmvector-sparse-inference-wasm": "^0.1.0",
+    "swarmvector-gnn-wasm": "^0.1.0",
     "micro-hnsw-wasm": "^0.2.0",
-    "ruvector-fpga-transformer-wasm": "^0.1.0",
+    "swarmvector-fpga-transformer-wasm": "^0.1.0",
     "sona": "^0.1.0",
     "@opentelemetry/api": "^1.7.0"
   }
@@ -436,7 +436,7 @@ return analysis; // Never execute
 | ADR | Relationship |
 |-----|--------------|
 | ADR-004: Plugin Architecture | Foundation - Defines plugin structure |
-| ADR-017: RuVector Integration | Dependency - Provides WASM packages |
+| ADR-017: SwarmVector Integration | Dependency - Provides WASM packages |
 | ADR-035: Code Intelligence | Related - Code analysis integration |
 | ADR-036: Test Intelligence | Related - Test performance metrics |
 | ADR-039: Cognitive Kernel | Related - Cognitive load optimization |
@@ -445,7 +445,7 @@ return analysis; // Never execute
 
 - OpenTelemetry: https://opentelemetry.io/
 - Chrome DevTools Protocol: https://chromedevtools.github.io/devtools-protocol/
-- ADR-017: RuVector Integration
+- ADR-017: SwarmVector Integration
 - ADR-004: Plugin Architecture
 
 ---

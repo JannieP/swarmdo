@@ -1183,9 +1183,9 @@ The 3-criteria AND-gate from ADR-150 review-round-1: `quality > 2% AND cost < 1%
 ### Cross-references
 
 - [ADR-150](v3/docs/adr/ADR-150-metaharness-integration-surfaces.md) — decision + implementation notes
-- [Issue #2399](https://github.com/ruvnet/swarmdo/issues/2399) — phase tracker
-- [Research gist](https://gist.github.com/ruvnet/19d166ff9acf368c9da4172d91ac9113) — graded evidence
-- Upstream: `github.com/ruvnet/agent-harness-generator`
+- [Issue #2399](the upstream project (see NOTICE)) — phase tracker
+- [Research gist](https://gist.the upstream project (see NOTICE)) — graded evidence
+- Upstream: `the upstream project (see NOTICE)`
 
 ## Optional Plugins (20 Available)
 
@@ -1255,8 +1255,8 @@ Registry source: IPFS via Pinata (`QmXbfEAaR7D2Ujm4GAkbwcGZQMHqAMpwDoje4583uNP83
 
 ## Support
 
-- Documentation: https://github.com/ruvnet/claude-flow
-- Issues: https://github.com/ruvnet/claude-flow/issues
+- Documentation: the upstream project (see NOTICE)
+- Issues: the upstream project (see NOTICE)
 
 ---
 

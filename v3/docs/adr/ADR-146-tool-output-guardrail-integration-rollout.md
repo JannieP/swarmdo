@@ -2,12 +2,12 @@
 
 **Status**: Proposed
 **Date**: 2026-06-02
-**Issue**: [ruvnet/ruflo#2149](https://github.com/ruvnet/ruflo/issues/2149) (follow-up — original ADR-131 closed P1 only)
+**Issue**: [upstream/swarmdo#2149](the upstream project (see NOTICE)) (follow-up — original ADR-131 closed P1 only)
 **Related**: ADR-131 (ToolOutputGuardrail — P1 shipped), ADR-144 (Authorization Propagation), ADR-145 (Plugin Supply-Chain Integrity)
 
 ## Context
 
-ADR-131 shipped Phase 1 only: the `ToolOutputGuardrail` class is exported from `@rufflo/security`, has tests and OWASP mapping docs, and is callable. It is not yet wired into a single hot path. The phased plan in ADR-131 §Integration Plan named four more phases (P2–P5) that close the actual ASI01 gap by running the guardrail at every place content crosses the agent boundary. None have shipped.
+ADR-131 shipped Phase 1 only: the `ToolOutputGuardrail` class is exported from `@swarmdo/security`, has tests and OWASP mapping docs, and is callable. It is not yet wired into a single hot path. The phased plan in ADR-131 §Integration Plan named four more phases (P2–P5) that close the actual ASI01 gap by running the guardrail at every place content crosses the agent boundary. None have shipped.
 
 A status-quo system with the class but no call sites is worse than not having the ADR at all — it implies coverage we don't have. Issue #2149 was filed against the ASI01 gap and was left open because P1 shipped without P2–P5; closing it requires running the guardrail at the four content-entry boundaries it was designed for.
 
@@ -34,7 +34,7 @@ Roll out the four remaining ADR-131 phases as a single coordinated effort, with 
 
 ### P2 — MCP tool result boundary
 
-**Where**: `v3/@rufflo/cli/src/mcp-tools/dispatch.ts` (the single chokepoint every tool result flows through).
+**Where**: `v3/@swarmdo/cli/src/mcp-tools/dispatch.ts` (the single chokepoint every tool result flows through).
 
 **Shape**:
 ```ts
@@ -49,23 +49,23 @@ return rawToolResult;
 
 ### P3 — Memory read path
 
-**Where**: `v3/@rufflo/cli/src/memory/memory-bridge.ts` (every `bridgeRetrieve` / `bridgeSearch` return).
+**Where**: `v3/@swarmdo/cli/src/memory/memory-bridge.ts` (every `bridgeRetrieve` / `bridgeSearch` return).
 
-**Shape**: Same `scanAndEnforce` call applied to each result's content field. Per-namespace policy overrides supported via `memory.guardrail.<namespace>.<severity>` in `rufflo.config.json` (e.g., a sandbox namespace might `allow` content that production would `redact`).
+**Shape**: Same `scanAndEnforce` call applied to each result's content field. Per-namespace policy overrides supported via `memory.guardrail.<namespace>.<severity>` in `swarmdo.config.json` (e.g., a sandbox namespace might `allow` content that production would `redact`).
 
 A reject finding here returns the entry with `content: <removed-by-guardrail>` and a structured warning rather than excluding the entry entirely — the caller needs to know the entry exists to track namespace state.
 
 ### P4 — Raft consensus payload validator
 
-**Where**: hive-mind proposal pipeline (`v3/@rufflo/cli/src/hive-mind/*` — exact file pinned during P4 PR).
+**Where**: hive-mind proposal pipeline (`v3/@swarmdo/cli/src/hive-mind/*` — exact file pinned during P4 PR).
 
 **Constraint**: Raft must not deadlock on a rejected payload. If a proposal triggers a `reject`, the proposer's commit step substitutes a `proposalRejected` no-op with the same term/index, so the log advances and other nodes don't time out waiting for the original. The original proposal hash is recorded in the rejection telemetry for post-incident analysis.
 
-P4 is the highest-risk phase. It ships behind `RUFFLO_STRICT_CONSENSUS_GUARDRAIL=true` (default off) until at least two weeks of P2/P3 production telemetry are available to tune the swarm-layer pattern set.
+P4 is the highest-risk phase. It ships behind `SWARMDO_STRICT_CONSENSUS_GUARDRAIL=true` (default off) until at least two weeks of P2/P3 production telemetry are available to tune the swarm-layer pattern set.
 
 ### P5 — Per-tool policy overrides + structured telemetry
 
-**Where**: `v3/@rufflo/cli/src/hooks/*` for policy resolution; new `v3/@rufflo/security/src/telemetry/guardrail-events.ts` for the sink.
+**Where**: `v3/@swarmdo/cli/src/hooks/*` for policy resolution; new `v3/@swarmdo/security/src/telemetry/guardrail-events.ts` for the sink.
 
 Telemetry contract (consumed by ADR-144's provenance log and ADR-145's verification log):
 

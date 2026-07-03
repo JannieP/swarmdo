@@ -1,10 +1,10 @@
 # SwarmVocal — Swarmdo Web UI
 
-> Swarmdo's multi-model AI chat with built-in Model Context Protocol (MCP) tool calling. Live at [**flo.ruv.io**](https://flo.ruv.io/).
+> Swarmdo's multi-model AI chat with built-in Model Context Protocol (MCP) tool calling. Live at [**swarmdo.com**](https://swarmdo.com).
 
-[![Try the Web UI — flo.ruv.io](https://img.shields.io/badge/✨_Try_it-flo.ruv.io-6366f1?style=for-the-badge&logo=svelte&logoColor=white)](https://flo.ruv.io/)
+[![Try the Web UI — swarmdo.com](https://img.shields.io/badge/✨_Try_it-swarmdo.com-6366f1?style=for-the-badge&logo=svelte&logoColor=white)](https://swarmdo.com)
 
-SwarmVocal is the SvelteKit web app that lets you chat with Qwen, Claude, Gemini, or OpenAI while [Swarmdo](https://github.com/ruvnet/swarmdo) invokes the same ~210 MCP tools the CLI uses — agent orchestration, persistent memory, swarm coordination, code review, GitHub ops — all directly from chat. No install, no API key needed to try the hosted demo.
+SwarmVocal is the SvelteKit web app that lets you chat with Qwen, Claude, Gemini, or OpenAI while [Swarmdo](the upstream project (see NOTICE)) invokes the same ~210 MCP tools the CLI uses — agent orchestration, persistent memory, swarm coordination, code review, GitHub ops — all directly from chat. No install, no API key needed to try the hosted demo.
 
 It started as a fork of the [HuggingFace chat-ui](https://github.com/huggingface/chat-ui) v0.20.0 and has been extended with a WASM-MCP integration layer, parallel tool execution, an in-browser tool gallery, and a "Swarmdo Capabilities" tour modal. See [ADR-033](../../docs/adr/ADR-033-SWARMVOCAL-WASM-MCP-INTEGRATION.md) for the architecture.
 
@@ -18,19 +18,19 @@ It started as a fork of the [HuggingFace chat-ui](https://github.com/huggingface
 | 💾 **AgentDB-backed memory** | "Remember my favorite color is indigo" → recalled weeks later via HNSW vector search |
 | 🧠 **6 curated frontier models** | Qwen 3.6 Max (default), Claude Sonnet 4.6, Claude Haiku 4.5, Gemini 2.5 Pro, Gemini 2.5 Flash, OpenAI — via OpenRouter |
 | 🔌 **Bring-your-own MCP servers** | Add HTTP/SSE/stdio endpoints from the chat input; they join the parallel-execution flow |
-| 🦾 **swarmLLM ready** | Native support for [swarmLLM](https://github.com/ruvnet/SwarmVector/tree/main/examples/swarmLLM) — Swarmdo's self-improving local model layer |
+| 🦾 **swarmLLM ready** | Native support for [swarmLLM](the upstream project (see NOTICE)) — Swarmdo's self-improving local model layer |
 | 🏠 **Self-hostable** | Multi-stage Dockerfile (`INCLUDE_DB=true` builds in MongoDB), `cloudbuild.yaml` for Google Cloud Run |
 
 ## Quick Start
 
 ### Hosted (zero install)
 
-[**flo.ruv.io**](https://flo.ruv.io/) — pick a model, type a question. That's it.
+[**swarmdo.com**](https://swarmdo.com) — pick a model, type a question. That's it.
 
 ### Local dev
 
 ```bash
-git clone https://github.com/ruvnet/swarmdo
+git clone the upstream project (see NOTICE)
 cd swarmdo/swarmdo/src/swarmvocal
 cp .env .env.local        # then edit .env.local — see below
 npm install
@@ -72,7 +72,7 @@ docker run -p 3000:3000 \
 
 ### Google Cloud Run (production-style)
 
-`cloudbuild.yaml` does a multi-stage build with `INCLUDE_DB=true`, pushes to Artifact Registry, and deploys to Cloud Run. Hosted demo at `flo.ruv.io` runs from this exact pipeline. See [`cloudbuild.yaml`](./cloudbuild.yaml) and the deploy notes in [ADR-033](../../docs/adr/ADR-033-SWARMVOCAL-WASM-MCP-INTEGRATION.md).
+`cloudbuild.yaml` does a multi-stage build with `INCLUDE_DB=true`, pushes to Artifact Registry, and deploys to Cloud Run. Hosted demo at `swarmdo.com` runs from this exact pipeline. See [`cloudbuild.yaml`](./cloudbuild.yaml) and the deploy notes in [ADR-033](../../docs/adr/ADR-033-SWARMVOCAL-WASM-MCP-INTEGRATION.md).
 
 ## Database
 
@@ -95,7 +95,7 @@ MCP_SERVERS=[
   {"name":"Swarmdo Agents","url":"https://mcp-bridge-...run.app/mcp/agents","transport":"sse"},
   {"name":"Swarmdo Memory","url":"https://mcp-bridge-...run.app/mcp/memory","transport":"sse"},
   {"name":"Swarmdo DevTools","url":"https://mcp-bridge-...run.app/mcp/devtools","transport":"sse"},
-  {"name":"π Shared Brain","url":"https://mcp.pi.ruv.io","transport":"streamable-http"}
+  {"name":"π Shared Brain","url":"https://mcp.pi.swarmdo.com","transport":"streamable-http"}
 ]
 ```
 
@@ -153,12 +153,12 @@ For deeper internals, see [`CLAUDE.md`](./CLAUDE.md) (Claude Code agent guide) a
 
 ## Related
 
-- 🏠 **Parent project** — [Swarmdo](https://github.com/ruvnet/swarmdo)
-- 🎯 **Goal Planner UI** — [goal.ruv.io](https://goal.ruv.io/) · [/agents](https://goal.ruv.io/agents)
+- 🏠 **Parent project** — [Swarmdo](the upstream project (see NOTICE))
+- 🎯 **Goal Planner UI** — [swarmdo.com](https://swarmdo.com) · [/agents](https://swarmdo.com)
 - 📖 **ADR-033** — SwarmVocal/WASM-MCP integration architecture
-- 📋 **Roadmap** — [issue #1689](https://github.com/ruvnet/swarmdo/issues/1689)
+- 📋 **Roadmap** — [issue #1689](the upstream project (see NOTICE))
 - 🍴 **Upstream** — [huggingface/chat-ui](https://github.com/huggingface/chat-ui) (SwarmVocal is forked from v0.20.0)
 
 ## License
 
-MIT — same as the parent [Swarmdo](https://github.com/ruvnet/swarmdo) project.
+MIT — same as the parent [Swarmdo](the upstream project (see NOTICE)) project.

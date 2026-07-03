@@ -9,9 +9,9 @@
 //! # Example
 //!
 //! ```rust,ignore
-//! use swarmllm::tokenizer::{RuvTokenizer, ChatMessage, Role};
+//! use swarmllm::tokenizer::{SwarmTokenizer, ChatMessage, Role};
 //!
-//! let tokenizer = RuvTokenizer::from_pretrained("Qwen/Qwen2.5-0.5B-Instruct")?;
+//! let tokenizer = SwarmTokenizer::from_pretrained("Qwen/Qwen2.5-0.5B-Instruct")?;
 //!
 //! // Basic encode/decode
 //! let tokens = tokenizer.encode("Hello, world!")?;
@@ -381,7 +381,7 @@ mod candle_impl {
     use super::*;
 
     /// HuggingFace tokenizer wrapper with chat template support
-    pub struct RuvTokenizer {
+    pub struct SwarmTokenizer {
         /// Underlying HuggingFace tokenizer
         inner: HfTokenizer,
         /// Chat template for this model
@@ -396,7 +396,7 @@ mod candle_impl {
         added_tokens: Vec<(u32, String)>,
     }
 
-    impl RuvTokenizer {
+    impl SwarmTokenizer {
         /// Load tokenizer from HuggingFace Hub
         ///
         /// # Arguments
@@ -406,7 +406,7 @@ mod candle_impl {
         /// # Example
         ///
         /// ```rust,ignore
-        /// let tokenizer = RuvTokenizer::from_pretrained("mistralai/Mistral-7B-Instruct-v0.3")?;
+        /// let tokenizer = SwarmTokenizer::from_pretrained("mistralai/Mistral-7B-Instruct-v0.3")?;
         /// ```
         ///
         /// ADR-179 iter 8: gated behind `hub-download` feature.
@@ -655,7 +655,7 @@ mod candle_impl {
         /// # Example
         ///
         /// ```rust,ignore
-        /// let mut tokenizer = RuvTokenizer::from_pretrained("...")?;
+        /// let mut tokenizer = SwarmTokenizer::from_pretrained("...")?;
         /// for token in generated_tokens {
         ///     if let Some(text) = tokenizer.decode_stream(token)? {
         ///         print!("{}", text);
@@ -848,9 +848,9 @@ mod candle_impl {
         }
     }
 
-    impl std::fmt::Debug for RuvTokenizer {
+    impl std::fmt::Debug for SwarmTokenizer {
         fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-            f.debug_struct("RuvTokenizer")
+            f.debug_struct("SwarmTokenizer")
                 .field("model_id", &self.model_id)
                 .field("vocab_size", &self.vocab_size())
                 .field("chat_template", &self.chat_template)
@@ -870,12 +870,12 @@ mod stub_impl {
 
     /// Stub tokenizer for when candle feature is disabled
     #[derive(Debug)]
-    pub struct RuvTokenizer {
+    pub struct SwarmTokenizer {
         chat_template: Option<ChatTemplate>,
         special_tokens: TokenizerSpecialTokens,
     }
 
-    impl Default for RuvTokenizer {
+    impl Default for SwarmTokenizer {
         fn default() -> Self {
             Self {
                 chat_template: Some(ChatTemplate::default()),
@@ -891,7 +891,7 @@ mod stub_impl {
         }
     }
 
-    impl RuvTokenizer {
+    impl SwarmTokenizer {
         pub fn from_pretrained(_model_id: &str) -> Result<Self> {
             Err(SwarmLLMError::Config(
                 "Tokenizer requires 'candle' feature to be enabled".to_string(),
@@ -972,10 +972,10 @@ mod stub_impl {
 // ============================================================================
 
 #[cfg(feature = "candle")]
-pub use candle_impl::RuvTokenizer;
+pub use candle_impl::SwarmTokenizer;
 
 #[cfg(not(feature = "candle"))]
-pub use stub_impl::RuvTokenizer;
+pub use stub_impl::SwarmTokenizer;
 
 // ============================================================================
 // Tokenizer Trait Implementation (for LlmBackend compatibility)
@@ -984,7 +984,7 @@ pub use stub_impl::RuvTokenizer;
 use crate::backends::{SpecialTokens, Tokenizer};
 
 #[cfg(feature = "candle")]
-impl Tokenizer for RuvTokenizer {
+impl Tokenizer for SwarmTokenizer {
     fn encode(&self, text: &str) -> Result<Vec<u32>> {
         self.encode(text)
     }
@@ -1008,7 +1008,7 @@ impl Tokenizer for RuvTokenizer {
 }
 
 #[cfg(not(feature = "candle"))]
-impl Tokenizer for RuvTokenizer {
+impl Tokenizer for SwarmTokenizer {
     fn encode(&self, text: &str) -> Result<Vec<u32>> {
         self.encode(text)
     }
@@ -1232,7 +1232,7 @@ mod tests {
     #[cfg(not(feature = "candle"))]
     #[test]
     fn test_stub_tokenizer() {
-        let tokenizer = RuvTokenizer::default();
+        let tokenizer = SwarmTokenizer::default();
 
         assert!(tokenizer.encode("test").is_err());
         assert!(tokenizer.decode(&[1, 2, 3]).is_err());

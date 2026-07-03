@@ -1,5 +1,5 @@
 /**
- * Tests for AgentAuthorizationPropagator (ADR-144 P1, ruvnet/swarmdo#2248).
+ * Tests for AgentAuthorizationPropagator (ADR-144 P1, upstream/swarmdo#2248).
  *
  * Covers the load-bearing invariants of the action-layer security model:
  *  - wrapOutbound monotonically reduces scope (cannot grant more than holder)

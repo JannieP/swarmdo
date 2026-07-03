@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Static guard for ruvnet/swarmdo ADR-125 / ADR-130 env-var precedence pattern.
+ * Static guard for upstream/swarmdo ADR-125 / ADR-130 env-var precedence pattern.
  *
  * Context
  * -------

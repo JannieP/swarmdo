@@ -1,6 +1,6 @@
 # V3 Migration Documentation
 
-> Comprehensive guide for migrating from Rufflo V2 to V3
+> Comprehensive guide for migrating from Swarmdo V2 to V3
 
 ## Overview
 
@@ -95,13 +95,13 @@ This directory contains detailed analysis of capabilities, gaps, and migration p
 
 ```bash
 # Check migration status
-npx rufflo migrate status
+npx swarmdo migrate status
 
 # Run automatic migration
-npx rufflo migrate run --target all --backup
+npx swarmdo migrate run --target all --backup
 
 # Verify migration
-npx rufflo migrate verify
+npx swarmdo migrate verify
 ```
 
 ## Related Documentation

@@ -1,5 +1,5 @@
 /**
- * Neural Agent Module - Integrates ruv-FANN neural network capabilities
+ * Neural Agent Module - Integrates the upstream repo neural network capabilities
  * into agent processing for cognitive diversity and learning
  */
 

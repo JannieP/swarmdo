@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Smoke test for ADR-131 / ruvnet/swarmdo#2149 — ToolOutputGuardrail wired up
+ * Smoke test for ADR-131 / upstream/swarmdo#2149 — ToolOutputGuardrail wired up
  * end-to-end through the published `@swarmdo/security` build output.
  *
  * Runs after the security package has been built (CI: `Build V3` job). This
@@ -107,7 +107,7 @@ check(
 console.log(`\n[smoke] ToolOutputGuardrail: ${passed} passed, ${failed} failed`);
 if (failed > 0) {
   console.error('[smoke] FAIL — see violations above');
-  console.error('Reference: ADR-131, ruvnet/swarmdo#2149');
+  console.error('Reference: ADR-131, upstream/swarmdo#2149');
   process.exit(1);
 }
 console.log('[smoke] ok: ToolOutputGuardrail wired up correctly');

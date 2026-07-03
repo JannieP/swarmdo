@@ -5,7 +5,7 @@ SwarmLLM local inference with chat formatting, model configuration, MicroLoRA fi
 ## Install
 
 ```
-/plugin marketplace add ruvnet/swarmdo
+/plugin marketplace add upstream/swarmdo
 /plugin install swarmdo-swarmllm@swarmdo
 ```
 

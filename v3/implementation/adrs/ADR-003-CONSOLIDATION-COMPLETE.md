@@ -22,7 +22,7 @@ Successfully implemented ADR-003: Single Coordination Engine by:
 ### Before ADR-003
 ```
 v3/
-├── @rufflo/swarm/src/
+├── @swarmdo/swarm/src/
 │   ├── unified-coordinator.ts (1,569 lines) ← Full implementation
 │   └── coordination/
 │       └── swarm-hub.ts (681 lines)       ← Duplicate logic ❌
@@ -39,7 +39,7 @@ Problems:
 ### After ADR-003
 ```
 v3/
-├── @rufflo/swarm/src/
+├── @swarmdo/swarm/src/
 │   ├── unified-coordinator.ts (1,569 lines) ← CANONICAL ENGINE ⭐
 │   └── coordination/
 │       └── swarm-hub.ts (~700 lines)        ← Thin facade (delegates)
@@ -58,7 +58,7 @@ Benefits:
 
 ### 1. UnifiedSwarmCoordinator (Canonical Engine)
 
-**File**: `/workspaces/rufflo/v3/@rufflo/swarm/src/unified-coordinator.ts`
+**File**: `/workspaces/swarmdo/v3/@swarmdo/swarm/src/unified-coordinator.ts`
 
 **Status**: ✅ Remains unchanged - this is the source of truth
 
@@ -73,7 +73,7 @@ Benefits:
 
 ### 2. SwarmHub (Compatibility Layer)
 
-**File**: `/workspaces/rufflo/v3/@rufflo/swarm/src/coordination/swarm-hub.ts`
+**File**: `/workspaces/swarmdo/v3/@swarmdo/swarm/src/coordination/swarm-hub.ts`
 
 **Status**: ✅ Refactored to thin facade
 
@@ -166,7 +166,7 @@ export { SwarmHub, createSwarmHub, type ISwarmHub } from './coordination/swarm-h
 
 ### 4. Duplicate File Handling
 
-**File**: `/workspaces/rufflo/v3/coordination/swarm-hub.ts`
+**File**: `/workspaces/swarmdo/v3/coordination/swarm-hub.ts`
 
 **Status**: ✅ Marked as duplicate with clear warnings
 
@@ -177,7 +177,7 @@ export { SwarmHub, createSwarmHub, type ISwarmHub } from './coordination/swarm-h
  * ⚠️ DEPRECATION WARNING:
  * This file is a DUPLICATE and should NOT be used.
  * Use the canonical implementation at:
- * /workspaces/rufflo/v3/@rufflo/swarm/src/coordination/swarm-hub.ts
+ * /workspaces/swarmdo/v3/@swarmdo/swarm/src/coordination/swarm-hub.ts
  */
 ```
 
@@ -186,7 +186,7 @@ export { SwarmHub, createSwarmHub, type ISwarmHub } from './coordination/swarm-h
 ### For New Code (Recommended)
 
 ```typescript
-import { createUnifiedSwarmCoordinator } from '@rufflo/swarm';
+import { createUnifiedSwarmCoordinator } from '@swarmdo/swarm';
 
 const coordinator = createUnifiedSwarmCoordinator({
   topology: { type: 'hierarchical', maxAgents: 15 },
@@ -208,7 +208,7 @@ const results = await coordinator.executeParallel([
 ### For Legacy Code (Compatibility)
 
 ```typescript
-import { createSwarmHub } from '@rufflo/swarm';
+import { createSwarmHub } from '@swarmdo/swarm';
 
 const hub = createSwarmHub();
 await hub.initialize();
@@ -232,7 +232,7 @@ await coordinator.executeParallel(tasks);
 | File | Purpose | Status |
 |------|---------|--------|
 | `docs/ADR-003-implementation-status.md` | Implementation tracking | ✅ Created |
-| `@rufflo/swarm/README.md` | Module documentation | ✅ Created |
+| `@swarmdo/swarm/README.md` | Module documentation | ✅ Created |
 | `docs/ADR-003-CONSOLIDATION-COMPLETE.md` | This file | ✅ Created |
 
 ## Code Metrics

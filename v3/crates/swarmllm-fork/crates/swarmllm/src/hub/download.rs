@@ -270,7 +270,7 @@ impl ModelDownloader {
 
     /// Download a model by ID from the registry
     pub fn download_by_id(&self, model_id: &str) -> Result<PathBuf> {
-        let registry = super::registry::RuvLtraRegistry::new();
+        let registry = super::registry::SwarmLtraRegistry::new();
         let model_info = registry
             .get(model_id)
             .ok_or_else(|| HubError::NotFound(model_id.to_string()))?;

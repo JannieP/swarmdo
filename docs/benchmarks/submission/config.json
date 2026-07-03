@@ -68,9 +68,9 @@
   },
 
   "harness_version": {
-    "package": "@rufflo/cli",
+    "package": "@swarmdo/cli",
     "version": "3.10.4",
-    "gaia_bench_command": "node v3/@rufflo/cli/dist/cli.js gaia-bench run --level 1 --model claude-sonnet-4-6 --limit 53 --enable-convergence"
+    "gaia_bench_command": "node v3/@swarmdo/cli/dist/cli.js gaia-bench run --level 1 --model claude-sonnet-4-6 --limit 53 --enable-convergence"
   },
 
   "measured_outcome": {

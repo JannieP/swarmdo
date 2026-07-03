@@ -1,4 +1,4 @@
-//! Task-Specific LoRA Adapters for RuvLTRA
+//! Task-Specific LoRA Adapters for SwarmLTRA
 //!
 //! This module provides pre-defined adapter configurations optimized for
 //! different agent types in the Claude Flow ecosystem:
@@ -21,7 +21,7 @@ pub mod trainer;
 
 /// Pre-defined task-specific adapter configurations
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct RuvLtraAdapters {
+pub struct SwarmLtraAdapters {
     /// Coder adapter: Optimized for code generation and refactoring
     /// - rank=16: High capacity for code patterns
     /// - alpha=32: Strong adaptation signal
@@ -53,7 +53,7 @@ pub struct RuvLtraAdapters {
     pub reviewer: LoraConfig,
 }
 
-impl RuvLtraAdapters {
+impl SwarmLtraAdapters {
     /// Create default adapter configurations
     pub fn new() -> Self {
         Self {
@@ -206,7 +206,7 @@ impl RuvLtraAdapters {
     }
 }
 
-impl Default for RuvLtraAdapters {
+impl Default for SwarmLtraAdapters {
     fn default() -> Self {
         Self::new()
     }
@@ -409,8 +409,8 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_ruvltra_adapters_creation() {
-        let adapters = RuvLtraAdapters::new();
+    fn test_swarmltra_adapters_creation() {
+        let adapters = SwarmLtraAdapters::new();
 
         assert_eq!(adapters.coder.rank, 16);
         assert_eq!(adapters.coder.alpha, 32.0);
@@ -425,7 +425,7 @@ mod tests {
 
     #[test]
     fn test_adapter_by_name() {
-        let adapters = RuvLtraAdapters::new();
+        let adapters = SwarmLtraAdapters::new();
 
         let coder = adapters.get("coder").unwrap();
         assert_eq!(coder.name, "coder");
@@ -435,7 +435,7 @@ mod tests {
 
     #[test]
     fn test_adapter_by_domain() {
-        let adapters = RuvLtraAdapters::new();
+        let adapters = SwarmLtraAdapters::new();
 
         let security_adapters = adapters.by_domain("security");
         assert_eq!(security_adapters.len(), 1);
@@ -447,7 +447,7 @@ mod tests {
 
     #[test]
     fn test_create_lora() {
-        let adapters = RuvLtraAdapters::new();
+        let adapters = SwarmLtraAdapters::new();
         let lora = adapters.create_lora("coder", 768).unwrap();
 
         assert_eq!(lora.config().rank, 16);
@@ -456,7 +456,7 @@ mod tests {
 
     #[test]
     fn test_memory_estimation() {
-        let adapters = RuvLtraAdapters::new();
+        let adapters = SwarmLtraAdapters::new();
 
         let coder_mem = adapters.coder.estimate_memory(768);
         let researcher_mem = adapters.researcher.estimate_memory(768);
@@ -485,7 +485,7 @@ mod tests {
 
     #[test]
     fn test_list_names() {
-        let adapters = RuvLtraAdapters::new();
+        let adapters = SwarmLtraAdapters::new();
         let names = adapters.list_names();
 
         assert_eq!(names.len(), 5);

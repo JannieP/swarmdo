@@ -1,6 +1,6 @@
-# Rufflo v3 Migration Roadmap
+# Swarmdo v3 Migration Roadmap
 
-**Project:** Rufflo v2.x → v3.0 Migration
+**Project:** Swarmdo v2.x → v3.0 Migration
 **Timeline:** 20 weeks (5 months)
 **Team Size:** 2-3 core developers + community contributors
 **Start Date:** 2026-01-06 (planned)
@@ -24,7 +24,7 @@
 
 ### Vision
 
-Transform Rufflo from a monolithic orchestration system into a modular, agentic-flow-native platform with clear domain boundaries, plugin extensibility, and superior performance.
+Transform Swarmdo from a monolithic orchestration system into a modular, agentic-flow-native platform with clear domain boundaries, plugin extensibility, and superior performance.
 
 ### Key Objectives
 
@@ -472,7 +472,7 @@ describe('ExamplePlugin', () => {
 **CI/CD Setup (Day 1-2)**
 ```yaml
 # .github/workflows/v3-ci.yml
-name: Rufflo v3 CI
+name: Swarmdo v3 CI
 
 on:
   push:
@@ -581,7 +581,7 @@ Step-by-step guide for migrating from v2 to v3
 
 ## Automated Migration Tool
 ```bash
-npx rufflo migrate v2-to-v3
+npx swarmdo migrate v2-to-v3
 ```
 
 ## Common Issues
@@ -1186,7 +1186,7 @@ npm run benchmark:compare -- --base=v2 --compare=v3
 
 # Backup v2 data
 echo "Backing up v2 data..."
-cp rufflo.db rufflo-v2-backup.db
+cp swarmdo.db swarmdo-v2-backup.db
 
 # Migrate configuration
 echo "Migrating configuration..."
@@ -1208,7 +1208,7 @@ echo "Migration complete! Review logs at migration.log"
 # Migrating from v2 to v3
 
 ## Overview
-This guide helps you migrate your rufflo installation from v2 to v3.
+This guide helps you migrate your swarmdo installation from v2 to v3.
 
 ## Prerequisites
 - Node.js 20+
@@ -1218,39 +1218,39 @@ This guide helps you migrate your rufflo installation from v2 to v3.
 ## Step 1: Backup
 ```bash
 # Backup data
-cp rufflo.db backup/
+cp swarmdo.db backup/
 cp -r .claude/ backup/
 ```
 
 ## Step 2: Install v3
 ```bash
-npm install rufflo@3.0.0
+npm install swarmdo@3.0.0
 ```
 
 ## Step 3: Migrate Config
 ```bash
-npx rufflo migrate config
+npx swarmdo migrate config
 ```
 
 ## Step 4: Migrate Data
 ```bash
-npx rufflo migrate data
+npx swarmdo migrate data
 ```
 
 ## Step 5: Test
 ```bash
-npx rufflo test-migration
+npx swarmdo test-migration
 ```
 
 ## Step 6: Switch
 ```bash
-npx rufflo activate v3
+npx swarmdo activate v3
 ```
 
 ## Rollback
 If issues occur:
 ```bash
-npx rufflo rollback v2
+npx swarmdo rollback v2
 ```
 ```
 

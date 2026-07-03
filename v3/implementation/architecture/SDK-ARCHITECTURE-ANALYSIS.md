@@ -1,8 +1,8 @@
-# Rufflo v3 SDK Architecture Analysis
+# Swarmdo v3 SDK Architecture Analysis
 
-## Deep Review: agentic-flow@alpha + ruvector Ecosystem
+## Deep Review: agentic-flow@alpha + swarmvector Ecosystem
 
-This document provides a comprehensive analysis of using `agentic-flow@2.0.1-alpha.50` as the SDK foundation for Rufflo v3, including additional capabilities from the ruvector ecosystem.
+This document provides a comprehensive analysis of using `agentic-flow@2.0.1-alpha.50` as the SDK foundation for Swarmdo v3, including additional capabilities from the swarmvector ecosystem.
 
 ---
 
@@ -10,9 +10,9 @@ This document provides a comprehensive analysis of using `agentic-flow@2.0.1-alp
 
 ### Key Findings
 
-**agentic-flow@alpha provides a complete, production-ready SDK** that wraps and fixes the raw @ruvector/* alpha packages. Rufflo v3 should use agentic-flow as its primary SDK rather than importing @ruvector/* packages directly.
+**agentic-flow@alpha provides a complete, production-ready SDK** that wraps and fixes the raw @swarmvector/* alpha packages. Swarmdo v3 should use agentic-flow as its primary SDK rather than importing @swarmvector/* packages directly.
 
-| Aspect | agentic-flow@alpha | Raw @ruvector/* |
+| Aspect | agentic-flow@alpha | Raw @swarmvector/* |
 |--------|-------------------|------------------|
 | Stability | Production wrappers | Alpha APIs (broken) |
 | Performance | 11-200x improvements | Variable |
@@ -24,7 +24,7 @@ This document provides a comprehensive analysis of using `agentic-flow@2.0.1-alp
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                     Rufflo v3                               │
+│                     Swarmdo v3                               │
 ├─────────────────────────────────────────────────────────────────┤
 │  Thin Integration Layer (~500 lines)                            │
 │  - Hook event mapping                                           │
@@ -43,9 +43,9 @@ This document provides a comprehensive analysis of using `agentic-flow@2.0.1-alp
 │  │  (11-22x)   │  (50-200x)  │  (Native)   │  (ONNX)     │     │
 │  └─────────────┴─────────────┴─────────────┴─────────────┘     │
 ├─────────────────────────────────────────────────────────────────┤
-│                @ruvector/* Packages (underlying)                │
+│                @swarmvector/* Packages (underlying)                │
 │  ┌─────────────┬─────────────┬─────────────┬─────────────┐     │
-│  │  ruvector   │ @ruvector/  │ @ruvector/  │ @ruvector/  │     │
+│  │  swarmvector   │ @swarmvector/  │ @swarmvector/  │ @swarmvector/  │     │
 │  │   core      │    sona     │  attention  │     gnn     │     │
 │  └─────────────┴─────────────┴─────────────┴─────────────┘     │
 └─────────────────────────────────────────────────────────────────┘
@@ -55,17 +55,17 @@ This document provides a comprehensive analysis of using `agentic-flow@2.0.1-alp
 
 ## 2. Package Ecosystem Overview
 
-### 2.1 ruvector@0.1.95 (Core Package)
+### 2.1 swarmvector@0.1.95 (Core Package)
 
 The base package providing high-performance vector operations with native Rust bindings.
 
 **Dependencies:**
 ```json
 {
-  "@ruvector/core": "^0.1.30",      // Native Rust HNSW (150x faster)
-  "@ruvector/sona": "^0.1.5",       // SONA continual learning
-  "@ruvector/attention": "^0.1.3", // Attention mechanisms
-  "@ruvector/gnn": "^0.1.22"       // Graph Neural Networks
+  "@swarmvector/core": "^0.1.30",      // Native Rust HNSW (150x faster)
+  "@swarmvector/sona": "^0.1.5",       // SONA continual learning
+  "@swarmvector/attention": "^0.1.3", // Attention mechanisms
+  "@swarmvector/gnn": "^0.1.22"       // Graph Neural Networks
 }
 ```
 
@@ -76,7 +76,7 @@ The base package providing high-performance vector operations with native Rust b
 - `ParallelIntelligence` - Worker pool parallelization
 - `OnnxEmbedder` - ONNX runtime embeddings
 
-### 2.2 @ruvector/core@0.1.30
+### 2.2 @swarmvector/core@0.1.30
 
 Native Rust bindings via NAPI with WASM fallback.
 
@@ -93,7 +93,7 @@ Native Rust bindings via NAPI with WASM fallback.
 | macOS x64/ARM | NAPI | ✅ Universal |
 | Windows x64 | WASM | ✅ Fallback |
 
-### 2.3 @ruvector/sona@0.1.5
+### 2.3 @swarmvector/sona@0.1.5
 
 SONA (Self-Organizing Neural Architecture) continual learning system.
 
@@ -109,7 +109,7 @@ SONA (Self-Organizing Neural Architecture) continual learning system.
 - Pattern clustering
 - Automatic learning cycle management
 
-### 2.4 @ruvector/attention@0.1.3
+### 2.4 @swarmvector/attention@0.1.3
 
 Multiple attention mechanism implementations.
 
@@ -123,7 +123,7 @@ Multiple attention mechanism implementations.
 | MoE (Mixture of Experts) | 1.8ms | Expert routing |
 | Graph (GraphRoPE) | 5.4ms | Topology-aware |
 
-### 2.5 @ruvector/gnn@0.1.22
+### 2.5 @swarmvector/gnn@0.1.22
 
 Graph Neural Network operations.
 
@@ -156,7 +156,7 @@ agentic-flow/dist/
 │       ├── post-edit.js      # Post-edit learning
 │       ├── route.js          # Intelligent routing
 │       ├── pretrain.js       # Pattern pretraining
-│       └── intelligence-*.js # RuVector integration
+│       └── intelligence-*.js # SwarmVector integration
 │
 ├── reasoningbank/            # Memory system
 │   ├── index.js              # Hybrid backend
@@ -176,7 +176,7 @@ agentic-flow/dist/
 │   └── sona-service.js       # SONA wrapper
 │
 ├── workers/                  # Background workers
-│   └── ruvector-integration.js  # Worker learning
+│   └── swarmvector-integration.js  # Worker learning
 │
 ├── intelligence/             # Persistence
 │   └── IntelligenceStore.js  # SQLite storage
@@ -187,13 +187,13 @@ agentic-flow/dist/
 
 ### 3.2 Core Wrappers Performance
 
-The `core/` wrappers provide production-stable alternatives to broken @ruvector/* alpha APIs:
+The `core/` wrappers provide production-stable alternatives to broken @swarmvector/* alpha APIs:
 
 | Wrapper | Raw Package | Speedup | Status |
 |---------|-------------|---------|--------|
-| `gnn-wrapper.js` | @ruvector/gnn | 11-22x | ✅ Verified |
+| `gnn-wrapper.js` | @swarmvector/gnn | 11-22x | ✅ Verified |
 | `agentdb-fast.js` | agentdb-cli | 50-200x | ✅ Verified |
-| `attention-native.js` | @ruvector/attention | Fixed | ✅ Verified |
+| `attention-native.js` | @swarmvector/attention | Fixed | ✅ Verified |
 | `embedding-service.js` | Multiple | N/A | ✅ Verified |
 
 **Usage Pattern:**
@@ -206,8 +206,8 @@ import {
   createEmbeddingService
 } from 'agentic-flow/core';
 
-// ❌ WRONG: Don't use raw @ruvector/* packages directly
-import { GNN } from '@ruvector/gnn'; // Broken API
+// ❌ WRONG: Don't use raw @swarmvector/* packages directly
+import { GNN } from '@swarmvector/gnn'; // Broken API
 ```
 
 ---
@@ -365,7 +365,7 @@ const config = await optimizer.getOptimization(
 **Intelligence Bridge Hooks (9):**
 | Hook | Purpose |
 |------|---------|
-| `intelligenceRouteTool` | RuVector-enhanced routing |
+| `intelligenceRouteTool` | SwarmVector-enhanced routing |
 | `intelligenceTrajectoryStartTool` | Begin trajectory tracking |
 | `intelligenceTrajectoryStepTool` | Record trajectory step |
 | `intelligenceTrajectoryEndTool` | Complete trajectory |
@@ -385,7 +385,7 @@ const config = await optimizer.getOptimization(
                       │
                       ▼
 ┌─────────────────────────────────────────────────────────────┐
-│              Rufflo Hook Dispatcher                     │
+│              Swarmdo Hook Dispatcher                     │
 │         (Maps Claude events → agentic-flow hooks)           │
 └─────────────────────┬───────────────────────────────────────┘
                       │
@@ -400,7 +400,7 @@ const config = await optimizer.getOptimization(
                      │
                      ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                   RuVector Core                              │
+│                   SwarmVector Core                              │
 │          (SONA, VectorDB, Attention, GNN)                   │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -433,12 +433,12 @@ PRAGMA journal_mode = WAL;      -- Better concurrent access
 PRAGMA synchronous = NORMAL;    -- Speed/safety balance
 ```
 
-### 7.2 RuVectorWorkerIntegration
+### 7.2 SwarmVectorWorkerIntegration
 
-Background worker integration with full RuVector stack:
+Background worker integration with full SwarmVector stack:
 
 ```typescript
-const integration = new RuVectorWorkerIntegration({
+const integration = new SwarmVectorWorkerIntegration({
   enableSona: true,
   enableReasoningBank: true,
   enableHnsw: true,
@@ -466,31 +466,31 @@ const result = await integration.completeTrajectory(trajectoryId, results);
 
 ---
 
-## 8. Rufflo v3 Integration Strategy
+## 8. Swarmdo v3 Integration Strategy
 
 ### 8.1 Installation Tiers
 
 **Tier 1: Core (~2MB)**
 ```bash
-npm install rufflo@3 agentic-flow@alpha
+npm install swarmdo@3 agentic-flow@alpha
 # Includes: hooks, routing, basic learning
 ```
 
 **Tier 2: Learning (~8MB)**
 ```bash
-npx rufflo enable-learning
+npx swarmdo enable-learning
 # Adds: SONA, AgentDB, ReasoningBank
 ```
 
 **Tier 3: Full (~15MB)**
 ```bash
-npx rufflo enable-swarm
+npx swarmdo enable-swarm
 # Adds: QUIC, attention coordination, GNN
 ```
 
 ### 8.2 Integration Layer
 
-Rufflo v3 needs a thin integration layer (~500 lines):
+Swarmdo v3 needs a thin integration layer (~500 lines):
 
 ```typescript
 // src/integrations/agentic-flow.ts
@@ -531,19 +531,19 @@ export async function initSwarmCoordination(config) {
 
 ```bash
 # Learning
-npx rufflo learn status          # Show learning stats
-npx rufflo learn force           # Force learning cycle
-npx rufflo learn export <path>   # Export learned patterns
+npx swarmdo learn status          # Show learning stats
+npx swarmdo learn force           # Force learning cycle
+npx swarmdo learn export <path>   # Export learned patterns
 
 # Hooks
-npx rufflo hooks list            # List available hooks
-npx rufflo hooks enable <hook>   # Enable specific hook
-npx rufflo hooks metrics         # Show hook performance
+npx swarmdo hooks list            # List available hooks
+npx swarmdo hooks enable <hook>   # Enable specific hook
+npx swarmdo hooks metrics         # Show hook performance
 
 # Swarm
-npx rufflo swarm init <topology> # Initialize swarm
-npx rufflo swarm status          # Show swarm status
-npx rufflo swarm optimize        # Get optimization recommendations
+npx swarmdo swarm init <topology> # Initialize swarm
+npx swarmdo swarm status          # Show swarm status
+npx swarmdo swarm optimize        # Get optimization recommendations
 ```
 
 ---
@@ -584,7 +584,7 @@ npx rufflo swarm optimize        # Get optimization recommendations
 
 ### 10.2 DON'T Use
 
-1. **Raw @ruvector/* packages** - Alpha APIs are broken
+1. **Raw @swarmvector/* packages** - Alpha APIs are broken
 2. **agentdb-cli** - Use AgentDB Fast instead (50-200x faster)
 3. **Custom attention implementations** - Use native wrappers
 4. **Manual learning loops** - Use SONAAgentDBTrainer
@@ -598,15 +598,15 @@ npx rufflo swarm optimize        # Get optimization recommendations
 
 ---
 
-## 11. Rufflo v3 Modular Package Constellation
+## 11. Swarmdo v3 Modular Package Constellation
 
 ### 11.1 Overview
 
-Rufflo v3 will be architected as a **modular constellation of npm packages** similar to the @ruvector/* collection. Each component can operate independently or integrate seamlessly within the ecosystem.
+Swarmdo v3 will be architected as a **modular constellation of npm packages** similar to the @swarmvector/* collection. Each component can operate independently or integrate seamlessly within the ecosystem.
 
 ```
                         ┌─────────────────────────┐
-                        │    @rufflo/core    │
+                        │    @swarmdo/core    │
                         │   (Central Connector)   │
                         │       ~50KB base        │
                         └───────────┬─────────────┘
@@ -630,13 +630,13 @@ Rufflo v3 will be architected as a **modular constellation of npm packages** sim
 
 ### 11.2 Package Specifications
 
-#### @rufflo/core (Central Connector)
+#### @swarmdo/core (Central Connector)
 
 **Purpose:** Minimal core that connects all packages, provides unified configuration, and manages inter-package communication.
 
 ```typescript
-// Package: @rufflo/core
-// Size: ~50KB (no dependencies on other @rufflo/* packages)
+// Package: @swarmdo/core
+// Size: ~50KB (no dependencies on other @swarmdo/* packages)
 
 export interface ClaudeFlowConfig {
   enabledModules: string[];
@@ -662,7 +662,7 @@ export class ClaudeFlowCore {
 }
 
 // Usage:
-import { ClaudeFlowCore } from '@rufflo/core';
+import { ClaudeFlowCore } from '@swarmdo/core';
 const core = new ClaudeFlowCore();
 ```
 
@@ -670,34 +670,34 @@ const core = new ClaudeFlowCore();
 - Event bus for inter-module communication
 - Shared configuration management
 - Module lifecycle management
-- Zero dependencies on other @rufflo/* packages
+- Zero dependencies on other @swarmdo/* packages
 - Can run standalone for minimal setups
 
 ---
 
-#### @rufflo/hooks
+#### @swarmdo/hooks
 
 **Purpose:** Claude Code event hooks for pre/post operations with intelligent routing.
 
 ```typescript
-// Package: @rufflo/hooks
-// Dependencies: @rufflo/core (optional peer)
+// Package: @swarmdo/hooks
+// Dependencies: @swarmdo/core (optional peer)
 // SDK: agentic-flow/hooks
 
 export interface HookConfig {
   enabled: boolean;
   events: ClaudeCodeEvent[];
-  learning?: boolean;  // Requires @rufflo/learning
+  learning?: boolean;  // Requires @swarmdo/learning
 }
 
 // Standalone usage
-import { createHookDispatcher } from '@rufflo/hooks';
+import { createHookDispatcher } from '@swarmdo/hooks';
 const dispatcher = createHookDispatcher();
 dispatcher.register('PreToolUse', preEditHook);
 
 // With core integration
-import { ClaudeFlowCore } from '@rufflo/core';
-import { HooksModule } from '@rufflo/hooks';
+import { ClaudeFlowCore } from '@swarmdo/core';
+import { HooksModule } from '@swarmdo/hooks';
 core.register(new HooksModule());
 ```
 
@@ -717,13 +717,13 @@ core.register(new HooksModule());
 
 ---
 
-#### @rufflo/learning
+#### @swarmdo/learning
 
 **Purpose:** Self-optimizing learning system with multiple RL algorithms.
 
 ```typescript
-// Package: @rufflo/learning
-// Dependencies: @rufflo/core (optional peer)
+// Package: @swarmdo/learning
+// Dependencies: @swarmdo/core (optional peer)
 // SDK: agentic-flow (SONA + AgentDB)
 
 export interface LearningConfig {
@@ -734,13 +734,13 @@ export interface LearningConfig {
 }
 
 // Standalone usage
-import { createLearningEngine } from '@rufflo/learning';
+import { createLearningEngine } from '@swarmdo/learning';
 const engine = createLearningEngine({ algorithm: 'PPO' });
 await engine.train(pattern);
 const similar = await engine.query(embedding);
 
 // With core integration
-import { LearningModule } from '@rufflo/learning';
+import { LearningModule } from '@swarmdo/learning';
 core.register(new LearningModule({ profile: 'balanced' }));
 ```
 
@@ -768,13 +768,13 @@ type RLAlgorithm =
 
 ---
 
-#### @rufflo/swarm
+#### @swarmdo/swarm
 
 **Purpose:** Multi-agent swarm coordination with topology support.
 
 ```typescript
-// Package: @rufflo/swarm
-// Dependencies: @rufflo/core (optional peer)
+// Package: @swarmdo/swarm
+// Dependencies: @swarmdo/core (optional peer)
 // SDK: agentic-flow/swarm
 
 export interface SwarmConfig {
@@ -785,7 +785,7 @@ export interface SwarmConfig {
 }
 
 // Standalone usage
-import { createSwarm } from '@rufflo/swarm';
+import { createSwarm } from '@swarmdo/swarm';
 const swarm = await createSwarm({
   topology: 'hierarchical',
   maxAgents: 10
@@ -793,7 +793,7 @@ const swarm = await createSwarm({
 await swarm.spawnAgent({ type: 'researcher' });
 
 // With core integration
-import { SwarmModule } from '@rufflo/swarm';
+import { SwarmModule } from '@swarmdo/swarm';
 core.register(new SwarmModule({ topology: 'mesh' }));
 ```
 
@@ -808,13 +808,13 @@ core.register(new SwarmModule({ topology: 'mesh' }));
 
 ---
 
-#### @rufflo/memory
+#### @swarmdo/memory
 
 **Purpose:** Persistent memory and pattern storage.
 
 ```typescript
-// Package: @rufflo/memory
-// Dependencies: @rufflo/core (optional peer)
+// Package: @swarmdo/memory
+// Dependencies: @swarmdo/core (optional peer)
 // SDK: agentic-flow/reasoningbank
 
 export interface MemoryConfig {
@@ -825,13 +825,13 @@ export interface MemoryConfig {
 }
 
 // Standalone usage
-import { createMemoryStore } from '@rufflo/memory';
+import { createMemoryStore } from '@swarmdo/memory';
 const memory = createMemoryStore({ backend: 'hybrid' });
 await memory.store('task/123', pattern);
 const similar = await memory.retrieve('code review', { k: 5 });
 
 // With core integration
-import { MemoryModule } from '@rufflo/memory';
+import { MemoryModule } from '@swarmdo/memory';
 core.register(new MemoryModule());
 ```
 
@@ -844,13 +844,13 @@ core.register(new MemoryModule());
 
 ---
 
-#### @rufflo/agents
+#### @swarmdo/agents
 
 **Purpose:** Agent definitions and dynamic agent generation.
 
 ```typescript
-// Package: @rufflo/agents
-// Dependencies: @rufflo/core (optional peer)
+// Package: @swarmdo/agents
+// Dependencies: @swarmdo/core (optional peer)
 
 export interface AgentDefinition {
   id: string;
@@ -861,14 +861,14 @@ export interface AgentDefinition {
 }
 
 // Standalone usage
-import { defineAgent, loadAgents } from '@rufflo/agents';
+import { defineAgent, loadAgents } from '@swarmdo/agents';
 const researcher = defineAgent({
   type: 'researcher',
   capabilities: ['web-search', 'code-analysis']
 });
 
 // With core integration
-import { AgentsModule } from '@rufflo/agents';
+import { AgentsModule } from '@swarmdo/agents';
 core.register(new AgentsModule());
 ```
 
@@ -881,13 +881,13 @@ core.register(new AgentsModule());
 
 ---
 
-#### @rufflo/mcp
+#### @swarmdo/mcp
 
 **Purpose:** MCP server and tool definitions.
 
 ```typescript
-// Package: @rufflo/mcp
-// Dependencies: @rufflo/core (optional peer)
+// Package: @swarmdo/mcp
+// Dependencies: @swarmdo/core (optional peer)
 
 export interface MCPConfig {
   servers: MCPServerConfig[];
@@ -896,13 +896,13 @@ export interface MCPConfig {
 }
 
 // Standalone usage
-import { startMCPServer } from '@rufflo/mcp';
+import { startMCPServer } from '@swarmdo/mcp';
 const server = await startMCPServer({
   tools: ['swarm_init', 'agent_spawn', 'task_orchestrate']
 });
 
 // With core integration
-import { MCPModule } from '@rufflo/mcp';
+import { MCPModule } from '@swarmdo/mcp';
 core.register(new MCPModule());
 ```
 
@@ -915,14 +915,14 @@ core.register(new MCPModule());
 
 ---
 
-#### @rufflo/neural
+#### @swarmdo/neural
 
 **Purpose:** Neural network operations and attention mechanisms.
 
 ```typescript
-// Package: @rufflo/neural
-// Dependencies: @rufflo/core (optional peer)
-// SDK: @ruvector/attention, @ruvector/gnn
+// Package: @swarmdo/neural
+// Dependencies: @swarmdo/core (optional peer)
+// SDK: @swarmvector/attention, @swarmvector/gnn
 
 export interface NeuralConfig {
   attention: AttentionMechanism;
@@ -931,12 +931,12 @@ export interface NeuralConfig {
 }
 
 // Standalone usage
-import { createAttentionService } from '@rufflo/neural';
+import { createAttentionService } from '@swarmdo/neural';
 const attention = createAttentionService({ mechanism: 'flash' });
 const result = await attention.compute(Q, K, V);
 
 // With core integration
-import { NeuralModule } from '@rufflo/neural';
+import { NeuralModule } from '@swarmdo/neural';
 core.register(new NeuralModule());
 ```
 
@@ -952,13 +952,13 @@ core.register(new NeuralModule());
 
 ---
 
-#### @rufflo/attention
+#### @swarmdo/attention
 
 **Purpose:** Attention-based agent coordination and consensus.
 
 ```typescript
-// Package: @rufflo/attention
-// Dependencies: @rufflo/core, @rufflo/neural (optional peers)
+// Package: @swarmdo/attention
+// Dependencies: @swarmdo/core, @swarmdo/neural (optional peers)
 
 export interface AttentionCoordinatorConfig {
   mechanism: AttentionMechanism;
@@ -966,25 +966,25 @@ export interface AttentionCoordinatorConfig {
 }
 
 // Standalone usage
-import { createAttentionCoordinator } from '@rufflo/attention';
+import { createAttentionCoordinator } from '@swarmdo/attention';
 const coordinator = createAttentionCoordinator({ mechanism: 'flash' });
 const consensus = await coordinator.coordinateAgents(outputs);
 
 // With core integration
-import { AttentionModule } from '@rufflo/attention';
+import { AttentionModule } from '@swarmdo/attention';
 core.register(new AttentionModule());
 ```
 
 ---
 
-#### @rufflo/vector
+#### @swarmdo/vector
 
 **Purpose:** Vector database operations with HNSW indexing.
 
 ```typescript
-// Package: @rufflo/vector
-// Dependencies: @rufflo/core (optional peer)
-// SDK: @ruvector/core, agentdb
+// Package: @swarmdo/vector
+// Dependencies: @swarmdo/core (optional peer)
+// SDK: @swarmvector/core, agentdb
 
 export interface VectorConfig {
   dimensions: number;
@@ -994,13 +994,13 @@ export interface VectorConfig {
 }
 
 // Standalone usage
-import { createVectorStore } from '@rufflo/vector';
+import { createVectorStore } from '@swarmdo/vector';
 const vectors = createVectorStore({ dimensions: 384 });
 await vectors.add('id', embedding, metadata);
 const results = await vectors.search(query, { k: 5 });
 
 // With core integration
-import { VectorModule } from '@rufflo/vector';
+import { VectorModule } from '@swarmdo/vector';
 core.register(new VectorModule());
 ```
 
@@ -1011,13 +1011,13 @@ core.register(new VectorModule());
 
 ---
 
-#### @rufflo/cli
+#### @swarmdo/cli
 
 **Purpose:** Command-line interface for all modules.
 
 ```typescript
-// Package: @rufflo/cli
-// Dependencies: All @rufflo/* packages (optional peers)
+// Package: @swarmdo/cli
+// Dependencies: All @swarmdo/* packages (optional peers)
 
 // Commands auto-detect installed modules
 ```
@@ -1025,31 +1025,31 @@ core.register(new VectorModule());
 **Commands:**
 ```bash
 # Core
-npx @rufflo/cli init           # Initialize project
-npx @rufflo/cli status         # Show module status
-npx @rufflo/cli config         # Configure modules
+npx @swarmdo/cli init           # Initialize project
+npx @swarmdo/cli status         # Show module status
+npx @swarmdo/cli config         # Configure modules
 
-# Hooks (if @rufflo/hooks installed)
-npx @rufflo/cli hooks list
-npx @rufflo/cli hooks enable <hook>
+# Hooks (if @swarmdo/hooks installed)
+npx @swarmdo/cli hooks list
+npx @swarmdo/cli hooks enable <hook>
 
-# Learning (if @rufflo/learning installed)
-npx @rufflo/cli learn status
-npx @rufflo/cli learn train <patterns>
-npx @rufflo/cli learn export
+# Learning (if @swarmdo/learning installed)
+npx @swarmdo/cli learn status
+npx @swarmdo/cli learn train <patterns>
+npx @swarmdo/cli learn export
 
-# Swarm (if @rufflo/swarm installed)
-npx @rufflo/cli swarm init <topology>
-npx @rufflo/cli swarm spawn <type>
-npx @rufflo/cli swarm status
+# Swarm (if @swarmdo/swarm installed)
+npx @swarmdo/cli swarm init <topology>
+npx @swarmdo/cli swarm spawn <type>
+npx @swarmdo/cli swarm status
 
-# Memory (if @rufflo/memory installed)
-npx @rufflo/cli memory stats
-npx @rufflo/cli memory consolidate
+# Memory (if @swarmdo/memory installed)
+npx @swarmdo/cli memory stats
+npx @swarmdo/cli memory consolidate
 
-# MCP (if @rufflo/mcp installed)
-npx @rufflo/cli mcp start
-npx @rufflo/cli mcp list-tools
+# MCP (if @swarmdo/mcp installed)
+npx @swarmdo/cli mcp start
+npx @swarmdo/cli mcp list-tools
 ```
 
 ---
@@ -1058,7 +1058,7 @@ npx @rufflo/cli mcp list-tools
 
 ```
                  core  hooks  learn  swarm  memory  agents  mcp  neural  attn  vector  cli
-@rufflo/
+@swarmdo/
   core            -     -      -      -      -       -      -     -       -     -      -
   hooks           P     -      P      -      P       -      -     -       -     -      -
   learning        P     -      -      -      P       -      -     P       -     P      -
@@ -1079,49 +1079,49 @@ P = Optional peer dependency (enhances features when present)
 
 #### Minimal (Core Only)
 ```bash
-npm install @rufflo/core
+npm install @swarmdo/core
 # 50KB, event bus and configuration only
 ```
 
 #### Hooks Only
 ```bash
-npm install @rufflo/hooks
+npm install @swarmdo/hooks
 # Works standalone, no core required
 # 200KB, Claude Code hook integration
 ```
 
 #### Learning Stack
 ```bash
-npm install @rufflo/core @rufflo/learning @rufflo/memory @rufflo/vector
+npm install @swarmdo/core @swarmdo/learning @swarmdo/memory @swarmdo/vector
 # 3MB, full learning system
 ```
 
 #### Swarm Stack
 ```bash
-npm install @rufflo/core @rufflo/swarm @rufflo/agents @rufflo/attention
+npm install @swarmdo/core @swarmdo/swarm @swarmdo/agents @swarmdo/attention
 # 4MB, multi-agent coordination
 ```
 
 #### Full Installation
 ```bash
-npm install rufflo
-# Meta-package that includes all @rufflo/* packages
+npm install swarmdo
+# Meta-package that includes all @swarmdo/* packages
 # 15MB, everything included
 ```
 
 #### Mix and Match Examples
 ```bash
 # Hooks + Learning (self-optimizing hooks)
-npm install @rufflo/hooks @rufflo/learning
+npm install @swarmdo/hooks @swarmdo/learning
 
 # Swarm + Memory (persistent swarm state)
-npm install @rufflo/swarm @rufflo/memory
+npm install @swarmdo/swarm @swarmdo/memory
 
 # Neural + Vector (embeddings + search)
-npm install @rufflo/neural @rufflo/vector
+npm install @swarmdo/neural @swarmdo/vector
 
 # CLI with specific modules
-npm install @rufflo/cli @rufflo/hooks @rufflo/swarm
+npm install @swarmdo/cli @swarmdo/hooks @swarmdo/swarm
 ```
 
 ### 11.5 Module Communication Protocol
@@ -1155,7 +1155,7 @@ interface ModuleEvents {
 }
 
 // Cross-module communication example
-// @rufflo/hooks emits, @rufflo/learning listens
+// @swarmdo/hooks emits, @swarmdo/learning listens
 core.on('hook:completed', async (data) => {
   if (data.hookId === 'postEdit') {
     await learningModule.train({
@@ -1169,9 +1169,9 @@ core.on('hook:completed', async (data) => {
 
 ### 11.6 SDK Mapping to Packages
 
-Each @rufflo/* package maps to specific agentic-flow SDK components:
+Each @swarmdo/* package maps to specific agentic-flow SDK components:
 
-| @rufflo/* | agentic-flow SDK |
+| @swarmdo/* | agentic-flow SDK |
 |----------------|------------------|
 | hooks | `agentic-flow/hooks`, `agentic-flow/mcp/fastmcp/tools/hooks` |
 | learning | `agentic-flow/services/sona-agentdb-integration`, `agentic-flow/hooks/swarm-learning-optimizer` |
@@ -1179,15 +1179,15 @@ Each @rufflo/* package maps to specific agentic-flow SDK components:
 | memory | `agentic-flow/reasoningbank`, `agentic-flow/intelligence/IntelligenceStore` |
 | agents | `agentic-flow/agents` |
 | mcp | `agentic-flow/mcp` |
-| neural | `@ruvector/attention`, `@ruvector/gnn`, `agentic-flow/core` |
+| neural | `@swarmvector/attention`, `@swarmvector/gnn`, `agentic-flow/core` |
 | attention | `agentic-flow/coordination/attention-coordinator` |
-| vector | `@ruvector/core`, `agentic-flow/core/agentdb-fast` |
+| vector | `@swarmvector/core`, `agentic-flow/core/agentdb-fast` |
 | cli | `agentic-flow/cli` |
 
 ### 11.7 Version Compatibility Matrix
 
 ```
-@rufflo/*  | agentic-flow | @ruvector/* | Node.js
+@swarmdo/*  | agentic-flow | @swarmvector/* | Node.js
 ----------------|--------------|-------------|--------
 3.0.x           | 2.0.x-alpha  | 0.1.x       | ≥18.x
 3.1.x           | 2.1.x-alpha  | 0.2.x       | ≥18.x
@@ -1198,9 +1198,9 @@ Each @rufflo/* package maps to specific agentic-flow SDK components:
 **Standalone (No Core):**
 ```typescript
 // Each package works independently
-import { createHookDispatcher } from '@rufflo/hooks';
-import { createLearningEngine } from '@rufflo/learning';
-import { createSwarm } from '@rufflo/swarm';
+import { createHookDispatcher } from '@swarmdo/hooks';
+import { createLearningEngine } from '@swarmdo/learning';
+import { createSwarm } from '@swarmdo/swarm';
 
 // Manual coordination required
 const dispatcher = createHookDispatcher();
@@ -1215,10 +1215,10 @@ dispatcher.on('postEdit', async (data) => {
 **Integrated (With Core):**
 ```typescript
 // Automatic cross-module communication
-import { ClaudeFlowCore } from '@rufflo/core';
-import { HooksModule } from '@rufflo/hooks';
-import { LearningModule } from '@rufflo/learning';
-import { SwarmModule } from '@rufflo/swarm';
+import { ClaudeFlowCore } from '@swarmdo/core';
+import { HooksModule } from '@swarmdo/hooks';
+import { LearningModule } from '@swarmdo/learning';
+import { SwarmModule } from '@swarmdo/swarm';
 
 const core = new ClaudeFlowCore();
 core.register(new HooksModule());
@@ -1233,12 +1233,12 @@ core.register(new SwarmModule());
 
 ### 11.9 Shared Types Package
 
-#### @rufflo/types
+#### @swarmdo/types
 
 **Purpose:** Zero-runtime TypeScript definitions shared across all packages.
 
 ```typescript
-// Package: @rufflo/types
+// Package: @swarmdo/types
 // Size: ~20KB (types only, no runtime)
 // Dependencies: None
 
@@ -1323,7 +1323,7 @@ export interface HookResult {
 #### Tool Selection: pnpm Workspaces + Turborepo
 
 ```
-rufflo/
+swarmdo/
 ├── package.json              # Root workspace config
 ├── pnpm-workspace.yaml       # pnpm workspace definition
 ├── turbo.json                # Turborepo pipeline config
@@ -1422,9 +1422,9 @@ describe('HookDispatcher', () => {
 
 ```typescript
 // packages/integration-tests/core-hooks.test.ts
-import { ClaudeFlowCore } from '@rufflo/core';
-import { HooksModule } from '@rufflo/hooks';
-import { LearningModule } from '@rufflo/learning';
+import { ClaudeFlowCore } from '@swarmdo/core';
+import { HooksModule } from '@swarmdo/hooks';
+import { LearningModule } from '@swarmdo/learning';
 
 describe('Core + Hooks + Learning Integration', () => {
   let core: ClaudeFlowCore;
@@ -1494,7 +1494,7 @@ export const createMockLearningEngine = () => ({
 #### Cross-Module Error Propagation
 
 ```typescript
-// @rufflo/core error types
+// @swarmdo/core error types
 export class ClaudeFlowError extends Error {
   constructor(
     message: string,
@@ -1537,7 +1537,7 @@ export enum ErrorCode {
 #### Graceful Degradation
 
 ```typescript
-// @rufflo/core graceful degradation
+// @swarmdo/core graceful degradation
 class ClaudeFlowCore {
   async safeGetModule<T>(id: string): Promise<T | null> {
     try {
@@ -1575,7 +1575,7 @@ class ClaudeFlowCore {
 #### Circuit Breaker Pattern
 
 ```typescript
-// @rufflo/core circuit breaker
+// @swarmdo/core circuit breaker
 interface CircuitBreakerConfig {
   failureThreshold: number;  // Failures before opening
   resetTimeout: number;      // Ms before half-open
@@ -1615,7 +1615,7 @@ class CircuitBreaker {
 #### API Key Management
 
 ```typescript
-// @rufflo/core secrets
+// @swarmdo/core secrets
 interface SecretsConfig {
   provider: 'env' | 'keychain' | 'vault';
   keyPrefix?: string;
@@ -1654,7 +1654,7 @@ class SecretsManager {
 #### Agent Sandboxing
 
 ```typescript
-// @rufflo/agents sandboxing
+// @swarmdo/agents sandboxing
 interface SandboxConfig {
   maxMemoryMB: number;
   maxCpuPercent: number;
@@ -1675,7 +1675,7 @@ const DEFAULT_SANDBOX: SandboxConfig = {
 #### PII Handling
 
 ```typescript
-// @rufflo/memory PII scrubbing (from agentic-flow)
+// @swarmdo/memory PII scrubbing (from agentic-flow)
 import { scrubPII, containsPII } from 'agentic-flow/reasoningbank';
 
 class SecureMemoryStore {
@@ -1695,7 +1695,7 @@ class SecureMemoryStore {
 #### Audit Logging
 
 ```typescript
-// @rufflo/core audit
+// @swarmdo/core audit
 interface AuditEvent {
   timestamp: number;
   module: string;
@@ -1725,12 +1725,12 @@ class AuditLogger {
 #### OpenTelemetry Integration
 
 ```typescript
-// @rufflo/core telemetry
+// @swarmdo/core telemetry
 import { trace, metrics, context } from '@opentelemetry/api';
 
 class Telemetry {
-  private tracer = trace.getTracer('@rufflo/core');
-  private meter = metrics.getMeter('@rufflo/core');
+  private tracer = trace.getTracer('@swarmdo/core');
+  private meter = metrics.getMeter('@swarmdo/core');
 
   // Counters
   private hookCounter = this.meter.createCounter('claude_flow.hooks.total');
@@ -1774,12 +1774,12 @@ interface ClaudeCodeMetrics {
   tools_invoked: Record<string, number>;
   tool_success_rate: number;
 
-  // Learning metrics (Rufflo specific)
+  // Learning metrics (Swarmdo specific)
   patterns_learned: number;
   learning_cycles: number;
   avg_pattern_quality: number;
 
-  // Swarm metrics (Rufflo specific)
+  // Swarm metrics (Swarmdo specific)
   agents_spawned: number;
   tasks_completed: number;
   consensus_rounds: number;
@@ -1828,9 +1828,9 @@ class SwarmTracer {
 
 | v2 API | v3 API | Migration |
 |--------|--------|-----------|
-| `require('rufflo')` | `import { ClaudeFlowCore } from '@rufflo/core'` | ESM only |
+| `require('swarmdo')` | `import { ClaudeFlowCore } from '@swarmdo/core'` | ESM only |
 | `claudeFlow.init()` | `new ClaudeFlowCore()` | Constructor-based |
-| `claudeFlow.swarm.create()` | `import { createSwarm } from '@rufflo/swarm'` | Modular import |
+| `claudeFlow.swarm.create()` | `import { createSwarm } from '@swarmdo/swarm'` | Modular import |
 | `claudeFlow.memory.store()` | `memoryModule.store()` | Module instance |
 | Callbacks | Promises/async-await | All async |
 
@@ -1838,14 +1838,14 @@ class SwarmTracer {
 
 ```bash
 # Install migration tool
-npx @rufflo/migrate
+npx @swarmdo/migrate
 
 # Analyze codebase
-npx @rufflo/migrate analyze ./src
+npx @swarmdo/migrate analyze ./src
 
 # Apply migrations
-npx @rufflo/migrate run ./src --dry-run
-npx @rufflo/migrate run ./src
+npx @swarmdo/migrate run ./src --dry-run
+npx @swarmdo/migrate run ./src
 ```
 
 #### Codemod Transforms
@@ -1856,14 +1856,14 @@ export default function transformer(file, api) {
   const j = api.jscodeshift;
   const root = j(file.source);
 
-  // Transform: require('rufflo') → import
+  // Transform: require('swarmdo') → import
   root.find(j.CallExpression, {
     callee: { name: 'require' },
-    arguments: [{ value: 'rufflo' }]
+    arguments: [{ value: 'swarmdo' }]
   }).replaceWith(() =>
     j.importDeclaration(
       [j.importSpecifier(j.identifier('ClaudeFlowCore'))],
-      j.literal('@rufflo/core')
+      j.literal('@swarmdo/core')
     )
   );
 
@@ -1874,15 +1874,15 @@ export default function transformer(file, api) {
 #### Compatibility Shim (Temporary)
 
 ```typescript
-// @rufflo/compat - Temporary v2 compatibility
-import { ClaudeFlowCore } from '@rufflo/core';
-import { HooksModule } from '@rufflo/hooks';
-import { SwarmModule } from '@rufflo/swarm';
-import { MemoryModule } from '@rufflo/memory';
+// @swarmdo/compat - Temporary v2 compatibility
+import { ClaudeFlowCore } from '@swarmdo/core';
+import { HooksModule } from '@swarmdo/hooks';
+import { SwarmModule } from '@swarmdo/swarm';
+import { MemoryModule } from '@swarmdo/memory';
 
 // v2-style API
 export function createClaudeFlow(config?: any) {
-  console.warn('[@rufflo/compat] Deprecated: Migrate to v3 modular imports');
+  console.warn('[@swarmdo/compat] Deprecated: Migrate to v3 modular imports');
 
   const core = new ClaudeFlowCore();
 
@@ -1919,7 +1919,7 @@ export function createClaudeFlow(config?: any) {
 #### Plugin Interface
 
 ```typescript
-// @rufflo/core plugin system
+// @swarmdo/core plugin system
 interface ClaudeFlowPlugin {
   name: string;
   version: string;
@@ -1991,10 +1991,10 @@ core.use(analyzerPlugin);
 
 ```bash
 # Install community extension
-npm install @community/rufflo-security
+npm install @community/swarmdo-security
 
 # Auto-discovered via naming convention
-# @*/rufflo-* or rufflo-plugin-*
+# @*/swarmdo-* or swarmdo-plugin-*
 ```
 
 ---
@@ -2005,17 +2005,17 @@ npm install @community/rufflo-security
 
 1. **Programmatic** (highest) - `core.configure({ ... })`
 2. **CLI flags** - `--swarm-topology=mesh`
-3. **Environment variables** - `RUFFLO_SWARM_TOPOLOGY=mesh`
-4. **Project config** - `.rufflo.json` or `rufflo.config.js`
-5. **User config** - `~/.rufflo/config.json`
+3. **Environment variables** - `SWARMDO_SWARM_TOPOLOGY=mesh`
+4. **Project config** - `.swarmdo.json` or `swarmdo.config.js`
+5. **User config** - `~/.swarmdo/config.json`
 6. **Defaults** (lowest) - Built-in defaults
 
 #### Configuration File
 
 ```json
-// .rufflo.json
+// .swarmdo.json
 {
-  "$schema": "https://rufflo.dev/schema.json",
+  "$schema": "https://swarmdo.dev/schema.json",
   "version": "3.0",
 
   "core": {
@@ -2042,7 +2042,7 @@ npm install @community/rufflo-security
 
   "memory": {
     "backend": "hybrid",
-    "path": ".rufflo/memory",
+    "path": ".swarmdo/memory",
     "consolidationInterval": 3600000
   }
 }
@@ -2051,17 +2051,17 @@ npm install @community/rufflo-security
 #### Environment Variable Mapping
 
 ```bash
-# Pattern: RUFFLO_<MODULE>_<OPTION>
-RUFFLO_LEARNING_ALGORITHM=PPO
-RUFFLO_SWARM_TOPOLOGY=mesh
-RUFFLO_MEMORY_BACKEND=sqlite
-RUFFLO_HOOKS_TIMEOUT=10000
+# Pattern: SWARMDO_<MODULE>_<OPTION>
+SWARMDO_LEARNING_ALGORITHM=PPO
+SWARMDO_SWARM_TOPOLOGY=mesh
+SWARMDO_MEMORY_BACKEND=sqlite
+SWARMDO_HOOKS_TIMEOUT=10000
 ```
 
 #### Configuration API
 
 ```typescript
-// @rufflo/core configuration
+// @swarmdo/core configuration
 class ConfigManager {
   // Load from all sources
   async load(): Promise<ResolvedConfig> {
@@ -2196,7 +2196,7 @@ jobs:
 #### Feature Detection
 
 ```typescript
-// @rufflo/core feature detection
+// @swarmdo/core feature detection
 class FeatureDetector {
   async detect(): Promise<AvailableFeatures> {
     return {
@@ -2238,7 +2238,7 @@ class FeatureDetector {
 #### Degraded Mode Configuration
 
 ```typescript
-// @rufflo/core degraded mode
+// @swarmdo/core degraded mode
 interface DegradedModeConfig {
   // What to do when network unavailable
   offline: {
@@ -2283,7 +2283,7 @@ const DEFAULT_DEGRADED: DegradedModeConfig = {
 
 ### 12.1 SDK Foundation
 
-**agentic-flow@alpha provides everything Rufflo v3 needs:**
+**agentic-flow@alpha provides everything Swarmdo v3 needs:**
 
 - ✅ 19 hook tools for comprehensive integration
 - ✅ 9 RL algorithms for adaptive learning
@@ -2295,21 +2295,21 @@ const DEFAULT_DEGRADED: DegradedModeConfig = {
 
 ### 12.2 Modular Package Architecture
 
-**Rufflo v3 will be a modular constellation of 10 npm packages:**
+**Swarmdo v3 will be a modular constellation of 10 npm packages:**
 
 | Package | Purpose | Size | Standalone |
 |---------|---------|------|------------|
-| `@rufflo/core` | Central connector | ~50KB | ✅ |
-| `@rufflo/hooks` | Claude Code events | ~200KB | ✅ |
-| `@rufflo/learning` | Self-optimization | ~2MB | ✅ |
-| `@rufflo/swarm` | Multi-agent coordination | ~1MB | ✅ |
-| `@rufflo/memory` | Persistent storage | ~500KB | ✅ |
-| `@rufflo/agents` | Agent definitions | ~300KB | ✅ |
-| `@rufflo/mcp` | MCP server/tools | ~400KB | ✅ |
-| `@rufflo/neural` | Neural operations | ~1MB | ✅ |
-| `@rufflo/attention` | Agent consensus | ~200KB | ✅ |
-| `@rufflo/vector` | HNSW search | ~800KB | ✅ |
-| `@rufflo/cli` | CLI interface | ~100KB | ❌ |
+| `@swarmdo/core` | Central connector | ~50KB | ✅ |
+| `@swarmdo/hooks` | Claude Code events | ~200KB | ✅ |
+| `@swarmdo/learning` | Self-optimization | ~2MB | ✅ |
+| `@swarmdo/swarm` | Multi-agent coordination | ~1MB | ✅ |
+| `@swarmdo/memory` | Persistent storage | ~500KB | ✅ |
+| `@swarmdo/agents` | Agent definitions | ~300KB | ✅ |
+| `@swarmdo/mcp` | MCP server/tools | ~400KB | ✅ |
+| `@swarmdo/neural` | Neural operations | ~1MB | ✅ |
+| `@swarmdo/attention` | Agent consensus | ~200KB | ✅ |
+| `@swarmdo/vector` | HNSW search | ~800KB | ✅ |
+| `@swarmdo/cli` | CLI interface | ~100KB | ❌ |
 
 ### 12.3 Key Architectural Decisions
 
@@ -2317,37 +2317,37 @@ const DEFAULT_DEGRADED: DegradedModeConfig = {
 2. **Optional peer dependencies** - Packages work alone or together
 3. **Event-driven communication** - Core provides event bus
 4. **Progressive enhancement** - More packages = more features
-5. **NOT directly import @ruvector/*** - Use agentic-flow wrappers
+5. **NOT directly import @swarmvector/*** - Use agentic-flow wrappers
 
 ### 12.4 Implementation Roadmap
 
 **Phase 1: Core Packages**
-- `@rufflo/core` - Event bus, configuration, module registry
-- `@rufflo/hooks` - Claude Code event mapping
-- `@rufflo/cli` - Basic CLI with init/status
+- `@swarmdo/core` - Event bus, configuration, module registry
+- `@swarmdo/hooks` - Claude Code event mapping
+- `@swarmdo/cli` - Basic CLI with init/status
 
 **Phase 2: Learning Stack**
-- `@rufflo/learning` - SONA + AgentDB integration
-- `@rufflo/memory` - ReasoningBank wrapper
-- `@rufflo/vector` - HNSW indexing
+- `@swarmdo/learning` - SONA + AgentDB integration
+- `@swarmdo/memory` - ReasoningBank wrapper
+- `@swarmdo/vector` - HNSW indexing
 
 **Phase 3: Swarm Stack**
-- `@rufflo/swarm` - QUIC coordination
-- `@rufflo/agents` - Agent definitions
-- `@rufflo/attention` - Consensus mechanisms
+- `@swarmdo/swarm` - QUIC coordination
+- `@swarmdo/agents` - Agent definitions
+- `@swarmdo/attention` - Consensus mechanisms
 
 **Phase 4: Neural Stack**
-- `@rufflo/neural` - Attention mechanisms
-- `@rufflo/mcp` - Full MCP server
+- `@swarmdo/neural` - Attention mechanisms
+- `@swarmdo/mcp` - Full MCP server
 
 ### 12.5 Final Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                         rufflo (meta-package)                       │
-│                      npm install rufflo@3                           │
+│                         swarmdo (meta-package)                       │
+│                      npm install swarmdo@3                           │
 ├─────────────────────────────────────────────────────────────────────────┤
-│  @rufflo/*                                                          │
+│  @swarmdo/*                                                          │
 │  ┌───────┬─────────┬───────┬────────┬────────┬──────┬──────┬─────────┐ │
 │  │ core  │  hooks  │ learn │ swarm  │ memory │agents│ mcp  │ neural  │ │
 │  └───────┴─────────┴───────┴────────┴────────┴──────┴──────┴─────────┘ │
@@ -2357,9 +2357,9 @@ const DEFAULT_DEGRADED: DegradedModeConfig = {
 │  │ hooks │ swarm │ reasoningbank │ coordination │ services │ workers │ │
 │  └────────────────────────────────────────────────────────────────────┘ │
 ├─────────────────────────────────────────────────────────────────────────┤
-│                       @ruvector/* (underlying)                           │
+│                       @swarmvector/* (underlying)                           │
 │  ┌───────────────┬────────────────┬─────────────────┬─────────────────┐ │
-│  │ @ruvector/core│ @ruvector/sona │ @ruvector/attn  │ @ruvector/gnn   │ │
+│  │ @swarmvector/core│ @swarmvector/sona │ @swarmvector/attn  │ @swarmvector/gnn   │ │
 │  │   (HNSW)      │   (LoRA)       │   (Attention)   │   (GNN)         │ │
 │  └───────────────┴────────────────┴─────────────────┴─────────────────┘ │
 └─────────────────────────────────────────────────────────────────────────┘
@@ -2398,7 +2398,7 @@ The agentic-flow worker system provides **non-blocking background workers** trig
 ┌─────────────────────────────────────────────────────────────────────┐
 │                   WorkerDispatchService                              │
 │  ┌─────────────┬─────────────┬─────────────┬─────────────────────┐ │
-│  │  Registry   │  Governor   │  RuVector   │  Worker Factory     │ │
+│  │  Registry   │  Governor   │  SwarmVector   │  Worker Factory     │ │
 │  │  (CRUD)     │  (Limits)   │ (Learning)  │  (Custom Workers)   │ │
 │  └─────────────┴─────────────┴─────────────┴─────────────────────┘ │
 └─────────────────────────────────┬───────────────────────────────────┘
@@ -2464,7 +2464,7 @@ detector.clearCooldown('ultralearn'); // Clear for testing
 
 #### WorkerDispatchService
 
-Main dispatcher with RuVector integration:
+Main dispatcher with SwarmVector integration:
 
 ```typescript
 import { getWorkerDispatchService } from 'agentic-flow/workers';
@@ -2667,31 +2667,31 @@ console.log(suite.summary);
 // }
 ```
 
-### 13.6 RuVector Integration
+### 13.6 SwarmVector Integration
 
-Workers integrate with RuVector for learning:
+Workers integrate with SwarmVector for learning:
 
 ```typescript
-import { getRuVectorWorkerIntegration } from 'agentic-flow/workers';
+import { getSwarmVectorWorkerIntegration } from 'agentic-flow/workers';
 
-const ruvector = getRuVectorWorkerIntegration();
-await ruvector.initialize();
+const swarmvector = getSwarmVectorWorkerIntegration();
+await swarmvector.initialize();
 
 // During worker execution:
 // 1. Start trajectory tracking
-const trajectoryId = await ruvector.startTrajectory(
+const trajectoryId = await swarmvector.startTrajectory(
   workerId, trigger, topic
 );
 
 // 2. Record phase steps
-await ruvector.recordStep(trajectoryId, 'file-discovery', {
+await swarmvector.recordStep(trajectoryId, 'file-discovery', {
   duration: 150,
   memoryDeposits: 5,
   successRate: 1.0
 });
 
 // 3. Complete with learning
-const learningResult = await ruvector.completeTrajectory(
+const learningResult = await swarmvector.completeTrajectory(
   trajectoryId,
   workerResults
 );
@@ -2702,16 +2702,16 @@ const learningResult = await ruvector.completeTrajectory(
 // }
 
 // 4. Find patterns for future runs
-const patterns = await ruvector.findPatterns(topic, 5);
+const patterns = await swarmvector.findPatterns(topic, 5);
 ```
 
-### 13.7 @rufflo/workers Package
+### 13.7 @swarmdo/workers Package
 
-Rufflo v3 workers package specification:
+Swarmdo v3 workers package specification:
 
 ```typescript
-// @rufflo/workers
-// Dependencies: @rufflo/core (optional peer)
+// @swarmdo/workers
+// Dependencies: @swarmdo/core (optional peer)
 // SDK: agentic-flow/workers
 
 export interface WorkersConfig {
@@ -2762,9 +2762,9 @@ export {
   workerBenchmarks,
   runBenchmarks,
 
-  // RuVector
-  RuVectorWorkerIntegration,
-  getRuVectorWorkerIntegration
+  // SwarmVector
+  SwarmVectorWorkerIntegration,
+  getSwarmVectorWorkerIntegration
 };
 ```
 
@@ -2773,8 +2773,8 @@ export {
 Workers can be triggered from Claude Code hooks:
 
 ```typescript
-import { HooksModule } from '@rufflo/hooks';
-import { WorkersModule } from '@rufflo/workers';
+import { HooksModule } from '@swarmdo/hooks';
+import { WorkersModule } from '@swarmdo/workers';
 
 const core = new ClaudeFlowCore();
 core.register(new HooksModule());
@@ -2803,4 +2803,4 @@ core.on('worker:complete', async ({ workerId, results }) => {
 
 *Document Version: 1.1.0*
 *Last Updated: 2026-01-03*
-*Based on: agentic-flow@2.0.1-alpha.50, ruvector@0.1.95*
+*Based on: agentic-flow@2.0.1-alpha.50, swarmvector@0.1.95*

@@ -1,6 +1,6 @@
-//! Claude Flow Integration for RuvLTRA
+//! Claude Flow Integration for SwarmLTRA
 //!
-//! Optimizes RuvLTRA-Small for Claude Flow use cases:
+//! Optimizes SwarmLTRA-Small for Claude Flow use cases:
 //! - Agent routing (task -> optimal agent type)
 //! - Task classification (code/research/test/review)
 //! - Semantic search (memory retrieval queries)
@@ -267,7 +267,7 @@ pub use model_router::{
     TaskComplexityAnalyzer,
 };
 
-/// Claude Flow agent types supported by RuvLTRA routing
+/// Claude Flow agent types supported by SwarmLTRA routing
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum ClaudeFlowAgent {
     /// Code implementation specialist

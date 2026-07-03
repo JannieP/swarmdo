@@ -31,12 +31,12 @@ mcp__swarmdo__agent_spawn { type: "optimizer", name: "Structure Optimizer" }
 mcp__swarmdo__agent_spawn { type: "coordinator", name: "Multi-Repo Coordinator" }
 
 // Analyze current repository structure
-LS("/workspaces/ruv-FANN/claude-code-flow/claude-code-flow")
-LS("/workspaces/ruv-FANN/ruv-swarm/npm")
+LS("/workspaces/upstream")
+LS("/workspaces/upstream")
 
 // Search for related repositories
 mcp__github__search_repositories {
-  query: "user:ruvnet claude",
+  query: "user:upstream claude",
   sort: "updated",
   order: "desc"
 }
@@ -61,7 +61,7 @@ mcp__github__create_repository {
 
 // Push template structure
 mcp__github__push_files {
-  owner: "ruvnet",
+  owner: "upstream",
   repo: "claude-project-template",
   branch: "main",
   files: [
@@ -144,8 +144,8 @@ const repositories = [
 // Update common files across repositories
 repositories.forEach(repo => {
   mcp__github__create_or_update_file({
-    owner: "ruvnet",
-    repo: "ruv-FANN",
+    owner: "upstream",
+    repo: "the upstream repo",
     path: `${repo}/.github/workflows/integration.yml`,
     content: `name: Integration Tests
 on: [push, pull_request]
@@ -177,10 +177,10 @@ jobs:
   mcp__swarmdo__agent_spawn { type: "coordinator", name: "Multi-Repo Coordinator" }
   
   // Analyze current repository structures
-  LS("/workspaces/ruv-FANN/claude-code-flow/claude-code-flow")
-  LS("/workspaces/ruv-FANN/ruv-swarm/npm") 
-  Read("/workspaces/ruv-FANN/claude-code-flow/claude-code-flow/package.json")
-  Read("/workspaces/ruv-FANN/ruv-swarm/npm/package.json")
+  LS("/workspaces/upstream")
+  LS("/workspaces/upstream") 
+  Read("/workspaces/upstream")
+  Read("/workspaces/upstream")
   
   // Search for architectural patterns using gh CLI
   ARCH_PATTERNS=$(Bash(`gh search repos "language:javascript template architecture" \
@@ -240,7 +240,7 @@ jobs:
 
 ### 1. **Monorepo Structure Pattern**
 ```
-ruv-FANN/
+the upstream repo/
 ├── packages/
 │   ├── claude-code-flow/
 │   │   ├── src/

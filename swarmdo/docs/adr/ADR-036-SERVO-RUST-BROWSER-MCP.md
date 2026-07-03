@@ -1,12 +1,12 @@
-# ADR-036: Servo Replaces Playwright as Browser Engine for @rufflo/browser
+# ADR-036: Servo Replaces Playwright as Browser Engine for @swarmdo/browser
 
 **Status:** Accepted
 **Date:** 2026-03-05
-**Supersedes:** Playwright dependency in `@rufflo/browser`
+**Supersedes:** Playwright dependency in `@swarmdo/browser`
 
 ## Context
 
-`@rufflo/browser` currently provides 59 MCP browser tools built on `agent-browser` + Playwright + Chromium. This stack works but has fundamental problems:
+`@swarmdo/browser` currently provides 59 MCP browser tools built on `agent-browser` + Playwright + Chromium. This stack works but has fundamental problems:
 
 1. **~400MB Chromium binary** — must download on first run, bloats Docker images, prevents edge deployment
 2. **200-500MB RAM per tab** — limits concurrent browser sessions in swarms
@@ -19,7 +19,7 @@
 
 ## Decision
 
-Replace Playwright/Chromium with **Servo** as the rendering backend for `@rufflo/browser`. Keep the existing 59-tool MCP interface, trajectory learning, security scanning, swarm coordination, and 9 workflow templates unchanged. The swap is at the adapter layer — `AgentBrowserAdapter` becomes `ServoAdapter`.
+Replace Playwright/Chromium with **Servo** as the rendering backend for `@swarmdo/browser`. Keep the existing 59-tool MCP interface, trajectory learning, security scanning, swarm coordination, and 9 workflow templates unchanged. The swap is at the adapter layer — `AgentBrowserAdapter` becomes `ServoAdapter`.
 
 ### Architecture: Before → After
 
@@ -180,9 +180,9 @@ impl ServoInstance {
 ### TypeScript Adapter (Drop-In Replacement)
 
 ```typescript
-// @rufflo/browser/src/adapters/servo-adapter.ts
+// @swarmdo/browser/src/adapters/servo-adapter.ts
 
-import { ServoInstance } from '@ruvector/servo-native'; // napi-rs binary
+import { ServoInstance } from '@swarmvector/servo-native'; // napi-rs binary
 import type { BrowserAdapter, ActionResult, Snapshot } from '../types';
 
 export class ServoAdapter implements BrowserAdapter {
@@ -199,7 +199,7 @@ export class ServoAdapter implements BrowserAdapter {
 
   async snapshot(options?: { interactive?: boolean }): Promise<ActionResult<Snapshot>> {
     const raw = this.servo.snapshot();
-    // Convert Servo refs to @rufflo/browser element ref format (@e1, @e2, ...)
+    // Convert Servo refs to @swarmdo/browser element ref format (@e1, @e2, ...)
     const refs: Record<string, ElementRef> = {};
     for (const [id, node] of Object.entries(raw.refs)) {
       refs[id] = {
@@ -262,7 +262,7 @@ export class ServoAdapter implements BrowserAdapter {
 ### Package Structure
 
 ```
-@ruvector/servo-native              (npm, prebuilt Rust binary via napi-rs)
+@swarmvector/servo-native              (npm, prebuilt Rust binary via napi-rs)
 ├── src/lib.rs                      Servo embedding + napi bindings
 ├── servo-headless/                  Minimal Servo build config (no GPU, no media)
 ├── prebuilds/
@@ -271,7 +271,7 @@ export class ServoAdapter implements BrowserAdapter {
 │   └── win32-x64/servo-native.node
 └── package.json                    ~5MB per platform
 
-@rufflo/browser                (existing package, adapter swap)
+@swarmdo/browser                (existing package, adapter swap)
 ├── src/
 │   ├── adapters/
 │   │   ├── agent-browser-adapter.ts   ← DEPRECATED (Playwright)
@@ -282,7 +282,7 @@ export class ServoAdapter implements BrowserAdapter {
 │   ├── workflows/                     unchanged
 │   └── hooks/                         unchanged
 └── package.json
-    - "@ruvector/servo-native": "^1.0.0"   (replaces agent-browser)
+    - "@swarmvector/servo-native": "^1.0.0"   (replaces agent-browser)
     + peerDependencies: none (no Playwright, no Chrome)
 ```
 
@@ -295,12 +295,12 @@ Same `browser` group, new backend:
 browser: {
   enabled: process.env.MCP_GROUP_BROWSER === "true",
   description: "Headless browser automation — navigate, click, fill, screenshot (Servo)",
-  source: "rufflo",
+  source: "swarmdo",
   prefixes: ["browser_"],
 }
 ```
 
-The rufflo `browser_*` tools will use `ServoAdapter` internally instead of `AgentBrowserAdapter`. No MCP bridge changes required.
+The swarmdo `browser_*` tools will use `ServoAdapter` internally instead of `AgentBrowserAdapter`. No MCP bridge changes required.
 
 ### Docker Impact
 
@@ -311,7 +311,7 @@ RUN npx playwright install chromium               # +400MB
 
 # AFTER: Servo native binary
 FROM node:20-slim                                  # 200MB base image
-RUN npm install @ruvector/servo-native             # +5MB
+RUN npm install @swarmvector/servo-native             # +5MB
 # Total: ~205MB vs ~2.5GB — 12x smaller
 ```
 
@@ -392,7 +392,7 @@ For the 95% of agent browsing tasks (navigate, read content, fill forms, click b
 ## Related
 
 - [ADR-035: MCP Tool Groups](ADR-035-MCP-TOOL-GROUPS.md) — browser group architecture
-- [ADR-033: RuVector + Rufflo MCP Integration](ADR-033-RUVECTOR-RUFLO-MCP-INTEGRATION.md) — stdio MCP client pattern
-- [@rufflo/browser README](https://github.com/ruvnet/ruflo/blob/main/v3/@rufflo/browser/README.md) — existing 59-tool API surface
+- [ADR-033: SwarmVector + Swarmdo MCP Integration](ADR-033-SWARMVECTOR-SWARMDO-MCP-INTEGRATION.md) — stdio MCP client pattern
+- [@swarmdo/browser README](the upstream project (see NOTICE)@swarmdo/browser/README.md) — existing 59-tool API surface
 - [Servo project](https://servo.org/) — Linux Foundation browser engine
 - [napi-rs](https://napi.rs/) — Rust ↔ Node.js FFI framework

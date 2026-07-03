@@ -275,7 +275,7 @@ export const initCommand: Command = {
             } catch {
               spinner.fail('Failed to create vector extension');
               output.printError('Please install swarmvector or pgvector manually.');
-              output.printError('  swarmvector: https://hub.docker.com/r/ruvnet/swarmvector-postgres');
+              output.printError('  swarmvector: https://hub.docker.com/r/upstream/swarmvector-postgres');
               output.printError('  pgvector: https://github.com/pgvector/pgvector');
               await client.end();
               return { success: false, exitCode: 1 };

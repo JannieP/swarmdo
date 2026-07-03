@@ -59,15 +59,15 @@
     "pi-key",
     "distributed-compute"
   ],
-  "author": "ruv.io Team <info@ruv.io> (https://ruv.io)",
-  "homepage": "https://ruv.io",
+  "author": "swarmdo.com Team <maintainers@swarmdo.com> (https://swarmdo.com)",
+  "homepage": "https://swarmdo.com",
   "bugs": {
-    "url": "https://github.com/ruvnet/swarmvector/issues"
+    "url": "the upstream project (see NOTICE)"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ruvnet/swarmvector.git",
+    "url": "the upstream project (see NOTICE)",
     "directory": "npm/packages/swarmvector"
   },
   "dependencies": {

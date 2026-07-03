@@ -2,19 +2,19 @@
 
 **Status**: Accepted — Implemented (Phases 1–3 + Component C wiring landed)
 **Date**: 2026-05-05 (proposed) · **Updated**: 2026-05-09
-**Version**: shipped in `@rufflo/plugin-agent-federation@1.0.0-alpha.5` and `@rufflo/claims@3.0.0-alpha.x`
+**Version**: shipped in `@swarmdo/plugin-agent-federation@1.0.0-alpha.5` and `@swarmdo/claims@3.0.0-alpha.x`
 **Supersedes**: nothing
-**Related**: ADR-086 (Agent Federation), ADR-097 (Federation budget circuit breaker), ADR-102 (CI smoke harness — federation policy-engine fix attested via witness), commit `6f495369` (G2 Ed25519 signing), `v3/@rufflo/claims/`, `v3/@rufflo/plugin-agent-federation/`
+**Related**: ADR-086 (Agent Federation), ADR-097 (Federation budget circuit breaker), ADR-102 (CI smoke harness — federation policy-engine fix attested via witness), commit `6f495369` (G2 Ed25519 signing), `v3/@swarmdo/claims/`, `v3/@swarmdo/plugin-agent-federation/`
 
 ## Context
 
-The claims module (`v3/@rufflo/claims/`) is a Domain-Driven-Design implementation of a work-coordination protocol — agents and humans claim issues, hand them off, mark them stealable, and contest steals through a Cilk-style work-stealing scheduler. Today it operates **strictly in-process**: every claim, every handoff, every steal happens against `InMemoryClaimEventStore` with monotonic per-aggregate integer versions, and every consumer of the claim service is assumed to be on the same node.
+The claims module (`v3/@swarmdo/claims/`) is a Domain-Driven-Design implementation of a work-coordination protocol — agents and humans claim issues, hand them off, mark them stealable, and contest steals through a Cilk-style work-stealing scheduler. Today it operates **strictly in-process**: every claim, every handoff, every steal happens against `InMemoryClaimEventStore` with monotonic per-aggregate integer versions, and every consumer of the claim service is assumed to be on the same node.
 
-Federation (`v3/@rufflo/plugin-agent-federation/`) is the cross-node trust plane: Ed25519-signed envelopes, peer registry, trust scoring, and a `RoutingService` for sending typed messages between Rufflo installations. ADR-097 added budget circuit breakers; ADR-086 established the core Ed25519 protocol.
+Federation (`v3/@swarmdo/plugin-agent-federation/`) is the cross-node trust plane: Ed25519-signed envelopes, peer registry, trust scoring, and a `RoutingService` for sending typed messages between Swarmdo installations. ADR-097 added budget circuit breakers; ADR-086 established the core Ed25519 protocol.
 
 These two modules have been built independently and have **never been wired together**. As a consequence:
 
-- A user running Rufflo on three nodes — say, a developer laptop, a CI runner, and a long-running cloud worker — cannot have an agent on the laptop hand a claim off to an idle agent on the cloud worker. The work happens locally or not at all.
+- A user running Swarmdo on three nodes — say, a developer laptop, a CI runner, and a long-running cloud worker — cannot have an agent on the laptop hand a claim off to an idle agent on the cloud worker. The work happens locally or not at all.
 - Plugin authors who want to express "the most-loaded node should hand its overflow to the least-loaded node in the trust circle" have no path to do so. The load balancer (`load-balancer.ts:345`) computes globally optimal assignments inside a single process; the result cannot leave that process.
 - The work-stealing scheduler — designed exactly for the case where one worker has nothing to do and another has a backlog — only works when both workers share memory. The cross-machine case, where stealing matters most, is the case we don't support.
 
@@ -26,18 +26,18 @@ This ADR is the design document for those three changes plus the contracts, roll
 
 | Component | Path | Today |
 |---|---|---|
-| Claim service | `v3/@rufflo/claims/src/application/claim-service.ts:147–240` | Pure DI through `IClaimRepository`, `IClaimantRepository`, `IClaimEventStore` |
-| Work-stealing service | `v3/@rufflo/claims/src/application/work-stealing-service.ts:172–305` | Repo-driven; `contestInfo` window already exists for race resolution |
-| Load balancer | `v3/@rufflo/claims/src/application/load-balancer.ts:345–793` | Pure functions of claim-count / progress / priority — federates trivially |
-| Event store | `v3/@rufflo/claims/src/infrastructure/event-store.ts:50–286` | Local in-memory, integer per-aggregate versions |
-| Domain types | `v3/@rufflo/claims/src/domain/types.ts:91,513` | `Claimant.id` opaque `string`, no locality assumption |
-| Federation envelope | `v3/@rufflo/plugin-agent-federation/src/protocol/federation-envelope.ts:91–101` | `toSignablePayload()`, `hmacSignature`, Ed25519 verify |
-| Federation routing | `v3/@rufflo/plugin-agent-federation/src/transport/routing-service.ts:36,61` | `send()`, `scanPii()` already wired; supports `task-assignment` envelope type |
+| Claim service | `v3/@swarmdo/claims/src/application/claim-service.ts:147–240` | Pure DI through `IClaimRepository`, `IClaimantRepository`, `IClaimEventStore` |
+| Work-stealing service | `v3/@swarmdo/claims/src/application/work-stealing-service.ts:172–305` | Repo-driven; `contestInfo` window already exists for race resolution |
+| Load balancer | `v3/@swarmdo/claims/src/application/load-balancer.ts:345–793` | Pure functions of claim-count / progress / priority — federates trivially |
+| Event store | `v3/@swarmdo/claims/src/infrastructure/event-store.ts:50–286` | Local in-memory, integer per-aggregate versions |
+| Domain types | `v3/@swarmdo/claims/src/domain/types.ts:91,513` | `Claimant.id` opaque `string`, no locality assumption |
+| Federation envelope | `v3/@swarmdo/plugin-agent-federation/src/protocol/federation-envelope.ts:91–101` | `toSignablePayload()`, `hmacSignature`, Ed25519 verify |
+| Federation routing | `v3/@swarmdo/plugin-agent-federation/src/transport/routing-service.ts:36,61` | `send()`, `scanPii()` already wired; supports `task-assignment` envelope type |
 | Federation message catalog | `federation-envelope.ts:1–16` | Enumerates `task-assignment`, `consensus-vote`, `peer-status`; no `claim-*` member yet |
 
 ## Decision
 
-Wire claims into the federation plane via three additive components, kept in the same `@rufflo/claims` package and gated behind a feature flag for the entire v3.8 alpha cycle. Each component is independently shippable; the dependencies form a strict topological order.
+Wire claims into the federation plane via three additive components, kept in the same `@swarmdo/claims` package and gated behind a feature flag for the entire v3.8 alpha cycle. Each component is independently shippable; the dependencies form a strict topological order.
 
 ### Component A — Hybrid Logical Clock (HLC) timestamps
 
@@ -50,7 +50,7 @@ Wire claims into the federation plane via three additive components, kept in the
 - stay within a small bounded skew of physical time (so they remain human-readable for debugging)
 
 ```ts
-// v3/@rufflo/claims/src/infrastructure/hlc.ts
+// v3/@swarmdo/claims/src/infrastructure/hlc.ts
 export interface HlcTimestamp {
   readonly physicalMs: number;   // wall clock at issuance
   readonly logical: number;      // tie-breaker, monotonic per (node, physicalMs)
@@ -84,7 +84,7 @@ To preserve backwards compatibility with existing in-memory deployments (single-
 **Decision.** Introduce two new infrastructure adapters that satisfy the existing repository / event-store interfaces and route writes through federation:
 
 ```
-v3/@rufflo/claims/src/infrastructure/
+v3/@swarmdo/claims/src/infrastructure/
   hlc.ts                          # Component A
   federated-claim-repository.ts   # implements IClaimRepository
   federated-event-store.ts        # implements IClaimEventStore
@@ -127,7 +127,7 @@ Existing event consumers see the additional fields as opaque metadata; they do n
 **Decision.** Add a new federation message type and route handoff events through the existing signing infrastructure:
 
 ```ts
-// v3/@rufflo/plugin-agent-federation/src/protocol/federation-envelope.ts
+// v3/@swarmdo/plugin-agent-federation/src/protocol/federation-envelope.ts
 export type FederationMessageType =
   | 'task-assignment'
   | 'task-result'
@@ -256,7 +256,7 @@ A minimal-touch alternative: just sign handoff envelopes, skip the federated rep
 
 ### A5. Build federation-aware claims as a sibling package
 
-A separate `@rufflo/federated-claims` that depends on both `@rufflo/claims` and `@rufflo/plugin-agent-federation`. Rejected because:
+A separate `@swarmdo/federated-claims` that depends on both `@swarmdo/claims` and `@swarmdo/plugin-agent-federation`. Rejected because:
 
 - The existing `IClaimRepository` and `IClaimEventStore` interfaces are already the right extension points. A sibling package would either duplicate them or re-export them, both of which add noise.
 - npm dependency graphs already track this fan-in; a sibling package buys nothing the existing package can't deliver via opt-in DI.
@@ -270,7 +270,7 @@ markers across the federation surface.
 
 | Phase / Component | Status | Files | Commit(s) |
 |---|---|---|---|
-| **Phase 1** — HLC clock + skew-tolerant timestamps | Implemented | `v3/@rufflo/claims/src/infrastructure/hlc.ts` + tests | `1f826fb9b feat(claims): ADR-101 Phase 1` |
+| **Phase 1** — HLC clock + skew-tolerant timestamps | Implemented | `v3/@swarmdo/claims/src/infrastructure/hlc.ts` + tests | `1f826fb9b feat(claims): ADR-101 Phase 1` |
 | **Phase 2** — Federated repository + event-store adapters | Implemented | `claims/src/infrastructure/federated-claim-repository.ts`, `federated-event-store.ts`, `event-store.ts` + tests | `edc39f7da feat(claims): ADR-101 Phase 2` |
 | **Phase 3** — Attested handoff envelopes (`claim-event`, `agent-handoff` message types) | Implemented | `plugin-agent-federation/src/domain/entities/federation-envelope.ts:17–19` | `cc6af4b77 feat(federation): ADR-101 Phase 3` |
 | **Phase 3 follow-on** — `CLAIMS_FOR_MESSAGE_TYPE` policy-engine wiring | Implemented (2026-05-08) | `plugin-agent-federation/src/application/policy-engine.ts:65–73` | `3ba0b6141 fix(plugin-agent-federation): add CLAIMS_FOR_MESSAGE_TYPE entries for ADR-101 Component C` |
@@ -328,7 +328,7 @@ Three phases, each independently mergeable. Each phase ships behind the feature 
 
 | Task | File | Notes |
 |---|---|---|
-| Implement HLC | `v3/@rufflo/claims/src/infrastructure/hlc.ts` (new) | Pure module, ~100 lines, exhaustive unit tests |
+| Implement HLC | `v3/@swarmdo/claims/src/infrastructure/hlc.ts` (new) | Pure module, ~100 lines, exhaustive unit tests |
 | Replace `Date.now()` comparisons in work-stealing | `work-stealing-service.ts:540–545,357–360` | Two callsites, accept HLC via DI on construction |
 | Add HLC to all event types | `domain/events.ts` | Optional field; older events read with `hlc: zeroHlc()` |
 | Wire HLC into `ClaimService` | `application/claim-service.ts` | Constructor injection of `IHlc` interface |
@@ -363,10 +363,10 @@ Phase 3 closes on a green CI run including the new e2e test on Linux + macOS + W
 
 ### Phase 4 — Validate, optimize, publish, merge
 
-- `npm run lint && npm run typecheck && npm test` for both `@rufflo/claims` and `@rufflo/plugin-agent-federation`
+- `npm run lint && npm run typecheck && npm test` for both `@swarmdo/claims` and `@swarmdo/plugin-agent-federation`
 - Run the federation soak test for 30 minutes (3 nodes, 1000 simulated claims, 200 handoffs/min) and assert no orphaned claims, no signature failures, no PII leaks
-- Bump `@rufflo/claims` from `3.0.0-alpha.X` → `3.1.0-alpha.0` (new minor; opt-in feature flag preserves SemVer)
-- Bump `@rufflo/plugin-agent-federation` from `1.0.0-alpha.X` → `1.1.0-alpha.0`
+- Bump `@swarmdo/claims` from `3.0.0-alpha.X` → `3.1.0-alpha.0` (new minor; opt-in feature flag preserves SemVer)
+- Bump `@swarmdo/plugin-agent-federation` from `1.0.0-alpha.X` → `1.1.0-alpha.0`
 - Update `verification.md` with a Post-witness validation entry for ADR-101
 - Open PR; require green CI on all three OSes; merge after one approving review
 
@@ -403,4 +403,4 @@ These are deferred to implementation; this ADR commits to the contracts, not the
 
 **Proposed by**: Reuven (this ADR)
 **Reviewers**: federation-coordinator agent (architectural fit assessment captured in PR description)
-**Sign-off required from**: maintainers of `@rufflo/claims` and `@rufflo/plugin-agent-federation`
+**Sign-off required from**: maintainers of `@swarmdo/claims` and `@swarmdo/plugin-agent-federation`

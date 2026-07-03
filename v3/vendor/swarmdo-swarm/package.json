@@ -1,6 +1,6 @@
 {
   "name": "swarmdo-swarm",
-  "mcpName": "io.github.ruvnet/swarmdo-swarm",
+  "mcpName": "io.github.upstream/swarmdo-swarm",
   "version": "1.0.20",
   "description": "High-performance neural network swarm orchestration in WebAssembly",
   "main": "src/index.js",
@@ -98,7 +98,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ruvnet/ruv-FANN.git",
+    "url": "git+the upstream project (see NOTICE)",
     "directory": "swarmdo-swarm/npm"
   },
   "keywords": [
@@ -116,12 +116,11 @@
     "workflow-coordination",
     "state-persistence"
   ],
-  "author": "rUv Contributors",
   "license": "MIT OR Apache-2.0",
   "bugs": {
-    "url": "https://github.com/ruvnet/ruv-FANN/issues"
+    "url": "the upstream project (see NOTICE)"
   },
-  "homepage": "https://github.com/ruvnet/ruv-FANN#readme",
+  "homepage": "the upstream project (see NOTICE)#readme",
   "dependencies": {
     "better-sqlite3": "^11.6.0",
     "uuid": "^9.0.1",

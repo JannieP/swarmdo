@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Regression guard for ruvnet/swarmdo#2015.
+ * Regression guard for upstream/swarmdo#2015.
  *
  * `swarmvector@0.2.25 rvf create` accepts only:
  *   -d, --dimension <n>    (required)
@@ -106,7 +106,7 @@ if (failures.length > 0) {
   console.error(`\n${failures.length} call site(s) missing --dimension:`);
   for (const f of failures) console.error(`  ${f}`);
   console.error(`\nFix: append "--dimension 384" (or your project's vector dim)`);
-  console.error(`to the rvf create invocation. See ruvnet/swarmdo#2015.`);
+  console.error(`to the rvf create invocation. See upstream/swarmdo#2015.`);
   process.exit(1);
 }
 

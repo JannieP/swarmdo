@@ -119,9 +119,9 @@ export const pluginMetadata = {
   version: '3.0.0-alpha.1',
   description: 'Hyperbolic geometry for hierarchical reasoning',
   category: 'exotic',
-  author: 'rUv',
+  author: 'the upstream author',
   license: 'MIT',
-  repository: 'https://github.com/ruvnet/claude-flow',
+  repository: 'the upstream project (see NOTICE)',
   tools: [
     'hyperbolic_embed_hierarchy',
     'hyperbolic_taxonomic_reason',

@@ -9,7 +9,7 @@
 - ✓ Added all necessary feature flags
 
 ### 2. Core Modules
-- ✓ Copied all SONA modules from `examples/ruvLLM/src/sona/`:
+- ✓ Copied all SONA modules from `examples/swarmLLM/src/sona/`:
   - `types.rs` - Core types and structures
   - `lora.rs` - Micro-LoRA and Base-LoRA implementations
   - `trajectory.rs` - Trajectory tracking and buffering

@@ -247,7 +247,7 @@ name = "ane_bench"
 harness = false
 
 [[bench]]
-name = "ruvltra_benchmark"
+name = "swarmltra_benchmark"
 harness = false
 
 [[bench]]

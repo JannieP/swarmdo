@@ -145,8 +145,8 @@ class ClaudeGitHubHooks {
 // Hook registration for Claude Code
 async function registerHooks() {
   const hooks = new ClaudeGitHubHooks({
-    owner: process.env.GITHUB_OWNER || 'ruvnet',
-    repo: process.env.GITHUB_REPO || 'ruv-FANN',
+    owner: process.env.GITHUB_OWNER || 'upstream',
+    repo: process.env.GITHUB_REPO || 'the upstream repo',
   });
 
   // Register with Claude Code's hook system

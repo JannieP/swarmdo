@@ -5,7 +5,7 @@
 **Updated:** 2026-01-12
 **Author:** Conveyor AI Team
 **Deciders:** Engineering, AI/ML Team
-**Related:** ADR-001-EXTENSION-ARCHITECTURE, ADR-004-RUVECTOR-POSTGRES-GCP-DEPLOYMENT
+**Related:** ADR-001-EXTENSION-ARCHITECTURE, ADR-004-SWARMVECTOR-POSTGRES-GCP-DEPLOYMENT
 
 ---
 
@@ -30,9 +30,9 @@ Key algorithms needed across extensions:
 Implement a **TypeScript-first approach with optional WASM optimization** in the `packages/shared-ai` package. This provides:
 
 1. **Pure TypeScript implementations** that work everywhere
-2. **WASM acceleration** via RuVector packages when available
+2. **WASM acceleration** via SwarmVector packages when available
 3. **Unified API** regardless of execution backend
-4. **Integration with RuVector PostgreSQL** for server-side operations
+4. **Integration with SwarmVector PostgreSQL** for server-side operations
 
 ---
 
@@ -59,8 +59,8 @@ packages/shared-ai/
 |       +-- index.ts
 |       +-- VectorOps.ts          # Vector operations
 +-- wasm/                          # Optional WASM binaries
-    +-- ruvector-attention.wasm
-    +-- ruvector-rvlite.wasm
+    +-- swarmvector-attention.wasm
+    +-- swarmvector-rvlite.wasm
 ```
 
 ### Package Exports
@@ -366,7 +366,7 @@ console.log('Similar deals:', similarDeals.map(d => d.id));
 
 ## WASM Acceleration
 
-### RuVector Integration
+### SwarmVector Integration
 
 When WASM is available, operations automatically accelerate:
 
@@ -376,14 +376,14 @@ import { VectorOps } from '@shared-ai';
 
 const vectorOps = new VectorOps({ dimension: 768, metric: 'cosine' });
 
-// If WASM available: Uses RuVector SIMD operations
+// If WASM available: Uses SwarmVector SIMD operations
 // If WASM unavailable: Uses TypeScript implementation
 const similarity = vectorOps.similarity(vec1, vec2);
 ```
 
 ### Performance Characteristics
 
-| Operation | TypeScript | WASM (RuVector) | Improvement |
+| Operation | TypeScript | WASM (SwarmVector) | Improvement |
 |-----------|------------|-----------------|-------------|
 | Vector similarity (768d) | 0.5ms | 0.003ms | ~167x |
 | Batch similarity (1000 vectors) | 500ms | 3ms | ~167x |
@@ -391,12 +391,12 @@ const similarity = vectorOps.similarity(vec1, vec2);
 | Q-table lookup | 0.01ms | 0.01ms | 1x |
 | Monte Carlo (10k iterations) | 150ms | 20ms | ~7.5x |
 
-### Server-Side with RuVector PostgreSQL
+### Server-Side with SwarmVector PostgreSQL
 
-For heavy operations, leverage the RuVector PostgreSQL extension:
+For heavy operations, leverage the SwarmVector PostgreSQL extension:
 
 ```typescript
-// Server-side vector search via RuVector PostgreSQL
+// Server-side vector search via SwarmVector PostgreSQL
 // Performance: ~1.9x-4.7x measured faster than standard pgvector
 
 const similarCases = await postgres.query(`
@@ -497,7 +497,7 @@ const cohortSimilarity = vectorOps.batchSimilarity(targetCohort, allCohorts);
 3. **Performance**: WASM acceleration when available (7x-167x speedup)
 4. **Consistency**: All extensions use the same AI implementations
 5. **Testability**: Pure TypeScript enables comprehensive unit testing
-6. **RuVector Integration**: Seamless connection to PostgreSQL for heavy ops
+6. **SwarmVector Integration**: Seamless connection to PostgreSQL for heavy ops
 
 ### Negative
 
@@ -534,7 +534,7 @@ const cohortSimilarity = vectorOps.batchSimilarity(targetCohort, allCohorts);
 - [x] Type definitions
 
 ### WASM Integration - PARTIAL
-- [x] RuVector packages available
+- [x] SwarmVector packages available
 - [ ] Automatic WASM detection
 - [ ] SIMD optimization
 
@@ -543,8 +543,8 @@ const cohortSimilarity = vectorOps.batchSimilarity(targetCohort, allCohorts);
 ## References
 
 - [ADR-001: Extension Architecture](./ADR-001-EXTENSION-ARCHITECTURE.md)
-- [ADR-004: RuVector PostgreSQL Deployment](./ADR-004-RUVECTOR-POSTGRES-GCP-DEPLOYMENT.md)
-- [RuVector Documentation](https://github.com/ruvector)
+- [ADR-004: SwarmVector PostgreSQL Deployment](./ADR-004-SWARMVECTOR-POSTGRES-GCP-DEPLOYMENT.md)
+- [SwarmVector Documentation](https://github.com/swarmvector)
 - [Q-Learning Algorithm](https://en.wikipedia.org/wiki/Q-learning)
 - [Monte Carlo Methods](https://en.wikipedia.org/wiki/Monte_Carlo_method)
 - [Stoer-Wagner MinCut](https://en.wikipedia.org/wiki/Stoer%E2%80%93Wagner_algorithm)

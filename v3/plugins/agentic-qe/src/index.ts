@@ -288,10 +288,10 @@ export const PLUGIN_METADATA = {
   name: 'agentic-qe',
   version: '3.5.59',
   description: 'Quality Engineering plugin with 51 specialized agents across 12 DDD bounded contexts',
-  author: 'rUv',
+  author: 'the upstream author',
   license: 'MIT',
-  homepage: 'https://github.com/ruvnet/agentic-qe',
-  repository: 'https://github.com/ruvnet/agentic-qe',
+  homepage: 'the upstream project (see NOTICE)',
+  repository: 'the upstream project (see NOTICE)',
   minClaudeFlowVersion: '3.0.0-alpha.50',
   capabilities: [
     'test-generation',

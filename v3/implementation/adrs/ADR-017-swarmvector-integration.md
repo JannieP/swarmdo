@@ -1,4 +1,4 @@
-# ADR-017: RuVector Integration Architecture
+# ADR-017: SwarmVector Integration Architecture
 
 **Status:** Accepted
 **Date:** 2026-01-07
@@ -8,7 +8,7 @@
 
 ## Context
 
-The `@rufflo/cli` package requires integration with `ruvector` for advanced code intelligence features:
+The `@swarmdo/cli` package requires integration with `swarmvector` for advanced code intelligence features:
 
 1. **Q-Learning Agent Router** - ML-based task routing (80%+ accuracy)
 2. **AST Analysis** - Symbol extraction and complexity metrics
@@ -16,33 +16,33 @@ The `@rufflo/cli` package requires integration with `ruvector` for advanced code
 4. **Coverage Routing** - Test-aware agent selection
 5. **Graph Analysis** - Code boundaries (MinCut/Louvain)
 
-These features are unique to ruvector and complement rufflo's existing capabilities without duplicating functionality already present in `@rufflo/embeddings` or `@rufflo/memory`.
+These features are unique to swarmvector and complement swarmdo's existing capabilities without duplicating functionality already present in `@swarmdo/embeddings` or `@swarmdo/memory`.
 
 ## Decision
 
-Implement ruvector as an **OPTIONAL dependency** with graceful fallback, following the existing patterns in `@rufflo/cli`.
+Implement swarmvector as an **OPTIONAL dependency** with graceful fallback, following the existing patterns in `@swarmdo/cli`.
 
 ### Design Principles
 
-1. **Optional by Default** - ruvector is not required; all commands degrade gracefully
+1. **Optional by Default** - swarmvector is not required; all commands degrade gracefully
 2. **Consistent CLI Patterns** - Match existing command structure (`agent`, `hooks`, `neural`)
 3. **MCP-First Architecture** - CLI wraps MCP tools per ADR-005
-4. **Lazy Loading** - Only load ruvector modules when needed
-5. **Clear Error Messages** - Helpful guidance when ruvector is missing
+4. **Lazy Loading** - Only load swarmvector modules when needed
+5. **Clear Error Messages** - Helpful guidance when swarmvector is missing
 
 ---
 
 ## File Structure
 
 ```
-v3/@rufflo/cli/src/
+v3/@swarmdo/cli/src/
 ├── commands/
 │   ├── route.ts              # NEW: Q-Learning routing command
 │   ├── analyze.ts            # NEW: AST/Diff/Graph analysis commands
 │   └── index.ts              # Updated: register new commands
-├── ruvector/
+├── swarmvector/
 │   ├── index.ts              # Lazy loader with availability check
-│   ├── types.ts              # TypeScript interfaces for ruvector
+│   ├── types.ts              # TypeScript interfaces for swarmvector
 │   ├── availability.ts       # Package detection utilities
 │   └── adapters/
 │       ├── router-adapter.ts # Wraps hooks_route, hooks_route_enhanced
@@ -51,7 +51,7 @@ v3/@rufflo/cli/src/
 │       ├── coverage-adapter.ts # Wraps hooks_coverage_route
 │       └── graph-adapter.ts  # Wraps hooks_graph_mincut, hooks_graph_cluster
 ├── mcp-tools/
-│   └── ruvector-tools.ts     # NEW: MCP tool definitions for ruvector
+│   └── swarmvector-tools.ts     # NEW: MCP tool definitions for swarmvector
 └── package.json              # Updated: optionalDependencies
 ```
 
@@ -59,22 +59,22 @@ v3/@rufflo/cli/src/
 
 ## Interface Definitions
 
-### 1. RuVector Availability Interface
+### 1. SwarmVector Availability Interface
 
 ```typescript
-// v3/@rufflo/cli/src/ruvector/availability.ts
+// v3/@swarmdo/cli/src/swarmvector/availability.ts
 
 /**
- * RuVector availability state
+ * SwarmVector availability state
  */
-export interface RuVectorStatus {
+export interface SwarmVectorStatus {
   available: boolean;
   version?: string;
-  features: RuVectorFeatures;
+  features: SwarmVectorFeatures;
   error?: string;
 }
 
-export interface RuVectorFeatures {
+export interface SwarmVectorFeatures {
   qLearningRouter: boolean;
   astAnalysis: boolean;
   diffClassification: boolean;
@@ -83,10 +83,10 @@ export interface RuVectorFeatures {
 }
 
 /**
- * Check if ruvector is installed and available
+ * Check if swarmvector is installed and available
  * Uses lazy evaluation and caching
  */
-export async function checkRuVectorAvailability(): Promise<RuVectorStatus>;
+export async function checkSwarmVectorAvailability(): Promise<SwarmVectorStatus>;
 
 /**
  * Get human-readable installation instructions
@@ -94,15 +94,15 @@ export async function checkRuVectorAvailability(): Promise<RuVectorStatus>;
 export function getInstallInstructions(): string;
 
 /**
- * Require ruvector feature, throw helpful error if unavailable
+ * Require swarmvector feature, throw helpful error if unavailable
  */
-export async function requireRuVector(feature: keyof RuVectorFeatures): Promise<void>;
+export async function requireSwarmVector(feature: keyof SwarmVectorFeatures): Promise<void>;
 ```
 
 ### 2. Router Adapter Interface
 
 ```typescript
-// v3/@rufflo/cli/src/ruvector/adapters/router-adapter.ts
+// v3/@swarmdo/cli/src/swarmvector/adapters/router-adapter.ts
 
 export interface RouteRequest {
   task: string;
@@ -134,13 +134,13 @@ export interface AgentRecommendation {
 
 /**
  * Route task using Q-Learning model
- * @throws RuVectorNotAvailableError if ruvector not installed
+ * @throws SwarmVectorNotAvailableError if swarmvector not installed
  */
 export async function routeWithQLearning(request: RouteRequest): Promise<RouteResult>;
 
 /**
  * Route with coverage awareness
- * @throws RuVectorNotAvailableError if ruvector not installed
+ * @throws SwarmVectorNotAvailableError if swarmvector not installed
  */
 export async function routeWithCoverage(request: RouteRequest): Promise<RouteResult>;
 ```
@@ -148,7 +148,7 @@ export async function routeWithCoverage(request: RouteRequest): Promise<RouteRes
 ### 3. AST Adapter Interface
 
 ```typescript
-// v3/@rufflo/cli/src/ruvector/adapters/ast-adapter.ts
+// v3/@swarmdo/cli/src/swarmvector/adapters/ast-adapter.ts
 
 export interface ASTAnalysisRequest {
   path: string;
@@ -196,13 +196,13 @@ export interface ComplexityMetrics {
 
 /**
  * Analyze AST of files at path
- * @throws RuVectorNotAvailableError if ruvector not installed
+ * @throws SwarmVectorNotAvailableError if swarmvector not installed
  */
 export async function analyzeAST(request: ASTAnalysisRequest): Promise<ASTAnalysisResult>;
 
 /**
  * Get complexity metrics for path
- * @throws RuVectorNotAvailableError if ruvector not installed
+ * @throws SwarmVectorNotAvailableError if swarmvector not installed
  */
 export async function getComplexity(path: string): Promise<ComplexityMetrics>;
 ```
@@ -210,7 +210,7 @@ export async function getComplexity(path: string): Promise<ComplexityMetrics>;
 ### 4. Diff Adapter Interface
 
 ```typescript
-// v3/@rufflo/cli/src/ruvector/adapters/diff-adapter.ts
+// v3/@swarmdo/cli/src/swarmvector/adapters/diff-adapter.ts
 
 export interface DiffAnalysisRequest {
   diff?: string;
@@ -250,13 +250,13 @@ export interface AffectedFile {
 
 /**
  * Analyze diff and classify changes
- * @throws RuVectorNotAvailableError if ruvector not installed
+ * @throws SwarmVectorNotAvailableError if swarmvector not installed
  */
 export async function analyzeDiff(request: DiffAnalysisRequest): Promise<DiffAnalysisResult>;
 
 /**
  * Get risk score for diff
- * @throws RuVectorNotAvailableError if ruvector not installed
+ * @throws SwarmVectorNotAvailableError if swarmvector not installed
  */
 export async function classifyDiffRisk(diff: string): Promise<number>;
 ```
@@ -264,7 +264,7 @@ export async function classifyDiffRisk(diff: string): Promise<number>;
 ### 5. Graph Adapter Interface
 
 ```typescript
-// v3/@rufflo/cli/src/ruvector/adapters/graph-adapter.ts
+// v3/@swarmdo/cli/src/swarmvector/adapters/graph-adapter.ts
 
 export interface GraphAnalysisRequest {
   path: string;
@@ -305,7 +305,7 @@ export interface GraphMetrics {
 
 /**
  * Analyze code boundaries using graph algorithms
- * @throws RuVectorNotAvailableError if ruvector not installed
+ * @throws SwarmVectorNotAvailableError if swarmvector not installed
  */
 export async function analyzeGraphBoundaries(request: GraphAnalysisRequest): Promise<GraphAnalysisResult>;
 ```
@@ -317,7 +317,7 @@ export async function analyzeGraphBoundaries(request: GraphAnalysisRequest): Pro
 ### 1. Route Command
 
 ```typescript
-// v3/@rufflo/cli/src/commands/route.ts
+// v3/@swarmdo/cli/src/commands/route.ts
 
 export const routeCommand: Command = {
   name: 'route',
@@ -333,14 +333,14 @@ export const routeCommand: Command = {
     {
       name: 'q-learning',
       short: 'q',
-      description: 'Use Q-Learning model for routing (requires ruvector)',
+      description: 'Use Q-Learning model for routing (requires swarmvector)',
       type: 'boolean',
       default: false
     },
     {
       name: 'coverage-aware',
       short: 'c',
-      description: 'Use test coverage data for routing (requires ruvector)',
+      description: 'Use test coverage data for routing (requires swarmvector)',
       type: 'boolean',
       default: false
     },
@@ -361,11 +361,11 @@ export const routeCommand: Command = {
   ],
   examples: [
     {
-      command: 'rufflo route -t "Implement user authentication" --q-learning',
+      command: 'swarmdo route -t "Implement user authentication" --q-learning',
       description: 'Route with Q-Learning model'
     },
     {
-      command: 'rufflo route -t "Fix login bug" --coverage-aware',
+      command: 'swarmdo route -t "Fix login bug" --coverage-aware',
       description: 'Route with coverage awareness'
     }
   ],
@@ -376,7 +376,7 @@ export const routeCommand: Command = {
 ### 2. Analyze Command
 
 ```typescript
-// v3/@rufflo/cli/src/commands/analyze.ts
+// v3/@swarmdo/cli/src/commands/analyze.ts
 
 export const analyzeCommand: Command = {
   name: 'analyze',
@@ -418,8 +418,8 @@ const astSubcommand: Command = {
     }
   ],
   examples: [
-    { command: 'rufflo analyze ast -p src/', description: 'Analyze src directory' },
-    { command: 'rufflo analyze ast -p src/api.ts --complexity', description: 'Get complexity for file' }
+    { command: 'swarmdo analyze ast -p src/', description: 'Analyze src directory' },
+    { command: 'swarmdo analyze ast -p src/api.ts --complexity', description: 'Get complexity for file' }
   ],
   action: astAction
 };
@@ -455,9 +455,9 @@ const diffSubcommand: Command = {
     }
   ],
   examples: [
-    { command: 'rufflo analyze diff --risk', description: 'Analyze current diff with risk' },
-    { command: 'rufflo analyze diff --base main --target feature', description: 'Compare branches' },
-    { command: 'git diff | rufflo analyze diff --stdin --risk', description: 'Pipe diff from git' }
+    { command: 'swarmdo analyze diff --risk', description: 'Analyze current diff with risk' },
+    { command: 'swarmdo analyze diff --base main --target feature', description: 'Compare branches' },
+    { command: 'git diff | swarmdo analyze diff --stdin --risk', description: 'Pipe diff from git' }
   ],
   action: diffAction
 };
@@ -489,8 +489,8 @@ const boundariesSubcommand: Command = {
     }
   ],
   examples: [
-    { command: 'rufflo analyze boundaries -p src/', description: 'Detect boundaries in src' },
-    { command: 'rufflo analyze boundaries -a louvain', description: 'Use Louvain algorithm' }
+    { command: 'swarmdo analyze boundaries -p src/', description: 'Detect boundaries in src' },
+    { command: 'swarmdo analyze boundaries -a louvain', description: 'Use Louvain algorithm' }
   ],
   action: boundariesAction
 };
@@ -500,35 +500,35 @@ const boundariesSubcommand: Command = {
 
 ## Error Handling Strategy
 
-### 1. RuVector Not Available Error
+### 1. SwarmVector Not Available Error
 
 ```typescript
-// v3/@rufflo/cli/src/ruvector/errors.ts
+// v3/@swarmdo/cli/src/swarmvector/errors.ts
 
-export class RuVectorNotAvailableError extends CLIError {
+export class SwarmVectorNotAvailableError extends CLIError {
   constructor(feature: string) {
     super(
-      `RuVector is required for ${feature} but is not installed.`,
-      'RUVECTOR_NOT_AVAILABLE',
+      `SwarmVector is required for ${feature} but is not installed.`,
+      'SWARMVECTOR_NOT_AVAILABLE',
       1,
       {
         feature,
-        suggestion: 'Install with: npm install ruvector',
-        documentation: 'https://github.com/ruvnet/ruvector'
+        suggestion: 'Install with: npm install swarmvector',
+        documentation: 'the upstream project (see NOTICE)'
       }
     );
-    this.name = 'RuVectorNotAvailableError';
+    this.name = 'SwarmVectorNotAvailableError';
   }
 }
 
-export class RuVectorFeatureDisabledError extends CLIError {
+export class SwarmVectorFeatureDisabledError extends CLIError {
   constructor(feature: string, reason: string) {
     super(
-      `RuVector feature "${feature}" is disabled: ${reason}`,
-      'RUVECTOR_FEATURE_DISABLED',
+      `SwarmVector feature "${feature}" is disabled: ${reason}`,
+      'SWARMVECTOR_FEATURE_DISABLED',
       1
     );
-    this.name = 'RuVectorFeatureDisabledError';
+    this.name = 'SwarmVectorFeatureDisabledError';
   }
 }
 ```
@@ -536,26 +536,26 @@ export class RuVectorFeatureDisabledError extends CLIError {
 ### 2. Graceful Degradation Pattern
 
 ```typescript
-// v3/@rufflo/cli/src/ruvector/availability.ts
+// v3/@swarmdo/cli/src/swarmvector/availability.ts
 
-let cachedStatus: RuVectorStatus | null = null;
+let cachedStatus: SwarmVectorStatus | null = null;
 
-export async function checkRuVectorAvailability(): Promise<RuVectorStatus> {
+export async function checkSwarmVectorAvailability(): Promise<SwarmVectorStatus> {
   if (cachedStatus) return cachedStatus;
 
   try {
     // Attempt dynamic import
-    const ruvector = await import('ruvector');
+    const swarmvector = await import('swarmvector');
 
     cachedStatus = {
       available: true,
-      version: ruvector.version ?? 'unknown',
+      version: swarmvector.version ?? 'unknown',
       features: {
-        qLearningRouter: typeof ruvector.hooks_route === 'function',
-        astAnalysis: typeof ruvector.hooks_ast_analyze === 'function',
-        diffClassification: typeof ruvector.hooks_diff_analyze === 'function',
-        coverageRouting: typeof ruvector.hooks_coverage_route === 'function',
-        graphAnalysis: typeof ruvector.hooks_graph_mincut === 'function',
+        qLearningRouter: typeof swarmvector.hooks_route === 'function',
+        astAnalysis: typeof swarmvector.hooks_ast_analyze === 'function',
+        diffClassification: typeof swarmvector.hooks_diff_analyze === 'function',
+        coverageRouting: typeof swarmvector.hooks_coverage_route === 'function',
+        graphAnalysis: typeof swarmvector.hooks_graph_mincut === 'function',
       }
     };
   } catch (error) {
@@ -577,7 +577,7 @@ export async function checkRuVectorAvailability(): Promise<RuVectorStatus> {
 
 export function getInstallInstructions(): string {
   return `
-RuVector provides advanced code intelligence features:
+SwarmVector provides advanced code intelligence features:
   - Q-Learning agent routing (80%+ accuracy)
   - AST analysis and complexity metrics
   - Diff classification and risk scoring
@@ -585,26 +585,26 @@ RuVector provides advanced code intelligence features:
   - Graph-based boundary detection
 
 Install with:
-  npm install ruvector
+  npm install swarmvector
 
 Or add as optional dependency:
-  npm install ruvector --save-optional
+  npm install swarmvector --save-optional
 
-Learn more: https://github.com/ruvnet/ruvector
+Learn more: the upstream project (see NOTICE)
 `.trim();
 }
 
-export async function requireRuVector(feature: keyof RuVectorFeatures): Promise<void> {
-  const status = await checkRuVectorAvailability();
+export async function requireSwarmVector(feature: keyof SwarmVectorFeatures): Promise<void> {
+  const status = await checkSwarmVectorAvailability();
 
   if (!status.available) {
-    throw new RuVectorNotAvailableError(feature);
+    throw new SwarmVectorNotAvailableError(feature);
   }
 
   if (!status.features[feature]) {
-    throw new RuVectorFeatureDisabledError(
+    throw new SwarmVectorFeatureDisabledError(
       feature,
-      `Your version of ruvector (${status.version}) does not support this feature.`
+      `Your version of swarmvector (${status.version}) does not support this feature.`
     );
   }
 }
@@ -619,16 +619,16 @@ async function routeAction(ctx: CommandContext): Promise<CommandResult> {
   const useQLearning = ctx.flags['q-learning'] as boolean;
   const useCoverageAware = ctx.flags['coverage-aware'] as boolean;
 
-  // Check if ruvector features are needed
+  // Check if swarmvector features are needed
   if (useQLearning || useCoverageAware) {
     try {
       const feature = useQLearning ? 'qLearningRouter' : 'coverageRouting';
-      await requireRuVector(feature);
+      await requireSwarmVector(feature);
     } catch (error) {
-      if (error instanceof RuVectorNotAvailableError) {
+      if (error instanceof SwarmVectorNotAvailableError) {
         output.printError(error.message);
         output.writeln();
-        output.printBox(getInstallInstructions(), 'Install RuVector');
+        output.printBox(getInstallInstructions(), 'Install SwarmVector');
         output.writeln();
         output.printInfo('Falling back to default agent routing...');
 
@@ -639,27 +639,27 @@ async function routeAction(ctx: CommandContext): Promise<CommandResult> {
     }
   }
 
-  // Continue with ruvector-powered routing
+  // Continue with swarmvector-powered routing
   // ...
 }
 ```
 
 ---
 
-## Integration Points with RuVector
+## Integration Points with SwarmVector
 
 ### 1. MCP Tool Definitions
 
 ```typescript
-// v3/@rufflo/cli/src/mcp-tools/ruvector-tools.ts
+// v3/@swarmdo/cli/src/mcp-tools/swarmvector-tools.ts
 
 import type { MCPTool } from './types.js';
 
-export const ruvectorTools: MCPTool[] = [
+export const swarmvectorTools: MCPTool[] = [
   {
-    name: 'ruvector/route',
+    name: 'swarmvector/route',
     description: 'Route task to optimal agents using Q-Learning',
-    category: 'ruvector',
+    category: 'swarmvector',
     version: '1.0.0',
     inputSchema: {
       type: 'object',
@@ -672,7 +672,7 @@ export const ruvectorTools: MCPTool[] = [
       required: ['task']
     },
     handler: async (input) => {
-      const adapter = await import('../ruvector/adapters/router-adapter.js');
+      const adapter = await import('../swarmvector/adapters/router-adapter.js');
       return adapter.routeWithQLearning({
         task: input.task as string,
         options: {
@@ -684,9 +684,9 @@ export const ruvectorTools: MCPTool[] = [
     }
   },
   {
-    name: 'ruvector/analyze-ast',
+    name: 'swarmvector/analyze-ast',
     description: 'Analyze code AST for symbols and complexity',
-    category: 'ruvector',
+    category: 'swarmvector',
     version: '1.0.0',
     inputSchema: {
       type: 'object',
@@ -699,7 +699,7 @@ export const ruvectorTools: MCPTool[] = [
       required: ['path']
     },
     handler: async (input) => {
-      const adapter = await import('../ruvector/adapters/ast-adapter.js');
+      const adapter = await import('../swarmvector/adapters/ast-adapter.js');
       return adapter.analyzeAST({
         path: input.path as string,
         options: {
@@ -711,9 +711,9 @@ export const ruvectorTools: MCPTool[] = [
     }
   },
   {
-    name: 'ruvector/analyze-diff',
+    name: 'swarmvector/analyze-diff',
     description: 'Analyze and classify code diffs with risk scoring',
-    category: 'ruvector',
+    category: 'swarmvector',
     version: '1.0.0',
     inputSchema: {
       type: 'object',
@@ -725,7 +725,7 @@ export const ruvectorTools: MCPTool[] = [
       }
     },
     handler: async (input) => {
-      const adapter = await import('../ruvector/adapters/diff-adapter.js');
+      const adapter = await import('../swarmvector/adapters/diff-adapter.js');
       return adapter.analyzeDiff({
         diff: input.diff as string,
         baseBranch: input.baseBranch as string,
@@ -737,9 +737,9 @@ export const ruvectorTools: MCPTool[] = [
     }
   },
   {
-    name: 'ruvector/analyze-boundaries',
+    name: 'swarmvector/analyze-boundaries',
     description: 'Detect code boundaries using graph algorithms',
-    category: 'ruvector',
+    category: 'swarmvector',
     version: '1.0.0',
     inputSchema: {
       type: 'object',
@@ -755,7 +755,7 @@ export const ruvectorTools: MCPTool[] = [
       required: ['path']
     },
     handler: async (input) => {
-      const adapter = await import('../ruvector/adapters/graph-adapter.js');
+      const adapter = await import('../swarmvector/adapters/graph-adapter.js');
       return adapter.analyzeGraphBoundaries({
         path: input.path as string,
         options: {
@@ -771,44 +771,44 @@ export const ruvectorTools: MCPTool[] = [
 ### 2. Lazy Loading Pattern
 
 ```typescript
-// v3/@rufflo/cli/src/ruvector/index.ts
+// v3/@swarmdo/cli/src/swarmvector/index.ts
 
 /**
- * RuVector Integration Module
+ * SwarmVector Integration Module
  *
- * Provides lazy-loaded access to ruvector features with graceful fallback.
- * All imports are dynamic to avoid build failures when ruvector is not installed.
+ * Provides lazy-loaded access to swarmvector features with graceful fallback.
+ * All imports are dynamic to avoid build failures when swarmvector is not installed.
  */
 
-export { checkRuVectorAvailability, requireRuVector, getInstallInstructions } from './availability.js';
-export { RuVectorNotAvailableError, RuVectorFeatureDisabledError } from './errors.js';
+export { checkSwarmVectorAvailability, requireSwarmVector, getInstallInstructions } from './availability.js';
+export { SwarmVectorNotAvailableError, SwarmVectorFeatureDisabledError } from './errors.js';
 
 // Re-export types (these are safe - no runtime dependency)
 export type * from './types.js';
 
 // Lazy adapter exports
 export async function getRouterAdapter() {
-  await requireRuVector('qLearningRouter');
+  await requireSwarmVector('qLearningRouter');
   return import('./adapters/router-adapter.js');
 }
 
 export async function getASTAdapter() {
-  await requireRuVector('astAnalysis');
+  await requireSwarmVector('astAnalysis');
   return import('./adapters/ast-adapter.js');
 }
 
 export async function getDiffAdapter() {
-  await requireRuVector('diffClassification');
+  await requireSwarmVector('diffClassification');
   return import('./adapters/diff-adapter.js');
 }
 
 export async function getCoverageAdapter() {
-  await requireRuVector('coverageRouting');
+  await requireSwarmVector('coverageRouting');
   return import('./adapters/coverage-adapter.js');
 }
 
 export async function getGraphAdapter() {
-  await requireRuVector('graphAnalysis');
+  await requireSwarmVector('graphAnalysis');
   return import('./adapters/graph-adapter.js');
 }
 ```
@@ -819,16 +819,16 @@ export async function getGraphAdapter() {
 
 ```json
 {
-  "name": "@rufflo/cli",
+  "name": "@swarmdo/cli",
   "version": "3.0.0-alpha.16",
   "optionalDependencies": {
-    "ruvector": "^0.1.95"
+    "swarmvector": "^0.1.95"
   },
   "peerDependencies": {
-    "ruvector": "^0.1.95"
+    "swarmvector": "^0.1.95"
   },
   "peerDependenciesMeta": {
-    "ruvector": {
+    "swarmvector": {
       "optional": true
     }
   }
@@ -840,7 +840,7 @@ export async function getGraphAdapter() {
 ## Command Index Updates
 
 ```typescript
-// v3/@rufflo/cli/src/commands/index.ts
+// v3/@swarmdo/cli/src/commands/index.ts
 
 // Existing imports...
 import { routeCommand } from './route.js';
@@ -860,26 +860,26 @@ export const commands: Command[] = [
 
 ### Phase 1: Core Infrastructure (Day 1)
 
-1. Create `/ruvector/availability.ts` - Package detection
-2. Create `/ruvector/errors.ts` - Error types
-3. Create `/ruvector/types.ts` - TypeScript interfaces
-4. Create `/ruvector/index.ts` - Lazy loader
+1. Create `/swarmvector/availability.ts` - Package detection
+2. Create `/swarmvector/errors.ts` - Error types
+3. Create `/swarmvector/types.ts` - TypeScript interfaces
+4. Create `/swarmvector/index.ts` - Lazy loader
 5. Update `package.json` - Optional dependency
 
 ### Phase 2: Route Command (Day 1-2)
 
 1. Create `/commands/route.ts` - CLI command
-2. Create `/ruvector/adapters/router-adapter.ts` - Q-Learning adapter
-3. Create `/ruvector/adapters/coverage-adapter.ts` - Coverage adapter
-4. Add MCP tools to `/mcp-tools/ruvector-tools.ts`
+2. Create `/swarmvector/adapters/router-adapter.ts` - Q-Learning adapter
+3. Create `/swarmvector/adapters/coverage-adapter.ts` - Coverage adapter
+4. Add MCP tools to `/mcp-tools/swarmvector-tools.ts`
 5. Update command index
 
 ### Phase 3: Analyze Command (Day 2-3)
 
 1. Create `/commands/analyze.ts` - CLI command with subcommands
-2. Create `/ruvector/adapters/ast-adapter.ts` - AST adapter
-3. Create `/ruvector/adapters/diff-adapter.ts` - Diff adapter
-4. Create `/ruvector/adapters/graph-adapter.ts` - Graph adapter
+2. Create `/swarmvector/adapters/ast-adapter.ts` - AST adapter
+3. Create `/swarmvector/adapters/diff-adapter.ts` - Diff adapter
+4. Create `/swarmvector/adapters/graph-adapter.ts` - Graph adapter
 5. Add MCP tools
 
 ### Phase 4: Testing & Documentation (Day 3-4)
@@ -887,7 +887,7 @@ export const commands: Command[] = [
 1. Unit tests for availability detection
 2. Integration tests for adapters
 3. Update CLI help text
-4. Update README with ruvector features
+4. Update README with swarmvector features
 
 ---
 
@@ -896,30 +896,30 @@ export const commands: Command[] = [
 ### 1. Availability Tests
 
 ```typescript
-// v3/@rufflo/cli/tests/ruvector/availability.test.ts
+// v3/@swarmdo/cli/tests/swarmvector/availability.test.ts
 
 import { describe, it, expect, vi } from 'vitest';
-import { checkRuVectorAvailability } from '../../src/ruvector/availability.js';
+import { checkSwarmVectorAvailability } from '../../src/swarmvector/availability.js';
 
-describe('RuVector Availability', () => {
-  it('should detect when ruvector is not installed', async () => {
-    vi.mock('ruvector', () => {
+describe('SwarmVector Availability', () => {
+  it('should detect when swarmvector is not installed', async () => {
+    vi.mock('swarmvector', () => {
       throw new Error('Cannot find module');
     });
 
-    const status = await checkRuVectorAvailability();
+    const status = await checkSwarmVectorAvailability();
     expect(status.available).toBe(false);
     expect(status.error).toBeDefined();
   });
 
   it('should detect available features', async () => {
-    vi.mock('ruvector', () => ({
+    vi.mock('swarmvector', () => ({
       hooks_route: vi.fn(),
       hooks_ast_analyze: vi.fn(),
       version: '0.1.95'
     }));
 
-    const status = await checkRuVectorAvailability();
+    const status = await checkSwarmVectorAvailability();
     expect(status.available).toBe(true);
     expect(status.features.qLearningRouter).toBe(true);
     expect(status.features.astAnalysis).toBe(true);
@@ -930,13 +930,13 @@ describe('RuVector Availability', () => {
 ### 2. Command Tests
 
 ```typescript
-// v3/@rufflo/cli/tests/commands/route.test.ts
+// v3/@swarmdo/cli/tests/commands/route.test.ts
 
 import { describe, it, expect, vi } from 'vitest';
 import { routeCommand } from '../../src/commands/route.js';
 
 describe('Route Command', () => {
-  it('should show helpful error when ruvector not available', async () => {
+  it('should show helpful error when swarmvector not available', async () => {
     const ctx = {
       args: [],
       flags: { task: 'Build API', 'q-learning': true },
@@ -944,10 +944,10 @@ describe('Route Command', () => {
       cwd: process.cwd()
     };
 
-    // Mock ruvector as unavailable
-    vi.mock('../../src/ruvector/availability.js', () => ({
-      requireRuVector: vi.fn().mockRejectedValue(
-        new RuVectorNotAvailableError('qLearningRouter')
+    // Mock swarmvector as unavailable
+    vi.mock('../../src/swarmvector/availability.js', () => ({
+      requireSwarmVector: vi.fn().mockRejectedValue(
+        new SwarmVectorNotAvailableError('qLearningRouter')
       )
     }));
 
@@ -963,9 +963,9 @@ describe('Route Command', () => {
 
 ### Positive
 
-1. **Zero breaking changes** - ruvector is optional
+1. **Zero breaking changes** - swarmvector is optional
 2. **Enhanced capabilities** - Q-Learning routing, AST analysis, etc.
-3. **Clean separation** - ruvector code isolated in `/ruvector/`
+3. **Clean separation** - swarmvector code isolated in `/swarmvector/`
 4. **Consistent UX** - Follows existing CLI patterns
 5. **MCP-first** - All features available via MCP tools
 
@@ -973,7 +973,7 @@ describe('Route Command', () => {
 
 1. **Increased complexity** - More code to maintain
 2. **Optional dependency** - Users may not discover features
-3. **Version coupling** - Must track ruvector API changes
+3. **Version coupling** - Must track swarmvector API changes
 
 ### Neutral
 
@@ -986,25 +986,25 @@ describe('Route Command', () => {
 
 - ADR-005: MCP-First API Design
 - ADR-004: Plugin-Based Architecture
-- RuVector Documentation: https://github.com/ruvnet/ruvector
+- SwarmVector Documentation: the upstream project (see NOTICE)
 - Existing hooks command: `/commands/hooks.ts`
 - Existing neural command: `/commands/neural.ts`
 
 ---
 
-## Appendix: RuVector Function Mapping
+## Appendix: SwarmVector Function Mapping
 
-| RuVector Function | CLI Command | MCP Tool |
+| SwarmVector Function | CLI Command | MCP Tool |
 |-------------------|-------------|----------|
-| `hooks_route` | `route --q-learning` | `ruvector/route` |
-| `hooks_route_enhanced` | `route --q-learning --explain` | `ruvector/route` |
-| `hooks_coverage_route` | `route --coverage-aware` | `ruvector/route` |
-| `hooks_ast_analyze` | `analyze ast <path>` | `ruvector/analyze-ast` |
-| `hooks_ast_complexity` | `analyze ast --complexity` | `ruvector/analyze-ast` |
-| `hooks_diff_analyze` | `analyze diff` | `ruvector/analyze-diff` |
-| `hooks_diff_classify` | `analyze diff --risk` | `ruvector/analyze-diff` |
-| `hooks_graph_mincut` | `analyze boundaries -a mincut` | `ruvector/analyze-boundaries` |
-| `hooks_graph_cluster` | `analyze boundaries -a louvain` | `ruvector/analyze-boundaries` |
+| `hooks_route` | `route --q-learning` | `swarmvector/route` |
+| `hooks_route_enhanced` | `route --q-learning --explain` | `swarmvector/route` |
+| `hooks_coverage_route` | `route --coverage-aware` | `swarmvector/route` |
+| `hooks_ast_analyze` | `analyze ast <path>` | `swarmvector/analyze-ast` |
+| `hooks_ast_complexity` | `analyze ast --complexity` | `swarmvector/analyze-ast` |
+| `hooks_diff_analyze` | `analyze diff` | `swarmvector/analyze-diff` |
+| `hooks_diff_classify` | `analyze diff --risk` | `swarmvector/analyze-diff` |
+| `hooks_graph_mincut` | `analyze boundaries -a mincut` | `swarmvector/analyze-boundaries` |
+| `hooks_graph_cluster` | `analyze boundaries -a louvain` | `swarmvector/analyze-boundaries` |
 
 ---
 
@@ -1016,15 +1016,15 @@ describe('Route Command', () => {
 
 | Module | Path | Lines | Description |
 |--------|------|-------|-------------|
-| `availability.ts` | `/ruvector/availability.ts` | ~120 | Package detection and feature checking |
-| `errors.ts` | `/ruvector/errors.ts` | ~50 | Custom error types for graceful fallback |
-| `types.ts` | `/ruvector/types.ts` | ~180 | TypeScript interfaces for all adapters |
-| `index.ts` | `/ruvector/index.ts` | ~80 | Lazy loader and re-exports |
-| `router-adapter.ts` | `/ruvector/adapters/router-adapter.ts` | ~350 | Q-Learning and coverage routing |
-| `ast-adapter.ts` | `/ruvector/adapters/ast-adapter.ts` | ~400 | AST analysis and complexity metrics |
-| `diff-adapter.ts` | `/ruvector/adapters/diff-adapter.ts` | ~320 | Diff classification and risk scoring |
-| `graph-adapter.ts` | `/ruvector/adapters/graph-adapter.ts` | ~280 | Graph-based boundary detection |
-| `ruvector-tools.ts` | `/mcp-tools/ruvector-tools.ts` | ~450 | MCP tool definitions |
+| `availability.ts` | `/swarmvector/availability.ts` | ~120 | Package detection and feature checking |
+| `errors.ts` | `/swarmvector/errors.ts` | ~50 | Custom error types for graceful fallback |
+| `types.ts` | `/swarmvector/types.ts` | ~180 | TypeScript interfaces for all adapters |
+| `index.ts` | `/swarmvector/index.ts` | ~80 | Lazy loader and re-exports |
+| `router-adapter.ts` | `/swarmvector/adapters/router-adapter.ts` | ~350 | Q-Learning and coverage routing |
+| `ast-adapter.ts` | `/swarmvector/adapters/ast-adapter.ts` | ~400 | AST analysis and complexity metrics |
+| `diff-adapter.ts` | `/swarmvector/adapters/diff-adapter.ts` | ~320 | Diff classification and risk scoring |
+| `graph-adapter.ts` | `/swarmvector/adapters/graph-adapter.ts` | ~280 | Graph-based boundary detection |
+| `swarmvector-tools.ts` | `/mcp-tools/swarmvector-tools.ts` | ~450 | MCP tool definitions |
 | `route.ts` | `/commands/route.ts` | ~350 | CLI route command |
 | `analyze.ts` | `/commands/analyze.ts` | ~308 | CLI analyze command with subcommands |
 
@@ -1046,7 +1046,7 @@ describe('Route Command', () => {
 
 ### Graceful Fallback Behavior
 
-When `ruvector` is not installed:
+When `swarmvector` is not installed:
 - Commands display helpful installation instructions
 - Fall back to default agent routing (rule-based)
 - No build failures or runtime crashes
@@ -1056,7 +1056,7 @@ When `ruvector` is not installed:
 
 - Unit tests for availability detection
 - Integration tests for command handlers
-- Mock tests for ruvector unavailable scenarios
+- Mock tests for swarmvector unavailable scenarios
 - Fallback behavior verification
 
 ---
@@ -1068,7 +1068,7 @@ When `ruvector` is not installed:
 
 ### Overview
 
-Following initial implementation, performance analysis identified several bottlenecks across the ruvector integration. Optimizations implemented in alpha.21-23 achieved 3-10x speedups.
+Following initial implementation, performance analysis identified several bottlenecks across the swarmvector integration. Optimizations implemented in alpha.21-23 achieved 3-10x speedups.
 
 ### 1. Diff Classifier Optimizations (alpha.21)
 
@@ -1217,17 +1217,17 @@ const checkResults = await Promise.allSettled(checksToRun.map(check => check()))
 
 ### Cache Utility Functions
 
-All cache utilities exported from `@rufflo/cli/ruvector`:
+All cache utilities exported from `@swarmdo/cli/swarmvector`:
 
 ```typescript
 // Diff caches
-import { clearDiffCache, clearAllDiffCaches } from '@rufflo/cli/ruvector';
+import { clearDiffCache, clearAllDiffCaches } from '@swarmdo/cli/swarmvector';
 
 // Graph caches
-import { clearGraphCaches, getGraphCacheStats } from '@rufflo/cli/ruvector';
+import { clearGraphCaches, getGraphCacheStats } from '@swarmdo/cli/swarmvector';
 
 // Coverage caches
-import { clearCoverageCache, getCoverageCacheStats } from '@rufflo/cli/ruvector';
+import { clearCoverageCache, getCoverageCacheStats } from '@swarmdo/cli/swarmvector';
 ```
 
 ### Published Versions
@@ -1261,7 +1261,7 @@ Five high-impact, low-effort optimizations were implemented to achieve measurabl
 **Impact:** ~200ms CLI startup time reduction
 
 **Changes Made:**
-- `@rufflo/cli/src/commands/index.ts` - Refactored to use dynamic imports
+- `@swarmdo/cli/src/commands/index.ts` - Refactored to use dynamic imports
 
 **Before:**
 ```typescript
@@ -1298,7 +1298,7 @@ import { agentCommand } from './agent.js';
 **Impact:** 2-3x faster bulk operations
 
 **Changes Made:**
-- `@rufflo/memory/src/agentdb-adapter.ts` - Optimized bulk methods
+- `@swarmdo/memory/src/agentdb-adapter.ts` - Optimized bulk methods
 
 **Optimizations:**
 ```typescript
@@ -1365,9 +1365,9 @@ await pooledTransport.withConnection(async (transport) => {
 
 **Changes Made:**
 - Added `"sideEffects": false` to package.json files:
-  - `rufflo/package.json`
-  - `@rufflo/cli/package.json`
-  - `@rufflo/mcp/package.json`
+  - `swarmdo/package.json`
+  - `@swarmdo/cli/package.json`
+  - `@swarmdo/mcp/package.json`
 
 **How It Works:**
 - Bundlers (webpack, rollup, esbuild) can now tree-shake unused exports
@@ -1388,15 +1388,15 @@ await pooledTransport.withConnection(async (transport) => {
 
 | Package | Before | After |
 |---------|--------|-------|
-| `rufflo` | 3.0.0-alpha.17 | 3.0.0-alpha.18 |
-| `@rufflo/cli` | 3.0.0-alpha.24 | 3.0.0-alpha.25 |
-| `@rufflo/mcp` | 3.0.0-alpha.7 | 3.0.0-alpha.8 |
+| `swarmdo` | 3.0.0-alpha.17 | 3.0.0-alpha.18 |
+| `@swarmdo/cli` | 3.0.0-alpha.24 | 3.0.0-alpha.25 |
+| `@swarmdo/mcp` | 3.0.0-alpha.7 | 3.0.0-alpha.8 |
 
 ### Usage Examples
 
 **Lazy Command Loading:**
 ```typescript
-import { getCommandAsync, loadAllCommands } from '@rufflo/cli';
+import { getCommandAsync, loadAllCommands } from '@swarmdo/cli';
 
 // Get single command (loads on demand)
 const neuralCmd = await getCommandAsync('neural');
@@ -1407,7 +1407,7 @@ const allCommands = await loadAllCommands();
 
 **Batch Memory Operations:**
 ```typescript
-import { UnifiedMemoryService } from '@rufflo/memory';
+import { UnifiedMemoryService } from '@swarmdo/memory';
 
 const memory = new UnifiedMemoryService();
 await memory.initialize();
@@ -1465,18 +1465,18 @@ console.log(pool.getStats());
 
 ### Published Versions
 
-- `rufflo@3.0.0-alpha.18`
-- `@rufflo/cli@3.0.0-alpha.25`
-- `@rufflo/mcp@3.0.0-alpha.8`
-- `@rufflo/memory@3.0.0-alpha.2`
+- `swarmdo@3.0.0-alpha.18`
+- `@swarmdo/cli@3.0.0-alpha.25`
+- `@swarmdo/mcp@3.0.0-alpha.8`
+- `@swarmdo/memory@3.0.0-alpha.2`
 
 ### Performance Validation
 
 All builds pass successfully:
 ```
-✓ @rufflo/cli build passed
-✓ @rufflo/mcp build passed
-✓ @rufflo/memory build passed
+✓ @swarmdo/cli build passed
+✓ @swarmdo/mcp build passed
+✓ @swarmdo/memory build passed
 ```
 
 ---
@@ -1520,7 +1520,7 @@ All builds pass successfully:
 
 ### Key Features
 
-1. **Graceful Fallback**: All features work without ruvector via regex-based fallback
+1. **Graceful Fallback**: All features work without swarmvector via regex-based fallback
 2. **Output Formats**: text, json, table, DOT (for graphs)
 3. **File Export**: Results can be exported to files
 4. **Severity Filtering**: Filter by risk/severity level
@@ -1532,9 +1532,9 @@ All builds pass successfully:
 
 ## WASM Package Integrations (2026-03-17)
 
-In addition to the original `ruvector` (core) package, two WASM packages have been integrated as optional dependencies, extending the RuVector integration surface to cover sandboxed agent runtimes and browser-native LLM inference.
+In addition to the original `swarmvector` (core) package, two WASM packages have been integrated as optional dependencies, extending the SwarmVector integration surface to cover sandboxed agent runtimes and browser-native LLM inference.
 
-### @ruvector/rvagent-wasm v0.1.0 (ADR-059)
+### @swarmvector/rvagent-wasm v0.1.0 (ADR-059)
 
 Sandboxed AI agent runtime compiled to WebAssembly. See ADR-059 for full details.
 
@@ -1545,16 +1545,16 @@ Sandboxed AI agent runtime compiled to WebAssembly. See ADR-059 for full details
 | `WasmMcpServer` | JSON-RPC 2.0 MCP server running entirely in WASM |
 | `WasmRvfBuilder` | RVF binary container format for multi-agent packaging |
 
-**Integration module**: `src/ruvector/agent-wasm.ts` (22 exports)
+**Integration module**: `src/swarmvector/agent-wasm.ts` (22 exports)
 **MCP tools**: `src/mcp-tools/wasm-agent-tools.ts` (10 tools)
 
-### @ruvector/ruvllm-wasm v2.0.1
+### @swarmvector/swarmllm-wasm v2.0.1
 
 Browser-native LLM inference runtime with WASM-accelerated intelligence components. Provides native WASM implementations of several capabilities previously only available via JavaScript approximations.
 
 | Component | Description | Replaces/Enhances |
 |-----------|-------------|-------------------|
-| `RuvLLMWasm` | Core inference runtime (init, reset, version) | New capability |
+| `SwarmLLMWasm` | Core inference runtime (init, reset, version) | New capability |
 | `HnswRouterWasm` | WASM-native HNSW for semantic routing | Enhances ADR-028 HNSW search |
 | `SonaInstantWasm` | <1ms adaptation with WASM performance | Enhances SONA (ADR-028) |
 | `MicroLoraWasm` | Ultra-lightweight LoRA adaptation (ranks 1-4, <10KB) | Enhances LoRA adapter |
@@ -1568,17 +1568,17 @@ Browser-native LLM inference runtime with WASM-accelerated intelligence componen
 
 **Resolved (v2.0.1)**: `HnswRouterWasm.addPattern()` `.ln()` bug fixed — replaced `wasm_random()` with integer-based geometric distribution in `select_layer()`. Published as v2.0.1.
 
-**Integration module**: `src/ruvector/ruvllm-wasm.ts` (planned)
-**MCP tools**: `src/mcp-tools/ruvllm-tools.ts` (planned)
+**Integration module**: `src/swarmvector/swarmllm-wasm.ts` (planned)
+**MCP tools**: `src/mcp-tools/swarmllm-tools.ts` (planned)
 
 ### Package Dependency Summary
 
 ```json
 "optionalDependencies": {
-  "ruvector": "^1.0.0",
-  "@ruvector/rvagent-wasm": "^0.1.0",
-  "@ruvector/ruvllm-wasm": "^2.0.1",
-  "@ruvector/sona": "^0.1.5"
+  "swarmvector": "^1.0.0",
+  "@swarmvector/rvagent-wasm": "^0.1.0",
+  "@swarmvector/swarmllm-wasm": "^2.0.1",
+  "@swarmvector/sona": "^0.1.5"
 }
 ```
 
@@ -1586,7 +1586,7 @@ Browser-native LLM inference runtime with WASM-accelerated intelligence componen
 
 | ADR | Impact |
 |-----|--------|
-| ADR-028 (Neural Attention) | HNSW, SONA, KV Cache now available as native WASM via ruvllm-wasm |
+| ADR-028 (Neural Attention) | HNSW, SONA, KV Cache now available as native WASM via swarmllm-wasm |
 | ADR-059 (rvagent-wasm) | Full integration documented |
 | ADR-006 (Unified Memory) | HNSW search can use WasmHNSW backend |
 | ADR-026 (Agent Booster) | WASM agents provide Tier-0 sandboxed execution |

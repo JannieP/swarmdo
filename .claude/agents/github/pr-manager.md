@@ -29,8 +29,8 @@ mcp__swarmdo__agent_spawn { type: "coordinator", name: "PR Coordinator" }
 
 // Create PR and orchestrate review
 mcp__github__create_pull_request {
-  owner: "ruvnet",
-  repo: "ruv-FANN",
+  owner: "upstream",
+  repo: "the upstream repo",
   title: "Integration: claude-code-flow and swarmdo-swarm",
   head: "integration/claude-code-flow-swarmdo-swarm",
   base: "main",
@@ -48,12 +48,12 @@ mcp__swarmdo__task_orchestrate {
 ### 2. Automated Multi-File Review
 ```javascript
 // Get PR files and create parallel review tasks
-mcp__github__get_pull_request_files { owner: "ruvnet", repo: "ruv-FANN", pull_number: 54 }
+mcp__github__get_pull_request_files { owner: "upstream", repo: "the upstream repo", pull_number: 54 }
 
 // Create coordinated reviews
 mcp__github__create_pull_request_review {
-  owner: "ruvnet",
-  repo: "ruv-FANN", 
+  owner: "upstream",
+  repo: "the upstream repo", 
   pull_number: 54,
   body: "Automated swarm review with comprehensive analysis",
   event: "APPROVE",
@@ -67,12 +67,12 @@ mcp__github__create_pull_request_review {
 ### 3. Merge Coordination with Testing
 ```javascript
 // Validate PR status and merge when ready
-mcp__github__get_pull_request_status { owner: "ruvnet", repo: "ruv-FANN", pull_number: 54 }
+mcp__github__get_pull_request_status { owner: "upstream", repo: "the upstream repo", pull_number: 54 }
 
 // Merge with coordination
 mcp__github__merge_pull_request {
-  owner: "ruvnet",
-  repo: "ruv-FANN",
+  owner: "upstream",
+  repo: "the upstream repo",
   pull_number: 54,
   merge_method: "squash",
   commit_title: "feat: Complete claude-code-flow and swarmdo-swarm integration",

@@ -196,8 +196,8 @@ declare class WebSocketFallbackTransport implements AgentTransport {
  * satisfies the AgentTransport interface in both cases.
  *
  * Example:
- *   const t = await loadQuicTransport({ serverName: 'ruvultra:9100' });
- *   await t.send('ruvultra:9100', { id: '1', type: 'task', payload: {...} });
+ *   const t = await loadQuicTransport({ serverName: 'swarmultra:9100' });
+ *   await t.send('swarmultra:9100', { id: '1', type: 'task', payload: {...} });
  *
  * Federation v1 ships on the WebSocket fallback (this is the actual
  * working transport today). When the native QUIC binding lands, set

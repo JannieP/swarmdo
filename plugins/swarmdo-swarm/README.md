@@ -5,7 +5,7 @@ Agent teams, swarm coordination, Monitor streams, and worktree isolation.
 ## Install
 
 ```
-/plugin marketplace add ruvnet/swarmdo
+/plugin marketplace add upstream/swarmdo
 /plugin install swarmdo-swarm@swarmdo
 ```
 

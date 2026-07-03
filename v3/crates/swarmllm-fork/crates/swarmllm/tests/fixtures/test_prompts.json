@@ -1,8 +1,8 @@
 {
   "metadata": {
     "version": "1.0.0",
-    "description": "Test prompts for RuvLTRA-Small validation",
-    "model": "ruvltra-small",
+    "description": "Test prompts for SwarmLTRA-Small validation",
+    "model": "swarmltra-small",
     "last_updated": "2024-01-19"
   },
   "prompts": {

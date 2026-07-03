@@ -1,6 +1,6 @@
 //! # Claude Task Fine-Tuning Dataset Generator
 //!
-//! Generates synthetic training datasets for RuvLTRA models fine-tuned on
+//! Generates synthetic training datasets for SwarmLTRA models fine-tuned on
 //! Claude Flow agent tasks. Includes data augmentation, quality scoring,
 //! and export to standard formats (JSONL, Parquet).
 //!

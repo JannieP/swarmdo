@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Static guard for ruvnet/swarmdo#2132 — plugin `hooks.json` commands must be
+ * Static guard for upstream/swarmdo#2132 — plugin `hooks.json` commands must be
  * cross-platform (work on Windows without WSL / Git Bash).
  *
  * The reporter ran the plugin hooks on native Windows and every `PostToolUse`
@@ -182,7 +182,7 @@ for (const v of violations) {
   console.error(`     cmd: ${v.cmd}`);
   console.error(`     fix: ${v.hint}`);
 }
-console.error('\nReference: ruvnet/swarmdo#2132 (plugin hooks broken on Windows).');
+console.error('\nReference: upstream/swarmdo#2132 (plugin hooks broken on Windows).');
 console.error('Cross-platform pattern: .claude/settings.json + .claude/helpers/hook-handler.cjs (node, no bash).');
 console.error('POSIX-exempt pattern: add "_platform": "posix" to hooks.json + create scripts/swarmdo-hook.cjs sibling.');
 process.exit(1);

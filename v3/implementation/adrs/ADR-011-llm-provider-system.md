@@ -21,12 +21,12 @@ V2 has concrete provider implementations in `v2/src/providers/` that need to be 
 
 ## Decision
 
-### 1. Create `@rufflo/providers` Package
+### 1. Create `@swarmdo/providers` Package
 
 A dedicated package for LLM provider implementations:
 
 ```
-v3/@rufflo/providers/
+v3/@swarmdo/providers/
 ├── src/
 │   ├── types.ts              # Unified type definitions
 │   ├── base-provider.ts      # Abstract base class with circuit breaker
@@ -35,7 +35,7 @@ v3/@rufflo/providers/
 │   ├── google-provider.ts    # Gemini models
 │   ├── cohere-provider.ts    # Command models
 │   ├── ollama-provider.ts    # Local models
-│   ├── ruvector-provider.ts  # RuVector/ruvLLM with SONA learning
+│   ├── swarmvector-provider.ts  # SwarmVector/swarmLLM with SONA learning
 │   ├── provider-manager.ts   # Orchestration layer
 │   ├── __tests__/            # Integration tests
 │   │   └── quick-test.ts     # Provider test suite
@@ -73,7 +73,7 @@ interface ILLMProvider {
 
 ### 4. LLM Hooks Integration
 
-Add LLM-specific hooks to `@rufflo/hooks`:
+Add LLM-specific hooks to `@swarmdo/hooks`:
 
 ```typescript
 // Pre-LLM hooks
@@ -127,11 +127,11 @@ Include latest models:
 - phi-4
 - qwen2.5 (including 0.5b, 1.5b variants)
 
-**RuVector/ruvLLM (Self-Learning Local):**
-- ruvector-auto (auto-selects optimal)
-- ruvector-fast (speed-optimized)
-- ruvector-quality (quality-optimized)
-- ruvector-balanced
+**SwarmVector/swarmLLM (Self-Learning Local):**
+- swarmvector-auto (auto-selects optimal)
+- swarmvector-fast (speed-optimized)
+- swarmvector-quality (quality-optimized)
+- swarmvector-balanced
 - Any Ollama model via fallback
 
 ## Consequences
@@ -149,7 +149,7 @@ Include latest models:
 - Testing requires API mocks
 
 ### Neutral
-- Integration with existing `@rufflo/integration` multi-model-router
+- Integration with existing `@swarmdo/integration` multi-model-router
 - Can coexist with agentic-flow's provider system
 
 ## Implementation Notes
@@ -161,11 +161,11 @@ Include latest models:
 
 ### Phase 2: Extended Providers ✅ Complete
 4. ✅ Implement Google, Cohere, Ollama providers
-5. ✅ Implement RuVector provider with Ollama fallback
+5. ✅ Implement SwarmVector provider with Ollama fallback
 6. ✅ Implement provider manager with load balancing
 
 ### Phase 3: Hooks Integration 🔄 Pending
-7. Add LLM hooks to @rufflo/hooks
+7. Add LLM hooks to @swarmdo/hooks
 8. Integration testing with hooks system
 
 ## Validation Results
@@ -178,7 +178,7 @@ Include latest models:
 | Google | gemini-2.0-flash | ✅ Pass | Free tier, streaming support |
 | OpenRouter | openai/gpt-4o-mini | ✅ Pass | Via OpenAI-compatible API |
 | Ollama | qwen2.5:0.5b | ✅ Pass | Local CPU-friendly model |
-| RuVector | qwen2.5:0.5b | ✅ Pass | Ollama fallback working |
+| SwarmVector | qwen2.5:0.5b | ✅ Pass | Ollama fallback working |
 | Manager | Multi-provider | ✅ Pass | Load balancing + 0ms cache |
 
 **All 6 providers passing validation.**
@@ -192,8 +192,8 @@ Include latest models:
 - Token estimation for cost calculation
 - Event emitter for monitoring
 
-**RuVector Provider:**
-- Native ruvLLM server support (port 3000, `/query` endpoint)
+**SwarmVector Provider:**
+- Native swarmLLM server support (port 3000, `/query` endpoint)
 - Automatic Ollama fallback when server unavailable
 - SONA self-learning integration (when available)
 - HNSW vector memory support
@@ -208,7 +208,7 @@ Include latest models:
 ## References
 
 - V2 Provider System: `v2/src/providers/`
-- V3 Multi-Model Router: `v3/@rufflo/integration/src/multi-model-router.ts`
-- RuVector ruvLLM: `https://github.com/ruvnet/ruvector/tree/main/examples/ruvLLM`
+- V3 Multi-Model Router: `v3/@swarmdo/integration/src/multi-model-router.ts`
+- SwarmVector swarmLLM: `the upstream project (see NOTICE)`
 - ADR-001: agentic-flow Integration
 - ADR-006: Unified Memory Service

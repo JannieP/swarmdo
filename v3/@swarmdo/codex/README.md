@@ -8,7 +8,7 @@
 <p align="center">
   <a href="https://www.npmjs.com/package/@swarmdo/codex"><img src="https://img.shields.io/npm/v/@swarmdo/codex?label=npm&color=blue" alt="npm version"></a>
   <a href="https://www.npmjs.com/package/@swarmdo/codex"><img src="https://img.shields.io/npm/dm/@swarmdo/codex?label=downloads&color=cb3837" alt="npm downloads"></a>
-  <a href="https://github.com/ruvnet/swarmdo"><img src="https://img.shields.io/badge/license-MIT-green" alt="license"></a>
+  <a href="the upstream project (see NOTICE)"><img src="https://img.shields.io/badge/license-MIT-green" alt="license"></a>
   <a href="https://agentics.org"><img src="https://img.shields.io/badge/standard-Agentics-purple" alt="Agentics Standard"></a>
 </p>
 
@@ -1031,5 +1031,5 @@ MIT
 
 ## Support
 
-- Documentation: https://github.com/ruvnet/swarmdo
-- Issues: https://github.com/ruvnet/swarmdo/issues
+- Documentation: the upstream project (see NOTICE)
+- Issues: the upstream project (see NOTICE)

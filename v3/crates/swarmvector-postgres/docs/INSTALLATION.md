@@ -153,7 +153,7 @@ ls ~/.pgrx/
 
 ```bash
 # Clone the repository
-git clone https://github.com/ruvnet/swarmvector.git
+git clone the upstream project (see NOTICE)
 cd swarmvector/crates/swarmvector-postgres
 
 # Build for your PostgreSQL version
@@ -747,6 +747,6 @@ sudo systemctl restart postgresql
 
 ## Support
 
-- **Documentation**: https://github.com/ruvnet/swarmvector/tree/main/crates/swarmvector-postgres/docs
-- **Issues**: https://github.com/ruvnet/swarmvector/issues
-- **Discussions**: https://github.com/ruvnet/swarmvector/discussions
+- **Documentation**: the upstream project (see NOTICE)
+- **Issues**: the upstream project (see NOTICE)
+- **Discussions**: the upstream project (see NOTICE)

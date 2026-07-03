@@ -1,4 +1,4 @@
-# ADR-038: RuVocal — HF Chat UI Fork with Self-Contained RVF Document Store
+# ADR-038: SwarmVocal — HF Chat UI Fork with Self-Contained RVF Document Store
 
 **Status:** Implemented
 **Date:** 2026-03-05
@@ -14,24 +14,24 @@ The current `chat-ui-mcp` package uses the upstream HuggingFace Chat UI (`ghcr.i
 3. **Upstream lock-in** — Using a pre-built Docker image means we can't modify the SvelteKit app.
 4. **Operational complexity** — Two databases (MongoDB + PostgreSQL) to maintain.
 
-We initially considered PostgreSQL (ruvector-postgres) as the replacement, but pivoted to a lighter approach: a self-contained RVF (RuVector Format) document store that persists to a single JSON file on disk. This eliminates all external database dependencies while preserving the full MongoDB Collection API.
+We initially considered PostgreSQL (swarmvector-postgres) as the replacement, but pivoted to a lighter approach: a self-contained RVF (SwarmVector Format) document store that persists to a single JSON file on disk. This eliminates all external database dependencies while preserving the full MongoDB Collection API.
 
 ## Decision
 
-Fork HuggingFace Chat UI as **RuVocal** (`/workspaces/dev/packages/ruvocal`), replacing MongoDB with a pure TypeScript in-memory document store persisted to a single `.rvf.json` file.
+Fork HuggingFace Chat UI as **SwarmVocal** (`/workspaces/dev/packages/swarmvocal`), replacing MongoDB with a pure TypeScript in-memory document store persisted to a single `.rvf.json` file.
 
 ### Name
 
-**RuVocal** = **Ru**Vector + **Vocal** (voice/conversation). A conversational AI interface powered by ruvector.
+**SwarmVocal** = **Ru**Vector + **Vocal** (voice/conversation). A conversational AI interface powered by swarmvector.
 
 ## Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        RuVocal Stack                             │
+│                        SwarmVocal Stack                             │
 │                                                                  │
 │  ┌──────────────────┐    ┌──────────────────┐                   │
-│  │   RuVocal UI     │    │   MCP Bridge     │                   │
+│  │   SwarmVocal UI     │    │   MCP Bridge     │                   │
 │  │   (SvelteKit 2)  │───▶│   (Node.js)      │                   │
 │  │                  │    │                  │                   │
 │  │  - Chat UI       │    │  - Tool proxy    │                   │
@@ -45,7 +45,7 @@ Fork HuggingFace Chat UI as **RuVocal** (`/workspaces/dev/packages/ruvocal`), re
 │  │         RVF Document Store               │                   │
 │  │         (In-Memory + Disk Persist)       │                   │
 │  │                                           │                   │
-│  │  File: db/ruvocal.rvf.json               │                   │
+│  │  File: db/swarmvocal.rvf.json               │                   │
 │  │                                           │                   │
 │  │  Collections (16):                        │                   │
 │  │  - conversations    (chat sessions)       │                   │
@@ -248,28 +248,28 @@ Tenant data is persisted separately in the RVF file under the `tenants` key.
 ## Environment Variables
 
 ```bash
-# RVF store path (defaults to db/ruvocal.rvf.json)
-RVF_DB_PATH=/data/ruvocal
+# RVF store path (defaults to db/swarmvocal.rvf.json)
+RVF_DB_PATH=/data/swarmvocal
 
 # Empty string = in-memory only (for tests)
 RVF_DB_PATH=
 
 # Everything else stays the same
-PUBLIC_APP_NAME=RuVocal
+PUBLIC_APP_NAME=SwarmVocal
 PUBLIC_ORIGIN=https://chat.example.com
 OPENAI_BASE_URL=https://openrouter.ai/api/v1
 ```
 
 ## Benefits
 
-| Aspect | MongoDB (upstream) | RVF Store (RuVocal) |
+| Aspect | MongoDB (upstream) | RVF Store (SwarmVocal) |
 |--------|-------------------|---------------------|
 | **Dependencies** | MongoDB server required | Zero — pure TypeScript |
 | **Container size** | +500MB for MongoDB | 0 extra |
 | **Persistence** | Network database | Single JSON file |
 | **Startup time** | Seconds (connection) | Instant |
 | **Multi-tenant** | Not built-in | Native tenant isolation |
-| **Backup** | mongodump | cp ruvocal.rvf.json |
+| **Backup** | mongodump | cp swarmvocal.rvf.json |
 | **UI customization** | Cannot modify upstream | Full SvelteKit source |
 | **Test speed** | MongoMemoryServer (~2s) | In-memory (~300ms) |
 
@@ -281,6 +281,6 @@ OPENAI_BASE_URL=https://openrouter.ai/api/v1
 
 ## Mitigation
 
-1. For large deployments, future upgrade path to ruvector-postgres (PostgresAdapter already exists at `postgres.ts`)
+1. For large deployments, future upgrade path to swarmvector-postgres (PostgresAdapter already exists at `postgres.ts`)
 2. The debounced save + flush-on-exit pattern prevents data loss; WAL logging can be added if needed
 3. Keep fork minimal — only database layer changed, UI components untouched

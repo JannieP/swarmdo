@@ -50,7 +50,6 @@
     "orchestration",
     "mcp"
   ],
-  "author": "rUv <ruv@ruv.net>",
   "license": "MIT",
   "repository": {
     "type": "git",

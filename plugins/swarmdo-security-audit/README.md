@@ -5,7 +5,7 @@ Security review, dependency scanning, policy gates, and CVE monitoring.
 ## Install
 
 ```
-/plugin marketplace add ruvnet/swarmdo
+/plugin marketplace add upstream/swarmdo
 /plugin install swarmdo-security-audit@swarmdo
 ```
 

@@ -39,16 +39,16 @@ For specific questions use `deep-research`. For multi-step plans use `goal-plan`
 
 ```json
 {
-  "seed": "ruvnet",
+  "seed": "upstream",
   "seedType": "username",
   "depth": 2,
   "truncated": false,
   "generatedAt": "ISO-8601",
   "nodes": [
-    { "id": "ruvnet", "type": "username", "attrs": { "...": "..." }, "sources": ["WebSearch", "github.com"] }
+    { "id": "upstream", "type": "username", "attrs": { "...": "..." }, "sources": ["WebSearch", "github.com"] }
   ],
   "edges": [
-    { "from": "ruvnet", "to": "swarmdo", "kind": "owns", "source": "github.com", "confidence": "high" }
+    { "from": "upstream", "to": "swarmdo", "kind": "owns", "source": "github.com", "confidence": "high" }
   ],
   "stats": { "nodesByType": {}, "sourcesUsed": [], "tokensSpent": 0 }
 }
@@ -63,7 +63,7 @@ For specific questions use `deep-research`. For multi-step plans use `goal-plan`
 ## Examples
 
 ```
-/swarmdo-goals:dossier-collect ruvnet
+/swarmdo-goals:dossier-collect upstream
 /swarmdo-goals:dossier-collect ADR-097 --max-depth 1
 /swarmdo-goals:dossier-collect "src/memory/hnsw.ts" --sources codebase,git,memory
 /swarmdo-goals:dossier-collect "swarmdo-goals" --max-breadth 5 --budget-usd 1

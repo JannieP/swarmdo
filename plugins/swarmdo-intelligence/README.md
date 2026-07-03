@@ -7,7 +7,7 @@ User-facing surface for Swarmdo's self-learning system. Wraps **29 intelligence-
 ## Install
 
 ```
-/plugin marketplace add ruvnet/swarmdo
+/plugin marketplace add upstream/swarmdo
 /plugin install swarmdo-intelligence@swarmdo
 ```
 

@@ -435,9 +435,9 @@ await rb.optimize();
 ## Learn More
 
 - **AgentDB Integration**: node_modules/agentic-flow/docs/AGENTDB_INTEGRATION.md
-- **GitHub**: https://github.com/ruvnet/agentic-flow/tree/main/packages/agentdb
+- **GitHub**: the upstream project (see NOTICE)
 - **MCP Integration**: `npx agentdb@latest mcp`
-- **Website**: https://agentdb.ruv.io
+- **Website**: https://swarmdo.com
 
 ---
 

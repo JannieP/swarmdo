@@ -543,11 +543,11 @@ impl Default for HotSwapManager {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::lora::adapters::RuvLtraAdapters;
+    use crate::lora::adapters::SwarmLtraAdapters;
 
     #[test]
     fn test_merge_average() {
-        let adapters_cfg = RuvLtraAdapters::new();
+        let adapters_cfg = SwarmLtraAdapters::new();
         let lora1 = adapters_cfg.create_lora("coder", 64).unwrap();
         let lora2 = adapters_cfg.create_lora("researcher", 64).unwrap();
 
@@ -566,7 +566,7 @@ mod tests {
 
     #[test]
     fn test_merge_weighted() {
-        let adapters_cfg = RuvLtraAdapters::new();
+        let adapters_cfg = SwarmLtraAdapters::new();
         let lora1 = adapters_cfg.create_lora("coder", 64).unwrap();
         let lora2 = adapters_cfg.create_lora("security", 64).unwrap();
 
@@ -589,7 +589,7 @@ mod tests {
 
     #[test]
     fn test_merge_slerp() {
-        let adapters_cfg = RuvLtraAdapters::new();
+        let adapters_cfg = SwarmLtraAdapters::new();
         let lora1 = adapters_cfg.create_lora("coder", 64).unwrap();
         let lora2 = adapters_cfg.create_lora("reviewer", 64).unwrap();
 
@@ -608,7 +608,7 @@ mod tests {
 
     #[test]
     fn test_hot_swap() {
-        let adapters_cfg = RuvLtraAdapters::new();
+        let adapters_cfg = SwarmLtraAdapters::new();
         let lora1 = adapters_cfg.create_lora("coder", 64).unwrap();
         let lora2 = adapters_cfg.create_lora("security", 64).unwrap();
 

@@ -4,7 +4,7 @@ Open issues that the supply-chain audit + recent CI hardening surfaced but requi
 
 ## #2047 — Witness manifests report `missing=95 drift=2`
 
-**Status**: HIGH, open. Tracked at https://github.com/ruvnet/swarmdo/issues/2047.
+**Status**: HIGH, open. Tracked at the upstream project (see NOTICE)
 
 **Root cause**: the 12-hour scheduled verification job runs in a bare-source environment (no `npm ci && npm run build`), but the signed witness manifest references 95 compiled `dist/**` artifacts. In a pre-build state those files don't exist on disk → verify reports them as missing. The Ed25519 signature itself is valid; this is *not* tamper.
 
@@ -20,11 +20,11 @@ Open issues that the supply-chain audit + recent CI hardening surfaced but requi
 
 ## #2048 — `agentic-flow/reasoningbank` ESM import fails on Windows (onnxruntime native binding)
 
-**Status**: FIXED upstream + downstream integrated. Tracked at https://github.com/ruvnet/swarmdo/issues/2048.
+**Status**: FIXED upstream + downstream integrated. Tracked at the upstream project (see NOTICE)
 
 **Root cause**: `import('agentic-flow/reasoningbank')` triggered an eager load of `onnxruntime-node`'s native binding (`onnxruntime_binding.node`), which fails on Windows with "OS cannot run %1" even when the user has VCRedist installed. The chain was `reasoningbank/index.ts → core/distill.ts → router/router.ts → onnx-local.ts (top-level await)`. The top-level `await import('onnxruntime-node')` in `onnx-local.ts` forced the binding load at module-evaluation time, before any user code ran.
 
-**Upstream fix** (PR ruvnet/agentic-flow#155, shipped as agentic-flow@2.0.13):
+**Upstream fix** (PR upstream/agentic-flow#155, shipped as agentic-flow@2.0.13):
 
 1. ✅ `src/router/providers/onnx-local.ts` — moved the top-level `await import('onnxruntime-node')` into a lazy `loadOrt()` helper called from `initializeSession()`. The binding now loads only when an explicit inference call happens, never at module import time.
 2. ✅ `src/router/providers/onnx-local-optimized.ts` — removed the eager top-level try/catch around `await import('onnxruntime-node')`. It was dead code (the class extends ONNXLocalProvider and never used `ort` directly), but it was still triggering the binding at import time.

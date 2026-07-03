@@ -1637,13 +1637,13 @@ const Index = () => {
           <p className="text-sm" style={{ color: widgetConfig.secondaryTextColor }}>
             Created with <span style={{ color: widgetConfig.accentColor }}>❤️</span> by{" "}
             <a 
-              href="https://ruv.io" 
+              href="https://swarmdo.com" 
               target="_blank" 
               rel="noopener noreferrer"
               className="font-medium hover:underline transition-colors"
               style={{ color: widgetConfig.primaryColor }}
             >
-              rUv.io
+              the upstream author.io
             </a>
           </p>
         </div>

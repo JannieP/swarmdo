@@ -2,7 +2,7 @@
 
 **Status:** Proposed
 **Date:** 2026-02-08
-**Authors:** RuvNet, Rufflo Team
+**Authors:** the upstream author, Swarmdo Team
 
 ## Context
 
@@ -34,7 +34,7 @@ Fast Mode is not a different model - it uses the same Opus 4.6 with a different 
 
 ## Decision
 
-Integrate Fast Mode awareness into RuvFlow/Rufflo to enable:
+Integrate Fast Mode awareness into SwarmFlow/Swarmdo to enable:
 
 1. **Automatic Fast Mode for time-critical swarm tasks**
 2. **Settings integration** for user preference management
@@ -82,10 +82,10 @@ Add fast mode hooks for swarm coordination:
 
 ```bash
 # Pre-task hook checks if fast mode should be enabled
-npx ruvflow hooks pre-task --enable-fast-mode-if-critical
+npx swarmdo hooks pre-task --enable-fast-mode-if-critical
 
 # Post-task hook can disable fast mode to save costs
-npx ruvflow hooks post-task --restore-standard-mode
+npx swarmdo hooks post-task --restore-standard-mode
 ```
 
 #### 4. Swarm Coordination
@@ -115,7 +115,7 @@ When fast mode rate limits are hit:
 3. Work continues at standard speed/pricing
 4. Fast mode auto-re-enables when cooldown expires
 
-RuvFlow should detect this and:
+SwarmFlow should detect this and:
 - Log the fallback event
 - Adjust cost tracking accordingly
 - Notify swarm coordinator of reduced speed

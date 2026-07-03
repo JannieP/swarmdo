@@ -6,7 +6,7 @@
 
 ## Context
 
-rufflo's vector search uses three backends with different tradeoffs. With `@ruvector/diskann@0.1.0` now published (5-platform native binaries), we have a Vamana graph-based SSD-friendly alternative to HNSW.
+swarmdo's vector search uses three backends with different tradeoffs. With `@swarmvector/diskann@0.1.0` now published (5-platform native binaries), we have a Vamana graph-based SSD-friendly alternative to HNSW.
 
 ## Benchmark Results (measured, not theoretical)
 
@@ -31,15 +31,15 @@ rufflo's vector search uses three backends with different tradeoffs. With `@ruve
 ### Analysis
 
 - **DiskANN**: Perfect recall at 1K vectors (1.000), strong at 5K (0.874). Insert is 8,000x faster than HNSW. Build step is expensive (1-16s) but only needed once. QPS competitive.
-- **HNSW** (@ruvector/router): Fastest search but very low recall (0.12 at 1K, 0.026 at 5K) — the score-as-distance inversion bug may still affect recall measurement. Very slow insert (4.6s for 1K).
+- **HNSW** (@swarmvector/router): Fastest search but very low recall (0.12 at 1K, 0.026 at 5K) — the score-as-distance inversion bug may still affect recall measurement. Very slow insert (4.6s for 1K).
 - **Cosine-JS**: Perfect recall (brute force) but slowest search. Best for small datasets (<500 vectors).
 
 ## Decision
 
-Add `@ruvector/diskann` as an optional backend with automatic fallback:
+Add `@swarmvector/diskann` as an optional backend with automatic fallback:
 
 ```
-DiskANN (native, Vamana graph) → HNSW (@ruvector/router) → Cosine-JS (pure JS)
+DiskANN (native, Vamana graph) → HNSW (@swarmvector/router) → Cosine-JS (pure JS)
 ```
 
 ### Selection criteria
@@ -53,11 +53,11 @@ DiskANN (native, Vamana graph) → HNSW (@ruvector/router) → Cosine-JS (pure J
 ## Implementation
 
 ### Files
-- `v3/@rufflo/cli/src/ruvector/diskann-backend.ts` — unified backend with auto-selection, fallback chain, benchmark utility
+- `v3/@swarmdo/cli/src/swarmvector/diskann-backend.ts` — unified backend with auto-selection, fallback chain, benchmark utility
 
 ### API
 ```typescript
-import { insertVector, searchVectors, buildIndex, benchmark } from './ruvector/diskann-backend.js';
+import { insertVector, searchVectors, buildIndex, benchmark } from './swarmvector/diskann-backend.js';
 
 // Insert vectors
 await insertVector('doc-1', embedding, { dim: 384 });

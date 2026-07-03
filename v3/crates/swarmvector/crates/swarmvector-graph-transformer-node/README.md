@@ -1,6 +1,6 @@
-# @ruvector/graph-transformer
+# @swarmvector/graph-transformer
 
-[![npm](https://img.shields.io/npm/v/@ruvector/graph-transformer.svg)](https://www.npmjs.com/package/@ruvector/graph-transformer)
+[![npm](https://img.shields.io/npm/v/@swarmvector/graph-transformer.svg)](https://www.npmjs.com/package/@swarmvector/graph-transformer)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-20_passing-brightgreen.svg)]()
 
@@ -11,24 +11,24 @@ Use graph transformers from JavaScript and TypeScript with native Rust performan
 ## Install
 
 ```bash
-npm install @ruvector/graph-transformer
+npm install @swarmvector/graph-transformer
 ```
 
 Prebuilt binaries are provided for:
 
 | Platform | Architecture | Package |
 |----------|-------------|---------|
-| Linux | x64 (glibc) | `@ruvector/graph-transformer-linux-x64-gnu` |
-| Linux | x64 (musl) | `@ruvector/graph-transformer-linux-x64-musl` |
-| Linux | ARM64 (glibc) | `@ruvector/graph-transformer-linux-arm64-gnu` |
-| macOS | x64 (Intel) | `@ruvector/graph-transformer-darwin-x64` |
-| macOS | ARM64 (Apple Silicon) | `@ruvector/graph-transformer-darwin-arm64` |
-| Windows | x64 | `@ruvector/graph-transformer-win32-x64-msvc` |
+| Linux | x64 (glibc) | `@swarmvector/graph-transformer-linux-x64-gnu` |
+| Linux | x64 (musl) | `@swarmvector/graph-transformer-linux-x64-musl` |
+| Linux | ARM64 (glibc) | `@swarmvector/graph-transformer-linux-arm64-gnu` |
+| macOS | x64 (Intel) | `@swarmvector/graph-transformer-darwin-x64` |
+| macOS | ARM64 (Apple Silicon) | `@swarmvector/graph-transformer-darwin-arm64` |
+| Windows | x64 | `@swarmvector/graph-transformer-win32-x64-msvc` |
 
 ## Quick Start
 
 ```javascript
-const { GraphTransformer } = require('@ruvector/graph-transformer');
+const { GraphTransformer } = require('@swarmvector/graph-transformer');
 
 const gt = new GraphTransformer();
 console.log(gt.version()); // "2.0.4"
@@ -214,21 +214,21 @@ gt.reset();
 npm install -g @napi-rs/cli
 
 # Build native module
-cd crates/ruvector-graph-transformer-node
+cd crates/swarmvector-graph-transformer-node
 napi build --platform --release
 
 # Run tests
-cargo test -p ruvector-graph-transformer-node
+cargo test -p swarmvector-graph-transformer-node
 ```
 
 ## Related Packages
 
 | Package | Description |
 |---------|-------------|
-| [`ruvector-graph-transformer`](../ruvector-graph-transformer) | Core Rust crate |
-| [`ruvector-graph-transformer-wasm`](../ruvector-graph-transformer-wasm) | WASM bindings for browsers |
-| [`@ruvector/gnn`](https://www.npmjs.com/package/@ruvector/gnn) | Base GNN operations |
-| [`@ruvector/attention`](https://www.npmjs.com/package/@ruvector/attention) | 46 attention mechanisms |
+| [`swarmvector-graph-transformer`](../swarmvector-graph-transformer) | Core Rust crate |
+| [`swarmvector-graph-transformer-wasm`](../swarmvector-graph-transformer-wasm) | WASM bindings for browsers |
+| [`@swarmvector/gnn`](https://www.npmjs.com/package/@swarmvector/gnn) | Base GNN operations |
+| [`@swarmvector/attention`](https://www.npmjs.com/package/@swarmvector/attention) | 46 attention mechanisms |
 
 ## License
 

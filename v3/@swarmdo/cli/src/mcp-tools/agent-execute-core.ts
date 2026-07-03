@@ -359,7 +359,7 @@ async function callOpenAICompat(
         'content-type': 'application/json',
         // OpenRouter convention: identify the integrating app for analytics
         // and rate-limit tiering. Harmless on other OpenAI-compat backends.
-        'HTTP-Referer': 'https://github.com/ruvnet/swarmdo',
+        'HTTP-Referer': 'the upstream project (see NOTICE)',
         'X-Title': 'Swarmdo',
       },
       body: JSON.stringify({

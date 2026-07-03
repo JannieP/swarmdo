@@ -10,7 +10,7 @@
 
 Bring the power of Swarmvector's blazing-fast vector search to your Node.js and TypeScript applications. Built with NAPI-RS for zero-overhead native bindings, async/await support, and complete type safety.
 
-> Part of the [Swarmvector](https://github.com/ruvnet/swarmvector) ecosystem - next-generation vector database built in Rust.
+> Part of the [Swarmvector](the upstream project (see NOTICE)) ecosystem - next-generation vector database built in Rust.
 
 ## 🌟 Why Swarmvector Node.js?
 
@@ -835,7 +835,7 @@ const manhattanDb = new VectorDB({
 
 ```bash
 # Clone the repository
-git clone https://github.com/ruvnet/swarmvector.git
+git clone the upstream project (see NOTICE)
 cd swarmvector/crates/swarmvector-node
 
 # Install dependencies
@@ -1037,11 +1037,11 @@ cargo bench -p swarmvector-bench
 
 ## 🌐 Support
 
-- **GitHub Issues**: [Report bugs or request features](https://github.com/ruvnet/swarmvector/issues)
-- **Discussions**: [Ask questions and share ideas](https://github.com/ruvnet/swarmvector/discussions)
-- **Discord**: [Join our community](https://discord.gg/ruvnet)
-- **Twitter**: [@ruvnet](https://twitter.com/ruvnet)
-- **Enterprise**: [enterprise@ruv.io](mailto:enterprise@ruv.io)
+- **GitHub Issues**: [Report bugs or request features](the upstream project (see NOTICE))
+- **Discussions**: [Ask questions and share ideas](the upstream project (see NOTICE))
+- **Discord**: [Join our community](https://discord.gg/upstream)
+- **Twitter**: [@upstream](https://twitter.com/upstream)
+- **Enterprise**: [enterprise@swarmdo.com](mailto:enterprise@swarmdo.com)
 
 ## 📜 License
 
@@ -1072,11 +1072,11 @@ Special thanks to the Rust and Node.js communities!
 
 <div align="center">
 
-**Built by [rUv](https://ruv.io) • Part of the [Swarmvector](https://github.com/ruvnet/swarmvector) ecosystem**
+**Built by [the upstream author](https://swarmdo.com) • Part of the [Swarmvector](the upstream project (see NOTICE)) ecosystem**
 
-[![Star on GitHub](https://img.shields.io/github/stars/ruvnet/swarmvector?style=social)](https://github.com/ruvnet/swarmvector)
+[![Star on GitHub](https://img.shields.io/github/stars/upstream/swarmvector?style=social)](the upstream project (see NOTICE))
 [![npm downloads](https://img.shields.io/npm/dm/swarmvector.svg)](https://www.npmjs.com/package/swarmvector)
-[![Discord](https://img.shields.io/badge/Discord-Join%20Chat-7289da.svg)](https://discord.gg/ruvnet)
+[![Discord](https://img.shields.io/badge/Discord-Join%20Chat-7289da.svg)](https://discord.gg/upstream)
 
 **Status**: Production Ready | **Version**: 0.1.0 | **Performance**: <0.5ms latency
 

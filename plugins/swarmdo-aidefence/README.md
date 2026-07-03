@@ -5,7 +5,7 @@ AI safety scanning, PII detection, prompt injection defense, and adaptive threat
 ## Install
 
 ```
-/plugin marketplace add ruvnet/swarmdo
+/plugin marketplace add upstream/swarmdo
 /plugin install swarmdo-aidefence@swarmdo
 ```
 

@@ -710,7 +710,7 @@ pub fn calculate_compression_ratio(original_dims: usize, qtype: QuantizationType
 
 ## 🔗 Links
 
-- **Main Repository**: [github.com/ruvnet/swarmvector](https://github.com/ruvnet/swarmvector)
+- **Main Repository**: [the upstream project (see NOTICE)](the upstream project (see NOTICE))
 - **Documentation**: [docs/README.md](../../docs/README.md)
 - **API Reference**: [docs/api/RUST_API.md](../../docs/api/RUST_API.md)
 - **Performance Guide**: [docs/optimization/PERFORMANCE_TUNING_GUIDE.md](../../docs/optimization/PERFORMANCE_TUNING_GUIDE.md)
@@ -752,9 +752,9 @@ Built with battle-tested technologies:
 
 <div align="center">
 
-**Part of the [Swarmvector](https://github.com/ruvnet/swarmvector) ecosystem**
+**Part of the [Swarmvector](the upstream project (see NOTICE)) ecosystem**
 
-Built by [rUv](https://ruv.io) • Production Ready • MIT Licensed
+Built by [the upstream author](https://swarmdo.com) • Production Ready • MIT Licensed
 
 [Documentation](../../docs/README.md) • [API Reference](../../docs/api/RUST_API.md) • [Examples](../../examples/) • [Benchmarks](../../benchmarks/)
 

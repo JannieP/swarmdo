@@ -1,9 +1,9 @@
 {
-  "name": "ruvllm-native",
+  "name": "swarmllm-native",
   "version": "2.0.0",
   "description": "Self-learning LLM with optimized NEON/Metal kernels, Flash Attention 2, and multi-threaded GEMM/GEMV",
   "napi": {
-    "binaryName": "ruvllm",
+    "binaryName": "swarmllm",
     "targets": [
       "x86_64-unknown-linux-gnu",
       "aarch64-unknown-linux-gnu",
@@ -25,6 +25,6 @@
     "metal",
     "self-learning",
     "flash-attention",
-    "ruvector"
+    "swarmvector"
   ]
 }

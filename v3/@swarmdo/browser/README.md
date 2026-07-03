@@ -715,17 +715,17 @@ MIT License - see [LICENSE](../../LICENSE) for details.
 
 ## Links
 
-- [GitHub Repository](https://github.com/ruvnet/claude-flow)
+- [GitHub Repository](the upstream project (see NOTICE))
 - [agent-browser](https://github.com/AugmentCode/agent-browser)
-- [Swarmdo Documentation](https://github.com/ruvnet/claude-flow#readme)
+- [Swarmdo Documentation](the upstream project (see NOTICE)#readme)
 - [MCP Protocol](https://modelcontextprotocol.io)
 
 ---
 
 <div align="center">
 
-**Part of the [Swarmdo](https://github.com/ruvnet/claude-flow) ecosystem**
+**Part of the [Swarmdo](the upstream project (see NOTICE)) ecosystem**
 
-Made with ❤️ by [ruvnet](https://github.com/ruvnet)
+Made with ❤️ by [upstream](https://the upstream project (see NOTICE))
 
 </div>

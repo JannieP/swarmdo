@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Smoke test for ruvnet/swarmdo#2132 — swarmdo-hook.cjs cross-platform shim.
+ * Smoke test for upstream/swarmdo#2132 — swarmdo-hook.cjs cross-platform shim.
  *
  * Verifies that plugins/swarmdo-core/scripts/swarmdo-hook.cjs:
  *   1. Can be invoked via `node swarmdo-hook.cjs <subcommand>`

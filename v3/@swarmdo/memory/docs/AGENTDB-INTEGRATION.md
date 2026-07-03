@@ -378,7 +378,7 @@ This integration implements:
 
 ## Related Documentation
 
-- [AgentDB GitHub](https://github.com/ruvnet/agentic-flow/tree/main/packages/agentdb)
+- [AgentDB GitHub](the upstream project (see NOTICE))
 - [HNSW Algorithm Paper](https://arxiv.org/abs/1603.09320)
 - [V3 Memory Architecture](./README.md)
 - [HybridBackend Documentation](./docs/hybrid-backend.md)

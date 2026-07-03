@@ -113,11 +113,11 @@ jobs:
             # Create new badge section
             cat > new-badges.md << 'EOF'
           <!-- BADGES-START -->
-          [![Verification Pipeline](https://img.shields.io/github/actions/workflow/status/ruvnet/claude-code-flow/verification-pipeline.yml?branch=main&label=verification&style=flat-square)](https://github.com/ruvnet/claude-code-flow/actions/workflows/verification-pipeline.yml)
-          [![Truth Scoring](https://img.shields.io/github/actions/workflow/status/ruvnet/claude-code-flow/truth-scoring.yml?branch=main&label=truth%20score&style=flat-square)](https://github.com/ruvnet/claude-code-flow/actions/workflows/truth-scoring.yml)
-          [![Integration Tests](https://img.shields.io/github/actions/workflow/status/ruvnet/claude-code-flow/integration-tests.yml?branch=main&label=integration&style=flat-square)](https://github.com/ruvnet/claude-code-flow/actions/workflows/integration-tests.yml)
-          [![Rollback Manager](https://img.shields.io/github/actions/workflow/status/ruvnet/claude-code-flow/rollback-manager.yml?branch=main&label=rollback&style=flat-square)](https://github.com/ruvnet/claude-code-flow/actions/workflows/rollback-manager.yml)
-          [![CI/CD](https://img.shields.io/github/actions/workflow/status/ruvnet/claude-code-flow/ci.yml?branch=main&label=ci%2Fcd&style=flat-square)](https://github.com/ruvnet/claude-code-flow/actions/workflows/ci.yml)
+          [![Verification Pipeline](https://img.shields.io/github/actions/workflow/status/upstream/claude-code-flow/verification-pipeline.yml?branch=main&label=verification&style=flat-square)](the upstream project (see NOTICE))
+          [![Truth Scoring](https://img.shields.io/github/actions/workflow/status/upstream/claude-code-flow/truth-scoring.yml?branch=main&label=truth%20score&style=flat-square)](the upstream project (see NOTICE))
+          [![Integration Tests](https://img.shields.io/github/actions/workflow/status/upstream/claude-code-flow/integration-tests.yml?branch=main&label=integration&style=flat-square)](the upstream project (see NOTICE))
+          [![Rollback Manager](https://img.shields.io/github/actions/workflow/status/upstream/claude-code-flow/rollback-manager.yml?branch=main&label=rollback&style=flat-square)](the upstream project (see NOTICE))
+          [![CI/CD](https://img.shields.io/github/actions/workflow/status/upstream/claude-code-flow/ci.yml?branch=main&label=ci%2Fcd&style=flat-square)](the upstream project (see NOTICE))
           [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
           [![Version](https://img.shields.io/npm/v/swarmdo.svg?style=flat-square)](https://www.npmjs.com/package/swarmdo)
           <!-- BADGES-END -->

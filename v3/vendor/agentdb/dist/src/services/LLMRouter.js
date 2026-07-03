@@ -385,7 +385,7 @@ export class LLMRouter {
             headers: {
                 'Authorization': `Bearer ${apiKey}`,
                 'Content-Type': 'application/json',
-                'HTTP-Referer': 'https://github.com/ruvnet/agentic-flow',
+                'HTTP-Referer': 'the upstream project (see NOTICE)',
                 'X-Title': 'AgentDB v2 Simulation'
             },
             body: JSON.stringify({

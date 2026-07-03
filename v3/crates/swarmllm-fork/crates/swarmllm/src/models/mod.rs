@@ -8,18 +8,18 @@
 //!
 //! | Model | Architecture | Params | ANE Optimized | Use Case |
 //! |-------|--------------|--------|---------------|----------|
-//! | RuvLTRA-Small | Qwen 0.5B | 500M | Yes | Edge inference, mobile |
-//! | RuvLTRA-Medium | Qwen2.5-3B | 3B | Yes | Balanced quality/performance |
+//! | SwarmLTRA-Small | Qwen 0.5B | 500M | Yes | Edge inference, mobile |
+//! | SwarmLTRA-Medium | Qwen2.5-3B | 3B | Yes | Balanced quality/performance |
 //!
 //! ## Model Selection Guide
 //!
 //! ```text
 //! Model Size vs Performance:
 //!
-//!   RuvLTRA-Small (0.5B)  ████████░░  Good quality, fast inference
+//!   SwarmLTRA-Small (0.5B)  ████████░░  Good quality, fast inference
 //!                                      ANE: 38 TOPS, ~200 tok/s
 //!
-//!   RuvLTRA-Medium (3B)   ██████████  High quality, moderate speed
+//!   SwarmLTRA-Medium (3B)   ██████████  High quality, moderate speed
 //!                                      GPU/ANE: ~50-80 tok/s, SONA learning
 //!
 //!   Phi-3 (3B)            ██████████  High quality, moderate speed
@@ -31,27 +31,27 @@
 //!
 //! ## Usage
 //!
-//! ### RuvLTRA-Small (0.5B)
+//! ### SwarmLTRA-Small (0.5B)
 //!
 //! ```rust,ignore
-//! use swarmllm::models::ruvltra::{RuvLtraConfig, RuvLtraModel};
+//! use swarmllm::models::swarmltra::{SwarmLtraConfig, SwarmLtraModel};
 //!
 //! // Create model with default Qwen 0.5B config
-//! let config = RuvLtraConfig::default();
-//! let model = RuvLtraModel::new(&config)?;
+//! let config = SwarmLtraConfig::default();
+//! let model = SwarmLtraModel::new(&config)?;
 //!
 //! // Run inference
 //! let logits = model.forward(&input_ids, &positions, None)?;
 //! ```
 //!
-//! ### RuvLTRA-Medium (3B)
+//! ### SwarmLTRA-Medium (3B)
 //!
 //! ```rust,ignore
-//! use swarmllm::models::ruvltra_medium::{RuvLtraMediumConfig, RuvLtraMediumModel};
+//! use swarmllm::models::swarmltra_medium::{SwarmLtraMediumConfig, SwarmLtraMediumModel};
 //!
 //! // Create base variant
-//! let config = RuvLtraMediumConfig::base();
-//! let mut model = RuvLtraMediumModel::new(&config)?;
+//! let config = SwarmLtraMediumConfig::base();
+//! let mut model = SwarmLtraMediumModel::new(&config)?;
 //!
 //! // Enable SONA learning hooks at layers 8, 16, 24
 //! model.enable_sona_with_hooks(&[8, 16, 24])?;
@@ -62,8 +62,8 @@
 
 pub mod openmythos;
 pub mod rdt;
-pub mod ruvltra;
-pub mod ruvltra_medium;
+pub mod swarmltra;
+pub mod swarmltra_medium;
 pub mod sampling;
 
 // Re-export OpenMythos types (Rust/Candle port of kyegomez/OpenMythos)
@@ -79,35 +79,35 @@ pub use rdt::{
     RDT_ARCHITECTURES, RDT_RECURRENCE_KEYS,
 };
 
-// Re-export RuvLTRA-Small types
-pub use ruvltra::{
+// Re-export SwarmLTRA-Small types
+pub use swarmltra::{
     AneDispatcher,
     AneOptimization,
     MemoryLayout,
     QuantizationType,
-    RuvLtraAttention,
+    SwarmLtraAttention,
     // Configuration
-    RuvLtraConfig,
-    RuvLtraDecoderLayer,
-    RuvLtraMLP,
+    SwarmLtraConfig,
+    SwarmLtraDecoderLayer,
+    SwarmLtraMLP,
     // Model components
-    RuvLtraModel,
+    SwarmLtraModel,
     // Utilities
-    RuvLtraModelInfo,
+    SwarmLtraModelInfo,
 };
 
-// Re-export RuvLTRA-Medium types
-pub use ruvltra_medium::{
-    RuvLtraMediumAttention,
+// Re-export SwarmLTRA-Medium types
+pub use swarmltra_medium::{
+    SwarmLtraMediumAttention,
     // Configuration
-    RuvLtraMediumConfig,
-    RuvLtraMediumDecoderLayer,
-    RuvLtraMediumMLP,
+    SwarmLtraMediumConfig,
+    SwarmLtraMediumDecoderLayer,
+    SwarmLtraMediumMLP,
     // Model components
-    RuvLtraMediumModel,
+    SwarmLtraMediumModel,
     // Utilities
-    RuvLtraMediumModelInfo,
-    RuvLtraMediumQuant,
-    RuvLtraMediumVariant,
+    SwarmLtraMediumModelInfo,
+    SwarmLtraMediumQuant,
+    SwarmLtraMediumVariant,
     SonaHookConfig,
 };

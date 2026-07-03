@@ -1,15 +1,15 @@
-# Ruvector Raft
+# Swarmvector Raft
 
-[![Crates.io](https://img.shields.io/crates/v/ruvector-raft.svg)](https://crates.io/crates/ruvector-raft)
-[![Documentation](https://docs.rs/ruvector-raft/badge.svg)](https://docs.rs/ruvector-raft)
+[![Crates.io](https://img.shields.io/crates/v/swarmvector-raft.svg)](https://crates.io/crates/swarmvector-raft)
+[![Documentation](https://docs.rs/swarmvector-raft/badge.svg)](https://docs.rs/swarmvector-raft)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Rust](https://img.shields.io/badge/rust-1.77%2B-orange.svg)](https://www.rust-lang.org)
 
-**Raft consensus implementation for Ruvector distributed metadata coordination.**
+**Raft consensus implementation for Swarmvector distributed metadata coordination.**
 
-`ruvector-raft` provides a production-ready Raft consensus implementation for coordinating distributed Ruvector deployments. Ensures strong consistency for cluster metadata, configuration, and leader election. Part of the [Ruvector](https://github.com/ruvnet/ruvector) ecosystem.
+`swarmvector-raft` provides a production-ready Raft consensus implementation for coordinating distributed Swarmvector deployments. Ensures strong consistency for cluster metadata, configuration, and leader election. Part of the [Swarmvector](the upstream project (see NOTICE)) ecosystem.
 
-## Why Ruvector Raft?
+## Why Swarmvector Raft?
 
 - **Strong Consistency**: Linearizable reads and writes
 - **Leader Election**: Automatic failover on leader failure
@@ -37,11 +37,11 @@
 
 ## Installation
 
-Add `ruvector-raft` to your `Cargo.toml`:
+Add `swarmvector-raft` to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-ruvector-raft = "0.1.1"
+swarmvector-raft = "0.1.1"
 ```
 
 ## Quick Start
@@ -49,7 +49,7 @@ ruvector-raft = "0.1.1"
 ### Create Raft Node
 
 ```rust
-use ruvector_raft::{RaftNode, RaftConfig, StateMachine};
+use swarmvector_raft::{RaftNode, RaftConfig, StateMachine};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -80,7 +80,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Implement State Machine
 
 ```rust
-use ruvector_raft::{StateMachine, Entry, Snapshot};
+use swarmvector_raft::{StateMachine, Entry, Snapshot};
 
 struct MyStateMachine {
     data: HashMap<String, String>,
@@ -224,15 +224,15 @@ impl<S: StateMachine> RaftNode<S> {
 
 ## Related Crates
 
-- **[ruvector-core](../ruvector-core/)** - Core vector database engine
-- **[ruvector-cluster](../ruvector-cluster/)** - Clustering and sharding
-- **[ruvector-replication](../ruvector-replication/)** - Data replication
+- **[swarmvector-core](../swarmvector-core/)** - Core vector database engine
+- **[swarmvector-cluster](../swarmvector-cluster/)** - Clustering and sharding
+- **[swarmvector-replication](../swarmvector-replication/)** - Data replication
 
 ## Documentation
 
 - **[Main README](../../README.md)** - Complete project overview
-- **[API Documentation](https://docs.rs/ruvector-raft)** - Full API reference
-- **[GitHub Repository](https://github.com/ruvnet/ruvector)** - Source code
+- **[API Documentation](https://docs.rs/swarmvector-raft)** - Full API reference
+- **[GitHub Repository](the upstream project (see NOTICE))** - Source code
 
 ## License
 
@@ -242,10 +242,10 @@ impl<S: StateMachine> RaftNode<S> {
 
 <div align="center">
 
-**Part of [Ruvector](https://github.com/ruvnet/ruvector) - Built by [rUv](https://ruv.io)**
+**Part of [Swarmvector](the upstream project (see NOTICE)) - Built by [the upstream author](https://swarmdo.com)**
 
-[![Star on GitHub](https://img.shields.io/github/stars/ruvnet/ruvector?style=social)](https://github.com/ruvnet/ruvector)
+[![Star on GitHub](https://img.shields.io/github/stars/upstream/swarmvector?style=social)](the upstream project (see NOTICE))
 
-[Documentation](https://docs.rs/ruvector-raft) | [Crates.io](https://crates.io/crates/ruvector-raft) | [GitHub](https://github.com/ruvnet/ruvector)
+[Documentation](https://docs.rs/swarmvector-raft) | [Crates.io](https://crates.io/crates/swarmvector-raft) | [GitHub](the upstream project (see NOTICE))
 
 </div>

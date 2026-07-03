@@ -46,8 +46,8 @@ agentdb 3.0.0-alpha.10 now exports all 8 previously-missing controllers. Upgrade
 |---|-----------|--------|
 | U1 | HierarchicalMemory | Stub → real `HierarchicalMemory(db, embedder)` with Ebbinghaus forgetting curves, spaced repetition, 3-tier persistence |
 | U2 | MemoryConsolidation | Stub → real `MemoryConsolidation(db, hm, embedder)` with episodic→semantic clustering, forgetting curves |
-| U3 | SemanticRouter | null → real `SemanticRouter()` with `@ruvector/router` native + keyword fallback |
-| U4 | GNNService | null → real `GNNService(config)` with `@ruvector/gnn` native + JS fallback |
+| U3 | SemanticRouter | null → real `SemanticRouter()` with `@swarmvector/router` native + keyword fallback |
+| U4 | GNNService | null → real `GNNService(config)` with `@swarmvector/gnn` native + JS fallback |
 | U5 | RVFOptimizer | null → real `RVFOptimizer()` with 4/8/16-bit quantization, dedup, pruning, batch embed |
 | U6 | MutationGuard | null → real `MutationGuard(config)` for proof-gated state mutation (ADR-060) |
 | U7 | AttestationLog | null → real `AttestationLog(db)` for append-only audit log |
@@ -97,7 +97,7 @@ Fallback stubs           →  HierarchicalMemory, MemoryConsolidation (if agentd
 - All 6 MCP tools fully functional with real agentdb controllers
 - HierarchicalMemory now has persistent 3-tier storage with Ebbinghaus decay curves
 - MemoryConsolidation clusters episodic memories into semantic patterns
-- SemanticRouter enables intent-based routing with `@ruvector/router` or keyword fallback
+- SemanticRouter enables intent-based routing with `@swarmvector/router` or keyword fallback
 - GNNService provides graph neural network intent classification and skill recommendations
 - RVFOptimizer enables 4-bit quantization (8x compression) and batch embedding
 - MutationGuard + AttestationLog + GuardedVectorBackend complete the ADR-060 proof-gated mutation chain
@@ -106,8 +106,8 @@ Fallback stubs           →  HierarchicalMemory, MemoryConsolidation (if agentd
 
 ## Files Changed
 
-- `v3/@rufflo/memory/src/controller-registry.ts` — 8 controllers upgraded from stub/null to real instantiation, added `createEmbeddingService()` helper
-- `v3/@rufflo/cli/src/memory/memory-bridge.ts` — Bridge functions detect real vs stub API, updated recall/store/consolidate signatures
-- `v3/@rufflo/cli/src/mcp-tools/agentdb-tools.ts` — Tier enum, input validation (phase 1)
-- `v3/@rufflo/memory/package.json` — agentdb dependency `^3.0.0-alpha.10`
+- `v3/@swarmdo/memory/src/controller-registry.ts` — 8 controllers upgraded from stub/null to real instantiation, added `createEmbeddingService()` helper
+- `v3/@swarmdo/cli/src/memory/memory-bridge.ts` — Bridge functions detect real vs stub API, updated recall/store/consolidate signatures
+- `v3/@swarmdo/cli/src/mcp-tools/agentdb-tools.ts` — Tier enum, input validation (phase 1)
+- `v3/@swarmdo/memory/package.json` — agentdb dependency `^3.0.0-alpha.10`
 - `README.md` — Tier names, capacity/TTL claims, RVFOptimizer categorization (phase 1)

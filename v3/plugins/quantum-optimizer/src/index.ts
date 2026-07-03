@@ -92,9 +92,9 @@ export const pluginMetadata = {
   version: '3.0.0-alpha.1',
   description: 'Quantum-inspired optimization for combinatorial problems',
   category: 'exotic',
-  author: 'rUv',
+  author: 'the upstream author',
   license: 'MIT',
-  repository: 'https://github.com/ruvnet/claude-flow',
+  repository: 'the upstream project (see NOTICE)',
   tools: [
     'quantum_annealing_solve',
     'quantum_qaoa_optimize',

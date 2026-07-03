@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
-// @swarmnet/bmssp — renamed fork of @ruvnet/bmssp@1.0.0 (prebuilt wasm-bindgen).
+// @swarmnet/bmssp — renamed fork of @upstream/bmssp@1.0.0 (prebuilt wasm-bindgen).
 // teammate-plugin's semantic-router/topology-optimizer call default() then
 // use WasmNeuralBMSSP, so those exports are the contract.
 test('exposes the API teammate-plugin adopts', async () => {

@@ -737,16 +737,16 @@ fn check_cpu_features() -> CpuFeatures {
 
 ```bash
 # Run all benchmarks
-cargo bench --package ruvllm --features sona
+cargo bench --package swarmllm --features sona
 
 # Run specific benchmark group
-cargo bench --package ruvllm --bench micro_lora
+cargo bench --package swarmllm --bench micro_lora
 
 # Run with specific features
-cargo bench --package ruvllm --features "sona,avx2"
+cargo bench --package swarmllm --features "sona,avx2"
 
 # Profile memory
-cargo bench --package ruvllm --bench memory -- --profile-time 60
+cargo bench --package swarmllm --bench memory -- --profile-time 60
 
 # Generate flamegraph
 cargo flamegraph --bench micro_lora -- --bench
@@ -775,10 +775,10 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Run benchmarks
-        run: cargo bench --package ruvllm --features sona -- --save-baseline main
+        run: cargo bench --package swarmllm --features sona -- --save-baseline main
 
       - name: Compare with baseline
-        run: cargo bench --package ruvllm --features sona -- --baseline main
+        run: cargo bench --package swarmllm --features sona -- --baseline main
 
       - name: Upload results
         uses: actions/upload-artifact@v4

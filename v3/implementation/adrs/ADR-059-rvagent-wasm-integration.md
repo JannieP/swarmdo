@@ -1,14 +1,14 @@
-# ADR-059: @ruvector/rvagent-wasm Integration
+# ADR-059: @swarmvector/rvagent-wasm Integration
 
 **Status**: Implemented (see ADR-070 for completion details)
 **Date**: 2026-03-17
-**Author**: RuvNet
+**Author**: the upstream author
 
 ## Context
 
-Rufflo v3 already integrates four `@ruvector/*` WASM packages for intelligence
+Swarmdo v3 already integrates four `@swarmvector/*` WASM packages for intelligence
 (learning-wasm, attention, router, sona). A new package —
-`@ruvector/rvagent-wasm@0.1.0` — provides a complete sandboxed AI agent runtime
+`@swarmvector/rvagent-wasm@0.1.0` — provides a complete sandboxed AI agent runtime
 compiled to WebAssembly. It includes:
 
 - **WasmAgent** — LLM agent with virtual filesystem (no OS access)
@@ -20,24 +20,24 @@ compiled to WebAssembly. It includes:
 
 Package size: 196.8 kB packed / 620 kB unpacked, zero runtime dependencies.
 
-A companion package — `@ruvector/ruvllm-wasm` — provides browser-native LLM
+A companion package — `@swarmvector/swarmllm-wasm` — provides browser-native LLM
 inference with HNSW routing, MicroLoRA, SONA Instant, WebGPU acceleration, and
 pi-quantization. This ADR covers both integrations.
 
 ## Decision
 
-Integrate `@ruvector/rvagent-wasm` as an optional dependency in `@rufflo/cli`,
-following the established pattern used by `@ruvector/learning-wasm` et al.
+Integrate `@swarmvector/rvagent-wasm` as an optional dependency in `@swarmdo/cli`,
+following the established pattern used by `@swarmvector/learning-wasm` et al.
 
 ### Integration Surface
 
 | Layer | What | How |
 |-------|------|-----|
-| **package.json** | Optional deps | `"@ruvector/rvagent-wasm": "^0.1.0"`, `"@ruvector/ruvllm-wasm": "^2.0.1"` |
+| **package.json** | Optional deps | `"@swarmvector/rvagent-wasm": "^0.1.0"`, `"@swarmvector/swarmllm-wasm": "^2.0.1"` |
 | **Ambient types** | TypeScript compat | `src/types/optional-modules.d.ts` |
-| **Integration module** | `src/ruvector/agent-wasm.ts` | Agent lifecycle, VFS, gallery, RVF, MCP bridge |
+| **Integration module** | `src/swarmvector/agent-wasm.ts` | Agent lifecycle, VFS, gallery, RVF, MCP bridge |
 | **MCP tools** | `src/mcp-tools/wasm-agent-tools.ts` | 10 tools exposed via MCP protocol |
-| **Re-exports** | `src/ruvector/index.ts` | Public API surface |
+| **Re-exports** | `src/swarmvector/index.ts` | Public API surface |
 
 ### MCP Tools Added
 
@@ -54,7 +54,7 @@ following the established pattern used by `@ruvector/learning-wasm` et al.
 | `wasm_gallery_search` | Search templates by query |
 | `wasm_gallery_create` | Create agent from template |
 
-### @ruvector/ruvllm-wasm v2.0.1 Integration
+### @swarmvector/swarmllm-wasm v2.0.1 Integration
 
 Package published to npm and live-tested on 2026-03-17. Ambient types declared in
 `src/types/optional-modules.d.ts`. Integration module and MCP tools pending.
@@ -63,7 +63,7 @@ Package published to npm and live-tested on 2026-03-17. Ambient types declared i
 
 | Component | API | Status |
 |-----------|-----|--------|
-| `RuvLLMWasm` | `initialize()`, `reset()`, `version()`, `getPoolStats()` | Working |
+| `SwarmLLMWasm` | `initialize()`, `reset()`, `version()`, `getPoolStats()` | Working |
 | `ChatTemplateWasm` | `.llama3()`, `.mistral()`, `.chatml()`, `.phi()`, `.gemma()`, `.custom()`, `.detectFromModelId()` | Working |
 | `ChatMessageWasm` | `.system()`, `.user()`, `.assistant()` | Working |
 | `GenerateConfig` | `maxTokens`, `temperature`, `topP`, `topK`, `repetitionPenalty`, `toJson()`, `fromJson()` | Working |
@@ -82,7 +82,7 @@ import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
-const wasmPath = require.resolve('@ruvector/ruvllm-wasm/ruvllm_wasm_bg.wasm');
+const wasmPath = require.resolve('@swarmvector/swarmllm-wasm/swarmllm_wasm_bg.wasm');
 const bytes = readFileSync(wasmPath);
 
 // MUST use object form — initSync(bytes) is deprecated
@@ -97,9 +97,9 @@ distribution that avoids floating-point logarithms entirely. Published as v2.0.1
 
 #### Planned Integration Module
 
-`src/ruvector/ruvllm-wasm.ts` will expose:
-- `isRuvllmWasmAvailable()` — Runtime detection
-- `initRuvllmWasm()` — Node.js WASM initialization
+`src/swarmvector/swarmllm-wasm.ts` will expose:
+- `isSwarmllmWasmAvailable()` — Runtime detection
+- `initSwarmllmWasm()` — Node.js WASM initialization
 - `createHnswRouter()` — WASM HNSW for semantic routing
 - `createSonaInstant()` — <1ms adaptation loops
 - `createMicroLora()` — Ultra-lightweight LoRA (ranks 1-4)
@@ -111,9 +111,9 @@ distribution that avoids floating-point logarithms entirely. Published as v2.0.1
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│  @rufflo/cli                                        │
+│  @swarmdo/cli                                        │
 │                                                          │
-│  src/ruvector/agent-wasm.ts  ◄── Integration module      │
+│  src/swarmvector/agent-wasm.ts  ◄── Integration module      │
 │    ├─ createWasmAgent()      (lifecycle)                  │
 │    ├─ promptWasmAgent()      (LLM interaction)            │
 │    ├─ createWasmMcpServer()  (MCP bridge)                 │
@@ -123,7 +123,7 @@ distribution that avoids floating-point logarithms entirely. Published as v2.0.1
 │  src/mcp-tools/wasm-agent-tools.ts ◄── MCP exposure      │
 │                                                          │
 ├──────────────────────────────────────────────────────────┤
-│  @ruvector/rvagent-wasm (WASM, optional)                 │
+│  @swarmvector/rvagent-wasm (WASM, optional)                 │
 │    ├─ WasmAgent          (sandboxed agent runtime)       │
 │    ├─ WasmStateBackend   (in-memory VFS)                 │
 │    ├─ WasmMcpServer      (JSON-RPC 2.0)                  │
@@ -158,18 +158,18 @@ distribution that avoids floating-point logarithms entirely. Published as v2.0.1
 | `write_todos` format undocumented | Low | Tool works, format TBD |
 | Template ID is `swarm-orchestrator` not `swarm` | Info | Updated in code and docs |
 
-### Known Issues (ruvllm-wasm v2.0.1)
+### Known Issues (swarmllm-wasm v2.0.1)
 
 | Issue | Severity | Workaround |
 |-------|----------|------------|
 | HNSW `addPattern` panics at ~12 patterns | High | Limit to <12 or await fix |
 | `SonaInstantWasm` requires `SonaConfigWasm` | Info | API change from earlier versions |
 | `MicroLoraWasm.adapt()` takes `AdaptFeedbackWasm` | Info | API change; `.apply()` for transforms |
-| `RuvLLMWasm` has no `.version()` | Info | Use standalone `getVersion()` |
+| `SwarmLLMWasm` has no `.version()` | Info | Use standalone `getVersion()` |
 | `GenerateConfig` float precision loss | Low | f32 roundtrip (0.7 → 0.699999...) |
 | Stats objects return WASM pointers | Low | Use `.toJson()` or named accessors |
 
 ### Neutral
-- Follows existing @ruvector/* optional dependency pattern
+- Follows existing @swarmvector/* optional dependency pattern
 - No breaking changes to existing APIs
 - Tests mock the WASM module for CI environments where it's not installed

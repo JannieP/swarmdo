@@ -4,7 +4,7 @@
 
 ## Overview
 
-V2's Hive-Mind system is a comprehensive multi-agent coordination framework. V3 consolidates this into the `@rufflo/swarm` module with a unified `SwarmCoordinator` per ADR-003.
+V2's Hive-Mind system is a comprehensive multi-agent coordination framework. V3 consolidates this into the `@swarmdo/swarm` module with a unified `SwarmCoordinator` per ADR-003.
 
 ## Architecture Comparison
 
@@ -26,7 +26,7 @@ v2/src/hive-mind/
 
 ### V3 Swarm Structure
 ```
-v3/@rufflo/swarm/
+v3/@swarmdo/swarm/
 ├── src/
 │   ├── unified-coordinator.ts  # Main coordinator (ADR-003)
 │   ├── topology-manager.ts     # Topology handling
@@ -53,8 +53,8 @@ v3/@rufflo/swarm/
 | `HiveMind.ts` | `unified-coordinator.ts` | ⚠️ Partial |
 | `Queen.ts` | Missing | ❌ Needs implementation |
 | `Agent.ts` | `domain/entities/agent.ts` | ✅ Complete |
-| `Memory.ts` | `@rufflo/memory` | ✅ Enhanced |
-| `Communication.ts` | `@rufflo/shared/events` | ✅ Complete |
+| `Memory.ts` | `@swarmdo/memory` | ✅ Enhanced |
+| `Communication.ts` | `@swarmdo/shared/events` | ✅ Complete |
 
 ### Queen Coordinator - MISSING
 
@@ -68,7 +68,7 @@ The V2 Queen provides:
 
 **Migration Path:**
 ```typescript
-// V3 Implementation needed in @rufflo/swarm/src/queen-coordinator.ts
+// V3 Implementation needed in @swarmdo/swarm/src/queen-coordinator.ts
 export class QueenCoordinator {
   private swarm: UnifiedSwarmCoordinator;
   private neural: NeuralLearningSystem;
@@ -136,7 +136,7 @@ const topologyConfigs = {
 
 ### V3 Topology Configuration
 ```typescript
-// V3: v3/@rufflo/swarm/src/topology-manager.ts
+// V3: v3/@swarmdo/swarm/src/topology-manager.ts
 const topologyConfigs = {
   mesh: { /* similar */ },
   hierarchical: { /* similar */ },
@@ -154,7 +154,7 @@ const topologyConfigs = {
 ### Implemented in V3 ✅
 
 ```typescript
-// V3: v3/@rufflo/swarm/src/consensus/consensus-engine.ts
+// V3: v3/@swarmdo/swarm/src/consensus/consensus-engine.ts
 export class ConsensusEngine {
   async raft(proposal: Proposal): Promise<ConsensusResult>;
   async byzantine(proposal: Proposal): Promise<ConsensusResult>;
@@ -223,7 +223,7 @@ const hiveAgentTypes = {
 
 ### V3 Agent Types
 ```typescript
-// v3/@rufflo/swarm/src/types.ts
+// v3/@swarmdo/swarm/src/types.ts
 // V3 has 15-agent hierarchical mesh but missing hive-specific types
 // Need to add hive agent type definitions for backward compatibility
 ```
@@ -235,25 +235,25 @@ const hiveAgentTypes = {
 ### V2 Hive Commands
 ```bash
 # V2 Commands
-npx rufflo hive --topology mesh --consensus quorum --max-agents 8
-npx rufflo hive-mind init
-npx rufflo hive-mind status
-npx rufflo hive-mind spawn --type queen
-npx rufflo hive-mind task --description "Implement feature"
-npx rufflo hive-mind wizard
-npx rufflo hive-mind pause
-npx rufflo hive-mind resume
-npx rufflo hive-mind stop
-npx rufflo hive-mind ps
-npx rufflo hive-mind optimize-memory
+npx swarmdo hive --topology mesh --consensus quorum --max-agents 8
+npx swarmdo hive-mind init
+npx swarmdo hive-mind status
+npx swarmdo hive-mind spawn --type queen
+npx swarmdo hive-mind task --description "Implement feature"
+npx swarmdo hive-mind wizard
+npx swarmdo hive-mind pause
+npx swarmdo hive-mind resume
+npx swarmdo hive-mind stop
+npx swarmdo hive-mind ps
+npx swarmdo hive-mind optimize-memory
 ```
 
 ### V3 Equivalent Commands
 ```bash
 # V3 Commands (partial coverage)
-npx rufflo swarm init --topology hierarchical-mesh --max-agents 15
-npx rufflo swarm status
-npx rufflo agent spawn --type queen-coordinator
+npx swarmdo swarm init --topology hierarchical-mesh --max-agents 15
+npx swarmdo swarm status
+npx swarmdo agent spawn --type queen-coordinator
 
 # Missing V3 commands:
 # - hive (dedicated hive mode)
@@ -296,11 +296,11 @@ const swarmTools = [
 ### Step 1: Update Imports
 ```typescript
 // V2
-import { HiveMind } from 'rufflo/hive-mind';
-import { Queen } from 'rufflo/hive-mind/core/Queen';
+import { HiveMind } from 'swarmdo/hive-mind';
+import { Queen } from 'swarmdo/hive-mind/core/Queen';
 
 // V3
-import { UnifiedSwarmCoordinator } from '@rufflo/swarm';
+import { UnifiedSwarmCoordinator } from '@swarmdo/swarm';
 // Queen needs to be implemented
 ```
 

@@ -8,10 +8,10 @@
 ## Context
 
 > **Note (2026-06-09, #2329):** This ADR was authored when the design intent
-> was a `@ruvector/tiny-dancer` neural router. The shipped router in
-> `v3/@rufflo/cli/src/ruvector/model-router.ts` is instead a lexical
+> was a `@swarmvector/tiny-dancer` neural router. The shipped router in
+> `v3/@swarmdo/cli/src/swarmvector/model-router.ts` is instead a lexical
 > complexity heuristic combined with a Thompson-sampling Beta-Bernoulli
-> bandit (no `@ruvector/tiny-dancer` import, no neural model load). Read
+> bandit (no `@swarmvector/tiny-dancer` import, no neural model load). Read
 > every `tiny-dancer` mention below as "the local heuristic + bandit
 > ModelRouter" until this ADR is rewritten or the neural path is wired
 > in. The 3-tier Agent Booster integration on top of it (the actual
@@ -83,7 +83,7 @@ Task Input
 ### 1. Enhanced Model Router Interface
 
 ```typescript
-// v3/@rufflo/cli/src/ruvector/model-router.ts
+// v3/@swarmdo/cli/src/swarmvector/model-router.ts
 
 import { AgentBoosterPreprocessor, EditIntent, PreprocessorResult } from 'agentic-flow';
 
@@ -124,7 +124,7 @@ export interface EnhancedModelRouterConfig {
 ### 2. Enhanced Route Function
 
 ```typescript
-// v3/@rufflo/cli/src/ruvector/model-router.ts
+// v3/@swarmdo/cli/src/swarmvector/model-router.ts
 
 export class EnhancedModelRouter {
   private preprocessor: AgentBoosterPreprocessor;
@@ -266,13 +266,13 @@ export class EnhancedModelRouter {
 ### 3. Pre-Task Hook Integration
 
 ```typescript
-// v3/@rufflo/cli/src/commands/hooks.ts (update preTaskCommand)
+// v3/@swarmdo/cli/src/commands/hooks.ts (update preTaskCommand)
 
 // In pre-task action, after existing logic:
 
 // Enhanced model routing with Agent Booster AST
 try {
-  const { EnhancedModelRouter } = await import('../ruvector/enhanced-model-router.js');
+  const { EnhancedModelRouter } = await import('../swarmvector/enhanced-model-router.js');
   const router = new EnhancedModelRouter();
   const routeResult = await router.route(description, { filePath: ctx.flags.file as string });
 
@@ -309,9 +309,9 @@ try {
 ### 4. Agent Spawn Integration
 
 ```typescript
-// v3/@rufflo/cli/src/mcp-tools/agent-tools.ts (update determineAgentModel)
+// v3/@swarmdo/cli/src/mcp-tools/agent-tools.ts (update determineAgentModel)
 
-import { EnhancedModelRouter } from '../ruvector/enhanced-model-router.js';
+import { EnhancedModelRouter } from '../swarmvector/enhanced-model-router.js';
 
 async function determineAgentModel(
   agentType: string,
@@ -398,8 +398,8 @@ async function determineAgentModel(
 ## File Structure
 
 ```
-v3/@rufflo/cli/src/
-├── ruvector/
+v3/@swarmdo/cli/src/
+├── swarmvector/
 │   ├── model-router.ts           # Existing tiny-dancer router
 │   ├── enhanced-model-router.ts  # NEW: Agent Booster + AST integration
 │   └── adapters/
@@ -451,10 +451,10 @@ v3/@rufflo/cli/src/
 
 ## References
 
-- ADR-017: RuVector Integration Architecture
+- ADR-017: SwarmVector Integration Architecture
 - ADR-018: Claude Code Integration
 - Agent Booster: https://github.com/anthropics/agent-booster
-- agentic-flow: https://github.com/ruvnet/agentic-flow
+- agentic-flow: the upstream project (see NOTICE)
 - tiny-dancer: design-intent name for the model-routing layer; the shipped
   implementation is a lexical + Thompson-bandit `ModelRouter`, not a neural
   router (see note at top of this ADR and #2329)

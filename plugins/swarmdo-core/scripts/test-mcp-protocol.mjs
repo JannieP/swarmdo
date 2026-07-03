@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Regression guard for ruvnet/swarmdo#1874.
+ * Regression guard for upstream/swarmdo#1874.
  *
  * Static dist scan: assert the MCP server packages emit a spec-compliant
  * `YYYY-MM-DD` string for `protocolVersion`, never the previous

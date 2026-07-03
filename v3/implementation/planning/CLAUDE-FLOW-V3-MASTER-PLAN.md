@@ -1,8 +1,8 @@
-# Rufflo v3: Complete Reimagining with agentic-flow@alpha Foundation
+# Swarmdo v3: Complete Reimagining with agentic-flow@alpha Foundation
 
 ## Executive Summary
 
-Rufflo v3 represents a complete architectural overhaul that builds on **agentic-flow@alpha** as its core foundation while maintaining full backward compatibility with v2.x. This plan consolidates findings from concurrent swarm analysis covering architecture, security, dead code, Windows compatibility, repository cleanup, and .claude/ optimization.
+Swarmdo v3 represents a complete architectural overhaul that builds on **agentic-flow@alpha** as its core foundation while maintaining full backward compatibility with v2.x. This plan consolidates findings from concurrent swarm analysis covering architecture, security, dead code, Windows compatibility, repository cleanup, and .claude/ optimization.
 
 ### Key Objectives
 
@@ -46,9 +46,9 @@ Rufflo v3 represents a complete architectural overhaul that builds on **agentic-
 ### 1.1 Codebase Overview
 
 ```
-Rufflo v2.7.47
+Swarmdo v2.7.47
 ├── Source Files: 376 TypeScript files (~130,000 lines)
-├── Dependencies: agentic-flow (^1.9.4), ruv-swarm, flow-nexus
+├── Dependencies: agentic-flow (^1.9.4), swarmdo-swarm, flow-nexus
 ├── Architecture: Multi-layered (CLI, Core, MCP, Swarm, Hive-Mind)
 └── Configuration: 14.2 MB across 7 directories
 ```
@@ -127,7 +127,7 @@ const hash = await bcrypt.hash(password, SALT_ROUNDS);
 
 ```typescript
 // REMOVE these hardcoded credentials
-email: 'admin@rufflo.local'
+email: 'admin@swarmdo.local'
 password: 'admin123'  // CRITICAL RISK
 
 // v3: Generate random on installation
@@ -172,7 +172,7 @@ const adminPassword = crypto.randomBytes(32).toString('hex');
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     Rufflo v3                          │
+│                     Swarmdo v3                          │
 ├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────────────────────────────────────────────┐   │
 │  │              Compatibility Layer (v2 API)            │   │
@@ -402,7 +402,7 @@ export class SqlJsBackend implements DatabaseBackend {
 |------|------|--------|
 | `dist-cjs/` | 22MB | Remove from git, add to .gitignore |
 | Duplicate lock file | 0.6MB | Keep one (npm or pnpm) |
-| `rufflo-wiki/` | 0 | Remove empty directory |
+| `swarmdo-wiki/` | 0 | Remove empty directory |
 
 #### Medium Priority (26.6MB)
 
@@ -435,7 +435,7 @@ rm -f package-lock.json  # If using pnpm
 rm -f pnpm-lock.yaml     # If using npm
 
 # 4. Remove empty directory
-rmdir rufflo-wiki/
+rmdir swarmdo-wiki/
 
 # 5. Clean up .gitignore duplicates
 # (manual edit to remove 8 duplicate "hive-mind-prompt-*.txt" entries)
@@ -457,7 +457,7 @@ dist-cjs/
 # Runtime databases (shouldn't be tracked)
 .swarm/memory.db
 .hive-mind/memory.db
-.rufflo/**/*.db
+.swarmdo/**/*.db
 ```
 
 ---
@@ -469,11 +469,11 @@ dist-cjs/
 | Directory | Size | Issues |
 |-----------|------|--------|
 | `.claude/` | 11MB | 9 settings variants, 3,720 checkpoints |
-| `.rufflo/` | 2.5MB | Stale training data |
+| `.swarmdo/` | 2.5MB | Stale training data |
 | `.claude-plugin/` | 81KB | Hook duplication |
 | `.hive-mind/` | 20KB | Separate database |
 | `.swarm/` | 272KB | Separate database |
-| `.ruv-swarm/` | 9.5KB | Old benchmark |
+| `.swarmdo-swarm/` | 9.5KB | Old benchmark |
 | `.research/` | 399KB | Stale docs |
 
 ### 6.2 v3 Optimized Structure (3.5MB target)
@@ -518,7 +518,7 @@ dist-cjs/
     ├── MIGRATION_LOG.md
     └── OPTIMIZATION_STATUS.md
 
-.rufflo/
+.swarmdo/
 ├── swarm-config.json              # Includes agent profiles
 ├── coordination/                  # NEW: Unified runtime
 │   ├── memory.db                  # Merged swarm + hive-mind
@@ -532,9 +532,9 @@ dist-cjs/
     └── latest-validation.json     # Single file
 
 # REMOVE these directories
-.swarm/                            # → .rufflo/coordination/
-.hive-mind/                        # → .rufflo/coordination/
-.ruv-swarm/                        # Archive or remove
+.swarm/                            # → .swarmdo/coordination/
+.hive-mind/                        # → .swarmdo/coordination/
+.swarmdo-swarm/                        # Archive or remove
 ```
 
 ### 6.3 Settings Consolidation
@@ -698,23 +698,23 @@ commands/
     "PreToolUse": [
       {
         "matcher": "Bash",
-        "commands": ["npx rufflo hooks pre-tool --tool=$TOOL_NAME"]
+        "commands": ["npx swarmdo hooks pre-tool --tool=$TOOL_NAME"]
       }
     ],
     "PostToolUse": [
       {
         "matcher": "*",
-        "commands": ["npx rufflo hooks post-tool --tool=$TOOL_NAME"]
+        "commands": ["npx swarmdo hooks post-tool --tool=$TOOL_NAME"]
       }
     ],
     "PreCompact": [
       {
-        "commands": ["npx rufflo hooks pre-compact --session=$SESSION_ID"]
+        "commands": ["npx swarmdo hooks pre-compact --session=$SESSION_ID"]
       }
     ],
     "Stop": [
       {
-        "commands": ["npx rufflo hooks session-end --export-metrics true"]
+        "commands": ["npx swarmdo hooks session-end --export-metrics true"]
       }
     ]
   },
@@ -1096,7 +1096,7 @@ docs/reasoningbank/models/*/memory.db.backup
 dist-cjs/ (remove from git)
 
 # Empty
-rufflo-wiki/
+swarmdo-wiki/
 
 # Duplicate settings
 .claude/settings-complete.json
@@ -1132,7 +1132,7 @@ npm audit fix --force
 ./scripts/cleanup-v3.sh
 
 # Run migration
-npx rufflo migrate --to v3
+npx swarmdo migrate --to v3
 
 # Verify backward compatibility
 npm run test:compatibility
@@ -1160,10 +1160,10 @@ npm run build:v3
 
 ```typescript
 // v3 with backward compatibility
-import { SwarmCoordinator } from 'rufflo';  // v2 API still works
+import { SwarmCoordinator } from 'swarmdo';  // v2 API still works
 
 // v3 native
-import { AgenticFlowAdapter } from 'rufflo/v3';
+import { AgenticFlowAdapter } from 'swarmdo/v3';
 const adapter = new AgenticFlowAdapter({ sona: 'research' });
 await adapter.initialize();
 ```

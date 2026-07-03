@@ -3,8 +3,8 @@
   "description": "Foundation plugin — registers the swarmdo MCP server (300+ tools across memory/agentdb/embeddings/hooks/aidefence/neural/autopilot/browser/agent/swarm), provides 3 generalist agents (coder/researcher/reviewer), 3 first-run skills, and a curated plugin-discovery catalog",
   "version": "0.2.2",
   "author": {
-    "name": "ruvnet",
-    "url": "https://github.com/ruvnet"
+    "name": "upstream",
+    "url": "https://the upstream project (see NOTICE)"
   },
   "homepage": "https://github.com/JannieP/swarmdo",
   "license": "MIT",

@@ -1,4 +1,4 @@
-# Rufflo v3: Optimized Implementation Plan
+# Swarmdo v3: Optimized Implementation Plan
 
 ## Core Priorities
 
@@ -594,7 +594,7 @@ export class InitController {
     await this.security.validateEnvironment();
 
     // Check for secure token
-    if (!process.env.RUFFLO_TOKEN) {
+    if (!process.env.SWARMDO_TOKEN) {
       const token = this.security.generateSecureToken();
       console.log('Generated secure token - add to environment');
     }
@@ -609,9 +609,9 @@ export class InitController {
       '.claude/commands',
       '.claude/skills',
       '.claude/checkpoints/active',
-      '.rufflo/coordination',
-      '.rufflo/training',
-      '.rufflo/metrics'
+      '.swarmdo/coordination',
+      '.swarmdo/training',
+      '.swarmdo/metrics'
     ];
 
     for (const dir of dirs) {
@@ -846,14 +846,14 @@ import { InitController } from '../init/init-controller';
 
 export function createInitCommand(): Command {
   return new Command('init')
-    .description('Initialize Rufflo v3 with enhanced capabilities')
+    .description('Initialize Swarmdo v3 with enhanced capabilities')
     .option('-m, --mode <mode>', 'Initialization mode', 'standard')
     .option('--sona <profile>', 'SONA learning profile', 'balanced')
     .option('--no-learning', 'Disable self-learning')
     .option('--attention <type>', 'Attention mechanism', 'flash')
     .option('--migrate', 'Auto-migrate from v2')
     .action(async (options) => {
-      console.log('🚀 Initializing Rufflo v3...\n');
+      console.log('🚀 Initializing Swarmdo v3...\n');
 
       const controller = new InitController({
         mode: options.mode,
@@ -956,21 +956,21 @@ npm run test:compatibility
 
 ```bash
 # Fresh v3 installation
-npx rufflo init --mode sparc --sona research
+npx swarmdo init --mode sparc --sona research
 
 # With all features
-npx rufflo init --mode enterprise --sona research --attention flash
+npx swarmdo init --mode enterprise --sona research --attention flash
 
 # Minimal (fast startup)
-npx rufflo init --mode standard --sona real-time
+npx swarmdo init --mode standard --sona real-time
 
 # Migrate from v2
-npx rufflo init --migrate
+npx swarmdo init --migrate
 ```
 
 ```typescript
 // v3 API usage
-import { InitController, SwarmCoordinator, SONAManager } from 'rufflo/v3';
+import { InitController, SwarmCoordinator, SONAManager } from 'swarmdo/v3';
 
 // Initialize with learning
 const init = new InitController({

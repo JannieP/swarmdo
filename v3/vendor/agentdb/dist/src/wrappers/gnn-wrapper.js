@@ -82,9 +82,9 @@ function hierarchicalForwardFallback(input, weights, inputDim, outputDim) {
     return output;
 }
 /**
- * RuvectorLayer wrapper with fallback
+ * SwarmvectorLayer wrapper with fallback
  */
-export class RuvectorLayer {
+export class SwarmvectorLayer {
     inputDim;
     outputDim;
     weights;

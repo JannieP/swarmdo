@@ -7,7 +7,7 @@ Combines Swarmdo's 10 autopilot MCP tools with Claude Code's native `/loop` + `S
 ## Install
 
 ```
-/plugin marketplace add ruvnet/swarmdo
+/plugin marketplace add upstream/swarmdo
 /plugin install swarmdo-autopilot@swarmdo
 ```
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Smoke test for ruvnet/swarmdo#2049: kg-extract must NOT conflate
+ * Smoke test for upstream/swarmdo#2049: kg-extract must NOT conflate
  * TypeScript `import type` with value imports.
  *
  * The user-visible failure mode was a phantom `findings ⇄ finding-actions`

@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/@swarmvector/swarmllm.svg)](https://www.npmjs.com/package/@swarmvector/swarmllm)
 [![Downloads](https://img.shields.io/npm/dm/@swarmvector/swarmllm)](https://www.npmjs.com/package/@swarmvector/swarmllm)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![GitHub Stars](https://img.shields.io/github/stars/ruvnet/swarmvector?style=social)](https://github.com/ruvnet/swarmvector)
+[![GitHub Stars](https://img.shields.io/github/stars/upstream/swarmvector?style=social)](the upstream project (see NOTICE))
 
 **Self-learning LLM runtime for Node.js** — GGUF inference, TurboQuant KV-cache compression (6-8x memory savings), SONA adaptive learning, FlashAttention, speculative decoding, and SIMD-optimized kernels. Built in Rust, runs everywhere.
 
@@ -25,7 +25,7 @@ const llm = new SwarmLLM();
 
 // Or with custom configuration
 const llm = new SwarmLLM({
-  modelPath: './models/ruvltra-small-q4km.gguf',
+  modelPath: './models/swarmltra-small-q4km.gguf',
   sonaEnabled: true,
   flashAttention: true,
   maxTokens: 256,
@@ -49,7 +49,7 @@ for await (const token of llm.stream('Write a haiku about Rust')) {
 | **TurboQuant Embedding Store** | Quantized vector storage with compressed search — 10-30x memory savings |
 | **H2O / PyramidKV Eviction** | Intelligent cache eviction policies for long-context inference |
 | **Optimized Inner Product** | Asymmetric distance on quantized data — skip decompression for 2-4x faster search |
-| **RuvLTRA Models** | Purpose-built 0.5B & 3B models for Claude Flow |
+| **SwarmLTRA Models** | Purpose-built 0.5B & 3B models for Claude Flow |
 | **Task-Specific LoRA** | 5 pre-trained adapters (coder, researcher, security, architect, reviewer) |
 | **HuggingFace Hub** | Download/upload models directly |
 | **Adapter Merging** | TIES, DARE, SLERP strategies |
@@ -89,7 +89,7 @@ swarmllm query "What is machine learning?"
 swarmllm query --stream "Write a poem"
 
 # Download a model
-swarmllm download swarmvector/ruvltra-small-q4km
+swarmllm download swarmvector/swarmltra-small-q4km
 
 # Benchmark
 swarmllm bench ./models/model.gguf
@@ -247,8 +247,8 @@ const response = await llm.query('Write production code');
 
 ## Supported Models
 
-- **RuvLTRA-Small** (494M) - Q4K, Q5K, Q8
-- **RuvLTRA-Medium** (3B) - Q4K, Q5K, Q8
+- **SwarmLTRA-Small** (494M) - Q4K, Q5K, Q8
+- **SwarmLTRA-Medium** (3B) - Q4K, Q5K, Q8
 - **Qwen 2.5** (0.5B-72B)
 - **Llama 3.x** (8B-70B)
 - **Mistral** (7B-22B)
@@ -269,11 +269,11 @@ const response = await llm.query('Write production code');
 
 - [@swarmvector/core](https://www.npmjs.com/package/@swarmvector/core) - Vector operations
 - [@swarmvector/sona](https://www.npmjs.com/package/@swarmvector/sona) - SONA learning engine
-- [@swarmvector/swarmvector](https://www.npmjs.com/package/@swarmvector/swarmvector) - Full Ruvector SDK
+- [@swarmvector/swarmvector](https://www.npmjs.com/package/@swarmvector/swarmvector) - Full Swarmvector SDK
 
 ## Links
 
-- [GitHub Repository](https://github.com/ruvnet/swarmvector)
+- [GitHub Repository](the upstream project (see NOTICE))
 - [API Documentation](https://docs.rs/swarmllm)
 - [Crate (Rust)](https://crates.io/crates/swarmllm)
 

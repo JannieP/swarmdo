@@ -1,7 +1,7 @@
 {
   "name": "agentic-flow",
   "version": "2.0.14",
-  "description": "Production-ready AI agent orchestration platform with 66 specialized agents, 213 MCP tools, ReasoningBank learning memory, and autonomous multi-agent swarms. Built by @ruvnet with Claude Agent SDK, neural networks, memory persistence, GitHub integration, and distributed consensus protocols.",
+  "description": "Production-ready AI agent orchestration platform with 66 specialized agents, 213 MCP tools, ReasoningBank learning memory, and autonomous multi-agent swarms. Built by @upstream with Claude Agent SDK, neural networks, memory persistence, GitHub integration, and distributed consensus protocols.",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
@@ -115,8 +115,8 @@
     "pagerank",
     "parallel-processing",
     "raft",
-    "ruv",
-    "ruvnet",
+    "swarm",
+    "upstream",
     "sparc",
     "sublinear-algorithms",
     "swarm",
@@ -126,25 +126,21 @@
     "workflow",
     "workflow-automation"
   ],
-  "author": {
-    "name": "ruv",
-    "url": "https://github.com/ruvnet"
-  },
   "contributors": [
     {
-      "name": "ruv",
-      "url": "https://github.com/ruvnet"
+      "name": "swarm",
+      "url": "https://the upstream project (see NOTICE)"
     }
   ],
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ruvnet/agentic-flow.git"
+    "url": "the upstream project (see NOTICE)"
   },
   "bugs": {
-    "url": "https://github.com/ruvnet/agentic-flow/issues"
+    "url": "the upstream project (see NOTICE)"
   },
-  "homepage": "https://github.com/ruvnet/agentic-flow#readme",
+  "homepage": "the upstream project (see NOTICE)#readme",
   "engines": {
     "node": ">=18.0.0"
   },

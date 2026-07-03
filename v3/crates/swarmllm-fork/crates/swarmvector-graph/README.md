@@ -1,7 +1,7 @@
-# Ruvector Graph
+# Swarmvector Graph
 
-[![Crates.io](https://img.shields.io/crates/v/ruvector-graph.svg)](https://crates.io/crates/ruvector-graph)
-[![Documentation](https://docs.rs/ruvector-graph/badge.svg)](https://docs.rs/ruvector-graph)
+[![Crates.io](https://img.shields.io/crates/v/swarmvector-graph.svg)](https://crates.io/crates/swarmvector-graph)
+[![Documentation](https://docs.rs/swarmvector-graph/badge.svg)](https://docs.rs/swarmvector-graph)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Rust](https://img.shields.io/badge/rust-1.77%2B-orange.svg)](https://www.rust-lang.org)
 
@@ -9,12 +9,12 @@
 
 ```toml
 [dependencies]
-ruvector-graph = "0.1.1"
+swarmvector-graph = "0.1.1"
 ```
 
-Most graph databases make you choose: you can have relationships *or* vector search, a query language *or* raw traversals, pairwise edges *or* nothing. `ruvector-graph` gives you all of them together. Write familiar Cypher queries like Neo4j, attach vector embeddings to any node for semantic search, and model complex group relationships with hyperedges that connect three or more nodes at once. It runs on servers, in browsers via WASM, and across clusters with built-in RAFT consensus. Part of the [SwarmVector](https://github.com/ruvnet/ruvector) ecosystem.
+Most graph databases make you choose: you can have relationships *or* vector search, a query language *or* raw traversals, pairwise edges *or* nothing. `swarmvector-graph` gives you all of them together. Write familiar Cypher queries like Neo4j, attach vector embeddings to any node for semantic search, and model complex group relationships with hyperedges that connect three or more nodes at once. It runs on servers, in browsers via WASM, and across clusters with built-in RAFT consensus. Part of the [SwarmVector](the upstream project (see NOTICE)) ecosystem.
 
-| | ruvector-graph | Neo4j / Typical Graph DB | Vector DB + Custom Glue |
+| | swarmvector-graph | Neo4j / Typical Graph DB | Vector DB + Custom Glue |
 |---|---|---|---|
 | **Query language** | Full Cypher parser built-in | Cypher (Neo4j) or proprietary | No graph queries |
 | **Hyperedges** | Native -- one edge connects N nodes | Pairwise only -- workarounds needed | Not applicable |
@@ -43,7 +43,7 @@ Most graph databases make you choose: you can have relationships *or* vector sea
 
 ```toml
 [dependencies]
-ruvector-graph = "0.1.1"
+swarmvector-graph = "0.1.1"
 ```
 
 ### Feature Flags
@@ -51,13 +51,13 @@ ruvector-graph = "0.1.1"
 ```toml
 [dependencies]
 # Full feature set
-ruvector-graph = { version = "0.1.1", features = ["full"] }
+swarmvector-graph = { version = "0.1.1", features = ["full"] }
 
 # Minimal WASM-compatible build
-ruvector-graph = { version = "0.1.1", default-features = false, features = ["wasm"] }
+swarmvector-graph = { version = "0.1.1", default-features = false, features = ["wasm"] }
 
 # Distributed deployment
-ruvector-graph = { version = "0.1.1", features = ["distributed"] }
+swarmvector-graph = { version = "0.1.1", features = ["distributed"] }
 ```
 
 Available features:
@@ -76,7 +76,7 @@ Available features:
 ### Create a Graph
 
 ```rust
-use ruvector_graph::{Graph, Node, Edge, GraphConfig};
+use swarmvector_graph::{Graph, Node, Edge, GraphConfig};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Create a new graph
@@ -120,7 +120,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Cypher Queries
 
 ```rust
-use ruvector_graph::{Graph, CypherExecutor};
+use swarmvector_graph::{Graph, CypherExecutor};
 
 // Execute Cypher query
 let executor = CypherExecutor::new(&graph);
@@ -138,7 +138,7 @@ for row in results {
 ### Vector-Enhanced Graph
 
 ```rust
-use ruvector_graph::{Graph, VectorConfig};
+use swarmvector_graph::{Graph, VectorConfig};
 
 // Enable vector embeddings on nodes
 let config = GraphConfig {
@@ -171,7 +171,7 @@ let similar = graph.search_similar_nodes(
 ### Hyperedges
 
 ```rust
-use ruvector_graph::{Graph, Hyperedge};
+use swarmvector_graph::{Graph, Hyperedge};
 
 // Create a hyperedge connecting multiple nodes
 let meeting = graph.create_hyperedge(Hyperedge {
@@ -256,17 +256,17 @@ Vector similarity       ~2ms             10K ops/s
 
 ## Related Crates
 
-- **[ruvector-core](../ruvector-core/)** - Core vector database engine
-- **[ruvector-graph-node](../ruvector-graph-node/)** - Node.js bindings
-- **[ruvector-graph-wasm](../ruvector-graph-wasm/)** - WebAssembly bindings
-- **[ruvector-raft](../ruvector-raft/)** - RAFT consensus for distributed mode
-- **[ruvector-cluster](../ruvector-cluster/)** - Clustering and sharding
+- **[swarmvector-core](../swarmvector-core/)** - Core vector database engine
+- **[swarmvector-graph-node](../swarmvector-graph-node/)** - Node.js bindings
+- **[swarmvector-graph-wasm](../swarmvector-graph-wasm/)** - WebAssembly bindings
+- **[swarmvector-raft](../swarmvector-raft/)** - RAFT consensus for distributed mode
+- **[swarmvector-cluster](../swarmvector-cluster/)** - Clustering and sharding
 
 ## Documentation
 
 - **[SwarmVector README](../../README.md)** - Complete project overview
-- **[API Documentation](https://docs.rs/ruvector-graph)** - Full API reference
-- **[GitHub Repository](https://github.com/ruvnet/ruvector)** - Source code
+- **[API Documentation](https://docs.rs/swarmvector-graph)** - Full API reference
+- **[GitHub Repository](the upstream project (see NOTICE))** - Source code
 
 ## License
 
@@ -276,10 +276,10 @@ Vector similarity       ~2ms             10K ops/s
 
 <div align="center">
 
-**Part of [SwarmVector](https://github.com/ruvnet/ruvector) - Built by [rUv](https://ruv.io)**
+**Part of [SwarmVector](the upstream project (see NOTICE)) - Built by [the upstream author](https://swarmdo.com)**
 
-[![Star on GitHub](https://img.shields.io/github/stars/ruvnet/ruvector?style=social)](https://github.com/ruvnet/ruvector)
+[![Star on GitHub](https://img.shields.io/github/stars/upstream/swarmvector?style=social)](the upstream project (see NOTICE))
 
-[Documentation](https://docs.rs/ruvector-graph) | [Crates.io](https://crates.io/crates/ruvector-graph) | [GitHub](https://github.com/ruvnet/ruvector)
+[Documentation](https://docs.rs/swarmvector-graph) | [Crates.io](https://crates.io/crates/swarmvector-graph) | [GitHub](the upstream project (see NOTICE))
 
 </div>

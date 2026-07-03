@@ -333,7 +333,7 @@ npm run build:widget
 ## 🤝 Support
 
 - Documentation: [View README](./README.md)
-- Issues: [GitHub Issues](https://github.com/ruvnet/goap-ui/issues)
+- Issues: [GitHub Issues](the upstream project (see NOTICE))
 - Demo: [Live Demo](https://lovable.dev/projects/598e2f1d-b876-4347-bb4f-379bdab134b0)
 
 ## 📄 License

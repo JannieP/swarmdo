@@ -11,7 +11,7 @@ Get started with Swarmdo in 5 minutes!
 In Claude Code:
 
 ```
-/plugin add ruvnet/claude-flow
+/plugin add upstream/claude-flow
 /restart
 ```
 
@@ -19,7 +19,7 @@ In Claude Code:
 
 ```bash
 # Clone the repository
-git clone https://github.com/ruvnet/claude-flow.git
+git clone the upstream project (see NOTICE)
 cd swarmdo
 ```
 

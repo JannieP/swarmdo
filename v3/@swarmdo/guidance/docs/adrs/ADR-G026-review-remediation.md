@@ -8,11 +8,11 @@ Accepted
 
 ## Context
 
-A comprehensive code review of the `@rufflo/guidance` package identified several critical, high, and medium severity issues that required remediation before the package could be considered production-ready.
+A comprehensive code review of the `@swarmdo/guidance` package identified several critical, high, and medium severity issues that required remediation before the package could be considered production-ready.
 
 ### Critical Issues Found
 
-1. **`createProofChain()` called without signing key** (`ruvbot-integration.ts:858`). The `RuvBotBridge.handleSessionCreate()` method called `createProofChain()` without providing an HMAC signing key. The `ProofChain` constructor throws if no key is supplied, meaning any session with `enableProofChain: true` would crash at runtime.
+1. **`createProofChain()` called without signing key** (`swarmbot-integration.ts:858`). The `SwarmBotBridge.handleSessionCreate()` method called `createProofChain()` without providing an HMAC signing key. The `ProofChain` constructor throws if no key is supplied, meaning any session with `enableProofChain: true` would crash at runtime.
 
 2. **`createProofChain` factory type mismatch** (`proof.ts`). The factory accepted `config?: { signingKey?: string }`, allowing callers to omit the key entirely. The inner `ProofChain` constructor then throws, making the optional typing misleading and unsafe.
 
@@ -48,7 +48,7 @@ export function createProofChain(config: { signingKey: string }): ProofChain {
 
 This makes the type system enforce what the runtime already enforced, catching missing keys at compile time.
 
-### 2. Add `proofSigningKey` to `RuvBotBridgeConfig`
+### 2. Add `proofSigningKey` to `SwarmBotBridgeConfig`
 
 Added a `proofSigningKey?: string` field to the bridge configuration. When `enableProofChain` is `true`, the bridge now validates that the key is present before calling `createProofChain()`, throwing a clear error message instead of an opaque constructor crash.
 
@@ -106,7 +106,7 @@ Added a `Map<string, RegExp>` cache to `ShardRetriever` so that each glob patter
 - `src/crypto-utils.ts` -- Shared timing-safe comparison
 - `src/proof.ts` -- ProofChain, createProofChain factory
 - `src/authority.ts` -- MemoryAuthority (imports crypto-utils)
-- `src/ruvbot-integration.ts` -- RuvBotBridge, RuvBotBridgeConfig
+- `src/swarmbot-integration.ts` -- SwarmBotBridge, SwarmBotBridgeConfig
 - `src/conformance-kit.ts` -- ConformanceRunner, createConformanceRunner
 - `src/ledger.ts` -- RunLedger, evictIfNeeded, createLedger
 - `src/adversarial.ts` -- ThreatDetector.addSignal, CollusionDetector.recordInteraction

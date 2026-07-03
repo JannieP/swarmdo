@@ -1,9 +1,9 @@
 //! Flow Optimizer for Claude Flow
 //!
-//! Optimizes RuvLTRA for Claude Flow workflows with SONA pretraining.
+//! Optimizes SwarmLTRA for Claude Flow workflows with SONA pretraining.
 
 use super::{AgentRouter, ClaudeFlowAgent, ClaudeFlowTask, TaskClassifier};
-use crate::models::RuvLtraConfig;
+use crate::models::SwarmLtraConfig;
 use crate::sona::{SonaConfig, SonaStats};
 use std::collections::HashMap;
 
@@ -15,7 +15,7 @@ pub struct OptimizationConfig {
     /// SONA configuration
     pub sona_config: SonaConfig,
     /// Model configuration
-    pub model_config: RuvLtraConfig,
+    pub model_config: SwarmLtraConfig,
     /// Target use cases
     pub target_use_cases: Vec<ClaudeFlowTask>,
     /// Optimization level (1-3)
@@ -39,7 +39,7 @@ impl Default for OptimizationConfig {
                 deep_interval_secs: 604800,
                 quality_threshold: 0.6,
             },
-            model_config: RuvLtraConfig::qwen_0_5b(),
+            model_config: SwarmLtraConfig::qwen_0_5b(),
             target_use_cases: vec![
                 ClaudeFlowTask::CodeGeneration,
                 ClaudeFlowTask::Research,
@@ -70,7 +70,7 @@ pub struct OptimizationResult {
     pub latency_improvement_pct: f32,
 }
 
-/// Flow optimizer for RuvLTRA + Claude Flow
+/// Flow optimizer for SwarmLTRA + Claude Flow
 pub struct FlowOptimizer {
     /// Configuration
     config: OptimizationConfig,

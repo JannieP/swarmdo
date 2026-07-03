@@ -5,7 +5,7 @@
   "main": "index.js",
   "types": "index.d.ts",
   "napi": {
-    "name": "ruvector-graph-transformer",
+    "name": "swarmvector-graph-transformer",
     "triples": {
       "defaults": false,
       "additional": [
@@ -24,11 +24,11 @@
     "build": "napi build --platform --release",
     "build:debug": "napi build --platform",
     "prepublishOnly": "napi prepublish -t npm",
-    "test": "cargo test -p ruvector-graph-transformer-node",
+    "test": "cargo test -p swarmvector-graph-transformer-node",
     "version": "napi version"
   },
   "keywords": [
-    "ruvector",
+    "swarmvector",
     "graph-transformer",
     "proof-gated",
     "attention",
@@ -37,11 +37,10 @@
     "graph-neural-network",
     "napi-rs"
   ],
-  "author": "Ruvector Team",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ruvnet/ruvector"
+    "url": "the upstream project (see NOTICE)"
   },
   "devDependencies": {
     "@napi-rs/cli": "^2.16.0"

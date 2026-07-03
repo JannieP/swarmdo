@@ -1,4 +1,4 @@
-# flash.ps1 - Auto-detect COM port and flash RuvLLM ESP32
+# flash.ps1 - Auto-detect COM port and flash SwarmLLM ESP32
 # Automatically finds connected ESP32 devices
 
 param(
@@ -10,7 +10,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-Write-Host "`n=== RuvLLM ESP32 Flash ===" -ForegroundColor Cyan
+Write-Host "`n=== SwarmLLM ESP32 Flash ===" -ForegroundColor Cyan
 Write-Host ""
 
 # Auto-detect COM port if not specified
@@ -57,7 +57,7 @@ $binary = Get-ChildItem $targetDir -Filter "*.elf" -ErrorAction SilentlyContinue
     Select-Object -First 1
 
 if (-not $binary) {
-    $binary = Get-ChildItem $targetDir -Filter "ruvllm-esp32*" -ErrorAction SilentlyContinue |
+    $binary = Get-ChildItem $targetDir -Filter "swarmllm-esp32*" -ErrorAction SilentlyContinue |
         Where-Object { $_.Name -notmatch "\." -or $_.Name -match "\.elf$" } |
         Select-Object -First 1
 }

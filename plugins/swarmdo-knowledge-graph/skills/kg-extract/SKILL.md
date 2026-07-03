@@ -17,7 +17,7 @@ When you need to build or update a knowledge graph from source code or documenta
 
 1. **Scan files** -- use `Glob` and `Read` to enumerate and read source files at the given path
 2. **Identify entities** -- extract classes, functions, modules, types, and config references from each file
-3. **Map relations** -- for each entity, determine its relations to other entities. **Critical: TypeScript `import type` and inline `type` specifiers (`import { type Foo, bar }`) are erased at compile time and MUST NOT be counted as value imports** -- they're a separate, weaker relation. Misclassifying them produces phantom runtime cycles (see ruvnet/swarmdo#2049).
+3. **Map relations** -- for each entity, determine its relations to other entities. **Critical: TypeScript `import type` and inline `type` specifiers (`import { type Foo, bar }`) are erased at compile time and MUST NOT be counted as value imports** -- they're a separate, weaker relation. Misclassifying them produces phantom runtime cycles (see upstream/swarmdo#2049).
    - `imports`: value imports (`import { x } from '...'`, `require(...)`) -- weight `0.9`
    - `type-depends-on`: TypeScript type-only imports (`import type { Foo } from '...'` and `import { type Foo, value } from '...'`) -- weight `0.1`, **never used for cycle detection or runtime impact analysis**
    - `extends`: class inheritance -- weight `0.9`

@@ -13,7 +13,7 @@
  *
  * Credential resolution (mirrors performance-capability.ts / web_search.ts):
  *   1. process.env.GOOGLE_AI_API_KEY
- *   2. gcloud secrets versions access latest --secret=GOOGLE_AI_API_KEY --project=ruv-dev
+ *   2. gcloud secrets versions access latest --secret=GOOGLE_AI_API_KEY --project=swarm-dev
  *   3. Throws with clear instructions if neither is available
  *
  * Free tier: 1500 grounded queries/day on Gemini 2.5 Flash.
@@ -147,7 +147,7 @@ export async function resolveGoogleAIApiKey(): Promise<string> {
   try {
     const { execSync } = await import('node:child_process');
     const key = execSync(
-      'gcloud secrets versions access latest --secret=GOOGLE_AI_API_KEY --project=ruv-dev 2>/dev/null',
+      'gcloud secrets versions access latest --secret=GOOGLE_AI_API_KEY --project=swarm-dev 2>/dev/null',
       { encoding: 'utf-8', timeout: 5_000 },
     ).trim();
     if (key) return key;
@@ -158,7 +158,7 @@ export async function resolveGoogleAIApiKey(): Promise<string> {
   throw new Error(
     'grounded_query: No Google AI API key found.\n' +
       'Set GOOGLE_AI_API_KEY env var, or ensure `gcloud` is authenticated and\n' +
-      'the secret GOOGLE_AI_API_KEY exists in GCP project ruv-dev.\n' +
+      'the secret GOOGLE_AI_API_KEY exists in GCP project swarm-dev.\n' +
       'Get a free key at: https://aistudio.google.com/apikey',
   );
 }

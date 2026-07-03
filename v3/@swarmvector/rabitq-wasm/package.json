@@ -33,12 +33,12 @@
   "license": "MIT OR Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ruvnet/SwarmVector.git",
+    "url": "git+the upstream project (see NOTICE)",
     "directory": "crates/swarmvector-rabitq-wasm"
   },
-  "homepage": "https://github.com/ruvnet/SwarmVector#readme",
+  "homepage": "the upstream project (see NOTICE)#readme",
   "bugs": {
-    "url": "https://github.com/ruvnet/SwarmVector/issues"
+    "url": "the upstream project (see NOTICE)"
   },
   "files": [
     "swarmvector_rabitq_wasm_bg.wasm",

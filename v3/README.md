@@ -2,7 +2,7 @@
 
 > **Modular AI Agent Coordination System** - A complete reimagining of Swarmdo with 15-agent hierarchical mesh swarm coordination.
 
-[![Version](https://img.shields.io/badge/version-3.0.0--alpha.1-blue.svg)](https://github.com/ruvnet/claude-flow)
+[![Version](https://img.shields.io/badge/version-3.0.0--alpha.1-blue.svg)](the upstream project (see NOTICE))
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20.0.0-green.svg)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3+-blue.svg)](https://www.typescriptlang.org/)
 [![License](https://img.shields.io/badge/license-MIT-purple.svg)](../LICENSE)
@@ -398,7 +398,7 @@ Features:
 
 ```bash
 # Clone the repository
-git clone https://github.com/ruvnet/claude-flow.git
+git clone the upstream project (see NOTICE)
 cd swarmdo/v3
 
 # Install dependencies
@@ -474,9 +474,9 @@ pnpm test:coverage
 - [Hooks Tools](./mcp/tools/hooks-tools.ts)
 
 ### External
-- [GitHub Repository](https://github.com/ruvnet/claude-flow)
-- [agentic-flow Integration](https://github.com/ruvnet/agentic-flow)
-- [AgentDB](https://github.com/ruvnet/agentdb)
+- [GitHub Repository](the upstream project (see NOTICE))
+- [agentic-flow Integration](the upstream project (see NOTICE))
+- [AgentDB](the upstream project (see NOTICE))
 
 ## Requirements
 

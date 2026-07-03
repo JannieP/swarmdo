@@ -1,8 +1,8 @@
-# RuvLLM Documentation
+# SwarmLLM Documentation
 
 ## Overview
 
-This directory contains documentation for the RuvLLM self-learning LLM architecture.
+This directory contains documentation for the SwarmLLM self-learning LLM architecture.
 
 ## Quick Links
 
@@ -25,7 +25,7 @@ The project was designed using the SPARC methodology:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                         RuvLLM System                           │
+│                         SwarmLLM System                           │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐             │
@@ -75,10 +75,10 @@ The project was designed using the SPARC methodology:
 ### Basic Query
 
 ```rust
-use ruvllm::{Config, RuvLLM};
+use swarmllm::{Config, SwarmLLM};
 
 let config = Config::builder().build()?;
-let llm = RuvLLM::new(config).await?;
+let llm = SwarmLLM::new(config).await?;
 let response = llm.query("What is Rust?").await?;
 ```
 
@@ -93,7 +93,7 @@ let r2 = llm.query_session(&session, "How are they used in ML?").await?;
 ### Feedback Loop
 
 ```rust
-use ruvllm::Feedback;
+use swarmllm::Feedback;
 
 llm.feedback(Feedback {
     request_id: response.request_id,

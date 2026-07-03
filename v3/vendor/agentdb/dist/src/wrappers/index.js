@@ -15,7 +15,7 @@
  * @example
  * ```typescript
  * // GNN operations
- * import { differentiableSearch, RuvectorLayer } from 'agentdb/wrappers';
+ * import { differentiableSearch, SwarmvectorLayer } from 'agentdb/wrappers';
  *
  * // AgentDB operations
  * import { createFastAgentDB } from 'agentdb/wrappers';
@@ -28,7 +28,7 @@
  * ```
  */
 // GNN wrapper exports
-export { differentiableSearch, hierarchicalForward, RuvectorLayer, TensorCompress, getCompressionLevel, } from './gnn-wrapper.js';
+export { differentiableSearch, hierarchicalForward, SwarmvectorLayer, TensorCompress, getCompressionLevel, } from './gnn-wrapper.js';
 // AgentDB Fast API exports
 export { AgentDBFast, createFastAgentDB, } from './agentdb-fast.js';
 // Attention fallbacks exports

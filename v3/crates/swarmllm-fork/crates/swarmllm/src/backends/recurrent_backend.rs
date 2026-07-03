@@ -24,7 +24,7 @@ use super::{
 use crate::error::{Result, SwarmLLMError};
 use crate::models::openmythos::{validate_mythos_metadata, MythosConfig, OpenMythos};
 use crate::models::sampling::SamplingConfig;
-use crate::tokenizer::RuvTokenizer;
+use crate::tokenizer::SwarmTokenizer;
 
 use candle_core::{DType, Device};
 
@@ -40,9 +40,9 @@ pub struct CheckpointManifest {
     pub eos_token_id: Option<u32>,
 }
 
-/// A [`Tokenizer`] adapter over [`RuvTokenizer`].
+/// A [`Tokenizer`] adapter over [`SwarmTokenizer`].
 pub struct MythosTokenizer {
-    inner: RuvTokenizer,
+    inner: SwarmTokenizer,
 }
 
 impl Tokenizer for MythosTokenizer {
@@ -101,7 +101,7 @@ impl RecurrentBackend {
     /// Construct directly from an in-memory model (testing / embedding use).
     pub fn from_model(
         model: OpenMythos,
-        tokenizer: Option<RuvTokenizer>,
+        tokenizer: Option<SwarmTokenizer>,
         model_id: impl Into<String>,
     ) -> Self {
         let cfg = model.config().clone();
@@ -192,7 +192,7 @@ impl LlmBackend for RecurrentBackend {
         // Tokenizer (optional but expected for text I/O).
         let tok_path = dir.join("tokenizer.json");
         if tok_path.is_file() {
-            let tok = RuvTokenizer::from_file(&tok_path)?;
+            let tok = SwarmTokenizer::from_file(&tok_path)?;
             self.eos = manifest.eos_token_id.or(Some(tok.eos_token_id()));
             self.tokenizer = Some(MythosTokenizer { inner: tok });
         } else {

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Offline Toolchain Cache for RuvLLM ESP32
+# Offline Toolchain Cache for SwarmLLM ESP32
 #
 # Downloads and caches the ESP32 toolchain for air-gapped environments.
 # Run this on a machine with internet, then transfer the cache folder.
@@ -11,7 +11,7 @@
 
 set -e
 
-CACHE_DIR="${RUVLLM_CACHE_DIR:-$HOME/.ruvllm-cache}"
+CACHE_DIR="${SWARMLLM_CACHE_DIR:-$HOME/.swarmllm-cache}"
 TOOLCHAIN_VERSION="1.90.0.0"
 ESPFLASH_VERSION="4.3.0"
 LDPROXY_VERSION="0.3.4"
@@ -170,7 +170,7 @@ show_info() {
         exit 1
     fi
 
-    echo "=== RuvLLM ESP32 Offline Cache ==="
+    echo "=== SwarmLLM ESP32 Offline Cache ==="
     cat "$CACHE_DIR/metadata.json"
     echo ""
     echo "Cache size: $(du -sh "$CACHE_DIR" | cut -f1)"
@@ -191,7 +191,7 @@ case "${1:-help}" in
         show_info
         ;;
     *)
-        echo "RuvLLM ESP32 Offline Toolchain Cache"
+        echo "SwarmLLM ESP32 Offline Toolchain Cache"
         echo ""
         echo "Usage: $0 <command>"
         echo ""
@@ -202,6 +202,6 @@ case "${1:-help}" in
         echo "  info     - Show cache information"
         echo ""
         echo "Environment variables:"
-        echo "  RUVLLM_CACHE_DIR - Cache directory (default: ~/.ruvllm-cache)"
+        echo "  SWARMLLM_CACHE_DIR - Cache directory (default: ~/.swarmllm-cache)"
         ;;
 esac

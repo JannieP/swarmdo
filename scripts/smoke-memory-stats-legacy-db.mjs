@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Regression guard for ruvnet/swarmdo#2120 — `swarmdo memory stats` and
+ * Regression guard for upstream/swarmdo#2120 — `swarmdo memory stats` and
  * `listEntries` returned 0 entries against a populated `.swarm/memory.db`
  * on WSL2 (reporter: @alexandrelealbess, alpha.81).
  *

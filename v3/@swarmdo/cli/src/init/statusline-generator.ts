@@ -67,7 +67,7 @@ export function generateStatuslineScript(options: InitOptions): string {
 /**
  * Swarmdo V3 Statusline — delegation build (#2195)
  *
- * Fix for ruvnet/swarmdo#2195: the previous version re-implemented all data
+ * Fix for upstream/swarmdo#2195: the previous version re-implemented all data
  * readers locally using fragile file probes that missed AgentDB patterns,
  * the v3/docs/adr/ ADR directory, and the real vector count.
  *

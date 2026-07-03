@@ -55,7 +55,6 @@
     "aimds",
     "llm-security"
   ],
-  "author": "rUv <hello@ruv.io>",
   "license": "MIT",
   "repository": {
     "type": "git",

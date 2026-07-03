@@ -20,21 +20,21 @@ The current chat system (`extensions-cloudrun/apps/chat-system`) is a custom Rea
 
 1. Exposes **GPT-5 family models** (gpt-5, gpt-5-mini, gpt-5-nano, gpt-5-pro, gpt-5.1, gpt-5.2) plus multi-provider models (Google Gemini, Anthropic Claude) using **existing Google Secret Manager keys**
 2. Integrates with **existing Cloud Functions** (airtable-agent, db-query-agent, simulation-agent, case-manager, workflow-search) via MCP tool calling
-3. Connects to **ruvector-postgres** (10.128.0.2) for vector search over workflow documents (384d all-MiniLM-L6-v2 embeddings, 311 chunks) — all tool/data operations go through PostgreSQL, NOT MongoDB
+3. Connects to **swarmvector-postgres** (10.128.0.2) for vector search over workflow documents (384d all-MiniLM-L6-v2 embeddings, 311 chunks) — all tool/data operations go through PostgreSQL, NOT MongoDB
 4. Provides conversation persistence, authentication, and a polished UI out of the box
 5. Deploys as a new Cloud Run service alongside the existing chat-system — no disruption
 
 ### Database Strategy: Hybrid PostgreSQL + MongoDB
 
-HuggingFace Chat UI **requires MongoDB** for its internal persistence layer (conversations, users, sessions, assistants). This cannot be swapped for PostgreSQL without forking the project. However, **all business data and tool operations** route through ruvector-postgres via the MCP Bridge:
+HuggingFace Chat UI **requires MongoDB** for its internal persistence layer (conversations, users, sessions, assistants). This cannot be swapped for PostgreSQL without forking the project. However, **all business data and tool operations** route through swarmvector-postgres via the MCP Bridge:
 
 | Layer | Database | Purpose |
 |-------|----------|---------|
 | **Chat UI internals** | MongoDB (lightweight sidecar or Atlas free tier) | Conversations, user sessions, assistant configs |
-| **Business data & tools** | ruvector-postgres (10.128.0.2) | Workflow search, case data, analytics, embeddings |
+| **Business data & tools** | swarmvector-postgres (10.128.0.2) | Workflow search, case data, analytics, embeddings |
 | **AI provider keys** | Google Secret Manager | `openai-api-key`, `anthropic-api-key`, `google-api-key` |
 
-MongoDB handles only what Chat UI needs internally. All the **real work** — workflow search, case management, analytics, simulations — flows through the existing ruvector-postgres via MCP tools. The MongoDB instance can run as a sidecar container on the same Cloud Run service using the bundled `chat-ui-db` image, requiring **zero additional infrastructure**.
+MongoDB handles only what Chat UI needs internally. All the **real work** — workflow search, case management, analytics, simulations — flows through the existing swarmvector-postgres via MCP tools. The MongoDB instance can run as a sidecar container on the same Cloud Run service using the bundled `chat-ui-db` image, requiring **zero additional infrastructure**.
 
 ### Multi-Provider Strategy via Google Secret Manager
 
@@ -69,7 +69,7 @@ This eliminates months of custom UI development while providing a superior chat 
 |--------|---------------------|-------------------|
 | AI Provider | Gemini-only (tightly coupled) | Any OpenAI-compatible API |
 | Model switching | None (ADR-028 proposes abstraction) | Built-in multi-model selector |
-| Conversation persistence | LocalStorage only | MongoDB sidecar + ruvector-postgres for tools |
+| Conversation persistence | LocalStorage only | MongoDB sidecar + swarmvector-postgres for tools |
 | Tool calling | Custom FunctionExecutor | MCP standard protocol |
 | Authentication | Custom Google OAuth | OpenID Connect (standard) |
 | Voice input | None | Whisper transcription |
@@ -86,7 +86,7 @@ Deploy HuggingFace Chat UI as a new Cloud Run service (`hf-chat-ui`) with:
 - MongoDB Atlas for conversation persistence
 - Google OAuth via OpenID Connect
 - Custom domain mapping to `chat.conveyorclaims.ai`
-- VPC connector for ruvector-postgres access
+- VPC connector for swarmvector-postgres access
 
 ---
 
@@ -121,7 +121,7 @@ Deploy HuggingFace Chat UI as a new Cloud Run service (`hf-chat-ui`) with:
           │       │              │  │      │ │ API    │ │ API     │
           │       │ Routes to:   │  │gpt-5 │ │gemini  │ │claude   │
           │       │ Cloud Fns +  │  │gpt-5m│ │2.5-pro │ │sonnet-4 │
-          │       │ ruvector-pg  │  │gpt-4o│ │2.5-fl  │ │         │
+          │       │ swarmvector-pg  │  │gpt-4o│ │2.5-fl  │ │         │
           │       └──────┬───────┘  │o3    │ │        │ │         │
           │              │          └──────┘ └────────┘ └─────────┘
           │              ▼               Keys from Google Secret Manager
@@ -138,9 +138,9 @@ Deploy HuggingFace Chat UI as a new Cloud Run service (`hf-chat-ui`) with:
           │                  │ VPC (10.128.0.0/20)
           │                  ▼
           │  ┌───────────────────────────────────┐
-          │  │     ruvector-postgres VM           │
+          │  │     swarmvector-postgres VM           │
           └─▶│     10.128.0.2:5432               │
-             │     PostgreSQL 17.7 + ruvector    │
+             │     PostgreSQL 17.7 + swarmvector    │
              │                                    │
              │  PRIMARY DATA STORE:               │
              │  • workflow_chunks (311 rows)      │
@@ -161,7 +161,7 @@ HuggingFace Chat UI requires MongoDB for internal persistence (conversations, us
 **Why sidecar, not Atlas:**
 - Zero additional infrastructure or accounts
 - No network latency (localhost connection)
-- All business data still lives in ruvector-postgres via MCP tools
+- All business data still lives in swarmvector-postgres via MCP tools
 - MongoDB only stores lightweight chat UI metadata
 - If we outgrow this, upgrade to Atlas later (just change `MONGODB_URL`)
 
@@ -189,9 +189,9 @@ HuggingFace Chat UI is **hardcoded to MongoDB** — its data layer uses MongoDB 
 - No additional infrastructure cost
 - No MongoDB Atlas account needed
 - Data lives on the container's ephemeral storage (conversations are lightweight and regenerable)
-- All **business-critical data** (cases, workflows, embeddings, analytics) stays in ruvector-postgres
+- All **business-critical data** (cases, workflows, embeddings, analytics) stays in swarmvector-postgres
 
-Think of MongoDB here as an internal implementation detail of Chat UI — like SQLite in a desktop app. The user never interacts with it directly. Ruvector-postgres remains the **single source of truth** for all Conveyor data.
+Think of MongoDB here as an internal implementation detail of Chat UI — like SQLite in a desktop app. The user never interacts with it directly. Swarmvector-postgres remains the **single source of truth** for all Conveyor data.
 
 ---
 
@@ -220,7 +220,7 @@ const server = new McpServer({
   version: "1.0.0",
 });
 
-// Tool: Search workflow documents (vector search via ruvector-postgres)
+// Tool: Search workflow documents (vector search via swarmvector-postgres)
 server.tool(
   "search_workflows",
   "Search CLG workflow procedures, FAQs, and case management steps using semantic search. Returns relevant workflow steps for a given query.",
@@ -355,14 +355,14 @@ gcloud run deploy mcp-bridge \
 
 Chat UI supports multiple MCP servers simultaneously. We configure **three** to give GPT-5 full access to Conveyor's data ecosystem:
 
-#### MCP Server 1: Conveyor Bridge (Custom — Cloud Functions + ruvector-postgres)
+#### MCP Server 1: Conveyor Bridge (Custom — Cloud Functions + swarmvector-postgres)
 
 The custom MCP Bridge from Phase 2. Provides 5 tools:
 
 | Tool | Backend | Purpose |
 |------|---------|---------|
-| `search_workflows` | workflow-search → ruvector-postgres | Semantic search over CLG workflow docs (311 chunks, 384d HNSW) |
-| `query_database` | db-query-agent → ruvector-postgres | SQL analytics, revenue forecasts, trend analysis |
+| `search_workflows` | workflow-search → swarmvector-postgres | Semantic search over CLG workflow docs (311 chunks, 384d HNSW) |
+| `query_database` | db-query-agent → swarmvector-postgres | SQL analytics, revenue forecasts, trend analysis |
 | `manage_case` | case-manager → Airtable | Case status lookup, next steps, updates |
 | `run_simulation` | simulation-agent | RL strategy simulations (Q-learning, Monte Carlo) |
 | `airtable_query` | airtable-agent → Airtable | Generic Airtable CRUD across all tables |
@@ -429,7 +429,7 @@ Auth: OAuth2 service account or user token
             │                    │                    │
             ▼                    ▼                    ▼
    Cloud Functions +      Airtable API        Google Drive API
-   ruvector-postgres      (airtable.com)      (googleapis.com)
+   swarmvector-postgres      (airtable.com)      (googleapis.com)
 ```
 
 ---
@@ -693,7 +693,7 @@ COOKIE_SAMESITE=lax
 MCP_SERVERS=`[
   {
     "name": "Conveyor Tools",
-    "description": "Workflow search, DB analytics, case management, simulations via ruvector-postgres and Cloud Functions",
+    "description": "Workflow search, DB analytics, case management, simulations via swarmvector-postgres and Cloud Functions",
     "url": "https://mcp-bridge-hwqrrwrlna-uc.a.run.app/mcp"
   },
   {
@@ -880,7 +880,7 @@ gcloud run deploy hf-chat-ui \
   --set-secrets="OPENAI_API_KEY=openai-api-key:latest,ANTHROPIC_API_KEY=anthropic-api-key:latest,GOOGLE_API_KEY=google-api-key:latest,AIRTABLE_API_KEY=airtable-api-key:latest,GOOGLE_CLIENT_ID=google-client-id:latest,GOOGLE_CLIENT_SECRET=google-client-secret:latest" \
   --project=new-project-473022
 
-# 2. Deploy MCP Bridge (connects Chat UI tools to existing Cloud Functions + ruvector-postgres)
+# 2. Deploy MCP Bridge (connects Chat UI tools to existing Cloud Functions + swarmvector-postgres)
 gcloud run deploy mcp-bridge \
   --source=infrastructure/gcp/mcp-bridge \
   --platform=managed \
@@ -912,7 +912,7 @@ gcloud run domain-mappings create \
 | **Cloud Run (hf-chat-ui + MongoDB sidecar)** | ~$8-30 (min-instances=1 for MongoDB persistence) |
 | **Cloud Run (mcp-bridge)** | ~$2-10 (lightweight, auto-scales to 0) |
 | **MongoDB** | $0 (bundled sidecar, no external service) |
-| **ruvector-postgres** | $0 (already running for existing services) |
+| **swarmvector-postgres** | $0 (already running for existing services) |
 | **OpenAI API (GPT-5)** | Variable — depends on usage |
 | **Google/Anthropic APIs** | Variable — uses existing Secret Manager keys |
 | **SSL Certificate** | $0 (Google-managed) |
@@ -930,7 +930,7 @@ gcloud run domain-mappings create \
 - **Production-grade** — conversation history, auth, streaming, voice input out of the box
 - **Community maintained** — 10,400+ stars, active development by HuggingFace
 - **Zero disruption** — existing chat system continues operating independently
-- **Cost effective** — MongoDB sidecar eliminates external DB cost, ruvector-postgres already running
+- **Cost effective** — MongoDB sidecar eliminates external DB cost, swarmvector-postgres already running
 - **Multi-provider resilience** — if one AI provider is down, users switch to another
 
 ### Negative
@@ -989,10 +989,10 @@ gcloud run domain-mappings create \
 │  │  └────────┼──────────────────────────────────────────────────────────┘        │  │
 │  │           │                                                                   │  │
 │  │  ┌────────▼─────────┐                                                         │  │
-│  │  │  ruvector-postgres│                                                        │  │
+│  │  │  swarmvector-postgres│                                                        │  │
 │  │  │  10.128.0.2:5432 │                                                        │  │
 │  │  │  PostgreSQL 17.7  │                                                        │  │
-│  │  │  ruvector 2.0.1   │                                                        │  │
+│  │  │  swarmvector 2.0.1   │                                                        │  │
 │  │  └──────────────────┘                                                         │  │
 │  └───────────────────────────────────────────────────────────────────────────────┘  │
 │                                                                                     │
@@ -1002,7 +1002,7 @@ gcloud run domain-mappings create \
 │  │  • anthropic-api-key      │    │  • Google    → Gemini 2.5        │              │
 │  │  • google-api-key         │    │  • Anthropic → Claude Sonnet 4   │              │
 │  │  • airtable-api-key       │    └───────────────────────────────────┘              │
-│  │  • ruvector-db-password   │                                                       │
+│  │  • swarmvector-db-password   │                                                       │
 │  └───────────────────────────┘                                                       │
 └─────────────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -1014,7 +1014,7 @@ gcloud run domain-mappings create \
 | Service | Domain | Purpose | Tools/Models |
 |---------|--------|---------|--------------|
 | **hf-chat-ui** (NEW) | `chat.conveyorclaims.ai` | Multi-provider chat with 3 MCP tool servers | GPT-5.2, GPT-5, GPT-5-mini, GPT-4o, o3, Gemini 2.5, Claude Sonnet 4 |
-| **mcp-bridge** (NEW) | internal | Custom MCP → Cloud Functions + ruvector-postgres | 5 tools (search, query, case, sim, airtable) |
+| **mcp-bridge** (NEW) | internal | Custom MCP → Cloud Functions + swarmvector-postgres | 5 tools (search, query, case, sim, airtable) |
 | **Airtable MCP** (external) | `mcp.airtable.com` | Official Airtable direct access | Schema browse, CRUD, search |
 | **Google Drive MCP** (external) | `mcp.googleapis.com` | Official Google Drive access | File search, doc read, sheets |
 | **chat-system** (existing) | `chat-system-*.run.app` | Gemini-powered workflow chat | gemini-2.5-pro/flash |
@@ -1113,7 +1113,7 @@ Fixed all 5 tool-to-Cloud-Function mappings in the MCP Bridge. Every tool was se
 
 Added `nl_query` action to the db-query-agent Cloud Function. This enables natural language questions like "How many cases were opened this month?" to be converted to SQL via Gemini.
 
-**Flow:** Natural language → Gemini generates SQL → validate (no DROP/DELETE) → execute against ruvector-postgres → return results
+**Flow:** Natural language → Gemini generates SQL → validate (no DROP/DELETE) → execute against swarmvector-postgres → return results
 
 **File modified:** `infrastructure/gcp/functions/db-query-agent/index.js`
 
@@ -1230,7 +1230,7 @@ Moved MODELS config from Cloud Run env vars to Docker image `.env.local` file. T
 |-----|-------------|
 | ADR-014 | Existing chat system architecture (continues independently) |
 | ADR-015 | Cloud Functions reused via MCP Bridge |
-| ADR-022 | Workflow documents in ruvector-postgres searched via tools |
+| ADR-022 | Workflow documents in swarmvector-postgres searched via tools |
 | ADR-024 | Workflow context injection pattern adapted for MCP tools |
 | ADR-027 | Response formatting rules carried into system prompt |
 | ADR-028 | OpenAI GPT-5 integration in existing chat system (complementary) |

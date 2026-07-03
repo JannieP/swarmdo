@@ -1,4 +1,4 @@
-# Rufflo v3 Architecture Assessment
+# Swarmdo v3 Architecture Assessment
 
 **Date:** 2026-01-03
 **Analyzed Version:** 2.7.47
@@ -9,12 +9,12 @@
 
 ## Executive Summary
 
-Rufflo is a sophisticated multi-agent orchestration platform with deep integration into the agentic-flow ecosystem. The current v2.x architecture demonstrates strong engineering practices but suffers from architectural complexity, overlapping concerns, and scalability limitations. This assessment provides a comprehensive analysis and roadmap for v3 redesign focused on modularity, performance, and agentic-flow-native architecture.
+Swarmdo is a sophisticated multi-agent orchestration platform with deep integration into the agentic-flow ecosystem. The current v2.x architecture demonstrates strong engineering practices but suffers from architectural complexity, overlapping concerns, and scalability limitations. This assessment provides a comprehensive analysis and roadmap for v3 redesign focused on modularity, performance, and agentic-flow-native architecture.
 
 **Key Metrics:**
 - Total TypeScript Files: 376
 - Lines of Code: ~130,000
-- Core Dependencies: agentic-flow (^1.9.4), ruv-swarm (^1.0.14), flow-nexus (^0.1.128)
+- Core Dependencies: agentic-flow (^1.9.4), swarmdo-swarm (^1.0.14), flow-nexus (^0.1.128)
 - MCP Protocol Version: 2024.11.5
 - Node Version: >=20.0.0
 
@@ -214,7 +214,7 @@ Implementations:
 - Dynamic tool registration
 - Schema validation with JSON Schema
 - Built-in tools: system/info, system/health, tools/list
-- Integration tools: Rufflo tools, Swarm tools, ruv-swarm tools
+- Integration tools: Swarmdo tools, Swarm tools, swarmdo-swarm tools
 
 **Session Management:**
 - Per-connection sessions
@@ -407,7 +407,7 @@ CLI → Orchestrator → [TerminalManager, MemoryManager, CoordinationManager, M
 ```json
 "dependencies": {
   "agentic-flow": "^1.9.4",
-  "ruv-swarm": "^1.0.14",
+  "swarmdo-swarm": "^1.0.14",
   "flow-nexus": "^0.1.128"
 }
 ```
@@ -458,18 +458,18 @@ CLI → Orchestrator → [TerminalManager, MemoryManager, CoordinationManager, M
 
 3. **Memory Integration**
    - Use agentic-flow's memory system as primary
-   - Add rufflo-specific extensions via plugins
+   - Add swarmdo-specific extensions via plugins
    - Leverage agentic-flow's distributed memory
 
 4. **Task Execution**
    - Use agentic-flow's task graph execution
-   - Add rufflo-specific task types
+   - Add swarmdo-specific task types
    - Leverage agentic-flow's retry and fault tolerance
 
 **Architecture Shift:**
 ```
-Current: rufflo implements everything, integrates with agentic-flow
-   v3: agentic-flow provides core, rufflo extends and specializes
+Current: swarmdo implements everything, integrates with agentic-flow
+   v3: agentic-flow provides core, swarmdo extends and specializes
 ```
 
 ---
@@ -481,7 +481,7 @@ Current: rufflo implements everything, integrates with agentic-flow
 **Proposed Domain Model:**
 
 ```
-Rufflo v3 Domains:
+Swarmdo v3 Domains:
 ┌─────────────────────────────────────────────────────────┐
 │            Shared Kernel (types, interfaces)            │
 └─────────────────────────────────────────────────────────┘
@@ -1296,7 +1296,7 @@ interface MCPContext {
 
 ### 11.1 Summary
 
-Rufflo v2.x is a sophisticated system with strong foundations but architectural complexity that limits scalability and maintainability. The v3 redesign presents an opportunity to:
+Swarmdo v2.x is a sophisticated system with strong foundations but architectural complexity that limits scalability and maintainability. The v3 redesign presents an opportunity to:
 
 1. **Simplify** by adopting agentic-flow native architecture
 2. **Modularize** through domain-driven design and bounded contexts
@@ -1371,7 +1371,7 @@ Top 20 largest files requiring decomposition:
  20KB  src/cli/commands/memory.ts
  18KB  src/cli/commands/monitor.ts
  18KB  src/cli/commands/sparc.ts
- 18KB  src/cli/commands/ruv-swarm.ts
+ 18KB  src/cli/commands/swarmdo-swarm.ts
  17KB  src/cli/commands/hive.ts
  17KB  src/agents/agent-manager.ts (1,736 lines)
  15KB  src/cli/commands/agent.ts
@@ -1426,7 +1426,7 @@ Orchestrator (core/orchestrator.ts)
 - Swarm coordination from agentic-flow
 - Task graph execution from agentic-flow
 - Memory system from agentic-flow
-- Add rufflo extensions via plugins
+- Add swarmdo extensions via plugins
 ```
 
 ### Appendix D: Testing Strategy

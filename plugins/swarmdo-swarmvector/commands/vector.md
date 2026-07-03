@@ -121,7 +121,7 @@ Usage: /vector <subcommand> [options]
 ## Edge compute network
 
 71. **edge status** — `npx -y swarmvector@0.2.25 edge status`
-72. **edge balance [nodeId]** — `npx -y swarmvector@0.2.25 edge balance` (rUv balance)
+72. **edge balance [nodeId]** — `npx -y swarmvector@0.2.25 edge balance` (the upstream author balance)
 73. **edge tasks** — `npx -y swarmvector@0.2.25 edge tasks`
 74. **edge join** — `npx -y swarmvector@0.2.25 edge join` (join the network as a node)
 75. **edge dashboard** — `npx -y swarmvector@0.2.25 edge dashboard` (opens in browser)

@@ -7,11 +7,11 @@
   "author": "SwarmVector Team <team@swarmvector.dev>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ruvnet/swarmvector.git"
+    "url": "git+the upstream project (see NOTICE)"
   },
-  "homepage": "https://ruv.io/swarmvector",
+  "homepage": "https://swarmdo.com",
   "bugs": {
-    "url": "https://github.com/ruvnet/swarmvector/issues"
+    "url": "the upstream project (see NOTICE)"
   },
   "main": "swarmvector_attention_wasm.js",
   "module": "swarmvector_attention_wasm.js",

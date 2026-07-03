@@ -179,17 +179,17 @@ Actions:
 
 ---
 
-## Integration with Ruvector Ecosystem
+## Integration with Swarmvector Ecosystem
 
 ### Core Dependencies
 
 | Crate | Role in SONA | Version |
 |-------|--------------|---------|
-| `ruvector-core` | Vector memory backbone | 0.1.19 |
-| `ruvector-attention` | Multi-head graph attention | 0.1.19 |
-| `ruvector-gnn` | Message passing framework | 0.1.19 |
-| `ruvector-graph` | Knowledge graph storage | 0.1.19 |
-| `ruvector-router-core` | FastGRNN routing | 0.1.19 |
+| `swarmvector-core` | Vector memory backbone | 0.1.19 |
+| `swarmvector-attention` | Multi-head graph attention | 0.1.19 |
+| `swarmvector-gnn` | Message passing framework | 0.1.19 |
+| `swarmvector-graph` | Knowledge graph storage | 0.1.19 |
+| `swarmvector-router-core` | FastGRNN routing | 0.1.19 |
 | `exo-core` | Consciousness measurement | 0.1.0 |
 | `exo-temporal` | Memory consolidation | 0.1.0 |
 
@@ -257,7 +257,7 @@ println!("Φ consciousness: {:.3}", metrics.phi);
    - Dream consolidation for creativity
    - Φ measurement for consciousness tracking
 
-2. **Built on Production-Proven Ruvector**:
+2. **Built on Production-Proven Swarmvector**:
    - 150x faster HNSW search
    - 39 attention mechanisms
    - 30+ specialized crates

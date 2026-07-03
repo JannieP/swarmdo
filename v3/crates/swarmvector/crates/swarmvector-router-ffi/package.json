@@ -31,11 +31,11 @@
     "vector-search",
     "napi-rs"
   ],
-  "author": "ruv.io Team <info@ruv.io>",
+  "author": "swarmdo.com Team <maintainers@swarmdo.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ruvnet/swarmvector"
+    "url": "the upstream project (see NOTICE)"
   },
   "devDependencies": {
     "@napi-rs/cli": "^2.16.0"

@@ -1,65 +1,65 @@
 ---
 id: ADR-0001
-title: Pin rufflo-ruvector plugin to ruvector@0.2.25 with optional add-on packages
+title: Pin swarmdo-swarmvector plugin to swarmvector@0.2.25 with optional add-on packages
 status: Accepted
 date: 2026-05-04
 authors:
   - reviewer (Claude Code)
-tags: [plugin, ruvector, versioning, mcp, dependencies]
+tags: [plugin, swarmvector, versioning, mcp, dependencies]
 ---
 
 ## Context
 
-The `rufflo-ruvector` plugin wraps the `ruvector` npm package as a Claude Code plugin. The plugin's documentation (README, agent file, skills, command spec) drifted from the actual CLI surface in two ways:
+The `swarmdo-swarmvector` plugin wraps the `swarmvector` npm package as a Claude Code plugin. The plugin's documentation (README, agent file, skills, command spec) drifted from the actual CLI surface in two ways:
 
 1. **Aspirational features.** Older docs referenced `FlashAttention-3`, `Graph RAG`, `Hybrid Search`, `DiskANN`, `ColBERT`, `Matryoshka`, `MLA`, `TurboQuant`, `Brain AGI`, and `Midstream` as if they were invokable CLI subcommands. The native Rust bindings expose primitives for most of these, but **no CLI subcommand wires them up** — only `attention list` enumerates the mechanisms.
-2. **Unspecified version.** The plugin invoked `npx ruvector ...` without a version pin, so a user with `ruvector@0.1.x` resolved would silently get a different surface (no `brain`, no `route`, no `sona`) than a user on `ruvector@0.2.x`.
+2. **Unspecified version.** The plugin invoked `npx swarmvector ...` without a version pin, so a user with `swarmvector@0.1.x` resolved would silently get a different surface (no `brain`, no `route`, no `sona`) than a user on `swarmvector@0.2.x`.
 
 Concretely, this caused:
 
-- `npx ruvector embed "TEXT"` → `unknown command 'TEXT'` (real form is `embed text "TEXT"`)
-- `npx ruvector compare A B` → command does not exist
-- `npx ruvector cluster --namespace ... --k N` → `cluster` is for distributed cluster ops, not k-means
-- `npx ruvector hooks route --task X` → unknown option `--task` (positional)
-- `npx ruvector brain agi status` → no `agi` subgroup
-- `npx ruvector midstream status` → command does not exist
-- `npx ruvector index create N` → command does not exist (use `create <path>`)
+- `npx swarmvector embed "TEXT"` → `unknown command 'TEXT'` (real form is `embed text "TEXT"`)
+- `npx swarmvector compare A B` → command does not exist
+- `npx swarmvector cluster --namespace ... --k N` → `cluster` is for distributed cluster ops, not k-means
+- `npx swarmvector hooks route --task X` → unknown option `--task` (positional)
+- `npx swarmvector brain agi status` → no `agi` subgroup
+- `npx swarmvector midstream status` → command does not exist
+- `npx swarmvector index create N` → command does not exist (use `create <path>`)
 
-A live audit against `ruvector@0.2.25` confirmed which subcommands work, which require optional add-on packages, and which are upstream bugs.
+A live audit against `swarmvector@0.2.25` confirmed which subcommands work, which require optional add-on packages, and which are upstream bugs.
 
 ## Decision
 
-The plugin pins to `ruvector@0.2.25` and documents the optional add-on packages required for full functionality.
+The plugin pins to `swarmvector@0.2.25` and documents the optional add-on packages required for full functionality.
 
 ### 1. Pin every CLI invocation
 
 All `npx` calls in the plugin (README, agent, skills, commands, scripts) MUST be of the form:
 
 ```bash
-npx -y ruvector@0.2.25 <subcommand> [args]
+npx -y swarmvector@0.2.25 <subcommand> [args]
 ```
 
-Rationale: the `-y` flag suppresses the npm interactive prompt; the version pin prevents a future ruvector release from breaking the plugin's contract without our knowledge.
+Rationale: the `-y` flag suppresses the npm interactive prompt; the version pin prevents a future swarmvector release from breaking the plugin's contract without our knowledge.
 
 ### 2. Treat add-ons as opt-in extensions, not required deps
 
 | Package | Enables | Plugin subcommands gated on it |
 |---------|---------|------------------------------|
-| `ruvector-onnx-embeddings-wasm` | ONNX runtime | `embed text`, `embed adaptive`, `llm embed` |
-| `@ruvector/pi-brain` | Collective brain | `brain *` |
-| `@rufvector/rufllm` | RuvLLM + SONA JS fallback | `sona *`, `llm *` |
-| `@ruvector/graph-node` | Graph database (Cypher) | `graph -q ...` |
-| `@ruvector/router` | Semantic router | `router --route ...` |
+| `swarmvector-onnx-embeddings-wasm` | ONNX runtime | `embed text`, `embed adaptive`, `llm embed` |
+| `@swarmvector/pi-brain` | Collective brain | `brain *` |
+| `@swarmvector/swarmllm` | SwarmLLM + SONA JS fallback | `sona *`, `llm *` |
+| `@swarmvector/graph-node` | Graph database (Cypher) | `graph -q ...` |
+| `@swarmvector/router` | Semantic router | `router --route ...` |
 
 Rationale: these are heavy dependencies (ONNX runtime alone is large). Forcing them at install time penalizes users who only want hooks routing or RVF storage. Instead we provide a `vector-setup` skill and document the precise error message → install command mapping.
 
 ### 3. Register MCP server with the same pin
 
 ```bash
-claude mcp add ruvector -- npx -y ruvector@0.2.25 mcp start
+claude mcp add swarmvector -- npx -y swarmvector@0.2.25 mcp start
 ```
 
-Rationale: the MCP transport layer changes between minor versions of ruvector. Pinning the MCP command keeps the 103 exposed tools stable for downstream agents.
+Rationale: the MCP transport layer changes between minor versions of swarmvector. Pinning the MCP command keeps the 103 exposed tools stable for downstream agents.
 
 ### 4. Removed surface stays removed
 
@@ -75,7 +75,7 @@ A future ADR may relax this if upstream introduces a stable equivalent and we up
 
 ### 5. Smoke test as the contract
 
-`scripts/smoke.sh` verifies the contracted surface against any installed `ruvector@0.2.25`. It must remain green on every plugin change. Tests cover:
+`scripts/smoke.sh` verifies the contracted surface against any installed `swarmvector@0.2.25`. It must remain green on every plugin change. Tests cover:
 
 - Version pin (`--version` returns `0.2.25`)
 - Top-level subcommand visibility (`hooks`, `embed`, `rvf`, `attention`, `gnn`, `brain`, `sona`, `create`, `stats`, `search`, `insert`)
@@ -94,13 +94,13 @@ The plugin's own `version` field in `.claude-plugin/plugin.json` is bumped (patc
 
 - Every documented invocation in the plugin matches a real CLI surface that is verified by a smoke test.
 - New users hit a deterministic `vector-setup` flow instead of cryptic ONNX/Brain/SONA errors.
-- Future ruvector releases can be evaluated by running the smoke test against the new version before bumping the pin.
+- Future swarmvector releases can be evaluated by running the smoke test against the new version before bumping the pin.
 - The "Capabilities" table in README is now a contract, not a wishlist.
 
 **Negative:**
 
-- Bumping the pin requires a deliberate test pass. New ruvector features land in the plugin only after a manual review.
-- Add-on packages (`ruvector-onnx-embeddings-wasm`, `@ruvector/pi-brain`, `@rufvector/rufllm`) must be installed manually or via `/vector-setup`. Users who skip this and try `embed text` will hit the documented error.
+- Bumping the pin requires a deliberate test pass. New swarmvector features land in the plugin only after a manual review.
+- Add-on packages (`swarmvector-onnx-embeddings-wasm`, `@swarmvector/pi-brain`, `@swarmvector/swarmllm`) must be installed manually or via `/vector-setup`. Users who skip this and try `embed text` will hit the documented error.
 
 **Neutral:**
 
@@ -110,7 +110,7 @@ The plugin's own `version` field in `.claude-plugin/plugin.json` is bumped (patc
 
 ```bash
 # Plugin contract check
-bash plugins/rufflo-ruvector/scripts/smoke.sh
+bash plugins/swarmdo-swarmvector/scripts/smoke.sh
 # Expected: "11 passed, 0 failed"
 ```
 

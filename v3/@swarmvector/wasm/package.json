@@ -51,7 +51,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ruvnet/swarmvector.git"
+    "url": "the upstream project (see NOTICE)"
   },
   "devDependencies": {
     "wasm-pack": "^0.12.1"

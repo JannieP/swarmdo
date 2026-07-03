@@ -116,7 +116,7 @@
   },
   "attribution": {
     "commit": "Co-Authored-By: swarmdo-bot <swarmdo-bot@users.noreply.github.com>",
-    "pr": "Generated with [swarmdo](https://github.com/ruvnet/claude-flow)"
+    "pr": "Generated with [swarmdo](the upstream project (see NOTICE))"
   },
   "claudeFlow": {
     "version": "3.1.0",

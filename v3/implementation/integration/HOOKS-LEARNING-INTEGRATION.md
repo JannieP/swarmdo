@@ -1,4 +1,4 @@
-# Rufflo v3: Hooks & Learning Integration
+# Swarmdo v3: Hooks & Learning Integration
 
 ## Executive Summary
 
@@ -336,7 +336,7 @@ EOF
 - [x] Speculative embedding for related files
 - [x] AST analysis, complexity metrics, security scanning
 
-### Rufflo v3 Needs to Add:
+### Swarmdo v3 Needs to Add:
 - [ ] Claude Code hook configuration adapter
 - [ ] OpenTelemetry metric export wrapper
 - [ ] Cross-session learning persistence
@@ -347,7 +347,7 @@ EOF
 
 ## 9. Recommendation
 
-**Use agentic-flow@alpha as the learning backbone for Rufflo v3.**
+**Use agentic-flow@alpha as the learning backbone for Swarmdo v3.**
 
 The package already provides:
 - Complete RL learning system (9 algorithms)
@@ -356,7 +356,7 @@ The package already provides:
 - Parallel processing (7 workers)
 - SQLite persistence (cross-session)
 
-Rufflo v3 should focus on:
+Swarmdo v3 should focus on:
 1. **Thin integration layer** - Connect Claude Code hooks to agentic-flow hooks
 2. **Configuration UI** - Let users customize learning parameters
 3. **Swarm coordination** - Use learning to optimize swarm topology selection

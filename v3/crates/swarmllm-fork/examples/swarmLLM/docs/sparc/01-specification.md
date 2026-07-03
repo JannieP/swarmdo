@@ -1,4 +1,4 @@
-# RuvLLM: Self-Learning LLM with LFM2 and Ruvector Integration
+# SwarmLLM: Self-Learning LLM with LFM2 and Swarmvector Integration
 
 ## SPARC Phase 1: Specification
 
@@ -6,13 +6,13 @@
 
 ## 1. Executive Summary
 
-RuvLLM is a self-learning LLM architecture that integrates **Liquid Foundation Models (LFM2)** with **ruvector** as the world model and memory substrate. The system uses **FastGRNN** as an intelligent router to dynamically allocate computational resources based on query complexity, enabling efficient on-device inference with continuous learning capabilities.
+SwarmLLM is a self-learning LLM architecture that integrates **Liquid Foundation Models (LFM2)** with **swarmvector** as the world model and memory substrate. The system uses **FastGRNN** as an intelligent router to dynamically allocate computational resources based on query complexity, enabling efficient on-device inference with continuous learning capabilities.
 
 ### Core Innovation
 
 The architecture treats:
 - **LFM2** as the reasoning head (inference engine)
-- **Ruvector** as the world model and episodic memory
+- **Swarmvector** as the world model and episodic memory
 - **FastGRNN** as the control circuit (routing decisions)
 
 This triad creates a self-learning system where:
@@ -36,7 +36,7 @@ This triad creates a self-learning system where:
   - Enable KV cache for context reuse
   - Achieve <500ms median latency (CPU), <100ms (GPU)
 
-#### FR-002: Ruvector Memory Service
+#### FR-002: Swarmvector Memory Service
 - **Description**: Implement semantic memory with graph structure
 - **Storage Schema**:
   ```
@@ -134,7 +134,7 @@ This triad creates a self-learning system where:
   - Edge-weighted aggregation (confidence, recency)
   - Hyperbolic embeddings for hierarchical relationships
   - 2-hop neighborhood expansion
-- **Integration with existing ruvector-attention**:
+- **Integration with existing swarmvector-attention**:
   - Leverage `EdgeFeaturedAttention` for edge attributes
   - Use `GraphRoPE` for positional encoding on graphs
   - Apply `DualSpaceAttention` for multi-manifold reasoning
@@ -211,17 +211,17 @@ LFM2's training is relevant for our self-learning pipeline:
 
 ---
 
-## 4. Ruvector Integration Analysis
+## 4. Swarmvector Integration Analysis
 
 ### 4.1 Existing Capabilities
 
 | Component | Status | Integration Plan |
 |-----------|--------|------------------|
-| ruvector-core | ✅ Production | Primary vector store |
-| ruvector-gnn | ✅ Production | Graph neural layer |
-| ruvector-attention | ✅ Production | Attention mechanisms |
-| ruvector-router-core | ✅ Production | Base routing |
-| ruvector-graph | ✅ Production | Knowledge graph |
+| swarmvector-core | ✅ Production | Primary vector store |
+| swarmvector-gnn | ✅ Production | Graph neural layer |
+| swarmvector-attention | ✅ Production | Attention mechanisms |
+| swarmvector-router-core | ✅ Production | Base routing |
+| swarmvector-graph | ✅ Production | Knowledge graph |
 
 ### 4.2 Required Extensions
 
@@ -453,7 +453,7 @@ impl QualityJudge {
 **Elastic Weight Consolidation (EWC)**:
 
 ```rust
-// From ruvector-gnn ewc module
+// From swarmvector-gnn ewc module
 pub struct ElasticWeightConsolidation {
     lambda: f32,                    // Regularization strength
     fisher_info: Vec<f32>,          // Fisher information diagonal
@@ -494,12 +494,12 @@ impl ElasticWeightConsolidation {
 | Speculative decode | 1.3-1.5x | 0% | Draft model |
 | Continuous batching | 2-4x | 0% | vLLM |
 
-### 7.2 Ruvector Level
+### 7.2 Swarmvector Level
 
 | Optimization | Speedup | Quality Impact | Implementation |
 |--------------|---------|----------------|----------------|
 | HNSW tuning | Variable | Recall tradeoff | efSearch adjustment |
-| Product quantization | 4-8x memory | <5% | PQ in ruvector-core |
+| Product quantization | 4-8x memory | <5% | PQ in swarmvector-core |
 | Graph pruning | 1.2-1.5x | <1% | Edge weight threshold |
 | Batch retrieval | 2-3x | 0% | Parallel HNSW |
 | Caching | 10x+ (hits) | 0% | LRU with TTL |
@@ -569,11 +569,11 @@ Targets:
 
 ```toml
 [dependencies]
-ruvector-core = { path = "../ruvector-core" }
-ruvector-gnn = { path = "../ruvector-gnn" }
-ruvector-attention = { path = "../ruvector-attention" }
-ruvector-graph = { path = "../ruvector-graph" }
-ruvector-router-core = { path = "../ruvector-router-core" }
+swarmvector-core = { path = "../swarmvector-core" }
+swarmvector-gnn = { path = "../swarmvector-gnn" }
+swarmvector-attention = { path = "../swarmvector-attention" }
+swarmvector-graph = { path = "../swarmvector-graph" }
+swarmvector-router-core = { path = "../swarmvector-router-core" }
 ```
 
 ### 10.2 External Dependencies
@@ -609,4 +609,4 @@ tracing = "0.1"
 
 *Document Version: 1.0*
 *Last Updated: 2025-12-02*
-*Author: RuvLLM Architecture Team*
+*Author: SwarmLLM Architecture Team*

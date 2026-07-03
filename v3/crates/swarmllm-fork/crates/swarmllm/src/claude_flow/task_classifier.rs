@@ -65,7 +65,7 @@ pub struct ClassificationResult {
     pub recommended_agents: u8,
 }
 
-/// Task classifier using RuvLTRA embeddings
+/// Task classifier using SwarmLTRA embeddings
 pub struct TaskClassifier {
     /// Language detection patterns
     language_patterns: Vec<(String, Vec<&'static str>)>,

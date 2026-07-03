@@ -253,7 +253,7 @@ tags:
 
 # {} SONA Adapter
 
-This adapter was generated using [SONA (Self-Optimizing Neural Architecture)](https://github.com/ruvnet/swarmvector/tree/main/crates/sona) - a runtime-adaptive learning system.
+This adapter was generated using [SONA (Self-Optimizing Neural Architecture)](the upstream project (see NOTICE)) - a runtime-adaptive learning system.
 
 ## Model Details
 

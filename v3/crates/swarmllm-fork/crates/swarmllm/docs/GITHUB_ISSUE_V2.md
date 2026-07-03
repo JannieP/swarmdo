@@ -1,30 +1,30 @@
-# 🚀 RuvLLM v2.0 - High-Performance LLM Inference for Apple Silicon
+# 🚀 SwarmLLM v2.0 - High-Performance LLM Inference for Apple Silicon
 
-[![Crates.io](https://img.shields.io/crates/v/ruvllm.svg)](https://crates.io/crates/ruvllm)
-[![npm](https://img.shields.io/npm/v/@aspect/ruvllm.svg)](https://www.npmjs.com/package/@aspect/ruvllm)
-[![Documentation](https://img.shields.io/badge/docs-ruv.io-blue)](https://ruv.io/docs/ruvllm)
+[![Crates.io](https://img.shields.io/crates/v/swarmllm.svg)](https://crates.io/crates/swarmllm)
+[![npm](https://img.shields.io/npm/v/@aspect/swarmllm.svg)](https://www.npmjs.com/package/@aspect/swarmllm)
+[![Documentation](https://img.shields.io/badge/docs-swarmdo.com-blue)](https://swarmdo.com)
 [![License](https://img.shields.io/badge/license-MIT%2FApache--2.0-green)](LICENSE)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/aspect/ruvector/ci.yml?branch=main)](https://github.com/aspect/ruvector/actions)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/aspect/swarmvector/ci.yml?branch=main)](https://github.com/aspect/swarmvector/actions)
 [![Discord](https://img.shields.io/discord/1234567890?logo=discord&label=discord)](https://discord.gg/ruv)
 
 <p align="center">
-  <img src="https://ruv.io/assets/ruvllm-logo.svg" alt="RuvLLM" width="200"/>
+  <img src="https://swarmdo.com" alt="SwarmLLM" width="200"/>
   <br/>
   <strong>Run Large Language Models locally on your Mac with maximum performance</strong>
   <br/>
-  <a href="https://ruv.io/ruvllm">Website</a> •
-  <a href="https://ruv.io/docs/ruvllm">Documentation</a> •
+  <a href="https://swarmdo.com">Website</a> •
+  <a href="https://swarmdo.com">Documentation</a> •
   <a href="https://discord.gg/ruv">Discord</a> •
   <a href="https://twitter.com/raboruv">Twitter</a>
 </p>
 
 ---
 
-## What is RuvLLM?
+## What is SwarmLLM?
 
-**RuvLLM** is a blazing-fast LLM inference engine built in Rust, specifically optimized for Apple Silicon Macs (M1/M2/M3/M4). It lets you run AI models like Llama, Mistral, Phi, and Gemma directly on your laptop — no cloud, no API costs, complete privacy.
+**SwarmLLM** is a blazing-fast LLM inference engine built in Rust, specifically optimized for Apple Silicon Macs (M1/M2/M3/M4). It lets you run AI models like Llama, Mistral, Phi, and Gemma directly on your laptop — no cloud, no API costs, complete privacy.
 
-### Why RuvLLM?
+### Why SwarmLLM?
 
 - **🔥 Fast** — 40+ tokens/second on M4 Pro with optimized Metal shaders
 - **🍎 Apple Silicon Native** — Uses Metal GPU, Apple Neural Engine (ANE), and ARM NEON
@@ -56,7 +56,7 @@
 | **Hybrid GPU+ANE Pipeline** | Best of both worlds for optimal throughput |
 | **Flash Attention v2** | 2.5-7.5x faster attention computation |
 | **SONA Learning** | Self-optimizing neural architecture for adaptive inference |
-| **Ruvector Integration** | Built-in vector embeddings for RAG applications |
+| **Swarmvector Integration** | Built-in vector embeddings for RAG applications |
 
 ---
 
@@ -66,11 +66,11 @@
 
 ```bash
 # Add to Cargo.toml
-cargo add ruvllm --features inference-metal
+cargo add swarmllm --features inference-metal
 ```
 
 ```rust
-use ruvllm::{Engine, GenerateParams};
+use swarmllm::{Engine, GenerateParams};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -91,14 +91,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Node.js (npm)
 
 ```bash
-npm install @aspect/ruvllm
+npm install @aspect/swarmllm
 ```
 
 ```javascript
-import { RuvLLM } from '@aspect/ruvllm';
+import { SwarmLLM } from '@aspect/swarmllm';
 
 // Initialize with a model
-const llm = await RuvLLM.fromPretrained('microsoft/Phi-3-mini-4k-instruct-gguf');
+const llm = await SwarmLLM.fromPretrained('microsoft/Phi-3-mini-4k-instruct-gguf');
 
 // Generate text
 const response = await llm.generate('Explain quantum computing in simple terms:');
@@ -114,13 +114,13 @@ for await (const token of llm.stream('Write a haiku about coding:')) {
 
 ```bash
 # Install CLI
-cargo install ruvllm-cli
+cargo install swarmllm-cli
 
 # Run interactively
-ruvllm chat --model microsoft/Phi-3-mini-4k-instruct-gguf
+swarmllm chat --model microsoft/Phi-3-mini-4k-instruct-gguf
 
 # One-shot generation
-ruvllm generate "What is the meaning of life?" --model phi-3
+swarmllm generate "What is the meaning of life?" --model phi-3
 ```
 
 ---
@@ -133,7 +133,7 @@ ruvllm generate "What is the meaning of life?" --model phi-3
 Create a simple chatbot that runs entirely on your Mac:
 
 ```rust
-use ruvllm::{Engine, GenerateParams, ChatMessage};
+use swarmllm::{Engine, GenerateParams, ChatMessage};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let engine = Engine::from_pretrained("meta-llama/Llama-3.2-1B-Instruct-GGUF")?;
@@ -164,11 +164,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 Build a real-time streaming API:
 
 ```javascript
-import { RuvLLM } from '@aspect/ruvllm';
+import { SwarmLLM } from '@aspect/swarmllm';
 import express from 'express';
 
 const app = express();
-const llm = await RuvLLM.fromPretrained('phi-3-mini');
+const llm = await SwarmLLM.fromPretrained('phi-3-mini');
 
 app.get('/stream', async (req, res) => {
     const prompt = req.query.prompt;
@@ -187,13 +187,13 @@ app.get('/stream', async (req, res) => {
 app.listen(3000);
 ```
 
-### Tutorial 3: RAG with Ruvector
+### Tutorial 3: RAG with Swarmvector
 
-Combine RuvLLM with Ruvector for retrieval-augmented generation:
+Combine SwarmLLM with Swarmvector for retrieval-augmented generation:
 
 ```rust
-use ruvllm::Engine;
-use ruvector_core::{VectorDb, HnswConfig};
+use swarmllm::Engine;
+use swarmvector_core::{VectorDb, HnswConfig};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Initialize vector database
@@ -203,11 +203,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let llm = Engine::from_pretrained("phi-3-mini")?;
 
     // Add documents (embeddings generated automatically)
-    db.add_document("doc1", "RuvLLM is a fast LLM inference engine.")?;
+    db.add_document("doc1", "SwarmLLM is a fast LLM inference engine.")?;
     db.add_document("doc2", "It supports Metal GPU acceleration.")?;
 
     // Query and generate
-    let query = "What is RuvLLM?";
+    let query = "What is SwarmLLM?";
     let context = db.search(query, 3)?;
 
     let prompt = format!(
@@ -231,12 +231,12 @@ Run models directly in the browser:
 <html>
 <head>
     <script type="module">
-        import init, { RuvLLM } from 'https://unpkg.com/@aspect/ruvllm-wasm/ruvllm.js';
+        import init, { SwarmLLM } from 'https://unpkg.com/@aspect/swarmllm-wasm/swarmllm.js';
 
         async function main() {
             await init();
 
-            const llm = await RuvLLM.fromUrl('/models/phi-3-mini-q4.gguf');
+            const llm = await SwarmLLM.fromUrl('/models/phi-3-mini-q4.gguf');
 
             const output = document.getElementById('output');
 
@@ -266,7 +266,7 @@ Run models directly in the browser:
 Fine-tune model loading for your specific hardware:
 
 ```rust
-use ruvllm::{Engine, ModelConfig, ComputeBackend, Quantization};
+use swarmllm::{Engine, ModelConfig, ComputeBackend, Quantization};
 
 let engine = Engine::builder()
     .model_path("/path/to/model.gguf")
@@ -283,7 +283,7 @@ let engine = Engine::builder()
 Leverage the dedicated ML accelerator on Apple Silicon:
 
 ```rust
-use ruvllm::{Engine, CoreMLBackend, ComputeUnits};
+use swarmllm::{Engine, CoreMLBackend, ComputeUnits};
 
 // Create Core ML backend with ANE
 let backend = CoreMLBackend::new()?
@@ -302,7 +302,7 @@ let response = backend.generate("Hello", GenerateParams::default())?;
 Maximize throughput with intelligent workload distribution:
 
 ```rust
-use ruvllm::kernels::{should_use_ane_matmul, get_ane_recommendation};
+use swarmllm::kernels::{should_use_ane_matmul, get_ane_recommendation};
 
 // Check if ANE is beneficial for your matrix size
 let recommendation = get_ane_recommendation(batch_size, hidden_dim, vocab_size);
@@ -319,7 +319,7 @@ if recommendation.use_ane {
 Build a high-throughput inference server:
 
 ```rust
-use ruvllm::serving::{
+use swarmllm::serving::{
     ContinuousBatchScheduler, KvCacheManager, InferenceRequest, SchedulerConfig
 };
 
@@ -351,7 +351,7 @@ while let Some(batch) = scheduler.schedule() {
 Speed up generation with draft models:
 
 ```rust
-use ruvllm::speculative::{SpeculativeDecoder, SpeculativeConfig};
+use swarmllm::speculative::{SpeculativeDecoder, SpeculativeConfig};
 
 let config = SpeculativeConfig {
     draft_model: "phi-3-mini-draft",    // Small, fast model
@@ -371,13 +371,13 @@ let response = decoder.generate("Explain relativity:", params)?;
 Use custom tokenizers for specialized models:
 
 ```rust
-use ruvllm::tokenizer::{RuvTokenizer, TokenizerConfig};
+use swarmllm::tokenizer::{SwarmTokenizer, TokenizerConfig};
 
 // Load from HuggingFace
-let tokenizer = RuvTokenizer::from_pretrained("meta-llama/Llama-3.2-1B")?;
+let tokenizer = SwarmTokenizer::from_pretrained("meta-llama/Llama-3.2-1B")?;
 
 // Or from local file
-let tokenizer = RuvTokenizer::from_file("./tokenizer.json")?;
+let tokenizer = SwarmTokenizer::from_file("./tokenizer.json")?;
 
 // Encode/decode
 let tokens = tokenizer.encode("Hello, world!")?;
@@ -395,7 +395,7 @@ let formatted = tokenizer.apply_chat_template(&[
 Optimize for large models on limited memory:
 
 ```rust
-use ruvllm::{Engine, MemoryConfig};
+use swarmllm::{Engine, MemoryConfig};
 
 let engine = Engine::builder()
     .model_path("llama-70b.gguf")
@@ -413,7 +413,7 @@ let engine = Engine::builder()
 Generate embeddings for retrieval applications:
 
 ```rust
-use ruvllm::Engine;
+use swarmllm::Engine;
 
 let engine = Engine::from_pretrained("nomic-embed-text-v1.5")?;
 
@@ -428,15 +428,15 @@ let embeddings = engine.embed_batch(&[
 ])?;
 
 // Cosine similarity
-let similarity = ruvector_core::cosine_similarity(&embedding, &embeddings[0]);
+let similarity = swarmvector_core::cosine_similarity(&embedding, &embeddings[0]);
 ```
 
 ### Node.js Advanced Configuration
 
 ```javascript
-import { RuvLLM, ModelConfig, ComputeBackend } from '@aspect/ruvllm';
+import { SwarmLLM, ModelConfig, ComputeBackend } from '@aspect/swarmllm';
 
-const llm = await RuvLLM.create({
+const llm = await SwarmLLM.create({
     modelPath: './models/phi-3-mini-q4.gguf',
     backend: ComputeBackend.Metal,
     contextLength: 8192,
@@ -524,7 +524,7 @@ Tested on M4 Pro (14-core CPU, 20-core GPU, 38 TOPS ANE):
 
 ## 🔌 Supported Models
 
-RuvLLM supports any model in GGUF format. Popular options:
+SwarmLLM supports any model in GGUF format. Popular options:
 
 - **Llama 3.2** (1B, 3B) — Meta's latest efficient models
 - **Phi-3** (Mini, Small, Medium) — Microsoft's powerful small models
@@ -543,10 +543,10 @@ Download models from [Hugging Face](https://huggingface.co/models?library=gguf).
 
 ```toml
 [dependencies]
-ruvllm = { version = "2.0", features = ["inference-metal"] }
+swarmllm = { version = "2.0", features = ["inference-metal"] }
 
 # Or with all features
-ruvllm = { version = "2.0", features = ["inference-metal", "coreml", "speculative"] }
+swarmllm = { version = "2.0", features = ["inference-metal", "coreml", "speculative"] }
 ```
 
 Available features:
@@ -559,18 +559,18 @@ Available features:
 ### Node.js
 
 ```bash
-npm install @aspect/ruvllm
+npm install @aspect/swarmllm
 # or
-yarn add @aspect/ruvllm
+yarn add @aspect/swarmllm
 # or
-pnpm add @aspect/ruvllm
+pnpm add @aspect/swarmllm
 ```
 
 ### From Source
 
 ```bash
-git clone https://github.com/aspect/ruvector
-cd ruvector/crates/ruvllm
+git clone https://github.com/aspect/swarmvector
+cd swarmvector/crates/swarmllm
 cargo build --release --features inference-metal
 ```
 
@@ -580,20 +580,20 @@ cargo build --release --features inference-metal
 
 We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-- 🐛 [Report bugs](https://github.com/aspect/ruvector/issues/new?template=bug_report.md)
-- 💡 [Request features](https://github.com/aspect/ruvector/issues/new?template=feature_request.md)
-- 📖 [Improve docs](https://github.com/aspect/ruvector/tree/main/docs)
+- 🐛 [Report bugs](https://github.com/aspect/swarmvector/issues/new?template=bug_report.md)
+- 💡 [Request features](https://github.com/aspect/swarmvector/issues/new?template=feature_request.md)
+- 📖 [Improve docs](https://github.com/aspect/swarmvector/tree/main/docs)
 
 ---
 
 ## 📄 License
 
-RuvLLM is dual-licensed under MIT and Apache 2.0. See [LICENSE-MIT](LICENSE-MIT) and [LICENSE-APACHE](LICENSE-APACHE).
+SwarmLLM is dual-licensed under MIT and Apache 2.0. See [LICENSE-MIT](LICENSE-MIT) and [LICENSE-APACHE](LICENSE-APACHE).
 
 ---
 
 <p align="center">
-  Made with ❤️ by <a href="https://ruv.io">ruv.io</a>
+  Made with ❤️ by <a href="https://swarmdo.com">swarmdo.com</a>
   <br/>
-  <sub>Part of the <a href="https://github.com/aspect/ruvector">Ruvector</a> ecosystem</sub>
+  <sub>Part of the <a href="https://github.com/aspect/swarmvector">Swarmvector</a> ecosystem</sub>
 </p>

@@ -2,18 +2,17 @@
   "name": "@swarmvector/learning-wasm",
   "type": "module",
   "collaborators": [
-    "rUv <ruvnet@users.noreply.github.com>"
+    "the upstream author <upstream@users.noreply.github.com>"
   ],
-  "author": "SwarmVector Team <ruvnet@users.noreply.github.com>",
   "description": "Ultra-fast MicroLoRA adaptation for WASM - rank-2 LoRA with <100us latency for per-operator learning",
   "version": "0.1.29",
   "license": "MIT OR Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ruvnet/swarmvector"
+    "url": "the upstream project (see NOTICE)"
   },
   "bugs": {
-    "url": "https://github.com/ruvnet/swarmvector/issues"
+    "url": "the upstream project (see NOTICE)"
   },
   "files": [
     "swarmvector_learning_wasm_bg.wasm",
@@ -23,7 +22,7 @@
     "README.md"
   ],
   "main": "swarmvector_learning_wasm.js",
-  "homepage": "https://ruv.io",
+  "homepage": "https://swarmdo.com",
   "types": "swarmvector_learning_wasm.d.ts",
   "sideEffects": [
     "./snippets/*"

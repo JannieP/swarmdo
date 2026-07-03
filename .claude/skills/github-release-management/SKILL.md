@@ -1015,8 +1015,8 @@ npx swarmdo@alpha github version-sync \
 - **deployment-orchestration**: Advanced deployment strategies
 
 ### Support & Community
-- Issues: https://github.com/ruvnet/claude-flow/issues
-- Discussions: https://github.com/ruvnet/claude-flow/discussions
+- Issues: the upstream project (see NOTICE)
+- Discussions: the upstream project (see NOTICE)
 - Documentation: https://swarmdo.dev/docs
 
 ---

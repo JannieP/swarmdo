@@ -7,9 +7,9 @@
  * pure, testable module. Operators restrict the exposed/callable MCP tool surface
  * via environment variables:
  *
- *   RUVECTOR_MCP_ALLOW="hooks_route,hooks_recall"  → only these are exposed/callable
- *   RUVECTOR_MCP_DENY="hooks_security_scan"        → these are blocked (wins over allow)
- *   RUVECTOR_MCP_PROFILE=readonly                  → a curated safe subset
+ *   SWARMVECTOR_MCP_ALLOW="hooks_route,hooks_recall"  → only these are exposed/callable
+ *   SWARMVECTOR_MCP_DENY="hooks_security_scan"        → these are blocked (wins over allow)
+ *   SWARMVECTOR_MCP_PROFILE=readonly                  → a curated safe subset
  *
  * Precedence: DENY > ALLOW/PROFILE > (default allow-all).
  * With no policy configured, all registered tools are allowed (backward compatible);
@@ -51,9 +51,9 @@ function parseList(value) {
  */
 function buildToolPolicy(env) {
   const e = env || process.env;
-  const allow = parseList(e.RUVECTOR_MCP_ALLOW);
-  const deny = new Set(parseList(e.RUVECTOR_MCP_DENY));
-  const profileName = e.RUVECTOR_MCP_PROFILE && e.RUVECTOR_MCP_PROFILE.trim();
+  const allow = parseList(e.SWARMVECTOR_MCP_ALLOW);
+  const deny = new Set(parseList(e.SWARMVECTOR_MCP_DENY));
+  const profileName = e.SWARMVECTOR_MCP_PROFILE && e.SWARMVECTOR_MCP_PROFILE.trim();
 
   let allowSet = null;
   if (profileName && MCP_PROFILES[profileName]) {

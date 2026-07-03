@@ -199,7 +199,7 @@ EXAMPLES:
   # List top 5 most used memories
   npx agentic-flow reasoningbank list --sort usage --limit 5
 
-For more information: https://github.com/ruvnet/agentic-flow
+For more information: the upstream project (see NOTICE)
   `);
 }
 //# sourceMappingURL=reasoningbankCommands.js.map

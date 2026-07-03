@@ -1,6 +1,6 @@
 ---
 id: ADR-0001
-title: rufflo-market-data plugin contract — pinning, namespace coordination, namespace-routing fix, embeddings_generate fix, smoke as contract
+title: swarmdo-market-data plugin contract — pinning, namespace coordination, namespace-routing fix, embeddings_generate fix, smoke as contract
 status: Accepted
 date: 2026-05-04
 updated: 2026-05-09
@@ -11,13 +11,13 @@ tags: [plugin, market-data, ohlcv, candlestick, namespace, hnsw, smoke-test]
 
 ## Context
 
-`rufflo-market-data` (v0.1.0) — feed ingestion, OHLCV normalization, candlestick pattern detection. 1 agent + 2 skills + 1 command (5 subcommands).
+`swarmdo-market-data` (v0.1.0) — feed ingestion, OHLCV normalization, candlestick pattern detection. 1 agent + 2 skills + 1 command (5 subcommands).
 
 ### Three real bugs found in skills
 
-1. `market-ingest/SKILL.md` referenced `mcp__rufflo__embeddings_embed` — that tool name does not exist. Real tool is `embeddings_generate` (per [rufflo-knowledge-graph ADR-0001](../../rufflo-knowledge-graph/docs/adrs/0001-knowledge-graph-contract.md), same fix).
-2. `market-ingest/SKILL.md` used `agentdb_hierarchical-store` with `namespace: 'market-data'`. Per [rufflo-agentdb ADR-0001 §"Namespace convention"](../../rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md), `agentdb_hierarchical-*` routes by **tier** (`working|episodic|semantic`), not namespace. The namespace arg was silently ignored.
-3. `market-pattern/SKILL.md` had the same hierarchical-recall + namespace bug **plus** the same pattern-store + namespace bug as rufflo-cost-tracker (`agentdb_pattern-store` with `namespace: 'market-patterns'` — ReasoningBank ignores namespace).
+1. `market-ingest/SKILL.md` referenced `mcp__swarmdo__embeddings_embed` — that tool name does not exist. Real tool is `embeddings_generate` (per [swarmdo-knowledge-graph ADR-0001](../../swarmdo-knowledge-graph/docs/adrs/0001-knowledge-graph-contract.md), same fix).
+2. `market-ingest/SKILL.md` used `agentdb_hierarchical-store` with `namespace: 'market-data'`. Per [swarmdo-agentdb ADR-0001 §"Namespace convention"](../../swarmdo-agentdb/docs/adrs/0001-agentdb-optimization.md), `agentdb_hierarchical-*` routes by **tier** (`working|episodic|semantic`), not namespace. The namespace arg was silently ignored.
+3. `market-pattern/SKILL.md` had the same hierarchical-recall + namespace bug **plus** the same pattern-store + namespace bug as swarmdo-cost-tracker (`agentdb_pattern-store` with `namespace: 'market-patterns'` — ReasoningBank ignores namespace).
 
 All three fixed in this ADR pass by switching to `memory_*` (namespace-routed) for the load/store paths and documenting the dual write path for optimization-style patterns (per the cost-tracker precedent).
 
@@ -46,16 +46,16 @@ All three fixed in this ADR pass by switching to `memory_*` (namespace-routed) f
 ## Verification
 
 ```bash
-bash plugins/rufflo-market-data/scripts/smoke.sh
+bash plugins/swarmdo-market-data/scripts/smoke.sh
 # Expected: "11 passed, 0 failed"
 ```
 
 ## Related
 
-- `plugins/rufflo-cost-tracker/docs/adrs/0001-cost-tracker-contract.md` — same namespace-routing bug class
-- `plugins/rufflo-knowledge-graph/docs/adrs/0001-knowledge-graph-contract.md` — same `embeddings_embed` rename
-- `plugins/rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md` — namespace convention this ADR fixes a violation of
+- `plugins/swarmdo-cost-tracker/docs/adrs/0001-cost-tracker-contract.md` — same namespace-routing bug class
+- `plugins/swarmdo-knowledge-graph/docs/adrs/0001-knowledge-graph-contract.md` — same `embeddings_embed` rename
+- `plugins/swarmdo-agentdb/docs/adrs/0001-agentdb-optimization.md` — namespace convention this ADR fixes a violation of
 
 ## Implementation status
 
-Plugin version v0.2.0 shipped and listed in marketplace.json. Source exists at `plugins/rufflo-market-data/`. Contract elements implemented: `embeddings_embed` → `embeddings_generate` tool-name drift fixed; `agentdb_hierarchical-*` namespace arg bug fixed (switched to `memory_*`); `agentdb_pattern-store` namespace arg bug fixed; smoke-as-contract gate defined in `scripts/smoke.sh` (11 checks).
+Plugin version v0.2.0 shipped and listed in marketplace.json. Source exists at `plugins/swarmdo-market-data/`. Contract elements implemented: `embeddings_embed` → `embeddings_generate` tool-name drift fixed; `agentdb_hierarchical-*` namespace arg bug fixed (switched to `memory_*`); `agentdb_pattern-store` namespace arg bug fixed; smoke-as-contract gate defined in `scripts/smoke.sh` (11 checks).

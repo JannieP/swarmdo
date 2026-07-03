@@ -79,7 +79,7 @@ class IntelligenceEngine {
         this.onnxReady = false;
         this.onnxInitPromise = null;
         this.onnxInitError = null;
-        /** RUVECTOR_EMBEDDER=minilm: fail rather than fall back (ADR-210 D5). */
+        /** SWARMVECTOR_EMBEDDER=minilm: fail rather than fall back (ADR-210 D5). */
         this.onnxHardRequire = false;
         this.parallel = null;
         // In-memory data structures
@@ -98,8 +98,8 @@ class IntelligenceEngine {
         this.learningEnabled = true;
         this.episodeBatchQueue = [];
         // ADR-210 D1/D5: ONNX semantic embeddings are the default. Environment
-        // rollout flags override config: RUVECTOR_EMBEDDER=auto|minilm|hash wins
-        // over RUVECTOR_ONNX=0|1, which wins over config.enableOnnx.
+        // rollout flags override config: SWARMVECTOR_EMBEDDER=auto|minilm|hash wins
+        // over SWARMVECTOR_ONNX=0|1, which wins over config.enableOnnx.
         const selection = (0, embedding_provenance_1.resolveEmbedderSelection)();
         let useOnnx;
         if (selection === 'hash') {
@@ -108,7 +108,7 @@ class IntelligenceEngine {
         else if (selection === 'minilm') {
             // Hard-require: init failure is an error, never a silent fallback.
             if (!(0, onnx_embedder_1.isOnnxAvailable)()) {
-                throw new Error('RUVECTOR_EMBEDDER=minilm (or RUVECTOR_ONNX=1) hard-requires the ONNX embedder, ' +
+                throw new Error('SWARMVECTOR_EMBEDDER=minilm (or SWARMVECTOR_ONNX=1) hard-requires the ONNX embedder, ' +
                     'but the bundled WASM files are missing. Reinstall swarmvector or unset the flag.');
             }
             useOnnx = true;
@@ -251,7 +251,7 @@ class IntelligenceEngine {
      *
      * ADR-210 D1: when ONNX is enabled but the model cannot load, the hash
      * fallback is used and reported (one stderr warning per process, and
-     * stats().embedderKind === 'hash-fallback'). Under RUVECTOR_EMBEDDER=minilm
+     * stats().embedderKind === 'hash-fallback'). Under SWARMVECTOR_EMBEDDER=minilm
      * the failure is an error instead — no fallback (D5).
      */
     async embedAsync(text) {
@@ -267,7 +267,7 @@ class IntelligenceEngine {
             }
             catch (e) {
                 if (this.onnxHardRequire) {
-                    throw new Error(`RUVECTOR_EMBEDDER=minilm hard-requires the ONNX embedder and fallback is disabled: ${e?.message ?? e}`);
+                    throw new Error(`SWARMVECTOR_EMBEDDER=minilm hard-requires the ONNX embedder and fallback is disabled: ${e?.message ?? e}`);
                 }
                 (0, embedding_provenance_1.warnHashFallbackOnce)(e?.message ?? String(e));
                 // Fall through to sync methods
@@ -283,7 +283,7 @@ class IntelligenceEngine {
      * status note); smaller batches use the single-threaded batch path. On
      * fallback, semantics match embedAsync exactly: hash per-item with the
      * loud once-per-process warning, or a hard error under
-     * RUVECTOR_EMBEDDER=minilm (D5). Texts are embedded as passages (D4).
+     * SWARMVECTOR_EMBEDDER=minilm (D5). Texts are embedded as passages (D4).
      *
      * Callers that start the pool should call shutdownEmbedderPool() when the
      * bulk work is done so worker threads do not keep the process alive.
@@ -302,7 +302,7 @@ class IntelligenceEngine {
             }
             catch (e) {
                 if (this.onnxHardRequire) {
-                    throw new Error(`RUVECTOR_EMBEDDER=minilm hard-requires the ONNX embedder and fallback is disabled: ${e?.message ?? e}`);
+                    throw new Error(`SWARMVECTOR_EMBEDDER=minilm hard-requires the ONNX embedder and fallback is disabled: ${e?.message ?? e}`);
                 }
                 (0, embedding_provenance_1.warnHashFallbackOnce)(e?.message ?? String(e));
                 // Fall through to sync methods
@@ -1167,7 +1167,7 @@ function createIntelligenceEngine(config) {
 /**
  * Create a high-performance engine with all features enabled.
  * Note (ADR-210): with default-on ONNX the embedding space is 384-dim; the
- * 512-dim setting only applies on the hash path (RUVECTOR_EMBEDDER=hash or
+ * 512-dim setting only applies on the hash path (SWARMVECTOR_EMBEDDER=hash or
  * ONNX unavailable). SONA dims follow the engine's actual embeddingDim.
  */
 function createHighPerformanceEngine() {

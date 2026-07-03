@@ -385,7 +385,7 @@ test:
 
 - [pgrx Documentation](https://github.com/pgcentralfoundation/pgrx)
 - [PostgreSQL Docker Hub](https://hub.docker.com/_/postgres)
-- [SwarmVector Repository](https://github.com/ruvnet/swarmvector)
+- [SwarmVector Repository](the upstream project (see NOTICE))
 
 ## License
 

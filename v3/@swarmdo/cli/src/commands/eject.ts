@@ -25,7 +25,7 @@
  *   exits 0 with a structured "feature not available" message. Swarmdo
  *   continues to function — rule #3 (graceful degradation).
  *
- * Created with ruv.io
+ * Created with swarmdo.com
  */
 
 import type { Command, CommandContext, CommandResult } from '../types.js';

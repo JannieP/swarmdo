@@ -14,11 +14,11 @@ Testing is critical for software quality, but teams struggle with test suite opt
 
 ## Decision
 
-Create a **Test Intelligence Plugin** that leverages RuVector WASM packages for predictive test selection, flaky test detection, test gap analysis, and automated test generation suggestions.
+Create a **Test Intelligence Plugin** that leverages SwarmVector WASM packages for predictive test selection, flaky test detection, test gap analysis, and automated test generation suggestions.
 
 ## Plugin Name
 
-`@rufflo/plugin-test-intelligence`
+`@swarmdo/plugin-test-intelligence`
 
 ## Description
 
@@ -29,9 +29,9 @@ A comprehensive test intelligence plugin combining reinforcement learning for op
 | Package | Purpose |
 |---------|---------|
 | `micro-hnsw-wasm` | Fast code-to-test similarity matching |
-| `ruvector-learning-wasm` | RL-based test selection and prioritization |
-| `ruvector-gnn-wasm` | Code-test dependency graphs for impact analysis |
-| `ruvector-sparse-inference-wasm` | Efficient flaky test pattern detection |
+| `swarmvector-learning-wasm` | RL-based test selection and prioritization |
+| `swarmvector-gnn-wasm` | Code-test dependency graphs for impact analysis |
+| `swarmvector-sparse-inference-wasm` | Efficient flaky test pattern detection |
 | `sona` | Continuous learning from test execution history |
 
 ## MCP Tools
@@ -379,9 +379,9 @@ Execution History --> SONA Learning --> RL Policy
 {
   "dependencies": {
     "micro-hnsw-wasm": "^0.2.0",
-    "ruvector-learning-wasm": "^0.1.0",
-    "ruvector-gnn-wasm": "^0.1.0",
-    "ruvector-sparse-inference-wasm": "^0.1.0",
+    "swarmvector-learning-wasm": "^0.1.0",
+    "swarmvector-gnn-wasm": "^0.1.0",
+    "swarmvector-sparse-inference-wasm": "^0.1.0",
     "sona": "^0.1.0",
     "istanbul-lib-coverage": "^3.2.0"
   }
@@ -408,7 +408,7 @@ Execution History --> SONA Learning --> RL Policy
 | ADR | Relationship |
 |-----|--------------|
 | ADR-004: Plugin Architecture | Foundation - Defines plugin structure |
-| ADR-017: RuVector Integration | Dependency - Provides WASM packages |
+| ADR-017: SwarmVector Integration | Dependency - Provides WASM packages |
 | ADR-035: Code Intelligence | Related - Code-test mapping |
 | ADR-037: Performance Optimizer | Related - Test performance analysis |
 | ADR-040: Quantum Optimizer | Related - Test selection optimization |
@@ -417,7 +417,7 @@ Execution History --> SONA Learning --> RL Policy
 
 - Google Test Selection: https://testing.googleblog.com/2019/11/debugging-test-selection.html
 - Predictive Test Selection Research: https://arxiv.org/abs/2108.06123
-- ADR-017: RuVector Integration
+- ADR-017: SwarmVector Integration
 - ADR-004: Plugin Architecture
 
 ---

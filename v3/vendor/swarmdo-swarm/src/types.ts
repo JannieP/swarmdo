@@ -1,5 +1,5 @@
 /**
- * Core types and interfaces for RuvSwarm
+ * Core types and interfaces for SwarmSwarm
  */
 
 export interface SwarmOptions {

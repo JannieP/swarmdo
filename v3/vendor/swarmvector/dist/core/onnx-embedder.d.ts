@@ -50,7 +50,7 @@ export interface SimilarityResult {
  * NOTE: This is a capability check, NOT a readiness check. It returns `true`
  * before `initOnnxEmbedder()` has run (so callers can decide whether to init).
  * To check whether the model has actually been loaded, use `isOnnxInitialized()`
- * or `isReady()`. See https://github.com/ruvnet/SwarmVector/issues/523.
+ * or `isReady()`. See the upstream project (see NOTICE)
  */
 export declare function isOnnxAvailable(): boolean;
 /**
@@ -97,7 +97,7 @@ export declare function isReady(): boolean;
  * export to avoid a barrel name collision. Equivalent to `isReady()`; provided
  * as a self-documenting gate so callers can distinguish "bundled" (available)
  * from "loaded" (initialized). See
- * https://github.com/ruvnet/SwarmVector/issues/523.
+ * the upstream project (see NOTICE)
  */
 export declare function isOnnxInitialized(): boolean;
 /** Model id of the loaded model, or null before init (ADR-210). */

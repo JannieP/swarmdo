@@ -1,19 +1,19 @@
-# ruvector-attention
+# swarmvector-attention
 
-[![Crates.io](https://img.shields.io/crates/v/ruvector-attention.svg)](https://crates.io/crates/ruvector-attention)
-[![Documentation](https://docs.rs/ruvector-attention/badge.svg)](https://docs.rs/ruvector-attention)
+[![Crates.io](https://img.shields.io/crates/v/swarmvector-attention.svg)](https://crates.io/crates/swarmvector-attention)
+[![Documentation](https://docs.rs/swarmvector-attention/badge.svg)](https://docs.rs/swarmvector-attention)
 [![License](https://img.shields.io/badge/license-MIT%2FApache--2.0-blue.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-142%20passing-brightgreen.svg)]()
 
 **46 attention mechanisms grounded in 7 mathematical theories -- from Flash Attention to optimal transport -- in one crate.**
 
 ```bash
-cargo add ruvector-attention
+cargo add swarmvector-attention
 ```
 
-Attention is the core operation in transformers, vector search, and graph neural networks, but most libraries give you one or two flavors and call it done. `ruvector-attention` ships 46 mechanisms spanning standard dot-product, sparse (Flash, linear, local-global), geometric (hyperbolic, mixed-curvature), graph (GAT, RoPE), and mixture-of-experts -- all SIMD-accelerated with quantization support. Pick the right attention for your data shape instead of forcing everything through softmax(QK^T/sqrt(d))V.
+Attention is the core operation in transformers, vector search, and graph neural networks, but most libraries give you one or two flavors and call it done. `swarmvector-attention` ships 46 mechanisms spanning standard dot-product, sparse (Flash, linear, local-global), geometric (hyperbolic, mixed-curvature), graph (GAT, RoPE), and mixture-of-experts -- all SIMD-accelerated with quantization support. Pick the right attention for your data shape instead of forcing everything through softmax(QK^T/sqrt(d))V.
 
-| | ruvector-attention | PyTorch `nn.MultiheadAttention` | FlashAttention (standalone) | xFormers |
+| | swarmvector-attention | PyTorch `nn.MultiheadAttention` | FlashAttention (standalone) | xFormers |
 |---|---|---|---|---|
 | **Mechanism count** | 46 | 1 (scaled dot-product) | 1 (Flash) | ~5 |
 | **Geometric attention** | Hyperbolic, spherical, mixed-curvature | No | No | No |
@@ -34,7 +34,7 @@ Attention is the core operation in transformers, vector search, and graph neural
 | **PDE/Diffusion Attention** | Runs heat equation on a similarity graph | Smooth, noise-robust attention for irregular data |
 | **Unified Diagnostics** | Health monitoring and automatic mode selection across all 7 theories | One report tells you which attention works best for your data |
 
-> Part of the [SwarmVector](https://github.com/ruvnet/ruvector) ecosystem -- the self-learning vector database with graph intelligence.
+> Part of the [SwarmVector](the upstream project (see NOTICE)) ecosystem -- the self-learning vector database with graph intelligence.
 
 ## Supported Attention Mechanisms
 
@@ -78,7 +78,7 @@ This crate implements attention mechanisms grounded in 7 distinct mathematical t
 Attention as mass transport between query and key distributions using Wasserstein distance.
 
 ```rust
-use ruvector_attention::{SlicedWassersteinAttention, SlicedWassersteinConfig};
+use swarmvector_attention::{SlicedWassersteinAttention, SlicedWassersteinConfig};
 
 // Configure Sliced Wasserstein with 16 random projections
 let config = SlicedWassersteinConfig {
@@ -108,7 +108,7 @@ let output = ot_attention.compute_sliced(&query, &keys, &values)?;
 Attention in product manifolds combining Euclidean (E), Hyperbolic (H), and Spherical (S) spaces.
 
 ```rust
-use ruvector_attention::{
+use swarmvector_attention::{
     MixedCurvatureFusedAttention, FusedCurvatureConfig,
     TangentSpaceMapper, TangentSpaceConfig
 };
@@ -141,7 +141,7 @@ let tangent_keys = mapper.map_to_tangent(&hyperbolic_keys);
 Adaptive attention that switches modes based on local coherence metrics.
 
 ```rust
-use ruvector_attention::{
+use swarmvector_attention::{
     TopologyGatedAttention, TopologyGatedConfig,
     AttentionMode, PolicyConfig, CoherenceMetric
 };
@@ -178,7 +178,7 @@ let mode = gated.current_mode(); // Stable, Cautious, or Freeze
 Natural gradient optimization using the Fisher Information Matrix.
 
 ```rust
-use ruvector_attention::{FisherMetric, FisherConfig, NaturalGradient, NaturalGradientConfig};
+use swarmvector_attention::{FisherMetric, FisherConfig, NaturalGradient, NaturalGradientConfig};
 
 // Fisher metric for probability distributions
 let fisher = FisherMetric::new(FisherConfig {
@@ -213,7 +213,7 @@ let new_logits = ng.step_logits(&logits, &grad_logits);
 Attention compression via the Information Bottleneck principle.
 
 ```rust
-use ruvector_attention::{InformationBottleneck, IBConfig, KLDivergence, DiagonalGaussian};
+use swarmvector_attention::{InformationBottleneck, IBConfig, KLDivergence, DiagonalGaussian};
 
 // Information bottleneck layer
 let ib = InformationBottleneck::new(IBConfig {
@@ -247,7 +247,7 @@ let z = ib.sample(&mean, &log_var, &epsilon);
 Attention as heat diffusion on the key similarity graph.
 
 ```rust
-use ruvector_attention::{
+use swarmvector_attention::{
     DiffusionAttention, DiffusionConfig,
     GraphLaplacian, LaplacianType
 };
@@ -291,7 +291,7 @@ let scales = diffusion.compute_multiscale(&query, &keys, 4);
 Diagnostic dashboard combining all metrics for intelligent attention mode selection.
 
 ```rust
-use ruvector_attention::{
+use swarmvector_attention::{
     ReportBuilder, ReportConfig, GeometryReport,
     MetricType, AttentionRecommendation
 };
@@ -338,7 +338,7 @@ for metric in &report.metrics {
 ## Quick Start
 
 ```rust
-use ruvector_attention::sdk::*;
+use swarmvector_attention::sdk::*;
 
 // Simple multi-head attention
 let attention = multi_head(768, 12)
@@ -370,14 +370,14 @@ Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-ruvector-attention = "0.1"
+swarmvector-attention = "0.1"
 ```
 
 Or with specific features:
 
 ```toml
 [dependencies]
-ruvector-attention = { version = "0.1", features = ["simd", "wasm"] }
+swarmvector-attention = { version = "0.1", features = ["simd", "wasm"] }
 ```
 
 ## SDK Overview
@@ -387,7 +387,7 @@ ruvector-attention = { version = "0.1", features = ["simd", "wasm"] }
 The builder provides a fluent interface for configuring attention:
 
 ```rust
-use ruvector_attention::sdk::*;
+use swarmvector_attention::sdk::*;
 
 // Flash attention for long sequences
 let flash = flash(1024, 128)  // dim, block_size
@@ -415,7 +415,7 @@ let hyperbolic = hyperbolic(512, -1.0)  // dim, curvature
 Compose attention with pre/post processing:
 
 ```rust
-use ruvector_attention::sdk::*;
+use swarmvector_attention::sdk::*;
 
 let attention = multi_head(768, 12).build()?;
 
@@ -434,7 +434,7 @@ let output = pipeline.run(&query, &keys, &values)?;
 Pre-configured attention for popular models:
 
 ```rust
-use ruvector_attention::sdk::presets::*;
+use swarmvector_attention::sdk::presets::*;
 
 // Model-specific presets
 let bert = AttentionPreset::Bert.builder(768).build()?;
@@ -457,7 +457,7 @@ let gpt2 = from_model_name("gpt2", 768)?;
 ## Architecture
 
 ```
-ruvector-attention/
+swarmvector-attention/
 ├── src/
 │   ├── lib.rs                 # Main crate entry
 │   ├── error.rs               # Error types
@@ -535,7 +535,7 @@ ruvector-attention/
 ### Transformer Block
 
 ```rust
-use ruvector_attention::sdk::*;
+use swarmvector_attention::sdk::*;
 
 fn create_transformer_block(dim: usize) -> AttentionResult<AttentionPipeline> {
     let attention = multi_head(dim, 12)
@@ -553,7 +553,7 @@ fn create_transformer_block(dim: usize) -> AttentionResult<AttentionPipeline> {
 ### Long Context Processing
 
 ```rust
-use ruvector_attention::sdk::*;
+use swarmvector_attention::sdk::*;
 
 fn create_long_context_attention(dim: usize, max_len: usize)
     -> AttentionResult<Box<dyn Attention>> {
@@ -570,7 +570,7 @@ fn create_long_context_attention(dim: usize, max_len: usize)
 ### Graph Neural Network
 
 ```rust
-use ruvector_attention::sdk::*;
+use swarmvector_attention::sdk::*;
 
 fn create_graph_attention(dim: usize, is_tree: bool)
     -> AttentionResult<Box<dyn Attention>> {
@@ -635,8 +635,8 @@ On a typical workload (batch_size=32, seq_len=512, dim=768):
 Combine multiple geometric attention mechanisms for hierarchical data.
 
 ```rust
-use ruvector_attention::*;
-use ruvector_attention::sdk::*;
+use swarmvector_attention::*;
+use swarmvector_attention::sdk::*;
 
 fn create_geometry_aware_block(dim: usize) -> AttentionResult<AttentionPipeline> {
     // Use hyperbolic attention for hierarchy + standard for local patterns
@@ -656,7 +656,7 @@ fn create_geometry_aware_block(dim: usize) -> AttentionResult<AttentionPipeline>
 Use the unified report to automatically select the best attention mode.
 
 ```rust
-use ruvector_attention::*;
+use swarmvector_attention::*;
 
 fn adaptive_attention(
     query: &[f32],
@@ -701,7 +701,7 @@ fn adaptive_attention(
 Use VIB to learn compressed attention representations.
 
 ```rust
-use ruvector_attention::*;
+use swarmvector_attention::*;
 
 struct CompressedAttention {
     ib: InformationBottleneck,
@@ -754,7 +754,7 @@ impl CompressedAttention {
 Use diffusion attention at multiple scales for long documents.
 
 ```rust
-use ruvector_attention::*;
+use swarmvector_attention::*;
 
 fn document_understanding(
     query: &[f32],
@@ -786,7 +786,7 @@ fn document_understanding(
 Train attention parameters with geometry-aware optimization.
 
 ```rust
-use ruvector_attention::*;
+use swarmvector_attention::*;
 
 fn natural_gradient_step(
     logits: &[f32],
@@ -825,7 +825,7 @@ fn softmax(logits: &[f32]) -> Vec<f32> {
 ## Documentation
 
 - [SDK Guide](docs/SDK_GUIDE.md) - Comprehensive SDK usage guide
-- [API Documentation](https://docs.rs/ruvector-attention) - Full API reference
+- [API Documentation](https://docs.rs/swarmvector-attention) - Full API reference
 - [Examples](examples/) - Working code examples
 
 ## Contributing
@@ -846,16 +846,16 @@ at your option.
 If you use this crate in your research, please cite:
 
 ```bibtex
-@software{ruvector_attention,
-  title = {ruvector-attention: Advanced Attention Mechanisms for Vector Search},
-  author = {ruvector contributors},
+@software{swarmvector_attention,
+  title = {swarmvector-attention: Advanced Attention Mechanisms for Vector Search},
+  author = {swarmvector contributors},
   year = {2025},
-  url = {https://github.com/ruvnet/ruvector}
+  url = {the upstream project (see NOTICE)}
 }
 ```
 
 ## Related Projects
 
-- [ruvector](../ruvector) - Core vector search engine
-- [ruvector-graph](../ruvector-graph) - Graph neural networks
-- [ruvector-gnn](../ruvector-gnn) - Geometric neural networks
+- [swarmvector](../swarmvector) - Core vector search engine
+- [swarmvector-graph](../swarmvector-graph) - Graph neural networks
+- [swarmvector-gnn](../swarmvector-gnn) - Geometric neural networks

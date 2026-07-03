@@ -1,6 +1,6 @@
-# Rufflo v3 - Architecture Decision Records
+# Swarmdo v3 - Architecture Decision Records
 
-**Project:** Rufflo v3 Reimagining
+**Project:** Swarmdo v3 Reimagining
 **Date Range:** 2026-01-03 onwards
 **Status:** Proposed
 **Decision Authority:** Architecture Team
@@ -37,7 +37,7 @@
 
 ### Context
 
-Rufflo v2.x implements its own agent orchestration, coordination, and execution systems. This duplicates significant functionality available in agentic-flow, our primary dependency. The current architecture treats agentic-flow as an optional add-on rather than the foundation.
+Swarmdo v2.x implements its own agent orchestration, coordination, and execution systems. This duplicates significant functionality available in agentic-flow, our primary dependency. The current architecture treats agentic-flow as an optional add-on rather than the foundation.
 
 **Current State:**
 - Custom SwarmCoordinator (800+ lines)
@@ -51,7 +51,7 @@ Rufflo v2.x implements its own agent orchestration, coordination, and execution 
 ```
 Functionality Overlap:
 ┌─────────────────────────────────────┐
-│  rufflo   │   agentic-flow     │
+│  swarmdo   │   agentic-flow     │
 ├─────────────────────────────────────┤
 │ SwarmCoordinator │ Swarm System    │ 80% overlap
 │ AgentManager     │ Agent Lifecycle │ 70% overlap
@@ -62,7 +62,7 @@ Functionality Overlap:
 
 ### Decision
 
-**We will adopt agentic-flow as the core foundation for v3, building rufflo as a specialized extension rather than a parallel implementation.**
+**We will adopt agentic-flow as the core foundation for v3, building swarmdo as a specialized extension rather than a parallel implementation.**
 
 Specifically:
 1. Use agentic-flow's Agent base class for all agents
@@ -111,7 +111,7 @@ Specifically:
 import { Agent as AgenticFlowAgent } from 'agentic-flow';
 
 export class ClaudeFlowAgent extends AgenticFlowAgent {
-  // Add rufflo specific capabilities
+  // Add swarmdo specific capabilities
   async handleClaudeFlowTask(task: ClaudeTask): Promise<TaskResult> {
     // Claude-specific logic
   }
@@ -131,7 +131,7 @@ export class ClaudeFlowAgent extends AgenticFlowAgent {
 
 ### Success Metrics
 
-- [ ] <5,000 lines of orchestration code in rufflo (vs 15,000+ currently)
+- [ ] <5,000 lines of orchestration code in swarmdo (vs 15,000+ currently)
 - [ ] 100% feature parity with v2
 - [ ] <10% performance regression (ideally improvement)
 - [ ] All tests passing
@@ -519,7 +519,7 @@ await core.initialize();
 
 ### Context
 
-v2 CLI commands contain business logic, making it hard to use rufflo programmatically or via other interfaces.
+v2 CLI commands contain business logic, making it hard to use swarmdo programmatically or via other interfaces.
 
 ### Decision
 
@@ -775,7 +775,7 @@ Need to choose default memory backend for v3.
   memory: {
     backend: 'hybrid',
     sqlite: {
-      path: './rufflo.db'
+      path: './swarmdo.db'
     },
     agentdb: {
       dimensions: 1536, // OpenAI embeddings

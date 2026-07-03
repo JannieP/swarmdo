@@ -167,7 +167,7 @@ export async function getCachedTransformersPipeline(task = 'feature-extraction',
     }, 200 * 1024 * 1024 // 200MB estimate for transformers model
     );
 }
-export async function getCachedRuvectorCore() {
+export async function getCachedSwarmvectorCore() {
     return modelCache.getOrLoad('swarmvector-core', async () => {
         const swarmvector = await import('swarmvector');
         return swarmvector;

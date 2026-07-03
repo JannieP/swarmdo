@@ -14,7 +14,7 @@ How do we expose embedding operations through the MCP protocol for:
 2. Generating embeddings on-demand
 3. Comparing text similarity
 4. Semantic search across stored embeddings
-5. Neural substrate operations (RuVector)
+5. Neural substrate operations (SwarmVector)
 6. Hyperbolic embedding operations (Poincaré ball)
 
 ### Design Principles
@@ -26,7 +26,7 @@ Following ADR-005 (MCP-First API Design):
 
 ## Decision
 
-Implement 7 MCP tools in `@rufflo/cli/src/mcp-tools/embeddings-tools.ts`:
+Implement 7 MCP tools in `@swarmdo/cli/src/mcp-tools/embeddings-tools.ts`:
 
 ### 1. `embeddings/init`
 Initialize the ONNX embedding subsystem with hyperbolic support.
@@ -100,7 +100,7 @@ Semantic search across stored embeddings.
 ```
 
 ### 5. `embeddings/neural`
-Neural substrate operations (RuVector integration).
+Neural substrate operations (SwarmVector integration).
 
 ```typescript
 {
@@ -118,7 +118,7 @@ Neural substrate operations (RuVector integration).
 
 Actions:
 - `status` - Get neural substrate status
-- `init` - Initialize RuVector with SONA, Flash Attention, EWC++
+- `init` - Initialize SwarmVector with SONA, Flash Attention, EWC++
 - `drift` - Check semantic drift status
 - `consolidate` - Run memory consolidation (hippocampal dynamics)
 - `adapt` - Trigger SONA adaptation cycle
@@ -172,7 +172,7 @@ Get embeddings system status and configuration.
 │          ▼                     ▼                    ▼       │
 │  ┌─────────────────────────────────────────────────────────┐│
 │  │               Configuration Layer                        ││
-│  │    .rufflo/embeddings.json (persistent config)      ││
+│  │    .swarmdo/embeddings.json (persistent config)      ││
 │  └─────────────────────────────────────────────────────────┘│
 │                          │                                   │
 │          ┌───────────────┼───────────────┐                  │
@@ -180,7 +180,7 @@ Get embeddings system status and configuration.
 │  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐        │
 │  │ Embedding    │ │ Hyperbolic   │ │ Neural       │        │
 │  │ Generation   │ │ Projection   │ │ Substrate    │        │
-│  │ (mock/ONNX)  │ │ (Poincaré)   │ │ (RuVector)   │        │
+│  │ (mock/ONNX)  │ │ (Poincaré)   │ │ (SwarmVector)   │        │
 │  └──────────────┘ └──────────────┘ └──────────────┘        │
 │                                                              │
 │  ┌────────────────┐    ┌────────────────┐    ┌───────────┐ │
@@ -213,12 +213,12 @@ where scale ensures ||m|| < maxNorm
 
 ## Configuration
 
-Tools store configuration in `.rufflo/embeddings.json`:
+Tools store configuration in `.swarmdo/embeddings.json`:
 
 ```json
 {
   "model": "all-MiniLM-L6-v2",
-  "modelPath": ".rufflo/models",
+  "modelPath": ".swarmdo/models",
   "dimension": 384,
   "cacheSize": 256,
   "hyperbolic": {
@@ -231,7 +231,7 @@ Tools store configuration in `.rufflo/embeddings.json`:
     "enabled": true,
     "driftThreshold": 0.3,
     "decayRate": 0.01,
-    "ruvector": {
+    "swarmvector": {
       "enabled": true,
       "sona": true,
       "flashAttention": true,
@@ -339,7 +339,7 @@ export { embeddingsTools } from './embeddings-tools.js';
 - **MCP-first design**: Embeddings accessible to all MCP clients
 - **Consistent API**: Same tools for CLI and programmatic access
 - **Full feature coverage**: Init, generate, compare, search, neural, hyperbolic
-- **RuVector integration**: SONA, Flash Attention, EWC++ available via MCP
+- **SwarmVector integration**: SONA, Flash Attention, EWC++ available via MCP
 - **Stateless tools**: Configuration persisted to disk
 
 ### Negative
@@ -355,7 +355,7 @@ export { embeddingsTools } from './embeddings-tools.js';
 
 - ADR-005: MCP-First API Design
 - ADR-006: Unified Memory Service
-- ADR-017: RuVector Integration
+- ADR-017: SwarmVector Integration
 - ADR-023: ONNX Hyperbolic Embeddings Initialization
 
 ## References

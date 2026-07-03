@@ -5,7 +5,7 @@
 
 ## Context
 
-The model-routing Thompson-sampling bandit (`v3/@rufflo/cli/src/ruvector/model-router.ts`)
+The model-routing Thompson-sampling bandit (`v3/@swarmdo/cli/src/swarmvector/model-router.ts`)
 kept Beta(α,β) priors **globally per model**: `priors: Record<ClaudeModel, BetaPrior>`.
 The intelligence audit found this is too coarse — e.g. 8 Haiku failures on one hard
 task suppress Haiku for **all** tasks, including trivial ones it handles well. The

@@ -2,7 +2,7 @@
  * Hook Tools - Intelligent agent routing and self-learning
  * Integrates with ReasoningBank, LearningSystem, and Swarm
  *
- * NOW WITH FULL RUVECTOR INTELLIGENCE:
+ * NOW WITH FULL SWARMVECTOR INTELLIGENCE:
  * - @swarmvector/sona: Micro-LoRA (~0.05ms), EWC++, Trajectory tracking
  * - @swarmvector/attention: MoE, Flash, Hyperbolic, Graph attention
  * - swarmvector core: HNSW indexing (150x faster)

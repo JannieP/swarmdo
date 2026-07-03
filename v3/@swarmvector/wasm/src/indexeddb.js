@@ -1,5 +1,5 @@
 /**
- * IndexedDB Persistence Layer for Ruvector
+ * IndexedDB Persistence Layer for Swarmvector
  *
  * Provides:
  * - Save/load database state to IndexedDB

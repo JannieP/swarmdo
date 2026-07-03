@@ -34,7 +34,7 @@ interface InitComponents {
   helpers: boolean;     // .claude/helpers/
   statusline: boolean;  // statusline scripts
   mcp: boolean;         // .mcp.json
-  runtime: boolean;     // .rufflo/
+  runtime: boolean;     // .swarmdo/
 }
 ```
 
@@ -138,7 +138,7 @@ interface AgentsConfig {
 
 ```typescript
 interface MCPConfig {
-  claudeFlow: boolean;    // rufflo MCP server
+  claudeFlow: boolean;    // swarmdo MCP server
   agenticFlow: boolean;   // agentic-flow integration
   memory: boolean;        // Memory MCP tools
   neural: boolean;        // Neural MCP tools
@@ -150,11 +150,11 @@ interface MCPConfig {
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `RUFFLO_MODE` | `v3` | Operation mode |
-| `RUFFLO_HOOKS_ENABLED` | `true` | Enable hooks |
-| `RUFFLO_TOPOLOGY` | `hierarchical-mesh` | Swarm topology |
-| `RUFFLO_MAX_AGENTS` | `15` | Maximum agents |
-| `RUFFLO_MEMORY_BACKEND` | `hybrid` | Memory backend |
+| `SWARMDO_MODE` | `v3` | Operation mode |
+| `SWARMDO_HOOKS_ENABLED` | `true` | Enable hooks |
+| `SWARMDO_TOPOLOGY` | `hierarchical-mesh` | Swarm topology |
+| `SWARMDO_MAX_AGENTS` | `15` | Maximum agents |
+| `SWARMDO_MEMORY_BACKEND` | `hybrid` | Memory backend |
 
 ## Runtime Configuration
 

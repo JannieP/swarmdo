@@ -19,7 +19,7 @@ import { join } from 'node:path';
 
 // Try to import real embeddings.
 // Tier 0 (NEW, ADR-089): swarmvector@0.2.27 bundled ONNX (no sharp dep, fixes ADR-086's
-//   silent-fallback bug at source; closes the chain described in ruvnet/swarmvector#523).
+//   silent-fallback bug at source; closes the chain described in upstream/swarmvector#523).
 // Tier 1: agentic-flow v3 ReasoningBank (was Tier 1 — broken on darwin-arm64 without sharp)
 // Tier 2-3: @swarmdo/embeddings
 let realEmbeddings: { embed: (text: string) => Promise<number[]> } | null = null;

@@ -20,7 +20,7 @@
 //!
 //! ## Chat Templates
 //!
-//! The backend uses RuvTokenizer for advanced chat template support:
+//! The backend uses SwarmTokenizer for advanced chat template support:
 //! - Llama 3: `<|begin_of_text|><|start_header_id|>role<|end_header_id|>`
 //! - Mistral: `[INST] system\n\nuser [/INST]`
 //! - Qwen/ChatML: `<|im_start|>role\ncontent<|im_end|>`
@@ -50,7 +50,7 @@ use super::{
 };
 use crate::error::{Result, SwarmLLMError};
 use crate::sona::{SonaConfig, SonaIntegration, Trajectory};
-use crate::tokenizer::{ChatMessage, ChatTemplate, RuvTokenizer};
+use crate::tokenizer::{ChatMessage, ChatTemplate, SwarmTokenizer};
 
 use std::path::{Path, PathBuf};
 use std::sync::mpsc;
@@ -143,7 +143,7 @@ mod candle_impl {
 
     /// Candle tokenizer wrapper (legacy, kept for compatibility)
     ///
-    /// For new code, prefer using `RuvTokenizer` directly via `swarmllm::tokenizer`.
+    /// For new code, prefer using `SwarmTokenizer` directly via `swarmllm::tokenizer`.
     pub struct CandleTokenizer {
         pub inner: HfTokenizer,
         pub special_tokens: SpecialTokens,
@@ -182,9 +182,9 @@ mod candle_impl {
     ///
     /// The backend maintains two tokenizer references:
     /// - `tokenizer`: Legacy `CandleTokenizer` for trait compatibility
-    /// - `ruv_tokenizer`: Enhanced `RuvTokenizer` with chat templates and streaming decode
+    /// - `swarm_tokenizer`: Enhanced `SwarmTokenizer` with chat templates and streaming decode
     ///
-    /// For new features like chat templates, use the `ruv_tokenizer()` method.
+    /// For new features like chat templates, use the `swarm_tokenizer()` method.
     pub struct CandleBackend {
         /// Current device
         pub device: Device,
@@ -193,7 +193,7 @@ mod candle_impl {
         /// Legacy tokenizer (for trait compatibility)
         pub tokenizer: Option<CandleTokenizer>,
         /// Enhanced tokenizer with chat templates and streaming decode
-        pub ruv_tokenizer: Option<RuvTokenizer>,
+        pub swarm_tokenizer: Option<SwarmTokenizer>,
         /// Cache directory for models
         pub cache_dir: PathBuf,
         /// Configuration
@@ -212,7 +212,7 @@ mod candle_impl {
                 device: Device::Cpu,
                 model: None,
                 tokenizer: None,
-                ruv_tokenizer: None,
+                swarm_tokenizer: None,
                 cache_dir: get_cache_dir(),
                 config: None,
                 model_id: String::new(),
@@ -236,7 +236,7 @@ mod candle_impl {
                 device,
                 model: None,
                 tokenizer: None,
-                ruv_tokenizer: None,
+                swarm_tokenizer: None,
                 cache_dir,
                 config: None,
                 model_id: String::new(),
@@ -276,16 +276,16 @@ mod candle_impl {
             embedding
         }
 
-        /// Get the enhanced RuvTokenizer with chat template support
+        /// Get the enhanced SwarmTokenizer with chat template support
         ///
         /// Returns `None` if no tokenizer is loaded.
-        pub fn ruv_tokenizer(&self) -> Option<&RuvTokenizer> {
-            self.ruv_tokenizer.as_ref()
+        pub fn swarm_tokenizer(&self) -> Option<&SwarmTokenizer> {
+            self.swarm_tokenizer.as_ref()
         }
 
-        /// Get mutable reference to RuvTokenizer (needed for streaming decode)
-        pub fn ruv_tokenizer_mut(&mut self) -> Option<&mut RuvTokenizer> {
-            self.ruv_tokenizer.as_mut()
+        /// Get mutable reference to SwarmTokenizer (needed for streaming decode)
+        pub fn swarm_tokenizer_mut(&mut self) -> Option<&mut SwarmTokenizer> {
+            self.swarm_tokenizer.as_mut()
         }
 
         /// Apply chat template to messages
@@ -294,7 +294,7 @@ mod candle_impl {
         /// format multi-turn conversations for instruction-tuned models.
         pub fn apply_chat_template(&self, messages: &[ChatMessage]) -> Result<String> {
             let tokenizer = self
-                .ruv_tokenizer
+                .swarm_tokenizer
                 .as_ref()
                 .ok_or_else(|| SwarmLLMError::InvalidOperation("No tokenizer loaded".to_string()))?;
 
@@ -303,20 +303,20 @@ mod candle_impl {
 
         /// Get the current chat template
         pub fn chat_template(&self) -> Option<&ChatTemplate> {
-            self.ruv_tokenizer.as_ref().and_then(|t| t.chat_template())
+            self.swarm_tokenizer.as_ref().and_then(|t| t.chat_template())
         }
 
         /// Set a custom chat template
         pub fn set_chat_template(&mut self, template: ChatTemplate) {
-            if let Some(tokenizer) = self.ruv_tokenizer.take() {
-                self.ruv_tokenizer = Some(tokenizer.with_chat_template(template));
+            if let Some(tokenizer) = self.swarm_tokenizer.take() {
+                self.swarm_tokenizer = Some(tokenizer.with_chat_template(template));
             }
         }
 
         /// Decode a single token for streaming output
         pub fn decode_stream(&mut self, token: u32) -> Result<Option<String>> {
             let tokenizer = self
-                .ruv_tokenizer
+                .swarm_tokenizer
                 .as_mut()
                 .ok_or_else(|| SwarmLLMError::InvalidOperation("No tokenizer loaded".to_string()))?;
 
@@ -326,7 +326,7 @@ mod candle_impl {
         /// Flush any remaining bytes in the streaming buffer
         pub fn flush_stream(&mut self) -> Result<Option<String>> {
             let tokenizer = self
-                .ruv_tokenizer
+                .swarm_tokenizer
                 .as_mut()
                 .ok_or_else(|| SwarmLLMError::InvalidOperation("No tokenizer loaded".to_string()))?;
 
@@ -335,7 +335,7 @@ mod candle_impl {
 
         /// Reset the streaming decode buffer
         pub fn reset_stream(&mut self) {
-            if let Some(tokenizer) = self.ruv_tokenizer.as_mut() {
+            if let Some(tokenizer) = self.swarm_tokenizer.as_mut() {
                 tokenizer.reset_stream();
             }
         }
@@ -436,10 +436,10 @@ mod candle_impl {
 
             self.load_tokenizer(&tokenizer_path)?;
 
-            // Also load the enhanced RuvTokenizer with chat template support
-            let ruv_tokenizer = RuvTokenizer::from_file(&tokenizer_path)?;
+            // Also load the enhanced SwarmTokenizer with chat template support
+            let swarm_tokenizer = SwarmTokenizer::from_file(&tokenizer_path)?;
             let chat_template = ChatTemplate::detect_from_model_id(model_id);
-            self.ruv_tokenizer = Some(ruv_tokenizer.with_chat_template(chat_template));
+            self.swarm_tokenizer = Some(swarm_tokenizer.with_chat_template(chat_template));
 
             // Try to download GGUF file based on quantization
             let gguf_filenames = match config.quantization {
@@ -1250,9 +1250,9 @@ mod candle_impl {
                     let tokenizer_path = path.join("tokenizer.json");
                     if tokenizer_path.exists() {
                         self.load_tokenizer(&tokenizer_path)?;
-                        let ruv_tok = RuvTokenizer::from_file(&tokenizer_path)?;
+                        let swarm_tok = SwarmTokenizer::from_file(&tokenizer_path)?;
                         let template = ChatTemplate::detect_from_model_id(model_id);
-                        self.ruv_tokenizer = Some(ruv_tok.with_chat_template(template));
+                        self.swarm_tokenizer = Some(swarm_tok.with_chat_template(template));
                     }
 
                     self.model_id = model_id.to_string();
@@ -1634,7 +1634,7 @@ mod candle_impl {
         fn unload_model(&mut self) {
             self.model = None;
             self.tokenizer = None;
-            self.ruv_tokenizer = None;
+            self.swarm_tokenizer = None;
             self.config = None;
             self.model_id.clear();
             *self.current_pos.lock().expect("current_pos mutex poisoned") = 0;

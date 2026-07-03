@@ -7,7 +7,7 @@ The substrate plugin for Swarmdo memory. Wraps three CLI MCP families — `agent
 ## Install
 
 ```
-/plugin marketplace add ruvnet/swarmdo
+/plugin marketplace add upstream/swarmdo
 /plugin install swarmdo-agentdb@swarmdo
 ```
 

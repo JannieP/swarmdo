@@ -1,4 +1,4 @@
-# Ruvector WASM
+# Swarmvector WASM
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![npm version](https://img.shields.io/npm/v/@swarmvector/wasm.svg)](https://www.npmjs.com/package/@swarmvector/wasm)
@@ -8,13 +8,13 @@
 
 **High-performance vector database running entirely in your browser via WebAssembly.**
 
-> Bring **sub-millisecond vector search** to the edge with **offline-first** capabilities. Perfect for AI applications, semantic search, and recommendation engines that run completely client-side. Built by [rUv](https://ruv.io) with Rust and WebAssembly.
+> Bring **sub-millisecond vector search** to the edge with **offline-first** capabilities. Perfect for AI applications, semantic search, and recommendation engines that run completely client-side. Built by [the upstream author](https://swarmdo.com) with Rust and WebAssembly.
 
-## 🌟 Why Ruvector WASM?
+## 🌟 Why Swarmvector WASM?
 
 In the age of privacy-first, offline-capable web applications, running AI workloads **entirely in the browser** is no longer optional—it's essential.
 
-**Ruvector WASM brings enterprise-grade vector search to the browser:**
+**Swarmvector WASM brings enterprise-grade vector search to the browser:**
 
 - ⚡ **Blazing Fast**: <1ms query latency with HNSW indexing and SIMD acceleration
 - 🔒 **Privacy First**: All data stays in the browser—zero server round-trips
@@ -135,10 +135,10 @@ results.forEach(result => {
 `similarity = 1 - distance` so the documented "higher is better" contract holds.
 
 ```javascript
-import { RuvectorWasmAdapter } from '@swarmvector/wasm/adapter';
+import { SwarmvectorWasmAdapter } from '@swarmvector/wasm/adapter';
 
 // Loads + inits the WASM module and constructs the VectorDB for you.
-const index = await RuvectorWasmAdapter.create({ dimensions: 384, metric: 'cosine' });
+const index = await SwarmvectorWasmAdapter.create({ dimensions: 384, metric: 'cosine' });
 
 index.insert({ id: 'doc_1', vector: embedding, metadata: { title: 'My Document' } });
 
@@ -477,7 +477,7 @@ console.log(`Vectors: ${vectorCount}, Dims: ${dimensions}`);
 ### Throughput Comparison
 
 ```
-Operation               Ruvector WASM    Tensorflow.js    ml5.js
+Operation               Swarmvector WASM    Tensorflow.js    ml5.js
 ─────────────────────────────────────────────────────────────────
 Insert (ops/sec)        25,000           5,000            1,200
 Search (queries/sec)    500              80               20
@@ -621,7 +621,7 @@ npm install -g wasm-pack
 
 ```bash
 # Clone repository
-git clone https://github.com/ruvnet/swarmvector.git
+git clone the upstream project (see NOTICE)
 cd swarmvector/crates/swarmvector-wasm
 
 # Install dependencies
@@ -972,10 +972,10 @@ See [WASM Troubleshooting Guide](../../docs/getting-started/wasm-troubleshooting
 
 ### Community & Support
 
-- **GitHub**: [github.com/ruvnet/swarmvector](https://github.com/ruvnet/swarmvector)
-- **Discord**: [Join our community](https://discord.gg/ruvnet)
-- **Twitter**: [@ruvnet](https://twitter.com/ruvnet)
-- **Issues**: [Report bugs](https://github.com/ruvnet/swarmvector/issues)
+- **GitHub**: [the upstream project (see NOTICE)](the upstream project (see NOTICE))
+- **Discord**: [Join our community](https://discord.gg/upstream)
+- **Twitter**: [@upstream](https://twitter.com/upstream)
+- **Issues**: [Report bugs](the upstream project (see NOTICE))
 
 ## 📄 License
 
@@ -994,10 +994,10 @@ Free to use for commercial and personal projects.
 
 <div align="center">
 
-**Built by [rUv](https://ruv.io) • Open Source on [GitHub](https://github.com/ruvnet/swarmvector)**
+**Built by [the upstream author](https://swarmdo.com) • Open Source on [GitHub](the upstream project (see NOTICE))**
 
-[![Star on GitHub](https://img.shields.io/github/stars/ruvnet/swarmvector?style=social)](https://github.com/ruvnet/swarmvector)
-[![Follow @ruvnet](https://img.shields.io/twitter/follow/ruvnet?style=social)](https://twitter.com/ruvnet)
+[![Star on GitHub](https://img.shields.io/github/stars/upstream/swarmvector?style=social)](the upstream project (see NOTICE))
+[![Follow @upstream](https://img.shields.io/twitter/follow/upstream?style=social)](https://twitter.com/upstream)
 
 **Perfect for**: PWAs • Offline-First Apps • Edge Computing • Privacy-First AI
 

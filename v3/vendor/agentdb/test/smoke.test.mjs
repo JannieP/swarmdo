@@ -1,6 +1,6 @@
 /**
  * agentdb smoke test (node:test).
- * Vendored fork of the upstream `agentdb` (internal ruv->ruf sweep; name kept).
+ * Vendored fork of the upstream `agentdb` (internal swarm->ruf sweep; name kept).
  * swarmdo loads it via `await import('agentdb')`.
  */
 import { test } from 'node:test';

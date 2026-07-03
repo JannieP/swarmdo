@@ -572,13 +572,13 @@ Pre-scan agent inputs automatically:
 
 ## Contributing
 
-Contributions are welcome! Please see our [Contributing Guide](https://github.com/ruvnet/claude-flow/blob/main/CONTRIBUTING.md).
+Contributions are welcome! Please see our [Contributing Guide](the upstream project (see NOTICE)).
 
 ### Development
 
 ```bash
 # Clone repository
-git clone https://github.com/ruvnet/claude-flow.git
+git clone the upstream project (see NOTICE)
 cd swarmdo/v3/@swarmdo/aidefence
 
 # Install dependencies
@@ -625,6 +625,6 @@ MIT License - see [LICENSE](LICENSE) for details.
 ---
 
 <p align="center">
-  <strong>Built with security in mind by <a href="https://ruv.io">rUv</a></strong><br>
+  <strong>Built with security in mind by <a href="https://swarmdo.com">the upstream author</a></strong><br>
   <sub>Part of the Swarmdo ecosystem</sub>
 </p>

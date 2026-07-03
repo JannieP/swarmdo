@@ -123,7 +123,7 @@ Assign a risk score and let the model decide whether to proceed. Rejected becaus
 
 ## References
 
-- `v3/@rufflo/guidance/src/gates.ts` -- `EnforcementGates` class, `GateConfig`, default patterns
-- `v3/@rufflo/guidance/src/types.ts` -- `GateDecision`, `GateResult`, `GateConfig`
-- `v3/@rufflo/guidance/src/index.ts` -- `GuidanceControlPlane.evaluateCommand()`, `evaluateToolUse()`, `evaluateEdit()`
+- `v3/@swarmdo/guidance/src/gates.ts` -- `EnforcementGates` class, `GateConfig`, default patterns
+- `v3/@swarmdo/guidance/src/types.ts` -- `GateDecision`, `GateResult`, `GateConfig`
+- `v3/@swarmdo/guidance/src/index.ts` -- `GuidanceControlPlane.evaluateCommand()`, `evaluateToolUse()`, `evaluateEdit()`
 - ADR-G001 -- Why enforcement lives outside the model

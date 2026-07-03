@@ -28,10 +28,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ruvnet/swarmvector",
+    "url": "the upstream project (see NOTICE)",
     "directory": "crates/swarmvector-attention-node"
   },
-  "author": "rUv <ruv@ruv.io>",
   "license": "MIT OR Apache-2.0",
   "keywords": [
     "attention",

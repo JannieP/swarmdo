@@ -2,7 +2,7 @@
 
 **Status**: Proposed
 **Date**: 2026-06-02
-**Issue**: [ruvnet/ruflo#2248](https://github.com/ruvnet/ruflo/issues/2248)
+**Issue**: [upstream/swarmdo#2248](the upstream project (see NOTICE))
 **Related**: ADR-012 (MCP Security Features), ADR-013 (Core Security Module), ADR-131 (ToolOutputGuardrail — content layer), ADR-145 (Plugin supply-chain — install layer)
 
 ## Context
@@ -19,7 +19,7 @@ The distinction matters:
 
 ### Evidence
 
-1. **MCP Authentication Measurement** (arXiv:2605.22333, May 2026, Grade A — empirical): First survey of 7,973 live MCP servers. **40.55% expose tools with zero authentication; 96.6% of OAuth-enabled servers contain ≥1 exploitable flaw** (most common: improper scope validation). Rufflo registers MCP tools but performs no runtime authentication check on server identity before accepting tool responses, so any agent that calls a federated MCP tool today has a >40% chance of trusting an unauthenticated source.
+1. **MCP Authentication Measurement** (arXiv:2605.22333, May 2026, Grade A — empirical): First survey of 7,973 live MCP servers. **40.55% expose tools with zero authentication; 96.6% of OAuth-enabled servers contain ≥1 exploitable flaw** (most common: improper scope validation). Swarmdo registers MCP tools but performs no runtime authentication check on server identity before accepting tool responses, so any agent that calls a federated MCP tool today has a >40% chance of trusting an unauthenticated source.
 
 2. **AIRGuard** (arXiv:2605.28914, May 2026, Grade A — controlled benchmark): Runtime authority control at the action execution layer reduces agent attack success **from 36.3% to 5.5% (−85%)**. The load-bearing primitive is least-privilege authorization checked **per action**, not per session.
 
@@ -29,15 +29,15 @@ The distinction matters:
 
 ### Current State
 
-`@rufflo/security` provides `InputValidator`, `PathValidator`, `SafeExecutor`, `PasswordHasher`, `TokenGenerator`. None of these track authorization scope across agent delegation boundaries, verify MCP server identity, enforce per-action privilege, or produce an execution provenance record. `SendMessage` (the comms primitive between named agents) carries no authorization metadata at all.
+`@swarmdo/security` provides `InputValidator`, `PathValidator`, `SafeExecutor`, `PasswordHasher`, `TokenGenerator`. None of these track authorization scope across agent delegation boundaries, verify MCP server identity, enforce per-action privilege, or produce an execution provenance record. `SendMessage` (the comms primitive between named agents) carries no authorization metadata at all.
 
 ## Decision
 
-Add `AgentAuthorizationPropagator` as a new component in `@rufflo/security`, paired with an MCP-server auth validator in the CLI's MCP layer.
+Add `AgentAuthorizationPropagator` as a new component in `@swarmdo/security`, paired with an MCP-server auth validator in the CLI's MCP layer.
 
 ### `AgentAuthorizationPropagator` shape
 
-**File**: `v3/@rufflo/security/src/authorization/propagator.ts`
+**File**: `v3/@swarmdo/security/src/authorization/propagator.ts`
 
 ```typescript
 interface AuthScope {
@@ -75,7 +75,7 @@ Scope is **monotonically reducing**: each delegation hop can drop tools/servers 
 
 ### MCP Authentication Validator
 
-**File**: `v3/@rufflo/cli/src/mcp/auth-validator.ts`
+**File**: `v3/@swarmdo/cli/src/mcp/auth-validator.ts`
 
 Before any tool response from an MCP server enters agent reasoning:
 
@@ -87,18 +87,18 @@ Before any tool response from an MCP server enters agent reasoning:
 
 | Phase | Scope | Where |
 |---|---|---|
-| **P1** | Component + tests + exports; SendMessage envelope schema | `@rufflo/security/src/authorization/`, `@rufflo/cli/src/types/` |
-| P2 | Outbound: wrap every SendMessage in the comms layer | `@rufflo/cli/src/agent/comms.ts` |
-| P3 | Inbound: validate scope at the MCP tool dispatcher | `@rufflo/cli/src/mcp-tools/dispatch.ts` |
-| P4 | MCP auth validator wired before tool result processing | `@rufflo/cli/src/mcp/auth-validator.ts` |
-| P5 | Provenance log + dual-graph audit CLI | `@rufflo/cli/src/commands/audit.ts` |
+| **P1** | Component + tests + exports; SendMessage envelope schema | `@swarmdo/security/src/authorization/`, `@swarmdo/cli/src/types/` |
+| P2 | Outbound: wrap every SendMessage in the comms layer | `@swarmdo/cli/src/agent/comms.ts` |
+| P3 | Inbound: validate scope at the MCP tool dispatcher | `@swarmdo/cli/src/mcp-tools/dispatch.ts` |
+| P4 | MCP auth validator wired before tool result processing | `@swarmdo/cli/src/mcp/auth-validator.ts` |
+| P5 | Provenance log + dual-graph audit CLI | `@swarmdo/cli/src/commands/audit.ts` |
 
-P2–P5 ship behind `RUFFLO_STRICT_AUTH=true` so existing pipelines continue to work in legacy permissive mode until v4.0.
+P2–P5 ship behind `SWARMDO_STRICT_AUTH=true` so existing pipelines continue to work in legacy permissive mode until v4.0.
 
 ### Backwards compatibility
 
 - The `scope` field on the envelope is **optional** in v1. Agents that don't set scope operate in legacy mode (all tools allowed, depth unlimited, server auth unchecked).
-- `RUFFLO_STRICT_AUTH=true` enables enforcement. This env var is a documented escape hatch (registered in `audit-env-var-precedence.mjs`).
+- `SWARMDO_STRICT_AUTH=true` enables enforcement. This env var is a documented escape hatch (registered in `audit-env-var-precedence.mjs`).
 - Existing `SafeExecutor` is unchanged.
 
 ## Alternatives considered

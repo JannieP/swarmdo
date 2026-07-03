@@ -1,15 +1,15 @@
-# Ruvector Core
+# Swarmvector Core
 
-[![Crates.io](https://img.shields.io/crates/v/ruvector-core.svg)](https://crates.io/crates/ruvector-core)
-[![Documentation](https://docs.rs/ruvector-core/badge.svg)](https://docs.rs/ruvector-core)
+[![Crates.io](https://img.shields.io/crates/v/swarmvector-core.svg)](https://crates.io/crates/swarmvector-core)
+[![Documentation](https://docs.rs/swarmvector-core/badge.svg)](https://docs.rs/swarmvector-core)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Rust](https://img.shields.io/badge/rust-1.77%2B-orange.svg)](https://www.rust-lang.org)
 
 **The pure-Rust vector database engine behind SwarmVector -- HNSW indexing, quantization, and SIMD acceleration in a single crate.**
 
-`ruvector-core` is the foundational library that powers the entire [SwarmVector](https://github.com/ruvnet/ruvector) ecosystem. It gives you a production-grade vector database you can embed directly into any Rust application: insert vectors, search them in under a millisecond, filter by metadata, and compress storage up to 32x -- all without external services. If you need vector search as a library instead of a server, this is the crate.
+`swarmvector-core` is the foundational library that powers the entire [SwarmVector](the upstream project (see NOTICE)) ecosystem. It gives you a production-grade vector database you can embed directly into any Rust application: insert vectors, search them in under a millisecond, filter by metadata, and compress storage up to 32x -- all without external services. If you need vector search as a library instead of a server, this is the crate.
 
-| | ruvector-core | Typical Vector Database |
+| | swarmvector-core | Typical Vector Database |
 |---|---|---|
 | **Deployment** | Embed as a Rust dependency -- no server, no network calls | Run a separate service, manage connections |
 | **Query latency** | <0.5 ms p50 at 1M vectors with HNSW | ~1-5 ms depending on network and index |
@@ -23,18 +23,18 @@
 
 ## Installation
 
-Add `ruvector-core` to your `Cargo.toml`:
+Add `swarmvector-core` to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-ruvector-core = "0.1.0"
+swarmvector-core = "0.1.0"
 ```
 
 ### Feature Flags
 
 ```toml
 [dependencies]
-ruvector-core = { version = "0.1.0", features = ["simd", "uuid-support"] }
+swarmvector-core = { version = "0.1.0", features = ["simd", "uuid-support"] }
 ```
 
 Available features:
@@ -64,7 +64,7 @@ Available features:
 ### Basic Usage
 
 ```rust
-use ruvector_core::{VectorDB, DbOptions, VectorEntry, SearchQuery, DistanceMetric};
+use swarmvector_core::{VectorDB, DbOptions, VectorEntry, SearchQuery, DistanceMetric};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Create a new vector database
@@ -107,7 +107,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Batch Operations
 
 ```rust
-use ruvector_core::{VectorDB, VectorEntry};
+use swarmvector_core::{VectorDB, VectorEntry};
 
 // Insert multiple vectors efficiently
 let entries = vec![
@@ -157,7 +157,7 @@ let results = db.search(SearchQuery {
 ### HNSW Configuration
 
 ```rust
-use ruvector_core::{DbOptions, HnswConfig, DistanceMetric};
+use swarmvector_core::{DbOptions, HnswConfig, DistanceMetric};
 
 let mut options = DbOptions::default();
 options.dimensions = 384;
@@ -177,7 +177,7 @@ let db = VectorDB::new(options)?;
 ### Quantization
 
 ```rust
-use ruvector_core::{DbOptions, QuantizationConfig};
+use swarmvector_core::{DbOptions, QuantizationConfig};
 
 let mut options = DbOptions::default();
 options.dimensions = 384;
@@ -274,7 +274,7 @@ pub enum DistanceMetric {
 
 ```rust
 // Hybrid search (dense + sparse)
-use ruvector_core::{HybridSearch, HybridConfig};
+use swarmvector_core::{HybridSearch, HybridConfig};
 
 let hybrid = HybridSearch::new(HybridConfig {
     alpha: 0.7,  // Balance between dense (0.7) and sparse (0.3)
@@ -282,7 +282,7 @@ let hybrid = HybridSearch::new(HybridConfig {
 });
 
 // Filtered search with expressions
-use ruvector_core::{FilteredSearch, FilterExpression};
+use swarmvector_core::{FilteredSearch, FilterExpression};
 
 let filtered = FilteredSearch::new(db);
 let expr = FilterExpression::And(vec![
@@ -291,7 +291,7 @@ let expr = FilterExpression::And(vec![
 ]);
 
 // MMR diversification
-use ruvector_core::{MMRSearch, MMRConfig};
+use swarmvector_core::{MMRSearch, MMRConfig};
 
 let mmr = MMRSearch::new(MMRConfig {
     lambda: 0.5,  // Balance relevance (0.5) and diversity (0.5)
@@ -427,13 +427,13 @@ Available benchmarks:
 
 ## Related Crates
 
-`ruvector-core` is the foundation for platform-specific bindings:
+`swarmvector-core` is the foundation for platform-specific bindings:
 
-- **[ruvector-node](../ruvector-node/)** - Node.js bindings via NAPI-RS
-- **[ruvector-wasm](../ruvector-wasm/)** - WebAssembly bindings for browsers
-- **[ruvector-gnn](../ruvector-gnn/)** - Graph Neural Network layer for learned search
-- **[ruvector-cli](../ruvector-cli/)** - Command-line interface
-- **[ruvector-bench](../ruvector-bench/)** - Performance benchmarks
+- **[swarmvector-node](../swarmvector-node/)** - Node.js bindings via NAPI-RS
+- **[swarmvector-wasm](../swarmvector-wasm/)** - WebAssembly bindings for browsers
+- **[swarmvector-gnn](../swarmvector-gnn/)** - Graph Neural Network layer for learned search
+- **[swarmvector-cli](../swarmvector-cli/)** - Command-line interface
+- **[swarmvector-bench](../swarmvector-bench/)** - Performance benchmarks
 
 ## Documentation
 
@@ -442,7 +442,7 @@ Available benchmarks:
 - **[Rust API Reference](../../docs/api/RUST_API.md)** - Detailed API documentation
 - **[Advanced Features Guide](../../docs/guide/ADVANCED_FEATURES.md)** - Quantization, indexing, tuning
 - **[Performance Tuning](../../docs/optimization/PERFORMANCE_TUNING_GUIDE.md)** - Optimization strategies
-- **[API Documentation](https://docs.rs/ruvector-core)** - Full API reference on docs.rs
+- **[API Documentation](https://docs.rs/swarmvector-core)** - Full API reference on docs.rs
 
 ## Acknowledgments
 
@@ -462,10 +462,10 @@ Built with state-of-the-art algorithms and libraries:
 
 <div align="center">
 
-**Part of [SwarmVector](https://github.com/ruvnet/ruvector) - Built by [rUv](https://ruv.io)**
+**Part of [SwarmVector](the upstream project (see NOTICE)) - Built by [the upstream author](https://swarmdo.com)**
 
-[![Star on GitHub](https://img.shields.io/github/stars/ruvnet/ruvector?style=social)](https://github.com/ruvnet/ruvector)
+[![Star on GitHub](https://img.shields.io/github/stars/upstream/swarmvector?style=social)](the upstream project (see NOTICE))
 
-[Documentation](https://docs.rs/ruvector-core) | [Crates.io](https://crates.io/crates/ruvector-core) | [GitHub](https://github.com/ruvnet/ruvector)
+[Documentation](https://docs.rs/swarmvector-core) | [Crates.io](https://crates.io/crates/swarmvector-core) | [GitHub](the upstream project (see NOTICE))
 
 </div>

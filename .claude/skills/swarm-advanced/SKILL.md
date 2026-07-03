@@ -957,10 +957,10 @@ mcp__swarmdo__swarm_init({ topology: "mesh", maxAgents: 4 })
 
 ## References
 
-- [Swarmdo Documentation](https://github.com/ruvnet/claude-flow)
-- [Swarm Orchestration Guide](https://github.com/ruvnet/claude-flow/wiki/swarm)
-- [MCP Tools Reference](https://github.com/ruvnet/claude-flow/wiki/mcp)
-- [Performance Optimization](https://github.com/ruvnet/claude-flow/wiki/performance)
+- [Swarmdo Documentation](the upstream project (see NOTICE))
+- [Swarm Orchestration Guide](the upstream project (see NOTICE))
+- [MCP Tools Reference](the upstream project (see NOTICE))
+- [Performance Optimization](the upstream project (see NOTICE))
 
 ---
 

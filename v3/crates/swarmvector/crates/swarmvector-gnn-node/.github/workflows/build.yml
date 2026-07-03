@@ -45,7 +45,7 @@ jobs:
         with:
           node-version: 18
           cache: npm
-          cache-dependency-path: crates/ruvector-gnn-node/package.json
+          cache-dependency-path: crates/swarmvector-gnn-node/package.json
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -63,23 +63,23 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ matrix.settings.target }}-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Install dependencies
-        working-directory: crates/ruvector-gnn-node
+        working-directory: crates/swarmvector-gnn-node
         run: npm install
 
       - name: Build
-        working-directory: crates/ruvector-gnn-node
+        working-directory: crates/swarmvector-gnn-node
         run: ${{ matrix.settings.build }}
 
       - name: Test (non-cross compile only)
         if: matrix.settings.host == 'ubuntu-latest' && matrix.settings.target == 'x86_64-unknown-linux-gnu'
-        working-directory: crates/ruvector-gnn-node
+        working-directory: crates/swarmvector-gnn-node
         run: npm test
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: crates/ruvector-gnn-node/*.node
+          path: crates/swarmvector-gnn-node/*.node
           if-no-files-found: error
 
   test:
@@ -99,12 +99,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-x86_64-unknown-linux-gnu
-          path: crates/ruvector-gnn-node
+          path: crates/swarmvector-gnn-node
 
       - name: Install dependencies
-        working-directory: crates/ruvector-gnn-node
+        working-directory: crates/swarmvector-gnn-node
         run: npm install --ignore-scripts
 
       - name: Run tests
-        working-directory: crates/ruvector-gnn-node
+        working-directory: crates/swarmvector-gnn-node
         run: npm test

@@ -2,7 +2,7 @@
  * V3 CLI Main Entry Point
  * Modernized CLI for Swarmdo V3
  *
- * Created with ❤️ by ruv.io
+ * Created with ❤️ by swarmdo.com
  */
 
 // MUST be the first import — installs console filter for the cosmetic
@@ -396,7 +396,7 @@ export class CLI {
 
     this.output.writeln(this.output.dim(`Run "${this.name} <command> --help" for command help`));
     this.output.writeln();
-    this.output.writeln(this.output.dim('Created with ❤️ by ruv.io'));
+    this.output.writeln(this.output.dim('Created with ❤️ by swarmdo.com'));
     this.output.writeln();
   }
 

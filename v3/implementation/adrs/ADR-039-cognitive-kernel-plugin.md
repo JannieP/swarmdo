@@ -14,11 +14,11 @@ Large Language Models benefit from structured reasoning but often lack persisten
 
 ## Decision
 
-Create a **Cognitive Kernel Plugin** that leverages RuVector WASM packages to provide cognitive augmentation for LLMs including working memory management, attention steering, meta-cognitive monitoring, and cognitive load balancing.
+Create a **Cognitive Kernel Plugin** that leverages SwarmVector WASM packages to provide cognitive augmentation for LLMs including working memory management, attention steering, meta-cognitive monitoring, and cognitive load balancing.
 
 ## Plugin Name
 
-`@rufflo/plugin-cognitive-kernel`
+`@swarmdo/plugin-cognitive-kernel`
 
 ## Description
 
@@ -30,8 +30,8 @@ A cutting-edge cognitive augmentation plugin combining the Cognitum Gate Kernel 
 |---------|---------|
 | `cognitum-gate-kernel` | Core cognitive kernel for memory gating and attention control |
 | `sona` | Self-Optimizing Neural Architecture for adaptive cognition |
-| `ruvector-attention-wasm` | Multi-head attention for cognitive focus |
-| `ruvector-nervous-system-wasm` | Coordination between cognitive subsystems |
+| `swarmvector-attention-wasm` | Multi-head attention for cognitive focus |
+| `swarmvector-nervous-system-wasm` | Coordination between cognitive subsystems |
 | `micro-hnsw-wasm` | Fast retrieval for episodic memory |
 
 ## MCP Tools
@@ -458,8 +458,8 @@ const CognitiveRateLimits = {
   "dependencies": {
     "cognitum-gate-kernel": "^0.1.0",
     "sona": "^0.1.0",
-    "ruvector-attention-wasm": "^0.1.0",
-    "ruvector-nervous-system-wasm": "^0.1.0",
+    "swarmvector-attention-wasm": "^0.1.0",
+    "swarmvector-nervous-system-wasm": "^0.1.0",
     "micro-hnsw-wasm": "^0.2.0"
   }
 }
@@ -485,7 +485,7 @@ const CognitiveRateLimits = {
 | ADR | Relationship |
 |-----|--------------|
 | ADR-004: Plugin Architecture | Foundation - Defines plugin structure |
-| ADR-017: RuVector Integration | Dependency - Provides WASM packages |
+| ADR-017: SwarmVector Integration | Dependency - Provides WASM packages |
 | ADR-038: Neural Coordination | Related - Multi-agent cognitive layer |
 | ADR-037: Performance Optimizer | Related - Cognitive load metrics |
 | ADR-041: Hyperbolic Reasoning | Related - Concept hierarchy in memory |
@@ -494,7 +494,7 @@ const CognitiveRateLimits = {
 
 - Baddeley's Working Memory Model: https://www.simplypsychology.org/working-memory.html
 - Cognitive Load Theory: https://www.tandfonline.com/doi/abs/10.1207/s15516709cog1202_4
-- ADR-017: RuVector Integration
+- ADR-017: SwarmVector Integration
 - ADR-004: Plugin Architecture
 
 ---

@@ -5,7 +5,7 @@ Long-horizon goal planning, deep research orchestration, and adaptive replanning
 ## Install
 
 ```
-/plugin marketplace add ruvnet/swarmdo
+/plugin marketplace add upstream/swarmdo
 /plugin install swarmdo-goals@swarmdo
 ```
 

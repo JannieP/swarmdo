@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Regression guard for ruvnet/swarmdo#1883 + #1884.
+ * Regression guard for upstream/swarmdo#1883 + #1884.
  *
  * #1883 — memory_import_claude `allProjects=false` failed under WSL because
  *         project-hash derivation only POSIX-slash-replaced cwd. We now try

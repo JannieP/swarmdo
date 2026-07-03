@@ -1,21 +1,21 @@
-# ADR-126 — `rufflo-neural-trader` Substrate Integration: Persistent Memory, Graph-Intelligence Solver, Provenance Signing, and Pipeline Coordination
+# ADR-126 — `swarmdo-neural-trader` Substrate Integration: Persistent Memory, Graph-Intelligence Solver, Provenance Signing, and Pipeline Coordination
 
 **Status**: Proposed (2026-05-20)
 **Date**: 2026-05-20
-**Authors**: claude (drafted with rUv) — dossier by `rufflo-goals:dossier-investigator`
-**Related**: ADR-117 (managed-agent backtests), ADR-115 (rvagent), ADR-122 (browser substrate), ADR-123 (sublinear integration), ADR-125 (memory consolidation), ADR-103 (witness temporal history), CWE-347 plugin-registry pattern (#1922, #2060), `rufflo-neural-trader` plugin, `neural-trader` npm package
+**Authors**: claude (drafted with the upstream author) — dossier by `swarmdo-goals:dossier-investigator`
+**Related**: ADR-117 (managed-agent backtests), ADR-115 (rvagent), ADR-122 (browser substrate), ADR-123 (sublinear integration), ADR-125 (memory consolidation), ADR-103 (witness temporal history), CWE-347 plugin-registry pattern (#1922, #2060), `swarmdo-neural-trader` plugin, `neural-trader` npm package
 **Supersedes**: nothing — extends ADR-117 with the substrate integrations that the four ADRs landed since 2026-04 make newly possible
 
 ## Context
 
-`rufflo-neural-trader` (4 specialized agents + 5 skills + Rust/NAPI backtest engine via the upstream `neural-trader` npm package) is the headline domain-specific plugin in the rufflo ecosystem. Between 2026-04 and today (2026-05-20), four substrate ADRs have landed that change what's possible — but the plugin doesn't yet leverage any of them:
+`swarmdo-neural-trader` (4 specialized agents + 5 skills + Rust/NAPI backtest engine via the upstream `neural-trader` npm package) is the headline domain-specific plugin in the swarmdo ecosystem. Between 2026-04 and today (2026-05-20), four substrate ADRs have landed that change what's possible — but the plugin doesn't yet leverage any of them:
 
-1. **ADR-125 / `@rufflo/memory@3.0.0-alpha.18`** (PRs #2062 + #2063) shipped the canonical `MemoryService`, real `HybridBackend` default, **persistent HNSW** (`.hnsw` sidecar snapshots that survive restart), **`MemoryConsolidator`** (`sweepExpired` / `dedup` / `compactHnsw` / auto-run timer), **graceful retrieval degradation** with FTS5 keyword fallback, and **hybrid RRF+MMR search**. Today every neural-trader process restart rebuilds the HNSW index from scratch; the four trading namespaces (`trading-{strategies,backtests,risk,analysis}`) have no expiry policy and grow unboundedly; `semanticSearch` hard-throws when the embedder is unavailable, taking down the `market-analyst` regime-comparison workflow.
-2. **ADR-123 / `rufflo-graph-intelligence` + `rufflo-sublinear`** (PR #2045) shipped sublinear-time graph algorithms via `sublinear-time-solver@1.7.0` with 5 wedges. **Row 8 of the ADR-123 integration table explicitly names `rufflo-neural-trader` as the Wedge-8 target**: replace the Neumann-series mean-variance solve with Conjugate Gradient via `sublinear/solve` for `Σx = μ` — measured at **816 ns CG vs ~50 µs Neumann** (40–60x speedup), zero new deps, 0.5-day estimate. Today nothing in the plugin references CG or sublinear; the portfolio path still calls `npx neural-trader --portfolio optimize` directly.
+1. **ADR-125 / `@swarmdo/memory@3.0.0-alpha.18`** (PRs #2062 + #2063) shipped the canonical `MemoryService`, real `HybridBackend` default, **persistent HNSW** (`.hnsw` sidecar snapshots that survive restart), **`MemoryConsolidator`** (`sweepExpired` / `dedup` / `compactHnsw` / auto-run timer), **graceful retrieval degradation** with FTS5 keyword fallback, and **hybrid RRF+MMR search**. Today every neural-trader process restart rebuilds the HNSW index from scratch; the four trading namespaces (`trading-{strategies,backtests,risk,analysis}`) have no expiry policy and grow unboundedly; `semanticSearch` hard-throws when the embedder is unavailable, taking down the `market-analyst` regime-comparison workflow.
+2. **ADR-123 / `swarmdo-graph-intelligence` + `swarmdo-sublinear`** (PR #2045) shipped sublinear-time graph algorithms via `sublinear-time-solver@1.7.0` with 5 wedges. **Row 8 of the ADR-123 integration table explicitly names `swarmdo-neural-trader` as the Wedge-8 target**: replace the Neumann-series mean-variance solve with Conjugate Gradient via `sublinear/solve` for `Σx = μ` — measured at **816 ns CG vs ~50 µs Neumann** (40–60x speedup), zero new deps, 0.5-day estimate. Today nothing in the plugin references CG or sublinear; the portfolio path still calls `npx neural-trader --portfolio optimize` directly.
 3. **ADR-122 / Browser substrate** (PR #2043) shipped signed-trajectory RVF containers, AIDefence-attested cookie vault, GOAP preflight, Session Capsule, federated MCTS, and Workflow Compiler. Today the `market-analyst` agent fetches market data via `npx neural-trader --symbol TICKER` — a batch pull from Yahoo Finance with **zero provenance**. No way to detect if the OHLCV series was tampered with at the gateway.
 4. **CWE-347 Ed25519 pattern** (PR #2060) formalized "sign with Ed25519, pin to a trusted key, fail closed" as a documented invariant via `scripts/smoke-plugin-registry-signature.mjs`. Today the paper→live promotion gate — the moment cryptographic tamper-evidence matters most for a quant team — stores backtest results as plain JSON with no hash and no signature. The `trading-predictor` sublinear agent file (`.claude/agents/sublinear/trading-predictor.md:213`) lists "signed audit trail" as a requirement but no implementation exists.
 
-Cumulatively this puts neural-trader behind both the rufflo ecosystem (substrates it could use) and the 2025–2026 production trading SOTA (regulator-grade explainability, episodic/semantic memory separation, signed audit trails, multi-agent pipeline coordination — references in the dossier).
+Cumulatively this puts neural-trader behind both the swarmdo ecosystem (substrates it could use) and the 2025–2026 production trading SOTA (regulator-grade explainability, episodic/semantic memory separation, signed audit trails, multi-agent pipeline coordination — references in the dossier).
 
 The investigation also surfaced **one active bug**: a three-way namespace mismatch between `README.md:198-205` (claims `trading-{strategies,backtests,risk,analysis}`), `docs/adrs/0001-neural-trader-contract.md:63` (claims `trading-signals`, `trading-models` instead), and `skills/trader-signal/SKILL.md:35` (actually writes to `trading-signals` — undeclared by the README). The smoke test (`scripts/smoke.sh:58-63`) validates the README's four names, so the smoke passes while `trader-signal` writes to a namespace no consumer of the documentation knows about. Any downstream memory search scoped to the four documented namespaces silently misses all signal data.
 
@@ -26,7 +26,7 @@ The investigation also surfaced **one active bug**: a three-way namespace mismat
 | Namespace mismatch (**active bug**) | `README.md:198-205` vs `docs/adrs/0001-neural-trader-contract.md:63` vs `skills/trader-signal/SKILL.md:35` | smoke passes, signal data lost from documented surface | This ADR Phase 1 |
 | Cold-start HNSW rebuild | `agents/trading-strategist.md:108` + `market-analyst.md:48` | every restart rebuilds index from scratch | ADR-125 Phase 3 — persistent HNSW |
 | Unbounded memory growth | `trader-backtest/SKILL.md:26` + `trader-signal/SKILL.md:35` (no TTL anywhere) | stale entries accumulate; semantic recall degrades | ADR-125 Phase 4 — `MemoryConsolidator` |
-| `semanticSearch` hard-throws when embedder absent | `v3/@rufflo/memory/src/agentdb-adapter.ts:752-754` | `market-analyst` regime comparison goes offline | ADR-125 Phase 5 — graceful FTS5 fallback (already shipped) |
+| `semanticSearch` hard-throws when embedder absent | `v3/@swarmdo/memory/src/agentdb-adapter.ts:752-754` | `market-analyst` regime comparison goes offline | ADR-125 Phase 5 — graceful FTS5 fallback (already shipped) |
 | Pure-dense retrieval for regime similarity | `market-analyst.md:48` | misses exact-match signals (ticker symbols, error codes) | ADR-125 Phase 5 — RRF+MMR hybrid (already shipped) |
 | Portfolio CG solve not wired | `trader-portfolio/SKILL.md` — no `sublinear/solve` reference | ~50 µs Neumann vs 816 ns CG (40–60x) | ADR-123 Wedge 8 |
 | No feature attribution / explainability | LSTM/Transformer predictions opaque | regulator-grade interpretability impossible | ADR-123 single-entry PR (forward-push) |
@@ -38,7 +38,7 @@ The investigation also surfaced **one active bug**: a three-way namespace mismat
 
 ## Decision
 
-Land **`rufflo-neural-trader@0.2.0-alpha.1`** with six coupled phases, ordered to maximize early payoff and bound late risk:
+Land **`swarmdo-neural-trader@0.2.0-alpha.1`** with six coupled phases, ordered to maximize early payoff and bound late risk:
 
 ### Phase 1 — Fix the namespace mismatch (small; single PR; ships first)
 
@@ -52,13 +52,13 @@ trading-analysis     — market-analyst output (regime classifications, technica
 trading-signals      — short-lived signal events (intraday; TTL applied in Phase 2)
 ```
 
-Touched files: `plugins/rufflo-neural-trader/README.md` (L198-205), `plugins/rufflo-neural-trader/docs/adrs/0001-neural-trader-contract.md` (L63), `plugins/rufflo-neural-trader/scripts/smoke.sh` (L58-63 add the fifth namespace assertion). All four agents’ tool-allowlists already permit memory calls so no agent edits needed.
+Touched files: `plugins/swarmdo-neural-trader/README.md` (L198-205), `plugins/swarmdo-neural-trader/docs/adrs/0001-neural-trader-contract.md` (L63), `plugins/swarmdo-neural-trader/scripts/smoke.sh` (L58-63 add the fifth namespace assertion). All four agents’ tool-allowlists already permit memory calls so no agent edits needed.
 
 Commit: `fix(neural-trader): #2068 ADR-126 Phase 1 — canonical 5-namespace alignment + smoke`
 
 ### Phase 2 — Wire ADR-125 memory lifecycle (small)
 
-`trader-signal/SKILL.md`: write entries with `expiresAt: now + 24h` so intraday signals don't pollute long-running memory. `trader-backtest/SKILL.md`: call `MemoryConsolidator.dedup('keep-newest')` before re-running a backtest on the same `strategyId × paramsHash`. Add `MemoryConsolidator` to the `allowed-tools` lists for `trader-backtest` and `trader-signal`. Document that HNSW warm-start requires `@rufflo/memory@3.0.0-alpha.18` (already published).
+`trader-signal/SKILL.md`: write entries with `expiresAt: now + 24h` so intraday signals don't pollute long-running memory. `trader-backtest/SKILL.md`: call `MemoryConsolidator.dedup('keep-newest')` before re-running a backtest on the same `strategyId × paramsHash`. Add `MemoryConsolidator` to the `allowed-tools` lists for `trader-backtest` and `trader-signal`. Document that HNSW warm-start requires `@swarmdo/memory@3.0.0-alpha.18` (already published).
 
 No code change is required to benefit from the persistent HNSW or the FTS5 fallback — those flow through `MemoryService.search()` automatically. The plugin's `market-analyst` regime-similarity query will become hybrid (dense + sparse RRF + MMR) at zero plugin cost.
 
@@ -66,14 +66,14 @@ Commit: `feat(neural-trader): #2068 ADR-126 Phase 2 — ADR-125 lifecycle (TTL +
 
 ### Phase 3 — Portfolio CG solve via ADR-123 Wedge 8 (medium)
 
-New `plugins/rufflo-neural-trader/src/sublinear-adapter.ts` exporting the `SublinearAdapter` shape (per ADR-123 §262-289). New skill `trader-portfolio-cg/SKILL.md` that:
+New `plugins/swarmdo-neural-trader/src/sublinear-adapter.ts` exporting the `SublinearAdapter` shape (per ADR-123 §262-289). New skill `trader-portfolio-cg/SKILL.md` that:
 
 1. Reads the current covariance matrix `Σ` and expected-return vector `μ` from neural-trader's portfolio API (`npx neural-trader --portfolio current --json`).
-2. Calls `mcp__rufflo-sublinear__solve` with the CG method for `Σx = μ`, target tolerance `1e-6`.
+2. Calls `mcp__swarmdo-sublinear__solve` with the CG method for `Σx = μ`, target tolerance `1e-6`.
 3. Falls back to `npx neural-trader --portfolio optimize` if `sublinear/solve` returns infeasible or unavailable.
 4. Writes the optimal weights vector to `trading-risk` namespace with provenance metadata (solver, iterations, residual, timestamp).
 
-Add `mcp__rufflo-sublinear__solve` to the skill's `allowed-tools`. Acceptance: `bench/portfolio-cg.bench.ts` shows <1 ms latency on `n=256` covariance; parity test confirms CG result within `1e-4` of original Neumann.
+Add `mcp__swarmdo-sublinear__solve` to the skill's `allowed-tools`. Acceptance: `bench/portfolio-cg.bench.ts` shows <1 ms latency on `n=256` covariance; parity test confirms CG result within `1e-4` of original Neumann.
 
 Commit: `feat(neural-trader): #2068 ADR-126 Phase 3 — portfolio CG via sublinear-solve (40-60x)`
 
@@ -83,7 +83,7 @@ Define `SignedBacktestArtifact` schema mirroring ADR-123's `SignedPageRankArtifa
 
 ```ts
 interface SignedBacktestArtifact {
-  schema: 'rufflo-neural-trader-backtest/v1';
+  schema: 'swarmdo-neural-trader-backtest/v1';
   strategyId: string;
   paramsHash: string;       // sha256 of canonicalized params JSON
   dataRange: { from: string; to: string };  // ISO dates
@@ -95,7 +95,7 @@ interface SignedBacktestArtifact {
 }
 ```
 
-Update `trader-backtest/SKILL.md` step 5: before storing, canonicalize the artifact (strip signature fields → `JSON.stringify` → ed25519 sign with the ADR-103 witness key). Update `trader-cloud-backtest/SKILL.md`: after retrieving an artifact from the managed agent, call `rufflo witness verify` and refuse to promote a result whose signature doesn't verify against the trusted pinned key.
+Update `trader-backtest/SKILL.md` step 5: before storing, canonicalize the artifact (strip signature fields → `JSON.stringify` → ed25519 sign with the ADR-103 witness key). Update `trader-cloud-backtest/SKILL.md`: after retrieving an artifact from the managed agent, call `swarmdo witness verify` and refuse to promote a result whose signature doesn't verify against the trusted pinned key.
 
 Update `scripts/smoke.sh` to assert that every entry stored in `trading-backtests` contains a `witnessSignature` field. Add a regression smoke `scripts/smoke-neural-trader-backtest-signing.mjs` modeled on `scripts/smoke-plugin-registry-signature.mjs`: build a fixture, sign it, verify; tamper one byte, verify fails; verify passes only with the pinned trusted key.
 
@@ -130,7 +130,7 @@ New skill `trader-explain/SKILL.md`:
 1. Takes a `signalId` as input.
 2. Calls `npx neural-trader --predict --signal $SIGNAL_ID --explain --json` to extract the model's feature-contribution scores (attention weights for Transformers, gradient × input for LSTMs, or SHAP values when available).
 3. Builds a feature-contribution graph: nodes = features, edges = co-attention weights, source = the signal output node.
-4. Calls `mcp__rufflo-sublinear__page-rank-entry` with single-entry forward-push from the signal output to get a top-K ranked list of contributing features.
+4. Calls `mcp__swarmdo-sublinear__page-rank-entry` with single-entry forward-push from the signal output to get a top-K ranked list of contributing features.
 5. Stores the ranked attribution to `trading-analysis` as a signed `SignedAttributionArtifact` (Phase 4 schema, attribution-specific variant).
 
 Acceptance: `trader-explain signal-<id>` returns a ranked feature list whose top-3 features match the model's attention argmax (within tolerance); ranking is reproducible across two identical runs (same seed → same ordering).
@@ -155,12 +155,12 @@ The plugin's existing 4-agent surface (`trading-strategist`, `backtest-engineer`
 
 ### Negative / trade-offs
 - Phase 5 (pipeline coordination) is a discipline change that requires every team member spawning trading agents to follow the SendMessage protocol — failure mode is "live trades execute without risk approval", which is precisely the failure we're trying to eliminate. Mitigation: the integration smoke fails the build if the test mock can bypass the gate.
-- Phase 3 adds `rufflo-sublinear` as a hard runtime dep for portfolio optimization (with a fallback to the legacy Neumann path). Without `rufflo-sublinear` installed, portfolio optimization degrades to the previous performance — same behavior as today.
+- Phase 3 adds `swarmdo-sublinear` as a hard runtime dep for portfolio optimization (with a fallback to the legacy Neumann path). Without `swarmdo-sublinear` installed, portfolio optimization degrades to the previous performance — same behavior as today.
 - Phase 4 introduces a witness-key dependency. If the project's Ed25519 signing key is lost, backtest results from before the key-rotation can't be promoted to live. Mitigation: ADR-103 already handles witness-key lifecycle and rotation.
 - Phase 6 requires `neural-trader --predict --explain` to expose attention/SHAP output. If that flag isn't shipped upstream yet, Phase 6 is gated on an upstream PR.
 
 ### Neutral
-- The 4-agent surface is preserved; users typing `npx rufflo-neural-trader` see the same plugin description and the same CLI surface.
+- The 4-agent surface is preserved; users typing `npx swarmdo-neural-trader` see the same plugin description and the same CLI surface.
 
 ## Implementation Plan
 
@@ -177,22 +177,22 @@ Recommended landing: Phase 1 + Phase 2 in one PR (the "ship the bug fix + memory
 
 ## Acceptance Criteria
 
-The ADR is considered fulfilled when all of the following hold against `rufflo-neural-trader@0.2.0-alpha.1`:
+The ADR is considered fulfilled when all of the following hold against `swarmdo-neural-trader@0.2.0-alpha.1`:
 
 1. `scripts/smoke.sh` passes with the canonical 5-namespace set (Phase 1).
 2. `memory_search` in `trading-signals` returns zero entries with `expiresAt` in the past after `consolidator.sweepExpired()` runs (Phase 2).
-3. `mcp__rufflo-sublinear__solve` on the live covariance matrix returns a portfolio-weights result within `1e-4` of the legacy Neumann path in `<1ms` (Phase 3).
-4. Every entry in `trading-backtests` carries a `witnessSignature` field; `rufflo witness verify <entry>` succeeds; mutating a single byte fails verification (Phase 4).
+3. `mcp__swarmdo-sublinear__solve` on the live covariance matrix returns a portfolio-weights result within `1e-4` of the legacy Neumann path in `<1ms` (Phase 3).
+4. Every entry in `trading-backtests` carries a `witnessSignature` field; `swarmdo witness verify <entry>` succeeds; mutating a single byte fails verification (Phase 4).
 5. A live-broker CLI invocation refuses to fire without a prior `risk-analyst` SendMessage approval event in the session trace (Phase 5).
 6. `trader-explain <signalId>` returns a ranked feature attribution list reproducible across two identical runs (Phase 6).
 7. No regression in the existing 4-agent / 5-skill surface — all current smoke checks still pass.
-8. `npx rufflo-neural-trader` still works as documented (no breaking change for current consumers).
+8. `npx swarmdo-neural-trader` still works as documented (no breaking change for current consumers).
 
 ## Out of Scope (Deferred to Separate ADRs)
 
 These each have user-value but are each non-trivial design efforts that deserve their own decision records:
 
-- **ADR-127** Real-time feature store wiring (`rufflo-market-data` streaming integration). Gated on `rufflo-market-data` exposing a streaming adapter first.
+- **ADR-127** Real-time feature store wiring (`swarmdo-market-data` streaming integration). Gated on `swarmdo-market-data` exposing a streaming adapter first.
 - **ADR-128** Browser-attested market-data scraping (ADR-122 Session Capsule + AIDefence cookie vault). Gated on ADR-122 Phases 3+6 completing.
 - **ADR-129** GOAP-LP trade sequencing via `sublinear/feasibility` (ADR-123 Wedge 9). Medium risk per the ADR-123 GOAP plan A10; LP feasibility is the trickiest math.
 - **ADR-130** Cone-of-influence loss attribution via causal trade-dependency graph. Depends on a trade-dependency graph schema that doesn't exist yet.

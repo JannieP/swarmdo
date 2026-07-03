@@ -1,6 +1,6 @@
 # V3 Implementation Documentation
 
-This directory contains all implementation documentation, planning, and research for Rufflo V3.
+This directory contains all implementation documentation, planning, and research for Swarmdo V3.
 
 ## Directory Structure
 
@@ -83,9 +83,9 @@ implementation/
 
 ## Quick Links
 
-- **Master Issue:** [GitHub Issue #927](https://github.com/ruvnet/claude-flow/issues/927)
+- **Master Issue:** [GitHub Issue #927](the upstream project (see NOTICE))
 - **ADR Documentation:** [/v3/docs/adrs/](../docs/adrs/)
-- **Module Source:** [/v3/@rufflo/](../@rufflo/)
+- **Module Source:** [/v3/@swarmdo/](../@swarmdo/)
 
 ## Statistics
 

@@ -172,9 +172,9 @@ Require three consecutive wins. Considered but rejected as too slow. At a weekly
 
 ## References
 
-- `v3/@rufflo/guidance/src/optimizer.ts` -- `OptimizerLoop.runCycle()`, `proposeChanges()`, `evaluateChange()`, `applyPromotions()`, `promotionTracker`
-- `v3/@rufflo/guidance/src/types.ts` -- `RuleChange`, `ABTestResult`, `OptimizationMetrics`, `ViolationRanking`, `RuleADR`
-- `v3/@rufflo/guidance/src/ledger.ts` -- `RunLedger.rankViolations()`, `computeMetrics()`
-- `v3/@rufflo/guidance/src/index.ts` -- `GuidanceControlPlane.optimize()`
+- `v3/@swarmdo/guidance/src/optimizer.ts` -- `OptimizerLoop.runCycle()`, `proposeChanges()`, `evaluateChange()`, `applyPromotions()`, `promotionTracker`
+- `v3/@swarmdo/guidance/src/types.ts` -- `RuleChange`, `ABTestResult`, `OptimizationMetrics`, `ViolationRanking`, `RuleADR`
+- `v3/@swarmdo/guidance/src/ledger.ts` -- `RunLedger.rankViolations()`, `computeMetrics()`
+- `v3/@swarmdo/guidance/src/index.ts` -- `GuidanceControlPlane.optimize()`
 - ADR-G002 -- Constitution/shard split that promotions modify
 - ADR-G005 -- Proof envelopes that record the evidence for promotion decisions

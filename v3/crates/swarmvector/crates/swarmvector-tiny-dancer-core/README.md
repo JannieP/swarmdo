@@ -3,7 +3,7 @@
 [![Crates.io](https://img.shields.io/crates/v/swarmvector-tiny-dancer-core.svg)](https://crates.io/crates/swarmvector-tiny-dancer-core)
 [![Documentation](https://docs.rs/swarmvector-tiny-dancer-core/badge.svg)](https://docs.rs/swarmvector-tiny-dancer-core)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Build Status](https://github.com/ruvnet/swarmvector/workflows/CI/badge.svg)](https://github.com/ruvnet/swarmvector/actions)
+[![Build Status](the upstream project (see NOTICE))](the upstream project (see NOTICE))
 [![Rust Version](https://img.shields.io/badge/rust-1.77%2B-blue.svg)](https://www.rust-lang.org)
 
 Production-grade AI agent routing system with FastGRNN neural inference for **70-85% LLM cost reduction**.
@@ -367,9 +367,9 @@ For 10,000 daily queries at $0.02 per query:
 ## 📚 Resources
 
 - **Documentation**: [docs.rs/swarmvector-tiny-dancer-core](https://docs.rs/swarmvector-tiny-dancer-core)
-- **GitHub**: [github.com/ruvnet/swarmvector](https://github.com/ruvnet/swarmvector)
-- **Website**: [ruv.io](https://ruv.io)
-- **Examples**: [github.com/ruvnet/swarmvector/tree/main/examples](https://github.com/ruvnet/swarmvector/tree/main/examples)
+- **GitHub**: [the upstream project (see NOTICE)](the upstream project (see NOTICE))
+- **Website**: [swarmdo.com](https://swarmdo.com)
+- **Examples**: [the upstream project (see NOTICE)](the upstream project (see NOTICE))
 
 ## 🤝 Contributing
 
@@ -387,4 +387,4 @@ MIT License - see [LICENSE](../../LICENSE) for details.
 
 ---
 
-Built with ❤️ by the [Swarmvector Team](https://github.com/ruvnet)
+Built with ❤️ by the [Swarmvector Team](https://the upstream project (see NOTICE))

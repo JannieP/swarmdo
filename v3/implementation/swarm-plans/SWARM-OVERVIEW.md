@@ -1,8 +1,8 @@
-# Rufflo v3: 15-Agent Concurrent Swarm Implementation Plan
+# Swarmdo v3: 15-Agent Concurrent Swarm Implementation Plan
 
 ## Overview
 
-This plan defines a **15-agent concurrent swarm** architecture for implementing Rufflo v3. The swarm uses specialized agents working in parallel across all modules, with TDD (London School), continuous GitHub issue updates, and comprehensive benchmarking.
+This plan defines a **15-agent concurrent swarm** architecture for implementing Swarmdo v3. The swarm uses specialized agents working in parallel across all modules, with TDD (London School), continuous GitHub issue updates, and comprehensive benchmarking.
 
 ---
 

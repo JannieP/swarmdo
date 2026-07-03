@@ -2,7 +2,7 @@
  * Pre-Edit Hook - Context retrieval and agent routing before file edit
  * Latency target: <20ms
  *
- * NOW WITH RUVECTOR INTELLIGENCE:
+ * NOW WITH SWARMVECTOR INTELLIGENCE:
  * - Trajectory tracking for learning from edit sequences
  * - HNSW-powered similar file retrieval
  * - SONA pattern matching for agent selection

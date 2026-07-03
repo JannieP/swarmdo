@@ -33,8 +33,8 @@ mcp__swarmdo__agent_spawn { type: "analyst", name: "Deployment Analyst" }
 
 // Create release preparation branch
 mcp__github__create_branch {
-  owner: "ruvnet",
-  repo: "ruv-FANN",
+  owner: "upstream",
+  repo: "the upstream repo",
   branch: "release/v1.0.72",
   from_branch: "main"
 }
@@ -51,8 +51,8 @@ mcp__swarmdo__task_orchestrate {
 ```javascript
 // Update versions across packages
 mcp__github__push_files {
-  owner: "ruvnet",
-  repo: "ruv-FANN", 
+  owner: "upstream",
+  repo: "the upstream repo", 
   branch: "release/v1.0.72",
   files: [
     {
@@ -100,19 +100,19 @@ mcp__github__push_files {
 ### 3. Automated Release Validation
 ```javascript
 // Comprehensive release testing
-Bash("cd /workspaces/ruv-FANN/claude-code-flow/claude-code-flow && npm install")
-Bash("cd /workspaces/ruv-FANN/claude-code-flow/claude-code-flow && npm run test")
-Bash("cd /workspaces/ruv-FANN/claude-code-flow/claude-code-flow && npm run lint")
-Bash("cd /workspaces/ruv-FANN/claude-code-flow/claude-code-flow && npm run build")
+Bash("cd /workspaces/upstream && npm install")
+Bash("cd /workspaces/upstream && npm run test")
+Bash("cd /workspaces/upstream && npm run lint")
+Bash("cd /workspaces/upstream && npm run build")
 
-Bash("cd /workspaces/ruv-FANN/ruv-swarm/npm && npm install")
-Bash("cd /workspaces/ruv-FANN/ruv-swarm/npm && npm run test:all")
-Bash("cd /workspaces/ruv-FANN/ruv-swarm/npm && npm run lint")
+Bash("cd /workspaces/upstream && npm install")
+Bash("cd /workspaces/upstream && npm run test:all")
+Bash("cd /workspaces/upstream && npm run lint")
 
 // Create release PR with validation results
 mcp__github__create_pull_request {
-  owner: "ruvnet",
-  repo: "ruv-FANN",
+  owner: "upstream",
+  repo: "the upstream repo",
   title: "Release v1.0.72: GitHub Integration and Swarm Enhancements",
   head: "release/v1.0.72", 
   base: "main",
@@ -200,8 +200,8 @@ This release is production-ready with comprehensive validation and testing.
   Bash("cd /tmp/release-v1.0.72 && git add -A && git commit -m 'release: Prepare v1.0.72 with comprehensive updates' && git push")
   
   // Run comprehensive validation
-  Bash("cd /workspaces/ruv-FANN/claude-code-flow/claude-code-flow && npm install && npm test && npm run lint && npm run build")
-  Bash("cd /workspaces/ruv-FANN/ruv-swarm/npm && npm install && npm run test:all && npm run lint")
+  Bash("cd /workspaces/upstream && npm install && npm test && npm run lint && npm run build")
+  Bash("cd /workspaces/upstream && npm install && npm run test:all && npm run lint")
   
   // Create release PR using gh CLI
   Bash(`gh pr create \

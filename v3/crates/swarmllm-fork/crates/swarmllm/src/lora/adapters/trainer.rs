@@ -500,7 +500,7 @@ impl SyntheticDataGenerator {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::lora::adapters::RuvLtraAdapters;
+    use crate::lora::adapters::SwarmLtraAdapters;
 
     #[test]
     fn test_training_example() {
@@ -557,7 +557,7 @@ mod tests {
 
     #[test]
     fn test_adapter_trainer() {
-        let adapters = RuvLtraAdapters::new();
+        let adapters = SwarmLtraAdapters::new();
         let lora = adapters.create_lora("coder", 64).unwrap();
 
         let generator = SyntheticDataGenerator::new(64, 42);

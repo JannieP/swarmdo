@@ -177,8 +177,8 @@ MCP_INSTRUCTIONS
         npx swarmdo@alpha --version 2>/dev/null || npm install -g swarmdo@alpha
         success "Swarmdo MCP server installed"
 
-        read -p "Install optional swarmdo-swarm MCP? (y/n) [n]: " INSTALL_RUV
-        if [ "$INSTALL_RUV" = "y" ]; then
+        read -p "Install optional swarmdo-swarm MCP? (y/n) [n]: " INSTALL_SWARM
+        if [ "$INSTALL_SWARM" = "y" ]; then
             info "Installing swarmdo-swarm MCP server..."
             npx swarmdo-swarm --version 2>/dev/null || npm install -g swarmdo-swarm
             success "swarmdo-swarm MCP server installed"

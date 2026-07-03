@@ -154,7 +154,7 @@
 		'"Spawn a 5-agent hierarchical swarm (architect, coder, tester, reviewer, security-auditor) for a Python→TypeScript refactor."',
 		'"Use swarmvector__hooks_route on the task: add OAuth to a SvelteKit API. Then spawn the recommended agent."',
 		'"Search Swarmdo memory for prior decisions about authentication, then web_research recent OAuth2 best practices, in parallel."',
-		'"Analyze the diff at github.com/ruvnet/swarmdo/pull/1687 — risk score, classify, and suggest reviewers."',
+		'"Analyze the diff at the upstream project (see NOTICE) — risk score, classify, and suggest reviewers."',
 	];
 
 	const stack: { name: string; role: string }[] = [
@@ -169,9 +169,9 @@
 	];
 
 	const domains: { url: string; note: string }[] = [
-		{ url: "flo.ruv.io", note: "Primary — shortest URL, recommended" },
-		{ url: "swarmdo.ruv.io", note: "Brand alias" },
-		{ url: "swarmvocal.ruv.io", note: "Original alias (matches the upstream chat-ui fork name)" },
+		{ url: "swarmdo.com", note: "Primary — shortest URL, recommended" },
+		{ url: "swarmdo.swarmdo.com", note: "Brand alias" },
+		{ url: "swarmvocal.swarmdo.com", note: "Original alias (matches the upstream chat-ui fork name)" },
 		{ url: "swarmvocal-875130704813.us-central1.run.app", note: "Raw Cloud Run URL — always available, no DNS dependency" },
 	];
 
@@ -258,7 +258,7 @@
 				<p class="mt-2 text-[11px] text-gray-500 dark:text-gray-400">Cloud models route through OpenRouter — switch any time via <strong>Models</strong> in the sidebar.</p>
 				<div class="mt-3 rounded-lg border border-emerald-300/40 bg-emerald-50/50 px-3 py-2 text-xs dark:border-emerald-700/40 dark:bg-emerald-900/10">
 					<p class="font-semibold text-emerald-900 dark:text-emerald-200">🦾 Any model — including local + self-learning</p>
-					<p class="mt-1 text-emerald-900/80 dark:text-emerald-200/80">Swarmdo speaks any OpenAI-compatible endpoint: vLLM, Ollama, LM Studio, Together, Groq, or self-hosted. Native support for <a href="https://github.com/ruvnet/SwarmVector/tree/main/examples/swarmLLM" target="_blank" rel="noopener" class="underline">swarmLLM</a> (lives in <code>ruvnet/RuVector/examples/ruvLLM</code>) — Swarmdo's self-improving local model layer with MicroLoRA adapters that learn from your trajectories via SONA. Pair cloud + local, or run fully offline.</p>
+					<p class="mt-1 text-emerald-900/80 dark:text-emerald-200/80">Swarmdo speaks any OpenAI-compatible endpoint: vLLM, Ollama, LM Studio, Together, Groq, or self-hosted. Native support for <a href="the upstream project (see NOTICE)" target="_blank" rel="noopener" class="underline">swarmLLM</a> (lives in <code>upstream/SwarmVector/examples/swarmLLM</code>) — Swarmdo's self-improving local model layer with MicroLoRA adapters that learn from your trajectories via SONA. Pair cloud + local, or run fully offline.</p>
 				</div>
 			</section>
 
@@ -375,23 +375,23 @@
 				<h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-gray-500">Resources</h3>
 				<ul class="space-y-1 text-sm">
 					<li>
-						<a href="https://github.com/ruvnet/swarmdo" target="_blank" rel="noopener" class="text-blue-600 hover:underline dark:text-blue-400">
-							github.com/ruvnet/swarmdo →
+						<a href="the upstream project (see NOTICE)" target="_blank" rel="noopener" class="text-blue-600 hover:underline dark:text-blue-400">
+							the upstream project (see NOTICE) →
 						</a>
 					</li>
 					<li>
-						<a href="https://github.com/ruvnet/swarmdo/blob/main/swarmdo/docs/adr/ADR-033-SWARMVOCAL-WASM-MCP-INTEGRATION.md" target="_blank" rel="noopener" class="text-blue-600 hover:underline dark:text-blue-400">
+						<a href="the upstream project (see NOTICE)" target="_blank" rel="noopener" class="text-blue-600 hover:underline dark:text-blue-400">
 							ADR-033 — Web UI architecture →
 						</a>
 					</li>
 					<li>
-						<a href="https://github.com/ruvnet/swarmdo/issues/1689" target="_blank" rel="noopener" class="text-blue-600 hover:underline dark:text-blue-400">
+						<a href="the upstream project (see NOTICE)" target="_blank" rel="noopener" class="text-blue-600 hover:underline dark:text-blue-400">
 							Issue #1689 — UI capabilities & roadmap →
 						</a>
 					</li>
 					<li>
-						<a href="https://github.com/ruvnet/swarmvector" target="_blank" rel="noopener" class="text-blue-600 hover:underline dark:text-blue-400">
-							ruvnet/swarmvector — intelligence layer →
+						<a href="the upstream project (see NOTICE)" target="_blank" rel="noopener" class="text-blue-600 hover:underline dark:text-blue-400">
+							upstream/swarmvector — intelligence layer →
 						</a>
 					</li>
 				</ul>

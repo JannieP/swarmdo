@@ -7,7 +7,7 @@
 In Claude Code:
 
 ```
-/plugin add ruvnet/claude-flow
+/plugin add upstream/claude-flow
 ```
 
 This will:
@@ -23,7 +23,7 @@ If you've cloned the repository:
 
 ```bash
 # Clone the repository
-git clone https://github.com/ruvnet/claude-flow.git
+git clone the upstream project (see NOTICE)
 cd swarmdo
 
 # In Claude Code, install the plugin
@@ -174,7 +174,7 @@ Agents are automatically available for Claude Code to delegate to when appropria
 /plugin list
 
 # Try installing again
-/plugin add ruvnet/claude-flow
+/plugin add upstream/claude-flow
 ```
 
 ### Commands Not Showing
@@ -196,7 +196,7 @@ ls -la agents/
 
 ```
 # Try local installation
-git clone https://github.com/ruvnet/claude-flow.git
+git clone the upstream project (see NOTICE)
 cd swarmdo
 /plugin add .
 ```
@@ -207,8 +207,8 @@ cd swarmdo
 
 - **Documentation**: See README.md for complete documentation
 - **Quick Start**: See docs/QUICKSTART.md for 5-minute guide
-- **GitHub Issues**: https://github.com/ruvnet/claude-flow/issues
-- **Discussions**: https://github.com/ruvnet/claude-flow/discussions
+- **GitHub Issues**: the upstream project (see NOTICE)
+- **Discussions**: the upstream project (see NOTICE)
 
 ---
 
@@ -226,7 +226,7 @@ This will remove all commands, agents, and hooks.
 
 **Version**: 2.5.0
 **License**: MIT
-**Author**: rUv
+**Author**: the upstream author
 
 ---
 

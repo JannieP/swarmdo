@@ -133,7 +133,7 @@ export function validateBackend(requested, detected) {
     if (requested === 'swarmvector' && detected.backend !== 'swarmvector') {
         throw new Error('SwarmVector backend requested but not available.\n' +
             'Install with: npm install @swarmvector/core\n' +
-            'See: https://github.com/ruvnet/swarmvector');
+            'See: the upstream project (see NOTICE)');
     }
     if (requested === 'hnswlib' && detected.backend !== 'hnswlib') {
         throw new Error('HNSWLib backend requested but not available.\n' +

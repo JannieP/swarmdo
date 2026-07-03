@@ -1,4 +1,4 @@
-# ADR-148 — Cost-Optimal Model Router Artifact Lifecycle (wiring `@metaharness/router` with optional `@ruvector/tiny-dancer` FastGRNN backend)
+# ADR-148 — Cost-Optimal Model Router Artifact Lifecycle (wiring `@metaharness/router` with optional `@swarmvector/tiny-dancer` FastGRNN backend)
 
 **Status**: Proposed
 **Date**: 2026-06-15
@@ -7,16 +7,16 @@
 
 ## Context
 
-`v3/@rufflo/cli/src/ruvector/model-router.ts` shipped a **lexical complexity
+`v3/@swarmdo/cli/src/swarmvector/model-router.ts` shipped a **lexical complexity
 heuristic + Thompson-sampling Beta-Bernoulli bandit** even though its file header
-and ADR-026 both described a **`@ruvector/tiny-dancer` FastGRNN neural router**.
+and ADR-026 both described a **`@swarmvector/tiny-dancer` FastGRNN neural router**.
 #2329 closed the documentation–implementation gap via Option A in #2330 (docs +
 labels updated, no behavior change). #2334 kept the open question of whether to
 *actually* wire the neural path — Option B in the original triage.
 
 When #2334 was raised, three blockers stalled the work:
 
-1. **Safetensors layout undocumented.** `@ruvector/tiny-dancer`'s
+1. **Safetensors layout undocumented.** `@swarmvector/tiny-dancer`'s
    `RouterConfig.modelPath` required a trained FastGRNN safetensors artifact but
    the tensor names/shapes/dtype the loader expected were not documented in the
    npm package; `reloadModel()` failed opaquely without that knowledge.
@@ -29,7 +29,7 @@ When #2334 was raised, three blockers stalled the work:
 
 On **2026-06-15** two complementary upstream packages landed:
 
-### `@ruvector/tiny-dancer@0.1.22` (FastGRNN native backend)
+### `@swarmvector/tiny-dancer@0.1.22` (FastGRNN native backend)
 
 Four releases between 12:47 and 16:07 UTC. New exports:
 
@@ -51,7 +51,7 @@ Published 2026-06-15 16:46 UTC, ~40 min after tiny-dancer 0.1.22. Described as
 | `TrainedRouter` (KRR with LOO-CV λ) | `dist/train.js` | offline | portable JSON via `toJSON()` | no |
 | `NativeRouter` (FastGRNN) | `dist/native.js` (wraps tiny-dancer) | `trainNativeRouter` writes safetensors | `.safetensors` (~6 kB) | yes (optional peer) |
 
-`resolveRouterBackend('auto')` selects native when `@ruvector/tiny-dancer` is
+`resolveRouterBackend('auto')` selects native when `@swarmvector/tiny-dancer` is
 installed, else the pure-TS path. All three backends consume the **same**
 `{embedding: number[], scores: Record<modelId, quality>}` row shape — so the
 trajectory-collection format is one decision that serves every backend.
@@ -72,16 +72,16 @@ ADR-026.
 
 ## Decision
 
-Wire `@metaharness/router@^0.3.2` into `@rufflo/cli`'s model routing path,
-with `@ruvector/tiny-dancer@^0.1.22` as an optional peer for native
+Wire `@metaharness/router@^0.3.2` into `@swarmdo/cli`'s model routing path,
+with `@swarmvector/tiny-dancer@^0.1.22` as an optional peer for native
 acceleration. Default behavior remains **byte-identical** to the shipped
 heuristic + bandit until a model is intentionally adopted. Six phases:
 
 ### 1. Dependencies (ADR-124)
 
-- `@rufflo/cli/package.json` `optionalDependencies`:
+- `@swarmdo/cli/package.json` `optionalDependencies`:
   - `@metaharness/router: ^0.3.2`           (pure TS, no native)
-  - `@ruvector/tiny-dancer: ^0.1.22`        (optional native acceleration)
+  - `@swarmvector/tiny-dancer: ^0.1.22`        (optional native acceleration)
 - Both resolved via dynamic `import()` inside `neural-router.ts`. If either is
   absent, the missing-piece path silently falls back to bandit-fallback. The
   pure-TS router has no native binary requirement at all — graceful degradation
@@ -114,7 +114,7 @@ clear" — is exactly the **uncertainty escalation** ADR-142 / #2250 introduced
 in the bandit; the new router exposes it natively.
 
 `qualityBar` starts at `0.80` (a defensible default for production routing) and
-is configurable via `RUFFLO_ROUTER_QUALITY_BAR`.
+is configurable via `SWARMDO_ROUTER_QUALITY_BAR`.
 
 ### 4. Observability: `routedBy`, not inferred (ADR-074, ADR-086)
 
@@ -133,7 +133,7 @@ failed.
 ### 5. Training: DRACO-shaped trajectories, opt-in
 
 `RouterTrajectoryRecorder` writes one JSONL row per decision to
-`.swarm/model-router-trajectories.jsonl` when `RUFFLO_ROUTER_TRAJECTORY=1`.
+`.swarm/model-router-trajectories.jsonl` when `SWARMDO_ROUTER_TRAJECTORY=1`.
 Default: **off** (rows carry full task text + raw embeddings).
 
 Row schema (versioned `"v": 1`):
@@ -161,7 +161,7 @@ reshaping.
   a fallback when the KRR artifact is missing or fails to parse.
 - **Trained (optional)**: a `TrainedRouter` JSON written via `toJSON()` from
   a larger corpus, distributed via IPFS using the existing `hooks transfer`
-  channel. `RUFFLO_ROUTER_MODEL_PATH` can point at a local path or an
+  channel. `SWARMDO_ROUTER_MODEL_PATH` can point at a local path or an
   `ipfs://` URI.
 - **Native-accelerated (optional)**: a `.safetensors` written by
   `trainNativeRouter`. Loaded only when tiny-dancer is installed *and* the
@@ -199,7 +199,7 @@ ADR-086 footgun.
   router` is pure TS with no transitive deps, tiny-dancer adds the native
   binary. The marginal install-size cost is ~40 kB of JS + ~6 kB of model.
 - Storing trajectory rows on disk introduces a PII/retention surface that the
-  bandit (aggregates-only) did not have. Mitigation: `RUFFLO_ROUTER_TRAJECTORY`
+  bandit (aggregates-only) did not have. Mitigation: `SWARMDO_ROUTER_TRAJECTORY`
   is opt-in, rotation policy documented, rows are local and never uploaded by
   default.
 - The benchmark below uses a **synthetic corpus with strong signal-to-noise
@@ -215,7 +215,7 @@ ADR-086 footgun.
 ## Measured numbers (before/after)
 
 Benchmark: `scripts/benchmark-router.mjs` (374 lines, reproducible from this
-repo + `npm install @metaharness/router@0.3.2 @ruvector/tiny-dancer@0.1.22`).
+repo + `npm install @metaharness/router@0.3.2 @swarmvector/tiny-dancer@0.1.22`).
 `darwin-arm64`, `node v22.22.1`, N=400 (280 train / 120 test), dim=32,
 hidden=12, epochs=40. Heuristic+bandit exercised **cold** (no learned state
 — same condition as a fresh installation).
@@ -229,7 +229,7 @@ hidden=12, epochs=40. Heuristic+bandit exercised **cold** (no learned state
 | shipped heuristic+bandit (cold) | **55.0%** | **54.2%** | 0.076–0.083 ms | 0.174 ms |
 | @metaharness/router 0.3.2 k-NN | **100.0%** | **100.0%** | 0.107–0.108 ms | 0.140 ms |
 | @metaharness/router 0.3.2 KRR (LOO-tuned) | **98.3%** | **100.0%** | **0.020 ms** | 0.023 ms |
-| @ruvector/tiny-dancer 0.1.22 FastGRNN | **100.0%** | **100.0%** | 0.036–0.037 ms | 0.047 ms |
+| @swarmvector/tiny-dancer 0.1.22 FastGRNN | **100.0%** | **100.0%** | 0.036–0.037 ms | 0.047 ms |
 
 Training/build cost:
 
@@ -312,18 +312,18 @@ Sequenced for the smallest credible PR first:
 
 **PR 1 — Phase 1 (smallest, default behavior byte-identical)**
 
-- Add `@metaharness/router ^0.3.2` and `@ruvector/tiny-dancer ^0.1.22` to
-  `@rufflo/cli/package.json` `optionalDependencies`.
-- Add `v3/@rufflo/cli/src/ruvector/neural-router.ts` exporting one
+- Add `@metaharness/router ^0.3.2` and `@swarmvector/tiny-dancer ^0.1.22` to
+  `@swarmdo/cli/package.json` `optionalDependencies`.
+- Add `v3/@swarmdo/cli/src/swarmvector/neural-router.ts` exporting one
   function: `tryCostOptimalRoute(embedding) → Promise<{model, predictedQuality,
   metBar, routedBy} | null>`. Returns `null` unless
-  `RUFFLO_ROUTER_NEURAL=1` is set, a seed corpus or trained artifact
+  `SWARMDO_ROUTER_NEURAL=1` is set, a seed corpus or trained artifact
   resolves, and the backend selects.
 - Bundle `assets/model-router/seed-rows.json` (~50 queries) for the k-NN cold
   path so the gate-on result is non-empty out of the box.
 - Thread the embedding through `ModelRouter.route(task, embedding?)` for the
   inference call only.
-- Add `RouterTrajectoryRecorder` (gated by `RUFFLO_ROUTER_TRAJECTORY=1`)
+- Add `RouterTrajectoryRecorder` (gated by `SWARMDO_ROUTER_TRAJECTORY=1`)
   writing DRACO-shaped JSONL.
 - Add `routedBy` to every result.
 - Tests: graceful-degradation (both optional deps missing → bandit-fallback),
@@ -339,21 +339,21 @@ Sequenced for the smallest credible PR first:
 **PR 3 — flip default**
 
 - Once the acceptance bar is met on a real corpus, set
-  `RUFFLO_ROUTER_NEURAL=1` as the package default and document the
+  `SWARMDO_ROUTER_NEURAL=1` as the package default and document the
   opt-out.
 
 ## References
 
 - Issues: #2329 (closed, Option A), #2334 (open, Option B), #2250 (closed)
 - ADRs: ADR-026 (3-tier routing), ADR-074, ADR-086, ADR-124, ADR-142, ADR-143
-- Code: `v3/@rufflo/cli/src/ruvector/model-router.ts`,
-  `v3/@rufflo/cli/src/ruvector/enhanced-model-router.ts`
+- Code: `v3/@swarmdo/cli/src/swarmvector/model-router.ts`,
+  `v3/@swarmdo/cli/src/swarmvector/enhanced-model-router.ts`
 - Upstream:
   - `@metaharness/router@0.3.2` (2026-06-15, exports `Router`, `TrainedRouter`,
     `trainRouter`, `NativeRouter`, `trainNativeRouter`, `resolveRouterBackend`,
     `isNativeRouterAvailable`)
-  - `@ruvector/tiny-dancer@0.1.22` (2026-06-15, exports `trainRouter`, `score`,
+  - `@swarmvector/tiny-dancer@0.1.22` (2026-06-15, exports `trainRouter`, `score`,
     `Router`)
-  - ruvector commits: `5173ce7`, `39fb398`, `3c1f701`
+  - swarmvector commits: `5173ce7`, `39fb398`, `3c1f701`
 - Bench: `scripts/benchmark-router.mjs`,
   `docs/benchmarks/runs/router-4way-seed42-2026-06-15T*.txt`

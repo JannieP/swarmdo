@@ -18,5 +18,5 @@
   "libc": [
     "musl"
   ],
-  "repository": "https://github.com/ruvnet/swarmvector"
+  "repository": "the upstream project (see NOTICE)"
 }

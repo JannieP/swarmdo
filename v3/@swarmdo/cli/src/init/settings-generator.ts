@@ -55,7 +55,7 @@ export function generateSettings(options: InitOptions): object {
   if (options.attribution === true) {
     settings.attribution = {
       commit: 'Co-Authored-By: swarmdo-bot <swarmdo-bot@users.noreply.github.com>',
-      pr: '🤖 Generated with [Swarmdo](https://github.com/ruvnet/swarmdo)',
+      pr: '🤖 Generated with [Swarmdo](the upstream project (see NOTICE))',
     };
   }
 

@@ -27,7 +27,7 @@ v2/src/memory/
 
 ### V3 Memory Architecture
 ```
-v3/@rufflo/memory/
+v3/@swarmdo/memory/
 ├── src/
 │   ├── types.ts              # Type definitions
 │   ├── index.ts              # UnifiedMemoryService
@@ -85,18 +85,18 @@ v3/@rufflo/memory/
 
 ```typescript
 // V2: Initialize memory
-import { MemoryManager } from 'rufflo/memory';
+import { MemoryManager } from 'swarmdo/memory';
 const memory = new MemoryManager({
   backend: 'sqlite',
-  path: './.rufflo/memory.db'
+  path: './.swarmdo/memory.db'
 });
 
 // V3: Initialize memory
-import { UnifiedMemoryService } from '@rufflo/memory';
+import { UnifiedMemoryService } from '@swarmdo/memory';
 const memory = new UnifiedMemoryService({
   backend: 'hybrid',  // SQLite + AgentDB
   sqlite: {
-    path: './.rufflo/memory.db'
+    path: './.swarmdo/memory.db'
   },
   agentdb: {
     enableHNSW: true,
@@ -157,7 +157,7 @@ const results = await memory.search({
 });
 
 // V3: Fluent query builder
-import { QueryBuilder } from '@rufflo/memory';
+import { QueryBuilder } from '@swarmdo/memory';
 const results = await new QueryBuilder(memory)
   .semantic('feature request')
   .type('episodic')
@@ -171,7 +171,7 @@ const results = await new QueryBuilder(memory)
 
 ```typescript
 // V3: HNSW vector search
-import { HNSWIndex } from '@rufflo/memory';
+import { HNSWIndex } from '@swarmdo/memory';
 
 const index = new HNSWIndex({
   dimensions: 384,
@@ -192,17 +192,17 @@ const results = await index.search(queryEmbedding, k: 10);
 
 ```typescript
 // Migrate V2 data to V3
-import { migrateMemoryData } from '@rufflo/memory/migration';
+import { migrateMemoryData } from '@swarmdo/memory/migration';
 
 await migrateMemoryData({
   source: {
     type: 'v2-sqlite',
-    path: './.rufflo/memory.db'
+    path: './.swarmdo/memory.db'
   },
   target: {
     type: 'v3-hybrid',
-    sqlitePath: './.rufflo/v3-memory.db',
-    agentdbPath: './.rufflo/v3-vectors'
+    sqlitePath: './.swarmdo/v3-memory.db',
+    agentdbPath: './.swarmdo/v3-vectors'
   },
   options: {
     generateEmbeddings: true,
@@ -228,11 +228,11 @@ v2/src/
 
 ### V3 Neural Architecture
 ```
-v3/@rufflo/neural/
+v3/@swarmdo/neural/
 ├── src/
 │   ├── index.ts              # NeuralLearningSystem
 │   ├── sona-manager.ts       # SONA modes
-│   ├── sona-integration.ts   # @ruvector/sona
+│   ├── sona-integration.ts   # @swarmvector/sona
 │   ├── reasoning-bank.ts     # Native ReasoningBank
 │   ├── pattern-learner.ts    # Pattern extraction
 │   ├── types.ts
@@ -289,14 +289,14 @@ v3/@rufflo/neural/
 
 ```typescript
 // V2: Neural integration
-import { NeuralDomainMapper } from 'rufflo/neural';
-import { registerNeuralHooks } from 'rufflo/neural/integration';
+import { NeuralDomainMapper } from 'swarmdo/neural';
+import { registerNeuralHooks } from 'swarmdo/neural/integration';
 
 const mapper = new NeuralDomainMapper();
 registerNeuralHooks(mapper);
 
 // V3: Neural learning system
-import { NeuralLearningSystem } from '@rufflo/neural';
+import { NeuralLearningSystem } from '@swarmdo/neural';
 
 const neural = new NeuralLearningSystem({
   mode: 'balanced',  // real-time | balanced | research | edge | batch
@@ -343,13 +343,13 @@ await trajectory.complete({ quality: 0.9 });
 
 ```typescript
 // V2: Via agentic-flow adapter
-import { ReasoningBankAdapter } from 'rufflo/reasoningbank';
+import { ReasoningBankAdapter } from 'swarmdo/reasoningbank';
 const rb = new ReasoningBankAdapter();
 await rb.store(memory);
 const patterns = await rb.retrieve(query);
 
 // V3: Native implementation
-import { ReasoningBank } from '@rufflo/neural';
+import { ReasoningBank } from '@swarmdo/neural';
 
 const rb = new ReasoningBank({
   memory: agentDbBackend,  // Uses AgentDB for ~4.7x faster search
@@ -370,7 +370,7 @@ await rb.consolidate();                               // CONSOLIDATE
 
 ```typescript
 // V3 only: Configure learning modes
-import { SONAManager, LearningMode } from '@rufflo/neural';
+import { SONAManager, LearningMode } from '@swarmdo/neural';
 
 const sona = new SONAManager();
 
@@ -394,7 +394,7 @@ sona.setMode(LearningMode.BATCH);
 
 ```typescript
 // V3 only: Use RL algorithms
-import { createPPO, createDQN, createA2C } from '@rufflo/neural/algorithms';
+import { createPPO, createDQN, createA2C } from '@swarmdo/neural/algorithms';
 
 // PPO for continuous action spaces
 const ppo = createPPO({
@@ -422,7 +422,7 @@ const a2c = createA2C({
 
 ```typescript
 // V3 only: LoRA and EWC
-import { SONAManager } from '@rufflo/neural';
+import { SONAManager } from '@swarmdo/neural';
 
 const sona = new SONAManager({
   enableLoRA: true,
@@ -455,7 +455,7 @@ await sona.train(newTask);
 ## Migration Checklist
 
 ### Memory Migration
-- [ ] Update imports to `@rufflo/memory`
+- [ ] Update imports to `@swarmdo/memory`
 - [ ] Configure hybrid backend
 - [ ] Run data migration script
 - [ ] Generate embeddings for existing entries
@@ -463,7 +463,7 @@ await sona.train(newTask);
 - [ ] Test HNSW index performance
 
 ### Neural Migration
-- [ ] Update imports to `@rufflo/neural`
+- [ ] Update imports to `@swarmdo/neural`
 - [ ] Initialize NeuralLearningSystem
 - [ ] Configure SONA mode
 - [ ] Migrate training code to trajectories

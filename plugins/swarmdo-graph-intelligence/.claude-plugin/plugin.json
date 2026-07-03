@@ -3,8 +3,8 @@
   "description": "Swarmdo Graph Intelligence Engine — real-time relationship intelligence with complexity-aware execution. Single-entry personalized PageRank, streaming delta updates, witness-signed reasoning artifacts, federation-distributable PR vectors. Built on sublinear-time-solver@1.7.0.",
   "version": "0.1.0-alpha.1",
   "author": {
-    "name": "ruvnet",
-    "url": "https://github.com/ruvnet"
+    "name": "upstream",
+    "url": "https://the upstream project (see NOTICE)"
   },
   "homepage": "https://github.com/JannieP/swarmdo",
   "license": "MIT",

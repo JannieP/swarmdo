@@ -10,7 +10,7 @@ Neither subsumes the other — see [Choosing a surface](#choosing-a-surface).
 ## Install
 
 ```
-/plugin marketplace add ruvnet/swarmdo
+/plugin marketplace add upstream/swarmdo
 /plugin install swarmdo-workflows@swarmdo
 ```
 

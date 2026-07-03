@@ -395,7 +395,7 @@ Bootstrap intelligence from repository analysis.
 ```json
 {
   "success": true,
-  "repositoryPath": "/workspaces/rufflo",
+  "repositoryPath": "/workspaces/swarmdo",
   "statistics": {
     "filesAnalyzed": 247,
     "patternsExtracted": 156,

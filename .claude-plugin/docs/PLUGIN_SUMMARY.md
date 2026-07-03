@@ -4,8 +4,8 @@
 
 **Version**: 2.5.0
 **License**: MIT
-**Author**: rUv
-**Repository**: https://github.com/ruvnet/claude-flow
+**Author**: the upstream author
+**Repository**: the upstream project (see NOTICE)
 
 ---
 
@@ -45,7 +45,7 @@ swarmdo/
 
 ```
 # Install plugin
-/plugin add ruvnet/claude-flow
+/plugin add upstream/claude-flow
 
 # Restart Claude Code
 /restart
@@ -220,7 +220,7 @@ All documentation follows official Claude Code plugin guidelines.
 
 ### Install
 ```
-/plugin add ruvnet/claude-flow
+/plugin add upstream/claude-flow
 ```
 
 ### Update
@@ -290,16 +290,16 @@ Should show `swarmdo` as active.
 
 ## 🤝 Support & Community
 
-- **Repository**: https://github.com/ruvnet/claude-flow
-- **Issues**: https://github.com/ruvnet/claude-flow/issues
-- **Discussions**: https://github.com/ruvnet/claude-flow/discussions
+- **Repository**: the upstream project (see NOTICE)
+- **Issues**: the upstream project (see NOTICE)
+- **Discussions**: the upstream project (see NOTICE)
 
 ---
 
 ## 📝 License & Attribution
 
 - **License**: MIT
-- **Author**: rUv (ruv@ruv.net)
+- **Author**: the upstream author (maintainers@swarmdo.com)
 - **Copyright**: 2025
 - **Open Source**: Free for personal and commercial use
 
@@ -327,12 +327,12 @@ The plugin is configured via `.claude-plugin/plugin.json`:
   "version": "2.5.0",
   "description": "Enterprise AI agent orchestration plugin...",
   "author": {
-    "name": "rUv",
-    "email": "ruv@ruv.net"
+    "name": "the upstream author",
+    "email": "maintainers@swarmdo.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ruvnet/claude-flow.git"
+    "url": "the upstream project (see NOTICE)"
   },
   "mcpServers": {
     "swarmdo": {
@@ -347,7 +347,7 @@ Commands and agents are automatically discovered from `commands/` and `agents/` 
 
 Users install with:
 ```
-/plugin add ruvnet/claude-flow
+/plugin add upstream/claude-flow
 ```
 
 ---

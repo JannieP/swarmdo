@@ -377,7 +377,7 @@ AVAILABLE CONFIGURATION KEYS:
   USE_OPENROUTER        - Force OpenRouter (true/false)
   USE_ONNX              - Use ONNX local inference (true/false)
 
-For more information: https://github.com/ruvnet/agentic-flow
+For more information: the upstream project (see NOTICE)
   `);
 }
 // If run directly

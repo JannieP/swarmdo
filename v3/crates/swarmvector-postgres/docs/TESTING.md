@@ -412,7 +412,7 @@ fn test_invalid_dimensions() {
 ## Support
 
 For test failures or questions:
-1. Check existing issues: https://github.com/ruvnet/swarmvector/issues
+1. Check existing issues: the upstream project (see NOTICE)
 2. Run with verbose output
 3. Check PostgreSQL logs
 4. Create minimal reproduction case

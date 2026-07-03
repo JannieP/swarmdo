@@ -3,7 +3,7 @@
  * Plugin management, installation, and lifecycle
  * Now uses IPFS-based decentralized registry for discovery
  *
- * Created with ❤️ by ruv.io
+ * Created with ❤️ by swarmdo.com
  */
 
 import type { Command, CommandContext, CommandResult } from '../types.js';
@@ -934,7 +934,7 @@ export const pluginsCommand: Command = {
     ]);
     output.writeln();
     output.writeln(output.dim('Run "swarmdo plugins list --official" to see all official plugins'));
-    output.writeln(output.dim('Created with ❤️ by ruv.io'));
+    output.writeln(output.dim('Created with ❤️ by swarmdo.com'));
     return { success: true };
   },
 };

@@ -1,7 +1,7 @@
 # @swarmdo/plugin-hyperbolic-reasoning
 
 [![npm version](https://img.shields.io/npm/v/@swarmdo/plugin-hyperbolic-reasoning.svg)](https://www.npmjs.com/package/@swarmdo/plugin-hyperbolic-reasoning)
-[![license](https://img.shields.io/npm/l/@swarmdo/plugin-hyperbolic-reasoning.svg)](https://github.com/ruvnet/claude-flow/blob/main/LICENSE)
+[![license](https://img.shields.io/npm/l/@swarmdo/plugin-hyperbolic-reasoning.svg)](the upstream project (see NOTICE))
 [![downloads](https://img.shields.io/npm/dm/@swarmdo/plugin-hyperbolic-reasoning.svg)](https://www.npmjs.com/package/@swarmdo/plugin-hyperbolic-reasoning)
 
 An exotic reasoning plugin implementing hyperbolic neural networks for superior hierarchical understanding. The plugin enables efficient representation of tree structures, taxonomic reasoning, and hierarchical entailment using Poincare ball embeddings with Mobius operations. Applications include improved ontology navigation, hierarchical code understanding, and organizational relationship modeling.

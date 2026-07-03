@@ -24,9 +24,9 @@ The V3 hooks system integrates with background daemons and statusline displays t
 ├─────────────────────────────────────────────────────────────────────────┤
 │  statusline.sh (on-demand, <200ms)                                       │
 │  └─> Reads from:                                                         │
-│       ├─ .rufflo/metrics.db      (SQLite, primary)                 │
-│       ├─ .rufflo/hooks.db        (ReasoningBank patterns)          │
-│       └─ .rufflo/metrics/*.json  (exported, legacy compat)         │
+│       ├─ .swarmdo/metrics.db      (SQLite, primary)                 │
+│       ├─ .swarmdo/hooks.db        (ReasoningBank patterns)          │
+│       └─ .swarmdo/metrics/*.json  (exported, legacy compat)         │
 ├─────────────────────────────────────────────────────────────────────────┤
 │  SessionEnd Hook                                                         │
 │  └─> .claude/helpers/daemon-manager.sh stop                             │
@@ -59,7 +59,7 @@ Central control for all background processes with hooks integration.
 
 **PID Management:**
 ```
-.rufflo/pids/
+.swarmdo/pids/
 ├── swarm-monitor.pid      # Swarm monitoring daemon
 ├── metrics-daemon.pid     # Metrics collection daemon
 └── hooks-daemon.pid       # Hooks learning daemon
@@ -67,7 +67,7 @@ Central control for all background processes with hooks integration.
 
 **Log Files:**
 ```
-.rufflo/logs/
+.swarmdo/logs/
 ├── daemon.log             # Daemon manager operations
 ├── swarm-monitor.log      # Process detection logs
 ├── metrics-daemon.log     # Metrics sync logs
@@ -196,7 +196,7 @@ node .claude/helpers/hooks-daemon.mjs export --format json
 ### Format
 
 ```
-▊ Rufflo V3 ● agentic-flow@alpha  │  ⎇ v3
+▊ Swarmdo V3 ● agentic-flow@alpha  │  ⎇ v3
 ─────────────────────────────────────────────────────
 🏗️  DDD Domains    [●●●●●]  5/5    ⚡ 1.0x → unverified (no benchmark)
 🤖 Swarm Agents    ◉ [ 5/15]      🟢 CVE 3/3    💾 156 patterns
@@ -212,7 +212,7 @@ node .claude/helpers/hooks-daemon.mjs export --format json
 # .claude/statusline.sh - V3 with Hooks Integration
 
 # Read from SQLite if available
-if [ -f ".rufflo/metrics.db" ]; then
+if [ -f ".swarmdo/metrics.db" ]; then
   METRICS=$(node -e "
     const db = require('.claude/helpers/metrics-db.mjs');
     console.log(JSON.stringify(db.getStatuslineData()));
@@ -228,7 +228,7 @@ if [ -f ".rufflo/metrics.db" ]; then
 fi
 
 # Format output
-printf "▊ Rufflo V3 ● agentic-flow@alpha  │  ⎇ v3\n"
+printf "▊ Swarmdo V3 ● agentic-flow@alpha  │  ⎇ v3\n"
 printf "─────────────────────────────────────────────────────\n"
 printf "🏗️  DDD Domains    %s  │  ⚡ Performance targets active\n" "$DDD_PROGRESS"
 printf "🤖 Swarm Agents    ◉ [%2d/15]      🟢 CVE %s    💾 %d patterns\n" "$ACTIVE_AGENTS" "$CVE_STATUS" "$PATTERNS"
@@ -258,7 +258,7 @@ printf "────────────────────────
           {
             "type": "command",
             "timeout": 5000,
-            "command": "/workspaces/rufflo/.claude/helpers/daemon-manager.sh start 3 30 60"
+            "command": "/workspaces/swarmdo/.claude/helpers/daemon-manager.sh start 3 30 60"
           }
         ]
       }
@@ -269,7 +269,7 @@ printf "────────────────────────
           {
             "type": "command",
             "timeout": 3000,
-            "command": "/workspaces/rufflo/.claude/helpers/daemon-manager.sh stop"
+            "command": "/workspaces/swarmdo/.claude/helpers/daemon-manager.sh stop"
           }
         ]
       }
@@ -288,12 +288,12 @@ printf "────────────────────────
   },
   "statusLine": {
     "type": "command",
-    "command": "/workspaces/rufflo/.claude/statusline.sh"
+    "command": "/workspaces/swarmdo/.claude/statusline.sh"
   }
 }
 ```
 
-### V3 Project Settings (`.rufflo/config.json`)
+### V3 Project Settings (`.swarmdo/config.json`)
 
 ```json
 {
@@ -306,12 +306,12 @@ printf "────────────────────────
     "metricsSync": {
       "enabled": true,
       "interval": 30000,
-      "database": ".rufflo/metrics.db"
+      "database": ".swarmdo/metrics.db"
     },
     "hooksLearning": {
       "enabled": true,
       "interval": 60000,
-      "database": ".rufflo/hooks.db"
+      "database": ".swarmdo/hooks.db"
     }
   },
   "statusline": {
@@ -336,7 +336,7 @@ SessionStart Hook Triggered
     │   └─> Start hooks-daemon.mjs (every 60s)
     │
     ├─> Initialize ReasoningBank
-    │   ├─> Load patterns from .rufflo/hooks.db
+    │   ├─> Load patterns from .swarmdo/hooks.db
     │   └─> Warm HNSW index for retrieval
     │
     └─> First statusline render
@@ -447,13 +447,13 @@ SessionEnd Hook Triggered
 .claude/helpers/daemon-manager.sh status
 
 # View logs
-tail -f .rufflo/logs/daemon.log
+tail -f .swarmdo/logs/daemon.log
 
 # Check for stale PID files
-ls -la .rufflo/pids/
+ls -la .swarmdo/pids/
 
 # Manual cleanup and restart
-rm .rufflo/pids/*.pid
+rm .swarmdo/pids/*.pid
 .claude/helpers/daemon-manager.sh start
 ```
 
@@ -464,7 +464,7 @@ rm .rufflo/pids/*.pid
 node .claude/helpers/metrics-db.mjs sync
 
 # Check SQLite database
-sqlite3 .rufflo/metrics.db "SELECT * FROM hooks_metrics"
+sqlite3 .swarmdo/metrics.db "SELECT * FROM hooks_metrics"
 
 # Verify statusline script
 bash -x .claude/statusline.sh
@@ -505,7 +505,7 @@ node .claude/helpers/hooks-daemon.mjs rebuild-index
     ├── swarm-monitor.sh             # Process detection
     └── hooks-daemon.mjs             # Learning background process
 
-.rufflo/
+.swarmdo/
 ├── metrics.db                       # Main metrics database
 ├── hooks.db                         # ReasoningBank storage
 ├── config.json                      # V3 configuration

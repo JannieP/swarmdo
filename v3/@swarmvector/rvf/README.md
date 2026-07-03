@@ -201,10 +201,10 @@ cargo install --path crates/rvf/rvf-cli
 
 ```bash
 # Download a specific example
-curl -LO https://raw.githubusercontent.com/ruvnet/swarmvector/main/examples/rvf/output/basic_store.rvf
+curl -LO https://raw.githubusercontent.com/upstream/swarmvector/main/examples/rvf/output/basic_store.rvf
 
 # Clone just the examples
-git clone --depth 1 --filter=blob:none --sparse https://github.com/ruvnet/swarmvector.git
+git clone --depth 1 --filter=blob:none --sparse the upstream project (see NOTICE)
 cd swarmvector && git sparse-checkout set examples/rvf/output
 ```
 
@@ -277,7 +277,7 @@ The `swarmvector` npm package includes 8 RVF CLI commands:
 npm install swarmvector @swarmvector/rvf
 
 # Enable RVF backend
-export RUVECTOR_BACKEND=rvf
+export SWARMVECTOR_BACKEND=rvf
 
 # Or use --backend flag
 npx swarmvector --backend rvf create mydb.rvf -d 384

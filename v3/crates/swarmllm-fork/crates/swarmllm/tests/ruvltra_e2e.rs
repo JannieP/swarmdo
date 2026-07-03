@@ -11,9 +11,9 @@
     unused_must_use,
     unused_parens
 )]
-//! RuvLTRA-Small End-to-End Tests
+//! SwarmLTRA-Small End-to-End Tests
 //!
-//! This module provides comprehensive end-to-end tests for the RuvLTRA-Small
+//! This module provides comprehensive end-to-end tests for the SwarmLTRA-Small
 //! inference pipeline, including full generation, streaming, and quality validation.
 //!
 //! ## Test Categories
@@ -27,13 +27,13 @@
 //!
 //! ```bash
 //! # Run all E2E tests (some require model files)
-//! cargo test --package swarmllm ruvltra_e2e
+//! cargo test --package swarmllm swarmltra_e2e
 //!
 //! # Run only tests that don't require model files
-//! cargo test --package swarmllm ruvltra_e2e -- --skip model_required
+//! cargo test --package swarmllm swarmltra_e2e -- --skip model_required
 //!
 //! # Run with full features on Apple Silicon
-//! cargo test --package swarmllm --features coreml,hybrid-ane ruvltra_e2e
+//! cargo test --package swarmllm --features coreml,hybrid-ane swarmltra_e2e
 //! ```
 
 use swarmllm::backends::{GenerateParams, LlmBackend, ModelArchitecture, ModelConfig, Quantization};

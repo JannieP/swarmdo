@@ -741,7 +741,7 @@ Contributions are welcome! See [CONTRIBUTING.md](../../docs/development/CONTRIBU
 
 ```bash
 # Clone repository
-git clone https://github.com/ruvnet/swarmvector.git
+git clone the upstream project (see NOTICE)
 cd swarmvector/crates/router-ffi
 
 # Install dependencies
@@ -789,19 +789,19 @@ Built with cutting-edge technologies:
 
 ## Support
 
-- **Documentation**: [github.com/ruvnet/swarmvector](https://github.com/ruvnet/swarmvector)
-- **Issues**: [GitHub Issues](https://github.com/ruvnet/swarmvector/issues)
-- **Discord**: [Join our community](https://discord.gg/ruvnet)
-- **Twitter**: [@ruvnet](https://twitter.com/ruvnet)
-- **Enterprise**: [enterprise@ruv.io](mailto:enterprise@ruv.io)
+- **Documentation**: [the upstream project (see NOTICE)](the upstream project (see NOTICE))
+- **Issues**: [GitHub Issues](the upstream project (see NOTICE))
+- **Discord**: [Join our community](https://discord.gg/upstream)
+- **Twitter**: [@upstream](https://twitter.com/upstream)
+- **Enterprise**: [enterprise@swarmdo.com](mailto:enterprise@swarmdo.com)
 
 ---
 
 <div align="center">
 
-**Built by [rUv](https://ruv.io) • Part of the [Swarmvector](https://github.com/ruvnet/swarmvector) ecosystem**
+**Built by [the upstream author](https://swarmdo.com) • Part of the [Swarmvector](the upstream project (see NOTICE)) ecosystem**
 
-[![Star on GitHub](https://img.shields.io/github/stars/ruvnet/swarmvector?style=social)](https://github.com/ruvnet/swarmvector)
-[![Follow @ruvnet](https://img.shields.io/twitter/follow/ruvnet?style=social)](https://twitter.com/ruvnet)
+[![Star on GitHub](https://img.shields.io/github/stars/upstream/swarmvector?style=social)](the upstream project (see NOTICE))
+[![Follow @upstream](https://img.shields.io/twitter/follow/upstream?style=social)](https://twitter.com/upstream)
 
 </div>

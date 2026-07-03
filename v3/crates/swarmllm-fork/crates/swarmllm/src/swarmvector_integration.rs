@@ -749,7 +749,7 @@ pub struct IntelligenceLayerStats {
 /// Main Swarmvector integration entry point
 ///
 /// This struct provides the single entry point for all Swarmvector capabilities
-/// in RuvLTRA.
+/// in SwarmLTRA.
 pub struct SwarmvectorIntegration {
     /// Detected capabilities
     capabilities: SwarmvectorCapabilities,

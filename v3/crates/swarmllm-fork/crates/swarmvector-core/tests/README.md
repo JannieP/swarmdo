@@ -1,4 +1,4 @@
-# Ruvector Core Test Suite
+# Swarmvector Core Test Suite
 
 ## Overview
 
@@ -117,7 +117,7 @@ Criterion benchmarks for batch operations:
 
 ### Run All Tests
 ```bash
-cargo test --package ruvector-core
+cargo test --package swarmvector-core
 ```
 
 ### Run Specific Test Suites

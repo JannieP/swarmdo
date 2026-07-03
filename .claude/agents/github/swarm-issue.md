@@ -263,7 +263,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Process Issue
-        uses: ruvnet/swarm-action@v1
+        uses: upstream/swarm-action@v1
         with:
           command: |
             LABEL_NAME_FILE=$(mktemp)

@@ -26,7 +26,7 @@ V2 relies on shell scripts (`.claude/helpers/`) which are:
 
 ## Decision
 
-### 1. Create TypeScript Worker System in `@rufflo/hooks`
+### 1. Create TypeScript Worker System in `@swarmdo/hooks`
 
 A cross-platform worker system with:
 - **10 Built-in Workers**: performance, health, security, adr, ddd, patterns, learning, cache, git, swarm
@@ -39,7 +39,7 @@ A cross-platform worker system with:
 ### 2. Architecture
 
 ```
-@rufflo/hooks/src/workers/
+@swarmdo/hooks/src/workers/
 ├── index.ts           # WorkerManager, all worker implementations
 ├── mcp-tools.ts       # MCP tool definitions for workers
 ├── session-hook.ts    # Claude Code session integration
@@ -196,7 +196,7 @@ Coverage:
 ### Basic Usage
 
 ```typescript
-import { createWorkerManager } from '@rufflo/hooks';
+import { createWorkerManager } from '@swarmdo/hooks';
 
 const manager = createWorkerManager('/path/to/project');
 await manager.initialize();
@@ -217,7 +217,7 @@ const statusline = manager.getStatuslineString();
 ### MCP Integration
 
 ```typescript
-import { createWorkerToolHandler, workerMCPTools } from '@rufflo/hooks';
+import { createWorkerToolHandler, workerMCPTools } from '@swarmdo/hooks';
 
 // Register tools with MCP server
 const handler = createWorkerToolHandler(manager);
@@ -229,7 +229,7 @@ const result = await handler('worker/run', { worker: 'health' });
 ### Session Hook
 
 ```typescript
-import { onSessionStart, formatSessionStartOutput } from '@rufflo/hooks';
+import { onSessionStart, formatSessionStartOutput } from '@swarmdo/hooks';
 
 const result = await onSessionStart({
   projectRoot: '/path/to/project',
@@ -260,7 +260,7 @@ console.log(formatSessionStartOutput(result));
 
 ### CLI Hooks Worker Subcommand
 
-Extended the worker system with CLI integration via `hooks worker` command in `@rufflo/cli`.
+Extended the worker system with CLI integration via `hooks worker` command in `@swarmdo/cli`.
 
 #### New Worker Types (12 Total)
 
@@ -285,27 +285,27 @@ In addition to the original system workers, the CLI exposes 12 trigger-based wor
 
 ```bash
 # List all available workers
-rufflo hooks worker list
+swarmdo hooks worker list
 
 # Detect triggers from prompt text (<5ms target)
-rufflo hooks worker detect --prompt "optimize performance"
+swarmdo hooks worker detect --prompt "optimize performance"
 
 # Auto-dispatch when triggers match (confidence ≥0.6)
-rufflo hooks worker detect --prompt "deep dive" --auto-dispatch --min-confidence 0.6
+swarmdo hooks worker detect --prompt "deep dive" --auto-dispatch --min-confidence 0.6
 
 # Manually dispatch a worker
-rufflo hooks worker dispatch --trigger refactor --context "auth module"
+swarmdo hooks worker dispatch --trigger refactor --context "auth module"
 
 # Check worker status
-rufflo hooks worker status
+swarmdo hooks worker status
 
 # Cancel a running worker
-rufflo hooks worker cancel --id worker_refactor_1_abc123
+swarmdo hooks worker cancel --id worker_refactor_1_abc123
 ```
 
 #### MCP Tools Added
 
-5 new MCP tools in `@rufflo/cli/src/mcp-tools/hooks-tools.ts`:
+5 new MCP tools in `@swarmdo/cli/src/mcp-tools/hooks-tools.ts`:
 - `hooks/worker-list` - List all 12 background workers
 - `hooks/worker-dispatch` - Dispatch a worker by trigger type
 - `hooks/worker-status` - Get status of running workers
@@ -324,7 +324,7 @@ Workers are automatically triggered via the `UserPromptSubmit` hook in `.claude/
       "hooks": [{
         "type": "command",
         "timeout": 6000,
-        "command": "rufflo hooks worker detect --prompt \"$USER_PROMPT\" --auto-dispatch --min-confidence 0.6"
+        "command": "swarmdo hooks worker detect --prompt \"$USER_PROMPT\" --auto-dispatch --min-confidence 0.6"
       }]
     }]
   }
@@ -352,7 +352,7 @@ Fixed nested subcommand routing in `parser.ts` to support 3 levels of subcommand
 
 ### Daemon Service Architecture
 
-Extended the worker system with a full Node.js daemon service in `@rufflo/cli/src/services/worker-daemon.ts`. This replaces the shell-based helpers in `.claude/helpers/` with a cross-platform TypeScript implementation.
+Extended the worker system with a full Node.js daemon service in `@swarmdo/cli/src/services/worker-daemon.ts`. This replaces the shell-based helpers in `.claude/helpers/` with a cross-platform TypeScript implementation.
 
 #### Key Components
 
@@ -367,22 +367,22 @@ Extended the worker system with a full Node.js daemon service in `@rufflo/cli/sr
 
 ```bash
 # Start the daemon (runs workers on intervals)
-npx rufflo@v3alpha daemon start
-npx rufflo@v3alpha daemon start --quiet  # Run once and exit
+npx swarmdo@v3alpha daemon start
+npx swarmdo@v3alpha daemon start --quiet  # Run once and exit
 
 # Stop the daemon
-npx rufflo@v3alpha daemon stop
+npx swarmdo@v3alpha daemon stop
 
 # Check status and worker history
-npx rufflo@v3alpha daemon status
+npx swarmdo@v3alpha daemon status
 
 # Manually trigger a worker
-npx rufflo@v3alpha daemon trigger <worker>
-npx rufflo@v3alpha daemon trigger map --force
+npx swarmdo@v3alpha daemon trigger <worker>
+npx swarmdo@v3alpha daemon trigger map --force
 
 # Enable/disable workers
-npx rufflo@v3alpha daemon enable map audit optimize
-npx rufflo@v3alpha daemon enable --all
+npx swarmdo@v3alpha daemon enable map audit optimize
+npx swarmdo@v3alpha daemon enable --all
 ```
 
 #### Worker Intervals (5 Enabled by Default)
@@ -399,10 +399,10 @@ npx rufflo@v3alpha daemon enable --all
 
 #### Metrics Output
 
-Workers write JSON metrics to `.rufflo/metrics/`:
+Workers write JSON metrics to `.swarmdo/metrics/`:
 
 ```
-.rufflo/metrics/
+.swarmdo/metrics/
 ├── codebase-map.json      # map worker output
 ├── security-audit.json    # audit worker output
 ├── performance.json       # optimize worker output
@@ -414,7 +414,7 @@ Workers write JSON metrics to `.rufflo/metrics/`:
 
 #### State Persistence
 
-Daemon state is persisted to `.rufflo/daemon-state.json`:
+Daemon state is persisted to `.swarmdo/daemon-state.json`:
 
 ```typescript
 interface DaemonState {
@@ -440,7 +440,7 @@ interface DaemonState {
 hooks.SessionStart = [{
   hooks: [{
     type: 'command',
-    command: 'npx rufflo@v3alpha daemon start --quiet 2>/dev/null || true',
+    command: 'npx swarmdo@v3alpha daemon start --quiet 2>/dev/null || true',
     timeout: 5000,
     continueOnError: true,
   }]
@@ -458,13 +458,13 @@ hooks.SessionStart = [{
 
 #### Package Integration
 
-The root `package.json` now links `rufflo@v3alpha` to the V3 CLI:
+The root `package.json` now links `swarmdo@v3alpha` to the V3 CLI:
 
 ```json
 {
-  "name": "rufflo",
+  "name": "swarmdo",
   "bin": {
-    "rufflo": "./v3/@rufflo/cli/bin/cli.js"
+    "swarmdo": "./v3/@swarmdo/cli/bin/cli.js"
   },
   "publishConfig": {
     "access": "public",
@@ -474,9 +474,9 @@ The root `package.json` now links `rufflo@v3alpha` to the V3 CLI:
 ```
 
 This means all V3 CLI commands (including `daemon`) are available via:
-- `npx rufflo@v3alpha daemon start`
-- `npx rufflo@v3alpha daemon status`
-- `npx rufflo@v3alpha hooks ...`
+- `npx swarmdo@v3alpha daemon start`
+- `npx swarmdo@v3alpha daemon status`
+- `npx swarmdo@v3alpha hooks ...`
 - etc.
 
 ---

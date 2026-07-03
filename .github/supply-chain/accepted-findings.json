@@ -11,12 +11,12 @@
     {
       "date": "2026-05-19",
       "commit": "ADR-124 — agentic-flow@2.0.12 upstream fix",
-      "summary": "Shipped agentic-flow@2.0.12 with @xenova/transformers moved from `dependencies` to `optionalDependencies` (upstream PR ruvnet/agentic-flow#154). Bumped agentic-flow ^2.0.11 → ^2.0.12 in root + v3/@swarmdo/browser. Removed the previously-accepted CVE entry for agentic-flow → @xenova/transformers — root npm audit now reports 0 vulnerabilities. End-user fresh-install with `npm install --omit=optional` skips @xenova/transformers entirely; default install still pulls it for users who need embeddings."
+      "summary": "Shipped agentic-flow@2.0.12 with @xenova/transformers moved from `dependencies` to `optionalDependencies` (upstream PR upstream/agentic-flow#154). Bumped agentic-flow ^2.0.11 → ^2.0.12 in root + v3/@swarmdo/browser. Removed the previously-accepted CVE entry for agentic-flow → @xenova/transformers — root npm audit now reports 0 vulnerabilities. End-user fresh-install with `npm install --omit=optional` skips @xenova/transformers entirely; default install still pulls it for users who need embeddings."
     },
     {
       "date": "2026-05-19",
       "commit": "swarmdo#2048 — agentic-flow@2.0.13 lazy onnxruntime-node load",
-      "summary": "Shipped agentic-flow@2.0.13 to fix swarmdo#2048 — `import('agentic-flow/reasoningbank')` on Windows crashed because router/providers/onnx-local.ts used a top-level `await import('onnxruntime-node')` which forced the native binding (`onnxruntime_binding.node`) to load at module import time. On Windows this throws \"OS cannot run %1\" even when VCRedist is installed. Upstream PR ruvnet/agentic-flow#155 moves the import into a lazy `loadOrt()` helper called from `initializeSession()`, so `reasoningbank` consumers never trigger the binding unless they actually run local ONNX inference. Bumped agentic-flow ^2.0.12 → ^2.0.13 in root + v3/@swarmdo/browser. Acceptance test: `node -e \"import('agentic-flow/reasoningbank').then(()=>console.log('OK'))\"` now succeeds under both default install and `--omit=optional` (binding absent)."
+      "summary": "Shipped agentic-flow@2.0.13 to fix swarmdo#2048 — `import('agentic-flow/reasoningbank')` on Windows crashed because router/providers/onnx-local.ts used a top-level `await import('onnxruntime-node')` which forced the native binding (`onnxruntime_binding.node`) to load at module import time. On Windows this throws \"OS cannot run %1\" even when VCRedist is installed. Upstream PR upstream/agentic-flow#155 moves the import into a lazy `loadOrt()` helper called from `initializeSession()`, so `reasoningbank` consumers never trigger the binding unless they actually run local ONNX inference. Bumped agentic-flow ^2.0.12 → ^2.0.13 in root + v3/@swarmdo/browser. Acceptance test: `node -e \"import('agentic-flow/reasoningbank').then(()=>console.log('OK'))\"` now succeeds under both default install and `--omit=optional` (binding absent)."
     }
   ],
   "cve": [
@@ -25,8 +25,8 @@
       "depName": "agentic-flow",
       "severity": "high",
       "via": ["@xenova/transformers"],
-      "tracking": "ADR-124 — Moot finding: @xenova/transformers is now an OPTIONAL dependency of agentic-flow as of 2.0.12 (PR ruvnet/agentic-flow#154). The vulnerable module is not installed when consumers pass `npm install --omit=optional`. `npm audit` still reports the finding because it reads the lockfile graph (including optionals) rather than what's actually on disk — a known npm limitation. Real-world impact: zero when consumers use --omit=optional; same as before when they include optionals.",
-      "trackingIssue": "https://github.com/ruvnet/agentic-flow/pull/154",
+      "tracking": "ADR-124 — Moot finding: @xenova/transformers is now an OPTIONAL dependency of agentic-flow as of 2.0.12 (PR upstream/agentic-flow#154). The vulnerable module is not installed when consumers pass `npm install --omit=optional`. `npm audit` still reports the finding because it reads the lockfile graph (including optionals) rather than what's actually on disk — a known npm limitation. Real-world impact: zero when consumers use --omit=optional; same as before when they include optionals.",
+      "trackingIssue": "the upstream project (see NOTICE)",
       "expiresAt": "2026-11-19",
       "rationale": "Cannot fully eliminate from the audit graph until either @xenova/transformers itself ships a fix OR agentic-flow drops it entirely (covered by ADR-121 Phase 4 migration). The browser substrate does not invoke embedding code paths, so the optional-dep path is the right install profile. Re-audit when ADR-121 Phase 4 lands or @xenova/transformers ships a CVE-clean version."
     },
@@ -36,7 +36,7 @@
       "severity": "critical",
       "via": ["GHSA-5xrq-8626-4rwp"],
       "tracking": "swarmdo#2268 — Vitest <4.1.0 UI server arbitrary-file-read/exec (CWE-862, CVSS 9.8). vitest is a devDependency only — never in the published tarball, never in the runtime path. The advisory's exploit requires the Vitest UI server (vitest --ui) to be listening, which only happens during interactive local test development. CI (--run) and production install (--omit=dev) never activate the UI server. Spec was already bumped to ^4.1.0 in v3/@swarmdo/browser/package.json on 2026-06-02 (release/3.10.34); the standalone-publish package-lock.json carries workspace:* refs that npm cannot resolve in isolation, so the lockfile refresh has to wait until the next workspace-coordinated rebuild. Tracked separately so this entry expires the moment that rebuild lands.",
-      "trackingIssue": "https://github.com/ruvnet/swarmdo/issues/2268",
+      "trackingIssue": "the upstream project (see NOTICE)",
       "expiresAt": "2026-09-02",
       "rationale": "devDependency-only + exploit requires `vitest --ui` which is local-dev only. Spec already requires ^4.1.0; only the standalone package-lock graph hasn't refreshed (workspace:* protocol limitation on raw `npm install`). Zero production / CI exposure. Re-audit and remove this entry the next time the browser's package-lock.json is regenerated."
     }

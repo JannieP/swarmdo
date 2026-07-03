@@ -1633,7 +1633,7 @@ async function writeCapabilitiesDoc(
 
   const capabilities = `# Swarmdo V3 - Complete Capabilities Reference
 > Generated: ${new Date().toISOString()}
-> Full documentation: https://github.com/ruvnet/claude-flow
+> Full documentation: the upstream project (see NOTICE)
 
 ## 📋 Table of Contents
 
@@ -2030,8 +2030,8 @@ npx swarmdo@latest hooks worker dispatch --trigger optimize
 
 ---
 
-**Full Documentation**: https://github.com/ruvnet/claude-flow
-**Issues**: https://github.com/ruvnet/claude-flow/issues
+**Full Documentation**: the upstream project (see NOTICE)
+**Issues**: the upstream project (see NOTICE)
 `;
 
   fs.writeFileSync(capabilitiesPath, capabilities, 'utf-8');

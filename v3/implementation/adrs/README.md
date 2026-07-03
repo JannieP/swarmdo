@@ -1,6 +1,6 @@
 # V3 Architecture Decision Records (ADRs)
 
-This directory contains all Architecture Decision Records for Rufflo v3.
+This directory contains all Architecture Decision Records for Swarmdo v3.
 
 **Status:** ✅ **BETA READY** (22 ADRs Complete)
 **Version:** 3.0.0-alpha.84
@@ -33,7 +33,7 @@ This directory contains all Architecture Decision Records for Rufflo v3.
 | ADR-014 | Workers System | ✅ Implemented | [ADR-014-workers-system.md](./ADR-014-workers-system.md) |
 | ADR-015 | Unified Plugin System | ✅ Implemented | [ADR-015-unified-plugin-system.md](./ADR-015-unified-plugin-system.md) |
 | ADR-016 | Collaborative Issue Claims | ✅ Implemented | [ADR-016-collaborative-issue-claims.md](./ADR-016-collaborative-issue-claims.md) |
-| ADR-017 | RuVector Integration | ✅ Implemented | [ADR-017-ruvector-integration.md](./ADR-017-ruvector-integration.md) |
+| ADR-017 | SwarmVector Integration | ✅ Implemented | [ADR-017-swarmvector-integration.md](./ADR-017-swarmvector-integration.md) |
 
 ### Advanced Features (ADR-018 to ADR-025)
 
@@ -53,7 +53,7 @@ This directory contains all Architecture Decision Records for Rufflo v3.
 | ADR | Title | Status | File |
 |-----|-------|--------|------|
 | ADR-026 | Agent Booster Model Routing | ✅ Implemented | [ADR-026-agent-booster-model-routing.md](./ADR-026-agent-booster-model-routing.md) |
-| ADR-027 | RuVector PostgreSQL Integration | ✅ Implemented | [ADR-027-ruvector-postgresql-integration.md](./ADR-027-ruvector-postgresql-integration.md) |
+| ADR-027 | SwarmVector PostgreSQL Integration | ✅ Implemented | [ADR-027-swarmvector-postgresql-integration.md](./ADR-027-swarmvector-postgresql-integration.md) |
 | ADR-028 | Neural Attention Mechanisms | ✅ Implemented | [ADR-028-neural-attention-mechanisms.md](./ADR-028-neural-attention-mechanisms.md) |
 | ADR-029 | GNN Integration | ✅ Implemented | [ADR-029-gnn-integration.md](./ADR-029-gnn-integration.md) |
 | ADR-030 | Agentic QE Integration | ✅ Implemented | [ADR-030-agentic-qe-integration.md](./ADR-030-agentic-qe-integration.md) |
@@ -63,11 +63,11 @@ This directory contains all Architecture Decision Records for Rufflo v3.
 
 | ADR | Title | Status | File |
 |-----|-------|--------|------|
-| ADR-046 | Dual Umbrella: rufflo + rufflo | Accepted | [ADR-046-rufflo-rebrand.md](./ADR-046-rufflo-rebrand.md) |
+| ADR-046 | Dual Umbrella: swarmdo + swarmdo | Accepted | [ADR-046-swarmdo-rebrand.md](./ADR-046-swarmdo-rebrand.md) |
 | ADR-047 | Fast Mode Integration | Proposed | [ADR-047-fast-mode-integration.md](./ADR-047-fast-mode-integration.md) |
 | ADR-048 | Auto Memory Integration | Accepted | [ADR-048-auto-memory-integration.md](./ADR-048-auto-memory-integration.md) |
 
-### RuVector WASM Plugin Architecture (ADR-032 to ADR-041)
+### SwarmVector WASM Plugin Architecture (ADR-032 to ADR-041)
 
 | ADR | Title | Category | Status | File |
 |-----|-------|----------|--------|------|
@@ -95,7 +95,7 @@ This directory contains all Architecture Decision Records for Rufflo v3.
 | Hooks System | ✅ 100% | 20 CLI + 60 MCP hook tools |
 | Test Coverage | ✅ 85%+ | 85+ test files (ADR-008) |
 | Service Integration | ✅ Complete | agentic-flow@alpha integration |
-| RuVector Integration | ✅ Complete | Q-Learning, AST, Diff, Coverage (ADR-017) |
+| SwarmVector Integration | ✅ Complete | Q-Learning, AST, Diff, Coverage (ADR-017) |
 | Performance Benchmarks | ✅ Complete | Full benchmark suite |
 | Auto-Update System | ✅ Complete | Rate-limited startup checks (ADR-025) |
 | Production Hardening | ✅ Complete | Real metrics, labeled examples, fallback warnings |
@@ -159,12 +159,12 @@ All ADRs consider security:
 ---
 
 **Last Updated:** 2026-01-13
-**Project:** Rufflo V3
+**Project:** Swarmdo V3
 **Version:** 3.0.0-alpha.84 (Beta Ready)
 
 ### Recent Updates (2026-01-13)
 
-#### Release: @rufflo/cli@3.0.0-alpha.84 (Beta Ready)
+#### Release: @swarmdo/cli@3.0.0-alpha.84 (Beta Ready)
 
 **All Audit Issues Resolved:**
 
@@ -176,17 +176,17 @@ All ADRs consider security:
 
 **Auto-Update System (ADR-025):**
 ```bash
-npx rufflo update check      # Check for updates
-npx rufflo update all        # Update all packages
-npx rufflo update history    # View update history
-npx rufflo update rollback   # Rollback last update
+npx swarmdo update check      # Check for updates
+npx swarmdo update all        # Update all packages
+npx swarmdo update history    # View update history
+npx swarmdo update rollback   # Rollback last update
 ```
 
 ---
 
 ### Previous Updates (2026-01-07)
 
-#### Release: @rufflo/cli@3.0.0-alpha.15 (Latest)
+#### Release: @swarmdo/cli@3.0.0-alpha.15 (Latest)
 
 **Doctor Command Enhancements**:
 - **Claude Code CLI Check**: Verifies `@anthropic-ai/claude-code` installation
@@ -195,18 +195,18 @@ npx rufflo update rollback   # Rollback last update
 
 ```bash
 # Check system health including Claude Code CLI
-npx rufflo@v3alpha doctor
+npx swarmdo@v3alpha doctor
 
 # Auto-install Claude Code CLI if missing
-npx rufflo@v3alpha doctor --install
+npx swarmdo@v3alpha doctor --install
 
 # Check only Claude Code CLI
-npx rufflo@v3alpha doctor -c claude
+npx swarmdo@v3alpha doctor -c claude
 ```
 
-**Package Resolution Fix**: Fixed Windows module resolution issue where `@rufflo/cli` exports pointed to wrong paths (`dist/index.js` → `dist/src/index.js`).
+**Package Resolution Fix**: Fixed Windows module resolution issue where `@swarmdo/cli` exports pointed to wrong paths (`dist/index.js` → `dist/src/index.js`).
 
-#### Release: @rufflo/cli@3.0.0-alpha.7
+#### Release: @swarmdo/cli@3.0.0-alpha.7
 - **Hive-Mind CLI**: All MCP tools now exposed via CLI subcommands:
   - `hive-mind join <agent-id>` - Join agent to hive
   - `hive-mind leave <agent-id>` - Remove agent from hive
@@ -214,7 +214,7 @@ npx rufflo@v3alpha doctor -c claude
   - `hive-mind broadcast -m <msg>` - Broadcast messages to workers
   - `hive-mind memory` - Access shared memory (get/set/delete/list)
 - **Bug Fix**: Fixed positional argument parsing for subcommands in CLI parser
-- **File Persistence**: All MCP tools use file-based persistence in `.rufflo/` directories
+- **File Persistence**: All MCP tools use file-based persistence in `.swarmdo/` directories
 - **ADR-014**: Node.js Worker Daemon - cross-platform TypeScript daemon replaces shell helpers
 - **CLI**: `daemon` command with start/stop/status/trigger/enable subcommands
 - **Session Integration**: Auto-start daemon on SessionStart, auto-stop on SessionEnd
@@ -232,13 +232,13 @@ npx rufflo@v3alpha doctor -c claude
 
 #### Install
 ```bash
-npx @rufflo/cli@v3alpha --help
+npx @swarmdo/cli@v3alpha --help
 ```
 
-### Release: @rufflo/cli@3.0.0-alpha.11 (2026-01-07)
+### Release: @swarmdo/cli@3.0.0-alpha.11 (2026-01-07)
 
 #### New V3 Advanced CLI Commands
-All commands include subcommand help and "Created with ❤️ by ruv.io" branding.
+All commands include subcommand help and "Created with ❤️ by swarmdo.com" branding.
 
 | Command | Description | Subcommands |
 |---------|-------------|-------------|
@@ -257,22 +257,22 @@ All commands include subcommand help and "Created with ❤️ by ruv.io" brandin
 
 **Smart Error Suggestions**: Typo detection with Levenshtein distance
 ```bash
-$ rufflo swram
+$ swarmdo swram
 [ERROR] Unknown command: swram
   Did you mean one of these?
   - swarm
   - neural
   - start
 
-$ rufflo memroy
+$ swarmdo memroy
 [ERROR] Unknown command: memroy
   Did you mean "memory"?
 ```
 
 **Doctor Command**: System health diagnostics
 ```bash
-$ rufflo doctor
-Rufflo Doctor
+$ swarmdo doctor
+Swarmdo Doctor
 ──────────────────────────────────────────────────
 ✓ Node.js Version: v22.21.1 (>= 20 required)
 ✓ npm Version: v10.9.4
@@ -292,16 +292,16 @@ Summary: 6 passed, 5 warnings
 **Shell Completions**: Tab completion for all shells
 ```bash
 # Install bash completions
-rufflo completions bash > ~/.bash_completion.d/rufflo
+swarmdo completions bash > ~/.bash_completion.d/swarmdo
 
 # Install zsh completions
-rufflo completions zsh > ~/.zfunc/_rufflo
+swarmdo completions zsh > ~/.zfunc/_swarmdo
 
 # Install fish completions
-rufflo completions fish > ~/.config/fish/completions/rufflo.fish
+swarmdo completions fish > ~/.config/fish/completions/swarmdo.fish
 
 # Install PowerShell completions
-rufflo completions powershell >> $PROFILE
+swarmdo completions powershell >> $PROFILE
 ```
 
 ## CLI Roadmap
@@ -316,41 +316,41 @@ rufflo completions powershell >> $PROFILE
 | 🟡 P1 | Resolve provider config overlap | Pending | Unify provider configs across embeddings/providers commands |
 | 🟡 P1 | Add unified `logs` command | Pending | Centralized log viewing across daemon, agents, swarms |
 | 🟢 P2 | Add `upgrade` command | Pending | Self-update CLI to latest version |
-| 🟢 P2 | Add interactive shell/REPL mode | Pending | `rufflo shell` for interactive command execution |
+| 🟢 P2 | Add interactive shell/REPL mode | Pending | `swarmdo shell` for interactive command execution |
 
 ### Implementation Plan
 
 **P0 - Critical (Next Release)**
 ```bash
 # Doctor command - diagnose system health
-rufflo doctor              # Full system check
-rufflo doctor --fix        # Auto-fix issues where possible
-rufflo doctor --component mcp  # Check specific component
+swarmdo doctor              # Full system check
+swarmdo doctor --fix        # Auto-fix issues where possible
+swarmdo doctor --component mcp  # Check specific component
 
 # Shell completions
-rufflo completions bash > ~/.bash_completion.d/rufflo
-rufflo completions zsh > ~/.zfunc/_rufflo
-rufflo completions fish > ~/.config/fish/completions/rufflo.fish
+swarmdo completions bash > ~/.bash_completion.d/swarmdo
+swarmdo completions zsh > ~/.zfunc/_swarmdo
+swarmdo completions fish > ~/.config/fish/completions/swarmdo.fish
 ```
 
 **P1 - High Priority**
 ```bash
 # Unified logs command
-rufflo logs                # All logs
-rufflo logs --follow       # Tail logs
-rufflo logs --component daemon
-rufflo logs --level error
+swarmdo logs                # All logs
+swarmdo logs --follow       # Tail logs
+swarmdo logs --component daemon
+swarmdo logs --level error
 ```
 
 **P2 - Nice to Have**
 ```bash
 # Self-update
-rufflo upgrade             # Upgrade to latest
-rufflo upgrade --check     # Check for updates
-rufflo upgrade --version 3.1.0
+swarmdo upgrade             # Upgrade to latest
+swarmdo upgrade --check     # Check for updates
+swarmdo upgrade --version 3.1.0
 
 # Interactive shell
-rufflo shell               # Enter REPL
+swarmdo shell               # Enter REPL
 > swarm init mesh
 > agent spawn coder
 > memory search "patterns"
@@ -358,11 +358,11 @@ rufflo shell               # Enter REPL
 
 ---
 
-## agentic-flow vs rufflo Feature Comparison
+## agentic-flow vs swarmdo Feature Comparison
 
 ### Feature Matrix
 
-| Feature | agentic-flow | rufflo | Integration Value |
+| Feature | agentic-flow | swarmdo | Integration Value |
 |---------|--------------|-------------|-------------------|
 | **Core Agent System** | | | |
 | Specialized Agents | 66+ | 15 (hierarchical) | 🟡 |
@@ -411,36 +411,36 @@ rufflo shell               # Enter REPL
 **1. QUIC Transport (50-70% faster)**
 ```bash
 # Integration target:
-rufflo transport quic --port 4433
-rufflo swarm start --transport quic  # 50-70% faster agent comms
+swarmdo transport quic --port 4433
+swarmdo swarm start --transport quic  # 50-70% faster agent comms
 ```
 
 **2. Federation Hub (Ephemeral Agents)**
 ```bash
 # Integration target:
-rufflo federation start --port 9443
-rufflo federation spawn --tenant acme --lifetime 600
+swarmdo federation start --port 9443
+swarmdo federation spawn --tenant acme --lifetime 600
 ```
 *Value: Agents die but memories persist → learning across agent generations*
 
 **3. Model Optimization (85% cost savings)**
 ```bash
 # Integration target:
-rufflo agent spawn -t coder --optimize --priority cost
-rufflo providers optimize --task "Build API" --budget 0.01
+swarmdo agent spawn -t coder --optimize --priority cost
+swarmdo providers optimize --task "Build API" --budget 0.01
 ```
 
 **4. Provider Fallback (Enterprise resilience)**
 ```bash
 # Integration target:
-rufflo providers fallback configure --primary anthropic --fallback openrouter,onnx
+swarmdo providers fallback configure --primary anthropic --fallback openrouter,onnx
 ```
 
 **5. ReasoningBank (WASM Learning Memory)**
 ```bash
 # Integration target:
-rufflo reasoningbank store "pattern" --reasoning "..."
-rufflo reasoningbank search "authentication patterns"
+swarmdo reasoningbank store "pattern" --reasoning "..."
+swarmdo reasoningbank search "authentication patterns"
 ```
 *Value: 10-100x faster reasoning pattern storage vs JSON*
 
@@ -464,9 +464,9 @@ rufflo reasoningbank search "authentication patterns"
 
 ```bash
 # After Phase 1:
-rufflo agent spawn -t coder --optimize --priority cost
-rufflo providers fallback configure --primary anthropic --fallback openrouter,onnx
-rufflo embeddings download all-MiniLM-L6-v2
+swarmdo agent spawn -t coder --optimize --priority cost
+swarmdo providers fallback configure --primary anthropic --fallback openrouter,onnx
+swarmdo embeddings download all-MiniLM-L6-v2
 ```
 
 #### Phase 2: Core Integration (2-3 weeks) → 9.5 → 9.7
@@ -480,10 +480,10 @@ rufflo embeddings download all-MiniLM-L6-v2
 
 ```bash
 # After Phase 2:
-rufflo federation start --port 9443
-rufflo federation spawn --lifetime 300 --task "Quick analysis"
-rufflo proxy start --provider openrouter
-rufflo daemon dispatch security-audit
+swarmdo federation start --port 9443
+swarmdo federation spawn --lifetime 300 --task "Quick analysis"
+swarmdo proxy start --provider openrouter
+swarmdo daemon dispatch security-audit
 ```
 
 #### Phase 3: Advanced (4-6 weeks) → 9.7 → 9.9
@@ -496,16 +496,16 @@ rufflo daemon dispatch security-audit
 
 ```bash
 # After Phase 3:
-rufflo swarm start --transport quic  # 50-70% faster
-rufflo reasoningbank store "pattern" --reasoning "..."
-rufflo agent spawn -t security-analyst  # One of 66 types
+swarmdo swarm start --transport quic  # 50-70% faster
+swarmdo reasoningbank store "pattern" --reasoning "..."
+swarmdo agent spawn -t security-analyst  # One of 66 types
 ```
 
 ### Recommended Integration Approach
 
 **Option A: Dependency Approach (Fastest)**
 ```json
-// rufflo/package.json
+// swarmdo/package.json
 {
   "dependencies": {
     "agentic-flow": "^2.0.3"
@@ -516,52 +516,52 @@ rufflo agent spawn -t security-analyst  # One of 66 types
 **Option B: Port Code (More Control)**
 ```bash
 # Copy specific modules:
-- agentic-flow/src/transport/quic.ts → rufflo/src/transport/
-- agentic-flow/src/federation/ → rufflo/src/federation/
-- agentic-flow/src/reasoningbank/ → rufflo/src/reasoningbank/
+- agentic-flow/src/transport/quic.ts → swarmdo/src/transport/
+- agentic-flow/src/federation/ → swarmdo/src/federation/
+- agentic-flow/src/reasoningbank/ → swarmdo/src/reasoningbank/
 ```
 
 **Option C: Unified Package (Long-term)**
 ```bash
-@rufflo/core      # Shared primitives
-@rufflo/cli       # CLI (current)
-@rufflo/agents    # From agentic-flow's 66 agents
-@rufflo/transport # QUIC + HTTP + WebSocket
+@swarmdo/core      # Shared primitives
+@swarmdo/cli       # CLI (current)
+@swarmdo/agents    # From agentic-flow's 66 agents
+@swarmdo/transport # QUIC + HTTP + WebSocket
 ```
 
 ---
 
-## ruvector Integration Analysis
+## swarmvector Integration Analysis
 
 ### Package Overview
 
 | Package | Version | Description |
 |---------|---------|-------------|
-| `ruvector` | 0.1.95 | Main CLI + unified interface |
-| `@ruvector/core` | 0.1.30 | Rust-native vector DB (52K+ inserts/sec) |
-| `@ruvector/attention` | 0.1.4 | Flash Attention mechanisms |
-| `@ruvector/sona` | 0.1.5 | Self-Optimizing Neural Architecture (LoRA, EWC++) |
-| `@ruvector/gnn` | 0.1.22 | Graph Neural Networks |
+| `swarmvector` | 0.1.95 | Main CLI + unified interface |
+| `@swarmvector/core` | 0.1.30 | Rust-native vector DB (52K+ inserts/sec) |
+| `@swarmvector/attention` | 0.1.4 | Flash Attention mechanisms |
+| `@swarmvector/sona` | 0.1.5 | Self-Optimizing Neural Architecture (LoRA, EWC++) |
+| `@swarmvector/gnn` | 0.1.22 | Graph Neural Networks |
 
 ### Feature Overlap Analysis
 
-**rufflo ALREADY HAS** (via @rufflo/embeddings):
-| Feature | rufflo | ruvector | Status |
+**swarmdo ALREADY HAS** (via @swarmdo/embeddings):
+| Feature | swarmdo | swarmvector | Status |
 |---------|-------------|----------|--------|
-| ONNX Embeddings | ✅ agentic-flow (~3ms) | ✅ @ruvector/core | **Equivalent** |
+| ONNX Embeddings | ✅ agentic-flow (~3ms) | ✅ @swarmvector/core | **Equivalent** |
 | Local Embeddings | ✅ all-MiniLM-L6-v2 | ✅ all-MiniLM-L6-v2 | **Equivalent** |
-| HNSW Indexing | ✅ @rufflo/memory | ✅ @ruvector/core | **Equivalent** |
+| HNSW Indexing | ✅ @swarmdo/memory | ✅ @swarmvector/core | **Equivalent** |
 | Persistent Cache | ✅ SQLite + LRU | ✅ Memory cache | **Equivalent** |
-| Hyperbolic Embeddings | ✅ Poincaré ball | ❌ | **rufflo ahead** |
-| Document Chunking | ✅ 4 strategies | ❌ | **rufflo ahead** |
-| Normalization | ✅ L2, L1, min-max, z-score | ❌ | **rufflo ahead** |
-| Neural Substrate | ✅ Drift, memory physics | ❌ | **rufflo ahead** |
+| Hyperbolic Embeddings | ✅ Poincaré ball | ❌ | **swarmdo ahead** |
+| Document Chunking | ✅ 4 strategies | ❌ | **swarmdo ahead** |
+| Normalization | ✅ L2, L1, min-max, z-score | ❌ | **swarmdo ahead** |
+| Neural Substrate | ✅ Drift, memory physics | ❌ | **swarmdo ahead** |
 
-### Unique ruvector Features (Integration Candidates)
+### Unique swarmvector Features (Integration Candidates)
 
-#### 🔴 Tier 1: High Value (rufflo lacks these)
+#### 🔴 Tier 1: High Value (swarmdo lacks these)
 
-| Feature | ruvector Source | Integration Target | Value |
+| Feature | swarmvector Source | Integration Target | Value |
 |---------|-----------------|-------------------|-------|
 | Q-Learning Agent Router | `hooks_route` | `hooks route --task` | 80%+ accuracy, learns patterns |
 | AST Analysis | `hooks_ast_analyze` | `analyze --ast` | Symbol extraction, complexity |
@@ -570,26 +570,26 @@ rufflo agent spawn -t security-analyst  # One of 66 types
 
 #### 🟡 Tier 2: Medium Value
 
-| Feature | ruvector Source | Integration Target |
+| Feature | swarmvector Source | Integration Target |
 |---------|-----------------|-------------------|
 | Co-edit Prediction | Git history analysis | `predict --coedits` |
 | Security Patterns | `hooks_security_scan` | `security scan --patterns` |
 
 #### 🟢 Tier 3: Nice to Have
 
-| Feature | ruvector Source | Use Case |
+| Feature | swarmvector Source | Use Case |
 |---------|-----------------|----------|
 | MinCut Boundaries | `hooks_graph_mincut` | Code organization |
 | Louvain Communities | `hooks_graph_cluster` | Module detection |
-| GNN Layers | `@ruvector/gnn` | Graph analysis |
+| GNN Layers | `@swarmvector/gnn` | Graph analysis |
 
-*Note: Flash Attention, SONA Learning, HNSW, and ONNX embeddings are already in rufflo via agentic-flow.*
+*Note: Flash Attention, SONA Learning, HNSW, and ONNX embeddings are already in swarmdo via agentic-flow.*
 
-### MCP Tools from ruvector (Unique Only)
+### MCP Tools from swarmvector (Unique Only)
 
 ```bash
-# Add ruvector MCP server (for unique features)
-claude mcp add ruvector-mcp -- npx ruvector mcp-server
+# Add swarmvector MCP server (for unique features)
+claude mcp add swarmvector-mcp -- npx swarmvector mcp-server
 ```
 
 **Unique Tools Worth Integrating:**
@@ -599,50 +599,50 @@ claude mcp add ruvector-mcp -- npx ruvector mcp-server
 - `hooks_coverage_route`, `hooks_coverage_suggest` — Test-aware routing ✅
 - `hooks_graph_mincut`, `hooks_graph_cluster` — Code boundaries ✅
 
-**Already in rufflo (skip):**
-- `hooks_rag_context` — Use @rufflo/memory instead
-- `hooks_attention_info` — Use @rufflo/neural instead
-- Embeddings tools — Use @rufflo/embeddings instead
+**Already in swarmdo (skip):**
+- `hooks_rag_context` — Use @swarmdo/memory instead
+- `hooks_attention_info` — Use @swarmdo/neural instead
+- Embeddings tools — Use @swarmdo/embeddings instead
 
 ### Integration Approach
 
 **Recommended: Option A - Add as Optional Dependency (for unique features only)**
 ```json
-// @rufflo/cli/package.json
+// @swarmdo/cli/package.json
 {
   "optionalDependencies": {
-    "ruvector": "^0.1.95"
+    "swarmvector": "^0.1.95"
   }
 }
 ```
 
-**CLI Wrappers (unique ruvector features):**
+**CLI Wrappers (unique swarmvector features):**
 ```bash
-# Q-Learning agent routing (unique to ruvector)
-rufflo route "task" --q-learning          # Uses hooks_route
+# Q-Learning agent routing (unique to swarmvector)
+swarmdo route "task" --q-learning          # Uses hooks_route
 
-# AST analysis (unique to ruvector)
-rufflo analyze ast src/                   # Uses hooks_ast_analyze
+# AST analysis (unique to swarmvector)
+swarmdo analyze ast src/                   # Uses hooks_ast_analyze
 
-# Diff classification (unique to ruvector)
-rufflo analyze diff --risk                # Uses hooks_diff_analyze
+# Diff classification (unique to swarmvector)
+swarmdo analyze diff --risk                # Uses hooks_diff_analyze
 
-# Coverage-aware routing (unique to ruvector)
-rufflo route "task" --coverage-aware      # Uses hooks_coverage_route
+# Coverage-aware routing (unique to swarmvector)
+swarmdo route "task" --coverage-aware      # Uses hooks_coverage_route
 ```
 
-**Already in rufflo (DO NOT import from ruvector):**
+**Already in swarmdo (DO NOT import from swarmvector):**
 ```bash
-rufflo embeddings generate --local        # Uses @rufflo/embeddings (ONNX)
-rufflo memory search --semantic "query"   # Uses @rufflo/memory (HNSW)
+swarmdo embeddings generate --local        # Uses @swarmdo/embeddings (ONNX)
+swarmdo memory search --semantic "query"   # Uses @swarmdo/memory (HNSW)
 ```
 
-### ruvector Integration Roadmap
+### swarmvector Integration Roadmap
 
 #### Phase 1: Q-Learning Router (1-2 days)
-- [ ] Add ruvector as optional dependency
+- [ ] Add swarmvector as optional dependency
 - [ ] Implement `hooks route --q-learning` wrapper
-- [ ] Add `info --ruvector` command for capability detection
+- [ ] Add `info --swarmvector` command for capability detection
 
 #### Phase 2: Code Intelligence (1 week)
 - [ ] Integrate AST analysis commands (`analyze ast`)
@@ -654,4 +654,4 @@ rufflo memory search --semantic "query"   # Uses @rufflo/memory (HNSW)
 - [ ] Add Louvain community detection (`analyze --modules`)
 - [ ] Integrate GNN layers for dependency graphs
 
-*Note: SONA, Flash Attention, HNSW already in rufflo - no need to import.*
+*Note: SONA, Flash Attention, HNSW already in swarmdo - no need to import.*

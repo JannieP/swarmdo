@@ -73,7 +73,7 @@ Mount a GCS bucket or NFS share as a volume for MongoDB data.
 
 ### Option D: Dedicated MongoDB VM
 
-Run MongoDB on a Compute Engine VM (similar to ruvector-postgres-vm pattern).
+Run MongoDB on a Compute Engine VM (similar to swarmvector-postgres-vm pattern).
 
 **Pros:** Full control, predictable performance, persistent
 **Cons:** Operational overhead, cost (~$25/mo for e2-small), manual backups

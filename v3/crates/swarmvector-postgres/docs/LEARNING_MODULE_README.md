@@ -328,5 +328,5 @@ SELECT swarmvector_enable_learning('my_table',
 ## Support
 
 For issues or questions:
-- GitHub Issues: https://github.com/ruvnet/swarmvector/issues
-- Documentation: https://github.com/ruvnet/swarmvector/tree/main/docs
+- GitHub Issues: the upstream project (see NOTICE)
+- Documentation: the upstream project (see NOTICE)

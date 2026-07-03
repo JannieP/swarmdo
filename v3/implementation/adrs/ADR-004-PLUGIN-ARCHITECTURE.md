@@ -94,10 +94,10 @@ class PluginManager {
 ```
 
 **Official Plugins:**
-1. `@rufflo/hive-mind` - Queen-led coordination
-2. `@rufflo/neural` - Neural training system
-3. `@rufflo/verification` - Truth scoring
-4. `@rufflo/enterprise` - Advanced features
+1. `@swarmdo/hive-mind` - Queen-led coordination
+2. `@swarmdo/neural` - Neural training system
+3. `@swarmdo/verification` - Truth scoring
+4. `@swarmdo/enterprise` - Advanced features
 
 ## Success Metrics
 

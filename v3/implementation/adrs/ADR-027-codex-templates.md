@@ -1,6 +1,6 @@
 # ADR-027 Supplement: Codex Template Specifications
 
-> **Branding Note**: This package is published as `@rufflo/codex` and is the first step in transitioning to the `coflow` brand. The future umbrella package will be `npm/npx coflow`.
+> **Branding Note**: This package is published as `@swarmdo/codex` and is the first step in transitioning to the `coflow` brand. The future umbrella package will be `npm/npx coflow`.
 
 ## Overview
 
@@ -10,18 +10,18 @@ This document provides the complete template specifications for all Codex-genera
 
 | Property | Value |
 |----------|-------|
-| Package Name | `@rufflo/codex` |
-| Location | `v3/@rufflo/codex/` |
+| Package Name | `@swarmdo/codex` |
+| Location | `v3/@swarmdo/codex/` |
 | Future Umbrella | `coflow` |
-| CLI Command | `npx @rufflo/codex init` |
-| Integration | Works with `@rufflo/cli` via `--codex` flag |
+| CLI Command | `npx @swarmdo/codex init` |
+| Integration | Works with `@swarmdo/cli` via `--codex` flag |
 
 ## AGENTS.md Templates
 
 ### Default Template (Full)
 
 ```markdown
-# Rufflo V3
+# Swarmdo V3
 
 > Multi-agent orchestration framework for agentic coding
 
@@ -128,7 +128,7 @@ Use `$skill-name` syntax to invoke:
 
 [optional body]
 
-Co-Authored-By: rufflo <ruv@ruv.net>
+Co-Authored-By: swarmdo <maintainers@swarmdo.com>
 ```
 
 Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`
@@ -186,7 +186,7 @@ npm run test:coverage
 
 ### Storing Patterns
 ```bash
-npx rufflo@v3alpha memory store \
+npx swarmdo@v3alpha memory store \
   --key "pattern-name" \
   --value "pattern description" \
   --namespace patterns
@@ -194,7 +194,7 @@ npx rufflo@v3alpha memory store \
 
 ### Searching Memory
 ```bash
-npx rufflo@v3alpha memory search \
+npx swarmdo@v3alpha memory search \
   --query "search terms" \
   --namespace patterns
 ```
@@ -206,11 +206,11 @@ npx rufflo@v3alpha memory search \
 
 ## MCP Integration
 
-Rufflo exposes tools via MCP:
+Swarmdo exposes tools via MCP:
 
 ```bash
 # Start MCP server
-npx rufflo@v3alpha mcp start
+npx swarmdo@v3alpha mcp start
 ```
 
 ### Available Tools
@@ -222,7 +222,7 @@ npx rufflo@v3alpha mcp start
 
 ## Hooks System
 
-Rufflo uses hooks for automation:
+Swarmdo uses hooks for automation:
 
 | Hook | Purpose |
 |------|---------|
@@ -233,14 +233,14 @@ Rufflo uses hooks for automation:
 
 ### Example
 ```bash
-npx rufflo@v3alpha hooks pre-task \
+npx swarmdo@v3alpha hooks pre-task \
   --description "implementing authentication"
 ```
 
 ## Links
 
-- Documentation: https://github.com/ruvnet/claude-flow
-- Issues: https://github.com/ruvnet/claude-flow/issues
+- Documentation: the upstream project (see NOTICE)
+- Issues: the upstream project (see NOTICE)
 ```
 
 ### Minimal Template
@@ -332,7 +332,7 @@ Coordinate multiple specialized agents to work on complex tasks in parallel.
 
 ### 1. Initialize Swarm
 ```bash
-npx rufflo@v3alpha swarm init \
+npx swarmdo@v3alpha swarm init \
   --topology hierarchical \
   --max-agents 8 \
   --strategy specialized
@@ -340,24 +340,24 @@ npx rufflo@v3alpha swarm init \
 
 ### 2. Route Task
 ```bash
-npx rufflo@v3alpha hooks route --task "[task description]"
+npx swarmdo@v3alpha hooks route --task "[task description]"
 ```
 
 ### 3. Monitor Status
 ```bash
-npx rufflo@v3alpha swarm status
+npx swarmdo@v3alpha swarm status
 ```
 
 ## Memory Integration
 
 ### Before Starting
 ```bash
-npx rufflo@v3alpha memory search --query "[task keywords]"
+npx swarmdo@v3alpha memory search --query "[task keywords]"
 ```
 
 ### After Completion
 ```bash
-npx rufflo@v3alpha memory store \
+npx swarmdo@v3alpha memory store \
   --key "[pattern-name]" \
   --value "[what worked]" \
   --namespace patterns
@@ -409,7 +409,7 @@ Interact with the AgentDB memory system for pattern storage, retrieval, and sema
 
 ### Store Data
 ```bash
-npx rufflo@v3alpha memory store \
+npx swarmdo@v3alpha memory store \
   --key "unique-key" \
   --value "data to store" \
   --namespace patterns \
@@ -418,7 +418,7 @@ npx rufflo@v3alpha memory store \
 
 ### Search Data
 ```bash
-npx rufflo@v3alpha memory search \
+npx swarmdo@v3alpha memory search \
   --query "semantic search terms" \
   --namespace patterns \
   --limit 10
@@ -426,14 +426,14 @@ npx rufflo@v3alpha memory search \
 
 ### Retrieve Specific Entry
 ```bash
-npx rufflo@v3alpha memory retrieve \
+npx swarmdo@v3alpha memory retrieve \
   --key "unique-key" \
   --namespace patterns
 ```
 
 ### List All Entries
 ```bash
-npx rufflo@v3alpha memory list \
+npx swarmdo@v3alpha memory list \
   --namespace patterns \
   --limit 50
 ```
@@ -497,35 +497,35 @@ Structured development workflow ensuring thorough planning before implementation
 Define requirements and acceptance criteria.
 
 ```bash
-npx rufflo@v3alpha hooks route --task "specification: [requirements]"
+npx swarmdo@v3alpha hooks route --task "specification: [requirements]"
 ```
 
 ### 2. Pseudocode
 Design algorithm in plain language.
 
 ```bash
-npx rufflo@v3alpha hooks route --task "pseudocode: [algorithm design]"
+npx swarmdo@v3alpha hooks route --task "pseudocode: [algorithm design]"
 ```
 
 ### 3. Architecture
 Plan system structure and components.
 
 ```bash
-npx rufflo@v3alpha hooks route --task "architecture: [system design]"
+npx swarmdo@v3alpha hooks route --task "architecture: [system design]"
 ```
 
 ### 4. Refinement
 Iterate and improve implementation.
 
 ```bash
-npx rufflo@v3alpha hooks route --task "refinement: [improvements]"
+npx swarmdo@v3alpha hooks route --task "refinement: [improvements]"
 ```
 
 ### 5. Completion
 Final validation and documentation.
 
 ```bash
-npx rufflo@v3alpha hooks route --task "completion: [validation]"
+npx swarmdo@v3alpha hooks route --task "completion: [validation]"
 ```
 
 ## Agent Mapping
@@ -602,22 +602,22 @@ Always invoke for:
 
 ### 1. Input Validation
 ```bash
-npx rufflo@v3alpha security scan --check input-validation
+npx swarmdo@v3alpha security scan --check input-validation
 ```
 
 ### 2. Path Security
 ```bash
-npx rufflo@v3alpha security scan --check path-traversal
+npx swarmdo@v3alpha security scan --check path-traversal
 ```
 
 ### 3. Command Injection
 ```bash
-npx rufflo@v3alpha security scan --check command-injection
+npx swarmdo@v3alpha security scan --check command-injection
 ```
 
 ### 4. Full Audit
 ```bash
-npx rufflo@v3alpha security scan --depth full
+npx swarmdo@v3alpha security scan --depth full
 ```
 
 ## CVE Monitoring
@@ -664,9 +664,9 @@ await safeExec.run(command, { sanitize: true });
 ### Default Configuration
 
 ```toml
-# Rufflo V3 - Codex Configuration
-# Generated by: rufflo init --codex
-# Documentation: https://github.com/ruvnet/claude-flow
+# Swarmdo V3 - Codex Configuration
+# Generated by: swarmdo init --codex
+# Documentation: the upstream project (see NOTICE)
 
 # =============================================================================
 # Core Settings
@@ -719,15 +719,15 @@ remote_compaction = true
 # MCP Servers
 # =============================================================================
 
-[mcp_servers.rufflo]
+[mcp_servers.swarmdo]
 command = "npx"
-args = ["-y", "@rufflo/cli@latest"]
+args = ["-y", "@swarmdo/cli@latest"]
 enabled = true
 tool_timeout_sec = 120
 
-[mcp_servers.ruv-swarm]
+[mcp_servers.swarmdo-swarm]
 command = "npx"
-args = ["-y", "ruv-swarm", "mcp", "start"]
+args = ["-y", "swarmdo-swarm", "mcp", "start"]
 enabled = true
 tool_timeout_sec = 120
 
@@ -821,22 +821,22 @@ exclude_slash_tmp = false
 ### Minimal Configuration
 
 ```toml
-# Rufflo V3 - Minimal Codex Configuration
+# Swarmdo V3 - Minimal Codex Configuration
 
 model = "gpt-5.3-codex"
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
 
-[mcp_servers.rufflo]
+[mcp_servers.swarmdo]
 command = "npx"
-args = ["-y", "@rufflo/cli@latest"]
+args = ["-y", "@swarmdo/cli@latest"]
 enabled = true
 ```
 
 ### CI/CD Configuration
 
 ```toml
-# Rufflo V3 - CI/CD Pipeline Configuration
+# Swarmdo V3 - CI/CD Pipeline Configuration
 
 model = "gpt-5.3-codex"
 approval_policy = "never"
@@ -847,9 +847,9 @@ web_search = "disabled"
 shell_snapshot = false
 remote_compaction = false
 
-[mcp_servers.rufflo]
+[mcp_servers.swarmdo]
 command = "npx"
-args = ["-y", "@rufflo/cli@latest"]
+args = ["-y", "@swarmdo/cli@latest"]
 enabled = true
 
 [history]
@@ -894,7 +894,7 @@ project/
 ├── .codex/                            # User-local overrides (gitignored)
 │   ├── config.toml                    # Personal config overrides
 │   └── AGENTS.override.md             # Local instruction overrides
-└── .rufflo/                      # Runtime data (shared)
+└── .swarmdo/                      # Runtime data (shared)
     ├── config.yaml
     ├── data/
     └── logs/
@@ -916,29 +916,29 @@ interface:
 dependencies:
   tools:
     - type: "mcp"
-      value: "rufflo"
-      description: "Rufflo MCP server for swarm coordination"
+      value: "swarmdo"
+      description: "Swarmdo MCP server for swarm coordination"
       transport: "stdio"
       command: "npx"
-      args: ["-y", "@rufflo/cli@latest"]
+      args: ["-y", "@swarmdo/cli@latest"]
 ```
 
 ## Generation API
 
 ```typescript
-// Usage in rufflo CLI or standalone
-// Package: @rufflo/codex (first step toward coflow rebranding)
+// Usage in swarmdo CLI or standalone
+// Package: @swarmdo/codex (first step toward coflow rebranding)
 
 import {
   generateAgentsMd,
   generateSkillMd,
   generateConfigToml,
   CodexInitializer
-} from '@rufflo/codex';
+} from '@swarmdo/codex';
 
 // Or via the CLI
-// npx @rufflo/codex init
-// npx @rufflo/codex generate-skill --name my-skill
+// npx @swarmdo/codex init
+// npx @swarmdo/codex generate-skill --name my-skill
 
 // Generate AGENTS.md
 const agentsMd = await generateAgentsMd({
@@ -963,7 +963,7 @@ const config = await generateConfigToml({
   approvalPolicy: 'on-request',
   sandboxMode: 'workspace-write',
   mcpServers: [
-    { name: 'rufflo', command: 'npx', args: ['-y', '@rufflo/cli@latest'] }
+    { name: 'swarmdo', command: 'npx', args: ['-y', '@swarmdo/cli@latest'] }
   ],
   skills: [
     { path: '.agents/skills/swarm-orchestration', enabled: true }
@@ -984,38 +984,38 @@ This completes the template specifications for the Codex integration.
 
 ## CLI Commands
 
-The `@rufflo/codex` package provides the following commands:
+The `@swarmdo/codex` package provides the following commands:
 
 ```bash
 # Initialize a new Codex project
-npx @rufflo/codex init
+npx @swarmdo/codex init
 
 # Initialize with specific template
-npx @rufflo/codex init --template minimal
+npx @swarmdo/codex init --template minimal
 
 # Generate a new skill
-npx @rufflo/codex generate-skill --name custom-skill
+npx @swarmdo/codex generate-skill --name custom-skill
 
 # Migrate from Claude Code to Codex
-npx @rufflo/codex migrate --from claude.md
+npx @swarmdo/codex migrate --from claude.md
 
 # Validate AGENTS.md and skills
-npx @rufflo/codex validate
+npx @swarmdo/codex validate
 
 # Generate dual-platform setup (Claude Code + Codex)
-npx @rufflo/codex init --dual
+npx @swarmdo/codex init --dual
 ```
 
-## Integration with @rufflo/cli
+## Integration with @swarmdo/cli
 
 When using the main CLI, Codex support is available via:
 
 ```bash
 # Initialize with Codex support
-npx rufflo@v3alpha init --codex
+npx swarmdo@v3alpha init --codex
 
 # Initialize with dual-platform support
-npx rufflo@v3alpha init --dual
+npx swarmdo@v3alpha init --dual
 
 # Future (after coflow rebrand)
 npx coflow init --codex

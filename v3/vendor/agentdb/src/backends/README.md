@@ -384,6 +384,6 @@ Warning: GNN learning not available
 
 ## Support
 
-- **Issues:** https://github.com/ruvnet/agentic-flow/issues
-- **SwarmVector:** https://github.com/ruvnet/swarmvector
+- **Issues:** the upstream project (see NOTICE)
+- **SwarmVector:** the upstream project (see NOTICE)
 - **HNSWLib:** https://github.com/nmslib/hnswlib

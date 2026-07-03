@@ -157,8 +157,8 @@
     ]
   },
   "attribution": {
-    "commit": "Co-Authored-By: Swarmdo <ruv@ruv.net>",
-    "pr": "\ud83e\udd16 Generated with [Swarmdo](https://github.com/ruvnet/swarmdo)"
+    "commit": "Co-Authored-By: Swarmdo <maintainers@swarmdo.com>",
+    "pr": "\ud83e\udd16 Generated with [Swarmdo](the upstream project (see NOTICE))"
   },
   "claudeFlow": {
     "version": "3.6.11",

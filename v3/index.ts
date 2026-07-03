@@ -537,7 +537,7 @@ export const V3_INFO = {
   name: 'swarmdo',
   version: V3_VERSION.full,
   description: 'Complete reimagining of Swarmdo with 15-agent hierarchical mesh swarm',
-  repository: 'https://github.com/ruvnet/claude-flow',
+  repository: 'the upstream project (see NOTICE)',
   license: 'MIT',
   engines: {
     node: '>=20.0.0'

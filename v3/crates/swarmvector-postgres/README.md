@@ -1,10 +1,10 @@
 # SwarmVector-Postgres
 
 [![Crates.io](https://img.shields.io/crates/v/swarmvector-postgres.svg)](https://crates.io/crates/swarmvector-postgres)
-[![Documentation](https://docs.rs/ruvector-postgres/badge.svg)](https://docs.rs/ruvector-postgres)
+[![Documentation](https://docs.rs/swarmvector-postgres/badge.svg)](https://docs.rs/swarmvector-postgres)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14--17-blue.svg)](https://www.postgresql.org/)
-[![Docker](https://img.shields.io/badge/Docker-available-blue.svg)](https://hub.docker.com/r/ruvnet/swarmvector-postgres)
+[![Docker](https://img.shields.io/badge/Docker-available-blue.svg)](https://hub.docker.com/r/upstream/swarmvector-postgres)
 [![npm](https://img.shields.io/npm/v/@swarmvector/core.svg)](https://www.npmjs.com/package/@swarmvector/core)
 [![Security](https://img.shields.io/badge/Security-Audited-green.svg)](docs/SECURITY_AUDIT_REPORT.md)
 
@@ -47,7 +47,7 @@ Most PostgreSQL vector extensions give you storage and search -- and that is it.
 docker run -d --name swarmvector-pg \
   -e POSTGRES_PASSWORD=secret \
   -p 5432:5432 \
-  ruvnet/swarmvector-postgres:latest
+  upstream/swarmvector-postgres:latest
 
 # Connect with psql
 PGPASSWORD=secret psql -h localhost -p 5432 -U postgres
@@ -538,7 +538,7 @@ SELECT rudag_qudag_status();            -- Network connection status
 SELECT rudag_qudag_sync_patterns();     -- Sync with network
 SELECT rudag_qudag_receive_patterns();  -- Get network patterns
 SELECT rudag_qudag_get_peers();         -- Connected peers
-SELECT rudag_qudag_stake_info();        -- rUv token staking
+SELECT rudag_qudag_stake_info();        -- the upstream author token staking
 SELECT rudag_qudag_governance_vote(proposal_id, approve := true);
 ```
 
@@ -1022,4 +1022,4 @@ Contributions welcome! See [CONTRIBUTING.md](../../CONTRIBUTING.md)
 
 ---
 
-Part of [SwarmVector](https://github.com/ruvnet/swarmvector) -- the self-learning vector database.
+Part of [SwarmVector](the upstream project (see NOTICE)) -- the self-learning vector database.

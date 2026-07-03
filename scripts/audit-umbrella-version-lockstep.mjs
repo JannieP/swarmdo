@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Static guard for ruvnet/swarmdo#2151 — enforce three-way version lockstep
+ * Static guard for upstream/swarmdo#2151 — enforce three-way version lockstep
  * across the umbrella packages that ship together:
  *
  *   - @swarmdo/cli  (v3/@swarmdo/cli/package.json)
@@ -99,5 +99,5 @@ if (violations.length === 0) {
 console.error('\nviolations:');
 for (const v of violations) console.error(`  ✗ ${v}`);
 console.error(`\n${violations.length} violation(s).`);
-console.error('Reference: ruvnet/swarmdo#2151 (version mismatch — swarmdo@3.10.2 + cli@3.10.1).');
+console.error('Reference: upstream/swarmdo#2151 (version mismatch — swarmdo@3.10.2 + cli@3.10.1).');
 process.exit(1);

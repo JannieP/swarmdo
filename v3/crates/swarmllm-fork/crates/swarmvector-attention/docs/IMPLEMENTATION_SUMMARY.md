@@ -1,14 +1,14 @@
-# ruvector-attention SDK Implementation Summary
+# swarmvector-attention SDK Implementation Summary
 
 ## Overview
 
-Successfully implemented a comprehensive, ergonomic SDK for the ruvector-attention crate following Agent 10's specifications.
+Successfully implemented a comprehensive, ergonomic SDK for the swarmvector-attention crate following Agent 10's specifications.
 
 ## Deliverables
 
 ### 1. SDK Module Structure
 
-Created high-level SDK APIs at `crates/ruvector-attention/src/sdk/`:
+Created high-level SDK APIs at `crates/swarmvector-attention/src/sdk/`:
 
 ```
 src/sdk/
@@ -230,7 +230,7 @@ fn from_model_name(model_name: &str, dim: usize) -> Option<AttentionBuilder>;
 
 ### Basic Multi-Head Attention
 ```rust
-use ruvector_attention::sdk::*;
+use swarmvector_attention::sdk::*;
 
 let attention = multi_head(768, 12)
     .dropout(0.1)
@@ -245,7 +245,7 @@ let output = attention.compute(&query, &keys, &values)?;
 
 ### Transformer Block
 ```rust
-use ruvector_attention::sdk::*;
+use swarmvector_attention::sdk::*;
 
 let attention = multi_head(768, 12).build()?;
 
@@ -258,7 +258,7 @@ let block = AttentionPipeline::new()
 
 ### Smart Selection
 ```rust
-use ruvector_attention::sdk::presets::*;
+use swarmvector_attention::sdk::presets::*;
 
 // Auto-select based on sequence length
 let attention = for_sequences(512, 8192).build()?;
@@ -271,7 +271,7 @@ let graph_attn = for_graphs(256, true).build()?;
 
 ### Model Presets
 ```rust
-use ruvector_attention::sdk::*;
+use swarmvector_attention::sdk::*;
 
 // BERT configuration
 let bert = AttentionPreset::Bert.builder(768).build()?;

@@ -9,7 +9,7 @@
   "license": "MIT OR Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ruvnet/agentic-flow"
+    "url": "the upstream project (see NOTICE)"
   },
   "files": [
     "reasoningbank_wasm_bg.wasm",
@@ -18,7 +18,7 @@
     "reasoningbank_wasm.d.ts"
   ],
   "main": "reasoningbank_wasm.js",
-  "homepage": "https://github.com/ruvnet/agentic-flow/tree/main/reasoningbank",
+  "homepage": "the upstream project (see NOTICE)",
   "types": "reasoningbank_wasm.d.ts",
   "sideEffects": [
     "./reasoningbank_wasm.js",

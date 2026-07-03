@@ -1,13 +1,13 @@
-# ADR-045: Guidance System Integration — Rufflo v3.1
+# ADR-045: Guidance System Integration — Swarmdo v3.1
 
 **Status:** Accepted
 **Date:** 2026-02-02
-**Author:** Rufflo Architecture
+**Author:** Swarmdo Architecture
 **Version:** 3.1.0-alpha.1
 
 ## Context
 
-The `@rufflo/guidance` package (published as `3.0.0-alpha.1`) provides a governance control plane for Claude Code sessions:
+The `@swarmdo/guidance` package (published as `3.0.0-alpha.1`) provides a governance control plane for Claude Code sessions:
 
 - **Compile**: CLAUDE.md → Constitution + Rule Shards + Rule Manifest
 - **Enforce**: 4 enforcement gates (ingestion, retrieval, generation, emission)
@@ -17,47 +17,47 @@ The `@rufflo/guidance` package (published as `3.0.0-alpha.1`) provides a governa
 - **A/B Test**: Headless comparative testing of governance configurations
 - **Templates**: 6 CLAUDE.md templates (minimal, standard, full, security, performance, solo)
 
-Currently, `@rufflo/guidance` is:
-1. A standalone package at `v3/@rufflo/guidance/`
-2. Used by `@rufflo/cli` via dynamic `import()` — but NOT declared as a dependency
-3. Not included in the umbrella `rufflo` package's `files` array
-4. Not available to end users running `npx rufflo@alpha`
+Currently, `@swarmdo/guidance` is:
+1. A standalone package at `v3/@swarmdo/guidance/`
+2. Used by `@swarmdo/cli` via dynamic `import()` — but NOT declared as a dependency
+3. Not included in the umbrella `swarmdo` package's `files` array
+4. Not available to end users running `npx swarmdo@alpha`
 
 This means the `guidance` CLI commands silently fail at runtime when installed from npm.
 
 ## Decision
 
-Integrate `@rufflo/guidance` as a **first-class dependency** in both `@rufflo/cli` and the `rufflo` umbrella package, making it a core component of Rufflo v3.1.
+Integrate `@swarmdo/guidance` as a **first-class dependency** in both `@swarmdo/cli` and the `swarmdo` umbrella package, making it a core component of Swarmdo v3.1.
 
 ### 1. Dependency Graph
 
 ```
-rufflo (umbrella v3.1.0-alpha.1)
-  └── @rufflo/cli (v3.1.0-alpha.1)
-        ├── @rufflo/guidance (v3.0.0-alpha.1)  ← NEW
-        ├── @rufflo/shared
-        ├── @rufflo/mcp
-        └── @rufflo/aidefence
+swarmdo (umbrella v3.1.0-alpha.1)
+  └── @swarmdo/cli (v3.1.0-alpha.1)
+        ├── @swarmdo/guidance (v3.0.0-alpha.1)  ← NEW
+        ├── @swarmdo/shared
+        ├── @swarmdo/mcp
+        └── @swarmdo/aidefence
 ```
 
 ### 2. Package Changes
 
-**`@rufflo/cli/package.json`**:
+**`@swarmdo/cli/package.json`**:
 ```json
 {
   "dependencies": {
-    "@rufflo/guidance": "^3.0.0-alpha.1"
+    "@swarmdo/guidance": "^3.0.0-alpha.1"
   }
 }
 ```
 
-**`rufflo/package.json` (umbrella)**:
+**`swarmdo/package.json` (umbrella)**:
 ```json
 {
   "files": [
-    "v3/@rufflo/guidance/dist/**/*.js",
-    "v3/@rufflo/guidance/dist/**/*.d.ts",
-    "v3/@rufflo/guidance/package.json"
+    "v3/@swarmdo/guidance/dist/**/*.js",
+    "v3/@swarmdo/guidance/dist/**/*.d.ts",
+    "v3/@swarmdo/guidance/package.json"
   ]
 }
 ```
@@ -87,9 +87,9 @@ The CLAUDE.md generator (`claudemd-generator.ts`) now:
 
 | Package | Current | v3.1 |
 |---------|---------|------|
-| `rufflo` (umbrella) | 3.0.0-alpha.185 | 3.1.0-alpha.1 |
-| `@rufflo/cli` | 3.0.0-alpha.185 | 3.1.0-alpha.1 |
-| `@rufflo/guidance` | 3.0.0-alpha.1 | 3.0.0-alpha.1 (unchanged) |
+| `swarmdo` (umbrella) | 3.0.0-alpha.185 | 3.1.0-alpha.1 |
+| `@swarmdo/cli` | 3.0.0-alpha.185 | 3.1.0-alpha.1 |
+| `@swarmdo/guidance` | 3.0.0-alpha.1 | 3.0.0-alpha.1 (unchanged) |
 
 The guidance package itself stays at 3.0.0-alpha.1 since its API is stable. The CLI and umbrella bump to 3.1.0 to reflect the governance integration as a feature milestone.
 
@@ -112,7 +112,7 @@ The guidance package itself stays at 3.0.0-alpha.1 since its API is stable. The 
 
 ## Implementation
 
-1. Add `@rufflo/guidance` to CLI's `dependencies`
+1. Add `@swarmdo/guidance` to CLI's `dependencies`
 2. Add guidance dist files to umbrella's `files` array
 3. Version bump CLI and umbrella to 3.1.0-alpha.1
 4. Update init wizard to offer template selection

@@ -28,8 +28,8 @@ We will implement an E2E testing service using:
 
 ### Technology Stack
 - **Runtime**: Cloud Run (containerized, scalable)
-- **Browser Automation**: `@rufflo/browser` (Playwright-based)
-- **Test Framework**: `@rufflo/testing` (assertion library + reporters)
+- **Browser Automation**: `@swarmdo/browser` (Playwright-based)
+- **Test Framework**: `@swarmdo/testing` (assertion library + reporters)
 - **Browser**: Chromium (headless mode for CI, headed for debugging)
 - **Credentials**: Google Secret Manager (secure storage)
 
@@ -215,9 +215,9 @@ MAX_RETRIES=2
 
 The E2E runner uses a **hybrid browser approach** that combines:
 1. **Playwright** for real browser automation
-2. **@rufflo/browser API** for AI-optimized element references
+2. **@swarmdo/browser API** for AI-optimized element references
 
-This design was chosen because `@rufflo/browser`'s `createBrowserService()` requires the `agent-browser` CLI which doesn't launch browsers directly in containerized environments.
+This design was chosen because `@swarmdo/browser`'s `createBrowserService()` requires the `agent-browser` CLI which doesn't launch browsers directly in containerized environments.
 
 #### Browser Wrapper Implementation
 
@@ -245,7 +245,7 @@ async function createBrowser(options, runId) {
 
   const page = await context.newPage();
 
-  // Return @rufflo/browser compatible API
+  // Return @swarmdo/browser compatible API
   return {
     async open(url) { /* ... */ },
     async snapshot(opts) { /* ... */ },
@@ -530,7 +530,7 @@ curl https://e2e-runner-xxxxx-uc.a.run.app/results/run-20260121-123456
 ## References
 
 - [Playwright Documentation](https://playwright.dev/)
-- [@rufflo/browser Package](https://www.npmjs.com/package/@rufflo/browser)
-- [@rufflo/testing Package](https://www.npmjs.com/package/@rufflo/testing)
+- [@swarmdo/browser Package](https://www.npmjs.com/package/@swarmdo/browser)
+- [@swarmdo/testing Package](https://www.npmjs.com/package/@swarmdo/testing)
 - [Cloud Run Documentation](https://cloud.google.com/run/docs)
 - [ADR-014: Chat System Architecture](./ADR-014-CHAT-SYSTEM-ARCHITECTURE.md)

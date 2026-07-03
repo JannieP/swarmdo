@@ -88,6 +88,6 @@ Match keywords without weights, count matches. Rejected because it treats ambigu
 
 ## References
 
-- `v3/@rufflo/guidance/src/retriever.ts` -- `INTENT_PATTERNS` map, `ShardRetriever.classifyIntent()`
-- `v3/@rufflo/guidance/src/types.ts` -- `TaskIntent` union type
+- `v3/@swarmdo/guidance/src/retriever.ts` -- `INTENT_PATTERNS` map, `ShardRetriever.classifyIntent()`
+- `v3/@swarmdo/guidance/src/types.ts` -- `TaskIntent` union type
 - ADR-G002 -- Constitution/shard split that depends on intent classification

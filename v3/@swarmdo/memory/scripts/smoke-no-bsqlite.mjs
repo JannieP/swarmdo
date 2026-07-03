@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Regression guard for ruvnet/swarmdo#1867.
+ * Regression guard for upstream/swarmdo#1867.
  *
  * Reproduces the user-visible failure mode of "native better-sqlite3 build failed"
  * (e.g. `npm install` on Node 26 without prebuilds) by installing this package

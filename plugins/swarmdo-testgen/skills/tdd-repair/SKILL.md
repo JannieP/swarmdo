@@ -78,7 +78,7 @@ Implementation: [`scripts/tdd-repair/tdd-repair.mjs`](../../scripts/tdd-repair/t
 
 ## Inspiration
 
-Modeled on the **Test-Driven Repair** mode from [agent-harness-generator/packages/darwin-mode](https://github.com/ruvnet/agent-harness-generator/tree/main/packages/darwin-mode) ADR-175. Key design difference: instead of wrapping `metaharness-darwin evolve` (population-based search), we drive a single `claude -p` invocation. Rationale:
+Modeled on the **Test-Driven Repair** mode from [agent-harness-generator/packages/darwin-mode](the upstream project (see NOTICE)) ADR-175. Key design difference: instead of wrapping `metaharness-darwin evolve` (population-based search), we drive a single `claude -p` invocation. Rationale:
 
 - The test command IS the fitness function — no need for variant scoring
 - `claude -p` is already in our stack — no new optional dep

@@ -14,11 +14,11 @@ Many real-world data structures exhibit hierarchical properties: file systems, o
 
 ## Decision
 
-Create a **Hyperbolic Reasoning Plugin** that leverages RuVector's hyperbolic WASM packages to provide superior hierarchical reasoning, taxonomy navigation, and semantic relationship modeling through Poincare ball and Lorentz model embeddings.
+Create a **Hyperbolic Reasoning Plugin** that leverages SwarmVector's hyperbolic WASM packages to provide superior hierarchical reasoning, taxonomy navigation, and semantic relationship modeling through Poincare ball and Lorentz model embeddings.
 
 ## Plugin Name
 
-`@rufflo/plugin-hyperbolic-reasoning`
+`@swarmdo/plugin-hyperbolic-reasoning`
 
 ## Description
 
@@ -28,9 +28,9 @@ An exotic reasoning plugin implementing hyperbolic neural networks for superior 
 
 | Package | Purpose |
 |---------|---------|
-| `ruvector-hyperbolic-hnsw-wasm` | Hyperbolic nearest neighbor search |
-| `ruvector-attention-wasm` | Hyperbolic attention mechanisms |
-| `ruvector-gnn-wasm` | Hyperbolic graph neural networks |
+| `swarmvector-hyperbolic-hnsw-wasm` | Hyperbolic nearest neighbor search |
+| `swarmvector-attention-wasm` | Hyperbolic attention mechanisms |
+| `swarmvector-gnn-wasm` | Hyperbolic graph neural networks |
 | `micro-hnsw-wasm` | Tangent space approximation search |
 | `sona` | Adaptive curvature learning |
 
@@ -533,9 +533,9 @@ hyperbolic_distance(x: Vector, y: Vector, c: number): number
 ```json
 {
   "dependencies": {
-    "ruvector-hyperbolic-hnsw-wasm": "^0.1.0",
-    "ruvector-attention-wasm": "^0.1.0",
-    "ruvector-gnn-wasm": "^0.1.0",
+    "swarmvector-hyperbolic-hnsw-wasm": "^0.1.0",
+    "swarmvector-attention-wasm": "^0.1.0",
+    "swarmvector-gnn-wasm": "^0.1.0",
     "micro-hnsw-wasm": "^0.2.0",
     "sona": "^0.1.0"
   }
@@ -572,7 +572,7 @@ Mixed hierarchy                      --> Adaptive curvature via SONA
 | ADR | Relationship |
 |-----|--------------|
 | ADR-004: Plugin Architecture | Foundation - Defines plugin structure |
-| ADR-017: RuVector Integration | Dependency - Provides WASM packages |
+| ADR-017: SwarmVector Integration | Dependency - Provides WASM packages |
 | ADR-023: ONNX Hyperbolic Embeddings | Dependency - Embedding initialization |
 | ADR-032: Healthcare Clinical | Related - Medical ontology hierarchies |
 | ADR-034: Legal Contracts | Related - Legal taxonomy navigation |
@@ -583,7 +583,7 @@ Mixed hierarchy                      --> Adaptive curvature via SONA
 - Poincare Embeddings: https://arxiv.org/abs/1705.08039
 - Hyperbolic Neural Networks: https://arxiv.org/abs/1805.09112
 - Hyperbolic Attention: https://arxiv.org/abs/1905.09786
-- ADR-017: RuVector Integration
+- ADR-017: SwarmVector Integration
 - ADR-023: ONNX Hyperbolic Embeddings Init
 - ADR-004: Plugin Architecture
 

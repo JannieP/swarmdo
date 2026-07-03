@@ -2,7 +2,7 @@
 
 - Status: **Accepted — Implemented (alpha.12 + agentic-flow@fix.6)**
 - Date: 2026-05-09
-- Authors: claude (drafted with rUv)
+- Authors: claude (drafted with the upstream author)
 - Related: [ADR-097](./ADR-097-federation-budget-circuit-breaker.md), [ADR-104](./ADR-104-federation-wire-transport.md), [ADR-105](./ADR-105-federation-v1-state-snapshot.md)
 
 ## Context
@@ -12,7 +12,7 @@ Federation v1 (`alpha.9`) uses `ws://` (plain WebSocket) over TCP. Encryption + 
 - **Intra-tailnet**: Tailscale (WireGuard) provides TLS-equivalent confidentiality + per-node identity via WireGuard public keys. The federation Ed25519 keypair is layered ON TOP of WireGuard's identity for application-level message signing.
 - **Localhost / LAN**: no encryption, but no exposure either (loopback or behind a firewall).
 
-This is sufficient TODAY because the dogfood configuration is mac↔ruvultra over tailscale. **It does not work for cross-tailnet federation over the open internet.**
+This is sufficient TODAY because the dogfood configuration is mac↔swarmultra over tailscale. **It does not work for cross-tailnet federation over the open internet.**
 
 ## Decision
 
@@ -126,7 +126,7 @@ async listen(port: number, host: string, opts?: { cert: Buffer; key: Buffer }) {
 ### Phase 4 — doctor surface
 
 ```bash
-$ npx rufflo doctor --component federation
+$ npx swarmdo doctor --component federation
 ✓ Federation Breaker: ADR-097 breaker loadable
 ✓ Federation Transport: selectedBackend=websocket
 ℹ Federation TLS: wss + 2 pinned fingerprints

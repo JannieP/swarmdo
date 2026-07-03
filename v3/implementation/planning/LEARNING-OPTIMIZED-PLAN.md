@@ -1,4 +1,4 @@
-# Rufflo v3: Optimized Learning System Plan
+# Swarmdo v3: Optimized Learning System Plan
 
 ## Executive Summary
 
@@ -17,7 +17,7 @@ This plan integrates the learning capabilities from **agentic-flow@2.0.1-alpha.5
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                     Rufflo v3 Learning System                       │
+│                     Swarmdo v3 Learning System                       │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                          │
 │  ┌─────────────────────────────────────────────────────────────────────┐│
@@ -682,17 +682,17 @@ export const memoryOptimizations = {
 
 ```bash
 # Tier 1: Basic Learning (Minimal)
-npx rufflo install learning:basic
+npx swarmdo install learning:basic
 # Includes: Pattern storage, skill lookup, basic RL (Q-Learning, SARSA)
 # Size: ~1MB | Platforms: All
 
 # Tier 2: Standard Learning (Recommended)
-npx rufflo install learning
+npx swarmdo install learning
 # Includes: Tier 1 + 5 more RL algorithms, reflexion memory, trajectory tracking
 # Size: ~2MB | Platforms: All
 
 # Tier 3: Advanced Learning (Full)
-npx rufflo install learning:advanced
+npx swarmdo install learning:advanced
 # Includes: Tier 2 + causal graphs, nightly learner, FlashAttention
 # Size: ~4MB | Platforms: All (NAPI for FlashAttention speedup)
 ```
@@ -722,22 +722,22 @@ npx rufflo install learning:advanced
 
 ```bash
 # Linux: Maximum performance
-npx rufflo install learning:advanced --native
+npx swarmdo install learning:advanced --native
 # Uses NAPI for FlashAttention (4x faster, 75% less memory)
 
 # macOS: Universal binary
-npx rufflo install learning:advanced
+npx swarmdo install learning:advanced
 # Auto-detects ARM vs Intel, uses native when possible
 
 # Windows: WASM-optimized
-npx rufflo install learning:advanced --wasm
+npx swarmdo install learning:advanced --wasm
 # Full features via WebAssembly, no build tools required
 ```
 
 ### 9.4 Lazy Loading Configuration
 
 ```typescript
-// .rufflo/config.json
+// .swarmdo/config.json
 {
   "learning": {
     "tier": "standard",              // basic | standard | advanced
@@ -778,33 +778,33 @@ npx rufflo install learning:advanced --wasm
 
 ```bash
 # Install core + basic learning
-npm install rufflo@3
-npx rufflo install learning:basic
+npm install swarmdo@3
+npx swarmdo install learning:basic
 
 # Start using immediately
-npx rufflo learning start --algorithm q-learning
+npx swarmdo learning start --algorithm q-learning
 ```
 
 ### 10.2 Recommended Learning Setup
 
 ```bash
 # Install with persistent memory
-npm install rufflo@3
-npx rufflo install memory learning
+npm install swarmdo@3
+npx swarmdo install memory learning
 
 # Initialize with sensible defaults
-npx rufflo init --learning
+npx swarmdo init --learning
 ```
 
 ### 10.3 Production Learning Setup
 
 ```bash
 # Full installation with native bindings
-npm install rufflo@3
-npx rufflo install --all --native
+npm install swarmdo@3
+npx swarmdo install --all --native
 
 # Configure for production
-cat > .rufflo/config.json << 'EOF'
+cat > .swarmdo/config.json << 'EOF'
 {
   "learning": {
     "tier": "advanced",
@@ -825,11 +825,11 @@ EOF
 
 ```bash
 # Minimal for CI (no native deps)
-npm install rufflo@3
-npx rufflo install learning:basic --wasm
+npm install swarmdo@3
+npx swarmdo install learning:basic --wasm
 
 # Run tests with learning
-npx rufflo test --with-learning
+npx swarmdo test --with-learning
 ```
 
 ---
@@ -840,26 +840,26 @@ npx rufflo test --with-learning
 
 ```bash
 # Upgrade from basic to standard
-npx rufflo install learning --upgrade
+npx swarmdo install learning --upgrade
 
 # Upgrade from standard to advanced
-npx rufflo install learning:advanced --upgrade
+npx swarmdo install learning:advanced --upgrade
 
 # Downgrade (preserves data)
-npx rufflo install learning:basic --downgrade
+npx swarmdo install learning:basic --downgrade
 ```
 
 ### 11.2 Data Migration
 
 ```bash
 # Export learning data before major upgrade
-npx rufflo learning export --output learning-backup.json
+npx swarmdo learning export --output learning-backup.json
 
 # Import after upgrade
-npx rufflo learning import --input learning-backup.json
+npx swarmdo learning import --input learning-backup.json
 
 # Verify data integrity
-npx rufflo learning verify
+npx swarmdo learning verify
 ```
 
 ---
@@ -879,16 +879,16 @@ npx rufflo learning verify
 
 ```bash
 # Check learning system status
-npx rufflo learning status
+npx swarmdo learning status
 
 # View component load times
-npx rufflo learning diagnostics
+npx swarmdo learning diagnostics
 
 # Test RL algorithms
-npx rufflo learning test --algorithm ppo
+npx swarmdo learning test --algorithm ppo
 
 # Verify installation
-npx rufflo verify --component learning
+npx swarmdo verify --component learning
 ```
 
 ---

@@ -1,5 +1,5 @@
 /**
- * RuvectorWasmAdapter — a correct, ergonomic wrapper around the generated
+ * SwarmvectorWasmAdapter — a correct, ergonomic wrapper around the generated
  * `@swarmvector/wasm` `VectorDB`.
  *
  * It exists to paper over three behaviours of the current WASM build that bite
@@ -11,7 +11,7 @@
  *     `"HNSW requested but not available (WASM build), using flat index"`).
  *     Results are still correct, but search is O(n), not O(log n). The win is
  *     latent until the upstream WASM HNSW lands. This adapter surfaces that fact
- *     via {@link RuvectorWasmAdapter#indexType} / {@link WASM_HNSW_AVAILABLE}
+ *     via {@link SwarmvectorWasmAdapter#indexType} / {@link WASM_HNSW_AVAILABLE}
  *     instead of letting callers assume a logarithmic index.
  *
  *  2. **`result.score` is a cosine *distance*, not a similarity.** Lower is
@@ -26,7 +26,7 @@
  *     on the way out, so what you put in is what you get back.
  *
  * The adapter is dependency-injectable: pass a pre-constructed `VectorDB` (real
- * or a test double), or use {@link RuvectorWasmAdapter.create} to load and init
+ * or a test double), or use {@link SwarmvectorWasmAdapter.create} to load and init
  * the WASM module for you.
  *
  * @module @swarmvector/wasm/adapter
@@ -85,7 +85,7 @@ export function distanceToSimilarity(metric, distance) {
 /**
  * Correct wrapper around the generated WASM `VectorDB`.
  */
-export class RuvectorWasmAdapter {
+export class SwarmvectorWasmAdapter {
   /**
    * @param {any} db - A constructed WASM `VectorDB` instance (or a compatible
    *   test double exposing `insert`, `insertBatch`, `search`, `get`, `delete`,
@@ -99,7 +99,7 @@ export class RuvectorWasmAdapter {
    */
   constructor(db, options = {}) {
     if (!db) {
-      throw new Error('RuvectorWasmAdapter requires a VectorDB instance');
+      throw new Error('SwarmvectorWasmAdapter requires a VectorDB instance');
     }
     this._db = db;
     this._metric = (options.metric || 'cosine').toLowerCase();
@@ -124,12 +124,12 @@ export class RuvectorWasmAdapter {
    *   the WASM build falls back to flat regardless (see {@link WASM_HNSW_AVAILABLE}).
    * @param {any} [options.module] - Pre-imported WASM module (exposing `default`
    *   init and `VectorDB`). If omitted, `@swarmvector/wasm` is imported dynamically.
-   * @returns {Promise<RuvectorWasmAdapter>}
+   * @returns {Promise<SwarmvectorWasmAdapter>}
    */
   static async create(options = {}) {
     const { dimensions, metric = 'cosine', useHnsw = true } = options;
     if (!dimensions || dimensions <= 0) {
-      throw new Error('RuvectorWasmAdapter.create requires positive `dimensions`');
+      throw new Error('SwarmvectorWasmAdapter.create requires positive `dimensions`');
     }
 
     const mod = options.module ?? (await import('@swarmvector/wasm'));
@@ -145,7 +145,7 @@ export class RuvectorWasmAdapter {
     }
 
     const db = new VectorDB(dimensions, metric, useHnsw);
-    return new RuvectorWasmAdapter(db, { dimensions, metric });
+    return new SwarmvectorWasmAdapter(db, { dimensions, metric });
   }
 
   /**
@@ -327,4 +327,4 @@ function toFloat32(v) {
   return v instanceof Float32Array ? v : new Float32Array(v);
 }
 
-export default RuvectorWasmAdapter;
+export default SwarmvectorWasmAdapter;

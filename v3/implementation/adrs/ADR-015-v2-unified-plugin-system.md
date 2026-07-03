@@ -252,8 +252,8 @@ interface CollectionManagerState {
 ```typescript
 // Core collection - essential plugins
 const coreCollection: PluginCollection = {
-  id: 'rufflo-core',
-  name: 'Rufflo Core Plugins',
+  id: 'swarmdo-core',
+  name: 'Swarmdo Core Plugins',
   version: '3.0.0',
   plugins: [
     { plugin: memoryPlugin, defaultEnabled: true, category: 'memory' },
@@ -264,7 +264,7 @@ const coreCollection: PluginCollection = {
 
 // Development collection - coding assistance
 const developmentCollection: PluginCollection = {
-  id: 'rufflo-development',
+  id: 'swarmdo-development',
   name: 'Development Tools',
   version: '3.0.0',
   plugins: [
@@ -278,7 +278,7 @@ const developmentCollection: PluginCollection = {
 
 // Intelligence collection - AI/ML features
 const intelligenceCollection: PluginCollection = {
-  id: 'rufflo-intelligence',
+  id: 'swarmdo-intelligence',
   name: 'Intelligence & Learning',
   version: '3.0.0',
   plugins: [
@@ -290,7 +290,7 @@ const intelligenceCollection: PluginCollection = {
 
 // Swarm collection - multi-agent coordination
 const swarmCollection: PluginCollection = {
-  id: 'rufflo-swarm',
+  id: 'swarmdo-swarm',
   name: 'Swarm Coordination',
   version: '3.0.0',
   plugins: [
@@ -303,7 +303,7 @@ const swarmCollection: PluginCollection = {
 
 // Security collection - security features
 const securityCollection: PluginCollection = {
-  id: 'rufflo-security',
+  id: 'swarmdo-security',
   name: 'Security & Audit',
   version: '3.0.0',
   plugins: [
@@ -465,7 +465,7 @@ class SecurePluginContext implements PluginContext {
 
 ### Phase 5: CLI Integration (2026-01-24)
 - [x] PluginManager for CLI (real npm installation)
-- [x] Persist to `.rufflo/plugins/installed.json`
+- [x] Persist to `.swarmdo/plugins/installed.json`
 - [x] Install, uninstall, upgrade, toggle commands
 - [x] Local plugin installation support
 - [x] Discovery service with npm fallback (IPFS demo mode)
@@ -596,7 +596,7 @@ CLI Commands (plugins.ts)
     │
     └── PluginManager (manager.ts)
             │
-            ├── InstalledPlugins manifest (.rufflo/plugins/installed.json)
+            ├── InstalledPlugins manifest (.swarmdo/plugins/installed.json)
             ├── npm install/uninstall
             └── PluginDiscoveryService (discovery.ts)
                     │
@@ -612,9 +612,9 @@ CLI Commands (plugins.ts)
 
 ## References
 
-- [Plugin Interface](../../@rufflo/plugins/src/core/plugin-interface.ts)
-- [Plugin Registry](../../@rufflo/plugins/src/registry/plugin-registry.ts)
-- [Plugin Manager (CLI)](../../@rufflo/cli/src/plugins/manager.ts)
-- [Collection Manager](../../@rufflo/plugins/src/collections/collection-manager.ts)
-- [Dependency Graph](../../@rufflo/plugins/src/registry/dependency-graph.ts)
-- [Official Collections](../../@rufflo/plugins/src/collections/official/index.ts)
+- [Plugin Interface](../../@swarmdo/plugins/src/core/plugin-interface.ts)
+- [Plugin Registry](../../@swarmdo/plugins/src/registry/plugin-registry.ts)
+- [Plugin Manager (CLI)](../../@swarmdo/cli/src/plugins/manager.ts)
+- [Collection Manager](../../@swarmdo/plugins/src/collections/collection-manager.ts)
+- [Dependency Graph](../../@swarmdo/plugins/src/registry/dependency-graph.ts)
+- [Official Collections](../../@swarmdo/plugins/src/collections/official/index.ts)

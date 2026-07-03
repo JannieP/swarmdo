@@ -8,7 +8,7 @@ Accepted (2026-02-27)
 
 ## Context
 
-The `agentic-flow` package is the upstream coordination engine that powers rufflo's ReasoningBank, Router, Agent Booster, QUIC transport, and intelligence subsystems. The major version upgrade from 2.0.7 to 3.0.0-alpha.1 introduces breaking changes, new modules, and a complete rewrite of the build pipeline.
+The `agentic-flow` package is the upstream coordination engine that powers swarmdo's ReasoningBank, Router, Agent Booster, QUIC transport, and intelligence subsystems. The major version upgrade from 2.0.7 to 3.0.0-alpha.1 introduces breaking changes, new modules, and a complete rewrite of the build pipeline.
 
 ### Previous State (2.0.7)
 
@@ -30,7 +30,7 @@ The `agentic-flow` package is the upstream coordination engine that powers ruffl
 
 ## Decision
 
-Upgrade `agentic-flow` from `^2.0.7` to `^3.0.0-alpha.1` in `@rufflo/cli`, preserving all lazy-import patterns and fallback behavior.
+Upgrade `agentic-flow` from `^2.0.7` to `^3.0.0-alpha.1` in `@swarmdo/cli`, preserving all lazy-import patterns and fallback behavior.
 
 ### Package Overview
 
@@ -76,7 +76,7 @@ dist/
 ├── embeddings/      # Vector embedding engine
 ├── federation/      # EphemeralAgent, FederationHub
 ├── hooks/           # Hook system (pre/post edit/command/task)
-├── intelligence/    # RuVector: SONA, HNSW, EWC++, EmbeddingCache, EmbeddingService
+├── intelligence/    # SwarmVector: SONA, HNSW, EWC++, EmbeddingCache, EmbeddingService
 ├── llm/             # Multi-provider LLM integration
 ├── mcp/             # FastMCP 3.x servers + 33+ MCP tools
 ├── memory/          # Memory management
@@ -110,7 +110,7 @@ dist/
 | Neural | neural-tools, sona-tools, sona-rvf-tools | Neural pattern training |
 | Performance | performance-tools, quantization-tools | Profiling and optimization |
 | Infrastructure | infrastructure-tools, streaming-tools | System management |
-| Intelligence | attention-tools, ruvector-tools, rvf-tools, gnn-tools | RuVector subsystem |
+| Intelligence | attention-tools, swarmvector-tools, rvf-tools, gnn-tools | SwarmVector subsystem |
 | Specialized | consensus-tools, cost-optimizer, daa-tools, explainability, github-tools, hidden-controllers, quic-tools, workflow-tools, autopilot-tools, session-tools | Domain-specific |
 | Agent Booster | agent-booster-tools, enhanced-booster-tools | WASM code transforms |
 
@@ -122,14 +122,14 @@ dist/
 | `stdio-full` | stdio | Full-featured stdio server |
 | `http-sse` | HTTP/SSE | Server-Sent Events transport |
 | `http-streaming-updated` | HTTP | Streaming HTTP transport |
-| `rufflo-sdk` | SDK | Rufflo SDK server |
+| `swarmdo-sdk` | SDK | Swarmdo SDK server |
 | `hooks-server` | mixed | Hooks-specific server |
 
 ### Intelligence Modules
 
 | Module | Description |
 |--------|-------------|
-| `RuVectorIntelligence` | Core intelligence engine (SONA + HNSW + EWC++) |
+| `SwarmVectorIntelligence` | Core intelligence engine (SONA + HNSW + EWC++) |
 | `IntelligenceStore` | Persistent pattern storage |
 | `EmbeddingService` | Vector embedding generation |
 | `EmbeddingCache` | Embedding result caching |
@@ -158,7 +158,7 @@ dist/
 | `@ai-sdk/google` | ^3.0.31 | Google AI integration |
 | `@google/genai` | ^1.43.0 | Gemini provider |
 | `@octokit/rest` | ^21.0.0 | GitHub API |
-| `@ruvector/graph-node` | ^2.0.2 | GNN graph operations |
+| `@swarmvector/graph-node` | ^2.0.2 | GNN graph operations |
 | `@xenova/transformers` | ^2.17.2 | Local embeddings |
 | `agentdb` | ^1.4.3 | AgentDB v3 controllers |
 | `express` | ^5.1.0 | HTTP server (MCP) |
@@ -184,9 +184,9 @@ dist/
 |------|--------|-------|
 | `src/services/agentic-flow-bridge.ts` | `import('agentic-flow/reasoningbank')`, `import('agentic-flow/router')`, `import('agentic-flow/orchestration')` | **NEW** — Unified lazy-loading bridge for all v3 subpaths |
 | `src/memory/memory-initializer.ts` | `import('agentic-flow/reasoningbank')`, `import('agentic-flow')` | Tier 1: ReasoningBank `computeEmbedding`, Tier 2: legacy core |
-| `src/ruvector/enhanced-model-router.ts` | `import('agentic-flow/agent-booster')` | Agent Booster with local module (no npx), npx fallback |
+| `src/swarmvector/enhanced-model-router.ts` | `import('agentic-flow/agent-booster')` | Agent Booster with local module (no npx), npx fallback |
 | `src/commands/hooks.ts` | `import('agentic-flow/reasoningbank')`, `import('agentic-flow')` | Token optimizer — v3 ReasoningBank first, legacy fallback |
-| `src/mcp-tools/neural-tools.ts` | `import('agentic-flow/reasoningbank')`, `import('@rufflo/embeddings')` | Tier 1: ReasoningBank WASM, Tier 2: embeddings, Tier 3: mock |
+| `src/mcp-tools/neural-tools.ts` | `import('agentic-flow/reasoningbank')`, `import('@swarmdo/embeddings')` | Tier 1: ReasoningBank WASM, Tier 2: embeddings, Tier 3: mock |
 | `src/commands/doctor.ts` | `import('agentic-flow/reasoningbank')`, `import('agentic-flow')` | **NEW** — Health check for agentic-flow capabilities |
 | `src/commands/embeddings.ts` | provider option | `agentic-flow` as embedding provider |
 | `src/types/optional-modules.d.ts` | Type declarations | Full types for 7 agentic-flow subpath modules |
@@ -202,7 +202,7 @@ All imports use **lazy dynamic `import()`** with `.catch(() => null)` fallbacks.
 | I1 | `optional-modules.d.ts` | Expanded from 2 to 7 `agentic-flow/*` module declarations with full type coverage |
 | I2 | `enhanced-model-router.ts` | Agent Booster: npx → local `import('agentic-flow/agent-booster')` with npx fallback |
 | I3 | `memory-initializer.ts` | Added Tier 1: `computeEmbedding` from `agentic-flow/reasoningbank` before legacy fallback |
-| I4 | `neural-tools.ts` | Added Tier 1: ReasoningBank WASM embeddings before @rufflo/embeddings |
+| I4 | `neural-tools.ts` | Added Tier 1: ReasoningBank WASM embeddings before @swarmdo/embeddings |
 | I5 | `hooks.ts` | Token optimizer: v3 ReasoningBank direct import, detects version in spinner label |
 | I6 | `doctor.ts` | New `checkAgenticFlow()` health check — detects ReasoningBank/Embeddings/Judgement/Consolidation |
 | I7 | `agentic-flow-bridge.ts` | **NEW** — Unified bridge with `capabilities()`, `isAvailable()`, `computeEmbedding()`, `retrieveMemories()` |
@@ -218,7 +218,7 @@ All imports use **lazy dynamic `import()`** with `.catch(() => null)` fallbacks.
 | Type declarations | Compatible | 7 module declarations in `optional-modules.d.ts` |
 | AgentDB controllers | Compatible | ADR-055 Phase 2 already adapted bridge for new exports |
 | Memory bridge | Compatible | `memory-bridge.ts` hardened in ADR-055 |
-| Embedding service | Compatible | 3-tier: ReasoningBank → @rufflo/embeddings → mock |
+| Embedding service | Compatible | 3-tier: ReasoningBank → @swarmdo/embeddings → mock |
 | Router integration | Compatible | Local agent-booster import with npx fallback |
 | Doctor health check | New | Detects all 4 ReasoningBank capabilities |
 | Unified bridge | New | Single entry point for all agentic-flow v3 modules |
@@ -227,8 +227,8 @@ All imports use **lazy dynamic `import()`** with `.catch(() => null)` fallbacks.
 
 | Package | Dependency | Required Version |
 |---------|-----------|-----------------|
-| `@rufflo/cli` | `agentic-flow` | `^3.0.0-alpha.1` (updated) |
-| `@rufflo/cli` | `agentdb` | `^3.0.0-alpha.10` (updated) |
+| `@swarmdo/cli` | `agentic-flow` | `^3.0.0-alpha.1` (updated) |
+| `@swarmdo/cli` | `agentdb` | `^3.0.0-alpha.10` (updated) |
 
 ## Consequences
 
@@ -237,7 +237,7 @@ All imports use **lazy dynamic `import()`** with `.catch(() => null)` fallbacks.
 1. **Zero production vulnerabilities** — sqlite3 removed from agentdb peer deps, all transitive vuln chains broken
 2. **WASM acceleration available** — ReasoningBank (211 KB) and QUIC (127 KB) WASM modules for native-speed operations
 3. **FastMCP 3.x** — 33+ Zod-validated MCP tools with proper error handling and streaming
-4. **Richer intelligence** — RuVectorIntelligence with SONA, HNSW, EWC++, Flash Attention
+4. **Richer intelligence** — SwarmVectorIntelligence with SONA, HNSW, EWC++, Flash Attention
 5. **Federation support** — EphemeralAgent and FederationHub for cross-instance coordination
 6. **Billing infrastructure** — 5-tier metering system for commercial deployment
 7. **Modern SDK** — Claude Agent SDK 0.1.5 for native agent spawning
@@ -270,7 +270,7 @@ node -e "import('agentic-flow/reasoningbank').then(m => console.log('RB:', !!m))
 node -e "import('agentic-flow/router').then(m => console.log('Router:', !!m))"
 
 # Verify CLI tests pass
-cd v3/@rufflo/cli && npm test  # → 445 passed
+cd v3/@swarmdo/cli && npm test  # → 445 passed
 
 # Verify zero production vulnerabilities
 npm audit --omit=dev  # → 0 vulnerabilities

@@ -16,8 +16,8 @@ The repo ships **two parallel implementations** of the MCP hooks surface:
 
 | Path | Used by |
 |---|---|
-| `v3/mcp/tools/hooks-tools.ts` | Standalone `mcp` package (not loaded by the `rufflo` MCP server) |
-| `v3/@rufflo/cli/src/mcp-tools/hooks-tools.ts` | **Actual CLI MCP server** (`npx @rufflo/cli mcp start`) |
+| `v3/mcp/tools/hooks-tools.ts` | Standalone `mcp` package (not loaded by the `swarmdo` MCP server) |
+| `v3/@swarmdo/cli/src/mcp-tools/hooks-tools.ts` | **Actual CLI MCP server** (`npx @swarmdo/cli mcp start`) |
 
 The 3.6.13 fix for #1686 (adding `dbPath` to `createReasoningBank`) landed in the first file but the runtime uses the second. The `hooks_post-task` writer and the `hooks_metrics` reader in the second file persist via `memory-store.ts` not `ReasoningBank` — and the metrics reader filters entries by key substring (`pattern`, `route`, `task`) rather than by trajectory store, so post-task writes that don't match those substrings remain invisible.
 
@@ -27,7 +27,7 @@ The 3.6.13 fix for #1686 (adding `dbPath` to `createReasoningBank`) landed in th
 
 - All 9 memory_* tools — full round-trip with sql.js + HNSW + 384-dim ONNX embeddings
 - All 22 workflow/task/claims/autopilot/daa/aidefence_* tools — minor caveats on `aidefence_scan` quick-mode and stats counters
-- 9/9 ruvllm_* tools including SONA controller (cleared #1700 item 3 — `ruvllm_sona_adapt` returns real Rust struct fields, not bridge fallback)
+- 9/9 swarmllm_* tools including SONA controller (cleared #1700 item 3 — `swarmllm_sona_adapt` returns real Rust struct fields, not bridge fallback)
 - 18/24 swarm/agent/hive-mind/coordination tools
 - Most embeddings_* tools — determinism confirmed (identical 384-dim vectors across calls), real HNSW search (~18ms on 30 vectors)
 - Most hooks_intelligence_* tools — pattern-store now uses `bridge-store` with real ONNX (cleared #1700 item 3 in this surface), pattern-search returns real BM25 hybrid hits
@@ -41,7 +41,7 @@ The 3.6.13 fix for #1686 (adding `dbPath` to `createReasoningBank`) landed in th
 | F2 | `hooks_worker-dispatch` (#1700 item 1) | returns `status:"completed"` in 0ms for a 45-second audit task; daemon state never advances; `worker_audit_*` shows `duration:0, completedAt==startedAt` | YES |
 | F3 | `hive-mind_init` schema (#1700 item 4) | input schema exposes only `topology` and `queenId`; no `consensus` parameter, silently defaults to `byzantine` even though docs say `raft` is the anti-drift default | YES |
 | F4 | `agentdb_pattern-store` | returns `success:false, error:"AgentDB bridge not available"` even though `agentdb_health.reasoningBank.enabled === true` — the availability check disagrees with the controller registry | YES |
-| F5 | `embeddings_status` MCP shape (#1698 partial regression) | `ruvector` field is a single boolean — no way for callers to distinguish "package installed" from "feature enabled" | YES |
+| F5 | `embeddings_status` MCP shape (#1698 partial regression) | `swarmvector` field is a single boolean — no way for callers to distinguish "package installed" from "feature enabled" | YES |
 | F6 | `session_list` | returns `[{}, {}, ...]` — every session entry serialized as empty object even though `session_info` by ID returns full metadata | YES |
 | F7 | `coordination_orchestrate` | hardcoded `estimatedCompletion: "50ms"` regardless of input; just generates an orchestrationId | NO (label as stub, defer real impl) |
 | F8 | `performance_metrics.latency`/`.throughput` | suspiciously round fixture values without the `_real:true` flag the cpu/memory branches carry | NO (label as stub) |
@@ -79,9 +79,9 @@ Extend the input schema to include `consensus: 'raft' | 'byzantine' | 'gossip' |
 
 Reconcile `agentdb_health.reasoningBank.enabled` with the `pattern-store` availability check. The check should accept either the new bridge OR the legacy controller. If both fail, emit a structured error with the exact controller path that's missing rather than the generic "bridge not available".
 
-### F5 — `embeddings_status.ruvector` shape
+### F5 — `embeddings_status.swarmvector` shape
 
-Replace the single `ruvector: boolean` field with `ruvector: { available: boolean, enabled: boolean, version?: string }`. `available` reflects whether `@ruvector/core` loaded; `enabled` reflects whether it's wired into the embedding pipeline. Document as a non-breaking additive change (old single-boolean readers see truthy → match `enabled`).
+Replace the single `swarmvector: boolean` field with `swarmvector: { available: boolean, enabled: boolean, version?: string }`. `available` reflects whether `@swarmvector/core` loaded; `enabled` reflects whether it's wired into the embedding pipeline. Document as a non-breaking additive change (old single-boolean readers see truthy → match `enabled`).
 
 ### F6 — `session_list` serialization
 
@@ -93,10 +93,10 @@ Have `config_list` return the same union as `config_export` (defaults + user-set
 
 ## Validation Plan
 
-1. Re-spawn the same six-agent verification swarm (memory-tester, hooks-tester, swarm-tester, neural-tester, system-tester, workflow-tester) against `@rufflo/cli@3.6.14`.
+1. Re-spawn the same six-agent verification swarm (memory-tester, hooks-tester, swarm-tester, neural-tester, system-tester, workflow-tester) against `@swarmdo/cli@3.6.14`.
 2. Each agent re-runs the same scenarios that flagged F1–F6, F12 in the May 3 audit. Pass criteria: each row in the matrix above flips from MOCK/BROKEN/DEGRADED to REAL.
 3. Add unit-level tests for F1 (post-task → metrics round-trip), F3 (consensus param round-trip), F6 (session_list returns non-empty objects).
-4. Verify against published artifact in a clean `/tmp/rufflo-smoke-3.6.14` install.
+4. Verify against published artifact in a clean `/tmp/swarmdo-smoke-3.6.14` install.
 
 ## Consequences
 
@@ -108,4 +108,4 @@ Have `config_list` return the same union as `config_export` (defaults + user-set
 
 ## Notes
 
-- The parallel `v3/mcp/tools/` and `v3/@rufflo/cli/src/mcp-tools/` implementations should be unified in a follow-up ADR. Maintaining both creates the kind of fix-in-the-wrong-file confusion that turned the 3.6.13 #1686 fix into a no-op on the runtime path. Recommend deprecating `v3/mcp/tools/` and re-pointing its consumers at the CLI mcp-tools.
+- The parallel `v3/mcp/tools/` and `v3/@swarmdo/cli/src/mcp-tools/` implementations should be unified in a follow-up ADR. Maintaining both creates the kind of fix-in-the-wrong-file confusion that turned the 3.6.13 #1686 fix into a no-op on the runtime path. Recommend deprecating `v3/mcp/tools/` and re-pointing its consumers at the CLI mcp-tools.

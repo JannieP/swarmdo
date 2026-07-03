@@ -2,7 +2,7 @@
  * V3 CLI Doctor Command
  * System diagnostics, dependency checks, config validation
  *
- * Created with ruv.io
+ * Created with swarmdo.com
  */
 
 import type { Command, CommandContext, CommandResult } from '../types.js';

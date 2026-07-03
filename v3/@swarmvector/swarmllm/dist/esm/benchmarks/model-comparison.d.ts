@@ -3,7 +3,7 @@
  *
  * Head-to-head comparison between:
  * - Qwen2.5-0.5B-Instruct (base model)
- * - RuvLTRA Claude Code 0.5B (fine-tuned for Claude Code)
+ * - SwarmLTRA Claude Code 0.5B (fine-tuned for Claude Code)
  *
  * Tests routing accuracy and embedding quality for Claude Code use cases.
  */

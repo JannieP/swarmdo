@@ -7,7 +7,7 @@
  *   npx swarmdo swarmvector setup --output /path/to/dir
  *   npx swarmdo swarmvector setup --print      # Print to stdout only
  *
- * Created with care by ruv.io
+ * Created with care by swarmdo.com
  */
 
 import type { Command, CommandContext, CommandResult } from '../../types.js';
@@ -19,7 +19,7 @@ import * as path from 'path';
  * Docker Compose template for SwarmVector PostgreSQL
  */
 const DOCKER_COMPOSE_TEMPLATE = `# SwarmVector PostgreSQL Testing Environment
-# Official SwarmVector extension from ruvnet/swarmvector-postgres
+# Official SwarmVector extension from upstream/swarmvector-postgres
 #
 # Features:
 # - 77+ SQL functions for vector operations
@@ -32,7 +32,7 @@ const DOCKER_COMPOSE_TEMPLATE = `# SwarmVector PostgreSQL Testing Environment
 
 services:
   postgres:
-    image: ruvnet/swarmvector-postgres:latest
+    image: upstream/swarmvector-postgres:latest
     container_name: swarmvector-postgres
     environment:
       POSTGRES_USER: claude
@@ -81,7 +81,7 @@ const INIT_SQL_TEMPLATE = `-- ============================================
 -- ============================================
 --
 -- This script initializes SwarmVector PostgreSQL extension
--- from ruvnet/swarmvector-postgres with Swarmdo V3 integration.
+-- from upstream/swarmvector-postgres with Swarmdo V3 integration.
 --
 -- SwarmVector provides 77+ SQL functions including:
 -- - Vector similarity search (HNSW with SIMD)
@@ -650,8 +650,8 @@ docker-compose up -d
 \`\`\`
 
 ## Learn More
-- [SwarmVector Docker Hub](https://hub.docker.com/r/ruvnet/swarmvector-postgres)
-- [Swarmdo Documentation](https://github.com/ruvnet/claude-flow)
+- [SwarmVector Docker Hub](https://hub.docker.com/r/upstream/swarmvector-postgres)
+- [Swarmdo Documentation](the upstream project (see NOTICE))
 `;
 
 /**

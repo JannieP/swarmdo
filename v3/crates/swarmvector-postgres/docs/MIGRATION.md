@@ -720,8 +720,8 @@ SELECT * FROM swarmvector_memory_stats();
 - **Documentation**: [/docs](/docs) directory
 - **API Reference**: [API.md](./API.md)
 - **Performance Guide**: [SIMD_OPTIMIZATION.md](./SIMD_OPTIMIZATION.md)
-- **GitHub Issues**: https://github.com/ruvnet/swarmvector/issues
-- **Community Forum**: https://github.com/ruvnet/swarmvector/discussions
+- **GitHub Issues**: the upstream project (see NOTICE)
+- **Community Forum**: the upstream project (see NOTICE)
 
 ## Migration Checklist Template
 

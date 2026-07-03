@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 #
 # Swarmdo Installer (formerly Swarmdo)
-# https://github.com/ruvnet/swarmdo
+# the upstream project (see NOTICE)
 #
 # Usage:
-#   curl -fsSL https://cdn.jsdelivr.net/gh/ruvnet/claude-flow@main/scripts/install.sh | bash
-#   curl -fsSL https://cdn.jsdelivr.net/gh/ruvnet/claude-flow@main/scripts/install.sh | bash -s -- --full
-#   curl -fsSL https://cdn.jsdelivr.net/gh/ruvnet/claude-flow@main/scripts/install.sh | bash -s -- --global
-#   curl -fsSL https://cdn.jsdelivr.net/gh/ruvnet/claude-flow@main/scripts/install.sh | bash -s -- --minimal
+#   curl -fsSL https://cdn.jsdelivr.net/gh/upstream/claude-flow@main/scripts/install.sh | bash
+#   curl -fsSL https://cdn.jsdelivr.net/gh/upstream/claude-flow@main/scripts/install.sh | bash -s -- --full
+#   curl -fsSL https://cdn.jsdelivr.net/gh/upstream/claude-flow@main/scripts/install.sh | bash -s -- --global
+#   curl -fsSL https://cdn.jsdelivr.net/gh/upstream/claude-flow@main/scripts/install.sh | bash -s -- --minimal
 #
 # Options (via arguments):
 #   --global              Global install (npm install -g)
@@ -304,8 +304,8 @@ show_quickstart() {
     fi
 
     echo ""
-    echo -e "${DIM}Documentation: https://github.com/ruvnet/swarmdo${NC}"
-    echo -e "${DIM}Issues: https://github.com/ruvnet/swarmdo/issues${NC}"
+    echo -e "${DIM}Documentation: the upstream project (see NOTICE)${NC}"
+    echo -e "${DIM}Issues: the upstream project (see NOTICE)${NC}"
     echo ""
 }
 

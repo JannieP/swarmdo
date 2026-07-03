@@ -664,7 +664,7 @@ record_routing_metrics(&metrics, inference_time_us, lightweight_count, powerful_
 ## Support
 
 For issues, questions, or contributions, please visit:
-- GitHub: https://github.com/ruvnet/swarmvector
+- GitHub: the upstream project (see NOTICE)
 - Documentation: https://docs.swarmvector.io
 
 ---

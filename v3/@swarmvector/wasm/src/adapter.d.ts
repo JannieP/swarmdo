@@ -1,5 +1,5 @@
 /**
- * Type declarations for the RuvectorWasmAdapter.
+ * Type declarations for the SwarmvectorWasmAdapter.
  *
  * Unlike the generated `pkg/swarmvector_wasm.d.ts`, the `score` documented here is
  * a real similarity (higher is better); the raw distance is exposed separately.
@@ -89,10 +89,10 @@ export interface CreateOptions {
 }
 
 /** Correct wrapper around the generated WASM `VectorDB`. */
-export class RuvectorWasmAdapter {
+export class SwarmvectorWasmAdapter {
   constructor(db: WasmVectorDBLike, options?: AdapterOptions);
 
-  static create(options: CreateOptions): Promise<RuvectorWasmAdapter>;
+  static create(options: CreateOptions): Promise<SwarmvectorWasmAdapter>;
 
   /** `false` for the current WASM build — flat O(n) search. */
   readonly usesHnsw: boolean;
@@ -129,4 +129,4 @@ export class RuvectorWasmAdapter {
   clearMetadata(): void;
 }
 
-export default RuvectorWasmAdapter;
+export default SwarmvectorWasmAdapter;

@@ -1,4 +1,4 @@
-# feat(ruvllm): Implement SOTA features for production agentic workflows
+# feat(swarmllm): Implement SOTA features for production agentic workflows
 
 **Labels**: `enhancement`, `p0-critical`, `agentic`, `v2.4`, `mistral-rs`, `performance`
 
@@ -6,7 +6,7 @@
 
 ## Summary
 
-RuvLLM v2.4 SOTA Feature Implementation - Adding the 3 critical capabilities needed for production agentic workflows: **Structured Output**, **Function Calling**, and **Prefix Caching**.
+SwarmLLM v2.4 SOTA Feature Implementation - Adding the 3 critical capabilities needed for production agentic workflows: **Structured Output**, **Function Calling**, and **Prefix Caching**.
 
 These features are essential for modern LLM applications and are currently blocking production adoption for major agent frameworks.
 
@@ -17,7 +17,7 @@ These features are essential for modern LLM applications and are currently block
 ### Why This Matters
 
 **Current State:**
-- RuvLLM cannot reliably generate structured outputs (JSON schema enforcement)
+- SwarmLLM cannot reliably generate structured outputs (JSON schema enforcement)
 - No native function calling support for tool-using agents
 - Repeated prompts/prefixes incur full generation costs (no caching)
 - Agent frameworks (LangChain, LlamaIndex, CrewAI) cannot integrate
@@ -29,7 +29,7 @@ These features are essential for modern LLM applications and are currently block
 - **Missing compatibility**: Cannot replace vLLM, llama.cpp, SGLang in existing stacks
 
 **Competitive Gap:**
-| Feature | vLLM | llama.cpp | SGLang | RuvLLM |
+| Feature | vLLM | llama.cpp | SGLang | SwarmLLM |
 |---------|------|-----------|--------|--------|
 | Structured Output | ✅ | ✅ | ✅ | ❌ |
 | Function Calling | ✅ | ✅ | ✅ | ❌ |
@@ -294,7 +294,7 @@ let response2 = llm.generate(GenerateRequest {
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                     RuvLLM v2.4                         │
+│                     SwarmLLM v2.4                         │
 ├─────────────────────────────────────────────────────────┤
 │  ┌─────────────────┐  ┌──────────────┐  ┌────────────┐ │
 │  │ Structured      │  │ Function     │  │ Prefix     │ │
@@ -552,4 +552,4 @@ let response2 = llm.generate(GenerateRequest {
 
 ---
 
-**Let's close the gap with vLLM/llama.cpp and make RuvLLM the best choice for production agentic workflows!** 🚀
+**Let's close the gap with vLLM/llama.cpp and make SwarmLLM the best choice for production agentic workflows!** 🚀

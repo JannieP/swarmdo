@@ -7,7 +7,7 @@
 
 ## Context
 
-The `@anthropic-ai/claude-code` package (v2.1.1) provides the official CLI for Claude AI. Deep integration with Claude Code enables enhanced developer experience for rufflo users. This ADR documents **undocumented integration points** discovered through source code analysis that are not covered in official documentation.
+The `@anthropic-ai/claude-code` package (v2.1.1) provides the official CLI for Claude AI. Deep integration with Claude Code enables enhanced developer experience for swarmdo users. This ADR documents **undocumented integration points** discovered through source code analysis that are not covered in official documentation.
 
 ### Analysis Methodology
 
@@ -121,22 +121,22 @@ interface PreToolUseOutput {
     "PreToolUse": [
       {
         "matcher": "Bash",
-        "hooks": ["npx rufflo@v3alpha hooks modify-bash"]
+        "hooks": ["npx swarmdo@v3alpha hooks modify-bash"]
       },
       {
         "matcher": "Write|Edit",
-        "hooks": ["npx rufflo@v3alpha hooks modify-file"]
+        "hooks": ["npx swarmdo@v3alpha hooks modify-file"]
       }
     ],
     "PostToolUse": [
       {
         "matcher": ".*",
-        "hooks": ["npx rufflo@v3alpha hooks post-command"]
+        "hooks": ["npx swarmdo@v3alpha hooks post-command"]
       }
     ],
     "UserPromptSubmit": [
       {
-        "hooks": ["npx rufflo@v3alpha hooks route --task \"$PROMPT\""]
+        "hooks": ["npx swarmdo@v3alpha hooks route --task \"$PROMPT\""]
       }
     ]
   }
@@ -239,9 +239,9 @@ MCP servers can have per-tool access control:
 ```json
 {
   "mcpServers": {
-    "rufflo": {
+    "swarmdo": {
       "command": "npx",
-      "args": ["rufflo@v3alpha", "mcp", "start"],
+      "args": ["swarmdo@v3alpha", "mcp", "start"],
       "allowlist": [
         "swarm_init",
         "agent_spawn",
@@ -403,7 +403,7 @@ export async function configureIntegration(options: {
 
   // Add MCP server if requested
   if (options.enableMcp && status.configPath) {
-    await exec(`claude mcp add ${options.mcpServerName || 'rufflo'} npx rufflo@v3alpha mcp start`);
+    await exec(`claude mcp add ${options.mcpServerName || 'swarmdo'} npx swarmdo@v3alpha mcp start`);
   }
 }
 ```
@@ -414,7 +414,7 @@ export async function configureIntegration(options: {
 // src/claude-code/hooks.ts
 
 /**
- * Install rufflo hooks into Claude Code settings
+ * Install swarmdo hooks into Claude Code settings
  */
 export async function installHooks(): Promise<void> {
   const status = await detectClaudeCode();
@@ -436,7 +436,7 @@ export async function installHooks(): Promise<void> {
   if (!bashHook) {
     settings.hooks.PreToolUse.push({
       matcher: 'Bash',
-      hooks: ['npx rufflo@v3alpha hooks modify-bash']
+      hooks: ['npx swarmdo@v3alpha hooks modify-bash']
     });
   }
 
@@ -448,24 +448,24 @@ export async function installHooks(): Promise<void> {
 
 ## CLI Integration Commands
 
-### `rufflo setup claude-code`
+### `swarmdo setup claude-code`
 
 ```bash
 # Auto-detect and configure integration
-npx rufflo@v3alpha setup claude-code
+npx swarmdo@v3alpha setup claude-code
 
 # Options:
 #   --hooks         Install hooks into Claude Code settings
-#   --mcp           Register rufflo MCP server
+#   --mcp           Register swarmdo MCP server
 #   --agents        Install custom agent definitions
 #   --verify        Verify integration status
 ```
 
-### `rufflo doctor --claude-code`
+### `swarmdo doctor --claude-code`
 
 ```bash
 # Check Claude Code integration health
-npx rufflo@v3alpha doctor --claude-code
+npx swarmdo@v3alpha doctor --claude-code
 
 # Output:
 # ✓ Claude Code installed (v2.1.1)
@@ -492,9 +492,9 @@ Hooks execute with user permissions. Recommendations:
 // Recommended MCP server configuration
 {
   "mcpServers": {
-    "rufflo": {
+    "swarmdo": {
       "command": "npx",
-      "args": ["rufflo@v3alpha", "mcp", "start"],
+      "args": ["swarmdo@v3alpha", "mcp", "start"],
       // Restrict to safe tools only
       "allowlist": [
         "memory_*",
@@ -589,7 +589,7 @@ Hooks execute with user permissions. Recommendations:
 
 - Claude Code Package: `@anthropic-ai/claude-code@2.1.1`
 - SDK Tools Types: `sdk-tools.d.ts`
-- ADR-017: RuVector Integration Architecture
+- ADR-017: SwarmVector Integration Architecture
 - ADR-004: Plugin-Based Architecture
 - Official Docs: https://docs.anthropic.com/en/docs/claude-code
 
@@ -664,13 +664,13 @@ Added `--start-all` flag to `init` command for complete project initialization:
 
 ```bash
 # Initialize project AND start all services
-npx @rufflo/cli@latest init --start-all
+npx @swarmdo/cli@latest init --start-all
 
 # Equivalent to running:
-# 1. npx @rufflo/cli@latest init
-# 2. npx @rufflo/cli@latest memory init
-# 3. npx @rufflo/cli@latest daemon start
-# 4. npx @rufflo/cli@latest swarm init --topology hierarchical
+# 1. npx @swarmdo/cli@latest init
+# 2. npx @swarmdo/cli@latest memory init
+# 3. npx @swarmdo/cli@latest daemon start
+# 4. npx @swarmdo/cli@latest swarm init --topology hierarchical
 ```
 
 **Flags added:**
@@ -679,7 +679,7 @@ npx @rufflo/cli@latest init --start-all
 
 This simplifies the Claude Code integration setup from multiple commands to a single invocation.
 
-**CLI Version:** `@rufflo/cli@3.0.0-alpha.56`
+**CLI Version:** `@swarmdo/cli@3.0.0-alpha.56`
 
 ---
 

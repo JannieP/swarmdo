@@ -2,14 +2,14 @@
   "name": "swarmvector-wasm",
   "type": "module",
   "collaborators": [
-    "Ruvector Team"
+    "Swarmvector Team"
   ],
-  "description": "WASM bindings for Ruvector including kernel pack system (ADR-005)",
+  "description": "WASM bindings for Swarmvector including kernel pack system (ADR-005)",
   "version": "2.2.3",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ruvnet/swarmvector"
+    "url": "the upstream project (see NOTICE)"
   },
   "files": [
     "swarmvector_wasm_bg.wasm",

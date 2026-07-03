@@ -32,7 +32,7 @@
         },
         {
           "id": "pattern-1780159888525-1o-qiri",
-          "name": "Is Rufflo safe on Claude Opus 4.8? — `opus` alias still pins to 4.7, and literal model ids silently d",
+          "name": "Is Swarmdo safe on Claude Opus 4.8? — `opus` alias still pins to 4.7, and literal model ids silently d",
           "type": "history-issue",
           "score": 0.6843424344550606,
           "cosineScore": 0.003778643529534665,
@@ -41,7 +41,7 @@
         },
         {
           "id": "pattern-1780161324702-4r-00fd",
-          "name": "feat(graph-intelligence): #2044 ADR-123 Phase 1 — rufflo-graph-intelligence plugin foundation",
+          "name": "feat(graph-intelligence): #2044 ADR-123 Phase 1 — swarmdo-graph-intelligence plugin foundation",
           "type": "history-commit",
           "score": 0.6,
           "cosineScore": 0.14559488017897365,
@@ -113,7 +113,7 @@
         },
         {
           "id": "pattern-1780161324694-3b-h7wi",
-          "name": "Merge pull request #2071 from ruvnet/feat/adr-126-phase-4-5-trust-pipeline",
+          "name": "Merge pull request #2071 from upstream/feat/adr-126-phase-4-5-trust-pipeline",
           "type": "history-commit",
           "score": 0.5497170195764974,
           "cosineScore": 0.12879817434673874,
@@ -158,7 +158,7 @@
         },
         {
           "id": "pattern-1780161324695-3k-3187",
-          "name": "Merge pull request #2067 from ruvnet/docs/trim-redundant-badges",
+          "name": "Merge pull request #2067 from upstream/docs/trim-redundant-badges",
           "type": "history-commit",
           "score": 0.6,
           "cosineScore": 0.11852022008519922,
@@ -167,7 +167,7 @@
         },
         {
           "id": "pattern-1780161324698-3u-c1g1",
-          "name": "chore(release): publish 3.7.0-alpha.71 + @rufflo/memory@3.0.0-alpha.18",
+          "name": "chore(release): publish 3.7.0-alpha.71 + @swarmdo/memory@3.0.0-alpha.18",
           "type": "history-commit",
           "score": 0.5970925328149753,
           "cosineScore": 0.11723942732447756,
@@ -311,7 +311,7 @@
         },
         {
           "id": "pattern-1780161324689-22-p22q",
-          "name": "Merge pull request #2101 from ruvnet/fix/2078-claudemd-coauthor-rule",
+          "name": "Merge pull request #2101 from upstream/fix/2078-claudemd-coauthor-rule",
           "type": "history-commit",
           "score": 0.6,
           "cosineScore": 0.11741462257643585,
@@ -365,7 +365,7 @@
         },
         {
           "id": "pattern-1780161324691-2i-tm1b",
-          "name": "Merge pull request #2090 from ruvnet/docs/adr-127-github-stack-modernization",
+          "name": "Merge pull request #2090 from upstream/docs/adr-127-github-stack-modernization",
           "type": "history-commit",
           "score": 0.6,
           "cosineScore": 0.15794464752821977,
@@ -464,7 +464,7 @@
         },
         {
           "id": "pattern-1780161324698-3u-c1g1",
-          "name": "chore(release): publish 3.7.0-alpha.71 + @rufflo/memory@3.0.0-alpha.18",
+          "name": "chore(release): publish 3.7.0-alpha.71 + @swarmdo/memory@3.0.0-alpha.18",
           "type": "history-commit",
           "score": 0.6325338902596626,
           "cosineScore": 0.10356354291635028,
@@ -482,7 +482,7 @@
         },
         {
           "id": "pattern-1780161237213-1s-xof1",
-          "name": "Statusline shows `Rufflo V3.6` for global npm installs — statusline-generator version probe never che",
+          "name": "Statusline shows `Swarmdo V3.6` for global npm installs — statusline-generator version probe never che",
           "type": "history-issue",
           "score": 0.61629844815063,
           "cosineScore": 0.10389287629109815,
@@ -536,7 +536,7 @@
         },
         {
           "id": "pattern-1780161324700-4b-ieca",
-          "name": "Merge pull request #2050 from ruvnet/feat/ci-supply-chain-hardening",
+          "name": "Merge pull request #2050 from upstream/feat/ci-supply-chain-hardening",
           "type": "history-commit",
           "score": 0.592484117643453,
           "cosineScore": 0.052350663373743465,

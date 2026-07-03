@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-**Current State**: Rufflo v2.7.47 uses `agentic-flow@^1.9.4`
+**Current State**: Swarmdo v2.7.47 uses `agentic-flow@^1.9.4`
 **Latest Alpha**: `agentic-flow@2.0.1-alpha.50` (published yesterday)
 **Upgrade Impact**: Major performance and capability improvements
 
@@ -40,11 +40,11 @@ import { handleReasoningBankCommand } from "./utils/reasoningbankCommands.js";
 
 ### 1.2 Core Module (dist/core/index.js)
 
-**Production-Ready Wrappers** (replacing broken @ruvector/* alpha APIs):
+**Production-Ready Wrappers** (replacing broken @swarmvector/* alpha APIs):
 
 ```javascript
 // GNN wrapper exports (11-22x speedup)
-export { differentiableSearch, hierarchicalForward, RuvectorLayer, TensorCompress };
+export { differentiableSearch, hierarchicalForward, SwarmvectorLayer, TensorCompress };
 
 // AgentDB Fast API (50-200x faster than CLI)
 export { AgentDBFast, createFastAgentDB };
@@ -135,7 +135,7 @@ export {
 
 ---
 
-## 2. Current Rufflo Integration Points
+## 2. Current Swarmdo Integration Points
 
 ### 2.1 Existing Integrations (29 files)
 
@@ -380,7 +380,7 @@ await learner.scheduleLearning({ interval: '0 2 * * *' }); // 2 AM daily
 import { shouldUseNativePackage, getWrapperPerformance } from 'agentic-flow/core';
 
 // Check if native package should be used
-const useNative = shouldUseNativePackage('@ruvector/gnn');
+const useNative = shouldUseNativePackage('@swarmvector/gnn');
 // Returns false for alpha packages (use wrappers instead)
 
 // Get performance info
@@ -399,7 +399,7 @@ const agentdbPerf = getWrapperPerformance('agentdb-fast');
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    Rufflo v3                           │
+│                    Swarmdo v3                           │
 ├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────────────────────────────────────────────┐   │
 │  │           v2 Compatibility Layer                     │   │
@@ -429,7 +429,7 @@ const agentdbPerf = getWrapperPerformance('agentdb-fast');
 
 ### 4.2 Integration Points Map
 
-| Rufflo Component | agentic-flow v2 Integration | Priority |
+| Swarmdo Component | agentic-flow v2 Integration | Priority |
 |-----------------------|-----------------------------|----------|
 | `SwarmCoordinator` | `AttentionCoordinator` | HIGH |
 | `AgentManager` | `EnhancedAgentDBWrapper` | HIGH |
@@ -627,7 +627,7 @@ wasm/
 │   ├── reasoningbank_wasm_bg.wasm    # ReasoningBank engine
 │   └── reasoningbank_wasm.d.ts       # Pattern storage, search
 dist/wasm/
-├── ruvector-edge.js                   # Edge GNN inference
+├── swarmvector-edge.js                   # Edge GNN inference
 ├── edge-full.js                       # Full edge runtime
 └── onnx-embeddings-wasm.js           # ONNX embedding inference
 ```
@@ -823,7 +823,7 @@ export const sonaTools = [
 ];
 ```
 
-### 11.2 SONA Integration for Rufflo v3
+### 11.2 SONA Integration for Swarmdo v3
 
 ```typescript
 // src/v3/learning/sona-integration.ts
@@ -1153,7 +1153,7 @@ Nightly  → FlashAttention Consolidation + A/B Experiments + Transfer Learning
 
 ```bash
 # Minimal install - works on all platforms
-npm install rufflo@3 --save
+npm install swarmdo@3 --save
 # ~2MB, no native dependencies, pure JavaScript
 ```
 
@@ -1167,37 +1167,37 @@ npm install rufflo@3 --save
 
 ```bash
 # Install components as needed
-npx rufflo install <component>
+npx swarmdo install <component>
 
 # Available components:
-npx rufflo install learning      # RL + trajectory tracking
-npx rufflo install memory        # Persistent memory (SQLite/WASM)
-npx rufflo install attention     # Flash/MoE attention mechanisms
-npx rufflo install transport     # QUIC transport layer
-npx rufflo install neural        # Neural pattern training
-npx rufflo install gnn           # GNN query enhancement
+npx swarmdo install learning      # RL + trajectory tracking
+npx swarmdo install memory        # Persistent memory (SQLite/WASM)
+npx swarmdo install attention     # Flash/MoE attention mechanisms
+npx swarmdo install transport     # QUIC transport layer
+npx swarmdo install neural        # Neural pattern training
+npx swarmdo install gnn           # GNN query enhancement
 ```
 
 ### 16.4 Platform-Specific Installation
 
 #### Linux (Fastest)
 ```bash
-npm install rufflo@3
-npx rufflo install native   # NAPI bindings (50-200x faster)
+npm install swarmdo@3
+npx swarmdo install native   # NAPI bindings (50-200x faster)
 # Total: ~15MB with native bindings
 ```
 
 #### macOS (Apple Silicon + Intel)
 ```bash
-npm install rufflo@3
-npx rufflo install native   # Universal binary
+npm install swarmdo@3
+npx swarmdo install native   # Universal binary
 # Fallback: WASM if Rosetta issues
 ```
 
 #### Windows
 ```bash
-npm install rufflo@3
-npx rufflo install wasm     # WASM backend (recommended)
+npm install swarmdo@3
+npx swarmdo install wasm     # WASM backend (recommended)
 # Note: NAPI optional but requires build tools
 ```
 
@@ -1254,7 +1254,7 @@ const platform = {
 ### 16.7 Feature Flags
 
 ```typescript
-// .rufflo/config.json
+// .swarmdo/config.json
 {
   "core": {
     "runtime": "auto",           // auto | napi | wasm | js
@@ -1287,19 +1287,19 @@ const platform = {
 
 ```bash
 # Minimal CLI usage
-npm install -g rufflo@3
+npm install -g swarmdo@3
 
 # Basic swarm coordination
-npm install rufflo@3
+npm install swarmdo@3
 
 # With persistent memory
-npm install rufflo@3 && npx rufflo install memory
+npm install swarmdo@3 && npx swarmdo install memory
 
 # Full learning system
-npm install rufflo@3 && npx rufflo install learning memory
+npm install swarmdo@3 && npx swarmdo install learning memory
 
 # Maximum performance (Linux/Mac)
-npm install rufflo@3 && npx rufflo install --all --native
+npm install swarmdo@3 && npx swarmdo install --all --native
 ```
 
 ---
@@ -1334,17 +1334,17 @@ npm install rufflo@3 && npx rufflo install --all --native
 
 ```bash
 # Run performance benchmarks
-npx rufflo benchmark
+npx swarmdo benchmark
 
 # Specific component benchmarks
-npx rufflo benchmark memory --iterations 1000
-npx rufflo benchmark learning --episodes 100
-npx rufflo benchmark attention --batch-size 32
+npx swarmdo benchmark memory --iterations 1000
+npx swarmdo benchmark learning --episodes 100
+npx swarmdo benchmark attention --batch-size 32
 
 # Compare runtimes
-npx rufflo benchmark --runtime napi
-npx rufflo benchmark --runtime wasm
-npx rufflo benchmark --runtime js
+npx swarmdo benchmark --runtime napi
+npx swarmdo benchmark --runtime wasm
+npx swarmdo benchmark --runtime js
 ```
 
 ### 17.4 Regression Detection
@@ -1416,11 +1416,11 @@ const learningConfig = {
 
 ```bash
 # View real-time metrics
-npx rufflo metrics
+npx swarmdo metrics
 
 # Export metrics for external systems
-npx rufflo metrics --format prometheus
-npx rufflo metrics --format json > metrics.json
+npx swarmdo metrics --format prometheus
+npx swarmdo metrics --format json > metrics.json
 ```
 
 ### 19.2 Key Metrics
@@ -1437,11 +1437,11 @@ npx rufflo metrics --format json > metrics.json
 ### 19.3 Logging Levels
 
 ```typescript
-// .rufflo/config.json
+// .swarmdo/config.json
 {
   "logging": {
     "level": "info",           // error | warn | info | debug | trace
-    "file": ".rufflo/logs/rufflo.log",
+    "file": ".swarmdo/logs/swarmdo.log",
     "maxSize": "10MB",
     "maxFiles": 5,
     "components": {
@@ -1460,10 +1460,10 @@ npx rufflo metrics --format json > metrics.json
 
 ```bash
 # Audit before install
-npm audit rufflo@3
+npm audit swarmdo@3
 
 # Verify checksums
-npx rufflo verify --checksums
+npx swarmdo verify --checksums
 ```
 
 ### 20.2 Data Privacy
@@ -1478,7 +1478,7 @@ npx rufflo verify --checksums
 ### 20.3 MCP Tool Access Control
 
 ```typescript
-// .rufflo/config.json
+// .swarmdo/config.json
 {
   "security": {
     "mcpToolAllowlist": [
@@ -1502,4 +1502,4 @@ npx rufflo verify --checksums
 *Deep review completed: 2026-01-03*
 *agentic-flow version analyzed: 2.0.1-alpha.50*
 *agentdb version analyzed: 2.0.0-alpha.3.1*
-*Rufflo version: 2.7.47*
+*Swarmdo version: 2.7.47*

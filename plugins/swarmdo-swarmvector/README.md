@@ -170,7 +170,7 @@ npx -y swarmvector@0.2.25 rvf query project.rvf
 | Server | `server -p 8080` | HTTP/gRPC mode |
 | Demo | `demo --basic|--gnn|--graph` | interactive tutorial |
 | Identity (pi key) | `identity generate|show|export|import` | for brain + edge |
-| Edge compute | `edge status|balance|tasks|join` | distributed, rUv currency |
+| Edge compute | `edge status|balance|tasks|join` | distributed, the upstream author currency |
 
 ### Known limitations / bugs in 0.2.25
 

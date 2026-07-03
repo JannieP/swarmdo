@@ -530,7 +530,7 @@ export class SwarmVectorProvider extends BaseProvider {
 
   /**
    * Build swarmLLM native API query format
-   * See: https://github.com/ruvnet/swarmvector/tree/main/examples/swarmLLM
+   * See: the upstream project (see NOTICE)
    */
   private buildSwarmvectorQuery(request: LLMRequest): { query: string; session_id?: string } {
     // swarmLLM uses simple query format, not OpenAI-compatible

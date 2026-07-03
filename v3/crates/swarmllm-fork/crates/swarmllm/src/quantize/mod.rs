@@ -1,4 +1,4 @@
-//! Quantization Pipeline for RuvLTRA Models
+//! Quantization Pipeline for SwarmLTRA Models
 //!
 //! This module provides quantization capabilities for converting full-precision
 //! models to optimized quantized formats suitable for edge inference on Apple Silicon.
@@ -56,7 +56,7 @@
 //! ## Example
 //!
 //! ```rust,ignore
-//! use swarmllm::quantize::{RuvltraQuantizer, QuantConfig, TargetFormat};
+//! use swarmllm::quantize::{SwarmltraQuantizer, QuantConfig, TargetFormat};
 //! use std::path::Path;
 //!
 //! // Create quantizer for Q4_K_M format
@@ -64,12 +64,12 @@
 //!     .with_format(TargetFormat::Q4_K_M)
 //!     .with_ane_optimization(true);
 //!
-//! let quantizer = RuvltraQuantizer::new(config)?;
+//! let quantizer = SwarmltraQuantizer::new(config)?;
 //!
 //! // Quantize a model
 //! quantizer.quantize_model(
 //!     Path::new("qwen-0.5b.safetensors"),
-//!     Path::new("ruvltra-small-q4.gguf"),
+//!     Path::new("swarmltra-small-q4.gguf"),
 //! )?;
 //! ```
 
@@ -78,12 +78,12 @@ pub mod incoherence;
 pub mod pi_quant;
 pub mod pi_quant_simd;
 pub mod quip;
-mod ruvltra_quant;
+mod swarmltra_quant;
 pub mod security;
 pub mod turbo_quant;
 pub mod turboquant_profile;
 
-pub use ruvltra_quant::{
+pub use swarmltra_quant::{
     dequantize_for_ane,
 
     // Memory estimation
@@ -91,9 +91,9 @@ pub use ruvltra_quant::{
     estimate_memory_q5,
     estimate_memory_q8,
     // Quantization functions
-    quantize_ruvltra_q4,
-    quantize_ruvltra_q5,
-    quantize_ruvltra_q8,
+    quantize_swarmltra_q4,
+    quantize_swarmltra_q5,
+    quantize_swarmltra_q8,
     MemoryEstimate,
 
     // Block types
@@ -106,7 +106,7 @@ pub use ruvltra_quant::{
     QuantProgress,
     QuantStats,
     // Core quantizer
-    RuvltraQuantizer,
+    SwarmltraQuantizer,
     TargetFormat,
 };
 

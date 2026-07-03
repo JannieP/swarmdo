@@ -40,11 +40,6 @@
     "self-learning",
     "enterprise"
   ],
-  "author": {
-    "name": "RuvNet",
-    "email": "ruv@ruv.io",
-    "url": "https://ruv.io"
-  },
   "license": "MIT",
   "exports": {
     ".": {

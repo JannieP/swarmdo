@@ -10,7 +10,7 @@ import { join } from 'path';
 let nativeModule: NativeSwarmLLM | null = null;
 
 interface NativeSwarmLLM {
-  // Native exports RuvLlmEngine (camelCase), we normalize to SwarmLLMEngine
+  // Native exports SwarmLlmEngine (camelCase), we normalize to SwarmLLMEngine
   SwarmLLMEngine: new (config?: NativeConfig) => NativeEngine;
   SimdOperations: new () => NativeSimdOps;
   version: () => string;
@@ -19,7 +19,7 @@ interface NativeSwarmLLM {
 
 // Raw native module interface (actual export names)
 interface RawNativeModule {
-  RuvLlmEngine?: new (config?: NativeConfig) => NativeEngine;
+  SwarmLlmEngine?: new (config?: NativeConfig) => NativeEngine;
   SwarmLLMEngine?: new (config?: NativeConfig) => NativeEngine;
   SimdOperations: new () => NativeSimdOps;
   version: () => string;
@@ -144,9 +144,9 @@ function loadNativeModule(): NativeSwarmLLM | null {
   for (const attempt of attempts) {
     try {
       const raw = attempt() as RawNativeModule;
-      // Normalize: native exports RuvLlmEngine, we expose as SwarmLLMEngine
+      // Normalize: native exports SwarmLlmEngine, we expose as SwarmLLMEngine
       nativeModule = {
-        SwarmLLMEngine: raw.SwarmLLMEngine ?? raw.RuvLlmEngine!,
+        SwarmLLMEngine: raw.SwarmLLMEngine ?? raw.SwarmLlmEngine!,
         SimdOperations: raw.SimdOperations,
         version: raw.version,
         hasSimdSupport: raw.hasSimdSupport,

@@ -5,7 +5,7 @@ Scaffold, validate, and publish new Claude Code plugins with proper structure, M
 ## Install
 
 ```
-/plugin marketplace add ruvnet/swarmdo
+/plugin marketplace add upstream/swarmdo
 /plugin install swarmdo-plugin-creator@swarmdo
 ```
 

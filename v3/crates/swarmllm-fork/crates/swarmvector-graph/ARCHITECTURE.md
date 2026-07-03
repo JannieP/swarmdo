@@ -146,7 +146,7 @@ Edges:     [E0, E1, E2, E3, E4, E5, E6, E7, ...]
    - Label Index: LabelId → [NodeId] (Bitmap or RoaringBitmap)
    - Property Index: (Key, Value) → [NodeId] (B+ Tree)
    - Temporal Index: TimeRange → [HyperedgeId] (Interval Tree)
-   - Vector Index: Embedding → [NodeId/EdgeId] (HNSW from ruvector-core)
+   - Vector Index: Embedding → [NodeId/EdgeId] (HNSW from swarmvector-core)
 
 3. **Specialized Indexes:**
    - Bipartite Index: Node ↔ Hyperedge (for hypergraph queries)
@@ -160,7 +160,7 @@ Edges:     [E0, E1, E2, E3, E4, E5, E6, E7, ...]
 ### 3.1 Crate Organization
 
 ```
-ruvector-graph/
+swarmvector-graph/
 ├── src/
 │   ├── lib.rs                    # Public API and re-exports
 │   │
@@ -221,7 +221,7 @@ ruvector-graph/
 │   │   ├── mod.rs
 │   │   ├── consensus/            # Consensus protocol
 │   │   │   ├── mod.rs
-│   │   │   ├── raft_ext.rs       # Extended RAFT from ruvector-raft
+│   │   │   ├── raft_ext.rs       # Extended RAFT from swarmvector-raft
 │   │   │   ├── log.rs            # Distributed transaction log
 │   │   │   └── snapshot.rs       # Distributed snapshots
 │   │   │
@@ -459,7 +459,7 @@ pub fn traverse_edges_simd(
 ```rust
 /// Graph-specific RAFT extension
 pub struct GraphRaft {
-    raft: RaftNode,  // From ruvector-raft
+    raft: RaftNode,  // From swarmvector-raft
     graph_state: Arc<RwLock<GraphState>>,
     partition_id: PartitionId,
 }
@@ -683,7 +683,7 @@ impl FederatedTransaction {
 ```rust
 /// Hybrid index combining HNSW (vectors) and CSR (graph)
 pub struct HybridIndex {
-    /// Vector index from ruvector-core
+    /// Vector index from swarmvector-core
     vector_index: HnswIndex,
 
     /// Graph index (CSR)
@@ -1084,7 +1084,7 @@ Cross-cluster latency: 100-200ms
 - ✅ Single-node deployment
 
 ### Phase 2: Distribution (Months 4-6)
-- ✅ RAFT integration from ruvector-raft
+- ✅ RAFT integration from swarmvector-raft
 - ✅ Graph partitioning (hash + METIS)
 - ✅ Distributed query execution
 - ✅ Multi-node cluster deployment
@@ -1096,7 +1096,7 @@ Cross-cluster latency: 100-200ms
 - Federation benchmarks
 
 ### Phase 4: Hybrid Optimization (Months 10-12)
-- HNSW integration from ruvector-core
+- HNSW integration from swarmvector-core
 - Semantic graph search
 - RAG-Hypergraph implementation
 - Hybrid query benchmarks
@@ -1130,9 +1130,9 @@ Cross-cluster latency: 100-200ms
 4. **ClickHouse** - Columnar storage and SIMD optimization
 
 ### SwarmVector Components
-- `ruvector-core` - HNSW indexing, SIMD distance functions
-- `ruvector-raft` - Distributed consensus
-- `ruvector-storage` - Memory-mapped storage patterns
+- `swarmvector-core` - HNSW indexing, SIMD distance functions
+- `swarmvector-raft` - Distributed consensus
+- `swarmvector-storage` - Memory-mapped storage patterns
 
 ---
 
@@ -1148,7 +1148,7 @@ SwarmVector Graph represents a next-generation distributed hypergraph database t
 **Key Differentiators:**
 - **10-100x faster** than Neo4j for most operations
 - **Native hypergraph** support for n-ary relationships
-- **Seamless vector integration** with ruvector-core
+- **Seamless vector integration** with swarmvector-core
 - **Production-ready distribution** with RAFT consensus
 
 This architecture provides a solid foundation for building the fastest graph database in the Rust ecosystem while maintaining compatibility with industry-standard query languages and patterns.

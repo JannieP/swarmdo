@@ -1,7 +1,7 @@
-//! RuvLTRA-Small Model Quantization Pipeline
+//! SwarmLTRA-Small Model Quantization Pipeline
 //!
 //! Implements K-quant quantization (Q4_K_M, Q5_K_M) and symmetric Q8_0 quantization
-//! for the RuvLTRA-Small model family, with optimizations for Apple Neural Engine.
+//! for the SwarmLTRA-Small model family, with optimizations for Apple Neural Engine.
 //!
 //! ## K-Quant Architecture
 //!
@@ -574,7 +574,7 @@ pub struct QuantStats {
 /// # Returns
 ///
 /// Vector of quantized blocks
-pub fn quantize_ruvltra_q4(input: &[f32]) -> Result<Vec<Q4KMBlock>> {
+pub fn quantize_swarmltra_q4(input: &[f32]) -> Result<Vec<Q4KMBlock>> {
     if input.len() % K_BLOCK_SIZE != 0 {
         return Err(SwarmLLMError::Model(format!(
             "Input length {} is not a multiple of block size {}",
@@ -596,7 +596,7 @@ pub fn quantize_ruvltra_q4(input: &[f32]) -> Result<Vec<Q4KMBlock>> {
 }
 
 /// Quantize FP32 values to Q5_K_M format
-pub fn quantize_ruvltra_q5(input: &[f32]) -> Result<Vec<Q5KMBlock>> {
+pub fn quantize_swarmltra_q5(input: &[f32]) -> Result<Vec<Q5KMBlock>> {
     if input.len() % K_BLOCK_SIZE != 0 {
         return Err(SwarmLLMError::Model(format!(
             "Input length {} is not a multiple of block size {}",
@@ -618,7 +618,7 @@ pub fn quantize_ruvltra_q5(input: &[f32]) -> Result<Vec<Q5KMBlock>> {
 }
 
 /// Quantize FP32 values to Q8_0 format (symmetric 8-bit)
-pub fn quantize_ruvltra_q8(input: &[f32]) -> Result<Vec<Q8Block>> {
+pub fn quantize_swarmltra_q8(input: &[f32]) -> Result<Vec<Q8Block>> {
     if input.len() % Q8_BLOCK_SIZE != 0 {
         return Err(SwarmLLMError::Model(format!(
             "Input length {} is not a multiple of block size {}",
@@ -920,16 +920,16 @@ fn f16_to_f32(bits: u16) -> f32 {
 // Main Quantizer Struct
 // ============================================================================
 
-/// RuvLTRA model quantizer
+/// SwarmLTRA model quantizer
 ///
 /// Provides a high-level interface for quantizing models to GGUF format
 /// with ANE-optimized weight layouts.
-pub struct RuvltraQuantizer {
+pub struct SwarmltraQuantizer {
     config: QuantConfig,
     stats: QuantStats,
 }
 
-impl RuvltraQuantizer {
+impl SwarmltraQuantizer {
     /// Create a new quantizer with the given configuration
     pub fn new(config: QuantConfig) -> Result<Self> {
         Ok(Self {
@@ -968,7 +968,7 @@ impl RuvltraQuantizer {
 
         match self.config.format {
             TargetFormat::Q4_K_M => {
-                let blocks = quantize_ruvltra_q4(&padded_data)?;
+                let blocks = quantize_swarmltra_q4(&padded_data)?;
                 let mut bytes = Vec::with_capacity(blocks.len() * Q4KMBlock::SIZE);
                 for block in blocks {
                     bytes.extend_from_slice(&block.to_bytes());
@@ -978,7 +978,7 @@ impl RuvltraQuantizer {
                 Ok(bytes)
             }
             TargetFormat::Q5_K_M => {
-                let blocks = quantize_ruvltra_q5(&padded_data)?;
+                let blocks = quantize_swarmltra_q5(&padded_data)?;
                 let mut bytes = Vec::with_capacity(blocks.len() * Q5KMBlock::SIZE);
                 for block in blocks {
                     bytes.extend_from_slice(&block.to_bytes());
@@ -988,7 +988,7 @@ impl RuvltraQuantizer {
                 Ok(bytes)
             }
             TargetFormat::Q8_0 => {
-                let blocks = quantize_ruvltra_q8(&padded_data)?;
+                let blocks = quantize_swarmltra_q8(&padded_data)?;
                 let mut bytes = Vec::with_capacity(blocks.len() * Q8Block::SIZE);
                 for block in blocks {
                     bytes.extend_from_slice(&block.to_bytes());
@@ -1196,7 +1196,7 @@ mod tests {
         // Create test data
         let data: Vec<f32> = (0..256).map(|i| i as f32 / 256.0).collect();
 
-        let blocks = quantize_ruvltra_q4(&data).unwrap();
+        let blocks = quantize_swarmltra_q4(&data).unwrap();
         assert_eq!(blocks.len(), 1);
 
         // Dequantize and check error
@@ -1218,7 +1218,7 @@ mod tests {
     fn test_q8_quantization() {
         let data: Vec<f32> = (0..32).map(|i| (i as f32 - 16.0) / 16.0).collect();
 
-        let blocks = quantize_ruvltra_q8(&data).unwrap();
+        let blocks = quantize_swarmltra_q8(&data).unwrap();
         assert_eq!(blocks.len(), 1);
 
         // Check block structure

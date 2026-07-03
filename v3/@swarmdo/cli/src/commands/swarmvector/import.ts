@@ -7,7 +7,7 @@
  *   npx swarmdo swarmvector import --from-memory
  *   npx swarmdo swarmvector import --input data.json --batch-size 100
  *
- * Created with care by ruv.io
+ * Created with care by swarmdo.com
  */
 
 import type { Command, CommandContext, CommandResult } from '../../types.js';

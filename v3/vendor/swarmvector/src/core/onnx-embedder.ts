@@ -118,7 +118,7 @@ const DEFAULT_MODEL = 'all-MiniLM-L6-v2';
  * NOTE: This is a capability check, NOT a readiness check. It returns `true`
  * before `initOnnxEmbedder()` has run (so callers can decide whether to init).
  * To check whether the model has actually been loaded, use `isOnnxInitialized()`
- * or `isReady()`. See https://github.com/ruvnet/SwarmVector/issues/523.
+ * or `isReady()`. See the upstream project (see NOTICE)
  */
 export function isOnnxAvailable(): boolean {
   try {
@@ -134,7 +134,7 @@ export function isOnnxAvailable(): boolean {
  * `onnx/bundled-parallel.mjs` file ships in the package. This reflects the
  * *bundled* pool (the only parallel implementation), NOT the unpublished
  * external `swarmvector-onnx-embeddings-wasm/parallel` package, which was rejected
- * in ADR-194. See https://github.com/ruvnet/SwarmVector/issues/531.
+ * in ADR-194. See the upstream project (see NOTICE)
  */
 function detectParallelAvailable(): boolean {
   try {
@@ -170,7 +170,7 @@ function detectSimd(): boolean {
  * The previously-referenced external package
  * `swarmvector-onnx-embeddings-wasm/parallel` was never published and was rejected
  * in ADR-194; the bundled pool (`onnx/bundled-parallel.mjs`) is the only
- * parallel implementation. See https://github.com/ruvnet/SwarmVector/issues/531.
+ * parallel implementation. See the upstream project (see NOTICE)
  */
 async function tryInitParallel(config: OnnxEmbedderConfig): Promise<boolean> {
   // Skip unless parallelism is explicitly requested (covers false and 'auto').
@@ -297,10 +297,10 @@ export async function initOnnxEmbedder(config: OnnxEmbedderConfig = {}): Promise
         // Auto-detect: check if running as CLI hook or long-running process
         const isCLI = process.argv[1]?.includes('cli.js') ||
                       process.argv[1]?.includes('bin/swarmvector') ||
-                      process.env.RUVECTOR_CLI === '1';
+                      process.env.SWARMVECTOR_CLI === '1';
         const isMCP = process.env.MCP_SERVER === '1' ||
                       process.argv.some(a => a.includes('mcp'));
-        const forceParallel = process.env.RUVECTOR_PARALLEL === '1';
+        const forceParallel = process.env.SWARMVECTOR_PARALLEL === '1';
 
         // Enable parallel for MCP/servers or if explicitly requested, skip for CLI
         shouldTryParallel = forceParallel || (isMCP && !isCLI);
@@ -473,7 +473,7 @@ export function isReady(): boolean {
  * export to avoid a barrel name collision. Equivalent to `isReady()`; provided
  * as a self-documenting gate so callers can distinguish "bundled" (available)
  * from "loaded" (initialized). See
- * https://github.com/ruvnet/SwarmVector/issues/523.
+ * the upstream project (see NOTICE)
  */
 export function isOnnxInitialized(): boolean {
   return isInitialized;

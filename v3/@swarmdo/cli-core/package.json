@@ -40,10 +40,6 @@
     "memory",
     "hooks"
   ],
-  "author": {
-    "name": "ruvnet",
-    "url": "https://github.com/ruvnet"
-  },
   "license": "MIT",
   "homepage": "https://github.com/JannieP/swarmdo",
   "repository": {

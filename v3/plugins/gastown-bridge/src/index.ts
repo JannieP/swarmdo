@@ -972,9 +972,9 @@ export class GasTownBridgePlugin extends EventEmitter implements IPlugin {
       name: this.name,
       version: this.version,
       description: this.description,
-      author: 'rUv',
+      author: 'the upstream author',
       license: 'MIT',
-      repository: 'https://github.com/ruvnet/claude-flow',
+      repository: 'the upstream project (see NOTICE)',
       keywords: [
         'swarmdo',
         'plugin',

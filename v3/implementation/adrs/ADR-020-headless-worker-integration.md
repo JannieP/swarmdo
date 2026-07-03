@@ -321,7 +321,7 @@ export const HEADLESS_WORKERS: HeadlessWorkerConfig[] = [
       sandbox: 'strict',
       model: 'haiku',
       outputFormat: 'json',
-      contextPatterns: ['.rufflo/metrics/*.json'],
+      contextPatterns: ['.swarmdo/metrics/*.json'],
     },
   },
 ];
@@ -611,16 +611,16 @@ export class WorkerDaemon extends EventEmitter {
 
 ```bash
 # Start daemon with headless workers
-npx rufflo@v3alpha daemon start --headless
+npx swarmdo@v3alpha daemon start --headless
 
 # Start with specific sandbox mode for all workers
-npx rufflo@v3alpha daemon start --sandbox strict
+npx swarmdo@v3alpha daemon start --sandbox strict
 
 # Trigger headless worker manually
-npx rufflo@v3alpha daemon trigger -w audit --headless
+npx swarmdo@v3alpha daemon trigger -w audit --headless
 
 # Show worker modes
-npx rufflo@v3alpha daemon status --show-modes
+npx swarmdo@v3alpha daemon status --show-modes
 ```
 
 ### Output Example
@@ -676,7 +676,7 @@ export class ContainerWorkerPool {
     try {
       // Mount workspace and execute
       const result = await container.exec([
-        'npx', 'rufflo@v3alpha', 'daemon', 'trigger',
+        'npx', 'swarmdo@v3alpha', 'daemon', 'trigger',
         '-w', worker.type,
         '--headless',
         '--sandbox', worker.headless?.sandbox || 'strict',
@@ -706,7 +706,7 @@ version: '3.8'
 
 services:
   worker-pool:
-    image: ghcr.io/ruvnet/claude-flow-headless:latest
+    image: ghcr.io/upstream/claude-flow-headless:latest
     deploy:
       replicas: 3
       resources:
@@ -719,11 +719,11 @@ services:
       - CLAUDE_CODE_SANDBOX_MODE=strict
     volumes:
       - workspace:/workspace:ro
-      - rufflo-state:/root/.rufflo
+      - swarmdo-state:/root/.swarmdo
     command: daemon start --foreground --workers audit,optimize,testgaps
 
   queue-manager:
-    image: ghcr.io/ruvnet/claude-flow-headless:latest
+    image: ghcr.io/upstream/claude-flow-headless:latest
     environment:
       - REDIS_URL=redis://redis:6379
     depends_on:
@@ -737,7 +737,7 @@ services:
 
 volumes:
   workspace:
-  rufflo-state:
+  swarmdo-state:
   redis-data:
 ```
 
@@ -820,7 +820,7 @@ volumes:
 
 ## References
 
-- ADR-019: @rufflo/headless Runtime Package
+- ADR-019: @swarmdo/headless Runtime Package
 - ADR-014: Workers System
 - V3 Worker Daemon: `src/services/worker-daemon.ts`
 - Claude Code Environment Variables

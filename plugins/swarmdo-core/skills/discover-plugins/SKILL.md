@@ -114,6 +114,6 @@ When starting a new project, exploring swarmdo capabilities, or wondering which 
 ## Install any plugin
 
 ```
-/plugin marketplace add ruvnet/swarmdo
+/plugin marketplace add upstream/swarmdo
 /plugin install <plugin-name>@swarmdo
 ```

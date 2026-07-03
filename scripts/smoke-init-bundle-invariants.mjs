@@ -200,5 +200,5 @@ for (const v of allViolations) {
   }
 }
 
-console.error('\nADR-128: https://github.com/ruvnet/swarmdo/blob/main/v3/docs/adr/ADR-128-init-bundle-reduce-refactor.md\n');
+console.error('\nADR-128: the upstream project (see NOTICE)\n');
 process.exit(1);

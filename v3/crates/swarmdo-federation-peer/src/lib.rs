@@ -222,7 +222,7 @@ where
 #[cfg(feature = "native")]
 pub mod native_transport {
     //! Real-QUIC wrapper over the `midstreamer-quic@0.3.0`
-    //! `QuicTransport` trait surface (ruvnet/midstream PR #82).
+    //! `QuicTransport` trait surface (upstream/midstream PR #82).
     //!
     //! `MidstreamerTransport` owns a single established
     //! [`midstreamer_quic::QuicConnection`] (typically a

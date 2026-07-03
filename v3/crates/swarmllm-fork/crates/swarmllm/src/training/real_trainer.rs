@@ -59,8 +59,8 @@ pub struct RealTrainingConfig {
 impl Default for RealTrainingConfig {
     fn default() -> Self {
         Self {
-            model_path: PathBuf::from("ruvltra-claude-code-0.5b-q4_k_m.gguf"),
-            output_path: PathBuf::from("ruvltra-claude-code-sota.gguf"),
+            model_path: PathBuf::from("swarmltra-claude-code-0.5b-q4_k_m.gguf"),
+            output_path: PathBuf::from("swarmltra-claude-code-sota.gguf"),
             learning_rate: 2e-5,
             weight_decay: 0.01,
             batch_size: 16,

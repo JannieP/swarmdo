@@ -15,7 +15,7 @@
 // versions without complex native dependencies. Same async send/receive
 // API surface as QuicTransport.
 //
-// Federation use case (ruvnet/swarmdo ADR-104): two peers on the same
+// Federation use case (upstream/swarmdo ADR-104): two peers on the same
 // tailnet can call loadQuicTransport({ serverName: 'peer.tailnet' }) and
 // exchange signed envelopes today, with zero code change required when
 // the native QUIC build lands later.
@@ -375,8 +375,8 @@ async function isRealQuicAvailable() {
  * satisfies the AgentTransport interface in both cases.
  *
  * Example:
- *   const t = await loadQuicTransport({ serverName: 'ruvultra:9100' });
- *   await t.send('ruvultra:9100', { id: '1', type: 'task', payload: {...} });
+ *   const t = await loadQuicTransport({ serverName: 'swarmultra:9100' });
+ *   await t.send('swarmultra:9100', { id: '1', type: 'task', payload: {...} });
  *
  * Federation v1 ships on the WebSocket fallback (this is the actual
  * working transport today). When the native QUIC binding lands, set

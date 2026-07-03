@@ -17,7 +17,7 @@ When you need to explore the knowledge graph starting from a specific entity -- 
 
 1. **Seed** -- call `mcp__swarmdo__agentdb_hierarchical-recall` to look up the target entity by name
 2. **Expand** -- call `mcp__swarmdo__agentdb_causal-edge` to find all edges connected to the seed entity, then recursively expand outward to the specified depth (default: 3)
-3. **Score** -- for each path, compute relevance: `cumulative_score = product(edge_weight * keyword_similarity(query, node))` using `mcp__swarmdo__agentdb_pattern-search` (the `semanticRouter` controller is `enabled: false` in current AgentDB builds; pattern-search is the available substitute and works fine for entity-name + relation-type keyword matches — see ruvnet/swarmdo#2049). For higher-fidelity semantic similarity, callers can fall back to `mcp__swarmdo__embeddings_generate` + manual cosine, but that's not required for step 3 to function.
+3. **Score** -- for each path, compute relevance: `cumulative_score = product(edge_weight * keyword_similarity(query, node))` using `mcp__swarmdo__agentdb_pattern-search` (the `semanticRouter` controller is `enabled: false` in current AgentDB builds; pattern-search is the available substitute and works fine for entity-name + relation-type keyword matches — see upstream/swarmdo#2049). For higher-fidelity semantic similarity, callers can fall back to `mcp__swarmdo__embeddings_generate` + manual cosine, but that's not required for step 3 to function.
 4. **Prune** -- remove paths with cumulative score below 0.3
 5. **Rank** -- sort remaining paths by cumulative score descending
 6. **Synthesize** -- call `mcp__swarmdo__agentdb_context-synthesize` to combine the top paths into a coherent summary

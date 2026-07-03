@@ -231,11 +231,11 @@ The `bin/rg` file uses [dotslash](https://dotslash-cli.com/) format:
 }
 ```
 
-## Integration with Rufflo
+## Integration with Swarmdo
 
 ### Parallels
 
-| Rufflo | Codex | Notes |
+| Swarmdo | Codex | Notes |
 |-------------|-------|-------|
 | `CLAUDE.md` | `AGENTS.md` | Project instructions |
 | `CLAUDE.local.md` | `AGENTS.override.md` | Local overrides |
@@ -250,7 +250,7 @@ The `bin/rg` file uses [dotslash](https://dotslash-cli.com/) format:
 
 1. **MCP Server Mode**
    - Codex can run as MCP server (`codex mcp-server`)
-   - Rufflo can connect to Codex as MCP client
+   - Swarmdo can connect to Codex as MCP client
    - Enables cross-platform agent orchestration
 
 2. **Skills Conversion**
@@ -263,7 +263,7 @@ The `bin/rg` file uses [dotslash](https://dotslash-cli.com/) format:
 
 4. **Session Interop**
    - Codex sessions use `codex resume`/`codex fork`
-   - Rufflo uses session persistence
+   - Swarmdo uses session persistence
    - Consider session format translation
 
 ## Security Considerations
@@ -303,7 +303,7 @@ This flag bypasses ALL safety checks. Only use in:
 1. **Generate AGENTS.md** from project analysis
 2. **Create `.agents/skills/`** directory with converted skills
 3. **Generate `config.toml`** with:
-   - MCP server configuration for rufflo
+   - MCP server configuration for swarmdo
    - Skill enablement
    - Default approval policy (`on-request`)
    - Default sandbox mode (`workspace-write`)
@@ -313,17 +313,17 @@ This flag bypasses ALL safety checks. Only use in:
 ### For Dual-Mode Support
 
 1. **Keep both configurations in sync**
-2. **Use `.rufflo/` as shared runtime**
+2. **Use `.swarmdo/` as shared runtime**
 3. **Generate platform-specific skills**
 4. **Map hooks ↔ automations**
 
 ### For MCP Integration
 
 ```toml
-# Rufflo as MCP server for Codex
-[mcp_servers.rufflo]
+# Swarmdo as MCP server for Codex
+[mcp_servers.swarmdo]
 command = "npx"
-args = ["-y", "@rufflo/cli@latest"]
+args = ["-y", "@swarmdo/cli@latest"]
 enabled = true
 tool_timeout_sec = 120
 ```
@@ -334,7 +334,7 @@ The following features were discovered through binary string analysis and are no
 
 ### Undocumented Environment Variables
 
-| Variable | Purpose | Rufflo Use Case |
+| Variable | Purpose | Swarmdo Use Case |
 |----------|---------|---------------------|
 | `CODEX_HOME` | Override config directory (default: `~/.codex`) | Custom config locations |
 | `CODEX_API_KEY` | Alternative to `OPENAI_API_KEY` | API key management |
@@ -480,7 +480,7 @@ Available models include:
 - `gpt-5.2-codex`
 - `gpt-5-codex`
 
-## Rufflo Integration Opportunities
+## Swarmdo Integration Opportunities
 
 ### Using Undocumented Features
 
@@ -512,7 +512,7 @@ Available models include:
    Via JSON-RPC: `thread/fork` with collaboration mode for multi-agent workflows.
 
 6. **Dynamic Tools**
-   Register rufflo tools at runtime via the MCP protocol.
+   Register swarmdo tools at runtime via the MCP protocol.
 
 ### Programmatic Control via JSON-RPC
 
@@ -561,16 +561,16 @@ The undocumented features provide significant opportunities for deep integration
 - **Ghost snapshots** for state management
 - **Dynamic tools** for runtime extensibility
 
-The package architecture is similar to Claude Code's approach, making it straightforward to create a compatible Codex integration in rufflo.
+The package architecture is similar to Claude Code's approach, making it straightforward to create a compatible Codex integration in swarmdo.
 
-## @rufflo/codex Package
+## @swarmdo/codex Package
 
-Based on this analysis, we've created the `@rufflo/codex` package as the first step in the coflow rebranding initiative.
+Based on this analysis, we've created the `@swarmdo/codex` package as the first step in the coflow rebranding initiative.
 
 ### Package Location
 
 ```
-v3/@rufflo/codex/
+v3/@swarmdo/codex/
 ├── package.json
 ├── tsconfig.json
 └── src/
@@ -606,31 +606,31 @@ v3/@rufflo/codex/
 
 ```bash
 # Initialize new Codex project
-npx @rufflo/codex init --template default
+npx @swarmdo/codex init --template default
 
 # Generate custom skill
-npx @rufflo/codex generate-skill --name my-skill
+npx @swarmdo/codex generate-skill --name my-skill
 
 # Validate configuration
-npx @rufflo/codex validate
+npx @swarmdo/codex validate
 
 # Migrate from Claude Code
-npx @rufflo/codex migrate --from CLAUDE.md
+npx @swarmdo/codex migrate --from CLAUDE.md
 
 # List available templates
-npx @rufflo/codex templates
+npx @swarmdo/codex templates
 
 # List built-in skills
-npx @rufflo/codex skills
+npx @swarmdo/codex skills
 ```
 
 ### Future: coflow Umbrella
 
-This package is the first step in transitioning from `rufflo` to `coflow`:
+This package is the first step in transitioning from `swarmdo` to `coflow`:
 
 ```bash
 # Current
-npx @rufflo/codex init
+npx @swarmdo/codex init
 
 # Future (after umbrella rebrand)
 npx coflow init --codex

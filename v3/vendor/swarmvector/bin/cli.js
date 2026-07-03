@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // Signal CLI context (disables parallel workers - hooks are short-lived)
-process.env.RUVECTOR_CLI = '1';
+process.env.SWARMVECTOR_CLI = '1';
 
 const { Command } = require('commander');
 const _chalk = require('chalk');
@@ -136,7 +136,7 @@ function reportGnnBindingError(error) {
   if (msg.includes('Given napi value is not an array') || msg.includes('TypedArray info failed')) {
     console.error(chalk.yellow('  Note: this is a known regression in the @swarmvector/gnn native binding,'));
     console.error(chalk.yellow('  not in the CLI. Track at:'));
-    console.error(chalk.white('    https://github.com/ruvnet/swarmvector/issues/402'));
+    console.error(chalk.white('    the upstream project (see NOTICE)'));
   }
 }
 
@@ -1660,7 +1660,7 @@ program
 
     // Quick install
     console.log(chalk.cyan('Quick Install (one-liner):'));
-    console.log(chalk.white('  curl -fsSL https://raw.githubusercontent.com/ruvnet/swarmvector/main/install.sh | bash'));
+    console.log(chalk.white('  curl -fsSL https://raw.githubusercontent.com/upstream/swarmvector/main/install.sh | bash'));
     console.log('');
 
     if (showAll || options.npm) {
@@ -1748,10 +1748,10 @@ program
     console.log(chalk.cyan('Documentation & Resources'));
     console.log(chalk.cyan('───────────────────────────────────────────────────────────────\n'));
 
-    console.log(chalk.white('  GitHub:     https://github.com/ruvnet/swarmvector'));
+    console.log(chalk.white('  GitHub:     the upstream project (see NOTICE)'));
     console.log(chalk.white('  npm:        https://www.npmjs.com/package/swarmvector'));
     console.log(chalk.white('  crates.io:  https://crates.io/crates/swarmvector-core'));
-    console.log(chalk.white('  Issues:     https://github.com/ruvnet/swarmvector/issues'));
+    console.log(chalk.white('  Issues:     the upstream project (see NOTICE)'));
     console.log('');
 
     console.log(chalk.cyan('Quick Commands:'));
@@ -2003,7 +2003,7 @@ program
       console.log(chalk.white(`    --grpc-port ${options.grpcPort}       # gRPC port`));
       console.log(chalk.white(`    --data-dir ${options.dataDir}  # Data directory`));
       console.log('');
-      console.log(chalk.gray('  Track progress: https://github.com/ruvnet/swarmvector/issues/20'));
+      console.log(chalk.gray('  Track progress: the upstream project (see NOTICE)'));
       console.log('');
       return;
     }
@@ -2050,7 +2050,7 @@ program
     console.log(chalk.white('    npx swarmvector cluster --join 192.168.1.10:7000'));
     console.log(chalk.white('    npx swarmvector cluster --nodes'));
     console.log('');
-    console.log(chalk.gray('  Track progress: https://github.com/ruvnet/swarmvector/issues/20'));
+    console.log(chalk.gray('  Track progress: the upstream project (see NOTICE)'));
     console.log('');
   });
 
@@ -2835,7 +2835,7 @@ program
           console.error(chalk.red(`  GNN demo failed: ${msg}`));
           console.error(chalk.yellow('\n  This looks like a regression in the @swarmvector/gnn native binding,'));
           console.error(chalk.yellow('  not in the CLI. Tracking at:'));
-          console.error(chalk.white('    https://github.com/ruvnet/swarmvector/issues/402'));
+          console.error(chalk.white('    the upstream project (see NOTICE)'));
         } else {
           console.error(chalk.red('GNN demo failed:', msg));
         }
@@ -3297,7 +3297,7 @@ class Intelligence {
   }
 
   /**
-   * Non-throwing write gate honoring RUVECTOR_REEMBED (D5):
+   * Non-throwing write gate honoring SWARMVECTOR_REEMBED (D5):
    *   refuse (default) → rethrow; warn → skip the write with one stderr
    *   warning per process; auto → handled by callers that can re-embed.
    * Returns { ok } or { ok: false, skipped: true }.
@@ -3312,12 +3312,12 @@ class Intelligence {
       if (policy === 'warn') {
         if (!Intelligence._reembedWarned) {
           Intelligence._reembedWarned = true;
-          console.error(`swarmvector: ${e.message} (RUVECTOR_REEMBED=warn: store stays read-only, write skipped)`);
+          console.error(`swarmvector: ${e.message} (SWARMVECTOR_REEMBED=warn: store stays read-only, write skipped)`);
         }
         return { ok: false, skipped: true, error: e.message };
       }
       // 'auto' without an async re-embed path behaves like refuse, with a hint.
-      if (policy === 'auto') e.message += ` (RUVECTOR_REEMBED=auto: run 'swarmvector hooks reembed' — in-place re-embedding needs the async path)`;
+      if (policy === 'auto') e.message += ` (SWARMVECTOR_REEMBED=auto: run 'swarmvector hooks reembed' — in-place re-embedding needs the async path)`;
       throw e;
     }
   }
@@ -3398,7 +3398,7 @@ class Intelligence {
     const id = `mem_${this.now()}`;
     const embedding = this.embed(content);
     // ADR-210 D0: refuse mismatched/legacy vector writes (throws), or skip
-    // under RUVECTOR_REEMBED=warn (returns null).
+    // under SWARMVECTOR_REEMBED=warn (returns null).
     const guard = this.guardVectorWrite(this.syncWriteProvenance(embedding));
     if (!guard.ok) return null;
     this.data.memories.push({ id, memory_type: memoryType, content, embedding, metadata, timestamp: this.now() });
@@ -3807,7 +3807,7 @@ class Intelligence {
 
     // Auto-compress patterns if enabled (v2.1)
     try {
-      if (process.env.RUVECTOR_AUTO_COMPRESS === 'true' || process.env.RUVECTOR_TENSOR_COMPRESS === 'true') {
+      if (process.env.SWARMVECTOR_AUTO_COMPRESS === 'true' || process.env.SWARMVECTOR_TENSOR_COMPRESS === 'true') {
         const TensorCompressClass = require('../dist/core/tensor-compress').default;
         if (TensorCompressClass && this.data.compressedPatterns) {
           const compress = new TensorCompressClass({ autoCompress: false });
@@ -3942,21 +3942,21 @@ hooksCmd.command('init')
   if (!opts.minimal && opts.env !== false) {
     settings.env = settings.env || {};
     // Core intelligence settings
-    settings.env.RUVECTOR_INTELLIGENCE_ENABLED = settings.env.RUVECTOR_INTELLIGENCE_ENABLED || 'true';
-    settings.env.RUVECTOR_LEARNING_RATE = settings.env.RUVECTOR_LEARNING_RATE || '0.1';
-    settings.env.RUVECTOR_MEMORY_BACKEND = settings.env.RUVECTOR_MEMORY_BACKEND || 'rvlite';
+    settings.env.SWARMVECTOR_INTELLIGENCE_ENABLED = settings.env.SWARMVECTOR_INTELLIGENCE_ENABLED || 'true';
+    settings.env.SWARMVECTOR_LEARNING_RATE = settings.env.SWARMVECTOR_LEARNING_RATE || '0.1';
+    settings.env.SWARMVECTOR_MEMORY_BACKEND = settings.env.SWARMVECTOR_MEMORY_BACKEND || 'rvlite';
     settings.env.INTELLIGENCE_MODE = settings.env.INTELLIGENCE_MODE || 'treatment';
     // v2.0 capabilities
-    settings.env.RUVECTOR_AST_ENABLED = settings.env.RUVECTOR_AST_ENABLED || 'true';
-    settings.env.RUVECTOR_DIFF_EMBEDDINGS = settings.env.RUVECTOR_DIFF_EMBEDDINGS || 'true';
-    settings.env.RUVECTOR_COVERAGE_ROUTING = settings.env.RUVECTOR_COVERAGE_ROUTING || 'true';
-    settings.env.RUVECTOR_GRAPH_ALGORITHMS = settings.env.RUVECTOR_GRAPH_ALGORITHMS || 'true';
-    settings.env.RUVECTOR_SECURITY_SCAN = settings.env.RUVECTOR_SECURITY_SCAN || 'true';
+    settings.env.SWARMVECTOR_AST_ENABLED = settings.env.SWARMVECTOR_AST_ENABLED || 'true';
+    settings.env.SWARMVECTOR_DIFF_EMBEDDINGS = settings.env.SWARMVECTOR_DIFF_EMBEDDINGS || 'true';
+    settings.env.SWARMVECTOR_COVERAGE_ROUTING = settings.env.SWARMVECTOR_COVERAGE_ROUTING || 'true';
+    settings.env.SWARMVECTOR_GRAPH_ALGORITHMS = settings.env.SWARMVECTOR_GRAPH_ALGORITHMS || 'true';
+    settings.env.SWARMVECTOR_SECURITY_SCAN = settings.env.SWARMVECTOR_SECURITY_SCAN || 'true';
     // v2.1 learning & compression
-    settings.env.RUVECTOR_MULTI_ALGORITHM = settings.env.RUVECTOR_MULTI_ALGORITHM || 'true';
-    settings.env.RUVECTOR_DEFAULT_ALGORITHM = settings.env.RUVECTOR_DEFAULT_ALGORITHM || 'double-q';
-    settings.env.RUVECTOR_TENSOR_COMPRESS = settings.env.RUVECTOR_TENSOR_COMPRESS || 'true';
-    settings.env.RUVECTOR_AUTO_COMPRESS = settings.env.RUVECTOR_AUTO_COMPRESS || 'true';
+    settings.env.SWARMVECTOR_MULTI_ALGORITHM = settings.env.SWARMVECTOR_MULTI_ALGORITHM || 'true';
+    settings.env.SWARMVECTOR_DEFAULT_ALGORITHM = settings.env.SWARMVECTOR_DEFAULT_ALGORITHM || 'double-q';
+    settings.env.SWARMVECTOR_TENSOR_COMPRESS = settings.env.SWARMVECTOR_TENSOR_COMPRESS || 'true';
+    settings.env.SWARMVECTOR_AUTO_COMPRESS = settings.env.SWARMVECTOR_AUTO_COMPRESS || 'true';
     console.log(chalk.blue('  ✓ Environment variables configured (v2.1 with multi-algorithm learning)'));
   }
 
@@ -4171,14 +4171,14 @@ fi
 # Usage: .claude/swarmvector-fast.sh hooks <command> [args...]
 
 # Find swarmvector CLI - check local first, then global
-RUVECTOR_CLI=""
+SWARMVECTOR_CLI=""
 
 # Check local npm package (for development)
 if [ -f "$PWD/npm/packages/swarmvector/bin/cli.js" ]; then
-  RUVECTOR_CLI="$PWD/npm/packages/swarmvector/bin/cli.js"
+  SWARMVECTOR_CLI="$PWD/npm/packages/swarmvector/bin/cli.js"
 # Check node_modules
 elif [ -f "$PWD/node_modules/swarmvector/bin/cli.js" ]; then
-  RUVECTOR_CLI="$PWD/node_modules/swarmvector/bin/cli.js"
+  SWARMVECTOR_CLI="$PWD/node_modules/swarmvector/bin/cli.js"
 # Check global npm installation
 elif [ -f "$PWD/node_modules/.bin/swarmvector" ]; then
   exec "$PWD/node_modules/.bin/swarmvector" "$@"
@@ -4190,7 +4190,7 @@ else
 fi
 
 # Execute with node directly (fast path)
-exec node "$RUVECTOR_CLI" "$@"
+exec node "$SWARMVECTOR_CLI" "$@"
 `;
     fs.writeFileSync(fastWrapperPath, fastWrapperContent);
     fs.chmodSync(fastWrapperPath, '755');
@@ -4324,11 +4324,11 @@ fi
     console.log(chalk.blue(`  ✓ Advanced hooks (UserPromptSubmit, PreCompact, Notification, Compress)${opts.fast ? ' - fast mode' : ''}`));
 
     // Extended environment variables for new capabilities
-    settings.env.RUVECTOR_AST_ENABLED = settings.env.RUVECTOR_AST_ENABLED || 'true';
-    settings.env.RUVECTOR_DIFF_EMBEDDINGS = settings.env.RUVECTOR_DIFF_EMBEDDINGS || 'true';
-    settings.env.RUVECTOR_COVERAGE_ROUTING = settings.env.RUVECTOR_COVERAGE_ROUTING || 'true';
-    settings.env.RUVECTOR_GRAPH_ALGORITHMS = settings.env.RUVECTOR_GRAPH_ALGORITHMS || 'true';
-    settings.env.RUVECTOR_SECURITY_SCAN = settings.env.RUVECTOR_SECURITY_SCAN || 'true';
+    settings.env.SWARMVECTOR_AST_ENABLED = settings.env.SWARMVECTOR_AST_ENABLED || 'true';
+    settings.env.SWARMVECTOR_DIFF_EMBEDDINGS = settings.env.SWARMVECTOR_DIFF_EMBEDDINGS || 'true';
+    settings.env.SWARMVECTOR_COVERAGE_ROUTING = settings.env.SWARMVECTOR_COVERAGE_ROUTING || 'true';
+    settings.env.SWARMVECTOR_GRAPH_ALGORITHMS = settings.env.SWARMVECTOR_GRAPH_ALGORITHMS || 'true';
+    settings.env.SWARMVECTOR_SECURITY_SCAN = settings.env.SWARMVECTOR_SECURITY_SCAN || 'true';
     console.log(chalk.blue('  ✓ Extended capabilities (AST, Diff, Coverage, Graph, Security)'));
   }
 
@@ -4368,15 +4368,15 @@ This project uses SwarmVector's self-learning intelligence hooks with advanced c
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| \`RUVECTOR_INTELLIGENCE_ENABLED\` | \`true\` | Enable/disable intelligence layer |
-| \`RUVECTOR_LEARNING_RATE\` | \`0.1\` | Q-learning rate (0.0-1.0) |
-| \`RUVECTOR_MEMORY_BACKEND\` | \`rvlite\` | Memory storage backend |
+| \`SWARMVECTOR_INTELLIGENCE_ENABLED\` | \`true\` | Enable/disable intelligence layer |
+| \`SWARMVECTOR_LEARNING_RATE\` | \`0.1\` | Q-learning rate (0.0-1.0) |
+| \`SWARMVECTOR_MEMORY_BACKEND\` | \`rvlite\` | Memory storage backend |
 | \`INTELLIGENCE_MODE\` | \`treatment\` | A/B testing mode (treatment/control) |
-| \`RUVECTOR_AST_ENABLED\` | \`true\` | Enable AST parsing and complexity analysis |
-| \`RUVECTOR_DIFF_EMBEDDINGS\` | \`true\` | Enable diff embeddings and risk scoring |
-| \`RUVECTOR_COVERAGE_ROUTING\` | \`true\` | Enable test coverage-aware routing |
-| \`RUVECTOR_GRAPH_ALGORITHMS\` | \`true\` | Enable graph algorithms (MinCut, Louvain) |
-| \`RUVECTOR_SECURITY_SCAN\` | \`true\` | Enable security vulnerability scanning |
+| \`SWARMVECTOR_AST_ENABLED\` | \`true\` | Enable AST parsing and complexity analysis |
+| \`SWARMVECTOR_DIFF_EMBEDDINGS\` | \`true\` | Enable diff embeddings and risk scoring |
+| \`SWARMVECTOR_COVERAGE_ROUTING\` | \`true\` | Enable test coverage-aware routing |
+| \`SWARMVECTOR_GRAPH_ALGORITHMS\` | \`true\` | Enable graph algorithms (MinCut, Louvain) |
+| \`SWARMVECTOR_SECURITY_SCAN\` | \`true\` | Enable security vulnerability scanning |
 
 ### Core Commands
 
@@ -4530,7 +4530,7 @@ npx swarmvector hooks init --force      # Overwrite existing configuration
 \`\`\`
 
 ---
-*Powered by [SwarmVector](https://github.com/ruvnet/swarmvector) self-learning intelligence v2.0*
+*Powered by [SwarmVector](the upstream project (see NOTICE)) self-learning intelligence v2.0*
 `;
     fs.writeFileSync(claudeMdPath, claudeMdContent);
     console.log(chalk.green('✅ CLAUDE.md created in project root'));
@@ -4705,7 +4705,7 @@ hooksCmd.command('remember').description('Store in memory').requiredOption('-t, 
       id = intel.remember(opts.type, content.join(' '));
     }
     if (id === null) {
-      // RUVECTOR_REEMBED=warn: store is read-only, write skipped (ADR-210)
+      // SWARMVECTOR_REEMBED=warn: store is read-only, write skipped (ADR-210)
       if (!opts.silent) {
         console.log(JSON.stringify({ success: false, skipped: true, reason: 'store is read-only for vector writes (embedding provenance, ADR-210); run `swarmvector hooks reembed`' }));
       }
@@ -4765,7 +4765,7 @@ hooksCmd.command('reembed')
       return;
     }
 
-    // Pick the target embedder per RUVECTOR_EMBEDDER (D5).
+    // Pick the target embedder per SWARMVECTOR_EMBEDDER (D5).
     const selection = provMod.resolveEmbedderSelection();
     let embedFn;
     let embedBatchFn = null;
@@ -4797,7 +4797,7 @@ hooksCmd.command('reembed')
         console.log(JSON.stringify({
           success: false,
           error: `ONNX model could not be loaded (${engine.getOnnxInitError?.()?.message || 'offline?'}); semantic re-embedding is impossible right now`,
-          hint: 'retry with network access, or force the hash embedder with RUVECTOR_EMBEDDER=hash',
+          hint: 'retry with network access, or force the hash embedder with SWARMVECTOR_EMBEDDER=hash',
         }));
         process.exitCode = 1;
         return;
@@ -6315,7 +6315,7 @@ hooksCmd.command('verify')
           checks.push({ name: 'Advanced hooks', status: 'warn', detail: 'None configured (optional)' });
         }
         // Check env
-        if (settings.env?.RUVECTOR_INTELLIGENCE_ENABLED) {
+        if (settings.env?.SWARMVECTOR_INTELLIGENCE_ENABLED) {
           checks.push({ name: 'Environment vars', status: 'pass', detail: 'Intelligence enabled' });
         } else {
           checks.push({ name: 'Environment vars', status: 'warn', detail: 'Not configured' });
@@ -7991,7 +7991,7 @@ const RVF_EXAMPLES = [
   { name: 'reasoning_grandchild', size: '162 B', desc: 'Minimal derived file' },
 ];
 
-const RVF_BASE_URL = 'https://raw.githubusercontent.com/ruvnet/swarmvector/main/examples/rvf/output';
+const RVF_BASE_URL = 'https://raw.githubusercontent.com/upstream/swarmvector/main/examples/rvf/output';
 
 rvfCmd.command('examples')
   .description('List available example .rvf files')
@@ -8010,7 +8010,7 @@ rvfCmd.command('examples')
       const size = chalk.yellow(ex.size.padStart(maxSize));
       console.log(`  ${name}  ${size}  ${chalk.dim(ex.desc)}`);
     }
-    console.log(chalk.dim(`\nFull catalog: https://github.com/ruvnet/swarmvector/tree/main/examples/rvf/output\n`));
+    console.log(chalk.dim(`\nFull catalog: the upstream project (see NOTICE)\n`));
   });
 
 rvfCmd.command('download [names...]')
@@ -8170,7 +8170,7 @@ mcpCmd.command('info')
     console.log(chalk.bold('\nEdge Tools (Distributed Compute):'));
     console.log(chalk.dim('  edge_status      - Network status'));
     console.log(chalk.dim('  edge_join        - Join as compute node'));
-    console.log(chalk.dim('  edge_balance     - Check rUv balance'));
+    console.log(chalk.dim('  edge_balance     - Check the upstream author balance'));
     console.log(chalk.dim('  edge_tasks       - Available compute tasks'));
 
     console.log(chalk.bold('\nIdentity Tools:'));
@@ -8316,7 +8316,7 @@ mcpCmd.command('tools')
       'edge': [
         { name: 'edge_status', desc: 'Network status' },
         { name: 'edge_join', desc: 'Join as compute node' },
-        { name: 'edge_balance', desc: 'Check rUv balance' },
+        { name: 'edge_balance', desc: 'Check the upstream author balance' },
         { name: 'edge_tasks', desc: 'Available compute tasks' },
       ],
       'identity': [
@@ -8452,7 +8452,7 @@ function isJsonOutput(opts) {
 async function makeBrainClient(opts) {
   const { PiBrainClient } = await requirePiBrain();
   return new PiBrainClient({
-    url: opts.url || process.env.BRAIN_URL || 'https://pi.ruv.io',
+    url: opts.url || process.env.BRAIN_URL || 'https://pi.swarmdo.com',
     apiKey: process.env.PI || 'anonymous',
   });
 }
@@ -8460,7 +8460,7 @@ async function makeBrainClient(opts) {
 const brainCmd = program
   .command('brain')
   .description('Shared intelligence — search, share, and manage collective knowledge')
-  .option('--url <url>', 'Brain server URL', process.env.BRAIN_URL || 'https://pi.ruv.io')
+  .option('--url <url>', 'Brain server URL', process.env.BRAIN_URL || 'https://pi.swarmdo.com')
   .option('--json', 'Force JSON output');
 
 brainCmd
@@ -8755,7 +8755,7 @@ brainCmd
     const spinner = ora(`Syncing LoRA weights (${dir})...`).start();
     try {
       await requirePiBrain();
-      const url = opts.url || process.env.BRAIN_URL || 'https://pi.ruv.io';
+      const url = opts.url || process.env.BRAIN_URL || 'https://pi.swarmdo.com';
       const apiKey = process.env.PI || 'anonymous';
       const headers = { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' };
       const res = await fetch(`${url}/v1/lora/sync`, {
@@ -8798,7 +8798,7 @@ brainCmd
     }
     const spinner = ora(`Brainpedia: ${action}...`).start();
     try {
-      const url = opts.url || process.env.BRAIN_URL || 'https://pi.ruv.io';
+      const url = opts.url || process.env.BRAIN_URL || 'https://pi.swarmdo.com';
       const apiKey = process.env.PI || 'anonymous';
       const headers = { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' };
       let result;
@@ -8969,7 +8969,7 @@ const EDGE_DASHBOARD_URL = 'https://edge-net-dashboard-875130704813.us-central1.
 
 const edgeCmd = program
   .command('edge')
-  .description('Distributed edge compute network — status, tasks, and rUv balance')
+  .description('Distributed edge compute network — status, tasks, and the upstream author balance')
   .option('--json', 'Force JSON output');
 
 edgeCmd
@@ -8988,7 +8988,7 @@ edgeCmd
       } else {
         console.log(chalk.cyan(`  Nodes:       ${result.total_nodes != null ? result.total_nodes : 'N/A'}`));
         console.log(chalk.cyan(`  Active:      ${result.active_nodes != null ? result.active_nodes : 'N/A'}`));
-        console.log(chalk.cyan(`  rUv Supply:  ${result.ruv_supply != null ? result.ruv_supply : 'N/A'}`));
+        console.log(chalk.cyan(`  the upstream author Supply:  ${result.ruv_supply != null ? result.ruv_supply : 'N/A'}`));
         console.log(chalk.cyan(`  Phase:       ${result.phase || result.sunset_phase || 'N/A'}`));
         if (result.uptime) console.log(chalk.gray(`  Uptime:      ${result.uptime}`));
       }
@@ -9013,21 +9013,21 @@ edgeCmd
 
 edgeCmd
   .command('balance [nodeId]')
-  .description('Check rUv balance for a node')
+  .description('Check the upstream author balance for a node')
   .action(async (nodeId) => {
     const opts = edgeCmd.opts();
     const id = nodeId || process.env.PI || 'anonymous';
-    const spinner = ora('Fetching rUv balance...').start();
+    const spinner = ora('Fetching the upstream author balance...').start();
     try {
       const res = await fetch(`${EDGE_GENESIS_URL}/balance/${encodeURIComponent(id)}`);
       if (!res.ok) throw new Error(`Balance query failed (${res.status})`);
       const result = await res.json();
-      spinner.succeed(chalk.green('rUv balance'));
+      spinner.succeed(chalk.green('the upstream author balance'));
       if (isJsonOutput(opts)) {
         console.log(JSON.stringify(result, null, 2));
       } else {
         console.log(chalk.cyan(`  Node:    ${id}`));
-        console.log(chalk.cyan(`  Balance: ${result.balance != null ? result.balance : JSON.stringify(result)} rUv`));
+        console.log(chalk.cyan(`  Balance: ${result.balance != null ? result.balance : JSON.stringify(result)} the upstream author`));
       }
     } catch (error) {
       spinner.fail(chalk.red('Failed to fetch balance'));
@@ -9056,7 +9056,7 @@ edgeCmd
         } else {
           tasks.forEach((task, i) => {
             console.log(chalk.cyan(`  ${i + 1}. ${task.name || task.id || 'Task'}`) +
-              (task.reward ? chalk.yellow(` (${task.reward} rUv)`) : '') +
+              (task.reward ? chalk.yellow(` (${task.reward} the upstream author)`) : '') +
               (task.status ? chalk.gray(` [${task.status}]`) : ''));
           });
         }
@@ -9344,7 +9344,7 @@ llmCmd.command('models')
       process.exit(1);
     }
     const models = typeof swarmllm.listModels === 'function' ? swarmllm.listModels() :
-      (swarmllm.RUVLTRA_MODELS ? Object.values(swarmllm.RUVLTRA_MODELS) : []);
+      (swarmllm.SWARMLTRA_MODELS ? Object.values(swarmllm.SWARMLTRA_MODELS) : []);
     if (opts.json) {
       console.log(JSON.stringify(models, null, 2));
       return;
@@ -10010,7 +10010,7 @@ const optimizeCmd = program.command('optimize')
       console.error(chalk.yellow('\n  swarmvector optimize: not yet shipped in this release.\n'));
       console.error(chalk.gray('  The optimizer module (profiles, settings generation) is in development'));
       console.error(chalk.gray('  and will land in a future release. Track progress at:'));
-      console.error(chalk.white('    https://github.com/ruvnet/swarmvector/issues/401\n'));
+      console.error(chalk.white('    the upstream project (see NOTICE)\n'));
       process.exit(1);
     }
 
@@ -10175,7 +10175,7 @@ function buildHarnessSurface() {
     available: fs.existsSync(mcpPath),
     usage: 'npx swarmvector mcp start',
     policy: mcpPolicy,
-    accessControl: mcpPolicy.configured ? 'default-deny (configured)' : 'allow-all (set RUVECTOR_MCP_ALLOW/PROFILE)',
+    accessControl: mcpPolicy.configured ? 'default-deny (configured)' : 'allow-all (set SWARMVECTOR_MCP_ALLOW/PROFILE)',
   };
 
   // Signed provenance — witness chain (ADR-103 / ADR-134)
@@ -10190,7 +10190,7 @@ function buildHarnessSurface() {
     name: 'sona+reasoningbank',
     role: 'persistent memory + self-learning loops',
     available: true,
-    namespace: (process.env.RUVECTOR_MEMORY_NAMESPACE || 'swarmvector').trim() || 'swarmvector',
+    namespace: (process.env.SWARMVECTOR_MEMORY_NAMESPACE || 'swarmvector').trim() || 'swarmvector',
   };
 
   const values = Object.values(primitives);

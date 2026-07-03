@@ -11,9 +11,9 @@
     unused_must_use,
     unused_parens
 )]
-//! RuvLTRA-Small Model Tests
+//! SwarmLTRA-Small Model Tests
 //!
-//! This module provides comprehensive tests for the RuvLTRA-Small inference engine,
+//! This module provides comprehensive tests for the SwarmLTRA-Small inference engine,
 //! validating model loading, quantization accuracy, SONA integration, and ANE dispatch.
 //!
 //! ## Test Categories
@@ -26,14 +26,14 @@
 //! ## Running Tests
 //!
 //! ```bash
-//! # Run all RuvLTRA tests
-//! cargo test --package swarmllm ruvltra_tests
+//! # Run all SwarmLTRA tests
+//! cargo test --package swarmllm swarmltra_tests
 //!
 //! # Run with ANE support (Apple Silicon only)
-//! cargo test --package swarmllm --features coreml ruvltra_tests
+//! cargo test --package swarmllm --features coreml swarmltra_tests
 //!
 //! # Run with full feature set
-//! cargo test --package swarmllm --all-features ruvltra_tests
+//! cargo test --package swarmllm --all-features swarmltra_tests
 //! ```
 
 use swarmllm::backends::{
@@ -51,8 +51,8 @@ use std::time::{Duration, Instant};
 // Test Fixtures and Constants
 // ============================================================================
 
-/// RuvLTRA-Small model configuration for testing
-const RUVLTRA_SMALL_CONFIG: RuvLtraTestConfig = RuvLtraTestConfig {
+/// SwarmLTRA-Small model configuration for testing
+const SWARMLTRA_SMALL_CONFIG: SwarmLtraTestConfig = SwarmLtraTestConfig {
     vocab_size: 32000,
     hidden_size: 2048,
     intermediate_size: 5504,
@@ -64,10 +64,10 @@ const RUVLTRA_SMALL_CONFIG: RuvLtraTestConfig = RuvLtraTestConfig {
     layer_norm_eps: 1e-5,
 };
 
-/// Test configuration for RuvLTRA-Small
+/// Test configuration for SwarmLTRA-Small
 #[derive(Debug, Clone, Copy)]
 #[allow(dead_code)]
-struct RuvLtraTestConfig {
+struct SwarmLtraTestConfig {
     vocab_size: usize,
     hidden_size: usize,
     intermediate_size: usize,
@@ -114,7 +114,7 @@ mod model_loading {
             architecture: ModelArchitecture::Llama,
             quantization: Some(Quantization::Q4K),
             max_sequence_length: 8192,
-            vocab_size: Some(RUVLTRA_SMALL_CONFIG.vocab_size),
+            vocab_size: Some(SWARMLTRA_SMALL_CONFIG.vocab_size),
             use_flash_attention: true,
             ..Default::default()
         };
@@ -122,7 +122,7 @@ mod model_loading {
         assert_eq!(config.architecture, ModelArchitecture::Llama);
         assert_eq!(config.quantization, Some(Quantization::Q4K));
         assert_eq!(config.max_sequence_length, 8192);
-        assert_eq!(config.vocab_size, Some(RUVLTRA_SMALL_CONFIG.vocab_size));
+        assert_eq!(config.vocab_size, Some(SWARMLTRA_SMALL_CONFIG.vocab_size));
         assert!(config.use_flash_attention);
     }
 
@@ -941,10 +941,10 @@ mod memory_management {
 
     #[test]
     fn test_tensor_memory_estimation() {
-        // Estimate memory for RuvLTRA-Small tensors
-        let hidden_size = RUVLTRA_SMALL_CONFIG.hidden_size;
-        let _num_layers = RUVLTRA_SMALL_CONFIG.num_hidden_layers;
-        let vocab_size = RUVLTRA_SMALL_CONFIG.vocab_size;
+        // Estimate memory for SwarmLTRA-Small tensors
+        let hidden_size = SWARMLTRA_SMALL_CONFIG.hidden_size;
+        let _num_layers = SWARMLTRA_SMALL_CONFIG.num_hidden_layers;
+        let vocab_size = SWARMLTRA_SMALL_CONFIG.vocab_size;
 
         // Embedding: vocab_size * hidden_size * bytes_per_element
         let embedding_size_f32 = vocab_size * hidden_size * 4;
@@ -959,12 +959,12 @@ mod memory_management {
 
     #[test]
     fn test_kv_cache_sizing() {
-        let hidden_size = RUVLTRA_SMALL_CONFIG.hidden_size;
-        let num_layers = RUVLTRA_SMALL_CONFIG.num_hidden_layers;
-        let num_kv_heads = RUVLTRA_SMALL_CONFIG.num_key_value_heads;
-        let max_seq_len = RUVLTRA_SMALL_CONFIG.max_position_embeddings;
+        let hidden_size = SWARMLTRA_SMALL_CONFIG.hidden_size;
+        let num_layers = SWARMLTRA_SMALL_CONFIG.num_hidden_layers;
+        let num_kv_heads = SWARMLTRA_SMALL_CONFIG.num_key_value_heads;
+        let max_seq_len = SWARMLTRA_SMALL_CONFIG.max_position_embeddings;
 
-        let head_dim = hidden_size / RUVLTRA_SMALL_CONFIG.num_attention_heads;
+        let head_dim = hidden_size / SWARMLTRA_SMALL_CONFIG.num_attention_heads;
 
         // KV cache per layer: 2 * seq_len * num_kv_heads * head_dim * sizeof(f16)
         let kv_per_layer = 2 * max_seq_len * num_kv_heads * head_dim * 2;
@@ -983,7 +983,7 @@ mod memory_management {
         // Simulate working memory allocation
         let batch_size = 1;
         let seq_len = 1024;
-        let hidden_size = RUVLTRA_SMALL_CONFIG.hidden_size;
+        let hidden_size = SWARMLTRA_SMALL_CONFIG.hidden_size;
 
         // Activations: batch * seq * hidden * sizeof(f32)
         let activation_memory = batch_size * seq_len * hidden_size * 4;
@@ -1003,7 +1003,7 @@ mod output_validation {
     #[test]
     fn test_logits_finite() {
         // Simulated logits output
-        let logits: Vec<f32> = (0..RUVLTRA_SMALL_CONFIG.vocab_size)
+        let logits: Vec<f32> = (0..SWARMLTRA_SMALL_CONFIG.vocab_size)
             .map(|i| (i as f32) * 0.001 - 16.0)
             .collect();
 
@@ -1061,7 +1061,7 @@ mod output_validation {
         // All tokens should be valid (within vocab range)
         for token in &sample_tokens {
             assert!(
-                *token < RUVLTRA_SMALL_CONFIG.vocab_size as u32,
+                *token < SWARMLTRA_SMALL_CONFIG.vocab_size as u32,
                 "Token {} exceeds vocab size",
                 token
             );

@@ -10,11 +10,7 @@
   "homepage": "https://swarmdo.com",
   "bugs": {
     "url": "https://github.com/JannieP/swarmdo/issues",
-    "email": "support@ruv.io"
-  },
-  "funding": {
-    "type": "github",
-    "url": "https://github.com/sponsors/ruvnet"
+    "email": "maintainers@swarmdo.com"
   },
   "files": [
     "bin/**",
@@ -158,7 +154,6 @@
     "url": "https://github.com/JannieP/swarmdo.git"
   },
   "keywords": [
-    "ruvflow",
     "claude",
     "claude-code",
     "anthropic",
@@ -192,11 +187,6 @@
     "consensus",
     "self-learning"
   ],
-  "author": {
-    "name": "RuvNet",
-    "email": "ruv@ruv.io",
-    "url": "https://ruv.io"
-  },
   "license": "MIT",
   "publishConfig": {
     "access": "public",

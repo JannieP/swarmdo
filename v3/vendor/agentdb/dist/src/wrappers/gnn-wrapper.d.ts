@@ -30,9 +30,9 @@ export declare function differentiableSearch(query: number[], candidateEmbedding
  */
 export declare function hierarchicalForward(input: number[], weights: number[] | number[][], inputDim: number, outputDim: number): number[];
 /**
- * RuvectorLayer wrapper with fallback
+ * SwarmvectorLayer wrapper with fallback
  */
-export declare class RuvectorLayer {
+export declare class SwarmvectorLayer {
     private inputDim;
     private outputDim;
     private weights;

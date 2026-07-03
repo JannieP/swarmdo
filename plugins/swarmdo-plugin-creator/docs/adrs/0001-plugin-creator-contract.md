@@ -1,6 +1,6 @@
 ---
 id: ADR-0001
-title: rufflo-plugin-creator plugin contract — pinning, scaffold-the-canonical-contract, MCP-drift warnings, smoke as contract
+title: swarmdo-plugin-creator plugin contract — pinning, scaffold-the-canonical-contract, MCP-drift warnings, smoke as contract
 status: Accepted
 date: 2026-05-04
 updated: 2026-05-09
@@ -11,7 +11,7 @@ tags: [plugin, plugin-creator, scaffolding, namespace, smoke-test]
 
 ## Context
 
-`rufflo-plugin-creator` (v0.1.0) — meta-plugin that scaffolds new Claude Code plugins. 1 agent + 2 skills + 1 command.
+`swarmdo-plugin-creator` (v0.1.0) — meta-plugin that scaffolds new Claude Code plugins. 1 agent + 2 skills + 1 command.
 
 This plugin is uniquely positioned: every new plugin scaffolded by it inherits whatever contract the scaffolder produces. ADR-0001 must therefore do two things:
 
@@ -20,7 +20,7 @@ This plugin is uniquely positioned: every new plugin scaffolded by it inherits w
 
 ### Drift fixed
 
-The `create-plugin` skill mentioned "19 AgentDB controllers" — a stale count that [rufflo-agentdb ADR-0001 §"Today's `rufflo-agentdb`"](../../../rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md) declared mythical (real: 15 `agentdb_*` MCP tools, 29 `ControllerName` entries). Fixed in this pass.
+The `create-plugin` skill mentioned "19 AgentDB controllers" — a stale count that [swarmdo-agentdb ADR-0001 §"Today's `swarmdo-agentdb`"](../../../swarmdo-agentdb/docs/adrs/0001-agentdb-optimization.md) declared mythical (real: 15 `agentdb_*` MCP tools, 29 `ControllerName` entries). Fixed in this pass.
 
 ## Decision
 
@@ -53,7 +53,7 @@ The `create-plugin` skill is updated to scaffold:
 3. `create-plugin` skill scaffolds ADR, smoke, README contract sections.
 4. `create-plugin` skill includes the MCP-tool drift warnings.
 5. `create-plugin` skill no longer claims "19 AgentDB controllers" (regression check).
-6. README pins to `@rufflo/cli` v3.6.
+6. README pins to `@swarmdo/cli` v3.6.
 7. README has Architecture Decisions section.
 8. ADR-0001 exists with status `Proposed`.
 9. `validate-plugin` skill present.
@@ -72,17 +72,17 @@ The `create-plugin` skill is updated to scaffold:
 ## Verification
 
 ```bash
-bash plugins/rufflo-plugin-creator/scripts/smoke.sh
+bash plugins/swarmdo-plugin-creator/scripts/smoke.sh
 # Expected: "10 passed, 0 failed"
 ```
 
 ## Related
 
-- `plugins/rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md` — namespace convention + "19 controllers" myth fix
-- `plugins/rufflo-cost-tracker/docs/adrs/0001-cost-tracker-contract.md` — namespace-routing bug class
-- `plugins/rufflo-knowledge-graph/docs/adrs/0001-knowledge-graph-contract.md` — `embeddings_embed` rename
-- `plugins/rufflo-ruvector/docs/adrs/0001-pin-ruvector-0.2.25.md` — pinning + smoke-as-contract precedent
+- `plugins/swarmdo-agentdb/docs/adrs/0001-agentdb-optimization.md` — namespace convention + "19 controllers" myth fix
+- `plugins/swarmdo-cost-tracker/docs/adrs/0001-cost-tracker-contract.md` — namespace-routing bug class
+- `plugins/swarmdo-knowledge-graph/docs/adrs/0001-knowledge-graph-contract.md` — `embeddings_embed` rename
+- `plugins/swarmdo-swarmvector/docs/adrs/0001-pin-swarmvector-0.2.25.md` — pinning + smoke-as-contract precedent
 
 ## Implementation status
 
-Plugin version v0.2.0 shipped and listed in marketplace.json. Source exists at `plugins/rufflo-plugin-creator/`. Contract elements implemented: scaffolding templates updated to include contract ADR, smoke test, Compatibility section, and namespace coordination block by default; MCP-drift warnings added to scaffolded skill templates; smoke-as-contract gate defined in `scripts/smoke.sh`.
+Plugin version v0.2.0 shipped and listed in marketplace.json. Source exists at `plugins/swarmdo-plugin-creator/`. Contract elements implemented: scaffolding templates updated to include contract ADR, smoke test, Compatibility section, and namespace coordination block by default; MCP-drift warnings added to scaffolded skill templates; smoke-as-contract gate defined in `scripts/smoke.sh`.

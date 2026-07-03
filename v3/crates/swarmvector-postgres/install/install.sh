@@ -745,7 +745,7 @@ main() {
     echo "  5. Query with similarity search:"
     echo "     SELECT * FROM items ORDER BY embedding <-> '[1,1,1]' LIMIT 10;"
     echo ""
-    echo "Documentation: https://github.com/ruvnet/swarmvector"
+    echo "Documentation: the upstream project (see NOTICE)"
     echo ""
 }
 

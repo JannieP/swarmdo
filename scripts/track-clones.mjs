@@ -12,7 +12,7 @@
  *    agentdb_clones,    agentdb_uniques,
  *    agentic_clones,    agentic_uniques,
  *    swarmvector_clones,   swarmvector_uniques,
- *    ruv-FANN_clones,   ruv-FANN_uniques]
+ *    the upstream repo_clones,   the upstream repo_uniques]
  *
  * Vector ID: `<ISO-date>-<run-id>`.
  * Metadata: full per-repo breakdown JSON + npm download totals at the
@@ -40,11 +40,11 @@ const LEDGER_PATH = path_resolve(DATA_DIR, 'clone-data.ledger.json');
 const PROOF_PATH = path_resolve(DATA_DIR, 'clone-data.proof.json');
 
 const REPOS = [
-  'ruvnet/swarmdo',
-  'ruvnet/agentdb',
-  'ruvnet/agentic-flow',
-  'ruvnet/swarmvector',
-  'ruvnet/ruv-FANN',
+  'upstream/swarmdo',
+  'upstream/agentdb',
+  'upstream/agentic-flow',
+  'upstream/swarmvector',
+  'the upstream repo',
 ];
 
 const NPM_PKGS_HEADLINE = [
@@ -122,7 +122,7 @@ function readLedger() {
         'agentdb_clones', 'agentdb_uniques',
         'agentic_flow_clones', 'agentic_flow_uniques',
         'swarmvector_clones', 'swarmvector_uniques',
-        'ruv_FANN_clones', 'ruv_FANN_uniques',
+        'swarm_upstream_clones', 'swarm_upstream_uniques',
       ],
       snapshots: [],
     };

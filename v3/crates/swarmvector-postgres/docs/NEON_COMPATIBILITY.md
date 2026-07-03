@@ -308,8 +308,8 @@ Details:
 Use case:
 [Describe your vector search use case]
 
-Repository: https://github.com/ruvnet/swarmvector
-Documentation: https://github.com/ruvnet/swarmvector/tree/main/crates/swarmvector-postgres
+Repository: the upstream project (see NOTICE)
+Documentation: the upstream project (see NOTICE)
 
 I can provide pre-built binaries if needed.
 ```
@@ -692,7 +692,7 @@ ALTER DATABASE mydb SET swarmvector.ef_search = 100;
 ## Support Resources
 
 - **Neon Documentation**: https://neon.tech/docs
-- **SwarmVector GitHub**: https://github.com/ruvnet/swarmvector
-- **SwarmVector Issues**: https://github.com/ruvnet/swarmvector/issues
+- **SwarmVector GitHub**: the upstream project (see NOTICE)
+- **SwarmVector Issues**: the upstream project (see NOTICE)
 - **Neon Discord**: https://discord.gg/92vNTzKDGp
 - **Neon Support**: console.neon.tech → Support (Scale plan+)

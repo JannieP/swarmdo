@@ -1,10 +1,10 @@
-# ADR-057: RVF Native Storage Backend — Replace sql.js with RuVector Format
+# ADR-057: RVF Native Storage Backend — Replace sql.js with SwarmVector Format
 
 | Field | Value |
 |-------|-------|
 | **Status** | Proposed |
 | **Date** | 2026-02-28 |
-| **Authors** | Rufflo Team |
+| **Authors** | Swarmdo Team |
 | **Supersedes** | — |
 | **Related** | ADR-053 (AgentDB Controller Activation), ADR-054 (RVF Plugin Marketplace), ADR-055 (Controller Bug Remediation), ADR-056 (agentic-flow v3 Integration) |
 
@@ -14,13 +14,13 @@
 
 ### The Problem
 
-`npx rufflo@latest` installs **1.3GB** across 914 packages with a 35-second cold start in Docker. The Docker optimization work (Dockerfile.lite with `--omit=optional` + aggressive pruning) reduced this to 324MB, but the **core dependency chain** still carries unnecessary weight:
+`npx swarmdo@latest` installs **1.3GB** across 914 packages with a 35-second cold start in Docker. The Docker optimization work (Dockerfile.lite with `--omit=optional` + aggressive pruning) reduced this to 324MB, but the **core dependency chain** still carries unnecessary weight:
 
 ```
-rufflo (5KB wrapper)
-  └─ @rufflo/cli (9MB)
-       ├─ @rufflo/shared (11MB) ← depends on sql.js (18MB WASM)
-       ├─ @rufflo/mcp (650KB)
+swarmdo (5KB wrapper)
+  └─ @swarmdo/cli (9MB)
+       ├─ @swarmdo/shared (11MB) ← depends on sql.js (18MB WASM)
+       ├─ @swarmdo/mcp (650KB)
        ├─ semver (tiny)
        └─ @noble/ed25519 (tiny)
 ```
@@ -29,9 +29,9 @@ rufflo (5KB wrapper)
 
 | Consumer | File | Purpose | Lines |
 |----------|------|---------|-------|
-| `@rufflo/shared` | `events/event-store.ts` | Append-only event sourcing log | 589 |
-| `@rufflo/memory` | `sqljs-backend.ts` | Memory entries + brute-force vector search | 767 |
-| `@rufflo/embeddings` | `persistent-cache.ts` | LRU embedding cache with TTL | 411 |
+| `@swarmdo/shared` | `events/event-store.ts` | Append-only event sourcing log | 589 |
+| `@swarmdo/memory` | `sqljs-backend.ts` | Memory entries + brute-force vector search | 767 |
+| `@swarmdo/embeddings` | `persistent-cache.ts` | LRU embedding cache with TTL | 411 |
 
 ### What sql.js Actually Does
 
@@ -55,7 +55,7 @@ recommendations.push('Consider using better-sqlite3 with HNSW for faster vector 
 
 ### The Opportunity
 
-RVF (RuVector Format) is a binary container format already used in the Rufflo ecosystem (ADR-054). It provides everything sql.js does **plus native HNSW indexing** in a fraction of the footprint:
+RVF (SwarmVector Format) is a binary container format already used in the Swarmdo ecosystem (ADR-054). It provides everything sql.js does **plus native HNSW indexing** in a fraction of the footprint:
 
 | Capability | sql.js | RVF |
 |-----------|--------|-----|
@@ -74,37 +74,37 @@ RVF (RuVector Format) is a binary container format already used in the Rufflo ec
 
 ## 2. Decision
 
-**Replace sql.js with RVF as the native storage backend** across `@rufflo/shared`, `@rufflo/memory`, and `@rufflo/embeddings`. Provide automatic and manual migration paths for existing SQLite (`.db`) and JSON (`.json`) data files with full backward compatibility.
+**Replace sql.js with RVF as the native storage backend** across `@swarmdo/shared`, `@swarmdo/memory`, and `@swarmdo/embeddings`. Provide automatic and manual migration paths for existing SQLite (`.db`) and JSON (`.json`) data files with full backward compatibility.
 
 ### Storage Architecture
 
 ```
 Before (sql.js):
 ┌─────────────────────────────────────┐
-│  @rufflo/shared                │
+│  @swarmdo/shared                │
 │  ├─ EventStore → sql.js (18MB WASM) │
 │  └─ event-store.db                  │
 ├─────────────────────────────────────┤
-│  @rufflo/memory                │
+│  @swarmdo/memory                │
 │  ├─ SqlJsBackend → sql.js           │
 │  └─ memory.db                       │
 ├─────────────────────────────────────┤
-│  @rufflo/embeddings            │
+│  @swarmdo/embeddings            │
 │  ├─ PersistentCache → sql.js        │
 │  └─ embeddings.db                   │
 └─────────────────────────────────────┘
 
 After (RVF):
 ┌─────────────────────────────────────┐
-│  @rufflo/shared                │
+│  @swarmdo/shared                │
 │  ├─ EventStore → RvfEventLog        │
 │  └─ events.rvf (LOG_SEG)            │
 ├─────────────────────────────────────┤
-│  @rufflo/memory                │
+│  @swarmdo/memory                │
 │  ├─ RvfBackend → RVF native         │
 │  └─ memory.rvf (VEC_SEG + KV_SEG)   │
 ├─────────────────────────────────────┤
-│  @rufflo/embeddings            │
+│  @swarmdo/embeddings            │
 │  ├─ RvfEmbeddingCache → RVF native  │
 │  └─ embeddings.rvf (VEC_SEG)        │
 └─────────────────────────────────────┘
@@ -204,25 +204,25 @@ async function openStorage(path: string, options: StorageOptions): Promise<IMemo
 
 ```bash
 # Check current storage format and migration status
-rufflo migrate status --storage
+swarmdo migrate status --storage
 
 # Dry-run migration (report what would change, don't modify)
-rufflo migrate run --storage --dry-run
+swarmdo migrate run --storage --dry-run
 
 # Migrate specific file
-rufflo migrate run --storage --file ./data/memory/memory.db
+swarmdo migrate run --storage --file ./data/memory/memory.db
 
 # Migrate all storage files in project
-rufflo migrate run --storage --all
+swarmdo migrate run --storage --all
 
 # Force re-migration (even if .rvf already exists)
-rufflo migrate run --storage --force
+swarmdo migrate run --storage --force
 
 # Rollback: restore from .bak files
-rufflo migrate rollback --storage
+swarmdo migrate rollback --storage
 
 # Validate migrated data integrity
-rufflo migrate validate --storage
+swarmdo migrate validate --storage
 ```
 
 ### 3.4 Migration for Each Data Type
@@ -467,7 +467,7 @@ async function selectBackend(path: string, options: StorageOptions): Promise<IMe
 1. **Legacy backends become lazy-loaded** — `sql.js` moves to a dynamic `import()`, only loaded when a `.db` file is detected. Zero cost for new installations.
 2. **JSON backend stays** — for the simplest possible fallback (no binary deps at all).
 3. **`.bak` files are kept indefinitely** — users can manually rollback at any time.
-4. **`rufflo migrate rollback --storage`** restores `.bak` → original and removes `.rvf`.
+4. **`swarmdo migrate rollback --storage`** restores `.bak` → original and removes `.rvf`.
 
 #### Write Compatibility
 
@@ -475,13 +475,13 @@ New writes always go to RVF. The `--legacy-format` flag forces legacy format:
 
 ```bash
 # Force sql.js backend for specific use case
-rufflo memory init --backend sqljs
+swarmdo memory init --backend sqljs
 
 # Force JSON backend
-rufflo memory init --backend json
+swarmdo memory init --backend json
 
 # Default (RVF)
-rufflo memory init
+swarmdo memory init
 ```
 
 #### Version Negotiation
@@ -509,7 +509,7 @@ If a future RVF version adds incompatible features, the reader can detect this a
 The existing `EmbeddingProvider` type union supports 4 providers:
 
 ```typescript
-// v3/@rufflo/embeddings/src/types.ts
+// v3/@swarmdo/embeddings/src/types.ts
 export type EmbeddingProvider = 'openai' | 'transformers' | 'mock' | 'agentic-flow';
 ```
 
@@ -523,7 +523,7 @@ Both download large ONNX model files at runtime. For the CLI's core use cases (m
 
 ### RVF as 5th Embedding Provider
 
-RVF's WASM kernel includes SIMD-accelerated vector operations and can serve as a lightweight local embedding provider using the `@ruvector/wasm` VectorDB (5.5KB microkernel + 46KB control plane):
+RVF's WASM kernel includes SIMD-accelerated vector operations and can serve as a lightweight local embedding provider using the `@swarmvector/wasm` VectorDB (5.5KB microkernel + 46KB control plane):
 
 ```typescript
 // New: RvfEmbeddingConfig
@@ -543,7 +543,7 @@ export interface RvfEmbeddingConfig extends EmbeddingBaseConfig {
 #### RvfEmbeddingService Implementation
 
 ```typescript
-import { RvfDatabase } from '@ruvector/rvf';
+import { RvfDatabase } from '@swarmvector/rvf';
 
 export class RvfEmbeddingService extends BaseEmbeddingService {
   readonly provider: EmbeddingProvider = 'rvf';
@@ -636,7 +636,7 @@ export type EmbeddingProvider = 'openai' | 'transformers' | 'mock' | 'agentic-fl
 if (provider === 'auto') {
   // 1. Try RVF first (52KB WASM, zero external deps, always available)
   try {
-    const { RvfDatabase } = await import('@ruvector/rvf');
+    const { RvfDatabase } = await import('@swarmvector/rvf');
     const service = new RvfEmbeddingService({ provider: 'rvf', dimensions: 384 });
     await service.embed('test');
     return service;
@@ -667,11 +667,11 @@ The `rvf` provider is **not a replacement for neural embeddings** — it provide
 
 ---
 
-## 3B. ruvLLM Storage Integration (Model Weights, LoRA, SONA)
+## 3B. swarmLLM Storage Integration (Model Weights, LoRA, SONA)
 
 ### The Problem
 
-The ruvLLM learning system (`@rufvector/rufllm`) generates persistent state that currently lives in scattered locations:
+The swarmLLM learning system (`@swarmvector/swarmllm`) generates persistent state that currently lives in scattered locations:
 
 | Component | Current Storage | Size | Format |
 |-----------|----------------|------|--------|
@@ -679,13 +679,13 @@ The ruvLLM learning system (`@rufvector/rufllm`) generates persistent state that
 | EWC++ weights (`EwcManager`) | In-memory `Map<string, Float64Array>` | Varies | TypedArrays |
 | LoRA adapters (`LoraManager`) | JSON serialization (`toJSON()`) | Small | JSON string |
 | Trajectories (`SonaCoordinator`) | In-memory buffer, lost on restart | Varies | JS objects |
-| HNSW memory (`RuVectorProvider.searchMemory`) | ruvLLM HTTP server state | Varies | Server-managed |
+| HNSW memory (`SwarmVectorProvider.searchMemory`) | swarmLLM HTTP server state | Varies | Server-managed |
 
 **All learning state is lost when the process exits.** There is no persistence layer for SONA patterns, EWC weights, or LoRA adapters.
 
 ### RVF as Unified Learning Storage
 
-RVF segments map naturally to ruvLLM's learning artifacts:
+RVF segments map naturally to swarmLLM's learning artifacts:
 
 ```
 learning.rvf
@@ -700,8 +700,8 @@ learning.rvf
 #### RvfLearningStore API
 
 ```typescript
-import { RvfDatabase } from '@ruvector/rvf';
-import { ReasoningBank, EwcManager, LoraAdapter, SonaCoordinator } from '@rufvector/rufllm';
+import { RvfDatabase } from '@swarmvector/rvf';
+import { ReasoningBank, EwcManager, LoraAdapter, SonaCoordinator } from '@swarmvector/swarmllm';
 
 export class RvfLearningStore {
   private db: RvfDatabase;
@@ -833,13 +833,13 @@ export class PersistentSonaCoordinator extends SonaCoordinator {
 }
 ```
 
-#### Integration with RuVectorProvider
+#### Integration with SwarmVectorProvider
 
-The existing `RuVectorProvider` in `@rufflo/providers` gains RVF-backed persistence:
+The existing `SwarmVectorProvider` in `@swarmdo/providers` gains RVF-backed persistence:
 
 ```typescript
-// ruvector-provider.ts — extended with RVF persistence
-export class RuVectorProvider extends BaseProvider {
+// swarmvector-provider.ts — extended with RVF persistence
+export class SwarmVectorProvider extends BaseProvider {
   private learningStore: RvfLearningStore | null = null;
 
   protected async doInitialize(): Promise<void> {
@@ -847,7 +847,7 @@ export class RuVectorProvider extends BaseProvider {
 
     // Initialize RVF learning persistence
     const rvfPath = this.config.providerOptions?.learningStorePath
-      || './data/learning/ruvector.rvf';
+      || './data/learning/swarmvector.rvf';
     this.learningStore = await RvfLearningStore.create(rvfPath);
   }
 
@@ -859,7 +859,7 @@ export class RuVectorProvider extends BaseProvider {
   }>> {
     if (this.learningStore) {
       // Use RVF's native HNSW search instead of HTTP call
-      // This works even when ruvLLM server is not running
+      // This works even when swarmLLM server is not running
       const embedding = await this.embedQuery(query);
       const results = await this.learningStore.db.query(embedding, limit);
       return results.map(r => ({
@@ -885,7 +885,7 @@ data/
 ├── embeddings/
 │   └── embeddings.rvf        # Embedding cache (VEC + INDEX)
 └── learning/
-    └── ruvector.rvf           # SONA patterns + LoRA + EWC (NEW)
+    └── swarmvector.rvf           # SONA patterns + LoRA + EWC (NEW)
 ```
 
 ### Benefits
@@ -907,79 +907,79 @@ data/
 
 | Task | Package | Description |
 |------|---------|-------------|
-| P1.1 | `@rufflo/memory` | Create `RvfBackend` implementing `IMemoryBackend` interface |
-| P1.2 | `@rufflo/memory` | Map `KV_SEG` to memory entry CRUD operations |
-| P1.3 | `@rufflo/memory` | Map `VEC_SEG` to embedding storage with typed quantization |
-| P1.4 | `@rufflo/memory` | Map `INDEX_SEG` to HNSW search (replace brute-force cosine) |
-| P1.5 | `@rufflo/memory` | Add `RvfBackend` to `DatabaseProvider` selection chain |
+| P1.1 | `@swarmdo/memory` | Create `RvfBackend` implementing `IMemoryBackend` interface |
+| P1.2 | `@swarmdo/memory` | Map `KV_SEG` to memory entry CRUD operations |
+| P1.3 | `@swarmdo/memory` | Map `VEC_SEG` to embedding storage with typed quantization |
+| P1.4 | `@swarmdo/memory` | Map `INDEX_SEG` to HNSW search (replace brute-force cosine) |
+| P1.5 | `@swarmdo/memory` | Add `RvfBackend` to `DatabaseProvider` selection chain |
 
 ### Phase 2: Event Store Migration (Week 2-3)
 
 | Task | Package | Description |
 |------|---------|-------------|
-| P2.1 | `@rufflo/shared` | Create `RvfEventLog` implementing `IEventStore` interface |
-| P2.2 | `@rufflo/shared` | Map `LOG_SEG` to append-only event operations |
-| P2.3 | `@rufflo/shared` | Map `SNAP_SEG` to snapshot save/load |
-| P2.4 | `@rufflo/shared` | Move `sql.js` from `dependencies` to `optionalDependencies` |
+| P2.1 | `@swarmdo/shared` | Create `RvfEventLog` implementing `IEventStore` interface |
+| P2.2 | `@swarmdo/shared` | Map `LOG_SEG` to append-only event operations |
+| P2.3 | `@swarmdo/shared` | Map `SNAP_SEG` to snapshot save/load |
+| P2.4 | `@swarmdo/shared` | Move `sql.js` from `dependencies` to `optionalDependencies` |
 
 ### Phase 3: Embedding Cache Migration (Week 3)
 
 | Task | Package | Description |
 |------|---------|-------------|
-| P3.1 | `@rufflo/embeddings` | Create `RvfEmbeddingCache` implementing `IPersistentCache` |
-| P3.2 | `@rufflo/embeddings` | LRU eviction via RVF metadata (no SQL DELETE needed) |
-| P3.3 | `@rufflo/embeddings` | TTL via RVF expiry flags (segment-level) |
-| P3.4 | `@rufflo/embeddings` | Move `sql.js` from `dependencies` to `optionalDependencies` |
+| P3.1 | `@swarmdo/embeddings` | Create `RvfEmbeddingCache` implementing `IPersistentCache` |
+| P3.2 | `@swarmdo/embeddings` | LRU eviction via RVF metadata (no SQL DELETE needed) |
+| P3.3 | `@swarmdo/embeddings` | TTL via RVF expiry flags (segment-level) |
+| P3.4 | `@swarmdo/embeddings` | Move `sql.js` from `dependencies` to `optionalDependencies` |
 
 ### Phase 4: Migration Tooling (Week 3-4)
 
 | Task | Package | Description |
 |------|---------|-------------|
-| P4.1 | `@rufflo/cli` | `rufflo migrate status --storage` — detect formats, report state |
-| P4.2 | `@rufflo/cli` | `rufflo migrate run --storage` — batch migration with progress |
-| P4.3 | `@rufflo/cli` | `rufflo migrate rollback --storage` — restore from `.bak` |
-| P4.4 | `@rufflo/cli` | `rufflo migrate validate --storage` — integrity verification |
-| P4.5 | `@rufflo/memory` | Automatic migration in `DatabaseProvider.openStorage()` |
+| P4.1 | `@swarmdo/cli` | `swarmdo migrate status --storage` — detect formats, report state |
+| P4.2 | `@swarmdo/cli` | `swarmdo migrate run --storage` — batch migration with progress |
+| P4.3 | `@swarmdo/cli` | `swarmdo migrate rollback --storage` — restore from `.bak` |
+| P4.4 | `@swarmdo/cli` | `swarmdo migrate validate --storage` — integrity verification |
+| P4.5 | `@swarmdo/memory` | Automatic migration in `DatabaseProvider.openStorage()` |
 
 ### Phase 5: RVF Embedding Provider (Week 4)
 
 | Task | Package | Description |
 |------|---------|-------------|
-| P5.1 | `@rufflo/embeddings` | Add `'rvf'` to `EmbeddingProvider` type union |
-| P5.2 | `@rufflo/embeddings` | Implement `RvfEmbeddingService` with hash-based embeddings |
-| P5.3 | `@rufflo/embeddings` | Update `createEmbeddingServiceAsync` auto-select: `rvf > agentic-flow > transformers > mock` |
-| P5.4 | `@rufflo/embeddings` | Add `RvfEmbeddingConfig` interface |
-| P5.5 | `@rufflo/embeddings` | Tests: RVF provider passes `IEmbeddingService` test suite |
+| P5.1 | `@swarmdo/embeddings` | Add `'rvf'` to `EmbeddingProvider` type union |
+| P5.2 | `@swarmdo/embeddings` | Implement `RvfEmbeddingService` with hash-based embeddings |
+| P5.3 | `@swarmdo/embeddings` | Update `createEmbeddingServiceAsync` auto-select: `rvf > agentic-flow > transformers > mock` |
+| P5.4 | `@swarmdo/embeddings` | Add `RvfEmbeddingConfig` interface |
+| P5.5 | `@swarmdo/embeddings` | Tests: RVF provider passes `IEmbeddingService` test suite |
 
-### Phase 6: ruvLLM Learning Persistence (Week 4-5)
+### Phase 6: swarmLLM Learning Persistence (Week 4-5)
 
 | Task | Package | Description |
 |------|---------|-------------|
-| P6.1 | `@rufflo/memory` | Create `RvfLearningStore` class (VEC + KV + LOG segments for SONA) |
-| P6.2 | `@rufflo/memory` | Implement `savePatterns` / `loadPatterns` for ReasoningBank persistence |
-| P6.3 | `@rufflo/memory` | Implement LoRA adapter serialization to RVF OVERLAY segment |
-| P6.4 | `@rufflo/memory` | Implement EWC++ Fisher diagonal persistence to META_SEG |
-| P6.5 | `@rufflo/providers` | Extend `RuVectorProvider` with RVF-backed `searchMemory()` |
-| P6.6 | `@rufflo/memory` | Create `PersistentSonaCoordinator` wrapping `SonaCoordinator` |
+| P6.1 | `@swarmdo/memory` | Create `RvfLearningStore` class (VEC + KV + LOG segments for SONA) |
+| P6.2 | `@swarmdo/memory` | Implement `savePatterns` / `loadPatterns` for ReasoningBank persistence |
+| P6.3 | `@swarmdo/memory` | Implement LoRA adapter serialization to RVF OVERLAY segment |
+| P6.4 | `@swarmdo/memory` | Implement EWC++ Fisher diagonal persistence to META_SEG |
+| P6.5 | `@swarmdo/providers` | Extend `SwarmVectorProvider` with RVF-backed `searchMemory()` |
+| P6.6 | `@swarmdo/memory` | Create `PersistentSonaCoordinator` wrapping `SonaCoordinator` |
 
 ### Phase 7: Progressive Download System (Week 5-6)
 
 | Task | Package | Description |
 |------|---------|-------------|
-| P7.1 | `@rufflo/cli` | Implement `ProgressiveDownloader` class |
-| P7.2 | `@rufflo/cli` | Create capability manifest schema and seed registry |
-| P7.3 | `@rufflo/cli` | `rufflo capabilities status/install/remove/list/prefetch` CLI commands |
-| P7.4 | `@rufflo/embeddings` | Integrate progressive download into `createEmbeddingServiceAsync` |
-| P7.5 | `@rufflo/providers` | Integrate progressive download into `RuVectorProvider` for LLM models |
-| P7.6 | `@rufflo/cli` | Package Phase 1-2 capabilities as .rvf files on CDN/IPFS |
+| P7.1 | `@swarmdo/cli` | Implement `ProgressiveDownloader` class |
+| P7.2 | `@swarmdo/cli` | Create capability manifest schema and seed registry |
+| P7.3 | `@swarmdo/cli` | `swarmdo capabilities status/install/remove/list/prefetch` CLI commands |
+| P7.4 | `@swarmdo/embeddings` | Integrate progressive download into `createEmbeddingServiceAsync` |
+| P7.5 | `@swarmdo/providers` | Integrate progressive download into `SwarmVectorProvider` for LLM models |
+| P7.6 | `@swarmdo/cli` | Package Phase 1-2 capabilities as .rvf files on CDN/IPFS |
 
 ### Phase 8: Dependency Cleanup (Week 6-7)
 
 | Task | Package | Description |
 |------|---------|-------------|
-| P8.1 | `@rufflo/shared` | Remove `sql.js` from hard dependencies |
-| P8.2 | `@rufflo/memory` | Remove `sql.js` from hard dependencies |
-| P8.3 | `@rufflo/embeddings` | Remove `sql.js` from hard dependencies |
+| P8.1 | `@swarmdo/shared` | Remove `sql.js` from hard dependencies |
+| P8.2 | `@swarmdo/memory` | Remove `sql.js` from hard dependencies |
+| P8.3 | `@swarmdo/embeddings` | Remove `sql.js` from hard dependencies |
 | P8.4 | All | Lazy-load sql.js only for legacy `.db` file reads |
 | P8.5 | All | Update Docker images to exclude sql.js entirely |
 | P8.6 | All | Move agentic-flow, @xenova/transformers to progressive downloads |
@@ -992,7 +992,7 @@ data/
 ### RvfBackend (implements IMemoryBackend)
 
 ```typescript
-import { RvfFile, VecSegment, KvSegment, IndexSegment } from '@ruvector/rvf';
+import { RvfFile, VecSegment, KvSegment, IndexSegment } from '@swarmvector/rvf';
 
 export class RvfBackend implements IMemoryBackend {
   private rvf: RvfFile;
@@ -1095,18 +1095,18 @@ export class RvfEventLog implements IEventStore {
 
 | Package | Hard Deps | Total Install Weight |
 |---------|-----------|---------------------|
-| `@rufflo/shared` | sql.js (18MB) | ~30MB |
-| `@rufflo/memory` | sql.js (18MB, deduped) | ~5MB own |
-| `@rufflo/embeddings` | sql.js (18MB, deduped) | ~3MB own |
+| `@swarmdo/shared` | sql.js (18MB) | ~30MB |
+| `@swarmdo/memory` | sql.js (18MB, deduped) | ~5MB own |
+| `@swarmdo/embeddings` | sql.js (18MB, deduped) | ~3MB own |
 | **Total sql.js contribution** | | **~18MB (deduped)** |
 
 ### After (RVF)
 
 | Package | Hard Deps | Total Install Weight |
 |---------|-----------|---------------------|
-| `@rufflo/shared` | `@ruvector/rvf` (WASM: 52KB, native: ~2MB) | ~13MB (−17MB) |
-| `@rufflo/memory` | (uses shared's rvf) | ~5MB (no change) |
-| `@rufflo/embeddings` | (uses shared's rvf) | ~3MB (no change) |
+| `@swarmdo/shared` | `@swarmvector/rvf` (WASM: 52KB, native: ~2MB) | ~13MB (−17MB) |
+| `@swarmdo/memory` | (uses shared's rvf) | ~5MB (no change) |
+| `@swarmdo/embeddings` | (uses shared's rvf) | ~3MB (no change) |
 | **Total RVF contribution** | | **52KB WASM or ~2MB native** |
 
 ### Net savings
@@ -1133,7 +1133,7 @@ export class RvfEventLog implements IEventStore {
 | Migration corrupts data | Low | High | Atomic write (temp + rename); `.bak` always kept |
 | WASM fallback slower than sql.js | Medium | Low | RVF WASM kernel is 52KB vs 18MB; simpler = faster |
 | Users depend on SQLite tooling | Medium | Low | Legacy read support permanent; `--backend sqljs` flag |
-| `@ruvector/rvf` npm availability | Low | High | Vendor WASM binary into `@rufflo/shared` as fallback |
+| `@swarmvector/rvf` npm availability | Low | High | Vendor WASM binary into `@swarmdo/shared` as fallback |
 
 ---
 
@@ -1161,7 +1161,7 @@ Integration Tests:
   ✓ Auto-select picks 'rvf' provider when no heavy deps installed
   ✓ Auto-select picks 'agentic-flow' when available (higher quality)
   ✓ PersistentSonaCoordinator survives process restart with patterns intact
-  ✓ RuVectorProvider.searchMemory works offline via RVF (no HTTP server)
+  ✓ SwarmVectorProvider.searchMemory works offline via RVF (no HTTP server)
 
 Performance Tests:
   ✓ HNSW search <1ms for 10K vectors (vs ~100ms brute-force)
@@ -1196,14 +1196,14 @@ Backward Compatibility Tests:
 - **Docker images shrink** further when sql.js is fully eliminated
 - **Zero-dep local embeddings** — 52KB RVF provider replaces 540MB agentic-flow for basic use
 - **Persistent learning** — SONA patterns, LoRA adapters, EWC weights survive restarts
-- **Offline intelligence** — `RuVectorProvider.searchMemory` works without HTTP server
+- **Offline intelligence** — `SwarmVectorProvider.searchMemory` works without HTTP server
 
 ### Negative
 
 - **Migration complexity** — must support 3 legacy formats (sql.js .db, better-sqlite3 .db, JSON)
-- **New dependency** — `@ruvector/rvf` replaces `sql.js` (smaller, but still a dep)
+- **New dependency** — `@swarmvector/rvf` replaces `sql.js` (smaller, but still a dep)
 - **Learning curve** — team must understand RVF segment model vs SQL tables
-- **Loss of SQL tooling** — can't `sqlite3 memory.db` to inspect data (mitigated by `rufflo memory list`)
+- **Loss of SQL tooling** — can't `sqlite3 memory.db` to inspect data (mitigated by `swarmdo memory list`)
 - **Hash embeddings are not semantic** — `rvf` provider good for matching, not meaning (mitigated by fallback to neural providers)
 
 ### Neutral
@@ -1219,7 +1219,7 @@ Backward Compatibility Tests:
 ### The Problem
 
 Current install paths are all-or-nothing:
-- `npx rufflo@latest` installs 1.3GB (all optional deps)
+- `npx swarmdo@latest` installs 1.3GB (all optional deps)
 - `--omit=optional` drops to ~30MB but loses all intelligence features
 - Users who want _some_ advanced features must install _all_ of them
 
@@ -1229,27 +1229,27 @@ RVF's segment model enables a **progressive download** approach where capabiliti
 
 ```
 Phase 0: Core CLI (always installed)
-  rufflo (5KB) → @rufflo/cli (9MB) → @rufflo/shared (~13MB with RVF)
+  swarmdo (5KB) → @swarmdo/cli (9MB) → @swarmdo/shared (~13MB with RVF)
   Total: ~22MB — MCP server, memory, events, CLI commands
 
 Phase 1: Lightweight Embeddings (downloaded on first use)
-  @ruvector/rvf WASM kernel (52KB)
+  @swarmvector/rvf WASM kernel (52KB)
   Hash-based embeddings — no neural model needed
-  Downloaded to: ~/.rufflo/capabilities/rvf-wasm.rvf
+  Downloaded to: ~/.swarmdo/capabilities/rvf-wasm.rvf
 
 Phase 2: Neural Embeddings (downloaded on demand)
   all-MiniLM-L6-v2 ONNX model (~22MB)
-  Stored as: ~/.rufflo/capabilities/models/minilm-l6-v2.rvf
+  Stored as: ~/.swarmdo/capabilities/models/minilm-l6-v2.rvf
   Segment: WASM_SEG (model weights) + META_SEG (tokenizer config)
 
 Phase 3: Local LLM Inference (downloaded on demand)
-  GGUF model files via ruvLLM
-  Stored as: ~/.rufflo/capabilities/models/<model>.rvf
+  GGUF model files via swarmLLM
+  Stored as: ~/.swarmdo/capabilities/models/<model>.rvf
   Segment: MODEL_SEG (quantized weights) + OVERLAY (LoRA adapters)
 
 Phase 4: Advanced Intelligence (downloaded on demand)
   CNN/GNN/Transformer kernels for specialized tasks
-  Stored as: ~/.rufflo/capabilities/kernels/<kernel>.rvf
+  Stored as: ~/.swarmdo/capabilities/kernels/<kernel>.rvf
   Segment: KERNEL_SEG (WASM bytecode) + EBPF_SEG (filters)
 ```
 
@@ -1282,15 +1282,15 @@ interface CapabilityEntry {
 ### Progressive Download Manager
 
 ```typescript
-import { RvfDatabase } from '@ruvector/rvf';
+import { RvfDatabase } from '@swarmvector/rvf';
 
 export class ProgressiveDownloader {
   private manifestPath: string;
   private capabilitiesDir: string;
 
-  constructor(ruffloHome = '~/.rufflo') {
-    this.manifestPath = `${ruffloHome}/capabilities/manifest.json`;
-    this.capabilitiesDir = `${ruffloHome}/capabilities`;
+  constructor(swarmdoHome = '~/.swarmdo') {
+    this.manifestPath = `${swarmdoHome}/capabilities/manifest.json`;
+    this.capabilitiesDir = `${swarmdoHome}/capabilities`;
   }
 
   /**
@@ -1305,7 +1305,7 @@ export class ProgressiveDownloader {
     if (entry.status === 'installed') return entry.rvfPath;
 
     // Download the capability
-    console.info(`[rufflo] Downloading ${entry.name} (${this.formatSize(entry.size)})...`);
+    console.info(`[swarmdo] Downloading ${entry.name} (${this.formatSize(entry.size)})...`);
     entry.status = 'downloading';
     await this.saveManifest(manifest);
 
@@ -1324,7 +1324,7 @@ export class ProgressiveDownloader {
     entry.rvfPath = rvfPath;
     await this.saveManifest(manifest);
 
-    console.info(`[rufflo] ✓ ${entry.name} ready`);
+    console.info(`[swarmdo] ✓ ${entry.name} ready`);
     return rvfPath;
   }
 
@@ -1391,21 +1391,21 @@ export class ProgressiveDownloader {
 
 ```bash
 # Check what's installed and available
-rufflo capabilities status
+swarmdo capabilities status
 
 # Download specific capability
-rufflo capabilities install neural-embeddings
+swarmdo capabilities install neural-embeddings
 
 # Download all capabilities up to phase N
-rufflo capabilities prefetch --phase 2
+swarmdo capabilities prefetch --phase 2
 
 # Remove a capability
-rufflo capabilities remove local-llm-qwen
+swarmdo capabilities remove local-llm-qwen
 
 # List all available models/kernels
-rufflo capabilities list --phase 3
-rufflo capabilities list --type model
-rufflo capabilities list --type kernel
+swarmdo capabilities list --phase 3
+swarmdo capabilities list --type model
+swarmdo capabilities list --type kernel
 ```
 
 ### Available Capabilities by Phase
@@ -1497,11 +1497,11 @@ The progressive download approach replaces npm's `optionalDependencies`:
 
 ## 11. References
 
-- [RuVector Format Specification](https://github.com/ruvnet/ruvector/blob/main/crates/rvf/README.md)
-- [ruvLLM Self-Learning LLM Engine](https://github.com/ruvnet/ruvector/blob/main/crates/ruvllm/README.md)
-- [@ruvector/rvf npm SDK](https://www.npmjs.com/package/@ruvector/rvf)
-- [@rufvector/rufllm npm SDK](https://www.npmjs.com/package/@rufvector/rufllm)
-- [ruvector npm package](https://www.npmjs.com/package/ruvector)
+- [SwarmVector Format Specification](the upstream project (see NOTICE))
+- [swarmLLM Self-Learning LLM Engine](the upstream project (see NOTICE))
+- [@swarmvector/rvf npm SDK](https://www.npmjs.com/package/@swarmvector/rvf)
+- [@swarmvector/swarmllm npm SDK](https://www.npmjs.com/package/@swarmvector/swarmllm)
+- [swarmvector npm package](https://www.npmjs.com/package/swarmvector)
 - [ADR-053: AgentDB v3 Controller Activation](./ADR-053-agentdb-v3-controller-activation.md)
 - [ADR-054: RVF-Powered Plugin Marketplace](./ADR-054-rvf-powered-plugin-marketplace.md)
 - [ADR-055: AgentDB Controller Bug Remediation](./ADR-055-agentdb-controller-bug-remediation.md)
@@ -1509,4 +1509,4 @@ The progressive download approach replaces npm's `optionalDependencies`:
 - [sql.js — WASM SQLite](https://github.com/sql-js/sql.js)
 - [LoRA: Low-Rank Adaptation](https://arxiv.org/abs/2106.09685)
 - [EWC++: Elastic Weight Consolidation](https://arxiv.org/abs/1612.00796)
-- [Vendored ruvector source](../../vendor/ruvector/)
+- [Vendored swarmvector source](../../vendor/swarmvector/)

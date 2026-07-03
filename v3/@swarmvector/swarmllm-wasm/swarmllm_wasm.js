@@ -1,4 +1,4 @@
-/* @ts-self-types="./ruvllm_wasm.d.ts" */
+/* @ts-self-types="./swarmllm_wasm.d.ts" */
 
 /**
  * Feedback for per-request adaptation.
@@ -2037,21 +2037,21 @@ export class RouteResultWasm {
 if (Symbol.dispose) RouteResultWasm.prototype[Symbol.dispose] = RouteResultWasm.prototype.free;
 
 /**
- * Main RuvLLM WASM interface.
+ * Main SwarmLLM WASM interface.
  *
  * Provides the primary entry point for LLM inference in the browser.
  * Manages KV cache, memory pools, and inference state.
  */
-export class RuvLLMWasm {
+export class SwarmLLMWasm {
     __destroy_into_raw() {
         const ptr = this.__wbg_ptr;
         this.__wbg_ptr = 0;
-        RuvLLMWasmFinalization.unregister(this);
+        SwarmLLMWasmFinalization.unregister(this);
         return ptr;
     }
     free() {
         const ptr = this.__destroy_into_raw();
-        wasm.__wbg_ruvllmwasm_free(ptr, 0);
+        wasm.__wbg_swarmllmwasm_free(ptr, 0);
     }
     /**
      * Format a chat conversation using a template.
@@ -2067,7 +2067,7 @@ export class RuvLLMWasm {
             _assertClass(template, ChatTemplateWasm);
             const ptr0 = passArrayJsValueToWasm0(messages, wasm.__wbindgen_export);
             const len0 = WASM_VECTOR_LEN;
-            wasm.ruvllmwasm_formatChat(retptr, template.__wbg_ptr, ptr0, len0);
+            wasm.swarmllmwasm_formatChat(retptr, template.__wbg_ptr, ptr0, len0);
             var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
             var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
             deferred2_0 = r0;
@@ -2087,7 +2087,7 @@ export class RuvLLMWasm {
         let deferred2_1;
         try {
             const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            wasm.ruvllmwasm_getPoolStats(retptr, this.__wbg_ptr);
+            wasm.swarmllmwasm_getPoolStats(retptr, this.__wbg_ptr);
             var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
             var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
             var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
@@ -2112,7 +2112,7 @@ export class RuvLLMWasm {
     initialize() {
         try {
             const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            wasm.ruvllmwasm_initialize(retptr, this.__wbg_ptr);
+            wasm.swarmllmwasm_initialize(retptr, this.__wbg_ptr);
             var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
             var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
             if (r1) {
@@ -2130,7 +2130,7 @@ export class RuvLLMWasm {
         try {
             const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
             _assertClass(config, KvCacheConfigWasm);
-            wasm.ruvllmwasm_initializeWithConfig(retptr, this.__wbg_ptr, config.__wbg_ptr);
+            wasm.swarmllmwasm_initializeWithConfig(retptr, this.__wbg_ptr, config.__wbg_ptr);
             var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
             var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
             if (r1) {
@@ -2145,23 +2145,23 @@ export class RuvLLMWasm {
      * @returns {boolean}
      */
     get isInitialized() {
-        const ret = wasm.ruvllmwasm_isInitialized(this.__wbg_ptr);
+        const ret = wasm.swarmllmwasm_isInitialized(this.__wbg_ptr);
         return ret !== 0;
     }
     /**
-     * Create a new RuvLLM WASM instance.
+     * Create a new SwarmLLM WASM instance.
      */
     constructor() {
-        const ret = wasm.ruvllmwasm_new();
+        const ret = wasm.swarmllmwasm_new();
         this.__wbg_ptr = ret >>> 0;
-        RuvLLMWasmFinalization.register(this, this.__wbg_ptr, this);
+        SwarmLLMWasmFinalization.register(this, this.__wbg_ptr, this);
         return this;
     }
     /**
      * Clear all caches and reset state.
      */
     reset() {
-        wasm.ruvllmwasm_reset(this.__wbg_ptr);
+        wasm.swarmllmwasm_reset(this.__wbg_ptr);
     }
     /**
      * Get version information.
@@ -2172,7 +2172,7 @@ export class RuvLLMWasm {
         let deferred1_1;
         try {
             const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            wasm.ruvllmwasm_version(retptr);
+            wasm.swarmllmwasm_version(retptr);
             var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
             var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
             deferred1_0 = r0;
@@ -2184,7 +2184,7 @@ export class RuvLLMWasm {
         }
     }
 }
-if (Symbol.dispose) RuvLLMWasm.prototype[Symbol.dispose] = RuvLLMWasm.prototype.free;
+if (Symbol.dispose) SwarmLLMWasm.prototype[Symbol.dispose] = SwarmLLMWasm.prototype.free;
 
 /**
  * Result of instant adaptation
@@ -3441,7 +3441,7 @@ function __wbg_get_imports() {
     };
     return {
         __proto__: null,
-        "./ruvllm_wasm_bg.js": import0,
+        "./swarmllm_wasm_bg.js": import0,
     };
 }
 
@@ -3511,9 +3511,9 @@ const PatternWasmFinalization = (typeof FinalizationRegistry === 'undefined')
 const RouteResultWasmFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_routeresultwasm_free(ptr >>> 0, 1));
-const RuvLLMWasmFinalization = (typeof FinalizationRegistry === 'undefined')
+const SwarmLLMWasmFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
-    : new FinalizationRegistry(ptr => wasm.__wbg_ruvllmwasm_free(ptr >>> 0, 1));
+    : new FinalizationRegistry(ptr => wasm.__wbg_swarmllmwasm_free(ptr >>> 0, 1));
 const SonaAdaptResultWasmFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_sonaadaptresultwasm_free(ptr >>> 0, 1));
@@ -3884,7 +3884,7 @@ async function __wbg_init(module_or_path) {
     }
 
     if (module_or_path === undefined) {
-        module_or_path = new URL('ruvllm_wasm_bg.wasm', import.meta.url);
+        module_or_path = new URL('swarmllm_wasm_bg.wasm', import.meta.url);
     }
     const imports = __wbg_get_imports();
 

@@ -10,7 +10,7 @@
  * - Neural substrate integration
  * - Persistent SQLite cache
  *
- * Created with ❤️ by ruv.io
+ * Created with ❤️ by swarmdo.com
  */
 
 import type { Command, CommandContext, CommandResult } from '../types.js';
@@ -1788,7 +1788,7 @@ export const embeddingsCommand: Command = {
       'Hyperbolic: Better hierarchical representation',
     ]);
     output.writeln();
-    output.writeln(output.dim('Created with ❤️ by ruv.io'));
+    output.writeln(output.dim('Created with ❤️ by swarmdo.com'));
     return { success: true };
   },
 };

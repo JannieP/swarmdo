@@ -5,7 +5,7 @@ Test gap detection, coverage analysis, and automated test generation. SPARC Refi
 ## Install
 
 ```
-/plugin marketplace add ruvnet/swarmdo
+/plugin marketplace add upstream/swarmdo
 /plugin install swarmdo-testgen@swarmdo
 ```
 

@@ -1,12 +1,12 @@
-# ADR-058: Self-Contained Rufflo RVF Appliance — Linux Kernel + Claude Code + ruvLLM
+# ADR-058: Self-Contained Swarmdo RVF Appliance — Linux Kernel + Claude Code + swarmLLM
 
 | Field | Value |
 |-------|-------|
 | **Status** | Proposed |
 | **Date** | 2026-02-28 |
-| **Authors** | Rufflo Team |
+| **Authors** | Swarmdo Team |
 | **Supersedes** | — |
-| **Related** | ADR-057 (RVF Native Storage), ADR-054 (RVF Plugin Marketplace), ADR-056 (agentic-flow v3 Integration), ADR-017 (RuVector Integration) |
+| **Related** | ADR-057 (RVF Native Storage), ADR-054 (RVF Plugin Marketplace), ADR-056 (agentic-flow v3 Integration), ADR-017 (SwarmVector Integration) |
 
 ---
 
@@ -14,7 +14,7 @@
 
 ### The Problem
 
-Rufflo v3.5 requires the user to have Node.js 20+, npm, Claude Code CLI, API keys, and a properly configured OS environment. This means:
+Swarmdo v3.5 requires the user to have Node.js 20+, npm, Claude Code CLI, API keys, and a properly configured OS environment. This means:
 
 - **10+ setup steps** before a user can run their first agent swarm
 - **Network dependency** at runtime for API calls, npm installs, MCP server downloads
@@ -24,15 +24,15 @@ Rufflo v3.5 requires the user to have Node.js 20+, npm, Claude Code CLI, API key
 
 ### The Vision
 
-A **single `rufflo.rvf` file** that contains everything needed to run the full Rufflo platform:
+A **single `swarmdo.rvf` file** that contains everything needed to run the full Swarmdo platform:
 
 ```
-rufflo.rvf (self-contained appliance)
+swarmdo.rvf (self-contained appliance)
 ├── Linux microkernel (Alpine-based, ~5MB)
 ├── Node.js 22 runtime (~30MB stripped)
 ├── Claude Code CLI
-├── Rufflo v3.5+ (all packages)
-├── ruvLLM local inference OR API key vault
+├── Swarmdo v3.5+ (all packages)
+├── swarmLLM local inference OR API key vault
 ├── AgentDB with HNSW indexes
 ├── Pre-trained SONA patterns
 ├── 60+ agent definitions
@@ -40,11 +40,11 @@ rufflo.rvf (self-contained appliance)
 └── Capability verification suite
 ```
 
-One file. No install. No dependencies. Works offline with ruvLLM, or connects to cloud APIs.
+One file. No install. No dependencies. Works offline with swarmLLM, or connects to cloud APIs.
 
 ### Why RVF as the Container Format
 
-The RVF (RuVector Format) binary format from ADR-057 already provides:
+The RVF (SwarmVector Format) binary format from ADR-057 already provides:
 
 | RVF Feature | Appliance Use |
 |-------------|---------------|
@@ -54,13 +54,13 @@ The RVF (RuVector Format) binary format from ADR-057 already provides:
 | CRC32/SHA256 integrity | Appliance verification |
 | Streaming reads | Boot without full decompression |
 
-Extending RVF to `RVFA` (RuVector Format Appliance) creates a unified format that Rufflo already understands natively.
+Extending RVF to `RVFA` (SwarmVector Format Appliance) creates a unified format that Swarmdo already understands natively.
 
 ---
 
 ## 2. Decision
 
-### 2.1 Appliance Format: `RVFA` (RuVector Format Appliance)
+### 2.1 Appliance Format: `RVFA` (SwarmVector Format Appliance)
 
 ```
 ┌─────────────────────────────────────────────────┐
@@ -77,21 +77,21 @@ Extending RVF to `RVFA` (RuVector Format Appliance) creates a unified format tha
 ├─────────────────────────────────────────────────┤
 │ Section 0: KERNEL (compressed rootfs)           │
 │   Alpine Linux 3.23 minimal + busybox           │
-│   /sbin/init → rufflo-init (PID 1)              │
+│   /sbin/init → swarmdo-init (PID 1)              │
 ├─────────────────────────────────────────────────┤
 │ Section 1: RUNTIME (compressed)                 │
 │   Node.js 22 (stripped, no npm)                 │
 │   Claude Code CLI binary                        │
 ├─────────────────────────────────────────────────┤
-│ Section 2: RUFLO (compressed)                   │
-│   @rufflo/cli + shared + guidance           │
+│ Section 2: SWARMDO (compressed)                   │
+│   @swarmdo/cli + shared + guidance           │
 │   All 26 commands, 140+ subcommands             │
 │   60+ agent definitions                         │
 │   17 hooks + 12 workers                         │
 │   MCP server (pre-configured, stdio + SSE)      │
 ├─────────────────────────────────────────────────┤
 │ Section 3: MODELS (compressed, optional)        │
-│   ruvLLM engine (GGUF quantized models)          │
+│   swarmLLM engine (GGUF quantized models)          │
 │   OR: encrypted API key vault (.env.enc)        │
 │   OR: hybrid (local small + cloud large)        │
 ├─────────────────────────────────────────────────┤
@@ -110,26 +110,26 @@ Extending RVF to `RVFA` (RuVector Format Appliance) creates a unified format tha
 └─────────────────────────────────────────────────┘
 ```
 
-### 2.2 Model Strategy: ruvLLM + API Key Vault
+### 2.2 Model Strategy: swarmLLM + API Key Vault
 
 Three model configurations, selected at build time:
 
 | Profile | Models Included | Size | Offline | Use Case |
 |---------|----------------|------|---------|----------|
-| `offline` | ruvLLM + Qwen2.5-Coder-3B-Q4 + Phi-3-mini-Q4 | ~4GB | Full | Air-gapped, edge, demos |
-| `hybrid` | ruvLLM + Phi-3-mini-Q4 + API vault | ~2GB | Partial | Local routing + cloud for complex tasks |
+| `offline` | swarmLLM + Qwen2.5-Coder-3B-Q4 + Phi-3-mini-Q4 | ~4GB | Full | Air-gapped, edge, demos |
+| `hybrid` | swarmLLM + Phi-3-mini-Q4 + API vault | ~2GB | Partial | Local routing + cloud for complex tasks |
 | `cloud` | API key vault only (no local models) | ~80MB | No | Minimal size, full cloud |
 
-**ruvLLM** is the local language model inference engine from the [RuVector](https://www.npmjs.com/package/@ruvector/core) ecosystem. It extends the existing @ruvector packages (core, router, sona, attention) with on-device LLM inference:
+**swarmLLM** is the local language model inference engine from the [SwarmVector](https://www.npmjs.com/package/@swarmvector/core) ecosystem. It extends the existing @swarmvector packages (core, router, sona, attention) with on-device LLM inference:
 
 ```
-ruvLLM Architecture (extends @ruvector):
-├── @ruvector/core — vector database, Q-learning router, AST analysis
-├── @ruvector/router — ML-based intelligent task routing (~80% accuracy)
-├── @ruvector/sona — Self-Optimizing Neural Architecture (<0.05ms)
-├── @ruvector/attention — Flash Attention (unverified (no benchmark) speedup)
-├── @ruvector/micro-hnsw-wasm — HNSW vector search (WASM)
-└── ruvLLM (new):
+swarmLLM Architecture (extends @swarmvector):
+├── @swarmvector/core — vector database, Q-learning router, AST analysis
+├── @swarmvector/router — ML-based intelligent task routing (~80% accuracy)
+├── @swarmvector/sona — Self-Optimizing Neural Architecture (<0.05ms)
+├── @swarmvector/attention — Flash Attention (unverified (no benchmark) speedup)
+├── @swarmvector/micro-hnsw-wasm — HNSW vector search (WASM)
+└── swarmLLM (new):
     ├── GGUF model loader (llama.cpp compatible)
     ├── KV-cache with RVF persistence
     ├── Token streaming over stdio/SSE
@@ -140,7 +140,7 @@ ruvLLM Architecture (extends @ruvector):
     └── Fallback to cloud API if local confidence < threshold
 ```
 
-ruvLLM bridges the gap between RuVector's vector intelligence (search, routing, learning) and full language model inference, keeping everything in the same ecosystem.
+swarmLLM bridges the gap between SwarmVector's vector intelligence (search, routing, learning) and full language model inference, keeping everything in the same ecosystem.
 
 **API Key Vault** (for cloud profiles):
 
@@ -155,14 +155,14 @@ ruvLLM bridges the gap between RuVector's vector intelligence (search, routing, 
 ### 2.3 Boot Sequence
 
 ```
-1. rufflo-appliance load rufflo.rvf
+1. swarmdo-appliance load swarmdo.rvf
 2. Verify RVFA magic bytes + footer SHA256
 3. Extract KERNEL section → mount as rootfs
 4. Extract RUNTIME section → /usr/local/bin/
-5. Extract RUFLO section → /opt/rufflo/
+5. Extract SWARMDO section → /opt/swarmdo/
 6. Mount DATA section (read-write overlay)
 7. Load MODELS section:
-   - If ruvLLM: start inference server on unix socket
+   - If swarmLLM: start inference server on unix socket
    - If API vault: decrypt keys, set env vars
    - If hybrid: start local + configure cloud fallback
 8. Run VERIFY section → self-test all capabilities
@@ -174,13 +174,13 @@ ruvLLM bridges the gap between RuVector's vector intelligence (search, routing, 
 
 | Mode | Command | Description |
 |------|---------|-------------|
-| **Run** | `rufflo-appliance run rufflo.rvf` | Boot and enter interactive CLI |
-| **MCP** | `rufflo-appliance mcp rufflo.rvf` | Boot as MCP server (stdio) |
-| **Verify** | `rufflo-appliance verify rufflo.rvf` | Run full capability test suite |
-| **Extract** | `rufflo-appliance extract rufflo.rvf ./out/` | Unpack all sections |
-| **Build** | `rufflo-appliance build --profile offline` | Create new appliance |
-| **Update** | `rufflo-appliance update rufflo.rvf --section RUFLO` | Hot-patch one section |
-| **Inspect** | `rufflo-appliance inspect rufflo.rvf` | Show header + section manifest |
+| **Run** | `swarmdo-appliance run swarmdo.rvf` | Boot and enter interactive CLI |
+| **MCP** | `swarmdo-appliance mcp swarmdo.rvf` | Boot as MCP server (stdio) |
+| **Verify** | `swarmdo-appliance verify swarmdo.rvf` | Run full capability test suite |
+| **Extract** | `swarmdo-appliance extract swarmdo.rvf ./out/` | Unpack all sections |
+| **Build** | `swarmdo-appliance build --profile offline` | Create new appliance |
+| **Update** | `swarmdo-appliance update swarmdo.rvf --section SWARMDO` | Hot-patch one section |
+| **Inspect** | `swarmdo-appliance inspect swarmdo.rvf` | Show header + section manifest |
 
 ### 2.5 Runtime Isolation
 
@@ -195,16 +195,16 @@ The appliance runs in one of three isolation levels:
 Container mode (default):
 ```bash
 # The .rvf file IS the container image
-rufflo-appliance run rufflo.rvf
+swarmdo-appliance run swarmdo.rvf
 # Equivalent to:
-# docker run --rm -it rufflo:self-contained
+# docker run --rm -it swarmdo:self-contained
 ```
 
 ---
 
 ## 3. Capability Verification Suite
 
-The appliance includes a built-in verification suite that tests **every capability** of Rufflo + Rufflo. This runs automatically at boot (`Section 5: VERIFY`) and can be triggered manually.
+The appliance includes a built-in verification suite that tests **every capability** of Swarmdo + Swarmdo. This runs automatically at boot (`Section 5: VERIFY`) and can be triggered manually.
 
 ### 3.1 Test Categories (25 Categories, 80+ Checks)
 
@@ -241,7 +241,7 @@ The appliance includes a built-in verification suite that tests **every capabili
 | # | Category | Checks | What It Proves |
 |---|----------|--------|----------------|
 | 26 | RVF Format | magic bytes, header parse, section integrity | Binary format correctness |
-| 27 | ruvLLM Inference | model load, tokenize, generate, stream | Local LLM works offline |
+| 27 | swarmLLM Inference | model load, tokenize, generate, stream | Local LLM works offline |
 | 28 | API Vault | decrypt, key validation, provider connectivity | Cloud API access |
 | 29 | Boot Integrity | SHA256 verification, section checksums | Tamper detection |
 | 30 | Isolation | namespace check, cgroup limits, filesystem | Security boundaries |
@@ -249,20 +249,20 @@ The appliance includes a built-in verification suite that tests **every capabili
 | 32 | MCP E2E | JSON-RPC init → tool call → response | Protocol compliance |
 | 33 | Persistence | write data → reboot → verify data survives | RVF durability |
 | 34 | Offline Mode | disconnect network → run full workflow | Air-gap capability |
-| 35 | Hot Update | patch RUFLO section → verify new version | Live update |
+| 35 | Hot Update | patch SWARMDO section → verify new version | Live update |
 
 ### 3.3 Test Output Format
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║  Rufflo Appliance v3.5.2 — Full Capability Verification  ║
+║  Swarmdo Appliance v3.5.2 — Full Capability Verification  ║
 ║  Format: RVFA v1 | Profile: offline | Arch: x86_64      ║
-║  Kernel: Alpine 3.23 | Node: 22.22.0 | ruvLLM: 0.1.0    ║
+║  Kernel: Alpine 3.23 | Node: 22.22.0 | swarmLLM: 0.1.0    ║
 ╚══════════════════════════════════════════════════════════╝
 
 ═══ 1. CLI Core ═══
-  ✓ rufflo --version
-  ✓ rufflo --help
+  ✓ swarmdo --version
+  ✓ swarmdo --help
   ✓ version is 3.5.2
 
 ═══ 2. Doctor ═══
@@ -276,7 +276,7 @@ The appliance includes a built-in verification suite that tests **every capabili
   ✓ section SHA256 checksums match
   ✓ footer hash matches computed hash
 
-═══ 27. ruvLLM Inference ═══
+═══ 27. swarmLLM Inference ═══
   ✓ model loaded (Phi-3-mini-Q4, 2.3GB)
   ✓ tokenizer functional (32000 vocab)
   ✓ generation produces valid output
@@ -297,24 +297,24 @@ The appliance includes a built-in verification suite that tests **every capabili
 
 ```bash
 # Build offline appliance (includes local models)
-rufflo-appliance build \
+swarmdo-appliance build \
   --profile offline \
   --arch x86_64 \
   --models "phi-3-mini-q4,qwen2.5-coder-3b-q4" \
-  --output rufflo-offline.rvf
+  --output swarmdo-offline.rvf
 
 # Build cloud appliance (API keys only)
-rufflo-appliance build \
+swarmdo-appliance build \
   --profile cloud \
   --api-keys .env \
-  --output rufflo-cloud.rvf
+  --output swarmdo-cloud.rvf
 
 # Build hybrid appliance
-rufflo-appliance build \
+swarmdo-appliance build \
   --profile hybrid \
   --models "phi-3-mini-q4" \
   --api-keys .env \
-  --output rufflo-hybrid.rvf
+  --output swarmdo-hybrid.rvf
 ```
 
 ### 4.2 Build Stages
@@ -332,14 +332,14 @@ Stage 2: RUNTIME
   ├── Include Claude Code CLI binary
   └── Compress (~30MB → ~12MB)
 
-Stage 3: RUFLO
-  ├── npm pack rufflo@latest --omit=optional
+Stage 3: SWARMDO
+  ├── npm pack swarmdo@latest --omit=optional
   ├── Include all CLI commands + agent defs
   ├── Pre-configure MCP server
   └── Compress (~9MB → ~3MB)
 
 Stage 4: MODELS (profile-dependent)
-  ├── offline: Download GGUF models, build ruvLLM
+  ├── offline: Download GGUF models, build swarmLLM
   ├── hybrid: Download small model + encrypt keys
   └── cloud: Encrypt API keys only
 
@@ -358,14 +358,14 @@ Final: Assemble RVFA
   ├── Write magic + version + header
   ├── Append all sections with offsets
   ├── Compute and append footer SHA256
-  └── Output: rufflo.rvf
+  └── Output: swarmdo.rvf
 ```
 
 ### 4.3 Size Targets
 
 | Profile | Sections | Compressed Size |
 |---------|----------|-----------------|
-| `cloud` | Kernel + Runtime + Rufflo + Data + Verify | ~60MB |
+| `cloud` | Kernel + Runtime + Swarmdo + Data + Verify | ~60MB |
 | `hybrid` | All + Phi-3-mini-Q4 | ~2GB |
 | `offline` | All + Phi-3 + Qwen2.5-Coder-3B | ~4GB |
 
@@ -377,13 +377,13 @@ Final: Assemble RVFA
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│                    rufflo.rvf (RVFA)                           │
+│                    swarmdo.rvf (RVFA)                           │
 │  ┌────────────────────────────────────────────────────────┐  │
 │  │  KERNEL: Alpine Linux 3.23 (~5MB)                      │  │
 │  │  ┌──────────────────────────────────────────────────┐  │  │
 │  │  │  RUNTIME: Node.js 22 + Claude Code CLI           │  │  │
 │  │  │  ┌──────────────────────────────────────────────┐│  │  │
-│  │  │  │  RUFLO v3.5+                                 ││  │  │
+│  │  │  │  SWARMDO v3.5+                                 ││  │  │
 │  │  │  │  ├── 26 CLI commands (140+ subcommands)      ││  │  │
 │  │  │  │  ├── 60+ agent definitions                   ││  │  │
 │  │  │  │  ├── 17 hooks + 12 workers                   ││  │  │
@@ -393,7 +393,7 @@ Final: Assemble RVFA
 │  │  │  └──────────────────────────────────────────────┘│  │  │
 │  │  │  ┌──────────────────────────────────────────────┐│  │  │
 │  │  │  │  MODELS                                      ││  │  │
-│  │  │  │  ├── ruvLLM inference engine                  ││  │  │
+│  │  │  │  ├── swarmLLM inference engine                  ││  │  │
 │  │  │  │  ├── Local: Phi-3 / Qwen2.5-Coder (GGUF)    ││  │  │
 │  │  │  │  └── Cloud: encrypted API key vault          ││  │  │
 │  │  │  └──────────────────────────────────────────────┘│  │  │
@@ -431,7 +431,7 @@ User Task
     │                             │
     ▼                             ▼
 ┌──────────┐              ┌─────────────┐
-│ Tier 1:  │              │ ruvLLM local?│
+│ Tier 1:  │              │ swarmLLM local?│
 │ Agent    │              └──────┬──────┘
 │ Booster  │                Yes  │  No
 │ (WASM)   │                ┌────┴────┐
@@ -495,26 +495,26 @@ Hot Update Flow:
 | Task | Description |
 |------|-------------|
 | Define RVFA binary spec | Magic bytes, header schema, section table |
-| `rufflo-appliance build` | Multi-stage builder with profile selection |
-| `rufflo-appliance inspect` | Header + section manifest viewer |
-| `rufflo-appliance extract` | Unpack all sections to directory |
-| Cloud profile | Kernel + Runtime + Rufflo + encrypted keys |
+| `swarmdo-appliance build` | Multi-stage builder with profile selection |
+| `swarmdo-appliance inspect` | Header + section manifest viewer |
+| `swarmdo-appliance extract` | Unpack all sections to directory |
+| Cloud profile | Kernel + Runtime + Swarmdo + encrypted keys |
 
 ### Phase 2: Runtime + Verification (Week 3-4)
 
 | Task | Description |
 |------|-------------|
-| `rufflo-appliance run` | Boot sequence with container isolation |
-| `rufflo-appliance verify` | 95-check capability suite |
-| `rufflo-appliance mcp` | MCP server mode (stdio + SSE) |
+| `swarmdo-appliance run` | Boot sequence with container isolation |
+| `swarmdo-appliance verify` | 95-check capability suite |
+| `swarmdo-appliance mcp` | MCP server mode (stdio + SSE) |
 | DATA section | Pre-built AgentDB + HNSW + SONA |
 | CI integration | Build appliance on every release |
 
-### Phase 3: ruvLLM Integration (Week 5-8)
+### Phase 3: swarmLLM Integration (Week 5-8)
 
 | Task | Description |
 |------|-------------|
-| ruvLLM engine | GGUF model loader + KV-cache + streaming |
+| swarmLLM engine | GGUF model loader + KV-cache + streaming |
 | Model routing | 3-tier routing (Booster → local → cloud) |
 | Hybrid profile | Small local model + cloud fallback |
 | Offline profile | Full local inference, no network |
@@ -524,7 +524,7 @@ Hot Update Flow:
 
 | Task | Description |
 |------|-------------|
-| `rufflo-appliance update` | Hot-patch individual sections |
+| `swarmdo-appliance update` | Hot-patch individual sections |
 | Ed25519 signing | Code signing for appliance + patches |
 | IPFS distribution | Publish appliances to decentralized storage |
 | MicroVM support | Firecracker/Cloud Hypervisor isolation |
@@ -540,7 +540,7 @@ Hot Update Flow:
 - **Offline-capable**: Full agent orchestration without internet (offline profile)
 - **Reproducible**: Same binary = same behavior everywhere
 - **Secure**: Encrypted keys, signed updates, container isolation
-- **Fast boot**: <5s from cold start (vs 35s for `npx rufflo@latest`)
+- **Fast boot**: <5s from cold start (vs 35s for `npx swarmdo@latest`)
 - **Verifiable**: Built-in 95-check suite proves every capability works
 - **Updatable**: Hot-patch sections without rebuilding entire appliance
 

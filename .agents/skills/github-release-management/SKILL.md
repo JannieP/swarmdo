@@ -1032,8 +1032,8 @@ npx swarmdo@alpha github version-sync \
 - **deployment-orchestration**: Advanced deployment strategies
 
 ### Support & Community
-- Issues: https:/$github.com$ruvnet$swarmdo$issues
-- Discussions: https:/$github.com$ruvnet$swarmdo$discussions
+- Issues: https:/$github.com$upstream$swarmdo$issues
+- Discussions: https:/$github.com$upstream$swarmdo$discussions
 - Documentation: https:/$swarmdo.dev$docs
 
 ---

@@ -21,7 +21,7 @@
 
 ### Problem Statement
 
-Rufflo V3 requires comprehensive quality engineering (QE) capabilities for:
+Swarmdo V3 requires comprehensive quality engineering (QE) capabilities for:
 1. **Automated test generation** across multiple paradigms (unit, integration, E2E, BDD)
 2. **Intelligent coverage analysis** with gap detection and prioritization
 3. **Defect prediction** using ML-based quality intelligence
@@ -30,7 +30,7 @@ Rufflo V3 requires comprehensive quality engineering (QE) capabilities for:
 6. **Chaos engineering** and resilience validation
 7. **Security compliance** automation (SAST, DAST, audit trails)
 
-The current V3 architecture provides agent coordination (`@rufflo/plugins`), memory management (`@rufflo/memory`), and security primitives (`@rufflo/security`), but lacks specialized QE capabilities.
+The current V3 architecture provides agent coordination (`@swarmdo/plugins`), memory management (`@swarmdo/memory`), and security primitives (`@swarmdo/security`), but lacks specialized QE capabilities.
 
 ### Agentic-QE Package Analysis
 
@@ -44,7 +44,7 @@ The `agentic-qe` package (v3.2.3) provides a comprehensive Quality Engineering f
 | **TinyDancer Model Routing** | 3-tier routing (Haiku/Sonnet/Opus) | <5ms routing |
 | **Queen Coordinator** | Hierarchical orchestration with Byzantine tolerance | O(log n) consensus |
 | **O(log n) Coverage** | Johnson-Lindenstrauss projected gap detection | ~4.7x faster |
-| **Browser Automation** | @rufflo/browser integration | Full Playwright |
+| **Browser Automation** | @swarmdo/browser integration | Full Playwright |
 | **MCP Server** | All tools via Model Context Protocol | <100ms response |
 
 ### 12 Bounded Contexts
@@ -67,30 +67,30 @@ agentic-qe/
 
 ### Shared Dependencies
 
-| Dependency | agentic-qe | rufflo V3 | Strategy |
+| Dependency | agentic-qe | swarmdo V3 | Strategy |
 |------------|------------|----------------|----------|
-| `@ruvector/attention` | Core attention | ADR-028 integration | **Reuse** V3 instance |
-| `@ruvector/gnn` | Code graphs | ADR-029 integration | **Reuse** V3 instance |
-| `@ruvector/sona` | Self-learning | ReasoningBank | **Bridge** via adapter |
-| `hnswlib-node` | Vector search | @rufflo/memory | **Share** index |
+| `@swarmvector/attention` | Core attention | ADR-028 integration | **Reuse** V3 instance |
+| `@swarmvector/gnn` | Code graphs | ADR-029 integration | **Reuse** V3 instance |
+| `@swarmvector/sona` | Self-learning | ReasoningBank | **Bridge** via adapter |
+| `hnswlib-node` | Vector search | @swarmdo/memory | **Share** index |
 | `better-sqlite3` | Persistence | sql.js (WASM) | **Separate** DBs |
-| `@xenova/transformers` | Embeddings | @rufflo/embeddings | **Share** model |
+| `@xenova/transformers` | Embeddings | @swarmdo/embeddings | **Share** model |
 
 ---
 
 ## Decision
 
-Integrate `agentic-qe` as a **first-class plugin** for Rufflo V3 using the `@rufflo/plugins` SDK with clear bounded context mapping, shared infrastructure coordination, and security isolation.
+Integrate `agentic-qe` as a **first-class plugin** for Swarmdo V3 using the `@swarmdo/plugins` SDK with clear bounded context mapping, shared infrastructure coordination, and security isolation.
 
 ### Architecture Overview
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│                              Rufflo V3                                      │
+│                              Swarmdo V3                                      │
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                  │
 │   ┌────────────────────────────────────────────────────────────────────────┐    │
-│   │                    @rufflo/plugins Registry                        │    │
+│   │                    @swarmdo/plugins Registry                        │    │
 │   │  ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌─────────────────┐  │    │
 │   │  │   Core     │  │  Security  │  │  Memory    │  │  agentic-qe     │  │    │
 │   │  │  Plugins   │  │  Plugins   │  │  Plugins   │  │  Plugin (NEW)   │  │    │
@@ -103,7 +103,7 @@ Integrate `agentic-qe` as a **first-class plugin** for Rufflo V3 using the `@ruf
 │   ├────────────────────────────────────────────────────────────────────────┤    │
 │   │                                                                          │    │
 │   │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────────────┐ │    │
-│   │  │  Memory Service  │  │  RuVector Layer │  │  MCP Server             │ │    │
+│   │  │  Memory Service  │  │  SwarmVector Layer │  │  MCP Server             │ │    │
 │   │  │  (AgentDB/HNSW) │  │  (Attention/GNN)│  │  (Tool Registry)        │ │    │
 │   │  └─────────────────┘  └─────────────────┘  └─────────────────────────┘ │    │
 │   │                                                                          │    │
@@ -164,7 +164,7 @@ Integrate `agentic-qe` as a **first-class plugin** for Rufflo V3 using the `@ruf
 ```typescript
 // v3/plugins/agentic-qe/src/index.ts
 
-import { PluginBuilder, HookEvent, HookPriority } from '@rufflo/plugins';
+import { PluginBuilder, HookEvent, HookPriority } from '@swarmdo/plugins';
 import { AgenticQEBridge } from './infrastructure/agentic-qe-bridge';
 import { ContextMapper } from './infrastructure/context-mapper';
 import { SecuritySandbox } from './infrastructure/security-sandbox';
@@ -174,12 +174,12 @@ import { workers } from './workers';
 
 export const agenticQEPlugin = new PluginBuilder('agentic-qe', '3.2.3')
   .withDescription('Quality Engineering plugin with 51 specialized agents across 12 DDD bounded contexts')
-  .withAuthor('rUv')
+  .withAuthor('the upstream author')
   .withLicense('MIT')
   .withDependencies([
-    '@rufflo/memory',
-    '@rufflo/security',
-    '@rufflo/embeddings'
+    '@swarmdo/memory',
+    '@swarmdo/security',
+    '@swarmdo/embeddings'
   ])
   .withCapabilities([
     'test-generation',
@@ -429,9 +429,9 @@ export class ContextMapper {
 ```typescript
 // v3/plugins/agentic-qe/src/infrastructure/agentic-qe-bridge.ts
 
-import type { IMemoryService } from '@rufflo/memory';
-import type { SecurityModule } from '@rufflo/security';
-import type { EmbeddingsService } from '@rufflo/embeddings';
+import type { IMemoryService } from '@swarmdo/memory';
+import type { SecurityModule } from '@swarmdo/security';
+import type { EmbeddingsService } from '@swarmdo/embeddings';
 
 export interface AgenticQEBridgeConfig {
   memory: IMemoryService;
@@ -636,7 +636,7 @@ export class AgenticQEBridge {
 ```typescript
 // v3/plugins/agentic-qe/src/mcp-tools/index.ts
 
-import type { MCPTool } from '@rufflo/plugins';
+import type { MCPTool } from '@swarmdo/plugins';
 
 export const mcpTools: MCPTool[] = [
   // Test Generation Tools
@@ -1063,7 +1063,7 @@ export const mcpTools: MCPTool[] = [
 ```typescript
 // v3/plugins/agentic-qe/src/infrastructure/model-routing-adapter.ts
 
-import type { EnhancedModelRouter, EnhancedRouteResult } from '@rufflo/cli/ruvector';
+import type { EnhancedModelRouter, EnhancedRouteResult } from '@swarmdo/cli/swarmvector';
 
 /**
  * Adapter to align TinyDancer model routing with ADR-026 Agent Booster routing
@@ -1162,10 +1162,10 @@ interface ModelRouteResult extends EnhancedRouteResult {
 ```typescript
 // v3/plugins/agentic-qe/src/infrastructure/queen-hive-bridge.ts
 
-import type { HiveMindService } from '@rufflo/coordination';
+import type { HiveMindService } from '@swarmdo/coordination';
 
 /**
- * Bridge between agentic-qe Queen Coordinator and rufflo Hive Mind
+ * Bridge between agentic-qe Queen Coordinator and swarmdo Hive Mind
  */
 export class QueenHiveBridge {
   private hiveMind: HiveMindService;
@@ -1298,7 +1298,7 @@ interface QESwarmResult {
 ```typescript
 // v3/plugins/agentic-qe/src/infrastructure/security-sandbox.ts
 
-import type { SecurityModule } from '@rufflo/security';
+import type { SecurityModule } from '@swarmdo/security';
 
 export interface SandboxConfig {
   maxExecutionTime: number;  // ms
@@ -1439,7 +1439,7 @@ interface ExecutionPolicy {
 ### Positive
 
 1. **Comprehensive QE Capabilities**: 51 specialized agents across 12 bounded contexts
-2. **Shared Infrastructure**: Reuses HNSW, AgentDB, RuVector investments
+2. **Shared Infrastructure**: Reuses HNSW, AgentDB, SwarmVector investments
 3. **Cost Optimization**: TinyDancer routing aligned with ADR-026 saves 75%+ on API costs
 4. **Security Isolation**: Sandbox execution prevents test code from affecting system
 5. **Learning Integration**: ReasoningBank patterns shared with V3 intelligence layer
@@ -1721,7 +1721,7 @@ v3/plugins/agentic-qe/
 | Create constants | `src/constants.ts` | 🟡 High | types.ts |
 
 **Deliverables:**
-- Plugin registers with `@rufflo/plugins` SDK
+- Plugin registers with `@swarmdo/plugins` SDK
 - Type-safe configuration validation
 - Basic lifecycle hooks (onLoad, onUnload)
 
@@ -1847,14 +1847,14 @@ v3/plugins/agentic-qe/
 
 ```json
 {
-  "name": "@rufflo/plugin-agentic-qe",
+  "name": "@swarmdo/plugin-agentic-qe",
   "version": "3.0.0-alpha.1",
   "dependencies": {
     "agentic-qe": "^3.2.3",
-    "@rufflo/plugins": "^3.0.0",
-    "@rufflo/memory": "^3.0.0",
-    "@rufflo/security": "^3.0.0",
-    "@rufflo/embeddings": "^3.0.0",
+    "@swarmdo/plugins": "^3.0.0",
+    "@swarmdo/memory": "^3.0.0",
+    "@swarmdo/security": "^3.0.0",
+    "@swarmdo/embeddings": "^3.0.0",
     "zod": "^3.23.0"
   },
   "devDependencies": {
@@ -1863,7 +1863,7 @@ v3/plugins/agentic-qe/
     "@types/node": "^20.0.0"
   },
   "peerDependencies": {
-    "@rufflo/browser": ">=3.0.0"
+    "@swarmdo/browser": ">=3.0.0"
   }
 }
 ```
@@ -1874,7 +1874,7 @@ v3/plugins/agentic-qe/
 
 - [ADR-015: Unified Plugin System](./ADR-015-unified-plugin-system.md)
 - [ADR-026: Agent Booster Model Routing](./ADR-026-agent-booster-model-routing.md)
-- [ADR-017: RuVector Integration](./ADR-017-ruvector-integration.md)
+- [ADR-017: SwarmVector Integration](./ADR-017-swarmvector-integration.md)
 - [ADR-006: Unified Memory Service](./ADR-006-UNIFIED-MEMORY.md)
 - [ADR-013: Core Security Module](./ADR-013-core-security-module.md)
 - [ADR-022: AIDEFENCE Integration](./ADR-022-aidefence-integration.md)

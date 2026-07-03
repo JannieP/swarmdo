@@ -25,7 +25,7 @@ V3 represents a major architectural overhaul with significant improvements acros
 | MCP Tools | 119 | ✅ Complete |
 | Hooks Subcommands | 20 | ✅ Complete |
 | Hook MCP Tools | 60+ | ✅ Complete |
-| @rufflo Packages | 16 | ✅ Complete |
+| @swarmdo Packages | 16 | ✅ Complete |
 | Total TS Files | 419 | Active |
 
 ---
@@ -36,11 +36,11 @@ V3 represents a major architectural overhaul with significant improvements acros
 
 | Feature | V2 Location | V3 Location |
 |---------|-------------|-------------|
-| UnifiedSwarmCoordinator | `v2/src/swarm/coordinator.ts` | `v3/@rufflo/swarm/src/unified-coordinator.ts` |
-| Topology Manager | `v2/src/core/TopologyManager.ts` | `v3/@rufflo/swarm/src/topology-manager.ts` |
-| Agent Base Class | `v2/src/hive-mind/core/Agent.ts` | `v3/@rufflo/swarm/src/domain/entities/` |
-| Event-based Communication | `v2/src/hive-mind/core/Communication.ts` | `v3/@rufflo/shared/src/events/` |
-| Consensus Engine | `v2/src/hive-mind/integration/ConsensusEngine.ts` | `v3/@rufflo/swarm/src/consensus/` |
+| UnifiedSwarmCoordinator | `v2/src/swarm/coordinator.ts` | `v3/@swarmdo/swarm/src/unified-coordinator.ts` |
+| Topology Manager | `v2/src/core/TopologyManager.ts` | `v3/@swarmdo/swarm/src/topology-manager.ts` |
+| Agent Base Class | `v2/src/hive-mind/core/Agent.ts` | `v3/@swarmdo/swarm/src/domain/entities/` |
+| Event-based Communication | `v2/src/hive-mind/core/Communication.ts` | `v3/@swarmdo/shared/src/events/` |
+| Consensus Engine | `v2/src/hive-mind/integration/ConsensusEngine.ts` | `v3/@swarmdo/swarm/src/consensus/` |
 
 ### Missing in V3 ❌
 
@@ -48,7 +48,7 @@ V3 represents a major architectural overhaul with significant improvements acros
 |---------|-------------|----------|----------------|
 | **Queen Coordinator** | `v2/src/hive-mind/core/Queen.ts` | HIGH | Implement as specialized agent in swarm module |
 | **HiveMind Core** | `v2/src/hive-mind/core/HiveMind.ts` | HIGH | Integrate into UnifiedSwarmCoordinator |
-| **Collective Memory** | `v2/src/hive-mind/core/Memory.ts` | MEDIUM | Already have better implementation in @rufflo/memory |
+| **Collective Memory** | `v2/src/hive-mind/core/Memory.ts` | MEDIUM | Already have better implementation in @swarmdo/memory |
 | **SwarmOrchestrator** | `v2/src/hive-mind/integration/SwarmOrchestrator.ts` | MEDIUM | Merge into UnifiedSwarmCoordinator |
 | **Hive Agent Types** | `v2/src/cli/agents/hive-agents.ts` | MEDIUM | Add QueenAgent, WorkerAgent, ScoutAgent, GuardianAgent |
 | **Maestro Integration** | `v2/src/maestro/maestro-swarm-coordinator.ts` | LOW | Specs-driven workflow support |
@@ -96,11 +96,11 @@ V3 represents a major architectural overhaul with significant improvements acros
 | **Monitoring** | metrics, list | Performance tracking |
 | **Intelligence** | intelligence (7 sub-ops) | ReasoningBank integration |
 | **Workers** | worker (list, dispatch, status, detect, cancel) | 12 background workers |
-| **Coverage** | coverage-route, coverage-suggest, coverage-gaps | RuVector integration |
+| **Coverage** | coverage-route, coverage-suggest, coverage-gaps | SwarmVector integration |
 
 #### MCP Hook Tools (60+)
 
-All hooks exposed as MCP tools in `@rufflo/cli/src/mcp-tools/hooks-tools.ts`:
+All hooks exposed as MCP tools in `@swarmdo/cli/src/mcp-tools/hooks-tools.ts`:
 - Core hooks: pre-edit, post-edit, pre-command, post-command, pre-task, post-task
 - Session hooks: session-start, session-end, session-restore, notify
 - Intelligence hooks: route, explain, pretrain, build-agents, transfer, metrics, list, init
@@ -152,7 +152,7 @@ All hooks exposed as MCP tools in `@rufflo/cli/src/mcp-tools/hooks-tools.ts`:
 ### MCP Tools Architecture
 
 - **119 MCP tools** across 12 tool files
-- All tools in `@rufflo/cli/src/mcp-tools/`
+- All tools in `@swarmdo/cli/src/mcp-tools/`
 - JSON Schema validation for all inputs
 - Consistent response format with success/error handling
 
@@ -206,7 +206,7 @@ All hooks exposed as MCP tools in `@rufflo/cli/src/mcp-tools/hooks-tools.ts`:
 ### CLI Architecture
 
 - **28 commands** with **140+ subcommands**
-- All commands exported from `@rufflo/cli/src/commands/index.ts`
+- All commands exported from `@swarmdo/cli/src/commands/index.ts`
 - Consistent Command interface with options, examples, and action handlers
 - Smart error suggestions via Levenshtein distance
 
@@ -300,7 +300,7 @@ The following packages could benefit from adding domain/application layers (curr
 | Neural System | ✅ 100% | SONA, ReasoningBank, RL |
 | Hive-Mind | ✅ 100% | Full consensus + coordination |
 | DDD Architecture | ✅ 100% | 16 packages (5 with full layers) |
-| RuVector Integration | ✅ 100% | Q-Learning, AST, Diff, Coverage |
+| SwarmVector Integration | ✅ 100% | Q-Learning, AST, Diff, Coverage |
 
 **Remaining 3%:**
 - Optional DDD layer refinement for utility packages

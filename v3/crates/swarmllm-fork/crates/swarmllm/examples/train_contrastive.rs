@@ -11,7 +11,7 @@
     unused_must_use,
     unused_parens
 )]
-//! # Contrastive Fine-Tuning for RuvLTRA
+//! # Contrastive Fine-Tuning for SwarmLTRA
 //!
 //! This example trains a contrastive embedding model for agent routing.
 //!
@@ -19,9 +19,9 @@
 //!
 //! ```bash
 //! cargo run --example train_contrastive --release -- \
-//!   --triplets ~/.swarmllm/training/ruvltra-finetuned/triplets.jsonl \
+//!   --triplets ~/.swarmllm/training/swarmltra-finetuned/triplets.jsonl \
 //!   --epochs 20 \
-//!   --output ruvltra-claude-code-finetuned.gguf
+//!   --output swarmltra-claude-code-finetuned.gguf
 //! ```
 
 use std::path::PathBuf;
@@ -32,7 +32,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         "╔═══════════════════════════════════════════════════════════════════════════════════╗"
     );
     println!(
-        "║           RuvLTRA Contrastive Fine-Tuning for SOTA Agent Routing                  ║"
+        "║           SwarmLTRA Contrastive Fine-Tuning for SOTA Agent Routing                  ║"
     );
     println!(
         "╚═══════════════════════════════════════════════════════════════════════════════════╝\n"
@@ -43,10 +43,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut triplets_path =
         PathBuf::from(std::env::var("HOME").unwrap_or_else(|_| ".".to_string()))
-            .join(".swarmllm/training/ruvltra-finetuned/triplets.jsonl");
+            .join(".swarmllm/training/swarmltra-finetuned/triplets.jsonl");
 
     let mut epochs = 20usize;
-    let mut output_path = PathBuf::from("ruvltra-claude-code-sota.gguf");
+    let mut output_path = PathBuf::from("swarmltra-claude-code-sota.gguf");
     let mut learning_rate = 2e-5;
     let mut batch_size = 32usize;
 
@@ -87,9 +87,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("Usage: train_contrastive [OPTIONS]");
                 println!();
                 println!("Options:");
-                println!("  -t, --triplets <PATH>  Path to triplets.jsonl (default: ~/.swarmllm/training/ruvltra-finetuned/triplets.jsonl)");
+                println!("  -t, --triplets <PATH>  Path to triplets.jsonl (default: ~/.swarmllm/training/swarmltra-finetuned/triplets.jsonl)");
                 println!("  -e, --epochs <NUM>     Number of training epochs (default: 20)");
-                println!("  -o, --output <PATH>    Output model path (default: ruvltra-claude-code-sota.gguf)");
+                println!("  -o, --output <PATH>    Output model path (default: swarmltra-claude-code-sota.gguf)");
                 println!("  --lr <RATE>            Learning rate (default: 2e-5)");
                 println!("  -b, --batch-size <N>   Batch size (default: 32)");
                 println!("  -h, --help             Show this help message");
@@ -246,7 +246,7 @@ impl Default for ContrastiveConfig {
         Self {
             learning_rate: 2e-5,
             batch_size: 32,
-            output_path: PathBuf::from("ruvltra-sota.gguf"),
+            output_path: PathBuf::from("swarmltra-sota.gguf"),
             epochs: 20,
         }
     }

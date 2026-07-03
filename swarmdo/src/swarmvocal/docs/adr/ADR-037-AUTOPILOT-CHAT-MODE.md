@@ -1,4 +1,4 @@
-# ADR-037: Autopilot Mode with Parallel Task UI, Web Workers & RuVector WASM
+# ADR-037: Autopilot Mode with Parallel Task UI, Web Workers & SwarmVector WASM
 
 **Status:** Accepted
 **Date:** 2026-03-05
@@ -34,9 +34,9 @@ When the AI spawns multiple agents or runs concurrent tool calls, the UI shows t
 
 ### Problem 3: No In-Browser Agent Intelligence
 
-All agent coordination runs server-side. The browser is a dumb terminal. With RuVector WASM compiled to WebAssembly, agent routing, memory search, pattern matching, and swarm topology can run directly in the browser — reducing latency, enabling offline capabilities, and offloading the server.
+All agent coordination runs server-side. The browser is a dumb terminal. With SwarmVector WASM compiled to WebAssembly, agent routing, memory search, pattern matching, and swarm topology can run directly in the browser — reducing latency, enabling offline capabilities, and offloading the server.
 
-**agentic-flow@latest** provides the backend autopilot capability. **RuVector WASM** provides in-browser intelligence. **Web Workers** provide non-blocking parallel execution. This ADR combines all three.
+**agentic-flow@latest** provides the backend autopilot capability. **SwarmVector WASM** provides in-browser intelligence. **Web Workers** provide non-blocking parallel execution. This ADR combines all three.
 
 ## Decision
 
@@ -44,7 +44,7 @@ Add three integrated capabilities to HF Chat UI:
 
 1. **Autopilot Mode** — auto-continue toggle (server-side loop in MCP bridge)
 2. **Parallel Task UI** — Claude Code-style collapsible task cards with lazy rendering
-3. **WASM Agent Runtime** — RuVector WASM + Web Workers for in-browser agent coordination
+3. **WASM Agent Runtime** — SwarmVector WASM + Web Workers for in-browser agent coordination
 
 ---
 
@@ -605,7 +605,7 @@ All autopilot processing runs in Web Workers to keep the main thread responsive:
 │  │    updates          │     │                                     │ │
 │  │  - Final renders    │     │  ┌─────────────────────────────┐   │ │
 │  │                     │     │  │  WasmAgentWorker             │   │ │
-│  │  Never blocks on:   │     │  │  • RuVector WASM runtime    │   │ │
+│  │  Never blocks on:   │     │  │  • SwarmVector WASM runtime    │   │ │
 │  │  - SSE parsing      │     │  │  • Agent routing decisions  │   │ │
 │  │  - JSON processing  │     │  │  • Memory/pattern search    │   │ │
 │  │  - WASM execution   │     │  │  • Swarm topology mgmt     │   │ │
@@ -826,13 +826,13 @@ self.onmessage = async (e: MessageEvent) => {
 
 ---
 
-## Part 4: RuVector WASM In-Browser Agent Runtime
+## Part 4: SwarmVector WASM In-Browser Agent Runtime
 
 ### Why WASM in the Browser?
 
-Currently, all intelligence runs server-side: the MCP bridge calls ruvector/rufflo via stdio, gets results, sends them back. This adds latency and server load for operations that could run client-side.
+Currently, all intelligence runs server-side: the MCP bridge calls swarmvector/swarmdo via stdio, gets results, sends them back. This adds latency and server load for operations that could run client-side.
 
-RuVector's core capabilities — vector search, pattern matching, agent routing, HNSW indexing — are written in Rust and compile to WASM. Running them in-browser enables:
+SwarmVector's core capabilities — vector search, pattern matching, agent routing, HNSW indexing — are written in Rust and compile to WASM. Running them in-browser enables:
 
 | Capability | Server-Side | WASM In-Browser |
 |------------|-------------|-----------------|
@@ -853,7 +853,7 @@ RuVector's core capabilities — vector search, pattern matching, agent routing,
 │  │                     WasmAgentWorker                               │   │
 │  │                                                                   │   │
 │  │  ┌─────────────────────────────────────────────────────────┐     │   │
-│  │  │  @ruvector/wasm (compiled from ruvector Rust crate)      │     │   │
+│  │  │  @swarmvector/wasm (compiled from swarmvector Rust crate)      │     │   │
 │  │  │                                                          │     │   │
 │  │  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │     │   │
 │  │  │  │  HNSW Index   │  │  Agent Router │  │  Pattern DB  │  │     │   │
@@ -890,7 +890,7 @@ RuVector's core capabilities — vector search, pattern matching, agent routing,
 ### WASM Module Loading
 
 ```typescript
-// src/lib/wasm/ruvector-wasm.ts
+// src/lib/wasm/swarmvector-wasm.ts
 
 let wasmInstance: any = null;
 let wasmReady = false;
@@ -899,7 +899,7 @@ export async function initWasm(): Promise<void> {
   if (wasmReady) return;
 
   // Load WASM module (~800KB gzipped, cached by browser)
-  const module = await import('@ruvector/wasm');
+  const module = await import('@swarmvector/wasm');
   await module.default(); // initialize WASM memory
   wasmInstance = module;
   wasmReady = true;
@@ -967,12 +967,12 @@ interface CostEstimate {
 
 ### WasmAgentWorker
 
-Runs RuVector WASM in a dedicated Web Worker:
+Runs SwarmVector WASM in a dedicated Web Worker:
 
 ```typescript
 // src/lib/workers/wasm-agent.worker.ts
 
-import { initWasm, routeTask, searchPatterns, createSwarm, rebalanceSwarm, estimateCost, countTokens } from '../wasm/ruvector-wasm';
+import { initWasm, routeTask, searchPatterns, createSwarm, rebalanceSwarm, estimateCost, countTokens } from '../wasm/swarmvector-wasm';
 
 let initialized = false;
 
@@ -1104,11 +1104,11 @@ WASM HNSW index caches recent patterns in IndexedDB. When offline or slow networ
 ### Package Structure
 
 ```
-@ruvector/wasm                         (npm, prebuilt WASM)
+@swarmvector/wasm                         (npm, prebuilt WASM)
 ├── pkg/
-│   ├── ruvector_wasm_bg.wasm          (~800KB gzipped)
-│   ├── ruvector_wasm.js               (JS bindings)
-│   └── ruvector_wasm.d.ts             (TypeScript types)
+│   ├── swarmvector_wasm_bg.wasm          (~800KB gzipped)
+│   ├── swarmvector_wasm.js               (JS bindings)
+│   └── swarmvector_wasm.d.ts             (TypeScript types)
 ├── src/
 │   ├── lib.rs                         (Rust source)
 │   ├── hnsw.rs                        (HNSW index)
@@ -1130,10 +1130,10 @@ chat-ui-mcp/chat-ui/
 │   │   └── AgentPreview.svelte        (pre-execution routing preview)
 │   ├── workers/
 │   │   ├── autopilot.worker.ts        (SSE stream processing)
-│   │   ├── wasm-agent.worker.ts       (RuVector WASM runtime)
+│   │   ├── wasm-agent.worker.ts       (SwarmVector WASM runtime)
 │   │   └── detail-fetch.worker.ts     (lazy detail loading + LRU cache)
 │   ├── wasm/
-│   │   └── ruvector-wasm.ts           (WASM module loader + API)
+│   │   └── swarmvector-wasm.ts           (WASM module loader + API)
 │   └── stores/
 │       ├── autopilot.ts               (autopilot state store)
 │       ├── tasks.ts                   (task/group state store)
@@ -1381,7 +1381,7 @@ Parallel execution patterns:
 | **Cost guard** | Disabled | `AUTOPILOT_MAX_COST` env | Stop if cost exceeds threshold |
 | **Token limit** | None | `AUTOPILOT_MAX_TOKENS` env | Stop if total tokens exceed limit |
 | **Detail TTL** | 5 min | `AUTOPILOT_DETAIL_TTL` env | How long full results are kept |
-| **WASM memory** | 64MB | `RUVECTOR_WASM_MEMORY` | Max WASM heap size |
+| **WASM memory** | 64MB | `SWARMVECTOR_WASM_MEMORY` | Max WASM heap size |
 | **Detail cache** | 20 items | Hardcoded | LRU cache size in DetailFetchWorker |
 
 ---
@@ -1445,8 +1445,8 @@ User: "Monitor all our Cloud Run services"
 | **Chat UI** | `AutopilotToggle`, `TaskCard`, `TaskGroup`, `VirtualTaskList`, `SwarmTopology`, `CostTracker`, `AgentPreview` components |
 | **Chat UI** | 3 Web Workers: `autopilot.worker.ts`, `wasm-agent.worker.ts`, `detail-fetch.worker.ts` |
 | **Chat UI** | WASM module loader + Svelte stores for state management |
-| **Docker** | `AUTOPILOT_*` env vars, `@ruvector/wasm` dependency |
-| **npm** | New `@ruvector/wasm` package (prebuilt WASM, ~800KB gzipped) |
+| **Docker** | `AUTOPILOT_*` env vars, `@swarmvector/wasm` dependency |
+| **npm** | New `@swarmvector/wasm` package (prebuilt WASM, ~800KB gzipped) |
 
 ## What Stays the Same
 
@@ -1496,5 +1496,5 @@ User: "Monitor all our Cloud Run services"
 - [ADR-002: WASM Core Package](ADR-002-WASM-CORE-PACKAGE.md) — WASM architecture
 - [ADR-036: Servo Browser MCP](ADR-036-SERVO-RUST-BROWSER-MCP.md) — Rust/WASM browser engine
 - [agentic-flow](https://www.npmjs.com/package/agentic-flow) — autonomous agent backend
-- [ruvector](https://www.npmjs.com/package/ruvector) — WASM-compiled intelligence runtime
+- [swarmvector](https://www.npmjs.com/package/swarmvector) — WASM-compiled intelligence runtime
 - Claude Code — UX inspiration for parallel tool cards and bypass mode

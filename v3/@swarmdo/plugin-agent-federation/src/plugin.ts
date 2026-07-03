@@ -31,7 +31,7 @@ import { type FederationMessageType } from './domain/entities/federation-envelop
 
 // ADR-104: real wire transport via agentic-flow loader pattern.
 // ADR-120: midstream-aware loader wraps the agentic-flow loader so
-// when `midstreamer` (ruvnet/midstream) ships its production QUIC
+// when `midstreamer` (upstream/midstream) ships its production QUIC
 // build (Step 1 of ADR-120) and operators opt in with
 // MIDSTREAMER_QUIC_NATIVE=1, the federation transport auto-upgrades.
 // Until then, the wrapper transparently defers to the agentic-flow

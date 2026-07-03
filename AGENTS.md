@@ -628,7 +628,7 @@ enabled = true
 
 ## 📚 SUPPORT
 
-- Docs: https://github.com/ruvnet/claude-flow
-- Issues: https://github.com/ruvnet/claude-flow/issues
+- Docs: the upstream project (see NOTICE)
+- Issues: the upstream project (see NOTICE)
 
 **Remember: Codex executes, swarmdo orchestrates!**

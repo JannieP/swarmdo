@@ -39,7 +39,7 @@
  *   node scripts/benchmark-intelligence.mjs --queries 50 --dims 384
  *   node scripts/benchmark-intelligence.mjs --json-only
  *
- * Created for the swarmdo intelligence stack. Co-Authored-By: Swarmdo <ruv@ruv.net>
+ * Created for the swarmdo intelligence stack. Co-Authored-By: Swarmdo <maintainers@swarmdo.com>
  */
 
 import { fileURLToPath } from 'node:url';

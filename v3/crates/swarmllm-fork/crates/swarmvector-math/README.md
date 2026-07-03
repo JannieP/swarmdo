@@ -1,14 +1,14 @@
-# ruvector-math
+# swarmvector-math
 
 Advanced Mathematics for Next-Generation Vector Search
 
-[![Crates.io](https://img.shields.io/crates/v/ruvector-math.svg)](https://crates.io/crates/ruvector-math)
-[![Documentation](https://docs.rs/ruvector-math/badge.svg)](https://docs.rs/ruvector-math)
+[![Crates.io](https://img.shields.io/crates/v/swarmvector-math.svg)](https://crates.io/crates/swarmvector-math)
+[![Documentation](https://docs.rs/swarmvector-math/badge.svg)](https://docs.rs/swarmvector-math)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## What is ruvector-math?
+## What is swarmvector-math?
 
-**ruvector-math** brings advanced mathematical tools to vector search and AI systems. Think of it as a Swiss Army knife for working with high-dimensional data, embeddings, and neural networks.
+**swarmvector-math** brings advanced mathematical tools to vector search and AI systems. Think of it as a Swiss Army knife for working with high-dimensional data, embeddings, and neural networks.
 
 ### The Core Idea: Mincut as the Governance Signal
 
@@ -66,7 +66,7 @@ This "governance dial" lets AI systems automatically adjust their behavior based
 
 ## Overview
 
-`ruvector-math` provides production-grade implementations of advanced mathematical algorithms that differentiate SwarmVector from traditional vector databases:
+`swarmvector-math` provides production-grade implementations of advanced mathematical algorithms that differentiate SwarmVector from traditional vector databases:
 
 | Algorithm | Purpose | Speedup | Use Case |
 |-----------|---------|---------|----------|
@@ -85,19 +85,19 @@ This "governance dial" lets AI systems automatically adjust their behavior based
 - **SIMD-Ready**: Hot paths optimized for auto-vectorization
 - **Numerically Stable**: Log-domain arithmetic, clamping, and stable softmax
 - **Modular**: Each component usable independently
-- **WebAssembly**: Full browser support via `ruvector-math-wasm`
+- **WebAssembly**: Full browser support via `swarmvector-math-wasm`
 
 ## Installation
 
 ```toml
 [dependencies]
-ruvector-math = "0.1"
+swarmvector-math = "0.1"
 ```
 
 For WASM:
 ```toml
 [dependencies]
-ruvector-math-wasm = "0.1"
+swarmvector-math-wasm = "0.1"
 ```
 
 ## Quick Start
@@ -105,7 +105,7 @@ ruvector-math-wasm = "0.1"
 ### Optimal Transport
 
 ```rust
-use ruvector_math::optimal_transport::{SlicedWasserstein, SinkhornSolver, OptimalTransport};
+use swarmvector_math::optimal_transport::{SlicedWasserstein, SinkhornSolver, OptimalTransport};
 
 // Sliced Wasserstein: Fast distribution comparison
 let sw = SlicedWasserstein::new(100) // 100 random projections
@@ -129,7 +129,7 @@ println!("Converged in {} iterations", result.iterations);
 ### Information Geometry
 
 ```rust
-use ruvector_math::information_geometry::{FisherInformation, NaturalGradient};
+use swarmvector_math::information_geometry::{FisherInformation, NaturalGradient};
 
 // Compute Fisher Information Matrix from gradient samples
 let fisher = FisherInformation::new().with_damping(1e-4);
@@ -146,7 +146,7 @@ let update = optimizer.step(&gradient, Some(&gradient_samples))?;
 ### Product Manifolds
 
 ```rust
-use ruvector_math::product_manifold::{ProductManifold, ProductManifoldConfig};
+use swarmvector_math::product_manifold::{ProductManifold, ProductManifoldConfig};
 
 // Create E^64 × H^16 × S^8 product manifold
 let manifold = ProductManifold::new(64, 16, 8);
@@ -167,7 +167,7 @@ let neighbors = manifold.knn(&query, &database, 10)?;
 ### Spherical Geometry
 
 ```rust
-use ruvector_math::spherical::SphericalSpace;
+use swarmvector_math::spherical::SphericalSpace;
 
 // Create S^{127} (128-dimensional unit sphere)
 let sphere = SphericalSpace::new(128);
@@ -288,7 +288,7 @@ d(x, y)² = w_e·d_E(x_e, y_e)² + w_h·d_H(x_h, y_h)² + w_s·d_S(x_s, y_s)²
 import {
   WasmSlicedWasserstein,
   WasmProductManifold
-} from 'ruvector-math-wasm';
+} from 'swarmvector-math-wasm';
 
 // Sliced Wasserstein in browser
 const sw = new WasmSlicedWasserstein(100);
@@ -305,7 +305,7 @@ const dist = manifold.distance(pointA, pointB);
 Run benchmarks:
 
 ```bash
-cargo bench -p ruvector-math
+cargo bench -p swarmvector-math
 ```
 
 ### Sample Results (M1 MacBook Pro)

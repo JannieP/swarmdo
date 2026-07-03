@@ -56,6 +56,6 @@ declare class ModelCache {
 export declare const modelCache: ModelCache;
 export declare function getCachedOnnxEmbedder(): Promise<any>;
 export declare function getCachedTransformersPipeline(task?: string, model?: string): Promise<any>;
-export declare function getCachedRuvectorCore(): Promise<any>;
+export declare function getCachedSwarmvectorCore(): Promise<any>;
 export {};
 //# sourceMappingURL=model-cache.d.ts.map

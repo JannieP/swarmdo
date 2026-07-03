@@ -238,8 +238,8 @@ This is an automated update from the swarm coordinator.`;
 // Example usage with gh CLI - commented out to avoid no-unused-vars warning
 // async function example() {
 //   const coordinator = new GHCoordinator({
-//     owner: 'ruvnet',
-//     repo: 'ruv-FANN',
+//     owner: 'upstream',
+//     repo: 'the upstream repo',
 //   });
 //
 //   // Get available tasks

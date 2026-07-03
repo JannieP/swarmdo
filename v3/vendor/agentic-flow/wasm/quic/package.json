@@ -8,7 +8,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ruvnet/agentic-flow"
+    "url": "the upstream project (see NOTICE)"
   },
   "files": [
     "agentic_flow_quic_bg.wasm",

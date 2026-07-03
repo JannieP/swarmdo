@@ -1,5 +1,5 @@
 /**
- * Tests for PluginIntegrityVerifier (ADR-145 P1, ruvnet/swarmdo#2254).
+ * Tests for PluginIntegrityVerifier (ADR-145 P1, upstream/swarmdo#2254).
  *
  * Covers:
  *  - canonicalize is deterministic (key order doesn't change the digest)

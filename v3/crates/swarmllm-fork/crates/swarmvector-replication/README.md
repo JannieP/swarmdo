@@ -1,19 +1,19 @@
-# ruvector-replication
+# swarmvector-replication
 
-[![Crates.io](https://img.shields.io/crates/v/ruvector-replication.svg)](https://crates.io/crates/ruvector-replication)
-[![docs.rs](https://docs.rs/ruvector-replication/badge.svg)](https://docs.rs/ruvector-replication)
+[![Crates.io](https://img.shields.io/crates/v/swarmvector-replication.svg)](https://crates.io/crates/swarmvector-replication)
+[![docs.rs](https://docs.rs/swarmvector-replication/badge.svg)](https://docs.rs/swarmvector-replication)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Rust](https://img.shields.io/badge/rust-1.77%2B-orange.svg)](https://www.rust-lang.org)
 
 **Multi-master vector replication with quorum writes, vector clocks, and automatic conflict resolution.**
 
 ```toml
-ruvector-replication = "0.1.1"
+swarmvector-replication = "0.1.1"
 ```
 
-When your vector database runs on more than one node, you need a way to keep data in sync without losing writes or slowing down queries. ruvector-replication handles that: it replicates vectors across nodes, resolves conflicts automatically, and lets you trade off consistency versus speed per-write. It plugs into the [SwarmVector](https://github.com/ruvnet/ruvector) ecosystem alongside Raft consensus and auto-sharding.
+When your vector database runs on more than one node, you need a way to keep data in sync without losing writes or slowing down queries. swarmvector-replication handles that: it replicates vectors across nodes, resolves conflicts automatically, and lets you trade off consistency versus speed per-write. It plugs into the [SwarmVector](the upstream project (see NOTICE)) ecosystem alongside Raft consensus and auto-sharding.
 
-| | Single-node vector DB | ruvector-replication |
+| | Single-node vector DB | swarmvector-replication |
 |---|---|---|
 | **Availability** | One node goes down, everything stops | Replicas serve reads and accept writes |
 | **Write scaling** | One writer | Multi-master -- write to any node |
@@ -25,7 +25,7 @@ When your vector database runs on more than one node, you need a way to keep dat
 ## Quick Start
 
 ```rust
-use ruvector_replication::{Replicator, ReplicationConfig, ConsistencyLevel};
+use swarmvector_replication::{Replicator, ReplicationConfig, ConsistencyLevel};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -61,7 +61,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Write with Replication
 
 ```rust
-use ruvector_replication::{Replicator, WriteOptions};
+use swarmvector_replication::{Replicator, WriteOptions};
 
 // Write with quorum consistency
 let options = WriteOptions {
@@ -199,15 +199,15 @@ impl Replicator {
 
 ## Related Crates
 
-- **[ruvector-core](../ruvector-core/)** - Core vector database engine
-- **[ruvector-cluster](../ruvector-cluster/)** - Clustering and sharding
-- **[ruvector-raft](../ruvector-raft/)** - Raft consensus
+- **[swarmvector-core](../swarmvector-core/)** - Core vector database engine
+- **[swarmvector-cluster](../swarmvector-cluster/)** - Clustering and sharding
+- **[swarmvector-raft](../swarmvector-raft/)** - Raft consensus
 
 ## Documentation
 
 - **[Main README](../../README.md)** - Complete project overview
-- **[API Documentation](https://docs.rs/ruvector-replication)** - Full API reference
-- **[GitHub Repository](https://github.com/ruvnet/ruvector)** - Source code
+- **[API Documentation](https://docs.rs/swarmvector-replication)** - Full API reference
+- **[GitHub Repository](the upstream project (see NOTICE))** - Source code
 
 ## License
 
@@ -217,10 +217,10 @@ impl Replicator {
 
 <div align="center">
 
-**Part of [Ruvector](https://github.com/ruvnet/ruvector) - Built by [rUv](https://ruv.io)**
+**Part of [Swarmvector](the upstream project (see NOTICE)) - Built by [the upstream author](https://swarmdo.com)**
 
-[![Star on GitHub](https://img.shields.io/github/stars/ruvnet/ruvector?style=social)](https://github.com/ruvnet/ruvector)
+[![Star on GitHub](https://img.shields.io/github/stars/upstream/swarmvector?style=social)](the upstream project (see NOTICE))
 
-[Documentation](https://docs.rs/ruvector-replication) | [Crates.io](https://crates.io/crates/ruvector-replication) | [GitHub](https://github.com/ruvnet/ruvector)
+[Documentation](https://docs.rs/swarmvector-replication) | [Crates.io](https://crates.io/crates/swarmvector-replication) | [GitHub](the upstream project (see NOTICE))
 
 </div>

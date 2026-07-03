@@ -1,15 +1,15 @@
-# ADR-120 — Cross-repo QUIC unification: borrow agentic-flow's bridge for midstream's npm build, then adopt in rufflo with Rust in-flight agentics
+# ADR-120 — Cross-repo QUIC unification: borrow agentic-flow's bridge for midstream's npm build, then adopt in swarmdo with Rust in-flight agentics
 
 **Status**: Proposed (2026-05-14)
 **Date**: 2026-05-14
-**Authors**: claude (drafted with rUv)
+**Authors**: claude (drafted with the upstream author)
 **Related**: [ADR-104](./ADR-104-federation-transport.md) (federation transport, WebSocket today + clean QUIC upgrade path) · [ADR-108](./ADR-108-native-quic-binding.md) (agentic-flow native QUIC binding plan, loader pattern) · [ADR-111](./ADR-111-federation-wg-mesh.md) (WireGuard mesh) · [ADR-118](./ADR-118-aidefence-2.3.0-upgrade.md) (AIMDS sibling adopted) · [ADR-119](./ADR-119-midstreamer-adoption-assessment.md) (midstreamer assessed — decision was *wait*; this ADR is the "what would change the answer" trigger)
 **Supersedes**: nothing
-**Sources**: [agentic-flow QUIC-STATUS.md (Oct 17, 2025)](https://github.com/ruvnet/agentic-flow/blob/main/docs/features/quic/QUIC-STATUS.md) · [agentic-flow `crates/agentic-flow-quic/`](https://github.com/ruvnet/agentic-flow/tree/main/crates/agentic-flow-quic) · [midstream `crates/quic-multistream/`](https://github.com/ruvnet/midstream/tree/main/crates/quic-multistream)
+**Sources**: [agentic-flow QUIC-STATUS.md (Oct 17, 2025)](the upstream project (see NOTICE)) · [agentic-flow `crates/agentic-flow-quic/`](the upstream project (see NOTICE)) · [midstream `crates/quic-multistream/`](the upstream project (see NOTICE))
 
 ## Context
 
-Both `ruvnet/agentic-flow` and `ruvnet/midstream` have a QUIC crate. They are not the same crate:
+Both `upstream/agentic-flow` and `upstream/midstream` have a QUIC crate. They are not the same crate:
 
 | Concern | `agentic-flow-quic` (v0.1.0) | `midstreamer-quic` (v0.2.1) |
 |---------|----------------------------|----------------------------|
@@ -21,13 +21,13 @@ Both `ruvnet/agentic-flow` and `ruvnet/midstream` have a QUIC crate. They are no
 
 So `agentic-flow-quic` has the **integration layer** (UDP socket bridge in TypeScript, handshake state machine, validated 0-RTT reconnection, packet-level WASM bridge); `midstreamer-quic` has the **better Rust crate** (OS-trust-store verifier, proptest coverage, slightly newer toolchain pin). Cross-pollinating these two would produce a single QUIC transport that is both production-grade in Rust and shippable as a working npm package — which is the gap ADR-108 has been waiting on.
 
-rufflo's federation transport (ADR-104) and the native-QUIC upgrade plan (ADR-108) were both architected around a loader pattern (`AGENTIC_FLOW_QUIC_NATIVE=1` + same `AgentTransport` interface) that's intentionally transport-agnostic. The federation WireGuard mesh (ADR-111) operates at the OS network layer below this — orthogonal. The AIMDS / `aidefence` sibling component (ADR-118) provides the in-flight safety gates. **The only remaining gap to fully Rust-native federation + in-flight agentics is: real QUIC reachable from Node with a verified TLS posture.**
+swarmdo's federation transport (ADR-104) and the native-QUIC upgrade plan (ADR-108) were both architected around a loader pattern (`AGENTIC_FLOW_QUIC_NATIVE=1` + same `AgentTransport` interface) that's intentionally transport-agnostic. The federation WireGuard mesh (ADR-111) operates at the OS network layer below this — orthogonal. The AIMDS / `aidefence` sibling component (ADR-118) provides the in-flight safety gates. **The only remaining gap to fully Rust-native federation + in-flight agentics is: real QUIC reachable from Node with a verified TLS posture.**
 
 This ADR proposes a three-step plan to close it.
 
 ## Decision
 
-**Step 1 — Cross-port the agentic-flow QUIC bridge into midstream and republish `midstreamer-quic` with the production WASM build (upstream work in `ruvnet/midstream`).** Step 2 — Update rufflo's ADR-108 loader to detect the new midstream WASM build. Step 3 — Compose `midstreamer-quic` + `aimds-*` into a single rufflo Rust transport that runs the federation hops *and* the in-flight gate in one process.
+**Step 1 — Cross-port the agentic-flow QUIC bridge into midstream and republish `midstreamer-quic` with the production WASM build (upstream work in `upstream/midstream`).** Step 2 — Update swarmdo's ADR-108 loader to detect the new midstream WASM build. Step 3 — Compose `midstreamer-quic` + `aimds-*` into a single swarmdo Rust transport that runs the federation hops *and* the in-flight gate in one process.
 
 ### Step 1 — Upstream: `midstream` adopts agentic-flow's bridge pattern
 
@@ -55,7 +55,7 @@ The cross-port is structurally small because the two crates share `quinn 0.11`:
 
 **Estimated effort:** ~1-2 days of upstream work. The pattern is already proven in `agentic-flow-quic`; midstream just adopts it.
 
-### Step 2 — Rufflo: ADR-108 loader detects the new midstream WASM
+### Step 2 — Swarmdo: ADR-108 loader detects the new midstream WASM
 
 [ADR-108](./ADR-108-native-quic-binding.md) already defines the loader pattern. The implementation today is:
 
@@ -88,13 +88,13 @@ for (const [envFlag, modulePath] of candidates) {
 return webSocketFallback();
 ```
 
-Why prefer midstreamer once available: it ships the same `quinn 0.11` core but with `rustls-platform-verifier` (OS trust store) — a real production posture for federation peers. Plus it's the package rufflo already takes `aidefence` from (ADR-118), so adopting another crate from the same workspace lowers the dependency-coordination surface.
+Why prefer midstreamer once available: it ships the same `quinn 0.11` core but with `rustls-platform-verifier` (OS trust store) — a real production posture for federation peers. Plus it's the package swarmdo already takes `aidefence` from (ADR-118), so adopting another crate from the same workspace lowers the dependency-coordination surface.
 
-**File that changes in rufflo:** the existing loader in `agentic-flow/src/transport/quic-loader.ts` consumed by `@rufflo/plugin-agent-federation`. One module, two new lines, one new env flag.
+**File that changes in swarmdo:** the existing loader in `agentic-flow/src/transport/quic-loader.ts` consumed by `@swarmdo/plugin-agent-federation`. One module, two new lines, one new env flag.
 
 ### Step 3 — Rust in-flight agentics: compose `midstreamer-quic` + `aimds-*` in a single peer binary
 
-This is the "Rust-based in-flight agentics" the question is really asking about. Today the rufflo federation peer is a Node.js process: it receives a federation message, passes it through `aidefence_*` MCP tools (the in-flight gate per ADR-118's 3-gate pattern), then dispatches to the local agent. With Step 1 done, we can collapse those layers into a single Rust binary per peer:
+This is the "Rust-based in-flight agentics" the question is really asking about. Today the swarmdo federation peer is a Node.js process: it receives a federation message, passes it through `aidefence_*` MCP tools (the in-flight gate per ADR-118's 3-gate pattern), then dispatches to the local agent. With Step 1 done, we can collapse those layers into a single Rust binary per peer:
 
 ```
   Federation peer (single Rust binary)
@@ -125,10 +125,10 @@ This is the "Rust-based in-flight agentics" the question is really asking about.
 - **One trust-store config.** Both `midstreamer-quic` and `aimds-*` are already in the same Cargo workspace upstream — they share `rustls`, the same `validator 0.20` (after ADR-118's bump), the same `unsafe_code = "deny"` workspace lint.
 - **Real backpressure.** A Rust binary can apply tokio task-level backpressure between the QUIC receive loop and the AIMDS gates, which the current Node-bridge architecture can only approximate via cooperative `await`.
 
-**File(s) that change in rufflo:**
+**File(s) that change in swarmdo:**
 
-- New crate at `v3/crates/rufflo-federation-peer/` — depends on `midstreamer-quic` and `aimds-{core,detection,analysis,response}` from the upstream workspace. Exposes one CLI entry point: `rufflo-federation-peer start --listen <addr>`.
-- `plugins/rufflo-federation/scripts/` gains an opt-in launcher that prefers the native peer binary when present; falls back to the existing Node implementation.
+- New crate at `v3/crates/swarmdo-federation-peer/` — depends on `midstreamer-quic` and `aimds-{core,detection,analysis,response}` from the upstream workspace. Exposes one CLI entry point: `swarmdo-federation-peer start --listen <addr>`.
+- `plugins/swarmdo-federation/scripts/` gains an opt-in launcher that prefers the native peer binary when present; falls back to the existing Node implementation.
 - ADR-104 / ADR-107 (federation TLS pinning) carry over unchanged — `midstreamer-quic`'s `rustls-platform-verifier` enforces them.
 
 **What stays:**
@@ -139,10 +139,10 @@ This is the "Rust-based in-flight agentics" the question is really asking about.
 
 ## Migration path
 
-1. **Upstream PR to `ruvnet/midstream`** — cross-port the agentic-flow bridge into `npm-wasm/`. Republish `midstreamer@0.3.0`. (External to rufflo; this ADR proposes the design and links to ADR-108 as the consumer.)
-2. **Rufflo: loader update** — one-module change in `agentic-flow/src/transport/quic-loader.ts` to detect `midstreamer` first when `MIDSTREAMER_QUIC_NATIVE=1`. Behind the env flag — no behavior change for default callers.
-3. **Rufflo: `v3/crates/rufflo-federation-peer/`** — new crate composing `midstreamer-quic` + `aimds-*` + a stdio dispatcher. Ships as an optional native binary; launcher in `plugins/rufflo-federation/scripts/` prefers it.
-4. **Smoke parity** — `plugins/rufflo-federation/scripts/smoke.sh` runs against both transports (native peer + WebSocket fallback) and asserts identical 3-gate verdicts on a fixture set.
+1. **Upstream PR to `upstream/midstream`** — cross-port the agentic-flow bridge into `npm-wasm/`. Republish `midstreamer@0.3.0`. (External to swarmdo; this ADR proposes the design and links to ADR-108 as the consumer.)
+2. **Swarmdo: loader update** — one-module change in `agentic-flow/src/transport/quic-loader.ts` to detect `midstreamer` first when `MIDSTREAMER_QUIC_NATIVE=1`. Behind the env flag — no behavior change for default callers.
+3. **Swarmdo: `v3/crates/swarmdo-federation-peer/`** — new crate composing `midstreamer-quic` + `aimds-*` + a stdio dispatcher. Ships as an optional native binary; launcher in `plugins/swarmdo-federation/scripts/` prefers it.
+4. **Smoke parity** — `plugins/swarmdo-federation/scripts/smoke.sh` runs against both transports (native peer + WebSocket fallback) and asserts identical 3-gate verdicts on a fixture set.
 
 ## Consequences
 
@@ -151,14 +151,14 @@ This is the "Rust-based in-flight agentics" the question is really asking about.
 - **Resolves ADR-108.** "Wait for a native QUIC binding" becomes "we ship one." Federation transport finally has the production latency profile (53.7% lower than HTTP/2, 0-RTT reconnection at 91.2% improvement) documented in `agentic-flow-quic`'s QUIC-STATUS but now with the better security posture (OS trust store).
 - **Resolves the ADR-119 wait.** ADR-119 closed with "revisit when an N-API binding lands"; Step 1 closes that gap upstream.
 - **Halves the federation peer process count.** Today each peer is Node bridge + MCP server; tomorrow the bridge collapses into the native binary.
-- **Single dependency on the midstream workspace.** rufflo already takes `aidefence` (ADR-118); adding `midstreamer-quic` lowers coordination cost vs adding it from a different upstream.
+- **Single dependency on the midstream workspace.** swarmdo already takes `aidefence` (ADR-118); adding `midstreamer-quic` lowers coordination cost vs adding it from a different upstream.
 - **Verifiable.** Both upstream crates already have benchmark suites (`agentic-flow-quic/benches`, `midstreamer-quic/benches`) and proptest coverage. The 3-gate parity smoke is the existing test.
 
 ### Negative
 
-- **Depends on upstream work.** Step 1 is upstream-only (`ruvnet/midstream`). Rufflo can't ship the integration until midstream republishes. We can write the loader (Step 2) and the peer crate (Step 3) behind feature flags so they're ready, but they don't activate until upstream lands.
+- **Depends on upstream work.** Step 1 is upstream-only (`upstream/midstream`). Swarmdo can't ship the integration until midstream republishes. We can write the loader (Step 2) and the peer crate (Step 3) behind feature flags so they're ready, but they don't activate until upstream lands.
 - **New native dependency surface.** A Rust binary per federation peer is a stricter deployment surface than the existing Node-only path. Consumers running federation in pure-JS environments (some k8s setups) need the WebSocket fallback to stay first-class. ADR-104 already guarantees that, but operators must understand the choice.
-- **`midstreamer@0.3.0` is breaking-ish.** The `QuicMultistream` class' actual behavior changes from "counter stub" to "real QUIC." Any caller that depended on the stub semantics (none in rufflo today; verified via `grep`) would break.
+- **`midstreamer@0.3.0` is breaking-ish.** The `QuicMultistream` class' actual behavior changes from "counter stub" to "real QUIC." Any caller that depended on the stub semantics (none in swarmdo today; verified via `grep`) would break.
 
 ### Neutral
 
@@ -173,7 +173,7 @@ This is the "Rust-based in-flight agentics" the question is really asking about.
 
 ## Links
 
-- Source repos: [`ruvnet/agentic-flow`](https://github.com/ruvnet/agentic-flow) · [`ruvnet/midstream`](https://github.com/ruvnet/midstream)
-- Upstream crates: [`agentic-flow-quic`](https://github.com/ruvnet/agentic-flow/tree/main/crates/agentic-flow-quic) · [`midstreamer-quic`](https://github.com/ruvnet/midstream/tree/main/crates/quic-multistream)
-- QUIC status doc this ADR built on: [`agentic-flow/docs/features/quic/QUIC-STATUS.md`](https://github.com/ruvnet/agentic-flow/blob/main/docs/features/quic/QUIC-STATUS.md) (October 17, 2025 — 100% complete, validated)
+- Source repos: [`upstream/agentic-flow`](the upstream project (see NOTICE)) · [`upstream/midstream`](the upstream project (see NOTICE))
+- Upstream crates: [`agentic-flow-quic`](the upstream project (see NOTICE)) · [`midstreamer-quic`](the upstream project (see NOTICE))
+- QUIC status doc this ADR built on: [`agentic-flow/docs/features/quic/QUIC-STATUS.md`](the upstream project (see NOTICE)) (October 17, 2025 — 100% complete, validated)
 - Prior ADRs: [ADR-104](./ADR-104-federation-transport.md) · [ADR-108](./ADR-108-native-quic-binding.md) · [ADR-111](./ADR-111-federation-wg-mesh.md) · [ADR-118](./ADR-118-aidefence-2.3.0-upgrade.md) · [ADR-119](./ADR-119-midstreamer-adoption-assessment.md)

@@ -104,9 +104,9 @@ Validate tool call parameters against a schema before execution. Rejected becaus
 
 ## References
 
-- `v3/@rufflo/guidance/src/gates.ts` -- `EnforcementGates.aggregateDecision()`, stateless evaluation methods
-- `v3/@rufflo/guidance/src/ledger.ts` -- `RunLedger.createEvent()`, `DiffQualityEvaluator`
-- `v3/@rufflo/guidance/src/index.ts` -- `GuidanceControlPlane.evaluateCommand()`, `evaluateToolUse()`, `evaluateEdit()`
-- `v3/@rufflo/guidance/src/types.ts` -- `GateDecision`, `GateResult`
+- `v3/@swarmdo/guidance/src/gates.ts` -- `EnforcementGates.aggregateDecision()`, stateless evaluation methods
+- `v3/@swarmdo/guidance/src/ledger.ts` -- `RunLedger.createEvent()`, `DiffQualityEvaluator`
+- `v3/@swarmdo/guidance/src/index.ts` -- `GuidanceControlPlane.evaluateCommand()`, `evaluateToolUse()`, `evaluateEdit()`
+- `v3/@swarmdo/guidance/src/types.ts` -- `GateDecision`, `GateResult`
 - ADR-G004 -- The four gates this gateway wraps
 - ADR-G005 -- The proof envelope that records gate decisions

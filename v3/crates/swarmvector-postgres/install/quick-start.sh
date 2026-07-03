@@ -3,7 +3,7 @@
 # SwarmVector Quick Start Installer
 # Auto-detects platform and runs appropriate setup
 #
-# Usage: curl -sSL https://raw.githubusercontent.com/ruvnet/swarmvector/main/install/quick-start.sh | bash
+# Usage: curl -sSL https://raw.githubusercontent.com/upstream/swarmvector/main/install/quick-start.sh | bash
 #    or: ./quick-start.sh [PG_VERSION]
 #
 set -e
@@ -43,7 +43,7 @@ case "$OS" in
             bash "$SCRIPT_DIR/scripts/setup-debian.sh" "$PG_VERSION"
         else
             echo "Downloading setup script..."
-            curl -sSL https://raw.githubusercontent.com/ruvnet/swarmvector/main/install/scripts/setup-debian.sh | bash -s "$PG_VERSION"
+            curl -sSL https://raw.githubusercontent.com/upstream/swarmvector/main/install/scripts/setup-debian.sh | bash -s "$PG_VERSION"
         fi
         ;;
     rhel)
@@ -52,7 +52,7 @@ case "$OS" in
             bash "$SCRIPT_DIR/scripts/setup-rhel.sh" "$PG_VERSION"
         else
             echo "Downloading setup script..."
-            curl -sSL https://raw.githubusercontent.com/ruvnet/swarmvector/main/install/scripts/setup-rhel.sh | bash -s "$PG_VERSION"
+            curl -sSL https://raw.githubusercontent.com/upstream/swarmvector/main/install/scripts/setup-rhel.sh | bash -s "$PG_VERSION"
         fi
         ;;
     macos)
@@ -61,7 +61,7 @@ case "$OS" in
             bash "$SCRIPT_DIR/scripts/setup-macos.sh" "$PG_VERSION"
         else
             echo "Downloading setup script..."
-            curl -sSL https://raw.githubusercontent.com/ruvnet/swarmvector/main/install/scripts/setup-macos.sh | bash -s "$PG_VERSION"
+            curl -sSL https://raw.githubusercontent.com/upstream/swarmvector/main/install/scripts/setup-macos.sh | bash -s "$PG_VERSION"
         fi
         ;;
     *)
@@ -81,7 +81,7 @@ echo "════════════════════════�
 echo ""
 echo "Dependencies installed! Now clone and build SwarmVector:"
 echo ""
-echo "  git clone https://github.com/ruvnet/swarmvector.git"
+echo "  git clone the upstream project (see NOTICE)"
 echo "  cd swarmvector"
 echo "  ./install/install.sh --build-from-source --pg-version $PG_VERSION"
 echo ""

@@ -7,7 +7,7 @@
 
 ## Context
 
-Rufflo V3's neural learning system generates valuable patterns, trajectories, and learned behaviors during operation. These patterns are currently isolated to individual installations, preventing knowledge sharing across:
+Swarmdo V3's neural learning system generates valuable patterns, trajectories, and learned behaviors during operation. These patterns are currently isolated to individual installations, preventing knowledge sharing across:
 
 1. **Team collaboration** - Developers can't share optimized routing patterns
 2. **Organizational standards** - Companies can't distribute approved patterns
@@ -19,9 +19,9 @@ Additionally, learned patterns may contain:
 - **Proprietary code patterns** - Trade secrets, internal APIs
 - **Sensitive metadata** - Project structures, security configurations
 
-### RuVector IPFS Capabilities
+### SwarmVector IPFS Capabilities
 
-RuVector provides decentralized storage via IPFS (InterPlanetary File System):
+SwarmVector provides decentralized storage via IPFS (InterPlanetary File System):
 - Content-addressable storage (CID-based)
 - Immutable pattern versioning
 - Peer-to-peer distribution
@@ -33,7 +33,7 @@ Implement a **Transfer Hook System** with:
 
 1. **Export/Import Commands** - Serialize and deserialize learning models
 2. **Anonymization Pipeline** - Multi-level PII redaction and obfuscation
-3. **IPFS Integration** - Optional decentralized pattern sharing via RuVector
+3. **IPFS Integration** - Optional decentralized pattern sharing via SwarmVector
 4. **Pattern Marketplace** - Community plugin store for shared patterns
 
 ---
@@ -67,26 +67,26 @@ Implement a **Transfer Hook System** with:
 
 ```bash
 # Basic export to file
-npx rufflo@v3alpha hooks transfer export \
+npx swarmdo@v3alpha hooks transfer export \
   --output ./patterns/my-patterns.cfp \
   --format cbor
 
 # Export with anonymization
-npx rufflo@v3alpha hooks transfer export \
+npx swarmdo@v3alpha hooks transfer export \
   --output ./patterns/team-patterns.cfp \
   --anonymize standard \
   --redact-pii true \
   --strip-paths true
 
 # Export to IPFS
-npx rufflo@v3alpha hooks transfer export \
+npx swarmdo@v3alpha hooks transfer export \
   --to-ipfs \
   --anonymize strict \
   --pin true \
   --gateway https://w3s.link
 
 # Export specific pattern types
-npx rufflo@v3alpha hooks transfer export \
+npx swarmdo@v3alpha hooks transfer export \
   --types routing,complexity,coverage \
   --min-confidence 0.7 \
   --since "2026-01-01"
@@ -96,21 +96,21 @@ npx rufflo@v3alpha hooks transfer export \
 
 ```bash
 # Import from file
-npx rufflo@v3alpha hooks transfer import \
+npx swarmdo@v3alpha hooks transfer import \
   --input ./patterns/team-patterns.cfp
 
 # Import from IPFS
-npx rufflo@v3alpha hooks transfer import \
+npx swarmdo@v3alpha hooks transfer import \
   --from-ipfs bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi \
   --verify-signature true
 
 # Import from Pattern Store
-npx rufflo@v3alpha hooks transfer import \
+npx swarmdo@v3alpha hooks transfer import \
   --from-store typescript-routing-patterns \
   --version latest
 
 # Import with merge strategy
-npx rufflo@v3alpha hooks transfer import \
+npx swarmdo@v3alpha hooks transfer import \
   --input ./patterns.cfp \
   --strategy merge \
   --conflict-resolution highest-confidence
@@ -120,13 +120,13 @@ npx rufflo@v3alpha hooks transfer import \
 
 ```bash
 # Browse pattern store
-npx rufflo@v3alpha hooks transfer store list \
+npx swarmdo@v3alpha hooks transfer store list \
   --category routing \
   --language typescript \
   --min-downloads 100
 
 # Publish to store
-npx rufflo@v3alpha hooks transfer store publish \
+npx swarmdo@v3alpha hooks transfer store publish \
   --input ./patterns.cfp \
   --name "react-component-patterns" \
   --description "Optimized routing for React projects" \
@@ -134,7 +134,7 @@ npx rufflo@v3alpha hooks transfer store publish \
   --anonymize strict
 
 # Download from store
-npx rufflo@v3alpha hooks transfer store download \
+npx swarmdo@v3alpha hooks transfer store download \
   --name "enterprise-security-patterns" \
   --output ./patterns/
 ```
@@ -297,7 +297,7 @@ interface RedactionConfig {
 
 ## Export Format Specification
 
-### Rufflo Pattern (.cfp) Format
+### Swarmdo Pattern (.cfp) Format
 
 ```typescript
 interface CFPFormat {
@@ -305,7 +305,7 @@ interface CFPFormat {
   magic: 'CFP1';                    // Magic bytes
   version: SemVer;                  // Format version
   createdAt: ISO8601;
-  generatedBy: string;              // Rufflo version
+  generatedBy: string;              // Swarmdo version
 
   // Metadata
   metadata: {
@@ -383,10 +383,10 @@ interface CFPFormat {
 
 ## IPFS Integration
 
-### RuVector IPFS Adapter
+### SwarmVector IPFS Adapter
 
 ```typescript
-// v3/@rufflo/cli/src/transfer/ipfs-adapter.ts
+// v3/@swarmdo/cli/src/transfer/ipfs-adapter.ts
 
 import { create as createIpfsClient } from 'ipfs-http-client';
 
@@ -426,27 +426,27 @@ class IPFSPatternStore {
 
 ```bash
 # Upload to IPFS with pinning
-npx rufflo@v3alpha hooks transfer ipfs upload \
+npx swarmdo@v3alpha hooks transfer ipfs upload \
   --input ./patterns.cfp \
   --pin pinata \
   --name "my-patterns"
 
 # Download from IPFS
-npx rufflo@v3alpha hooks transfer ipfs download \
+npx swarmdo@v3alpha hooks transfer ipfs download \
   --cid bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi \
   --output ./patterns.cfp
 
 # List pinned patterns
-npx rufflo@v3alpha hooks transfer ipfs list \
+npx swarmdo@v3alpha hooks transfer ipfs list \
   --service pinata
 
 # Publish to IPNS (mutable name)
-npx rufflo@v3alpha hooks transfer ipfs publish \
+npx swarmdo@v3alpha hooks transfer ipfs publish \
   --cid bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi \
   --key my-patterns-key
 
 # Resolve IPNS name
-npx rufflo@v3alpha hooks transfer ipfs resolve \
+npx swarmdo@v3alpha hooks transfer ipfs resolve \
   --name my-patterns
 ```
 
@@ -458,7 +458,7 @@ npx rufflo@v3alpha hooks transfer ipfs resolve \
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    Rufflo Pattern Store                     │
+│                    Swarmdo Pattern Store                     │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                  │
 │  ┌──────────────────┐    ┌──────────────────┐                   │
@@ -537,34 +537,34 @@ interface Category {
 
 ```bash
 # Search patterns
-npx rufflo@v3alpha hooks transfer store search \
+npx swarmdo@v3alpha hooks transfer store search \
   --query "react hooks optimization" \
   --category routing \
   --min-rating 4.0
 
 # Get pattern info
-npx rufflo@v3alpha hooks transfer store info \
+npx swarmdo@v3alpha hooks transfer store info \
   --name react-routing-patterns
 
 # Install pattern
-npx rufflo@v3alpha hooks transfer store install \
+npx swarmdo@v3alpha hooks transfer store install \
   --name react-routing-patterns \
   --version ^1.0.0
 
 # Publish pattern
-npx rufflo@v3alpha hooks transfer store publish \
+npx swarmdo@v3alpha hooks transfer store publish \
   --input ./patterns.cfp \
   --name my-patterns \
   --category routing \
   --license MIT
 
 # Update published pattern
-npx rufflo@v3alpha hooks transfer store update \
+npx swarmdo@v3alpha hooks transfer store update \
   --name my-patterns \
   --input ./patterns-v2.cfp
 
 # Rate pattern
-npx rufflo@v3alpha hooks transfer store rate \
+npx swarmdo@v3alpha hooks transfer store rate \
   --name react-routing-patterns \
   --rating 5 \
   --comment "Excellent for large React projects"
@@ -621,7 +621,7 @@ interface ImportSandbox {
 
 ```typescript
 type TrustLevel =
-  | 'verified'      // Signed by Rufflo team
+  | 'verified'      // Signed by Swarmdo team
   | 'community'     // Community verified, high ratings
   | 'unverified'    // No verification
   | 'untrusted'     // Flagged or low trust
@@ -658,7 +658,7 @@ interface TrustPolicy {
 
 ### Phase 3: IPFS Integration (Week 3)
 
-1. Integrate RuVector IPFS adapter
+1. Integrate SwarmVector IPFS adapter
 2. Implement upload/download commands
 3. Add pinning service support (Pinata, Web3.Storage)
 4. Implement IPNS for mutable references
@@ -685,7 +685,7 @@ interface TrustPolicy {
 ## File Structure
 
 ```
-v3/@rufflo/cli/src/
+v3/@swarmdo/cli/src/
 ├── commands/
 │   └── transfer.ts              # Main transfer command with subcommands
 ├── transfer/
@@ -727,7 +727,7 @@ v3/@rufflo/cli/src/
 
 ## Configuration
 
-### rufflo.config.json
+### swarmdo.config.json
 
 ```json
 {
@@ -746,8 +746,8 @@ v3/@rufflo/cli/src/
 
     "store": {
       "enabled": true,
-      "registryUrl": "https://patterns.rufflo.dev/registry.json",
-      "cacheDir": ".rufflo/patterns"
+      "registryUrl": "https://patterns.swarmdo.dev/registry.json",
+      "cacheDir": ".swarmdo/patterns"
     },
 
     "security": {
@@ -801,7 +801,7 @@ v3/@rufflo/cli/src/
 
 ### Neutral
 
-1. **Optional Dependency** - IPFS features require RuVector
+1. **Optional Dependency** - IPFS features require SwarmVector
 2. **Configuration Overhead** - Multiple options to configure
 3. **Network Dependency** - Store features require connectivity
 
@@ -812,7 +812,7 @@ v3/@rufflo/cli/src/
 ### Transfer MCP Tools
 
 ```typescript
-// v3/@rufflo/cli/src/mcp-tools/transfer-tools.ts
+// v3/@swarmdo/cli/src/mcp-tools/transfer-tools.ts
 
 import type { MCPTool } from './types.js';
 
@@ -1548,7 +1548,7 @@ export const transferTools: MCPTool[] = [
 ### MCP Tool Registration
 
 ```typescript
-// v3/@rufflo/cli/src/mcp-tools/index.ts
+// v3/@swarmdo/cli/src/mcp-tools/index.ts
 
 import { transferTools } from './transfer-tools.js';
 
@@ -1643,7 +1643,7 @@ const verification = await mcp__claude_flow__transfer_verify({
 On Windows, MCP servers require a `cmd /c` wrapper to execute npx commands. Without this wrapper, Claude Code will display the warning:
 
 ```
-[Warning] [rufflo] mcpServers.rufflo: Windows requires 'cmd /c' wrapper to execute npx
+[Warning] [swarmdo] mcpServers.swarmdo: Windows requires 'cmd /c' wrapper to execute npx
 ```
 
 ### Platform-Specific .mcp.json Configuration
@@ -1653,11 +1653,11 @@ On Windows, MCP servers require a `cmd /c` wrapper to execute npx commands. With
 ```json
 {
   "mcpServers": {
-    "rufflo": {
+    "swarmdo": {
       "command": "cmd",
-      "args": ["/c", "npx", "@rufflo/cli@latest", "mcp", "start"],
+      "args": ["/c", "npx", "@swarmdo/cli@latest", "mcp", "start"],
       "env": {
-        "RUFFLO_LOG_LEVEL": "info"
+        "SWARMDO_LOG_LEVEL": "info"
       }
     }
   }
@@ -1669,11 +1669,11 @@ On Windows, MCP servers require a `cmd /c` wrapper to execute npx commands. With
 ```json
 {
   "mcpServers": {
-    "rufflo": {
+    "swarmdo": {
       "command": "npx",
-      "args": ["@rufflo/cli@latest", "mcp", "start"],
+      "args": ["@swarmdo/cli@latest", "mcp", "start"],
       "env": {
-        "RUFFLO_LOG_LEVEL": "info"
+        "SWARMDO_LOG_LEVEL": "info"
       }
     }
   }
@@ -1686,10 +1686,10 @@ The `init` command automatically detects the platform and generates the correct 
 
 ```bash
 # Auto-detects platform and generates correct .mcp.json
-npx @rufflo/cli@latest init --force
+npx @swarmdo/cli@latest init --force
 
 # Or use the wizard for more options
-npx @rufflo/cli@latest init wizard
+npx @swarmdo/cli@latest init wizard
 ```
 
 ### MCP Server Auto-Configuration
@@ -1697,7 +1697,7 @@ npx @rufflo/cli@latest init wizard
 The init command generates platform-aware MCP configuration:
 
 ```typescript
-// v3/@rufflo/cli/src/init/mcp-generator.ts
+// v3/@swarmdo/cli/src/init/mcp-generator.ts
 
 function generateMcpConfig(): MCPConfig {
   const isWindows = process.platform === 'win32';
@@ -1705,11 +1705,11 @@ function generateMcpConfig(): MCPConfig {
   if (isWindows) {
     return {
       mcpServers: {
-        'rufflo': {
+        'swarmdo': {
           command: 'cmd',
-          args: ['/c', 'npx', '@rufflo/cli@latest', 'mcp', 'start'],
+          args: ['/c', 'npx', '@swarmdo/cli@latest', 'mcp', 'start'],
           env: {
-            RUFFLO_LOG_LEVEL: 'info'
+            SWARMDO_LOG_LEVEL: 'info'
           }
         }
       }
@@ -1718,11 +1718,11 @@ function generateMcpConfig(): MCPConfig {
 
   return {
     mcpServers: {
-      'rufflo': {
+      'swarmdo': {
         command: 'npx',
-        args: ['@rufflo/cli@latest', 'mcp', 'start'],
+        args: ['@swarmdo/cli@latest', 'mcp', 'start'],
         env: {
-          RUFFLO_LOG_LEVEL: 'info'
+          SWARMDO_LOG_LEVEL: 'info'
         }
       }
     }
@@ -1735,9 +1735,9 @@ function generateMcpConfig(): MCPConfig {
 ```json
 {
   "mcpServers": {
-    "rufflo": {
+    "swarmdo": {
       "command": "cmd",
-      "args": ["/c", "npx", "@rufflo/cli@latest", "mcp", "start"],
+      "args": ["/c", "npx", "@swarmdo/cli@latest", "mcp", "start"],
       "tools": [
         "transfer/export",
         "transfer/import",
@@ -1765,13 +1765,13 @@ function generateMcpConfig(): MCPConfig {
 
 ```bash
 # Windows PowerShell
-cmd /c npx @rufflo/cli@latest hooks transfer export --output patterns.cfp
+cmd /c npx @swarmdo/cli@latest hooks transfer export --output patterns.cfp
 
 # Windows CMD
-npx @rufflo/cli@latest hooks transfer export --output patterns.cfp
+npx @swarmdo/cli@latest hooks transfer export --output patterns.cfp
 
 # macOS/Linux
-npx @rufflo/cli@latest hooks transfer export --output patterns.cfp
+npx @swarmdo/cli@latest hooks transfer export --output patterns.cfp
 ```
 
 ### Troubleshooting
@@ -1833,11 +1833,11 @@ Pre-configured trusted registries for initial discovery:
 ```typescript
 const BOOTSTRAP_REGISTRIES: KnownRegistry[] = [
   {
-    name: 'rufflo-official',
-    description: 'Official Rufflo pattern registry',
+    name: 'swarmdo-official',
+    description: 'Official Swarmdo pattern registry',
     ipnsName: 'k51qzi5uqu5dj0w8q1xvqn8ql2g4p7x8qpk9vz3xm1y2n3o4p5q6r7s8t9u0v',
     gateway: 'https://w3s.link',
-    publicKey: 'ed25519:rufflo-registry-key',
+    publicKey: 'ed25519:swarmdo-registry-key',
     trusted: true,
   },
   {
@@ -1872,7 +1872,7 @@ const BOOTSTRAP_REGISTRIES: KnownRegistry[] = [
 ### Implemented Files
 
 ```
-v3/@rufflo/cli/src/transfer/store/
+v3/@swarmdo/cli/src/transfer/store/
 ├── types.ts           # Type definitions (PatternEntry, Registry, etc.)
 ├── registry.ts        # Registry management, signature verification
 ├── discovery.ts       # IPNS resolution, IPFS fetch, caching
@@ -1887,7 +1887,7 @@ v3/@rufflo/cli/src/transfer/store/
 ```typescript
 // Create and initialize store
 const store = createPatternStore();
-await store.initialize('rufflo-official');
+await store.initialize('swarmdo-official');
 
 // Search patterns
 const results = store.search({
@@ -1939,7 +1939,7 @@ Trust:       verified
 
 | Feature | Status | Evidence |
 |---------|--------|----------|
-| **Memory Store** | ✅ Real | Data persists to `.rufflo/memory/store.json` |
+| **Memory Store** | ✅ Real | Data persists to `.swarmdo/memory/store.json` |
 | **CLI-to-Store Wiring** | ✅ Real | `plugins list` calls actual `createPluginDiscoveryService()` |
 | **Pattern Store Module** | ✅ Real | `PatternStore` class with search, download, publish APIs |
 | **Plugin Store Module** | ✅ Real | `PluginDiscoveryService` with 9 plugins in registry |
@@ -1956,7 +1956,7 @@ Trust:       verified
 |---------|--------|---------|
 | **IPNS Resolution** | ⚠️ Demo | Attempts real IPNS resolution, falls back to demo registry |
 | **IPFS Gateway Fetch** | ⚠️ Demo | Tries w3s.link/dweb.link/ipfs.io, uses demo on failure |
-| **Registry Discovery** | ⚠️ Demo | Shows "rufflo-official (demo)" source |
+| **Registry Discovery** | ⚠️ Demo | Shows "swarmdo-official (demo)" source |
 
 **Why Demo Mode?** IPFS public gateways often have:
 - Rate limiting
@@ -2028,7 +2028,7 @@ CLI Commands:         Wired to real store modules ✅
 
 3. **Test Upload**:
    ```bash
-   npx @rufflo/cli hooks transfer store publish \
+   npx @swarmdo/cli hooks transfer store publish \
      -i patterns.cfp \
      -n my-patterns \
      -d "My patterns" \
@@ -2048,7 +2048,7 @@ CLI Commands:         Wired to real store modules ✅
 
 ## References
 
-- ADR-017: RuVector Integration Architecture
+- ADR-017: SwarmVector Integration Architecture
 - ADR-006: Unified Memory Service
 - IPFS Documentation: https://docs.ipfs.io
 - Differential Privacy: https://desfontain.es/privacy/differential-privacy-awesomeness.html
@@ -2124,7 +2124,7 @@ CLI Commands:         Wired to real store modules ✅
 ```bash
 # Verify CLI uses real store
 ./bin/cli.js plugins list --official
-# Should show: "rufflo-official (demo)" and list 6 official plugins
+# Should show: "swarmdo-official (demo)" and list 6 official plugins
 
 # Verify MCP tools work
 ./bin/cli.js mcp exec --tool "transfer/plugin-search" --params '{"query":"neural"}'

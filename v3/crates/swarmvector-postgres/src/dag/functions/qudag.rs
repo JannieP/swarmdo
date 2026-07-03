@@ -71,7 +71,7 @@ fn qudag_sync_patterns(since_round: default!(i64, 0)) -> pgrx::JsonB {
     }))
 }
 
-/// Get rUv balance
+/// Get the upstream author balance
 #[pg_extern]
 fn qudag_balance() -> f64 {
     100.0 // Placeholder

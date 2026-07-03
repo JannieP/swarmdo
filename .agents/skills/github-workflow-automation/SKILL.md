@@ -187,7 +187,7 @@ jobs:
       - uses: actions$checkout@v3
 
       - name: Initialize Swarm
-        uses: ruvnet$swarm-action@v1
+        uses: upstream$swarm-action@v1
         with:
           topology: mesh
           max-agents: 6
@@ -1046,8 +1046,8 @@ echo "✅ GitHub workflow automation setup complete"
 
 - **GitHub CLI Docs**: https:/$cli.github.com$manual/
 - **GitHub Actions**: https:/$docs.github.com$en$actions
-- **Swarmdo**: https:/$github.com$ruvnet$swarmdo
-- **Ruf-Swarm**: https:/$github.com$ruvnet$swarmdo-swarm
+- **Swarmdo**: https:/$github.com$upstream$swarmdo
+- **Ruf-Swarm**: https:/$github.com$upstream$swarmdo-swarm
 
 ## Version History
 

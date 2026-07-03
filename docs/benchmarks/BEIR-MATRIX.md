@@ -1,6 +1,6 @@
-# BEIR Public-Benchmark Results — rufflo
+# BEIR Public-Benchmark Results — swarmdo
 
-This page tracks rufflo's measured retrieval performance on BEIR datasets.
+This page tracks swarmdo's measured retrieval performance on BEIR datasets.
 Every cell is reproducible from the commands in the rightmost column;
 every cell has a run JSON in `docs/benchmarks/runs/`. Published baseline
 numbers come from Thakur et al. 2021 (BEIR paper) and the BAAI BGE paper.
@@ -27,8 +27,8 @@ The 95% confidence intervals tell the rigorous story. On NFCorpus, we beat BM25 
 | BGE-large-v1.5 (published) | 0.380 | 0.722 | 0.551 |
 | SPLADE++ | 0.347 | 0.704 | 0.526 |
 | BM25 (Lucene published) | 0.325 | 0.679 | 0.502 |
-| **rufflo + BGE-base (direct dense, no rerank)** | **0.352** | **0.626** | **0.489** |
-| **rufflo + BM25+BGE-base RRF k=60 (3.10.27, did NOT improve)** | 0.328 | 0.569 | 0.449 |
+| **swarmdo + BGE-base (direct dense, no rerank)** | **0.352** | **0.626** | **0.489** |
+| **swarmdo + BM25+BGE-base RRF k=60 (3.10.27, did NOT improve)** | 0.328 | 0.569 | 0.449 |
 
 **We're below BM25 on the 2-dataset mean** (0.489 vs 0.502). RRF made it worse (0.449). The BEIR-average story requires more datasets *and* domain-specific tuning. The NFCorpus rank-2 is real but not representative.
 
@@ -68,15 +68,15 @@ Fixing the BM25 (Porter stemmer + Lucene stopwords + length norm, single-field o
 |---|---:|---:|---:|---:|
 | BGE-large-v1.5 (published) | 335M | **0.551** | 0.380 | 0.722 |
 | SPLADE++ (published) | 110M | **0.526** | 0.347 | 0.704 |
-| **rufflo Lucene RRF + CE rerank (3.10.28)** | **110M** | **0.521** | **0.358** | **0.683** |
-| rufflo multi-field RRF + CE rerank | 110M | 0.520 | 0.355 | 0.685 |
-| rufflo Lucene BM25 alone | — | 0.505 | 0.328 | 0.681 |
+| **swarmdo Lucene RRF + CE rerank (3.10.28)** | **110M** | **0.521** | **0.358** | **0.683** |
+| swarmdo multi-field RRF + CE rerank | 110M | 0.520 | 0.355 | 0.685 |
+| swarmdo Lucene BM25 alone | — | 0.505 | 0.328 | 0.681 |
 | BM25 (published Lucene) | — | 0.502 | 0.325 | 0.679 |
 | Contriever (published) | 110M | 0.502 | 0.328 | 0.677 |
 | DocT5query (published) | 60M | 0.501 | 0.328 | 0.675 |
 | ColBERT (published) | 110M | 0.488 | 0.305 | 0.671 |
 | GTR-XL (published) | 1.2B | 0.502 | 0.343 | 0.662 |
-| rufflo dense alone (BGE-base) | 110M | 0.489 | 0.352 | 0.626 |
+| swarmdo dense alone (BGE-base) | 110M | 0.489 | 0.352 | 0.626 |
 | TAS-B (published) | 66M | 0.481 | 0.319 | 0.643 |
 | SBERT msmarco (published) | 110M | 0.414 | 0.272 | 0.555 |
 
@@ -86,7 +86,7 @@ We rank **3rd of 13 entries on the 2-dataset mean**. Using a 110M-param base mod
 
 ArguAna joins NFCorpus + SciFact. Same harness, same Lucene-style BM25, same BGE-base-en-v1.5.
 
-| Dataset | Best rufflo | Pipeline | Rank | Best Listed |
+| Dataset | Best swarmdo | Pipeline | Rank | Best Listed |
 |---|---:|---|---:|---:|
 | NFCorpus | **0.358** | Lucene + RRF + CE rerank | 2/11 | BGE-large 0.380 |
 | SciFact | **0.683** | Lucene + RRF + CE rerank | 3/11 | BGE-large 0.722 |
@@ -100,7 +100,7 @@ ArguAna joins NFCorpus + SciFact. Same harness, same Lucene-style BM25, same BGE
 | BGE-large-v1.5 (published) | 335M | 0.380 | 0.722 | 0.636 | **0.579** |
 | SPLADE++ (published) | 110M | 0.347 | 0.704 | 0.521 | **0.524** |
 | GenQ (published) | 110M | 0.319 | 0.644 | 0.493 | 0.485 |
-| **rufflo best (per-dataset)** | **110M** | **0.358** | **0.683** | **0.432** | **0.491** |
+| **swarmdo best (per-dataset)** | **110M** | **0.358** | **0.683** | **0.432** | **0.491** |
 | GTR-XL (published) | 1.2B | 0.343 | 0.662 | 0.439 | 0.481 |
 | BM25 (published Lucene) | — | 0.325 | 0.679 | 0.397 | **0.467** |
 | Contriever (published) | 110M | 0.328 | 0.677 | 0.379 | 0.461 |
@@ -122,7 +122,7 @@ ArguAna joins NFCorpus + SciFact. Same harness, same Lucene-style BM25, same BGE
 
 Same harness extended to SciDocs (25,657 docs, 1000 queries). Different best config:
 
-| Dataset | Best rufflo | Pipeline | Rank |
+| Dataset | Best swarmdo | Pipeline | Rank |
 |---|---:|---|---:|
 | NFCorpus | 0.358 | Lucene + RRF + CE rerank | 2/11 |
 | SciFact | 0.683 | Lucene + RRF + CE rerank | 3/11 |
@@ -136,7 +136,7 @@ Same harness extended to SciDocs (25,657 docs, 1000 queries). Different best con
 |---|---:|---:|---:|---:|---:|---:|
 | BGE-large-v1.5 (published) | 335M | 0.380 | 0.722 | 0.636 | 0.225 | **0.491** |
 | SPLADE++ (published) | 110M | 0.347 | 0.704 | 0.521 | 0.159 | **0.433** |
-| **rufflo best (per-dataset)** | **110M** | **0.358** | **0.683** | **0.432** | **0.211** | **0.421** |
+| **swarmdo best (per-dataset)** | **110M** | **0.358** | **0.683** | **0.432** | **0.211** | **0.421** |
 | GTR-XL (published) | 1.2B | 0.343 | 0.662 | 0.439 | 0.174 | 0.405 |
 | GenQ (published) | 110M | 0.319 | 0.644 | 0.493 | 0.143 | 0.400 |
 | BM25 (published Lucene) | — | 0.325 | 0.679 | 0.397 | 0.158 | **0.390** |
@@ -162,7 +162,7 @@ Three of four datasets pick a *different* best config. No single pipeline wins e
 > **What pipeline is reported here:** the NFCorpus 0.352 row is the **direct
 > BGE dense path** — no fine-tuning, no hybrid BM25+dense fusion, no
 > cross-encoder reranker. The hybrid pipeline (cosine + multi-field BM25 +
-> MMR + opt-in rerank, ADRs 078-083) is what rufflo uses internally for
+> MMR + opt-in rerank, ADRs 078-083) is what swarmdo uses internally for
 > small-corpus retrieval; the BEIR runner deliberately isolates the dense
 > path for clean comparison to dense baselines. Hybrid + rerank variants on
 > BEIR are tracked for a future ADR.
@@ -174,7 +174,7 @@ Three of four datasets pick a *different* best config. No single pipeline wins e
 | Method | Params | nDCG@10 | Source |
 |---|---:|---:|---|
 | BGE-large-v1.5 | 335M | 0.380 | BAAI BGE paper |
-| **rufflo + BGE-base-en-v1.5** | **110M** | **0.352** | **this repo** |
+| **swarmdo + BGE-base-en-v1.5** | **110M** | **0.352** | **this repo** |
 | SPLADE++ | 110M | 0.347 | Formal et al. 2022 |
 | GTR-XL | 1.2B | 0.343 | Ni et al. 2022 |
 | DocT5query | 60M | 0.328 | Nogueira & Lin 2019 |
@@ -203,23 +203,23 @@ Three of four datasets pick a *different* best config. No single pipeline wins e
 ## How to reproduce
 
 ```bash
-git clone https://github.com/ruvnet/ruflo && cd rufflo
-npm install && ( cd v3/@rufflo/cli && npx tsc )
+git clone the upstream project (see NOTICE) && cd swarmdo
+npm install && ( cd v3/@swarmdo/cli && npx tsc )
 
 # NFCorpus
 mkdir -p /tmp/beir-nfcorpus && cd /tmp/beir-nfcorpus
 curl -sL -o nfcorpus.zip 'https://public.ukp.informatik.tu-darmstadt.de/thakur/BEIR/datasets/nfcorpus.zip' && unzip -q nfcorpus.zip
-node /path/to/rufflo/v3/@rufflo/cli/scripts/run-beir-bge.mjs
+node /path/to/swarmdo/v3/@swarmdo/cli/scripts/run-beir-bge.mjs
 # → nDCG@10 0.352, rank 2 of 11
 
 # SciFact
 mkdir -p /tmp/beir-scifact && cd /tmp/beir-scifact
 curl -sL -o scifact.zip 'https://public.ukp.informatik.tu-darmstadt.de/thakur/BEIR/datasets/scifact.zip' && unzip -q scifact.zip
-BEIR_DATA_DIR=/tmp/beir-scifact/scifact node /path/to/rufflo/v3/@rufflo/cli/scripts/run-beir-bge.mjs
+BEIR_DATA_DIR=/tmp/beir-scifact/scifact node /path/to/swarmdo/v3/@swarmdo/cli/scripts/run-beir-bge.mjs
 
 # Paired bootstrap significance test (ADR-086)
-node /path/to/rufflo/v3/@rufflo/cli/scripts/beir-bootstrap-significance.mjs \
-  /path/to/rufflo/docs/benchmarks/runs/beir-nfcorpus-bge-latest.json
+node /path/to/swarmdo/v3/@swarmdo/cli/scripts/beir-bootstrap-significance.mjs \
+  /path/to/swarmdo/docs/benchmarks/runs/beir-nfcorpus-bge-latest.json
 ```
 
 ## Model size / speed / quality trade-offs
@@ -254,7 +254,7 @@ int8-quantised ONNX. GPU would be ~10-50× faster.
 - **Two-dataset coverage isn't BEIR-average.** BEIR ships 18 datasets;
   the published "BEIR average" is the standard generalisation gauge.
   Tracking: TREC-COVID, FiQA-2018, ArguAna, HotpotQA, NQ next.
-- **Single-annotator labelled retrieval** for internal rufflo bench
+- **Single-annotator labelled retrieval** for internal swarmdo bench
   (ADR-081); not relevant to BEIR's externally-curated qrels.
 - **The 0.005 gap to SPLADE++** (0.352 vs 0.347) is on the edge of noise
   at N=323. The paired bootstrap test (ADR-086) gives a confidence

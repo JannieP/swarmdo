@@ -5,7 +5,7 @@ The comms layer for multi-agent AI. Cross-installation agent federation with zer
 ## Install
 
 ```
-/plugin marketplace add ruvnet/swarmdo
+/plugin marketplace add upstream/swarmdo
 /plugin install swarmdo-federation@swarmdo
 ```
 

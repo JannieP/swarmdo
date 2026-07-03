@@ -92,7 +92,7 @@ edition = "2021"
 rust-version = "1.77"
 license = "MIT"
 authors = ["Swarmvector Team"]
-repository = "https://github.com/ruvnet/swarmvector"
+repository = "the upstream project (see NOTICE)"
 
 [workspace.dependencies]
 serde = { version = "1.0", features = ["derive"] }
@@ -190,8 +190,8 @@ ENV POSTGRES_INITDB_ARGS="--data-checksums"
 LABEL org.opencontainers.image.title="SwarmVector PostgreSQL Extension v0.3.1"
 LABEL org.opencontainers.image.description="High-performance vector database extension for PostgreSQL with 270+ SQL functions, Graph/Cypher/SPARQL, GNN, hybrid search, multi-tenancy, self-healing, SONA self-learning, Solver, Math, TDA, and Domain Expansion"
 LABEL org.opencontainers.image.version="0.3.1"
-LABEL org.opencontainers.image.vendor="ruv.io"
-LABEL org.opencontainers.image.source="https://github.com/ruvnet/swarmvector"
+LABEL org.opencontainers.image.vendor="swarmdo.com"
+LABEL org.opencontainers.image.source="the upstream project (see NOTICE)"
 LABEL swarmvector.pg.version="${PG_VERSION}"
 LABEL swarmvector.features="attention,gnn,hybrid,tenancy,healing,learning,hyperbolic,graph,solver,math,tda,sona,domain-expansion"
 

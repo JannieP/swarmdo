@@ -12,8 +12,8 @@
  *   - the provenance record type + compare/refuse logic (D0),
  *   - legacy-default derivation for pre-ADR-210 stores (D0),
  *   - per-model query/passage prefix policies (D4),
- *   - rollout flag resolution: RUVECTOR_EMBEDDER / RUVECTOR_ONNX /
- *     RUVECTOR_REEMBED (D5),
+ *   - rollout flag resolution: SWARMVECTOR_EMBEDDER / SWARMVECTOR_ONNX /
+ *     SWARMVECTOR_REEMBED (D5),
  *   - the once-per-process loud hash-fallback warning (D1).
  */
 export type PrefixPolicy = 'none' | 'required' | 'query-recommended';
@@ -98,14 +98,14 @@ export declare class ProvenanceMismatchError extends Error {
 /** Refuse mismatched inserts with an error naming both sides (D0). */
 export declare function assertProvenanceMatch(store: EmbeddingProvenance, active: EmbeddingProvenance, storeName?: string): void;
 /**
- * Resolve RUVECTOR_EMBEDDER / RUVECTOR_ONNX.
- * Precedence: RUVECTOR_EMBEDDER wins when both are set; RUVECTOR_ONNX=0 is
+ * Resolve SWARMVECTOR_EMBEDDER / SWARMVECTOR_ONNX.
+ * Precedence: SWARMVECTOR_EMBEDDER wins when both are set; SWARMVECTOR_ONNX=0 is
  * shorthand for `hash`, =1 for `minilm`. Unrecognized values fall back to
  * 'auto' (MiniLM when loadable, loud hash fallback otherwise).
  */
 export declare function resolveEmbedderSelection(env?: NodeJS.ProcessEnv): EmbedderSelection;
 /**
- * Resolve RUVECTOR_REEMBED: what happens when opening a store whose
+ * Resolve SWARMVECTOR_REEMBED: what happens when opening a store whose
  * provenance mismatches the active embedder.
  *   refuse (default) — error;
  *   warn             — open read-only with a single warning;

@@ -2,7 +2,7 @@
  * V3 CLI Cleanup Command
  * Removes project artifacts created by swarmdo/swarmdo
  *
- * Created with ruv.io
+ * Created with swarmdo.com
  */
 
 import type { Command, CommandContext, CommandResult } from '../types.js';
@@ -14,7 +14,7 @@ import { join } from 'path';
  * Swarmdo-owned subdirectories within .claude/ that are safe to delete.
  * Everything else in .claude/ (agents, skills, commands, settings.local.json,
  * memory.db, worktrees, launch.json) belongs to Claude Code and must be preserved.
- * See: https://github.com/ruvnet/swarmdo/issues/1557
+ * See: the upstream project (see NOTICE)
  */
 const CLAUDE_OWNED_SUBDIRS = [
   { path: join('.claude', 'helpers'), description: 'Swarmdo hook scripts' },

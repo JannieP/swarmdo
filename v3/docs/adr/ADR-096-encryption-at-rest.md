@@ -10,7 +10,7 @@
 
 The May 2026 audit (`audit_1776853149979`) flagged plaintext storage of session and memory state as a class-3 finding. The defense-in-depth mitigation (`de96b0e`, iter #35) restricts file mode to 0600 and dir mode to 0700 for the audit-cited writers. That closes the cross-user-on-same-host vector but does **not** protect against:
 
-1. **Backup exfiltration** — a Time Machine snapshot, a Dropbox sync, or any backup tool that copies `.rufflo/` reads with the *backup user's* permissions, not the original mode.
+1. **Backup exfiltration** — a Time Machine snapshot, a Dropbox sync, or any backup tool that copies `.swarmdo/` reads with the *backup user's* permissions, not the original mode.
 2. **Disk forensics** — a recovered SSD or stolen laptop without FileVault yields the plaintext bytes regardless of file mode.
 3. **Hostile shared-tenant environments** — CI runners, dev containers, and shared workspaces where the FS perms are scoped wider than the project owner.
 4. **Process memory dumps** — orthogonal; out of scope for this ADR.
@@ -19,13 +19,13 @@ The May 2026 audit (`audit_1776853149979`) flagged plaintext storage of session 
 
 | Store | Path | Sensitivity | Reason |
 |---|---|---|---|
-| Session JSON | `.rufflo/sessions/*.json` | **High** | Bundles memory snapshots + agent prompts on save |
+| Session JSON | `.swarmdo/sessions/*.json` | **High** | Bundles memory snapshots + agent prompts on save |
 | Memory DB (sql.js SQLite) | `.swarm/memory.db` | **High** | Conversation entries + 384-dim embeddings; embeddings leak topics |
-| Terminal history | `.rufflo/terminals/store.json` | **High** | Pasted shell commands often include API keys, DB passwords |
-| Agent registry | `.rufflo/agents/store.json` | Medium | Agent configs incl. model + domain; no prompts |
-| Task store | `.rufflo/tasks/store.json` | Medium | Task descriptions + status |
-| Claims / config / workflow / neural / DAA / GitHub stores | various under `.rufflo/` | Low–Medium | Mostly metadata; case-by-case |
-| Update history | `~/.rufflo/update-history.json` | Low | Package names + versions; relevant only for the integrity gate added in `c1b57e4f` |
+| Terminal history | `.swarmdo/terminals/store.json` | **High** | Pasted shell commands often include API keys, DB passwords |
+| Agent registry | `.swarmdo/agents/store.json` | Medium | Agent configs incl. model + domain; no prompts |
+| Task store | `.swarmdo/tasks/store.json` | Medium | Task descriptions + status |
+| Claims / config / workflow / neural / DAA / GitHub stores | various under `.swarmdo/` | Low–Medium | Mostly metadata; case-by-case |
+| Update history | `~/.swarmdo/update-history.json` | Low | Package names + versions; relevant only for the integrity gate added in `c1b57e4f` |
 | Attestation log | `.swarm/attestation.db` | Low | Hash chain of mutations; integrity-protective, not confidentiality-sensitive |
 
 ### Existing crypto in the codebase
@@ -38,7 +38,7 @@ Ship encryption at rest in three phases. Each phase is independently shippable a
 
 ### Phase 1 (this ADR's scope) — opt-in encrypted vault
 
-**Posture**: opt-in via `RUFFLO_ENCRYPT_AT_REST=1`. Default off so the 1865 existing tests and current users keep working unchanged.
+**Posture**: opt-in via `SWARMDO_ENCRYPT_AT_REST=1`. Default off so the 1865 existing tests and current users keep working unchanged.
 
 **What's encrypted**: only the **High** tier (`sessions/`, `.swarm/memory.db`, `terminals/`). The Medium and Low tier stores stay plaintext for now — they hold nothing the audit specifically flagged.
 
@@ -51,17 +51,17 @@ Ship encryption at rest in three phases. Each phase is independently shippable a
    "RFE1"   random   plaintext xor   GCM
 ```
 
-Magic `"RFE1"` (Rufflo File Encrypted v1) — distinguishes from plaintext on read so we can roll out incrementally without a repo-wide migration.
+Magic `"RFE1"` (Swarmdo File Encrypted v1) — distinguishes from plaintext on read so we can roll out incrementally without a repo-wide migration.
 
 **Key source** (precedence, fail closed):
 
-1. `RUFFLO_ENCRYPTION_KEY` — base64-encoded 32 bytes. Highest precedence, useful for CI / containers / users who already have a secret manager.
-2. OS keychain — `keytar`-style lookup under service `rufflo`, account `default`. macOS Keychain, Windows DPAPI, libsecret on Linux. **Optional dependency**: `keytar` is a native module; if unavailable, fall back to (3).
-3. Passphrase prompt + scrypt KDF — interactive only. Stored derived key in process memory for the session, never on disk. Salt persisted at `~/.rufflo/.kdf-salt` (16 bytes random, mode 0600).
+1. `SWARMDO_ENCRYPTION_KEY` — base64-encoded 32 bytes. Highest precedence, useful for CI / containers / users who already have a secret manager.
+2. OS keychain — `keytar`-style lookup under service `swarmdo`, account `default`. macOS Keychain, Windows DPAPI, libsecret on Linux. **Optional dependency**: `keytar` is a native module; if unavailable, fall back to (3).
+3. Passphrase prompt + scrypt KDF — interactive only. Stored derived key in process memory for the session, never on disk. Salt persisted at `~/.swarmdo/.kdf-salt` (16 bytes random, mode 0600).
 
-If `RUFFLO_ENCRYPT_AT_REST=1` and *no* key source resolves, the CLI **errors immediately** rather than silently writing plaintext. Fail-closed posture.
+If `SWARMDO_ENCRYPT_AT_REST=1` and *no* key source resolves, the CLI **errors immediately** rather than silently writing plaintext. Fail-closed posture.
 
-**Migration**: lazy. On read, sniff the magic. If `"RFE1"`, decrypt; otherwise treat as plaintext (backward compatible). On the *first write* after enable, the file is rewritten encrypted. A `rufflo migrate encrypt` subcommand (also opt-in) does an eager pass for users who want it now.
+**Migration**: lazy. On read, sniff the magic. If `"RFE1"`, decrypt; otherwise treat as plaintext (backward compatible). On the *first write* after enable, the file is rewritten encrypted. A `swarmdo migrate encrypt` subcommand (also opt-in) does an eager pass for users who want it now.
 
 **Out of scope**:
 - Key rotation (next phase)
@@ -70,7 +70,7 @@ If `RUFFLO_ENCRYPT_AT_REST=1` and *no* key source resolves, the CLI **errors imm
 
 ### Phase 2 (separate ADR) — key rotation + sealed-box backups
 
-`rufflo encryption rotate` re-encrypts all High-tier stores under a new key. Existing key kept for read-only one cycle to avoid bricking running daemons. Sealed-box format (`age` or `nacl.box`) for files that need to survive off-host transfer.
+`swarmdo encryption rotate` re-encrypts all High-tier stores under a new key. Existing key kept for read-only one cycle to avoid bricking running daemons. Sealed-box format (`age` or `nacl.box`) for files that need to survive off-host transfer.
 
 ### Phase 3 (separate ADR) — extend coverage to Medium-tier stores + AgentDB column-level encryption
 
@@ -103,9 +103,9 @@ This ADR proposes the design; the implementation iteration ships in a separate c
    - key precedence: env-var > keychain > passphrase
    - fail-closed when enabled with no key
 
-6. **Doctor check** — `rufflo doctor` reports encryption status (off / on with env-var / on with keychain / on with passphrase).
+6. **Doctor check** — `swarmdo doctor` reports encryption status (off / on with env-var / on with keychain / on with passphrase).
 
-7. **Documentation** — `docs/security/encryption.md` covers user-facing setup, recovery if a key is lost (the data is gone — by design), and CI guidance (set `RUFFLO_ENCRYPTION_KEY` in repo secrets).
+7. **Documentation** — `docs/security/encryption.md` covers user-facing setup, recovery if a key is lost (the data is gone — by design), and CI guidance (set `SWARMDO_ENCRYPTION_KEY` in repo secrets).
 
 ## Trade-offs
 
@@ -128,20 +128,20 @@ This ADR proposes the design; the implementation iteration ships in a separate c
 ## Open questions
 
 - **Daemon vs CLI**: the daemon long-lived process and the CLI one-shot process need to share a key. For env-var/keychain, they both read the same source. For passphrase, the daemon would need to be started with the passphrase or a derived key passed in via stdin. Document the daemon-mode setup explicitly.
-- **MCP server mode**: when started by Claude Code via `claude mcp add`, the MCP server inherits Claude Code's environment. The user has to set `RUFFLO_ENCRYPTION_KEY` in the env Claude Code launches with — which is doable but non-obvious. A `~/.rufflo/encryption.json` config (mode 0600, keychain reference) might be cleaner than env-var-everywhere. Decide in implementation.
+- **MCP server mode**: when started by Claude Code via `claude mcp add`, the MCP server inherits Claude Code's environment. The user has to set `SWARMDO_ENCRYPTION_KEY` in the env Claude Code launches with — which is doable but non-obvious. A `~/.swarmdo/encryption.json` config (mode 0600, keychain reference) might be cleaner than env-var-everywhere. Decide in implementation.
 - **AgentDB v3 native encryption**: if AgentDB ever exposes a transparent column-encryption API, switch to it for the memory DB. Until then, file-level on the whole DB blob is correct.
 
 ## Acceptance criteria
 
 The implementation iteration is done when:
 
-- [x] `RUFFLO_ENCRYPT_AT_REST=1` round-trips a session save → restore unchanged — pinned by `__tests__/session-encryption.test.ts:run_save → run_restore` (commit `98aa256`).
-- [x] A plaintext `.rufflo/sessions/foo.json` from before the upgrade is still readable after the upgrade (magic-sniff backward compat) — pinned by `__tests__/session-encryption.test.ts > migration` and the analogous case in `terminal-encryption.test.ts` + `memory-db-encryption.test.ts` (commits `98aa256`, `49c8019`, `841365f`).
+- [x] `SWARMDO_ENCRYPT_AT_REST=1` round-trips a session save → restore unchanged — pinned by `__tests__/session-encryption.test.ts:run_save → run_restore` (commit `98aa256`).
+- [x] A plaintext `.swarmdo/sessions/foo.json` from before the upgrade is still readable after the upgrade (magic-sniff backward compat) — pinned by `__tests__/session-encryption.test.ts > migration` and the analogous case in `terminal-encryption.test.ts` + `memory-db-encryption.test.ts` (commits `98aa256`, `49c8019`, `841365f`).
 - [x] A flipped byte in any encrypted file produces a decrypt error, not a panic — pinned by `__tests__/encryption-vault.test.ts > tamper detection` (6 cases) and `memory-db-encryption.test.ts > tamper > flipped ciphertext byte` (commits `cb9a9f3`, `841365f`).
-- [x] The 1865-test baseline stays green with `RUFFLO_ENCRYPT_AT_REST` unset — full vitest run is now **1933/1933 passing, 46 skipped, 0 failures** with the env var unset (started this loop at 1865 + 25 pre-existing failures; +68 new tests across the encryption track).
+- [x] The 1865-test baseline stays green with `SWARMDO_ENCRYPT_AT_REST` unset — full vitest run is now **1933/1933 passing, 46 skipped, 0 failures** with the env var unset (started this loop at 1865 + 25 pre-existing failures; +68 new tests across the encryption track).
 - [x] A new test file `__tests__/encryption-vault.test.ts` exercises every path above — 45 cases (commit `cb9a9f3`). Plus `fs-secure.test.ts` (8 cases), `session-encryption.test.ts` (7), `terminal-encryption.test.ts` (7), `memory-db-encryption.test.ts` (9). Total **76 encryption-track tests across 5 files**.
-- [ ] `rufflo doctor` reports encryption status — **deferred to Phase 5**. The doctor surface needs a separate small change; not blocking the high-tier scope shipping.
-- [ ] The witness manifest (`verification.md.json`) gains a fix entry covering the new vault module so `rufflo verify` confirms it after publish — **deferred until the batch publish iteration** (per the loop directive of "do not publish on every iteration"). Will land alongside the 3.6.25 bump.
+- [ ] `swarmdo doctor` reports encryption status — **deferred to Phase 5**. The doctor surface needs a separate small change; not blocking the high-tier scope shipping.
+- [ ] The witness manifest (`verification.md.json`) gains a fix entry covering the new vault module so `swarmdo verify` confirms it after publish — **deferred until the batch publish iteration** (per the loop directive of "do not publish on every iteration"). Will land alongside the 3.6.25 bump.
 
 ## Implementation status
 
@@ -152,9 +152,9 @@ The implementation iteration is done when:
 | 3 | Wire terminal-tools `saveTerminalStore` + `loadTerminalStore` | `49c8019` | +7 (`terminal-encryption.test.ts`) | 1917 → 1924 |
 | 4 | Wire memory-initializer — 7 `dbPath` writes + 9 `dbPath` reads (Buffer-only sql.js SQLite blobs) | `841365f` | +9 (`memory-db-encryption.test.ts`) | 1924 → 1933 |
 
-**High-tier targets shipped end-to-end opt-in encrypted under `RUFFLO_ENCRYPT_AT_REST=1`:**
-- `.rufflo/sessions/*.json` (memory snapshots + agent prompts)
-- `.rufflo/terminals/store.json` (pasted shell command history → frequent credentials)
+**High-tier targets shipped end-to-end opt-in encrypted under `SWARMDO_ENCRYPT_AT_REST=1`:**
+- `.swarmdo/sessions/*.json` (memory snapshots + agent prompts)
+- `.swarmdo/terminals/store.json` (pasted shell command history → frequent credentials)
 - `.swarm/memory.db` (sql.js SQLite + 384-dim ONNX embeddings)
 
 Backward-compat strategy is the magic-byte sniff (`"RFE1"`): legacy plaintext files keep working unchanged regardless of whether the gate is on or off, so users can opt in without a coordinated migration. On the *first write* after enable, the file is rewritten encrypted; reads always sniff first.
@@ -163,9 +163,9 @@ Backward-compat strategy is the magic-byte sniff (`"RFE1"`): legacy plaintext fi
 
 Each is a separate ADR or follow-up iteration:
 
-- **`rufflo doctor` encryption status report** — small surface change; lands as part of the next CLI bump.
+- **`swarmdo doctor` encryption status report** — small surface change; lands as part of the next CLI bump.
 - **Witness manifest entry** for `src/encryption/vault.ts` + the four wired stores — gates on the next batch publish (per the per-iteration "no publish per iteration" directive).
-- **Key rotation + `rufflo encryption rotate`** — was Phase 2 in the original ADR; renamed Phase 5 now that opt-in shipping is done.
+- **Key rotation + `swarmdo encryption rotate`** — was Phase 2 in the original ADR; renamed Phase 5 now that opt-in shipping is done.
 - **Sealed-box backups** — was Phase 2; renamed Phase 6.
 - **Medium-tier stores** (`agents/`, `tasks/`, `github/`, `claims/`, `config/`, `workflow/`, `neural/`, `daa/`) — was Phase 3; renamed Phase 7. Lower information value per the tiering table; ship after Phase 5 proves the migration story in production.
 - **Keychain (`keytar`) + interactive passphrase resolvers** — extends `getKey()` precedence beyond the env-var-only Phase 1 source.

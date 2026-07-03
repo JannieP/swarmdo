@@ -7,7 +7,7 @@
 
 **The pure-Rust vector database engine behind SwarmVector -- HNSW indexing, quantization, and SIMD acceleration in a single crate.**
 
-`swarmvector-core` is the foundational library that powers the entire [SwarmVector](https://github.com/ruvnet/swarmvector) ecosystem. It gives you a production-grade vector database you can embed directly into any Rust application: insert vectors, search them in under a millisecond, filter by metadata, and compress storage up to 32x -- all without external services. If you need vector search as a library instead of a server, this is the crate.
+`swarmvector-core` is the foundational library that powers the entire [SwarmVector](the upstream project (see NOTICE)) ecosystem. It gives you a production-grade vector database you can embed directly into any Rust application: insert vectors, search them in under a millisecond, filter by metadata, and compress storage up to 32x -- all without external services. If you need vector search as a library instead of a server, this is the crate.
 
 | | swarmvector-core | Typical Vector Database |
 |---|---|---|
@@ -462,10 +462,10 @@ Built with state-of-the-art algorithms and libraries:
 
 <div align="center">
 
-**Part of [SwarmVector](https://github.com/ruvnet/swarmvector) - Built by [rUv](https://ruv.io)**
+**Part of [SwarmVector](the upstream project (see NOTICE)) - Built by [the upstream author](https://swarmdo.com)**
 
-[![Star on GitHub](https://img.shields.io/github/stars/ruvnet/swarmvector?style=social)](https://github.com/ruvnet/swarmvector)
+[![Star on GitHub](https://img.shields.io/github/stars/upstream/swarmvector?style=social)](the upstream project (see NOTICE))
 
-[Documentation](https://docs.rs/swarmvector-core) | [Crates.io](https://crates.io/crates/swarmvector-core) | [GitHub](https://github.com/ruvnet/swarmvector)
+[Documentation](https://docs.rs/swarmvector-core) | [Crates.io](https://crates.io/crates/swarmvector-core) | [GitHub](the upstream project (see NOTICE))
 
 </div>

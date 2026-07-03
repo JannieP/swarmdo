@@ -636,7 +636,7 @@ pub use coreml_native::CoreMLModelHandle;
 ))]
 pub struct CoreMLStreamIterator<'a> {
     model_handle: &'a CoreMLModelHandle,
-    tokenizer: &'a crate::tokenizer::RuvTokenizer,
+    tokenizer: &'a crate::tokenizer::SwarmTokenizer,
     input_ids: Vec<i32>,
     max_tokens: usize,
     temperature: f32,
@@ -658,7 +658,7 @@ impl<'a> CoreMLStreamIterator<'a> {
     /// Create a new streaming iterator
     pub fn new(
         model_handle: &'a CoreMLModelHandle,
-        tokenizer: &'a crate::tokenizer::RuvTokenizer,
+        tokenizer: &'a crate::tokenizer::SwarmTokenizer,
         input_ids: Vec<i32>,
         max_tokens: usize,
         temperature: f32,
@@ -828,7 +828,7 @@ impl<'a> Iterator for CoreMLStreamIterator<'a> {
     }
 }
 
-// Safety: The iterator holds references to CoreMLModelHandle and RuvTokenizer which are Send+Sync
+// Safety: The iterator holds references to CoreMLModelHandle and SwarmTokenizer which are Send+Sync
 #[cfg(all(
     target_os = "macos",
     target_arch = "aarch64",
@@ -859,7 +859,7 @@ pub struct CoreMLBackend {
     model_handle: Option<CoreMLModelHandle>,
     /// The tokenizer for encoding/decoding text
     #[cfg(feature = "candle")]
-    tokenizer: Option<crate::tokenizer::RuvTokenizer>,
+    tokenizer: Option<crate::tokenizer::SwarmTokenizer>,
     /// Input feature name for the model (e.g., "input_ids")
     input_feature_name: String,
     /// EOS token ID for stopping generation
@@ -952,7 +952,7 @@ impl CoreMLBackend {
 
     /// Set the tokenizer for encoding/decoding text
     #[cfg(feature = "candle")]
-    pub fn with_tokenizer(mut self, tokenizer: crate::tokenizer::RuvTokenizer) -> Self {
+    pub fn with_tokenizer(mut self, tokenizer: crate::tokenizer::SwarmTokenizer) -> Self {
         self.eos_token_id = tokenizer.eos_token_id();
         self.vocab_size = tokenizer.vocab_size();
         self.tokenizer = Some(tokenizer);
@@ -981,9 +981,9 @@ impl CoreMLBackend {
     #[cfg(feature = "candle")]
     pub fn load_tokenizer(&mut self, model_id_or_path: &str) -> Result<()> {
         let tokenizer = if std::path::Path::new(model_id_or_path).exists() {
-            crate::tokenizer::RuvTokenizer::from_file(std::path::Path::new(model_id_or_path))?
+            crate::tokenizer::SwarmTokenizer::from_file(std::path::Path::new(model_id_or_path))?
         } else {
-            crate::tokenizer::RuvTokenizer::from_pretrained(model_id_or_path)?
+            crate::tokenizer::SwarmTokenizer::from_pretrained(model_id_or_path)?
         };
 
         self.eos_token_id = tokenizer.eos_token_id();

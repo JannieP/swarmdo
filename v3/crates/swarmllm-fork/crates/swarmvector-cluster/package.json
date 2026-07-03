@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ruvnet/ruvector"
+    "url": "the upstream project (see NOTICE)"
   },
   "keywords": [
     "cluster",
@@ -24,10 +24,9 @@
     "consensus",
     "vector-database"
   ],
-  "author": "rUv",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ruvnet/ruvector/issues"
+    "url": "the upstream project (see NOTICE)"
   },
-  "homepage": "https://github.com/ruvnet/ruvector"
+  "homepage": "the upstream project (see NOTICE)"
 }

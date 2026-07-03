@@ -20,7 +20,7 @@
 //   BENCH_NO_WRITE=1 node scripts/pretrain-from-github.mjs  # don't write a run JSON
 //
 // Repro from a fresh checkout:
-//   git clone https://github.com/ruvnet/swarmdo && cd swarmdo
+//   git clone the upstream project (see NOTICE) && cd swarmdo
 //   npm install && ( cd v3/@swarmdo/cli && npx tsc -b )
 //   node v3/@swarmdo/cli/scripts/pretrain-from-github.mjs
 
@@ -39,7 +39,7 @@ const RUNS_DIR = join(SWARMDO_ROOT, 'docs', 'benchmarks', 'runs');
 // same script can pretrain on agentdb / agentic-flow / any other repo for
 // generalisation testing. Defaults preserve swarmdo behaviour.
 const REPO_ROOT = process.env.REPO_ROOT ? resolve(process.env.REPO_ROOT) : SWARMDO_ROOT;
-const GH_REPO   = process.env.GH_REPO   || 'ruvnet/swarmdo';
+const GH_REPO   = process.env.GH_REPO   || 'upstream/swarmdo';
 
 const COMMITS = Number(process.env.COMMITS) || 50;
 const ISSUES  = Number(process.env.ISSUES)  || 30;

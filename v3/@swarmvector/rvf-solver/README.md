@@ -1,7 +1,7 @@
 # @swarmvector/rvf-solver
 
 [![npm](https://img.shields.io/npm/v/@swarmvector/rvf-solver)](https://www.npmjs.com/package/@swarmvector/rvf-solver)
-[![license](https://img.shields.io/npm/l/@swarmvector/rvf-solver)](https://github.com/ruvnet/swarmvector/blob/main/LICENSE)
+[![license](https://img.shields.io/npm/l/@swarmvector/rvf-solver)](the upstream project (see NOTICE))
 ![platforms](https://img.shields.io/badge/platforms-Node.js%20%7C%20Browser%20%7C%20Edge-blue)
 
 Self-learning temporal solver with Thompson Sampling, PolicyKernel, ReasoningBank, and SHAKE-256 tamper-evident witness chains. Runs in the browser, Node.js, and edge runtimes via WebAssembly.
@@ -249,6 +249,6 @@ MIT OR Apache-2.0
 
 ## Links
 
-- [GitHub Repository](https://github.com/ruvnet/swarmvector)
-- [RVF Format Specification](https://github.com/ruvnet/swarmvector/tree/main/crates/rvf)
+- [GitHub Repository](the upstream project (see NOTICE))
+- [RVF Format Specification](the upstream project (see NOTICE))
 - [npm Package](https://www.npmjs.com/package/@swarmvector/rvf-solver)

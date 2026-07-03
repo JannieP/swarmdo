@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document details how SONA integrates with the ruvector ecosystem and exo-ai cognitive crates to create a unified self-improving architecture.
+This document details how SONA integrates with the swarmvector ecosystem and exo-ai cognitive crates to create a unified self-improving architecture.
 
 ## Integration Architecture
 
@@ -18,7 +18,7 @@ This document details how SONA integrates with the ruvector ecosystem and exo-ai
 ├─────────┼────────────────┼────────────────┼────────────────┼───────────┤
 │         │                │                │                │           │
 │  ┌──────▼──────────────────────────────────────────────────▼──────┐    │
-│  │                     ruvector Crates                            │    │
+│  │                     swarmvector Crates                            │    │
 │  │  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐  │    │
 │  │  │  core   │ │attention│ │  gnn    │ │postgres │ │ sparse  │  │    │
 │  │  │ (HNSW)  │ │(39 mech)│ │ (GNN)   │ │(persist)│ │(vectors)│  │    │
@@ -35,14 +35,14 @@ This document details how SONA integrates with the ruvector ecosystem and exo-ai
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-## ruvector Crate Integration
+## swarmvector Crate Integration
 
-### 1. ruvector-core (HNSW Index)
+### 1. swarmvector-core (HNSW Index)
 
 **Purpose**: High-performance approximate nearest neighbor search for pattern retrieval.
 
 ```rust
-use ruvector_core::{HnswIndex, Distance, SearchParams};
+use swarmvector_core::{HnswIndex, Distance, SearchParams};
 
 /// Pattern index using HNSW for sub-millisecond retrieval
 pub struct PatternIndex {
@@ -101,12 +101,12 @@ pub struct IndexMetrics {
 - Dream memory retrieval
 - Router context lookup
 
-### 2. ruvector-attention (39 Mechanisms)
+### 2. swarmvector-attention (39 Mechanisms)
 
 **Purpose**: Diverse attention mechanisms for different reasoning patterns.
 
 ```rust
-use ruvector_attention::{
+use swarmvector_attention::{
     AttentionMechanism, MultiHeadAttention, LinearAttention,
     SparseAttention, FlashAttention, KernelizedAttention
 };
@@ -195,12 +195,12 @@ impl AttentionRouter {
 - Dream pattern recognition
 - Cross-memory attention
 
-### 3. ruvector-gnn (Graph Neural Networks)
+### 3. swarmvector-gnn (Graph Neural Networks)
 
 **Purpose**: Graph-based reasoning over knowledge structures.
 
 ```rust
-use ruvector_gnn::{GraphConv, GraphAttention, MessagePassing};
+use swarmvector_gnn::{GraphConv, GraphAttention, MessagePassing};
 
 /// Knowledge graph reasoning with GNN
 pub struct KnowledgeGraph {
@@ -322,12 +322,12 @@ enum GnnLayer {
 - Dream creative connections
 - Pattern relationship discovery
 
-### 4. ruvector-postgres (Persistence)
+### 4. swarmvector-postgres (Persistence)
 
 **Purpose**: Durable storage for learned knowledge.
 
 ```rust
-use ruvector_postgres::{PgVector, PgStore, VectorIndex};
+use swarmvector_postgres::{PgVector, PgStore, VectorIndex};
 
 /// Persistent pattern storage with PostgreSQL
 pub struct PatternStore {
@@ -445,12 +445,12 @@ impl PatternStore {
 - Dream memory storage
 - Knowledge graph persistence
 
-### 5. ruvector-sparse (Sparse Vectors)
+### 5. swarmvector-sparse (Sparse Vectors)
 
 **Purpose**: Efficient sparse vector operations for pattern matching.
 
 ```rust
-use ruvector_sparse::{SparseVector, SparseDot, SparseIndex};
+use swarmvector_sparse::{SparseVector, SparseDot, SparseIndex};
 
 /// Sparse pattern representation for efficient storage
 pub struct SparsePatternStore {
@@ -912,7 +912,7 @@ pub struct CreativeSample {
 ```rust
 /// Central integration manager for all SONA components
 pub struct SonaIntegration {
-    // ruvector components
+    // swarmvector components
     pub pattern_index: PatternIndex,
     pub attention: AdaptiveAttention,
     pub knowledge_graph: KnowledgeGraph,

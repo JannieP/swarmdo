@@ -1,7 +1,7 @@
 # Swarmdo Research
 
-> Goal-Oriented Action Planning UI for autonomous AI research workflows. Part of the [Swarmdo](https://github.com/ruvnet/swarmdo) platform.
-> Live: [goal.ruv.io](https://goal.ruv.io/) · Agents dashboard: [goal.ruv.io/agents](https://goal.ruv.io/agents)
+> Goal-Oriented Action Planning UI for autonomous AI research workflows. Part of the [Swarmdo](the upstream project (see NOTICE)) platform.
+> Live: [swarmdo.com](https://swarmdo.com) · Agents dashboard: [swarmdo.com/agents](https://swarmdo.com)
 
 Turn plain-English research goals into executable agent plans. Swarmdo Research applies classic Goal-Oriented Action Planning (GOAP) — A* search through a state space of actions with preconditions and effects — to autonomous AI research, then dispatches the work to live agents you can inspect in real time.
 
@@ -57,8 +57,8 @@ v3/goal_ui/
     accentColor: "#10b981",
   };
 </script>
-<script src="https://goal.ruv.io/widget.js"></script>
-<link rel="stylesheet" href="https://goal.ruv.io/widget.css" />
+<script src="https://swarmdo.com"></script>
+<link rel="stylesheet" href="https://swarmdo.com" />
 ```
 
 The widget exposes a global `window.SwarmdoResearchWidget` with `init(containerId)` and `version` for programmatic control. See [`docs/WIDGET-INTEGRATION.md`](docs/WIDGET-INTEGRATION.md) for the full integration guide.
@@ -69,7 +69,7 @@ React 18 · TypeScript 5 · Vite 5 · Tailwind 3 · shadcn/ui · Radix UI · Rea
 
 ## Deployment
 
-Hosted on Netlify (`netlify.toml`) at [goal.ruv.io](https://goal.ruv.io/). See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for self-hosting instructions and edge-function deploy steps.
+Hosted on Netlify (`netlify.toml`) at [swarmdo.com](https://swarmdo.com). See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for self-hosting instructions and edge-function deploy steps.
 
 ## Environment
 
@@ -83,4 +83,4 @@ VITE_SUPABASE_PUBLISHABLE_KEY=...
 
 ## License
 
-MIT — same as the parent [Swarmdo](https://github.com/ruvnet/swarmdo) project.
+MIT — same as the parent [Swarmdo](the upstream project (see NOTICE)) project.

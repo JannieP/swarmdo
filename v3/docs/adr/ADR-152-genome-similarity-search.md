@@ -4,7 +4,7 @@
 **Date**: 2026-06-16 (revised same-day with spike result)
 **Parent**: [ADR-151](ADR-151-harness-intelligence-layer.md) (Phase 3 scope shell — Harness Intelligence Layer)
 **Inherits**: ADR-150's four architectural constraints (removable / optional / graceful / CI-gate)
-**Spike**: `plugins/rufflo-metaharness/scripts/_spike-similarity.mjs` ([iter-35 commit](https://github.com/ruvnet/ruflo/commit/HEAD))
+**Spike**: `plugins/swarmdo-metaharness/scripts/_spike-similarity.mjs` ([iter-35 commit](the upstream project (see NOTICE)))
 
 ## Spike result (iter 35 — measured)
 
@@ -36,7 +36,7 @@ What we need: a function `similarity(genomeA, genomeB) → number ∈ [0,1]` plu
 
 ## Decision
 
-Implement genome similarity as a **pure-TS function** in the existing `rufflo-metaharness` plugin with three components:
+Implement genome similarity as a **pure-TS function** in the existing `swarmdo-metaharness` plugin with three components:
 
 ### 1. Cosine similarity over a numerical feature vector
 
@@ -105,9 +105,9 @@ The `perDimension` breakdown lets consumers explain *why* two harnesses scored a
 
 ## Implementation surface
 
-- **One pure-TS function** in `plugins/rufflo-metaharness/scripts/_similarity.mjs` (shared module convention — see iter-1 `_harness.mjs` and iter-73 `_sessions.mjs`).
-- **One CLI skill** `harness-similarity` invoked as `npx rufflo metaharness similarity --a <genomeA.json> --b <genomeB.json>` (or `--a-key`/`--b-key` for memory-namespace lookup, mirroring iter-15 `audit-trend`).
-- **One MCP tool** `mcp__rufflo__metaharness_similarity` so agents can call it during conversation.
+- **One pure-TS function** in `plugins/swarmdo-metaharness/scripts/_similarity.mjs` (shared module convention — see iter-1 `_harness.mjs` and iter-73 `_sessions.mjs`).
+- **One CLI skill** `harness-similarity` invoked as `npx swarmdo metaharness similarity --a <genomeA.json> --b <genomeB.json>` (or `--a-key`/`--b-key` for memory-namespace lookup, mirroring iter-15 `audit-trend`).
+- **One MCP tool** `mcp__swarmdo__metaharness_similarity` so agents can call it during conversation.
 
 NO new dependency on `@metaharness/*` — the function operates on JSON shapes that the existing CLI already emits. Genuinely zero blast radius on ADR-150's four constraints:
 
@@ -126,7 +126,7 @@ Before ADR-152 is marked **Accepted**, ship a 30-LOC proof that:
 4. Verifies: similarity(X, X) === 1 (exact self-match).
 5. Verifies: similarity(legal_harness, devops_harness) < similarity(legal_harness, support_harness) using the 13 known metaharness verticals as fixtures.
 
-The spike script: `plugins/rufflo-metaharness/scripts/_spike-similarity.mjs`. Lives in the plugin to avoid polluting global scripts; deleted after ADR-152 graduates.
+The spike script: `plugins/swarmdo-metaharness/scripts/_spike-similarity.mjs`. Lives in the plugin to avoid polluting global scripts; deleted after ADR-152 graduates.
 
 ## Consequences
 
@@ -173,6 +173,6 @@ The spike script: `plugins/rufflo-metaharness/scripts/_spike-similarity.mjs`. Li
 
 - [ADR-151](ADR-151-harness-intelligence-layer.md) — Phase 3 scope shell (parent)
 - [ADR-150](ADR-150-metaharness-integration-surfaces.md) — Phase 1+2 implementation, architectural constraints
-- iter-15 `audit-trend` — `plugins/rufflo-metaharness/scripts/audit-trend.mjs` (sibling drift-detection primitive)
+- iter-15 `audit-trend` — `plugins/swarmdo-metaharness/scripts/audit-trend.mjs` (sibling drift-detection primitive)
 - iter-1 `_harness.mjs` — shared-module convention reference
-- Upstream `harness genome / score / threat-model` outputs documented in [`ruvnet/agent-harness-generator`](https://github.com/ruvnet/agent-harness-generator) source
+- Upstream `harness genome / score / threat-model` outputs documented in [`upstream/agent-harness-generator`](the upstream project (see NOTICE)) source

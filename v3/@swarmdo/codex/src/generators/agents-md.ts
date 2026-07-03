@@ -85,7 +85,7 @@ ${testCommand}
 
 ## Links
 
-- Documentation: https://github.com/ruvnet/swarmdo
+- Documentation: the upstream project (see NOTICE)
 `;
 }
 
@@ -279,8 +279,8 @@ npx @swarmdo/cli hooks pre-task --description "task summary"
 
 ## Links
 
-- Documentation: https://github.com/ruvnet/swarmdo
-- Issues: https://github.com/ruvnet/swarmdo/issues
+- Documentation: the upstream project (see NOTICE)
+- Issues: the upstream project (see NOTICE)
 `;
 }
 

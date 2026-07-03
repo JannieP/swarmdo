@@ -14,22 +14,22 @@
 //! Download small GGUF models for testing
 //!
 //! This utility downloads small, quantized models suitable for testing SwarmLLM.
-//! Now includes support for RuvLTRA models via the HuggingFace Hub integration.
+//! Now includes support for SwarmLTRA models via the HuggingFace Hub integration.
 //!
 //! ## Usage
 //!
 //! ```bash
-//! # Download RuvLTRA Small (recommended for quick tests)
-//! cargo run -p swarmllm --example download_test_model -- --model ruvltra-small
+//! # Download SwarmLTRA Small (recommended for quick tests)
+//! cargo run -p swarmllm --example download_test_model -- --model swarmltra-small
 //!
-//! # Download RuvLTRA Medium
-//! cargo run -p swarmllm --example download_test_model -- --model ruvltra-medium
+//! # Download SwarmLTRA Medium
+//! cargo run -p swarmllm --example download_test_model -- --model swarmltra-medium
 //!
 //! # Download TinyLlama (legacy)
 //! cargo run -p swarmllm --example download_test_model -- --model tinyllama
 //!
 //! # Download to custom directory
-//! cargo run -p swarmllm --example download_test_model -- --model ruvltra-small --output ./my_models
+//! cargo run -p swarmllm --example download_test_model -- --model swarmltra-small --output ./my_models
 //!
 //! # List available models
 //! cargo run -p swarmllm --example download_test_model -- --list
@@ -39,8 +39,8 @@
 //!
 //! | Model | Size | Params | Use Case |
 //! |-------|------|--------|----------|
-//! | ruvltra-small | ~662MB | 0.5B | Edge devices, includes SONA weights |
-//! | ruvltra-medium | ~2.1GB | 3B | General purpose, extended context |
+//! | swarmltra-small | ~662MB | 0.5B | Edge devices, includes SONA weights |
+//! | swarmltra-medium | ~2.1GB | 3B | General purpose, extended context |
 //! | tinyllama | ~600MB | 1.1B | Fast iteration, general testing |
 //! | qwen-0.5b | ~400MB | 0.5B | Smallest, fastest tests |
 //!
@@ -49,7 +49,7 @@
 //! - `HF_TOKEN`: HuggingFace token for gated models (optional for most models)
 //! - `SWARMLLM_MODELS_DIR`: Default output directory for models
 
-use swarmllm::hub::{default_cache_dir, DownloadConfig, ModelDownloader, RuvLtraRegistry};
+use swarmllm::hub::{default_cache_dir, DownloadConfig, ModelDownloader, SwarmLtraRegistry};
 use std::env;
 use std::fs::{self, File};
 use std::io::{self, BufWriter, Write};
@@ -125,7 +125,7 @@ fn main() {
 
     if args.contains(&"--list".to_string()) || args.contains(&"-l".to_string()) {
         list_models();
-        list_ruvltra_models();
+        list_swarmltra_models();
         return;
     }
 
@@ -169,10 +169,10 @@ fn main() {
         }
     };
 
-    // Check if this is a RuvLTRA model first
-    let registry = RuvLtraRegistry::new();
-    if let Some(ruvltra_model) = registry.get(model_name) {
-        download_ruvltra_model(ruvltra_model, output_dir, force);
+    // Check if this is a SwarmLTRA model first
+    let registry = SwarmLtraRegistry::new();
+    if let Some(swarmltra_model) = registry.get(model_name) {
+        download_swarmltra_model(swarmltra_model, output_dir, force);
         return;
     }
 
@@ -182,7 +182,7 @@ fn main() {
         None => {
             eprintln!("Error: Unknown model '{}'", model_name);
             eprintln!("Available models:");
-            eprintln!("\nRuvLTRA models:");
+            eprintln!("\nSwarmLTRA models:");
             for id in registry.model_ids() {
                 eprintln!("  - {}", id);
             }
@@ -445,15 +445,15 @@ fn format_bytes(bytes: u64) -> String {
     }
 }
 
-/// Download a RuvLTRA model using the hub integration
-fn download_ruvltra_model(
+/// Download a SwarmLTRA model using the hub integration
+fn download_swarmltra_model(
     model_info: &swarmllm::hub::ModelInfo,
     output_dir: Option<PathBuf>,
     force: bool,
 ) {
     use swarmllm::hub::DownloadConfig;
 
-    println!("Downloading RuvLTRA model: {}", model_info.name);
+    println!("Downloading SwarmLTRA model: {}", model_info.name);
     println!("Repository: {}", model_info.repo);
     println!("Size: ~{} MB", model_info.size_bytes / (1024 * 1024));
     println!("Quantization: {:?}", model_info.quantization);
@@ -512,13 +512,13 @@ fn download_ruvltra_model(
     }
 }
 
-/// List available RuvLTRA models
-fn list_ruvltra_models() {
-    use swarmllm::hub::RuvLtraRegistry;
+/// List available SwarmLTRA models
+fn list_swarmltra_models() {
+    use swarmllm::hub::SwarmLtraRegistry;
 
-    let registry = RuvLtraRegistry::new();
+    let registry = SwarmLtraRegistry::new();
 
-    println!("\nRuvLTRA models (recommended):\n");
+    println!("\nSwarmLTRA models (recommended):\n");
     println!(
         "{:<20} {:>8}  {:>6}  {:<50}",
         "NAME", "SIZE", "PARAMS", "DESCRIPTION"
@@ -551,9 +551,9 @@ fn list_ruvltra_models() {
 
     println!();
     println!("Recommendations:");
-    println!("  - For edge devices: ruvltra-small");
-    println!("  - For general use: ruvltra-medium");
-    println!("  - For code completion: ruvltra-small + ruvltra-small-coder adapter");
+    println!("  - For edge devices: swarmltra-small");
+    println!("  - For general use: swarmltra-medium");
+    println!("  - For code completion: swarmltra-small + swarmltra-small-coder adapter");
 }
 
 #[cfg(test)]
@@ -588,12 +588,12 @@ mod tests {
     }
 
     #[test]
-    fn test_ruvltra_registry() {
-        use swarmllm::hub::RuvLtraRegistry;
+    fn test_swarmltra_registry() {
+        use swarmllm::hub::SwarmLtraRegistry;
 
-        let registry = RuvLtraRegistry::new();
-        assert!(registry.get("ruvltra-small").is_some());
-        assert!(registry.get("ruvltra-medium").is_some());
+        let registry = SwarmLtraRegistry::new();
+        assert!(registry.get("swarmltra-small").is_some());
+        assert!(registry.get("swarmltra-medium").is_some());
         assert!(registry.list_all().len() > 0);
     }
 }

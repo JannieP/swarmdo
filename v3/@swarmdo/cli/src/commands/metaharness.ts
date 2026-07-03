@@ -31,7 +31,7 @@
  * here we only spawn the local Node script (which then handles
  * `npx metaharness` + graceful degradation).
  *
- * Created with ruv.io
+ * Created with swarmdo.com
  */
 
 import type { Command, CommandContext, CommandResult } from '../types.js';

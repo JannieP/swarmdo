@@ -609,9 +609,9 @@ Agent Activity:
 
 ## Support
 
-- Documentation: https://github.com/ruvnet/ruv-FANN/tree/main/swarmdo-swarm
-- Issues: https://github.com/ruvnet/ruv-FANN/issues
-- Examples: https://github.com/ruvnet/ruv-FANN/tree/main/swarmdo-swarm/examples
+- Documentation: the upstream project (see NOTICE)
+- Issues: the upstream project (see NOTICE)
+- Examples: the upstream project (see NOTICE)
 
 ---
 
@@ -1404,9 +1404,9 @@ When using swarmdo-swarm coordination with Claude Code:
 
 ## Support
 
-- Documentation: https://github.com/ruvnet/ruv-FANN/tree/main/swarmdo-swarm
-- Issues: https://github.com/ruvnet/ruv-FANN/issues
-- Examples: https://github.com/ruvnet/ruv-FANN/tree/main/swarmdo-swarm/examples
+- Documentation: the upstream project (see NOTICE)
+- Issues: the upstream project (see NOTICE)
+- Examples: the upstream project (see NOTICE)
 
 ---
 

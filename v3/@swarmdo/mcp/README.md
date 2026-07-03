@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
 [![MCP 2025-11-25](https://img.shields.io/badge/MCP-2025--11--25-blue.svg)](https://modelcontextprotocol.io)
-[![Standalone](https://img.shields.io/badge/Module-Standalone-green.svg)](https://github.com/ruvnet/claude-flow)
+[![Standalone](https://img.shields.io/badge/Module-Standalone-green.svg)](the upstream project (see NOTICE))
 
 > **MCP 2025-11-25 Compliant** - Standalone Model Context Protocol server implementation with full Resources, Prompts, and Tasks support
 

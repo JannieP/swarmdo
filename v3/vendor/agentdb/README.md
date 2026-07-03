@@ -5,10 +5,10 @@
 [![License](https://img.shields.io/badge/License-MIT_OR_Apache--2.0-yellow?style=for-the-badge)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178c6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-[![🕸️ SwarmVector Engine](https://img.shields.io/badge/SwarmVector_Engine-Rust_+_NAPI-06b6d4?style=for-the-badge&logoColor=white&logo=rust)](https://github.com/ruvnet/swarmvector)
+[![🕸️ SwarmVector Engine](https://img.shields.io/badge/SwarmVector_Engine-Rust_+_NAPI-06b6d4?style=for-the-badge&logoColor=white&logo=rust)](the upstream project (see NOTICE))
 [![🧠 SONA Self-Learning](https://img.shields.io/badge/SONA-Self_Learning-8b5cf6?style=for-the-badge&logoColor=white)](#-self-learning-loop)
 [![🔌 MCP Compatible](https://img.shields.io/badge/MCP-41_tools-D97757?style=for-the-badge&logoColor=white&logo=anthropic)](#-mcp-integration)
-[![⭐ Star on GitHub](https://img.shields.io/github/stars/ruvnet/agentdb?style=for-the-badge&logo=github&color=gold)](https://github.com/ruvnet/agentdb)
+[![⭐ Star on GitHub](https://img.shields.io/github/stars/upstream/agentdb?style=for-the-badge&logo=github&color=gold)](the upstream project (see NOTICE))
 
 # AgentDB
 
@@ -22,7 +22,7 @@ A single-file cognitive container — vectors, indexes, learning state, and a cr
 
 > Most vector databases store embeddings and call it done. AgentDB watches *which* results your agent actually used, learns from that signal, and ranks the next query better. The bandit underneath also picks the right RL algorithm, the right compression tier, and the right pattern weighting on its own — so the database itself gets sharper while you focus on the agent.
 
-> The name: a database that thinks like an agent — episodic memory, skill library, causal reasoning, and a learning loop, all in one file. Built by [`rUv`](https://ruv.io) on the [`swarmvector`](https://github.com/ruvnet/swarmvector) Rust engine.
+> The name: a database that thinks like an agent — episodic memory, skill library, causal reasoning, and a learning loop, all in one file. Built by [`the upstream author`](https://swarmdo.com) on the [`swarmvector`](the upstream project (see NOTICE)) Rust engine.
 
 ### What AgentDB Does
 
@@ -110,7 +110,7 @@ That registers 41 MCP tools — `agentdb_pattern_store`, `agentdb_pattern_search
 | 🔌 **41 MCP Tools** | First-class Claude Code / Cursor / Cline integration — pattern store, search, skill library, reflexion, causal edges, hierarchical recall, delete |
 | 🌐 **Runs Anywhere** | Node, browser (WASM), edge runtimes, fully offline — same API, same `.rvf` file |
 | 🛡️ **Enterprise Security** | JWT auth, API key rotation, Argon2id hashing, SOC2 / GDPR audit trails, cryptographic witness chain |
-| 🔗 **agentic-flow Integration** | Drop-in for [`agentic-flow`](https://github.com/ruvnet/agentic-flow) — backs ReasoningBank, MemoryController, NightlyLearner, and 30+ agents |
+| 🔗 **agentic-flow Integration** | Drop-in for [`agentic-flow`](the upstream project (see NOTICE)) — backs ReasoningBank, MemoryController, NightlyLearner, and 30+ agents |
 
 ---
 
@@ -242,11 +242,11 @@ AgentDB powers the memory + learning layer in:
 
 | Project | What it uses AgentDB for |
 |---|---|
-| [**`agentic-flow`**](https://github.com/ruvnet/agentic-flow) | ReasoningBank backend, ReflexionMemory, NightlyLearner consolidation, 30+ agent memory namespaces |
-| [**`swarmdo`**](https://github.com/ruvnet/swarmdo) | Plugin marketplace memory, agent federation audit log, hierarchical recall for /adr-index, swarm coordination patterns |
-| [**`@swarmvector`**](https://github.com/ruvnet/swarmvector) | Reference downstream for the Rust engine — every release is verified against AgentDB's test suite |
+| [**`agentic-flow`**](the upstream project (see NOTICE)) | ReasoningBank backend, ReflexionMemory, NightlyLearner consolidation, 30+ agent memory namespaces |
+| [**`swarmdo`**](the upstream project (see NOTICE)) | Plugin marketplace memory, agent federation audit log, hierarchical recall for /adr-index, swarm coordination patterns |
+| [**`@swarmvector`**](the upstream project (see NOTICE)) | Reference downstream for the Rust engine — every release is verified against AgentDB's test suite |
 
-If you ship something on top of AgentDB, [open an issue](https://github.com/ruvnet/agentdb/issues) and we'll add you.
+If you ship something on top of AgentDB, [open an issue](the upstream project (see NOTICE)) and we'll add you.
 
 ---
 
@@ -289,11 +289,11 @@ docker compose -f docker/docker-compose.yml up
 | | |
 |---|---|
 | 📦 **npm** | [`agentdb`](https://www.npmjs.com/package/agentdb) |
-| 🌐 **Source** | https://github.com/ruvnet/agentdb |
-| 🐛 **Issues** | https://github.com/ruvnet/agentdb/issues |
+| 🌐 **Source** | the upstream project (see NOTICE) |
+| 🐛 **Issues** | the upstream project (see NOTICE) |
 | 🎨 **Marketing site** | [`ui/`](./ui) (Vite + React + shadcn/ui) |
-| 🧬 **Engine** | [`@swarmvector`](https://github.com/ruvnet/swarmvector) (Rust + NAPI) |
-| 🔗 **Reference consumer** | [`agentic-flow`](https://github.com/ruvnet/agentic-flow) (uses this as a git submodule at `packages/agentdb/`) |
+| 🧬 **Engine** | [`@swarmvector`](the upstream project (see NOTICE)) (Rust + NAPI) |
+| 🔗 **Reference consumer** | [`agentic-flow`](the upstream project (see NOTICE)) (uses this as a git submodule at `packages/agentdb/`) |
 
 ---
 
@@ -302,12 +302,12 @@ docker compose -f docker/docker-compose.yml up
 | Resource | Link |
 |---|---|
 | Documentation | [docs/README-full.md](docs/README-full.md) |
-| Issues & Bugs | [GitHub Issues](https://github.com/ruvnet/agentdb/issues) |
-| Enterprise | [ruv.io](https://ruv.io) |
+| Issues & Bugs | [GitHub Issues](the upstream project (see NOTICE)) |
+| Enterprise | [swarmdo.com](https://swarmdo.com) |
 | Community | [Agentics Foundation Discord](https://discord.com/invite/dfxmpwkG2D) |
-| Engine | [`swarmvector`](https://github.com/ruvnet/swarmvector) |
+| Engine | [`swarmvector`](the upstream project (see NOTICE)) |
 | Powered by | [Cognitum.one](https://cognitum.one) |
 
 ## License
 
-[MIT](LICENSE) OR Apache-2.0 — [RuvNet](https://github.com/ruvnet)
+[MIT](LICENSE) OR Apache-2.0 — [the upstream author](https://the upstream project (see NOTICE))

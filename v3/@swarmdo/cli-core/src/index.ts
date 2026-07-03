@@ -121,7 +121,7 @@ Storage:
 Programmatic use:
   import { JsonMemoryBackend, runMemoryCommand } from '@swarmdo/cli-core';
 
-Track progress: https://github.com/ruvnet/swarmdo/issues/1760`);
+Track progress: the upstream project (see NOTICE)`);
     process.exit(0);
   }
 

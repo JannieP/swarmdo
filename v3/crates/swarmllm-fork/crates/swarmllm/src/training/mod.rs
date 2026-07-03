@@ -1,7 +1,7 @@
 //! # Training Module
 //!
 //! This module provides training data generation and fine-tuning utilities
-//! for RuvLTRA models, including Claude Flow task datasets and MCP tool training.
+//! for SwarmLTRA models, including Claude Flow task datasets and MCP tool training.
 //!
 //! ## Submodules
 //!

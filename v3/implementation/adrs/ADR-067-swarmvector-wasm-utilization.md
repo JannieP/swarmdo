@@ -1,21 +1,21 @@
 ---
-# ADR-067: RuVector WASM Utilization Improvement Plan
+# ADR-067: SwarmVector WASM Utilization Improvement Plan
 
 **Status**: Proposed
 **Date**: 2026-03-26
-**Author**: RuvNet
+**Author**: the upstream author
 
 ## Context
 
-The CLI declares 6 `@ruvector` WASM packages in `optionalDependencies`, promising significant performance improvements (Flash Attention unverified (no benchmark), SONA <0.05ms adaptation, HNSW ~1.9x-4.7x measured search). A utilization audit revealed that most of these packages are either dead code, permanently falling back to JS implementations, or only reachable through MCP tools rather than the CLI surface.
+The CLI declares 6 `@swarmvector` WASM packages in `optionalDependencies`, promising significant performance improvements (Flash Attention unverified (no benchmark), SONA <0.05ms adaptation, HNSW ~1.9x-4.7x measured search). A utilization audit revealed that most of these packages are either dead code, permanently falling back to JS implementations, or only reachable through MCP tools rather than the CLI surface.
 
 Key audit findings:
 
-- **@ruvector/router** is dead code: imported but never called, all routing falls back to JS logic
-- **@ruvector/learning-wasm** falls back to the JS implementation 100% of the time
-- **@ruvector/attention** is only exercised in benchmark paths, never in production request flows
-- **@ruvector/sona** engine is created but rarely invoked for actual pattern learning
-- **@ruvector/rvagent-wasm** and **@ruvector/ruvllm-wasm** are properly integrated but only exposed via MCP tools, not the CLI
+- **@swarmvector/router** is dead code: imported but never called, all routing falls back to JS logic
+- **@swarmvector/learning-wasm** falls back to the JS implementation 100% of the time
+- **@swarmvector/attention** is only exercised in benchmark paths, never in production request flows
+- **@swarmvector/sona** engine is created but rarely invoked for actual pattern learning
+- **@swarmvector/rvagent-wasm** and **@swarmvector/swarmllm-wasm** are properly integrated but only exposed via MCP tools, not the CLI
 - All WASM-dependent tests use mocks -- 0% real WASM coverage
 - Declared performance targets are not verifiable in production because the WASM paths are never reached
 
@@ -25,15 +25,15 @@ Adopt a tiered remediation plan to close the gap between declared capabilities a
 
 ### Tier 1 -- Immediate (dead code removal)
 
-Remove `@ruvector/router` from `optionalDependencies` and delete the unused import, OR integrate it into the `hooks route` command so the WASM router is actually invoked when available. Prefer integration if the package is functional; prefer removal if it is not.
+Remove `@swarmvector/router` from `optionalDependencies` and delete the unused import, OR integrate it into the `hooks route` command so the WASM router is actually invoked when available. Prefer integration if the package is functional; prefer removal if it is not.
 
 ### Tier 2 -- Short-term (CLI exposure)
 
-Expose `rvagent-wasm` and `ruvllm-wasm` capabilities through CLI commands so they are not locked behind MCP-only access:
+Expose `rvagent-wasm` and `swarmllm-wasm` capabilities through CLI commands so they are not locked behind MCP-only access:
 
 - `agent wasm-create` -- create an agent backed by the WASM runtime
 - `agent wasm-prompt` -- send a prompt to a WASM-backed agent
-- `neural wasm-infer` -- run inference through ruvllm-wasm
+- `neural wasm-infer` -- run inference through swarmllm-wasm
 
 ### Tier 3 -- Medium-term (WASM-first fallback inversion)
 
@@ -54,12 +54,12 @@ Invert the current pattern where WASM is optional and JS is default. For `learni
 
 | Package | Current State | Utilization | Target State | Target Utilization |
 |---------|--------------|-------------|--------------|-------------------|
-| `@ruvector/router` | Imported, never called | 0% | Integrated into `hooks route` or removed | 100% or removed |
-| `@ruvector/learning-wasm` | Always falls back to JS | 0% (WASM) | WASM-first with JS fallback + warning | 80%+ (WASM) |
-| `@ruvector/attention` | Benchmark-only | ~5% | Production memory-search + benchmark | 60%+ |
-| `@ruvector/sona` | Engine created, rarely invoked | ~10% | Active in `hooks pretrain`, `neural train` | 70%+ |
-| `@ruvector/rvagent-wasm` | MCP-only | 40% | MCP + CLI (`agent wasm-*`) | 90%+ |
-| `@ruvector/ruvllm-wasm` | MCP-only | 40% | MCP + CLI (`neural wasm-infer`) | 90%+ |
+| `@swarmvector/router` | Imported, never called | 0% | Integrated into `hooks route` or removed | 100% or removed |
+| `@swarmvector/learning-wasm` | Always falls back to JS | 0% (WASM) | WASM-first with JS fallback + warning | 80%+ (WASM) |
+| `@swarmvector/attention` | Benchmark-only | ~5% | Production memory-search + benchmark | 60%+ |
+| `@swarmvector/sona` | Engine created, rarely invoked | ~10% | Active in `hooks pretrain`, `neural train` | 70%+ |
+| `@swarmvector/rvagent-wasm` | MCP-only | 40% | MCP + CLI (`agent wasm-*`) | 90%+ |
+| `@swarmvector/swarmllm-wasm` | MCP-only | 40% | MCP + CLI (`neural wasm-infer`) | 90%+ |
 
 ## Consequences
 
@@ -86,6 +86,6 @@ Invert the current pattern where WASM is optional and JS is default. For `learni
 ## Related
 
 - ADR-066: v3.5.24 Audit Remediation (prior audit cycle)
-- `v3/@rufflo/cli/package.json` -- optionalDependencies declarations
-- `v3/@rufflo/cli/src/hooks/` -- hooks route command
-- `v3/@rufflo/cli/src/mcp/tools/` -- MCP tool definitions for rvagent and ruvllm
+- `v3/@swarmdo/cli/package.json` -- optionalDependencies declarations
+- `v3/@swarmdo/cli/src/hooks/` -- hooks route command
+- `v3/@swarmdo/cli/src/mcp/tools/` -- MCP tool definitions for rvagent and swarmllm

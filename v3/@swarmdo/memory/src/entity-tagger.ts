@@ -2,7 +2,7 @@
  * Entity tagger — regex-based proper-noun / structured-token extractor.
  *
  * Used by the `hybridSearch` controller as a third RRF arm alongside the
- * dense (vector) and sparse (BM25/FTS5) signals (ADR-147, ruvnet/swarmdo#2317).
+ * dense (vector) and sparse (BM25/FTS5) signals (ADR-147, upstream/swarmdo#2317).
  *
  * Entity matching is a distinct signal because BM25 weights documents by
  * overall token frequency; a per-entity exact match avoids downweighting

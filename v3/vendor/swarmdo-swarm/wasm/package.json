@@ -2,7 +2,7 @@
   "name": "swarmdo-swarm-wasm",
   "type": "module",
   "collaborators": [
-    "rUv Contributors"
+    "the upstream author Contributors"
   ],
   "description": "WebAssembly bindings for swarmdo-swarm neural network orchestration",
   "version": "1.0.5",

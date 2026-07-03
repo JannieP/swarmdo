@@ -264,7 +264,7 @@ export class WasmMcpServer {
  * RVF Container Builder for WASM.
  *
  * Build RVF cognitive containers that package tools, prompts, skills,
- * orchestrator configs, MCP tools, and Ruvix capabilities.
+ * orchestrator configs, MCP tools, and Swarmix capabilities.
  *
  * # Example (JavaScript)
  * ```js
@@ -279,7 +279,7 @@ export class WasmRvfBuilder {
     free(): void;
     [Symbol.dispose](): void;
     /**
-     * Add Ruvix capability definitions.
+     * Add Swarmix capability definitions.
      */
     addCapabilities(caps_json: string): void;
     /**

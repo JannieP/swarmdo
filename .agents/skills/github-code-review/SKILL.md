@@ -1119,8 +1119,8 @@ npx swarmdo-swarm github review-init --pr 123 --parallel --cache-results
 
 ### Documentation
 - [GitHub CLI Documentation](https:/$cli.github.com$manual/)
-- [RUV Swarm Guide](https:/$github.com$ruvnet$swarmdo-swarm)
-- [Swarmdo Integration](https:/$github.com$ruvnet$swarmdo)
+- [RUV Swarm Guide](https:/$github.com$upstream$swarmdo-swarm)
+- [Swarmdo Integration](https:/$github.com$upstream$swarmdo)
 
 ### Support
 - GitHub Issues: Report bugs and request features

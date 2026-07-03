@@ -52,7 +52,7 @@ interface Witness {
   };
 }
 
-const DEFAULT_MANIFEST_URL = 'https://raw.githubusercontent.com/ruvnet/swarmdo/{branch}/verification.md.json';
+const DEFAULT_MANIFEST_URL = 'https://raw.githubusercontent.com/upstream/swarmdo/{branch}/verification.md.json';
 
 async function fetchWitness(branch: string): Promise<Witness> {
   const url = DEFAULT_MANIFEST_URL.replace('{branch}', branch);

@@ -1,4 +1,4 @@
-/* @ts-self-types="./ruvector_rabitq_wasm.d.ts" */
+/* @ts-self-types="./swarmvector_rabitq_wasm.d.ts" */
 
 /**
  * 1-bit quantized vector index. Builds in O(n × dim) memory + O(n × dim)
@@ -224,7 +224,7 @@ function __wbg_get_imports() {
     };
     return {
         __proto__: null,
-        "./ruvector_rabitq_wasm_bg.js": import0,
+        "./swarmvector_rabitq_wasm_bg.js": import0,
     };
 }
 
@@ -454,7 +454,7 @@ async function __wbg_init(module_or_path) {
     }
 
     if (module_or_path === undefined) {
-        module_or_path = new URL('ruvector_rabitq_wasm_bg.wasm', import.meta.url);
+        module_or_path = new URL('swarmvector_rabitq_wasm_bg.wasm', import.meta.url);
     }
     const imports = __wbg_get_imports();
 

@@ -2,7 +2,7 @@
 /**
  * CWE-347 regression smoke — plugin registry Ed25519 verification.
  *
- * Reference: ruvnet/swarmdo PR #1922 / aaronjmars's disclosure.
+ * Reference: upstream/swarmdo PR #1922 / aaronjmars's disclosure.
  *
  * The historical bug: `verifyRegistrySignature` in
  * v3/@swarmdo/cli/src/plugins/store/discovery.ts was a stub that

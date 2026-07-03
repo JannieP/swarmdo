@@ -14,7 +14,7 @@
 //! # Claude Task Dataset Generation Example
 //!
 //! This example demonstrates how to generate a comprehensive fine-tuning dataset
-//! for RuvLTRA models trained on Claude Flow agent tasks.
+//! for SwarmLTRA models trained on Claude Flow agent tasks.
 //!
 //! ## Usage
 //!
@@ -127,7 +127,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     println!("\n✨ Dataset generation complete!");
     println!("   Total examples: {}", dataset.examples.len());
-    println!("   Ready for fine-tuning RuvLTRA models\n");
+    println!("   Ready for fine-tuning SwarmLTRA models\n");
 
     Ok(())
 }

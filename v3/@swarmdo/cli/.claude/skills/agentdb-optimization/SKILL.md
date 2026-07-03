@@ -499,8 +499,8 @@ const adapter = await createAgentDBAdapter({
 
 - **Quantization Paper**: docs/quantization-techniques.pdf
 - **HNSW Algorithm**: docs/hnsw-index.pdf
-- **GitHub**: https://github.com/ruvnet/agentic-flow/tree/main/packages/agentdb
-- **Website**: https://agentdb.ruv.io
+- **GitHub**: the upstream project (see NOTICE)
+- **Website**: https://swarmdo.com
 
 ---
 

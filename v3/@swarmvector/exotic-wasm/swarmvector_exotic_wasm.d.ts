@@ -260,7 +260,7 @@ export function available_mechanisms(): any;
 export function init(): void;
 
 /**
- * Get the version of the ruvector-exotic-wasm crate
+ * Get the version of the swarmvector-exotic-wasm crate
  */
 export function version(): string;
 

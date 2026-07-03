@@ -2,19 +2,19 @@
 
 [![Swarmdo Banner](swarmdo/assets/swarmdo-small.jpeg)](https://cognitum.one/agentic-engineering)
 
-[![Try the UI Beta — flo.ruv.io](https://img.shields.io/badge/_Try_the_UI_Beta-flo.ruv.io-6366f1?style=for-the-badge&logoColor=white&logo=svelte)](https://flo.ruv.io/)
-[![Goal Planner — goal.ruv.io](https://img.shields.io/badge/_Goal_Planner-goal.ruv.io-8b5cf6?style=for-the-badge&logoColor=white&logo=react)](https://goal.ruv.io/)
-[![Live Agents — goal.ruv.io/agents](https://img.shields.io/badge/_Live_Agents-goal.ruv.io%2Fagents-10b981?style=for-the-badge&logoColor=white&logo=react)](https://goal.ruv.io/agents)
+[![Try the UI Beta — swarmdo.com](https://img.shields.io/badge/_Try_the_UI_Beta-swarmdo.com-6366f1?style=for-the-badge&logoColor=white&logo=svelte)](https://swarmdo.com)
+[![Goal Planner — swarmdo.com](https://img.shields.io/badge/_Goal_Planner-swarmdo.com-8b5cf6?style=for-the-badge&logoColor=white&logo=react)](https://swarmdo.com)
+[![Live Agents — swarmdo.com/agents](https://img.shields.io/badge/_Live_Agents-swarmdo.com%2Fagents-10b981?style=for-the-badge&logoColor=white&logo=react)](https://swarmdo.com)
 
 [![npm version (swarmdo)](https://img.shields.io/npm/v/swarmdo?label=swarmdo&style=for-the-badge&logo=npm&color=cb3837)](https://www.npmjs.com/package/swarmdo)
-[![Ecosystem downloads](https://img.shields.io/badge/ecosystem%20downloads-22.2M%2B-blue?style=for-the-badge&logo=npm)](https://github.com/ruvnet/swarmdo/blob/main/data/clone-data.proof.json)
-[![Git clones (14d)](https://img.shields.io/badge/git%20clones%2014d-115k-blueviolet?style=for-the-badge&logo=github)](https://github.com/ruvnet/swarmdo/blob/main/data/clone-data.ledger.json)
+[![Ecosystem downloads](https://img.shields.io/badge/ecosystem%20downloads-22.2M%2B-blue?style=for-the-badge&logo=npm)](the upstream project (see NOTICE))
+[![Git clones (14d)](https://img.shields.io/badge/git%20clones%2014d-115k-blueviolet?style=for-the-badge&logo=github)](the upstream project (see NOTICE))
 
-[![Star on GitHub](https://img.shields.io/github/stars/ruvnet/claude-flow?style=for-the-badge&logo=github&color=gold)](https://github.com/ruvnet/claude-flow)
+[![Star on GitHub](https://img.shields.io/github/stars/upstream/claude-flow?style=for-the-badge&logo=github&color=gold)](the upstream project (see NOTICE))
 [![MIT License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](https://opensource.org/licenses/MIT)
-[![Claude Code](https://img.shields.io/badge/Claude%20Code-Plugin-D97757?style=for-the-badge&logoColor=white&logo=anthropic)](https://github.com/ruvnet/claude-flow)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-Plugin-D97757?style=for-the-badge&logoColor=white&logo=anthropic)](the upstream project (see NOTICE))
 [![Codex Plugin](https://img.shields.io/badge/Codex-Plugin-412991?style=for-the-badge&logoColor=white&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0yMi4yODIgOS44MjFhNS45ODUgNS45ODUgMCAwIDAtLjUxNi00LjkxIDYuMDQ2IDYuMDQ2IDAgMCAwLTYuNTEtMi45QTYuMDY1IDYuMDY1IDAgMCAwIDQuOTgxIDQuMThhNS45ODUgNS45ODUgMCAwIDAtMy45OTggMi45IDYuMDQ2IDYuMDQ2IDAgMCAwIC43NDMgNy4wOTcgNS45OCA1Ljk4IDAgMCAwIC41MSA0LjkxMSA2LjA1MSA2LjA1MSAwIDAgMCA2LjUxNSAyLjlBNS45ODUgNS45ODUgMCAwIDAgMTMuMjYgMjRhNi4wNTYgNi4wNTYgMCAwIDAgNS43NzItNC4yMDYgNS45OSA1Ljk5IDAgMCAwIDMuOTk4LTIuOSA2LjA1NiA2LjA1NiAwIDAgMC0uNzQ3LTcuMDczek0xMy4yNiAyMi40M2E0LjQ3NiA0LjQ3NiAwIDAgMS0yLjg3Ni0xLjA0bC4xNDItLjA4IDQuNzc4LTIuNzU4YS43OTUuNzk1IDAgMCAwIC4zOTMtLjY4MXYtNi43MzdsMi4wMiAxLjE2OGEuMDcxLjA3MSAwIDAgMSAuMDM4LjA1MnY1LjU4M2E0LjUwNCA0LjUwNCAwIDAgMS00LjQ5NSA0LjQ5NHpNMy42IDE4LjMwNGE0LjQ3IDQuNDcgMCAwIDEtLjUzNS0zLjAxNGwuMTQyLjA4NSA0Ljc4MyAyLjc1OWEuNzcxLjc3MSAwIDAgMCAuNzgxIDBsNS44NDMtMy4zNjl2Mi4zMzJhLjA4LjA4IDAgMCAxLS4wMzMuMDYyTDkuNzQgMTkuOTVhNC41IDQuNSAwIDAgMS02LjE0LTEuNjQ2ek0yLjM0IDcuODk2YTQuNDg1IDQuNDg1IDAgMCAxIDIuMzY2LTEuOTczVjExLjZhLjc2Ni43NjYgMCAwIDAgLjM4OC42NzdsNS44MTUgMy4zNTQtMi4wMiAxLjE2OGEuMDc2LjA3NiAwIDAgMS0uMDcyIDBsLTQuODMtMi43ODZBNC41MDQgNC41MDQgMCAwIDEgMi4zNCA3Ljg3MnptMTYuNTk3IDMuODU1LTUuODMzLTMuMzg3IDIuMDE2LTEuMTY1YS4wNzYuMDc2IDAgMCAxIC4wNzEgMGw0LjgzIDIuNzkxYTQuNDk0IDQuNDk0IDAgMCAxLS42NzYgOC4xMDR2LTUuNjc3YS43OS43OSAwIDAgMC0uNDA3LS42Njd6bTIuMDEtMy4wMjMtLjE0MS0uMDg1LTQuNzc0LTIuNzgyYS43NzYuNzc2IDAgMCAwLS43ODUgMEw5LjQwOSA5LjIzVjYuODk3YS4wNjYuMDY2IDAgMCAxIC4wMjgtLjA2Mmw0LjgzLTIuNzg3YTQuNDk5IDQuNDk5IDAgMCAxIDYuNjggNC42NnpNOC4zMDcgMTIuODYzbC0yLjAyLTEuMTY0YS4wOC4wOCAwIDAgMS0uMDM4LS4wNTdWNi4wNzRhNC40OTkgNC40OTkgMCAwIDEgNy4zNzYtMy40NTRsLS4xNDIuMDgtNC43NzggMi43NThhLjc5NS43OTUgMCAwIDAtLjM5My42ODJ6bTEuMDk3LTIuMzY2IDIuNjAyLTEuNSAyLjYwNyAxLjV2Mi45OTlsLTIuNTk3IDEuNS0yLjYwNy0xLjVaIi8%2BPC9zdmc%2B)](https://www.npmjs.com/package/@swarmdo/codex)
-[![🕸️ SwarmVector Graph Ai](https://img.shields.io/badge/SwarmVector_Agentic-DB-06b6d4?style=for-the-badge&logoColor=white&logo=graphql)](https://github.com/ruvnet/swarmvector)
+[![🕸️ SwarmVector Graph Ai](https://img.shields.io/badge/SwarmVector_Agentic-DB-06b6d4?style=for-the-badge&logoColor=white&logo=graphql)](the upstream project (see NOTICE))
 
 # Swarmdo
 
@@ -26,7 +26,7 @@ Orchestrate 100+ specialized AI agents across machines, teams, and trust boundar
 
 ### Why Swarmdo?
 
-> Swarmdo is now Swarmdo — named by [`rUv`](https://ruv.io), who loves Rust, flow states, and building things that feel inevitable. The "Ru" is the rUv. The "flo" is working until 3am. Underneath, powered by [`Cognitum.One`](https://cognitum.one/?Swarmdo) agentic architecture, running a supercharged Rust based AI engine, embeddings, memory, and plugin system.
+> Swarmdo is now Swarmdo — named by [`the upstream author`](https://swarmdo.com), who loves Rust, flow states, and building things that feel inevitable. The "Ru" is the the upstream author. The "flo" is working until 3am. Underneath, powered by [`Cognitum.One`](https://cognitum.one/?Swarmdo) agentic architecture, running a supercharged Rust based AI engine, embeddings, memory, and plugin system.
 
 
 ### What Swarmdo Does
@@ -63,7 +63,7 @@ There are **two different install paths** with very different surface areas. Pic
 
 ```bash
 # Add the marketplace
-/plugin marketplace add ruvnet/swarmdo
+/plugin marketplace add upstream/swarmdo
 
 # Install core + any plugins you need
 /plugin install swarmdo-core@swarmdo
@@ -163,7 +163,7 @@ This adds slash commands and agent definitions only. The Swarmdo MCP server is N
 
 ```bash
 # One-line install (POSIX shells only — see Windows note below)
-curl -fsSL https://cdn.jsdelivr.net/gh/ruvnet/swarmdo@main/scripts/install.sh | bash
+curl -fsSL https://cdn.jsdelivr.net/gh/upstream/swarmdo@main/scripts/install.sh | bash
 ```
 
 **All platforms (including native Windows PowerShell / cmd):**
@@ -204,55 +204,55 @@ claude mcp add swarmdo -- npx swarmdo@latest mcp start
 | 🔌 **Multi-Provider** | Claude, GPT, Gemini, Cohere, Ollama with smart routing |
 | 🛡️ **Security** | AIDefence, input validation, CVE remediation, path traversal prevention |
 | 🌐 **Agent Federation** | Cross-installation agent collaboration with zero-trust security |
-| 💬 **[Web UI Beta](https://flo.ruv.io/)** | Multi-model chat at flo.ruv.io with parallel MCP tool calling and an in-browser WASM tool gallery |
-| 🎯 **[Swarmdo Research](https://goal.ruv.io/)** | GOAP A\* planner at goal.ruv.io — plain-English goals → executable agent plans, with a live agent dashboard at [/agents](https://goal.ruv.io/agents) |
+| 💬 **[Web UI Beta](https://swarmdo.com)** | Multi-model chat at swarmdo.com with parallel MCP tool calling and an in-browser WASM tool gallery |
+| 🎯 **[Swarmdo Research](https://swarmdo.com)** | GOAP A\* planner at swarmdo.com — plain-English goals → executable agent plans, with a live agent dashboard at [/agents](https://swarmdo.com) |
 
 <p align="center">
-  <a href="https://flo.ruv.io/">
-    <img src="v3/docs/assets/swarmVocal.png" alt="Swarmdo Web UI executing parallel MCP tool calls at flo.ruv.io — swarmdo__memory_store and swarmdo__memory_search firing in a single model turn with the 'Step 1 — 2 tools completed' parallel-execution indicator, thinking process panel visible, Qwen 3.6 Max as the active model. Multi-agent AI chat with Model Context Protocol (MCP) tool calling, persistent vector memory via AgentDB + HNSW, swarm coordination, and 6 frontier models including Claude Sonnet 4.6, Gemini 2.5 Pro, and OpenAI through OpenRouter." width="100%" />
+  <a href="https://swarmdo.com">
+    <img src="v3/docs/assets/swarmVocal.png" alt="Swarmdo Web UI executing parallel MCP tool calls at swarmdo.com — swarmdo__memory_store and swarmdo__memory_search firing in a single model turn with the 'Step 1 — 2 tools completed' parallel-execution indicator, thinking process panel visible, Qwen 3.6 Max as the active model. Multi-agent AI chat with Model Context Protocol (MCP) tool calling, persistent vector memory via AgentDB + HNSW, swarm coordination, and 6 frontier models including Claude Sonnet 4.6, Gemini 2.5 Pro, and OpenAI through OpenRouter." width="100%" />
   </a>
 </p>
 
-### Web UI (Beta) — self-hostable, hosted demo at [flo.ruv.io](https://flo.ruv.io/)
+### Web UI (Beta) — self-hostable, hosted demo at [swarmdo.com](https://swarmdo.com)
 
 **Swarmdo's web UI is a multi-model AI chat with built-in Model Context Protocol (MCP) tool calling.** Talk to Qwen, Claude, Gemini, or OpenAI while Swarmdo invokes the same MCP tools the CLI uses — agent orchestration, persistent memory, swarm coordination, code review, GitHub ops — directly from chat. No install, no API key needed to try it.
 
 | | What it is | Why it matters |
 |---|------------|----------------|
 | 🧠 | **Any model, local or remote** | 6 curated frontier models out-of-the-box — Qwen 3.6 Max (default), Claude Sonnet 4.6, Claude Haiku 4.5, Gemini 2.5 Pro, Gemini 2.5 Flash, OpenAI — via OpenRouter. Add your own: any OpenAI-compatible endpoint (vLLM, Ollama, LM Studio, Together, Groq, self-hosted). |
-| 🦾 | **swarmLLM self-learning AI** | Native support for [swarmLLM](https://github.com/ruvnet/SwarmVector/tree/main/examples/swarmLLM) (lives in `ruvnet/RuVector/examples/ruvLLM`) — Swarmdo's self-improving local model layer. Routes to MicroLoRA adapters, learns from your trajectories via SONA, and stays on your machine. Pair with the cloud models or run fully offline. |
+| 🦾 | **swarmLLM self-learning AI** | Native support for [swarmLLM](the upstream project (see NOTICE)) (lives in `upstream/SwarmVector/examples/swarmLLM`) — Swarmdo's self-improving local model layer. Routes to MicroLoRA adapters, learns from your trajectories via SONA, and stays on your machine. Pair with the cloud models or run fully offline. |
 | 🛠️ | **~210 tools, ready to call** | 5 server groups (Core, Intelligence, Agents, Memory, DevTools) plus an 18-tool gallery that runs entirely in your browser — works offline. |
 | 🔌 | **Bring your own MCP servers** | Click the **MCP (n)** pill in the chat input → *Add Server* and paste any MCP endpoint (HTTP, SSE, or stdio). Your tools join Swarmdo's native ones in the same parallel-execution flow. Run a local MCP server on `localhost:3000` and it just works. |
 | ⚡ | **Tools run in parallel** | One model response can fire 4–6+ tools at the same time. The UI shows them as cards with a *Step 1 — 2 tools completed* badge so you can see exactly what ran. |
 | 💾 | **Memory that sticks** | Say *"remember my favorite color is indigo"* and ask weeks later — Swarmdo recalls it. Backed by AgentDB + HNSW vector search (measured ~1.9x–4.7x faster than brute force above the crossover, recall@10 ~0.99). |
 | 📘 | **Built-in capabilities tour** | Click the question-mark icon in the sidebar — a "Swarmdo Capabilities" modal opens with the full tool list, model strengths, architecture, and keyboard shortcuts. |
-| 🏠 | **Self-hostable** | Web UI is shipped as Docker (`swarmdo/src/swarmvocal/Dockerfile`) with embedded Mongo. Deploy to your own Cloud Run / Fly / Kubernetes / docker-compose. The hosted [flo.ruv.io](https://flo.ruv.io/) demo is one option; running your own is fully supported. |
+| 🏠 | **Self-hostable** | Web UI is shipped as Docker (`swarmdo/src/swarmvocal/Dockerfile`) with embedded Mongo. Deploy to your own Cloud Run / Fly / Kubernetes / docker-compose. The hosted [swarmdo.com](https://swarmdo.com) demo is one option; running your own is fully supported. |
 | 🚀 | **Zero install to try** | Open the hosted URL, pick a model, type a question. That's the whole onboarding. |
 
-**Try the hosted demo:** [https://flo.ruv.io/](https://flo.ruv.io/) — no account, no API key. **Run your own:** the source lives in [`swarmdo/src/swarmvocal/`](swarmdo/src/swarmvocal/) with a multi-stage Dockerfile (`INCLUDE_DB=true` builds in MongoDB) and a `cloudbuild.yaml` for Google Cloud Run. See [ADR-033](swarmdo/docs/adr/ADR-033-SWARMVOCAL-WASM-MCP-INTEGRATION.md) for the architecture and [issue #1689](https://github.com/ruvnet/swarmdo/issues/1689) for the roadmap.
+**Try the hosted demo:** [https://swarmdo.com](https://swarmdo.com) — no account, no API key. **Run your own:** the source lives in [`swarmdo/src/swarmvocal/`](swarmdo/src/swarmvocal/) with a multi-stage Dockerfile (`INCLUDE_DB=true` builds in MongoDB) and a `cloudbuild.yaml` for Google Cloud Run. See [ADR-033](swarmdo/docs/adr/ADR-033-SWARMVOCAL-WASM-MCP-INTEGRATION.md) for the architecture and [issue #1689](the upstream project (see NOTICE)) for the roadmap.
 
 <p align="center">
-  <a href="https://goal.ruv.io/agents">
-    <img src="v3/docs/assets/goal.png" alt="goal.ruv.io/agents — Swarmdo Goal-Oriented Action Planning (GOAP) UI for autonomous AI agents. Visual goal decomposition, A* search through state spaces, multi-agent task assignment, and live agent telemetry." width="100%" />
+  <a href="https://swarmdo.com">
+    <img src="v3/docs/assets/goal.png" alt="swarmdo.com/agents — Swarmdo Goal-Oriented Action Planning (GOAP) UI for autonomous AI agents. Visual goal decomposition, A* search through state spaces, multi-agent task assignment, and live agent telemetry." width="100%" />
   </a>
 </p>
 
-### Goal Planner UI — autonomous agents at [goal.ruv.io](https://goal.ruv.io/)
+### Goal Planner UI — autonomous agents at [swarmdo.com](https://swarmdo.com)
 
-**Turn high-level goals into executable agent plans.** `goal.ruv.io` is Swarmdo's hosted Goal-Oriented Action Planning (GOAP) front-end — describe an outcome in plain English and watch Swarmdo decompose it into preconditions, actions, and an A* path through state space, then dispatch the work to live agents at [`/agents`](https://goal.ruv.io/agents).
+**Turn high-level goals into executable agent plans.** `swarmdo.com` is Swarmdo's hosted Goal-Oriented Action Planning (GOAP) front-end — describe an outcome in plain English and watch Swarmdo decompose it into preconditions, actions, and an A* path through state space, then dispatch the work to live agents at [`/agents`](https://swarmdo.com).
 
 | | What it is | Why it matters |
 |---|------------|----------------|
 | 🎯 | **Plain-English goals** | Type *"ship the auth refactor with tests and a PR"* — Swarmdo extracts the success criteria, the constraints, and the implicit preconditions. No JSON, no DSL. |
 | 🧭 | **GOAP A\* planner** | Classic gaming-AI planning ported to software work: state-space search through actions with preconditions/effects to find the shortest viable path. Replans on the fly when state changes. |
-| 🤖 | **Live agent dashboard** | [goal.ruv.io/agents](https://goal.ruv.io/agents) shows every spawned agent — role, current step, memory namespace, token budget, status. Click in to inspect trajectories, kill runaway workers, or reassign. |
+| 🤖 | **Live agent dashboard** | [swarmdo.com/agents](https://swarmdo.com) shows every spawned agent — role, current step, memory namespace, token budget, status. Click in to inspect trajectories, kill runaway workers, or reassign. |
 | 🌳 | **Visual plan tree** | Goals render as collapsible action trees with progress, blocked branches, and rollbacks highlighted. See *exactly* why an agent picked a path — no opaque chain-of-thought. |
 | ♻️ | **Adaptive replanning** | When an action fails or new info arrives, the planner re-runs A\* from the current state instead of restarting. Failures become learning, not loops. |
 | 🧠 | **Shared memory + SONA** | Plans, trajectories, and outcomes flow into AgentDB. Future plans retrieve past solutions via HNSW — the planner gets smarter with every run. |
 | 🔗 | **Wired to MCP tools** | Every action node maps to a tool call (Swarmdo's ~210 MCP tools, your custom servers, or shell). The planner schedules them in parallel where the dependency graph allows. |
-| 🚀 | **Zero install to try** | Open [goal.ruv.io](https://goal.ruv.io/), describe a goal, watch it run. Source lives in [`v3/goal_ui/`](v3/goal_ui/) — Vite + Supabase, self-hostable. |
+| 🚀 | **Zero install to try** | Open [swarmdo.com](https://swarmdo.com), describe a goal, watch it run. Source lives in [`v3/goal_ui/`](v3/goal_ui/) — Vite + Supabase, self-hostable. |
 
-**Try it:** [https://goal.ruv.io/](https://goal.ruv.io/) for goals · [https://goal.ruv.io/agents](https://goal.ruv.io/agents) for live agents. **Run your own:** clone the `goal` branch and `cd v3/goal_ui && npm install && npm run dev`.
+**Try it:** [https://swarmdo.com](https://swarmdo.com) for goals · [https://swarmdo.com](https://swarmdo.com) for live agents. **Run your own:** clone the `goal` branch and `cd v3/goal_ui && npm install && npm run dev`.
 
 ### Agent Federation — Slack for Agents
 
@@ -272,7 +272,7 @@ Their Agent <-- [ Block attacks ] <-- [ Check identity ] <------+
 
 Slack gave teams channels. Federation gives agents the same thing — **shared workspaces across trust boundaries**, where agents on different machines, orgs, or cloud regions can discover each other, prove who they are, and collaborate on tasks.
 
-The difference: some channels are trusted, some aren't. [`@swarmdo/plugin-agent-federation`](https://github.com/ruvnet/swarmdo/issues/1669) handles that automatically. Your agents join a federation, get verified via mTLS + ed25519, and start exchanging work — with PII stripped before anything leaves your node and every message auditable. Untrusted agents can still participate at lower privilege: they see discovery info, not your memory. As they prove reliable, trust upgrades. If they misbehave, they get downgraded instantly — no human in the loop required.
+The difference: some channels are trusted, some aren't. [`@swarmdo/plugin-agent-federation`](the upstream project (see NOTICE)) handles that automatically. Your agents join a federation, get verified via mTLS + ed25519, and start exchanging work — with PII stripped before anything leaves your node and every message auditable. Untrusted agents can still participate at lower privilege: they see discovery info, not your memory. As they prove reliable, trust upgrades. If they misbehave, they get downgraded instantly — no human in the loop required.
 
 You don't configure handshakes or manage certificates. You `federation init`, `federation join`, and your agents start talking. The protocol handles identity, the PII pipeline handles data safety, and the audit trail handles compliance.
 
@@ -311,7 +311,7 @@ npx swarmdo@latest federation status
 
 </details>
 
-See [issue #1669](https://github.com/ruvnet/swarmdo/issues/1669) for the complete architecture, trust model, and implementation roadmap.
+See [issue #1669](the upstream project (see NOTICE)) for the complete architecture, trust model, and implementation roadmap.
 
 ```bash
 # Claude Code plugin
@@ -376,11 +376,11 @@ Four docs for four audiences:
 |-----|-----------------|
 | **[Status](docs/STATUS.md)** | See what currently works — capability counts, test baselines, recent fixes, what's next. The *is-it-ready* doc. |
 | **[User Guide](docs/USERGUIDE.md)** | Daily reference — every command, every config flag, every plugin. The *how-do-I* doc. |
-| **[Benchmarks](https://gist.github.com/ruvnet/298f8c668c8859b369f91734a0e9cbbe)** | v3.8.0 SOTA matrix vs LangGraph / AutoGen / CrewAI on darwin-arm64 + linux-x64. swarmdo wins cold start, single turn, RSS by 1.3×–1953×. The *is-it-fast* doc. |
+| **[Benchmarks](https://gist.the upstream project (see NOTICE))** | v3.8.0 SOTA matrix vs LangGraph / AutoGen / CrewAI on darwin-arm64 + linux-x64. swarmdo wins cold start, single turn, RSS by 1.3×–1953×. The *is-it-fast* doc. |
 | **[Verification](verification.md)** | Cryptographically prove your installed bytes match the signed witness — `swarmdo verify`. The *trust-but-verify* doc. |
 | **[Team Gateway Checklist](docs/TEAM-GATEWAY-CHECKLIST.md)** | Before-merge gates, dual-mode handoff, memory namespace sharing, and witness manifest entry per merge. The *safer-team-workflows* doc. |
 
-Benchmark internals (for reproduction): [`sota-workload-spec.md`](https://github.com/ruvnet/swarmdo/blob/perf/sota-comparator-benchmarks/docs/benchmarks/sota-workload-spec.md) · [`SOTA-PROGRESS.md`](https://github.com/ruvnet/swarmdo/blob/perf/sota-comparator-benchmarks/docs/benchmarks/SOTA-PROGRESS.md) · [raw matrix JSON: darwin](https://github.com/ruvnet/swarmdo/blob/perf/sota-comparator-benchmarks/docs/benchmarks/sota-matrix.json) · [linux](https://github.com/ruvnet/swarmdo/blob/perf/sota-comparator-benchmarks/docs/benchmarks/sota-matrix-linux.json)
+Benchmark internals (for reproduction): [`sota-workload-spec.md`](the upstream project (see NOTICE)) · [`SOTA-PROGRESS.md`](the upstream project (see NOTICE)) · [raw matrix JSON: darwin](the upstream project (see NOTICE)) · [linux](the upstream project (see NOTICE))
 
 User Guide section index:
 
@@ -393,7 +393,7 @@ User Guide section index:
 | [Security](docs/USERGUIDE.md#%EF%B8%8F-security) | AIDefence, CVE remediation, validation |
 | [Ecosystem](docs/USERGUIDE.md#-ecosystem--integrations) | SwarmVector, agentic-flow, Flow Nexus |
 | [Configuration](docs/USERGUIDE.md#%EF%B8%8F-configuration--reference) | Environment variables, config schema |
-| [Plugin Marketplace](https://ruvnet.github.io/swarmdo) | Browse and install plugins |
+| [Plugin Marketplace](https://upstream.github.io/swarmdo) | Browse and install plugins |
 
 ---
 
@@ -402,11 +402,11 @@ User Guide section index:
 | Resource | Link |
 |----------|------|
 | Documentation | [User Guide](docs/USERGUIDE.md) |
-| Issues & Bugs | [GitHub Issues](https://github.com/ruvnet/claude-flow/issues) |
-| Enterprise | [ruv.io](https://ruv.io) |
+| Issues & Bugs | [GitHub Issues](the upstream project (see NOTICE)) |
+| Enterprise | [swarmdo.com](https://swarmdo.com) |
 | Community | [Agentics Foundation Discord](https://discord.com/invite/dfxmpwkG2D) |
 | Powered by | [Cognitum.one](https://cognitum.one) |
 
 ## License
 
-MIT - [RuvNet](https://github.com/ruvnet)
+MIT - [the upstream author](https://the upstream project (see NOTICE))

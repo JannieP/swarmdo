@@ -1,15 +1,15 @@
-# Ruvector GNN
+# Swarmvector GNN
 
-[![Crates.io](https://img.shields.io/crates/v/ruvector-gnn.svg)](https://crates.io/crates/ruvector-gnn)
-[![Documentation](https://docs.rs/ruvector-gnn/badge.svg)](https://docs.rs/ruvector-gnn)
+[![Crates.io](https://img.shields.io/crates/v/swarmvector-gnn.svg)](https://crates.io/crates/swarmvector-gnn)
+[![Documentation](https://docs.rs/swarmvector-gnn/badge.svg)](https://docs.rs/swarmvector-gnn)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Rust](https://img.shields.io/badge/rust-1.77%2B-orange.svg)](https://www.rust-lang.org)
 
 **A Graph Neural Network layer that makes HNSW vector search get smarter over time.**
 
-Most vector indexes return the same results every time you search. `ruvector-gnn` adds a GNN layer on top of HNSW that learns from your query patterns -- so search results actually improve with use. It runs message passing directly on the HNSW graph structure with SIMD acceleration, keeping latency low even on large indexes. Part of the [SwarmVector](https://github.com/ruvnet/ruvector) ecosystem.
+Most vector indexes return the same results every time you search. `swarmvector-gnn` adds a GNN layer on top of HNSW that learns from your query patterns -- so search results actually improve with use. It runs message passing directly on the HNSW graph structure with SIMD acceleration, keeping latency low even on large indexes. Part of the [SwarmVector](the upstream project (see NOTICE)) ecosystem.
 
-| | ruvector-gnn | Standard HNSW Search |
+| | swarmvector-gnn | Standard HNSW Search |
 |---|---|---|
 | **Search quality** | GNN re-ranks neighbors using learned attention weights -- results improve over time | Static ranking -- same results every time |
 | **Graph awareness** | Operates directly on HNSW topology; understands graph structure | Treats index as a flat lookup table |
@@ -20,11 +20,11 @@ Most vector indexes return the same results every time you search. `ruvector-gnn
 
 ## Installation
 
-Add `ruvector-gnn` to your `Cargo.toml`:
+Add `swarmvector-gnn` to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-ruvector-gnn = "0.1.1"
+swarmvector-gnn = "0.1.1"
 ```
 
 ### Feature Flags
@@ -32,13 +32,13 @@ ruvector-gnn = "0.1.1"
 ```toml
 [dependencies]
 # Default with SIMD and memory mapping
-ruvector-gnn = { version = "0.1.1", features = ["simd", "mmap"] }
+swarmvector-gnn = { version = "0.1.1", features = ["simd", "mmap"] }
 
 # WASM-compatible build
-ruvector-gnn = { version = "0.1.1", default-features = false, features = ["wasm"] }
+swarmvector-gnn = { version = "0.1.1", default-features = false, features = ["wasm"] }
 
 # Node.js bindings
-ruvector-gnn = { version = "0.1.1", features = ["napi"] }
+swarmvector-gnn = { version = "0.1.1", features = ["napi"] }
 ```
 
 Available features:
@@ -67,7 +67,7 @@ Available features:
 ### Basic GCN Layer
 
 ```rust
-use ruvector_gnn::{GCNLayer, GNNConfig, MessagePassing};
+use swarmvector_gnn::{GCNLayer, GNNConfig, MessagePassing};
 use ndarray::Array2;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -101,7 +101,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Graph Attention Network
 
 ```rust
-use ruvector_gnn::{GATLayer, AttentionConfig};
+use swarmvector_gnn::{GATLayer, AttentionConfig};
 
 // Configure multi-head attention
 let config = AttentionConfig {
@@ -127,7 +127,7 @@ for (node_id, weights) in attention_weights.iter().enumerate() {
 ### GraphSAGE with Custom Aggregator
 
 ```rust
-use ruvector_gnn::{GraphSAGE, SAGEConfig, Aggregator};
+use swarmvector_gnn::{GraphSAGE, SAGEConfig, Aggregator};
 
 let config = SAGEConfig {
     input_dim: 128,
@@ -148,11 +148,11 @@ let embeddings = sage.forward_minibatch(
 )?;
 ```
 
-### Integration with Ruvector Core
+### Integration with Swarmvector Core
 
 ```rust
-use ruvector_core::VectorDB;
-use ruvector_gnn::{HNSWMessagePassing, GNNEmbedder};
+use swarmvector_core::VectorDB;
+use swarmvector_gnn::{HNSWMessagePassing, GNNEmbedder};
 
 // Load vector database
 let db = VectorDB::open("vectors.db")?;
@@ -246,16 +246,16 @@ With mmap weights       ~10MB (+ disk)
 
 ## Related Crates
 
-- **[ruvector-core](../ruvector-core/)** - Core vector database engine
-- **[ruvector-gnn-node](../ruvector-gnn-node/)** - Node.js bindings
-- **[ruvector-gnn-wasm](../ruvector-gnn-wasm/)** - WebAssembly bindings
-- **[ruvector-graph](../ruvector-graph/)** - Graph database engine
+- **[swarmvector-core](../swarmvector-core/)** - Core vector database engine
+- **[swarmvector-gnn-node](../swarmvector-gnn-node/)** - Node.js bindings
+- **[swarmvector-gnn-wasm](../swarmvector-gnn-wasm/)** - WebAssembly bindings
+- **[swarmvector-graph](../swarmvector-graph/)** - Graph database engine
 
 ## Documentation
 
 - **[Main README](../../README.md)** - Complete project overview
-- **[API Documentation](https://docs.rs/ruvector-gnn)** - Full API reference
-- **[GitHub Repository](https://github.com/ruvnet/ruvector)** - Source code
+- **[API Documentation](https://docs.rs/swarmvector-gnn)** - Full API reference
+- **[GitHub Repository](the upstream project (see NOTICE))** - Source code
 
 ## License
 
@@ -265,10 +265,10 @@ With mmap weights       ~10MB (+ disk)
 
 <div align="center">
 
-**Part of [SwarmVector](https://github.com/ruvnet/ruvector) - Built by [rUv](https://ruv.io)**
+**Part of [SwarmVector](the upstream project (see NOTICE)) - Built by [the upstream author](https://swarmdo.com)**
 
-[![Star on GitHub](https://img.shields.io/github/stars/ruvnet/ruvector?style=social)](https://github.com/ruvnet/ruvector)
+[![Star on GitHub](https://img.shields.io/github/stars/upstream/swarmvector?style=social)](the upstream project (see NOTICE))
 
-[Documentation](https://docs.rs/ruvector-gnn) | [Crates.io](https://crates.io/crates/ruvector-gnn) | [GitHub](https://github.com/ruvnet/ruvector)
+[Documentation](https://docs.rs/swarmvector-gnn) | [Crates.io](https://crates.io/crates/swarmvector-gnn) | [GitHub](the upstream project (see NOTICE))
 
 </div>

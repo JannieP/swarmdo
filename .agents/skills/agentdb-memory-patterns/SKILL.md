@@ -333,6 +333,6 @@ npx agentdb@latest migrate --source .swarm$memory.db
 
 ## Learn More
 
-- GitHub: https:/$github.com$ruvnet$agentic-flow$tree$main$packages$agentdb
+- GitHub: https:/$github.com$upstream$agentic-flow$tree$main$packages$agentdb
 - Documentation: node_modules$agentic-flow/docs/AGENTDB_INTEGRATION.md
 - MCP Integration: `npx agentdb@latest mcp` for Claude Code

@@ -119,9 +119,9 @@ function hierarchicalForwardFallback(
 }
 
 /**
- * RuvectorLayer wrapper with fallback
+ * SwarmvectorLayer wrapper with fallback
  */
-export class RuvectorLayer {
+export class SwarmvectorLayer {
   private inputDim: number;
   private outputDim: number;
   private weights: number[][];

@@ -1,4 +1,4 @@
-//! ReasoningBank Integration for RuvLTRA
+//! ReasoningBank Integration for SwarmLTRA
 //!
 //! Implements intelligent pattern learning for Claude Flow agent routing:
 //!
@@ -356,8 +356,8 @@ impl Default for ReasoningBankConfig {
 }
 
 impl ReasoningBankConfig {
-    /// Create configuration optimized for RuvLTRA-Small
-    pub fn for_ruvltra_small() -> Self {
+    /// Create configuration optimized for SwarmLTRA-Small
+    pub fn for_swarmltra_small() -> Self {
         Self {
             capacity: 5000,
             distillation_threshold: 0.6,
@@ -1510,7 +1510,7 @@ mod tests {
     #[test]
     fn test_config_presets() {
         let default = ReasoningBankConfig::default();
-        let small = ReasoningBankConfig::for_ruvltra_small();
+        let small = ReasoningBankConfig::for_swarmltra_small();
         let edge = ReasoningBankConfig::for_edge();
 
         assert!(default.capacity > small.capacity);

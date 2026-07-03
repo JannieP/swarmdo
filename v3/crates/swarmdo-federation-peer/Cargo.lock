@@ -1049,7 +1049,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "ruflo-federation-peer"
+name = "swarmdo-federation-peer"
 version = "0.1.0"
 dependencies = [
  "aimds-core",

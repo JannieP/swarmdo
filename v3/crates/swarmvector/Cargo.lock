@@ -3265,7 +3265,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rufvector-attention"
+name = "swarmvector-attention"
 version = "2.2.3"
 dependencies = [
  "approx",
@@ -3274,26 +3274,26 @@ dependencies = [
  "napi-derive",
  "rand 0.8.6",
  "rayon",
- "rufvector-math",
+ "swarmvector-math",
  "serde",
  "thiserror 1.0.69",
 ]
 
 [[package]]
-name = "rufvector-attention-node"
+name = "swarmvector-attention-node"
 version = "2.2.3"
 dependencies = [
  "napi",
  "napi-build",
  "napi-derive",
- "rufvector-attention",
+ "swarmvector-attention",
  "serde",
  "serde_json",
  "tokio",
 ]
 
 [[package]]
-name = "rufvector-cluster"
+name = "swarmvector-cluster"
 version = "2.2.3"
 dependencies = [
  "async-trait",
@@ -3303,7 +3303,7 @@ dependencies = [
  "futures",
  "parking_lot",
  "rand 0.8.6",
- "rufvector-core",
+ "swarmvector-core",
  "serde",
  "serde_json",
  "thiserror 2.0.18",
@@ -3313,7 +3313,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rufvector-collections"
+name = "swarmvector-collections"
 version = "2.2.3"
 dependencies = [
  "bincode 2.0.1",
@@ -3321,7 +3321,7 @@ dependencies = [
  "criterion",
  "dashmap",
  "parking_lot",
- "rufvector-core",
+ "swarmvector-core",
  "serde",
  "serde_json",
  "thiserror 2.0.18",
@@ -3329,7 +3329,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rufvector-core"
+name = "swarmvector-core"
 version = "2.2.3"
 dependencies = [
  "anyhow",
@@ -3365,7 +3365,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rufvector-diskann"
+name = "swarmvector-diskann"
 version = "2.2.3"
 dependencies = [
  "bincode 2.0.1",
@@ -3382,27 +3382,27 @@ dependencies = [
 ]
 
 [[package]]
-name = "rufvector-diskann-node"
+name = "swarmvector-diskann-node"
 version = "2.2.3"
 dependencies = [
  "napi",
  "napi-build",
  "napi-derive",
  "parking_lot",
- "rufvector-diskann",
+ "swarmvector-diskann",
  "serde",
  "serde_json",
  "tokio",
 ]
 
 [[package]]
-name = "rufvector-filter"
+name = "swarmvector-filter"
 version = "2.2.3"
 dependencies = [
  "chrono",
  "dashmap",
  "ordered-float",
- "rufvector-core",
+ "swarmvector-core",
  "serde",
  "serde_json",
  "thiserror 2.0.18",
@@ -3410,7 +3410,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rufvector-gnn"
+name = "swarmvector-gnn"
 version = "2.2.3"
 dependencies = [
  "anyhow",
@@ -3427,8 +3427,8 @@ dependencies = [
  "rand 0.8.6",
  "rand_distr",
  "rayon",
- "rufvector-core",
- "rufvector-diskann",
+ "swarmvector-core",
+ "swarmvector-diskann",
  "serde",
  "serde_json",
  "tempfile",
@@ -3436,18 +3436,18 @@ dependencies = [
 ]
 
 [[package]]
-name = "rufvector-gnn-node"
+name = "swarmvector-gnn-node"
 version = "2.2.3"
 dependencies = [
  "napi",
  "napi-build",
  "napi-derive",
- "rufvector-gnn",
+ "swarmvector-gnn",
  "serde_json",
 ]
 
 [[package]]
-name = "rufvector-graph"
+name = "swarmvector-graph"
 version = "2.2.3"
 dependencies = [
  "anyhow",
@@ -3487,10 +3487,10 @@ dependencies = [
  "redb",
  "rkyv",
  "roaring",
- "rufvector-cluster",
- "rufvector-core",
- "rufvector-raft",
- "rufvector-replication",
+ "swarmvector-cluster",
+ "swarmvector-core",
+ "swarmvector-raft",
+ "swarmvector-replication",
  "serde",
  "serde_json",
  "simsimd",
@@ -3508,7 +3508,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rufvector-graph-node"
+name = "swarmvector-graph-node"
 version = "2.2.3"
 dependencies = [
  "anyhow",
@@ -3516,8 +3516,8 @@ dependencies = [
  "napi",
  "napi-build",
  "napi-derive",
- "rufvector-core",
- "rufvector-graph",
+ "swarmvector-core",
+ "swarmvector-graph",
  "serde",
  "serde_json",
  "thiserror 2.0.18",
@@ -3527,7 +3527,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rufvector-graph-transformer-node"
+name = "swarmvector-graph-transformer-node"
 version = "2.2.3"
 dependencies = [
  "napi",
@@ -3539,7 +3539,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rufvector-math"
+name = "swarmvector-math"
 version = "2.2.3"
 dependencies = [
  "approx",
@@ -3554,7 +3554,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rufvector-metrics"
+name = "swarmvector-metrics"
 version = "2.2.3"
 dependencies = [
  "chrono",
@@ -3565,17 +3565,17 @@ dependencies = [
 ]
 
 [[package]]
-name = "rufvector-node"
+name = "swarmvector-node"
 version = "2.2.3"
 dependencies = [
  "anyhow",
  "napi",
  "napi-build",
  "napi-derive",
- "rufvector-collections",
- "rufvector-core",
- "rufvector-filter",
- "rufvector-metrics",
+ "swarmvector-collections",
+ "swarmvector-core",
+ "swarmvector-filter",
+ "swarmvector-metrics",
  "serde",
  "serde_json",
  "thiserror 2.0.18",
@@ -3584,7 +3584,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rufvector-raft"
+name = "swarmvector-raft"
 version = "2.2.3"
 dependencies = [
  "bincode 2.0.1",
@@ -3593,7 +3593,7 @@ dependencies = [
  "futures",
  "parking_lot",
  "rand 0.8.6",
- "rufvector-core",
+ "swarmvector-core",
  "serde",
  "serde_json",
  "thiserror 2.0.18",
@@ -3603,7 +3603,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rufvector-replication"
+name = "swarmvector-replication"
 version = "2.2.3"
 dependencies = [
  "bincode 2.0.1",
@@ -3612,7 +3612,7 @@ dependencies = [
  "futures",
  "parking_lot",
  "rand 0.8.6",
- "rufvector-core",
+ "swarmvector-core",
  "serde",
  "serde_json",
  "thiserror 2.0.18",
@@ -3622,7 +3622,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rufvector-router-core"
+name = "swarmvector-router-core"
 version = "2.2.3"
 dependencies = [
  "anyhow",
@@ -3649,7 +3649,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rufvector-router-ffi"
+name = "swarmvector-router-ffi"
 version = "2.2.3"
 dependencies = [
  "anyhow",
@@ -3657,14 +3657,14 @@ dependencies = [
  "napi",
  "napi-build",
  "napi-derive",
- "rufvector-router-core",
+ "swarmvector-router-core",
  "serde",
  "serde_json",
  "tokio",
 ]
 
 [[package]]
-name = "rufvector-sona"
+name = "swarmvector-sona"
 version = "0.2.1"
 dependencies = [
  "console_error_panic_hook",
@@ -3686,7 +3686,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rufvector-tiny-dancer-core"
+name = "swarmvector-tiny-dancer-core"
 version = "2.2.3"
 dependencies = [
  "anyhow",
@@ -3717,7 +3717,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rufvector-tiny-dancer-node"
+name = "swarmvector-tiny-dancer-node"
 version = "2.2.3"
 dependencies = [
  "anyhow",
@@ -3726,7 +3726,7 @@ dependencies = [
  "napi-build",
  "napi-derive",
  "parking_lot",
- "rufvector-tiny-dancer-core",
+ "swarmvector-tiny-dancer-core",
  "serde",
  "serde_json",
  "thiserror 2.0.18",

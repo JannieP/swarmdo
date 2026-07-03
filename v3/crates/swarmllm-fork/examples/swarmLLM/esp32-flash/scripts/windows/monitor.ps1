@@ -8,7 +8,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-Write-Host "`n=== RuvLLM ESP32 Serial Monitor ===" -ForegroundColor Cyan
+Write-Host "`n=== SwarmLLM ESP32 Serial Monitor ===" -ForegroundColor Cyan
 Write-Host ""
 
 # Auto-detect COM port if not specified

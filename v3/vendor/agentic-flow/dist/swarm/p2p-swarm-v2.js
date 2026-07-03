@@ -1647,7 +1647,7 @@ export class P2PSwarmV2 {
     }
 }
 //=============================================================================
-// RUVECTOR OPTIMIZATION LAYER
+// SWARMVECTOR OPTIMIZATION LAYER
 //=============================================================================
 /**
  * SwarmVector optimization for Gun message handling

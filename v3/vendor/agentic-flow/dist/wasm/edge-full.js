@@ -18,7 +18,7 @@
  * - Raft consensus
  * - SIMD acceleration
  *
- * @see https://github.com/ruvnet/swarmvector/tree/main/examples/edge-full
+ * @see the upstream project (see NOTICE)
  */
 import { logger } from '../utils/logger.js';
 // Module state

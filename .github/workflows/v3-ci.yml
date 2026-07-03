@@ -403,7 +403,7 @@ jobs:
           path: v3/@swarmdo/*/dist/
 
   smoke-install-no-bsqlite:
-    # Regression guard for ruvnet/swarmdo#1867 — ensures @swarmdo/memory
+    # Regression guard for upstream/swarmdo#1867 — ensures @swarmdo/memory
     # installs and loads when better-sqlite3 fails to build (e.g. Node 26
     # without prebuilds). Reproduces the user-visible failure mode by
     # installing with --omit=optional.
@@ -484,7 +484,7 @@ jobs:
           node smoke-no-bsqlite.mjs
 
   plugin-hooks-smoke:
-    # Regression guard for ruvnet/swarmdo#1859 + #1862 — drives each PostToolUse
+    # Regression guard for upstream/swarmdo#1859 + #1862 — drives each PostToolUse
     # hook from plugins/swarmdo-core/hooks/hooks.json with synthetic Claude-Code
     # JSON against the locally built CLI. Catches:
     #   - hooks calling flags the CLI doesn't accept (#1862's --format true)
@@ -545,7 +545,7 @@ jobs:
             "node $GITHUB_WORKSPACE/v3/@swarmdo/cli/bin/cli.js"
 
   browser-rvf-create-flags-smoke:
-    # Regression guard for ruvnet/swarmdo#2015 — the swarmdo-browser
+    # Regression guard for upstream/swarmdo#2015 — the swarmdo-browser
     # `browser_session_record` MCP tool wraps `swarmvector rvf create`.
     # swarmvector@0.2.25 makes `-d, --dimension <n>` required, so before
     # this fix every session-record call failed with
@@ -680,7 +680,7 @@ jobs:
     #
     # **Setup requirement**: this action needs GitHub's Dependency Graph
     # feature enabled at the repo level. Toggle at
-    # https://github.com/ruvnet/swarmdo/settings/security_analysis under
+    # the upstream project (see NOTICE) under
     # "Dependency graph". Until that toggle is on, the action errors
     # with "Dependency review is not supported on this repository" — so
     # this job is marked continue-on-error to keep the CVE/audit/codeowner
@@ -715,7 +715,7 @@ jobs:
           deny-packages: pkg:npm/event-stream@3.3.6, pkg:npm/flatmap-stream, pkg:npm/ua-parser-js@0.7.29, pkg:npm/ua-parser-js@0.8.0, pkg:npm/ua-parser-js@1.0.0, pkg:npm/colors@1.4.1, pkg:npm/faker@6.6.6
 
   witness-marker-drift-smoke:
-    # Regression guard for ruvnet/swarmdo#2021 — the slow witness-verify
+    # Regression guard for upstream/swarmdo#2021 — the slow witness-verify
     # job below catches marker drift but only as a post-build check on
     # cross-platform matrix. Direct pushes to main (e.g. the alpha.43
     # release chain) bypass PR-time gating and a bad marker can sneak
@@ -745,7 +745,7 @@ jobs:
         run: node scripts/smoke-witness-marker-drift.mjs
 
   witness-verify-precondition-smoke:
-    # Regression guard for ruvnet/swarmdo#1880 — the 12h scheduled witness
+    # Regression guard for upstream/swarmdo#1880 — the 12h scheduled witness
     # verification runs in a source-only checkout (no `npm ci`, no
     # `npm run build`). Before this fix, that environment exited 1
     # (real verification failure) because `@noble/ed25519` wasn't
@@ -784,7 +784,7 @@ jobs:
         run: node scripts/smoke-witness-verify-precondition.mjs
 
   kg-extract-type-imports-smoke:
-    # Regression guard for ruvnet/swarmdo#2049 — `kg-extract` previously
+    # Regression guard for upstream/swarmdo#2049 — `kg-extract` previously
     # treated TypeScript `import type` and value imports as the same edge
     # type, producing phantom runtime cycles in the knowledge graph (a
     # 51-service codebase reported a non-existent `findings ⇄ finding-actions`
@@ -818,7 +818,7 @@ jobs:
         run: node scripts/smoke-kg-extract-type-imports.mjs
 
   neural-trader-portfolio-cg-smoke:
-    # Regression guard for ruvnet/swarmdo#2068 — ADR-126 Phase 3.
+    # Regression guard for upstream/swarmdo#2068 — ADR-126 Phase 3.
     #
     # Phase 3 wires the Conjugate-Gradient portfolio path that ADR-123
     # Wedge 8 promises a 40-60× speedup over the legacy Neumann series.
@@ -861,7 +861,7 @@ jobs:
         run: node scripts/smoke-neural-trader-portfolio-cg.mjs
 
   neural-trader-backtest-signing-smoke:
-    # Regression guard for ruvnet/swarmdo#2068 — ADR-126 Phase 4.
+    # Regression guard for upstream/swarmdo#2068 — ADR-126 Phase 4.
     #
     # Phase 4 wires Ed25519-signed backtest artifacts so the paper→live
     # promotion gate has cryptographic tamper evidence. The signing scheme
@@ -911,7 +911,7 @@ jobs:
         run: node scripts/smoke-neural-trader-backtest-signing.mjs
 
   neural-trader-pipeline-smoke:
-    # Regression guard for ruvnet/swarmdo#2068 — ADR-126 Phase 5.
+    # Regression guard for upstream/swarmdo#2068 — ADR-126 Phase 5.
     #
     # Phase 5 refactors the four neural-trader agents (market-analyst,
     # trading-strategist, risk-analyst, backtest-engineer) into a typed
@@ -965,7 +965,7 @@ jobs:
         run: node scripts/smoke-neural-trader-pipeline.mjs
 
   neural-trader-feature-attribution-smoke:
-    # Regression guard for ruvnet/swarmdo#2068 — ADR-126 Phase 6.
+    # Regression guard for upstream/swarmdo#2068 — ADR-126 Phase 6.
     #
     # Phase 6 ships regulator-grade feature attribution for LSTM /
     # Transformer trading signals. Given a `signalId`, the `trader-explain`
@@ -1021,7 +1021,7 @@ jobs:
         run: node scripts/smoke-neural-trader-feature-attribution.mjs
 
   plugin-registry-signature-smoke:
-    # Regression guard for ruvnet/swarmdo#1922 (CWE-347 — improper verification
+    # Regression guard for upstream/swarmdo#1922 (CWE-347 — improper verification
     # of cryptographic signature). The plugin-registry signature verifier in
     # v3/@swarmdo/cli/src/plugins/store/discovery.ts used to be a stub
     # that returned `true` whenever the served `registryPublicKey` field
@@ -1065,7 +1065,7 @@ jobs:
         run: node scripts/smoke-plugin-registry-signature.mjs
 
   swarmllm-wasm-auto-init-smoke:
-    # Regression guard for ruvnet/swarmdo#2086 — swarmllm WASM bootstrap not
+    # Regression guard for upstream/swarmdo#2086 — swarmllm WASM bootstrap not
     # exposed via MCP. Reporter: @seo-yas. Every `swarmllm_*` MCP tool that
     # touches the WASM runtime calls `loadSwarmllmWasm()` in
     # `v3/@swarmdo/cli/src/mcp-tools/swarmllm-tools.ts`. That helper used
@@ -1104,7 +1104,7 @@ jobs:
         run: node scripts/smoke-swarmllm-wasm-auto-init.mjs
 
   agent-execute-providers-smoke:
-    # Regression guard for ruvnet/swarmdo#2042 — agent_execute hardcoded
+    # Regression guard for upstream/swarmdo#2042 — agent_execute hardcoded
     # the Anthropic SDK and ignored the v3 provider system. Reporter:
     # @ummcke00. Fix routes executeAgentTask through callAnthropicMessages
     # which dispatches Anthropic / OpenRouter / Ollama by env var.
@@ -1124,7 +1124,7 @@ jobs:
         run: node scripts/smoke-agent-execute-providers.mjs
 
   memory-stats-legacy-db-smoke:
-    # Regression guard for ruvnet/swarmdo#2120 — `swarmdo memory stats` and
+    # Regression guard for upstream/swarmdo#2120 — `swarmdo memory stats` and
     # `listEntries` returned 0 entries against a populated
     # `.swarm/memory.db` on WSL2 (reporter: @alexandrelealbess on
     # alpha.81). Root cause: the `WHERE status = 'active'` filter
@@ -1229,7 +1229,7 @@ jobs:
         run: node scripts/smoke-memory-no-stray-db.mjs
 
   github-safe-injection-smoke:
-    # Regression guard for ruvnet/swarmdo#2089 — ADR-127 Phase 1.
+    # Regression guard for upstream/swarmdo#2089 — ADR-127 Phase 1.
     #
     # Drives adversarial PR/issue bodies (backticks, $(), semicolons,
     # >256KB, empty) through github-safe.js and asserts the body lands in a
@@ -1258,7 +1258,7 @@ jobs:
         run: node scripts/smoke-github-safe-injection.mjs
 
   github-actions-pins-smoke:
-    # Static contract guard for ruvnet/swarmdo#2089 — ADR-127 Phase 1.
+    # Static contract guard for upstream/swarmdo#2089 — ADR-127 Phase 1.
     #
     # Scans every `uses:` line in:
     #   .claude/agents/github/*.md
@@ -1288,7 +1288,7 @@ jobs:
         run: node scripts/smoke-github-actions-pins.mjs
 
   github-deprecated-actions-smoke:
-    # Regression guard for ruvnet/swarmdo#2089 — ADR-127 Phase 3.
+    # Regression guard for upstream/swarmdo#2089 — ADR-127 Phase 3.
     #
     # Scans every `uses:` line in the same scope as the pins smoke and
     # fails if any deprecated action ref is still present:
@@ -1317,7 +1317,7 @@ jobs:
         run: node scripts/smoke-deprecated-actions.mjs
 
   github-attribution-opt-in-smoke:
-    # Regression guard for ruvnet/swarmdo#2089 — ADR-127 Phase 4.
+    # Regression guard for upstream/swarmdo#2089 — ADR-127 Phase 4.
     #
     # Phase 4 removes hardcoded "Generated with Claude Code" attribution
     # strings from the static github command templates. Attribution is now
@@ -1345,7 +1345,7 @@ jobs:
         run: node scripts/smoke-attribution-opt-in.mjs
 
   pre-bash-hook-smoke:
-    # Regression guard for ruvnet/swarmdo#2017 — the `pre-bash` PreToolUse hook
+    # Regression guard for upstream/swarmdo#2017 — the `pre-bash` PreToolUse hook
     # in `.claude/helpers/hook-handler.cjs` is a security gate that refuses to
     # run dangerous commands (`rm -rf /`, fork bombs, etc.). In 3.6.30 it
     # silently exited 0 on every dangerous payload because the handler read
@@ -1380,7 +1380,7 @@ jobs:
         run: node scripts/smoke-pre-bash-hook.mjs
 
   mcp-protocol-smoke:
-    # Regression guard for ruvnet/swarmdo#1874 — boots the HTTP MCP server,
+    # Regression guard for upstream/swarmdo#1874 — boots the HTTP MCP server,
     # sends a real `initialize` request, and validates the response wire
     # format against the MCP spec (YYYY-MM-DD protocolVersion string,
     # not a {major,minor,patch} object). This was the missing layer that
@@ -1422,7 +1422,7 @@ jobs:
         run: node plugins/swarmdo-core/scripts/test-mcp-protocol.mjs
 
   memory-import-smoke:
-    # Regression guard for ruvnet/swarmdo#1883 + #1884 — drives the import-side
+    # Regression guard for upstream/swarmdo#1883 + #1884 — drives the import-side
     # invariants that single-component tests missed:
     #   #1883 — memory_import_claude(allProjects=false) failed on WSL because
     #           project-hash derivation was POSIX-only. Verified via candidate
@@ -1471,7 +1471,7 @@ jobs:
         run: node plugins/swarmdo-core/scripts/test-memory-import.mjs
 
   mcp-roundtrip-smoke:
-    # Regression guard for ruvnet/swarmdo#1889 — paired MCP tool round-trip.
+    # Regression guard for upstream/swarmdo#1889 — paired MCP tool round-trip.
     # When two MCP tools form a store/search pair, the contract is that
     # data written by one MUST be retrievable by the other. The original
     # bug: pattern-store wrote to memory-store-fallback while pattern-search
@@ -1670,7 +1670,7 @@ jobs:
         run: node scripts/audit-env-var-precedence.mjs
 
   cli-npx-install-smoke:
-    # Regression guard for ruvnet/swarmdo#1147 and #2018 — both report:
+    # Regression guard for upstream/swarmdo#1147 and #2018 — both report:
     #   $ npx @swarmdo/cli@latest …
     #   npm error Invalid Version:
     # Caused by an optionalDependencies/peerDependencies overlap deep in the
@@ -1717,7 +1717,7 @@ jobs:
         run: node scripts/smoke-cli-npx-install.mjs
 
   windows-hook-shim-smoke:
-    # Smoke test for ruvnet/swarmdo#2132 — swarmdo-hook.cjs cross-platform shim.
+    # Smoke test for upstream/swarmdo#2132 — swarmdo-hook.cjs cross-platform shim.
     # Proves that plugins/swarmdo-core/scripts/swarmdo-hook.cjs can be invoked
     # via `node swarmdo-hook.cjs <subcommand>`, always exits 0, and accepts
     # stdin JSON input without crashing.
@@ -1743,7 +1743,7 @@ jobs:
         run: node scripts/smoke-swarmdo-hook-cjs.mjs
 
   windows-init-hooks-smoke:
-    # Smoke test for ruvnet/swarmdo#2132 — init-time platform detection.
+    # Smoke test for upstream/swarmdo#2132 — init-time platform detection.
     # Proves swarmdo init generates correct hook commands per platform:
     #   - windows-latest: node-based (no /bin/bash, no | jq)
     #   - ubuntu/macos: POSIX-compatible (sh-based, no cmd.exe patterns)
@@ -1787,7 +1787,7 @@ jobs:
         run: node scripts/smoke-windows-init-hooks.mjs
 
   windows-hook-execution-smoke:
-    # End-to-end validation for ruvnet/swarmdo#2132 — simulates a Claude Code
+    # End-to-end validation for upstream/swarmdo#2132 — simulates a Claude Code
     # PostToolUse hook firing. Asserts exit code != 126 ("cannot execute
     # binary file") and no POSIX-only pipeline patterns in the generated
     # settings.json hook commands.
@@ -1896,7 +1896,7 @@ jobs:
         run: node scripts/audit-vector-dim.mjs
 
   tool-output-guardrail-smoke:
-    # Smoke test for ADR-131 / ruvnet/swarmdo#2149 — ToolOutputGuardrail
+    # Smoke test for ADR-131 / upstream/swarmdo#2149 — ToolOutputGuardrail
     # detects the four canonical OWASP ASI01 (Agent Goal Hijacking) attack
     # shapes (instruction override, ChatML/Llama frame injection, exfiltration)
     # and enforces the documented default policy (critical→reject,
@@ -2114,7 +2114,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   init-bundle-invariants-smoke:
-    # Regression guard for ruvnet/swarmdo#2095 — ADR-128 Phase 5.
+    # Regression guard for upstream/swarmdo#2095 — ADR-128 Phase 5.
     #
     # Statically asserts three invariants of the @swarmdo/cli init bundle:
     #
@@ -2390,7 +2390,7 @@ jobs:
         run: node scripts/benchmark-graph.mjs
 
   statusline-generator-delegation-smoke:
-    # Regression guard for ruvnet/swarmdo#2195 — the statusline generator
+    # Regression guard for upstream/swarmdo#2195 — the statusline generator
     # previously re-implemented all data readers locally with fragile file
     # probes that returned wrong values (DDD 0/5, intelligence 1%, ADR 87/87).
     #
@@ -2459,7 +2459,7 @@ jobs:
         run: node scripts/smoke-statusline-generator-delegation.mjs
 
   wizard-init-regression-guard:
-    # Regression guard for ruvnet/swarmdo#2206 #2207 #2208 — three init-wizard
+    # Regression guard for upstream/swarmdo#2206 #2207 #2208 — three init-wizard
     # bugs that collectively broke every new user install:
     #
     # #2206: mcp-generator registered the server under key 'swarmdo', causing all

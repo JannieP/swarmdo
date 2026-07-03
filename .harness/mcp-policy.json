@@ -36,6 +36,6 @@
   "references": {
     "adr": "v3/docs/adr/ADR-150-metaharness-integration-surfaces.md",
     "constraint": "Swarmdo remains operational if every MetaHarness package is removed.",
-    "upstream": "github.com/ruvnet/agent-harness-generator/blob/main/dist/mcp-scan.js"
+    "upstream": "the upstream project (see NOTICE)"
   }
 }

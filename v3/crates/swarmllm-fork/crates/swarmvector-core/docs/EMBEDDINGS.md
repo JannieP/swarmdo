@@ -1,13 +1,13 @@
 # Text Embeddings for AgenticDB
 
-This guide explains how to use real text embeddings with AgenticDB in ruvector-core.
+This guide explains how to use real text embeddings with AgenticDB in swarmvector-core.
 
 ## Quick Start
 
 ### Default (Hash-based - Testing Only)
 
 ```rust
-use ruvector_core::{AgenticDB, types::DbOptions};
+use swarmvector_core::{AgenticDB, types::DbOptions};
 
 let mut options = DbOptions::default();
 options.dimensions = 128;
@@ -34,7 +34,7 @@ let episode_id = db.store_episode(
 ### OpenAI
 
 ```rust
-use ruvector_core::{AgenticDB, ApiEmbedding, types::DbOptions};
+use swarmvector_core::{AgenticDB, ApiEmbedding, types::DbOptions};
 use std::sync::Arc;
 
 let mut options = DbOptions::default();
@@ -83,8 +83,8 @@ let db = AgenticDB::with_embedding_provider(options, provider)?;
 Implement the `EmbeddingProvider` trait for any embedding system:
 
 ```rust
-use ruvector_core::embeddings::EmbeddingProvider;
-use ruvector_core::error::Result;
+use swarmvector_core::embeddings::EmbeddingProvider;
+use swarmvector_core::error::Result;
 
 struct MyCustomEmbedding {
     // Your model here
@@ -159,7 +159,7 @@ This feature flag enables the `CandleEmbedding` type (currently a stub):
 
 ```toml
 [dependencies]
-ruvector-core = { version = "0.1", features = ["real-embeddings"] }
+swarmvector-core = { version = "0.1", features = ["real-embeddings"] }
 ```
 
 However, we recommend using API-based providers instead of implementing Candle integration yourself.
@@ -167,7 +167,7 @@ However, we recommend using API-based providers instead of implementing Candle i
 ## Complete Example
 
 ```rust
-use ruvector_core::{AgenticDB, ApiEmbedding, types::DbOptions};
+use swarmvector_core::{AgenticDB, ApiEmbedding, types::DbOptions};
 use std::sync::Arc;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -267,19 +267,19 @@ The beauty is: **your AgenticDB code doesn't change**, just the provider!
 ## Error Handling
 
 ```rust
-use ruvector_core::error::RuvectorError;
+use swarmvector_core::error::SwarmvectorError;
 
 match AgenticDB::with_embedding_provider(options, provider) {
     Ok(db) => {
         // Use db
     }
-    Err(RuvectorError::InvalidDimension(msg)) => {
+    Err(SwarmvectorError::InvalidDimension(msg)) => {
         eprintln!("Dimension mismatch: {}", msg);
     }
-    Err(RuvectorError::ModelLoadError(msg)) => {
+    Err(SwarmvectorError::ModelLoadError(msg)) => {
         eprintln!("Failed to load model: {}", msg);
     }
-    Err(RuvectorError::ModelInferenceError(msg)) => {
+    Err(SwarmvectorError::ModelInferenceError(msg)) => {
         eprintln!("Inference failed: {}", msg);
     }
     Err(e) => {

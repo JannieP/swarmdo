@@ -1,6 +1,6 @@
 # Migration Guide: v2 → v3
 
-Complete guide for upgrading from Rufflo v2 to v3.0.0-alpha.1
+Complete guide for upgrading from Swarmdo v2 to v3.0.0-alpha.1
 
 ---
 
@@ -21,10 +21,10 @@ Complete guide for upgrading from Rufflo v2 to v3.0.0-alpha.1
 ## Overview
 
 ### What's Changed
-Rufflo v3 is a complete architectural overhaul based on 10 Architecture Decision Records (ADRs). The migration involves:
+Swarmdo v3 is a complete architectural overhaul based on 10 Architecture Decision Records (ADRs). The migration involves:
 
 - **Code reduction**: 15,000+ lines → <5,000 lines
-- **Module architecture**: Monolith → 10 @rufflo modules
+- **Module architecture**: Monolith → 10 @swarmdo modules
 - **Foundation**: Custom implementation → agentic-flow@alpha core
 - **Memory**: 6+ fragmented systems → Unified AgentDB
 - **Testing**: Jest → Vitest (10x faster)
@@ -45,7 +45,7 @@ Rufflo v3 is a complete architectural overhaul based on 10 Architecture Decision
 ### 1. Backup Current Setup
 ```bash
 # Backup your v2 installation
-cp -r ~/.rufflo ~/.rufflo.v2.backup
+cp -r ~/.swarmdo ~/.swarmdo.v2.backup
 cp -r ./node_modules ./node_modules.v2.backup
 cp package.json package.json.v2.backup
 cp package-lock.json package-lock.json.v2.backup
@@ -57,13 +57,13 @@ npx agentic-flow memory export --output ./v2-memory-backup.json
 ### 2. Document Current Configuration
 ```bash
 # Save current configuration
-cat ~/.rufflo/config.json > v2-config-backup.json
+cat ~/.swarmdo/config.json > v2-config-backup.json
 
 # List installed agents
 npx agentic-flow --list > v2-agents-list.txt
 
 # Export environment variables
-env | grep RUFFLO > v2-env-backup.txt
+env | grep SWARMDO > v2-env-backup.txt
 ```
 
 ### 3. System Requirements Check
@@ -86,11 +86,11 @@ uname -a  # Windows/macOS/Linux
 # Check for conflicting dependencies
 npm list agentic-flow
 npm list agentdb
-npm list @ruvector/attention
-npm list @ruvector/sona
+npm list @swarmvector/attention
+npm list @swarmvector/sona
 
 # Check for custom plugins or extensions
-ls ~/.rufflo/plugins/
+ls ~/.swarmdo/plugins/
 ```
 
 ---
@@ -131,7 +131,7 @@ ls ~/.rufflo/plugins/
 - npx agentic-flow memory --backend mongodb
 
 + # v3: Unified AgentDB
-+ npx @rufflo/memory unify --backend agentdb
++ npx @swarmdo/memory unify --backend agentdb
 ```
 
 **Action Required**: Migrate all memory data to AgentDB.
@@ -144,7 +144,7 @@ ls ~/.rufflo/plugins/
 - import { AdaptiveCoordinator } from './coordinators/adaptive'
 
 + # v3: Single UnifiedSwarmCoordinator
-+ import { SwarmCoordinator } from '@rufflo/swarm'
++ import { SwarmCoordinator } from '@swarmdo/swarm'
 ```
 
 **Action Required**: Update all coordinator imports and usage.
@@ -180,9 +180,9 @@ ls ~/.rufflo/plugins/
 - import { Security, Memory, Swarm } from 'agentic-flow';
 
 + # v3: Module imports
-+ import { SecurityModule } from '@rufflo/security';
-+ import { MemoryModule } from '@rufflo/memory';
-+ import { SwarmModule } from '@rufflo/swarm';
++ import { SecurityModule } from '@swarmdo/security';
++ import { MemoryModule } from '@swarmdo/memory';
++ import { SwarmModule } from '@swarmdo/swarm';
 ```
 
 ### 3. Configuration Changes
@@ -247,18 +247,18 @@ rm package-lock.json
 # 2. Install v3 alpha
 npm install agentic-flow@3.0.0-alpha.1
 
-# 3. Install required @rufflo modules
-npm install @rufflo/security@latest
-npm install @rufflo/memory@latest
-npm install @rufflo/integration@latest
-npm install @rufflo/performance@latest
-npm install @rufflo/swarm@latest
-npm install @rufflo/cli@latest
+# 3. Install required @swarmdo modules
+npm install @swarmdo/security@latest
+npm install @swarmdo/memory@latest
+npm install @swarmdo/integration@latest
+npm install @swarmdo/performance@latest
+npm install @swarmdo/swarm@latest
+npm install @swarmdo/cli@latest
 
 # 4. Install peer dependencies
 npm install agentdb@2.0.0-alpha.3.4
-npm install @ruvector/attention@0.1.3
-npm install @ruvector/sona@0.1.5
+npm install @swarmvector/attention@0.1.3
+npm install @swarmvector/sona@0.1.5
 
 # 5. Install dev dependencies
 npm install --save-dev vitest@^2.1.8
@@ -272,35 +272,35 @@ npm install --save-dev @vitest/ui@^2.1.8
 npx agentic-flow@3.0.0-alpha.1 init --v3
 
 # 2. Migrate v2 configuration (manual merge)
-# Edit ~/.rufflo/config.json with your v2 settings
+# Edit ~/.swarmdo/config.json with your v2 settings
 # Follow new schema from v3/config/schema.json
 
 # 3. Set environment variables
-export RUFFLO_VERSION=3
-export RUFFLO_MODE=production
-export RUFFLO_MEMORY_BACKEND=agentdb
+export SWARMDO_VERSION=3
+export SWARMDO_MODE=production
+export SWARMDO_MEMORY_BACKEND=agentdb
 ```
 
 #### Windows Configuration
 ```powershell
 # PowerShell
-setx RUFFLO_VERSION "3"
-setx RUFFLO_MODE "production"
-setx RUFFLO_MEMORY_BACKEND "agentdb"
+setx SWARMDO_VERSION "3"
+setx SWARMDO_MODE "production"
+setx SWARMDO_MEMORY_BACKEND "agentdb"
 
 # Update config path
-$env:RUFFLO_CONFIG = "$env:APPDATA\rufflo\config.json"
+$env:SWARMDO_CONFIG = "$env:APPDATA\swarmdo\config.json"
 ```
 
 #### macOS/Linux Configuration
 ```bash
 # Bash/Zsh
-export RUFFLO_VERSION=3
-export RUFFLO_MODE=production
-export RUFFLO_MEMORY_BACKEND=agentdb
+export SWARMDO_VERSION=3
+export SWARMDO_MODE=production
+export SWARMDO_MEMORY_BACKEND=agentdb
 
 # Update config path
-export RUFFLO_CONFIG="$HOME/.rufflo/config.json"
+export SWARMDO_CONFIG="$HOME/.swarmdo/config.json"
 
 # Add to ~/.bashrc or ~/.zshrc for persistence
 ```
@@ -312,17 +312,17 @@ export RUFFLO_CONFIG="$HOME/.rufflo/config.json"
 npx agentic-flow@2.x memory export --output ./v2-memory.json
 
 # 2. Initialize v3 memory backend
-npx @rufflo/memory init --backend agentdb
+npx @swarmdo/memory init --backend agentdb
 
 # 3. Import v2 memory into v3
-npx @rufflo/memory import ./v2-memory.json --format v2
+npx @swarmdo/memory import ./v2-memory.json --format v2
 
 # 4. Verify migration
-npx @rufflo/memory stats
+npx @swarmdo/memory stats
 # Should show: "Migrated X patterns from v2"
 
 # 5. Optimize with HNSW indexing
-npx @rufflo/memory optimize --hnsw
+npx @swarmdo/memory optimize --hnsw
 ```
 
 ### Step 4: Update Code
@@ -339,9 +339,9 @@ import {
 
 // After (v3)
 import { Agent } from 'agentic-flow';
-import { SwarmCoordinator } from '@rufflo/swarm';
-import { MemoryModule } from '@rufflo/memory';
-import { SecurityModule } from '@rufflo/security';
+import { SwarmCoordinator } from '@swarmdo/swarm';
+import { MemoryModule } from '@swarmdo/memory';
+import { SecurityModule } from '@swarmdo/security';
 ```
 
 #### 4b. Update Agent Initialization
@@ -470,29 +470,29 @@ export default defineConfig({
 
 ```bash
 # 1. Run v3 security audit
-npx @rufflo/security audit --strict
+npx @swarmdo/security audit --strict
 
 # 2. Fix any CVEs automatically
-npx @rufflo/security fix --auto
+npx @swarmdo/security fix --auto
 
 # 3. Validate credentials
-npx @rufflo/security validate-credentials
+npx @swarmdo/security validate-credentials
 
 # 4. Check path security
-npx @rufflo/security check-paths
+npx @swarmdo/security check-paths
 
 # 5. Review security report
-cat ~/.rufflo/security-report.json
+cat ~/.swarmdo/security-report.json
 ```
 
 ### Step 7: Performance Validation
 
 ```bash
 # 1. Run performance benchmarks
-npx @rufflo/performance benchmark
+npx @swarmdo/performance benchmark
 
 # 2. Compare with v2 baseline
-npx @rufflo/performance compare --baseline v2
+npx @swarmdo/performance compare --baseline v2
 
 # 3. Validate targets
 # - Flash Attention: unverified (no benchmark) speedup
@@ -501,17 +501,17 @@ npx @rufflo/performance compare --baseline v2
 # - CLI Startup: <500ms
 
 # 4. Profile memory usage
-npx @rufflo/performance profile --memory
+npx @swarmdo/performance profile --memory
 
 # 5. Analyze bottlenecks
-npx @rufflo/performance analyze
+npx @swarmdo/performance analyze
 ```
 
 ### Step 8: Integration Testing
 
 ```bash
 # 1. Test agentic-flow integration
-npx @rufflo/integration test --agentic-flow-version alpha
+npx @swarmdo/integration test --agentic-flow-version alpha
 
 # 2. Test all modules
 npm run test:modules
@@ -523,14 +523,14 @@ npm run test:cross-platform
 npx agentic-flow --agent coder --task "Hello v3"
 
 # 5. Test swarm coordination
-npx @rufflo/swarm test --agents 15
+npx @swarmdo/swarm test --agents 15
 ```
 
 ---
 
 ## Module-by-Module Guide
 
-### @rufflo/security Migration
+### @swarmdo/security Migration
 
 #### Before (v2)
 ```typescript
@@ -540,7 +540,7 @@ npx @rufflo/swarm test --agents 15
 
 #### After (v3)
 ```typescript
-import { SecurityModule } from '@rufflo/security';
+import { SecurityModule } from '@swarmdo/security';
 
 const security = new SecurityModule({
   strict: true,
@@ -564,7 +564,7 @@ const safe = await security.sanitizeOutput(output);
 await security.validateCredentials();
 ```
 
-### @rufflo/memory Migration
+### @swarmdo/memory Migration
 
 #### Before (v2)
 ```typescript
@@ -577,7 +577,7 @@ const result = await memory.retrieve('key');
 
 #### After (v3)
 ```typescript
-import { MemoryModule } from '@rufflo/memory';
+import { MemoryModule } from '@swarmdo/memory';
 
 const memory = new MemoryModule({
   backend: 'hybrid', // SQLite + AgentDB
@@ -612,7 +612,7 @@ const enhanced = await memory.gnnEnhancedSearch(embedding, {
 });
 ```
 
-### @rufflo/swarm Migration
+### @swarmdo/swarm Migration
 
 #### Before (v2)
 ```typescript
@@ -630,7 +630,7 @@ const coordinator = new HierarchicalCoordinator({
 
 #### After (v3)
 ```typescript
-import { SwarmCoordinator } from '@rufflo/swarm';
+import { SwarmCoordinator } from '@swarmdo/swarm';
 
 // Single unified coordinator
 const swarm = new SwarmCoordinator({
@@ -652,7 +652,7 @@ const status = await swarm.getStatus();
 console.log(`Active: ${status.activeAgents}/${status.totalAgents}`);
 ```
 
-### @rufflo/performance Migration
+### @swarmdo/performance Migration
 
 #### Before (v2)
 ```typescript
@@ -662,7 +662,7 @@ console.log(`Active: ${status.activeAgents}/${status.totalAgents}`);
 
 #### After (v3)
 ```typescript
-import { PerformanceModule } from '@rufflo/performance';
+import { PerformanceModule } from '@swarmdo/performance';
 
 const perf = new PerformanceModule({
   targets: {
@@ -778,38 +778,38 @@ console.log(`Peak usage: ${profile.peakMB}MB`);
 
 #### v2 Environment Variables
 ```bash
-RUFFLO_VERSION=2
-RUFFLO_MEMORY_PATH=./memory
-RUFFLO_COORDINATOR=hierarchical
+SWARMDO_VERSION=2
+SWARMDO_MEMORY_PATH=./memory
+SWARMDO_COORDINATOR=hierarchical
 ```
 
 #### v3 Environment Variables
 ```bash
 # Core
-RUFFLO_VERSION=3
-RUFFLO_MODE=production
-RUFFLO_CONFIG=~/.rufflo/config.json
+SWARMDO_VERSION=3
+SWARMDO_MODE=production
+SWARMDO_CONFIG=~/.swarmdo/config.json
 
 # Memory
-RUFFLO_MEMORY_BACKEND=agentdb
-RUFFLO_MEMORY_PATH=./data
-RUFFLO_AGENTDB_HNSW=true
+SWARMDO_MEMORY_BACKEND=agentdb
+SWARMDO_MEMORY_PATH=./data
+SWARMDO_AGENTDB_HNSW=true
 
 # Security
-RUFFLO_SECURITY_STRICT=true
-RUFFLO_SECURITY_MODE=strict
+SWARMDO_SECURITY_STRICT=true
+SWARMDO_SECURITY_MODE=strict
 
 # Performance
-RUFFLO_FLASH_ATTENTION=true
-RUFFLO_SONA_LEARNING=true
+SWARMDO_FLASH_ATTENTION=true
+SWARMDO_SONA_LEARNING=true
 
 # Platform-specific (Windows)
 APPDATA=C:\Users\YourName\AppData\Roaming
-RUFFLO_CONFIG=%APPDATA%\rufflo\config.json
+SWARMDO_CONFIG=%APPDATA%\swarmdo\config.json
 
 # Platform-specific (macOS/Linux)
 HOME=/home/yourname
-RUFFLO_CONFIG=$HOME/.rufflo/config.json
+SWARMDO_CONFIG=$HOME/.swarmdo/config.json
 ```
 
 ---
@@ -830,8 +830,8 @@ const agent = new Agent({
 
 // ✅ v3 Pattern
 import { Agent } from 'agentic-flow';
-import { MemoryModule } from '@rufflo/memory';
-import { SecurityModule } from '@rufflo/security';
+import { MemoryModule } from '@swarmdo/memory';
+import { SecurityModule } from '@swarmdo/security';
 
 const agent = new Agent({
   name: 'coder',
@@ -855,8 +855,8 @@ const swarm = new HierarchicalCoordinator({
 const result = await swarm.execute(task);
 
 // ✅ v3 Pattern
-import { SwarmCoordinator } from '@rufflo/swarm';
-import { AttentionCoordinator } from '@rufflo/swarm/attention';
+import { SwarmCoordinator } from '@swarmdo/swarm';
+import { AttentionCoordinator } from '@swarmdo/swarm/attention';
 
 const swarm = new SwarmCoordinator({
   topology: 'hierarchical-mesh',
@@ -881,7 +881,7 @@ await memory.store('user-123', userData);
 const user = await memory.retrieve('user-123');
 
 // ✅ v3 Pattern
-import { MemoryModule } from '@rufflo/memory';
+import { MemoryModule } from '@swarmdo/memory';
 
 const memory = new MemoryModule({
   backend: 'hybrid',
@@ -919,7 +919,7 @@ try {
 }
 
 // ✅ v3 Pattern (Event Sourcing)
-import { SecurityError, MemoryError } from '@rufflo/shared';
+import { SecurityError, MemoryError } from '@swarmdo/shared';
 
 try {
   const result = await agent.execute(task);
@@ -969,7 +969,7 @@ describe('Agent', () => {
 // ✅ v3 Pattern (Vitest)
 import { describe, it, expect, vi } from 'vitest';
 import { Agent } from 'agentic-flow';
-import { MemoryModule } from '@rufflo/memory';
+import { MemoryModule } from '@swarmdo/memory';
 
 describe('Agent', () => {
   it('should execute task with memory', async () => {
@@ -1104,7 +1104,7 @@ rm -rf node_modules
 cp -r node_modules.v2.backup node_modules
 
 # 3. Restore configuration
-cp v2-config-backup.json ~/.rufflo/config.json
+cp v2-config-backup.json ~/.swarmdo/config.json
 
 # 4. Restore memory
 npx agentic-flow@2.x memory import ./v2-memory-backup.json
@@ -1118,17 +1118,17 @@ npx agentic-flow --agent coder --task "Test rollback"
 ```bash
 # 1. Uninstall v3 completely
 npm uninstall agentic-flow
-npm uninstall @rufflo/security
-npm uninstall @rufflo/memory
-npm uninstall @rufflo/swarm
-npm uninstall @rufflo/integration
-npm uninstall @rufflo/performance
+npm uninstall @swarmdo/security
+npm uninstall @swarmdo/memory
+npm uninstall @swarmdo/swarm
+npm uninstall @swarmdo/integration
+npm uninstall @swarmdo/performance
 npm uninstall agentdb
-npm uninstall @ruvector/attention
-npm uninstall @ruvector/sona
+npm uninstall @swarmvector/attention
+npm uninstall @swarmvector/sona
 
 # 2. Restore entire v2 environment
-cp -r ~/.rufflo.v2.backup ~/.rufflo
+cp -r ~/.swarmdo.v2.backup ~/.swarmdo
 rm -rf node_modules
 cp package.json.v2.backup package.json
 cp package-lock.json.v2.backup package-lock.json
@@ -1149,7 +1149,7 @@ npx agentic-flow --list
 
 **Symptoms**:
 ```
-Error: Rufflo v3 requires Node.js 20.x or higher
+Error: Swarmdo v3 requires Node.js 20.x or higher
 Current version: v18.x.x
 ```
 
@@ -1179,19 +1179,19 @@ AgentDB not initialized
 **Solution**:
 ```bash
 # 1. Initialize AgentDB manually
-npx @rufflo/memory init --backend agentdb --force
+npx @swarmdo/memory init --backend agentdb --force
 
 # 2. Create data directory
 mkdir -p ./data/agentdb
 
 # 3. Import v2 memory with verbose logging
-npx @rufflo/memory import ./v2-memory-backup.json \
+npx @swarmdo/memory import ./v2-memory-backup.json \
   --format v2 \
   --verbose \
   --continue-on-error
 
 # 4. Verify
-npx @rufflo/memory stats
+npx @swarmdo/memory stats
 ```
 
 ### Issue 3: Security Validation Errors
@@ -1205,18 +1205,18 @@ Path traversal detected: ../../../etc/passwd
 **Solution**:
 ```bash
 # 1. Review security configuration
-cat ~/.rufflo/config.json | grep -A 10 security
+cat ~/.swarmdo/config.json | grep -A 10 security
 
 # 2. Update allowedDirectories
-npx @rufflo/security configure \
+npx @swarmdo/security configure \
   --allowed-dirs "./src/,./tests/,./data/" \
   --blocked-patterns "../,~/,/etc/,/tmp/"
 
 # 3. Validate paths
-npx @rufflo/security check-paths --fix
+npx @swarmdo/security check-paths --fix
 
 # 4. Re-run with strict mode disabled (temporary)
-export RUFFLO_SECURITY_STRICT=false
+export SWARMDO_SECURITY_STRICT=false
 ```
 
 ### Issue 4: Vitest Test Failures
@@ -1253,18 +1253,18 @@ npm test
 
 **Symptoms**:
 ```
-Error: Cannot find module '@rufflo/security'
+Error: Cannot find module '@swarmdo/security'
 Module not found
 ```
 
 **Solution**:
 ```bash
 # 1. Install all v3 modules
-npm install @rufflo/security@latest
-npm install @rufflo/memory@latest
-npm install @rufflo/swarm@latest
-npm install @rufflo/integration@latest
-npm install @rufflo/performance@latest
+npm install @swarmdo/security@latest
+npm install @swarmdo/memory@latest
+npm install @swarmdo/swarm@latest
+npm install @swarmdo/integration@latest
+npm install @swarmdo/performance@latest
 
 # 2. Clear npm cache
 npm cache clean --force
@@ -1274,8 +1274,8 @@ rm -rf node_modules package-lock.json
 npm install
 
 # 4. Verify modules
-npm list @rufflo/security
-npm list @rufflo/memory
+npm list @swarmdo/security
+npm list @swarmdo/memory
 ```
 
 ### Issue 6: Platform-Specific Errors
@@ -1296,7 +1296,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 
 # Solution
 xattr -d com.apple.quarantine /path/to/npx
-spctl --add --label "Rufflo" /path/to/npx
+spctl --add --label "Swarmdo" /path/to/npx
 ```
 
 #### Linux: Permission Denied
@@ -1314,7 +1314,7 @@ sudo chown -R $USER:$USER ~/.npm
 ## Post-Migration Checklist
 
 - [ ] v3 installed and running (`npx agentic-flow --version` shows 3.0.0-alpha.1)
-- [ ] All 10 @rufflo modules installed
+- [ ] All 10 @swarmdo modules installed
 - [ ] Configuration migrated to v3 format
 - [ ] Memory data imported into AgentDB
 - [ ] Security audit passed
@@ -1331,10 +1331,10 @@ sudo chown -R $USER:$USER ~/.npm
 ## Getting Help
 
 ### Resources
-- **Documentation**: https://github.com/ruvnet/agentic-flow/tree/v3/docs
-- **GitHub Issues**: https://github.com/ruvnet/agentic-flow/issues
-- **ADR Reference**: /workspaces/rufflo/v3/docs/adr/
-- **Examples**: /workspaces/rufflo/v3/examples/
+- **Documentation**: the upstream project (see NOTICE)
+- **GitHub Issues**: the upstream project (see NOTICE)
+- **ADR Reference**: /workspaces/swarmdo/v3/docs/adr/
+- **Examples**: /workspaces/swarmdo/v3/examples/
 
 ### Support Channels
 - **Bug Reports**: Open issue with `migration` label
@@ -1347,7 +1347,7 @@ If you encounter issues not covered in this guide:
 1. **Collect diagnostic information**:
    ```bash
    npx agentic-flow diagnose --output diagnostics.json
-   npx @rufflo/security audit --report security-report.json
+   npx @swarmdo/security audit --report security-report.json
    ```
 
 2. **Create detailed issue**:
@@ -1359,7 +1359,7 @@ If you encounter issues not covered in this guide:
 
 3. **Try safe mode**:
    ```bash
-   export RUFFLO_SAFE_MODE=true
+   export SWARMDO_SAFE_MODE=true
    npx agentic-flow --agent coder --task "Test safe mode"
    ```
 
@@ -1398,4 +1398,4 @@ If you encounter issues not covered in this guide:
 
 ---
 
-**Happy Migrating! Welcome to Rufflo v3!** 🚀
+**Happy Migrating! Welcome to Swarmdo v3!** 🚀

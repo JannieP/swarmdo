@@ -3,7 +3,7 @@
  *
  * Head-to-head comparison between:
  * - Qwen2.5-0.5B-Instruct (base model)
- * - RuvLTRA Claude Code 0.5B (fine-tuned for Claude Code)
+ * - SwarmLTRA Claude Code 0.5B (fine-tuned for Claude Code)
  *
  * Tests routing accuracy and embedding quality for Claude Code use cases.
  */
@@ -49,13 +49,13 @@ export const COMPARISON_MODELS: Record<string, ModelConfig> = {
     sizeBytes: 491_000_000,
     description: 'Base Qwen 0.5B model (Q4_K_M quantized)',
   },
-  'ruvltra-claude-code': {
-    id: 'ruvltra-claude-code',
-    name: 'RuvLTRA Claude Code 0.5B',
-    url: 'https://huggingface.co/ruv/ruvltra/resolve/main/ruvltra-claude-code-0.5b-q4_k_m.gguf',
-    filename: 'ruvltra-claude-code-0.5b-q4_k_m.gguf',
+  'swarmltra-claude-code': {
+    id: 'swarmltra-claude-code',
+    name: 'SwarmLTRA Claude Code 0.5B',
+    url: 'https://huggingface.co/swarmdo/swarmltra/resolve/main/swarmltra-claude-code-0.5b-q4_k_m.gguf',
+    filename: 'swarmltra-claude-code-0.5b-q4_k_m.gguf',
     sizeBytes: 398_000_000,
-    description: 'RuvLTRA fine-tuned for Claude Code workflows',
+    description: 'SwarmLTRA fine-tuned for Claude Code workflows',
   },
 };
 
@@ -375,7 +375,7 @@ export function formatComparisonResults(results: FullComparisonResults): string 
   lines.push('');
   lines.push('╔═══════════════════════════════════════════════════════════════════════════════════╗');
   lines.push('║                        MODEL COMPARISON RESULTS                                   ║');
-  lines.push('║               Qwen2.5-0.5B (Base) vs RuvLTRA Claude Code                          ║');
+  lines.push('║               Qwen2.5-0.5B (Base) vs SwarmLTRA Claude Code                          ║');
   lines.push('╠═══════════════════════════════════════════════════════════════════════════════════╣');
   lines.push(`║  Timestamp: ${results.timestamp.padEnd(70)}║`);
   lines.push('╚═══════════════════════════════════════════════════════════════════════════════════╝');
@@ -383,20 +383,20 @@ export function formatComparisonResults(results: FullComparisonResults): string 
   // Comparison table
   lines.push('');
   lines.push('┌─────────────────────────────┬───────────────┬───────────────┬───────────────┐');
-  lines.push('│ Metric                      │ Baseline      │ Qwen Base     │ RuvLTRA       │');
+  lines.push('│ Metric                      │ Baseline      │ Qwen Base     │ SwarmLTRA       │');
   lines.push('├─────────────────────────────┼───────────────┼───────────────┼───────────────┤');
 
   const baseline = results.baseline;
   const qwen = results.models.find(m => m.modelId === 'qwen-base');
-  const ruvltra = results.models.find(m => m.modelId === 'ruvltra-claude-code');
+  const swarmltra = results.models.find(m => m.modelId === 'swarmltra-claude-code');
 
   const metrics = [
-    { name: 'Routing Accuracy', b: baseline.routing.accuracy, q: qwen?.routing.accuracy || 0, r: ruvltra?.routing.accuracy || 0 },
-    { name: 'Similarity Detection', b: baseline.embedding.similarityAccuracy, q: qwen?.embedding.similarityAccuracy || 0, r: ruvltra?.embedding.similarityAccuracy || 0 },
-    { name: 'Search MRR', b: baseline.embedding.searchMRR, q: qwen?.embedding.searchMRR || 0, r: ruvltra?.embedding.searchMRR || 0 },
-    { name: 'Search NDCG', b: baseline.embedding.searchNDCG, q: qwen?.embedding.searchNDCG || 0, r: ruvltra?.embedding.searchNDCG || 0 },
-    { name: 'Cluster Purity', b: baseline.embedding.clusterPurity, q: qwen?.embedding.clusterPurity || 0, r: ruvltra?.embedding.clusterPurity || 0 },
-    { name: 'Overall Score', b: baseline.overallScore, q: qwen?.overallScore || 0, r: ruvltra?.overallScore || 0 },
+    { name: 'Routing Accuracy', b: baseline.routing.accuracy, q: qwen?.routing.accuracy || 0, r: swarmltra?.routing.accuracy || 0 },
+    { name: 'Similarity Detection', b: baseline.embedding.similarityAccuracy, q: qwen?.embedding.similarityAccuracy || 0, r: swarmltra?.embedding.similarityAccuracy || 0 },
+    { name: 'Search MRR', b: baseline.embedding.searchMRR, q: qwen?.embedding.searchMRR || 0, r: swarmltra?.embedding.searchMRR || 0 },
+    { name: 'Search NDCG', b: baseline.embedding.searchNDCG, q: qwen?.embedding.searchNDCG || 0, r: swarmltra?.embedding.searchNDCG || 0 },
+    { name: 'Cluster Purity', b: baseline.embedding.clusterPurity, q: qwen?.embedding.clusterPurity || 0, r: swarmltra?.embedding.clusterPurity || 0 },
+    { name: 'Overall Score', b: baseline.overallScore, q: qwen?.overallScore || 0, r: swarmltra?.overallScore || 0 },
   ];
 
   for (const m of metrics) {
@@ -428,14 +428,14 @@ export function formatComparisonResults(results: FullComparisonResults): string 
   lines.push('─────────────────────────────────────────────────────────────────────────────────');
 
   const categories = Object.keys(baseline.routing.accuracyByCategory);
-  lines.push('Category'.padEnd(20) + 'Baseline'.padStart(12) + 'Qwen'.padStart(12) + 'RuvLTRA'.padStart(12) + 'Best'.padStart(10));
+  lines.push('Category'.padEnd(20) + 'Baseline'.padStart(12) + 'Qwen'.padStart(12) + 'SwarmLTRA'.padStart(12) + 'Best'.padStart(10));
 
   for (const cat of categories) {
     const b = baseline.routing.accuracyByCategory[cat] || 0;
     const q = qwen?.routing.accuracyByCategory[cat] || 0;
-    const r = ruvltra?.routing.accuracyByCategory[cat] || 0;
+    const r = swarmltra?.routing.accuracyByCategory[cat] || 0;
 
-    const best = r > q && r > b ? 'RuvLTRA' : q > b ? 'Qwen' : 'Baseline';
+    const best = r > q && r > b ? 'SwarmLTRA' : q > b ? 'Qwen' : 'Baseline';
 
     lines.push(
       cat.padEnd(20) +
@@ -454,7 +454,7 @@ export function formatComparisonResults(results: FullComparisonResults): string 
  */
 export async function runFullComparison(): Promise<FullComparisonResults> {
   console.log('\n╔═══════════════════════════════════════════════════════════════════════════════════╗');
-  console.log('║                    RUVLTRA vs QWEN MODEL COMPARISON                               ║');
+  console.log('║                    SWARMLTRA vs QWEN MODEL COMPARISON                               ║');
   console.log('║                   Testing for Claude Code Use Cases                               ║');
   console.log('╚═══════════════════════════════════════════════════════════════════════════════════╝\n');
 
@@ -487,17 +487,17 @@ export async function runFullComparison(): Promise<FullComparisonResults> {
   const qwenResult = runModelComparison('qwen-base', 'Qwen2.5-0.5B-Instruct', qwenEmbedder);
   console.log(`  Qwen routing: ${(qwenResult.routing.accuracy * 100).toFixed(1)}%`);
 
-  // Simulate RuvLTRA model (enhanced embeddings simulating fine-tuning)
-  console.log('\nRunning RuvLTRA Claude Code simulation...');
+  // Simulate SwarmLTRA model (enhanced embeddings simulating fine-tuning)
+  console.log('\nRunning SwarmLTRA Claude Code simulation...');
 
-  // RuvLTRA embedder - enhanced with Claude Code specific terms
+  // SwarmLTRA embedder - enhanced with Claude Code specific terms
   const claudeCodeTerms = [
     'agent', 'spawn', 'swarm', 'coordinate', 'task', 'route', 'orchestrate',
     'coder', 'tester', 'reviewer', 'architect', 'researcher', 'debugger',
     'implement', 'refactor', 'optimize', 'security', 'performance', 'deploy',
   ];
 
-  const ruvltraEmbedder = (text: string): number[] => {
+  const swarmltraEmbedder = (text: string): number[] => {
     const base = simpleEmbedding(text, 384);
 
     // Boost dimensions for Claude Code specific terms
@@ -518,27 +518,27 @@ export async function runFullComparison(): Promise<FullComparisonResults> {
     return base;
   };
 
-  const ruvltraResult = runModelComparison('ruvltra-claude-code', 'RuvLTRA Claude Code 0.5B', ruvltraEmbedder);
-  console.log(`  RuvLTRA routing: ${(ruvltraResult.routing.accuracy * 100).toFixed(1)}%`);
+  const swarmltraResult = runModelComparison('swarmltra-claude-code', 'SwarmLTRA Claude Code 0.5B', swarmltraEmbedder);
+  console.log(`  SwarmLTRA routing: ${(swarmltraResult.routing.accuracy * 100).toFixed(1)}%`);
 
   // Determine winner
   const scores = [
     { name: 'Baseline', score: baseline.overallScore },
     { name: 'Qwen2.5-0.5B', score: qwenResult.overallScore },
-    { name: 'RuvLTRA Claude Code', score: ruvltraResult.overallScore },
+    { name: 'SwarmLTRA Claude Code', score: swarmltraResult.overallScore },
   ].sort((a, b) => b.score - a.score);
 
   const winner = scores[0].name;
   const improvement = ((scores[0].score - baseline.overallScore) / baseline.overallScore * 100).toFixed(1);
 
   let summary = '';
-  if (winner === 'RuvLTRA Claude Code') {
-    summary = `RuvLTRA Claude Code outperforms Qwen base by ${((ruvltraResult.overallScore - qwenResult.overallScore) * 100).toFixed(1)} percentage points.\n`;
+  if (winner === 'SwarmLTRA Claude Code') {
+    summary = `SwarmLTRA Claude Code outperforms Qwen base by ${((swarmltraResult.overallScore - qwenResult.overallScore) * 100).toFixed(1)} percentage points.\n`;
     summary += `  This demonstrates the value of fine-tuning for Claude Code specific tasks.\n`;
     summary += `  Key advantages: Better agent routing and task-specific embedding quality.`;
   } else if (winner === 'Qwen2.5-0.5B') {
-    summary = `Qwen base slightly outperforms RuvLTRA on general metrics.\n`;
-    summary += `  However, RuvLTRA may still be better for specific Claude Code workflows.\n`;
+    summary = `Qwen base slightly outperforms SwarmLTRA on general metrics.\n`;
+    summary += `  However, SwarmLTRA may still be better for specific Claude Code workflows.\n`;
     summary += `  Consider task-specific evaluation for your use case.`;
   } else {
     summary = `Baseline keyword matching remains competitive.\n`;
@@ -549,7 +549,7 @@ export async function runFullComparison(): Promise<FullComparisonResults> {
   return {
     timestamp: new Date().toISOString(),
     baseline,
-    models: [qwenResult, ruvltraResult],
+    models: [qwenResult, swarmltraResult],
     winner,
     summary,
   };

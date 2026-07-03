@@ -3,7 +3,7 @@
 **RaBitQ 1-bit quantized vector index in WebAssembly.** Compress embeddings 32× and run approximate nearest-neighbor search in the browser, Cloudflare Workers, Deno, or Bun.
 
 [![npm](https://img.shields.io/npm/v/@swarmvector/rabitq-wasm.svg)](https://www.npmjs.com/package/@swarmvector/rabitq-wasm)
-[![License](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue)](https://github.com/ruvnet/SwarmVector#license)
+[![License](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue)](the upstream project (see NOTICE)#license)
 
 ## What is RaBitQ?
 
@@ -118,11 +118,11 @@ Returns the crate version baked at build time.
 
 ## Source
 
-- **Rust crate**: [`crates/swarmvector-rabitq-wasm/`](https://github.com/ruvnet/SwarmVector/tree/main/crates/swarmvector-rabitq-wasm)
-- **Algorithm crate**: [`crates/swarmvector-rabitq/`](https://github.com/ruvnet/SwarmVector/tree/main/crates/swarmvector-rabitq)
-- **ADR**: [ADR-154 RaBitQ rotation-based 1-bit quantization](https://github.com/ruvnet/SwarmVector/blob/main/docs/adr/ADR-154-rabitq-rotation-based-1bit-quantization.md)
-- **Packaging ADR**: [ADR-161 — `swarmvector-rabitq-wasm` npm package](https://github.com/ruvnet/SwarmVector/blob/main/docs/adr/ADR-161-rabitq-wasm-npm-package.md)
-- **Repository**: [github.com/ruvnet/SwarmVector](https://github.com/ruvnet/SwarmVector)
+- **Rust crate**: [`crates/swarmvector-rabitq-wasm/`](the upstream project (see NOTICE))
+- **Algorithm crate**: [`crates/swarmvector-rabitq/`](the upstream project (see NOTICE))
+- **ADR**: [ADR-154 RaBitQ rotation-based 1-bit quantization](the upstream project (see NOTICE))
+- **Packaging ADR**: [ADR-161 — `swarmvector-rabitq-wasm` npm package](the upstream project (see NOTICE))
+- **Repository**: [the upstream project (see NOTICE)](the upstream project (see NOTICE))
 
 ## License
 

@@ -1,4 +1,4 @@
-//! # Contrastive Learning for RuvLTRA Embeddings
+//! # Contrastive Learning for SwarmLTRA Embeddings
 //!
 //! This module implements triplet loss and InfoNCE contrastive learning
 //! for fine-tuning embedding models on agent routing tasks.
@@ -25,7 +25,7 @@
 //! println!("Final loss: {}", result.final_loss);
 //!
 //! // Export fine-tuned model
-//! trainer.export_gguf("ruvltra-finetuned.gguf")?;
+//! trainer.export_gguf("swarmltra-finetuned.gguf")?;
 //! ```
 
 use serde::{Deserialize, Serialize};
@@ -80,7 +80,7 @@ impl Default for ContrastiveConfig {
             warmup_steps: 100,
             hard_negative_ratio: 0.7,
             max_grad_norm: 1.0,
-            output_path: PathBuf::from("ruvltra-finetuned.gguf"),
+            output_path: PathBuf::from("swarmltra-finetuned.gguf"),
             use_metal: true,
             seed: 42,
         }

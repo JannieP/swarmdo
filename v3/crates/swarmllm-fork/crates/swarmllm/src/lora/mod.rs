@@ -114,7 +114,7 @@ pub use adapters::{
         AdapterDataset, AdapterTrainer, AdapterTrainingConfig, SyntheticDataGenerator,
         TrainingExample,
     },
-    AdapterMetadata, LoraConfig, RuvLtraAdapters,
+    AdapterMetadata, LoraConfig, SwarmLtraAdapters,
 };
 pub use micro_lora::{AdaptFeedback, LoraAdapter, MicroLoRA, MicroLoraConfig, TargetModule};
 pub use training::{

@@ -1,14 +1,14 @@
-# Ruvector Graph Node
+# Swarmvector Graph Node
 
-[![npm](https://img.shields.io/npm/v/@ruvector/graph.svg)](https://www.npmjs.com/package/@ruvector/graph)
-[![Crates.io](https://img.shields.io/crates/v/ruvector-graph-node.svg)](https://crates.io/crates/ruvector-graph-node)
+[![npm](https://img.shields.io/npm/v/@swarmvector/graph.svg)](https://www.npmjs.com/package/@swarmvector/graph)
+[![Crates.io](https://img.shields.io/crates/v/swarmvector-graph-node.svg)](https://crates.io/crates/swarmvector-graph-node)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 **Node.js bindings for SwarmVector Graph Database via NAPI-RS.**
 
-`ruvector-graph-node` provides native Node.js bindings for the Ruvector graph database, enabling high-performance graph operations with Cypher queries directly from JavaScript/TypeScript. Part of the [Ruvector](https://github.com/ruvnet/ruvector) ecosystem.
+`swarmvector-graph-node` provides native Node.js bindings for the Swarmvector graph database, enabling high-performance graph operations with Cypher queries directly from JavaScript/TypeScript. Part of the [Swarmvector](the upstream project (see NOTICE)) ecosystem.
 
-## Why Ruvector Graph Node?
+## Why Swarmvector Graph Node?
 
 - **Native Performance**: Rust speed in Node.js
 - **Zero-Copy**: Efficient data transfer via NAPI-RS
@@ -36,11 +36,11 @@
 ## Installation
 
 ```bash
-npm install @ruvector/graph
+npm install @swarmvector/graph
 # or
-yarn add @ruvector/graph
+yarn add @swarmvector/graph
 # or
-pnpm add @ruvector/graph
+pnpm add @swarmvector/graph
 ```
 
 ## Quick Start
@@ -48,7 +48,7 @@ pnpm add @ruvector/graph
 ### Create a Graph
 
 ```typescript
-import { Graph, Node, Edge } from '@ruvector/graph';
+import { Graph, Node, Edge } from '@swarmvector/graph';
 
 // Create a new graph
 const graph = new Graph({
@@ -79,7 +79,7 @@ await graph.createEdge({
 ### Cypher Queries
 
 ```typescript
-import { Graph } from '@ruvector/graph';
+import { Graph } from '@swarmvector/graph';
 
 const graph = new Graph();
 
@@ -98,7 +98,7 @@ for (const row of results) {
 ### Vector Search
 
 ```typescript
-import { Graph } from '@ruvector/graph';
+import { Graph } from '@swarmvector/graph';
 
 const graph = new Graph({ dimensions: 384 });
 
@@ -192,8 +192,8 @@ interface SearchOptions {
 
 ```bash
 # Clone repository
-git clone https://github.com/ruvnet/ruvector.git
-cd ruvector/crates/ruvector-graph-node
+git clone the upstream project (see NOTICE)
+cd swarmvector/crates/swarmvector-graph-node
 
 # Install dependencies
 npm install
@@ -217,15 +217,15 @@ npm test
 
 ## Related Packages
 
-- **[ruvector-graph](../ruvector-graph/)** - Core graph database engine
-- **[ruvector-graph-wasm](../ruvector-graph-wasm/)** - WebAssembly bindings
-- **[@ruvector/core](https://www.npmjs.com/package/@ruvector/core)** - Core vector bindings
+- **[swarmvector-graph](../swarmvector-graph/)** - Core graph database engine
+- **[swarmvector-graph-wasm](../swarmvector-graph-wasm/)** - WebAssembly bindings
+- **[@swarmvector/core](https://www.npmjs.com/package/@swarmvector/core)** - Core vector bindings
 
 ## Documentation
 
 - **[Main README](../../README.md)** - Complete project overview
-- **[API Documentation](https://docs.rs/ruvector-graph-node)** - Full API reference
-- **[GitHub Repository](https://github.com/ruvnet/ruvector)** - Source code
+- **[API Documentation](https://docs.rs/swarmvector-graph-node)** - Full API reference
+- **[GitHub Repository](the upstream project (see NOTICE))** - Source code
 
 ## License
 
@@ -235,10 +235,10 @@ npm test
 
 <div align="center">
 
-**Part of [Ruvector](https://github.com/ruvnet/ruvector) - Built by [rUv](https://ruv.io)**
+**Part of [Swarmvector](the upstream project (see NOTICE)) - Built by [the upstream author](https://swarmdo.com)**
 
-[![Star on GitHub](https://img.shields.io/github/stars/ruvnet/ruvector?style=social)](https://github.com/ruvnet/ruvector)
+[![Star on GitHub](https://img.shields.io/github/stars/upstream/swarmvector?style=social)](the upstream project (see NOTICE))
 
-[Documentation](https://docs.rs/ruvector-graph-node) | [npm](https://www.npmjs.com/package/@ruvector/graph) | [GitHub](https://github.com/ruvnet/ruvector)
+[Documentation](https://docs.rs/swarmvector-graph-node) | [npm](https://www.npmjs.com/package/@swarmvector/graph) | [GitHub](the upstream project (see NOTICE))
 
 </div>

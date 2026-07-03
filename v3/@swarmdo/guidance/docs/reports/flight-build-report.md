@@ -230,8 +230,8 @@ npx ts-node -e "
 
 ## Links
 
-- **GitHub**: [github.com/ruvnet/claude-flow](https://github.com/ruvnet/claude-flow)
+- **GitHub**: [the upstream project (see NOTICE)](the upstream project (see NOTICE))
 - **npm**: [@swarmdo/guidance](https://www.npmjs.com/package/@swarmdo/guidance)
 - **npm**: [swarmdo](https://www.npmjs.com/package/swarmdo)
 - **npm**: [swarmbot](https://www.npmjs.com/package/swarmbot)
-- **ruv.io**: [ruv.io](https://ruv.io)
+- **swarmdo.com**: [swarmdo.com](https://swarmdo.com)

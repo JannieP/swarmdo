@@ -85,7 +85,7 @@ export const PACKAGE_INFO = {
   version: VERSION,
   description: 'Codex CLI integration for Swarmdo',
   futureUmbrella: 'coflow',
-  repository: 'https://github.com/ruvnet/swarmdo',
+  repository: 'the upstream project (see NOTICE)',
 } as const;
 
 /**

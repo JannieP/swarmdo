@@ -1,4 +1,4 @@
-# ADR-019: @rufflo/headless Runtime Package
+# ADR-019: @swarmdo/headless Runtime Package
 
 **Status:** Proposed
 **Date:** 2026-01-07
@@ -17,7 +17,7 @@ The undocumented `CLAUDE_CODE_HEADLESS` and `CLAUDE_CODE_SANDBOX_MODE` environme
 
 ## Decision
 
-Create `@rufflo/headless` package providing:
+Create `@swarmdo/headless` package providing:
 - Programmatic Claude Code invocation with environment control
 - Sandbox-aware execution contexts
 - Batch task queue with persistence
@@ -29,7 +29,7 @@ Create `@rufflo/headless` package providing:
 ## Package Architecture
 
 ```
-@rufflo/headless/
+@swarmdo/headless/
 ├── src/
 │   ├── index.ts                 # Main exports
 │   ├── executor/
@@ -495,7 +495,7 @@ export class APIServer {
 
 export interface DockerConfig {
   // Base image with Claude Code pre-installed
-  image: string;  // e.g., 'ghcr.io/ruvnet/claude-flow-headless:latest'
+  image: string;  // e.g., 'ghcr.io/upstream/claude-flow-headless:latest'
 
   // Container resources
   resources: {
@@ -571,27 +571,27 @@ export class ContainerExecutor {
 
 ```bash
 # Start headless server
-npx @rufflo/headless serve --port 3001 --sandbox strict
+npx @swarmdo/headless serve --port 3001 --sandbox strict
 
 # Execute single prompt
-npx @rufflo/headless exec "Fix the bug in auth.ts" --cwd ./project
+npx @swarmdo/headless exec "Fix the bug in auth.ts" --cwd ./project
 
 # Execute from file
-npx @rufflo/headless exec --file tasks.txt --parallel 3
+npx @swarmdo/headless exec --file tasks.txt --parallel 3
 
 # Queue management
-npx @rufflo/headless queue add "Refactor utils" --priority high
-npx @rufflo/headless queue list
-npx @rufflo/headless queue cancel <id>
+npx @swarmdo/headless queue add "Refactor utils" --priority high
+npx @swarmdo/headless queue list
+npx @swarmdo/headless queue cancel <id>
 
 # Docker mode
-npx @rufflo/headless docker start --containers 3
-npx @rufflo/headless docker exec "Run tests" --isolated
-npx @rufflo/headless docker scale 5
+npx @swarmdo/headless docker start --containers 3
+npx @swarmdo/headless docker exec "Run tests" --isolated
+npx @swarmdo/headless docker scale 5
 
 # Monitoring
-npx @rufflo/headless status
-npx @rufflo/headless metrics --prometheus
+npx @swarmdo/headless status
+npx @swarmdo/headless metrics --prometheus
 ```
 
 ---
@@ -617,7 +617,7 @@ jobs:
           CLAUDE_CODE_HEADLESS: "true"
           CLAUDE_CODE_SANDBOX_MODE: "strict"
         run: |
-          npx @rufflo/headless exec \
+          npx @swarmdo/headless exec \
             "Review this PR for bugs, security issues, and code quality. \
              Provide actionable feedback." \
             --output review.md
@@ -638,7 +638,7 @@ jobs:
 ### 2. Batch Test Generation
 
 ```typescript
-import { HeadlessExecutor, TaskQueue } from '@rufflo/headless';
+import { HeadlessExecutor, TaskQueue } from '@swarmdo/headless';
 
 const executor = new HeadlessExecutor({
   sandbox: { mode: 'permissive' },
@@ -687,7 +687,7 @@ spec:
     spec:
       containers:
       - name: claude
-        image: ghcr.io/ruvnet/claude-flow-headless:latest
+        image: ghcr.io/upstream/claude-flow-headless:latest
         env:
         - name: ANTHROPIC_API_KEY
           valueFrom:
@@ -700,7 +700,7 @@ spec:
           value: "strict"
         command:
         - npx
-        - "@rufflo/headless"
+        - "@swarmdo/headless"
         - exec
         - "Migrate database schema from v2 to v3"
         volumeMounts:
@@ -716,10 +716,10 @@ spec:
 ### 4. Distributed Swarm Execution
 
 ```typescript
-import { ContainerExecutor } from '@rufflo/headless';
+import { ContainerExecutor } from '@swarmdo/headless';
 
 const executor = new ContainerExecutor({
-  image: 'ghcr.io/ruvnet/claude-flow-headless:latest',
+  image: 'ghcr.io/upstream/claude-flow-headless:latest',
   resources: { cpus: 2, memoryMb: 4096, diskMb: 10240 },
   pool: { minContainers: 5, maxContainers: 20, idleTimeoutMs: 60000 }
 });
@@ -824,10 +824,10 @@ const HARD_LIMITS = {
 
 ```json
 {
-  "name": "@rufflo/headless",
+  "name": "@swarmdo/headless",
   "version": "3.0.0-alpha.1",
   "dependencies": {
-    "@rufflo/shared": "^3.0.0-alpha.1",
+    "@swarmdo/shared": "^3.0.0-alpha.1",
     "better-sqlite3": "^9.0.0",
     "express": "^4.18.2",
     "ws": "^8.14.2",
@@ -867,14 +867,14 @@ const HARD_LIMITS = {
 ### Neutral
 
 1. **Optional** - Users who don't need headless can skip it
-2. **Standalone** - Can be used without other rufflo packages
+2. **Standalone** - Can be used without other swarmdo packages
 
 ---
 
 ## References
 
 - ADR-018: Claude Code Deep Integration
-- ADR-017: RuVector Integration Architecture
+- ADR-017: SwarmVector Integration Architecture
 - Claude Code Environment Variables (undocumented)
 - Docker Best Practices for CI/CD
 

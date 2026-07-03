@@ -94,8 +94,8 @@ Pre-define shard groups (e.g., "security pack", "testing pack") and load by task
 
 ## References
 
-- `v3/@rufflo/guidance/src/types.ts` -- `Constitution`, `RuleShard`, `PolicyBundle` type definitions
-- `v3/@rufflo/guidance/src/compiler.ts` -- `buildConstitution()`, `buildShards()`, `CONSTITUTION_MARKERS`
-- `v3/@rufflo/guidance/src/retriever.ts` -- `ShardRetriever.retrieve()`, `selectWithContradictionCheck()`
+- `v3/@swarmdo/guidance/src/types.ts` -- `Constitution`, `RuleShard`, `PolicyBundle` type definitions
+- `v3/@swarmdo/guidance/src/compiler.ts` -- `buildConstitution()`, `buildShards()`, `CONSTITUTION_MARKERS`
+- `v3/@swarmdo/guidance/src/retriever.ts` -- `ShardRetriever.retrieve()`, `selectWithContradictionCheck()`
 - ADR-G001 -- Why a separate control plane
 - ADR-G003 -- Intent classification for shard retrieval

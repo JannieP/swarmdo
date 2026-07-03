@@ -4,14 +4,14 @@
 //! for the SwarmLLM inference runtime, including:
 //!
 //! - **Core Integration**: Three-tier learning loops (Instant, Background, Deep)
-//! - **RuvLTRA Pretraining**: Optimized configurations for RuvLTRA-Small (0.5B)
+//! - **SwarmLTRA Pretraining**: Optimized configurations for SwarmLTRA-Small (0.5B)
 //!
 //! ## Architecture
 //!
 //! The SONA integration consists of two main components:
 //!
 //! 1. **SonaIntegration**: Runtime learning during inference
-//! 2. **RuvLtraPretrainer**: Pretraining configuration for models
+//! 2. **SwarmLtraPretrainer**: Pretraining configuration for models
 //!
 //! ## Learning Loops
 //!
@@ -40,9 +40,9 @@
 //!                           +-------------------+
 //! ```
 //!
-//! ## RuvLTRA-Small Configuration
+//! ## SwarmLTRA-Small Configuration
 //!
-//! The `ruvltra_pretrain` module provides optimized settings for 0.5B models:
+//! The `swarmltra_pretrain` module provides optimized settings for 0.5B models:
 //!
 //! | Parameter | Value | Rationale |
 //! |-----------|-------|-----------|
@@ -56,15 +56,15 @@
 //! ## Example
 //!
 //! ```rust,ignore
-//! use swarmllm::sona::{SonaIntegration, SonaConfig, RuvLtraPretrainConfig, RuvLtraPretrainer};
+//! use swarmllm::sona::{SonaIntegration, SonaConfig, SwarmLtraPretrainConfig, SwarmLtraPretrainer};
 //!
 //! // Runtime integration
 //! let config = SonaConfig::default();
 //! let sona = SonaIntegration::new(config);
 //!
-//! // Pretraining for RuvLTRA-Small
-//! let pretrain_config = RuvLtraPretrainConfig::for_ruvltra_small();
-//! let mut pretrainer = RuvLtraPretrainer::new(pretrain_config);
+//! // Pretraining for SwarmLTRA-Small
+//! let pretrain_config = SwarmLtraPretrainConfig::for_swarmltra_small();
+//! let mut pretrainer = SwarmLtraPretrainer::new(pretrain_config);
 //!
 //! // Seed initial patterns
 //! let seeding_result = pretrainer.seed_reasoning_bank();
@@ -78,8 +78,8 @@
 // Core integration module
 pub mod integration;
 
-// Pretraining for RuvLTRA-Small
-pub mod ruvltra_pretrain;
+// Pretraining for SwarmLTRA-Small
+pub mod swarmltra_pretrain;
 
 // Re-export integration types (primary API)
 pub use integration::{
@@ -87,8 +87,8 @@ pub use integration::{
 };
 
 // Re-export pretraining types
-pub use ruvltra_pretrain::{
+pub use swarmltra_pretrain::{
     DatasetConfig, ModelRouteMapping, PatternCategory, PretrainSample, PretrainedState,
     QualityPretrainConfig, QualityPretrainResult, RoutingPretrainConfig, RoutingPretrainResult,
-    RuvLtraPretrainConfig, RuvLtraPretrainer, SeedingConfig, SeedingResult,
+    SwarmLtraPretrainConfig, SwarmLtraPretrainer, SeedingConfig, SeedingResult,
 };

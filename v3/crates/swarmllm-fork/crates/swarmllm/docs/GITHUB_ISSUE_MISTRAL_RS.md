@@ -1,4 +1,4 @@
-# feat(ruvllm): Full mistral-rs backend integration with PagedAttention, X-LoRA, and ISQ
+# feat(swarmllm): Full mistral-rs backend integration with PagedAttention, X-LoRA, and ISQ
 
 ## Summary
 
@@ -127,19 +127,19 @@ full = ["candle", "mistral-rs"]
 
 | File | Changes |
 |------|---------|
-| `crates/ruvllm/Cargo.toml` | Add mistral-rs dependencies and feature flags |
-| `crates/ruvllm/src/backends/mistral_backend.rs` | Replace stub with real implementation |
-| `crates/ruvllm/src/backends/mod.rs` | Update conditional exports |
-| `crates/ruvllm/src/paged_attention.rs` | Wire to mistral-rs PagedAttention |
-| `crates/ruvllm/src/xlora_manager.rs` | Wire to mistral-rs X-LoRA |
-| `crates/ruvllm/src/isq.rs` | Wire to mistral-rs ISQ |
-| `crates/ruvllm/src/lib.rs` | Add re-exports and feature gates |
-| `crates/ruvllm/README.md` | Document usage and examples |
+| `crates/swarmllm/Cargo.toml` | Add mistral-rs dependencies and feature flags |
+| `crates/swarmllm/src/backends/mistral_backend.rs` | Replace stub with real implementation |
+| `crates/swarmllm/src/backends/mod.rs` | Update conditional exports |
+| `crates/swarmllm/src/paged_attention.rs` | Wire to mistral-rs PagedAttention |
+| `crates/swarmllm/src/xlora_manager.rs` | Wire to mistral-rs X-LoRA |
+| `crates/swarmllm/src/isq.rs` | Wire to mistral-rs ISQ |
+| `crates/swarmllm/src/lib.rs` | Add re-exports and feature gates |
+| `crates/swarmllm/README.md` | Document usage and examples |
 
 ### API Design
 
 ```rust
-use ruvllm::{MistralBackend, MistralConfig, PagedAttentionConfig};
+use swarmllm::{MistralBackend, MistralConfig, PagedAttentionConfig};
 
 // Create backend with PagedAttention
 let config = MistralConfig {
@@ -258,13 +258,13 @@ mistral-rs uses async Rust throughout. Ensure all shared state is properly synch
 - Avoid blocking in async contexts
 
 ### Error Handling
-Map mistral-rs errors to ruvllm error types:
+Map mistral-rs errors to swarmllm error types:
 ```rust
-impl From<mistralrs::Error> for RuvllmError {
+impl From<mistralrs::Error> for SwarmllmError {
     fn from(e: mistralrs::Error) -> Self {
         match e {
-            mistralrs::Error::ModelLoad(_) => RuvllmError::ModelLoad(...),
-            mistralrs::Error::Generation(_) => RuvllmError::Generation(...),
+            mistralrs::Error::ModelLoad(_) => SwarmllmError::ModelLoad(...),
+            mistralrs::Error::Generation(_) => SwarmllmError::Generation(...),
             // ...
         }
     }
@@ -293,7 +293,7 @@ impl From<mistralrs::Error> for RuvllmError {
 
 ---
 
-**Labels:** `enhancement`, `ruvllm`, `backend`, `performance`, `P1`
+**Labels:** `enhancement`, `swarmllm`, `backend`, `performance`, `P1`
 
 **Milestone:** v0.2.0
 

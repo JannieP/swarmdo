@@ -1,14 +1,14 @@
 # SONA - Self-Optimizing Neural Architecture
 
-[![Crates.io](https://img.shields.io/crates/v/ruvector-sona.svg)](https://crates.io/crates/ruvector-sona)
-[![npm](https://img.shields.io/npm/v/@ruvector/sona.svg)](https://www.npmjs.com/package/@ruvector/sona)
-[![Documentation](https://docs.rs/ruvector-sona/badge.svg)](https://docs.rs/ruvector-sona)
+[![Crates.io](https://img.shields.io/crates/v/swarmvector-sona.svg)](https://crates.io/crates/swarmvector-sona)
+[![npm](https://img.shields.io/npm/v/@swarmvector/sona.svg)](https://www.npmjs.com/package/@swarmvector/sona)
+[![Documentation](https://docs.rs/swarmvector-sona/badge.svg)](https://docs.rs/swarmvector-sona)
 [![License](https://img.shields.io/badge/license-MIT%2FApache--2.0-blue.svg)](LICENSE)
 
 **Runtime-adaptive learning for LLM routers and AI systems -- without expensive retraining.**
 
 ```bash
-cargo add ruvector-sona
+cargo add swarmvector-sona
 ```
 
 Most AI systems stop learning the moment they leave training. When a user gives bad feedback, that signal is lost -- or fixing it means days of fine-tuning and thousands of dollars. SONA is different. It watches every interaction, learns from feedback in sub-millisecond time, and continuously improves routing, ranking, and responses while your application is running. No retraining, no downtime, no cloud bills. It works in Rust, Node.js, and browsers (WASM).
@@ -32,7 +32,7 @@ Most AI systems stop learning the moment they leave training. When a user gives 
 | **WASM Support** | Runs the full learning engine in browsers at near-native speed | On-device personalization with zero server costs |
 | **Node.js Bindings** | Native N-API bindings -- no child processes or HTTP calls | Drop into any JavaScript backend with one `npm install` |
 
-> Part of the [SwarmVector](https://github.com/ruvnet/ruvector) ecosystem -- the self-learning vector database with graph intelligence.
+> Part of the [SwarmVector](the upstream project (see NOTICE)) ecosystem -- the self-learning vector database with graph intelligence.
 
 ---
 
@@ -61,28 +61,28 @@ Most AI systems stop learning the moment they leave training. When a user gives 
 
 ```toml
 [dependencies]
-ruvector-sona = "0.1.1"
+swarmvector-sona = "0.1.1"
 
 # With all features
-ruvector-sona = { version = "0.1.1", features = ["serde-support"] }
+swarmvector-sona = { version = "0.1.1", features = ["serde-support"] }
 ```
 
 ### Node.js (npm)
 
 ```bash
-npm install @ruvector/sona
+npm install @swarmvector/sona
 # or
-yarn add @ruvector/sona
+yarn add @swarmvector/sona
 # or
-pnpm add @ruvector/sona
+pnpm add @swarmvector/sona
 ```
 
 ### Browser (WASM)
 
 ```bash
 # Clone and build WASM package
-git clone https://github.com/ruvnet/ruvector.git
-cd ruvector/crates/sona
+git clone the upstream project (see NOTICE)
+cd swarmvector/crates/sona
 wasm-pack build --target web --features wasm
 
 # Copy to your project
@@ -96,7 +96,7 @@ cp -r pkg/ your-project/sona/
 ### 30-Second Example (Rust)
 
 ```rust
-use ruvector_sona::{SonaEngine, SonaConfig};
+use swarmvector_sona::{SonaEngine, SonaConfig};
 
 fn main() {
     // 1. Create engine
@@ -125,7 +125,7 @@ fn main() {
 ### 30-Second Example (Node.js)
 
 ```javascript
-const { SonaEngine } = require('@ruvector/sona');
+const { SonaEngine } = require('@swarmvector/sona');
 
 // 1. Create engine
 const engine = new SonaEngine(256);
@@ -242,7 +242,7 @@ Let's build a simple application that learns from user feedback.
 **Goal**: Create a system that improves response quality based on thumbs up/down.
 
 ```rust
-use ruvector_sona::{SonaEngine, SonaConfig};
+use swarmvector_sona::{SonaEngine, SonaConfig};
 
 fn main() {
     // Step 1: Configure SONA
@@ -341,7 +341,7 @@ Learning applied! Embedding change magnitude: 0.0847
 Let's build a chatbot that learns to give better responses.
 
 ```rust
-use ruvector_sona::{SonaEngine, SonaConfig};
+use swarmvector_sona::{SonaEngine, SonaConfig};
 use std::collections::HashMap;
 
 /// Adaptive chatbot that learns from user feedback
@@ -503,7 +503,7 @@ fn main() {
 Build a router that learns which LLM to use for different query types.
 
 ```rust
-use ruvector_sona::{SonaEngine, SonaConfig};
+use swarmvector_sona::{SonaEngine, SonaConfig};
 use std::time::Instant;
 
 /// Represents an LLM model
@@ -893,7 +893,7 @@ Production-ready Node.js integration with Express.
 
 ```javascript
 const express = require('express');
-const { SonaEngine } = require('@ruvector/sona');
+const { SonaEngine } = require('@swarmvector/sona');
 
 const app = express();
 app.use(express.json());
@@ -1048,7 +1048,7 @@ curl http://localhost:3000/api/stats
 Best practices for deploying SONA in production.
 
 ```rust
-use ruvector_sona::{SonaEngine, SonaConfig};
+use swarmvector_sona::{SonaEngine, SonaConfig};
 use std::sync::Arc;
 use tokio::sync::RwLock;
 use tokio::time::{interval, Duration};
@@ -1395,13 +1395,13 @@ interface JsLearnedPattern {
 
 ```bash
 # Run all benchmarks
-cargo bench -p ruvector-sona
+cargo bench -p swarmvector-sona
 
 # Run specific benchmark
-cargo bench -p ruvector-sona -- micro_lora
+cargo bench -p swarmvector-sona -- micro_lora
 
 # With detailed output
-cargo bench -p ruvector-sona -- --verbose
+cargo bench -p swarmvector-sona -- --verbose
 ```
 
 ---
@@ -1483,7 +1483,7 @@ at your option.
 
 ## Contributing
 
-Contributions welcome! Please see our [Contributing Guide](https://github.com/ruvnet/ruvector/blob/main/CONTRIBUTING.md).
+Contributions welcome! Please see our [Contributing Guide](the upstream project (see NOTICE)).
 
 ## Acknowledgments
 
@@ -1495,7 +1495,7 @@ Contributions welcome! Please see our [Contributing Guide](https://github.com/ru
 
 <div align="center">
 
-**[Documentation](https://docs.rs/ruvector-sona)** | **[GitHub](https://github.com/ruvnet/ruvector)** | **[npm](https://www.npmjs.com/package/@ruvector/sona)** | **[crates.io](https://crates.io/crates/ruvector-sona)**
+**[Documentation](https://docs.rs/swarmvector-sona)** | **[GitHub](the upstream project (see NOTICE))** | **[npm](https://www.npmjs.com/package/@swarmvector/sona)** | **[crates.io](https://crates.io/crates/swarmvector-sona)**
 
 Made with 🦀 Rust by the SwarmVector Team
 

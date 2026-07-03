@@ -1,6 +1,6 @@
 /**
  * swarmvector smoke test (node:test).
- * Vendored fork of the upstream `swarmvector` package (renamed ruv->ruf).
+ * Vendored fork of the upstream `swarmvector` package (renamed swarm->ruf).
  * swarmdo loads it via `await import('swarmvector').catch(()=>null)`.
  */
 import { test } from 'node:test';

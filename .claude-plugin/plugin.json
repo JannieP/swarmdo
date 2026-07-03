@@ -3,16 +3,16 @@
   "version": "2.5.0",
   "description": "Enterprise AI agent orchestration plugin with 150+ commands, 74+ specialized agents, SPARC methodology, swarm coordination, GitHub integration, and neural training capabilities",
   "author": {
-    "name": "rUv",
-    "email": "ruv@ruv.net"
+    "name": "the upstream author",
+    "email": "maintainers@swarmdo.com"
   },
-  "homepage": "https://github.com/ruvnet/claude-flow",
+  "homepage": "the upstream project (see NOTICE)",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ruvnet/claude-flow.git"
+    "url": "the upstream project (see NOTICE)"
   },
   "bugs": {
-    "url": "https://github.com/ruvnet/claude-flow/issues"
+    "url": "the upstream project (see NOTICE)"
   },
   "license": "MIT",
   "keywords": [

@@ -1,4 +1,4 @@
-# RuvLLM ESP32 - Cluster Flash Script (Windows)
+# SwarmLLM ESP32 - Cluster Flash Script (Windows)
 # Flashes multiple ESP32s with configured roles
 
 param(
@@ -10,7 +10,7 @@ $ErrorActionPreference = "Stop"
 Write-Host @"
 
 ╔══════════════════════════════════════════════════════════╗
-║          RuvLLM ESP32 - Cluster Flash Tool               ║
+║          SwarmLLM ESP32 - Cluster Flash Tool               ║
 ╚══════════════════════════════════════════════════════════╝
 
 "@ -ForegroundColor Cyan
@@ -60,10 +60,10 @@ foreach ($port in $ports) {
     }
 
     # Flash
-    $env:RUVLLM_CHIP_ID = $chipId
-    $env:RUVLLM_TOTAL_CHIPS = $numChips
+    $env:SWARMLLM_CHIP_ID = $chipId
+    $env:SWARMLLM_TOTAL_CHIPS = $numChips
 
-    espflash flash --port $port target\xtensa-esp32-espidf\release\ruvllm-esp32-flash
+    espflash flash --port $port target\xtensa-esp32-espidf\release\swarmllm-esp32-flash
 
     if ($LASTEXITCODE -eq 0) {
         Write-Host "✓ Chip $chipId flashed successfully" -ForegroundColor Green

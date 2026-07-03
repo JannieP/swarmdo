@@ -1,6 +1,6 @@
 # Self-Learning — Usage Guide
 
-> Copy-paste examples for the three paths rufflo's self-learning system actually
+> Copy-paste examples for the three paths swarmdo's self-learning system actually
 > supports, plus how to pretrain it from a repo's GitHub history and verify
 > that learning happened.
 >
@@ -27,7 +27,7 @@ naming exactly what fired and what didn't.
 
 ```bash
 # Via the MCP tool (most common — Claude Code agents use this)
-mcp__rufflo__hooks_task-completed {
+mcp__swarmdo__hooks_task-completed {
   taskId: 'fix-2245-stub',
   success: true,
   quality: 0.95,
@@ -66,7 +66,7 @@ await mcp.hooks_intelligence_trajectory-step({
 });
 await mcp.hooks_intelligence_trajectory-step({
   trajectoryId, type: 'action',
-  content: 'Extract to jwt-verify helper in @rufflo/security',
+  content: 'Extract to jwt-verify helper in @swarmdo/security',
 });
 await mcp.hooks_intelligence_trajectory-step({
   trajectoryId, type: 'result',
@@ -93,7 +93,7 @@ final outcome.
 When you want to remember something but don't want it shaping future routing:
 
 ```bash
-mcp__rufflo__memory_store {
+mcp__swarmdo__memory_store {
   key: 'note-2026-05-30',
   value: 'Reminder: the Opus alias bump landed in 3.10.14',
   namespace: 'notes',
@@ -110,16 +110,16 @@ The fastest way to bootstrap the learning system on an existing project:
 
 ```bash
 # Defaults: 50 commits + 30 issues
-node v3/@rufflo/cli/scripts/pretrain-from-github.mjs
+node v3/@swarmdo/cli/scripts/pretrain-from-github.mjs
 
 # Larger:
-COMMITS=200 ISSUES=100 node v3/@rufflo/cli/scripts/pretrain-from-github.mjs
+COMMITS=200 ISSUES=100 node v3/@swarmdo/cli/scripts/pretrain-from-github.mjs
 
 # Git only (no gh CLI required):
-SOURCE=git node v3/@rufflo/cli/scripts/pretrain-from-github.mjs
+SOURCE=git node v3/@swarmdo/cli/scripts/pretrain-from-github.mjs
 
 # Machine-readable for CI:
-BENCH_JSON=1 node v3/@rufflo/cli/scripts/pretrain-from-github.mjs
+BENCH_JSON=1 node v3/@swarmdo/cli/scripts/pretrain-from-github.mjs
 ```
 
 Each commit and each issue becomes a one-step trajectory. Structured
@@ -139,7 +139,7 @@ Two complementary verifiers.
 ### Counter-based (any time)
 
 ```bash
-mcp__rufflo__hooks_intelligence_unified-stats {}
+mcp__swarmdo__hooks_intelligence_unified-stats {}
 
 # Returns: { global, sona, memoryBridge, neuralPatterns, consistency }
 # Each sub-view names its source path. The consistency block flags drift
@@ -149,7 +149,7 @@ mcp__rufflo__hooks_intelligence_unified-stats {}
 ### Retrieval-based (after pretrain)
 
 ```bash
-node v3/@rufflo/cli/scripts/benchmark-pretrained-retrieval.mjs
+node v3/@swarmdo/cli/scripts/benchmark-pretrained-retrieval.mjs
 
 # Runs 10 sample queries against the neural store and reports top-k matches.
 # If pretrain populated the store correctly, every query should match a
@@ -183,20 +183,20 @@ catches future regressions.
 ## Reproduce all the proofs in this repo
 
 ```bash
-git clone https://github.com/ruvnet/ruflo && cd rufflo
-npm install && ( cd v3/@rufflo/cli && npx tsc -b )
+git clone the upstream project (see NOTICE) && cd swarmdo
+npm install && ( cd v3/@swarmdo/cli && npx tsc -b )
 
 # ⓐ Self-learning wiring (5 sections — primitives → MCP surfaces → multi-step)
-node v3/@rufflo/cli/scripts/benchmark-self-learning.mjs
+node v3/@swarmdo/cli/scripts/benchmark-self-learning.mjs
 
 # ⓑ Structured Distillation MRR (raw vs distilled retrieval)
-node v3/@rufflo/cli/scripts/benchmark-trajectory-mrr.mjs
+node v3/@swarmdo/cli/scripts/benchmark-trajectory-mrr.mjs
 
 # ⓒ Pretrain from this repo's git+issues history
-node v3/@rufflo/cli/scripts/pretrain-from-github.mjs
+node v3/@swarmdo/cli/scripts/pretrain-from-github.mjs
 
 # ⓓ Retrieval after pretrain (10 sample queries)
-node v3/@rufflo/cli/scripts/benchmark-pretrained-retrieval.mjs
+node v3/@swarmdo/cli/scripts/benchmark-pretrained-retrieval.mjs
 ```
 
 All four scripts write run JSONs to `docs/benchmarks/runs/`. All four are
@@ -208,15 +208,15 @@ non-zero on failure, so they double as CI gates.
 
 - **"My dashboard shows 0 after I called `post-edit`"** — read the
   `learningPath` field. If it's `'recorded-only'`, the trajectory pipeline
-  wasn't reachable in the calling process. Run from inside rufflo's CLI
+  wasn't reachable in the calling process. Run from inside swarmdo's CLI
   process or set up the bridge explicitly.
 - **"`neural_patterns list` is empty after `pretrain`"** — fixed in 3.10.14
-  (ADR-074). Make sure you're on `npx rufflo@3.10.14` or later.
+  (ADR-074). Make sure you're on `npx swarmdo@3.10.14` or later.
 - **"`hooks_intelligence_stats` shows different numbers than
   `memory_bridge_status`"** — that's by design (they measure different
   layers). Use `hooks_intelligence_unified-stats` for one coherent view,
   per ADR-075.
 - **"My recall@10 dropped"** — run `node
-  v3/@rufflo/cli/scripts/benchmark-codemods.mjs` and
+  v3/@swarmdo/cli/scripts/benchmark-codemods.mjs` and
   `benchmark-recall.mjs`. Both are CI gates that fail if recall regresses
   below the documented floor (0.90).

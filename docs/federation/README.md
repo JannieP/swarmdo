@@ -1,12 +1,12 @@
-# Rufflo Federation — User Guide
+# Swarmdo Federation — User Guide
 
 > Cross-installation agent peering with built-in cost limits, circuit breaker, signed envelopes, and (as of alpha.14) opt-in WireGuard mesh layer governed by federation trust.
 
-This guide walks through what federation is, when to use it, and how to set it up. For the architectural backstory and per-phase release notes see the [companion gist](https://gist.github.com/ruvnet/3b5111a2ea7e450ff262ce96e88560bf).
+This guide walks through what federation is, when to use it, and how to set it up. For the architectural backstory and per-phase release notes see the [companion gist](https://gist.the upstream project (see NOTICE)).
 
 ## What federation does
 
-Federation lets two or more Rufflo installations — your mac, a server, a teammate's laptop — discover each other, exchange signed manifests, and send messages between them with bounded cost and per-peer trust gates. Key properties:
+Federation lets two or more Swarmdo installations — your mac, a server, a teammate's laptop — discover each other, exchange signed manifests, and send messages between them with bounded cost and per-peer trust gates. Key properties:
 
 - **Ed25519 identity** — each node holds a private key; peers exchange Ed25519-signed manifests. No central directory.
 - **Five-level trust ladder** — `UNTRUSTED → VERIFIED → ATTESTED → TRUSTED → PRIVILEGED`. Each level unlocks a wider set of operations (`discovery`, `send`, `share-context`, `remote-spawn`, …).
@@ -33,20 +33,20 @@ Federation lets two or more Rufflo installations — your mac, a server, a teamm
 ### 1. Install the plugin
 
 ```bash
-npx rufflo@latest                                     # if you don't have it yet
-npx rufflo plugins install @rufflo/plugin-agent-federation
+npx swarmdo@latest                                     # if you don't have it yet
+npx swarmdo plugins install @swarmdo/plugin-agent-federation
 ```
 
 Or directly via npm:
 
 ```bash
-npm i @rufflo/plugin-agent-federation@latest    # currently 1.0.0-alpha.14
+npm i @swarmdo/plugin-agent-federation@latest    # currently 1.0.0-alpha.14
 ```
 
 ### 2. Initialize a node
 
 ```bash
-npx rufflo@v3alpha agent spawn -t federation --name fed-1
+npx swarmdo@v3alpha agent spawn -t federation --name fed-1
 ```
 
 Or via the MCP tool `federation_init`:
@@ -62,7 +62,7 @@ Or via the MCP tool `federation_init`:
 }
 ```
 
-This generates an Ed25519 keypair (persisted to `.rufflo/federation/keys-<nodeId>.json`, mode 0600), publishes a signed manifest, and starts the discovery service.
+This generates an Ed25519 keypair (persisted to `.swarmdo/federation/keys-<nodeId>.json`, mode 0600), publishes a signed manifest, and starts the discovery service.
 
 ### 3. Join a peer
 
@@ -164,31 +164,31 @@ ADR-111 closes that gap with an optional in-tree WG mesh:
 - Phase 6 — Operator MCP tools — PR #1895
 
 **Phase 7 — operator-mediated**:
-See [`docs/federation/phase7-mesh-bringup.md`](./phase7-mesh-bringup.md) for the cross-OS bringup procedure (mac ↔ ruvultra over Tailscale).
+See [`docs/federation/phase7-mesh-bringup.md`](./phase7-mesh-bringup.md) for the cross-OS bringup procedure (mac ↔ swarmultra over Tailscale).
 
 ### Enabling ADR-111
 
 Set `config.wgMesh: true` in your federation plugin config, then run the staging helper:
 
 ```bash
-node v3/@rufflo/plugin-agent-federation/scripts/phase7-stage.mjs \
+node v3/@swarmdo/plugin-agent-federation/scripts/phase7-stage.mjs \
   <localNodeId> <peerNodeId> <peerPubkey> <peerMeshIP> <peerEndpoint>
 ```
 
 The script generates `/tmp/adr-111-stage/`:
 - `wg-key-<nodeId>.json` (mode 0600 — your private WG key)
-- `rufflo-fed.conf` (the wg-quick interface config)
-- `rufflo-fed.nft` or `rufflo-fed.pf` (firewall projection)
+- `swarmdo-fed.conf` (the wg-quick interface config)
+- `swarmdo-fed.nft` or `swarmdo-fed.pf` (firewall projection)
 
 After review, the operator manually activates:
 
 ```bash
-sudo install -m 0600 /tmp/adr-111-stage/rufflo-fed.conf /etc/wireguard/rufflo-fed.conf
+sudo install -m 0600 /tmp/adr-111-stage/swarmdo-fed.conf /etc/wireguard/swarmdo-fed.conf
 # Linux:
-sudo nft -f /tmp/adr-111-stage/rufflo-fed.nft
+sudo nft -f /tmp/adr-111-stage/swarmdo-fed.nft
 # macOS:
-sudo pfctl -a rufflo-fed -f /tmp/adr-111-stage/rufflo-fed.pf
-sudo wg-quick up rufflo-fed
+sudo pfctl -a swarmdo-fed -f /tmp/adr-111-stage/swarmdo-fed.pf
+sudo wg-quick up swarmdo-fed
 ```
 
 ## Using `claude -p` headless mode
@@ -205,7 +205,7 @@ claude -p --model haiku --max-budget-usd 0.20 --output-format text \
 #   federation-audit (compliance filtering).
 ```
 
-**On the peer host (ruvultra)** — requires interactive `/login` first since `claude -p` reads stored credentials:
+**On the peer host (swarmultra)** — requires interactive `/login` first since `claude -p` reads stored credentials:
 
 ```bash
 # First time only — operator-mediated:
@@ -221,9 +221,9 @@ claude -p --model haiku --max-budget-usd 0.20 \
 ```bash
 # Host A — kick off a federated task:
 claude -p --model sonnet --output-format json --resume <session> \
-  "Use federation_send to dispatch this task to ruvultra: analyze the failing test"
+  "Use federation_send to dispatch this task to swarmultra: analyze the failing test"
 
-# Host B (ruvultra) — receive + work:
+# Host B (swarmultra) — receive + work:
 claude -p --resume <session> "Continue handling the federated task"
 ```
 
@@ -240,17 +240,17 @@ The federation plugin handles signing, PII gating, breaker, and audit on every s
 
 | What | Path |
 |---|---|
-| Plugin source | `v3/@rufflo/plugin-agent-federation/src/` |
-| Tests | `v3/@rufflo/plugin-agent-federation/__tests__/` |
+| Plugin source | `v3/@swarmdo/plugin-agent-federation/src/` |
+| Tests | `v3/@swarmdo/plugin-agent-federation/__tests__/` |
 | ADRs | `v3/docs/adr/ADR-{097,104,105,106,107,109,110,111}-*.md` |
-| Phase 7 staging script | `v3/@rufflo/plugin-agent-federation/scripts/phase7-stage.mjs` |
-| Witness signing | `plugins/rufflo-core/scripts/witness/` |
+| Phase 7 staging script | `v3/@swarmdo/plugin-agent-federation/scripts/phase7-stage.mjs` |
+| Witness signing | `plugins/swarmdo-core/scripts/witness/` |
 
 ## Releases
 
 | Version | What landed |
 |---|---|
-| `1.0.0-alpha.9` | First user-visible release — see [announcement gist](https://gist.github.com/ruvnet/3b5111a2ea7e450ff262ce96e88560bf) |
+| `1.0.0-alpha.9` | First user-visible release — see [announcement gist](https://gist.the upstream project (see NOTICE)) |
 | `1.0.0-alpha.10` | ADR-097 Phases 2.a-4 + ADR-104 transport + ADR-109 inbound dispatcher |
 | `1.0.0-alpha.11-12` | ADR-109 sig verify, ADR-104 compression, ADR-107 TLS cert pinning |
 | `1.0.0-alpha.13` | ADR-104 stream multiplexing + ADR-110 MemorySpendReporter |
@@ -270,7 +270,7 @@ The federation plugin handles signing, PII gating, breaker, and audit on every s
 
 ## Support
 
-- Issues: https://github.com/ruvnet/ruflo/issues
-- Tracking issue (ADR-111): [#1879](https://github.com/ruvnet/ruflo/issues/1879)
-- Federation gist (current through alpha.14): https://gist.github.com/ruvnet/3b5111a2ea7e450ff262ce96e88560bf
-- ADR-111 deep-dive gist: https://gist.github.com/ruvnet/c640fc71c7a6ced37908e645d5db84c5
+- Issues: the upstream project (see NOTICE)
+- Tracking issue (ADR-111): [#1879](the upstream project (see NOTICE))
+- Federation gist (current through alpha.14): https://gist.the upstream project (see NOTICE)
+- ADR-111 deep-dive gist: https://gist.the upstream project (see NOTICE)

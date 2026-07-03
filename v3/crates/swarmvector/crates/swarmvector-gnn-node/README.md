@@ -1,9 +1,9 @@
-# @ruvector/gnn - Graph Neural Network Node.js Bindings
+# @swarmvector/gnn - Graph Neural Network Node.js Bindings
 
-High-performance Graph Neural Network (GNN) capabilities for Ruvector, powered by Rust and NAPI-RS.
+High-performance Graph Neural Network (GNN) capabilities for Swarmvector, powered by Rust and NAPI-RS.
 
-[![npm version](https://img.shields.io/npm/v/@ruvector/gnn.svg)](https://www.npmjs.com/package/@ruvector/gnn)
-[![CI](https://github.com/ruvnet/ruvector/actions/workflows/build-gnn.yml/badge.svg)](https://github.com/ruvnet/ruvector/actions/workflows/build-gnn.yml)
+[![npm version](https://img.shields.io/npm/v/@swarmvector/gnn.svg)](https://www.npmjs.com/package/@swarmvector/gnn)
+[![CI](the upstream project (see NOTICE))](the upstream project (see NOTICE))
 
 ## Features
 
@@ -17,7 +17,7 @@ High-performance Graph Neural Network (GNN) capabilities for Ruvector, powered b
 ## Installation
 
 ```bash
-npm install @ruvector/gnn
+npm install @swarmvector/gnn
 ```
 
 ## Quick Start
@@ -25,14 +25,14 @@ npm install @ruvector/gnn
 ### Creating a GNN Layer
 
 ```javascript
-const { RuvectorLayer } = require('@ruvector/gnn');
+const { SwarmvectorLayer } = require('@swarmvector/gnn');
 
 // Create a GNN layer with:
 // - Input dimension: 128
 // - Hidden dimension: 256
 // - Attention heads: 4
 // - Dropout rate: 0.1
-const layer = new RuvectorLayer(128, 256, 4, 0.1);
+const layer = new SwarmvectorLayer(128, 256, 4, 0.1);
 
 // Forward pass
 const nodeEmbedding = new Array(128).fill(0).map(() => Math.random());
@@ -49,7 +49,7 @@ console.log('Output dimension:', output.length); // 256
 ### Tensor Compression
 
 ```javascript
-const { TensorCompress, getCompressionLevel } = require('@ruvector/gnn');
+const { TensorCompress, getCompressionLevel } = require('@swarmvector/gnn');
 
 const compressor = new TensorCompress();
 const embedding = new Array(128).fill(0).map(() => Math.random());
@@ -76,7 +76,7 @@ const compressedPQ = compressor.compressWithLevel(embedding, level);
 ### Differentiable Search
 
 ```javascript
-const { differentiableSearch } = require('@ruvector/gnn');
+const { differentiableSearch } = require('@swarmvector/gnn');
 
 const query = [1.0, 0.0, 0.0];
 const candidates = [
@@ -93,7 +93,7 @@ console.log('Soft weights:', result.weights);     // [0.x, 0.y]
 ### Hierarchical Forward Pass
 
 ```javascript
-const { hierarchicalForward, RuvectorLayer } = require('@ruvector/gnn');
+const { hierarchicalForward, SwarmvectorLayer } = require('@swarmvector/gnn');
 
 const query = [1.0, 0.0];
 
@@ -103,7 +103,7 @@ const layerEmbeddings = [
 ];
 
 // Create and serialize GNN layers
-const layer1 = new RuvectorLayer(2, 2, 1, 0.0);
+const layer1 = new SwarmvectorLayer(2, 2, 1, 0.0);
 const layers = [layer1.toJson()];
 
 // Hierarchical processing
@@ -113,24 +113,24 @@ console.log('Final embedding:', result);
 
 ## API Reference
 
-### RuvectorLayer
+### SwarmvectorLayer
 
 #### Constructor
 
 ```typescript
-new RuvectorLayer(
+new SwarmvectorLayer(
   inputDim: number,
   hiddenDim: number,
   heads: number,
   dropout: number
-): RuvectorLayer
+): SwarmvectorLayer
 ```
 
 #### Methods
 
 - `forward(nodeEmbedding: number[], neighborEmbeddings: number[][], edgeWeights: number[]): number[]`
 - `toJson(): string` - Serialize layer to JSON
-- `fromJson(json: string): RuvectorLayer` - Deserialize layer from JSON
+- `fromJson(json: string): SwarmvectorLayer` - Deserialize layer from JSON
 
 ### TensorCompress
 
@@ -243,10 +243,10 @@ MIT - See LICENSE file for details
 
 ## Contributing
 
-Contributions are welcome! Please see the main Ruvector repository for guidelines.
+Contributions are welcome! Please see the main Swarmvector repository for guidelines.
 
 ## Links
 
-- [GitHub Repository](https://github.com/ruvnet/ruvector)
-- [Documentation](https://docs.ruvector.io)
-- [Issues](https://github.com/ruvnet/ruvector/issues)
+- [GitHub Repository](the upstream project (see NOTICE))
+- [Documentation](https://docs.swarmvector.io)
+- [Issues](the upstream project (see NOTICE))

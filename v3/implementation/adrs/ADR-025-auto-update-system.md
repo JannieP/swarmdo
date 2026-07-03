@@ -1,4 +1,4 @@
-# ADR-025: Auto-Update System for @rufflo Packages
+# ADR-025: Auto-Update System for @swarmdo Packages
 
 ## Status
 **Implemented** - 2026-01-13
@@ -14,16 +14,16 @@
 | CLI Commands | `src/commands/update.ts` | ~340 |
 | Startup Integration | `src/index.ts` | ~20 |
 
-**Published:** @rufflo/cli@3.0.0-alpha.83
+**Published:** @swarmdo/cli@3.0.0-alpha.83
 
 ## Context
 
-The Rufflo V3 ecosystem consists of multiple packages:
-- `@rufflo/cli` - Main CLI tool
-- `@rufflo/embeddings` - Vector embeddings
-- `@rufflo/security` - Security utilities
-- `@rufflo/integration` - agentic-flow integration
-- `@rufflo/testing` - Test utilities
+The Swarmdo V3 ecosystem consists of multiple packages:
+- `@swarmdo/cli` - Main CLI tool
+- `@swarmdo/embeddings` - Vector embeddings
+- `@swarmdo/security` - Security utilities
+- `@swarmdo/integration` - agentic-flow integration
+- `@swarmdo/testing` - Test utilities
 
 When one package is updated, dependent packages may need updates for compatibility. Currently, users must manually check for updates, leading to:
 - Version mismatches causing runtime errors
@@ -55,10 +55,10 @@ Implement an **auto-update system** that:
 
 | Priority | Packages | Auto-Update |
 |----------|----------|-------------|
-| Critical | `@rufflo/security` | Always (patches) |
-| High | `@rufflo/cli` | Minor + Patch |
-| Normal | `@rufflo/embeddings`, `@rufflo/integration` | Patch only |
-| Low | `@rufflo/testing` | Notify only |
+| Critical | `@swarmdo/security` | Always (patches) |
+| High | `@swarmdo/cli` | Minor + Patch |
+| Normal | `@swarmdo/embeddings`, `@swarmdo/integration` | Patch only |
+| Low | `@swarmdo/testing` | Notify only |
 
 ## Implementation
 
@@ -129,7 +129,7 @@ interface RateLimitState {
   packageVersions: Record<string, string>;
 }
 
-// Stored in: ~/.rufflo/update-state.json
+// Stored in: ~/.swarmdo/update-state.json
 ```
 
 #### 3. PackageValidator (`src/update/validator.ts`)
@@ -148,10 +148,10 @@ interface ValidationResult {
 ```
 1. CLI Start
    │
-   ├─► Check rate limit cache (~/.rufflo/update-state.json)
+   ├─► Check rate limit cache (~/.swarmdo/update-state.json)
    │   └─► If checked within 24h AND no --force-update → Skip
    │
-   ├─► Query npm registry for @rufflo/* packages
+   ├─► Query npm registry for @swarmdo/* packages
    │   └─► Compare versions using semver
    │
    ├─► For each package with available update:
@@ -160,45 +160,45 @@ interface ValidationResult {
    │   └─► Determine if auto-update applies
    │
    ├─► Execute auto-updates (if any)
-   │   ├─► npm install @rufflo/package@version
+   │   ├─► npm install @swarmdo/package@version
    │   ├─► Verify installation success
    │   └─► Log to update history
    │
    └─► Display notification for non-auto updates
-       └─► "Run `npx rufflo update` to update X packages"
+       └─► "Run `npx swarmdo update` to update X packages"
 ```
 
 ### CLI Commands
 
 ```bash
 # Check for updates (manual)
-npx rufflo update check
+npx swarmdo update check
 
 # Update all packages
-npx rufflo update all
+npx swarmdo update all
 
 # Update specific package
-npx rufflo update @rufflo/embeddings
+npx swarmdo update @swarmdo/embeddings
 
 # View update history
-npx rufflo update history
+npx swarmdo update history
 
 # Rollback last update
-npx rufflo update rollback
+npx swarmdo update rollback
 
 # Configure auto-update
-npx rufflo config set update.autoUpdateMinor true
-npx rufflo config set update.checkIntervalHours 12
+npx swarmdo config set update.autoUpdateMinor true
+npx swarmdo config set update.checkIntervalHours 12
 ```
 
 ### Environment Variables
 
 ```bash
 # Disable auto-update entirely
-RUFFLO_AUTO_UPDATE=false
+SWARMDO_AUTO_UPDATE=false
 
 # Force update check
-RUFFLO_FORCE_UPDATE=true
+SWARMDO_FORCE_UPDATE=true
 
 # CI/CD mode (no interactive prompts, no auto-update)
 CI=true
@@ -207,7 +207,7 @@ CI=true
 ### Configuration File
 
 ```json
-// rufflo.config.json
+// swarmdo.config.json
 {
   "update": {
     "enabled": true,
@@ -218,11 +218,11 @@ CI=true
       "major": false
     },
     "priority": {
-      "@rufflo/security": "critical",
-      "@rufflo/cli": "high",
-      "@rufflo/embeddings": "normal",
-      "@rufflo/integration": "normal",
-      "@rufflo/testing": "low"
+      "@swarmdo/security": "critical",
+      "@swarmdo/cli": "high",
+      "@swarmdo/embeddings": "normal",
+      "@swarmdo/integration": "normal",
+      "@swarmdo/testing": "low"
     },
     "exclude": []
   }

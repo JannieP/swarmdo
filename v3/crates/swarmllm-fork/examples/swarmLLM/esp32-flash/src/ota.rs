@@ -199,7 +199,7 @@ impl OtaManager {
                 ).unwrap_or_default(),
                 notes: heapless::String::try_from("Performance improvements and bug fixes").unwrap_or_default(),
                 download_url: heapless::String::try_from(
-                    "https://github.com/ruvnet/swarmvector/releases/latest/download/swarmllm-esp32"
+                    "the upstream project (see NOTICE)"
                 ).unwrap_or_default(),
             });
             self.state = OtaState::UpdateAvailable;

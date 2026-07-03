@@ -3,8 +3,8 @@
   "description": "Domain-Driven Design scaffolding — bounded contexts, aggregate roots, domain events, value objects, repositories, and anti-corruption layers; navigable domain graph stored in AgentDB",
   "version": "0.2.0",
   "author": {
-    "name": "ruvnet",
-    "url": "https://github.com/ruvnet"
+    "name": "upstream",
+    "url": "https://the upstream project (see NOTICE)"
   },
   "homepage": "https://github.com/JannieP/swarmdo",
   "license": "MIT",

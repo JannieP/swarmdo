@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes how the Quality Engineering (agentic-qe) plugin integrates with Rufflo V3's existing domains: Security, Core, Memory, Integration, and Coordination.
+This document describes how the Quality Engineering (agentic-qe) plugin integrates with Swarmdo V3's existing domains: Security, Core, Memory, Integration, and Coordination.
 
 ## Integration Architecture
 
@@ -13,7 +13,7 @@ This document describes how the Quality Engineering (agentic-qe) plugin integrat
 │                                                                                  │
 │   ┌─────────────────────────────────────────────────────────────────────────┐   │
 │   │                    Anti-Corruption Layer (ACL)                           │   │
-│   │   Translates between agentic-qe and rufflo V3 domains              │   │
+│   │   Translates between agentic-qe and swarmdo V3 domains              │   │
 │   └─────────────────────────────────────────────────────────────────────────┘   │
 │                                        │                                         │
 │     ┌──────────────┬──────────────────┼──────────────────┬──────────────┐       │
@@ -57,8 +57,8 @@ The QE domain shares the Memory domain's infrastructure for vector storage, HNSW
 ```typescript
 // v3/plugins/agentic-qe/src/infrastructure/memory-bridge.ts
 
-import type { IMemoryService, MemoryEntry } from '@rufflo/memory';
-import type { EmbeddingsService } from '@rufflo/embeddings';
+import type { IMemoryService, MemoryEntry } from '@swarmdo/memory';
+import type { EmbeddingsService } from '@swarmdo/embeddings';
 
 export class QEMemoryBridge {
   constructor(
@@ -168,7 +168,7 @@ export class QEMemoryBridge {
 
 #### Embedding Reuse
 
-The QE domain reuses V3's `@rufflo/embeddings` service instead of running separate `@xenova/transformers` instances:
+The QE domain reuses V3's `@swarmdo/embeddings` service instead of running separate `@xenova/transformers` instances:
 
 ```typescript
 // Embedding generation delegation
@@ -204,7 +204,7 @@ The QE security-compliance context adapts to V3's security module patterns and u
 ```typescript
 // v3/plugins/agentic-qe/src/infrastructure/security-bridge.ts
 
-import type { SecurityModule } from '@rufflo/security';
+import type { SecurityModule } from '@swarmdo/security';
 
 export class QESecurityBridge {
   constructor(private security: SecurityModule) {}
@@ -318,7 +318,7 @@ QE acts as a customer of V3 Core services, generating tests that Core executes.
 ```typescript
 // v3/plugins/agentic-qe/src/infrastructure/core-bridge.ts
 
-import type { AgentService, TaskService, WorkflowService } from '@rufflo/core';
+import type { AgentService, TaskService, WorkflowService } from '@swarmdo/core';
 
 export class QECoreBridge {
   constructor(
@@ -410,7 +410,7 @@ QE's Queen Coordinator integrates with V3's Hive Mind for swarm coordination.
 ```typescript
 // v3/plugins/agentic-qe/src/infrastructure/hive-bridge.ts
 
-import type { HiveMindService, ConsensusResult } from '@rufflo/coordination';
+import type { HiveMindService, ConsensusResult } from '@swarmdo/coordination';
 
 export class QEHiveBridge {
   private queenId: string;
@@ -548,7 +548,7 @@ QE tools are registered with V3's MCP server using the standard tool definition 
 ```typescript
 // v3/plugins/agentic-qe/src/mcp-tools/registration.ts
 
-import type { MCPServer, ToolDefinition } from '@rufflo/mcp';
+import type { MCPServer, ToolDefinition } from '@swarmdo/mcp';
 import { mcpTools } from './index';
 
 export async function registerQETools(server: MCPServer): Promise<void> {
@@ -597,7 +597,7 @@ TinyDancer model routing is aligned with V3's ADR-026 Agent Booster routing.
 ```typescript
 // v3/plugins/agentic-qe/src/infrastructure/model-routing-adapter.ts
 
-import type { EnhancedModelRouter, EnhancedRouteResult } from '@rufflo/cli/ruvector';
+import type { EnhancedModelRouter, EnhancedRouteResult } from '@swarmdo/cli/swarmvector';
 
 export class QEModelRoutingAdapter {
   constructor(private v3Router: EnhancedModelRouter) {}

@@ -1,6 +1,6 @@
-//! SONA Pretraining Configuration for RuvLTRA-Small (0.5B)
+//! SONA Pretraining Configuration for SwarmLTRA-Small (0.5B)
 //!
-//! Optimized pretraining configuration for the RuvLTRA-Small 0.5B parameter model.
+//! Optimized pretraining configuration for the SwarmLTRA-Small 0.5B parameter model.
 //! This module provides:
 //!
 //! - MicroLoRA rank=1 (minimal overhead for small model)
@@ -20,10 +20,10 @@
 //! ## Example
 //!
 //! ```rust,ignore
-//! use swarmllm::sona::ruvltra_pretrain::{RuvLtraPretrainConfig, RuvLtraPretrainer};
+//! use swarmllm::sona::swarmltra_pretrain::{SwarmLtraPretrainConfig, SwarmLtraPretrainer};
 //!
-//! let config = RuvLtraPretrainConfig::for_ruvltra_small();
-//! let pretrainer = RuvLtraPretrainer::new(config);
+//! let config = SwarmLtraPretrainConfig::for_swarmltra_small();
+//! let pretrainer = SwarmLtraPretrainer::new(config);
 //!
 //! // Pretrain routing patterns
 //! pretrainer.pretrain_routing_patterns(&sample_prompts);
@@ -40,9 +40,9 @@ use swarmvector_sona::{
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-/// Pretraining configuration optimized for RuvLTRA-Small (0.5B)
+/// Pretraining configuration optimized for SwarmLTRA-Small (0.5B)
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct RuvLtraPretrainConfig {
+pub struct SwarmLtraPretrainConfig {
     /// SONA configuration for 0.5B model
     pub sona: SonaConfig,
     /// Dataset configuration
@@ -139,15 +139,15 @@ pub struct PatternCategory {
     pub target_model_index: usize,
 }
 
-impl Default for RuvLtraPretrainConfig {
+impl Default for SwarmLtraPretrainConfig {
     fn default() -> Self {
-        Self::for_ruvltra_small()
+        Self::for_swarmltra_small()
     }
 }
 
-impl RuvLtraPretrainConfig {
-    /// Create configuration optimized for RuvLTRA-Small (0.5B)
-    pub fn for_ruvltra_small() -> Self {
+impl SwarmLtraPretrainConfig {
+    /// Create configuration optimized for SwarmLTRA-Small (0.5B)
+    pub fn for_swarmltra_small() -> Self {
         Self {
             sona: SonaConfig {
                 hidden_dim: 128,              // Smaller for 0.5B
@@ -194,7 +194,7 @@ impl RuvLtraPretrainConfig {
 
     /// Create configuration for edge deployment (minimal footprint)
     pub fn for_edge_deployment() -> Self {
-        let mut config = Self::for_ruvltra_small();
+        let mut config = Self::for_swarmltra_small();
         config.sona.hidden_dim = 64;
         config.sona.embedding_dim = 256;
         config.sona.pattern_capacity = 1000;
@@ -363,10 +363,10 @@ pub struct SeedingResult {
     pub avg_quality: f32,
 }
 
-/// RuvLTRA-Small Pretrainer
-pub struct RuvLtraPretrainer {
+/// SwarmLTRA-Small Pretrainer
+pub struct SwarmLtraPretrainer {
     /// Configuration
-    config: RuvLtraPretrainConfig,
+    config: SwarmLtraPretrainConfig,
     /// SONA engine for learning
     engine: SonaEngine,
     /// EWC++ for catastrophic forgetting prevention
@@ -375,9 +375,9 @@ pub struct RuvLtraPretrainer {
     reasoning_bank: ReasoningBank,
 }
 
-impl RuvLtraPretrainer {
+impl SwarmLtraPretrainer {
     /// Create a new pretrainer
-    pub fn new(config: RuvLtraPretrainConfig) -> Self {
+    pub fn new(config: SwarmLtraPretrainConfig) -> Self {
         let core_config = SonaCoreConfig {
             hidden_dim: config.sona.hidden_dim,
             embedding_dim: config.sona.embedding_dim,
@@ -740,7 +740,7 @@ impl RuvLtraPretrainer {
     }
 
     /// Get configuration
-    pub fn config(&self) -> &RuvLtraPretrainConfig {
+    pub fn config(&self) -> &SwarmLtraPretrainConfig {
         &self.config
     }
 
@@ -771,7 +771,7 @@ impl RuvLtraPretrainer {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct PretrainedState {
     /// Configuration used
-    pub config: RuvLtraPretrainConfig,
+    pub config: SwarmLtraPretrainConfig,
     /// Learned patterns
     pub patterns: Vec<LearnedPattern>,
     /// EWC task count
@@ -793,7 +793,7 @@ mod tests {
 
     #[test]
     fn test_config_defaults() {
-        let config = RuvLtraPretrainConfig::for_ruvltra_small();
+        let config = SwarmLtraPretrainConfig::for_swarmltra_small();
 
         assert_eq!(config.sona.hidden_dim, 128);
         assert_eq!(config.sona.embedding_dim, 384);
@@ -804,7 +804,7 @@ mod tests {
 
     #[test]
     fn test_edge_config() {
-        let config = RuvLtraPretrainConfig::for_edge_deployment();
+        let config = SwarmLtraPretrainConfig::for_edge_deployment();
 
         assert_eq!(config.sona.hidden_dim, 64);
         assert_eq!(config.sona.embedding_dim, 256);
@@ -813,8 +813,8 @@ mod tests {
 
     #[test]
     fn test_pretrainer_creation() {
-        let config = RuvLtraPretrainConfig::for_ruvltra_small();
-        let pretrainer = RuvLtraPretrainer::new(config);
+        let config = SwarmLtraPretrainConfig::for_swarmltra_small();
+        let pretrainer = SwarmLtraPretrainer::new(config);
 
         assert_eq!(pretrainer.config().sona.micro_lora_rank, 1);
         assert_eq!(pretrainer.ewc().task_count(), 0);
@@ -822,8 +822,8 @@ mod tests {
 
     #[test]
     fn test_seeding() {
-        let config = RuvLtraPretrainConfig::for_ruvltra_small();
-        let mut pretrainer = RuvLtraPretrainer::new(config);
+        let config = SwarmLtraPretrainConfig::for_swarmltra_small();
+        let mut pretrainer = SwarmLtraPretrainer::new(config);
 
         let result = pretrainer.seed_reasoning_bank();
 
@@ -833,8 +833,8 @@ mod tests {
 
     #[test]
     fn test_routing_pretrain() {
-        let config = RuvLtraPretrainConfig::for_ruvltra_small();
-        let mut pretrainer = RuvLtraPretrainer::new(config);
+        let config = SwarmLtraPretrainConfig::for_swarmltra_small();
+        let mut pretrainer = SwarmLtraPretrainer::new(config);
 
         // Create sample data
         let samples: Vec<PretrainSample> = (0..100)
@@ -854,8 +854,8 @@ mod tests {
 
     #[test]
     fn test_quality_pretrain() {
-        let config = RuvLtraPretrainConfig::for_ruvltra_small();
-        let mut pretrainer = RuvLtraPretrainer::new(config);
+        let config = SwarmLtraPretrainConfig::for_swarmltra_small();
+        let mut pretrainer = SwarmLtraPretrainer::new(config);
 
         // Create sample data
         let samples: Vec<PretrainSample> = (0..100)
@@ -876,8 +876,8 @@ mod tests {
 
     #[test]
     fn test_model_index_mapping() {
-        let config = RuvLtraPretrainConfig::for_ruvltra_small();
-        let pretrainer = RuvLtraPretrainer::new(config);
+        let config = SwarmLtraPretrainConfig::for_swarmltra_small();
+        let pretrainer = SwarmLtraPretrainer::new(config);
 
         assert_eq!(pretrainer.quality_to_model_index(0.9), 0); // Tiny
         assert_eq!(pretrainer.quality_to_model_index(0.7), 1); // Small
@@ -887,8 +887,8 @@ mod tests {
 
     #[test]
     fn test_export_state() {
-        let config = RuvLtraPretrainConfig::for_ruvltra_small();
-        let mut pretrainer = RuvLtraPretrainer::new(config);
+        let config = SwarmLtraPretrainConfig::for_swarmltra_small();
+        let mut pretrainer = SwarmLtraPretrainer::new(config);
 
         // Seed some patterns
         pretrainer.seed_reasoning_bank();

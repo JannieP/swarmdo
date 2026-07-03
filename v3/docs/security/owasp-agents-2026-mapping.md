@@ -1,7 +1,7 @@
-# OWASP Top 10 for Agentic Applications 2026 — Rufflo control mapping
+# OWASP Top 10 for Agentic Applications 2026 — Swarmdo control mapping
 
 **Reference**: OWASP Gen AI Security Project, "OWASP Top 10 for Agentic Applications" (Dec 2025, 100+ contributors).
-**Issue**: [ruvnet/ruflo#2149](https://github.com/ruvnet/ruflo/issues/2149)
+**Issue**: [upstream/swarmdo#2149](the upstream project (see NOTICE))
 **Last updated**: 2026-05-26
 
 ## Legend
@@ -10,11 +10,11 @@
 |---|---|
 | ✓ | Covered — controls present and validated |
 | ◐ | Partial — some surfaces covered, gaps documented |
-| ✗ | Open — no Rufflo control yet, tracked for future work |
+| ✗ | Open — no Swarmdo control yet, tracked for future work |
 
 ## Matrix
 
-| ID | Risk | Coverage | Rufflo controls | Gaps / follow-ups |
+| ID | Risk | Coverage | Swarmdo controls | Gaps / follow-ups |
 |---|---|---|---|---|
 | **ASI01** | **Agent Goal Hijacking** (indirect prompt injection via retrieved content) | ◐ | `ToolOutputGuardrail` (ADR-131) — class shipped, integration phased: P2 MCP tool dispatch, P3 memory read, P4 swarm payload | Phase 2–4 wiring tracked under ADR-131 |
 | **ASI02** | **Excessive Tool Permissions** (over-broad tool access) | ◐ | `SafeExecutor` allowed-commands list; claims-based authorization (ADR-101); init-time tool permissions in settings.json | No per-tool runtime-scoping inside agent reasoning; no tool-use telemetry |

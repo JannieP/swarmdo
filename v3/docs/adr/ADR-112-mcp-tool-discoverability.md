@@ -2,13 +2,13 @@
 
 **Status**: Accepted (2026-05-11)
 **Date**: 2026-05-11
-**Authors**: claude (drafted with rUv)
-**Related**: [#1748](https://github.com/ruvnet/ruflo/issues/1748), [#1896](https://github.com/ruvnet/ruflo/issues/1896), [AlphaSignal external audit](https://alphasignalai.substack.com/p/how-rufflo-turns-claude-code-into)
+**Authors**: claude (drafted with the upstream author)
+**Related**: [#1748](the upstream project (see NOTICE)), [#1896](the upstream project (see NOTICE)), [AlphaSignal external audit](https://alphasignalai.substack.com/p/how-swarmdo-turns-claude-code-into)
 **Supersedes**: nothing
 
 ## Context
 
-Rufflo ships 285 MCP tools across the CLI package. Claude Code already exposes a native toolset (`Read`, `Write`, `Edit`, `Bash`, `Grep`, `Glob`, `Task`, `TodoWrite`, `WebFetch`, `WebSearch`, etc.) that overlaps with many of ours. When Claude picks between two ways to do the same thing, the deciding signal is the tool description it sees in its system prompt — there is no other context.
+Swarmdo ships 285 MCP tools across the CLI package. Claude Code already exposes a native toolset (`Read`, `Write`, `Edit`, `Bash`, `Grep`, `Glob`, `Task`, `TodoWrite`, `WebFetch`, `WebSearch`, etc.) that overlaps with many of ours. When Claude picks between two ways to do the same thing, the deciding signal is the tool description it sees in its system prompt — there is no other context.
 
 Measurement on current main (2026-05-11):
 
@@ -19,9 +19,9 @@ With Use-when guidance:    9
 Without guidance:         276
 ```
 
-**Worse than the [AlphaSignal article](https://alphasignalai.substack.com/p/how-rufflo-turns-claude-code-into) reported** (it estimated 237/300 lack guidance). 97% of our tool descriptions are essentially "here is what this thing does" rather than "here is when to use this instead of `<native equivalent>`".
+**Worse than the [AlphaSignal article](https://alphasignalai.substack.com/p/how-swarmdo-turns-claude-code-into) reported** (it estimated 237/300 lack guidance). 97% of our tool descriptions are essentially "here is what this thing does" rather than "here is when to use this instead of `<native equivalent>`".
 
-The downstream effect: Claude defaults to native tools for anything where they could plausibly work. Memory tools lose to file `Read`. `agent_spawn` loses to `Task`. `workflow_execute` loses to sequential Bash. Rufflo's value-add (cost attribution, learning loops, swarm coordination, witness chain) never fires because Claude doesn't know it should call us.
+The downstream effect: Claude defaults to native tools for anything where they could plausibly work. Memory tools lose to file `Read`. `agent_spawn` loses to `Task`. `workflow_execute` loses to sequential Bash. Swarmdo's value-add (cost attribution, learning loops, swarm coordination, witness chain) never fires because Claude doesn't know it should call us.
 
 ## Decision
 
@@ -38,8 +38,8 @@ The downstream effect: Claude defaults to native tools for anything where they c
 
 For each of the 285 tools, before merging any new description we ask:
 
-1. **Is there a native tool that overlaps?** (Read/Write/Edit/Bash/Grep/Glob/Task/TodoWrite/WebFetch/WebSearch). If yes, the description MUST name it and state when to use Rufflo's version over it.
-2. **What does the Rufflo version do that the native doesn't?** Concrete answers only:
+1. **Is there a native tool that overlaps?** (Read/Write/Edit/Bash/Grep/Glob/Task/TodoWrite/WebFetch/WebSearch). If yes, the description MUST name it and state when to use Swarmdo's version over it.
+2. **What does the Swarmdo version do that the native doesn't?** Concrete answers only:
    - Cost attribution (cost-tracking namespace)
    - Learning persistence (patterns namespace, ReasoningBank)
    - Cross-session memory (.swarm/memory.db)
@@ -47,7 +47,7 @@ For each of the 285 tools, before merging any new description we ask:
    - Witness chain (Ed25519-signed audit)
    - Sandbox isolation (WASM)
    - Real-time observability (intelligence trajectory)
-3. **When is native actually better?** State it. "For one-shot file reads, native Read is fine." Honesty builds Claude's trust in our guidance — if every description says "always use Rufflo", Claude learns to ignore them.
+3. **When is native actually better?** State it. "For one-shot file reads, native Read is fine." Honesty builds Claude's trust in our guidance — if every description says "always use Swarmdo", Claude learns to ignore them.
 
 ### Worst-offender priority order (Phase 1 — this iteration)
 
@@ -78,7 +78,7 @@ These tell Claude **what** the tool does, never **when** to call it over a nativ
 
 ### Pattern description (what TO write)
 
-✅ `"Spawn a Rufflo-tracked agent with cost attribution + memory persistence + swarm coordination. Use when native Task tool is wrong because you need (a) cost tracking per agent in the cost-tracking namespace, (b) cross-session learning via the patterns namespace, or (c) coordination with other agents in a swarm topology (hierarchical / mesh / consensus). For one-shot subtasks with no learning loop, native Task is fine. Pair with hooks_route to pick the right model first."`
+✅ `"Spawn a Swarmdo-tracked agent with cost attribution + memory persistence + swarm coordination. Use when native Task tool is wrong because you need (a) cost tracking per agent in the cost-tracking namespace, (b) cross-session learning via the patterns namespace, or (c) coordination with other agents in a swarm topology (hierarchical / mesh / consensus). For one-shot subtasks with no learning loop, native Task is fine. Pair with hooks_route to pick the right model first."`
 
 That description exists in tree today (it's `agent_spawn`). It's the template every other description should match.
 
@@ -127,7 +127,7 @@ Subsequent phases tracked in their own PRs, but the CI baseline is what guarante
 
 ## References
 
-- [#1748](https://github.com/ruvnet/ruflo/issues/1748) — original discoverability tracking issue
-- [#1896](https://github.com/ruvnet/ruflo/issues/1896) — external audit response
-- [AlphaSignal AI article](https://alphasignalai.substack.com/p/how-rufflo-turns-claude-code-into) — external amplification
-- `agent_spawn` description in `v3/@rufflo/cli/src/mcp-tools/agent-tools.ts:183` — the template every other description should match
+- [#1748](the upstream project (see NOTICE)) — original discoverability tracking issue
+- [#1896](the upstream project (see NOTICE)) — external audit response
+- [AlphaSignal AI article](https://alphasignalai.substack.com/p/how-swarmdo-turns-claude-code-into) — external amplification
+- `agent_spawn` description in `v3/@swarmdo/cli/src/mcp-tools/agent-tools.ts:183` — the template every other description should match

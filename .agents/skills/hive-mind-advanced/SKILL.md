@@ -699,10 +699,10 @@ npx swarmdo hive-mind spawn "Review PR #456" \
 
 ## References
 
-- [Hive Mind Documentation](https:/$github.com$ruvnet$swarmdo$docs$hive-mind)
-- [Collective Intelligence Patterns](https:/$github.com$ruvnet$swarmdo$docs$patterns)
-- [Byzantine Consensus](https:/$github.com$ruvnet$swarmdo$docs$consensus)
-- [Memory Optimization](https:/$github.com$ruvnet$swarmdo$docs$memory)
+- [Hive Mind Documentation](https:/$github.com$upstream$swarmdo$docs$hive-mind)
+- [Collective Intelligence Patterns](https:/$github.com$upstream$swarmdo$docs$patterns)
+- [Byzantine Consensus](https:/$github.com$upstream$swarmdo$docs$consensus)
+- [Memory Optimization](https:/$github.com$upstream$swarmdo$docs$memory)
 
 ---
 

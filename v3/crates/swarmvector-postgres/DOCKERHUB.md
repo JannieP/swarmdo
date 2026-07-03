@@ -16,7 +16,7 @@
 docker run -d --name swarmvector \
   -e POSTGRES_PASSWORD=secret \
   -p 5432:5432 \
-  ruvnet/swarmvector-postgres:latest
+  upstream/swarmvector-postgres:latest
 
 # Connect and use
 psql -h localhost -U swarmvector -d swarmvector_test
@@ -214,10 +214,10 @@ swarmvector-pg bench run --type all --size 10000
 
 ## Links
 
-- [GitHub](https://github.com/ruvnet/swarmvector)
+- [GitHub](the upstream project (see NOTICE))
 - [npm CLI](https://www.npmjs.com/package/@swarmvector/postgres-cli)
 - [crates.io](https://crates.io/crates/swarmvector-postgres)
-- [Documentation](https://docs.rs/ruvector-postgres)
+- [Documentation](https://docs.rs/swarmvector-postgres)
 
 ## License
 

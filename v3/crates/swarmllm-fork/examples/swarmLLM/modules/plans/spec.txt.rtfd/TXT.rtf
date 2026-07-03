@@ -187,14 +187,14 @@ For the
 \pard\pardeftab720\sa298\partightenfactor0
 
 \f0\b\fs36 \cf0 \strokec2 Updated Architecture Plan for 
-\f3\i \strokec2 ruvllm
+\f3\i \strokec2 swarmllm
 \f0\i0 \strokec2  (Edge + WASM)\
 \pard\pardeftab720\sa240\partightenfactor0
 
 \f1\b0\fs24 \cf0 \strokec2 Given the above trends, here is a 
 \f0\b \strokec2 \'93frontier\'94 plan
 \f1\b0 \strokec2  to build an edge-focused LLM serving runtime (which we\'92ll call 
-\f2\i \strokec2 ruvllm
+\f2\i \strokec2 swarmllm
 \f1\i0 \strokec2  for now) using Rust, vectorized kernels, WASM modules, and latest best practices. The plan is organized in stages:\
 \pard\pardeftab720\sa280\partightenfactor0
 
@@ -208,13 +208,13 @@ For the
 \f1\b0  (application binary interface) for the low-level math kernels. This way, the coordinator (token loop, model logic, memory management) stays in safe native Rust, but you can 
 \f0\b swap out kernel implementations easily
 \f1\b0  \'96 e.g. use highly optimized native Rust kernels, or load alternative implementations (possibly as WASM modules) without changing the core. This aligns with our design goals of auditability and flexibility: the core runtime handles things like policy decisions, logging, and safety checks, while the matrix multiplication, attention, etc., can be provided by plugin modules. In essence, the 
-\f2\i ruvllm
+\f2\i swarmllm
 \f1\i0 engine should treat kernels as replaceable artifacts (almost like drivers). This was directionally in the original spec; now we double down on it by clearly delineating the boundary and ensuring that, for example, a kernel pack can be distributed or updated independently (e.g. a user could load a SIMD-optimized WASM kernel pack for their CPU). The base system should run with a default kernel set, but allow override via this interface.\
 \ls2\ilvl0
 \f0\b \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	2	}\expnd0\expndtw0\kerning0
 \outl0\strokewidth0 \strokec2 Implement Two-Tier KV Cache (Quantization as a First-Class Feature):
 \f1\b0  Based on the state-of-art practices, the runtime must manage the KV cache in a memory-optimized way by default. Concretely, 
-\f2\i ruvllm
+\f2\i swarmllm
 \f1\i0  should use a 
 \f0\b two-tier KV cache
 \f1\b0 :\
@@ -238,7 +238,7 @@ For the
 \f1\b0 , then discard that scratch after use. This follows the proven pattern from production systems: 
 \f2\i quantize for storage, dequantize for compute
 \f1\i0 . By doing this, we keep arithmetic precision high where it matters (no accuracy loss in the actual attention math), while memory usage is greatly reduced in steady-state. Initial research suggests that even 3\'964 bit precision for KV can work with proper calibration, so 
-\f2\i ruvllm
+\f2\i swarmllm
 \f1\i0  should make KV compression \'93on by default.\'94 In essence, KV cache management becomes a core feature of the runtime (with policies to decide when to quantize or not) rather than an afterthought. This matches what both academic work and deployed systems (like vLLM) indicate about KV being the new bottleneck.\
 \pard\tx220\tx720\pardeftab720\li720\fi-720\sa240\partightenfactor0
 \ls2\ilvl0
@@ -249,7 +249,7 @@ For the
 \f1\b0 . The design should allow flexibility in precision 
 \f2\i per component
 \f1\i0 . For instance, research (e.g. KIVI) found that keys benefit from per-channel quantization and perhaps need a different approach than values. 
-\f2\i ruvllm
+\f2\i swarmllm
 \f1\i0  should support configuring 
 \f0\b separate quantization formats for K and V
 \f1\b0 , and even potentially leaving some layers\'92 KV in higher precision if desired. This means the KV cache API/structs need to carry type information (one layer\'92s KV might be 8-bit, another 4-bit, etc., or keys in one format, values in another). By making this configurable, the system can implement policies like: \'93Layers 1\'96N quantized to 4-bit, final layers 8-bit for fidelity\'94 or \'93Key caches use a higher precision than Value caches,\'94 etc. Such mixed schemes were hinted by prior studies to improve the quality-memory trade-off. The key point is to 
@@ -261,7 +261,7 @@ For the
 \f1\b0  Extend the runtime\'92s memory management to handle 
 \f0\b LoRA adapter weights using the same strategy as KV scratch buffers
 \f1\b0 . In other words, 
-\f2\i ruvllm
+\f2\i swarmllm
 \f1\i0  will allocate a 
 \f0\b unified arena (pool)
 \f1\b0  in memory that is used for:\
@@ -279,7 +279,7 @@ For the
 \pard\tx220\tx720\pardeftab720\li720\fi-720\sa240\partightenfactor0
 \ls2\ilvl0\cf0 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	6	}\expnd0\expndtw0\kerning0
 \outl0\strokewidth0 \strokec2 This unified pool prevents fragmentation and simplifies allocation. We can draw inspiration from S-LoRA\'92s paging system: S-LoRA had one memory pool that managed both adapter tensors and KV tensors to reduce fragmentation and overhead. 
-\f2\i ruvllm
+\f2\i swarmllm
 \f1\i0  on edge may not have as many concurrent adapters as S-LoRA\'92s cloud scenario, but the same principle of 
 \f0\b unified budgeting
 \f1\b0  applies (especially on CPU memory-constrained devices). For example, if multiple sessions with different LoRAs are running, we might swap out adapters from the pool when not in use (similar to paging to CPU or disk if needed), or compress them. We will also consider storing adapters in a compressed form (e.g. 8-bit or in some efficient delta form) when idle, and only 
@@ -304,7 +304,7 @@ For the
 \f0\b \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	8	}\expnd0\expndtw0\kerning0
 \outl0\strokewidth0 \strokec2 Tailor the WASM Runtime to Device Class:
 \f1\b0  
-\f2\i ruvllm
+\f2\i swarmllm
 \f1\i0  should be able to run on a spectrum of edge devices, so we will 
 \f0\b adopt different WASM runtime configurations depending on the deployment target
 \f1\b0 :\
@@ -330,13 +330,13 @@ For the
 \outl0\strokewidth0 \strokec2 The runtime will detect or be configured with the target class and choose the appropriate engine. Importantly, the 
 \f0\b functional behavior is consistent
 \f1\b0  across these \'96 thanks to WASI, the same module can run in Wasmtime or WAMR. This flexibility means we can deploy the same 
-\f2\i ruvllm
+\f2\i swarmllm
 \f1\i0  engine from a beefy edge box down to an IoT gateway, just swapping the WASM runtime and maybe the kernel pack flavor (some modules might include alternative code paths for different SIMD instruction sets, selected at load time).\
 \pard\pardeftab720\sa240\partightenfactor0
 \cf0 \strokec2 The above 
 \f0\b \strokec2 Core Plan
 \f1\b0 \strokec2  items are the must-haves to get an initial version of 
-\f2\i \strokec2 ruvllm
+\f2\i \strokec2 swarmllm
 \f1\i0 \strokec2  that is 
 \f0\b \strokec2 predictable, memory-efficient, and extensible
 \f1\b0 \strokec2 . To summarize, after this stage: KV cache usage will be under control via quantization; adapter overhead will be managed via unified pooling; our system will be modular with safe, portable kernel plugins; and we\'92ll be equipped to enforce strict execution budgets (no stalls or leaks). These are all foundations for a system that can run 
@@ -362,7 +362,7 @@ For the
 \f1\b0  In the core system, we will already support applying different LoRA adapters to different sessions. A stretch goal is to implement 
 \f0\b heterogeneous batching
 \f1\b0  across requests that use different adapters. S-LoRA already showed a technique for this by grouping operations and using a bitmask to select adapter contributions per request. Initially, we might serialize different adapter requests separately, but to fully utilize the hardware, we want to batch them when possible. We can design the compute such that, for example, during the forward pass we accumulate the base model output and then for each adapter in the batch, apply its rank-$r$ update (possibly via a fused kernel per adapter). This requires careful scheduling: all requests in the batch share the base computation, then each gets its adapter added. We don\'92t need the full generality of S-LoRA\'92s solution at first; we can start with a simpler approach (e.g., limit to 2\'964 distinct adapters in a batch and handle them explicitly). The key is that nothing in the core design should prevent this \'96 indeed our unified memory pool and kernel ABI should make it feasible. Achieving this will further improve throughput for multi-tenant scenarios (common on edge boxes that handle requests from different users/models). It also forces our memory manager to be really robust (since multiple adapters must reside in GPU/CPU memory simultaneously during a batch). We\'92ll take cues from S-LoRA and Punica on how they batch and schedule multi-adapter workloads, ensuring 
-\f2\i ruvllm
+\f2\i swarmllm
 \f1\i0  can eventually do the same.\
 \ls3\ilvl0
 \f0\b \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	3	}\expnd0\expndtw0\kerning0
@@ -392,14 +392,14 @@ For the
 \f1\b0\fs24 \cf0 \strokec2 Finally, if we look further out, there are a few 
 \f0\b \strokec2 disruptive ideas
 \f1\b0 \strokec2  that could push 
-\f2\i \strokec2 ruvllm
+\f2\i \strokec2 swarmllm
 \f1\i0 \strokec2  to true state-of-the-art and beyond, especially in low-memory edge environments:\
 \pard\tx220\tx720\pardeftab720\li720\fi-720\sa240\partightenfactor0
 \ls4\ilvl0
 \f0\b \cf0 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	1	}\expnd0\expndtw0\kerning0
 \outl0\strokewidth0 \strokec2 Extreme KV Rematerialization:
 \f1\b0  Build on the concept from XQuant and similar research to implement a mode where 
-\f2\i ruvllm
+\f2\i swarmllm
 \f1\i0  *
 \f2\i does not store all KV activations at all
 \f1\i0 , but instead 
@@ -407,7 +407,7 @@ For the
 \f1\b0 . For instance, instead of caching every Key and Value vector, we might cache a smaller \'93fingerprint\'94 of the intermediate state (like the 
 \f2\i X
 \f1\i0  that XQuant stores or perhaps a compressed hidden state before projection) and on each new token, recompute the necessary K/V from that. This could drastically reduce memory \'96 potentially enabling context lengths in the millions on edge devices \'96 at the cost of extra compute per token. For devices that have idle compute capacity (or specialized accelerators), this trade could be worthwhile when memory is the hard limit. We\'92d need to integrate this with our scheduling: e.g., only turn on rematerialization beyond a certain context length or when memory usage hits a cap. It\'92s essentially taking quantization to the limit (1-bit or mathematical regeneration). The challenge is keeping it fast; we might use multi-threading or SIMD to recompute multiple layers of KV in parallel if needed. This \'93compute instead of cache\'94 approach would differentiate 
-\f2\i ruvllm
+\f2\i swarmllm
 \f1\i0 for ultra-long contexts. It\'92s a frontier area, but the pieces we will have (unified memory, kernel plugins, etc.) will help experiment with it.\
 \ls4\ilvl0
 \f0\b \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	2	}\expnd0\expndtw0\kerning0
@@ -419,7 +419,7 @@ For the
 \f1\b0 , where each type of data (model weights, activations, cache, deltas) can be evicted or swapped out in a coordinated way. Some early signs of this are in systems like 
 \f0\b LMCache
 \f1\b0 , which offloads KV to CPU or disk with a controller API. We\'92d extend that concept to include LoRA and other aux data. The benefit is that 
-\f2\i ruvllm
+\f2\i swarmllm
 \f1\i0  could then 
 \f0\b run indefinitely (as a service) without ever hitting an out-of-memory
 \f1\b0 , because it would have mechanisms to spill to secondary storage deterministically. It would also make consolidation easier: e.g., on a multi-model edge server, a single pool could be shared among multiple model instances, improving utilization. Achieving this \'93runs forever\'94 reliability is the difference between a demo and a production service. We will aim for a design where adding a \'93unified paging\'94 module later is feasible \'96 likely by abstracting memory accesses through a layer that can decide to fetch from a slower tier. Logging and determinism will be critical here, as well as avoiding thrashing (hence the importance of the earlier scheduler component).\
@@ -438,7 +438,7 @@ For the
 \f1\b0  (token generation) under tight control and maximum speed, while still allowing 
 \f0\b extensibility for supporting tasks
 \f1\b0  using the broader ML ecosystem. Concretely, we could define a WASM ABI for calling out to \'93side models\'94 asynchronously. This frontier idea means 
-\f2\i ruvllm
+\f2\i swarmllm
 \f1\i0  could become not just a single-model server but an intelligent host that safely runs multiple models in concert (each in its sandbox), e.g., for multi-modal capabilities or guardrail systems, without compromising the main model\'92s performance.\
 \pard\pardeftab720\sa298\partightenfactor0
 
@@ -446,7 +446,7 @@ For the
 \pard\pardeftab720\sa240\partightenfactor0
 
 \f1\b0\fs24 \cf0 \strokec2 To implement the above plan in 
-\f2\i \strokec2 ruvllm
+\f2\i \strokec2 swarmllm
 \f1\i0 \strokec2 , here are the key changes and additions we would make to the current system specification:\
 \pard\tx220\tx720\pardeftab720\li720\fi-720\sa240\partightenfactor0
 \ls5\ilvl0
@@ -493,7 +493,7 @@ For the
 \pard\pardeftab720\sa240\partightenfactor0
 
 \f1\b0\fs24 \cf0 \strokec2 If we execute this plan, the resulting 
-\f2\i \strokec2 ruvllm
+\f2\i \strokec2 swarmllm
 \f1\i0 \strokec2  runtime will be a 
 \f0\b \strokec2 predictable, auditable, and high-performance edge inference engine
 \f1\b0 \strokec2  with several key advantages:\
@@ -506,7 +506,7 @@ For the
 \f0\b \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	\uc0\u8226 	}\expnd0\expndtw0\kerning0
 \outl0\strokewidth0 \strokec2 System-Wide Efficiency:
 \f1\b0  Through unified pooling and scheduling, all parts of the model (base weights, KV, LoRAs, scratch) share resources cooperatively. This avoids the fragmentation and over-allocation that plague less integrated solutions. It also means 
-\f2\i ruvllm
+\f2\i swarmllm
 \f1\i0  can 
 \f0\b run continuously (\'93forever\'94)
 \f1\b0  in an edge environment without needing manual restarts to clear caches \'96 it has its own internal \'93garbage collection\'94 and paging for model data. The worst-case memory usage is predictable and capped, which is vital for production services.\
@@ -514,7 +514,7 @@ For the
 \f0\b \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	\uc0\u8226 	}\expnd0\expndtw0\kerning0
 \outl0\strokewidth0 \strokec2 Modularity and Upgradability:
 \f1\b0  By using a plugin kernel approach (with WASM as the vehicle), we achieve a level of modularity where kernels can be improved or specialized for different platforms without changing the core. For example, if a new faster matrix multiply library comes out, one could package it as a WASM plugin; or if a security issue is found in an old kernel, it can be updated independently. This is a step towards treating model execution like loading drivers \'96 the core orchestrator doesn\'92t need recompilation for every tweak. It also means 
-\f2\i ruvllm
+\f2\i swarmllm
 \f1\i0  could be extended with new ops or model architectures by adding modules, not by overhauling the engine. This 
 \f0\b decoupling of policy and mechanism
 \f1\b0  (Rust core sets policy, WASM/Kernel modules do mechanism) follows good systems design and makes the system easier to maintain.\
@@ -528,7 +528,7 @@ For the
 \f0\b \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	\uc0\u8226 	}\expnd0\expndtw0\kerning0
 \outl0\strokewidth0 \strokec2 Always-On Reliability:
 \f1\b0  Ultimately, the combination of all these features means 
-\f2\i ruvllm
+\f2\i swarmllm
 \f1\i0  can serve as the backbone for 
 \f0\b always-on edge AI agents
 \f1\b0  that stay responsive and 
@@ -536,7 +536,7 @@ For the
 \f1\b0 . Surprises due to memory exhaustion or latency spikes will be minimized because we\'92ve built in backpressure and adaptation (quantize more if needed, etc.). Everything is auditable: if the model\'92s quality dips or it ran out of budget, you can trace it to a logged event (e.g., \'93KV for layer 10 quantized to 4-bit at 13:05:23 due to memory threshold\'94). This is crucial for trust and debugging, which in turn is crucial for deploying AI in the wild. Moreover, by having a strong foundation, new research ideas (like those in the Frontier section) can be incorporated without a rewrite \'96 we can try extreme strategies knowing the system\'92s modular pieces (schedulers, plugins, etc.) support experimentation.\
 \pard\pardeftab720\sa240\partightenfactor0
 \cf0 \strokec2 In essence, by following this plan we transform the original 
-\f2\i \strokec2 ruvllm
+\f2\i \strokec2 swarmllm
 \f1\i0 \strokec2  spec into a 
 \f0\b \strokec2 state-of-the-art edge inference system
 \f1\b0 \strokec2 that embodies the lessons from the latest research (2024\'962025) and anticipates future needs. It balances performance with safety and flexibility, enabling cutting-edge ML models to run efficiently at the edge. This positions us well for the coming era where AI services are expected to be ubiquitous, personal, and reliable.\
@@ -659,7 +659,7 @@ What\'92s missing?\
 \ls8\ilvl0\kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	8	}\expnd0\expndtw0\kerning0
 \outl0\strokewidth0 \strokec2 Evaluation harness is not concrete enough\uc0\u8232 You need a mandatory benchmark and correctness suite that covers:\u8232 a) p50 p95 p99 decode step latency\u8232 b) memory per token and KV growth curves\u8232 c) quality drift across long contexts\u8232 d) adapter correctness and regressions\u8232 e) quantization error accumulation and recovery\u8232 Until this exists, you will not know if the scheduler and gating rules are helping or silently hurting.\
 \ls8\ilvl0\kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	9	}\expnd0\expndtw0\kerning0
-\outl0\strokewidth0 \strokec2 ruvector integration is still conceptual\uc0\u8232 You have not defined the exact role ruvector plays in the runtime loop. Missing choices include:\u8232 a) ruvector as the policy memory store for learned thresholds\u8232 b) ruvector as the session state index for adapter selection and cache locality\u8232 c) ruvector as the witness log index for postmortem and audit queries\u8232 You need concrete APIs and storage models for these.\
+\outl0\strokewidth0 \strokec2 swarmvector integration is still conceptual\uc0\u8232 You have not defined the exact role swarmvector plays in the runtime loop. Missing choices include:\u8232 a) swarmvector as the policy memory store for learned thresholds\u8232 b) swarmvector as the session state index for adapter selection and cache locality\u8232 c) swarmvector as the witness log index for postmortem and audit queries\u8232 You need concrete APIs and storage models for these.\
 \ls8\ilvl0\kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	10	}\expnd0\expndtw0\kerning0
 \outl0\strokewidth0 \strokec2 A clear mapping of model formats and feature coverage\uc0\u8232 The plan does not specify model formats, tokenizer pipeline, and attention variants that must be supported from day one, like grouped query attention, sliding window attention, rope variants, and long context scaling. This affects your kernel ABI and test vectors.\
 \pard\pardeftab720\sa240\partightenfactor0
@@ -698,13 +698,13 @@ Give me full implementation \
 \f1\b0  Should I optimize for minimal memory, max throughput, or multi-user batching?\
 \ls10\ilvl0
 \f0\b \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	5	}\expnd0\expndtw0\kerning0
-\outl0\strokewidth0 \strokec2 Use of ruvector:
+\outl0\strokewidth0 \strokec2 Use of swarmvector:
 \f1\b0  Do you want this as a vector DB, witness logger, policy engine, or all of the above?\
 \pard\pardeftab720\sa240\partightenfactor0
 \cf0 \strokec2 Once I have that, I\'92ll generate the full code and build structure.\
 \pard\pardeftab720\partightenfactor0
 \cf0 \strokec2 \
-Here is what is missing right now. The plan is directionally correct, but it still lacks the pieces that make it runnable, measurable, and hard to break. 1. A committed attention and matmul path for the hot loop Right now the plan says \'93defer attention in WASM,\'94 but it does not specify what runs attention today. You need a clear default backend choice and fallback order, for example a mistral.rs style paged attention backend for throughput and fragmentation control, with KV cache quantization support already proven in that codebase. 2. A real SIMD strategy that matches Rust reality in 2026 If you want deterministic speed on edge CPU, you need to pick a SIMD approach that compiles everywhere and can multiversion per CPU. std simd is still nightly in 2025, with people recommending crates like wide, pulp, or macerator depending on your needs. That decision affects every kernel you ship. 3. The missing KV cache algorithm layer between quantize and rematerialize You listed KVQuant, KIVI, XQuant, but you have not specified when to use which, nor how to combine them safely. Also, there are newer KV quant methods like SQuat that change the error geometry rather than just lowering bits. That belongs in your decision tree and benchmark suite. 4. Unified paging is described, but the allocator and eviction policy are not specified You need concrete answers for: page size, metadata layout, pinning rules, eviction order, concurrency model, and how you prevent thrash. Without this, \'93unified pool\'94 becomes a soft idea instead of a production subsystem. 5. The WASM boundary is not locked down You need to decide whether you are shipping raw ABI calls or a component model interface, how memory is shared, and what happens on trap. You also need to commit to interruption mechanics. Wasmtime documents fuel and epoch interruption, with epoch generally faster, and the choice matters for tail latency. 6. Kernel pack supply chain and rollback is not fully designed You mentioned signing, but you still need: manifest schema, signature rotation, allow lists, version compatibility gates, reproducible builds, and a safe rollback protocol that is deterministic under load. 7. Adapter serving needs a multi tenant execution plan Micro LoRA apply is specified, but what is missing is the serving strategy: adapter residency rules, batching rules when multiple adapters are active, adapter compression, and a unified paging contract that covers KV plus adapters together. The S LoRA approach is the reference for why this matters. 8. Evaluation harness is not concrete enough You need a mandatory benchmark and correctness suite that covers: a) p50 p95 p99 decode step latency b) memory per token and KV growth curves c) quality drift across long contexts d) adapter correctness and regressions e) quantization error accumulation and recovery Until this exists, you will not know if the scheduler and gating rules are helping or silently hurting. 9. ruvector integration is still conceptual You have not defined the exact role ruvector plays in the runtime loop. Missing choices include: a) ruvector as the policy memory store for learned thresholds b) ruvector as the session state index for adapter selection and cache locality c) ruvector as the witness log index for postmortem and audit queries You need concrete APIs and storage models for these. 10. A clear mapping of model formats and feature coverage The plan does not specify model formats, tokenizer pipeline, and attention variants that must be supported from day one, like grouped query attention, sliding window attention, rope variants, and long context scaling. This affects your kernel ABI and test vectors. If you want the updated frontier plan to be actionable, the next step is to lock three things in writing: 1. Default inference backend for attention and matmul, with a defined fallback order, likely using mistral.rs as the reference for paged attention and quantized KV support 2. SIMD kernel strategy using crates that work today, since std simd remains nightly for many setups 3. WASM execution budget mechanism, with epoch interruption as the default where possible Once those are fixed, everything else becomes an engineering pipeline instead of a research debate.\
+Here is what is missing right now. The plan is directionally correct, but it still lacks the pieces that make it runnable, measurable, and hard to break. 1. A committed attention and matmul path for the hot loop Right now the plan says \'93defer attention in WASM,\'94 but it does not specify what runs attention today. You need a clear default backend choice and fallback order, for example a mistral.rs style paged attention backend for throughput and fragmentation control, with KV cache quantization support already proven in that codebase. 2. A real SIMD strategy that matches Rust reality in 2026 If you want deterministic speed on edge CPU, you need to pick a SIMD approach that compiles everywhere and can multiversion per CPU. std simd is still nightly in 2025, with people recommending crates like wide, pulp, or macerator depending on your needs. That decision affects every kernel you ship. 3. The missing KV cache algorithm layer between quantize and rematerialize You listed KVQuant, KIVI, XQuant, but you have not specified when to use which, nor how to combine them safely. Also, there are newer KV quant methods like SQuat that change the error geometry rather than just lowering bits. That belongs in your decision tree and benchmark suite. 4. Unified paging is described, but the allocator and eviction policy are not specified You need concrete answers for: page size, metadata layout, pinning rules, eviction order, concurrency model, and how you prevent thrash. Without this, \'93unified pool\'94 becomes a soft idea instead of a production subsystem. 5. The WASM boundary is not locked down You need to decide whether you are shipping raw ABI calls or a component model interface, how memory is shared, and what happens on trap. You also need to commit to interruption mechanics. Wasmtime documents fuel and epoch interruption, with epoch generally faster, and the choice matters for tail latency. 6. Kernel pack supply chain and rollback is not fully designed You mentioned signing, but you still need: manifest schema, signature rotation, allow lists, version compatibility gates, reproducible builds, and a safe rollback protocol that is deterministic under load. 7. Adapter serving needs a multi tenant execution plan Micro LoRA apply is specified, but what is missing is the serving strategy: adapter residency rules, batching rules when multiple adapters are active, adapter compression, and a unified paging contract that covers KV plus adapters together. The S LoRA approach is the reference for why this matters. 8. Evaluation harness is not concrete enough You need a mandatory benchmark and correctness suite that covers: a) p50 p95 p99 decode step latency b) memory per token and KV growth curves c) quality drift across long contexts d) adapter correctness and regressions e) quantization error accumulation and recovery Until this exists, you will not know if the scheduler and gating rules are helping or silently hurting. 9. swarmvector integration is still conceptual You have not defined the exact role swarmvector plays in the runtime loop. Missing choices include: a) swarmvector as the policy memory store for learned thresholds b) swarmvector as the session state index for adapter selection and cache locality c) swarmvector as the witness log index for postmortem and audit queries You need concrete APIs and storage models for these. 10. A clear mapping of model formats and feature coverage The plan does not specify model formats, tokenizer pipeline, and attention variants that must be supported from day one, like grouped query attention, sliding window attention, rope variants, and long context scaling. This affects your kernel ABI and test vectors. If you want the updated frontier plan to be actionable, the next step is to lock three things in writing: 1. Default inference backend for attention and matmul, with a defined fallback order, likely using mistral.rs as the reference for paged attention and quantized KV support 2. SIMD kernel strategy using crates that work today, since std simd remains nightly for many setups 3. WASM execution budget mechanism, with epoch interruption as the default where possible Once those are fixed, everything else becomes an engineering pipeline instead of a research debate.\
 \
 \pard\pardeftab720\sa240\partightenfactor0
 \cf0 \strokec2 Understood. I will research and specify:\
@@ -1223,7 +1223,7 @@ Key components of the evaluation suite:\
 \fs24 \cf0 Ruvector
 \f1\b0 \strokec2  is envisioned as a 
 \f2\i \strokec2 learning and memory subsystem
-\f1\i0 \strokec2  for the runtime. We clarify how ruvector will be used in three roles and outline the APIs/storage involved:\
+\f1\i0 \strokec2  for the runtime. We clarify how swarmvector will be used in three roles and outline the APIs/storage involved:\
 \pard\tx220\tx720\pardeftab720\li720\fi-720\sa240\partightenfactor0
 \ls19\ilvl0
 \f0\b \cf0 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	\uc0\u8226 	}\expnd0\expndtw0\kerning0
@@ -1233,42 +1233,42 @@ Key components of the evaluation suite:\
 \f1\i0 , can store an 
 \f0\b embedding of the context
 \f1\b0  or some representation of the session state along with the outcome metrics (latency, quality). Over time, we can cluster or correlate which contexts benefit from which strategy. The API here would look like: after each session or critical event, we form a vector (embedding) of the situation and store it via 
-\f4\fs26 ruvector.insert(key, vector, metadata)
-\f1\fs24 , where metadata might include the strategy used and the results (e.g. \'93quantized at 4k tokens, quality good\'94). Later, when a new session starts or reaches a decision point, we query ruvector for similar situations: 
-\f4\fs26 ruvector.query(vector, k=5)
+\f4\fs26 swarmvector.insert(key, vector, metadata)
+\f1\fs24 , where metadata might include the strategy used and the results (e.g. \'93quantized at 4k tokens, quality good\'94). Later, when a new session starts or reaches a decision point, we query swarmvector for similar situations: 
+\f4\fs26 swarmvector.query(vector, k=5)
 \f1\fs24 might return the closest stored experiences. If those all indicate that, say, KIVI 2-bit was fine, we proceed; if they indicate that quality dropped, we might choose a different path (maybe use SQuat or none). This effectively allows the system to 
 \f0\b learn thresholds dynamically
 \f1\b0  rather than hard-coding them. Initially, we might run in a logging mode and manually analyze, but eventually the loop can be closed for self-optimizing behavior.\
 \ls19\ilvl0
 \f0\b \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	\uc0\u8226 	}\expnd0\expndtw0\kerning0
 \outl0\strokewidth0 \strokec2 B. Session State Index for Adapter Selection & Cache Locality:
-\f1\b0  In a multi-tenant system, ruvector can act as an index of sessions and their properties, enabling better placement and retrieval. We\'92ll maintain an entry in ruvector for each active session (or recently active one). The vector could encode the user\'92s preferences or past usage (for example, which adapters they use frequently, what kind of prompts they have \'96 embedded into a vector). The 
+\f1\b0  In a multi-tenant system, swarmvector can act as an index of sessions and their properties, enabling better placement and retrieval. We\'92ll maintain an entry in swarmvector for each active session (or recently active one). The vector could encode the user\'92s preferences or past usage (for example, which adapters they use frequently, what kind of prompts they have \'96 embedded into a vector). The 
 \f0\b adapter selection
 \f1\b0  part means if a new request comes in for a certain task, we can quickly find if there\'92s an adapter that fits (by querying similar past sessions or known task vectors). This could guide routing: e.g. we identify which LoRA to load for a given query if not explicitly specified. The 
 \f0\b cache locality
-\f1\b0  aspect is about optimizing memory usage: ruvector can help us decide if we should colocate certain sessions on the same GPU because they use similar adapters or content (thus could batch). If ruvector tells us Session X and Y are very similar in embedding (say both are long chats about programming), we might schedule them closely so they can share context or at least ensure their memory pages might reside together for efficiency. The API could be: when a session ends or after N turns, update its embedding in ruvector. When scheduling new requests, query for the nearest neighbor sessions and see if they are on a particular server or GPU \'96 then possibly assign the new request to the same location to 
+\f1\b0  aspect is about optimizing memory usage: swarmvector can help us decide if we should colocate certain sessions on the same GPU because they use similar adapters or content (thus could batch). If swarmvector tells us Session X and Y are very similar in embedding (say both are long chats about programming), we might schedule them closely so they can share context or at least ensure their memory pages might reside together for efficiency. The API could be: when a session ends or after N turns, update its embedding in swarmvector. When scheduling new requests, query for the nearest neighbor sessions and see if they are on a particular server or GPU \'96 then possibly assign the new request to the same location to 
 \f0\b reuse loaded adapters or cached knowledge
-\f1\b0 . Essentially, ruvector becomes a smart directory of sessions, supporting decisions like \'93which adapter to pre-load for this user\'92s next query\'94 or \'93which server has the most relevant data for this request\'94.\
+\f1\b0 . Essentially, swarmvector becomes a smart directory of sessions, supporting decisions like \'93which adapter to pre-load for this user\'92s next query\'94 or \'93which server has the most relevant data for this request\'94.\
 \ls19\ilvl0
 \f0\b \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	\uc0\u8226 	}\expnd0\expndtw0\kerning0
 \outl0\strokewidth0 \strokec2 C. Witness Log Index for Postmortem & Audit:
-\f1\b0  Every interaction and decision in the system can be logged as a \'93witness\'94 \'96 a data point that can be later analyzed. We will use ruvector to index these logs in a semantic way. For example, each completed request can produce: an embedding of the prompt+response (to capture the content semantics), the system decisions (quantization used, any interruptions, etc.), and outcome (latency, errors if any). This goes into ruvector as a vector with attached metadata (the log). Later, if we are investigating an incident (say a particular query produced a wrong answer or the system lagged), we can perform an 
+\f1\b0  Every interaction and decision in the system can be logged as a \'93witness\'94 \'96 a data point that can be later analyzed. We will use swarmvector to index these logs in a semantic way. For example, each completed request can produce: an embedding of the prompt+response (to capture the content semantics), the system decisions (quantization used, any interruptions, etc.), and outcome (latency, errors if any). This goes into swarmvector as a vector with attached metadata (the log). Later, if we are investigating an incident (say a particular query produced a wrong answer or the system lagged), we can perform an 
 \f0\b semantic search
 \f1\b0  in these logs. Perhaps an auditor can query \'93find all requests that had to be interrupted for timeout\'94 or \'93find similar conversations to this one that got a bad answer\'94. Ruvector\'92s ability to store and search high-dimensional data makes it ideal for this. The 
 \f0\b witness logs
 \f1\b0  stored allow 
 \f2\i postmortem analysis
 \f1\i0 : after deployment, developers can cluster failures or outliers and derive improvements. They also assist in compliance audits \'96 e.g. if a user reports an inappropriate response, we can find it and related cases by similarity. API-wise, we\'92d have something like 
-\f4\fs26 ruvector.log(vector, info)
+\f4\fs26 swarmvector.log(vector, info)
 \f1\fs24  for each request. For retrieval, an admin tool might do 
-\f4\fs26 ruvector.search(vector_or_text, filter=condition)
+\f4\fs26 swarmvector.search(vector_or_text, filter=condition)
 \f1\fs24 .\
 \ls19\ilvl0
 \f0\b \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	\uc0\u8226 	}\expnd0\expndtw0\kerning0
 \outl0\strokewidth0 \strokec2 Concrete Storage Model:
-\f1\b0  Ruvector in distributed mode would likely run as a service or embedded database. We will integrate it such that on each node (or centrally) there\'92s a ruvector instance. It can scale horizontally with Raft consensus (per their docs), which is good for reliability. We\'92ll define the schemas for each entry type (policy, session, log) possibly as separate collections or namespaces in ruvector. The vectors themselves might be of different dimensions (for policy maybe small, for session perhaps large embedding). Ruvector\'92s learning capability means it might adjust indices or create summary indices automatically \'96 we\'92ll leverage that to improve query speed as data grows. We\'92ll also ensure PII or sensitive info is handled \'96 likely the embeddings will be somewhat anonymized or at least not directly storing raw text.\
+\f1\b0  Ruvector in distributed mode would likely run as a service or embedded database. We will integrate it such that on each node (or centrally) there\'92s a swarmvector instance. It can scale horizontally with Raft consensus (per their docs), which is good for reliability. We\'92ll define the schemas for each entry type (policy, session, log) possibly as separate collections or namespaces in swarmvector. The vectors themselves might be of different dimensions (for policy maybe small, for session perhaps large embedding). Ruvector\'92s learning capability means it might adjust indices or create summary indices automatically \'96 we\'92ll leverage that to improve query speed as data grows. We\'92ll also ensure PII or sensitive info is handled \'96 likely the embeddings will be somewhat anonymized or at least not directly storing raw text.\
 \pard\pardeftab720\sa240\partightenfactor0
-\cf0 \strokec2 In summary, ruvector will be the 
+\cf0 \strokec2 In summary, swarmvector will be the 
 \f0\b \strokec2 intelligent memory
 \f1\b0 \strokec2  of the system: storing past experiences and using them to make the system smarter and more auditable over time. We\'92ve identified clear APIs for inserting and querying this information, which cements its role beyond a conceptual \'93nice-to-have\'94. It becomes a core component for adaptive behavior (learning thresholds), efficient multi-session handling (session index), and traceability (audit log).\
 \pard\pardeftab720\sa298\partightenfactor0
@@ -1376,7 +1376,7 @@ With these three key decisions solidified \'96 the attention backend (paged+quan
 \f0\b\fs36 \cf0 \strokec2 Conclusion\
 \pard\pardeftab720\sa240\partightenfactor0
 
-\f1\b0\fs24 \cf0 \strokec2 By addressing each missing piece with concrete implementations and policies, we have transformed the original high-level plan into a detailed design ready for engineering. We have specified how attention and matmul will run, how SIMD will be done in Rust today, how we\'92ll quantize and manage KV caches, how memory paging and eviction works, the exact WASM integration approach, secure handling of kernel plugins, multi-adapter serving strategies, testing protocols, ruvector\'92s integration, and comprehensive model support. Finally, we cemented three critical decisions (attention backend, SIMD crate, WASM interruption) to guide the development.\
+\f1\b0\fs24 \cf0 \strokec2 By addressing each missing piece with concrete implementations and policies, we have transformed the original high-level plan into a detailed design ready for engineering. We have specified how attention and matmul will run, how SIMD will be done in Rust today, how we\'92ll quantize and manage KV caches, how memory paging and eviction works, the exact WASM integration approach, secure handling of kernel plugins, multi-adapter serving strategies, testing protocols, swarmvector\'92s integration, and comprehensive model support. Finally, we cemented three critical decisions (attention backend, SIMD crate, WASM interruption) to guide the development.\
 This updated plan is now 
 \f0\b \strokec2 actionable
 \f1\b0 \strokec2  \'96 each component can be implemented and tested according to the descriptions here. With these details in writing, the project moves out of the realm of research debate and into execution. The result will be a robust, state-of-the-art LLM inference engine that is efficient, scalable, and hard to break, by design.\

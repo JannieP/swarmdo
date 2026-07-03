@@ -12,7 +12,7 @@ import { generateStatuslineScript, generateStatuslineHook } from './statusline-g
 // PR body templates and release notes.  It is NEVER hard-wired into the
 // static command-file templates — those are user-owned content.
 export const ATTRIBUTION_FOOTER =
-  '🤖 Generated with [Swarmdo](https://github.com/ruvnet/swarmdo)';
+  '🤖 Generated with [Swarmdo](the upstream project (see NOTICE))';
 
 /**
  * Generate pre-commit hook script

@@ -5,7 +5,7 @@
 **Verified:** All Cloud Functions operational including suggestion-agent (see ADR-015)
 **Author:** Conveyor AI Team
 **Deciders:** Engineering, Product, DevOps, Security
-**Related:** ADR-001-EXTENSION-ARCHITECTURE, ADR-004-RUVECTOR-POSTGRES-GCP-DEPLOYMENT, ADR-011-cloud-run-extension-architecture, ADR-012-vitejs-heroui-frontend-stack, ADR-013-hybrid-data-layer-architecture, ADR-015-CLOUD-FUNCTIONS-ARCHITECTURE
+**Related:** ADR-001-EXTENSION-ARCHITECTURE, ADR-004-SWARMVECTOR-POSTGRES-GCP-DEPLOYMENT, ADR-011-cloud-run-extension-architecture, ADR-012-vitejs-heroui-frontend-stack, ADR-013-hybrid-data-layer-architecture, ADR-015-CLOUD-FUNCTIONS-ARCHITECTURE
 
 ---
 
@@ -74,7 +74,7 @@ Implement a **Chat System Architecture** deployed on Google Cloud Run with the f
 |  |  +-------------------+  +-------------------+  +--------------------+             |
 |  |  | Cloud SQL         |  | Airtable          |  | Secret Manager     |             |
 |  |  | PostgreSQL        |  | (Cases, Clients)  |  | (API Keys, OAuth)  |             |
-|  |  | (RuVector + RL)   |  |                   |  |                    |             |
+|  |  | (SwarmVector + RL)   |  |                   |  |                    |             |
 |  |  +-------------------+  +-------------------+  +--------------------+             |
 |  +-----------------------------------------------------------------------------------+
 |                                                                                    |
@@ -691,7 +691,7 @@ export class WebSocketManager {
 | `oauth-client-secret` | Google OAuth client secret |
 | `jwt-signing-key` | JWT token signing |
 | `redis-url` | Rate limiting store |
-| `ruvector-db-password` | Database access |
+| `swarmvector-db-password` | Database access |
 
 ### Rate Limiting Strategy
 
@@ -781,7 +781,7 @@ const ROLE_PERMISSIONS: Record<string, Permission[]> = {
 |  |     (us-central1)         |  |     (us-central1)         |                     |
 |  |                           |  |                           |                     |
 |  |  +---------------------+  |  |  +---------------------+  |                     |
-|  |  | chat-orchestrator   |  |  |  | conveyor-ruvector-  |  |                     |
+|  |  | chat-orchestrator   |  |  |  | conveyor-swarmvector-  |  |                     |
 |  |  | (1024Mi, 2 CPU)     |--+--+--| db (PostgreSQL 15)  |  |                     |
 |  |  +---------------------+  |  |  +---------------------+  |                     |
 |  |                           |  |                           |                     |
@@ -804,7 +804,7 @@ const ROLE_PERMISSIONS: Record<string, Permission[]> = {
 |  |  anthropic-api-key        |  |  | airtable-agent    |    |                     |
 |  |  oauth-client-secret      |  |  +-------------------+    |                     |
 |  |  jwt-signing-key          |  +---------------------------+                     |
-|  |  ruvector-db-password     |                                                    |
+|  |  swarmvector-db-password     |                                                    |
 |  +---------------------------+                                                    |
 |                                                                                    |
 |  +---------------------------+  +---------------------------+                     |
@@ -1005,7 +1005,7 @@ User Input
 ## References
 
 - [ADR-001: Extension Architecture](./ADR-001-EXTENSION-ARCHITECTURE.md) - Monorepo structure and deployment patterns
-- [ADR-004: RuVector PostgreSQL Database Deployment](./ADR-004-RUVECTOR-POSTGRES-GCP-DEPLOYMENT.md) - Database schema and functions
+- [ADR-004: SwarmVector PostgreSQL Database Deployment](./ADR-004-SWARMVECTOR-POSTGRES-GCP-DEPLOYMENT.md) - Database schema and functions
 - [ADR-011: Cloud Run Extension Architecture](./ADR-011-cloud-run-extension-architecture.md) - Cloud Run deployment patterns
 - [ADR-012: ViteJS + HeroUI Frontend Stack](./ADR-012-vitejs-heroui-frontend-stack.md) - Frontend technology stack
 - [ADR-013: Hybrid Data Layer Architecture](./ADR-013-hybrid-data-layer-architecture.md) - Data routing and sync patterns

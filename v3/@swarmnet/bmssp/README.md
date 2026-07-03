@@ -1,13 +1,13 @@
 # 🚀 BMSSP - Blazing Fast Graph Pathfinding SDK
 
-[![npm version](https://img.shields.io/npm/v/@ruvnet/bmssp.svg)](https://www.npmjs.com/package/@ruvnet/bmssp)
-[![Downloads](https://img.shields.io/npm/dm/@ruvnet/bmssp.svg)](https://www.npmjs.com/package/@ruvnet/bmssp)
-[![License](https://img.shields.io/npm/l/bmssp.svg)](https://github.com/ruvnet/bmssp/blob/main/LICENSE)
+[![npm version](https://img.shields.io/npm/v/@upstream/bmssp.svg)](https://www.npmjs.com/package/@upstream/bmssp)
+[![Downloads](https://img.shields.io/npm/dm/@upstream/bmssp.svg)](https://www.npmjs.com/package/@upstream/bmssp)
+[![License](https://img.shields.io/npm/l/bmssp.svg)](the upstream project (see NOTICE))
 [![WASM](https://img.shields.io/badge/WASM-Powered-blue.svg)](https://webassembly.org/)
-[![Performance](https://img.shields.io/badge/Performance-10--15x_Faster-green.svg)](https://github.com/ruvnet/bmssp#benchmarks)
+[![Performance](https://img.shields.io/badge/Performance-10--15x_Faster-green.svg)](the upstream project (see NOTICE)#benchmarks)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
 [![Bundle Size](https://img.shields.io/bundlephobia/minzip/bmssp)](https://bundlephobia.com/package/bmssp)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/ruvnet/bmssp/ci.yml)](https://github.com/ruvnet/bmssp/actions)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/upstream/bmssp/ci.yml)](the upstream project (see NOTICE))
 
 **BMSSP (Bounded Multi-Source Shortest Path)** is a high-performance graph pathfinding library that leverages WebAssembly for blazing-fast shortest path calculations. Perfect for route optimization, network analysis, and graph algorithms in JavaScript/TypeScript applications.
 
@@ -26,7 +26,7 @@
 ## 📦 Installation
 
 ```bash
-npm install @ruvnet/bmssp
+npm install @upstream/bmssp
 ```
 
 Or with yarn:
@@ -37,7 +37,7 @@ yarn add bmssp
 Or via CDN:
 ```html
 <script type="module">
-  import { BmsSpGraph } from 'https://unpkg.com/@ruvnet/bmssp/dist/bmssp.js';
+  import { BmsSpGraph } from 'https://unpkg.com/@upstream/bmssp/dist/bmssp.js';
 </script>
 ```
 
@@ -46,7 +46,7 @@ Or via CDN:
 ### Basic Usage
 
 ```javascript
-import { BmsSpGraph } from '@ruvnet/bmssp';
+import { BmsSpGraph } from '@upstream/bmssp';
 
 // Create a new graph
 const graph = new BmsSpGraph();
@@ -262,7 +262,7 @@ interface GraphStats {
 ### ES Modules
 ```html
 <script type="module">
-  import { BmsSpGraph } from 'https://unpkg.com/@ruvnet/bmssp/dist/bmssp.js';
+  import { BmsSpGraph } from 'https://unpkg.com/@upstream/bmssp/dist/bmssp.js';
   
   const graph = new BmsSpGraph();
   // Use the graph...
@@ -271,7 +271,7 @@ interface GraphStats {
 
 ### Script Tag
 ```html
-<script src="https://unpkg.com/@ruvnet/bmssp/dist/bmssp.umd.js"></script>
+<script src="https://unpkg.com/@upstream/bmssp/dist/bmssp.umd.js"></script>
 <script>
   const graph = new window.BMSSP.BmsSpGraph();
   // Use the graph...
@@ -300,7 +300,7 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 
 ```bash
 # Clone the repository
-git clone https://github.com/ruvnet/bmssp.git
+git clone the upstream project (see NOTICE)
 cd bmssp
 
 # Install dependencies
@@ -318,7 +318,7 @@ npm run benchmark
 
 ## 📚 Examples
 
-Check out the [examples directory](https://github.com/ruvnet/bmssp/tree/main/examples) for:
+Check out the [examples directory](the upstream project (see NOTICE)) for:
 - Route optimization demos
 - Network analysis tools
 - Game pathfinding examples
@@ -362,8 +362,8 @@ Based on research:
 ## 📞 Support
 
 - 📧 Email: support@bmssp.dev
-- 🐛 Issues: [GitHub Issues](https://github.com/ruvnet/bmssp/issues)
-- 💬 Discussions: [GitHub Discussions](https://github.com/ruvnet/bmssp/discussions)
+- 🐛 Issues: [GitHub Issues](the upstream project (see NOTICE))
+- 💬 Discussions: [GitHub Discussions](the upstream project (see NOTICE))
 - 📖 Docs: [Full Documentation](https://docs.bmssp.dev)
 - 🎮 Discord: [Join our community](https://discord.gg/bmssp)
 - 🐦 Twitter: [@bmssp_dev](https://twitter.com/bmssp_dev)
@@ -372,7 +372,7 @@ Based on research:
 
 Special thanks to our sponsors who make this project possible!
 
-[Become a sponsor](https://github.com/sponsors/ruvnet)
+[Become a sponsor](https://github.com/sponsors/upstream)
 
 ---
 

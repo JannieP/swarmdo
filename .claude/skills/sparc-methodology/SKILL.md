@@ -1057,8 +1057,8 @@ mcp__swarmdo__token_usage {
 
 ## Support and Resources
 
-- **Documentation**: https://github.com/ruvnet/claude-flow
-- **Issues**: https://github.com/ruvnet/claude-flow/issues
+- **Documentation**: the upstream project (see NOTICE)
+- **Issues**: the upstream project (see NOTICE)
 - **NPM Package**: https://www.npmjs.com/package/swarmdo
 - **Community**: Discord server (link in repository)
 

@@ -1,6 +1,6 @@
 ---
 id: ADR-0001
-title: rufflo-sparc plugin contract — pinning, namespace coordination, ADR/DDD/Docs phase cross-references, smoke as contract
+title: swarmdo-sparc plugin contract — pinning, namespace coordination, ADR/DDD/Docs phase cross-references, smoke as contract
 status: Accepted
 date: 2026-05-04
 updated: 2026-05-09
@@ -11,17 +11,17 @@ tags: [plugin, sparc, methodology, namespace, smoke-test]
 
 ## Context
 
-`rufflo-sparc` (v0.1.0) — SPARC methodology orchestrator (Specification, Pseudocode, Architecture, Refinement, Completion). 1 agent (`sparc-orchestrator`), 3 skills (`sparc-spec`, `sparc-implement`, `sparc-refine`), 1 command (`/rufflo-sparc`).
+`swarmdo-sparc` (v0.1.0) — SPARC methodology orchestrator (Specification, Pseudocode, Architecture, Refinement, Completion). 1 agent (`sparc-orchestrator`), 3 skills (`sparc-spec`, `sparc-implement`, `sparc-refine`), 1 command (`/swarmdo-sparc`).
 
 The 5 SPARC phases each have a natural sibling-plugin alignment:
 
 | Phase | Sibling plugin | Purpose |
 |-------|----------------|---------|
-| **Specification** | `rufflo-goals` (deep-research) | Multi-source research orchestration to gather requirements |
-| **Pseudocode** | `rufflo-sparc` itself | Owned by this plugin |
-| **Architecture** | [`rufflo-adr`](../../rufflo-adr/docs/adrs/0001-adr-plugin-pattern.md) + [`rufflo-ddd`](../../rufflo-ddd/docs/adrs/0001-ddd-contract.md) | Architecture decisions and bounded contexts |
-| **Refinement** | [`rufflo-jujutsu`](../../rufflo-jujutsu/docs/adrs/0001-jujutsu-contract.md) + [`rufflo-testgen`](../../rufflo-testgen/) | Diff-aware refactor + test gap analysis |
-| **Completion** | [`rufflo-docs`](../../rufflo-docs/docs/adrs/0001-docs-contract.md) | Auto-generated documentation |
+| **Specification** | `swarmdo-goals` (deep-research) | Multi-source research orchestration to gather requirements |
+| **Pseudocode** | `swarmdo-sparc` itself | Owned by this plugin |
+| **Architecture** | [`swarmdo-adr`](../../swarmdo-adr/docs/adrs/0001-adr-plugin-pattern.md) + [`swarmdo-ddd`](../../swarmdo-ddd/docs/adrs/0001-ddd-contract.md) | Architecture decisions and bounded contexts |
+| **Refinement** | [`swarmdo-jujutsu`](../../swarmdo-jujutsu/docs/adrs/0001-jujutsu-contract.md) + [`swarmdo-testgen`](../../swarmdo-testgen/) | Diff-aware refactor + test gap analysis |
+| **Completion** | [`swarmdo-docs`](../../swarmdo-docs/docs/adrs/0001-docs-contract.md) | Auto-generated documentation |
 
 ADR-0001 makes these phase-to-plugin alignments contractually documented so SPARC consumers know which sibling plugin owns each phase's deeper tooling.
 
@@ -41,19 +41,19 @@ ADR-0001 makes these phase-to-plugin alignments contractually documented so SPAR
 ## Verification
 
 ```bash
-bash plugins/rufflo-sparc/scripts/smoke.sh
+bash plugins/swarmdo-sparc/scripts/smoke.sh
 # Expected: "11 passed, 0 failed"
 ```
 
 ## Related
 
-- `plugins/rufflo-adr/docs/adrs/0001-adr-plugin-pattern.md` — Architecture phase
-- `plugins/rufflo-ddd/docs/adrs/0001-ddd-contract.md` — Architecture phase (bounded contexts)
-- `plugins/rufflo-jujutsu/docs/adrs/0001-jujutsu-contract.md` — Refinement phase (diff analysis)
-- `plugins/rufflo-docs/docs/adrs/0001-docs-contract.md` — Completion phase (documentation)
-- `plugins/rufflo-goals/docs/adrs/0001-goals-contract.md` — Specification phase (deep-research)
-- `plugins/rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md` — namespace convention
+- `plugins/swarmdo-adr/docs/adrs/0001-adr-plugin-pattern.md` — Architecture phase
+- `plugins/swarmdo-ddd/docs/adrs/0001-ddd-contract.md` — Architecture phase (bounded contexts)
+- `plugins/swarmdo-jujutsu/docs/adrs/0001-jujutsu-contract.md` — Refinement phase (diff analysis)
+- `plugins/swarmdo-docs/docs/adrs/0001-docs-contract.md` — Completion phase (documentation)
+- `plugins/swarmdo-goals/docs/adrs/0001-goals-contract.md` — Specification phase (deep-research)
+- `plugins/swarmdo-agentdb/docs/adrs/0001-agentdb-optimization.md` — namespace convention
 
 ## Implementation status
 
-Plugin version v0.2.0 shipped and listed in marketplace.json. Source exists at `plugins/rufflo-sparc/`. Contract elements implemented: all 5 SPARC phases cross-linked to sibling plugins (goals, ddd, adr, testgen, docs); namespace `sparc-state` claimed; 3 skills (`sparc-spec`, `sparc-implement`, `sparc-refine`) shipped; smoke-as-contract gate defined in `scripts/smoke.sh` (11 checks).
+Plugin version v0.2.0 shipped and listed in marketplace.json. Source exists at `plugins/swarmdo-sparc/`. Contract elements implemented: all 5 SPARC phases cross-linked to sibling plugins (goals, ddd, adr, testgen, docs); namespace `sparc-state` claimed; 3 skills (`sparc-spec`, `sparc-implement`, `sparc-refine`) shipped; smoke-as-contract gate defined in `scripts/smoke.sh` (11 checks).

@@ -146,7 +146,7 @@ export class AnthropicToRequestyProxy {
             headers: {
                 'Authorization': `Bearer ${this.requestyApiKey}`,
                 'Content-Type': 'application/json',
-                'HTTP-Referer': 'https://github.com/ruvnet/agentic-flow',
+                'HTTP-Referer': 'the upstream project (see NOTICE)',
                 'X-Title': 'Agentic Flow'
             },
             body: JSON.stringify(openaiReq)
@@ -268,7 +268,7 @@ export class AnthropicToRequestyProxy {
                 headers: {
                     'Authorization': `Bearer ${this.requestyApiKey}`,
                     'Content-Type': 'application/json',
-                    'HTTP-Referer': 'https://github.com/ruvnet/agentic-flow',
+                    'HTTP-Referer': 'the upstream project (see NOTICE)',
                     'X-Title': 'Agentic Flow'
                 },
                 body: JSON.stringify(openaiReq),

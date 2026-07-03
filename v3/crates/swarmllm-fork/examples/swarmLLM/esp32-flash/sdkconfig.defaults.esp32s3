@@ -1,4 +1,4 @@
-# ESP32-S3 sdkconfig overrides for ruvllm-esp32 tiny-agent (ADR-165).
+# ESP32-S3 sdkconfig overrides for swarmllm-esp32 tiny-agent (ADR-165).
 # Loaded by esp-idf-sys when target = xtensa-esp32s3-espidf.
 
 # CPU & memory

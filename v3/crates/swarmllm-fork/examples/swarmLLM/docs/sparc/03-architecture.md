@@ -1,4 +1,4 @@
-# RuvLLM: System Architecture
+# SwarmLLM: System Architecture
 
 ## SPARC Phase 3: Architecture
 
@@ -10,7 +10,7 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                              RuvLLM System                                   │
+│                              SwarmLLM System                                   │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │  ┌──────────────┐                                                            │
@@ -48,7 +48,7 @@
 │                                │                                            │
 │                                ▼                                            │
 │  ┌──────────────────────────────────────────────────────────────────────┐   │
-│  │                        Memory Layer (Ruvector)                        │   │
+│  │                        Memory Layer (Swarmvector)                        │   │
 │  │                                                                        │   │
 │  │  ┌─────────────┐   ┌─────────────┐   ┌─────────────┐   ┌──────────┐  │   │
 │  │  │    HNSW     │   │   Graph     │   │  Metadata   │   │ Writeback│  │   │
@@ -98,7 +98,7 @@
 
 ```
 ┌──────┐      ┌───────────┐      ┌────────┐      ┌───────┐      ┌──────────┐
-│Client│      │Orchestrator│     │Embedder│      │Ruvector│     │ Router   │
+│Client│      │Orchestrator│     │Embedder│      │Swarmvector│     │ Router   │
 └──┬───┘      └─────┬─────┘      └───┬────┘      └───┬───┘      └────┬─────┘
    │                │                │              │               │
    │  Query         │                │              │               │
@@ -174,7 +174,7 @@ pub struct Orchestrator {
 pub struct OrchestratorComponents {
     embedder: Arc<EmbeddingService>,
     router: Arc<FastGRNNRouter>,
-    memory: Arc<RuvectorMemory>,
+    memory: Arc<SwarmvectorMemory>,
     graph_attention: Arc<GraphAttentionEngine>,
     inference: Arc<LFM2InferencePool>,
     learning: Arc<SelfLearningService>,
@@ -227,7 +227,7 @@ pub struct EmbeddingService {
 pub struct EmbeddingConfig {
     /// Input dimension from encoder
     pub encoder_dim: usize,
-    /// Output dimension for ruvector
+    /// Output dimension for swarmvector
     pub output_dim: usize,
     /// Maximum token length
     pub max_tokens: usize,
@@ -366,11 +366,11 @@ impl FastGRNNRouter {
 }
 ```
 
-### 2.4 Ruvector Memory Layer
+### 2.4 Swarmvector Memory Layer
 
 ```rust
 /// Unified memory interface combining vector search and graph
-pub struct RuvectorMemory {
+pub struct SwarmvectorMemory {
     /// Core vector database
     vector_db: VectorDB,
     /// Graph store for relationships
@@ -392,7 +392,7 @@ pub struct MemoryConfig {
     pub writeback_interval_ms: u64,
 }
 
-impl RuvectorMemory {
+impl SwarmvectorMemory {
     /// Semantic search with graph expansion
     pub async fn search_with_graph(
         &self,
@@ -1029,7 +1029,7 @@ impl QualityJudge {
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                           │
 │  ┌─────────────────────────────────────────────────────────────────────┐│
-│  │                         RuvLLM Process                               ││
+│  │                         SwarmLLM Process                               ││
 │  │                                                                       ││
 │  │  ┌───────────┐  ┌───────────┐  ┌───────────┐  ┌───────────┐        ││
 │  │  │Orchestrator│  │ Embedder │  │  Router   │  │  Memory   │        ││
@@ -1079,7 +1079,7 @@ impl QualityJudge {
 │  │   Memory Tier   │   │  Inference Tier │                             │
 │  │                 │   │                 │                             │
 │  │ ┌─────────────┐ │   │ ┌─────────────┐ │                             │
-│  │ │  Ruvector   │ │   │ │   vLLM      │ │                             │
+│  │ │  Swarmvector   │ │   │ │   vLLM      │ │                             │
 │  │ │  Primary    │ │   │ │   Pool      │ │                             │
 │  │ │  (redb)     │ │   │ │             │ │                             │
 │  │ └─────────────┘ │   │ │ ┌───┐ ┌───┐ │ │                             │
@@ -1139,17 +1139,17 @@ impl QualityJudge {
 
 ---
 
-## 5. Integration with Existing Ruvector Crates
+## 5. Integration with Existing Swarmvector Crates
 
 ### 5.1 Dependency Graph
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                        RuvLLM Dependency Graph                           │
+│                        SwarmLLM Dependency Graph                           │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                           │
 │                           ┌───────────────┐                              │
-│                           │   ruvector-   │                              │
+│                           │   swarmvector-   │                              │
 │                           │     llm       │                              │
 │                           │   (NEW)       │                              │
 │                           └───────┬───────┘                              │
@@ -1158,7 +1158,7 @@ impl QualityJudge {
 │           │                       │                       │             │
 │           ▼                       ▼                       ▼             │
 │  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐     │
-│  │  ruvector-core  │    │ ruvector-graph  │    │ruvector-attention│    │
+│  │  swarmvector-core  │    │ swarmvector-graph  │    │swarmvector-attention│    │
 │  │                 │    │                 │    │                 │     │
 │  │  - VectorDB     │    │  - GraphStore   │    │  - MultiHead    │     │
 │  │  - HNSW         │    │  - Edges/Nodes  │    │  - GraphAttention│    │
@@ -1167,7 +1167,7 @@ impl QualityJudge {
 │           │                      │                      │              │
 │           │                      ▼                      │              │
 │           │            ┌─────────────────┐              │              │
-│           │            │  ruvector-gnn   │◀─────────────┘              │
+│           │            │  swarmvector-gnn   │◀─────────────┘              │
 │           │            │                 │                             │
 │           │            │  - GNN Layers   │                             │
 │           │            │  - EWC          │                             │
@@ -1179,7 +1179,7 @@ impl QualityJudge {
 │                                 │                                      │
 │                                 ▼                                      │
 │                       ┌─────────────────┐                              │
-│                       │ ruvector-router │                              │
+│                       │ swarmvector-router │                              │
 │                       │     -core       │                              │
 │                       │                 │                              │
 │                       │  - Quantization │                              │
@@ -1193,19 +1193,19 @@ impl QualityJudge {
 ### 5.2 API Integration Points
 
 ```rust
-// Integration with ruvector-core
-use ruvector_core::{VectorDB, VectorEntry, SearchQuery, DbOptions};
+// Integration with swarmvector-core
+use swarmvector_core::{VectorDB, VectorEntry, SearchQuery, DbOptions};
 
-// Integration with ruvector-gnn
-use ruvector_gnn::{
+// Integration with swarmvector-gnn
+use swarmvector_gnn::{
     ElasticWeightConsolidation,
     ReplayBuffer,
     Optimizer, OptimizerType,
     LearningRateScheduler, SchedulerType,
 };
 
-// Integration with ruvector-attention
-use ruvector_attention::{
+// Integration with swarmvector-attention
+use swarmvector_attention::{
     MultiHeadAttention,
     GraphAttention, GraphAttentionConfig,
     EdgeFeaturedAttention,
@@ -1213,11 +1213,11 @@ use ruvector_attention::{
     InfoNCELoss,
 };
 
-// Integration with ruvector-graph
-use ruvector_graph::{GraphStore, Node, Edge, EdgeType};
+// Integration with swarmvector-graph
+use swarmvector_graph::{GraphStore, Node, Edge, EdgeType};
 
-// New types for RuvLLM
-pub struct RuvLLMConfig {
+// New types for SwarmLLM
+pub struct SwarmLLMConfig {
     /// Core database options
     pub db_options: DbOptions,
     /// Graph attention configuration
@@ -1350,4 +1350,4 @@ Span: orchestrator.process [450ms]
 
 *Document Version: 1.0*
 *Last Updated: 2025-12-02*
-*Author: RuvLLM Architecture Team*
+*Author: SwarmLLM Architecture Team*

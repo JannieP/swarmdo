@@ -7,7 +7,7 @@ allowed-tools: Bash
 
 Surfaces the upstream `metaharness-darwin security bench` command. **This is
 the upstream's own ADR-155 — Darwin Shield — and is the closest reference
-implementation for swarmdo's nightly self-learning security harness ([#2417](https://github.com/ruvnet/swarmdo/pull/2417)).**
+implementation for swarmdo's nightly self-learning security harness ([#2417](the upstream project (see NOTICE))).**
 
 ## Why this matters for swarmdo's ADR-155
 

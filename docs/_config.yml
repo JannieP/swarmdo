@@ -1,7 +1,7 @@
-title: Rufflo Marketplace
+title: Swarmdo Marketplace
 description: Claude Code native agents, swarms, workers, and MCP tools
 theme: jekyll-theme-minimal
-baseurl: /rufflo
-url: https://ruvnet.github.io
+baseurl: /swarmdo
+url: https://upstream.github.io
 plugins:
   - jekyll-seo-tag

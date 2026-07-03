@@ -1,4 +1,4 @@
-# ADR-027: RuVector PostgreSQL Integration for Rufflo v3
+# ADR-027: SwarmVector PostgreSQL Integration for Swarmdo v3
 
 **Status:** Proposed
 **Date:** 2026-01-16
@@ -7,7 +7,7 @@
 
 ## Context
 
-Rufflo v3 currently uses a hybrid memory backend (ADR-009) combining SQLite for structured queries and AgentDB for vector search. While this approach works well for many use cases, production deployments increasingly require:
+Swarmdo v3 currently uses a hybrid memory backend (ADR-009) combining SQLite for structured queries and AgentDB for vector search. While this approach works well for many use cases, production deployments increasingly require:
 
 1. **Scalable Vector Database** - AgentDB (in-memory HNSW) has limitations for datasets exceeding available RAM
 2. **Graph Capabilities** - No native support for graph queries, relationship traversal, or GNN-based analysis
@@ -16,7 +16,7 @@ Rufflo v3 currently uses a hybrid memory backend (ADR-009) combining SQLite for 
 5. **Self-Learning Optimization** - No query optimization learning from access patterns
 6. **Production Reliability** - Need for proven database with ACID guarantees, replication, and backup
 
-The `@ruvector/postgres-cli` package provides a production-grade PostgreSQL extension with:
+The `@swarmvector/postgres-cli` package provides a production-grade PostgreSQL extension with:
 - **53+ SQL functions** for vector and graph operations
 - **39 attention mechanisms** for neural processing
 - **GNN layers** for graph-aware queries
@@ -27,7 +27,7 @@ This creates an opportunity to offer users a high-performance alternative to the
 
 ## Decision
 
-Integrate `@ruvector/postgres-cli` as an **optional plugin bridge** in Rufflo v3, following the plugin architecture established in ADR-015-v2. This provides a production-grade vector database option while maintaining backward compatibility with existing AgentDB deployments.
+Integrate `@swarmvector/postgres-cli` as an **optional plugin bridge** in Swarmdo v3, following the plugin architecture established in ADR-015-v2. This provides a production-grade vector database option while maintaining backward compatibility with existing AgentDB deployments.
 
 ### Design Principles
 
@@ -68,7 +68,7 @@ Integrate `@ruvector/postgres-cli` as an **optional plugin bridge** in Rufflo v3
 
 ```sql
 -- Example: GNN-enhanced semantic search
-SELECT * FROM ruvector.gnn_search(
+SELECT * FROM swarmvector.gnn_search(
   query_embedding := $1,
   graph_context := 'code_dependencies',
   layers := ARRAY['GAT', 'GraphSAGE'],
@@ -108,7 +108,7 @@ The query optimizer learns from access patterns to:
 
 ```sql
 -- Enable self-learning optimizer
-SELECT ruvector.enable_learning_optimizer(
+SELECT swarmvector.enable_learning_optimizer(
   learning_rate := 0.01,
   exploration_factor := 0.1,
   min_samples := 1000
@@ -120,9 +120,9 @@ SELECT ruvector.enable_learning_optimizer(
 ### Plugin Structure
 
 ```
-v3/@rufflo/plugins/src/
+v3/@swarmdo/plugins/src/
 ├── bridges/
-│   └── ruvector-postgres/
+│   └── swarmvector-postgres/
 │       ├── index.ts                 # Plugin entry point
 │       ├── plugin.ts                # IPlugin implementation
 │       ├── connection-manager.ts    # PostgreSQL connection pooling
@@ -133,27 +133,27 @@ v3/@rufflo/plugins/src/
 │       ├── migration-helper.ts      # AgentDB migration utilities
 │       └── types.ts                 # TypeScript interfaces
 ├── mcp-tools/
-│   └── ruvector-postgres-tools.ts   # MCP tool definitions
+│   └── swarmvector-postgres-tools.ts   # MCP tool definitions
 └── collections/
     └── storage/
-        └── ruvector-postgres.ts     # Collection entry
+        └── swarmvector-postgres.ts     # Collection entry
 ```
 
 ### Plugin Implementation
 
 ```typescript
-// v3/@rufflo/plugins/src/bridges/ruvector-postgres/plugin.ts
+// v3/@swarmdo/plugins/src/bridges/swarmvector-postgres/plugin.ts
 
 import { IPlugin, PluginMetadata, PluginContext } from '../../core/plugin-interface.js';
 import { ConnectionManager } from './connection-manager.js';
 import { QueryBuilder } from './query-builder.js';
 
-export class RuVectorPostgresPlugin implements IPlugin {
+export class SwarmVectorPostgresPlugin implements IPlugin {
   readonly metadata: PluginMetadata = {
-    name: 'ruvector-postgres',
+    name: 'swarmvector-postgres',
     version: '1.0.0',
-    description: 'RuVector PostgreSQL integration for high-performance vector/graph operations',
-    author: 'Rufflo Team',
+    description: 'SwarmVector PostgreSQL integration for high-performance vector/graph operations',
+    author: 'Swarmdo Team',
     tags: ['vector', 'graph', 'postgresql', 'storage', 'production'],
     dependencies: [
       { name: 'core-plugin', version: '^3.0.0' }
@@ -168,9 +168,9 @@ export class RuVectorPostgresPlugin implements IPlugin {
   async initialize(context: PluginContext): Promise<void> {
     this.context = context;
 
-    const config = context.config.get<RuVectorPostgresConfig>('ruvector-postgres');
+    const config = context.config.get<SwarmVectorPostgresConfig>('swarmvector-postgres');
     if (!config) {
-      context.logger.warn('RuVector PostgreSQL not configured, plugin disabled');
+      context.logger.warn('SwarmVector PostgreSQL not configured, plugin disabled');
       return;
     }
 
@@ -191,15 +191,15 @@ export class RuVectorPostgresPlugin implements IPlugin {
 
     // Initialize query builder
     this.queryBuilder = new QueryBuilder({
-      schema: config.schema ?? 'ruvector',
+      schema: config.schema ?? 'swarmvector',
       defaultDimensions: config.dimensions ?? 1536,
       enableLearning: config.enableLearning ?? true,
     });
 
-    // Verify RuVector extension is installed
+    // Verify SwarmVector extension is installed
     await this.verifyExtension();
 
-    context.logger.info('RuVector PostgreSQL plugin initialized');
+    context.logger.info('SwarmVector PostgreSQL plugin initialized');
   }
 
   async shutdown(): Promise<void> {
@@ -207,7 +207,7 @@ export class RuVectorPostgresPlugin implements IPlugin {
       await this.connectionManager.shutdown();
       this.connectionManager = null;
     }
-    this.context?.logger.info('RuVector PostgreSQL plugin shut down');
+    this.context?.logger.info('SwarmVector PostgreSQL plugin shut down');
   }
 
   getMCPTools(): MCPTool[] {
@@ -223,12 +223,12 @@ export class RuVectorPostgresPlugin implements IPlugin {
 
   private async verifyExtension(): Promise<void> {
     const result = await this.connectionManager!.query(
-      "SELECT extversion FROM pg_extension WHERE extname = 'ruvector'"
+      "SELECT extversion FROM pg_extension WHERE extname = 'swarmvector'"
     );
     if (result.rows.length === 0) {
       throw new Error(
-        'RuVector PostgreSQL extension not installed. ' +
-        'Install with: CREATE EXTENSION ruvector;'
+        'SwarmVector PostgreSQL extension not installed. ' +
+        'Install with: CREATE EXTENSION swarmvector;'
       );
     }
   }
@@ -240,7 +240,7 @@ export class RuVectorPostgresPlugin implements IPlugin {
 ### Connection Pooling
 
 ```typescript
-// v3/@rufflo/plugins/src/bridges/ruvector-postgres/connection-manager.ts
+// v3/@swarmdo/plugins/src/bridges/swarmvector-postgres/connection-manager.ts
 
 import { Pool, PoolClient, PoolConfig } from 'pg';
 
@@ -408,13 +408,13 @@ export class ConnectionManager {
 ### MCP Tool Definitions
 
 ```typescript
-// v3/@rufflo/plugins/src/mcp-tools/ruvector-postgres-tools.ts
+// v3/@swarmdo/plugins/src/mcp-tools/swarmvector-postgres-tools.ts
 
 import type { MCPTool } from '../core/types.js';
 
-export const ruvectorPostgresTools: MCPTool[] = [
+export const swarmvectorPostgresTools: MCPTool[] = [
   {
-    name: 'ruvector-postgres/vector-search',
+    name: 'swarmvector-postgres/vector-search',
     description: 'Perform high-performance vector similarity search using PostgreSQL HNSW index',
     category: 'storage',
     version: '1.0.0',
@@ -461,13 +461,13 @@ export const ruvectorPostgresTools: MCPTool[] = [
       ]
     },
     handler: async (input, context) => {
-      const plugin = context.services.get<RuVectorPostgresPlugin>('ruvector-postgres');
+      const plugin = context.services.get<SwarmVectorPostgresPlugin>('swarmvector-postgres');
       return plugin.vectorSearch(input);
     }
   },
 
   {
-    name: 'ruvector-postgres/graph-search',
+    name: 'swarmvector-postgres/graph-search',
     description: 'Execute graph-aware semantic search using GNN layers',
     category: 'storage',
     version: '1.0.0',
@@ -497,13 +497,13 @@ export const ruvectorPostgresTools: MCPTool[] = [
       required: ['query', 'graphContext']
     },
     handler: async (input, context) => {
-      const plugin = context.services.get<RuVectorPostgresPlugin>('ruvector-postgres');
+      const plugin = context.services.get<SwarmVectorPostgresPlugin>('swarmvector-postgres');
       return plugin.graphSearch(input);
     }
   },
 
   {
-    name: 'ruvector-postgres/attention-query',
+    name: 'swarmvector-postgres/attention-query',
     description: 'Execute attention-weighted semantic query with configurable mechanism',
     category: 'storage',
     version: '1.0.0',
@@ -530,13 +530,13 @@ export const ruvectorPostgresTools: MCPTool[] = [
       required: ['query']
     },
     handler: async (input, context) => {
-      const plugin = context.services.get<RuVectorPostgresPlugin>('ruvector-postgres');
+      const plugin = context.services.get<SwarmVectorPostgresPlugin>('swarmvector-postgres');
       return plugin.attentionQuery(input);
     }
   },
 
   {
-    name: 'ruvector-postgres/bulk-insert',
+    name: 'swarmvector-postgres/bulk-insert',
     description: 'Bulk insert vectors with automatic batching (52,000+ inserts/sec)',
     category: 'storage',
     version: '1.0.0',
@@ -563,13 +563,13 @@ export const ruvectorPostgresTools: MCPTool[] = [
       required: ['entries']
     },
     handler: async (input, context) => {
-      const plugin = context.services.get<RuVectorPostgresPlugin>('ruvector-postgres');
+      const plugin = context.services.get<SwarmVectorPostgresPlugin>('swarmvector-postgres');
       return plugin.bulkInsert(input);
     }
   },
 
   {
-    name: 'ruvector-postgres/hyperbolic-search',
+    name: 'swarmvector-postgres/hyperbolic-search',
     description: 'Search using hyperbolic embeddings for hierarchical data',
     category: 'storage',
     version: '1.0.0',
@@ -590,13 +590,13 @@ export const ruvectorPostgresTools: MCPTool[] = [
       required: ['query']
     },
     handler: async (input, context) => {
-      const plugin = context.services.get<RuVectorPostgresPlugin>('ruvector-postgres');
+      const plugin = context.services.get<SwarmVectorPostgresPlugin>('swarmvector-postgres');
       return plugin.hyperbolicSearch(input);
     }
   },
 
   {
-    name: 'ruvector-postgres/optimize',
+    name: 'swarmvector-postgres/optimize',
     description: 'Optimize indexes and enable self-learning query optimizer',
     category: 'storage',
     version: '1.0.0',
@@ -627,7 +627,7 @@ export const ruvectorPostgresTools: MCPTool[] = [
       required: ['table']
     },
     handler: async (input, context) => {
-      const plugin = context.services.get<RuVectorPostgresPlugin>('ruvector-postgres');
+      const plugin = context.services.get<SwarmVectorPostgresPlugin>('swarmvector-postgres');
       return plugin.optimize(input);
     }
   }
@@ -637,7 +637,7 @@ export const ruvectorPostgresTools: MCPTool[] = [
 ### Async Operations with Batching
 
 ```typescript
-// v3/@rufflo/plugins/src/bridges/ruvector-postgres/embedding-adapter.ts
+// v3/@swarmdo/plugins/src/bridges/swarmvector-postgres/embedding-adapter.ts
 
 export class EmbeddingAdapter {
   private connectionManager: ConnectionManager;
@@ -811,7 +811,7 @@ const benchmarkTargets = {
 
 ```typescript
 // Configuration with secure credential handling
-interface RuVectorPostgresConfig {
+interface SwarmVectorPostgresConfig {
   // Direct credentials (development only)
   host?: string;
   port?: number;
@@ -834,8 +834,8 @@ interface RuVectorPostgresConfig {
 }
 
 // Example secure configuration
-const secureConfig: RuVectorPostgresConfig = {
-  connectionString: process.env.RUVECTOR_DATABASE_URL,
+const secureConfig: SwarmVectorPostgresConfig = {
+  connectionString: process.env.SWARMVECTOR_DATABASE_URL,
   ssl: {
     rejectUnauthorized: true,
     ca: fs.readFileSync('/etc/ssl/certs/rds-ca-2019-root.pem').toString()
@@ -949,13 +949,13 @@ async function withAudit<T>(
 The migration provides a backward-compatible layer that allows gradual transition:
 
 ```typescript
-// v3/@rufflo/plugins/src/bridges/ruvector-postgres/migration-helper.ts
+// v3/@swarmdo/plugins/src/bridges/swarmvector-postgres/migration-helper.ts
 
 export class MigrationHelper {
   private agentDB: AgentDBAdapter;
-  private postgres: RuVectorPostgresPlugin;
+  private postgres: SwarmVectorPostgresPlugin;
 
-  constructor(agentDB: AgentDBAdapter, postgres: RuVectorPostgresPlugin) {
+  constructor(agentDB: AgentDBAdapter, postgres: SwarmVectorPostgresPlugin) {
     this.agentDB = agentDB;
     this.postgres = postgres;
   }
@@ -1050,7 +1050,7 @@ class DualWriteAdapter implements IMemoryBackend {
 
   async search(query: SearchQuery): Promise<SearchResult[]> {
     // Route based on query type
-    if (query.type === 'semantic' && this.secondary instanceof RuVectorPostgresPlugin) {
+    if (query.type === 'semantic' && this.secondary instanceof SwarmVectorPostgresPlugin) {
       return this.secondary.search(query);
     }
     return this.primary.search(query);
@@ -1064,23 +1064,23 @@ class DualWriteAdapter implements IMemoryBackend {
 
 1. **Phase 1: Install and Configure**
    ```bash
-   # Install PostgreSQL with RuVector extension
-   npm install @ruvector/postgres-cli pg
+   # Install PostgreSQL with SwarmVector extension
+   npm install @swarmvector/postgres-cli pg
 
    # Initialize database
-   npx ruvector init --connection-string "$DATABASE_URL"
+   npx swarmvector init --connection-string "$DATABASE_URL"
    ```
 
 2. **Phase 2: Enable Dual-Write**
    ```typescript
-   // rufflo.config.ts
+   // swarmdo.config.ts
    export default {
      memory: {
        backend: 'dual-write',
        primary: 'agentdb',
        secondary: {
-         type: 'ruvector-postgres',
-         connectionString: process.env.RUVECTOR_DATABASE_URL
+         type: 'swarmvector-postgres',
+         connectionString: process.env.SWARMVECTOR_DATABASE_URL
        }
      }
    };
@@ -1088,9 +1088,9 @@ class DualWriteAdapter implements IMemoryBackend {
 
 3. **Phase 3: Migrate Existing Data**
    ```bash
-   npx rufflo migrate \
+   npx swarmdo migrate \
      --from agentdb \
-     --to ruvector-postgres \
+     --to swarmvector-postgres \
      --batch-size 5000
    ```
 
@@ -1098,7 +1098,7 @@ class DualWriteAdapter implements IMemoryBackend {
    ```typescript
    export default {
      memory: {
-       backend: 'ruvector-postgres',
+       backend: 'swarmvector-postgres',
        fallback: 'agentdb'  // Keep AgentDB as fallback
      }
    };
@@ -1108,7 +1108,7 @@ class DualWriteAdapter implements IMemoryBackend {
    ```typescript
    export default {
      memory: {
-       backend: 'ruvector-postgres'
+       backend: 'swarmvector-postgres'
        // AgentDB removed
      }
    };
@@ -1119,7 +1119,7 @@ class DualWriteAdapter implements IMemoryBackend {
 ```typescript
 // Ensure existing code continues to work
 const memory = await createMemoryService({
-  backend: 'ruvector-postgres',
+  backend: 'swarmvector-postgres',
   // ... config
 });
 
@@ -1129,7 +1129,7 @@ const result = await memory.get(id);
 const results = await memory.search({ content: 'query', k: 10 });
 
 // New capabilities available via plugin API
-const plugin = memory.getPlugin('ruvector-postgres');
+const plugin = memory.getPlugin('swarmvector-postgres');
 await plugin.graphSearch({ query: 'code dependencies', graphContext: 'ast' });
 await plugin.attentionQuery({ query: 'complex reasoning', mechanism: 'multi_head' });
 ```
@@ -1149,7 +1149,7 @@ await plugin.attentionQuery({ query: 'complex reasoning', mechanism: 'multi_head
 
 ### Negative
 
-1. **PostgreSQL Dependency** - Requires PostgreSQL 14+ with RuVector extension installed
+1. **PostgreSQL Dependency** - Requires PostgreSQL 14+ with SwarmVector extension installed
 2. **Infrastructure Complexity** - Additional database server to manage (unless using managed PostgreSQL)
 3. **Network Latency** - Remote database adds network round-trip vs in-process AgentDB
 4. **Learning Curve** - New SQL functions and concepts to learn
@@ -1188,16 +1188,16 @@ await plugin.attentionQuery({ query: 'complex reasoning', mechanism: 'multi_head
 - [ ] End-to-end tests
 - [ ] Security audit
 - [ ] Performance optimization
-- [ ] CLI integration (`rufflo memory --backend ruvector-postgres`)
+- [ ] CLI integration (`swarmdo memory --backend swarmvector-postgres`)
 - [ ] User documentation
 
 ## References
 
 - **ADR-009**: Hybrid Memory Backend (AgentDB + SQLite)
 - **ADR-015-v2**: Unified Plugin System
-- **ADR-017**: RuVector Integration Architecture
+- **ADR-017**: SwarmVector Integration Architecture
 - **ADR-006**: Unified Memory Service
-- **@ruvector/postgres-cli**: https://github.com/ruvnet/ruvector-postgres
+- **@swarmvector/postgres-cli**: the upstream project (see NOTICE)
 - **pgvector**: https://github.com/pgvector/pgvector
 - **PostgreSQL**: https://www.postgresql.org/docs/
 
@@ -1230,10 +1230,10 @@ FROM STDIN WITH (FORMAT binary);
 
 ```sql
 -- Create graph relationship
-SELECT ruvector.add_edge('code_deps', $1, $2, $3);
+SELECT swarmvector.add_edge('code_deps', $1, $2, $3);
 
 -- GNN-enhanced search
-SELECT * FROM ruvector.gnn_search(
+SELECT * FROM swarmvector.gnn_search(
   query := $1,
   graph := 'code_deps',
   layers := ARRAY['GAT', 'GraphSAGE'],
@@ -1241,14 +1241,14 @@ SELECT * FROM ruvector.gnn_search(
 );
 
 -- Subgraph extraction
-SELECT * FROM ruvector.extract_subgraph('code_deps', $1, depth := 2);
+SELECT * FROM swarmvector.extract_subgraph('code_deps', $1, depth := 2);
 ```
 
 ### Attention Operations
 
 ```sql
 -- Multi-head attention query
-SELECT * FROM ruvector.attention_query(
+SELECT * FROM swarmvector.attention_query(
   query := $1,
   documents := 'embeddings',
   mechanism := 'multi_head',
@@ -1256,7 +1256,7 @@ SELECT * FROM ruvector.attention_query(
 );
 
 -- Cross-attention between tables
-SELECT * FROM ruvector.cross_attention(
+SELECT * FROM swarmvector.cross_attention(
   queries := 'user_queries',
   keys := 'document_embeddings',
   values := 'document_content'
@@ -1267,13 +1267,13 @@ SELECT * FROM ruvector.cross_attention(
 
 ```sql
 -- Poincare ball distance
-SELECT ruvector.poincare_distance($1, $2, curvature := -1.0);
+SELECT swarmvector.poincare_distance($1, $2, curvature := -1.0);
 
 -- Hyperbolic centroid
-SELECT ruvector.poincare_centroid(ARRAY[emb1, emb2, emb3]);
+SELECT swarmvector.poincare_centroid(ARRAY[emb1, emb2, emb3]);
 
 -- Hierarchical search
-SELECT * FROM ruvector.hyperbolic_search(
+SELECT * FROM swarmvector.hyperbolic_search(
   query := $1,
   model := 'poincare',
   include_ancestors := true
@@ -1287,7 +1287,7 @@ SELECT * FROM ruvector.hyperbolic_search(
 ### Development Configuration
 
 ```typescript
-const devConfig: RuVectorPostgresConfig = {
+const devConfig: SwarmVectorPostgresConfig = {
   host: 'localhost',
   port: 5432,
   database: 'claude_flow_dev',
@@ -1302,7 +1302,7 @@ const devConfig: RuVectorPostgresConfig = {
 ### Production Configuration (AWS RDS)
 
 ```typescript
-const prodConfig: RuVectorPostgresConfig = {
+const prodConfig: SwarmVectorPostgresConfig = {
   connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: true,
@@ -1322,7 +1322,7 @@ const prodConfig: RuVectorPostgresConfig = {
 ### High-Availability Configuration
 
 ```typescript
-const haConfig: RuVectorPostgresConfig = {
+const haConfig: SwarmVectorPostgresConfig = {
   // Primary for writes
   primary: {
     connectionString: process.env.PRIMARY_DATABASE_URL,

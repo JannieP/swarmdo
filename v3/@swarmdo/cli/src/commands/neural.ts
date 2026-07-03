@@ -2,7 +2,7 @@
  * V3 CLI Neural Command
  * Neural pattern training, MoE, Flash Attention, pattern learning
  *
- * Created with ❤️ by ruv.io
+ * Created with ❤️ by swarmdo.com
  */
 
 import type { Command, CommandContext, CommandResult } from '../types.js';
@@ -4259,7 +4259,7 @@ export const neuralCommand: Command = {
     output.writeln();
     output.writeln('Use --help with subcommands for more info');
     output.writeln();
-    output.writeln(output.dim('Created with ❤️ by ruv.io'));
+    output.writeln(output.dim('Created with ❤️ by swarmdo.com'));
     return { success: true };
   },
 };

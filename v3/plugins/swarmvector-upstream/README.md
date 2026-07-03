@@ -24,7 +24,7 @@ This directory contains references and integration bridges for upstream SwarmVec
 
 ## Upstream Repository
 
-All packages are sourced from: https://github.com/ruvnet/swarmvector
+All packages are sourced from: the upstream project (see NOTICE)
 
 ## Plugin Dependencies
 

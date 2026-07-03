@@ -1834,7 +1834,7 @@ export async function bridgeDeleteHierarchical(options: {
     // 1. agentdb@3.0.0-alpha.13+: ReflexionMemory.deleteEpisode propagates through
     //    graph adapter / generic graph backend / vector backend AND purges SQL
     //    episodes + episode_embeddings rows. Single call, durably consistent.
-    //    See agentic-flow#150/#151 (closes ruvnet/SwarmVector#427 the cli-visible way).
+    //    See agentic-flow#150/#151 (closes upstream/SwarmVector#427 the cli-visible way).
     const reflexion = registry.get('reflexionMemory');
     if (reflexion && typeof reflexion.deleteEpisode === 'function') {
       try {

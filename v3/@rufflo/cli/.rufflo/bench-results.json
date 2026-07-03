@@ -13,14 +13,14 @@
     ]
   },
   "embeddingBackend": {
-    "backend": "ruvector (all-MiniLM-L6-v2)",
+    "backend": "swarmvector (all-MiniLM-L6-v2)",
     "dims": 384
   },
   "ed25519": {
     "iterations": 0,
     "signsPerSecond": null,
     "verifiesPerSecond": null,
-    "reason": "@noble/ed25519 unavailable (used by plugin-agent-federation; install with: pnpm add -w @noble/ed25519). Cannot find module '/@id/@noble/ed25519' imported from '/Users/janpieterse/Projects/ruflo/v3/@rufflo/cli/src/commands/demo.ts'"
+    "reason": "@noble/ed25519 unavailable (used by plugin-agent-federation; install with: pnpm add -w @noble/ed25519). Cannot find module '/@id/@noble/ed25519' imported from '/Users/janpieterse/Projects/swarmdo/v3/@swarmdo/cli/src/commands/demo.ts'"
   },
   "agentRun": {
     "success": false,
@@ -30,5 +30,5 @@
     "output": null,
     "reason": "skipped via --skip-llm"
   },
-  "source": "rufflo demo"
+  "source": "swarmdo demo"
 }

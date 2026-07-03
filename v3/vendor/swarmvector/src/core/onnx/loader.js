@@ -177,7 +177,7 @@ export class ModelLoader {
      */
     async _diskCacheDir(modelName) {
         if (typeof process === 'undefined' || !process.versions?.node) return null;
-        const home = process.env.RUVECTOR_CACHE_DIR
+        const home = process.env.SWARMVECTOR_CACHE_DIR
             || process.env.HOME || process.env.USERPROFILE || '/tmp';
         const path = await import('node:path');
         return path.join(home, '.swarmvector', 'models', modelName);

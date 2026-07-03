@@ -27,7 +27,7 @@ describe('validatePath (#2352)', () => {
     });
 
     it('accepts mixed separators', () => {
-      const r = validatePath('C:\\Users\\ruv/Projects\\swarmdo/file.ts', 'filePath');
+      const r = validatePath('C:\\Users\\swarm/Projects\\swarmdo/file.ts', 'filePath');
       expect(r.valid).toBe(true);
     });
   });
@@ -40,7 +40,7 @@ describe('validatePath (#2352)', () => {
     });
 
     it('accepts an absolute POSIX path', () => {
-      const r = validatePath('/home/ruv/repo/src/file.ts', 'filePath');
+      const r = validatePath('/home/swarm/repo/src/file.ts', 'filePath');
       expect(r.valid).toBe(true);
     });
   });

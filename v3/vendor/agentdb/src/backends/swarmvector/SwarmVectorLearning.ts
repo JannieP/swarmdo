@@ -27,7 +27,7 @@ export interface EnhancementOptions {
 }
 
 export class SwarmVectorLearning {
-  private gnnLayer: any;  // RuvectorLayer from @swarmvector/gnn
+  private gnnLayer: any;  // SwarmvectorLayer from @swarmvector/gnn
   private config: LearningConfig;
   private initialized = false;
   private differentiableSearch: any;
@@ -50,7 +50,7 @@ export class SwarmVectorLearning {
       // Dynamic import with runtime property access
       const gnnModule = await import('@swarmvector/gnn') as any;
 
-      this.gnnLayer = new gnnModule.RuvectorLayer(
+      this.gnnLayer = new gnnModule.SwarmvectorLayer(
         this.config.inputDim,
         this.config.hiddenDim,
         this.config.heads,
@@ -212,7 +212,7 @@ export class SwarmVectorLearning {
 
     try {
       const gnnModule = await import('@swarmvector/gnn') as any;
-      learning.gnnLayer = gnnModule.RuvectorLayer.fromJson(json);
+      learning.gnnLayer = gnnModule.SwarmvectorLayer.fromJson(json);
       return learning;
     } catch (error) {
       throw new Error(`Failed to load GNN from JSON: ${(error as Error).message}`);

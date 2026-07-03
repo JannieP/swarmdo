@@ -23,7 +23,7 @@ importers:
       '@noble/ed25519':
         specifier: ^2.1.0
         version: 2.3.0
-      '@rufvector/rabitq-wasm':
+      '@swarmvector/rabitq-wasm':
         specifier: ^0.1.0
         version: 0.1.0
       semver:
@@ -61,19 +61,19 @@ importers:
       '@claude-flow/plugin-gastown-bridge':
         specifier: ^0.1.3
         version: 0.1.3(@claude-flow/memory@3.0.0-alpha.14(@types/node@20.19.39)(zod@3.25.76))
-      '@rufvector/attention':
+      '@swarmvector/attention':
         specifier: ^0.1.3
         version: 0.1.32
-      '@rufvector/core':
+      '@swarmvector/core':
         specifier: ^0.1.30
         version: 0.1.31
-      '@rufvector/router':
+      '@swarmvector/router':
         specifier: ^0.1.30
         version: 0.1.30
-      '@rufvector/router-linux-x64-gnu':
+      '@swarmvector/router-linux-x64-gnu':
         specifier: ^0.1.30
         version: 0.1.30
-      '@rufvector/sona':
+      '@swarmvector/sona':
         specifier: ^0.1.5
         version: 0.1.6
       agentdb:
@@ -250,7 +250,7 @@ packages:
     os: [linux]
 
   '@esbuild/linux-arm64@0.27.7':
-    resolution: {integrity: sha512-RZPHBoxXuNnPQO9rvjh5jdkRmVizktkT7TCDkDmQ0W2SwHInKCAV95GRuvdSvA7w4VMwfCjUiPwDi0ZO6Nfe9A==}
+    resolution: {integrity: sha512-RZPHBoxXuNnPQO9rvjh5jdkRmVizktkT7TCDkDmQ0W2SwHInKCAV95GSwarmdSvA7w4VMwfCjUiPwDi0ZO6Nfe9A==}
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [linux]
@@ -975,401 +975,401 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@rufvector/attention-darwin-arm64@0.1.32':
+  '@swarmvector/attention-darwin-arm64@0.1.32':
     resolution: {integrity: sha512-CQ/oftq9o9t2EEBwCfUfdZsxuzHRXrHhtdZk05GZfvPxiDbsuw3NLgDQRR3cvg+8xU9lAmzer+8WCGdxbgX7vQ==}
     cpu: [arm64]
     os: [darwin]
 
-  '@rufvector/attention-darwin-x64@0.1.32':
+  '@swarmvector/attention-darwin-x64@0.1.32':
     resolution: {integrity: sha512-S11zMfLn+nZJlozLE4b8zVERdSTzD4DJ4Xb+bAUavTLrptYdIhJ0EzqPvCjF1XcSyAgAAkE9+u0oLEjVmAhT3Q==}
     cpu: [x64]
     os: [darwin]
 
-  '@rufvector/attention-linux-arm64-gnu@0.1.32':
+  '@swarmvector/attention-linux-arm64-gnu@0.1.32':
     resolution: {integrity: sha512-eySb6dYHy1WZ3RWuR80PP9r3X6wDWrTZ26bzZ7jEhg3o61bYwoRJ9BphSj0cSUdz1OMwcu163M/ddR1SM8/Ieg==}
     cpu: [arm64]
     os: [linux]
 
-  '@rufvector/attention-linux-x64-gnu@0.1.32':
+  '@swarmvector/attention-linux-x64-gnu@0.1.32':
     resolution: {integrity: sha512-Xch9eOJVMPouOB3L05VUHVA8RofzRnXh6tpEpIScSrkG6oqHwWaVf4Ku8SHe5YZ3FIsM+Oj1jrv11jtN56rpDg==}
     cpu: [x64]
     os: [linux]
 
-  '@rufvector/attention-win32-x64-msvc@0.1.32':
+  '@swarmvector/attention-win32-x64-msvc@0.1.32':
     resolution: {integrity: sha512-KMeo9ruZySGtyw1NFIE/6wWoGgPa07FhUplCVP75Y3y5JSFXrd6NjgEIfSItQOZ0RVRzTeXuUglkOzMo0kb/6Q==}
     cpu: [x64]
     os: [win32]
 
-  '@rufvector/attention@0.1.32':
+  '@swarmvector/attention@0.1.32':
     resolution: {integrity: sha512-7ePEASX4+Y8qVU2p2CszL/fgP+E3BRSZm7oukDaTwED5HSrw1jdQk75LijR488s3dYYeHdgoSv67P+WWHbM98A==}
 
-  '@rufvector/core@0.1.31':
+  '@swarmvector/core@0.1.31':
     resolution: {integrity: sha512-DLyWGgSFislyXglfODFwpysZdOoh+eWILF18ecgd6HNPgOylBUNoObW32odqJScmmrX+7150ndWFtdFHO9nGqw==}
     engines: {node: '>=18.0.0'}
 
-  '@rufvector/edge-full@0.1.0':
+  '@swarmvector/edge-full@0.1.0':
     resolution: {integrity: sha512-GSvq2bB+aTNXpISTqccdZwOroRLSdQhi33L7569QUVi9P7a03hEtdZSX/Gk5aWtDufp230T57uLXQUA1Q0uBeQ==}
 
-  '@rufvector/gnn-darwin-arm64@0.1.25':
+  '@swarmvector/gnn-darwin-arm64@0.1.25':
     resolution: {integrity: sha512-/MfLrqsIGxcMVHRW5ZyaU+0w+tnoEw+sLrQCYj/o3E7Gu0Cc+5QFE84p9CJUtaJLO/T+x5kEYLLC4iBwbYjkNg==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [darwin]
 
-  '@rufvector/gnn-darwin-x64@0.1.25':
+  '@swarmvector/gnn-darwin-x64@0.1.25':
     resolution: {integrity: sha512-Zw8HGUEFzWFVkTpMP4D9zoLMh5Tn6ztZsa74o6sMLKkXjWLIOhRIBBUXNtiJ6fv8QMXqqJyhNmBFNRXlglmLzA==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [darwin]
 
-  '@rufvector/gnn-linux-arm64-gnu@0.1.25':
+  '@swarmvector/gnn-linux-arm64-gnu@0.1.25':
     resolution: {integrity: sha512-Nran7u3oAth3eXS0hq0cQiYr85wAJDM9tdVGApa5LhI1RqSgXlvC2g+AjCBA+074TUfQboKcH38hpnfuF2hpRA==}
     engines: {node: '>= 18'}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
 
-  '@rufvector/gnn-linux-arm64-musl@0.1.25':
+  '@swarmvector/gnn-linux-arm64-musl@0.1.25':
     resolution: {integrity: sha512-Xih6WQ9frA4VpFtQSHWj0frk+fCuEzFDzeMme0QWzUcQZvMUzqiRiSRSRB8jatas7Skbzl+4ZRi6C6THMlccJg==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
     libc: [musl]
 
-  '@rufvector/gnn-linux-x64-gnu@0.1.25':
+  '@swarmvector/gnn-linux-x64-gnu@0.1.25':
     resolution: {integrity: sha512-CwEk4cQ/whmHtAPu6b9hnUAgQiK1DrUDPumXGLh9O4b/WmwjddFfswfoRvacbSMMqwyXGLnAnidjhDZFBx06EQ==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
 
-  '@rufvector/gnn-linux-x64-musl@0.1.25':
+  '@swarmvector/gnn-linux-x64-musl@0.1.25':
     resolution: {integrity: sha512-4nVcUFeN7dES6/mJ3e00FpZvZVZpGOQFFwWotHENFgNwIQc8XLqbbyeI3/rwhC1HJxxwf0oR+ianYoWKQptI/Q==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
     libc: [musl]
 
-  '@rufvector/gnn-win32-x64-msvc@0.1.25':
+  '@swarmvector/gnn-win32-x64-msvc@0.1.25':
     resolution: {integrity: sha512-tJNwffB5jzb6g+5r2H9r8X2oa1q0dSHWN7pXDV9JLh6kYmsk55v6vjaYe7H7M3fP51BCrUGu+vVTiBlBoVvrYA==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
 
-  '@rufvector/gnn@0.1.25':
+  '@swarmvector/gnn@0.1.25':
     resolution: {integrity: sha512-4q9HRHzA6IzCi2gXkppCuj8+y5jBN9xw9ea3nLq0WwtOc7zSK2x0n+zsNPiQVAeuGFO8CBTPjRyIDbXAOPvtsQ==}
     engines: {node: '>= 10'}
 
-  '@rufvector/graph-node-darwin-arm64@2.0.4':
+  '@swarmvector/graph-node-darwin-arm64@2.0.4':
     resolution: {integrity: sha512-9YBCI4JFDNCGSDzSApZng3yjdAb7u3Rq2Fn4yyuGbHy26fEie9TqfFDNQ7d+uK6mPcxDVJDCPnIOKcHnFsyMBQ==}
     engines: {node: '>=18.0.0'}
     cpu: [arm64]
     os: [darwin]
 
-  '@rufvector/graph-node-darwin-x64@2.0.4':
+  '@swarmvector/graph-node-darwin-x64@2.0.4':
     resolution: {integrity: sha512-WW07+HmIdbv3jij2tqRWbkJt5m6uR76PXDosIwOkwBjyLbV3Ck5kSW5DONctA6cOQuTEeCcOo9sIKqr3J/f2pQ==}
     engines: {node: '>=18.0.0'}
     cpu: [x64]
     os: [darwin]
 
-  '@rufvector/graph-node-linux-arm64-gnu@2.0.4':
+  '@swarmvector/graph-node-linux-arm64-gnu@2.0.4':
     resolution: {integrity: sha512-Z5OatE8CzaVCq5vgGOmowVSKOLxYvO1Dn0rvFL4d63fEvVONDpsVAMkR7rxRGHrgzMZMfpZ9EjZ0vu0KR08tRQ==}
     engines: {node: '>=18.0.0'}
     cpu: [arm64]
     os: [linux]
 
-  '@rufvector/graph-node-linux-x64-gnu@2.0.4':
+  '@swarmvector/graph-node-linux-x64-gnu@2.0.4':
     resolution: {integrity: sha512-RAdkLcB1gjEQcIsCxmSGHSOBbnUbCn7If8H9YrOqy5xxvmTVE25tkM49fpRRK3oINWJ9oQDBsAZr7GXKQZoLig==}
     engines: {node: '>=18.0.0'}
     cpu: [x64]
     os: [linux]
 
-  '@rufvector/graph-node-win32-x64-msvc@2.0.4':
+  '@swarmvector/graph-node-win32-x64-msvc@2.0.4':
     resolution: {integrity: sha512-+z2uyfiPmbELGjwvo5RfDSjHTJWZWQQDxDYLAnnfqV9a0oM1VklRe34t97pvGg7tdCXgEpnR6yWk3OZRemQUEQ==}
     engines: {node: '>=18.0.0'}
     cpu: [x64]
     os: [win32]
 
-  '@rufvector/graph-node@2.0.4':
+  '@swarmvector/graph-node@2.0.4':
     resolution: {integrity: sha512-pPUbQBF+Otnpd5YNgiQl3eaRsivi6NougS0hSmYbCd5i9gMJrr5u7oXL8pHwL/D9YbNKEkeIclhN6zu1rg5aUA==}
     engines: {node: '>=18.0.0'}
 
-  '@rufvector/graph-transformer-darwin-arm64@2.0.4':
+  '@swarmvector/graph-transformer-darwin-arm64@2.0.4':
     resolution: {integrity: sha512-VbPWnJHN//1MD5SIn5tEbgV+AUOUtEXpN6q648J+OKjEqJykGVyCg7TKrMOgNtAsAY3vU1S3BlaKIcj2O3ijEw==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [darwin]
 
-  '@rufvector/graph-transformer-darwin-x64@2.0.4':
+  '@swarmvector/graph-transformer-darwin-x64@2.0.4':
     resolution: {integrity: sha512-Ol4HYLHV93Scy7GT3kSFFPCmnYiZvDigUaq2l4sVLrGav8BGLMfFcnSRrY9imL3Pq5zFw8bilfaFCg1GF6ntxw==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [darwin]
 
-  '@rufvector/graph-transformer-linux-arm64-gnu@2.0.4':
+  '@swarmvector/graph-transformer-linux-arm64-gnu@2.0.4':
     resolution: {integrity: sha512-f8GatsWNtQWGkYQ4ZXsqnQZ1//5S/sH+5j2Kc6sC2DLIgN0PJamhNN4f2VBwu3toIZHbvk/O/3SQhlIYgBGtAg==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
 
-  '@rufvector/graph-transformer-linux-arm64-musl@2.0.4':
+  '@swarmvector/graph-transformer-linux-arm64-musl@2.0.4':
     resolution: {integrity: sha512-AMrLREncC4RBQqWMGSZRAaXyP9BrbZG7DDKbSBI86ov1+NvzJs8uoCI1U+x/vSnFcAGB4rq/Z3lDnrj2NP6fpg==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
     libc: [musl]
 
-  '@rufvector/graph-transformer-linux-x64-gnu@2.0.4':
+  '@swarmvector/graph-transformer-linux-x64-gnu@2.0.4':
     resolution: {integrity: sha512-daXYvA8eG6kKM42gQYvVXUKdgOq6mJmvqHbf024E8M68dFLQaQP6RepAn6CrhUo+dth7AC/pCzcl0YPf2yTVyg==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
 
-  '@rufvector/graph-transformer-linux-x64-musl@2.0.4':
+  '@swarmvector/graph-transformer-linux-x64-musl@2.0.4':
     resolution: {integrity: sha512-w2lbMFm0cBKP12/cheGs16Yb+QQldRS79iBGeaWUnGfUBSZxQS2XryVUMnq60B8R807y6Kv8y5JIOx1ZAeKfRA==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
     libc: [musl]
 
-  '@rufvector/graph-transformer-win32-x64-msvc@2.0.4':
+  '@swarmvector/graph-transformer-win32-x64-msvc@2.0.4':
     resolution: {integrity: sha512-dPnAdkr9n9g2FttFpmxtoffHNQVHxkbvZbEn3diot2IqTjXHHMJQYizVxTdZ6Dtur0T95PLpMz+XoW/qxus2xQ==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
 
-  '@rufvector/graph-transformer@2.0.4':
+  '@swarmvector/graph-transformer@2.0.4':
     resolution: {integrity: sha512-Ep7nCq4vwJ41CR/yl+isYXZAxi1qOLoDIJPVrM//zDx9aixRm4n1TWu9PSsv7GSXizSusQwv+n9hUeZrJ2muTg==}
     engines: {node: '>= 10'}
 
-  '@rufvector/rabitq-wasm@0.1.0':
+  '@swarmvector/rabitq-wasm@0.1.0':
     resolution: {integrity: sha512-Uu7fupcJw8x+QBhJLKAfIK0CyH55fQ8niexJwbnSrYEtSX93ScWSOJBr/zTLR/hd0Md9Dq7ZaatzIDB7uJqazg==}
 
-  '@rufvector/router-darwin-arm64@0.1.30':
+  '@swarmvector/router-darwin-arm64@0.1.30':
     resolution: {integrity: sha512-TWC8ei18jlODekVwSyzEC55XUnmgU+br1cD/w7I3iEW6FL6Vbl3neZU8b03cHtgEN9xxnrKDRr7jq3T41UY40A==}
     engines: {node: '>=18.0.0'}
     cpu: [arm64]
     os: [darwin]
 
-  '@rufvector/router-darwin-x64@0.1.30':
+  '@swarmvector/router-darwin-x64@0.1.30':
     resolution: {integrity: sha512-nxnPGUx2BYAgSzJ3bC/hiCOVAPnAORvJToKnwRV3V+b/KhuUd09qSEP1ykUjbT4Y8oxnA4DklTvVTMwKRFFE1w==}
     engines: {node: '>= 18'}
     cpu: [x64]
     os: [darwin]
 
-  '@rufvector/router-linux-arm64-gnu@0.1.30':
+  '@swarmvector/router-linux-arm64-gnu@0.1.30':
     resolution: {integrity: sha512-7FD16wlCVgQ+4Zvd3d5noTRrCpbT2SvEzmhVj+L9HVV3u8NHCfHVLSb8gObf9RS9PW1X4pm60b5X39SgxKbDTg==}
     engines: {node: '>= 18'}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
 
-  '@rufvector/router-linux-x64-gnu@0.1.30':
+  '@swarmvector/router-linux-x64-gnu@0.1.30':
     resolution: {integrity: sha512-NHognWMJBEfoRt5+22TvYAoA+XPzZpd1DHP3z4fLAoKI85SZOqYy9sxyZo/oyYVsMDPrrBJKi3wdufPzgLFeOQ==}
     engines: {node: '>= 18'}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
 
-  '@rufvector/router-win32-x64-msvc@0.1.30':
+  '@swarmvector/router-win32-x64-msvc@0.1.30':
     resolution: {integrity: sha512-E9j57ZMVS9CvHYwlPyBEZfmbMoMySWePUcqlhktglZbA22BD1soYUgIKPf2jUkEJTLfxvwLDqBjtyNThXAojiQ==}
     engines: {node: '>= 18'}
     cpu: [x64]
     os: [win32]
 
-  '@rufvector/router@0.1.30':
+  '@swarmvector/router@0.1.30':
     resolution: {integrity: sha512-gtZAdxp0UYrOJd3Kz+kNtFNfG53aW2xkZ7u3XNT+JdViTEVnpYMEdDfpc2ByQBy+kf600Cp5xVMQR3qVXajWtw==}
     engines: {node: '>=18.0.0'}
 
-  '@rufvector/rufllm-darwin-arm64@0.2.0':
+  '@swarmvector/swarmllm-darwin-arm64@0.2.0':
     resolution: {integrity: sha512-3oEMNEoGJqfTJXf1Th49HPTlETMxLzlBc1yBY1RqCMoqSrNKsM66+3Npx0O/GdYfFnKRU2wa/mlLPuBY2lUqYQ==}
     engines: {node: '>= 18'}
     cpu: [arm64]
     os: [darwin]
 
-  '@rufvector/rufllm-darwin-arm64@2.0.1':
+  '@swarmvector/swarmllm-darwin-arm64@2.0.1':
     resolution: {integrity: sha512-giZb+TbErKLgURLC3CSmJKJl0bnJn+jFZk488ppyzrR6YGft6kO329Twnd+TiJNDxVOMgZefwVdsbF9jrUIgAQ==}
     engines: {node: '>= 18'}
     cpu: [arm64]
     os: [darwin]
 
-  '@rufvector/rufllm-darwin-x64@0.2.0':
+  '@swarmvector/swarmllm-darwin-x64@0.2.0':
     resolution: {integrity: sha512-Niu9oG9hkbDJ1IpfXluRRfO4vwPwCdISW+ff1H+NjmIk8028CIg2w5iq3qbIaj6WzTQ9YqA68V5aMD9t0w8A6g==}
     engines: {node: '>= 18'}
     cpu: [x64]
     os: [darwin]
 
-  '@rufvector/rufllm-darwin-x64@2.0.1':
+  '@swarmvector/swarmllm-darwin-x64@2.0.1':
     resolution: {integrity: sha512-DpVKFBXFxVPBiCGBw1AeiwsY1YVWfaCh+Eq0+pVLqD4kwwXKhRIWLnTQcuZVE5Gnt1Ku8MxhH2Zs++vKiuq3mA==}
     engines: {node: '>= 18'}
     cpu: [x64]
     os: [darwin]
 
-  '@rufvector/rufllm-linux-arm64-gnu@0.2.0':
+  '@swarmvector/swarmllm-linux-arm64-gnu@0.2.0':
     resolution: {integrity: sha512-ykOqwiqRbf29idXYMmuDdZqOsRMbYgzpWhmk/BcSRVBMUsO4W2Q0UkgLZgt6PIKxSf1k2qt8x8uSmO5tYTD8Iw==}
     engines: {node: '>= 18'}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
 
-  '@rufvector/rufllm-linux-arm64-gnu@2.0.1':
+  '@swarmvector/swarmllm-linux-arm64-gnu@2.0.1':
     resolution: {integrity: sha512-+u6Fe/Dsy4Y11m9IUmuoUeFtoUWc1ZVXxGB4JYomNDll63D03a0cpeKKaslgwOfFlfXlrFcs/eDrsYr07tQP5g==}
     engines: {node: '>= 18'}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
 
-  '@rufvector/rufllm-linux-x64-gnu@0.2.0':
+  '@swarmvector/swarmllm-linux-x64-gnu@0.2.0':
     resolution: {integrity: sha512-8JHH7ft00rqCRyiP0wuAThOVwSodj0gaTZcG1jBBqtnwApmdmTWN8EpuffrHHhhRO+Uvny6T5r7TiAh+Xu+QuQ==}
     engines: {node: '>= 18'}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
 
-  '@rufvector/rufllm-linux-x64-gnu@2.0.1':
+  '@swarmvector/swarmllm-linux-x64-gnu@2.0.1':
     resolution: {integrity: sha512-GH9u/SPUZm9KXjSoQZx5PRtJui0hO/OK+OmRHLZc8+IYrlgona6UQAw6uKHJ3cSEZp9f+XBRYgIrLmsEJW3HXA==}
     engines: {node: '>= 18'}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
 
-  '@rufvector/rufllm-win32-x64-msvc@0.2.0':
+  '@swarmvector/swarmllm-win32-x64-msvc@0.2.0':
     resolution: {integrity: sha512-ksm+AZVqkkYLVq2Rbc7Rx+gSH7egFWlcH3E5dQpro98Oslc7jUH+uNDRjDVUS3lZXchV+Ot5WPLM4pClRxFm9w==}
     engines: {node: '>= 18'}
     cpu: [x64]
     os: [win32]
 
-  '@rufvector/rufllm-win32-x64-msvc@2.0.1':
+  '@swarmvector/swarmllm-win32-x64-msvc@2.0.1':
     resolution: {integrity: sha512-sRGNOMAcyC5p/nITnR0HLFUEObZ9Mh/T1erNiqhKrNUqIPZM1qAYBgN3xmZp02isdiTilRpxQihz3j4EzGPXIw==}
     engines: {node: '>= 18'}
     cpu: [x64]
     os: [win32]
 
-  '@rufvector/rufllm@0.2.4':
+  '@swarmvector/swarmllm@0.2.4':
     resolution: {integrity: sha512-cNAkcKZIqqy+3fxOb1z8bS1cJzJgsUpqNIdMk29RDr+a5g/fLgmHTVEzdBW6kHfDTc5tFUr10Juh9K6w0cKufg==}
     engines: {node: '>= 18'}
     hasBin: true
 
-  '@rufvector/rufllm@2.5.5':
+  '@swarmvector/swarmllm@2.5.5':
     resolution: {integrity: sha512-3WDQkN1EiRlmln6Y3qHIOwIRaRUWwagT1OG+AxohyFgr2UuvWCD5tsiPFtlgwUze4X01lgvBCiHdOsV3u81UWA==}
     engines: {node: '>= 18'}
     hasBin: true
 
-  '@rufvector/rvf-node-darwin-arm64@0.1.7':
+  '@swarmvector/rvf-node-darwin-arm64@0.1.7':
     resolution: {integrity: sha512-vll3WJwDn3oOfy1PB10IG7/f3zBpFiMNHL2/2tdJmeRR8La/rSPJ0ZH5MDIsfleiVtaWzh9bvVCtVkZ6uo2jeg==}
     cpu: [arm64]
     os: [darwin]
 
-  '@rufvector/rvf-node-darwin-x64@0.1.7':
+  '@swarmvector/rvf-node-darwin-x64@0.1.7':
     resolution: {integrity: sha512-Qi/l2bVuVz5YQ2RcYPYF0LNZVkytiIZHzvWhS71+Tt5GEIrsToauHQIcnJQmDNypvwxO8wYk+EeT2xcHR3ZSQQ==}
     cpu: [x64]
     os: [darwin]
 
-  '@rufvector/rvf-node-linux-arm64-gnu@0.1.7':
+  '@swarmvector/rvf-node-linux-arm64-gnu@0.1.7':
     resolution: {integrity: sha512-oZwrtfs7XqRVaDP6iiw6G52l7+NdP3NbTwR2iM+EP8r8X4e1+p4opwV2Ig+lyT7wAz72wcyOpkzpu1MlbK4NKA==}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
 
-  '@rufvector/rvf-node-linux-x64-gnu@0.1.7':
+  '@swarmvector/rvf-node-linux-x64-gnu@0.1.7':
     resolution: {integrity: sha512-CRq9nc7dIj8QbcY9sSXvVau7cr1ESh3VnYUPp1IodzZ4SegN0H3oeieF5nUMNYyq+43MkBR4yrEwFgDBZ00QHQ==}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
 
-  '@rufvector/rvf-node-win32-x64-msvc@0.1.7':
+  '@swarmvector/rvf-node-win32-x64-msvc@0.1.7':
     resolution: {integrity: sha512-sgnoNphOnbD4d3+YyQ83MlGO7sX4kbcDwsFNz7p2mlTaDR8coQXoudSaPrMeMpeUojFUqoxeDvVly/un3jADig==}
     cpu: [x64]
     os: [win32]
 
-  '@rufvector/rvf-node@0.1.8':
+  '@swarmvector/rvf-node@0.1.8':
     resolution: {integrity: sha512-1rbSr9XAiq69wnEPs36FW93ZEfFMYEiI2fANZ0bfQcEH4uNWlwxaZFgKs47PNQPhCgx/cbONpnVsnyX+uOTagw==}
     engines: {node: '>= 16'}
 
-  '@rufvector/rvf-solver@0.1.8':
+  '@swarmvector/rvf-solver@0.1.8':
     resolution: {integrity: sha512-YM7L6TvhVoC5w0kUMl8ASback2ka3MesPvuf+lRYSJEcaf6bncPX7YGzcrsheOe4BBwyiyx39vAijVPx1nZkWA==}
 
-  '@rufvector/rvf-wasm@0.1.6':
+  '@swarmvector/rvf-wasm@0.1.6':
     resolution: {integrity: sha512-hdxRgMJqqDR5jsYBepYrdc0odGGjlwE7QsKOfKlrIWN3kC/pNulCppqKwropJsME0/ZzlLBF90YmWmSXw1AXkg==}
 
-  '@rufvector/rvf@0.1.9':
+  '@swarmvector/rvf@0.1.9':
     resolution: {integrity: sha512-W40NLeSj/+FwIHT0+v3soFrtk4pnAZL5Ghx93qAsZkuwriNw2y6vGPnsapflQyp34WgMN362syIRiACXx3KW8g==}
 
-  '@rufvector/sona-darwin-arm64@0.1.4':
+  '@swarmvector/sona-darwin-arm64@0.1.4':
     resolution: {integrity: sha512-XLXGnlcrrVM00cTsq7VyGhWu2Fvr4zJQD1bktthR3j0r4Y1PXwnw1QPHVtdcKzKmZ5WKPDGxsgRNPUKAIT/PRA==}
     cpu: [arm64]
     os: [darwin]
 
-  '@rufvector/sona-darwin-x64@0.1.4':
+  '@swarmvector/sona-darwin-x64@0.1.4':
     resolution: {integrity: sha512-8bUvmQHn/N7zcD5Zf/u+lsggl6ql0NiuwPPYxitimJKAV+8oT7Zt4zE7kgnx8wqO2YCD4GPxw5laqhRz6IWwQQ==}
     cpu: [x64]
     os: [darwin]
 
-  '@rufvector/sona-linux-arm64-gnu@0.1.4':
+  '@swarmvector/sona-linux-arm64-gnu@0.1.4':
     resolution: {integrity: sha512-QyGIK++wbdRDTF2oio1Ikq1QjS5KKUKJx4Z/rRjxJu29TGXigEdJmwTnPDtsKKzVwXahrEi1mI4Ri/ALMJID9w==}
     cpu: [arm64]
     os: [linux]
 
-  '@rufvector/sona-linux-x64-gnu@0.1.4':
+  '@swarmvector/sona-linux-x64-gnu@0.1.4':
     resolution: {integrity: sha512-lh4HYZUag0yiFpooFxAF6TTx/SVDnh/OPD1yY6G2KH9UaIPgLzw0l/dGv4DaVtv6qjeQMMrxrI8y6vFHUOBvuw==}
     cpu: [x64]
     os: [linux]
 
-  '@rufvector/sona-linux-x64-musl@0.1.4':
+  '@swarmvector/sona-linux-x64-musl@0.1.4':
     resolution: {integrity: sha512-+g+5px2k4lztba8wqxuoNnOU1tFWEdCJHMXqU0Tqn5rq06YoGCGpzoDI55jo1OKtCgCbPLBVT8KiUHIKxT1L/g==}
     cpu: [x64]
     os: [linux]
     libc: [musl]
 
-  '@rufvector/sona-win32-arm64-msvc@0.1.4':
+  '@swarmvector/sona-win32-arm64-msvc@0.1.4':
     resolution: {integrity: sha512-xQkFe5x8SBcg+IM/I5EtDz7gQYdznG1GZnAqt9zKbY/xEOqPmJFlk9A8ab3w9QMBgXTCmlZKkWKDGQgqg3RQ5w==}
     cpu: [arm64]
     os: [win32]
 
-  '@rufvector/sona-win32-x64-msvc@0.1.4':
+  '@swarmvector/sona-win32-x64-msvc@0.1.4':
     resolution: {integrity: sha512-kox5tXvKiTtZaSw0fyo7fvAIp/VK5XAtnoN8C8BuERcqOgrcwY6CS8z5M1hEH1XUR9CHBNpiL6+wURsLXwq4/g==}
     cpu: [x64]
     os: [win32]
 
-  '@rufvector/sona@0.1.6':
+  '@swarmvector/sona@0.1.6':
     resolution: {integrity: sha512-LW40r28yQxXz3vt1fOLRWVV5nln4rzw6a/Yy11EJJdeEN9q4wZG1Glwf9leTp4SjQjuIJ5hklNW8OVMwgyzd5w==}
     engines: {node: '>= 16'}
 
-  '@rufvector/tiny-dancer-darwin-arm64@0.1.15':
+  '@swarmvector/tiny-dancer-darwin-arm64@0.1.15':
     resolution: {integrity: sha512-99vy9OLjppPj3kjusQnirgLvOnBt6Jrt2pij3Fvs5pzyp+zh04gb1np0tFR4JCxftKnuoKYqN7bCtQvgQbBBSg==}
     engines: {node: '>=18.0.0'}
     cpu: [arm64]
     os: [darwin]
 
-  '@rufvector/tiny-dancer-darwin-x64@0.1.15':
+  '@swarmvector/tiny-dancer-darwin-x64@0.1.15':
     resolution: {integrity: sha512-KxxhkiJwjRoUBeK0pwxuY8dKYpMrxpItss7CfNYhsbJc1YLmUzw1TG2Klga4vO1X7dsg/CYuHC+KKrgfSvEVwA==}
     engines: {node: '>=18.0.0'}
     cpu: [x64]
     os: [darwin]
 
-  '@rufvector/tiny-dancer-linux-arm64-gnu@0.1.17':
+  '@swarmvector/tiny-dancer-linux-arm64-gnu@0.1.17':
     resolution: {integrity: sha512-bvjYL0/tyonot6KFQPAbtOdw3TGL6fIxakmn8ED6gRRcwPJ3V6VZ0WgLZfOlXiWc4I/eQvcNldgJ+3QOXurgMw==}
     engines: {node: '>=18.0.0'}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
 
-  '@rufvector/tiny-dancer-linux-x64-gnu@0.1.15':
+  '@swarmvector/tiny-dancer-linux-x64-gnu@0.1.15':
     resolution: {integrity: sha512-lEknFh2p73KkHz6d51cP/Y5D10AATiXRsoQEDRkOjrO0Eb5blyxal4wzdqbylyXEH7UbRePCBrCCk5BkfZD1fA==}
     engines: {node: '>=18.0.0'}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
 
-  '@rufvector/tiny-dancer-win32-x64-msvc@0.1.15':
+  '@swarmvector/tiny-dancer-win32-x64-msvc@0.1.15':
     resolution: {integrity: sha512-f465GiIh+CWv58d3eixWKJOi8kSqcRk5heH2SRwj2Q4wWjWru4esr96NXb1VCj0EKFfDWs9D+aPW2OU4xFeoPQ==}
     engines: {node: '>=18.0.0'}
     cpu: [x64]
     os: [win32]
 
-  '@rufvector/tiny-dancer@0.1.18':
+  '@swarmvector/tiny-dancer@0.1.18':
     resolution: {integrity: sha512-rgkHJl/RIwIuFc+kYV8eULY+N/cDsEcxseURRcPA4vfU8TUKca0e3ENN8Fuc8Vm/bka8tzyY1TF8G2/DvFQAPA==}
     engines: {node: '>=18.0.0'}
 
@@ -1466,7 +1466,7 @@ packages:
     resolution: {integrity: sha512-lZmHqzrVIkSvZdKZEx7IYY51TK0WDrC8eR0c5IMnBsO8di8are1zzw8BlLhyO2TklZKLN5UffNGs1IJwT6oOqQ==}
 
   accepts@1.3.8:
-    resolution: {integrity: sha512-PYAthTa2m2VKxuvSD3DPC/Gy+U+sOA1LAuT8mkmRuvw+NACSaeXEQ+NHcVF7rONl6qcaxV3Uuemwawk+7+SJLw==}
+    resolution: {integrity: sha512-PYAthTa2m2VKxuvSD3DPC/Gy+U+sOA1LAuT8mkmSwarmw+NACSaeXEQ+NHcVF7rONl6qcaxV3Uuemwawk+7+SJLw==}
     engines: {node: '>= 0.6'}
 
   accepts@2.0.0:
@@ -3001,43 +3001,43 @@ packages:
   run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
 
-  rufvector-attention-wasm@0.1.32:
+  swarmvector-attention-wasm@0.1.32:
     resolution: {integrity: sha512-2pt5dhcpHXXhNEVXeeDPzshXlGo3X8vWVuMfLA+fjUuXYFsW2YYrmUSgHOvEuqVxxow2Rgn9sZpxWQSBuT470g==}
     engines: {node: '>=16.0.0'}
 
-  rufvector-core-darwin-arm64@0.1.29:
+  swarmvector-core-darwin-arm64@0.1.29:
     resolution: {integrity: sha512-gjZ1/J/0Nh9Mn74VdifIIkPLP/M4FqD/g+QVxWcfWcNFWhHVz+zHyxGjc6gJgrfYBquiMyP5jLfvyR3TffLanQ==}
     cpu: [arm64]
     os: [darwin]
 
-  rufvector-core-darwin-x64@0.1.29:
+  swarmvector-core-darwin-x64@0.1.29:
     resolution: {integrity: sha512-SNq2DrIBWM53qG3YSYcNV/BnBbAoJouafAADOjG3PkM8+RPrIucTeUDBavf148DNo5ZI337IS8TK1/0HpJEwFg==}
     cpu: [x64]
     os: [darwin]
 
-  rufvector-core-linux-arm64-gnu@0.1.29:
+  swarmvector-core-linux-arm64-gnu@0.1.29:
     resolution: {integrity: sha512-gcA2qSQD9nEeHR8pIXr5SKpQAiHMxu4EyBUwUSG4UnWOxVQnnU0l2kA/Z2NZ6B+JWLrb5+nhkkv7AaSmb8YAsg==}
     cpu: [arm64]
     os: [linux]
 
-  rufvector-core-linux-x64-gnu@0.1.29:
+  swarmvector-core-linux-x64-gnu@0.1.29:
     resolution: {integrity: sha512-GcYCVNRbAmiXmEaMNvVnA78ZIM469H0VwP2JFGfibwiSASBgWGX3BT+mqflX+gtBynbtQqslj8XcqVdDxEkEBg==}
     cpu: [x64]
     os: [linux]
 
-  rufvector-core-win32-x64-msvc@0.1.29:
+  swarmvector-core-win32-x64-msvc@0.1.29:
     resolution: {integrity: sha512-nqHrlUAKpTreGO87jQLtFVrQUBT/7J/dBsPD5/mV9Fet/shncN0QMij7YqBTrlhR9qtQ2gAUGrG0zw69T60AiQ==}
     cpu: [x64]
     os: [win32]
 
-  rufvector-graph-transformer-wasm@2.0.4:
+  swarmvector-graph-transformer-wasm@2.0.4:
     resolution: {integrity: sha512-O2u2OnE89YCa/0y2wmo6EkxXOFAPagDcjZ2HSx8kV7rvDLsgk+CQgoYGk4L/X8FM06Moiu09/P8/sWnjEv16/A==}
 
-  rufvector-onnx-embeddings-wasm@0.1.2:
+  swarmvector-onnx-embeddings-wasm@0.1.2:
     resolution: {integrity: sha512-U1Xx7BivMkbAns+bXl1J3b2bey4HZzdOwL3CCElxkNXKqP5BMZDYiVnzHmcaYwQ74Qg3iPNpPH5LHR4UOoUMIQ==}
     engines: {node: '>=16.0.0'}
 
-  rufvector@0.1.100:
+  swarmvector@0.1.100:
     resolution: {integrity: sha512-goVV/mB28sQmai+eU1DMAtZEg2qQSKes3NtIHjyjN53hHWqwCdIyjZwBEd1WKDysL9mJ4CnSCVC9uaJyStzBIA==}
     engines: {node: '>=14.0.0'}
     hasBin: true
@@ -3632,7 +3632,7 @@ snapshots:
   '@claude-flow/neural@3.0.0-alpha.8(@types/node@20.19.39)(zod@3.25.76)':
     dependencies:
       '@claude-flow/memory': 3.0.0-alpha.14(@types/node@20.19.39)(zod@3.25.76)
-      '@rufvector/sona': 0.1.6
+      '@swarmvector/sona': 0.1.6
     optionalDependencies:
       agentdb: 3.0.0-alpha.14(@types/node@20.19.39)(zod@3.25.76)
     transitivePeerDependencies:
@@ -4352,302 +4352,302 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.60.3':
     optional: true
 
-  '@rufvector/attention-darwin-arm64@0.1.32':
+  '@swarmvector/attention-darwin-arm64@0.1.32':
     optional: true
 
-  '@rufvector/attention-darwin-x64@0.1.32':
+  '@swarmvector/attention-darwin-x64@0.1.32':
     optional: true
 
-  '@rufvector/attention-linux-arm64-gnu@0.1.32':
+  '@swarmvector/attention-linux-arm64-gnu@0.1.32':
     optional: true
 
-  '@rufvector/attention-linux-x64-gnu@0.1.32':
+  '@swarmvector/attention-linux-x64-gnu@0.1.32':
     optional: true
 
-  '@rufvector/attention-win32-x64-msvc@0.1.32':
+  '@swarmvector/attention-win32-x64-msvc@0.1.32':
     optional: true
 
-  '@rufvector/attention@0.1.32':
+  '@swarmvector/attention@0.1.32':
     optionalDependencies:
-      '@rufvector/attention-darwin-arm64': 0.1.32
-      '@rufvector/attention-darwin-x64': 0.1.32
-      '@rufvector/attention-linux-arm64-gnu': 0.1.32
-      '@rufvector/attention-linux-x64-gnu': 0.1.32
-      '@rufvector/attention-win32-x64-msvc': 0.1.32
+      '@swarmvector/attention-darwin-arm64': 0.1.32
+      '@swarmvector/attention-darwin-x64': 0.1.32
+      '@swarmvector/attention-linux-arm64-gnu': 0.1.32
+      '@swarmvector/attention-linux-x64-gnu': 0.1.32
+      '@swarmvector/attention-win32-x64-msvc': 0.1.32
     optional: true
 
-  '@rufvector/core@0.1.31':
+  '@swarmvector/core@0.1.31':
     optionalDependencies:
-      rufvector-core-darwin-arm64: 0.1.29
-      rufvector-core-darwin-x64: 0.1.29
-      rufvector-core-linux-arm64-gnu: 0.1.29
-      rufvector-core-linux-x64-gnu: 0.1.29
-      rufvector-core-win32-x64-msvc: 0.1.29
+      swarmvector-core-darwin-arm64: 0.1.29
+      swarmvector-core-darwin-x64: 0.1.29
+      swarmvector-core-linux-arm64-gnu: 0.1.29
+      swarmvector-core-linux-x64-gnu: 0.1.29
+      swarmvector-core-win32-x64-msvc: 0.1.29
     optional: true
 
-  '@rufvector/edge-full@0.1.0':
+  '@swarmvector/edge-full@0.1.0':
     optional: true
 
-  '@rufvector/gnn-darwin-arm64@0.1.25':
+  '@swarmvector/gnn-darwin-arm64@0.1.25':
     optional: true
 
-  '@rufvector/gnn-darwin-x64@0.1.25':
+  '@swarmvector/gnn-darwin-x64@0.1.25':
     optional: true
 
-  '@rufvector/gnn-linux-arm64-gnu@0.1.25':
+  '@swarmvector/gnn-linux-arm64-gnu@0.1.25':
     optional: true
 
-  '@rufvector/gnn-linux-arm64-musl@0.1.25':
+  '@swarmvector/gnn-linux-arm64-musl@0.1.25':
     optional: true
 
-  '@rufvector/gnn-linux-x64-gnu@0.1.25':
+  '@swarmvector/gnn-linux-x64-gnu@0.1.25':
     optional: true
 
-  '@rufvector/gnn-linux-x64-musl@0.1.25':
+  '@swarmvector/gnn-linux-x64-musl@0.1.25':
     optional: true
 
-  '@rufvector/gnn-win32-x64-msvc@0.1.25':
+  '@swarmvector/gnn-win32-x64-msvc@0.1.25':
     optional: true
 
-  '@rufvector/gnn@0.1.25':
+  '@swarmvector/gnn@0.1.25':
     optionalDependencies:
-      '@rufvector/gnn-darwin-arm64': 0.1.25
-      '@rufvector/gnn-darwin-x64': 0.1.25
-      '@rufvector/gnn-linux-arm64-gnu': 0.1.25
-      '@rufvector/gnn-linux-arm64-musl': 0.1.25
-      '@rufvector/gnn-linux-x64-gnu': 0.1.25
-      '@rufvector/gnn-linux-x64-musl': 0.1.25
-      '@rufvector/gnn-win32-x64-msvc': 0.1.25
+      '@swarmvector/gnn-darwin-arm64': 0.1.25
+      '@swarmvector/gnn-darwin-x64': 0.1.25
+      '@swarmvector/gnn-linux-arm64-gnu': 0.1.25
+      '@swarmvector/gnn-linux-arm64-musl': 0.1.25
+      '@swarmvector/gnn-linux-x64-gnu': 0.1.25
+      '@swarmvector/gnn-linux-x64-musl': 0.1.25
+      '@swarmvector/gnn-win32-x64-msvc': 0.1.25
     optional: true
 
-  '@rufvector/graph-node-darwin-arm64@2.0.4':
+  '@swarmvector/graph-node-darwin-arm64@2.0.4':
     optional: true
 
-  '@rufvector/graph-node-darwin-x64@2.0.4':
+  '@swarmvector/graph-node-darwin-x64@2.0.4':
     optional: true
 
-  '@rufvector/graph-node-linux-arm64-gnu@2.0.4':
+  '@swarmvector/graph-node-linux-arm64-gnu@2.0.4':
     optional: true
 
-  '@rufvector/graph-node-linux-x64-gnu@2.0.4':
+  '@swarmvector/graph-node-linux-x64-gnu@2.0.4':
     optional: true
 
-  '@rufvector/graph-node-win32-x64-msvc@2.0.4':
+  '@swarmvector/graph-node-win32-x64-msvc@2.0.4':
     optional: true
 
-  '@rufvector/graph-node@2.0.4':
+  '@swarmvector/graph-node@2.0.4':
     optionalDependencies:
-      '@rufvector/graph-node-darwin-arm64': 2.0.4
-      '@rufvector/graph-node-darwin-x64': 2.0.4
-      '@rufvector/graph-node-linux-arm64-gnu': 2.0.4
-      '@rufvector/graph-node-linux-x64-gnu': 2.0.4
-      '@rufvector/graph-node-win32-x64-msvc': 2.0.4
+      '@swarmvector/graph-node-darwin-arm64': 2.0.4
+      '@swarmvector/graph-node-darwin-x64': 2.0.4
+      '@swarmvector/graph-node-linux-arm64-gnu': 2.0.4
+      '@swarmvector/graph-node-linux-x64-gnu': 2.0.4
+      '@swarmvector/graph-node-win32-x64-msvc': 2.0.4
     optional: true
 
-  '@rufvector/graph-transformer-darwin-arm64@2.0.4':
+  '@swarmvector/graph-transformer-darwin-arm64@2.0.4':
     optional: true
 
-  '@rufvector/graph-transformer-darwin-x64@2.0.4':
+  '@swarmvector/graph-transformer-darwin-x64@2.0.4':
     optional: true
 
-  '@rufvector/graph-transformer-linux-arm64-gnu@2.0.4':
+  '@swarmvector/graph-transformer-linux-arm64-gnu@2.0.4':
     optional: true
 
-  '@rufvector/graph-transformer-linux-arm64-musl@2.0.4':
+  '@swarmvector/graph-transformer-linux-arm64-musl@2.0.4':
     optional: true
 
-  '@rufvector/graph-transformer-linux-x64-gnu@2.0.4':
+  '@swarmvector/graph-transformer-linux-x64-gnu@2.0.4':
     optional: true
 
-  '@rufvector/graph-transformer-linux-x64-musl@2.0.4':
+  '@swarmvector/graph-transformer-linux-x64-musl@2.0.4':
     optional: true
 
-  '@rufvector/graph-transformer-win32-x64-msvc@2.0.4':
+  '@swarmvector/graph-transformer-win32-x64-msvc@2.0.4':
     optional: true
 
-  '@rufvector/graph-transformer@2.0.4':
+  '@swarmvector/graph-transformer@2.0.4':
     optionalDependencies:
-      '@rufvector/graph-transformer-darwin-arm64': 2.0.4
-      '@rufvector/graph-transformer-darwin-x64': 2.0.4
-      '@rufvector/graph-transformer-linux-arm64-gnu': 2.0.4
-      '@rufvector/graph-transformer-linux-arm64-musl': 2.0.4
-      '@rufvector/graph-transformer-linux-x64-gnu': 2.0.4
-      '@rufvector/graph-transformer-linux-x64-musl': 2.0.4
-      '@rufvector/graph-transformer-win32-x64-msvc': 2.0.4
+      '@swarmvector/graph-transformer-darwin-arm64': 2.0.4
+      '@swarmvector/graph-transformer-darwin-x64': 2.0.4
+      '@swarmvector/graph-transformer-linux-arm64-gnu': 2.0.4
+      '@swarmvector/graph-transformer-linux-arm64-musl': 2.0.4
+      '@swarmvector/graph-transformer-linux-x64-gnu': 2.0.4
+      '@swarmvector/graph-transformer-linux-x64-musl': 2.0.4
+      '@swarmvector/graph-transformer-win32-x64-msvc': 2.0.4
 
-  '@rufvector/rabitq-wasm@0.1.0': {}
+  '@swarmvector/rabitq-wasm@0.1.0': {}
 
-  '@rufvector/router-darwin-arm64@0.1.30':
+  '@swarmvector/router-darwin-arm64@0.1.30':
     optional: true
 
-  '@rufvector/router-darwin-x64@0.1.30':
+  '@swarmvector/router-darwin-x64@0.1.30':
     optional: true
 
-  '@rufvector/router-linux-arm64-gnu@0.1.30':
+  '@swarmvector/router-linux-arm64-gnu@0.1.30':
     optional: true
 
-  '@rufvector/router-linux-x64-gnu@0.1.30':
+  '@swarmvector/router-linux-x64-gnu@0.1.30':
     optional: true
 
-  '@rufvector/router-win32-x64-msvc@0.1.30':
+  '@swarmvector/router-win32-x64-msvc@0.1.30':
     optional: true
 
-  '@rufvector/router@0.1.30':
+  '@swarmvector/router@0.1.30':
     optionalDependencies:
-      '@rufvector/router-darwin-arm64': 0.1.30
-      '@rufvector/router-darwin-x64': 0.1.30
-      '@rufvector/router-linux-arm64-gnu': 0.1.30
-      '@rufvector/router-linux-x64-gnu': 0.1.30
-      '@rufvector/router-win32-x64-msvc': 0.1.30
+      '@swarmvector/router-darwin-arm64': 0.1.30
+      '@swarmvector/router-darwin-x64': 0.1.30
+      '@swarmvector/router-linux-arm64-gnu': 0.1.30
+      '@swarmvector/router-linux-x64-gnu': 0.1.30
+      '@swarmvector/router-win32-x64-msvc': 0.1.30
     optional: true
 
-  '@rufvector/rufllm-darwin-arm64@0.2.0':
+  '@swarmvector/swarmllm-darwin-arm64@0.2.0':
     optional: true
 
-  '@rufvector/rufllm-darwin-arm64@2.0.1':
+  '@swarmvector/swarmllm-darwin-arm64@2.0.1':
     optional: true
 
-  '@rufvector/rufllm-darwin-x64@0.2.0':
+  '@swarmvector/swarmllm-darwin-x64@0.2.0':
     optional: true
 
-  '@rufvector/rufllm-darwin-x64@2.0.1':
+  '@swarmvector/swarmllm-darwin-x64@2.0.1':
     optional: true
 
-  '@rufvector/rufllm-linux-arm64-gnu@0.2.0':
+  '@swarmvector/swarmllm-linux-arm64-gnu@0.2.0':
     optional: true
 
-  '@rufvector/rufllm-linux-arm64-gnu@2.0.1':
+  '@swarmvector/swarmllm-linux-arm64-gnu@2.0.1':
     optional: true
 
-  '@rufvector/rufllm-linux-x64-gnu@0.2.0':
+  '@swarmvector/swarmllm-linux-x64-gnu@0.2.0':
     optional: true
 
-  '@rufvector/rufllm-linux-x64-gnu@2.0.1':
+  '@swarmvector/swarmllm-linux-x64-gnu@2.0.1':
     optional: true
 
-  '@rufvector/rufllm-win32-x64-msvc@0.2.0':
+  '@swarmvector/swarmllm-win32-x64-msvc@0.2.0':
     optional: true
 
-  '@rufvector/rufllm-win32-x64-msvc@2.0.1':
+  '@swarmvector/swarmllm-win32-x64-msvc@2.0.1':
     optional: true
 
-  '@rufvector/rufllm@0.2.4':
+  '@swarmvector/swarmllm@0.2.4':
     dependencies:
       chalk: 4.1.2
       commander: 12.1.0
       ora: 5.4.1
     optionalDependencies:
-      '@rufvector/rufllm-darwin-arm64': 0.2.0
-      '@rufvector/rufllm-darwin-x64': 0.2.0
-      '@rufvector/rufllm-linux-arm64-gnu': 0.2.0
-      '@rufvector/rufllm-linux-x64-gnu': 0.2.0
-      '@rufvector/rufllm-win32-x64-msvc': 0.2.0
+      '@swarmvector/swarmllm-darwin-arm64': 0.2.0
+      '@swarmvector/swarmllm-darwin-x64': 0.2.0
+      '@swarmvector/swarmllm-linux-arm64-gnu': 0.2.0
+      '@swarmvector/swarmllm-linux-x64-gnu': 0.2.0
+      '@swarmvector/swarmllm-win32-x64-msvc': 0.2.0
     optional: true
 
-  '@rufvector/rufllm@2.5.5':
+  '@swarmvector/swarmllm@2.5.5':
     dependencies:
       chalk: 4.1.2
       commander: 12.1.0
       ora: 5.4.1
     optionalDependencies:
-      '@rufvector/rufllm-darwin-arm64': 2.0.1
-      '@rufvector/rufllm-darwin-x64': 2.0.1
-      '@rufvector/rufllm-linux-arm64-gnu': 2.0.1
-      '@rufvector/rufllm-linux-x64-gnu': 2.0.1
-      '@rufvector/rufllm-win32-x64-msvc': 2.0.1
+      '@swarmvector/swarmllm-darwin-arm64': 2.0.1
+      '@swarmvector/swarmllm-darwin-x64': 2.0.1
+      '@swarmvector/swarmllm-linux-arm64-gnu': 2.0.1
+      '@swarmvector/swarmllm-linux-x64-gnu': 2.0.1
+      '@swarmvector/swarmllm-win32-x64-msvc': 2.0.1
     optional: true
 
-  '@rufvector/rvf-node-darwin-arm64@0.1.7':
+  '@swarmvector/rvf-node-darwin-arm64@0.1.7':
     optional: true
 
-  '@rufvector/rvf-node-darwin-x64@0.1.7':
+  '@swarmvector/rvf-node-darwin-x64@0.1.7':
     optional: true
 
-  '@rufvector/rvf-node-linux-arm64-gnu@0.1.7':
+  '@swarmvector/rvf-node-linux-arm64-gnu@0.1.7':
     optional: true
 
-  '@rufvector/rvf-node-linux-x64-gnu@0.1.7':
+  '@swarmvector/rvf-node-linux-x64-gnu@0.1.7':
     optional: true
 
-  '@rufvector/rvf-node-win32-x64-msvc@0.1.7':
+  '@swarmvector/rvf-node-win32-x64-msvc@0.1.7':
     optional: true
 
-  '@rufvector/rvf-node@0.1.8':
+  '@swarmvector/rvf-node@0.1.8':
     optionalDependencies:
-      '@rufvector/rvf-node-darwin-arm64': 0.1.7
-      '@rufvector/rvf-node-darwin-x64': 0.1.7
-      '@rufvector/rvf-node-linux-arm64-gnu': 0.1.7
-      '@rufvector/rvf-node-linux-x64-gnu': 0.1.7
-      '@rufvector/rvf-node-win32-x64-msvc': 0.1.7
+      '@swarmvector/rvf-node-darwin-arm64': 0.1.7
+      '@swarmvector/rvf-node-darwin-x64': 0.1.7
+      '@swarmvector/rvf-node-linux-arm64-gnu': 0.1.7
+      '@swarmvector/rvf-node-linux-x64-gnu': 0.1.7
+      '@swarmvector/rvf-node-win32-x64-msvc': 0.1.7
     optional: true
 
-  '@rufvector/rvf-solver@0.1.8':
+  '@swarmvector/rvf-solver@0.1.8':
     optional: true
 
-  '@rufvector/rvf-wasm@0.1.6':
+  '@swarmvector/rvf-wasm@0.1.6':
     optional: true
 
-  '@rufvector/rvf@0.1.9':
+  '@swarmvector/rvf@0.1.9':
     dependencies:
-      '@rufvector/rvf-node': 0.1.8
+      '@swarmvector/rvf-node': 0.1.8
     optionalDependencies:
-      '@rufvector/rvf-solver': 0.1.8
-      '@rufvector/rvf-wasm': 0.1.6
+      '@swarmvector/rvf-solver': 0.1.8
+      '@swarmvector/rvf-wasm': 0.1.6
     optional: true
 
-  '@rufvector/sona-darwin-arm64@0.1.4':
+  '@swarmvector/sona-darwin-arm64@0.1.4':
     optional: true
 
-  '@rufvector/sona-darwin-x64@0.1.4':
+  '@swarmvector/sona-darwin-x64@0.1.4':
     optional: true
 
-  '@rufvector/sona-linux-arm64-gnu@0.1.4':
+  '@swarmvector/sona-linux-arm64-gnu@0.1.4':
     optional: true
 
-  '@rufvector/sona-linux-x64-gnu@0.1.4':
+  '@swarmvector/sona-linux-x64-gnu@0.1.4':
     optional: true
 
-  '@rufvector/sona-linux-x64-musl@0.1.4':
+  '@swarmvector/sona-linux-x64-musl@0.1.4':
     optional: true
 
-  '@rufvector/sona-win32-arm64-msvc@0.1.4':
+  '@swarmvector/sona-win32-arm64-msvc@0.1.4':
     optional: true
 
-  '@rufvector/sona-win32-x64-msvc@0.1.4':
+  '@swarmvector/sona-win32-x64-msvc@0.1.4':
     optional: true
 
-  '@rufvector/sona@0.1.6':
+  '@swarmvector/sona@0.1.6':
     optionalDependencies:
-      '@rufvector/sona-darwin-arm64': 0.1.4
-      '@rufvector/sona-darwin-x64': 0.1.4
-      '@rufvector/sona-linux-arm64-gnu': 0.1.4
-      '@rufvector/sona-linux-x64-gnu': 0.1.4
-      '@rufvector/sona-linux-x64-musl': 0.1.4
-      '@rufvector/sona-win32-arm64-msvc': 0.1.4
-      '@rufvector/sona-win32-x64-msvc': 0.1.4
+      '@swarmvector/sona-darwin-arm64': 0.1.4
+      '@swarmvector/sona-darwin-x64': 0.1.4
+      '@swarmvector/sona-linux-arm64-gnu': 0.1.4
+      '@swarmvector/sona-linux-x64-gnu': 0.1.4
+      '@swarmvector/sona-linux-x64-musl': 0.1.4
+      '@swarmvector/sona-win32-arm64-msvc': 0.1.4
+      '@swarmvector/sona-win32-x64-msvc': 0.1.4
 
-  '@rufvector/tiny-dancer-darwin-arm64@0.1.15':
+  '@swarmvector/tiny-dancer-darwin-arm64@0.1.15':
     optional: true
 
-  '@rufvector/tiny-dancer-darwin-x64@0.1.15':
+  '@swarmvector/tiny-dancer-darwin-x64@0.1.15':
     optional: true
 
-  '@rufvector/tiny-dancer-linux-arm64-gnu@0.1.17':
+  '@swarmvector/tiny-dancer-linux-arm64-gnu@0.1.17':
     optional: true
 
-  '@rufvector/tiny-dancer-linux-x64-gnu@0.1.15':
+  '@swarmvector/tiny-dancer-linux-x64-gnu@0.1.15':
     optional: true
 
-  '@rufvector/tiny-dancer-win32-x64-msvc@0.1.15':
+  '@swarmvector/tiny-dancer-win32-x64-msvc@0.1.15':
     optional: true
 
-  '@rufvector/tiny-dancer@0.1.18':
+  '@swarmvector/tiny-dancer@0.1.18':
     optionalDependencies:
-      '@rufvector/tiny-dancer-darwin-arm64': 0.1.15
-      '@rufvector/tiny-dancer-darwin-x64': 0.1.15
-      '@rufvector/tiny-dancer-linux-arm64-gnu': 0.1.17
-      '@rufvector/tiny-dancer-linux-x64-gnu': 0.1.15
-      '@rufvector/tiny-dancer-win32-x64-msvc': 0.1.15
+      '@swarmvector/tiny-dancer-darwin-arm64': 0.1.15
+      '@swarmvector/tiny-dancer-darwin-x64': 0.1.15
+      '@swarmvector/tiny-dancer-linux-arm64-gnu': 0.1.17
+      '@swarmvector/tiny-dancer-linux-x64-gnu': 0.1.15
+      '@swarmvector/tiny-dancer-win32-x64-msvc': 0.1.15
     optional: true
 
   '@sec-ant/readable-stream@0.4.1':
@@ -4827,7 +4827,7 @@ snapshots:
     dependencies:
       '@modelcontextprotocol/sdk': 1.29.0(zod@3.25.76)
       '@opentelemetry/api': 1.9.1
-      '@rufvector/graph-transformer': 2.0.4
+      '@swarmvector/graph-transformer': 2.0.4
       ajv: 8.20.0
       jsonwebtoken: 9.0.3
       sql.js: 1.14.1
@@ -4835,16 +4835,16 @@ snapshots:
       '@opentelemetry/resources': 1.30.1(@opentelemetry/api@1.9.1)
       '@opentelemetry/sdk-node': 0.52.1(@opentelemetry/api@1.9.1)
       '@opentelemetry/semantic-conventions': 1.40.0
-      '@rufvector/attention': 0.1.32
-      '@rufvector/gnn': 0.1.25
-      '@rufvector/graph-node': 2.0.4
-      '@rufvector/router': 0.1.30
-      '@rufvector/rufllm': 2.5.5
-      '@rufvector/rvf': 0.1.9
-      '@rufvector/rvf-node': 0.1.8
-      '@rufvector/rvf-solver': 0.1.8
-      '@rufvector/rvf-wasm': 0.1.6
-      '@rufvector/sona': 0.1.6
+      '@swarmvector/attention': 0.1.32
+      '@swarmvector/gnn': 0.1.25
+      '@swarmvector/graph-node': 2.0.4
+      '@swarmvector/router': 0.1.30
+      '@swarmvector/swarmllm': 2.5.5
+      '@swarmvector/rvf': 0.1.9
+      '@swarmvector/rvf-node': 0.1.8
+      '@swarmvector/rvf-solver': 0.1.8
+      '@swarmvector/rvf-wasm': 0.1.6
+      '@swarmvector/sona': 0.1.6
       '@xenova/transformers': 2.17.2
       argon2: 0.44.0
       better-sqlite3: 11.10.0
@@ -4852,9 +4852,9 @@ snapshots:
       commander: 12.1.0
       hnswlib-node: 3.0.0
       inquirer: 9.3.8(@types/node@20.19.39)
-      rufvector: 0.1.100(zod@3.25.76)
-      rufvector-attention-wasm: 0.1.32
-      rufvector-graph-transformer-wasm: 2.0.4
+      swarmvector: 0.1.100(zod@3.25.76)
+      swarmvector-attention-wasm: 0.1.32
+      swarmvector-graph-transformer-wasm: 2.0.4
     transitivePeerDependencies:
       - '@cfworker/json-schema'
       - '@types/node'
@@ -4869,11 +4869,11 @@ snapshots:
       '@anthropic-ai/claude-agent-sdk': 0.1.77(zod@3.25.76)
       '@anthropic-ai/sdk': 0.65.0(zod@3.25.76)
       '@google/genai': 1.52.0(@modelcontextprotocol/sdk@1.29.0(zod@3.25.76))
-      '@rufvector/core': 0.1.31
-      '@rufvector/edge-full': 0.1.0
-      '@rufvector/router': 0.1.30
-      '@rufvector/rufllm': 0.2.4
-      '@rufvector/tiny-dancer': 0.1.18
+      '@swarmvector/core': 0.1.31
+      '@swarmvector/edge-full': 0.1.0
+      '@swarmvector/router': 0.1.30
+      '@swarmvector/swarmllm': 0.2.4
+      '@swarmvector/tiny-dancer': 0.1.18
       '@supabase/supabase-js': 2.105.3
       '@xenova/transformers': 2.17.2
       axios: 1.16.0(debug@4.4.3)
@@ -4883,8 +4883,8 @@ snapshots:
       glob: 13.0.6
       gun: 0.2020.1241
       http-proxy-middleware: 3.0.5
-      rufvector: 0.1.100(zod@3.25.76)
-      rufvector-onnx-embeddings-wasm: 0.1.2
+      swarmvector: 0.1.100(zod@3.25.76)
+      swarmvector-onnx-embeddings-wasm: 0.1.2
       tiktoken: 1.0.22
       ulid: 3.0.2
       ws: 8.20.0
@@ -4892,8 +4892,8 @@ snapshots:
       zod: 3.25.76
     optionalDependencies:
       '@rollup/rollup-darwin-arm64': 4.60.3
-      '@rufvector/attention': 0.1.32
-      '@rufvector/sona': 0.1.6
+      '@swarmvector/attention': 0.1.32
+      '@swarmvector/sona': 0.1.6
       agentdb: 3.0.0-alpha.14(@types/node@20.19.39)(zod@3.25.76)
       better-sqlite3: 11.10.0
       onnxruntime-node: 1.25.1
@@ -6782,42 +6782,42 @@ snapshots:
     dependencies:
       queue-microtask: 1.2.3
 
-  rufvector-attention-wasm@0.1.32:
+  swarmvector-attention-wasm@0.1.32:
     optional: true
 
-  rufvector-core-darwin-arm64@0.1.29:
+  swarmvector-core-darwin-arm64@0.1.29:
     optional: true
 
-  rufvector-core-darwin-x64@0.1.29:
+  swarmvector-core-darwin-x64@0.1.29:
     optional: true
 
-  rufvector-core-linux-arm64-gnu@0.1.29:
+  swarmvector-core-linux-arm64-gnu@0.1.29:
     optional: true
 
-  rufvector-core-linux-x64-gnu@0.1.29:
+  swarmvector-core-linux-x64-gnu@0.1.29:
     optional: true
 
-  rufvector-core-win32-x64-msvc@0.1.29:
+  swarmvector-core-win32-x64-msvc@0.1.29:
     optional: true
 
-  rufvector-graph-transformer-wasm@2.0.4:
+  swarmvector-graph-transformer-wasm@2.0.4:
     optional: true
 
-  rufvector-onnx-embeddings-wasm@0.1.2:
+  swarmvector-onnx-embeddings-wasm@0.1.2:
     optional: true
 
-  rufvector@0.1.100(zod@3.25.76):
+  swarmvector@0.1.100(zod@3.25.76):
     dependencies:
       '@modelcontextprotocol/sdk': 1.29.0(zod@3.25.76)
-      '@rufvector/attention': 0.1.32
-      '@rufvector/core': 0.1.31
-      '@rufvector/gnn': 0.1.25
-      '@rufvector/sona': 0.1.6
+      '@swarmvector/attention': 0.1.32
+      '@swarmvector/core': 0.1.31
+      '@swarmvector/gnn': 0.1.25
+      '@swarmvector/sona': 0.1.6
       chalk: 4.1.2
       commander: 11.1.0
       ora: 5.4.1
     optionalDependencies:
-      '@rufvector/rvf': 0.1.9
+      '@swarmvector/rvf': 0.1.9
     transitivePeerDependencies:
       - '@cfworker/json-schema'
       - supports-color

@@ -696,10 +696,10 @@ npx swarmdo hive-mind spawn "Review PR #456" \
 
 ## References
 
-- [Hive Mind Documentation](https://github.com/ruvnet/claude-flow/docs/hive-mind)
-- [Collective Intelligence Patterns](https://github.com/ruvnet/claude-flow/docs/patterns)
-- [Byzantine Consensus](https://github.com/ruvnet/claude-flow/docs/consensus)
-- [Memory Optimization](https://github.com/ruvnet/claude-flow/docs/memory)
+- [Hive Mind Documentation](the upstream project (see NOTICE))
+- [Collective Intelligence Patterns](the upstream project (see NOTICE))
+- [Byzantine Consensus](the upstream project (see NOTICE))
+- [Memory Optimization](the upstream project (see NOTICE))
 
 ---
 

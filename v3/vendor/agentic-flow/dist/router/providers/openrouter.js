@@ -18,7 +18,7 @@ export class OpenRouterProvider {
             baseURL: config.baseUrl || 'https://openrouter.ai/api/v1',
             headers: {
                 'Authorization': `Bearer ${config.apiKey}`,
-                'HTTP-Referer': 'https://github.com/ruvnet/agentic-flow',
+                'HTTP-Referer': 'the upstream project (see NOTICE)',
                 'X-Title': 'Agentic Flow Multi-Model Router',
                 'Content-Type': 'application/json'
             },

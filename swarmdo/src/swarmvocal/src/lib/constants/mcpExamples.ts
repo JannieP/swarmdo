@@ -51,15 +51,15 @@ export const mcpExamples: RouterExample[] = [
 	{
 		title: "Analyze a diff",
 		prompt:
-			"Use swarmdo__analyze_diff to assess risk and swarmdo__analyze_diff-reviewers to suggest reviewers for the PR at github.com/ruvnet/swarmdo/pull/1687.",
+			"Use swarmdo__analyze_diff to assess risk and swarmdo__analyze_diff-reviewers to suggest reviewers for the PR at the upstream project (see NOTICE)",
 		followUps: [
 			{
 				title: "Repo metrics",
-				prompt: "Get repository metrics with swarmdo__github_repo_analyze for ruvnet/swarmdo.",
+				prompt: "Get repository metrics with swarmdo__github_repo_analyze for upstream/swarmdo.",
 			},
 			{
 				title: "Open issues",
-				prompt: "List recent issues with swarmdo__github_issue_track for ruvnet/swarmdo.",
+				prompt: "List recent issues with swarmdo__github_issue_track for upstream/swarmdo.",
 			},
 		],
 	},

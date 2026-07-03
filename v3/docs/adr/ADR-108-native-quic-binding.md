@@ -2,14 +2,14 @@
 
 - Status: **Proposed — gated on upstream agentic-flow Phase-1**
 - Date: 2026-05-09
-- Authors: claude (drafted with rUv)
-- Related: [ADR-104](./ADR-104-federation-wire-transport.md), [ADR-105](./ADR-105-federation-v1-state-snapshot.md), upstream [ruvnet/agentic-flow#15-21](https://github.com/ruvnet/agentic-flow/issues?q=is%3Aissue+is%3Aopen+QUIC)
+- Authors: claude (drafted with the upstream author)
+- Related: [ADR-104](./ADR-104-federation-wire-transport.md), [ADR-105](./ADR-105-federation-v1-state-snapshot.md), upstream [upstream/agentic-flow#15-21](the upstream project (see NOTICE)?q=is%3Aissue+is%3Aopen+QUIC)
 
 ## Context
 
 Federation transport today (`alpha.9` + `agentic-flow@2.0.12-fix.2`) uses WebSocket. The loader pattern (ADR-104) lets us auto-upgrade to QUIC when a native binding is available — set `AGENTIC_FLOW_QUIC_NATIVE=1` and the same code path picks up the upgrade. But the native binding doesn't ship.
 
-What exists today in upstream `ruvnet/agentic-flow`:
+What exists today in upstream `upstream/agentic-flow`:
 - `crates/agentic-flow-quic/` — Rust crate using `quinn` (the canonical Rust QUIC impl). Full client + server features behind compile-time `client` / `server` features.
 - `crates/agentic-flow-quic/src/wasm.rs` — WASM bindings, but **explicitly a stub** ("WASM build is a stub since browsers don't support UDP/QUIC directly. For production QUIC, use native Node.js builds.")
 - `crates/agentic-flow-quic/wasm-pack-build.sh` — build script for the WASM stub bundle (already runs)
@@ -17,7 +17,7 @@ What exists today in upstream `ruvnet/agentic-flow`:
 
 What's missing for a real native build:
 1. **No N-API binding crate.** We need a `crates/agentic-flow-quic-node/` or similar that wraps the existing client/server in `napi-rs` for Node.js native modules
-2. **No per-platform binary distribution.** Pattern that works for `@ruvector/*` packages: separate `@agentic-flow/quic-native-darwin-arm64`, `@agentic-flow/quic-native-linux-x64-gnu`, etc., resolved at install via `optionalDependencies`
+2. **No per-platform binary distribution.** Pattern that works for `@swarmvector/*` packages: separate `@agentic-flow/quic-native-darwin-arm64`, `@agentic-flow/quic-native-linux-x64-gnu`, etc., resolved at install via `optionalDependencies`
 3. **No platform detection in `loadQuicTransport`.** Today the env-var probe is a placeholder; it needs to detect the platform-specific package + try to load it
 4. **No CI matrix for cross-compiling Rust → multi-platform binaries.** GitHub Actions Linux/macOS/Windows runners + cross compilation for ARM
 
@@ -30,7 +30,7 @@ What's missing for a real native build:
 
 **When the native binding ships upstream:**
 
-1. Update `agentic-flow` dep range in `@rufflo/plugin-agent-federation/package.json` to the version that includes native (likely `^2.1` after their Phase-1 closes)
+1. Update `agentic-flow` dep range in `@swarmdo/plugin-agent-federation/package.json` to the version that includes native (likely `^2.1` after their Phase-1 closes)
 2. Document the `AGENTIC_FLOW_QUIC_NATIVE=1` env var in the federation operator runbook
 3. Update doctor surface so `--component federation` reports `selectedBackend=quic` when native is loaded
 4. Add a federation-side smoke that asserts `getTransportCapabilities().selectedBackend === 'quic'` when env is set + binding installed

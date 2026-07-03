@@ -1,4 +1,4 @@
-# RuvLLM
+# SwarmLLM
 
 [![Rust](https://img.shields.io/badge/rust-1.77%2B-orange.svg)](https://www.rust-lang.org/)
 [![License](https://img.shields.io/badge/license-MIT%2FApache--2.0-blue.svg)](LICENSE)
@@ -6,21 +6,21 @@
 [![CPU](https://img.shields.io/badge/platform-CPU%20SIMD-green.svg)](#architecture)
 [![HuggingFace](https://img.shields.io/badge/export-HuggingFace-yellow.svg)](#huggingface-export)
 
-**Self-Optimizing Neural Architecture (SONA) with LFM2 Cortex, Ruvector Memory, and Intelligent Routing**
+**Self-Optimizing Neural Architecture (SONA) with LFM2 Cortex, Swarmvector Memory, and Intelligent Routing**
 
 > *"The intelligence is not in one model anymore. It is in the loop."*
 
 ---
 
-## What is RuvLLM?
+## What is SwarmLLM?
 
-RuvLLM is a **self-learning language model orchestration system** that combines frozen foundation models with adaptive memory and intelligent routing. Unlike traditional LLMs that rely solely on static parameters, RuvLLM continuously improves from every interaction through three temporal learning loops.
+SwarmLLM is a **self-learning language model orchestration system** that combines frozen foundation models with adaptive memory and intelligent routing. Unlike traditional LLMs that rely solely on static parameters, SwarmLLM continuously improves from every interaction through three temporal learning loops.
 
-**Key Innovation**: RuvLLM doesn't replace your LLM—it makes any LLM smarter over time by learning from experience, routing intelligently, and preventing catastrophic forgetting.
+**Key Innovation**: SwarmLLM doesn't replace your LLM—it makes any LLM smarter over time by learning from experience, routing intelligently, and preventing catastrophic forgetting.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                         RuvLLM Architecture                              │
+│                         SwarmLLM Architecture                              │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                          │
 │    Query ──► Embedding ──► Memory Search ──► Router Decision            │
@@ -55,14 +55,14 @@ RuvLLM is a **self-learning language model orchestration system** that combines 
 | Component | Description | Implementation |
 |-----------|-------------|----------------|
 | **LFM2 Cortex** | Frozen reasoning engine (135M-2.6B params) | Mock, Candle, or external (llama.cpp/vLLM) |
-| **Ruvector Memory** | Adaptive synaptic mesh with HNSW indexing | Full CPU implementation with graph expansion |
+| **Swarmvector Memory** | Adaptive synaptic mesh with HNSW indexing | Full CPU implementation with graph expansion |
 | **FastGRNN Router** | Intelligent model selection circuit | Sparse + low-rank matrices with EWC learning |
 | **Graph Attention** | Multi-head attention with edge features | 8-head attention, layer normalization |
 | **SONA Engine** | Self-optimizing neural architecture | LoRA + EWC++ + ReasoningBank |
 
 ### SONA: Self-Optimizing Neural Architecture
 
-RuvLLM introduces **SONA**, a three-tier temporal learning system:
+SwarmLLM introduces **SONA**, a three-tier temporal learning system:
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────┐
@@ -105,7 +105,7 @@ RuvLLM introduces **SONA**, a three-tier temporal learning system:
 
 ### Federated Learning Architecture
 
-RuvLLM supports **federated learning** where ephemeral agents collect trajectories and export to a central coordinator:
+SwarmLLM supports **federated learning** where ephemeral agents collect trajectories and export to a central coordinator:
 
 ```
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
@@ -172,15 +172,15 @@ Generation:   ~0.04ms  ████████░░  (40%)
 | Claude 3.5 Sonnet | 380.00 | 456.00 | 1.2x |
 | Gemini 2.0 Flash | 180.00 | 234.00 | 2.5x |
 | Llama 3.3 70B (vLLM) | 120.00 | 168.00 | 3.8x |
-| **RuvLLM Orchestration** | **0.06** | **0.08** | **~7,500x** |
+| **SwarmLLM Orchestration** | **0.06** | **0.08** | **~7,500x** |
 
-> **Note**: RuvLLM orchestration latency measures memory retrieval, routing, and context preparation—NOT LLM generation. Actual response quality depends on your LLM backend.
+> **Note**: SwarmLLM orchestration latency measures memory retrieval, routing, and context preparation—NOT LLM generation. Actual response quality depends on your LLM backend.
 
 ---
 
 ## Feature Comparison
 
-| Feature | GPT-4o | Claude | RAG | vLLM | RuvLLM |
+| Feature | GPT-4o | Claude | RAG | vLLM | SwarmLLM |
 |---------|--------|--------|-----|------|--------|
 | On-device Inference | ✗ | ✗ | ✗ | ✓ | ✓ |
 | Continuous Learning | ✗ | ✗ | ✗ | ✗ | ✓ |
@@ -212,8 +212,8 @@ Generation:   ~0.04ms  ████████░░  (40%)
 
 ```bash
 # Clone the repository
-git clone https://github.com/ruvnet/ruvector.git
-cd ruvector/examples/ruvLLM
+git clone the upstream project (see NOTICE)
+cd swarmvector/examples/swarmLLM
 
 # Build in release mode
 cargo build --release
@@ -223,31 +223,31 @@ cargo build --release
 
 ```bash
 # Interactive demo with mock inference
-cargo run --bin ruvllm-demo --release
+cargo run --bin swarmllm-demo --release
 
 # SIMD capabilities demo
-cargo run --bin ruvllm-simd-demo --release
+cargo run --bin swarmllm-simd-demo --release
 
 # Quick benchmark
-cargo run --bin ruvllm-bench --release
+cargo run --bin swarmllm-bench --release
 
 # Full benchmark suite
-cargo run --bin ruvllm-benchmark-suite --release
+cargo run --bin swarmllm-benchmark-suite --release
 
 # HTTP server (requires 'server' feature)
-cargo run --bin ruvllm-server --release --features server
+cargo run --bin swarmllm-server --release --features server
 
 # Pretraining pipeline
-cargo run --bin ruvllm-pretrain --release
+cargo run --bin swarmllm-pretrain --release
 
 # HuggingFace export (requires 'hf-export' feature)
-cargo run --bin ruvllm-export --release --features hf-export -- help
+cargo run --bin swarmllm-export --release --features hf-export -- help
 ```
 
 ### Library Usage
 
 ```rust
-use ruvllm::{Config, RuvLLM, Result};
+use swarmllm::{Config, SwarmLLM, Result};
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -260,7 +260,7 @@ async fn main() -> Result<()> {
         .build()?;
 
     // Initialize
-    let llm = RuvLLM::new(config).await?;
+    let llm = SwarmLLM::new(config).await?;
 
     // Create a session for multi-turn conversation
     let session = llm.new_session();
@@ -287,7 +287,7 @@ async fn main() -> Result<()> {
 ### SIMD Inference Engine
 
 ```rust
-use ruvllm::{SimdInferenceEngine, SimdGenerationConfig, SimdOps};
+use swarmllm::{SimdInferenceEngine, SimdGenerationConfig, SimdOps};
 
 // Create SIMD-optimized engine
 let engine = SimdInferenceEngine::new(256, 128, 4, 4)?;
@@ -307,7 +307,7 @@ let result = engine.generate("Once upon a time", &config)?;
 ### SONA Learning Loops
 
 ```rust
-use ruvllm::sona::{LoopCoordinator, SonaConfig, InstantLoop, BackgroundLoop};
+use swarmllm::sona::{LoopCoordinator, SonaConfig, InstantLoop, BackgroundLoop};
 
 // Initialize SONA coordinator
 let config = SonaConfig {
@@ -332,7 +332,7 @@ coordinator.deep_consolidation().await;
 ### Federated Learning
 
 ```rust
-use ruvector_sona::training::{EphemeralAgent, FederatedCoordinator, SonaConfig};
+use swarmvector_sona::training::{EphemeralAgent, FederatedCoordinator, SonaConfig};
 
 // Create central coordinator (persistent, large capacity)
 let mut coordinator = FederatedCoordinator::default_coordinator("main", 3072);
@@ -431,22 +431,22 @@ Export learned patterns, LoRA weights, and preference pairs to HuggingFace:
 
 ```bash
 # Export LoRA weights in PEFT-compatible SafeTensors format
-ruvllm-export safetensors ./exports/lora
+swarmllm-export safetensors ./exports/lora
 
 # Export learned patterns as JSONL dataset
-ruvllm-export patterns ./exports/patterns
+swarmllm-export patterns ./exports/patterns
 
 # Export DPO/RLHF preference pairs
-ruvllm-export preferences ./exports/preferences
+swarmllm-export preferences ./exports/preferences
 
 # Export all artifacts
-ruvllm-export all ./exports
+swarmllm-export all ./exports
 
 # Push to HuggingFace Hub
-HF_TOKEN=your_token ruvllm-export push username/my-sona-model
+HF_TOKEN=your_token swarmllm-export push username/my-sona-model
 
 # Generate pretraining pipeline configuration
-ruvllm-export pretrain ./exports
+swarmllm-export pretrain ./exports
 ```
 
 ---
@@ -605,16 +605,16 @@ curl -X POST http://localhost:3000/query \
 
 ```bash
 # Run all tests
-cargo test -p ruvllm
+cargo test -p swarmllm
 
 # Unit tests only (47 tests)
-cargo test -p ruvllm --lib
+cargo test -p swarmllm --lib
 
 # Integration tests (15 tests)
-cargo test -p ruvllm --test integration
+cargo test -p swarmllm --test integration
 
 # With output
-cargo test -p ruvllm -- --nocapture
+cargo test -p swarmllm -- --nocapture
 ```
 
 ### Test Coverage
@@ -634,7 +634,7 @@ cargo test -p ruvllm -- --nocapture
 ## Project Structure
 
 ```
-examples/ruvLLM/
+examples/swarmLLM/
 ├── Cargo.toml              # Dependencies and features
 ├── README.md               # This file
 ├── src/
@@ -642,7 +642,7 @@ examples/ruvLLM/
 │   ├── config.rs           # Configuration system
 │   ├── error.rs            # Error types
 │   ├── types.rs            # Core domain types
-│   ├── orchestrator.rs     # Main RuvLLM coordinator
+│   ├── orchestrator.rs     # Main SwarmLLM coordinator
 │   ├── memory.rs           # HNSW memory service
 │   ├── router.rs           # FastGRNN router
 │   ├── attention.rs        # Graph attention engine
@@ -690,7 +690,7 @@ examples/ruvLLM/
 
 ## Feature Flags
 
-### RuvLLM Features
+### SwarmLLM Features
 
 | Feature | Default | Description |
 |---------|---------|-------------|
@@ -698,7 +698,7 @@ examples/ruvLLM/
 | `metrics` | ✓ | Prometheus metrics export |
 | `server` | ✗ | HTTP server with Axum |
 | `real-inference` | ✗ | Candle-based real LLM inference |
-| `hf-export` | ✗ | HuggingFace export via ruvector-sona |
+| `hf-export` | ✗ | HuggingFace export via swarmvector-sona |
 | `full` | ✗ | All features enabled |
 
 ```bash
@@ -706,7 +706,7 @@ examples/ruvLLM/
 cargo build --release --features full
 ```
 
-### ruvector-sona Features (Dependency)
+### swarmvector-sona Features (Dependency)
 
 | Feature | Default | Description |
 |---------|---------|-------------|
@@ -792,6 +792,6 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ---
 
 <p align="center">
-  <b>Built with Rust + Ruvector</b><br>
+  <b>Built with Rust + Swarmvector</b><br>
   <i>Self-Learning AI that gets smarter with every interaction</i>
 </p>

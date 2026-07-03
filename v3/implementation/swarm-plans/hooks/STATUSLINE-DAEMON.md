@@ -1,4 +1,4 @@
-# Rufflo V3 Statusline Daemon System
+# Swarmdo V3 Statusline Daemon System
 
 ## Overview
 
@@ -17,8 +17,8 @@ Real-time statusline updates powered by SQLite-backed daemon processes that moni
 ├─────────────────────────────────────────────────────────────┤
 │  statusline.sh (on-demand)                                   │
 │  └─> Reads from:                                             │
-│       ├─ .rufflo/metrics.db (primary, SQLite)          │
-│       └─ .rufflo/metrics/*.json (exported, compat)     │
+│       ├─ .swarmdo/metrics.db (primary, SQLite)          │
+│       └─ .swarmdo/metrics/*.json (exported, compat)     │
 ├─────────────────────────────────────────────────────────────┤
 │  SessionEnd Hook                                             │
 │  └─> daemon-manager.sh stop                                 │
@@ -56,7 +56,7 @@ CREATE TABLE v3_progress (
   id INTEGER PRIMARY KEY,
   domains_completed INTEGER,    -- 0-5 bounded contexts
   ddd_progress INTEGER,         -- 0-100%
-  total_modules INTEGER,        -- @rufflo modules
+  total_modules INTEGER,        -- @swarmdo modules
   total_files INTEGER,          -- TypeScript files
   total_lines INTEGER,          -- Lines of code
   last_updated TEXT
@@ -140,7 +140,7 @@ On-demand status display for Claude Code.
 
 **Output Format:**
 ```
-▊ Rufflo V3 ● agentic-flow@alpha  │  ⎇ v3
+▊ Swarmdo V3 ● agentic-flow@alpha  │  ⎇ v3
 ─────────────────────────────────────────────────────
 🏗️  DDD Domains    [●●●●●]  5/5    ⚡ 1.0x → unverified (no benchmark)
 🤖 Swarm Agents    ◉ [ 2/15]      🟢 CVE 3/3    💾 0%
@@ -199,7 +199,7 @@ In `.claude/settings.json`:
   },
   "statusLine": {
     "type": "command",
-    "command": "/workspaces/rufflo/.claude/statusline.sh"
+    "command": "/workspaces/swarmdo/.claude/statusline.sh"
   }
 }
 ```
@@ -213,17 +213,17 @@ In `.claude/settings.json`:
 | `.claude/helpers/swarm-monitor.sh` | Process detection |
 | `.claude/helpers/sync-v3-metrics.sh` | Legacy bash sync (deprecated) |
 | `.claude/statusline.sh` | Status display |
-| `.rufflo/metrics.db` | SQLite database |
-| `.rufflo/metrics/*.json` | Exported JSON (compatibility) |
-| `.rufflo/pids/*.pid` | Daemon PID files |
-| `.rufflo/logs/*.log` | Daemon logs |
+| `.swarmdo/metrics.db` | SQLite database |
+| `.swarmdo/metrics/*.json` | Exported JSON (compatibility) |
+| `.swarmdo/pids/*.pid` | Daemon PID files |
+| `.swarmdo/logs/*.log` | Daemon logs |
 
 ## Metrics Tracked
 
 ### V3 Progress
 - Domains completed (0-5 bounded contexts)
 - DDD architecture progress (0-100%)
-- Module count (10 @rufflo modules)
+- Module count (10 @swarmdo modules)
 - Files and lines of code
 
 ### Security
@@ -247,8 +247,8 @@ In `.claude/settings.json`:
 ### Daemons not starting
 ```bash
 # Check logs
-cat .rufflo/logs/daemon.log
-cat .rufflo/logs/metrics-daemon.log
+cat .swarmdo/logs/daemon.log
+cat .swarmdo/logs/metrics-daemon.log
 
 # Manual start
 .claude/helpers/daemon-manager.sh start
@@ -266,6 +266,6 @@ node .claude/helpers/metrics-db.mjs sync
 ### Database corruption
 ```bash
 # Remove and recreate
-rm .rufflo/metrics.db
+rm .swarmdo/metrics.db
 node .claude/helpers/metrics-db.mjs sync
 ```

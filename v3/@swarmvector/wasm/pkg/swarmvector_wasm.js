@@ -1,4 +1,4 @@
-/* @ts-self-types="./ruvector_wasm.d.ts" */
+/* @ts-self-types="./swarmvector_wasm.d.ts" */
 
 /**
  * JavaScript-compatible SearchResult
@@ -852,7 +852,7 @@ function __wbg_get_imports() {
     };
     return {
         __proto__: null,
-        "./ruvector_wasm_bg.js": import0,
+        "./swarmvector_wasm_bg.js": import0,
     };
 }
 
@@ -1172,7 +1172,7 @@ async function __wbg_init(module_or_path) {
     }
 
     if (module_or_path === undefined) {
-        module_or_path = new URL('ruvector_wasm_bg.wasm', import.meta.url);
+        module_or_path = new URL('swarmvector_wasm_bg.wasm', import.meta.url);
     }
     const imports = __wbg_get_imports();
 

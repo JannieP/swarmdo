@@ -1,7 +1,7 @@
-// Example: Basic usage of Ruvector GNN Node.js bindings
+// Example: Basic usage of Swarmvector GNN Node.js bindings
 
 const {
-  RuvectorLayer,
+  SwarmvectorLayer,
   TensorCompress,
   differentiableSearch,
   hierarchicalForward,
@@ -15,7 +15,7 @@ console.log('');
 // ==================== Example 1: GNN Layer ====================
 console.log('=== Example 1: GNN Layer ===');
 
-const layer = new RuvectorLayer(4, 8, 2, 0.1);
+const layer = new SwarmvectorLayer(4, 8, 2, 0.1);
 console.log('Created GNN layer (input_dim: 4, hidden_dim: 8, heads: 2, dropout: 0.1)');
 
 const nodeEmbedding = [1.0, 2.0, 3.0, 4.0];
@@ -86,7 +86,7 @@ const layerEmbeddings = [
   ],
 ];
 
-const layer1 = new RuvectorLayer(2, 2, 1, 0.0);
+const layer1 = new SwarmvectorLayer(2, 2, 1, 0.0);
 const layers = [layer1.toJson()];
 
 const finalEmbedding = hierarchicalForward(query2, layerEmbeddings, layers);
@@ -97,9 +97,9 @@ console.log('');
 // ==================== Example 5: Layer Serialization ====================
 console.log('=== Example 5: Layer Serialization ===');
 
-const originalLayer = new RuvectorLayer(8, 16, 4, 0.2);
+const originalLayer = new SwarmvectorLayer(8, 16, 4, 0.2);
 const serialized = originalLayer.toJson();
-const deserialized = RuvectorLayer.fromJson(serialized);
+const deserialized = SwarmvectorLayer.fromJson(serialized);
 
 console.log('Original layer created (8 -> 16, heads: 4, dropout: 0.2)');
 console.log('Serialized size:', serialized.length, 'bytes');

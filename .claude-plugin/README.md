@@ -1,6 +1,6 @@
 # 🚀 Swarmdo Plugin - Complete Enterprise AI Agent Orchestration
 
-[![Version](https://img.shields.io/badge/version-2.5.0-blue.svg)](https://github.com/ruvnet/claude-flow)
+[![Version](https://img.shields.io/badge/version-2.5.0-blue.svg)](the upstream project (see NOTICE))
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-%3E%3D2.0.0-purple.svg)](https://claude.com/code)
 
@@ -272,13 +272,13 @@ Swarmdo is the most comprehensive Claude Code plugin for enterprise AI agent orc
 In Claude Code:
 
 ```
-/plugin add ruvnet/claude-flow
+/plugin add upstream/claude-flow
 ```
 
 Or from local directory:
 
 ```bash
-git clone https://github.com/ruvnet/claude-flow.git
+git clone the upstream project (see NOTICE)
 cd swarmdo
 ```
 
@@ -327,7 +327,7 @@ claude plugin list
 
 In Claude Code:
 ```
-/plugin add ruvnet/claude-flow
+/plugin add upstream/claude-flow
 /restart
 ```
 
@@ -335,7 +335,7 @@ In Claude Code:
 
 ```bash
 # Clone the repository
-git clone https://github.com/ruvnet/claude-flow.git
+git clone the upstream project (see NOTICE)
 cd swarmdo/claude-plugin
 
 # Run installation script
@@ -630,9 +630,9 @@ Swarmdo integrates with 3 MCP servers providing 110+ tools:
 
 ## 🤝 Support
 
-- **Documentation**: [GitHub Wiki](https://github.com/ruvnet/claude-flow/wiki)
-- **Issues**: [GitHub Issues](https://github.com/ruvnet/claude-flow/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/ruvnet/claude-flow/discussions)
+- **Documentation**: [GitHub Wiki](the upstream project (see NOTICE))
+- **Issues**: [GitHub Issues](the upstream project (see NOTICE))
+- **Discussions**: [GitHub Discussions](the upstream project (see NOTICE))
 
 ---
 
@@ -695,10 +695,10 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 ## 🌟 Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=ruvnet/claude-flow&type=Date)](https://star-history.com/#ruvnet/claude-flow&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=upstream/claude-flow&type=Date)](https://star-history.com/#upstream/claude-flow&Date)
 
 ---
 
-**Made with ❤️ by rUv**
+**Made with ❤️ by the upstream author**
 
 *Enterprise AI Agent Orchestration for Claude Code*

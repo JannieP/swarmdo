@@ -1,8 +1,8 @@
-# ruvector-attention SDK Guide
+# swarmvector-attention SDK Guide
 
 ## Overview
 
-The ruvector-attention SDK provides high-level, ergonomic APIs for building attention mechanisms. It includes three main components:
+The swarmvector-attention SDK provides high-level, ergonomic APIs for building attention mechanisms. It includes three main components:
 
 1. **Builder API** - Fluent interface for configuring attention
 2. **Pipeline API** - Composable operations with normalization and residuals
@@ -13,7 +13,7 @@ The ruvector-attention SDK provides high-level, ergonomic APIs for building atte
 ### Basic Usage
 
 ```rust
-use ruvector_attention::sdk::*;
+use swarmvector_attention::sdk::*;
 
 // Create a simple multi-head attention
 let attention = multi_head(768, 12)
@@ -32,7 +32,7 @@ let output = attention.compute(&query, &keys, &values)?;
 ### Using Presets
 
 ```rust
-use ruvector_attention::sdk::presets::*;
+use swarmvector_attention::sdk::presets::*;
 
 // BERT-style attention
 let bert = AttentionPreset::Bert.builder(768).build()?;
@@ -50,7 +50,7 @@ let auto = for_sequences(512, 8192).build()?;
 ### Building Pipelines
 
 ```rust
-use ruvector_attention::sdk::*;
+use swarmvector_attention::sdk::*;
 
 // Create a transformer block
 let attention = multi_head(768, 12).build()?;
@@ -273,7 +273,7 @@ let vit = from_model_name("vit", 768)?;
 ### Custom Transformer Layer
 
 ```rust
-use ruvector_attention::sdk::*;
+use swarmvector_attention::sdk::*;
 
 fn create_transformer_layer(dim: usize, num_heads: usize) -> AttentionResult<AttentionPipeline> {
     let attention = multi_head(dim, num_heads)
@@ -292,7 +292,7 @@ fn create_transformer_layer(dim: usize, num_heads: usize) -> AttentionResult<Att
 ### Efficient Long-Sequence Processing
 
 ```rust
-use ruvector_attention::sdk::*;
+use swarmvector_attention::sdk::*;
 
 fn create_long_context_attention(dim: usize, max_len: usize) -> AttentionResult<Box<dyn Attention>> {
     if max_len <= 2048 {
@@ -311,7 +311,7 @@ fn create_long_context_attention(dim: usize, max_len: usize) -> AttentionResult<
 ### Hierarchical Graph Attention
 
 ```rust
-use ruvector_attention::sdk::*;
+use swarmvector_attention::sdk::*;
 
 fn create_graph_attention(dim: usize, is_tree: bool) -> AttentionResult<Box<dyn Attention>> {
     if is_tree {
@@ -327,7 +327,7 @@ fn create_graph_attention(dim: usize, is_tree: bool) -> AttentionResult<Box<dyn 
 ### Sparse + Dense Hybrid
 
 ```rust
-use ruvector_attention::sdk::*;
+use swarmvector_attention::sdk::*;
 
 fn create_hybrid_pipeline(dim: usize) -> AttentionResult<AttentionPipeline> {
     // Local attention
@@ -346,7 +346,7 @@ fn create_hybrid_pipeline(dim: usize) -> AttentionResult<AttentionPipeline> {
 ### MoE for Specialized Tasks
 
 ```rust
-use ruvector_attention::sdk::*;
+use swarmvector_attention::sdk::*;
 
 fn create_moe_attention(dim: usize) -> AttentionResult<Box<dyn Attention>> {
     moe(dim, 16, 2)  // 16 experts, route to top-2

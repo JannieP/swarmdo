@@ -14,11 +14,11 @@ Healthcare organizations require AI systems that can assist with clinical decisi
 
 ## Decision
 
-Create a **Healthcare Clinical Decision Support Plugin** that leverages RuVector WASM packages for medical document analysis, patient record similarity matching, and clinical pathway recommendations.
+Create a **Healthcare Clinical Decision Support Plugin** that leverages SwarmVector WASM packages for medical document analysis, patient record similarity matching, and clinical pathway recommendations.
 
 ## Plugin Name
 
-`@rufflo/plugin-healthcare-clinical`
+`@swarmdo/plugin-healthcare-clinical`
 
 ## Description
 
@@ -29,9 +29,9 @@ A HIPAA-compliant clinical decision support plugin that combines ultra-fast vect
 | Package | Purpose |
 |---------|---------|
 | `micro-hnsw-wasm` | Fast similarity search for patient records and medical literature (150x faster) |
-| `ruvector-gnn-wasm` | Graph neural networks for patient pathway analysis and comorbidity networks |
-| `ruvector-hyperbolic-hnsw-wasm` | Hierarchical medical ontology embeddings (ICD-10, SNOMED-CT trees) |
-| `ruvector-sparse-inference-wasm` | Efficient inference on sparse clinical features |
+| `swarmvector-gnn-wasm` | Graph neural networks for patient pathway analysis and comorbidity networks |
+| `swarmvector-hyperbolic-hnsw-wasm` | Hierarchical medical ontology embeddings (ICD-10, SNOMED-CT trees) |
+| `swarmvector-sparse-inference-wasm` | Efficient inference on sparse clinical features |
 
 ## MCP Tools
 
@@ -364,9 +364,9 @@ const safeQuery = {
 {
   "dependencies": {
     "micro-hnsw-wasm": "^0.2.0",
-    "ruvector-gnn-wasm": "^0.1.0",
-    "ruvector-hyperbolic-hnsw-wasm": "^0.1.0",
-    "ruvector-sparse-inference-wasm": "^0.1.0",
+    "swarmvector-gnn-wasm": "^0.1.0",
+    "swarmvector-hyperbolic-hnsw-wasm": "^0.1.0",
+    "swarmvector-sparse-inference-wasm": "^0.1.0",
     "@medplum/fhirtypes": "^2.0.0"
   }
 }
@@ -392,7 +392,7 @@ const safeQuery = {
 | ADR | Relationship |
 |-----|--------------|
 | ADR-004: Plugin Architecture | Foundation - Defines plugin structure |
-| ADR-017: RuVector Integration | Dependency - Provides WASM packages |
+| ADR-017: SwarmVector Integration | Dependency - Provides WASM packages |
 | ADR-041: Hyperbolic Reasoning | Related - Medical ontology navigation |
 | ADR-039: Cognitive Kernel | Related - Clinical decision support reasoning |
 
@@ -401,7 +401,7 @@ const safeQuery = {
 - HL7 FHIR R4 Specification: https://hl7.org/fhir/R4/
 - SNOMED CT: https://www.snomed.org/
 - ICD-10: https://www.who.int/standards/classifications/classification-of-diseases
-- ADR-017: RuVector Integration
+- ADR-017: SwarmVector Integration
 - ADR-004: Plugin Architecture
 
 ---

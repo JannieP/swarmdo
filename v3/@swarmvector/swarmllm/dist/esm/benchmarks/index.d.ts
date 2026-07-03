@@ -1,7 +1,7 @@
 /**
- * RuvLTRA Benchmark Suite
+ * SwarmLTRA Benchmark Suite
  *
- * Comprehensive benchmarks for evaluating RuvLTRA models
+ * Comprehensive benchmarks for evaluating SwarmLTRA models
  * on Claude Code-specific use cases.
  */
 export * from './routing-benchmark';

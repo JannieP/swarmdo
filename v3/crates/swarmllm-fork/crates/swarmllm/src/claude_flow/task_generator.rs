@@ -1,6 +1,6 @@
 //! Task Generator for Claude Flow Pretraining
 //!
-//! Generates realistic tasks for pretraining the RuvLTRA model on Claude Flow use cases.
+//! Generates realistic tasks for pretraining the SwarmLTRA model on Claude Flow use cases.
 //!
 //! ## Task Categories
 //!

@@ -1,6 +1,6 @@
-# RuvLLM Training Module
+# SwarmLLM Training Module
 
-Fine-tuning dataset generation for RuvLTRA models, focusing on Claude Flow agent task routing and model selection.
+Fine-tuning dataset generation for SwarmLTRA models, focusing on Claude Flow agent task routing and model selection.
 
 ## SOTA Achievements (v2.3)
 
@@ -36,7 +36,7 @@ Fine-tuning dataset generation for RuvLTRA models, focusing on Claude Flow agent
 
 ## Overview
 
-The training module generates synthetic datasets for fine-tuning RuvLTRA models on two key tasks:
+The training module generates synthetic datasets for fine-tuning SwarmLTRA models on two key tasks:
 
 1. **Agent Routing**: Classify tasks to appropriate Claude Flow agents (Coder, Researcher, Security, Architecture, Reviewer)
 2. **Model Selection**: Route tasks to optimal Claude models (Haiku/Sonnet/Opus) based on complexity
@@ -46,24 +46,24 @@ The training module generates synthetic datasets for fine-tuning RuvLTRA models 
 The `real_trainer` module provides production-grade training with actual Candle weight updates:
 
 ```rust
-use ruvllm::training::{RealContrastiveTrainer, RealTrainingConfig, run_training_pipeline};
+use swarmllm::training::{RealContrastiveTrainer, RealTrainingConfig, run_training_pipeline};
 use std::path::PathBuf;
 
 // Option 1: Full pipeline with GRPO feedback
 #[tokio::main]
 async fn main() -> Result<(), String> {
     run_training_pipeline(
-        &PathBuf::from("~/.ruvllm/training/combined-sota.jsonl"),
-        &PathBuf::from("ruvltra-claude-code-0.5b-q4_k_m.gguf"),
-        &PathBuf::from("ruvltra-claude-code-sota.gguf"),
+        &PathBuf::from("~/.swarmllm/training/combined-sota.jsonl"),
+        &PathBuf::from("swarmltra-claude-code-0.5b-q4_k_m.gguf"),
+        &PathBuf::from("swarmltra-claude-code-sota.gguf"),
         Some(&std::env::var("ANTHROPIC_API_KEY").unwrap()), // For GRPO
     ).await
 }
 
 // Option 2: Manual training with fine-grained control
 let config = RealTrainingConfig {
-    model_path: PathBuf::from("ruvltra-claude-code-0.5b-q4_k_m.gguf"),
-    output_path: PathBuf::from("ruvltra-claude-code-sota.gguf"),
+    model_path: PathBuf::from("swarmltra-claude-code-0.5b-q4_k_m.gguf"),
+    output_path: PathBuf::from("swarmltra-claude-code-sota.gguf"),
     learning_rate: 2e-5,
     weight_decay: 0.01,
     batch_size: 16,
@@ -107,7 +107,7 @@ bash output.gguf.weights/merge_adapter.sh
 GRPO (Group Relative Policy Optimization) uses Claude as a judge to improve training:
 
 ```rust
-use ruvllm::training::{GrpoEvaluator, GrpoFeedback};
+use swarmllm::training::{GrpoEvaluator, GrpoFeedback};
 
 let evaluator = GrpoEvaluator::new(api_key);
 
@@ -131,7 +131,7 @@ let result = trainer.train()?;
 The `contrastive` module provides state-of-the-art embedding fine-tuning:
 
 ```rust
-use ruvllm::training::{ContrastiveTrainer, ContrastiveConfig, TrainingTriplet};
+use swarmllm::training::{ContrastiveTrainer, ContrastiveConfig, TrainingTriplet};
 
 // Configure contrastive training
 let config = ContrastiveConfig {
@@ -160,7 +160,7 @@ Generate high-quality confusing training pairs using Claude Opus 4.5:
 ```bash
 node scripts/training/claude-hard-negatives.js --count=10 --grpo
 
-# Output: ~/.ruvllm/training/claude-hard-negatives.jsonl
+# Output: ~/.swarmllm/training/claude-hard-negatives.jsonl
 ```
 
 This generates triplets for confusing agent pairs:
@@ -173,7 +173,7 @@ This generates triplets for confusing agent pairs:
 ## Quick Start
 
 ```rust
-use ruvllm::training::{DatasetGenerator, DatasetConfig};
+use swarmllm::training::{DatasetGenerator, DatasetConfig};
 
 // Generate dataset with 100 examples per category
 let config = DatasetConfig::default();
@@ -247,7 +247,7 @@ let (train, val, test) = dataset.split(0.7, 0.15, 0.15, 42);
 ## Dataset Configuration
 
 ```rust
-use ruvllm::training::{DatasetConfig, AugmentationConfig};
+use swarmllm::training::{DatasetConfig, AugmentationConfig};
 
 let config = DatasetConfig {
     // Base examples per category
@@ -443,13 +443,13 @@ Training examples include quality scores (0.0-1.0) based on:
    - Research tasks: 0.80-0.89 (adequate quality)
    - Review tasks: 0.82-0.90 (good quality)
 
-## Integration with RuvLTRA
+## Integration with SwarmLTRA
 
 ### Fine-Tuning Pipeline
 
 ```rust
-use ruvllm::training::DatasetGenerator;
-use ruvllm::SonaLlm;
+use swarmllm::training::DatasetGenerator;
+use swarmllm::SonaLlm;
 
 // 1. Generate dataset
 let dataset = DatasetGenerator::new(config).generate();
@@ -526,28 +526,28 @@ TaskTemplate {
 
 ```bash
 # 1. Generate 500+ Claude-powered hard negatives
-node npm/packages/ruvllm/scripts/training/claude-hard-negatives.js --count=50
+node npm/packages/swarmllm/scripts/training/claude-hard-negatives.js --count=50
 
 # 2. Merge all triplets (base + hard negatives)
-cat ~/.ruvllm/training/ruvltra-finetuned/triplets.jsonl > combined.jsonl
+cat ~/.swarmllm/training/swarmltra-finetuned/triplets.jsonl > combined.jsonl
 echo "" >> combined.jsonl
-cat ~/.ruvllm/training/claude-hard-negatives.jsonl >> combined.jsonl
+cat ~/.swarmllm/training/claude-hard-negatives.jsonl >> combined.jsonl
 echo "" >> combined.jsonl
-cat ~/.ruvllm/training/claude-hard-negatives-batch2.jsonl >> combined.jsonl
+cat ~/.swarmllm/training/claude-hard-negatives-batch2.jsonl >> combined.jsonl
 
 # 3. Run REAL contrastive training with Candle (30 epochs)
 cargo run --example train_real --release --features candle -- \
-    --triplets ~/.ruvllm/training/combined-sota.jsonl \
-    --base-model ruvltra-claude-code-0.5b-q4_k_m.gguf \
-    --output ruvltra-claude-code-sota.gguf \
+    --triplets ~/.swarmllm/training/combined-sota.jsonl \
+    --base-model swarmltra-claude-code-0.5b-q4_k_m.gguf \
+    --output swarmltra-claude-code-sota.gguf \
     --epochs 30 \
     --grpo  # Enable GRPO feedback loop
 
 # 4. Merge trained adapter with base model
-bash ruvltra-claude-code-sota.gguf.weights/merge_adapter.sh
+bash swarmltra-claude-code-sota.gguf.weights/merge_adapter.sh
 
 # 5. Benchmark the improvement
-node npm/packages/ruvllm/scripts/hybrid-model-compare.js
+node npm/packages/swarmllm/scripts/hybrid-model-compare.js
 ```
 
 ### Simulated Contrastive Fine-Tuning (Quick Test)
@@ -555,7 +555,7 @@ node npm/packages/ruvllm/scripts/hybrid-model-compare.js
 ```bash
 # Simulated training (no real weight updates, for testing)
 cargo run --example train_contrastive --release -- \
-    --triplets ~/.ruvllm/training/combined-sota.jsonl \
+    --triplets ~/.swarmllm/training/combined-sota.jsonl \
     --epochs 30
 
 # Expected output:
@@ -582,12 +582,12 @@ cargo run --example generate_claude_dataset --release
 
 ```bash
 # Run tests
-cargo test --package ruvllm --lib training
+cargo test --package swarmllm --lib training
 
 # Test specific functionality
-cargo test --package ruvllm test_dataset_generation
-cargo test --package ruvllm test_dataset_augmentation
-cargo test --package ruvllm test_model_recommendation
+cargo test --package swarmllm test_dataset_generation
+cargo test --package swarmllm test_dataset_augmentation
+cargo test --package swarmllm test_model_recommendation
 ```
 
 ## Performance
@@ -621,8 +621,8 @@ Dataset generation is highly optimized:
 
 ## References
 
-- **Claude Flow**: https://github.com/ruvnet/claude-flow
-- **RuvLTRA Architecture**: `../../README.md`
+- **Claude Flow**: the upstream project (see NOTICE)
+- **SwarmLTRA Architecture**: `../../README.md`
 - **SONA Learning**: `../../../sona/README.md`
 - **Dataset Format**: `../../../../docs/claude_dataset_format.md`
 

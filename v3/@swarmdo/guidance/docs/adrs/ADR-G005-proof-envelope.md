@@ -77,7 +77,7 @@ The ledger supports temporal queries: `getEventsInRange(startMs, endMs)`, `getRe
 
 - **In-memory storage.** The current implementation stores events in an in-memory array. Mitigation: `RunLedger` accepts a `maxEvents` constructor parameter (default 0 = unlimited). When set, the oldest 10% of events are evicted in a batch splice when the limit is exceeded (see ADR-G026). Events can also be exported and cleared periodically via `exportEvents()` and `clear()`.
 - **No cryptographic chaining.** The current implementation uses UUIDs and guidance hashes but does not implement full hash-chain linking (each event's hash includes the previous event's hash). This is a future enhancement.
-- **Signing key is required.** The `createProofChain()` factory requires `{ signingKey: string }` as of ADR-G026. Callers must provide an explicit HMAC key; there is no fallback. The `RuvBotBridgeConfig` exposes a `proofSigningKey` field for this purpose.
+- **Signing key is required.** The `createProofChain()` factory requires `{ signingKey: string }` as of ADR-G026. Callers must provide an explicit HMAC key; there is no fallback. The `SwarmBotBridgeConfig` exposes a `proofSigningKey` field for this purpose.
 - **Clock dependency.** Timestamps rely on `Date.now()`, which can be manipulated on the host. Mitigation: in production, timestamps should be sourced from a trusted time service.
 
 ## Alternatives Considered
@@ -96,9 +96,9 @@ Log events without running evaluators. Rejected because the evaluators are what 
 
 ## References
 
-- `v3/@rufflo/guidance/src/types.ts` -- `RunEvent`, `Violation`, `EvaluatorResult`, `ViolationRanking`, `OptimizationMetrics`
-- `v3/@rufflo/guidance/src/ledger.ts` -- `RunLedger`, all evaluator classes
-- `v3/@rufflo/guidance/src/compiler.ts` -- `hashContent()` for guidance hash generation
-- `v3/@rufflo/guidance/src/index.ts` -- `GuidanceControlPlane.startRun()`, `finalizeRun()`
+- `v3/@swarmdo/guidance/src/types.ts` -- `RunEvent`, `Violation`, `EvaluatorResult`, `ViolationRanking`, `OptimizationMetrics`
+- `v3/@swarmdo/guidance/src/ledger.ts` -- `RunLedger`, all evaluator classes
+- `v3/@swarmdo/guidance/src/compiler.ts` -- `hashContent()` for guidance hash generation
+- `v3/@swarmdo/guidance/src/index.ts` -- `GuidanceControlPlane.startRun()`, `finalizeRun()`
 - ADR-G001 -- Why auditing is needed for autonomous agents
 - ADR-G008 -- How the optimizer consumes violation rankings
