@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>swarmdo — agent swarms for Claude Code</title>
+<meta name="description" content="swarmdo — agent swarm orchestration for Claude Code. 60+ agent roles, hive-mind consensus, vector memory, and a Postgres vector extension.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐝</text></svg>">
+</head>
+<body>
+
+
+<style>
+  :root{
+    --ink:#0f1317;          /* blue-biased terminal ground */
+    --ink-2:#131920;
+    --panel:#161d24;        /* raised surface */
+    --panel-2:#1b242d;
+    --line:#232e39;         /* hairline on dark */
+    --honey:#e2a33c;        /* the swarm's own color */
+    --honey-deep:#b97f22;
+    --honey-dim:#8a6b35;
+    --bright:#edf1f4;
+    --fog:#a9b4be;          /* body on dark, blue-grey */
+    --mute:#66737f;
+    /* muted ANSI, terminal only */
+    --a-green:#83b98a; --a-cyan:#6fb3c4; --a-red:#c97070; --a-yellow:#d5b25e; --a-purple:#a38fc9; --a-blue:#7d9fc9;
+    --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+    --sans:"Avenir Next","Seravek","Gill Sans Nova",Avenir,system-ui,-apple-system,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+  body{margin:0;background:var(--ink);color:var(--fog);font-family:var(--sans);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+  a{color:var(--honey);text-decoration:none}
+  a:hover{text-decoration:underline;text-underline-offset:3px}
+  a:focus-visible,button:focus-visible,input:focus-visible+label,[tabindex]:focus-visible{outline:2px solid var(--honey);outline-offset:3px;border-radius:2px}
+  ::selection{background:rgba(226,163,60,.28)}
+
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+
+  /* ── nav ─────────────────────────────── */
+  nav{position:sticky;top:0;z-index:20;background:rgba(15,19,23,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav-i{display:flex;align-items:center;gap:28px;height:58px}
+  .brand{font-family:var(--mono);font-size:16px;color:var(--bright);font-weight:600;letter-spacing:.01em}
+  .brand b{color:var(--honey);font-weight:600}
+  .nav-links{display:flex;gap:22px;margin-left:auto;font-family:var(--mono);font-size:13px}
+  .nav-links a{color:var(--fog)}
+  .nav-links a:hover{color:var(--honey);text-decoration:none}
+  .ver{font-family:var(--mono);font-size:12px;color:var(--mute);border:1px solid var(--line);padding:2px 8px;border-radius:99px}
+
+  /* ── hero ────────────────────────────── */
+  .hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+  #boids{position:absolute;inset:0;width:100%;height:100%;opacity:.5}
+  .hero-i{position:relative;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:56px;padding:84px 0 72px;align-items:start}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--honey);margin:0 0 18px}
+  h1{font-family:var(--mono);font-weight:600;color:var(--bright);font-size:clamp(30px,4vw,44px);line-height:1.14;letter-spacing:-.02em;margin:0 0 22px;text-wrap:balance}
+  h1 .h-accent{color:var(--honey)}
+  .lede{font-size:18px;max-width:32em;margin:0 0 30px}
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .cmd{display:inline-flex;align-items:center;gap:12px;font-family:var(--mono);font-size:14px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:11px 16px;color:var(--bright);cursor:pointer;transition:border-color .15s}
+  .cmd:hover{border-color:var(--honey-dim)}
+  .cmd .ps{color:var(--honey)}
+  .cmd .copy{color:var(--mute);font-size:12px}
+  .gh{font-family:var(--mono);font-size:14px;color:var(--fog);padding:11px 6px}
+  .hero-meta{display:flex;gap:26px;margin-top:34px;font-family:var(--mono);font-size:12.5px;color:var(--mute);flex-wrap:wrap}
+  .hero-meta b{color:var(--fog);font-weight:600}
+
+  /* ── terminal ────────────────────────── */
+  .term{background:#0c1014;border:1px solid var(--line);border-radius:10px;box-shadow:0 24px 60px rgba(0,0,0,.45);overflow:hidden}
+  .term-bar{display:flex;align-items:center;gap:8px;padding:11px 14px;border-bottom:1px solid var(--line);background:var(--ink-2)}
+  .dot{width:11px;height:11px;border-radius:50%;background:var(--line)}
+  .dot.r{background:#5e4444}.dot.y{background:#5e5744}.dot.g{background:#465e44}
+  .term-title{font-family:var(--mono);font-size:12px;color:var(--mute);margin-left:8px}
+  .term-body{padding:16px 16px 18px;font-family:var(--mono);font-size:13px;line-height:1.75;overflow-x:auto}
+  .term-body .ln{white-space:pre}
+  .p{color:var(--honey)} .dim{color:var(--mute)} .ok{color:var(--a-green)}
+  .sl{margin-top:10px;border-top:1px dashed var(--line);padding-top:12px}
+  .sl .ln{white-space:pre}
+  .b{font-weight:700} .c-pur{color:var(--a-purple)} .c-cy{color:var(--a-cyan)} .c-bl{color:var(--a-blue)}
+  .c-gr{color:var(--a-green)} .c-ye{color:var(--a-yellow)} .c-re{color:var(--a-red)} .c-wh{color:var(--bright)}
+
+  /* ── configurator ────────────────────── */
+  .config{margin-top:18px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px}
+  .config-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+  .config-head h3{font-family:var(--mono);font-size:13px;color:var(--bright);margin:0;font-weight:600}
+  .presets{display:flex;gap:8px;margin-left:auto}
+  .preset{font-family:var(--mono);font-size:12px;background:transparent;border:1px solid var(--line);color:var(--fog);border-radius:6px;padding:5px 12px;cursor:pointer;transition:all .15s}
+  .preset:hover{border-color:var(--honey-dim);color:var(--bright)}
+  .preset.on{background:var(--honey);border-color:var(--honey);color:#171004;font-weight:600}
+  .seg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+  .seg{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:12.5px;border:1px solid var(--line);border-radius:6px;padding:8px 11px;cursor:pointer;user-select:none;color:var(--fog);transition:all .12s;background:var(--ink-2)}
+  .seg input{position:absolute;opacity:0;pointer-events:none}
+  .seg .box{width:13px;height:13px;border:1.5px solid var(--mute);border-radius:3px;flex:none;position:relative;transition:all .12s}
+  .seg.on{border-color:var(--honey-dim);color:var(--bright)}
+  .seg.on .box{background:var(--honey);border-color:var(--honey)}
+  .seg.on .box::after{content:"";position:absolute;left:3.5px;top:.5px;width:4px;height:8px;border:solid #171004;border-width:0 2px 2px 0;transform:rotate(45deg)}
+  .config-foot{margin-top:14px;font-family:var(--mono);font-size:12px;color:var(--mute)}
+  .config-foot code{color:var(--honey)}
+
+  /* ── sections ────────────────────────── */
+  section{padding:76px 0;border-bottom:1px solid var(--line)}
+  .sec-label{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--honey);margin:0 0 10px}
+  h2{font-family:var(--mono);font-weight:600;color:var(--bright);font-size:clamp(22px,2.6vw,30px);letter-spacing:-.015em;line-height:1.2;margin:0 0 14px;text-wrap:balance}
+  .sec-lede{max-width:38em;margin:0 0 44px}
+
+  .feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .feat{background:var(--panel);padding:26px 26px 28px}
+  .feat h3{font-family:var(--mono);font-size:14.5px;color:var(--bright);margin:0 0 10px;font-weight:600}
+  .feat h3 .fk{color:var(--honey);margin-right:8px}
+  .feat p{font-size:15px;margin:0;color:var(--fog)}
+  .feat .num{font-variant-numeric:tabular-nums;color:var(--bright)}
+
+  /* engines table */
+  .engines{border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .engines-scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:14.5px;min-width:640px}
+  th{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);text-align:left;padding:13px 20px;background:var(--ink-2);border-bottom:1px solid var(--line);font-weight:600}
+  td{padding:13px 20px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  td.pkg{font-family:var(--mono);font-size:13.5px;color:var(--bright);white-space:nowrap}
+  tbody tr{background:var(--panel)}
+  tbody tr:nth-child(even){background:var(--panel-2)}
+  .chip{display:inline-block;font-family:var(--mono);font-size:11px;border:1px solid var(--honey-dim);color:var(--honey);border-radius:99px;padding:1.5px 9px;white-space:nowrap}
+
+  /* numbers strip — measured vs target is real information */
+  .nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .num-cell{background:var(--panel);padding:22px 24px}
+  .num-v{font-family:var(--mono);font-size:24px;color:var(--bright);font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .num-k{font-size:13.5px;color:var(--fog);margin-top:6px}
+  .num-t{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;margin-top:10px}
+  .num-t.meas{color:var(--a-green)} .num-t.targ{color:var(--mute)}
+
+  /* install */
+  .steps{display:grid;gap:14px;max-width:760px}
+  .step{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start}
+  .step-n{font-family:var(--mono);color:var(--honey);font-size:13px;padding-top:13px;width:20px}
+  .code{position:relative;background:#0c1014;border:1px solid var(--line);border-radius:8px;padding:13px 16px;font-family:var(--mono);font-size:13.5px;color:var(--bright);overflow-x:auto;white-space:pre}
+  .code .ps{color:var(--honey)} .code .cm{color:var(--mute)}
+  .step p{margin:8px 0 0;font-size:14.5px;color:var(--mute)}
+
+  /* footer */
+  footer{padding:44px 0 60px;font-size:14px;color:var(--mute)}
+  .foot-i{display:flex;gap:28px;flex-wrap:wrap;align-items:baseline}
+  .foot-i .brand{font-size:14px}
+  .foot-links{display:flex;gap:20px;margin-left:auto;font-family:var(--mono);font-size:12.5px}
+  .license{margin-top:18px;max-width:62em;font-size:13px;line-height:1.7}
+
+  .toast{position:fixed;bottom:26px;left:50%;transform:translate(-50%,80px);background:var(--honey);color:#171004;font-family:var(--mono);font-size:13px;font-weight:600;padding:9px 18px;border-radius:8px;transition:transform .25s;z-index:50}
+  .toast.show{transform:translate(-50%,0)}
+  @media (prefers-reduced-motion: reduce){ .toast{transition:none} }
+
+  @media (max-width:920px){
+    .hero-i{grid-template-columns:1fr;gap:40px;padding:56px 0}
+    .nav-links{display:none}
+  }
+</style>
+
+<nav>
+  <div class="wrap nav-i">
+    <span class="brand"><b>▊</b> swarmdo</span>
+    <span class="ver">v1.2.0 · MIT</span>
+    <div class="nav-links">
+      <a href="#statusline">statusline</a>
+      <a href="#features">features</a>
+      <a href="#engines">engines</a>
+      <a href="#install">install</a>
+      <a href="https://github.com/JannieP/swarmdo">github</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <canvas id="boids" aria-hidden="true"></canvas>
+  <div class="wrap hero-i">
+    <div>
+      <p class="eyebrow">Agent orchestration for Claude Code</p>
+      <h1>One prompt in.<br>A <span class="h-accent">swarm</span> of agents out.</h1>
+      <p class="lede">swarmdo turns Claude Code into a coordinated multi-agent system — 60+ agent roles, hive-mind consensus, persistent vector memory, and a Postgres vector extension. Fully self-contained: every engine ships in the repo.</p>
+      <div class="cta-row">
+        <button class="cmd" data-copy="npx swarmdo init" type="button">
+          <span class="ps">$</span> npx swarmdo init <span class="copy">⧉ copy</span>
+        </button>
+        <a class="gh" href="https://github.com/JannieP/swarmdo">source →</a>
+      </div>
+      <div class="hero-meta">
+        <span><b>26</b> commands</span>
+        <span><b>60+</b> agent types</span>
+        <span><b>27</b> hooks · <b>12</b> workers</span>
+        <span><b>0</b> external engine deps</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="term" id="statusline">
+        <div class="term-bar">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="term-title">claude — swarmdo statusline</span>
+        </div>
+        <div class="term-body" id="term-out">
+          <div class="ln"><span class="p">$</span> /statusline <span class="dim"># pick segments from a checklist, right in Claude Code</span></div>
+          <div class="ln ok">✓ written to .swarmdo/statusline.json</div>
+          <div class="sl" id="sl-render"></div>
+        </div>
+      </div>
+
+      <div class="config" aria-label="Statusline segment configurator">
+        <div class="config-head">
+          <h3>Choose what you see</h3>
+          <div class="presets" role="group" aria-label="Presets">
+            <button class="preset on" data-preset="full" type="button">full</button>
+            <button class="preset" data-preset="compact" type="button">compact</button>
+            <button class="preset" data-preset="minimal" type="button">minimal</button>
+          </div>
+        </div>
+        <div class="seg-grid" id="segs"></div>
+        <p class="config-foot">Live: <code id="seg-cmd">swarmdo statusline --preset full</code></p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="features">
+  <div class="wrap">
+    <p class="sec-label">What it does</p>
+    <h2>Claude Code coordinates. The swarm executes.</h2>
+    <p class="sec-lede">swarmdo registers as an MCP server and wires agents, memory, and consensus into every session — with hooks that learn from what worked.</p>
+    <div class="feat-grid">
+      <div class="feat"><h3><span class="fk">◉</span>Swarm orchestration</h3><p>Hierarchical, mesh, ring, star, or hybrid topologies with anti-drift defaults. Named agents coordinate over real-time messages — pipelines, fan-out, supervisor patterns.</p></div>
+      <div class="feat"><h3><span class="fk">⬡</span>Hive-mind consensus</h3><p>Queen-led coordination with raft, byzantine, gossip, CRDT, or quorum strategies. Byzantine mode tolerates <span class="num">f &lt; n/3</span> faulty agents.</p></div>
+      <div class="feat"><h3><span class="fk">⛁</span>Vector memory</h3><p>AgentDB-backed persistent memory with HNSW indexing — semantic search across sessions, namespaces shared by every agent in the swarm.</p></div>
+      <div class="feat"><h3><span class="fk">⚡</span>swarmvector for Postgres</h3><p>A pgvector-compatible extension with 230+ SQL functions, SIMD, and quantization. <code style="font-family:var(--mono);font-size:12.5px;color:var(--bright)">CREATE EXTENSION swarmvector</code> — verified on PostgreSQL 16.</p></div>
+      <div class="feat"><h3><span class="fk">🪝</span>Self-learning hooks</h3><p>27 lifecycle hooks and 12 background workers record what succeeded, train routing patterns, and preload context before you ask.</p></div>
+      <div class="feat"><h3><span class="fk">▊</span>A statusline you control</h3><p>Eleven segments, three presets, one checklist. Run <code style="font-family:var(--mono);font-size:12.5px;color:var(--bright)">/statusline</code> inside Claude Code and tick exactly what you want to see.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="sec-label">Honest numbers</p>
+    <h2>Measured where we measured. Targets where we haven&rsquo;t.</h2>
+    <p class="sec-lede">Benchmarks live in the repo and every claim is labeled. No mystery multipliers.</p>
+    <div class="nums">
+      <div class="num-cell"><div class="num-v">1.9–4.7×</div><div class="num-k">HNSW search vs brute force (N=5k–20k, recall@10 ≈ 0.99)</div><div class="num-t meas">measured</div></div>
+      <div class="num-cell"><div class="num-v">32×</div><div class="num-k">RaBitQ quantization compression, 0.60 ms/query</div><div class="num-t meas">measured</div></div>
+      <div class="num-cell"><div class="num-v">0.0043 ms</div><div class="num-k">SONA adaptation per step</div><div class="num-t meas">measured</div></div>
+      <div class="num-cell"><div class="num-v">&lt;100 ms</div><div class="num-k">MCP tool response</div><div class="num-t targ">target</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="engines">
+  <div class="wrap">
+    <p class="sec-label">Self-contained</p>
+    <h2>Every engine ships in the repo.</h2>
+    <p class="sec-lede">No runtime downloads from third-party registries, no surprise upstream churn. Each engine is vendored, renamed, smoke-tested, and file-linked.</p>
+    <div class="engines"><div class="engines-scroll">
+      <table>
+        <thead><tr><th>Engine</th><th>What it is</th><th>Form</th></tr></thead>
+        <tbody>
+          <tr><td class="pkg">swarmvector</td><td>Vector database — HNSW, ONNX embeddings (384-dim), Graph RAG</td><td><span class="chip">native + wasm</span></td></tr>
+          <tr><td class="pkg">swarmvector-postgres</td><td>Postgres extension, pgvector drop-in, pg 14–17</td><td><span class="chip">pgrx crate</span></td></tr>
+          <tr><td class="pkg">swarmllm</td><td>Local model layer — MicroLoRA adapters, SONA learning</td><td><span class="chip">native + wasm</span></td></tr>
+          <tr><td class="pkg">swarmdo-swarm</td><td>Swarm MCP server — cognitive patterns, neural agents</td><td><span class="chip">node + wasm</span></td></tr>
+          <tr><td class="pkg">agentdb</td><td>Agent memory store — vectors, reinforcement learning</td><td><span class="chip">vendored</span></td></tr>
+          <tr><td class="pkg">agentic-flow</td><td>Agent runtime integration and ONNX embedding backend</td><td><span class="chip">vendored</span></td></tr>
+          <tr><td class="pkg">@swarmnet/bmssp</td><td>Graph pathfinding for agent topology routing</td><td><span class="chip">wasm</span></td></tr>
+        </tbody>
+      </table>
+    </div></div>
+  </div>
+</section>
+
+<section id="install">
+  <div class="wrap">
+    <p class="sec-label">Install</p>
+    <h2>Three commands to a swarm.</h2>
+    <div class="steps" style="margin-top:36px">
+      <div class="step"><span class="step-n">1</span><div>
+        <div class="code"><span class="ps">$</span> npx swarmdo init --wizard</div>
+        <p>Scaffolds .claude/ with agents, skills, hooks, and the /statusline command.</p>
+      </div></div>
+      <div class="step"><span class="step-n">2</span><div>
+        <div class="code"><span class="ps">$</span> claude mcp add swarmdo -- npx -y @swarmdo/cli@latest</div>
+        <p>Registers the MCP server — 200+ tools for agents, memory, and coordination.</p>
+      </div></div>
+      <div class="step"><span class="step-n">3</span><div>
+        <div class="code"><span class="ps">$</span> claude <span class="cm"># then: "use a swarm to build the feature"</span></div>
+        <p>Claude Code spawns the agents; swarmdo coordinates, remembers, and learns.</p>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-i">
+      <span class="brand"><b>▊</b> swarmdo</span>
+      <div class="foot-links">
+        <a href="https://github.com/JannieP/swarmdo">github</a>
+        <a href="https://github.com/JannieP/swarmdo/releases">releases</a>
+        <a href="https://github.com/JannieP/swarmdo/blob/main/LICENSE">license</a>
+      </div>
+    </div>
+    <p class="license">MIT licensed. swarmdo is a derivative of an MIT-licensed upstream project; the original copyright and full lineage are preserved in the repository&rsquo;s LICENSE and NOTICE files.</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast">copied</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ── statusline model (mirrors the real segments) ── */
+  var SEGS=[
+    {k:"version",l:"version"},{k:"project",l:"project"},{k:"branch",l:"branch"},{k:"model",l:"model"},
+    {k:"duration",l:"duration"},{k:"context",l:"context"},{k:"cost",l:"cost"},
+    {k:"domains",l:"domains row"},{k:"swarm",l:"swarm row"},{k:"architecture",l:"architecture row"},{k:"agentdb",l:"agentdb row"}
+  ];
+  var PRESETS={
+    full:SEGS.map(function(s){return s.k}),
+    compact:["version","project","branch","model","context","cost","swarm"],
+    minimal:["project","branch","model","context"]
+  };
+  var state=new Set(PRESETS.full);
+
+  var segWrap=document.getElementById("segs");
+  SEGS.forEach(function(s){
+    var lab=document.createElement("label");
+    lab.className="seg on"; lab.setAttribute("data-k",s.k); lab.tabIndex=0;
+    lab.innerHTML='<input type="checkbox" checked><span class="box"></span>'+s.l;
+    lab.addEventListener("click",function(e){e.preventDefault();toggle(s.k);});
+    lab.addEventListener("keydown",function(e){if(e.key===" "||e.key==="Enter"){e.preventDefault();toggle(s.k);}});
+    segWrap.appendChild(lab);
+  });
+
+  function toggle(k){
+    if(state.has(k)){ if(state.size>1) state.delete(k); } else state.add(k);
+    sync();
+  }
+
+  var presetBtns=[].slice.call(document.querySelectorAll(".preset"));
+  presetBtns.forEach(function(b){
+    b.addEventListener("click",function(){
+      state=new Set(PRESETS[b.getAttribute("data-preset")]);
+      sync();
+    });
+  });
+
+  function esc(t){return t.replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+  function sp(cls,txt){return '<span class="'+cls+'">'+esc(txt)+'</span>'}
+  var SEP='  <span class="dim">│</span>  ';
+
+  function renderSL(){
+    var has=function(k){return state.has(k)};
+    var lines=[];
+    var head=[];
+    var idBits="";
+    if(has("version")) idBits+=sp("c-pur b","▊ Swarmdo V1.2.0 ");
+    if(has("project")) idBits+=sp("c-cy","● JannieP");
+    if(idBits) head.push(idBits);
+    if(has("branch")) head.push(sp("c-bl","⏇ main")+" "+sp("c-gr","+2")+sp("c-ye","~1"));
+    if(has("model")) head.push(sp("c-pur","Opus 4.6 (1M context)"));
+    if(has("duration")) head.push(sp("c-cy","⏱ 42m"));
+    if(has("context")) head.push(sp("c-gr","● 23% ctx"));
+    if(has("cost")) head.push(sp("c-ye","$4.20"));
+    if(head.length) lines.push(head.join(SEP));
+    var body=[];
+    if(has("domains")) body.push(sp("c-cy","🏗️ DDD Domains")+"    [●●●●○]  "+sp("c-gr","4")+"/"+sp("c-wh","5")+"    "+sp("c-ye","📚 232 patterns"));
+    if(has("swarm")) body.push(sp("c-ye","🤖 Swarm")+"  "+sp("c-gr","◉")+" ["+sp("c-gr"," 3")+"/"+sp("c-wh","15")+"]  "+sp("c-pur","👥 2")+"    "+sp("c-bl","🪝 ")+sp("c-gr","12")+"/"+sp("c-wh","12")+"    "+sp("c-cy","💾 27MB")+"    "+sp("c-gr","🧠  84%"));
+    if(has("architecture")) body.push(sp("c-pur","🔧 Architecture")+"    "+sp("c-cy","ADRs")+" "+sp("c-gr","●159/159")+SEP+sp("c-cy","DDD")+" "+sp("c-gr","● 80%")+SEP+sp("c-cy","Security")+" "+sp("c-gr","●CLEAN"));
+    if(has("agentdb")) body.push(sp("c-cy","📊 AgentDB")+"    "+sp("c-cy","Vectors")+" "+sp("c-gr","●1284⚡")+SEP+sp("c-cy","Size")+" "+sp("c-wh","4.2MB")+SEP+sp("c-cy","Tests")+" "+sp("c-gr","●616"));
+    if(lines.length&&body.length) lines.push('<span class="dim">'+Array(46).join("─")+'</span>');
+    lines=lines.concat(body);
+    if(!lines.length) lines=['<span class="dim">(everything hidden — pick at least one segment)</span>'];
+    document.getElementById("sl-render").innerHTML=lines.map(function(l){return '<div class="ln">'+l+"</div>"}).join("");
+  }
+
+  function sync(){
+    [].slice.call(segWrap.children).forEach(function(lab){
+      var on=state.has(lab.getAttribute("data-k"));
+      lab.classList.toggle("on",on);
+      lab.querySelector("input").checked=on;
+    });
+    var presetName=Object.keys(PRESETS).find(function(p){
+      var l=PRESETS[p]; if(l.length!==state.size) return false;
+      return l.every(function(k){return state.has(k)});
+    });
+    presetBtns.forEach(function(b){b.classList.toggle("on",b.getAttribute("data-preset")===presetName)});
+    var cmd=presetName?("swarmdo statusline --preset "+presetName)
+      :("swarmdo statusline --segments "+SEGS.map(function(s){return s.k}).filter(function(k){return state.has(k)}).join(","));
+    document.getElementById("seg-cmd").textContent=cmd;
+    renderSL();
+  }
+  sync();
+
+  /* ── copy buttons ── */
+  var toast=document.getElementById("toast"),tt;
+  [].slice.call(document.querySelectorAll("[data-copy]")).forEach(function(el){
+    el.addEventListener("click",function(){
+      var t=el.getAttribute("data-copy");
+      try{ navigator.clipboard.writeText(t); }catch(e){}
+      toast.classList.add("show");
+      clearTimeout(tt); tt=setTimeout(function(){toast.classList.remove("show")},1400);
+    });
+  });
+
+  /* ── boids: the swarm, literally ── */
+  var canvas=document.getElementById("boids");
+  var reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var ctx=canvas.getContext("2d");
+  var W,H,dpr=Math.min(window.devicePixelRatio||1,2);
+  function size(){
+    var r=canvas.parentElement.getBoundingClientRect();
+    W=r.width;H=r.height;
+    canvas.width=W*dpr;canvas.height=H*dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  size(); window.addEventListener("resize",size);
+
+  var N=Math.min(70,Math.floor(W/16)), boids=[];
+  for(var i=0;i<N;i++){
+    boids.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.7,vy:(Math.random()-.5)*.7});
+  }
+  function step(){
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<boids.length;i++){
+      var b=boids[i],ax=0,ay=0,cx=0,cy=0,sx=0,sy=0,n=0;
+      for(var j=0;j<boids.length;j++){
+        if(i===j) continue;
+        var o=boids[j],dx=o.x-b.x,dy=o.y-b.y,d2=dx*dx+dy*dy;
+        if(d2<5200){ cx+=o.x;cy+=o.y;ax+=o.vx;ay+=o.vy;n++;
+          if(d2<640){ sx-=dx;sy-=dy; } }
+      }
+      if(n){
+        b.vx+=((cx/n-b.x))*.0009+(ax/n-b.vx)*.024+sx*.0022;
+        b.vy+=((cy/n-b.y))*.0009+(ay/n-b.vy)*.024+sy*.0022;
+      }
+      var spd=Math.hypot(b.vx,b.vy)||1,max=.9,min=.25;
+      if(spd>max){b.vx=b.vx/spd*max;b.vy=b.vy/spd*max}
+      if(spd<min){b.vx=b.vx/spd*min;b.vy=b.vy/spd*min}
+      b.x+=b.vx;b.y+=b.vy;
+      if(b.x<-12)b.x=W+12; if(b.x>W+12)b.x=-12;
+      if(b.y<-12)b.y=H+12; if(b.y>H+12)b.y=-12;
+      ctx.beginPath();
+      ctx.arc(b.x,b.y,1.6,0,6.2832);
+      ctx.fillStyle="rgba(226,163,60,.55)";
+      ctx.fill();
+    }
+    requestAnimationFrame(step);
+  }
+  if(reduced){
+    /* static constellation for reduced motion */
+    for(var k=0;k<boids.length;k++){var b2=boids[k];ctx.beginPath();ctx.arc(b2.x,b2.y,1.6,0,6.2832);ctx.fillStyle="rgba(226,163,60,.4)";ctx.fill();}
+  } else { step(); }
+})();
+</script>
+
+</body>
+</html>
