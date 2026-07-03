@@ -102,6 +102,18 @@
   .config-foot{margin-top:14px;font-family:var(--mono);font-size:12px;color:var(--mute)}
   .config-foot code{color:var(--honey)}
 
+
+  .feat svg.diag{display:block;width:100%;height:96px;margin:0 0 16px;border:1px solid var(--line);border-radius:7px;background:var(--ink-2)}
+  .sl-embed{margin-top:20px}
+  .sl-embed-title{font-family:var(--mono);font-size:13.5px;color:var(--bright);font-weight:600;margin:0 0 14px}
+  .band{padding:56px 0;border-bottom:1px solid var(--line)}
+  .band svg{display:block;width:100%;height:auto;max-height:260px}
+  .band-cap{font-family:var(--mono);font-size:12.5px;color:var(--mute);margin:14px 0 0;text-align:center}
+  @media (prefers-reduced-motion: no-preference){
+    .pulse{stroke-dasharray:6 8;animation:dash 1.6s linear infinite}
+    @keyframes dash{to{stroke-dashoffset:-28}}
+  }
+
   /* ── sections ────────────────────────── */
   section{padding:76px 0;border-bottom:1px solid var(--line)}
   .sec-label{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--honey);margin:0 0 10px}
@@ -214,21 +226,16 @@
     <h2>Claude Code coordinates. The swarm executes.</h2>
     <p class="sec-lede">swarmdo registers as an MCP server and wires agents, memory, and consensus into every session — with hooks that learn from what worked.</p>
     <div class="feat-grid">
-      <div class="feat"><h3><span class="fk">◉</span>Swarm orchestration</h3><p>Hierarchical, mesh, ring, star, or hybrid topologies with anti-drift defaults. Named agents coordinate over real-time messages — pipelines, fan-out, supervisor patterns.</p></div>
-      <div class="feat"><h3><span class="fk">⬡</span>Hive-mind consensus</h3><p>Queen-led coordination with raft, byzantine, gossip, CRDT, or quorum strategies. Byzantine mode tolerates <span class="num">f &lt; n/3</span> faulty agents.</p></div>
-      <div class="feat"><h3><span class="fk">⛁</span>Vector memory</h3><p>AgentDB-backed persistent memory with HNSW indexing — semantic search across sessions, namespaces shared by every agent in the swarm.</p></div>
+      <div class="feat"><svg class="diag" viewBox="0 0 300 96" aria-hidden="true"><circle cx="150" cy="20" r="7" fill="#e2a33c"/><line class="pulse" x1="150" y1="27" x2="80" y2="52" stroke="#8a6b35" stroke-width="1.4"/><line class="pulse" x1="150" y1="27" x2="150" y2="52" stroke="#8a6b35" stroke-width="1.4"/><line class="pulse" x1="150" y1="27" x2="220" y2="52" stroke="#8a6b35" stroke-width="1.4"/><circle cx="80" cy="58" r="5" fill="#6fb3c4"/><circle cx="150" cy="58" r="5" fill="#a38fc9"/><circle cx="220" cy="58" r="5" fill="#83b98a"/><line x1="80" y1="63" x2="60" y2="80" stroke="#232e39" stroke-width="1.2"/><line x1="80" y1="63" x2="100" y2="80" stroke="#232e39" stroke-width="1.2"/><line x1="150" y1="63" x2="150" y2="80" stroke="#232e39" stroke-width="1.2"/><line x1="220" y1="63" x2="200" y2="80" stroke="#232e39" stroke-width="1.2"/><line x1="220" y1="63" x2="240" y2="80" stroke="#232e39" stroke-width="1.2"/><circle cx="60" cy="84" r="3.4" fill="#66737f"/><circle cx="100" cy="84" r="3.4" fill="#66737f"/><circle cx="150" cy="84" r="3.4" fill="#66737f"/><circle cx="200" cy="84" r="3.4" fill="#66737f"/><circle cx="240" cy="84" r="3.4" fill="#66737f"/></svg><h3><span class="fk">◉</span>Swarm orchestration</h3><p>Hierarchical, mesh, ring, star, or hybrid topologies with anti-drift defaults. Named agents coordinate over real-time messages — pipelines, fan-out, supervisor patterns.</p></div>
+      <div class="feat"><svg class="diag" viewBox="0 0 300 96" aria-hidden="true"><circle cx="150" cy="48" r="30" fill="none" stroke="#232e39" stroke-width="1.4"/><circle cx="150" cy="18" r="6" fill="#e2a33c"/><circle cx="176" cy="33" r="5" fill="#83b98a"/><circle cx="176" cy="63" r="5" fill="#83b98a"/><circle cx="150" cy="78" r="5" fill="#83b98a"/><circle cx="124" cy="63" r="5" fill="#83b98a"/><circle cx="124" cy="33" r="5" fill="#c97070"/><line class="pulse" x1="150" y1="24" x2="150" y2="72" stroke="#8a6b35" stroke-width="1.2"/><line class="pulse" x1="150" y1="24" x2="172" y2="60" stroke="#8a6b35" stroke-width="1.2"/><text x="150" y="94" font-family="monospace" font-size="9" fill="#66737f" text-anchor="middle">4/5 quorum — 1 faulty tolerated</text></svg><h3><span class="fk">⬡</span>Hive-mind consensus</h3><p>Queen-led coordination with raft, byzantine, gossip, CRDT, or quorum strategies. Byzantine mode tolerates <span class="num">f &lt; n/3</span> faulty agents.</p></div>
+      <div class="feat"><svg class="diag" viewBox="0 0 300 96" aria-hidden="true"><circle cx="40" cy="30" r="2.5" fill="#66737f"/><circle cx="58" cy="52" r="2.5" fill="#66737f"/><circle cx="76" cy="24" r="2.5" fill="#66737f"/><circle cx="96" cy="66" r="2.5" fill="#66737f"/><circle cx="118" cy="38" r="2.5" fill="#66737f"/><circle cx="142" cy="58" r="2.5" fill="#66737f"/><circle cx="170" cy="28" r="2.5" fill="#66737f"/><circle cx="196" cy="70" r="2.5" fill="#66737f"/><circle cx="222" cy="44" r="3.2" fill="#83b98a"/><circle cx="238" cy="36" r="3.2" fill="#83b98a"/><circle cx="230" cy="58" r="3.2" fill="#83b98a"/><circle cx="250" cy="50" r="3.2" fill="#83b98a"/><circle cx="236" cy="47" r="22" fill="none" stroke="#e2a33c" stroke-width="1.4" stroke-dasharray="4 4"/><circle cx="236" cy="47" r="3.6" fill="#e2a33c"/><text x="40" y="90" font-family="monospace" font-size="9" fill="#66737f">HNSW query → nearest neighbours</text></svg><h3><span class="fk">⛁</span>Vector memory</h3><p>AgentDB-backed persistent memory with HNSW indexing — semantic search across sessions, namespaces shared by every agent in the swarm.</p></div>
       <div class="feat"><h3><span class="fk">⚡</span>swarmvector for Postgres</h3><p>A pgvector-compatible extension with 230+ SQL functions, SIMD, and quantization. <code style="font-family:var(--mono);font-size:12.5px;color:var(--bright)">CREATE EXTENSION swarmvector</code> — verified on PostgreSQL 16.</p></div>
       <div class="feat"><h3><span class="fk">🪝</span>Self-learning hooks</h3><p>27 lifecycle hooks and 12 background workers record what succeeded, train routing patterns, and preload context before you ask.</p></div>
       <div class="feat"><h3><span class="fk">▊</span>A statusline you control</h3><p>Eleven segments, three presets, one checklist. Run <code style="font-family:var(--mono);font-size:12.5px;color:var(--bright)">/statusline</code> inside Claude Code and tick exactly what you want to see.</p></div>
     </div>
-  </div>
-</section>
-<section id="statusline">
-  <div class="wrap">
-    <p class="sec-label">Quality of life</p>
-    <h2>The statusline shows exactly what you want. Nothing more.</h2>
-    <p class="sec-lede">Eleven segments, three presets, or run <code style="font-family:var(--mono);font-size:14px;color:var(--bright)">/statusline</code> in Claude Code for a checklist. Try it:</p>
-    <div class="sl-demo">
+    <div class="sl-embed" id="statusline">
+      <p class="sl-embed-title"><span class="fk" style="color:var(--honey)">▊</span> Try it — the statusline, your way</p>
+      <div class="sl-demo">
       <div class="term">
         <div class="term-bar">
           <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
@@ -248,6 +255,7 @@
         <div class="seg-grid" id="segs"></div>
         <p class="config-foot">Live: <code id="seg-cmd">swarmdo statusline --preset full</code></p>
       </div>
+    </div>
     </div>
   </div>
 </section>
