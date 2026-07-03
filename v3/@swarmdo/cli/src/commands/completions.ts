@@ -13,7 +13,7 @@ const TOP_LEVEL_COMMANDS = [
   'swarm', 'agent', 'task', 'session', 'config', 'memory', 'workflow',
   'hive-mind', 'hooks', 'daemon', 'neural', 'security', 'performance',
   'providers', 'plugins', 'deployment', 'claims', 'embeddings',
-  'doctor', 'completions', 'help', 'version'
+  'doctor', 'completions', 'statusline', 'help', 'version'
 ];
 
 // Swarm subcommands
