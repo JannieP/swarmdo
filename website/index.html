@@ -80,8 +80,12 @@
   .b{font-weight:700} .c-pur{color:var(--a-purple)} .c-cy{color:var(--a-cyan)} .c-bl{color:var(--a-blue)}
   .c-gr{color:var(--a-green)} .c-ye{color:var(--a-yellow)} .c-re{color:var(--a-red)} .c-wh{color:var(--bright)}
 
+  .term-note{font-family:var(--mono);font-size:12.5px;color:var(--mute);margin:12px 4px 0}
+  .sl-demo{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:18px;align-items:start}
+  @media (max-width:920px){ .sl-demo{grid-template-columns:1fr} }
+
   /* ── configurator ────────────────────── */
-  .config{margin-top:18px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px}
+  .config{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px}
   .config-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:14px}
   .config-head h3{font-family:var(--mono);font-size:13px;color:var(--bright);margin:0;font-weight:600}
   .presets{display:flex;gap:8px;margin-left:auto}
@@ -192,30 +196,14 @@
     </div>
 
     <div>
-      <div class="term" id="statusline">
+      <div class="term">
         <div class="term-bar">
           <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-          <span class="term-title">claude — swarmdo statusline</span>
+          <span class="term-title">claude — swarm run</span>
         </div>
-        <div class="term-body" id="term-out">
-          <div class="ln"><span class="p">$</span> /statusline <span class="dim"># pick segments from a checklist, right in Claude Code</span></div>
-          <div class="ln ok">✓ written to .swarmdo/statusline.json</div>
-          <div class="sl" id="sl-render"></div>
-        </div>
+        <div class="term-body" id="swarm-term" aria-live="off"></div>
       </div>
-
-      <div class="config" aria-label="Statusline segment configurator">
-        <div class="config-head">
-          <h3>Choose what you see</h3>
-          <div class="presets" role="group" aria-label="Presets">
-            <button class="preset on" data-preset="full" type="button">full</button>
-            <button class="preset" data-preset="compact" type="button">compact</button>
-            <button class="preset" data-preset="minimal" type="button">minimal</button>
-          </div>
-        </div>
-        <div class="seg-grid" id="segs"></div>
-        <p class="config-foot">Live: <code id="seg-cmd">swarmdo statusline --preset full</code></p>
-      </div>
+      <p class="term-note">A real swarmdo pipeline: five named agents, coordinated over messages, sharing one memory.</p>
     </div>
   </div>
 </header>
@@ -235,6 +223,35 @@
     </div>
   </div>
 </section>
+<section id="statusline">
+  <div class="wrap">
+    <p class="sec-label">Quality of life</p>
+    <h2>The statusline shows exactly what you want. Nothing more.</h2>
+    <p class="sec-lede">Eleven segments, three presets, or run <code style="font-family:var(--mono);font-size:14px;color:var(--bright)">/statusline</code> in Claude Code for a checklist. Try it:</p>
+    <div class="sl-demo">
+      <div class="term">
+        <div class="term-bar">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="term-title">statusline preview</span>
+        </div>
+        <div class="term-body"><div class="sl" id="sl-render" style="border-top:none;margin-top:0;padding-top:0"></div></div>
+      </div>
+      <div class="config">
+        <div class="config-head">
+          <h3>Segments</h3>
+          <div class="presets" role="group" aria-label="Presets">
+            <button class="preset on" data-preset="full" type="button">full</button>
+            <button class="preset" data-preset="compact" type="button">compact</button>
+            <button class="preset" data-preset="minimal" type="button">minimal</button>
+          </div>
+        </div>
+        <div class="seg-grid" id="segs"></div>
+        <p class="config-foot">Live: <code id="seg-cmd">swarmdo statusline --preset full</code></p>
+      </div>
+    </div>
+  </div>
+</section>
+
 
 <section>
   <div class="wrap">
@@ -313,6 +330,37 @@
 (function(){
   "use strict";
 
+
+  /* ── hero: animated swarm run ── */
+  var termEl=document.getElementById("swarm-term");
+  var RUN=[
+    ['<span class="p">$</span> swarmdo swarm init <span class="dim">--topology hierarchical --max-agents 8</span>',200],
+    ['<span class="ok">\u2713</span> swarm ready <span class="dim">\u00b7 raft consensus \u00b7 shared memory namespace</span>',420],
+    ['<span class="p">$</span> claude <span class="dim">"use a swarm to ship the auth feature"</span>',900],
+    ['<span class="c-cy">\u25c9 researcher</span>  scanning codebase\u2026 <span class="dim">42 files, 3 auth patterns found</span>',700],
+    ['<span class="c-pur">\u25c9 architect</span>   design ready <span class="dim">\u2192 sent to coder</span>',800],
+    ['<span class="c-ye">\u25c9 coder</span>       implementing oauth flow\u2026 <span class="dim">6 files changed</span>',900],
+    ['<span class="c-gr">\u25c9 tester</span>      <span class="ok">28 tests passing</span> <span class="dim">\u2192 sent to reviewer</span>',800],
+    ['<span class="c-bl">\u25c9 reviewer</span>    approved <span class="dim">\u00b7 0 security findings</span>',700],
+    ['<span class="ok">\u2713 swarm complete</span> <span class="dim">\u2014 5 agents \u00b7 patterns stored to memory</span>',500]
+  ];
+  var reducedM=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function showRun(instant){
+    if(instant){
+      termEl.innerHTML=RUN.map(function(r){return '<div class="ln">'+r[0]+'</div>'}).join('');
+      return;
+    }
+    termEl.innerHTML='';
+    var i=0;
+    (function next(){
+      if(i>=RUN.length){ setTimeout(function(){ showRun(false); }, 9000); return; }
+      var d=document.createElement('div'); d.className='ln'; d.innerHTML=RUN[i][0];
+      termEl.appendChild(d);
+      i++; setTimeout(next, RUN[i-1][1]);
+    })();
+  }
+  showRun(reducedM);
+
   /* ── statusline model (mirrors the real segments) ── */
   var SEGS=[
     {k:"version",l:"version"},{k:"project",l:"project"},{k:"branch",l:"branch"},{k:"model",l:"model"},
@@ -359,7 +407,7 @@
     var head=[];
     var idBits="";
     if(has("version")) idBits+=sp("c-pur b","▊ Swarmdo V1.2.0 ");
-    if(has("project")) idBits+=sp("c-cy","● JannieP");
+    if(has("project")) idBits+=sp("c-cy","● my-project");
     if(idBits) head.push(idBits);
     if(has("branch")) head.push(sp("c-bl","⏇ main")+" "+sp("c-gr","+2")+sp("c-ye","~1"));
     if(has("model")) head.push(sp("c-pur","Opus 4.6 (1M context)"));
