@@ -1,0 +1,9 @@
+# Standard pgrx linker config. Postgres extension cdylibs reference server
+# symbols (e.g. s_lock) that only exist inside the postgres binary at load
+# time; on macOS the linker must be told to defer resolution. Upstream builds
+# in Docker (Linux) and never needed this — required for local macOS builds.
+[target.'cfg(target_os="macos")']
+rustflags = ["-Clink-arg=-Wl,-undefined,dynamic_lookup"]
+
+[env]
+RUST_MIN_STACK = "16777216"
