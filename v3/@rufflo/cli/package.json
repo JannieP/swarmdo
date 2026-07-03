@@ -1,6 +1,6 @@
 {
   "name": "@rufflo/cli",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "type": "module",
   "description": "Rufflo CLI - Enterprise AI agent orchestration with 60+ specialized agents, swarm coordination, MCP server, self-learning hooks, and vector memory for Claude Code",
   "main": "dist/src/index.js",
