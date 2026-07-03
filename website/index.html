@@ -24,7 +24,7 @@
 <meta name="twitter:image" content="https://swarmdo.com/og-image.png">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
- {"@type":"SoftwareApplication","name":"swarmdo","url":"https://swarmdo.com/","applicationCategory":"DeveloperApplication","operatingSystem":"macOS, Linux, Windows","description":"Agent swarm orchestration for Claude Code: 60+ agent roles, hive-mind consensus, persistent vector memory with HNSW, and the swarmvector Postgres extension.","license":"https://opensource.org/licenses/MIT","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"softwareVersion":"1.2.0","downloadUrl":"https://github.com/JannieP/swarmdo/releases"},
+ {"@type":"SoftwareApplication","name":"swarmdo","url":"https://swarmdo.com/","applicationCategory":"DeveloperApplication","operatingSystem":"macOS, Linux, Windows","description":"Agent swarm orchestration for Claude Code: 60+ agent roles, hive-mind consensus, persistent vector memory with HNSW, and the swarmvector Postgres extension.","license":"https://opensource.org/licenses/MIT","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"softwareVersion":"1.3.0","downloadUrl":"https://github.com/JannieP/swarmdo/releases"},
  {"@type":"WebSite","name":"swarmdo","url":"https://swarmdo.com/"},
  {"@type":"FAQPage","mainEntity":[
   {"@type":"Question","name":"What is swarmdo?","acceptedAnswer":{"@type":"Answer","text":"swarmdo turns Claude Code into a coordinated multi-agent system. One prompt spawns a swarm of named agents — researcher, architect, coder, tester, reviewer — that coordinate over messages, share persistent vector memory, and learn from what worked."}},
@@ -213,7 +213,7 @@
 <nav>
   <div class="wrap nav-i">
     <span class="brand"><b>▊</b> swarmdo</span>
-    <span class="ver">v1.2.0 · MIT</span>
+    <span class="ver">v1.3.0 · MIT</span>
     <div class="nav-links">
       <a href="#statusline">statusline</a>
       <a href="#features">features</a>
@@ -470,7 +470,7 @@
     var lines=[];
     var head=[];
     var idBits="";
-    if(has("version")) idBits+=sp("c-pur b","▊ Swarmdo V1.2.0 ");
+    if(has("version")) idBits+=sp("c-pur b","▊ Swarmdo V1.3.0 ");
     if(has("project")) idBits+=sp("c-cy","● my-project");
     if(idBits) head.push(idBits);
     if(has("branch")) head.push(sp("c-bl","⏇ main")+" "+sp("c-gr","+2")+sp("c-ye","~1"));
