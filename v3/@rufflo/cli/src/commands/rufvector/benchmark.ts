@@ -244,10 +244,10 @@ export const benchmarkCommand: Command = {
       // Detect vector extension type: prefer rufvector, fall back to pgvector
       let vectorTypeName = 'vector';
       const rufvectorCheck = await client.query(`
-        SELECT extname FROM pg_extension WHERE extname = 'ruvector'
+        SELECT extname FROM pg_extension WHERE extname = 'rufvector'
       `);
       if (rufvectorCheck.rows.length > 0) {
-        vectorTypeName = 'ruvector';
+        vectorTypeName = 'rufvector';
       }
 
       // Create benchmark table
@@ -303,7 +303,7 @@ export const benchmarkCommand: Command = {
         spinner.setText(`Creating ${indexType.toUpperCase()} index...`); spinner.start();
         const indexStart = Date.now();
 
-        const opsPrefix = vectorTypeName === 'ruvector' ? 'rufvector' : 'vector';
+        const opsPrefix = vectorTypeName === 'rufvector' ? 'rufvector' : 'vector';
         const metricOp = metric === 'cosine' ? `${opsPrefix}_cosine_ops` :
                          metric === 'l2' ? `${opsPrefix}_l2_ops` : `${opsPrefix}_ip_ops`;
 

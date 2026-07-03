@@ -313,10 +313,10 @@ export const migrateCommand: Command = {
       let vectorTypeName = 'vector';
       let cosineOps = 'vector_cosine_ops';
       const rufvectorCheck = await client.query(`
-        SELECT extname FROM pg_extension WHERE extname = 'ruvector'
+        SELECT extname FROM pg_extension WHERE extname = 'rufvector'
       `);
       if (rufvectorCheck.rows.length > 0) {
-        vectorTypeName = 'ruvector';
+        vectorTypeName = 'rufvector';
         cosineOps = 'rufvector_cosine_ops';
       }
 

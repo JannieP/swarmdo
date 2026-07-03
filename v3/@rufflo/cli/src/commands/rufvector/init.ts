@@ -236,12 +236,12 @@ export const initCommand: Command = {
 
       // Check for rufvector extension first (ships with rufvector-postgres image)
       const rufvectorResult = await client.query(`
-        SELECT extname, extversion FROM pg_extension WHERE extname = 'ruvector'
+        SELECT extname, extversion FROM pg_extension WHERE extname = 'rufvector'
       `);
 
       if (rufvectorResult.rows.length > 0) {
         vectorExtName = 'rufvector';
-        vectorTypeName = 'ruvector';
+        vectorTypeName = 'rufvector';
         spinner.succeed(`rufvector v${rufvectorResult.rows[0].extversion} found`);
       } else {
         // Fall back to pgvector
@@ -258,9 +258,9 @@ export const initCommand: Command = {
           spinner.succeed('No vector extension found, attempting to create...');
           let created = false;
           try {
-            await client.query("CREATE EXTENSION IF NOT EXISTS ruvector");
+            await client.query("CREATE EXTENSION IF NOT EXISTS rufvector");
             vectorExtName = 'rufvector';
-            vectorTypeName = 'ruvector';
+            vectorTypeName = 'rufvector';
             spinner.succeed('rufvector extension created');
             created = true;
           } catch {
