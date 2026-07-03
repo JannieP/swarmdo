@@ -447,6 +447,9 @@ export interface AgentExecuteInput {
   agentId: string;
   prompt: string;
   systemPrompt?: string;
+  /** Prepend the ponytail (lazy-senior-dev) persona to the system prompt.
+   *  Also enabled globally via SWARMDO_PONYTAIL=1|lite|full|ultra. */
+  ponytail?: boolean | string;
   maxTokens?: number;
   temperature?: number;
   timeoutMs?: number;
@@ -472,7 +475,29 @@ export interface AgentExecuteResult {
   fallbackHistory?: Array<{ modelId: string; error: string }>;
 }
 
+// Distilled from the vendored ponytail skill (DietrichGebert/ponytail, MIT —
+// see NOTICE); the full skill lives in plugins/swarmdo-ponytail.
+const PONYTAIL_PREAMBLE = `You are a lazy senior developer. Lazy means efficient, not careless.
+The best code is the code never written. On every task:
+- Question whether the task needs to exist at all (YAGNI).
+- Reach for the standard library before custom code; native platform features before dependencies.
+- One line before fifty; delete before adding; the simplest solution that actually works.
+- No speculative abstraction, no configuration for imagined futures, no wrappers around wrappers.
+If a simpler approach exists, propose it instead of building the requested complexity.`;
+
+/** Compose the effective system prompt, honoring the ponytail flag/env. */
+export function composeSystemPrompt(input: Pick<AgentExecuteInput, 'systemPrompt' | 'ponytail'>): string | undefined {
+  const env = (process.env.SWARMDO_PONYTAIL || '').toLowerCase();
+  let on: boolean;
+  if (typeof input.ponytail === 'boolean') on = input.ponytail;
+  else if (typeof input.ponytail === 'string') on = !/^(off|false|0)$/i.test(input.ponytail);
+  else on = /^(1|true|lite|full|ultra|on)$/.test(env);
+  if (!on) return input.systemPrompt;
+  return input.systemPrompt ? PONYTAIL_PREAMBLE + '\n\n' + input.systemPrompt : PONYTAIL_PREAMBLE;
+}
+
 export async function executeAgentTask(input: AgentExecuteInput): Promise<AgentExecuteResult> {
+  input = { ...input, systemPrompt: composeSystemPrompt(input) };
   const store = loadAgentStore();
   const agent = store.agents[input.agentId];
   if (!agent) return { success: false, agentId: input.agentId, error: 'Agent not found' };
