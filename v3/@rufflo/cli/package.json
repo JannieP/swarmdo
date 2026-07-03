@@ -11,13 +11,13 @@
     "rufflo": "./bin/cli.js",
     "rufflo-mcp": "./bin/mcp-server.js"
   },
-  "homepage": "https://github.com/ruvnet/claude-flow#readme",
+  "homepage": "https://github.com/JannieP/rufflo#readme",
   "bugs": {
-    "url": "https://github.com/ruvnet/claude-flow/issues"
+    "url": "https://github.com/JannieP/rufflo/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ruvnet/claude-flow.git",
+    "url": "https://github.com/JannieP/rufflo.git",
     "directory": "v3/@rufflo/cli"
   },
   "keywords": [
@@ -52,13 +52,13 @@
       "import": "./dist/src/index.js"
     },
     "./dist/*": "./dist/*",
-    "./ruvector": {
-      "types": "./dist/src/ruvector/index.d.ts",
-      "import": "./dist/src/ruvector/index.js"
+    "./rufvector": {
+      "types": "./dist/src/rufvector/index.d.ts",
+      "import": "./dist/src/rufvector/index.js"
     },
-    "./ruvector/*": {
-      "types": "./dist/src/ruvector/*.d.ts",
-      "import": "./dist/src/ruvector/*.js"
+    "./rufvector/*": {
+      "types": "./dist/src/rufvector/*.d.ts",
+      "import": "./dist/src/rufvector/*.js"
     },
     "./mcp-tools": {
       "types": "./dist/src/mcp-tools/index.d.ts",

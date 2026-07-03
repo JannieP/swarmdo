@@ -8,9 +8,9 @@
   "bin": {
     "rufflo": "./bin/rufflo.js"
   },
-  "homepage": "https://github.com/ruvnet/claude-flow#readme",
+  "homepage": "https://github.com/JannieP/rufflo#readme",
   "bugs": {
-    "url": "https://github.com/ruvnet/claude-flow/issues",
+    "url": "https://github.com/JannieP/rufflo/issues",
     "email": "support@ruv.io"
   },
   "funding": {
@@ -86,7 +86,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ruvnet/claude-flow.git",
+    "url": "https://github.com/JannieP/rufflo.git",
     "directory": "rufflo"
   },
   "keywords": [

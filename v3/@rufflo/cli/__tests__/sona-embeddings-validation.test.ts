@@ -3,7 +3,7 @@
  */
 import { describe, it, expect, beforeEach } from 'vitest';
 import { SONAOptimizer, resetSONAOptimizer } from '../src/memory/sona-optimizer.js';
-import { generateEmbedding } from '../src/ruvector/vector-db.js';
+import { generateEmbedding } from '../src/rufvector/vector-db.js';
 
 // ---------- SONA Optimizer ----------
 describe('SONA Optimizer', () => {
@@ -99,11 +99,11 @@ describe('Neural Tools (neural-tools)', () => {
     // Must be a non-empty string indicating which embedding backend is active
     expect(typeof provider).toBe('string');
     expect(provider.length).toBeGreaterThan(0);
-    // Must match one of the known provider tiers or fallback. `ruvector` /
+    // Must match one of the known provider tiers or fallback. `rufvector` /
     // `@rufflo/embeddings` is the Tier-0 bundled-ONNX backend (neural-tools.ts
     // line ~49) — it was missing from this allowlist, so the test failed
-    // wherever ruvector's native ONNX IS available and becomes the active tier.
-    const knownProviders = /agentic-flow|onnx|mock|hash|fallback|reasoningbank|none|ruvector|@rufflo\/embeddings/i;
+    // wherever rufvector's native ONNX IS available and becomes the active tier.
+    const knownProviders = /agentic-flow|onnx|mock|hash|fallback|reasoningbank|none|rufvector|@rufflo\/embeddings/i;
     expect(provider).toMatch(knownProviders);
   });
 });

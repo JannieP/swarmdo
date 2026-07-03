@@ -1,6 +1,6 @@
 # rufflo-agentdb
 
-The substrate plugin for Rufflo memory. Wraps three CLI MCP families — `agentdb_*` (controller bridge, 15 tools), `embeddings_*` (RuVector ONNX engine, 10 tools), and `ruvllm_hnsw_*` (WASM-backed pattern router, 3 tools) — into discoverable skills and commands. Other plugins (`rufflo-browser`, `rufflo-rag-memory`, `rufflo-intelligence`) compose this substrate; this plugin owns the namespace convention and the smoke contract for the substrate as a whole.
+The substrate plugin for Rufflo memory. Wraps three CLI MCP families — `agentdb_*` (controller bridge, 15 tools), `embeddings_*` (RufVector ONNX engine, 10 tools), and `rufllm_hnsw_*` (WASM-backed pattern router, 3 tools) — into discoverable skills and commands. Other plugins (`rufflo-browser`, `rufflo-rag-memory`, `rufflo-intelligence`) compose this substrate; this plugin owns the namespace convention and the smoke contract for the substrate as a whole.
 
 > **Status:** ADR-0001 implemented. Plugin v0.3.0 targets `@rufflo/cli` v3.6.x with bundled `agentdb@^3.0.0-alpha.11`. The smoke contract (10 checks) is the verification mechanism — see [docs/adrs/0001-agentdb-optimization.md](./docs/adrs/0001-agentdb-optimization.md).
 
@@ -20,8 +20,8 @@ The substrate plugin for Rufflo memory. Wraps three CLI MCP families — `agentd
 ## Features
 
 - **Controller bridge**: 15 `agentdb_*` MCP tools (hierarchical store/recall, semantic routing, pattern store/search, causal edges, context synthesis, batch ops, consolidation, feedback, sessions).
-- **RuVector embeddings**: 10 `embeddings_*` MCP tools — 384-dim ONNX (all-MiniLM-L6-v2), HNSW search, hyperbolic (Poincare), neural substrate, and **RaBitQ 1-bit quantization (32× memory reduction)**.
-- **HNSW pattern router**: 3 `ruvllm_hnsw_*` tools (WASM-backed, ≤11 high-priority patterns — distinct from the large-scale embeddings HNSW path).
+- **RufVector embeddings**: 10 `embeddings_*` MCP tools — 384-dim ONNX (all-MiniLM-L6-v2), HNSW search, hyperbolic (Poincare), neural substrate, and **RaBitQ 1-bit quantization (32× memory reduction)**.
+- **HNSW pattern router**: 3 `rufllm_hnsw_*` tools (WASM-backed, ≤11 high-priority patterns — distinct from the large-scale embeddings HNSW path).
 - **Causal knowledge graphs**: `agentdb_causal-edge` (graph-node backend with bridge fallback per ADR-087).
 
 ## Controllers (real registry, grouped by INIT_LEVELS)
@@ -53,15 +53,15 @@ Initialization order per ADR-053 (`controller-registry.ts:160-174`):
 | Controller | Role | Source |
 |---|---|---|
 | `gnnService` | Graph Neural Network embeddings + relational scoring over the AgentDB causal graph. No-arg construction. | `agentdb/dist/src/services/GNNService.js` |
-| `rvfOptimizer` | RuVector format compaction — quantizes + dedupes vector blocks before persistence. | `agentdb/dist/src/optimizations/RVFOptimizer.js` |
+| `rvfOptimizer` | RufVector format compaction — quantizes + dedupes vector blocks before persistence. | `agentdb/dist/src/optimizations/RVFOptimizer.js` |
 | `mutationGuard` | WASM-backed proof generation for state mutations (ADR-060). | `agentdb/dist/src/security/MutationGuard.js` |
 | `attestationLog` | Hash-chained audit log of mutations. Backed by a dedicated `.swarm/attestation.db`. | `agentdb/dist/src/security/AttestationLog.js` |
-| `GuardedVectorBackend` | Wraps the existing vectorBackend with `mutationGuard` + `attestationLog`. | `agentdb/dist/src/backends/ruvector/GuardedVectorBackend.js` |
+| `GuardedVectorBackend` | Wraps the existing vectorBackend with `mutationGuard` + `attestationLog`. | `agentdb/dist/src/backends/rufvector/GuardedVectorBackend.js` |
 
 ## Commands
 
 - `/agentdb` — AgentDB health, controller status, session management
-- `/embeddings` — RuVector embedding engine status and operations
+- `/embeddings` — RufVector embedding engine status and operations
 
 ## Skills
 
@@ -145,7 +145,7 @@ Several Claude Code hooks fire writes into AgentDB. Consumer plugins should know
 | `SessionEnd` | `auto-memory-hook.mjs sync` | bridge → `MEMORY.md` | Flows AgentDB insights back to Claude Code's MEMORY.md |
 | `post-task --train-neural` | `agentdb_pattern-store` (ReasoningBank) | `pattern` (with `memory-store-fallback` if registry unavailable) | Stores task-completion patterns for SONA distillation |
 | `pretrain` (one-shot) | `memory_store` | `patterns` (plural) | Bootstrap learning corpus |
-| `trajectory-begin/step/end` (ruvector hooks) | ruvector substrate (separate plugin) | sona/agentdb namespaces handled by `rufflo-ruvector` | See `plugins/rufflo-ruvector/docs/adrs/0001-pin-ruvector-0.2.25.md` |
+| `trajectory-begin/step/end` (rufvector hooks) | rufvector substrate (separate plugin) | sona/agentdb namespaces handled by `rufflo-rufvector` | See `plugins/rufflo-rufvector/docs/adrs/0001-pin-rufvector-0.2.25.md` |
 
 Implication for consumer plugins:
 
@@ -174,7 +174,7 @@ A `controller: 'memory-store-fallback'` response is a pattern that **was persist
 
 ### Causal-edge graph-node backend (ADR-087)
 
-`agentdb_causal-edge` tries the native `@ruvector/graph-node` backend first; on failure, falls back to the bridge. The response includes `_graphNodeBackend: true` when the native backend handled the call. Source: `agentdb-tools.ts:267-290`.
+`agentdb_causal-edge` tries the native `@rufvector/graph-node` backend first; on failure, falls back to the bridge. The response includes `_graphNodeBackend: true` when the native backend handled the call. Source: `agentdb-tools.ts:267-290`.
 
 ### Bridge unavailable
 
@@ -214,7 +214,7 @@ The smoke script is the contract. It calls each documented MCP tool, exercises t
 - `rufflo-rag-memory` — simple store/search/recall interface; consumes the `claude-memories` reserved namespace
 - `rufflo-intelligence` — SONA neural patterns; consumes the `pattern` reserved namespace via ReasoningBank
 - `rufflo-browser` — composes the namespace convention for `browser-sessions/-selectors/-templates/-cookies` (ADR-0001 §3 there)
-- `rufflo-ruvector` — pinned ruvector CLI; sibling substrate plugin
+- `rufflo-rufvector` — pinned rufvector CLI; sibling substrate plugin
 
 ## License
 

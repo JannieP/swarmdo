@@ -14,7 +14,7 @@ import {
   getGitDiffNumstat,
   type DiffFile,
   type RiskLevel,
-} from '../ruvector/diff-classifier.js';
+} from '../rufvector/diff-classifier.js';
 
 /**
  * Diff Analysis Tool
@@ -43,9 +43,9 @@ export const analyzeDiffTool: MCPTool = {
         description: 'Include recommended reviewers',
         default: true,
       },
-      useRuVector: {
+      useRufVector: {
         type: 'boolean',
-        description: 'Attempt to use ruvector for analysis (graceful fallback if unavailable)',
+        description: 'Attempt to use rufvector for analysis (graceful fallback if unavailable)',
         default: true,
       },
     },
@@ -55,12 +55,12 @@ export const analyzeDiffTool: MCPTool = {
     const ref = (params.ref as string) || 'HEAD';
     const includeFileRisks = params.includeFileRisks !== false;
     const includeReviewers = params.includeReviewers !== false;
-    const useRuVector = params.useRuVector !== false;
+    const useRufVector = params.useRufVector !== false;
 
     try {
       const result = await analyzeDiff({
         ref,
-        useRuVector,
+        useRufVector,
       });
 
       // Build response

@@ -5,7 +5,7 @@
  *   vs  @rufvector/tiny-dancer FastGRNN score()
  *
  * What this measures, on the machine it runs on, against:
- *   - v3/@rufflo/cli/dist/src/ruvector/model-router.js  (must be built)
+ *   - v3/@rufflo/cli/dist/src/rufvector/model-router.js  (must be built)
  *   - @metaharness/router@0.3.2  Router (k-NN), trainRouter (KRR) — pure TS, no native deps
  *   - @rufvector/tiny-dancer@0.1.22 trainRouter() + score() (native FastGRNN)
  *
@@ -136,9 +136,9 @@ function embed(task, label, dim) {
 async function runIntegratedNeural(test, dim) {
   process.env.RUFFLO_ROUTER_NEURAL = '1';
   // Clear any earlier cached config from previous runs in the same process.
-  const nr = await import(path.join(DIST, 'ruvector', 'neural-router.js'));
+  const nr = await import(path.join(DIST, 'rufvector', 'neural-router.js'));
   nr.__resetNeuralRouterForTests();
-  const routerMod = require(path.join(DIST, 'ruvector', 'model-router.js'));
+  const routerMod = require(path.join(DIST, 'rufvector', 'model-router.js'));
   routerMod.resetModelRouter?.();
 
   // Status check
@@ -184,7 +184,7 @@ async function runIntegratedNeural(test, dim) {
 // Run heuristic+bandit baseline (cold, no prior outcomes)
 // ----------------------------------------------------------------------------
 async function runBaseline(queries) {
-  const routerMod = require(path.join(DIST, 'ruvector', 'model-router.js'));
+  const routerMod = require(path.join(DIST, 'rufvector', 'model-router.js'));
   // Use a fresh router (no learned state)
   routerMod.resetModelRouter?.();
   const lat = [];
@@ -362,7 +362,7 @@ async function runTinyDancer(train, test, dim, options) {
 // Main
 // ----------------------------------------------------------------------------
 async function main() {
-  if (!existsSync(path.join(DIST, 'ruvector', 'model-router.js'))) {
+  if (!existsSync(path.join(DIST, 'rufvector', 'model-router.js'))) {
     console.error('[bench] dist not built — run `npm --prefix v3/@rufflo/cli run build`');
     process.exit(2);
   }
@@ -386,7 +386,7 @@ async function main() {
   const td = await runTinyDancer(train, test, ARGS.dim, { epochs: ARGS.epochs, hidden: ARGS.hidden });
 
   // Agreement rates pairwise (baseline ↔ each system)
-  const routerMod = require(path.join(DIST, 'ruvector', 'model-router.js'));
+  const routerMod = require(path.join(DIST, 'rufvector', 'model-router.js'));
   const m = await import('@metaharness/router');
   const tdMod = require('@rufvector/tiny-dancer');
   const router_knn = m.Router.fromExamples(

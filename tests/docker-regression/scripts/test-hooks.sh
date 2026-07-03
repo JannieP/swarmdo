@@ -168,7 +168,7 @@ run_test "Transfer patterns" "npx rufflo hooks transfer /tmp/source-project 2>/d
 echo ""
 echo "── Intelligence Features ──"
 
-run_test "RuVector intelligence" "npx rufflo hooks intelligence 2>/dev/null || echo 'intelligence ok'"
+run_test "RufVector intelligence" "npx rufflo hooks intelligence 2>/dev/null || echo 'intelligence ok'"
 
 # Cleanup
 rm -f "$TEST_FILE"

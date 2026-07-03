@@ -423,22 +423,22 @@ if should_run "rvf"; then
   rm -rf "$RVF_DIR"
 fi
 
-# ── 27. Local Model Inference (ruvLLM from RuVector) ──────────
-if should_run "ruvllm"; then
-  section 27 "Local Model Inference (ruvLLM / RuVector)"
+# ── 27. Local Model Inference (rufLLM from RufVector) ──────────
+if should_run "rufllm"; then
+  section 27 "Local Model Inference (rufLLM / RufVector)"
   if [ "${SKIP_MODELS:-0}" = "1" ]; then
-    check_skip "ruvllm: model load" "SKIP_MODELS=1"
-    check_skip "ruvllm: tokenize" "SKIP_MODELS=1"
-    check_skip "ruvllm: generate" "SKIP_MODELS=1"
-    check_skip "ruvllm: stream" "SKIP_MODELS=1"
-  elif command -v rufflo-ruvllm >/dev/null 2>&1; then
-    check_warn "ruvllm: engine available" rufflo-ruvllm --version
-    check_warn "ruvllm: model list" rufflo-ruvllm models list
-    check_warn "ruvllm: tokenize" rufflo-ruvllm tokenize --text "Hello world"
-    check_warn "ruvllm: generate" rufflo-ruvllm generate --prompt "2+2=" --max-tokens 10
+    check_skip "rufllm: model load" "SKIP_MODELS=1"
+    check_skip "rufllm: tokenize" "SKIP_MODELS=1"
+    check_skip "rufllm: generate" "SKIP_MODELS=1"
+    check_skip "rufllm: stream" "SKIP_MODELS=1"
+  elif command -v rufflo-rufllm >/dev/null 2>&1; then
+    check_warn "rufllm: engine available" rufflo-rufllm --version
+    check_warn "rufllm: model list" rufflo-rufllm models list
+    check_warn "rufllm: tokenize" rufflo-rufllm tokenize --text "Hello world"
+    check_warn "rufllm: generate" rufflo-rufllm generate --prompt "2+2=" --max-tokens 10
   else
-    check_skip "ruvllm: engine" "rufflo-ruvllm not installed (future: ADR-058 Phase 3)"
-    check_skip "ruvllm: inference" "rufflo-ruvllm not installed"
+    check_skip "rufllm: engine" "rufflo-rufllm not installed (future: ADR-058 Phase 3)"
+    check_skip "rufllm: inference" "rufflo-rufllm not installed"
   fi
 fi
 

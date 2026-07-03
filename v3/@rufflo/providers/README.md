@@ -6,11 +6,11 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
 [![Providers](https://img.shields.io/badge/Providers-6+-orange.svg)](https://github.com/ruvnet/claude-flow)
 
-> Multi-LLM Provider System for Rufflo V3 - unified interface for Anthropic, OpenAI, Google, Cohere, Ollama, and RuVector with intelligent load balancing, automatic failover, and cost optimization.
+> Multi-LLM Provider System for Rufflo V3 - unified interface for Anthropic, OpenAI, Google, Cohere, Ollama, and RufVector with intelligent load balancing, automatic failover, and cost optimization.
 
 ## Features
 
-- **6+ LLM Providers** - Anthropic, OpenAI, Google, Cohere, Ollama, RuVector
+- **6+ LLM Providers** - Anthropic, OpenAI, Google, Cohere, Ollama, RufVector
 - **Load Balancing** - Round-robin, latency-based, least-loaded, cost-based strategies
 - **Automatic Failover** - Seamless provider switching on failures
 - **Request Caching** - LRU cache with configurable TTL
@@ -49,7 +49,7 @@
 - `codellama`, `phi-4`
 - `deepseek-coder`
 
-### RuVector
+### RufVector
 - Custom models via @rufvector/rufllm
 
 ## Installation
@@ -177,7 +177,7 @@ import {
   GoogleProvider,
   CohereProvider,
   OllamaProvider,
-  RuVectorProvider,
+  RufVectorProvider,
 } from '@rufflo/providers';
 
 // Create provider directly

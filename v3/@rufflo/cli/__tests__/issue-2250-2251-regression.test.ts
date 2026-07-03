@@ -23,7 +23,7 @@ import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
 import { mkdtempSync, rmSync, mkdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { ModelRouter } from '../src/ruvector/model-router.js';
+import { ModelRouter } from '../src/rufvector/model-router.js';
 import { WorkerDaemon } from '../src/services/worker-daemon.js';
 
 let cwdRestore: string;

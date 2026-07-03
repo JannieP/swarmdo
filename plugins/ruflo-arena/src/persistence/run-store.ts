@@ -1,5 +1,5 @@
 // Run persistence. A competition run is a reproducible artifact (Rufflo ADR-147; the local
-// stand-in for RuVector ADR-197's payoff/fitness/evolution storage).
+// stand-in for RufVector ADR-197's payoff/fitness/evolution storage).
 //
 // Two backends ship here:
 //   - FileRunStore     — writes full artifacts to `.rufflo/arena/<runId>.json` (exact replay).
@@ -100,10 +100,10 @@ export class FileRunStore implements RunStore {
 /**
  * Shape a run for AgentDB persistence via `mcp__rufflo__memory_store`.
  * The command layer calls the MCP tool with this payload so runs become semantically
- * searchable ("tournaments where grim dominated") and feed the RuVector data layer later.
+ * searchable ("tournaments where grim dominated") and feed the RufVector data layer later.
  *
  * `kind`, `game`, and `seed` are lifted to top-level fields (parallel to `tags`)
- * so RuVector ADR-197 indexers can filter without re-parsing `value`. `value`
+ * so RufVector ADR-197 indexers can filter without re-parsing `value`. `value`
  * itself still carries the full summary for body-level semantic search.
  */
 export function agentdbRecord(record: RunRecord): {

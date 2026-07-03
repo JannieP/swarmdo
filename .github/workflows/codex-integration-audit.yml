@@ -16,7 +16,7 @@ on:
     paths:
       - 'v3/@rufflo/codex/**'
       - 'rufflo/src/mcp-bridge/**'
-      - 'rufflo/src/ruvocal/mcp-bridge/**'
+      - 'rufflo/src/rufvocal/mcp-bridge/**'
       - '.claude/agents/dual-mode/**'
       - 'scripts/audit-codex-integration.mjs'
       - '.github/workflows/codex-integration-audit.yml'
@@ -24,7 +24,7 @@ on:
     paths:
       - 'v3/@rufflo/codex/**'
       - 'rufflo/src/mcp-bridge/**'
-      - 'rufflo/src/ruvocal/mcp-bridge/**'
+      - 'rufflo/src/rufvocal/mcp-bridge/**'
       - '.claude/agents/dual-mode/**'
       - 'scripts/audit-codex-integration.mjs'
       - '.github/workflows/codex-integration-audit.yml'

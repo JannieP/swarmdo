@@ -15,7 +15,7 @@ import type { MCPTool } from './types.js';
 import { validateIdentifier, validateText } from './validate-input.js';
 
 async function loadAgentWasm() {
-  const mod = await import('../ruvector/agent-wasm.js');
+  const mod = await import('../rufvector/agent-wasm.js');
   return mod;
 }
 

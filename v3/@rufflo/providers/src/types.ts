@@ -17,7 +17,7 @@ export type LLMProvider =
   | 'google'
   | 'cohere'
   | 'ollama'
-  | 'ruvector'
+  | 'rufvector'
   | 'openrouter'
   | 'litellm'
   | 'custom';

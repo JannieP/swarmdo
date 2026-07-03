@@ -38,7 +38,7 @@ function percentile(sorted, p) {
 }
 
 async function main() {
-  const { applyCodemod } = await import('../dist/src/ruvector/codemods/engine.js');
+  const { applyCodemod } = await import('../dist/src/rufvector/codemods/engine.js');
   const corpus = JSON.parse(readFileSync(join(CLI_ROOT, 'bench', 'codemod-corpus.json'), 'utf-8'));
   const cases = corpus.cases;
 

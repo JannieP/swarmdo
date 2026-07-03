@@ -59,13 +59,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ruvnet/claude-flow.git",
+    "url": "git+https://github.com/JannieP/rufflo.git",
     "directory": "v3/@rufflo/aidefence"
   },
   "bugs": {
-    "url": "https://github.com/ruvnet/claude-flow/issues"
+    "url": "https://github.com/JannieP/rufflo/issues"
   },
-  "homepage": "https://github.com/ruvnet/claude-flow/tree/main/v3/@rufflo/aidefence#readme",
+  "homepage": "https://github.com/JannieP/rufflo/tree/main/v3/@rufflo/aidefence#readme",
   "publishConfig": {
     "access": "public",
     "tag": "alpha"

@@ -44,15 +44,15 @@ Confirm the gate state with `rufflo doctor -c encryption`.
 
 ## Cross-plugin RVF ownership
 
-RVF (RuVector Format) cognitive containers appear in three plugins. Each owns a different slice:
+RVF (RufVector Format) cognitive containers appear in three plugins. Each owns a different slice:
 
 | Slice | Owner | What it does |
 |-------|-------|-------------|
 | **Portable memory + session persistence** | `rufflo-rvf` (this plugin) | High-level skills for save/restore, cross-machine transfer |
 | **Browser sessions as RVF** | [rufflo-browser ADR-0001](../rufflo-browser/docs/adrs/0001-browser-skills-architecture.md) | Each browser session is allocated as an RVF container at session-start (manifest, trajectory, screenshots, snapshots, cookies, findings) |
-| **RVF tooling (10 subcommands)** | [rufflo-ruvector ADR-0001](../rufflo-ruvector/docs/adrs/0001-pin-ruvector-0.2.25.md) | `ruvector rvf create|ingest|query|status|segments|derive|compact|export|examples|download` |
+| **RVF tooling (10 subcommands)** | [rufflo-rufvector ADR-0001](../rufflo-rufvector/docs/adrs/0001-pin-rufvector-0.2.25.md) | `rufvector rvf create|ingest|query|status|segments|derive|compact|export|examples|download` |
 
-This plugin sits on top of ruvector's tooling and feeds browser's session-as-RVF model.
+This plugin sits on top of rufvector's tooling and feeds browser's session-as-RVF model.
 
 ## Namespace coordination
 
@@ -73,6 +73,6 @@ bash plugins/rufflo-rvf/scripts/smoke.sh
 
 ## Related Plugins
 
-- `rufflo-ruvector` — exposes the `ruvector rvf *` tooling this plugin sits on top of
+- `rufflo-rufvector` — exposes the `rufvector rvf *` tooling this plugin sits on top of
 - `rufflo-browser` — uses RVF containers for session-as-skill artifacts (ADR-0001 there)
 - `rufflo-agentdb` — namespace convention owner

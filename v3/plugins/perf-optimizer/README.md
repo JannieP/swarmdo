@@ -228,10 +228,10 @@ const rateLimits = {
 
 ## Dependencies
 
-- `ruvector-sparse-inference-wasm` - Efficient sparse performance trace processing
-- `ruvector-gnn-wasm` - Dependency chain analysis and critical path detection
+- `rufvector-sparse-inference-wasm` - Efficient sparse performance trace processing
+- `rufvector-gnn-wasm` - Dependency chain analysis and critical path detection
 - `micro-hnsw-wasm` - Similar performance pattern matching
-- `ruvector-fpga-transformer-wasm` - Fast transformer inference for trace analysis
+- `rufvector-fpga-transformer-wasm` - Fast transformer inference for trace analysis
 - `sona` - Learning optimal configurations from historical data
 
 ## Supported Formats

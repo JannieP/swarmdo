@@ -83,7 +83,7 @@ export interface CoevolutionResult {
 
 export type RunKind = 'arena' | 'tournament' | 'evolution' | 'coevolution';
 
-/** A persisted, queryable record of a competition run (local stand-in for RuVector ADR-197). */
+/** A persisted, queryable record of a competition run (local stand-in for RufVector ADR-197). */
 export interface RunRecord {
   runId: string;
   kind: RunKind;

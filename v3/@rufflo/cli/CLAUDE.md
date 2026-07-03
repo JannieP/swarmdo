@@ -401,7 +401,7 @@ CVE remediation, input validation, path security:
 | `metrics` | View learning metrics dashboard | `--v3-dashboard`, `--format` |
 | `transfer` | Transfer patterns via IPFS registry | `store`, `from-project` |
 | `list` | List all registered hooks | `--format` |
-| `intelligence` | RuVector intelligence system | `trajectory-*`, `pattern-*`, `stats` |
+| `intelligence` | RufVector intelligence system | `trajectory-*`, `pattern-*`, `stats` |
 | `worker` | Background worker management | `list`, `dispatch`, `status`, `detect` |
 | `progress` | Check V3 implementation progress | `--detailed`, `--format` |
 | `statusline` | Generate dynamic statusline | `--json`, `--compact`, `--no-color` |
@@ -479,12 +479,12 @@ npx @rufflo/cli@latest migrate rollback
 npx @rufflo/cli@latest migrate validate
 ```
 
-## 🧠 Intelligence System (RuVector)
+## 🧠 Intelligence System (RufVector)
 
-V3 includes the RuVector Intelligence System (measured numbers: see [audit](../../../docs/reviews/intelligence-system-audit-2026-05-29.md) + [`scripts/benchmark-intelligence.mjs`](../../../scripts/benchmark-intelligence.mjs)):
+V3 includes the RufVector Intelligence System (measured numbers: see [audit](../../../docs/reviews/intelligence-system-audit-2026-05-29.md) + [`scripts/benchmark-intelligence.mjs`](../../../scripts/benchmark-intelligence.mjs)):
 - **SONA**: Self-Optimizing Neural Architecture (measured 0.0043ms/adapt, target <0.05ms met)
 - **MoE**: Mixture of Experts for specialized routing (gate converges — confidence 0.13→0.88 after rewards)
-- **HNSW**: measured ~1.9x at N=20k, ~3.2x–4.7x at N=5k vs brute force (recall@10 ~0.99); ANN wins above the crossover, ruvector NAPI backend (WASM not active on test host)
+- **HNSW**: measured ~1.9x at N=20k, ~3.2x–4.7x at N=5k vs brute force (recall@10 ~0.99); ANN wins above the crossover, rufvector NAPI backend (WASM not active on test host)
 - **EWC++**: Elastic Weight Consolidation (prevents forgetting)
 - **Flash Attention**: unverified — no benchmark exists for this claim
 
@@ -502,7 +502,7 @@ Features:
 - **Normalization**: L2, L1, min-max, z-score
 - **Hyperbolic embeddings**: Poincaré ball model for hierarchical data
 - **agentic-flow ONNX integration**: speedup unverified (no benchmark; backend reported `onnx`, model all-MiniLM-L6-v2, 384-dim)
-- **Neural substrate**: Integration with RuVector
+- **Neural substrate**: Integration with RufVector
 
 ## 🐝 Hive-Mind Consensus
 
@@ -525,7 +525,7 @@ Features:
 
 | Metric | Measured / Target | Status |
 |--------|-------------------|--------|
-| HNSW Search | ~1.9x at N=20k, ~3.2x–4.7x at N=5k vs brute force (recall@10 ~0.99) | **Measured** (ruvector NAPI; 150x-12,500x NOT reproduced) |
+| HNSW Search | ~1.9x at N=20k, ~3.2x–4.7x at N=5k vs brute force (recall@10 ~0.99) | **Measured** (rufvector NAPI; 150x-12,500x NOT reproduced) |
 | Int8 Quantization | 3.84x compression, reconstruction cosine 0.99999 | **Measured** |
 | RaBitQ Quantization | 32x compression, 0.60ms/query | **Measured** |
 | SONA Adaptation | 0.0043ms/adapt (target <0.05ms met) | **Measured** |
@@ -690,7 +690,7 @@ This includes:
 - All 60+ agent types with routing recommendations
 - All 26 CLI commands with 140+ subcommands
 - All 27 hooks + 12 background workers
-- RuVector intelligence system details
+- RufVector intelligence system details
 - Hive-Mind consensus mechanisms
 - Integration ecosystem (agentic-flow, agentdb, ruv-swarm, flow-nexus, agentic-jujutsu)
 - Performance targets and status

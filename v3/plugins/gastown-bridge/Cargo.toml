@@ -2,14 +2,14 @@
 #
 # This workspace contains WASM modules for accelerated computation:
 # - gastown-formula-wasm: TOML parsing, variable cooking, molecule generation (352x faster)
-# - ruvector-gnn-wasm: DAG operations, topological sort, cycle detection (150x faster)
+# - rufvector-gnn-wasm: DAG operations, topological sort, cycle detection (150x faster)
 #
 # Build with: wasm-pack build --target web
 
 [workspace]
 members = [
     "wasm/gastown-formula-wasm",
-    "wasm/ruvector-gnn-wasm"
+    "wasm/rufvector-gnn-wasm"
 ]
 resolver = "2"
 

@@ -84,10 +84,10 @@ for t in embeddings_init embeddings_generate embeddings_compare embeddings_searc
 done
 [[ -z "$miss" ]] && ok || bad "undocumented:$miss"
 
-# 5. The 3 ruvllm_hnsw_* tools documented + the ~11 cap is acknowledged
-step "5. ruvllm_hnsw_* tools documented and ~11 cap acknowledged"
+# 5. The 3 rufllm_hnsw_* tools documented + the ~11 cap is acknowledged
+step "5. rufllm_hnsw_* tools documented and ~11 cap acknowledged"
 miss=""
-for t in ruvllm_hnsw_create ruvllm_hnsw_add ruvllm_hnsw_route; do
+for t in rufllm_hnsw_create rufllm_hnsw_add rufllm_hnsw_route; do
   grep -rq "$t" "$ROOT" --include='*.md' || miss="$miss $t"
 done
 if [[ -n "$miss" ]]; then

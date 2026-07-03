@@ -352,9 +352,9 @@ const rateLimits = {
 ## Dependencies
 
 - `micro-hnsw-wasm`: Fast semantic search for clause similarity and precedent matching
-- `ruvector-hyperbolic-hnsw-wasm`: Legal taxonomy navigation (contract types, clause hierarchies)
-- `ruvector-attention-wasm`: Cross-attention for contract comparison (redline analysis)
-- `ruvector-dag-wasm`: Contract dependency graphs (obligations, conditions, timelines)
+- `rufvector-hyperbolic-hnsw-wasm`: Legal taxonomy navigation (contract types, clause hierarchies)
+- `rufvector-attention-wasm`: Cross-attention for contract comparison (redline analysis)
+- `rufvector-dag-wasm`: Contract dependency graphs (obligations, conditions, timelines)
 - `pdf-parse`: PDF document parsing
 - `mammoth`: DOCX document parsing
 

@@ -87,7 +87,7 @@ done
 # 7. SONA + MicroLoRA tools (4) referenced
 step "7. all 4 SONA + MicroLoRA tools referenced"
 miss=""
-for t in ruvllm_sona_create ruvllm_sona_adapt ruvllm_microlora_create ruvllm_microlora_adapt; do
+for t in rufllm_sona_create rufllm_sona_adapt rufllm_microlora_create rufllm_microlora_adapt; do
   grep -rq "$t" "$ROOT" --include='*.md' || miss="$miss $t"
 done
 [[ -z "$miss" ]] && ok || bad "undocumented:$miss"

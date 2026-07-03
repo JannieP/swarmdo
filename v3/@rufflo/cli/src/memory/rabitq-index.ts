@@ -46,7 +46,7 @@ async function loadRabitqModule(): Promise<{
     // Node.js: use initSync with the WASM bytes
     const { createRequire } = await import('module');
     const require = createRequire(import.meta.url);
-    const wasmPath = require.resolve('@rufvector/rabitq-wasm/ruvector_rabitq_wasm_bg.wasm');
+    const wasmPath = require.resolve('@rufvector/rabitq-wasm/rufvector_rabitq_wasm_bg.wasm');
     const wasmBytes = fs.readFileSync(wasmPath);
     mod.initSync({ module: wasmBytes });
 

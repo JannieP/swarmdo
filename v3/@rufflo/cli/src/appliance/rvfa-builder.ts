@@ -233,7 +233,7 @@ export class RvfaBuilder {
 
     if (p === 'hybrid') {
       const content: Record<string, unknown> = {
-        type: 'models', profile: 'hybrid', provider: 'hybrid', engine: 'ruvllm+api-vault',
+        type: 'models', profile: 'hybrid', provider: 'hybrid', engine: 'rufllm+api-vault',
         localModels: resolveModels(this.opts.models),
         routing: { tier1: { handler: 'agent-booster', latency: '<1ms' }, tier2: { handler: 'local-model', latency: '~200ms' }, tier3: { handler: 'cloud-api', latency: '2-5s' }, complexityThreshold: 0.3 },
       };
@@ -248,7 +248,7 @@ export class RvfaBuilder {
     // offline
     const names = this.opts.models.length > 0 ? this.opts.models : ['phi-3-mini-q4', 'qwen2.5-coder-3b-q4'];
     return jsonBuf({
-      type: 'models', profile: 'offline', provider: 'ruvllm', engine: 'ruvllm',
+      type: 'models', profile: 'offline', provider: 'rufllm', engine: 'rufllm',
       models: resolveModels(names),
       routing: { tier1: { handler: 'agent-booster-wasm', latency: '<1ms' }, tier2: { handler: 'phi-3-mini-q4', latency: '~200ms' }, tier3: { handler: 'qwen2.5-coder-3b-q4', latency: '~2s' }, fallbackToCloud: false },
       kvCache: { backend: 'rvf', persistence: true },
@@ -311,9 +311,9 @@ export class RvfaBuilder {
   // ── Header ───────────────────────────────────────────────
 
   private buildHeaderPartial(): Partial<RvfaHeader> {
-    const providerMap: Record<string, RvfaModelConfig['provider']> = { cloud: 'api-vault', hybrid: 'hybrid', offline: 'ruvllm' };
+    const providerMap: Record<string, RvfaModelConfig['provider']> = { cloud: 'api-vault', hybrid: 'hybrid', offline: 'rufllm' };
     const caps = ['cli-26-commands', 'agents-60-plus', 'hooks-17', 'workers-12', 'mcp-215-tools', 'agentdb-rvf', 'hnsw-search', 'sona-patterns', 'security-scanning', 'performance-profiling', 'hive-mind-consensus', 'plugin-registry'];
-    if (this.opts.profile !== 'cloud') caps.push('local-inference-ruvllm');
+    if (this.opts.profile !== 'cloud') caps.push('local-inference-rufllm');
     if (this.opts.profile !== 'offline') caps.push('cloud-api-vault');
 
     const boot: RvfaBootConfig = {
@@ -325,7 +325,7 @@ export class RvfaBuilder {
 
     const models: RvfaModelConfig = {
       provider: providerMap[this.opts.profile],
-      engine: this.opts.profile === 'cloud' ? undefined : 'ruvllm-0.1.0',
+      engine: this.opts.profile === 'cloud' ? undefined : 'rufllm-0.1.0',
       models: this.opts.models.length > 0 ? this.opts.models : undefined,
       vaultEncryption: this.opts.profile !== 'offline' ? 'aes-256-gcm' : undefined,
     };

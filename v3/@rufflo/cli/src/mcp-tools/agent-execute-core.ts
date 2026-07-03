@@ -540,12 +540,12 @@ export async function executeAgentTask(input: AgentExecuteInput): Promise<AgentE
     const isRetryable = /\b(429|500|502|503|504|timeout|ECONNRESET|ETIMEDOUT)\b/i.test(result.error ?? '');
     if (isRetryable) {
       try {
-        const { nextCostOptimalAlternative } = await import('../ruvector/neural-router.js');
+        const { nextCostOptimalAlternative } = await import('../rufvector/neural-router.js');
         // ADR-149 iter 9 — delegate to the shared task-embedder LRU. The
         // pipeline + cache are shared with agent-tools.ts, so the embedding
         // for this prompt is almost always already cached from the initial
         // routing decision (no extra inference cost in steady state).
-        const { embedTaskWithCache } = await import('../ruvector/task-embedder.js');
+        const { embedTaskWithCache } = await import('../rufvector/task-embedder.js');
         const embedding = await embedTaskWithCache(input.prompt);
         if (embedding) {
           const excludeIds: string[] = [agent.modelId];
@@ -584,7 +584,7 @@ export async function executeAgentTask(input: AgentExecuteInput): Promise<AgentE
   // A finer-grained signal (user-accepted output / regression-detected) is a
   // follow-up; this commit closes the bandit's basic learning loop.
   try {
-    const { recordModelOutcome, recordModelOutcomeByModelId } = await import('../ruvector/model-router.js');
+    const { recordModelOutcome, recordModelOutcomeByModelId } = await import('../rufvector/model-router.js');
     // Bandit priors are keyed on the 3 canonical tiers (haiku/sonnet/opus/inherit);
     // collapse opus-4.7 → opus before recording so the bandit's per-tier Beta
     // updates correctly.
@@ -611,7 +611,7 @@ export async function executeAgentTask(input: AgentExecuteInput): Promise<AgentE
     // regression-detection is a separate hook).
     if (process.env.RUFFLO_ROUTER_TRAJECTORY === '1') {
       try {
-        const { recordTrajectoryOutcome } = await import('../ruvector/router-trajectory.js');
+        const { recordTrajectoryOutcome } = await import('../rufvector/router-trajectory.js');
         const scores: Record<string, number> | undefined = agent.modelId
           ? { [agent.modelId]: outcome === 'success' ? 1.0 : 0.0 }
           : undefined;

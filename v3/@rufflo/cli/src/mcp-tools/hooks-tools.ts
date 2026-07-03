@@ -131,7 +131,7 @@ async function getMoERouter() {
 
 // Semantic Router - lazy loaded
 // Tries native VectorDb first (16k+ routes/s HNSW), falls back to pure JS (47k routes/s cosine)
-let semanticRouter: import('../ruvector/semantic-router.js').SemanticRouter | null = null;
+let semanticRouter: import('../rufvector/semantic-router.js').SemanticRouter | null = null;
 let nativeVectorDb: unknown = null;
 let semanticRouterInitialized = false;
 let routerBackend: 'native' | 'pure-js' | 'none' = 'none';
@@ -377,7 +377,7 @@ async function getSemanticRouter() {
 
   // STEP 2: Fall back to pure JS SemanticRouter
   try {
-    const { SemanticRouter } = await import('../ruvector/semantic-router.js');
+    const { SemanticRouter } = await import('../rufvector/semantic-router.js');
     semanticRouter = new SemanticRouter({ dimension: 384 });
 
     for (const [patternName, { keywords, agents }] of Object.entries(getMergedTaskPatterns())) {
@@ -431,11 +431,11 @@ async function getFlashAttention() {
 }
 
 // LoRA Adapter - lazy loaded
-let loraAdapter: Awaited<ReturnType<typeof import('../ruvector/lora-adapter.js').getLoRAAdapter>> | null = null;
+let loraAdapter: Awaited<ReturnType<typeof import('../rufvector/lora-adapter.js').getLoRAAdapter>> | null = null;
 async function getLoRAAdapter() {
   if (!loraAdapter) {
     try {
-      const { getLoRAAdapter: getLora } = await import('../ruvector/lora-adapter.js');
+      const { getLoRAAdapter: getLora } = await import('../rufvector/lora-adapter.js');
       loraAdapter = await getLora();
     } catch {
       loraAdapter = null;
@@ -1297,7 +1297,7 @@ export const hooksPreTask: MCPTool = {
     // Enhanced model routing with deterministic Tier-1 codemods (ADR-026, ADR-143)
     let modelRouting: Record<string, unknown> | undefined;
     try {
-      const { getEnhancedModelRouter } = await import('../ruvector/enhanced-model-router.js');
+      const { getEnhancedModelRouter } = await import('../rufvector/enhanced-model-router.js');
       const router = getEnhancedModelRouter();
       const routeResult = await router.route(description, { filePath });
 
@@ -2301,10 +2301,10 @@ export const hooksInit: MCPTool = {
   },
 };
 
-// Intelligence hook - RuVector intelligence system
+// Intelligence hook - RufVector intelligence system
 export const hooksIntelligence: MCPTool = {
   name: 'hooks_intelligence',
-  description: 'RuVector intelligence system status (shows REAL metrics from memory store) Use when native Bash hooks (via Claude Code\'s settings.json) are wrong because you need Rufflo-side state — pattern persistence, neural training signals, model-routing learning, cost tracking, audit chain. For one-off shell commands, plain Bash hooks are fine.',
+  description: 'RufVector intelligence system status (shows REAL metrics from memory store) Use when native Bash hooks (via Claude Code\'s settings.json) are wrong because you need Rufflo-side state — pattern persistence, neural training signals, model-routing learning, cost tracking, audit chain. For one-off shell commands, plain Bash hooks are fine.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -2385,11 +2385,11 @@ export const hooksIntelligence: MCPTool = {
           implemented: true,
           note: 'Real ONNX embeddings via Xenova/all-MiniLM-L6-v2',
         },
-        ruvllmCoordinator: await (async () => {
+        rufllmCoordinator: await (async () => {
           try {
             const { getIntelligenceStats } = await import('../memory/intelligence.js');
             const s = getIntelligenceStats();
-            return { status: s._ruvllmBackend || 'unavailable', trajectories: s._ruvllmTrajectories || 0, note: s._ruvllmBackend === 'active' ? 'SonaCoordinator forwarding trajectories' : '@rufvector/rufllm not loaded' };
+            return { status: s._rufllmBackend || 'unavailable', trajectories: s._rufllmTrajectories || 0, note: s._rufllmBackend === 'active' ? 'SonaCoordinator forwarding trajectories' : '@rufvector/rufllm not loaded' };
           } catch { return { status: 'unavailable', trajectories: 0, note: 'Not initialized' }; }
         })(),
         contrastiveTrainer: await (async () => {
@@ -2403,12 +2403,12 @@ export const hooksIntelligence: MCPTool = {
           try {
             const loraInst = await getLoRAAdapter();
             const s = loraInst?.getStats();
-            return { status: s?._trainingBackend || 'unavailable', note: s?._trainingBackend === 'ruvllm' ? 'Checkpoint save/load via ruvllm' : 'JS fallback' };
+            return { status: s?._trainingBackend || 'unavailable', note: s?._trainingBackend === 'rufllm' ? 'Checkpoint save/load via rufllm' : 'JS fallback' };
           } catch { return { status: 'unavailable', note: 'Not initialized' }; }
         })(),
         graphDatabase: await (async () => {
           try {
-            const { getGraphStats } = await import('../ruvector/graph-backend.js');
+            const { getGraphStats } = await import('../rufvector/graph-backend.js');
             const gs = await getGraphStats();
             return { status: gs.backend, totalNodes: gs.totalNodes, totalEdges: gs.totalEdges, avgDegree: gs.avgDegree, note: gs.backend === 'graph-node' ? 'Native Rust graph with hyperedges and k-hop queries' : '@rufvector/graph-node not loaded' };
           } catch { return { status: 'unavailable', totalNodes: 0, totalEdges: 0, avgDegree: 0, note: 'Not initialized' }; }
@@ -2424,7 +2424,7 @@ export const hooksIntelligence: MCPTool = {
         working: [
           'memory-store', 'embeddings', 'trajectory-recording', 'claims', 'swarm-coordination',
           'hnsw-index', 'pattern-storage', 'sona-optimizer', 'ewc-consolidation', 'moe-routing',
-          'flash-attention', 'lora-adapter', 'ruvllm-coordinator', 'contrastive-trainer', 'training-pipeline', 'graph-database'
+          'flash-attention', 'lora-adapter', 'rufllm-coordinator', 'contrastive-trainer', 'training-pipeline', 'graph-database'
         ],
         partial: [],
         notImplemented: [],
@@ -2724,7 +2724,7 @@ export const hooksTrajectoryEnd: MCPTool = {
         }
       }
 
-      // Trigger ruvllm background learning after trajectory end
+      // Trigger rufllm background learning after trajectory end
       try {
         const { runBackgroundLearning } = await import('../memory/intelligence.js');
         await runBackgroundLearning();
@@ -3094,7 +3094,7 @@ export const hooksPatternSearch: MCPTool = {
 // Intelligence stats hook
 export const hooksIntelligenceStats: MCPTool = {
   name: 'hooks_intelligence_stats',
-  description: 'Get RuVector intelligence layer statistics Use when native Bash hooks (via Claude Code\'s settings.json) are wrong because you need Rufflo-side state — pattern persistence, neural training signals, model-routing learning, cost tracking, audit chain. For one-off shell commands, plain Bash hooks are fine.',
+  description: 'Get RufVector intelligence layer statistics Use when native Bash hooks (via Claude Code\'s settings.json) are wrong because you need Rufflo-side state — pattern persistence, neural training signals, model-routing learning, cost tracking, audit chain. For one-off shell commands, plain Bash hooks are fine.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -3237,40 +3237,40 @@ export const hooksIntelligenceStats: MCPTool = {
       };
     }
 
-    // ruvllm native backend stats
-    let ruvllmStats = { coordinator: 'unavailable' as string, trajectories: 0, contrastiveTrainer: 'unavailable' as string | object, trainingBackend: 'unavailable' as string, graphDatabase: { backend: 'unavailable', totalNodes: 0, totalEdges: 0 } as Record<string, unknown> };
+    // rufllm native backend stats
+    let rufllmStats = { coordinator: 'unavailable' as string, trajectories: 0, contrastiveTrainer: 'unavailable' as string | object, trainingBackend: 'unavailable' as string, graphDatabase: { backend: 'unavailable', totalNodes: 0, totalEdges: 0 } as Record<string, unknown> };
     try {
       const { getIntelligenceStats } = await import('../memory/intelligence.js');
       const iStats = getIntelligenceStats();
-      ruvllmStats.coordinator = iStats._ruvllmBackend || 'unavailable';
-      ruvllmStats.trajectories = iStats._ruvllmTrajectories || 0;
+      rufllmStats.coordinator = iStats._rufllmBackend || 'unavailable';
+      rufllmStats.trajectories = iStats._rufllmTrajectories || 0;
     } catch { /* not initialized */ }
     try {
       const { getSONAStats: getSONA } = await import('../memory/sona-optimizer.js');
       const sStats = await getSONA();
-      ruvllmStats.contrastiveTrainer = sStats._contrastiveTrainer || 'unavailable';
+      rufllmStats.contrastiveTrainer = sStats._contrastiveTrainer || 'unavailable';
     } catch { /* not initialized */ }
     if (lora) {
       const ls = lora.getStats();
-      ruvllmStats.trainingBackend = ls._trainingBackend || 'unavailable';
+      rufllmStats.trainingBackend = ls._trainingBackend || 'unavailable';
     }
     try {
-      const { getGraphStats } = await import('../ruvector/graph-backend.js');
+      const { getGraphStats } = await import('../rufvector/graph-backend.js');
       const gs = await getGraphStats();
-      ruvllmStats.graphDatabase = { backend: gs.backend, totalNodes: gs.totalNodes, totalEdges: gs.totalEdges, avgDegree: gs.avgDegree };
+      rufllmStats.graphDatabase = { backend: gs.backend, totalNodes: gs.totalNodes, totalEdges: gs.totalEdges, avgDegree: gs.avgDegree };
     } catch { /* not available */ }
 
     // ADR-148 — model-router operational counters (per-mechanism, per-backend,
     // A/B disagreement rate). Process-local so this is the most accurate
     // surface; the memory-store path was aggregates-only and lossy.
-    let routerStats: ReturnType<typeof import('../ruvector/model-router.js').getModelRouterStats> | null = null;
+    let routerStats: ReturnType<typeof import('../rufvector/model-router.js').getModelRouterStats> | null = null;
     let neuralRouter: { enabled: boolean; available: boolean; routedBy: string | null; reason: string } | null = null;
     try {
-      const { getModelRouterStats } = await import('../ruvector/model-router.js');
+      const { getModelRouterStats } = await import('../rufvector/model-router.js');
       routerStats = getModelRouterStats();
     } catch { /* router module not loaded */ }
     try {
-      const { neuralRouterStatus } = await import('../ruvector/neural-router.js');
+      const { neuralRouterStatus } = await import('../rufvector/neural-router.js');
       const s = await neuralRouterStatus();
       neuralRouter = { enabled: s.enabled, available: s.available, routedBy: s.routedBy, reason: s.reason };
     } catch { /* neural-router module not loaded */ }
@@ -3294,7 +3294,7 @@ export const hooksIntelligenceStats: MCPTool = {
       const trajectoryPath = process.env.RUFFLO_ROUTER_TRAJECTORY_PATH
         ?? pathMod.resolve(process.cwd(), '.swarm', 'model-router-trajectories.jsonl');
       if (fs.existsSync(trajectoryPath)) {
-        const { MODEL_PRICES } = await import('../ruvector/model-prices.js');
+        const { MODEL_PRICES } = await import('../rufvector/model-prices.js');
         const windowMs = 7 * 86_400_000;          // 7-day window — matches iter 41 default
         const cutoffMs = Date.now() - windowMs;
         interface DecisionLite { ts: string; task_hash: string; complexity: number; ab_pair?: { bandit_pick: string } }
@@ -3457,7 +3457,7 @@ export const hooksIntelligenceStats: MCPTool = {
       ewc: ewcStats,
       flash: flashStats,
       lora: loraStats,
-      ruvllm: ruvllmStats,
+      rufllm: rufllmStats,
       hnsw: {
         indexSize: memoryStats.memory.indexSize,
         avgSearchTimeMs: 0.12,
@@ -3542,7 +3542,7 @@ export const hooksIntelligenceLearn: MCPTool = {
       // DISTILL + CONSOLIDATE: real LoRA update with EWC++ protection
       distill = await intelligence.distillLearning();
       distillTriggered = distill !== null;
-      // Run background learning (ruvllm) pass as well — best-effort
+      // Run background learning (rufllm) pass as well — best-effort
       try {
         await intelligence.runBackgroundLearning();
       } catch { /* best-effort */ }
@@ -4394,11 +4394,11 @@ export const hooksWorkerDetect: MCPTool = {
 };
 
 // Model router - lazy loaded
-let modelRouterInstance: Awaited<ReturnType<typeof import('../ruvector/model-router.js').getModelRouter>> | null = null;
+let modelRouterInstance: Awaited<ReturnType<typeof import('../rufvector/model-router.js').getModelRouter>> | null = null;
 async function getModelRouterInstance() {
   if (!modelRouterInstance) {
     try {
-      const { getModelRouter } = await import('../ruvector/model-router.js');
+      const { getModelRouter } = await import('../rufvector/model-router.js');
       modelRouterInstance = getModelRouter();
     } catch {
       modelRouterInstance = null;
@@ -4451,7 +4451,7 @@ export const hooksModelRoute: MCPTool = {
       costMultiplier: result.costMultiplier,
       // Historical name kept for telemetry / dashboard schema stability.
       // The shipped router is the heuristic + Thompson-bandit described in
-      // ruvector/model-router.ts — not a neural network. See #2329.
+      // rufvector/model-router.ts — not a neural network. See #2329.
       implementation: 'heuristic-thompson-bandit',
     };
   },
@@ -4556,7 +4556,7 @@ export const hooksCodemod: MCPTool = {
     const dryRun = params.dryRun === true;
     const langParam = params.language as string | undefined;
 
-    const { applyCodemod, isDeterministicCodemod } = await import('../ruvector/codemods/engine.js');
+    const { applyCodemod, isDeterministicCodemod } = await import('../rufvector/codemods/engine.js');
     if (!isDeterministicCodemod(intent)) {
       return {
         success: false,

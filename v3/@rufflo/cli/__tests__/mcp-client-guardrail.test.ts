@@ -42,12 +42,12 @@ vi.mock('../src/mcp-tools/coordination-tools.js', () => ({ coordinationTools: []
 vi.mock('../src/mcp-tools/browser-tools.js', () => ({ browserTools: [] }));
 vi.mock('../src/mcp-tools/browser-session-tools.js', () => ({ browserSessionTools: [] }));
 vi.mock('../src/mcp-tools/agentdb-tools.js', () => ({ agentdbTools: [] }));
-vi.mock('../src/mcp-tools/ruvllm-tools.js', () => ({ ruvllmWasmTools: [] }));
+vi.mock('../src/mcp-tools/rufllm-tools.js', () => ({ rufllmWasmTools: [] }));
 vi.mock('../src/mcp-tools/wasm-agent-tools.js', () => ({ wasmAgentTools: [] }));
 vi.mock('../src/mcp-tools/managed-agent-tools.js', () => ({ managedAgentTools: [] }));
 vi.mock('../src/mcp-tools/guidance-tools.js', () => ({ guidanceTools: [] }));
 vi.mock('../src/mcp-tools/autopilot-tools.js', () => ({ autopilotTools: [] }));
-vi.mock('../src/ruvector/coverage-tools.js', () => ({ coverageRouterTools: [] }));
+vi.mock('../src/rufvector/coverage-tools.js', () => ({ coverageRouterTools: [] }));
 
 // The probe tool — its handler is rewritten per-test. vi.mock is hoisted
 // so we use vi.hoisted to share the mock fn between the factory and the

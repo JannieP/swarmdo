@@ -35,10 +35,10 @@ import { readFileSync, writeFileSync, copyFileSync, existsSync, mkdtempSync, ren
 import { resolve, join, dirname } from 'node:path';
 import { tmpdir } from 'node:os';
 import * as mh from '@metaharness/router';
-import { pairTrajectoryRows } from '../v3/@rufflo/cli/dist/src/ruvector/router-trajectory.js';
-import { IsotonicCalibrator } from '../v3/@rufflo/cli/dist/src/ruvector/router-calibrator.js';
+import { pairTrajectoryRows } from '../v3/@rufflo/cli/dist/src/rufvector/router-trajectory.js';
+import { IsotonicCalibrator } from '../v3/@rufflo/cli/dist/src/rufvector/router-calibrator.js';
 // iter 35 — single source of truth for prices.
-import { blendedPrice } from '../v3/@rufflo/cli/dist/src/ruvector/model-prices.js';
+import { blendedPrice } from '../v3/@rufflo/cli/dist/src/rufvector/model-prices.js';
 
 const ARGS = (() => {
   const a = {

@@ -176,10 +176,10 @@ const CAPABILITY_CATALOG: Record<string, CapabilityArea> = {
     skills: [],
     whenToUse: 'When you need sandboxed agent execution without OS access (safe, isolated environments).',
   },
-  'ruvllm-inference': {
-    name: 'RuVLLM Inference',
+  'rufllm-inference': {
+    name: 'RufLLM Inference',
     description: 'WASM-based HNSW routing, SONA instant adaptation, MicroLoRA, chat formatting. Use when native Bash / file tools are wrong because this MCP tool exposes Rufflo-specific state or controllers that have no shell equivalent. For tasks that fit a one-line native command, prefer that.',
-    tools: ['ruvllm_status', 'ruvllm_hnsw_create', 'ruvllm_sona_create', 'ruvllm_microlora_create', 'ruvllm_chat_format', 'ruvllm_kvcache_create'],
+    tools: ['rufllm_status', 'rufllm_hnsw_create', 'rufllm_sona_create', 'rufllm_microlora_create', 'rufllm_chat_format', 'rufllm_kvcache_create'],
     commands: [],
     agents: [],
     skills: [],
@@ -234,7 +234,7 @@ const TASK_ROUTES: TaskRoute[] = [
   { pattern: /\b(release|deploy|publish|version|changelog)\b/i, areas: ['github-integration', 'session-workflow'], workflow: 'release' },
   { pattern: /\b(swarm|multi.agent|coordin|hive|consensus)\b/i, areas: ['swarm-orchestration', 'hive-mind'], workflow: 'swarm' },
   { pattern: /\b(learn|train|neural|pattern|sona|lora)\b/i, areas: ['intelligence-learning'], workflow: 'learning' },
-  { pattern: /\b(wasm|sandbox|isolated|gallery)\b/i, areas: ['wasm-agents', 'ruvllm-inference'], workflow: 'wasm' },
+  { pattern: /\b(wasm|sandbox|isolated|gallery)\b/i, areas: ['wasm-agents', 'rufllm-inference'], workflow: 'wasm' },
   { pattern: /\b(hook|pre.task|post.task|worker|daemon)\b/i, areas: ['hooks-automation', 'session-workflow'], workflow: 'automation' },
   { pattern: /\b(config|setup|init|provider|doctor)\b/i, areas: ['config-system'], workflow: 'setup' },
 ];

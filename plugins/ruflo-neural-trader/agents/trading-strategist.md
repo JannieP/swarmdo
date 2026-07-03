@@ -117,7 +117,7 @@ npx @rufflo/cli@latest neural predict --input "current market: high volatility, 
 ### Related Plugins
 
 - **rufflo-market-data**: OHLCV ingestion and candlestick pattern detection
-- **rufflo-ruvector**: HNSW indexing for strategy pattern similarity search
+- **rufflo-rufvector**: HNSW indexing for strategy pattern similarity search
 - **rufflo-cost-tracker**: PnL tracking and cost attribution
 - **rufflo-observability**: Strategy performance dashboards
 

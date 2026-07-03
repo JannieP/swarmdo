@@ -80,9 +80,9 @@ The existing providers (`'better-sqlite3'`, `'sql.js'`, `'rvf'`, `'json'`, `'aut
 
 `npm run bench` now uses a dedicated `vitest.bench.config.ts` and discovers `benchmarks/**/*.bench.ts`. The first measured baseline lives in `benchmarks/results/`. The README's perf table now cites real measurements instead of aspirational prose.
 
-### 6. RuVector boundary (Phase 7)
+### 6. RufVector boundary (Phase 7)
 
-`v3/@rufflo/memory/ruvector.db` is test pollution, not a runtime artifact. It is now wiped before and after tests by `vitest.setup.ts`, and a `scripts/smoke-memory-no-stray-db.mjs` CI guard fails the build if any `*.db` / `*.redb` / `*.rvf` file appears in `git status` under the package after `npm test` runs.
+`v3/@rufflo/memory/rufvector.db` is test pollution, not a runtime artifact. It is now wiped before and after tests by `vitest.setup.ts`, and a `scripts/smoke-memory-no-stray-db.mjs` CI guard fails the build if any `*.db` / `*.redb` / `*.rvf` file appears in `git status` under the package after `npm test` runs.
 
 ## What did NOT change
 

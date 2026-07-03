@@ -90,7 +90,7 @@ bash plugins/rufflo-market-data/scripts/smoke.sh
 
 - `rufflo-agentdb` — namespace convention owner; defines the routing rules ADR-0001 fixes violations of
 - `rufflo-neural-trader` -- Consumes market patterns as strategy signals
-- `rufflo-ruvector` -- HNSW indexing engine for pattern similarity search
+- `rufflo-rufvector` -- HNSW indexing engine for pattern similarity search
 - `rufflo-observability` -- Data feed health and ingestion latency dashboards
 
 ## License

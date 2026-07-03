@@ -9,7 +9,7 @@
 # Triggers on changes that could move any of these signals:
 #   - the rufflo-metaharness plugin
 #   - the @metaharness/router optional dep version in v3/@rufflo/cli
-#   - the v3 ruvector router-trajectory + neural-router source
+#   - the v3 rufvector router-trajectory + neural-router source
 #   - this workflow file
 name: metaharness-ci
 
@@ -19,16 +19,16 @@ on:
     paths:
       - 'plugins/rufflo-metaharness/**'
       - 'v3/@rufflo/cli/package.json'
-      - 'v3/@rufflo/cli/src/ruvector/neural-router.ts'
-      - 'v3/@rufflo/cli/src/ruvector/router-trajectory.ts'
+      - 'v3/@rufflo/cli/src/rufvector/neural-router.ts'
+      - 'v3/@rufflo/cli/src/rufvector/router-trajectory.ts'
       - 'scripts/check-metaharness-compat.mjs'
       - '.github/workflows/metaharness-ci.yml'
   pull_request:
     paths:
       - 'plugins/rufflo-metaharness/**'
       - 'v3/@rufflo/cli/package.json'
-      - 'v3/@rufflo/cli/src/ruvector/neural-router.ts'
-      - 'v3/@rufflo/cli/src/ruvector/router-trajectory.ts'
+      - 'v3/@rufflo/cli/src/rufvector/neural-router.ts'
+      - 'v3/@rufflo/cli/src/rufvector/router-trajectory.ts'
       - 'scripts/check-metaharness-compat.mjs'
       - '.github/workflows/metaharness-ci.yml'
   workflow_dispatch:

@@ -6,7 +6,7 @@ MetaHarness integration plugin for rufflo. Surfaces the upstream `metaharness` /
 
 **Rufflo remains operational if every MetaHarness package is removed.** Every code path in this plugin satisfies four rules:
 
-1. **Removable** — no static `import '@metaharness/*'` outside the optional-router path in `v3/@rufflo/cli/src/ruvector/neural-router.ts`.
+1. **Removable** — no static `import '@metaharness/*'` outside the optional-router path in `v3/@rufflo/cli/src/rufvector/neural-router.ts`.
 2. **Optional in package.json** — `metaharness` is in `optionalDependencies`, never `dependencies`.
 3. **Graceful degradation** — every script catches `MODULE_NOT_FOUND`/network failure and emits `{ degraded: true, reason: 'metaharness-not-available' }` JSON, exits 0. The graceful path is the default behavior, not a special case.
 4. **CI gate** — `no-metaharness-smoke.yml` runs the plugin smoke with `npm install --no-optional` and asserts the contract still passes.

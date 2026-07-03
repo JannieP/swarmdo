@@ -51,9 +51,9 @@ The bridge runs automatically on `session-start` via the SessionStart hook. Manu
 - After bulk memory changes outside normal sessions
 - Forcing re-embedding after model updates
 
-## Integration with ruvector
+## Integration with rufvector
 
-When `rufflo-ruvector` is loaded, bridged memories are also indexed by ruvector for:
+When `rufflo-rufvector` is loaded, bridged memories are also indexed by rufvector for:
 - Hybrid search (sparse + dense with RRF)
 - Graph RAG multi-hop queries across memory entries
 - Brain knowledge sharing across sessions

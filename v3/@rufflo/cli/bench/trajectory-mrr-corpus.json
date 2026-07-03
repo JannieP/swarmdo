@@ -19,7 +19,7 @@
     },
     {
       "id": "t-004",
-      "raw": "Implemented deterministic codemod engine for var-to-const. Uses TypeScript compiler API to walk VariableDeclarationList nodes, applies formatting-preserving text-range edits (no re-printing). Source at src/ruvector/codemods/engine.ts. Tests at __tests__/codemod-engine.test.ts cover scope-aware reassignment analysis and idempotency.",
+      "raw": "Implemented deterministic codemod engine for var-to-const. Uses TypeScript compiler API to walk VariableDeclarationList nodes, applies formatting-preserving text-range edits (no re-printing). Source at src/rufvector/codemods/engine.ts. Tests at __tests__/codemod-engine.test.ts cover scope-aware reassignment analysis and idempotency.",
       "query": "codemod engine var-to-const"
     },
     {
@@ -54,7 +54,7 @@
     },
     {
       "id": "t-011",
-      "raw": "Added deterministic codemod for remove-console. Walks ExpressionStatement nodes; if the call target's root identifier is `console`, removes the statement. Preserves indentation when the statement owns its line; preserves inline when other code is on the same line. Source: src/ruvector/codemods/engine.ts.",
+      "raw": "Added deterministic codemod for remove-console. Walks ExpressionStatement nodes; if the call target's root identifier is `console`, removes the statement. Preserves indentation when the statement owns its line; preserves inline when other code is on the same line. Source: src/rufvector/codemods/engine.ts.",
       "query": "remove-console codemod"
     },
     {
@@ -64,12 +64,12 @@
     },
     {
       "id": "t-013",
-      "raw": "Added scope-aware reassignment analysis for var-to-const. Builds a per-function scope tree, resolves each assignment to its declaring scope, marks a var as `let` only when its OWN binding is reassigned. Source: src/ruvector/codemods/scope-analysis.ts. Soundness: never emits incorrect const — only ever errs toward let.",
+      "raw": "Added scope-aware reassignment analysis for var-to-const. Builds a per-function scope tree, resolves each assignment to its declaring scope, marks a var as `let` only when its OWN binding is reassigned. Source: src/rufvector/codemods/scope-analysis.ts. Soundness: never emits incorrect const — only ever errs toward let.",
       "query": "scope-aware var-to-const"
     },
     {
       "id": "t-014",
-      "raw": "Fixed the Q-state encoder bug. The 31-bit truncating fold silently discarded features 0-31 (the entire keyword block), collapsing keyword-distinct tasks to one Q-state. Replaced with 32-bit FNV-1a over the full quantized vector. Added encoderVersion=2 in PersistedModel; loadModel resets the Q-table on a v1→v2 mismatch. Source: src/ruvector/q-learning-router.ts.",
+      "raw": "Fixed the Q-state encoder bug. The 31-bit truncating fold silently discarded features 0-31 (the entire keyword block), collapsing keyword-distinct tasks to one Q-state. Replaced with 32-bit FNV-1a over the full quantized vector. Added encoderVersion=2 in PersistedModel; loadModel resets the Q-table on a v1→v2 mismatch. Source: src/rufvector/q-learning-router.ts.",
       "query": "Q-learning encoder fix"
     },
     {
@@ -79,7 +79,7 @@
     },
     {
       "id": "t-016",
-      "raw": "Replaced the agent-booster Tier-1 stub with deterministic codemods. The router previously emitted [AGENT_BOOSTER_AVAILABLE] for transforms it never executed. ADR-143 documents the replacement: route-time dry-run gates Tier-1 emission, codemod engine performs the transform, all measurable. Source: src/ruvector/enhanced-model-router.ts.",
+      "raw": "Replaced the agent-booster Tier-1 stub with deterministic codemods. The router previously emitted [AGENT_BOOSTER_AVAILABLE] for transforms it never executed. ADR-143 documents the replacement: route-time dry-run gates Tier-1 emission, codemod engine performs the transform, all measurable. Source: src/rufvector/enhanced-model-router.ts.",
       "query": "Agent Booster replacement deterministic codemods"
     },
     {

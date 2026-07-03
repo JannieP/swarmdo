@@ -30,7 +30,7 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import * as mh from '@metaharness/router';
-import { IsotonicCalibrator } from '../v3/@rufflo/cli/dist/src/ruvector/router-calibrator.js';
+import { IsotonicCalibrator } from '../v3/@rufflo/cli/dist/src/rufvector/router-calibrator.js';
 
 const ARGS = (() => {
   const a = {

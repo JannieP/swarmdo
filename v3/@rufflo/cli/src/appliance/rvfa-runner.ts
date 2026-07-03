@@ -135,7 +135,7 @@ export class RvfaRunner {
         RVFA_PROFILE: this.header.profile,
       };
 
-      if (options.passphrase && this.header.models.provider !== 'ruvllm') {
+      if (options.passphrase && this.header.models.provider !== 'rufllm') {
         const vault = tryExtract(this.reader, 'models');
         if (vault) {
           const keys = await this.decryptVault(vault, options.passphrase);

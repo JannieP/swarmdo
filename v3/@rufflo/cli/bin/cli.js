@@ -22,7 +22,7 @@ import { dirname, join } from 'path';
 //    audit_1776483149979 flagged a broader filter as too aggressive.
 //
 // 2. Redirect noisy stdout writes from upstream embedder libraries
-//    (ruvector ONNX loader, ruvector-onnx-embeddings-wasm parallel
+//    (rufvector ONNX loader, rufvector-onnx-embeddings-wasm parallel
 //    embedder) to stderr. Those libraries use console.log for progress
 //    messages — "Loading model:", "  Downloading: …", "🚀 Initializing N
 //    workers" — which corrupts MCP JSON-RPC stdio (#2253) and is noise
@@ -30,7 +30,7 @@ import { dirname, join } from 'path';
 //    and the MCP stdio framer reads stdout only.
 //
 // This MUST be installed before `import('../dist/src/index.js')` so the
-// patch is in place before agentic-flow / ruvector load transitively.
+// patch is in place before agentic-flow / rufvector load transitively.
 const _origWarn = console.warn;
 const _origLog = console.log;
 const _origError = console.error;
@@ -49,7 +49,7 @@ const _STDERR_REDIRECT_PREFIXES = [
 // `@xenova/transformers` fails to load (commonly: macOS arm64 without
 // `brew install vips` — sharp can't resolve libvips). The warnings claim
 // agentdb is "falling back to mock embeddings", but memory-bridge.ts's
-// rescueAgentdbEmbedder swaps the embedder over to ruvector ONNX in
+// rescueAgentdbEmbedder swaps the embedder over to rufvector ONNX in
 // that exact case, so the user is NOT on mocks. The warnings are stale
 // and misleading; drop them. Match anchored to exact upstream prefixes
 // (agentdb/dist/controllers/EmbeddingService.js:48–56) so unrelated
@@ -94,7 +94,7 @@ console.log = (...args) => {
 };
 
 // #2256 fast path: --version / -V / --help / -h must NOT trigger heavy
-// imports (agentic-flow, ruvector ONNX, etc.) — those eagerly download a
+// imports (agentic-flow, rufvector ONNX, etc.) — those eagerly download a
 // 23 MB ONNX model on cold cache, blocking 60+ s and causing SIGTERM
 // under common timeout windows (npx default, MCP stdio 30 s). Resolve
 // version directly from package.json and exit before any heavy import.

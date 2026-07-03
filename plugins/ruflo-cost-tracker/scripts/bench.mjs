@@ -12,7 +12,7 @@
 // Optional env:
 //   BENCH_LLM_BASELINE=1   -- run the same corpus through Gemini 2.0 Flash (or another OpenAI-compat model)
 //   BENCH_LLM_MODEL=...    -- override (default: models/gemini-2.0-flash)
-//   BENCH_LLM_BASE_URL=... -- override (default: deployed ruvocal Gemini OpenAI shim)
+//   BENCH_LLM_BASE_URL=... -- override (default: deployed rufvocal Gemini OpenAI shim)
 //   BENCH_LLM_API_KEY=...  -- override (default: from gcloud secret GOOGLE_AI_API_KEY)
 //   BENCH_LLM_PRICE_IN/OUT -- $/1M tokens override (default Gemini 2.0 Flash: 0.10 / 0.40)
 //
@@ -248,7 +248,7 @@ async function runLlmBaseline(cases) {
   const priceOut = parseFloat(process.env.BENCH_LLM_PRICE_OUT || '0.40'); // $/1M output
   let apiKey = process.env.BENCH_LLM_API_KEY;
   if (!apiKey) {
-    // Try to pull from gcloud (deployed ruvocal uses GOOGLE_AI_API_KEY)
+    // Try to pull from gcloud (deployed rufvocal uses GOOGLE_AI_API_KEY)
     try {
       const { execSync } = await import('node:child_process');
       apiKey = execSync('gcloud secrets versions access latest --secret=GOOGLE_AI_API_KEY 2>/dev/null', { encoding: 'utf-8' }).trim();

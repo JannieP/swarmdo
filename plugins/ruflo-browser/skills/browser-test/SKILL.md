@@ -19,7 +19,7 @@ Automated UI testing. **Now backed by a recorded RVF session container** instead
 
 1. **Record the test run** by composing `browser-record`:
    - Allocates an RVF container with `--kind browser-session`.
-   - Begins a ruvector trajectory.
+   - Begins a rufvector trajectory.
 2. **Drive interactions** — `browser_open`, `browser_click`, `browser_fill`, `browser_type`, `browser_select`. Each action emits a `trajectory-step`.
 3. **Wait** for elements / network idle via `browser_wait` before assertions.
 4. **Validate** with `browser_get-text` / `browser_get-value` / `browser_get-title` / `browser_get-url`. Validation outcomes go into `findings.md` inside the RVF container.

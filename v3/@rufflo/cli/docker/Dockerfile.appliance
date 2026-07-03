@@ -71,8 +71,8 @@ RUN GLOBAL_NM="$(npm config get prefix)/lib/node_modules" \
        "$GLOBAL_NM/rufflo/node_modules/@anthropic-ai" \
        "$GLOBAL_NM/rufflo/node_modules/@xenova" \
        "$GLOBAL_NM/rufflo/node_modules/agentdb" \
-       "$GLOBAL_NM/rufflo/node_modules/@ruvector" \
-       "$GLOBAL_NM/rufflo/node_modules/ruvector" \
+       "$GLOBAL_NM/rufflo/node_modules/@rufvector" \
+       "$GLOBAL_NM/rufflo/node_modules/rufvector" \
        "$GLOBAL_NM/rufflo/node_modules/tiktoken" \
        "$GLOBAL_NM/rufflo/node_modules/@img" \
        "$GLOBAL_NM/rufflo/node_modules/better-sqlite3" \

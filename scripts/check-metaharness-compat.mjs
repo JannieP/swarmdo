@@ -73,7 +73,7 @@ async function main() {
   }
 
   // ───── 3. Router.fromExamples + route(embedding) ─────
-  // Mirrors the exact shape used in v3/@rufflo/cli/src/ruvector/neural-router.ts:
+  // Mirrors the exact shape used in v3/@rufflo/cli/src/rufvector/neural-router.ts:
   //   - rows: { embedding: number[], scores: Record<string, number> }
   //   - prices: Record<modelId, number>
   //   - opts: { qualityBar?: number, k?: number }
@@ -179,7 +179,7 @@ async function main() {
     console.log(`**${payload.checksPassed}/${payload.checksRun} passed.**`);
     if (failed.length) {
       console.log('');
-      console.log('⚠ Upstream API has changed. Investigate v3/@rufflo/cli/src/ruvector/neural-router.ts before publishing.');
+      console.log('⚠ Upstream API has changed. Investigate v3/@rufflo/cli/src/rufvector/neural-router.ts before publishing.');
     } else {
       console.log('');
       console.log('✓ Upstream API matches rufflo\'s expectations.');

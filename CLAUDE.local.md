@@ -38,7 +38,7 @@ npx rufflo@v3alpha hooks route --task "[task]"
 npx rufflo@v3alpha hooks worker list
 ```
 
-## Intelligence System (RuVector)
+## Intelligence System (RufVector)
 
 4-step pipeline: RETRIEVE (HNSW) → JUDGE (verdicts) → DISTILL (LoRA) → CONSOLIDATE (EWC++)
 

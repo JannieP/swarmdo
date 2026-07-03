@@ -108,14 +108,14 @@ declare module 'agentic-flow/transport/quic' {
   export default quic;
 }
 
-declare module 'ruvector' {
-  const ruvector: any;
-  export default ruvector;
+declare module 'rufvector' {
+  const rufvector: any;
+  export default rufvector;
   export const VectorDB: any;
   export const VectorDb: any;
   export function isWasm(): boolean;
 
-  // ONNX Embedder (ruvector >= 0.2.15, bundled MiniLM-L6-v2)
+  // ONNX Embedder (rufvector >= 0.2.15, bundled MiniLM-L6-v2)
   export function initOnnxEmbedder(): Promise<void>;
   export function isOnnxAvailable(): boolean;
   export function getOptimizedOnnxEmbedder(): OptimizedOnnxEmbedder | null;
@@ -128,7 +128,7 @@ declare module 'ruvector' {
     similarity(a: number[], b: number[]): number;
   }
 
-  // AdaptiveEmbedder (ruvector >= 0.2.16, LoRA B=0 fix — identity when untrained)
+  // AdaptiveEmbedder (rufvector >= 0.2.16, LoRA B=0 fix — identity when untrained)
   export class AdaptiveEmbedder {
     constructor(options?: { useEpisodic?: boolean });
     embed(text: string): Promise<number[]>;
@@ -233,14 +233,14 @@ declare module '@rufvector/rufllm-wasm' {
   /** Initialize WASM synchronously (Node.js). Must use object form: initSync({ module: bytes }) */
   export function initSync(opts: { module: BufferSource }): void;
 
-  export class RuvLLMWasm {
+  export class RufLLMWasm {
     constructor();
     initialize(): void;
     initializeWithConfig(config: KvCacheConfigWasm): void;
     isInitialized: boolean;
     getPoolStats(): string;
     reset(): void;
-    // NOTE: version() is NOT on RuvLLMWasm — use standalone getVersion()
+    // NOTE: version() is NOT on RufLLMWasm — use standalone getVersion()
   }
   export class ChatMessageWasm {
     static system(content: string): ChatMessageWasm;

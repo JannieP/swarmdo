@@ -38,7 +38,7 @@ List or fetch persisted run records.
 
 The MCP tools persist full artifacts to `.rufflo/arena/<runId>.json` (exact replay). Each tool
 result also includes an `agentdb` payload — use it to store a searchable summary in AgentDB so
-runs are queryable later (the local stand-in for the RuVector data layer, ADR-196/197):
+runs are queryable later (the local stand-in for the RufVector data layer, ADR-196/197):
 
 ```
 mcp__rufflo__memory_store({

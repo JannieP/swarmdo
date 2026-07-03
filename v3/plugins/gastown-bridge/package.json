@@ -68,13 +68,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ruvnet/claude-flow.git",
+    "url": "https://github.com/JannieP/rufflo.git",
     "directory": "v3/plugins/gastown-bridge"
   },
   "bugs": {
-    "url": "https://github.com/ruvnet/claude-flow/issues"
+    "url": "https://github.com/JannieP/rufflo/issues"
   },
-  "homepage": "https://github.com/ruvnet/claude-flow/tree/main/v3/plugins/gastown-bridge#readme",
+  "homepage": "https://github.com/JannieP/rufflo/tree/main/v3/plugins/gastown-bridge#readme",
   "engines": {
     "node": ">=20.0.0"
   },

@@ -1,7 +1,7 @@
 /**
  * Nervous System Bridge
  *
- * Bridge to ruvector-nervous-system-wasm for neural coordination layer.
+ * Bridge to rufvector-nervous-system-wasm for neural coordination layer.
  * Provides signal propagation, state synchronization, and agent coordination.
  */
 
@@ -74,7 +74,7 @@ interface NervousSystemModule {
  * Nervous System Bridge implementation
  */
 export class NervousSystemBridge {
-  readonly name = 'ruvector-nervous-system-wasm';
+  readonly name = 'rufvector-nervous-system-wasm';
   readonly version = '0.1.0';
 
   private _status: WasmModuleStatus = 'unloaded';

@@ -51,7 +51,7 @@ All return `{ success, result | error }` and validate inputs with Zod. See
 
 Full run artifacts are written to `.rufflo/arena/<runId>.json` (exact replay). Each tool result
 also carries an `agentdb` payload so the command layer can store a searchable summary via
-`mcp__rufflo__memory_store` (namespace `arena`) — the local stand-in for the RuVector data
+`mcp__rufflo__memory_store` (namespace `arena`) — the local stand-in for the RufVector data
 layer (ADR-196/197), enabling queries like *"tournaments where grim dominated"*.
 
 ## Scope
@@ -61,7 +61,7 @@ v1 is intentionally Rufflo-only and core-untouched:
 - **In:** simple-program + stochastic strategies, PD + zero-sum games, tournaments, hill-climb &
   co-evolution, file/AgentDB persistence, MCP tools + CLI.
 - **Out (tracked elsewhere):** LLM-agent strategies + distillation (ADR-151), execution
-  sandboxing/resource governance (ADR-153), dashboard UI (ADR-149/154), and the full RuVector
+  sandboxing/resource governance (ADR-153), dashboard UI (ADR-149/154), and the full RufVector
   data/intelligence layer (ADR-196–198, ADR-200).
 
 ## Architecture

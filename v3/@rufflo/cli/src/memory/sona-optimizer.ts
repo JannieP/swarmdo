@@ -143,8 +143,8 @@ async function loadContrastiveTrainer(): Promise<any> {
   try {
     const { createRequire } = await import('module');
     const requireCjs = createRequire(import.meta.url);
-    const ruvllm = requireCjs('@rufvector/rufllm');
-    contrastiveTrainer = new ruvllm.ContrastiveTrainer({ batchSize: 32, margin: 0.5 });
+    const rufllm = requireCjs('@rufvector/rufllm');
+    contrastiveTrainer = new rufllm.ContrastiveTrainer({ batchSize: 32, margin: 0.5 });
     return contrastiveTrainer;
   } catch {
     return null;
@@ -281,7 +281,7 @@ export class SONAOptimizer {
 
     // Try to load Q-learning router lazily
     try {
-      const { QLearningRouter } = await import('../ruvector/q-learning-router.js');
+      const { QLearningRouter } = await import('../rufvector/q-learning-router.js');
       this.qLearningRouter = new QLearningRouter();
       await this.qLearningRouter.initialize();
       this.qLearningEnabled = true;

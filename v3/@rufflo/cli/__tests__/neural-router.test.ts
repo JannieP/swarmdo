@@ -20,8 +20,8 @@ import { mkdtempSync, rmSync, readFileSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import { __resetNeuralRouterForTests, tryCostOptimalRoute, neuralRouterStatus } from '../src/ruvector/neural-router.js';
-import { __resetTrajectoryRecorderForTests, recordDecision, taskHash, trajectoryRecorderStatus } from '../src/ruvector/router-trajectory.js';
+import { __resetNeuralRouterForTests, tryCostOptimalRoute, neuralRouterStatus } from '../src/rufvector/neural-router.js';
+import { __resetTrajectoryRecorderForTests, recordDecision, taskHash, trajectoryRecorderStatus } from '../src/rufvector/router-trajectory.js';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -525,7 +525,7 @@ describe('router-trajectory (ADR-148)', () => {
   });
 
   it('IsotonicCalibrator: fit + transform corrects monotone bias (ADR-149 iter 22)', async () => {
-    const { IsotonicCalibrator } = await import('../src/ruvector/router-calibrator.js');
+    const { IsotonicCalibrator } = await import('../src/rufvector/router-calibrator.js');
 
     // Build a synthetic miscalibration: predictions are systematically too low
     // (linear with slope 0.5, offset 0). Calibrator should learn to lift them.
@@ -553,7 +553,7 @@ describe('router-trajectory (ADR-148)', () => {
   });
 
   it('IsotonicCalibrator: monotonicity is enforced via PAV pooling (ADR-149 iter 22)', async () => {
-    const { IsotonicCalibrator } = await import('../src/ruvector/router-calibrator.js');
+    const { IsotonicCalibrator } = await import('../src/rufvector/router-calibrator.js');
 
     // Adversarial input where observed values violate monotonicity locally.
     // PAV should pool the violators into a single bucket.
@@ -592,7 +592,7 @@ describe('router-trajectory (ADR-148)', () => {
       process.env.RUFFLO_ROUTER_TRAJECTORY = '1';
       process.env.RUFFLO_ROUTER_TRAJECTORY_PATH = path;
       __resetTrajectoryRecorderForTests();
-      const { recordDecision } = await import('../src/ruvector/router-trajectory.js');
+      const { recordDecision } = await import('../src/rufvector/router-trajectory.js');
 
       recordDecision({
         task: 'with disagreement',
@@ -632,8 +632,8 @@ describe('router-trajectory (ADR-148)', () => {
       process.env.RUFFLO_ROUTER_TRAJECTORY = '1';
       process.env.RUFFLO_ROUTER_TRAJECTORY_PATH = path;
       __resetTrajectoryRecorderForTests();
-      const { recordTrajectoryOutcome } = await import('../src/ruvector/router-trajectory.js');
-      const { MODEL_PRICES } = await import('../src/ruvector/model-prices.js');
+      const { recordTrajectoryOutcome } = await import('../src/rufvector/router-trajectory.js');
+      const { MODEL_PRICES } = await import('../src/rufvector/model-prices.js');
 
       // Sanity: known model id has a price entry.
       expect(MODEL_PRICES['openai/gpt-4.1']).toBeDefined();
@@ -686,7 +686,7 @@ describe('router-trajectory (ADR-148)', () => {
   });
 
   it('pairTrajectoryRows reconstructs training rows from decision+outcome (ADR-149 iter 18)', async () => {
-    const { pairTrajectoryRows, tierFromComplexity } = await import('../src/ruvector/router-trajectory.js');
+    const { pairTrajectoryRows, tierFromComplexity } = await import('../src/rufvector/router-trajectory.js');
 
     const emb = new Array(384).fill(0).map((_, i) => Math.sin(i));
     const rows = [
@@ -764,7 +764,7 @@ describe('ModelRouter integration (ADR-148)', () => {
   });
 
   it('result carries routedBy="heuristic" when neural gate is closed (default)', async () => {
-    const { resetModelRouter, routeToModelFull } = await import('../src/ruvector/model-router.js');
+    const { resetModelRouter, routeToModelFull } = await import('../src/rufvector/model-router.js');
     resetModelRouter();
     const result = await routeToModelFull('add console.log to cache');
     expect(result.routedBy).toBe('heuristic');
@@ -773,7 +773,7 @@ describe('ModelRouter integration (ADR-148)', () => {
 
   it('result carries routedBy="heuristic" even with neural gate open if no embedding supplied', async () => {
     process.env.RUFFLO_ROUTER_NEURAL = '1';
-    const { resetModelRouter, routeToModelFull } = await import('../src/ruvector/model-router.js');
+    const { resetModelRouter, routeToModelFull } = await import('../src/rufvector/model-router.js');
     resetModelRouter();
     const result = await routeToModelFull('add console.log to cache');
     // No embedding → neural path not consulted → still heuristic
@@ -783,7 +783,7 @@ describe('ModelRouter integration (ADR-148)', () => {
   it('routedBy reflects active neural backend when gate + embedding + corpus all align', async () => {
     process.env.RUFFLO_ROUTER_NEURAL = '1';
     __resetNeuralRouterForTests();
-    const { resetModelRouter, routeToModelFull } = await import('../src/ruvector/model-router.js');
+    const { resetModelRouter, routeToModelFull } = await import('../src/rufvector/model-router.js');
     resetModelRouter();
     const e = makeEmbedding(3);
     e[0] = 0.85; e[1] = 0.0;
@@ -802,7 +802,7 @@ describe('ModelRouter integration (ADR-148)', () => {
     // ADR-149 — the bandit can only improve if outcome feedback fires. This
     // test confirms recordModelOutcome mutates state in a way getModelRouterStats
     // can see; without this round-trip, executeAgentTask's feedback loop is dead.
-    const { resetModelRouter, recordModelOutcome, getModelRouterStats } = await import('../src/ruvector/model-router.js');
+    const { resetModelRouter, recordModelOutcome, getModelRouterStats } = await import('../src/rufvector/model-router.js');
     resetModelRouter();
     const statsBefore = getModelRouterStats();
     // Drive the bandit through 5 success outcomes on 'haiku' for the same task.
@@ -824,7 +824,7 @@ describe('ModelRouter integration (ADR-148)', () => {
   it('nextCostOptimalAlternative returns a different model when the picked one is excluded (ADR-149 iter 7)', async () => {
     process.env.RUFFLO_ROUTER_NEURAL = '1';
     __resetNeuralRouterForTests();
-    const { nextCostOptimalAlternative, tryCostOptimalRoute } = await import('../src/ruvector/neural-router.js');
+    const { nextCostOptimalAlternative, tryCostOptimalRoute } = await import('../src/rufvector/neural-router.js');
     const e = new Array(384).fill(0);
     const first = await tryCostOptimalRoute(e);
     if (!first) return; // dep absent in CI
@@ -840,7 +840,7 @@ describe('ModelRouter integration (ADR-148)', () => {
   it('nextCostOptimalAlternative returns null when every candidate is excluded (ADR-149 iter 7)', async () => {
     process.env.RUFFLO_ROUTER_NEURAL = '1';
     __resetNeuralRouterForTests();
-    const { nextCostOptimalAlternative, tryCostOptimalRoute } = await import('../src/ruvector/neural-router.js');
+    const { nextCostOptimalAlternative, tryCostOptimalRoute } = await import('../src/rufvector/neural-router.js');
     const e = new Array(384).fill(0);
     const first = await tryCostOptimalRoute(e);
     if (!first) return; // dep absent in CI
@@ -859,7 +859,7 @@ describe('ModelRouter integration (ADR-148)', () => {
       process.env.RUFFLO_ROUTER_TRAJECTORY = '1';
       process.env.RUFFLO_ROUTER_TRAJECTORY_PATH = path;
       __resetTrajectoryRecorderForTests();
-      const { recordDecision, recordTrajectoryOutcome, taskHash } = await import('../src/ruvector/router-trajectory.js');
+      const { recordDecision, recordTrajectoryOutcome, taskHash } = await import('../src/rufvector/router-trajectory.js');
 
       const task = 'add console.log to cache';
       recordDecision({
@@ -891,7 +891,7 @@ describe('ModelRouter integration (ADR-148)', () => {
     // should still return a valid result. We don't assert a specific
     // pick change because that depends on whether the bandit signal
     // disagrees with the neural prediction — a real production-data scenario.
-    const { resetModelRouter, recordModelOutcomeByModelId, getModelRouterPriorsById } = await import('../src/ruvector/model-router.js');
+    const { resetModelRouter, recordModelOutcomeByModelId, getModelRouterPriorsById } = await import('../src/rufvector/model-router.js');
     resetModelRouter();
     // Drive ≥5 outcomes for a candidate so the density guard passes.
     const probeTask = 'Implement edge case for cache';
@@ -912,7 +912,7 @@ describe('ModelRouter integration (ADR-148)', () => {
     process.env.RUFFLO_ROUTER_NEURAL = '1';
     process.env.RUFFLO_ROUTER_BANDIT_PER_MODEL = '1';
     __resetNeuralRouterForTests();
-    const { tryCostOptimalRoute } = await import('../src/ruvector/neural-router.js');
+    const { tryCostOptimalRoute } = await import('../src/rufvector/neural-router.js');
     const e = new Array(384).fill(0); e[0] = 0.3;
     const r = await tryCostOptimalRoute(e);
     if (!r) return; // dep absent
@@ -926,7 +926,7 @@ describe('ModelRouter integration (ADR-148)', () => {
     // should be filtered out — the picked modelId may change.
     process.env.RUFFLO_ROUTER_NEURAL = '1';
     __resetNeuralRouterForTests();
-    const { tryCostOptimalRoute } = await import('../src/ruvector/neural-router.js');
+    const { tryCostOptimalRoute } = await import('../src/rufvector/neural-router.js');
     const e = new Array(384).fill(0); e[0] = 0.3;
 
     const unbounded = await tryCostOptimalRoute(e);
@@ -945,7 +945,7 @@ describe('ModelRouter integration (ADR-148)', () => {
   });
 
   it('embedTaskWithCacheBatch matches single-call results + amortizes setup (ADR-149 iter 11)', async () => {
-    const { embedTaskWithCache, embedTaskWithCacheBatch, __resetTaskEmbedderForTests, embedderStats } = await import('../src/ruvector/task-embedder.js');
+    const { embedTaskWithCache, embedTaskWithCacheBatch, __resetTaskEmbedderForTests, embedderStats } = await import('../src/rufvector/task-embedder.js');
     __resetTaskEmbedderForTests();
     const tasks = ['task one', 'task two', 'task three'];
     const single = await Promise.all(tasks.map(t => embedTaskWithCache(t)));
@@ -970,7 +970,7 @@ describe('ModelRouter integration (ADR-148)', () => {
   it('tryCostOptimalRouteBatch matches single-call shape (ADR-149 iter 11)', async () => {
     process.env.RUFFLO_ROUTER_NEURAL = '1';
     __resetNeuralRouterForTests();
-    const { tryCostOptimalRoute, tryCostOptimalRouteBatch } = await import('../src/ruvector/neural-router.js');
+    const { tryCostOptimalRoute, tryCostOptimalRouteBatch } = await import('../src/rufvector/neural-router.js');
     const e1 = new Array(384).fill(0); e1[0] = 0.5;
     const e2 = new Array(384).fill(0); e2[5] = 0.5;
     const e3 = new Array(384).fill(0); e3[10] = 0.5;
@@ -994,7 +994,7 @@ describe('ModelRouter integration (ADR-148)', () => {
   it('tryCostOptimalRouteBatch returns null entries for invalid embeddings (ADR-149 iter 11)', async () => {
     process.env.RUFFLO_ROUTER_NEURAL = '1';
     __resetNeuralRouterForTests();
-    const { tryCostOptimalRouteBatch } = await import('../src/ruvector/neural-router.js');
+    const { tryCostOptimalRouteBatch } = await import('../src/rufvector/neural-router.js');
     const valid = new Array(384).fill(0);
     const batch = await tryCostOptimalRouteBatch([valid, [], valid]);
     expect(batch).toHaveLength(3);
@@ -1005,7 +1005,7 @@ describe('ModelRouter integration (ADR-148)', () => {
   });
 
   it('embedTaskWithCache caches by task hash (ADR-149 iter 9)', async () => {
-    const { embedTaskWithCache, embedderStats, __resetTaskEmbedderForTests } = await import('../src/ruvector/task-embedder.js');
+    const { embedTaskWithCache, embedderStats, __resetTaskEmbedderForTests } = await import('../src/rufvector/task-embedder.js');
     __resetTaskEmbedderForTests();
     const sBefore = embedderStats();
     expect(sBefore.size).toBe(0);
@@ -1040,7 +1040,7 @@ describe('ModelRouter integration (ADR-148)', () => {
   });
 
   it('recordModelOutcomeByModelId writes shadow per-modelId state (ADR-149 iter 6)', async () => {
-    const { resetModelRouter, recordModelOutcomeByModelId, getModelRouterStats } = await import('../src/ruvector/model-router.js');
+    const { resetModelRouter, recordModelOutcomeByModelId, getModelRouterStats } = await import('../src/rufvector/model-router.js');
     resetModelRouter();
     // Drive 3 successes on a concrete OpenRouter slug. The tier-level priors
     // should be untouched (this method targets priorsById only). After the
@@ -1079,7 +1079,7 @@ describe('OpenRouter alternates (ADR-148 phase 2)', () => {
 
   it('defaults provider to "anthropic" when no OpenRouter signals are set', async () => {
     process.env.ANTHROPIC_API_KEY = 'sk-ant-test';
-    const { resetModelRouter, routeToModelFull } = await import('../src/ruvector/model-router.js');
+    const { resetModelRouter, routeToModelFull } = await import('../src/rufvector/model-router.js');
     resetModelRouter();
     const r = await routeToModelFull('add console.log to cache');
     expect(r.provider).toBe('anthropic');
@@ -1089,7 +1089,7 @@ describe('OpenRouter alternates (ADR-148 phase 2)', () => {
   it('switches to "openrouter" when RUFFLO_ROUTER_PROVIDER=openrouter', async () => {
     process.env.RUFFLO_ROUTER_PROVIDER = 'openrouter';
     process.env.OPENROUTER_API_KEY = 'sk-or-test';
-    const { resetModelRouter, routeToModelFull } = await import('../src/ruvector/model-router.js');
+    const { resetModelRouter, routeToModelFull } = await import('../src/rufvector/model-router.js');
     resetModelRouter();
     const r = await routeToModelFull('add console.log to cache');
     expect(r.provider).toBe('openrouter');
@@ -1104,7 +1104,7 @@ describe('OpenRouter alternates (ADR-148 phase 2)', () => {
 
   it('auto-selects openrouter when only OPENROUTER_API_KEY is set', async () => {
     process.env.OPENROUTER_API_KEY = 'sk-or-test'; // no ANTHROPIC_API_KEY
-    const { resetModelRouter, routeToModelFull } = await import('../src/ruvector/model-router.js');
+    const { resetModelRouter, routeToModelFull } = await import('../src/rufvector/model-router.js');
     resetModelRouter();
     const r = await routeToModelFull('add console.log to cache');
     expect(r.provider).toBe('openrouter');
@@ -1114,7 +1114,7 @@ describe('OpenRouter alternates (ADR-148 phase 2)', () => {
     process.env.ANTHROPIC_API_KEY = 'sk-ant-test';
     process.env.OPENROUTER_API_KEY = 'sk-or-test';
     // No explicit RUFFLO_ROUTER_PROVIDER — defaults to anthropic
-    const { resetModelRouter, routeToModelFull } = await import('../src/ruvector/model-router.js');
+    const { resetModelRouter, routeToModelFull } = await import('../src/rufvector/model-router.js');
     resetModelRouter();
     const r = await routeToModelFull('add console.log to cache');
     expect(r.provider).toBe('anthropic');
@@ -1123,7 +1123,7 @@ describe('OpenRouter alternates (ADR-148 phase 2)', () => {
   it('explicit RUFFLO_ROUTER_PROVIDER=anthropic overrides both keys', async () => {
     process.env.RUFFLO_ROUTER_PROVIDER = 'anthropic';
     process.env.OPENROUTER_API_KEY = 'sk-or-test';
-    const { resetModelRouter, routeToModelFull } = await import('../src/ruvector/model-router.js');
+    const { resetModelRouter, routeToModelFull } = await import('../src/rufvector/model-router.js');
     resetModelRouter();
     const r = await routeToModelFull('design distributed consensus protocol with byzantine fault tolerance');
     expect(r.provider).toBe('anthropic');

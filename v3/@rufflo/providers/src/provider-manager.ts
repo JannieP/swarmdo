@@ -34,7 +34,7 @@ import { OpenAIProvider } from './openai-provider.js';
 import { GoogleProvider } from './google-provider.js';
 import { CohereProvider } from './cohere-provider.js';
 import { OllamaProvider } from './ollama-provider.js';
-import { RuVectorProvider } from './ruvector-provider.js';
+import { RufVectorProvider } from './rufvector-provider.js';
 
 /**
  * Cache entry for request caching
@@ -125,8 +125,8 @@ export class ProviderManager extends EventEmitter {
         return new CohereProvider(options);
       case 'ollama':
         return new OllamaProvider(options);
-      case 'ruvector':
-        return new RuVectorProvider(options);
+      case 'rufvector':
+        return new RufVectorProvider(options);
       default:
         throw new Error(`Unknown provider: ${config.provider}`);
     }

@@ -23,7 +23,7 @@ import { DEFAULT_INIT_OPTIONS } from '../src/init/types.js';
 import { systemTools } from '../src/mcp-tools/system-tools.js';
 import { hooksTools } from '../src/mcp-tools/hooks-tools.js';
 import { agentdbPatternStore, agentdbPatternSearch } from '../src/mcp-tools/agentdb-tools.js';
-import { createQLearningRouter } from '../src/ruvector/q-learning-router.js';
+import { createQLearningRouter } from '../src/rufvector/q-learning-router.js';
 import { CommandParser } from '../src/parser.js';
 import { routeCommand } from '../src/commands/route.js';
 

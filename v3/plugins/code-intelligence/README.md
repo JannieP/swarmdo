@@ -341,10 +341,10 @@ const rateLimits = {
 ## Dependencies
 
 - `micro-hnsw-wasm`: Semantic code search and clone detection (150x faster)
-- `ruvector-gnn-wasm`: Code dependency graphs, call graphs, and control flow analysis
-- `ruvector-mincut-wasm`: Module boundary detection and optimal code splitting
+- `rufvector-gnn-wasm`: Code dependency graphs, call graphs, and control flow analysis
+- `rufvector-mincut-wasm`: Module boundary detection and optimal code splitting
 - `sona`: Self-optimizing learning from code review patterns
-- `ruvector-dag-wasm`: Build dependency analysis and incremental compilation
+- `rufvector-dag-wasm`: Build dependency analysis and incremental compilation
 - `@babel/parser`: JavaScript/TypeScript AST parsing
 - `typescript`: TypeScript compiler API
 

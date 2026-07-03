@@ -26,7 +26,7 @@ import {
   OpenAIProvider,
   GoogleProvider,
   OllamaProvider,
-  RuVectorProvider,
+  RufVectorProvider,
   createProviderManager,
   LLMRequest,
 } from '../index.js';
@@ -191,12 +191,12 @@ async function testOllama() {
   }
 }
 
-async function testRuVector() {
-  console.log('\n🔷 Testing RuVector (SONA + Local Qwen)...');
+async function testRufVector() {
+  console.log('\n🔷 Testing RufVector (SONA + Local Qwen)...');
 
-  const provider = new RuVectorProvider({
+  const provider = new RufVectorProvider({
     config: {
-      provider: 'ruvector',
+      provider: 'rufvector',
       model: 'qwen2.5:0.5b',
       maxTokens: 100,
       providerOptions: {
@@ -214,7 +214,7 @@ async function testRuVector() {
     await provider.initialize();
     const response = await provider.complete(createTestRequest('qwen2.5:0.5b'));
 
-    console.log('✅ RuVector Response:', response.content);
+    console.log('✅ RufVector Response:', response.content);
     console.log('   Tokens:', response.usage);
 
     // Show SONA metrics
@@ -229,10 +229,10 @@ async function testRuVector() {
     return response;
   } catch (error: any) {
     if (error.message?.includes('ECONNREFUSED') || error.message?.includes('fetch failed')) {
-      console.log('⏭️  Skipping RuVector - Ollama not running locally');
+      console.log('⏭️  Skipping RufVector - Ollama not running locally');
       console.log('   To test: ollama pull qwen2.5:0.5b && ollama serve');
     } else {
-      console.error('❌ RuVector Error:', error.message);
+      console.error('❌ RufVector Error:', error.message);
     }
     provider.destroy();
     return null;
@@ -325,7 +325,7 @@ async function main() {
     google: await testGoogle(),
     openrouter: await testOpenRouter(),
     ollama: await testOllama(),
-    ruvector: await testRuVector(),
+    rufvector: await testRufVector(),
     manager: await testProviderManager(),
   };
 
@@ -344,7 +344,7 @@ async function main() {
 
   console.log(`\n📊 Passed: ${passed}/${total}`);
 
-  if (results.ollama === null && results.ruvector === null) {
+  if (results.ollama === null && results.rufvector === null) {
     console.log('\n💡 To test local models:');
     console.log('   1. Install Ollama: https://ollama.ai');
     console.log('   2. Pull Qwen: ollama pull qwen2.5:0.5b');

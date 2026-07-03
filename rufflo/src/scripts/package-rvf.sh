@@ -1,6 +1,6 @@
 #!/bin/bash
 # =============================================================================
-# Package as RVF (RuVector Format) distributable
+# Package as RVF (RufVector Format) distributable
 # Creates a self-contained .rvf archive with manifest and all deployment files.
 #
 # Usage: bash scripts/package-rvf.sh [version]

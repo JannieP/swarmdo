@@ -2,7 +2,7 @@
 name: market-pattern
 description: Detect and classify candlestick patterns from ingested OHLCV data
 argument-hint: "<symbol> [--period 1D]"
-allowed-tools: mcp__rufflo__memory_search mcp__rufflo__memory_list mcp__rufflo__memory_store mcp__rufflo__agentdb_pattern-store mcp__rufflo__agentdb_pattern-search mcp__rufflo__ruvllm_hnsw_route Bash
+allowed-tools: mcp__rufflo__memory_search mcp__rufflo__memory_list mcp__rufflo__memory_store mcp__rufflo__agentdb_pattern-store mcp__rufflo__agentdb_pattern-search mcp__rufflo__rufllm_hnsw_route Bash
 ---
 
 # Market Pattern

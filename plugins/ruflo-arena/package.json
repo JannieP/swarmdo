@@ -1,7 +1,7 @@
 {
   "name": "rufflo-arena",
   "version": "0.1.0-alpha.1",
-  "description": "Competitive ruliology for Rufflo swarms — arenas, tournaments, and adaptive co-evolution of program strategies (ADR-147/148).",
+  "description": "Competitive ruliology for Rufflo swarms \u2014 arenas, tournaments, and adaptive co-evolution of program strategies (ADR-147/148).",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -33,12 +33,18 @@
     "typescript-eslint": "^8.5.0",
     "vitest": "^4.0.16"
   },
-  "keywords": ["rufflo", "arena", "tournament", "ruliology", "co-evolution"],
+  "keywords": [
+    "rufflo",
+    "arena",
+    "tournament",
+    "ruliology",
+    "co-evolution"
+  ],
   "author": "ruvnet",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ruvnet/ruflo.git",
+    "url": "https://github.com/JannieP/rufflo.git",
     "directory": "plugins/rufflo-arena"
   },
   "engines": {

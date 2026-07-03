@@ -1,5 +1,5 @@
 /**
- * RVFA (RuVector Format Appliance) — Binary format reader/writer
+ * RVFA (RufVector Format Appliance) — Binary format reader/writer
  * for self-contained Rufflo appliances.
  *
  * Binary layout:
@@ -62,7 +62,7 @@ export interface RvfaBootConfig {
 }
 
 export interface RvfaModelConfig {
-  provider: 'ruvllm' | 'api-vault' | 'hybrid';
+  provider: 'rufllm' | 'api-vault' | 'hybrid';
   engine?: string;
   models?: string[];
   vaultEncryption?: string;
@@ -101,21 +101,21 @@ export function createDefaultHeader(
     cloud: { provider: 'api-vault', vaultEncryption: 'aes-256-gcm' },
     hybrid: {
       provider: 'hybrid',
-      engine: 'ruvllm-0.1.0',
+      engine: 'rufllm-0.1.0',
       models: ['phi-3-mini-q4'],
       vaultEncryption: 'aes-256-gcm',
     },
     offline: {
-      provider: 'ruvllm',
-      engine: 'ruvllm-0.1.0',
+      provider: 'rufllm',
+      engine: 'rufllm-0.1.0',
       models: ['phi-3-mini-q4'],
     },
   };
 
   const capDefaults: Record<string, string[]> = {
     cloud: ['mcp', 'swarm', 'memory', 'hooks', 'neural', 'api-vault'],
-    hybrid: ['mcp', 'swarm', 'memory', 'hooks', 'neural', 'ruvllm', 'api-vault'],
-    offline: ['mcp', 'swarm', 'memory', 'hooks', 'neural', 'ruvllm'],
+    hybrid: ['mcp', 'swarm', 'memory', 'hooks', 'neural', 'rufllm', 'api-vault'],
+    offline: ['mcp', 'swarm', 'memory', 'hooks', 'neural', 'rufllm'],
   };
 
   return {
@@ -158,7 +158,7 @@ export function validateHeader(header: unknown): header is RvfaHeader {
   if (!oneOf(boot.isolation, ['container', 'microvm', 'native'])) return false;
 
   if (!obj(h.models)) return false;
-  if (!oneOf((h.models as Record<string, unknown>).provider, ['ruvllm', 'api-vault', 'hybrid'])) return false;
+  if (!oneOf((h.models as Record<string, unknown>).provider, ['rufllm', 'api-vault', 'hybrid'])) return false;
 
   for (const sec of h.sections as unknown[]) {
     if (!obj(sec)) return false;

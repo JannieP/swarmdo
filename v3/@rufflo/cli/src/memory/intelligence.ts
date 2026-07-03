@@ -715,8 +715,8 @@ class LocalReasoningBank {
 // @rufvector/rufllm SonaCoordinator Integration
 // ============================================================================
 
-let ruvllmCoordinator: any = null;
-let ruvllmLoaded = false;
+let rufllmCoordinator: any = null;
+let rufllmLoaded = false;
 
 /**
  * Synchronously load the @rufvector/rufllm SonaCoordinator. Used both by the
@@ -724,29 +724,29 @@ let ruvllmLoaded = false;
  * getIntelligenceStats — the dashboard would otherwise report "unavailable"
  * when stats are queried before any async init has fired (#1770).
  */
-function loadRuvllmCoordinatorSync(): any {
-  if (ruvllmLoaded) return ruvllmCoordinator;
-  ruvllmLoaded = true;
+function loadRufllmCoordinatorSync(): any {
+  if (rufllmLoaded) return rufllmCoordinator;
+  rufllmLoaded = true;
   try {
     const requireCjs = createRequire(import.meta.url);
-    const ruvllm = requireCjs('@rufvector/rufllm');
-    ruvllmCoordinator = new ruvllm.SonaCoordinator(ruvllm.DEFAULT_SONA_CONFIG);
-    return ruvllmCoordinator;
+    const rufllm = requireCjs('@rufvector/rufllm');
+    rufllmCoordinator = new rufllm.SonaCoordinator(rufllm.DEFAULT_SONA_CONFIG);
+    return rufllmCoordinator;
   } catch (err) {
     // Surface the reason on debug builds so future regressions of #1770 don't
     // disappear silently. Stays quiet by default to avoid noise on the cli's
     // hot path (e.g., npx invocations).
     if (process.env.RUFFLO_DEBUG) {
       // eslint-disable-next-line no-console
-      console.error('[ruvllm] SonaCoordinator load failed, falling back to JS:', (err as Error).message);
+      console.error('[rufllm] SonaCoordinator load failed, falling back to JS:', (err as Error).message);
     }
-    ruvllmCoordinator = null;
+    rufllmCoordinator = null;
     return null;
   }
 }
 
-async function loadRuvllmCoordinator(): Promise<any> {
-  return loadRuvllmCoordinatorSync();
+async function loadRufllmCoordinator(): Promise<any> {
+  return loadRufllmCoordinatorSync();
 }
 
 // ============================================================================
@@ -994,8 +994,8 @@ export async function initializeIntelligence(config?: Partial<SonaConfig>): Prom
     // Load persisted stats if available
     loadPersistedStats();
 
-    // Eagerly load ruvllm coordinator so stats reflect backend status
-    await loadRuvllmCoordinator();
+    // Eagerly load rufllm coordinator so stats reflect backend status
+    await loadRufllmCoordinator();
 
     intelligenceInitialized = true;
 
@@ -1149,11 +1149,11 @@ export async function recordTrajectory(
     }
 
     // Forward trajectory to @rufvector/rufllm SonaCoordinator if available
-    const ruvllmCoord = await loadRuvllmCoordinator();
-    if (ruvllmCoord) {
+    const rufllmCoord = await loadRufllmCoordinator();
+    if (rufllmCoord) {
       try {
         const avgQuality = verdict === 'success' ? 1.0 : verdict === 'partial' ? 0.5 : 0.0;
-        ruvllmCoord.recordTrajectory({
+        rufllmCoord.recordTrajectory({
           steps: enrichedSteps.map(s => ({
             state: s.content,
             action: s.type,
@@ -1164,7 +1164,7 @@ export async function recordTrajectory(
           success: verdict === 'success'
         });
       } catch {
-        // ruvllm recording failed silently
+        // rufllm recording failed silently
       }
     }
 
@@ -1243,23 +1243,23 @@ export async function findSimilarPatterns(
  * Get intelligence system statistics
  */
 export function getIntelligenceStats(): IntelligenceStats & {
-  _ruvllmBackend: string;
-  _ruvllmTrajectories: number;
+  _rufllmBackend: string;
+  _rufllmTrajectories: number;
   _contrastiveTrainer?: { triplets: number; agents: number } | string;
   _trainingBackend?: string;
 } {
   const sonaStats = sonaCoordinator?.stats();
   const bankStats = reasoningBank?.stats();
 
-  // Lazy-init the ruvllm coordinator if it hasn't been loaded yet. The MCP
+  // Lazy-init the rufllm coordinator if it hasn't been loaded yet. The MCP
   // dashboard (`hooks_intelligence_stats`) hits this path before any
   // initializeIntelligence() call has fired, so the coordinator field would
   // otherwise stay null and the dashboard would report "unavailable" even
   // when @rufvector/rufllm is fully resolvable. Sync require — cheap, idempotent.
-  if (!ruvllmLoaded) {
-    loadRuvllmCoordinatorSync();
+  if (!rufllmLoaded) {
+    loadRufllmCoordinatorSync();
   }
-  const ruvllmStats = ruvllmCoordinator?.stats?.() || null;
+  const rufllmStats = rufllmCoordinator?.stats?.() || null;
 
   // Fetch cross-module stats for unified reporting
   let contrastiveTrainer: { triplets: number; agents: number } | string = 'unavailable';
@@ -1281,8 +1281,8 @@ export function getIntelligenceStats(): IntelligenceStats & {
     trajectoriesRecorded: globalStats.trajectoriesRecorded,
     lastAdaptation: globalStats.lastAdaptation,
     avgAdaptationTime: sonaStats?.avgAdaptationMs ?? 0,
-    _ruvllmBackend: ruvllmStats ? 'active' : 'unavailable',
-    _ruvllmTrajectories: ruvllmStats?.trajectoriesBuffered || 0,
+    _rufllmBackend: rufllmStats ? 'active' : 'unavailable',
+    _rufllmTrajectories: rufllmStats?.trajectoriesBuffered || 0,
     _contrastiveTrainer: contrastiveTrainer,
     _trainingBackend: trainingBackend,
   };
@@ -1571,10 +1571,10 @@ export function getNeuralDataDir(): string {
 
 /**
  * Trigger background learning on the @rufvector/rufllm SonaCoordinator.
- * No-op if ruvllm is not installed.
+ * No-op if rufllm is not installed.
  */
 export async function runBackgroundLearning(): Promise<void> {
-  const coord = await loadRuvllmCoordinator();
+  const coord = await loadRufllmCoordinator();
   if (coord) coord.runBackgroundLoop();
 }
 

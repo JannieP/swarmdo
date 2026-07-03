@@ -38,8 +38,8 @@ RUN npm install -g rufflo@latest \
 #   @anthropic-ai: 72MB (SDK, only needed when calling API directly)
 #   @xenova: 45MB (transformers.js, not needed for CLI)
 #   agentdb: 37MB (optional memory backend)
-#   @ruvector: 28MB (optional neural patterns)
-#   ruvector: 9MB (optional intelligence)
+#   @rufvector: 28MB (optional neural patterns)
+#   rufvector: 9MB (optional intelligence)
 #   onnx-proto: 22MB (protobuf for ONNX)
 #   tiktoken: 23MB (token counting, optional)
 #   @img: 16MB (image processing, not needed)
@@ -55,8 +55,8 @@ RUN GLOBAL_PREFIX=$(npm config get prefix) \
       "${CLI_NM}/@anthropic-ai" \
       "${CLI_NM}/@xenova" \
       "${CLI_NM}/agentdb" \
-      "${CLI_NM}/@ruvector" \
-      "${CLI_NM}/ruvector" \
+      "${CLI_NM}/@rufvector" \
+      "${CLI_NM}/rufvector" \
       "${CLI_NM}/tiktoken" \
       "${CLI_NM}/@img" \
       "${CLI_NM}/better-sqlite3" \
@@ -72,11 +72,11 @@ RUN GLOBAL_PREFIX=$(npm config get prefix) \
     && NESTED="${CLI_NM}/@rufflo/cli/node_modules" \
     && rm -rf \
       "${NESTED}/agentic-flow" \
-      "${NESTED}/@ruvector" \
+      "${NESTED}/@rufvector" \
       "${NESTED}/agentdb" \
     && rm -rf \
-      "${CLI_NM}/ruvector-onnx-embeddings-wasm" \
-      "${CLI_NM}/ruvector-core-linux-x64-gnu" \
+      "${CLI_NM}/rufvector-onnx-embeddings-wasm" \
+      "${CLI_NM}/rufvector-core-linux-x64-gnu" \
       "${CLI_NM}/@rufflo/neural" \
       "${CLI_NM}/@grpc" \
       "${CLI_NM}/gun"

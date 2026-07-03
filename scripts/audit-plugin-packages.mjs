@@ -8,7 +8,7 @@
  *      entry, OR as a `peerDependencies` entry that is NOT marked
  *      `peerDependenciesMeta[name].optional: true`, that is not in the
  *      KNOWN_PUBLISHED allow-list. npm 7+ auto-installs non-optional peers,
- *      so an unpublished one (e.g. `@rufflo/ruvector-upstream`) makes
+ *      so an unpublished one (e.g. `@rufflo/rufvector-upstream`) makes
  *      `npm install <plugin>` fail with E404.
  *
  *   B. (#1902) A `peerDependencies` range for a `@rufflo/*` or

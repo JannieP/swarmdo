@@ -41,7 +41,7 @@ needs its own ADR.
 - All skills shell out to `npx metaharness ...` or `npx -p metaharness@latest harness ...` via the `_harness.mjs` shared helper.
 - 60s hard timeout per subprocess.
 - Output captured + parsed; `--json` flag forced unless the script opts out.
-- No `@metaharness/*` import statement appears outside the optional-router path in `v3/@rufflo/cli/src/ruvector/neural-router.ts`.
+- No `@metaharness/*` import statement appears outside the optional-router path in `v3/@rufflo/cli/src/rufvector/neural-router.ts`.
 
 ## Phase tracker
 

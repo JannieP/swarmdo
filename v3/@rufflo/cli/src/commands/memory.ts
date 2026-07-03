@@ -788,7 +788,7 @@ const statsCommand: Command = {
           'Xenova/bge-small-en-v1.5',
           'agentic-flow',
           'agentic-flow/reasoningbank',
-          'ruvector/onnx',
+          'rufvector/onnx',
           'cached',
         ]);
         const isSemantic = embedding.success && semanticProviders.has(embedding.modelName);

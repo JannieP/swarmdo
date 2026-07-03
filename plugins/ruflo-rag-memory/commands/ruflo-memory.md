@@ -13,8 +13,8 @@ Parse $ARGUMENTS to determine the operation:
 
 **search** `--query QUERY [--namespace NS] [--limit N] [--hybrid] [--graph-rag]`:
 - Default (dense): `npx @rufflo/cli@latest memory search --query "QUERY" --namespace NAMESPACE --limit 5`
-- Hybrid (sparse+dense): `npx ruvector search "QUERY" --hybrid --limit 5`
-- Graph RAG (multi-hop): `npx ruvector search "QUERY" --graph-rag --limit 5`
+- Hybrid (sparse+dense): `npx rufvector search "QUERY" --hybrid --limit 5`
+- Graph RAG (multi-hop): `npx rufvector search "QUERY" --graph-rag --limit 5`
 
 **retrieve** `--key KEY [--namespace NS]`:
 `npx @rufflo/cli@latest memory retrieve --key "KEY" --namespace NAMESPACE`

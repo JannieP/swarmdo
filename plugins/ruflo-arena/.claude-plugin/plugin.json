@@ -6,7 +6,7 @@
     "name": "ruvnet",
     "url": "https://github.com/ruvnet"
   },
-  "homepage": "https://github.com/ruvnet/ruflo",
+  "homepage": "https://github.com/JannieP/rufflo",
   "license": "MIT",
   "keywords": [
     "rufflo",
@@ -20,5 +20,5 @@
     "mcp"
   ],
   "categories": ["intelligence", "swarm", "simulation"],
-  "repository": "https://github.com/ruvnet/ruflo"
+  "repository": "https://github.com/JannieP/rufflo"
 }

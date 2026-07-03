@@ -34,13 +34,13 @@ The registered `rufflo` MCP server exposes 300+ tools across these families. Run
 |--------|---------------|-----------------------|
 | `memory_*` | `memory_store`, `_search`, `_search_unified`, `_import_claude`, `_bridge_status` | `rufflo-rag-memory` |
 | `agentdb_*` | 15 tools for hierarchical / pattern / causal storage | `rufflo-agentdb` |
-| `embeddings_*` | 10 tools incl. RaBitQ 32× quantization | `rufflo-agentdb`, `rufflo-ruvector` |
+| `embeddings_*` | 10 tools incl. RaBitQ 32× quantization | `rufflo-agentdb`, `rufflo-rufvector` |
 | `hooks_*` (incl. `hooks_intelligence_*`) | 19+ tools — routing, learning, transfer, metrics, explain | `rufflo-intelligence`, `rufflo-autopilot` |
 | `aidefence_*` | 6 tools — PII / prompt-injection / sanitization | `rufflo-aidefence` |
 | `neural_*` | 6 tools — train, predict, patterns, compress | `rufflo-intelligence` |
 | `autopilot_*` | 10 tools — autonomous loops + learning | `rufflo-autopilot` |
 | `browser_*` (+ new `browser_session_*`) | 23 + 5 = 28 tools — Playwright + RVF lifecycle | `rufflo-browser` |
-| `ruvllm_sona_*` / `ruvllm_microlora_*` | 4 tools — adaptive learning | `rufflo-intelligence`, `rufflo-ruvllm` |
+| `rufllm_sona_*` / `rufllm_microlora_*` | 4 tools — adaptive learning | `rufflo-intelligence`, `rufflo-rufllm` |
 | `agent_*`, `swarm_*` | spawn, list, status, orchestrate | `rufflo-swarm` |
 | `system_*`, `terminal_*` | system + terminal session ops | this plugin |
 
@@ -52,7 +52,7 @@ This foundation plugin defers to seven sibling ADRs that own specific cross-cutt
 
 | Contract | Owner |
 |----------|-------|
-| **Pinning + smoke as contract** (general pattern) | [rufflo-ruvector ADR-0001](../rufflo-ruvector/docs/adrs/0001-pin-ruvector-0.2.25.md) |
+| **Pinning + smoke as contract** (general pattern) | [rufflo-rufvector ADR-0001](../rufflo-rufvector/docs/adrs/0001-pin-rufvector-0.2.25.md) |
 | **Namespace convention** (`<plugin-stem>-<intent>`, reserved namespaces) | [rufflo-agentdb ADR-0001](../rufflo-agentdb/docs/adrs/0001-agentdb-optimization.md) |
 | **Session-as-skill architecture** (RVF + trajectory + 3 AIDefence gates) | [rufflo-browser ADR-0001](../rufflo-browser/docs/adrs/0001-browser-skills-architecture.md) |
 | **4-step intelligence pipeline** (RETRIEVE → JUDGE → DISTILL → CONSOLIDATE) | [rufflo-intelligence ADR-0001](../rufflo-intelligence/docs/adrs/0001-intelligence-surface-completeness.md) |

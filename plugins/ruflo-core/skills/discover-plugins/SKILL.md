@@ -38,10 +38,10 @@ When starting a new project, exploring rufflo capabilities, or wondering which p
 
 | Plugin | When to use | What it adds |
 |--------|-------------|-------------|
-| **rufflo-agentdb** | Semantic search over code patterns, telemetry, decisions | AgentDB with HNSW vector search (~1.9x-4.7x measured faster), RuVector embeddings |
+| **rufflo-agentdb** | Semantic search over code patterns, telemetry, decisions | AgentDB with HNSW vector search (~1.9x-4.7x measured faster), RufVector embeddings |
 | **rufflo-rag-memory** | Simple key-value memory with search | Store/search/recall without full AgentDB setup |
 | **rufflo-rvf** | Portable memory export/import across machines | RVF format, session persistence, cross-platform transfer |
-| **rufflo-ruvector** | Vector embedding operations, HNSW indexing, clustering | ONNX 384-dim embeddings, hyperbolic Poincare ball, k-means/DBSCAN clustering |
+| **rufflo-rufvector** | Vector embedding operations, HNSW indexing, clustering | ONNX 384-dim embeddings, hyperbolic Poincare ball, k-means/DBSCAN clustering |
 | **rufflo-knowledge-graph** | Entity extraction, relation mapping, graph traversal | Pathfinder algo on AgentDB causal edges, code entity graphs |
 | **rufflo-intelligence** | Task routing optimization, learning from outcomes | SONA neural patterns, trajectory learning, model routing with confidence |
 | **rufflo-daa** | Self-adapting agents that evolve behavior | Dynamic Agentic Architecture, cognitive patterns, knowledge sharing |
@@ -69,7 +69,7 @@ When starting a new project, exploring rufflo capabilities, or wondering which p
 |--------|-------------|-------------|
 | **rufflo-jujutsu** | PR review, merge decisions, diff risk scoring | Diff analysis, risk classification, reviewer recommendations |
 | **rufflo-docs** | After API changes, before releases | Doc generation, drift detection, API documentation |
-| **rufflo-ruvllm** | Local LLM inference, custom model configs | RuVLLM integration, MicroLoRA fine-tuning, chat formatting |
+| **rufflo-rufllm** | Local LLM inference, custom model configs | RuVLLM integration, MicroLoRA fine-tuning, chat formatting |
 | **rufflo-agent** | Sandboxed code execution, untrusted workloads | WASM agent sandboxing, community gallery |
 | **rufflo-plugin-creator** | Building new rufflo plugins | Scaffold structure, validate frontmatter, test MCP references |
 | **rufflo-migrations** | Database schema changes | Sequential migration numbering, up/down pairs, dry-run, rollback validation |
@@ -105,7 +105,7 @@ When starting a new project, exploring rufflo capabilities, or wondering which p
 - Scaffold domain models → `rufflo-ddd`
 - Follow SPARC methodology → `rufflo-sparc`
 - Develop trading strategies → `rufflo-neural-trader` + `rufflo-market-data`
-- Work with vector embeddings → `rufflo-ruvector`
+- Work with vector embeddings → `rufflo-rufvector`
 - Build knowledge graphs → `rufflo-knowledge-graph`
 - Manage database migrations → `rufflo-migrations`
 - Add observability → `rufflo-observability`

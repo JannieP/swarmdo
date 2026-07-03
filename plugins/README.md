@@ -31,7 +31,7 @@ claude $(ls -d plugins/rufflo-*/ | sed 's|^|--plugin-dir |' | tr '\n' ' ')
 | [rufflo-agentdb](rufflo-agentdb/) | AgentDB with HNSW vector search (~1.9x-4.7x measured faster) |
 | [rufflo-rag-memory](rufflo-rag-memory/) | SOTA RAG — hybrid search, Graph RAG, MMR diversity, memory bridge |
 | [rufflo-rvf](rufflo-rvf/) | Portable RVF memory format, session persistence |
-| [rufflo-ruvector](rufflo-ruvector/) | [`ruvector`](https://npmjs.com/package/ruvector) — FlashAttention-3, Graph RAG, hybrid search, 103 MCP tools, Brain AGI |
+| [rufflo-rufvector](rufflo-rufvector/) | [`rufvector`](https://npmjs.com/package/rufvector) — FlashAttention-3, Graph RAG, hybrid search, 103 MCP tools, Brain AGI |
 | [rufflo-knowledge-graph](rufflo-knowledge-graph/) | Entity extraction, relation mapping, pathfinder traversal |
 | [rufflo-intelligence](rufflo-intelligence/) | SONA neural patterns, trajectory learning, model routing |
 | [rufflo-daa](rufflo-daa/) | Dynamic Agentic Architecture, cognitive patterns |
@@ -59,7 +59,7 @@ claude $(ls -d plugins/rufflo-*/ | sed 's|^|--plugin-dir |' | tr '\n' ' ')
 |--------|-------------|
 | [rufflo-jujutsu](rufflo-jujutsu/) | Diff analysis, risk scoring, reviewer recommendations |
 | [rufflo-docs](rufflo-docs/) | Doc generation, drift detection, API docs |
-| [rufflo-ruvllm](rufflo-ruvllm/) | Local LLM inference, MicroLoRA, chat formatting |
+| [rufflo-rufllm](rufflo-rufllm/) | Local LLM inference, MicroLoRA, chat formatting |
 | [rufflo-agent](rufflo-agent/) | WASM agent sandboxing and gallery |
 | [rufflo-plugin-creator](rufflo-plugin-creator/) | Scaffold and validate new plugins |
 | [rufflo-migrations](rufflo-migrations/) | Database schema migration management |
@@ -84,9 +84,9 @@ claude $(ls -d plugins/rufflo-*/ | sed 's|^|--plugin-dir |' | tr '\n' ' ')
 | Security audit | `rufflo-core` + `rufflo-security-audit` + `rufflo-aidefence` |
 | Architecture work | `rufflo-core` + `rufflo-adr` + `rufflo-ddd` + `rufflo-sparc` |
 | Deep research | `rufflo-core` + `rufflo-goals` + `rufflo-rag-memory` + `rufflo-intelligence` |
-| Vector search | `rufflo-core` + `rufflo-ruvector` + `rufflo-rag-memory` + `rufflo-knowledge-graph` |
+| Vector search | `rufflo-core` + `rufflo-rufvector` + `rufflo-rag-memory` + `rufflo-knowledge-graph` |
 | IoT development | `rufflo-core` + `rufflo-iot-cognitum` + `rufflo-agentdb` |
-| Trading systems | `rufflo-core` + `rufflo-neural-trader` + `rufflo-market-data` + `rufflo-ruvector` |
+| Trading systems | `rufflo-core` + `rufflo-neural-trader` + `rufflo-market-data` + `rufflo-rufvector` |
 | Full stack | All 32 plugins |
 
 ## npm Package Integration
@@ -96,15 +96,15 @@ Several plugins wrap standalone npm packages for deeper functionality:
 | Plugin | npm Package | What It Adds |
 |--------|------------|-------------|
 | `rufflo-neural-trader` | [`neural-trader`](https://npmjs.com/package/neural-trader) | 112+ MCP tools, Rust/NAPI engine, LSTM/Transformer models |
-| `rufflo-ruvector` | [`ruvector`](https://npmjs.com/package/ruvector) | 103 MCP tools, FlashAttention-3, Graph RAG, Brain AGI |
+| `rufflo-rufvector` | [`rufvector`](https://npmjs.com/package/rufvector) | 103 MCP tools, FlashAttention-3, Graph RAG, Brain AGI |
 
 ```bash
 # Install backing packages
-npm install neural-trader ruvector
+npm install neural-trader rufvector
 
 # Add as MCP servers (optional, for direct tool access)
 claude mcp add neural-trader -- npx neural-trader mcp start
-claude mcp add ruvector -- npx ruvector mcp start
+claude mcp add rufvector -- npx rufvector mcp start
 ```
 
 ## Plugin Structure

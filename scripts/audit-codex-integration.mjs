@@ -28,7 +28,7 @@ console.log('Codex ↔ Rufflo integration audit (#1909)\n' + '─'.repeat(48));
 
 // ── 1. Codex MCP backend uses the real `mcp-server` subcommand ──────────────
 section('MCP backend registration (`codex` group):');
-for (const p of ['rufflo/src/mcp-bridge/index.js', 'rufflo/src/ruvocal/mcp-bridge/index.js']) {
+for (const p of ['rufflo/src/mcp-bridge/index.js', 'rufflo/src/rufvocal/mcp-bridge/index.js']) {
   if (!existsSync(resolve(ROOT, p))) { fail(`${p}: file missing`); continue; }
   const src = read(p);
   const codexLine = (src.match(/.*@openai\/codex.*/g) ?? [])[0]?.trim() ?? '(no @openai/codex entry)';

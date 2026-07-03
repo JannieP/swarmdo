@@ -1,17 +1,17 @@
 {
   "name": "rufflo-agentdb",
-  "description": "Substrate plugin for Rufflo memory: AgentDB controller bridge (15 agentdb_* MCP tools), RuVector ONNX embeddings (10 embeddings_* tools incl. RaBitQ 32x quantization), and WASM HNSW pattern router (3 ruvllm_hnsw_* tools)",
+  "description": "Substrate plugin for Rufflo memory: AgentDB controller bridge (15 agentdb_* MCP tools), RufVector ONNX embeddings (10 embeddings_* tools incl. RaBitQ 32x quantization), and WASM HNSW pattern router (3 rufllm_hnsw_* tools)",
   "version": "0.3.0",
   "author": {
     "name": "ruvnet",
     "url": "https://github.com/ruvnet"
   },
-  "homepage": "https://github.com/ruvnet/ruflo",
+  "homepage": "https://github.com/JannieP/rufflo",
   "license": "MIT",
   "keywords": [
     "rufflo",
     "agentdb",
-    "ruvector",
+    "rufvector",
     "hnsw",
     "embeddings",
     "vector-search",

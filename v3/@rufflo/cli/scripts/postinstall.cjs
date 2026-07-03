@@ -104,7 +104,7 @@ function augmentExports(base) {
   const additions = {
     './controllers/AttestationLog': './dist/src/security/AttestationLog.js',
     './controllers/MutationGuard': './dist/src/security/MutationGuard.js',
-    './controllers/GuardedVectorBackend': './dist/src/backends/ruvector/GuardedVectorBackend.js',
+    './controllers/GuardedVectorBackend': './dist/src/backends/rufvector/GuardedVectorBackend.js',
     // GNNService and RVFOptimizer live outside dist/src/controllers/ in
     // current agentdb. Map to the actual paths so the export points at a
     // real file. Future agentdb versions may move them — the file-exists

@@ -5,7 +5,7 @@
     "ruvnet/ruflo",
     "ruvnet/agentdb",
     "ruvnet/agentic-flow",
-    "ruvnet/ruvector",
+    "ruvnet/rufvector",
     "ruvnet/ruv-FANN"
   ],
   "vector_layout": [
@@ -15,8 +15,8 @@
     "agentdb_uniques",
     "agentic_flow_clones",
     "agentic_flow_uniques",
-    "ruvector_clones",
-    "ruvector_uniques",
+    "rufvector_clones",
+    "rufvector_uniques",
     "ruv_FANN_clones",
     "ruv_FANN_uniques"
   ],
@@ -269,7 +269,7 @@
             }
           ]
         },
-        "ruvnet/ruvector": {
+        "ruvnet/rufvector": {
           "count": 20283,
           "uniques": 2066,
           "days": [
@@ -469,7 +469,7 @@
           "days": [],
           "error": "fetch-failed"
         },
-        "ruvnet/ruvector": {
+        "ruvnet/rufvector": {
           "count": 0,
           "uniques": 0,
           "days": [],
@@ -529,7 +529,7 @@
           "days": [],
           "error": "fetch-failed"
         },
-        "ruvnet/ruvector": {
+        "ruvnet/rufvector": {
           "count": 0,
           "uniques": 0,
           "days": [],
@@ -589,7 +589,7 @@
           "days": [],
           "error": "fetch-failed"
         },
-        "ruvnet/ruvector": {
+        "ruvnet/rufvector": {
           "count": 0,
           "uniques": 0,
           "days": [],
@@ -649,7 +649,7 @@
           "days": [],
           "error": "fetch-failed"
         },
-        "ruvnet/ruvector": {
+        "ruvnet/rufvector": {
           "count": 0,
           "uniques": 0,
           "days": [],
@@ -709,7 +709,7 @@
           "days": [],
           "error": "fetch-failed"
         },
-        "ruvnet/ruvector": {
+        "ruvnet/rufvector": {
           "count": 0,
           "uniques": 0,
           "days": [],
@@ -769,7 +769,7 @@
           "days": [],
           "error": "fetch-failed"
         },
-        "ruvnet/ruvector": {
+        "ruvnet/rufvector": {
           "count": 0,
           "uniques": 0,
           "days": [],
@@ -829,7 +829,7 @@
           "days": [],
           "error": "fetch-failed"
         },
-        "ruvnet/ruvector": {
+        "ruvnet/rufvector": {
           "count": 0,
           "uniques": 0,
           "days": [],
@@ -889,7 +889,7 @@
           "days": [],
           "error": "fetch-failed"
         },
-        "ruvnet/ruvector": {
+        "ruvnet/rufvector": {
           "count": 0,
           "uniques": 0,
           "days": [],

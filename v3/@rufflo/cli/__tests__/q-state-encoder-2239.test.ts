@@ -10,7 +10,7 @@ import { describe, it, expect } from 'vitest';
 import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { QLearningRouter } from '../src/ruvector/q-learning-router.js';
+import { QLearningRouter } from '../src/rufvector/q-learning-router.js';
 
 const r = new QLearningRouter();
 const stateKey = (s: string) => r.getStateKey(s);

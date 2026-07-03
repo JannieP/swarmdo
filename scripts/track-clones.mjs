@@ -2,7 +2,7 @@
 /**
  * Clone tracker — fetches 14-day GitHub clone numbers for the rufflo
  * ecosystem repos and appends a snapshot to `data/clone-data.rvf`
- * (a RuVector RVF vector store).
+ * (a RufVector RVF vector store).
  *
  * Scheduled by `.github/workflows/clone-tracker.yml` every ~13 days,
  * which is just inside GitHub's 14-day clone-data retention window.
@@ -11,7 +11,7 @@
  *   [rufflo_clones,      rufflo_uniques,
  *    agentdb_clones,    agentdb_uniques,
  *    agentic_clones,    agentic_uniques,
- *    ruvector_clones,   ruvector_uniques,
+ *    rufvector_clones,   rufvector_uniques,
  *    ruv-FANN_clones,   ruv-FANN_uniques]
  *
  * Vector ID: `<ISO-date>-<run-id>`.
@@ -43,7 +43,7 @@ const REPOS = [
   'ruvnet/ruflo',
   'ruvnet/agentdb',
   'ruvnet/agentic-flow',
-  'ruvnet/ruvector',
+  'ruvnet/rufvector',
   'ruvnet/ruv-FANN',
 ];
 
@@ -121,7 +121,7 @@ function readLedger() {
         'rufflo_clones', 'rufflo_uniques',
         'agentdb_clones', 'agentdb_uniques',
         'agentic_flow_clones', 'agentic_flow_uniques',
-        'ruvector_clones', 'ruvector_uniques',
+        'rufvector_clones', 'rufvector_uniques',
         'ruv_FANN_clones', 'ruv_FANN_uniques',
       ],
       snapshots: [],
@@ -191,7 +191,7 @@ async function main() {
   writeLedger(ledger);
   console.error(`  ledger:          ${LEDGER_PATH} (snapshot #${ledger.snapshot_count})`);
 
-  // ---- Append to RVF (RuVector vector store) ----
+  // ---- Append to RVF (RufVector vector store) ----
   const db = await loadOrCreateRvf();
   if (db) {
     try {

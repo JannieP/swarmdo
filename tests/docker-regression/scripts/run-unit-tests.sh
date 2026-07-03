@@ -103,11 +103,11 @@ else
 fi
 
 # Plugin tests
-echo -n "  Testing: RuVector Plugins... "
-if [ -f "/app/v3/@rufflo/plugins/examples/ruvector-plugins/ruvector-plugins.test.ts" ]; then
+echo -n "  Testing: RufVector Plugins... "
+if [ -f "/app/v3/@rufflo/plugins/examples/rufvector-plugins/rufvector-plugins.test.ts" ]; then
     cd /app/v3/@rufflo/plugins
     set +e
-    npm test -- --run examples/ruvector-plugins/ruvector-plugins.test.ts 2>/dev/null && echo "✓ PASSED" || echo "✓ PASSED (via npm test)"
+    npm test -- --run examples/rufvector-plugins/rufvector-plugins.test.ts 2>/dev/null && echo "✓ PASSED" || echo "✓ PASSED (via npm test)"
     set -e
     cd /app
 else

@@ -4,7 +4,7 @@ import {
   isDeterministicCodemod,
   DETERMINISTIC_CODEMOD_INTENTS,
   MODEL_ROUTED_INTENTS,
-} from '../src/ruvector/codemods/engine.js';
+} from '../src/rufvector/codemods/engine.js';
 
 describe('codemod engine — registry', () => {
   it('classifies deterministic vs model-routed intents', () => {

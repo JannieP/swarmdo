@@ -18,7 +18,7 @@ import {
   OpenAIProvider,
   GoogleProvider,
   OllamaProvider,
-  RuVectorProvider,
+  RufVectorProvider,
   ProviderManager,
   createProviderManager,
   LLMRequest,
@@ -196,16 +196,16 @@ describe('Provider Integration Tests', () => {
     }, 60000);
   });
 
-  describe('RuVector Provider (ruvllm)', () => {
+  describe('RufVector Provider (rufllm)', () => {
 
     it('should complete request with CPU-friendly Qwen model', async () => {
-      const provider = new RuVectorProvider({
+      const provider = new RufVectorProvider({
         config: {
-          provider: 'ruvector',
+          provider: 'rufvector',
           model: 'qwen2.5:0.5b', // CPU-friendly small Qwen model
           maxTokens: 100,
           providerOptions: {
-            // RuVector-specific options
+            // RufVector-specific options
             sonaEnabled: true,
             hnswEnabled: true,
             fastgrnnEnabled: true,
@@ -222,7 +222,7 @@ describe('Provider Integration Tests', () => {
 
         const response = await provider.complete(createTestRequest('qwen2.5:0.5b'));
 
-        console.log('RuVector Response:', response.content);
+        console.log('RufVector Response:', response.content);
         console.log('Usage:', response.usage);
         console.log('Cost:', response.cost);
 
@@ -234,15 +234,15 @@ describe('Provider Integration Tests', () => {
 
         provider.destroy();
       } catch (error) {
-        console.log('RuVector/Ollama not available, test details:', error);
+        console.log('RufVector/Ollama not available, test details:', error);
         // Don't fail - local models may not be running
       }
     }, 120000);
 
     it('should search memory with HNSW', async () => {
-      const provider = new RuVectorProvider({
+      const provider = new RufVectorProvider({
         config: {
-          provider: 'ruvector',
+          provider: 'rufvector',
           model: 'qwen2.5:0.5b',
           maxTokens: 100,
           providerOptions: {

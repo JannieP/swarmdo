@@ -56,9 +56,9 @@ Each candlestick pattern is encoded as a fixed-length vector:
 - `mcp__rufflo__agentdb_pattern-search` -- search for similar patterns via HNSW
 - `mcp__rufflo__agentdb_semantic-route` -- route queries to relevant market data sources
 - `mcp__rufflo__embeddings_generate` -- generate embeddings for pattern descriptions
-- `mcp__rufflo__ruvllm_hnsw_create` -- create HNSW index for pattern vectors
-- `mcp__rufflo__ruvllm_hnsw_add` -- add pattern vectors to HNSW index
-- `mcp__rufflo__ruvllm_hnsw_route` -- nearest-neighbor search in pattern index
+- `mcp__rufflo__rufllm_hnsw_create` -- create HNSW index for pattern vectors
+- `mcp__rufflo__rufllm_hnsw_add` -- add pattern vectors to HNSW index
+- `mcp__rufflo__rufllm_hnsw_route` -- nearest-neighbor search in pattern index
 
 ### Neural Learning
 
@@ -80,6 +80,6 @@ npx @rufflo/cli@latest memory search --query "bearish reversal patterns for AAPL
 ### Related Plugins
 
 - **rufflo-neural-trader**: Consumes market data patterns as strategy signals for trading decisions
-- **rufflo-ruvector**: HNSW indexing engine for fast pattern similarity search
+- **rufflo-rufvector**: HNSW indexing engine for fast pattern similarity search
 - **rufflo-agentdb**: Persistent storage for OHLCV data and pattern vectors
 - **rufflo-observability**: Metrics dashboards for data feed health and ingestion latency

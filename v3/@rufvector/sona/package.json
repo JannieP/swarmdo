@@ -1,7 +1,7 @@
 {
   "name": "@rufvector/sona",
   "version": "0.2.1",
-  "description": "Self-Optimizing Neural Architecture (SONA) — adaptive learning for LLM routers. Rufflo in-repo fork of the upstream sona engine.",
+  "description": "Self-Optimizing Neural Architecture (SONA) \u2014 adaptive learning for LLM routers. Rufflo in-repo fork of the upstream sona engine.",
   "main": "./index.cjs",
   "module": "./index.mjs",
   "types": "./index.d.ts",
@@ -28,7 +28,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ruvnet/ruflo.git",
+    "url": "https://github.com/JannieP/rufflo.git",
     "directory": "v3/@rufvector/sona"
   }
 }

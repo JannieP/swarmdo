@@ -1,0 +1,127 @@
+{
+  "name": "@rufflo/rufvector-upstream",
+  "version": "3.0.0-alpha.1",
+  "description": "RufVector WASM package bridges for Rufflo plugins",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./hnsw": {
+      "import": "./dist/bridges/hnsw.js",
+      "types": "./dist/bridges/hnsw.d.ts"
+    },
+    "./attention": {
+      "import": "./dist/bridges/attention.js",
+      "types": "./dist/bridges/attention.d.ts"
+    },
+    "./gnn": {
+      "import": "./dist/bridges/gnn.js",
+      "types": "./dist/bridges/gnn.d.ts"
+    },
+    "./hyperbolic": {
+      "import": "./dist/bridges/hyperbolic.js",
+      "types": "./dist/bridges/hyperbolic.d.ts"
+    },
+    "./learning": {
+      "import": "./dist/bridges/learning.js",
+      "types": "./dist/bridges/learning.d.ts"
+    },
+    "./exotic": {
+      "import": "./dist/bridges/exotic.js",
+      "types": "./dist/bridges/exotic.d.ts"
+    },
+    "./cognitive": {
+      "import": "./dist/bridges/cognitive.js",
+      "types": "./dist/bridges/cognitive.d.ts"
+    },
+    "./sona": {
+      "import": "./dist/bridges/sona.js",
+      "types": "./dist/bridges/sona.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rimraf dist",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "rufflo",
+    "rufvector",
+    "wasm",
+    "vector-search",
+    "neural",
+    "graph",
+    "quantum"
+  ],
+  "author": "Rufflo Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JannieP/rufflo.git",
+    "directory": "v3/plugins/rufvector-upstream"
+  },
+  "dependencies": {
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.3.0",
+    "vitest": "^4.0.16"
+  },
+  "peerDependencies": {
+    "@rufvector/sona": ">=0.1.0",
+    "@rufvector/attention-wasm": "file:../../@rufvector/attention-wasm",
+    "@rufvector/learning-wasm": "file:../../@rufvector/learning-wasm",
+    "@rufvector/exotic-wasm": "file:../../@rufvector/exotic-wasm"
+  },
+  "peerDependenciesMeta": {
+    "@rufvector/micro-hnsw-wasm": {
+      "optional": true
+    },
+    "@rufvector/attention-wasm": {
+      "optional": true
+    },
+    "@rufvector/gnn-wasm": {
+      "optional": true
+    },
+    "@rufvector/hyperbolic-hnsw-wasm": {
+      "optional": true
+    },
+    "@rufvector/learning-wasm": {
+      "optional": true
+    },
+    "@rufvector/exotic-wasm": {
+      "optional": true
+    },
+    "@rufvector/cognitum-gate-kernel": {
+      "optional": true
+    },
+    "@rufvector/sona": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "v3alpha"
+  },
+  "optionalDependencies": {
+    "@rufvector/micro-hnsw-wasm": ">=0.1.0",
+    "@rufvector/gnn-wasm": ">=0.1.0",
+    "@rufvector/hyperbolic-hnsw-wasm": ">=0.1.0",
+    "@rufvector/cognitum-gate-kernel": ">=0.1.0"
+  }
+}

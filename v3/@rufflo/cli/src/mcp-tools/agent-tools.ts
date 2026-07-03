@@ -131,12 +131,12 @@ const AGENT_TYPE_MODEL_DEFAULTS: Record<string, ClaudeModel> = {
 };
 
 // Lazy-loaded model router
-let modelRouterInstance: Awaited<ReturnType<typeof import('../ruvector/model-router.js').getModelRouter>> | null = null;
+let modelRouterInstance: Awaited<ReturnType<typeof import('../rufvector/model-router.js').getModelRouter>> | null = null;
 
 async function getModelRouter() {
   if (!modelRouterInstance) {
     try {
-      const { getModelRouter } = await import('../ruvector/model-router.js');
+      const { getModelRouter } = await import('../rufvector/model-router.js');
       modelRouterInstance = getModelRouter();
     } catch (e) {
       // Log but don't fail - model router is optional
@@ -152,7 +152,7 @@ async function getModelRouter() {
 // @xenova/transformers MiniLM pipeline + LRU cache are shared across
 // agent-tools and the agent-execute-core fallback path.
 async function embedTaskSafe(task: string): Promise<number[] | undefined> {
-  const { embedTaskWithCache } = await import('../ruvector/task-embedder.js');
+  const { embedTaskWithCache } = await import('../rufvector/task-embedder.js');
   return embedTaskWithCache(task);
 }
 
@@ -189,7 +189,7 @@ async function determineAgentModel(
   if (task) {
     try {
       // Try enhanced router first (includes codemod-intent detection)
-      const { getEnhancedModelRouter } = await import('../ruvector/enhanced-model-router.js');
+      const { getEnhancedModelRouter } = await import('../rufvector/enhanced-model-router.js');
       const enhancedRouter = getEnhancedModelRouter();
       // ADR-149 — embed the task so the cost-optimal neural backend fires.
       // We probe the embedder lazily; if it can't load (no @xenova/transformers
@@ -348,7 +348,7 @@ async function registerAgent(input: Record<string, unknown>): Promise<RegisterAg
   } catch { /* swarm store unavailable — agent still registered globally */ }
 
   try {
-    const { addNode } = await import('../ruvector/graph-backend.js');
+    const { addNode } = await import('../rufvector/graph-backend.js');
     await addNode({ id: agentId, type: 'agent', name: agentType });
   } catch { /* graph-node not available */ }
 

@@ -8,7 +8,7 @@
 import type { Command, CommandContext, CommandResult } from '../types.js';
 import { output } from '../output.js';
 
-// Train subcommand - REAL WASM training with RuVector
+// Train subcommand - REAL WASM training with RufVector
 const trainCommand: Command = {
   name: 'train',
   description: 'Train neural patterns with WASM SIMD acceleration (MicroLoRA + Flash Attention)',
@@ -20,7 +20,7 @@ const trainCommand: Command = {
     { name: 'learning-rate', short: 'l', type: 'number', description: 'Learning rate', default: '0.01' },
     { name: 'batch-size', short: 'b', type: 'number', description: 'Batch size', default: '32' },
     { name: 'dim', type: 'number', description: 'Embedding dimension (max 256)', default: '256' },
-    { name: 'wasm', short: 'w', type: 'boolean', description: 'Use RuVector WASM acceleration', default: 'true' },
+    { name: 'wasm', short: 'w', type: 'boolean', description: 'Use RufVector WASM acceleration', default: 'true' },
     { name: 'flash', type: 'boolean', description: 'Enable Flash Attention (2.49x-7.47x speedup)', default: 'true' },
     { name: 'moe', type: 'boolean', description: 'Enable Mixture of Experts routing', default: 'false' },
     { name: 'hyperbolic', type: 'boolean', description: 'Enable hyperbolic attention for hierarchical patterns', default: 'false' },
@@ -47,15 +47,15 @@ const trainCommand: Command = {
     const dataFile = ctx.flags.data as string | undefined;
 
     output.writeln();
-    output.writeln(output.bold('Neural Pattern Training (RuVector WASM)'));
+    output.writeln(output.bold('Neural Pattern Training (RufVector WASM)'));
     output.writeln(output.dim('─'.repeat(55)));
 
-    const spinner = output.createSpinner({ text: 'Initializing RuVector training systems...', spinner: 'dots' });
+    const spinner = output.createSpinner({ text: 'Initializing RufVector training systems...', spinner: 'dots' });
     spinner.start();
 
     try {
-      // Import RuVector training service
-      const ruvector = await import('../services/ruvector-training.js');
+      // Import RufVector training service
+      const rufvector = await import('../services/rufvector-training.js');
       const { generateEmbedding } = await import('../memory/memory-initializer.js');
       const {
         initializeIntelligence,
@@ -66,10 +66,10 @@ const trainCommand: Command = {
         getPersistenceStatus
       } = await import('../memory/intelligence.js');
 
-      // Initialize RuVector WASM training
+      // Initialize RufVector WASM training
       let wasmFeatures: string[] = [];
       if (useWasm) {
-        const initResult = await ruvector.initializeTraining({
+        const initResult = await rufvector.initializeTraining({
           dim,
           learningRate,
           alpha: 0.1,
@@ -84,7 +84,7 @@ const trainCommand: Command = {
         if (initResult.success) {
           wasmFeatures = initResult.features;
           const backendLabel = initResult.backend === 'wasm' ? 'WASM' : 'JS fallback';
-          spinner.setText(`RuVector initialized [${backendLabel}]: ${wasmFeatures.join(', ')}`);
+          spinner.setText(`RufVector initialized [${backendLabel}]: ${wasmFeatures.join(', ')}`);
         } else {
           output.writeln(output.warning(`WASM init failed: ${initResult.error} - falling back`));
         }
@@ -98,16 +98,16 @@ const trainCommand: Command = {
 
       // Pattern type to operator mapping
       const operatorMap: Record<string, number> = {
-        coordination: ruvector.OperatorType.COORDINATION,
-        optimization: ruvector.OperatorType.OPTIMIZATION,
-        prediction: ruvector.OperatorType.ROUTING,
-        security: ruvector.OperatorType.SECURITY,
-        testing: ruvector.OperatorType.TESTING,
-        debugging: ruvector.OperatorType.DEBUGGING,
-        memory: ruvector.OperatorType.MEMORY,
-        reasoning: ruvector.OperatorType.REASONING,
+        coordination: rufvector.OperatorType.COORDINATION,
+        optimization: rufvector.OperatorType.OPTIMIZATION,
+        prediction: rufvector.OperatorType.ROUTING,
+        security: rufvector.OperatorType.SECURITY,
+        testing: rufvector.OperatorType.TESTING,
+        debugging: rufvector.OperatorType.DEBUGGING,
+        memory: rufvector.OperatorType.MEMORY,
+        reasoning: rufvector.OperatorType.REASONING,
       };
-      const operatorType = operatorMap[patternType] ?? ruvector.OperatorType.GENERAL;
+      const operatorType = operatorMap[patternType] ?? rufvector.OperatorType.GENERAL;
 
       spinner.setText(`Training ${patternType} patterns...`);
 
@@ -209,7 +209,7 @@ const trainCommand: Command = {
         const epochStart = performance.now();
 
         // Get curriculum difficulty if enabled
-        const difficulty = useCurriculum ? ruvector.getCurriculumDifficulty(epoch) : 1.0;
+        const difficulty = useCurriculum ? rufvector.getCurriculumDifficulty(epoch) : 1.0;
 
         // Process batch
         const batchStart = (epoch * batchSize) % embeddings.length;
@@ -225,7 +225,7 @@ const trainCommand: Command = {
 
           try {
             // Compute contrastive loss
-            const { loss, gradient } = ruvector.computeContrastiveLoss(anchor, positives, negatives);
+            const { loss, gradient } = rufvector.computeContrastiveLoss(anchor, positives, negatives);
             totalLoss += loss;
 
             // Scale gradient by difficulty
@@ -235,13 +235,13 @@ const trainCommand: Command = {
             }
 
             // Train with MicroLoRA
-            await ruvector.trainPattern(anchor, scaledGradient, operatorType);
+            await rufvector.trainPattern(anchor, scaledGradient, operatorType);
             adaptations++;
 
             // Record trajectory for learning
             const baselineMs = 10; // Baseline execution time
             const executionMs = performance.now() - epochStart;
-            ruvector.recordTrajectory(anchor, operatorType, useFlash ? 1 : 0, executionMs, baselineMs);
+            rufvector.recordTrajectory(anchor, operatorType, useFlash ? 1 : 0, executionMs, baselineMs);
           } catch {
             // WASM training failed, fall back to basic
           }
@@ -278,16 +278,16 @@ const trainCommand: Command = {
 
       const totalTime = Date.now() - startTime;
 
-      // Get RuVector stats
-      const ruvectorStats = useWasm && wasmFeatures.length > 0 ? ruvector.getTrainingStats() : null;
-      const trajectoryStats = ruvectorStats?.trajectoryStats;
+      // Get RufVector stats
+      const rufvectorStats = useWasm && wasmFeatures.length > 0 ? rufvector.getTrainingStats() : null;
+      const trajectoryStats = rufvectorStats?.trajectoryStats;
 
       // Benchmark if WASM was used
       let benchmark: Array<{ name: string; averageTimeMs: number; opsPerSecond: number }> | null = null;
       if (useWasm && wasmFeatures.length > 0) {
         try {
           spinner.setText('Running benchmark...');
-          benchmark = await ruvector.benchmarkTraining(dim, 100);
+          benchmark = await rufvector.benchmarkTraining(dim, 100);
         } catch {
           // Benchmark failed, continue
         }
@@ -302,9 +302,9 @@ const trainCommand: Command = {
       flushPatterns();
       const persistence = getPersistenceStatus();
 
-      // Save LoRA checkpoint via ruvllm TrainingPipeline if available
+      // Save LoRA checkpoint via rufllm TrainingPipeline if available
       try {
-        const { LoRAAdapter } = await import('../ruvector/lora-adapter.js');
+        const { LoRAAdapter } = await import('../rufvector/lora-adapter.js');
         const path = await import('path');
         const cpDir = path.join(process.cwd(), '.rufflo', 'neural');
         const cpPath = path.join(cpDir, `lora-checkpoint-${Date.now()}.json`);
@@ -330,7 +330,7 @@ const trainCommand: Command = {
 
       // Add WASM-specific metrics
       if (useWasm && wasmFeatures.length > 0) {
-        const backendUsed = ruvectorStats?.backend || 'unknown';
+        const backendUsed = rufvectorStats?.backend || 'unknown';
         tableData.push(
           { metric: 'Backend', value: backendUsed === 'wasm' ? 'WASM (native)' : 'JS (fallback)' },
           { metric: 'WASM Features', value: wasmFeatures.slice(0, 3).join(', ') },
@@ -338,9 +338,9 @@ const trainCommand: Command = {
           { metric: 'Avg Loss', value: (totalLoss / Math.max(1, epochs)).toFixed(4) }
         );
 
-        if (ruvectorStats?.microLoraStats) {
+        if (rufvectorStats?.microLoraStats) {
           tableData.push(
-            { metric: 'MicroLoRA Delta Norm', value: ruvectorStats.microLoraStats.deltaNorm.toFixed(6) }
+            { metric: 'MicroLoRA Delta Norm', value: rufvectorStats.microLoraStats.deltaNorm.toFixed(6) }
           );
         }
 
@@ -376,10 +376,10 @@ const trainCommand: Command = {
       output.writeln(output.success(`✓ ${patternsRecorded} patterns saved to ${persistence.patternsFile}`));
 
       if (useWasm && wasmFeatures.length > 0) {
-        const backendUsed = ruvectorStats?.backend || 'unknown';
+        const backendUsed = rufvectorStats?.backend || 'unknown';
         const backendMsg = backendUsed === 'wasm'
-          ? `RuVector WASM backend: ${wasmFeatures.join(', ')}`
-          : `RuVector JS fallback (install @rufvector/learning-wasm for native speed): ${wasmFeatures.join(', ')}`;
+          ? `RufVector WASM backend: ${wasmFeatures.join(', ')}`
+          : `RufVector JS fallback (install @rufvector/learning-wasm for native speed): ${wasmFeatures.join(', ')}`;
         output.writeln(output.highlight(`✓ ${backendMsg}`));
       }
 
@@ -391,7 +391,7 @@ const trainCommand: Command = {
           trajectoriesCompleted,
           totalTime,
           wasmFeatures,
-          ruvectorStats,
+          rufvectorStats,
           benchmark,
           stats,
           persistence
@@ -431,7 +431,7 @@ const statusCommand: Command = {
       // Import real implementations
       const { getIntelligenceStats, initializeIntelligence, benchmarkAdaptation } = await import('../memory/intelligence.js');
       const { getHNSWStatus, loadEmbeddingModel } = await import('../memory/memory-initializer.js');
-      const ruvector = await import('../services/ruvector-training.js');
+      const rufvector = await import('../services/rufvector-training.js');
 
       // Initialize if needed and get real stats
       await initializeIntelligence();
@@ -444,9 +444,9 @@ const statusCommand: Command = {
       // Check embedding model
       const modelInfo = await loadEmbeddingModel({ verbose: false });
 
-      // Check RuVector WASM status
-      const ruvectorStats = ruvector.getTrainingStats();
-      const sonaAvailable = ruvector.isSonaAvailable();
+      // Check RufVector WASM status
+      const rufvectorStats = rufvector.getTrainingStats();
+      const sonaAvailable = rufvector.isSonaAvailable();
 
       spinner.succeed('Neural systems checked');
 
@@ -466,17 +466,17 @@ const statusCommand: Command = {
               : 'Not initialized',
           },
           {
-            component: 'RuVector Training',
-            status: ruvectorStats.initialized ? output.success('Active') : output.dim('Not loaded'),
-            details: ruvectorStats.initialized
-              ? `${ruvectorStats.backend === 'wasm' ? 'WASM' : 'JS fallback'} | MicroLoRA: ${ruvectorStats.totalAdaptations} adapts`
+            component: 'RufVector Training',
+            status: rufvectorStats.initialized ? output.success('Active') : output.dim('Not loaded'),
+            details: rufvectorStats.initialized
+              ? `${rufvectorStats.backend === 'wasm' ? 'WASM' : 'JS fallback'} | MicroLoRA: ${rufvectorStats.totalAdaptations} adapts`
               : 'Call neural train to initialize',
           },
           {
             component: 'SONA Engine',
             status: sonaAvailable ? output.success('Active') : output.dim('Not loaded'),
-            details: sonaAvailable && ruvectorStats.sonaStats
-              ? `${ruvectorStats.sonaStats.totalLearns} learns, ${ruvectorStats.sonaStats.totalSearches} searches`
+            details: sonaAvailable && rufvectorStats.sonaStats
+              ? `${rufvectorStats.sonaStats.totalLearns} learns, ${rufvectorStats.sonaStats.totalSearches} searches`
               : 'Optional, enable with --sona',
           },
           {
@@ -517,10 +517,10 @@ const statusCommand: Command = {
             details: '~4x memory reduction',
           },
           {
-            component: 'ruvllm Coordinator',
-            status: stats._ruvllmBackend === 'active' ? output.success('Active') : output.dim('Unavailable'),
-            details: stats._ruvllmBackend === 'active'
-              ? `SonaCoordinator | ${stats._ruvllmTrajectories} trajectories`
+            component: 'rufllm Coordinator',
+            status: stats._rufllmBackend === 'active' ? output.success('Active') : output.dim('Unavailable'),
+            details: stats._rufllmBackend === 'active'
+              ? `SonaCoordinator | ${stats._rufllmTrajectories} trajectories`
               : 'Install @rufvector/rufllm',
           },
           {
@@ -532,14 +532,14 @@ const statusCommand: Command = {
           },
           {
             component: 'Training Pipeline',
-            status: stats._trainingBackend === 'ruvllm' ? output.success('Active') : output.dim(stats._trainingBackend || 'Unavailable'),
-            details: stats._trainingBackend === 'ruvllm'
-              ? 'ruvllm checkpoints enabled'
+            status: stats._trainingBackend === 'rufllm' ? output.success('Active') : output.dim(stats._trainingBackend || 'Unavailable'),
+            details: stats._trainingBackend === 'rufllm'
+              ? 'rufllm checkpoints enabled'
               : 'JS fallback (no checkpoints)',
           },
           await (async () => {
             try {
-              const { getGraphStats } = await import('../ruvector/graph-backend.js');
+              const { getGraphStats } = await import('../rufvector/graph-backend.js');
               const gs = await getGraphStats();
               return {
                 component: 'Graph Database',
@@ -572,20 +572,20 @@ const statusCommand: Command = {
           },
         ];
 
-        // Add RuVector WASM metrics if initialized
-        if (ruvectorStats.initialized) {
+        // Add RufVector WASM metrics if initialized
+        if (rufvectorStats.initialized) {
           detailedData.push(
-            { metric: 'RuVector Adaptations', value: String(ruvectorStats.totalAdaptations) },
-            { metric: 'RuVector Forwards', value: String(ruvectorStats.totalForwards) },
+            { metric: 'RufVector Adaptations', value: String(rufvectorStats.totalAdaptations) },
+            { metric: 'RufVector Forwards', value: String(rufvectorStats.totalForwards) },
           );
-          if (ruvectorStats.microLoraStats) {
+          if (rufvectorStats.microLoraStats) {
             detailedData.push(
-              { metric: 'MicroLoRA Delta Norm', value: ruvectorStats.microLoraStats.deltaNorm.toFixed(6) },
-              { metric: 'MicroLoRA Adapt Count', value: String(ruvectorStats.microLoraStats.adaptCount) },
+              { metric: 'MicroLoRA Delta Norm', value: rufvectorStats.microLoraStats.deltaNorm.toFixed(6) },
+              { metric: 'MicroLoRA Adapt Count', value: String(rufvectorStats.microLoraStats.adaptCount) },
             );
           }
-          if (sonaAvailable && ruvectorStats.sonaStats?.stats) {
-            const sonaStats = ruvectorStats.sonaStats.stats as Record<string, unknown>;
+          if (sonaAvailable && rufvectorStats.sonaStats?.stats) {
+            const sonaStats = rufvectorStats.sonaStats.stats as Record<string, unknown>;
             detailedData.push(
               { metric: 'SONA Patterns Stored', value: String(sonaStats.patterns_stored || 0) },
               { metric: 'SONA EWC Tasks', value: String(sonaStats.ewc_tasks || 0) },
@@ -602,7 +602,7 @@ const statusCommand: Command = {
         });
       }
 
-      return { success: true, data: { stats, hnswStatus, adaptBench, modelInfo, ruvectorStats } };
+      return { success: true, data: { stats, hnswStatus, adaptBench, modelInfo, rufvectorStats } };
     } catch (error) {
       spinner.fail('Failed to check neural systems');
       output.printError(error instanceof Error ? error.message : String(error));
@@ -850,7 +850,7 @@ const optimizeCommand: Command = {
       const patterns = await getAllPatterns();
       const stats = getIntelligenceStats();
 
-      // Trigger ruvllm background learning if available
+      // Trigger rufllm background learning if available
       try {
         const { runBackgroundLearning } = await import('../memory/intelligence.js');
         await runBackgroundLearning();
@@ -1612,7 +1612,7 @@ const importCommand: Command = {
 // Benchmark subcommand - Real WASM benchmarks
 const benchmarkCommand: Command = {
   name: 'benchmark',
-  description: 'Benchmark RuVector WASM training performance',
+  description: 'Benchmark RufVector WASM training performance',
   options: [
     { name: 'dim', short: 'd', type: 'number', description: 'Embedding dimension (max 256)', default: '256' },
     { name: 'iterations', short: 'i', type: 'number', description: 'Number of iterations', default: '1000' },
@@ -1628,7 +1628,7 @@ const benchmarkCommand: Command = {
     const numKeys = parseInt(ctx.flags.keys as string || '100', 10);
 
     output.writeln();
-    output.writeln(output.bold('RuVector WASM Benchmark'));
+    output.writeln(output.bold('RufVector WASM Benchmark'));
     output.writeln(output.dim('─'.repeat(50)));
 
     const spinner = output.createSpinner({ text: 'Running benchmarks...', spinner: 'dots' });
@@ -1731,7 +1731,7 @@ const benchmarkCommand: Command = {
       const fs = await import('fs');
       const { createRequire } = await import('module');
       const require = createRequire(import.meta.url);
-      const wasmPath = require.resolve('@rufvector/learning-wasm/ruvector_learning_wasm_bg.wasm');
+      const wasmPath = require.resolve('@rufvector/learning-wasm/rufvector_learning_wasm_bg.wasm');
       const wasmBuffer = fs.readFileSync(wasmPath);
 
       const learningWasm = await import('@rufvector/learning-wasm');
@@ -1793,8 +1793,8 @@ const routerStatusCommand: Command = {
   ],
   action: async (ctx: CommandContext): Promise<CommandResult> => {
     const format = (ctx.flags.format as string) || 'table';
-    const { neuralRouterStatus } = await import('../ruvector/neural-router.js');
-    const { getModelRouterStats } = await import('../ruvector/model-router.js');
+    const { neuralRouterStatus } = await import('../rufvector/neural-router.js');
+    const { getModelRouterStats } = await import('../rufvector/model-router.js');
     const status = await neuralRouterStatus();
     const stats = getModelRouterStats();
     const payload = { neuralRouter: status, modelRouter: stats };
@@ -1848,7 +1848,7 @@ const routerTrainCommand: Command = {
       output.printError('@metaharness/router is not installed. `npm install @metaharness/router@^0.3.2` then re-run.');
       return { success: false, exitCode: 1 };
     }
-    const { neuralRouterStatus } = await import('../ruvector/neural-router.js');
+    const { neuralRouterStatus } = await import('../rufvector/neural-router.js');
     const status = await neuralRouterStatus();
     const fs = await import('node:fs');
     const seedPath = corpusPath ?? status.config.seedCorpusPath;
@@ -1906,7 +1906,7 @@ const routerTrainFromTrajectoriesCommand: Command = {
   action: async (ctx: CommandContext): Promise<CommandResult> => {
     const fs = await import('node:fs');
     const path = await import('node:path');
-    const { pairTrajectoryRows } = await import('../ruvector/router-trajectory.js');
+    const { pairTrajectoryRows } = await import('../rufvector/router-trajectory.js');
 
     const inPath = (ctx.flags.in as string | undefined)
       ?? process.env.RUFFLO_ROUTER_TRAJECTORY_PATH
@@ -2021,7 +2021,7 @@ const routerReloadCommand: Command = {
     { command: 'rufflo neural router reload', description: 'Refresh backend caches after retraining an artifact' },
   ],
   action: async (): Promise<CommandResult> => {
-    const { __resetNeuralRouterForTests, neuralRouterStatus } = await import('../ruvector/neural-router.js');
+    const { __resetNeuralRouterForTests, neuralRouterStatus } = await import('../rufvector/neural-router.js');
     __resetNeuralRouterForTests();
     output.writeln(output.success('Neural router backend cache cleared.'));
     const status = await neuralRouterStatus();
@@ -2054,7 +2054,7 @@ const routerModelsCommand: Command = {
     const fs = await import('node:fs');
     const path = await import('node:path');
 
-    const { neuralRouterStatus } = await import('../ruvector/neural-router.js');
+    const { neuralRouterStatus } = await import('../rufvector/neural-router.js');
     const status = await neuralRouterStatus();
     const seedPath = status.config.seedCorpusPath;
 
@@ -2505,9 +2505,9 @@ const routerDecideCommand: Command = {
       return { success: false, exitCode: 1 };
     }
 
-    const { analyzeTaskComplexity, routeToModelFull } = await import('../ruvector/model-router.js');
-    const { embedTaskWithCache } = await import('../ruvector/task-embedder.js');
-    const { neuralRouterStatus, tryCostOptimalRoute } = await import('../ruvector/neural-router.js');
+    const { analyzeTaskComplexity, routeToModelFull } = await import('../rufvector/model-router.js');
+    const { embedTaskWithCache } = await import('../rufvector/task-embedder.js');
+    const { neuralRouterStatus, tryCostOptimalRoute } = await import('../rufvector/neural-router.js');
 
     const t0 = performance.now();
     const complexity = analyzeTaskComplexity(task);
@@ -2661,7 +2661,7 @@ const routerCostSavingsCommand: Command = {
   action: async (ctx: CommandContext): Promise<CommandResult> => {
     const fs = await import('node:fs');
     const path = await import('node:path');
-    const { MODEL_PRICES } = await import('../ruvector/model-prices.js');
+    const { MODEL_PRICES } = await import('../rufvector/model-prices.js');
 
     const inPath = (ctx.flags.in as string | undefined)
       ?? process.env.RUFFLO_ROUTER_TRAJECTORY_PATH
@@ -3340,9 +3340,9 @@ const routerCompareModesCommand: Command = {
     const ceiling = parseFloat(ctx.flags.ceiling as string || '20') || 20;
     const fmt = (ctx.flags.format as string) || 'table';
 
-    const { embedTaskWithCache } = await import('../ruvector/task-embedder.js');
-    const { tryCostOptimalRoute, __resetNeuralRouterForTests } = await import('../ruvector/neural-router.js');
-    const { analyzeTaskComplexity } = await import('../ruvector/model-router.js');
+    const { embedTaskWithCache } = await import('../rufvector/task-embedder.js');
+    const { tryCostOptimalRoute, __resetNeuralRouterForTests } = await import('../rufvector/neural-router.js');
+    const { analyzeTaskComplexity } = await import('../rufvector/model-router.js');
 
     const complexity = analyzeTaskComplexity(task);
     const bucket = complexity.score < 0.34 ? 'low' : complexity.score < 0.67 ? 'med' : 'high';
@@ -3468,8 +3468,8 @@ const routerStatsSummaryCommand: Command = {
     const fmt = (ctx.flags.format as string) || 'table';
 
     // 1. Backend gate / status
-    const { neuralRouterStatus } = await import('../ruvector/neural-router.js');
-    const { getModelRouterStats } = await import('../ruvector/model-router.js');
+    const { neuralRouterStatus } = await import('../rufvector/neural-router.js');
+    const { getModelRouterStats } = await import('../rufvector/model-router.js');
     const backend = await neuralRouterStatus();
     const stats = getModelRouterStats();
 
@@ -3485,7 +3485,7 @@ const routerStatsSummaryCommand: Command = {
 
     if (fs.existsSync(trajectoryPath)) {
       trajectory.exists = true;
-      const { MODEL_PRICES } = await import('../ruvector/model-prices.js');
+      const { MODEL_PRICES } = await import('../rufvector/model-prices.js');
       const lines = fs.readFileSync(trajectoryPath, 'utf8').split('\n').filter(l => l.trim().length > 0);
       trajectory.rows = lines.length;
 
@@ -3962,7 +3962,7 @@ const routerAbStatsCommand: Command = {
 // ADR-149 iter 43 — show the canonical price table that drives cost
 // computations, blended-price routing, and counterfactual baselines.
 // Operators ask "what does the router think gpt-4.1 costs?" frequently;
-// previously the answer required reading src/ruvector/model-prices.ts.
+// previously the answer required reading src/rufvector/model-prices.ts.
 const routerPricesCommand: Command = {
   name: 'prices',
   description: 'Show the per-model price table that drives blended cost + counterfactual computations (ADR-149 iter 43)',
@@ -3976,7 +3976,7 @@ const routerPricesCommand: Command = {
     { command: 'rufflo neural router prices --format json | jq \'.[] | select(.id | contains("opus"))\'', description: 'Filter via jq' },
   ],
   action: async (ctx: CommandContext): Promise<CommandResult> => {
-    const { MODEL_PRICES, blendedPrice } = await import('../ruvector/model-prices.js');
+    const { MODEL_PRICES, blendedPrice } = await import('../rufvector/model-prices.js');
     const fmt = (ctx.flags.format as string) || 'table';
     const sortKey = ((ctx.flags.sort as string) || 'blended').toLowerCase();
 
@@ -4040,7 +4040,7 @@ const routerCostProjectionCommand: Command = {
   action: async (ctx: CommandContext): Promise<CommandResult> => {
     const fs = await import('node:fs');
     const path = await import('node:path');
-    const { MODEL_PRICES } = await import('../ruvector/model-prices.js');
+    const { MODEL_PRICES } = await import('../rufvector/model-prices.js');
 
     const inPath = (ctx.flags.in as string | undefined)
       ?? process.env.RUFFLO_ROUTER_TRAJECTORY_PATH

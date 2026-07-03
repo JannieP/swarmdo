@@ -32,7 +32,7 @@
 
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { pairTrajectoryRows } from '../v3/@rufflo/cli/dist/src/ruvector/router-trajectory.js';
+import { pairTrajectoryRows } from '../v3/@rufflo/cli/dist/src/rufvector/router-trajectory.js';
 
 const ARGS = (() => {
   const a = {

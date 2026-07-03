@@ -54,13 +54,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ruvnet/claude-flow.git",
+    "url": "https://github.com/JannieP/rufflo.git",
     "directory": "v3/plugins/teammate-plugin"
   },
   "bugs": {
-    "url": "https://github.com/ruvnet/claude-flow/issues"
+    "url": "https://github.com/JannieP/rufflo/issues"
   },
-  "homepage": "https://github.com/ruvnet/claude-flow#readme",
+  "homepage": "https://github.com/JannieP/rufflo#readme",
   "engines": {
     "node": ">=18.0.0"
   },

@@ -76,5 +76,5 @@ npx @rufflo/cli@latest memory search --query "entities related to authentication
 
 - **rufflo-agentdb**: Underlying storage for entities, relations, and causal edges via HNSW-indexed AgentDB
 - **rufflo-core**: Researcher agent uses pathfinder traversal for codebase exploration
-- **rufflo-ruvector**: HNSW indexing for fast semantic search across graph nodes
+- **rufflo-rufvector**: HNSW indexing for fast semantic search across graph nodes
 - **rufflo-intelligence**: SONA neural patterns learn from graph traversal trajectories

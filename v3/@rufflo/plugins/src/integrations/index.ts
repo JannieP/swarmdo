@@ -4,7 +4,7 @@
  * Provides integration bridges for external systems:
  * - agentic-flow@alpha for swarm coordination
  * - AgentDB for vector storage and similarity search
- * - RuVector PostgreSQL Bridge for advanced vector operations
+ * - RufVector PostgreSQL Bridge for advanced vector operations
  */
 
 export {
@@ -30,12 +30,12 @@ export {
   type VectorSearchResult,
 } from './agentic-flow.js';
 
-// RuVector PostgreSQL Bridge
-export * as RuVectorTypes from './ruvector/index.js';
+// RufVector PostgreSQL Bridge
+export * as RufVectorTypes from './rufvector/index.js';
 export {
   // Main Bridge Plugin
-  RuVectorBridge,
-  createRuVectorBridge,
+  RufVectorBridge,
+  createRufVectorBridge,
 
   // Type Guards
   isDistanceMetric,
@@ -47,7 +47,7 @@ export {
   isError,
 
   // Namespace
-  RuVector,
+  RufVector,
 
   // Attention Mechanisms
   AttentionRegistry,
@@ -74,15 +74,15 @@ export {
   PatternRecognizer,
   LearningLoop,
   createSelfLearningSystem,
-} from './ruvector/index.js';
+} from './rufvector/index.js';
 
-// Re-export common RuVector types for convenience
+// Re-export common RufVector types for convenience
 export type {
-  RuVectorConfig,
-  VectorSearchOptions as RuVectorSearchOptions,
-  VectorSearchResult as RuVectorSearchResult,
+  RufVectorConfig,
+  VectorSearchOptions as RufVectorSearchOptions,
+  VectorSearchResult as RufVectorSearchResult,
   AttentionMechanism,
   GNNLayerType,
   HyperbolicModel,
-  IRuVectorClient,
-} from './ruvector/index.js';
+  IRufVectorClient,
+} from './rufvector/index.js';

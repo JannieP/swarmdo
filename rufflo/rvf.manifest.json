@@ -96,7 +96,7 @@
           "display_name": "Intelligence & Learning",
           "endpoint": "/mcp/intelligence",
           "description": "Hooks, learning, trajectory, neural pattern tools",
-          "source": "ruvector",
+          "source": "rufvector",
           "prefixes": ["hooks_"]
         },
         "agents": {
@@ -244,10 +244,10 @@
     "oidc_auth": true,
     "branded_assets": true,
     "tool_extensibility": true,
-    "ruvector_integration": true,
+    "rufvector_integration": true,
     "rufflo_integration": true,
     "agentic_flow_integration": true,
-    "external_mcp_backends": ["ruvector", "rufflo", "agentic-flow", "claude-code", "gemini", "codex"],
+    "external_mcp_backends": ["rufvector", "rufflo", "agentic-flow", "claude-code", "gemini", "codex"],
     "test_harness": true
   }
 }

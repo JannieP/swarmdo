@@ -79,7 +79,7 @@ export interface CausalMemoryOptions {
   maxEdgesPerSignature?: number;
   /**
    * Signature similarity threshold (0–1).  Currently unused for the simple
-   * hash-based implementation; reserved for future RuVector upgrade.
+   * hash-based implementation; reserved for future RufVector upgrade.
    * Default: 0.7
    */
   similarityThreshold?: number;
@@ -125,7 +125,7 @@ function resolveStorePath(options?: CausalMemoryOptions): string {
  *   3. SHA-256 → first 16 hex characters (64-bit prefix, collision-unlikely
  *      for the ~450-question GAIA validation set).
  *
- * Future (v2, embedding-based): replace with RuVector cosine similarity so
+ * Future (v2, embedding-based): replace with RufVector cosine similarity so
  * semantically similar questions (paraphrases, translated variants) share
  * causal edges across runs.
  */

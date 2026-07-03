@@ -33,13 +33,13 @@ describe('checkBenchmarkResults', () => {
   it('passes and surfaces measured HNSW + embedding numbers', async () => {
     writeBench({
       hnsw: { entries: [{ n: 5000, speedup: 4.12, recallAt10: 0.88 }] },
-      embeddingBackend: { backend: 'ruvector (all-MiniLM-L6-v2)' },
+      embeddingBackend: { backend: 'rufvector (all-MiniLM-L6-v2)' },
       persistedAt: new Date().toISOString(),
     });
     const c = await checkBenchmarkResults(dir);
     expect(c.status).toBe('pass');
     expect(c.message).toMatch(/4\.12x/);
-    expect(c.message).toMatch(/ruvector/);
+    expect(c.message).toMatch(/rufvector/);
     expect(c.message).toMatch(/ago|just now/);
   });
 

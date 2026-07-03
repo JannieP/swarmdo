@@ -1,8 +1,8 @@
 /**
- * Vitest global setup — ADR-125 Phase 7 (RuVector boundary cleanup).
+ * Vitest global setup — ADR-125 Phase 7 (RufVector boundary cleanup).
  *
  * The agentdb / @rufvector/rvf native bindings write a `vector.db` redb file
- * (legacy pre-fork name: `ruvector.db`) to the package's cwd as a side-effect
+ * (legacy pre-fork name: `rufvector.db`) to the package's cwd as a side-effect
  * of any code path that touches the
  * vector store. The file is test pollution — it has no source reference in
  * `src/**` and recreates itself on demand. This setup file wipes it before
@@ -32,9 +32,9 @@ const KNOWN_LEAK_FILES = [
   // Legacy pre-fork names — still emitted by the not-yet-recompiled native
   // binding; keep wiping them until the forked engine (default `vector.db`)
   // fully replaces it.
-  'ruvector.db',
-  'ruvector.db-journal',
-  'ruvector.db-wal',
+  'rufvector.db',
+  'rufvector.db-journal',
+  'rufvector.db-wal',
   'test-database-provider.db',
   'test-database-provider.rvf',
   'agentdb.rvf.lock',

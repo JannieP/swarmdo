@@ -1,4 +1,4 @@
-// Strategies-as-programs (Rufflo ADR-147/148, RuVector ADR-196). The core representation is
+// Strategies-as-programs (Rufflo ADR-147/148, RufVector ADR-196). The core representation is
 // a deterministic Moore machine: OUTPUT depends on the current state, TRANSITION depends on
 // the opponent's last action — Wolfram's "strategy = a simple program reading history".
 

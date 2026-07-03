@@ -317,7 +317,7 @@ bash plugins/rufflo-neural-trader/scripts/smoke.sh
 - `rufflo-agent` — the `managed_agent_*` cloud agent runtime used by the `trader-cloud-backtest` skill (ADR-115 / ADR-117)
 - `rufflo-agentdb` — namespace convention owner; backing store
 - `rufflo-market-data` — OHLCV data ingestion and candlestick pattern detection (feeds `trading-strategies`)
-- `rufflo-ruvector` — HNSW indexing for strategy pattern similarity search
+- `rufflo-rufvector` — HNSW indexing for strategy pattern similarity search
 - `rufflo-cost-tracker` — PnL tracking and cost attribution
 - `rufflo-observability` — Strategy performance dashboards
 

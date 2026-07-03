@@ -242,9 +242,9 @@ const rateLimits = {
 ## Dependencies
 
 - `micro-hnsw-wasm`: Fast similarity search (150x faster than traditional)
-- `ruvector-gnn-wasm`: Graph neural networks for pathway analysis
-- `ruvector-hyperbolic-hnsw-wasm`: Hierarchical medical ontology embeddings
-- `ruvector-sparse-inference-wasm`: Efficient inference on sparse clinical features
+- `rufvector-gnn-wasm`: Graph neural networks for pathway analysis
+- `rufvector-hyperbolic-hnsw-wasm`: Hierarchical medical ontology embeddings
+- `rufvector-sparse-inference-wasm`: Efficient inference on sparse clinical features
 - `@medplum/fhirtypes`: FHIR R4 type definitions
 
 ## Related Plugins

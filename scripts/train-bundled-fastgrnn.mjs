@@ -16,7 +16,7 @@ import { readFileSync, statSync } from 'node:fs';
 import { resolve } from 'node:path';
 import * as mh from '@metaharness/router';
 // iter 35 — single source of truth for prices.
-import { blendedPrice } from '../v3/@rufflo/cli/dist/src/ruvector/model-prices.js';
+import { blendedPrice } from '../v3/@rufflo/cli/dist/src/rufvector/model-prices.js';
 
 const args = (() => {
   const a = { out: resolve('v3/@rufflo/cli/assets/model-router/seed-router.fastgrnn.safetensors'), epochs: 40, hiddenDim: 12, lr: 0.05 };

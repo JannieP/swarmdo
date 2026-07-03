@@ -37,8 +37,8 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import * as mh from '@metaharness/router';
-import { blendedPrice, costUsd } from '../v3/@rufflo/cli/dist/src/ruvector/model-prices.js';
-import { IsotonicCalibrator } from '../v3/@rufflo/cli/dist/src/ruvector/router-calibrator.js';
+import { blendedPrice, costUsd } from '../v3/@rufflo/cli/dist/src/rufvector/model-prices.js';
+import { IsotonicCalibrator } from '../v3/@rufflo/cli/dist/src/rufvector/router-calibrator.js';
 
 const ARGS = (() => {
   const a = {

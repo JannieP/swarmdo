@@ -400,7 +400,7 @@ CVE remediation, input validation, path security:
 | `metrics` | View learning metrics dashboard | `--v3-dashboard`, `--format` |
 | `transfer` | Transfer patterns via IPFS registry | `store`, `from-project` |
 | `list` | List all registered hooks | `--format` |
-| `intelligence` | RuVector intelligence system | `trajectory-*`, `pattern-*`, `stats` |
+| `intelligence` | RufVector intelligence system | `trajectory-*`, `pattern-*`, `stats` |
 | `worker` | Background worker management | `list`, `dispatch`, `status`, `detect` |
 | `progress` | Check V3 implementation progress | `--detailed`, `--format` |
 | `statusline` | Generate dynamic statusline | `--json`, `--compact`, `--no-color` |
@@ -478,9 +478,9 @@ npx @rufflo/cli@latest migrate rollback
 npx @rufflo/cli@latest migrate validate
 ```
 
-## 🧠 Intelligence System (RuVector)
+## 🧠 Intelligence System (RufVector)
 
-V3 includes the RuVector Intelligence System:
+V3 includes the RufVector Intelligence System:
 - **SONA**: Self-Optimizing Neural Architecture (<0.05ms adaptation)
 - **MoE**: Mixture of Experts for specialized routing
 - **HNSW**: ~1.9x-4.7x measured faster pattern search
@@ -501,7 +501,7 @@ Features:
 - **Normalization**: L2, L1, min-max, z-score
 - **Hyperbolic embeddings**: Poincaré ball model for hierarchical data
 - **75x faster**: With agentic-flow ONNX integration
-- **Neural substrate**: Integration with RuVector
+- **Neural substrate**: Integration with RufVector
 
 ## 🐝 Hive-Mind Consensus
 

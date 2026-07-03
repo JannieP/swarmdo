@@ -1,5 +1,5 @@
 // Text rendering of results. In the full system these surfaces become Rufflo dashboard
-// panels fed by RuVector read-models (ADR-149/198/202). Here we render to text so the
+// panels fed by RufVector read-models (ADR-149/198/202). Here we render to text so the
 // plugin is observable with zero UI dependencies.
 
 import type { EvolutionResult, FsmStrategy, TournamentResult } from '../domain/types.js';

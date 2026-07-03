@@ -2,7 +2,7 @@ name: Clone Tracker (14-day rolling)
 
 # GitHub's clone API only retains 14 days. We run every 13 days so we always
 # catch the full window with a 24h safety margin. The job appends a snapshot
-# to `data/clone-data.rvf` (RuVector vector store) + `data/clone-data.ledger.json`
+# to `data/clone-data.rvf` (RufVector vector store) + `data/clone-data.ledger.json`
 # (chronological JSON), regenerates `data/clone-data.proof.json` with a fresh
 # SHA-256 over the ledger, and commits the result back to main.
 #

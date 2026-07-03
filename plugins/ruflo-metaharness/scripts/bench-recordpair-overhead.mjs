@@ -175,7 +175,7 @@ function main() {
     if (overhead > ARGS.maxOverheadNs) {
       console.log(`⚠ **REGRESSION**: measured ${Math.round(overhead)}ns > threshold ${ARGS.maxOverheadNs}ns`);
       console.log(`  The iter-12 dispatch wiring may have grown beyond the env-flag check.`);
-      console.log(`  Inspect v3/@rufflo/cli/src/ruvector/model-router.ts route() for new work in the default path.`);
+      console.log(`  Inspect v3/@rufflo/cli/src/rufvector/model-router.ts route() for new work in the default path.`);
       process.exit(1);
     } else {
       console.log(`✓ Within regression threshold (${Math.round(overhead)}ns ≤ ${ARGS.maxOverheadNs}ns).`);

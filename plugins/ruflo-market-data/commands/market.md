@@ -10,7 +10,7 @@ Market data commands:
 2. Normalize: open/high/low/close as relative percentages, volume as Z-score
 3. Vectorize each candle to a 64-dimension padded vector
 4. Store normalized data via `mcp__rufflo__agentdb_hierarchical-store` in `market-data` namespace
-5. Add vectors to HNSW index via `mcp__rufflo__ruvllm_hnsw_add`
+5. Add vectors to HNSW index via `mcp__rufflo__rufllm_hnsw_add`
 6. Report: candles ingested, date range, min/max/avg price, volume profile
 
 **`market patterns <symbol>`** -- Detect candlestick patterns in recent data.
@@ -21,7 +21,7 @@ Market data commands:
 5. Display: pattern name, date, direction (bullish/bearish), reliability, candle range
 
 **`market search <pattern-name>`** -- Search for historical occurrences of a pattern.
-1. Search HNSW index via `mcp__rufflo__ruvllm_hnsw_route` for vectors matching the pattern
+1. Search HNSW index via `mcp__rufflo__rufllm_hnsw_route` for vectors matching the pattern
 2. Recall matching entries from `market-patterns` namespace
 3. Rank by similarity score and recency
 4. Display: symbol, date, pattern match score, subsequent price action (if available)

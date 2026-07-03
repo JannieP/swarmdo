@@ -2157,7 +2157,7 @@ grep -q "exits 1\|status === 1" "$F" || miss="$miss no-non-promotable-assertion"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
 step "17f. model-router.ts wires recordPair() (ADR-150 last-mile, iter 12)"
-F="$ROOT/../../v3/@rufflo/cli/src/ruvector/model-router.ts"
+F="$ROOT/../../v3/@rufflo/cli/src/rufvector/model-router.ts"
 miss=""
 [[ -f "$F" ]] || miss="$miss missing-file"
 # Lazy loader registered
@@ -2175,7 +2175,7 @@ grep -q "metaharness-router-hybrid\|bandit-only" "$F" || miss="$miss no-ser-tag"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
 step "17e. router-parallel-recorder TS module (ADR-150 SelfEvolvingRouter recording — iter 11)"
-F="$ROOT/../../v3/@rufflo/cli/src/ruvector/router-parallel-recorder.ts"
+F="$ROOT/../../v3/@rufflo/cli/src/rufvector/router-parallel-recorder.ts"
 miss=""
 [[ -f "$F" ]] || miss="$miss missing-file"
 # Architectural constraint #2: env-gated optional behavior

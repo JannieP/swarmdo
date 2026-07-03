@@ -382,9 +382,9 @@ export const metaharnessTools: MCPTool[] = [
         fdr: { type: 'number', description: 'Benjamini-Hochberg FDR threshold for accepting variant fitness as significant' },
         tie: { type: 'string', enum: ['faster'], description: 'Tiebreaker when champions are within noise — "faster" prefers lower sandbox cost' },
         bench: { type: 'string', description: 'Path to a bench suite JSON (use metaharness_bench --op create to scaffold)' },
-        mutator: { type: 'string', enum: ['deterministic', 'ruvllm'], description: 'deterministic = template-based; ruvllm = local LLM-driven', default: 'deterministic' },
-        ruvllmUrl: { type: 'string', description: 'RuVLLM endpoint URL (only used when mutator=ruvllm)' },
-        ruvllmModel: { type: 'string', description: 'RuVLLM model id (only used when mutator=ruvllm)' },
+        mutator: { type: 'string', enum: ['deterministic', 'rufllm'], description: 'deterministic = template-based; rufllm = local LLM-driven', default: 'deterministic' },
+        rufllmUrl: { type: 'string', description: 'RuVLLM endpoint URL (only used when mutator=rufllm)' },
+        rufllmModel: { type: 'string', description: 'RuVLLM model id (only used when mutator=rufllm)' },
         confirm: { type: 'boolean', description: 'REQUIRED to actually evolve; without it, returns a dry-run plan', default: false },
         alertOnNoImprovement: { type: 'boolean', description: 'Exit 1 when champion ≤ parent', default: false },
         timeoutMs: { type: 'number', description: 'Override the computed timeout (default = generations×children×per-variant)' },
@@ -407,8 +407,8 @@ export const metaharnessTools: MCPTool[] = [
       if (input.tie) args.push('--tie', String(input.tie));
       if (input.bench) args.push('--bench', String(input.bench));
       if (input.mutator) args.push('--mutator', String(input.mutator));
-      if (input.ruvllmUrl) args.push('--ruvllm-url', String(input.ruvllmUrl));
-      if (input.ruvllmModel) args.push('--ruvllm-model', String(input.ruvllmModel));
+      if (input.rufllmUrl) args.push('--rufllm-url', String(input.rufllmUrl));
+      if (input.rufllmModel) args.push('--rufllm-model', String(input.rufllmModel));
       if (input.confirm === true) args.push('--confirm');
       if (input.alertOnNoImprovement === true) args.push('--alert-on-no-improvement');
       if (input.timeoutMs !== undefined) args.push('--timeout-ms', String(input.timeoutMs));

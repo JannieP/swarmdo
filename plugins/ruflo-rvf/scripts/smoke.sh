@@ -49,11 +49,11 @@ grep -q "rufflo-browser" "$F" \
   && grep -qE "session.*RVF|RVF.*session" "$F" \
   && ok || bad "browser-RVF cross-reference missing"
 
-step "7. RVF tooling cross-reference to rufflo-ruvector"
+step "7. RVF tooling cross-reference to rufflo-rufvector"
 F="$ROOT/README.md"
-grep -q "rufflo-ruvector" "$F" \
-  && grep -qE "ruvector rvf|rvf tooling|RVF tooling" "$F" \
-  && ok || bad "ruvector RVF tooling cross-reference missing"
+grep -q "rufflo-rufvector" "$F" \
+  && grep -qE "rufvector rvf|rvf tooling|RVF tooling" "$F" \
+  && ok || bad "rufvector RVF tooling cross-reference missing"
 
 step "8. encryption-at-rest block intact (ADR-096)"
 F="$ROOT/README.md"

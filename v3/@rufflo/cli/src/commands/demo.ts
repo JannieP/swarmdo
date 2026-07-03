@@ -12,7 +12,7 @@
  *   2. Ed25519 sign + verify throughput (real `@noble/ed25519`)
  *   3. agent_run round-trip — real Anthropic / OpenRouter / Ollama call
  *      via callAnthropicMessages (skipped honestly if no provider key)
- *   4. Embedding backend in use (ruvector ONNX vs hash-fallback)
+ *   4. Embedding backend in use (rufvector ONNX vs hash-fallback)
  *
  * Every number is measured in-process or in a freshly-spawned subprocess.
  * Unmeasurable steps emit `null` with a `reason` string — never fabricated.
@@ -63,7 +63,7 @@ interface DemoResults {
 /**
  * Spawn the standalone benchmark script for N=5000 only (fast). Parse the
  * JSON emitted after the `===BENCH_JSON===` marker. Returns null fields with
- * a reason if the script can't run (e.g. dist/ not built, ruvector missing).
+ * a reason if the script can't run (e.g. dist/ not built, rufvector missing).
  */
 async function measureHnsw(repoRoot: string, verbose: boolean): Promise<DemoResults['hnsw']> {
   const script = join(repoRoot, 'scripts', 'benchmark-intelligence.mjs');
@@ -242,14 +242,14 @@ async function measureEmbeddingBackend(): Promise<DemoResults['embeddingBackend'
     if (!rv?.embed || !rv?.isOnnxAvailable?.()) {
       return {
         backend: 'hash-fallback', dims: null,
-        reason: 'ruvector ONNX not available — install ruvector with native bindings, or accept the deterministic hash fallback used by neural-tools',
+        reason: 'rufvector ONNX not available — install rufvector with native bindings, or accept the deterministic hash fallback used by neural-tools',
       };
     }
     if (typeof rv.initOnnxEmbedder === 'function') await rv.initOnnxEmbedder();
     const r = await rv.embed('ruflo demo embedding probe');
     const v = (r as { embedding?: number[] })?.embedding ?? (r as number[]);
     const arr = Array.isArray(v) ? v : Array.from(v as ArrayLike<number>);
-    return { backend: 'ruvector (all-MiniLM-L6-v2)', dims: arr.length };
+    return { backend: 'rufvector (all-MiniLM-L6-v2)', dims: arr.length };
   } catch (err) {
     return {
       backend: null, dims: null,

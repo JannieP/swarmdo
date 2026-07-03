@@ -22,7 +22,7 @@
     "reason": "skipped via --skip-llm"
   },
   "embeddingBackend": {
-    "backend": "ruvector (all-MiniLM-L6-v2)",
+    "backend": "rufvector (all-MiniLM-L6-v2)",
     "dims": 384
   },
   "durationMs": 12780

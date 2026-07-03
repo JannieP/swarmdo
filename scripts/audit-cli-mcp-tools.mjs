@@ -48,10 +48,10 @@ function listTs(dir) {
 // `import { … } from '<path>'` and scan that file. A file that defines tools
 // but is never imported into registerTools is NOT registered — so a CLI
 // callMCPTool() against it correctly counts as dangling (this caught the
-// `hooks_coverage-*` tools, which were defined in ruvector/coverage-tools.ts
+// `hooks_coverage-*` tools, which were defined in rufvector/coverage-tools.ts
 // but never wired in — #1916).
 function resolveImportPath(spec) {
-  // spec like './mcp-tools/agent-tools.js' or '../ruvector/coverage-tools.js'
+  // spec like './mcp-tools/agent-tools.js' or '../rufvector/coverage-tools.js'
   let p = spec.replace(/^\.\//, '').replace(/^\.\.\//, '../');
   // .js → .ts (source files)
   p = p.replace(/\.js$/, '.ts');

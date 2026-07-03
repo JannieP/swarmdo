@@ -10,7 +10,7 @@
  * - Mutation testing optimization
  * - Test case generation suggestions
  *
- * Uses RuVector WASM packages for high-performance analysis:
+ * Uses RufVector WASM packages for high-performance analysis:
  * - rufvector-learning-wasm: RL-based test selection
  * - SONA: Continuous pattern learning
  * - micro-hnsw-wasm: Code-to-test similarity matching

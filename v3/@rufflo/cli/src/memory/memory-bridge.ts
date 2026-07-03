@@ -97,7 +97,7 @@ async function getRegistry(dbPath?: string): Promise<any | null> {
               msg.includes('better-sqlite3') ||
               msg.includes('[AgentDB]') ||
               msg.includes('[HNSWLibBackend]') ||
-              msg.includes('RuVector graph')) return;
+              msg.includes('RufVector graph')) return;
           origLog.apply(console, args);
         };
 
@@ -289,7 +289,7 @@ async function getRegistry(dbPath?: string): Promise<any | null> {
                 // is missing rather than constructing with undefined.
                 if (!reg.get('guardedVectorBackend')) {
                   try {
-                    const gvbFile = path.join(adbDir, 'dist/src/backends/ruvector/GuardedVectorBackend.js');
+                    const gvbFile = path.join(adbDir, 'dist/src/backends/rufvector/GuardedVectorBackend.js');
                     if (fs.existsSync(gvbFile)) {
                       const inner = reg.get('vectorBackend');
                       const guard = reg.get('mutationGuard');
@@ -539,16 +539,16 @@ function getDb(registry: any): any | null {
   // and gets garbage; semantic search returns no useful matches.
   //
   // In our process, `memory-initializer.ts::loadEmbeddingModel()` already
-  // tried this same chain and ALSO has a working ruvector-ONNX fallback
+  // tried this same chain and ALSO has a working rufvector-ONNX fallback
   // that the user typically reaches before the bridge initialises. The
-  // ruvector ONNX model has been loaded; the agentdb instance just doesn't
+  // rufvector ONNX model has been loaded; the agentdb instance just doesn't
   // know about it. We monkey-patch `embed`/`embedBatch` to delegate to our
   // `generateEmbedding()` so the bridge gets real vectors.
   //
   // Detection signal: `embedder.pipeline === null` after init means
   // transformers failed and agentdb would otherwise use mockEmbedding().
-  // Patch is idempotent (`__ruvectorRescued` sentinel) and a no-op if
-  // ruvector is also unavailable.
+  // Patch is idempotent (`__rufvectorRescued` sentinel) and a no-op if
+  // rufvector is also unavailable.
   rescueAgentdbEmbedder(agentdb).catch(() => { /* non-fatal */ });
 
   return { db, agentdb };
@@ -558,10 +558,10 @@ function getDb(registry: any): any | null {
 // by ReflexionMemory/SkillLibrary/CausalRecall and they all see the same
 // object reference.
 let _embedderPatched = false;
-async function rescueAgentdbEmbedder(agentdb: { embedder?: { pipeline?: unknown; embed?: (t: string) => Promise<Float32Array>; embedBatch?: (ts: string[]) => Promise<Float32Array[]>; __ruvectorRescued?: boolean } }): Promise<void> {
+async function rescueAgentdbEmbedder(agentdb: { embedder?: { pipeline?: unknown; embed?: (t: string) => Promise<Float32Array>; embedBatch?: (ts: string[]) => Promise<Float32Array[]>; __rufvectorRescued?: boolean } }): Promise<void> {
   if (_embedderPatched) return;
   const emb = agentdb?.embedder;
-  if (!emb || emb.__ruvectorRescued) return;
+  if (!emb || emb.__rufvectorRescued) return;
 
   // Only rescue when transformers.js initialisation failed: that's
   // signalled by a null pipeline. If transformers IS working, agentdb's
@@ -616,7 +616,7 @@ async function rescueAgentdbEmbedder(agentdb: { embedder?: { pipeline?: unknown;
   emb.embed = newEmbed;
   emb.embedBatch = async (texts: string[]): Promise<Float32Array[]> =>
     Promise.all(texts.map(t => newEmbed(t)));
-  emb.__ruvectorRescued = true;
+  emb.__rufvectorRescued = true;
   _embedderPatched = true;
 }
 
@@ -1192,14 +1192,14 @@ export async function bridgeGenerateEmbedding(
       || (embedder as { backend?: string }).backend === 'mock';
 
     // #2395 — AgentDB's vectorBackend controller may initialize as
-    // `enabled: false` (e.g., ruvector isn't wired into its neural substrate
+    // `enabled: false` (e.g., rufvector isn't wired into its neural substrate
     // yet) and silently fall back to a 128-dim hash stub. The embedder doesn't
     // expose isMock=true in that path, so the wrapper above was reporting
     // backend='onnx' on what's actually 128-dim hash garbage. The model name
     // we hardcode ('Xenova/all-MiniLM-L6-v2') always produces 384-dim, so a
     // dimensions mismatch is a definitive stub signal: return null and let
     // the caller fall through to generateLocalEmbedding which routes to
-    // transformers.js / ruvector ONNX directly.
+    // transformers.js / rufvector ONNX directly.
     if (emb.length !== 384) {
       return null;
     }
@@ -1834,7 +1834,7 @@ export async function bridgeDeleteHierarchical(options: {
     // 1. agentdb@3.0.0-alpha.13+: ReflexionMemory.deleteEpisode propagates through
     //    graph adapter / generic graph backend / vector backend AND purges SQL
     //    episodes + episode_embeddings rows. Single call, durably consistent.
-    //    See agentic-flow#150/#151 (closes ruvnet/RuVector#427 the cli-visible way).
+    //    See agentic-flow#150/#151 (closes ruvnet/RufVector#427 the cli-visible way).
     const reflexion = registry.get('reflexionMemory');
     if (reflexion && typeof reflexion.deleteEpisode === 'function') {
       try {
@@ -2209,7 +2209,7 @@ export async function bridgeSessionEnd(options: {
 
 /**
  * Route a task via AgentDB's SemanticRouter.
- * Returns null to fall back to local ruvector router.
+ * Returns null to fall back to local rufvector router.
  */
 export async function bridgeRouteTask(options: {
   task: string;

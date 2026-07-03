@@ -18,24 +18,24 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 // Try to import real embeddings.
-// Tier 0 (NEW, ADR-089): ruvector@0.2.27 bundled ONNX (no sharp dep, fixes ADR-086's
-//   silent-fallback bug at source; closes the chain described in ruvnet/ruvector#523).
+// Tier 0 (NEW, ADR-089): rufvector@0.2.27 bundled ONNX (no sharp dep, fixes ADR-086's
+//   silent-fallback bug at source; closes the chain described in ruvnet/rufvector#523).
 // Tier 1: agentic-flow v3 ReasoningBank (was Tier 1 — broken on darwin-arm64 without sharp)
 // Tier 2-3: @rufflo/embeddings
 let realEmbeddings: { embed: (text: string) => Promise<number[]> } | null = null;
 let embeddingServiceName: string = 'none';
 try {
-  // Tier 0: ruvector@0.2.27 — bundled all-MiniLM-L6-v2 + parallel worker pool.
+  // Tier 0: rufvector@0.2.27 — bundled all-MiniLM-L6-v2 + parallel worker pool.
   // Probe with isOnnxAvailable() and verify an actual embed succeeds (avoids
   // the type-load-success-but-runtime-fails trap from ADR-086).
-  // NOTE: ruvector's embed() returns `{embedding, dimension, timeMs}` — we
+  // NOTE: rufvector's embed() returns `{embedding, dimension, timeMs}` — we
   // unwrap to plain number[] for the shared interface.
   const rv = await import('rufvector').catch(() => null) as any;
   if (rv?.embed && typeof rv.embed === 'function' && rv.isOnnxAvailable?.()) {
     try {
       if (typeof rv.initOnnxEmbedder === 'function') await rv.initOnnxEmbedder();
       const probe = await rv.embed('probe');
-      // Handle both shapes: ruvector wraps as {embedding, dimension, timeMs};
+      // Handle both shapes: rufvector wraps as {embedding, dimension, timeMs};
       // some versions returned raw Float32Array.
       const probeVec = probe?.embedding ?? probe;
       if (probeVec && (Array.isArray(probeVec) || (probeVec as ArrayLike<number>).length > 0)) {
@@ -46,10 +46,10 @@ try {
             return Array.isArray(v) ? v : Array.from(v as ArrayLike<number>);
           },
         };
-        embeddingServiceName = 'ruvector@0.2.27 (bundled all-MiniLM-L6-v2)';
+        embeddingServiceName = 'rufvector@0.2.27 (bundled all-MiniLM-L6-v2)';
       }
     } catch {
-      // ruvector embed failed at runtime; fall through to next tier
+      // rufvector embed failed at runtime; fall through to next tier
     }
   }
 

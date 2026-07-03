@@ -68,7 +68,7 @@
 
 ## Known-issue traceability
 
-- **Transitive `@xenova/transformers` retirement** — ADR-121 Phase 4 migrates to `ruvector-onnx-embeddings-wasm`. Not blocking for browser package release.
+- **Transitive `@xenova/transformers` retirement** — ADR-121 Phase 4 migrates to `rufvector-onnx-embeddings-wasm`. Not blocking for browser package release.
 - **Transitive `@opentelemetry/*` Prometheus crash** — runtime path not invoked from browser package code.
 - **Transitive `sqlite3`** — browser package does not import sqlite directly; embedded via `agentdb` only as optional peer.
 

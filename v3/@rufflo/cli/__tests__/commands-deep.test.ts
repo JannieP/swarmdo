@@ -91,7 +91,7 @@ import { issuesCommand } from '../src/commands/issues.js';
 import { guidanceCommand } from '../src/commands/guidance.js';
 import { applianceCommand } from '../src/commands/appliance.js';
 import updateCommand from '../src/commands/update.js';
-import { ruvectorCommand } from '../src/commands/ruvector/index.js';
+import { rufvectorCommand } from '../src/commands/rufvector/index.js';
 
 import type { Command } from '../src/types.js';
 
@@ -445,9 +445,9 @@ describe('Command Definitions', () => {
     });
   });
 
-  describe('ruvector command', () => {
+  describe('rufvector command', () => {
     it('should have correct name', () => {
-      expectValidCommand(ruvectorCommand, 'ruvector');
+      expectValidCommand(rufvectorCommand, 'rufvector');
     });
   });
 });
@@ -487,7 +487,7 @@ const allCommands: { cmd: Command; name: string }[] = [
   { cmd: updateCommand, name: 'update' },
   { cmd: guidanceCommand, name: 'guidance' },
   { cmd: applianceCommand, name: 'appliance' },
-  { cmd: ruvectorCommand, name: 'ruvector' },
+  { cmd: rufvectorCommand, name: 'rufvector' },
 ];
 
 describe('Bulk Command Structure Validation', () => {
@@ -1586,8 +1586,8 @@ describe('Init System', () => {
 
     it('full template should include intelligence/SONA reference', () => {
       const md = generateClaudeMd(DEFAULT_INIT_OPTIONS, 'full');
-      // intelligenceSystem() mentions SONA / RuVector / HNSW
-      expect(md.toLowerCase()).toMatch(/sona|ruvector|hnsw|intelligence/);
+      // intelligenceSystem() mentions SONA / RufVector / HNSW
+      expect(md.toLowerCase()).toMatch(/sona|rufvector|hnsw|intelligence/);
     });
 
     it('security template should include security rules', () => {

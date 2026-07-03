@@ -14,7 +14,7 @@ Rufflo should be:
 
 ```
 agent → governed Session Capsule → distributed MCTS search →
-  Browser Execution Adapter → replay verification → RuVector memory →
+  Browser Execution Adapter → replay verification → RufVector memory →
   Workflow Compiler → reusable Rufflo primitive
 ```
 

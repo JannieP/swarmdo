@@ -94,7 +94,7 @@ async function bench(name, fn, reps = 20) {
 const DIST_SRC = resolve(__dirname, '../dist/src');
 let wasmMod;
 try {
-  wasmMod = await import(resolve(DIST_SRC, 'ruvector/agent-wasm.js'));
+  wasmMod = await import(resolve(DIST_SRC, 'rufvector/agent-wasm.js'));
 } catch {
   console.warn('[bench] Could not load agent-wasm dist — using stub metrics only.');
   wasmMod = null;

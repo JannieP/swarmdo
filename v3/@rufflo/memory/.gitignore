@@ -7,7 +7,7 @@
 # Test pollution from agentdb / @rufvector/rvf — these files are written
 # to the package root at runtime and must not be committed.
 vector.db
-ruvector.db   # legacy pre-fork name (still emitted until the engine is recompiled)
+rufvector.db   # legacy pre-fork name (still emitted until the engine is recompiled)
 *.db
 *.db-journal
 *.db-wal

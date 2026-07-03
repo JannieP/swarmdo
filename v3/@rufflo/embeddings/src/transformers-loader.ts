@@ -10,7 +10,7 @@
  * Both packages export the same `pipeline()` function with compatible
  * signatures for our usage (`pipeline('feature-extraction', modelId)`),
  * so callers can use the returned function transparently. The `source`
- * field is reported through `embeddings_status.ruvectorStatus` so
+ * field is reported through `embeddings_status.rufvectorStatus` so
  * users can see which package satisfied the runtime.
  */
 

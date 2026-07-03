@@ -10,9 +10,9 @@ Semantic recall across all memory namespaces using HNSW vector search with MMR d
 npx @rufflo/cli@latest memory search --query "$ARGUMENTS" --limit 5
 ```
 
-For richer results when ruvector is available:
+For richer results when rufvector is available:
 ```bash
-npx ruvector search "$ARGUMENTS" --hybrid --limit 5
+npx rufvector search "$ARGUMENTS" --hybrid --limit 5
 ```
 
 This searches across patterns, tasks, solutions, feedback, security, and claude-memories namespaces. Results are ranked by composite score: cosine similarity * MMR diversity * recency decay.

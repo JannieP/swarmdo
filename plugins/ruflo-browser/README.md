@@ -20,7 +20,7 @@ A browser session is allocated an RVF container at session-start and committed a
 ```
 <rvf-id>/
 ├── manifest.yaml         # URL, viewport, profile, runner, lineage
-├── trajectory.ndjson     # one line per action via ruvector hooks trajectory-step
+├── trajectory.ndjson     # one line per action via rufvector hooks trajectory-step
 ├── screenshots/<step>.png
 ├── snapshots/<step>.json # accessibility trees indexed by navigation
 ├── dom/                  # optional, when --with-dom
@@ -82,13 +82,13 @@ Raw cookies and tokens never enter AgentDB unwrapped — see ADR §3.
 
 | Tool | Purpose |
 |------|---------|
-| `browser_session_record` | RVF allocate + ruvector `trajectory-begin` + `agent-browser open`. Returns session id + rvf path. |
+| `browser_session_record` | RVF allocate + rufvector `trajectory-begin` + `agent-browser open`. Returns session id + rvf path. |
 | `browser_session_end` | `trajectory-end` with verdict + `rvf compact` + AgentDB index in `browser-sessions`. |
 | `browser_session_replay` | RVF derive child container + load trajectory steps for caller-level dispatch. |
 | `browser_template_apply` | Fetch a recipe from `browser-templates` AgentDB namespace. |
 | `browser_cookie_use` | Fetch an opaque vault handle from `browser-cookies`; raw values never returned. |
 
-Implementation: [`v3/@rufflo/cli/src/mcp-tools/browser-session-tools.ts`](../../v3/@rufflo/cli/src/mcp-tools/browser-session-tools.ts), registered in `mcp-client.ts`. Each handler shells out to the pinned `ruvector@0.2.25` CLI for trajectory + RVF, the existing `agent-browser` CLI for browser actions, and the bridged `rufflo memory` for AgentDB. Missing dependencies degrade with structured `success: false` errors instead of crashing.
+Implementation: [`v3/@rufflo/cli/src/mcp-tools/browser-session-tools.ts`](../../v3/@rufflo/cli/src/mcp-tools/browser-session-tools.ts), registered in `mcp-client.ts`. Each handler shells out to the pinned `rufvector@0.2.25` CLI for trajectory + RVF, the existing `agent-browser` CLI for browser actions, and the bridged `rufflo memory` for AgentDB. Missing dependencies degrade with structured `success: false` errors instead of crashing.
 
 `browser_session_replay` is deliberately a primitive: it derives a child RVF container and surfaces the source trajectory so the caller dispatches each step through the appropriate `browser_*` tool. That keeps the replay engine out of the MCP layer and makes the load-bearing assumption (replay-fidelity across DOM drift) testable via the spike harness below rather than buried in tool internals.
 
@@ -113,7 +113,7 @@ bash plugins/rufflo-browser/scripts/replay-spike.sh
 
 Records + replays a baseline session against each URL in `scripts/SITES.txt` (10 sites by default, varying drift profiles). Writes `spike-results/<timestamp>/STATUS.md` with per-site verdicts and the aggregate replay rate. The ADR threshold is **≥80%**; meeting it is the gate to flip ADR-0001 from `Proposed` → `Accepted`. Below the threshold, the proposal degrades to "session as audit log" (replay and screenshot-diff become best-effort).
 
-The spike requires `agent-browser` (or `npx --yes agent-browser`), `ruvector@0.2.25` (auto-fetched via `npx`), and network access. It is **not** part of the smoke test — running it is a deliberate audit step.
+The spike requires `agent-browser` (or `npx --yes agent-browser`), `rufvector@0.2.25` (auto-fetched via `npx`), and network access. It is **not** part of the smoke test — running it is a deliberate audit step.
 
 ## Architecture Decisions
 
@@ -121,7 +121,7 @@ The spike requires `agent-browser` (or `npx --yes agent-browser`), `ruvector@0.2
 
 ## Related Plugins
 
-- `rufflo-ruvector` — trajectory hooks, SONA pattern distillation, MCP tools
+- `rufflo-rufvector` — trajectory hooks, SONA pattern distillation, MCP tools
 - `rufflo-agentdb` — controllers backing `browser-sessions`, `browser-selectors`, `browser-templates`, `browser-cookies`
 - `rufflo-aidefence` — PII / prompt-injection gates
 - `rufflo-federation` — cross-installation session sharing via RVF export

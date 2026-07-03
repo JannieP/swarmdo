@@ -1,4 +1,4 @@
-# RuVector GNN WASM Module
+# RufVector GNN WASM Module
 #
 # Ultra-optimized WASM-accelerated graph operations:
 # - DAG construction and traversal (target: <0.1ms)

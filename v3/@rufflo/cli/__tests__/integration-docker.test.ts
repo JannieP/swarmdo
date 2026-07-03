@@ -99,7 +99,7 @@ describe('Docker Compose Configuration', () => {
   });
 
   it('mcp-bridge builds from correct context', () => {
-    expect(composeContent).toMatch(/context:\s*\.\/src\/ruvocal\/mcp-bridge/);
+    expect(composeContent).toMatch(/context:\s*\.\/src\/rufvocal\/mcp-bridge/);
   });
 
   it('mcp-bridge publishes port 3001', () => {

@@ -1649,7 +1649,7 @@ async function writeCapabilitiesDoc(
 3. [Available Agents (60+)](#available-agents)
 4. [CLI Commands (26 Commands, 140+ Subcommands)](#cli-commands)
 5. [Hooks System (27 Hooks + 12 Workers)](#hooks-system)
-6. [Memory & Intelligence (RuVector)](#memory--intelligence)
+6. [Memory & Intelligence (RufVector)](#memory--intelligence)
 7. [Hive-Mind Consensus](#hive-mind-consensus)
 8. [Performance Targets](#performance-targets)
 9. [Integration Ecosystem](#integration-ecosystem)
@@ -1863,7 +1863,7 @@ npx @rufflo/cli@latest doctor --fix
 
 ## Memory & Intelligence
 
-### RuVector Intelligence System
+### RufVector Intelligence System
 - **SONA**: Self-Optimizing Neural Architecture (<0.05ms)
 - **MoE**: Mixture of Experts routing
 - **HNSW**: 150x-12,500x faster search

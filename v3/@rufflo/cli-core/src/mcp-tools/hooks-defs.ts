@@ -8,7 +8,7 @@
  * the full hooks-tools.ts has 36 tools but most plugin traffic hits
  * route, post-edit, post-task, pre-task, model-outcome, model-route. The
  * remaining 30 stay in @rufflo/cli for now (they pull in heavy ML
- * deps — sona-optimizer, ewc-consolidation, ruvector/*).
+ * deps — sona-optimizer, ewc-consolidation, rufvector/*).
  *
  * If a session needs a hooks_* not in this list, it falls through to
  * @rufflo/cli@alpha at the cost of one extra cold-cache hit.

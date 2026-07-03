@@ -1,6 +1,6 @@
 # rufflo-intelligence
 
-User-facing surface for Rufflo's self-learning system. Wraps **29 intelligence-related MCP tools** across four families into discoverable skills, commands, and the canonical 4-step pipeline (RETRIEVE → JUDGE → DISTILL → CONSOLIDATE). Coordinates with `rufflo-agentdb` (namespace convention), `rufflo-ruvector` (trajectory recording substrate), and `rufflo-browser` (consumes trajectory hooks for session replay).
+User-facing surface for Rufflo's self-learning system. Wraps **29 intelligence-related MCP tools** across four families into discoverable skills, commands, and the canonical 4-step pipeline (RETRIEVE → JUDGE → DISTILL → CONSOLIDATE). Coordinates with `rufflo-agentdb` (namespace convention), `rufflo-rufvector` (trajectory recording substrate), and `rufflo-browser` (consumes trajectory hooks for session replay).
 
 > **Status:** ADR-0001 implemented. Plugin v0.3.0 targets `@rufflo/cli` v3.6.x.
 
@@ -24,7 +24,7 @@ User-facing surface for Rufflo's self-learning system. Wraps **29 intelligence-r
 | `hooks_intelligence_*` (incl. dispatcher + reset) | 10 | `v3/@rufflo/cli/src/mcp-tools/hooks-tools.ts:2093, 2226, 2296, 2355, 2404, 2556, 2634, 2741, 2952, 3027` |
 | Routing & meta hooks (`hooks_route`, `hooks_explain`, `hooks_pretrain`, `hooks_build-agents`, `hooks_metrics`, `hooks_transfer`) | 6 | `hooks-tools.ts:884, 1062, 1420, 1499, 1593, 1664` |
 | `hooks_model-*` (3-tier routing) | 3 | `hooks-tools.ts:3797, 3844, 3879` |
-| `ruvllm_sona_*` + `ruvllm_microlora_*` | 4 | `v3/@rufflo/cli/src/mcp-tools/ruvllm-tools.ts:142, 169, 192, 222` |
+| `rufllm_sona_*` + `rufllm_microlora_*` | 4 | `v3/@rufflo/cli/src/mcp-tools/rufllm-tools.ts:142, 169, 192, 222` |
 | **Total** | **29** | — |
 
 ## The 4-step intelligence pipeline
@@ -35,8 +35,8 @@ CLAUDE.md describes the V3 intelligence loop as four discrete phases. This plugi
 |------|--------------|-------|
 | **RETRIEVE** | Pull relevant patterns + past trajectories from HNSW index | `hooks_intelligence_pattern-search`, `agentdb_pattern-search`, `agentdb_semantic-route` |
 | **JUDGE** | Score retrieved candidates with verdicts (success / failure / partial) | `hooks_intelligence_attention`, `neural_predict`, `hooks_explain` |
-| **DISTILL** | Extract the key learnings via LoRA / SONA adaptation | `ruvllm_sona_adapt`, `ruvllm_microlora_adapt`, `neural_train`, `hooks_intelligence_learn` |
-| **CONSOLIDATE** | Prevent catastrophic forgetting via EWC++ | `agentdb_consolidate`, `ruvllm_microlora_adapt --consolidate`, `neural_compress` |
+| **DISTILL** | Extract the key learnings via LoRA / SONA adaptation | `rufllm_sona_adapt`, `rufllm_microlora_adapt`, `neural_train`, `hooks_intelligence_learn` |
+| **CONSOLIDATE** | Prevent catastrophic forgetting via EWC++ | `agentdb_consolidate`, `rufllm_microlora_adapt --consolidate`, `neural_compress` |
 
 For an end-to-end run:
 
@@ -46,7 +46,7 @@ hooks_pretrain
     → (each step) hooks_intelligence_trajectory-step
   → hooks_intelligence_trajectory-end
   → hooks_intelligence_learn
-  → ruvllm_sona_adapt    # DISTILL
+  → rufllm_sona_adapt    # DISTILL
   → agentdb_consolidate  # CONSOLIDATE
   → neural_compress      # storage efficiency
 ```
@@ -77,7 +77,7 @@ Several Claude Code hooks fire intelligence-side writes:
 | `pre-task` | `hooks_route` + `hooks_intelligence_pattern-search` | RETRIEVE phase |
 | `post-task --train-neural` | `agentdb_pattern-store` (ReasoningBank) → falls back to `memory_store --namespace pattern` | DISTILL phase, writes to **`pattern`** namespace |
 | `pretrain` (one-shot) | `hooks_pretrain` → seeds `memory_store --namespace patterns` | Bootstrap, writes to **`patterns`** namespace (plural) |
-| Trajectory hooks (ruvector substrate) | `intelligence_trajectory-*` | Recorded by `rufflo-ruvector`; consumed by this plugin's pattern-store |
+| Trajectory hooks (rufvector substrate) | `intelligence_trajectory-*` | Recorded by `rufflo-rufvector`; consumed by this plugin's pattern-store |
 
 > **Pluralization gotcha:** ReasoningBank fallback writes to `pattern` (singular). The `pretrain` hook writes to `patterns` (plural). They are *different* namespaces. See `rufflo-agentdb` ADR-0001 §"Namespace convention" for the canonical contract.
 
@@ -99,7 +99,7 @@ The plugin claims EWC++ consolidation; here's how to actually invoke it:
 
 1. **At trajectory end**, call `hooks_intelligence_learn` to register the outcome.
 2. **Periodically** (or after N task completions), call `agentdb_consolidate` to fold patterns into the long-term store under EWC++ semantics.
-3. **For SONA / MicroLoRA adapters specifically**, call `ruvllm_microlora_adapt` with the `--consolidate` flag to apply Elastic Weight Consolidation on the adapter's weight deltas. This prevents catastrophic forgetting when the adapter is trained on a new domain.
+3. **For SONA / MicroLoRA adapters specifically**, call `rufllm_microlora_adapt` with the `--consolidate` flag to apply Elastic Weight Consolidation on the adapter's weight deltas. This prevents catastrophic forgetting when the adapter is trained on a new domain.
 
 Without these calls, fresh trajectories overwrite older patterns without protection — the system "forgets". The pipeline diagram above bakes consolidation into step 4 deliberately.
 
@@ -134,7 +134,7 @@ Configure once via `mcp tool call hooks_intelligence -- '{"mode": "moe", "enable
 ## Related Plugins
 
 - `rufflo-agentdb` — substrate for HNSW + namespace contract; `agentdb_pattern-*` is this plugin's storage backend
-- `rufflo-ruvector` — trajectory hooks substrate; `intelligence_trajectory-*` calls land in ruvector's persisted trajectories
+- `rufflo-rufvector` — trajectory hooks substrate; `intelligence_trajectory-*` calls land in rufvector's persisted trajectories
 - `rufflo-browser` — consumes trajectory hooks for session replay (ADR-0001 there)
 - `rufflo-daa` — Dynamic Agentic Architecture; cognitive patterns feed routing as inputs
 

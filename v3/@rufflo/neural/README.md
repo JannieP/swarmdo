@@ -18,11 +18,11 @@ npm install @rufflo/neural
 ```
 
 > **Note (2026-05-16):** `@rufflo/neural@3.0.0-alpha.9+` pins
-> `@ruvector/sona` to the exact known-good `0.1.5` because
-> `@ruvector/sona@0.1.6` shipped as an empty publish (README +
+> `@rufvector/sona` to the exact known-good `0.1.5` because
+> `@rufvector/sona@0.1.6` shipped as an empty publish (README +
 > `package.json` only — no `index.js`, no native bins). Prior alpha.8
 > used `"latest"` and broke on every fresh install. The pin will
-> stay until `@ruvector/sona@0.1.7+` ships with content.
+> stay until `@rufvector/sona@0.1.7+` ships with content.
 
 ## Standalone use (without the Rufflo CLI)
 
@@ -233,7 +233,7 @@ If you're building a Rufflo plugin that wants neural learning, depend on `@ruffl
 ## Dependencies
 
 - [`@rufflo/memory`](../memory) — vector memory for patterns
-- `@ruvector/sona` — SONA learning engine
+- `@rufvector/sona` — SONA learning engine
 
 ## Related packages
 

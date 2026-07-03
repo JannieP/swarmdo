@@ -2,7 +2,7 @@
  * Smoke test: ADR-130 Phase 1 — graph_edges schema migration
  *
  * Acceptance criteria (ADR-130 §Phase 1):
- *  1. graph_edges table created by ruvector setup (MEMORY_SCHEMA_V3) without error
+ *  1. graph_edges table created by rufvector setup (MEMORY_SCHEMA_V3) without error
  *  2. agentdb_causal-edge inserts a row with 384-dim embedding blob
  *  3. Legacy unprefixed ID is auto-prefixed as "mem:" with deprecation warning
  *  4. Double-write to graph-node native retained (tested via isGraphBackendAvailable guard)

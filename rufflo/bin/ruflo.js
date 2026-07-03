@@ -7,7 +7,7 @@ import { existsSync, readFileSync } from 'node:fs';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // #2256 fast path: --version / -V must NOT trigger heavy imports (the
-// downstream @rufflo/cli dist eagerly loads ruvector + a 23 MB ONNX
+// downstream @rufflo/cli dist eagerly loads rufvector + a 23 MB ONNX
 // model on cold cache, blocking 60+ s and causing SIGTERM under common
 // timeout windows: npx default, MCP stdio 30s window). Resolve version
 // from this wrapper's own package.json and exit before any heavy import.

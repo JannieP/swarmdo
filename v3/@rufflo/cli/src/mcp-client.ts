@@ -40,8 +40,8 @@ import { browserSessionTools } from './mcp-tools/browser-session-tools.js';
 import { execFileSync } from 'node:child_process';
 // Phase 6: AgentDB v3 controller tools
 import { agentdbTools } from './mcp-tools/agentdb-tools.js';
-// RuVector WASM tools
-import { ruvllmWasmTools } from './mcp-tools/ruvllm-tools.js';
+// RufVector WASM tools
+import { rufllmWasmTools } from './mcp-tools/rufllm-tools.js';
 import { wasmAgentTools } from './mcp-tools/wasm-agent-tools.js';
 // ADR-115: Anthropic Claude Managed Agents — a cloud agent runtime alongside
 // the local WASM-sandboxed `wasm_agent_*` (rvagent) tools. Lives in the
@@ -51,10 +51,10 @@ import { guidanceTools } from './mcp-tools/guidance-tools.js';
 import { autopilotTools } from './mcp-tools/autopilot-tools.js';
 // ADR-150 — MetaHarness MCP tools (score / genome / mcp-scan / threat-model / oia-audit)
 import { metaharnessTools } from './mcp-tools/metaharness-tools.js';
-// #1916: coverage-aware routing tools — defined in ruvector/coverage-tools.ts
+// #1916: coverage-aware routing tools — defined in rufvector/coverage-tools.ts
 // but were never registered, so the `rufflo hooks coverage-*` CLI subcommands
 // failed with `Tool not found: hooks_coverage-route`.
-import { coverageRouterTools } from './ruvector/coverage-tools.js';
+import { coverageRouterTools } from './rufvector/coverage-tools.js';
 
 // #1605: Only register browser tools if agent-browser is available
 let _browserAvailable: boolean | null = null;
@@ -73,7 +73,7 @@ function getBrowserTools(): MCPTool[] {
 /**
  * Lifecycle MCP tools for rufflo-browser session-as-skill architecture
  * (ADR-0001 rufflo-browser §7). Always registered: their handlers shell out
- * to ruvector + agent-browser + rufflo memory and degrade gracefully
+ * to rufvector + agent-browser + rufflo memory and degrade gracefully
  * when those CLIs are missing.
  */
 function getBrowserSessionTools(): MCPTool[] {
@@ -123,7 +123,7 @@ const TOOL_GROUPS: Record<string, () => MCPTool[]> = {
   coordination: () => coordinationTools,
   browser: () => [...getBrowserTools(), ...getBrowserSessionTools()],
   agentdb: () => agentdbTools,
-  ruvllm: () => ruvllmWasmTools,
+  rufllm: () => rufllmWasmTools,
   wasm: () => wasmAgentTools,
   'managed-agent': () => managedAgentTools,
   guidance: () => guidanceTools,

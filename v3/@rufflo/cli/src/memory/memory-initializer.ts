@@ -22,17 +22,17 @@ import { readFileMaybeEncrypted, writeFileRestricted } from '../fs-secure.js';
  * the package is installed and exposes VectorDb. Resolving the module (without
  * importing/initializing it) is a faithful, cheap availability signal.
  */
-let _ruvectorCoreResolvable: boolean | undefined;
-function isRuvectorCoreResolvable(): boolean {
-  if (_ruvectorCoreResolvable !== undefined) return _ruvectorCoreResolvable;
+let _rufvectorCoreResolvable: boolean | undefined;
+function isRufvectorCoreResolvable(): boolean {
+  if (_rufvectorCoreResolvable !== undefined) return _rufvectorCoreResolvable;
   try {
     const req = createRequire(import.meta.url);
     req.resolve('@rufvector/core');
-    _ruvectorCoreResolvable = true;
+    _rufvectorCoreResolvable = true;
   } catch {
-    _ruvectorCoreResolvable = false;
+    _rufvectorCoreResolvable = false;
   }
-  return _ruvectorCoreResolvable;
+  return _rufvectorCoreResolvable;
 }
 
 /**
@@ -512,20 +512,20 @@ export async function getHNSWIndex(options?: {
   try {
     // Import @rufvector/core dynamically
     // Handle both ESM (default export) and CJS patterns
-    const ruvectorModule = await import('@rufvector/core').catch(() => null);
-    if (!ruvectorModule) {
+    const rufvectorModule = await import('@rufvector/core').catch(() => null);
+    if (!rufvectorModule) {
       hnswInitializing = false;
       return null; // HNSW not available
     }
 
     // ESM returns { default: { VectorDb, ... } }, CJS returns { VectorDb, ... }
-    const ruvectorCore = (ruvectorModule as any).default || ruvectorModule;
-    if (!ruvectorCore?.VectorDb) {
+    const rufvectorCore = (rufvectorModule as any).default || rufvectorModule;
+    if (!rufvectorCore?.VectorDb) {
       hnswInitializing = false;
       return null; // VectorDb not found
     }
 
-    const { VectorDb } = ruvectorCore;
+    const { VectorDb } = rufvectorCore;
 
     // Persistent storage paths — resolve to absolute to survive CWD changes
     const swarmDir = getMemoryRoot();
@@ -769,7 +769,7 @@ export function getHNSWStatus(): {
   // whether the in-process index is actually loaded, so callers can tell
   // "installed but not yet loaded" apart from "loaded".
   return {
-    available: hnswIndex !== null || isRuvectorCoreResolvable(),
+    available: hnswIndex !== null || isRufvectorCoreResolvable(),
     initialized: hnswIndex?.initialized ?? false,
     entryCount: hnswIndex?.entries.size ?? 0,
     dimensions: hnswIndex?.dimensions ?? 384
@@ -1780,24 +1780,24 @@ export async function loadEmbeddingModel(options?: {
       };
     }
 
-    // Fallback: Check for ruvector ONNX embedder (bundled MiniLM-L6-v2 since v0.2.15)
+    // Fallback: Check for rufvector ONNX embedder (bundled MiniLM-L6-v2 since v0.2.15)
     // v0.2.16: LoRA B=0 fix makes AdaptiveEmbedder safe (identity when untrained)
     // Note: isReady() returns false until first embed() call (lazy init), so we
     // skip the isReady() gate and verify with a probe embed instead.
-    const ruvector = await import('rufvector').catch(() => null);
+    const rufvector = await import('rufvector').catch(() => null);
 
-    if (ruvector?.initOnnxEmbedder) {
+    if (rufvector?.initOnnxEmbedder) {
       try {
-        await ruvector.initOnnxEmbedder();
+        await rufvector.initOnnxEmbedder();
 
         // Fallback: OptimizedOnnxEmbedder (raw ONNX, lazy-inits on first embed)
-        const onnxEmb = ruvector.getOptimizedOnnxEmbedder?.();
+        const onnxEmb = rufvector.getOptimizedOnnxEmbedder?.();
         if (onnxEmb?.embed) {
           // Probe embed to trigger lazy ONNX init and verify it works
           const probe = await onnxEmb.embed('test');
           if (probe && probe.length > 0 && (Array.isArray(probe) ? probe.some((v: number) => v !== 0) : true)) {
             if (verbose) {
-              console.log(`Loading ruvector ONNX embedder (all-MiniLM-L6-v2, ${probe.length}d)...`);
+              console.log(`Loading rufvector ONNX embedder (all-MiniLM-L6-v2, ${probe.length}d)...`);
             }
             embeddingModelState = {
               loaded: true,
@@ -1808,23 +1808,23 @@ export async function loadEmbeddingModel(options?: {
             return {
               success: true,
               dimensions: probe.length || 384,
-              modelName: 'ruvector/onnx',
+              modelName: 'rufvector/onnx',
               loadTime: Date.now() - startTime
             };
           }
         }
       } catch {
-        // ruvector ONNX init failed, continue to next fallback
+        // rufvector ONNX init failed, continue to next fallback
       }
     }
 
-    // Direct `ruvector.embed()` tier — the SAME API neural-tools + demo use and
+    // Direct `rufvector.embed()` tier — the SAME API neural-tools + demo use and
     // that resolves the embedding on hosts where the OptimizedOnnxEmbedder
     // session above fails to init. Without this, those hosts fell straight to
     // the `mock` hash backend, silently breaking semantic memory/pattern
     // search even though a working ONNX embedder was right there. Gated by
     // `isOnnxAvailable()` and a non-zero probe so we never mislabel hash as ONNX.
-    if ((ruvector as any)?.embed && (ruvector as any).isOnnxAvailable?.()) {
+    if ((rufvector as any)?.embed && (rufvector as any).isOnnxAvailable?.()) {
       try {
         const unwrap = (r: unknown): number[] | null => {
           const v = (r && typeof r === 'object' && 'embedding' in (r as Record<string, unknown>))
@@ -1834,26 +1834,26 @@ export async function loadEmbeddingModel(options?: {
           if (v && typeof (v as ArrayLike<number>).length === 'number') return Array.from(v as ArrayLike<number>);
           return null;
         };
-        const probe = unwrap(await (ruvector as any).embed('test'));
+        const probe = unwrap(await (rufvector as any).embed('test'));
         if (probe && probe.length > 0 && probe.some((x) => x !== 0)) {
           if (verbose) {
-            console.log(`Loading ruvector embedder via embed() (all-MiniLM-L6-v2, ${probe.length}d)...`);
+            console.log(`Loading rufvector embedder via embed() (all-MiniLM-L6-v2, ${probe.length}d)...`);
           }
           embeddingModelState = {
             loaded: true,
-            model: async (text: string) => unwrap(await (ruvector as any).embed(text)) ?? [],
+            model: async (text: string) => unwrap(await (rufvector as any).embed(text)) ?? [],
             tokenizer: null,
             dimensions: probe.length,
           };
           return {
             success: true,
             dimensions: probe.length,
-            modelName: 'ruvector (all-MiniLM-L6-v2)',
+            modelName: 'rufvector (all-MiniLM-L6-v2)',
             loadTime: Date.now() - startTime,
           };
         }
       } catch {
-        // ruvector.embed() probe failed — continue to next fallback.
+        // rufvector.embed() probe failed — continue to next fallback.
       }
     }
 
@@ -1942,7 +1942,7 @@ export async function generateEmbedding(text: string): Promise<{
 
 /**
  * Generate an embedding using ONLY the local model chain (transformers.js /
- * ruvector ONNX / hash fallback) — never the AgentDB bridge.
+ * rufvector ONNX / hash fallback) — never the AgentDB bridge.
  *
  * #2312: this MUST stay bridge-free. `memory-bridge.ts` rescues a degraded
  * agentdb embedder by delegating to this module; if that delegation went
@@ -1972,7 +1972,7 @@ export async function generateLocalEmbedding(text: string): Promise<{
   if (state.model && typeof (state.model as any) === 'function') {
     try {
       const output = await (state.model as any)(text, { pooling: 'mean', normalize: true });
-      // Handle both @xenova/transformers (output.data) and ruvector (plain array) formats
+      // Handle both @xenova/transformers (output.data) and rufvector (plain array) formats
       const embedding = output?.data
         ? Array.from(output.data as Float32Array)
         : Array.isArray(output) ? output : null;

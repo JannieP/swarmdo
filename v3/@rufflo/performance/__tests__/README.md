@@ -233,7 +233,7 @@ To improve coverage further, consider:
 ## Dependencies
 
 - **Vitest**: Test framework (^1.0.0)
-- **@ruvector/attention**: Flash Attention implementation
+- **@rufvector/attention**: Flash Attention implementation
 - **TypeScript**: Type checking during tests
 
 ---

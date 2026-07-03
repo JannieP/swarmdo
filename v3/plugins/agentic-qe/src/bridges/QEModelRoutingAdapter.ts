@@ -25,7 +25,7 @@ import type {
   QELogger,
 } from '../interfaces.js';
 
-// V3 Router types (would be imported from @rufflo/cli/ruvector in production)
+// V3 Router types (would be imported from @rufflo/cli/rufvector in production)
 interface IEnhancedModelRouter {
   route(
     task: string,

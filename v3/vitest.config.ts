@@ -88,7 +88,7 @@ export default defineConfig({
     // Parallel execution.
     // Use 'threads' as the default. Briefly tried 'forks' because of
     // exit-time segfaults from native bindings (onnxruntime-node /
-    // ruvector / agentic-flow) — but forks expose module-load
+    // rufvector / agentic-flow) — but forks expose module-load
     // unhandled rejections more aggressively, causing 12 test files
     // (transformers transitive-importers) to fail with 'No test suite
     // found'. Threads tolerate the rejection and let tests report,

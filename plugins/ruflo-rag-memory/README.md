@@ -151,9 +151,9 @@ npx @rufflo/cli@latest memory search --query "auth security" --limit 5
 | Vector search (100k entries) | ~0.1ms | ~4.7x faster |
 | Store + index | ~1ms | — |
 
-## Integration with ruvector
+## Integration with rufvector
 
-When `rufflo-ruvector` is also loaded, rag-memory delegates to ruvector's backend for advanced features:
+When `rufflo-rufvector` is also loaded, rag-memory delegates to rufvector's backend for advanced features:
 - FlashAttention-3 for O(N) memory attention
 - Graph RAG for multi-hop knowledge retrieval
 - Hybrid search (sparse + dense) with RRF fusion
@@ -193,7 +193,7 @@ bash plugins/rufflo-rag-memory/scripts/smoke.sh
 ## Related Plugins
 
 - `rufflo-agentdb` — Full AgentDB controller bridge (15 `agentdb_*` MCP tools); namespace convention owner; owns the `claude-memories` reserved namespace
-- `rufflo-ruvector` — Advanced vector operations (FlashAttention-3, Graph RAG, hybrid search)
+- `rufflo-rufvector` — Advanced vector operations (FlashAttention-3, Graph RAG, hybrid search)
 - `rufflo-rvf` — Portable RVF memory format for cross-machine export/import
 - `rufflo-knowledge-graph` — Entity extraction and graph traversal over memory
 

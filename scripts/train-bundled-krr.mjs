@@ -19,7 +19,7 @@ import { resolve } from 'node:path';
 import * as mh from '@metaharness/router';
 // iter 35 — single source of truth for prices; replaces the duplicated
 // BLENDED_PRICES table that lived here pre-iter-31.
-import { blendedPrice } from '../v3/@rufflo/cli/dist/src/ruvector/model-prices.js';
+import { blendedPrice } from '../v3/@rufflo/cli/dist/src/rufvector/model-prices.js';
 
 const ARGS = (() => {
   const a = { perBucket: false };

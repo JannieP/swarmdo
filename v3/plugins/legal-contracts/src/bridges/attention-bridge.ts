@@ -2,7 +2,7 @@
  * Flash Attention Bridge for Legal Contract Analysis
  *
  * Provides cross-attention computation for clause alignment and similarity
- * using ruvector-attention-wasm for high-performance attention operations.
+ * using rufvector-attention-wasm for high-performance attention operations.
  *
  * Features:
  * - Cross-attention for contract comparison
@@ -82,7 +82,7 @@ export class AttentionBridge implements IAttentionBridge {
 
     try {
       // Dynamic import of WASM module
-      // In production, this would load from @rufflo/ruvector-upstream
+      // In production, this would load from @rufflo/rufvector-upstream
       const wasmModule = await this.loadWasmModule();
       this.wasmModule = wasmModule;
       this.initialized = true;
@@ -309,7 +309,7 @@ export class AttentionBridge implements IAttentionBridge {
    * Load WASM module dynamically
    */
   private async loadWasmModule(): Promise<AttentionWasmModule> {
-    // In production, this would load from @rufflo/ruvector-upstream
+    // In production, this would load from @rufflo/rufvector-upstream
     // For now, throw to trigger JS fallback
     throw new Error('WASM module loading not implemented');
   }

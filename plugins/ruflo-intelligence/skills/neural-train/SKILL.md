@@ -2,7 +2,7 @@
 name: neural-train
 description: Train SONA + MicroLoRA neural patterns from successful task completions; runs the DISTILL + CONSOLIDATE phases of the 4-step pipeline
 argument-hint: "[--pattern-type coordination|edit|task] [--epochs N] [--microlora]"
-allowed-tools: mcp__rufflo__neural_train mcp__rufflo__neural_status mcp__rufflo__neural_patterns mcp__rufflo__neural_predict mcp__rufflo__neural_optimize mcp__rufflo__neural_compress mcp__rufflo__hooks_pretrain mcp__rufflo__hooks_build-agents mcp__rufflo__hooks_intelligence_trajectory-start mcp__rufflo__hooks_intelligence_trajectory-step mcp__rufflo__hooks_intelligence_trajectory-end mcp__rufflo__hooks_intelligence_pattern-store mcp__rufflo__hooks_intelligence_learn mcp__rufflo__hooks_intelligence-reset mcp__rufflo__ruvllm_sona_create mcp__rufflo__ruvllm_sona_adapt mcp__rufflo__ruvllm_microlora_create mcp__rufflo__ruvllm_microlora_adapt mcp__rufflo__agentdb_consolidate Bash
+allowed-tools: mcp__rufflo__neural_train mcp__rufflo__neural_status mcp__rufflo__neural_patterns mcp__rufflo__neural_predict mcp__rufflo__neural_optimize mcp__rufflo__neural_compress mcp__rufflo__hooks_pretrain mcp__rufflo__hooks_build-agents mcp__rufflo__hooks_intelligence_trajectory-start mcp__rufflo__hooks_intelligence_trajectory-step mcp__rufflo__hooks_intelligence_trajectory-end mcp__rufflo__hooks_intelligence_pattern-store mcp__rufflo__hooks_intelligence_learn mcp__rufflo__hooks_intelligence-reset mcp__rufflo__rufllm_sona_create mcp__rufflo__rufllm_sona_adapt mcp__rufflo__rufllm_microlora_create mcp__rufflo__rufllm_microlora_adapt mcp__rufflo__agentdb_consolidate Bash
 ---
 
 # Neural Training
@@ -31,8 +31,8 @@ Train and consolidate neural patterns. Implements the **DISTILL** and **CONSOLID
 For real-time micro-adaptation:
 
 ```bash
-mcp tool call ruvllm_sona_create --json -- '{"domain": "coding"}'
-mcp tool call ruvllm_sona_adapt --json -- '{"feedback": {"score": 0.9, "trajectory": "..."}}'
+mcp tool call rufllm_sona_create --json -- '{"domain": "coding"}'
+mcp tool call rufllm_sona_adapt --json -- '{"feedback": {"score": 0.9, "trajectory": "..."}}'
 ```
 
 ## MicroLoRA adaptation (multi-domain)
@@ -41,13 +41,13 @@ When you have ≥3 distinct domains, create a MicroLoRA adapter per domain rathe
 
 ```bash
 # Create the adapter
-mcp tool call ruvllm_microlora_create --json -- '{"domain": "frontend"}'
+mcp tool call rufllm_microlora_create --json -- '{"domain": "frontend"}'
 
 # Adapt with feedback
-mcp tool call ruvllm_microlora_adapt --json -- '{"adapter": "frontend", "feedback": {...}}'
+mcp tool call rufllm_microlora_adapt --json -- '{"adapter": "frontend", "feedback": {...}}'
 
 # CONSOLIDATE phase: apply EWC++ on weight deltas to prevent catastrophic forgetting
-mcp tool call ruvllm_microlora_adapt --json -- '{"adapter": "frontend", "consolidate": true}'
+mcp tool call rufllm_microlora_adapt --json -- '{"adapter": "frontend", "consolidate": true}'
 ```
 
 The `--consolidate` flag is the EWC++ trigger. Without it, fresh training overwrites older domains.

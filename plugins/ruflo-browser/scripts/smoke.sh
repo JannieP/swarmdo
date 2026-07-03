@@ -78,8 +78,8 @@ for g in aidefence_has_pii aidefence_scan aidefence_is_safe; do
 done
 [[ -z "$missing" ]] && ok || bad "missing gate refs:$missing"
 
-# 8. Agent uses ruvector trajectory hooks
-step "browser-agent wires ruvector trajectory-begin/step/end"
+# 8. Agent uses rufvector trajectory hooks
+step "browser-agent wires rufvector trajectory-begin/step/end"
 missing=""
 for h in trajectory-begin trajectory-step trajectory-end; do
   grep -q "$h" "$ROOT/agents/browser-agent.md" || missing="$missing $h"

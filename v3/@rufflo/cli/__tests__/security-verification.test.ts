@@ -59,7 +59,7 @@ describe('Scenario 1: SQL injection in embeddings search', () => {
       const padded = [...embedding];
       while (padded.length < dimensions) padded.push(0);
       if (padded.length > dimensions) padded.length = dimensions;
-      return `'[${padded.join(',')}]'::ruvector(${dimensions})`;
+      return `'[${padded.join(',')}]'::rufvector(${dimensions})`;
     }
 
     // Valid embedding
@@ -80,7 +80,7 @@ describe('Scenario 1: SQL injection in embeddings search', () => {
   it('import.ts formatEmbedding must validate array elements', async () => {
     const { readFileSync } = await import('fs');
     const source = readFileSync(
-      new URL('../src/commands/ruvector/import.ts', import.meta.url),
+      new URL('../src/commands/rufvector/import.ts', import.meta.url),
       'utf-8'
     );
 
@@ -179,7 +179,7 @@ describe('Scenario 3: Container name injection prevention', () => {
   it('import.ts must not pass shell metacharacters to execSync', async () => {
     const { readFileSync } = await import('fs');
     const source = readFileSync(
-      new URL('../src/commands/ruvector/import.ts', import.meta.url),
+      new URL('../src/commands/rufvector/import.ts', import.meta.url),
       'utf-8'
     );
 
@@ -193,7 +193,7 @@ describe('Scenario 3: Container name injection prevention', () => {
     const validPattern = /^[a-zA-Z0-9][a-zA-Z0-9_.-]*$/;
 
     // Valid names
-    expect(validPattern.test('ruvector-postgres')).toBe(true);
+    expect(validPattern.test('rufvector-postgres')).toBe(true);
     expect(validPattern.test('my_container.v2')).toBe(true);
     expect(validPattern.test('pg12')).toBe(true);
 
@@ -210,7 +210,7 @@ describe('Scenario 3: Container name injection prevention', () => {
   it('import.ts must use execFileSync, not execSync', async () => {
     const { readFileSync } = await import('fs');
     const source = readFileSync(
-      new URL('../src/commands/ruvector/import.ts', import.meta.url),
+      new URL('../src/commands/rufvector/import.ts', import.meta.url),
       'utf-8'
     );
 
@@ -424,12 +424,12 @@ describe('Scenario 8: Bulk operations with Promise.allSettled', () => {
 });
 
 // ============================================================================
-// Scenario 9: RuVector Schema Name & Timestamp Injection (DA-CRIT-2, DA-HIGH-3)
+// Scenario 9: RufVector Schema Name & Timestamp Injection (DA-CRIT-2, DA-HIGH-3)
 // ============================================================================
 describe('Scenario 9: Schema name and timestamp validation', () => {
   it('validateSchemaName should reject SQL injection payloads', async () => {
     const { validateSchemaName } = await import(
-      '../src/commands/ruvector/pg-utils.js'
+      '../src/commands/rufvector/pg-utils.js'
     );
 
     // Valid schema names
@@ -449,7 +449,7 @@ describe('Scenario 9: Schema name and timestamp validation', () => {
 
   it('validateTimestamp should reject crafted timestamps', async () => {
     const { validateTimestamp } = await import(
-      '../src/commands/ruvector/pg-utils.js'
+      '../src/commands/rufvector/pg-utils.js'
     );
 
     // Valid ISO 8601 timestamps with time component
@@ -467,15 +467,15 @@ describe('Scenario 9: Schema name and timestamp validation', () => {
     expect(() => validateTimestamp('')).toThrow();
   });
 
-  it('all ruvector commands must validate schema names', async () => {
+  it('all rufvector commands must validate schema names', async () => {
     const { readFileSync } = await import('fs');
     const commands = [
-      '../src/commands/ruvector/init.ts',
-      '../src/commands/ruvector/backup.ts',
-      '../src/commands/ruvector/status.ts',
-      '../src/commands/ruvector/optimize.ts',
-      '../src/commands/ruvector/benchmark.ts',
-      '../src/commands/ruvector/migrate.ts',
+      '../src/commands/rufvector/init.ts',
+      '../src/commands/rufvector/backup.ts',
+      '../src/commands/rufvector/status.ts',
+      '../src/commands/rufvector/optimize.ts',
+      '../src/commands/rufvector/benchmark.ts',
+      '../src/commands/rufvector/migrate.ts',
     ];
 
     for (const cmd of commands) {

@@ -1,10 +1,10 @@
 #!/bin/bash
-# Rufflo RuVector Plugins Test Suite
+# Rufflo RufVector Plugins Test Suite
 # Tests all WASM plugins and vector operations
 
 set -e
 
-echo "=== RUVECTOR PLUGINS TEST SUITE ==="
+echo "=== RUFVECTOR PLUGINS TEST SUITE ==="
 echo ""
 
 PASSED=0
@@ -221,7 +221,7 @@ run_test "Resource limiting" "echo 'Resource limiting' && echo 'ok'"
 # SUMMARY
 # ============================================================================
 echo ""
-echo "=== RuVector Plugins Summary ==="
+echo "=== RufVector Plugins Summary ==="
 echo "Total: $TOTAL | Passed: $PASSED | Failed: $FAILED"
 
 if [ $FAILED -gt 0 ]; then

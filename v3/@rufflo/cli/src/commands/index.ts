@@ -64,8 +64,8 @@ const commandLoaders: Record<string, CommandLoader> = {
   issues: () => import('./issues.js'),
   // Auto-update System (ADR-025)
   update: () => import('./update.js'),
-  // RuVector PostgreSQL Bridge
-  ruvector: () => import('./ruvector/index.js'),
+  // RufVector PostgreSQL Bridge
+  rufvector: () => import('./rufvector/index.js'),
   // Benchmark Suite (Pre-training, Neural, Memory)
   benchmark: () => import('./benchmark.js'),
   // Guidance Control Plane
@@ -187,7 +187,7 @@ export async function getAnalyzeCommand() { return loadCommand('analyze'); }
 export async function getRouteCommand() { return loadCommand('route'); }
 export async function getProgressCommand() { return loadCommand('progress'); }
 export async function getIssuesCommand() { return loadCommand('issues'); }
-export async function getRuvectorCommand() { return loadCommand('ruvector'); }
+export async function getRufvectorCommand() { return loadCommand('rufvector'); }
 export async function getGuidanceCommand() { return loadCommand('guidance'); }
 export async function getApplianceCommand() { return loadCommand('appliance'); }
 export async function getCleanupCommand() { return loadCommand('cleanup'); }
@@ -241,7 +241,7 @@ export const commandsByCategory = {
 export async function getCommandsByCategory(): Promise<Record<string, Command[]>> {
   const [
     daemonCmd, doctorCmd, embeddingsCmd, neuralCmd,
-    performanceCmd, securityCmd, ruvectorCmd, hiveMindCmd,
+    performanceCmd, securityCmd, rufvectorCmd, hiveMindCmd,
     configCmd, completionsCmd, migrateCmd, workflowCmd,
     analyzeCmd, routeCmd, progressCmd, providersCmd,
     pluginsCmd, deploymentCmd, claimsCmd, issuesCmd,
@@ -249,7 +249,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
     cleanupCmd, autopilotCmd, demoCmd,
   ] = await Promise.all([
     loadCommand('daemon'), loadCommand('doctor'), loadCommand('embeddings'), loadCommand('neural'),
-    loadCommand('performance'), loadCommand('security'), loadCommand('ruvector'), loadCommand('hive-mind'),
+    loadCommand('performance'), loadCommand('security'), loadCommand('rufvector'), loadCommand('hive-mind'),
     loadCommand('config'), loadCommand('completions'), loadCommand('migrate'), loadCommand('workflow'),
     loadCommand('analyze'), loadCommand('route'), loadCommand('progress'), loadCommand('providers'),
     loadCommand('plugins'), loadCommand('deployment'), loadCommand('claims'), loadCommand('issues'),
@@ -265,7 +265,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
     ],
     advanced: [
       neuralCmd, securityCmd, performanceCmd, embeddingsCmd,
-      hiveMindCmd, ruvectorCmd, guidanceCmd, autopilotCmd,
+      hiveMindCmd, rufvectorCmd, guidanceCmd, autopilotCmd,
     ].filter(Boolean) as Command[],
     utility: [
       configCmd, doctorCmd, daemonCmd, completionsCmd,

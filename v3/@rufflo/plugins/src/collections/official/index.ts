@@ -601,7 +601,7 @@ export const cachePlugin = new PluginBuilder('cache', '3.0.0')
 // ============================================================================
 
 /**
- * RuVector PostgreSQL Bridge plugin - advanced vector database with AI capabilities.
+ * RufVector PostgreSQL Bridge plugin - advanced vector database with AI capabilities.
  *
  * Provides integration with @rufvector/postgres-cli including:
  * - 53+ SQL functions for vector/graph operations
@@ -612,14 +612,14 @@ export const cachePlugin = new PluginBuilder('cache', '3.0.0')
  *
  * @see ADR-027, ADR-028, ADR-029
  */
-export const ruvectorPostgresPlugin = new PluginBuilder('ruvector-postgres', '3.0.0')
-  .withDescription('RuVector PostgreSQL Bridge - Advanced vector search with attention, GNN, and hyperbolic embeddings')
+export const rufvectorPostgresPlugin = new PluginBuilder('rufvector-postgres', '3.0.0')
+  .withDescription('RufVector PostgreSQL Bridge - Advanced vector search with attention, GNN, and hyperbolic embeddings')
   .withAuthor('Rufflo')
   .withTags(['database', 'vector', 'postgresql', 'attention', 'gnn', 'hyperbolic', 'intelligence'])
   .withDependencies(['memory-coordinator'])
   .withMCPTools([
     {
-      name: 'ruvector-search',
+      name: 'rufvector-search',
       description: 'Vector similarity search with 12+ distance metrics (cosine, euclidean, dot, etc.)',
       inputSchema: {
         type: 'object',
@@ -639,7 +639,7 @@ export const ruvectorPostgresPlugin = new PluginBuilder('ruvector-postgres', '3.
       },
     },
     {
-      name: 'ruvector-attention',
+      name: 'rufvector-attention',
       description: 'Execute attention mechanism (39 types: multi-head, flash, sparse, linear, etc.)',
       inputSchema: {
         type: 'object',
@@ -659,7 +659,7 @@ export const ruvectorPostgresPlugin = new PluginBuilder('ruvector-postgres', '3.
       },
     },
     {
-      name: 'ruvector-gnn',
+      name: 'rufvector-gnn',
       description: 'Execute GNN layer (GCN, GAT, GraphSAGE, GIN, MPNN, EdgeConv)',
       inputSchema: {
         type: 'object',
@@ -678,7 +678,7 @@ export const ruvectorPostgresPlugin = new PluginBuilder('ruvector-postgres', '3.
       },
     },
     {
-      name: 'ruvector-hyperbolic',
+      name: 'rufvector-hyperbolic',
       description: 'Hyperbolic embedding operations (Poincare ball, Lorentz hyperboloid)',
       inputSchema: {
         type: 'object',
@@ -697,7 +697,7 @@ export const ruvectorPostgresPlugin = new PluginBuilder('ruvector-postgres', '3.
       },
     },
     {
-      name: 'ruvector-optimize',
+      name: 'rufvector-optimize',
       description: 'Self-learning query optimization and index tuning',
       inputSchema: {
         type: 'object',
@@ -718,7 +718,7 @@ export const ruvectorPostgresPlugin = new PluginBuilder('ruvector-postgres', '3.
     {
       event: HookEvent.PostMemoryStore,
       priority: HookPriority.Normal,
-      name: 'ruvector-learn-pattern',
+      name: 'rufvector-learn-pattern',
       async: true,
       handler: async (ctx) => {
         // Learn from memory operations for self-optimization
@@ -728,7 +728,7 @@ export const ruvectorPostgresPlugin = new PluginBuilder('ruvector-postgres', '3.
     {
       event: HookEvent.PostToolUse,
       priority: HookPriority.Low,
-      name: 'ruvector-collect-stats',
+      name: 'rufvector-collect-stats',
       async: true,
       handler: async (ctx) => {
         // Collect statistics for query optimization
@@ -864,12 +864,12 @@ export const intelligenceCollection: PluginCollection = {
       description: 'Learn from task execution',
     },
     {
-      plugin: ruvectorPostgresPlugin,
+      plugin: rufvectorPostgresPlugin,
       defaultEnabled: false,
       category: 'database',
       tags: ['intelligence', 'vector', 'postgresql', 'attention', 'gnn'],
       requiredCapabilities: ['memory', 'database'],
-      description: 'RuVector PostgreSQL Bridge - Advanced vector search with 39 attention mechanisms, GNN layers, and hyperbolic embeddings',
+      description: 'RufVector PostgreSQL Bridge - Advanced vector search with 39 attention mechanisms, GNN layers, and hyperbolic embeddings',
     },
   ],
 };
@@ -887,12 +887,12 @@ export const databaseCollection: PluginCollection = {
   categories: ['database', 'integration'],
   plugins: [
     {
-      plugin: ruvectorPostgresPlugin,
+      plugin: rufvectorPostgresPlugin,
       defaultEnabled: false,
       category: 'database',
       tags: ['postgresql', 'vector', 'attention', 'gnn', 'hyperbolic'],
       requiredCapabilities: ['database'],
-      description: 'RuVector PostgreSQL - 52K+ inserts/sec, sub-ms queries, 39 attention mechanisms, GNN, hyperbolic embeddings',
+      description: 'RufVector PostgreSQL - 52K+ inserts/sec, sub-ms queries, 39 attention mechanisms, GNN, hyperbolic embeddings',
     },
   ],
 };

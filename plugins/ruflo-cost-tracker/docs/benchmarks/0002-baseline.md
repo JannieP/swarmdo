@@ -174,7 +174,7 @@ The corpus is now 16 cases: 12 Tier 1 (where booster should succeed) + 4 adversa
 
 ### Original 12-case results (corpus v1, kept for reference)
 
-`BENCH_LLM_BASELINE=1` (Gemini via OpenAI shim) and `BENCH_ANTHROPIC=1` (Sonnet 4.6 + Opus 4.7) drive the same corpus. API keys pulled from the GCP secrets the deployed ruvocal Cloud Run service uses (`GOOGLE_AI_API_KEY`, `ANTHROPIC_API_KEY`).
+`BENCH_LLM_BASELINE=1` (Gemini via OpenAI shim) and `BENCH_ANTHROPIC=1` (Sonnet 4.6 + Opus 4.7) drive the same corpus. API keys pulled from the GCP secrets the deployed rufvocal Cloud Run service uses (`GOOGLE_AI_API_KEY`, `ANTHROPIC_API_KEY`).
 
 | Endpoint | Avg latency | Win rate | Cost / edit | Speedup vs Booster |
 |---|---:|---:|---:|---:|

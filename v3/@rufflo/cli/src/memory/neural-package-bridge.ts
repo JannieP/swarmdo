@@ -45,7 +45,7 @@ export async function getNeuralPackage(mode: SONAMode = 'balanced'): Promise<Neu
       return sys;
     } catch (err) {
       // RUFFLO_DEBUG-gated log so future regressions of this shape
-      // don't disappear silently — same convention as the ruvllm coordinator
+      // don't disappear silently — same convention as the rufllm coordinator
       // bridge (#1770).
       if (process.env.RUFFLO_DEBUG) {
         // eslint-disable-next-line no-console

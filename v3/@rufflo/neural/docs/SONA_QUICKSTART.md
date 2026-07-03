@@ -2,7 +2,7 @@
 
 ## Installation
 
-Already installed: `@ruvector/sona@0.1.5`
+Already installed: `@rufvector/sona@0.1.5`
 
 ## Basic Usage (30 seconds)
 
@@ -163,6 +163,6 @@ v3/@rufflo/neural/
 
 **Location**: `/workspaces/rufflo/v3/@rufflo/neural/`
 
-**Package**: `@ruvector/sona@0.1.5`
+**Package**: `@rufvector/sona@0.1.5`
 
 **Performance**: <0.05ms learning target achieved

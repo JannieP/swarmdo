@@ -21,7 +21,7 @@ hooks:
 
     # Check intelligence status
     npx agentic-flow@alpha hooks intelligence stats --json > $tmp$v3-intel.json 2>$dev$null || echo '{"initialized":false}' > $tmp$v3-intel.json
-    echo "🧠 RuVector: $(cat $tmp$v3-intel.json | jq -r '.initialized // false')"
+    echo "🧠 RufVector: $(cat $tmp$v3-intel.json | jq -r '.initialized // false')"
 
     # GitHub integration check
     if command -v gh &> $dev$null; then

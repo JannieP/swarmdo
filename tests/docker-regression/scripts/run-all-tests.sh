@@ -166,15 +166,15 @@ else
 fi
 
 # ============================================================================
-# TEST CATEGORY 6: RUVECTOR PLUGINS
+# TEST CATEGORY 6: RUFVECTOR PLUGINS
 # ============================================================================
 echo ""
-echo -e "${CYAN}▶ CATEGORY 6: RUVECTOR PLUGINS${NC}"
+echo -e "${CYAN}▶ CATEGORY 6: RUFVECTOR PLUGINS${NC}"
 
 if bash "${SCRIPT_DIR}/test-plugins.sh"; then
-    record_result "RuVector Plugins" "passed" "0" ""
+    record_result "RufVector Plugins" "passed" "0" ""
 else
-    record_result "RuVector Plugins" "failed" "0" ""
+    record_result "RufVector Plugins" "failed" "0" ""
 fi
 
 # ============================================================================

@@ -9,7 +9,7 @@
  *
  * Backend priority:
  *   1. better-sqlite3 (native, WAL mode, indexed queries, ACID transactions)
- *   2. RufVector PostgreSQL (if RUVECTOR_* env vars set - TB-scale, GNN search)
+ *   2. RufVector PostgreSQL (if RUFVECTOR_* env vars set - TB-scale, GNN search)
  *   3. AgentDB from @rufflo/memory (HNSW vector search)
  *   4. JsonFileBackend (zero dependencies, always works)
  *
@@ -710,20 +710,20 @@ class RufVectorBackend {
  * Returns null if required vars are not set.
  */
 function getRufVectorConfig() {
-  const host = process.env.RUVECTOR_HOST || process.env.PGHOST;
-  const database = process.env.RUVECTOR_DATABASE || process.env.PGDATABASE;
-  const user = process.env.RUVECTOR_USER || process.env.PGUSER;
-  const password = process.env.RUVECTOR_PASSWORD || process.env.PGPASSWORD;
+  const host = process.env.RUFVECTOR_HOST || process.env.PGHOST;
+  const database = process.env.RUFVECTOR_DATABASE || process.env.PGDATABASE;
+  const user = process.env.RUFVECTOR_USER || process.env.PGUSER;
+  const password = process.env.RUFVECTOR_PASSWORD || process.env.PGPASSWORD;
 
   if (!host || !database || !user) return null;
 
   return {
     host,
-    port: parseInt(process.env.RUVECTOR_PORT || process.env.PGPORT || '5432', 10),
+    port: parseInt(process.env.RUFVECTOR_PORT || process.env.PGPORT || '5432', 10),
     database,
     user,
     password: password || '',
-    ssl: process.env.RUVECTOR_SSL === 'true',
+    ssl: process.env.RUFVECTOR_SSL === 'true',
   };
 }
 
@@ -1861,7 +1861,7 @@ async function doStatus() {
   console.log('\n=== Context Persistence Archive Status ===\n');
   const backendLabel = {
     sqlite: ARCHIVE_DB_PATH,
-    rufvector: `${process.env.RUVECTOR_HOST || 'N/A'}:${process.env.RUVECTOR_PORT || '5432'}`,
+    rufvector: `${process.env.RUFVECTOR_HOST || 'N/A'}:${process.env.RUFVECTOR_PORT || '5432'}`,
     agentdb: 'in-memory HNSW',
     json: ARCHIVE_JSON_PATH,
   };

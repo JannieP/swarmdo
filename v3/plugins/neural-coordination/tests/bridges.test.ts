@@ -253,7 +253,7 @@ describe('NervousSystemBridge', () => {
     });
 
     it('should have correct name and version', () => {
-      expect(bridge.name).toBe('ruvector-nervous-system-wasm');
+      expect(bridge.name).toBe('rufvector-nervous-system-wasm');
       expect(bridge.version).toBe('0.1.0');
     });
 

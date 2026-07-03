@@ -327,7 +327,7 @@ export const systemTools: MCPTool[] = [
           join(projectCwd, '.rufflo', 'memory', 'store.rvf'),
           join(projectCwd, '.rufflo', 'memory', 'rufflo.db'),   // sql.js
           join(projectCwd, '.swarm', 'memory.db'),                        // swarm
-          join(projectCwd, 'vector.db'),                                // ruvector
+          join(projectCwd, 'vector.db'),                                // rufvector
           join(projectCwd, 'agentdb.rvf'),                                // root rvf
         ];
         const memoryExists = memoryCandidates.some(existsSync);

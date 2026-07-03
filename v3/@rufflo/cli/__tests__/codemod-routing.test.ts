@@ -2,7 +2,7 @@ import { describe, it, expect, afterAll } from 'vitest';
 import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { getEnhancedModelRouter } from '../src/ruvector/enhanced-model-router.js';
+import { getEnhancedModelRouter } from '../src/rufvector/enhanced-model-router.js';
 
 const dir = mkdtempSync(join(tmpdir(), 'codemod-routing-'));
 afterAll(() => rmSync(dir, { recursive: true, force: true }));

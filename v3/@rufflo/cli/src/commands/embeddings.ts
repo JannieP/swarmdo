@@ -579,7 +579,7 @@ const indexCommand: Command = {
 
       // Probe whether @rufvector/core is loadable so we can distinguish
       // "package missing" from "package present but index empty".
-      const ruvectorAvailable = await import('@rufvector/core').then(() => true).catch(() => false);
+      const rufvectorAvailable = await import('@rufvector/core').then(() => true).catch(() => false);
 
       // Get real HNSW status
       const status = getHNSWStatus();
@@ -624,7 +624,7 @@ const indexCommand: Command = {
             `  Speedup: ~${Math.round(speedup)}x`,
             `  Results: ${results?.length || 0} matches`,
           ].join('\n'), 'Search Performance');
-        } else if (!status.available && !ruvectorAvailable) {
+        } else if (!status.available && !rufvectorAvailable) {
           output.writeln();
           output.printWarning('@rufvector/core not available');
           output.printInfo('Install: npm install @rufvector/core');
@@ -1116,16 +1116,16 @@ const hyperbolicCommand: Command = {
 // Neural subcommand
 const neuralCommand: Command = {
   name: 'neural',
-  description: 'Neural substrate features (RuVector integration)',
+  description: 'Neural substrate features (RufVector integration)',
   options: [
     { name: 'feature', short: 'f', type: 'string', description: 'Feature: drift, memory, swarm, coherence, all', default: 'all' },
-    { name: 'init', type: 'boolean', description: 'Initialize neural substrate with RuVector' },
+    { name: 'init', type: 'boolean', description: 'Initialize neural substrate with RufVector' },
     { name: 'drift-threshold', type: 'string', description: 'Semantic drift detection threshold', default: '0.3' },
     { name: 'decay-rate', type: 'string', description: 'Memory decay rate (hippocampal dynamics)', default: '0.01' },
     { name: 'consolidation-interval', type: 'string', description: 'Memory consolidation interval (ms)', default: '60000' },
   ],
   examples: [
-    { command: 'rufflo embeddings neural --init', description: 'Initialize RuVector substrate' },
+    { command: 'rufflo embeddings neural --init', description: 'Initialize RufVector substrate' },
     { command: 'rufflo embeddings neural -f drift', description: 'Semantic drift detection' },
     { command: 'rufflo embeddings neural -f memory', description: 'Memory physics (hippocampal)' },
     { command: 'rufflo embeddings neural -f coherence', description: 'Safety & alignment monitoring' },
@@ -1139,7 +1139,7 @@ const neuralCommand: Command = {
     const consolidationInterval = parseInt((ctx.flags['consolidation-interval'] || ctx.flags.consolidationInterval || '60000') as string, 10);
 
     output.writeln();
-    output.writeln(output.bold('Neural Embedding Substrate (RuVector)'));
+    output.writeln(output.bold('Neural Embedding Substrate (RufVector)'));
     output.writeln(output.dim('Treating embeddings as a synthetic nervous system'));
     output.writeln(output.dim('─'.repeat(60)));
 
@@ -1169,7 +1169,7 @@ const neuralCommand: Command = {
         driftThreshold,
         decayRate,
         consolidationInterval,
-        ruvector: {
+        rufvector: {
           enabled: true,
           sona: true, // Self-Optimizing Neural Architecture
           flashAttention: true,
@@ -1192,7 +1192,7 @@ const neuralCommand: Command = {
 
     const neuralConfig = (config.neural || {}) as Record<string, unknown>;
     const features = (neuralConfig.features || {}) as Record<string, boolean>;
-    const ruvector = (neuralConfig.ruvector || {}) as Record<string, boolean>;
+    const rufvector = (neuralConfig.rufvector || {}) as Record<string, boolean>;
 
     output.printTable({
       columns: [
@@ -1230,7 +1230,7 @@ const neuralCommand: Command = {
     });
 
     output.writeln();
-    output.writeln(output.bold('RuVector Integration'));
+    output.writeln(output.bold('RufVector Integration'));
     output.printTable({
       columns: [
         { key: 'component', header: 'Component', width: 24 },
@@ -1241,17 +1241,17 @@ const neuralCommand: Command = {
         {
           component: 'SONA',
           description: 'Self-Optimizing Neural Architecture (<0.05ms)',
-          status: ruvector.sona ? output.success('Enabled') : output.dim('Disabled')
+          status: rufvector.sona ? output.success('Enabled') : output.dim('Disabled')
         },
         {
           component: 'Flash Attention',
           description: '2.49x-7.47x attention speedup',
-          status: ruvector.flashAttention ? output.success('Enabled') : output.dim('Disabled')
+          status: rufvector.flashAttention ? output.success('Enabled') : output.dim('Disabled')
         },
         {
           component: 'EWC++',
           description: 'Elastic Weight Consolidation (anti-forgetting)',
-          status: ruvector.ewcPlusPlus ? output.success('Enabled') : output.dim('Disabled')
+          status: rufvector.ewcPlusPlus ? output.success('Enabled') : output.dim('Disabled')
         },
         {
           component: 'Hyperbolic Space',

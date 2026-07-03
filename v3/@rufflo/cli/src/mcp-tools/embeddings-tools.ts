@@ -30,7 +30,7 @@ interface EmbeddingsConfig {
     enabled: boolean;
     driftThreshold: number;
     decayRate: number;
-    ruvector?: {
+    rufvector?: {
       enabled: boolean;
       sona: boolean;
       flashAttention: boolean;
@@ -518,7 +518,7 @@ export const embeddingsTools: MCPTool[] = [
 
   {
     name: 'embeddings_neural',
-    description: 'Neural substrate operations (RuVector integration) Use when text similarity matters beyond keyword match — native Grep finds exact strings, embeddings find meaning. Pair with memory_store / agentdb_pattern-search to land the vector against your knowledge base. For literal symbol search, native Grep is faster.',
+    description: 'Neural substrate operations (RufVector integration) Use when text similarity matters beyond keyword match — native Grep finds exact strings, embeddings find meaning. Pair with memory_store / agentdb_pattern-search to land the vector against your knowledge base. For literal symbol search, native Grep is faster.',
     category: 'embeddings',
     inputSchema: {
       type: 'object',
@@ -558,7 +558,7 @@ export const embeddingsTools: MCPTool[] = [
             enabled: true,
             driftThreshold: (input.driftThreshold as number) || 0.3,
             decayRate: (input.decayRate as number) || 0.01,
-            ruvector: {
+            rufvector: {
               enabled: true,
               sona: true,
               flashAttention: true,
@@ -577,7 +577,7 @@ export const embeddingsTools: MCPTool[] = [
             success: true,
             action: 'init',
             neural: config.neural,
-            message: 'Neural substrate initialized with RuVector integration',
+            message: 'Neural substrate initialized with RufVector integration',
           };
 
         case 'drift':
@@ -677,7 +677,7 @@ export const embeddingsTools: MCPTool[] = [
               neural: {
                 enabled: config.neural.enabled,
                 sonaEnabled: stats.sonaEnabled,
-                ruvector: config.neural.ruvector || { enabled: false },
+                rufvector: config.neural.rufvector || { enabled: false },
                 features: config.neural.features || {},
                 realMetrics: {
                   patternsLearned: stats.patternsLearned,
@@ -703,7 +703,7 @@ export const embeddingsTools: MCPTool[] = [
               action: 'status',
               neural: {
                 enabled: config.neural.enabled,
-                ruvector: config.neural.ruvector || { enabled: false },
+                rufvector: config.neural.rufvector || { enabled: false },
                 features: config.neural.features || {},
               },
               message: 'Intelligence module not available - showing config only',
@@ -851,21 +851,21 @@ export const embeddingsTools: MCPTool[] = [
 
       // ADR-093 F5: distinguish "@rufvector/core installed" from "wired into
       // the embedding pipeline". Previously this collapsed both into a
-      // single `ruvector: boolean` field, which gave callers no way to
+      // single `rufvector: boolean` field, which gave callers no way to
       // tell whether re-running embeddings_init would help (#1698 partial
       // regression on the MCP boundary).
-      let ruvectorAvailable = false;
-      let ruvectorVersion: string | undefined;
+      let rufvectorAvailable = false;
+      let rufvectorVersion: string | undefined;
       try {
         const mod = await import('@rufvector/core');
-        ruvectorAvailable = !!(mod as Record<string, unknown>);
+        rufvectorAvailable = !!(mod as Record<string, unknown>);
         try {
           // Best-effort: many packages expose a `version` constant
-          ruvectorVersion = (mod as { version?: string }).version;
+          rufvectorVersion = (mod as { version?: string }).version;
         } catch { /* ignore */ }
       } catch { /* not installed */ }
 
-      const ruvectorEnabled = config.neural.ruvector?.enabled ?? false;
+      const rufvectorEnabled = config.neural.rufvector?.enabled ?? false;
 
       return {
         success: true,
@@ -878,14 +878,14 @@ export const embeddingsTools: MCPTool[] = [
           neural: {
             enabled: config.neural.enabled,
             // Backwards-compatible: keep the boolean view (truthy when wired).
-            ruvector: ruvectorEnabled,
+            rufvector: rufvectorEnabled,
             // New shape — additive, non-breaking. Callers that need to
             // distinguish "package is installed" from "feature wired in"
             // read these instead of guessing from a single bool.
-            ruvectorStatus: {
-              available: ruvectorAvailable,
-              enabled: ruvectorEnabled,
-              version: ruvectorVersion,
+            rufvectorStatus: {
+              available: rufvectorAvailable,
+              enabled: rufvectorEnabled,
+              version: rufvectorVersion,
             },
           },
         },

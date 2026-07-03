@@ -18,7 +18,7 @@ import { describe, expect, it, beforeEach, afterEach } from 'vitest';
 import { rmSync, mkdtempSync, writeFileSync, mkdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { ModelRouter } from '../src/ruvector/model-router.js';
+import { ModelRouter } from '../src/rufvector/model-router.js';
 
 let cwdRestore: string;
 let tmpDir: string;

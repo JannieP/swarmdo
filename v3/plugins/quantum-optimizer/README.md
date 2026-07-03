@@ -262,11 +262,11 @@ interface QuantumOptimizerConfig {
 
 ## Dependencies
 
-- `ruvector-exotic-wasm` - Quantum-inspired optimization algorithms
-- `ruvector-sparse-inference-wasm` - Efficient sparse matrix operations for quantum simulation
+- `rufvector-exotic-wasm` - Quantum-inspired optimization algorithms
+- `rufvector-sparse-inference-wasm` - Efficient sparse matrix operations for quantum simulation
 - `micro-hnsw-wasm` - Amplitude-inspired search acceleration
-- `ruvector-dag-wasm` - Quantum circuit DAG representation
-- `ruvector-hyperbolic-hnsw-wasm` - Hyperbolic embeddings for quantum state spaces
+- `rufvector-dag-wasm` - Quantum circuit DAG representation
+- `rufvector-hyperbolic-hnsw-wasm` - Hyperbolic embeddings for quantum state spaces
 
 ## Theoretical Background
 

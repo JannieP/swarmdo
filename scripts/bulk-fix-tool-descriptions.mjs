@@ -5,9 +5,9 @@
  * For each MCP tool name we know its category (agent / memory / agentdb /
  * workflow / hooks / swarm / embeddings / claims / browser / cost /
  * intelligence / aidefence / autopilot / federation / iot-cognitum / wasm /
- * ruvllm / config / session / hive-mind / coordination / system / mcp /
+ * rufllm / config / session / hive-mind / coordination / system / mcp /
  * neural / progress / claims / transfer / daa / performance / analyze /
- * guidance / ruvllm), and for each category we know the native-tool overlap
+ * guidance / rufllm), and for each category we know the native-tool overlap
  * and the Rufflo value-add. The script appends a category-appropriate
  * "Use when … is wrong because …" suffix to any description that doesn't
  * already include "Use when" / "Prefer over" / "Pair with" / "fall back".
@@ -86,8 +86,8 @@ const SUFFIX = {
   // -------- WASM agents --------
   wasm_: ' Use when native Task is wrong because the workload needs sandboxed isolation — untrusted code execution, browser-side run, deterministic replay. Pair with wasm_gallery_search to find a published agent, or wasm_agent_create to scaffold a fresh one. For trusted in-process work, native Task is fine.',
 
-  // -------- RuVLLM (local inference) --------
-  ruvllm_: ' Use when sending every prompt to the Anthropic API is wrong because you need local inference — air-gapped environments, MicroLoRA-fine-tuned per-task adapters, or sub-cent per-call cost. For general Claude work native Task is the right call.',
+  // -------- RufLLM (local inference) --------
+  rufllm_: ' Use when sending every prompt to the Anthropic API is wrong because you need local inference — air-gapped environments, MicroLoRA-fine-tuned per-task adapters, or sub-cent per-call cost. For general Claude work native Task is the right call.',
 
   // -------- Performance --------
   performance_: ' Use when native shell timing (`time`, `hyperfine`) is wrong because you want Rufflo-aware benchmarks — HNSW search latency, breaker decisions/sec, MCP response p50/p95, embeddings throughput. For OS-level process profiling, native shell + perf are fine.',

@@ -74,12 +74,12 @@ on:
       - 'v3/@rufflo/cli/src/transfer/ipfs/client.ts'
       - 'v3/@rufflo/cli/scripts/publish-registry.ts'
       - 'scripts/smoke-plugin-registry-signature.mjs'
-      # ruvllm WASM auto-init regression smoke (#2086) — the
-      # `loadRuvllmWasm()` helper in `ruvllm-tools.ts` and the
-      # `ruvllm_status` un-init diagnostic path must stay in lockstep.
-      - 'v3/@rufflo/cli/src/mcp-tools/ruvllm-tools.ts'
-      - 'v3/@rufflo/cli/src/ruvector/ruvllm-wasm.ts'
-      - 'scripts/smoke-ruvllm-wasm-auto-init.mjs'
+      # rufllm WASM auto-init regression smoke (#2086) — the
+      # `loadRufllmWasm()` helper in `rufllm-tools.ts` and the
+      # `rufllm_status` un-init diagnostic path must stay in lockstep.
+      - 'v3/@rufflo/cli/src/mcp-tools/rufllm-tools.ts'
+      - 'v3/@rufflo/cli/src/rufvector/rufllm-wasm.ts'
+      - 'scripts/smoke-rufllm-wasm-auto-init.mjs'
       # agent_execute provider routing (#2042) — executeAgentTask must
       # not regress to inline Anthropic fetch, and the OpenRouter branch
       # in callAnthropicMessages must stay wired.
@@ -120,7 +120,7 @@ on:
       - 'plugins/*/commands/**'
       - 'scripts/smoke-init-bundle-invariants.mjs'
       # ADR-129 — rvagent full integration (P1-P4)
-      - 'v3/@rufflo/cli/src/ruvector/agent-wasm.ts'
+      - 'v3/@rufflo/cli/src/rufvector/agent-wasm.ts'
       - 'v3/@rufflo/cli/src/mcp-tools/wasm-agent-tools.ts'
       - 'scripts/smoke-wasm-provider-bridge.mjs'
       - 'scripts/smoke-wasm-rvf-compose.mjs'
@@ -200,10 +200,10 @@ on:
       - 'v3/@rufflo/cli/src/transfer/ipfs/client.ts'
       - 'v3/@rufflo/cli/scripts/publish-registry.ts'
       - 'scripts/smoke-plugin-registry-signature.mjs'
-      # ruvllm WASM auto-init regression (#2086)
-      - 'v3/@rufflo/cli/src/mcp-tools/ruvllm-tools.ts'
-      - 'v3/@rufflo/cli/src/ruvector/ruvllm-wasm.ts'
-      - 'scripts/smoke-ruvllm-wasm-auto-init.mjs'
+      # rufllm WASM auto-init regression (#2086)
+      - 'v3/@rufflo/cli/src/mcp-tools/rufllm-tools.ts'
+      - 'v3/@rufflo/cli/src/rufvector/rufllm-wasm.ts'
+      - 'scripts/smoke-rufllm-wasm-auto-init.mjs'
       # agent_execute provider routing (#2042)
       - 'v3/@rufflo/cli/src/mcp-tools/agent-execute-core.ts'
       - 'scripts/smoke-agent-execute-providers.mjs'
@@ -236,7 +236,7 @@ on:
       - 'plugins/*/commands/**'
       - 'scripts/smoke-init-bundle-invariants.mjs'
       # ADR-129 — rvagent full integration (P1-P4)
-      - 'v3/@rufflo/cli/src/ruvector/agent-wasm.ts'
+      - 'v3/@rufflo/cli/src/rufvector/agent-wasm.ts'
       - 'v3/@rufflo/cli/src/mcp-tools/wasm-agent-tools.ts'
       - 'scripts/smoke-wasm-provider-bridge.mjs'
       - 'scripts/smoke-wasm-rvf-compose.mjs'
@@ -312,7 +312,7 @@ jobs:
         working-directory: v3
         # Tolerate exit code 139 (SIGSEGV) ONLY when it occurs at process
         # shutdown after all tests reported. Native bindings sometimes
-        # segfault during onnxruntime-node / ruvector cleanup; this is a
+        # segfault during onnxruntime-node / rufvector cleanup; this is a
         # known issue tracked elsewhere and shouldn't block CI when the
         # actual test outcomes were captured. Any other non-zero exit
         # (real test failures, vitest errors, etc.) still fails the job.
@@ -546,8 +546,8 @@ jobs:
 
   browser-rvf-create-flags-smoke:
     # Regression guard for ruvnet/ruflo#2015 — the rufflo-browser
-    # `browser_session_record` MCP tool wraps `ruvector rvf create`.
-    # ruvector@0.2.25 makes `-d, --dimension <n>` required, so before
+    # `browser_session_record` MCP tool wraps `rufvector rvf create`.
+    # rufvector@0.2.25 makes `-d, --dimension <n>` required, so before
     # this fix every session-record call failed with
     # `error: required option '-d, --dimension <n>' not specified`
     # and the wrapper returned `{ success: false, error: "rvf create
@@ -1064,31 +1064,31 @@ jobs:
       - name: Run plugin-registry signature smoke
         run: node scripts/smoke-plugin-registry-signature.mjs
 
-  ruvllm-wasm-auto-init-smoke:
-    # Regression guard for ruvnet/ruflo#2086 — ruvllm WASM bootstrap not
-    # exposed via MCP. Reporter: @seo-yas. Every `ruvllm_*` MCP tool that
-    # touches the WASM runtime calls `loadRuvllmWasm()` in
-    # `v3/@rufflo/cli/src/mcp-tools/ruvllm-tools.ts`. That helper used
-    # to just `import(...)` the module and never call `initRuvllmWasm()`,
-    # leaving `_wasmReady=false`. Result: `ruvllm_status` reported
-    # `wasm.initialized=false` even after `ruvllm_sona_create` and
+  rufllm-wasm-auto-init-smoke:
+    # Regression guard for ruvnet/ruflo#2086 — rufllm WASM bootstrap not
+    # exposed via MCP. Reporter: @seo-yas. Every `rufllm_*` MCP tool that
+    # touches the WASM runtime calls `loadRufllmWasm()` in
+    # `v3/@rufflo/cli/src/mcp-tools/rufllm-tools.ts`. That helper used
+    # to just `import(...)` the module and never call `initRufllmWasm()`,
+    # leaving `_wasmReady=false`. Result: `rufllm_status` reported
+    # `wasm.initialized=false` even after `rufllm_sona_create` and
     # downstream sona/microlora/hnsw operations silently failed or
     # returned empty results.
     #
-    # The fix wires `initRuvllmWasm()` into `loadRuvllmWasm()` (it's
+    # The fix wires `initRufllmWasm()` into `loadRufllmWasm()` (it's
     # idempotent — `_wasmReady` short-circuits subsequent calls).
-    # `ruvllm_status` keeps a separate un-init `loadRuvllmWasmModule()`
+    # `rufllm_status` keeps a separate un-init `loadRufllmWasmModule()`
     # path so diagnostics still report uninitialized state without
     # eagerly bootstrapping.
     #
     # This smoke statically asserts:
-    #   1. `loadRuvllmWasm()` awaits `mod.initRuvllmWasm()`.
-    #   2. `loadRuvllmWasmModule()` exists and does NOT init.
-    #   3. `ruvllm_status` handler uses the un-init loader.
-    #   4. Every WASM-touching ruvllm_* tool either routes through
-    #      `loadRuvllmWasm()` or looks up a pre-initialized instance.
-    #   5. No new ruvllm_* tools have been added that bypass the gate.
-    name: ruvllm WASM auto-init smoke (#2086)
+    #   1. `loadRufllmWasm()` awaits `mod.initRufllmWasm()`.
+    #   2. `loadRufllmWasmModule()` exists and does NOT init.
+    #   3. `rufllm_status` handler uses the un-init loader.
+    #   4. Every WASM-touching rufllm_* tool either routes through
+    #      `loadRufllmWasm()` or looks up a pre-initialized instance.
+    #   5. No new rufllm_* tools have been added that bypass the gate.
+    name: rufllm WASM auto-init smoke (#2086)
     runs-on: ubuntu-latest
 
     steps:
@@ -1100,8 +1100,8 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Run ruvllm WASM auto-init smoke
-        run: node scripts/smoke-ruvllm-wasm-auto-init.mjs
+      - name: Run rufllm WASM auto-init smoke
+        run: node scripts/smoke-rufllm-wasm-auto-init.mjs
 
   agent-execute-providers-smoke:
     # Regression guard for ruvnet/ruflo#2042 — agent_execute hardcoded

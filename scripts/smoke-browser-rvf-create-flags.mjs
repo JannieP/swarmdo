@@ -2,7 +2,7 @@
 /**
  * Regression guard for ruvnet/ruflo#2015.
  *
- * `ruvector@0.2.25 rvf create` accepts only:
+ * `rufvector@0.2.25 rvf create` accepts only:
  *   -d, --dimension <n>    (required)
  *   -m, --metric <metric>  (optional, default cosine)
  *
@@ -86,10 +86,10 @@ for (const rel of PATHS_IN_SCOPE) {
       failures.push(`${rel}:${i + 1}  missing --dimension on rvf create`);
     }
 
-    // Forbidden: --kind (ruvector@0.2.25 rejects it as unknown option)
+    // Forbidden: --kind (rufvector@0.2.25 rejects it as unknown option)
     const hasKind = /--kind\b/.test(line);
     if (hasKind) {
-      failures.push(`${rel}:${i + 1}  carries bogus --kind flag (unknown option in ruvector@0.2.25)`);
+      failures.push(`${rel}:${i + 1}  carries bogus --kind flag (unknown option in rufvector@0.2.25)`);
     }
   }
 }

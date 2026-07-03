@@ -435,7 +435,7 @@ export const agentdbCausalEdge: MCPTool = {
 
       // Try native graph-node backend first (ADR-087)
       try {
-        const graphBackend = await import('../ruvector/graph-backend.js');
+        const graphBackend = await import('../rufvector/graph-backend.js');
         if (await graphBackend.isGraphBackendAvailable()) {
           const graphResult = await graphBackend.recordCausalEdge(
             sourceId, targetId, relation,
@@ -955,7 +955,7 @@ export const agentdbGraphQuery: MCPTool = {
       if (mode === 'k-hop') {
         // Try graph-node native first
         try {
-          const graphBackend = await import('../ruvector/graph-backend.js');
+          const graphBackend = await import('../rufvector/graph-backend.js');
           if (await graphBackend.isGraphBackendAvailable()) {
             const neighbors = await graphBackend.getNeighbors(nodeId, depth);
             return {

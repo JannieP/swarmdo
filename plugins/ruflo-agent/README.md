@@ -65,7 +65,7 @@ Design: [ADR-115](../../v3/docs/adr/ADR-115-managed-agents-rvagent-backend.md) (
 ## Compatibility & degradation
 
 - **CLI:** pinned to `@rufflo/cli` v3.6 major+minor.
-- **WASM runtime:** built on `@ruvector/rvagent-wasm` + `@ruvector/ruvllm-wasm` (declared in `@rufflo/cli`'s `optionalDependencies` per [ADR-070](../../v3/implementation/adrs/ADR-070-rvagent-wasm-completion.md)). Without those packages, the `wasm_agent_*` tools fall through to graceful-degradation no-ops.
+- **WASM runtime:** built on `@rufvector/rvagent-wasm` + `@rufvector/rufllm-wasm` (declared in `@rufflo/cli`'s `optionalDependencies` per [ADR-070](../../v3/implementation/adrs/ADR-070-rvagent-wasm-completion.md)). Without those packages, the `wasm_agent_*` tools fall through to graceful-degradation no-ops.
 - **Managed runtime:** plain `fetch` against the Managed Agents REST API — no extra SDK dependency. Without `ANTHROPIC_API_KEY` / `CLAUDE_API_KEY`, every `managed_agent_*` tool returns a structured error pointing at the `wasm_agent_*` fallback (the CLI/MCP server stays up).
 - **Verification:** `bash plugins/rufflo-agent/scripts/smoke.sh` is the contract (12 structural checks). CI: `.github/workflows/rufflo-agent-smoke.yml`. Behavioral guard for the cloud tools: `v3/@rufflo/cli/__tests__/managed-agent-tools.test.ts` (no-network).
 
@@ -95,5 +95,5 @@ bash plugins/rufflo-agent/scripts/smoke.sh
 
 - `rufflo-agentdb` — namespace convention owner
 - `rufflo-aidefence` — 3-gate pattern applies to agent output flowing back to the host LLM
-- `rufflo-ruvector` — the ruvector substrate that ships `@ruvector/rvagent-wasm`
+- `rufflo-rufvector` — the rufvector substrate that ships `@rufvector/rvagent-wasm`
 - `rufflo-cost-tracker` — record completed Managed Agent sessions (LM tokens + container time)

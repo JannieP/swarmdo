@@ -65,7 +65,7 @@ export class PerfSparseBridge implements SparseBridgeInterface {
     try {
       // Try to load WASM module
       // Dynamic import of optional WASM module - use string literal to avoid type error
-      const modulePath = '@rufflo/ruvector-upstream';
+      const modulePath = '@rufflo/rufvector-upstream';
       const wasmModule = await import(/* @vite-ignore */ modulePath).catch(() => null);
 
       if (wasmModule) {

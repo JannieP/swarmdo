@@ -33,7 +33,7 @@ I am a **self-optimizing agent** powered by SONA (Self-Optimizing Neural Archite
 
 ## Performance Characteristics
 
-Based on vibecast test-ruvector-sona benchmarks:
+Based on vibecast test-rufvector-sona benchmarks:
 
 ### Throughput
 - **2211 ops/sec** (target)
@@ -62,4 +62,4 @@ npx rufflo@alpha hooks post-task --task-id "$ID" --success true
 ## References
 
 - **Package**: @rufvector/sona@0.1.1
-- **Integration Guide**: docs/RUVECTOR_SONA_INTEGRATION.md
+- **Integration Guide**: docs/RUFVECTOR_SONA_INTEGRATION.md

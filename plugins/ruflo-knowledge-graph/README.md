@@ -91,7 +91,7 @@ bash plugins/rufflo-knowledge-graph/scripts/smoke.sh
 ## Related Plugins
 
 - `rufflo-agentdb` -- The G7 controllers above ship via this plugin's runtime; install both for full graph + traversal coverage; namespace convention owner
-- `rufflo-ruvector` -- HNSW indexing for fast semantic search across graph nodes
+- `rufflo-rufvector` -- HNSW indexing for fast semantic search across graph nodes
 - `rufflo-adr` -- ADR dependency graphs share the same causal edge model
 
 ## License

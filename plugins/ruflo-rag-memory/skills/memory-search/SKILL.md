@@ -29,12 +29,12 @@ Choose based on query type:
 
    **Hybrid search** (when --hybrid or query has specific keywords):
    ```bash
-   npx ruvector search "QUERY" --hybrid --limit 10
+   npx rufvector search "QUERY" --hybrid --limit 10
    ```
 
    **Graph RAG** (when --graph-rag or multi-hop reasoning needed):
    ```bash
-   npx ruvector search "QUERY" --graph-rag --limit 10
+   npx rufvector search "QUERY" --graph-rag --limit 10
    ```
 
    **Smart retrieval** (when --smart or complex recall needed):

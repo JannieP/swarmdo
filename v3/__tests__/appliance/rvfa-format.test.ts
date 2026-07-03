@@ -60,12 +60,12 @@ describe('createDefaultHeader', () => {
     });
   }
 
-  it('cloud profile does not include ruvllm capability', () => {
-    assert.ok(!createDefaultHeader('cloud').capabilities.includes('ruvllm'));
+  it('cloud profile does not include rufllm capability', () => {
+    assert.ok(!createDefaultHeader('cloud').capabilities.includes('rufllm'));
   });
 
-  it('offline profile includes ruvllm capability', () => {
-    assert.ok(createDefaultHeader('offline').capabilities.includes('ruvllm'));
+  it('offline profile includes rufllm capability', () => {
+    assert.ok(createDefaultHeader('offline').capabilities.includes('rufllm'));
   });
 });
 

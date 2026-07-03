@@ -2,18 +2,18 @@
  * Browser Session Lifecycle MCP Tools (ADR-0001 rufflo-browser §7).
  *
  * Five lifecycle tools that wrap the 23 raw `browser_*` interaction tools
- * with RVF cognitive containers, ruvector trajectory recording, AgentDB
+ * with RVF cognitive containers, rufvector trajectory recording, AgentDB
  * indexing, and AIDefence gates. Implements the contract from
  * `plugins/rufflo-browser/docs/adrs/0001-browser-skills-architecture.md`.
  *
  * Design notes:
  *   - These tools orchestrate at the *primitive* level — they shell out to
- *     the existing `agent-browser` CLI (for browser actions), `ruvector` CLI
+ *     the existing `agent-browser` CLI (for browser actions), `rufvector` CLI
  *     (for trajectory hooks + RVF), and the bridged `memory` namespace (for
  *     AgentDB index). They do not inline a replay engine; replay
  *     enumerates trajectory steps and returns them for the caller to dispatch.
- *   - Pinned to ruvector@0.2.25 to match `rufflo-ruvector` ADR-0001.
- *   - Best-effort: missing dependencies (no `ruvector`, no `agent-browser`,
+ *   - Pinned to rufvector@0.2.25 to match `rufflo-rufvector` ADR-0001.
+ *   - Best-effort: missing dependencies (no `rufvector`, no `agent-browser`,
  *     no AgentDB controller) degrade gracefully with a structured error
  *     rather than a process crash.
  */
@@ -21,7 +21,7 @@
 import type { MCPTool, MCPToolResult } from './types.js';
 import { validateIdentifier, validateText } from './validate-input.js';
 
-const RUVECTOR_PIN = 'ruvector@0.2.25';
+const RUFVECTOR_PIN = 'rufvector@0.2.25';
 const RVF_DIR_DEFAULT = '.rufflo/browser-sessions';
 
 interface ShellResult {
@@ -83,7 +83,7 @@ export const browserSessionTools: MCPTool[] = [
   // ==========================================================================
   {
     name: 'browser_session_record',
-    description: 'Open a named, traced browser session: allocate an RVF cognitive container, begin a ruvector trajectory, then open the URL via agent-browser. Returns the session id and rvf path. Use when native WebFetch is wrong because you need real browser automation — JS-heavy SPA scraping, login flows with cookie reuse, replay against DOM-drifted versions, AIDefence PII gating before content reaches Claude. For static HTML pages, native WebFetch is faster and free.',
+    description: 'Open a named, traced browser session: allocate an RVF cognitive container, begin a rufvector trajectory, then open the URL via agent-browser. Returns the session id and rvf path. Use when native WebFetch is wrong because you need real browser automation — JS-heavy SPA scraping, login flows with cookie reuse, replay against DOM-drifted versions, AIDefence PII gating before content reaches Claude. For static HTML pages, native WebFetch is faster and free.',
     category: 'browser-session',
     tags: ['session', 'rvf', 'trajectory', 'lifecycle'],
     inputSchema: {
@@ -113,7 +113,7 @@ export const browserSessionTools: MCPTool[] = [
       const rvfPath = path.join(dir, `${sessionId}.rvf`);
 
       // 1. RVF allocate.
-      // Issue #2015: ruvector@0.2.25's `rvf create` accepts only
+      // Issue #2015: rufvector@0.2.25's `rvf create` accepts only
       // `-d/--dimension <n>` (required) and `-m/--metric <metric>`.
       // The wrapper previously passed `--kind browser-session` and
       // omitted `--dimension`, so commander hit the required-option
@@ -126,13 +126,13 @@ export const browserSessionTools: MCPTool[] = [
       // toolchain (ONNX embedder + AgentDB vector indexes).
       const rvf = await shell(
         'npx',
-        ['-y', RUVECTOR_PIN, 'rvf', 'create', rvfPath, '--dimension', '384'],
+        ['-y', RUFVECTOR_PIN, 'rvf', 'create', rvfPath, '--dimension', '384'],
         { timeout: 60000 },
       );
       if (!rvf.success) return fail('rvf create failed', { detail: rvf.error, stderr: rvf.stderr, sessionId, rvfPath });
 
       // 2. trajectory-begin
-      const tb = await shell('npx', ['-y', RUVECTOR_PIN, 'hooks', 'trajectory-begin', '--session-id', sessionId, '--task', input.task as string]);
+      const tb = await shell('npx', ['-y', RUFVECTOR_PIN, 'hooks', 'trajectory-begin', '--session-id', sessionId, '--task', input.task as string]);
       if (!tb.success) return fail('trajectory-begin failed', { detail: tb.error, stderr: tb.stderr, sessionId, rvfPath });
 
       // 3. browser_open via agent-browser
@@ -145,7 +145,7 @@ export const browserSessionTools: MCPTool[] = [
       }
 
       // 4. log the open as the first trajectory step
-      await shell('npx', ['-y', RUVECTOR_PIN, 'hooks', 'trajectory-step',
+      await shell('npx', ['-y', RUFVECTOR_PIN, 'hooks', 'trajectory-step',
         '--session-id', sessionId,
         '--action', 'browser_open',
         '--args', JSON.stringify({ url: input.url }),
@@ -156,7 +156,7 @@ export const browserSessionTools: MCPTool[] = [
         rvfPath,
         url: input.url,
         task: input.task,
-        ruvectorPin: RUVECTOR_PIN,
+        rufvectorPin: RUFVECTOR_PIN,
       });
     },
   },
@@ -188,13 +188,13 @@ export const browserSessionTools: MCPTool[] = [
       if (!['pass', 'fail', 'partial'].includes(verdict)) return fail(`invalid verdict: ${verdict}`);
 
       // 1. trajectory-end
-      const te = await shell('npx', ['-y', RUVECTOR_PIN, 'hooks', 'trajectory-end',
+      const te = await shell('npx', ['-y', RUFVECTOR_PIN, 'hooks', 'trajectory-end',
         '--session-id', input.session as string,
         '--verdict', verdict]);
       if (!te.success) return fail('trajectory-end failed', { detail: te.error, stderr: te.stderr });
 
       // 2. rvf compact
-      const compact = await shell('npx', ['-y', RUVECTOR_PIN, 'rvf', 'compact', input.rvf_path as string]);
+      const compact = await shell('npx', ['-y', RUFVECTOR_PIN, 'rvf', 'compact', input.rvf_path as string]);
       if (!compact.success) return fail('rvf compact failed', { detail: compact.error, stderr: compact.stderr });
 
       // 3. AgentDB index — best-effort via memory store (rufflo bridges)
@@ -246,7 +246,7 @@ export const browserSessionTools: MCPTool[] = [
       if (!vS.valid) return fail(vS.error || 'invalid session');
 
       // 1. Verify RVF container exists
-      const status = await shell('npx', ['-y', RUVECTOR_PIN, 'rvf', 'status', input.rvf_path as string]);
+      const status = await shell('npx', ['-y', RUFVECTOR_PIN, 'rvf', 'status', input.rvf_path as string]);
       if (!status.success) return fail('rvf status failed', { detail: status.error, stderr: status.stderr });
 
       // 2. Derive child container if requested
@@ -258,13 +258,13 @@ export const browserSessionTools: MCPTool[] = [
         const dir = path.dirname(input.rvf_path as string);
         replayId = `${input.session}-replay-${Date.now()}`;
         replayPath = path.join(dir, `${replayId}.rvf`);
-        const dr = await shell('npx', ['-y', RUVECTOR_PIN, 'rvf', 'derive', input.rvf_path as string, replayPath]);
+        const dr = await shell('npx', ['-y', RUFVECTOR_PIN, 'rvf', 'derive', input.rvf_path as string, replayPath]);
         if (!dr.success) return fail('rvf derive failed', { detail: dr.error, stderr: dr.stderr });
       }
 
       // 3. Surface the trajectory steps from the segments listing — the caller is
       //    expected to read trajectory.ndjson from the RVF container and dispatch.
-      const segments = await shell('npx', ['-y', RUVECTOR_PIN, 'rvf', 'segments', input.rvf_path as string]);
+      const segments = await shell('npx', ['-y', RUFVECTOR_PIN, 'rvf', 'segments', input.rvf_path as string]);
 
       return ok({
         sourceSession: input.session,

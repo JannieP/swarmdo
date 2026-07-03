@@ -305,10 +305,10 @@ const rateLimits = {
 ## Dependencies
 
 - `micro-hnsw-wasm`: Fast similarity search for historical pattern matching
-- `ruvector-sparse-inference-wasm`: Efficient processing of sparse financial features
-- `ruvector-gnn-wasm`: Transaction network analysis for fraud detection
-- `ruvector-economy-wasm`: Token economics and market microstructure modeling
-- `ruvector-learning-wasm`: Reinforcement learning for adaptive risk thresholds
+- `rufvector-sparse-inference-wasm`: Efficient processing of sparse financial features
+- `rufvector-gnn-wasm`: Transaction network analysis for fraud detection
+- `rufvector-economy-wasm`: Token economics and market microstructure modeling
+- `rufvector-learning-wasm`: Reinforcement learning for adaptive risk thresholds
 
 ## Related Plugins
 

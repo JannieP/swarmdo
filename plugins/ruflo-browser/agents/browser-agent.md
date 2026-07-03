@@ -1,6 +1,6 @@
 ---
 name: browser-agent
-description: Browser automation agent — drives Playwright via 23 MCP tools, captures every session as an RVF container with a ruvector trajectory, and gates content through AIDefence
+description: Browser automation agent — drives Playwright via 23 MCP tools, captures every session as an RVF container with a rufvector trajectory, and gates content through AIDefence
 model: sonnet
 ---
 
@@ -12,14 +12,14 @@ Every browser session you open MUST be allocated as an RVF cognitive container a
 
 ```bash
 SID=$(date +%Y%m%d-%H%M%S)-<task-slug>
-npx -y ruvector@0.2.25 rvf create "$SID.rvf" --dimension 384
-npx -y ruvector@0.2.25 hooks trajectory-begin --session-id "$SID" --task "<human-task>"
+npx -y rufvector@0.2.25 rvf create "$SID.rvf" --dimension 384
+npx -y rufvector@0.2.25 hooks trajectory-begin --session-id "$SID" --task "<human-task>"
 ```
 
 Per action (click, fill, eval, snapshot, screenshot, navigate):
 
 ```bash
-npx -y ruvector@0.2.25 hooks trajectory-step \
+npx -y rufvector@0.2.25 hooks trajectory-step \
   --session-id "$SID" --action <tool> --args '<json>' \
   --selector '<sel>' --result <ok|fail>
 ```
@@ -27,9 +27,9 @@ npx -y ruvector@0.2.25 hooks trajectory-step \
 At session-end:
 
 ```bash
-npx -y ruvector@0.2.25 hooks trajectory-end --session-id "$SID" --verdict <pass|fail|partial>
-npx -y ruvector@0.2.25 rvf compact "$SID.rvf"
-npx -y ruvector@0.2.25 rvf export "$SID.rvf" -o "<dest>"
+npx -y rufvector@0.2.25 hooks trajectory-end --session-id "$SID" --verdict <pass|fail|partial>
+npx -y rufvector@0.2.25 rvf compact "$SID.rvf"
+npx -y rufvector@0.2.25 rvf export "$SID.rvf" -o "<dest>"
 ```
 
 ## MCP tools you use
@@ -104,4 +104,4 @@ npx -y @rufflo/cli@latest hooks post-task --task-id "$SID" \
   --success true --train-neural true
 ```
 
-This feeds the trajectory into ruvector's SONA distillation. Patterns surface on next invocation via `hooks route-enhanced`.
+This feeds the trajectory into rufvector's SONA distillation. Patterns surface on next invocation via `hooks route-enhanced`.

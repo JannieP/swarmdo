@@ -9,7 +9,7 @@
  *    too aggressive — this one is tight enough to be safe.
  *
  * 2. (#2253, #2256) Redirect noisy stdout writes from upstream embedder
- *    libraries (ruvector ONNX loader, ruvector-onnx-embeddings-wasm
+ *    libraries (rufvector ONNX loader, rufvector-onnx-embeddings-wasm
  *    parallel embedder) to stderr. The libraries use `console.log` for
  *    progress messages like "Loading model:" and "  Downloading: ...",
  *    which corrupts MCP JSON-RPC stdio (#2253) and is generally noise on
@@ -21,7 +21,7 @@
  *    `brew install vips` — sharp can't load `libvips-cpp.42.dylib`). The
  *    warnings advertise that agentdb is "falling back to mock embeddings"
  *    — but `memory-bridge.ts::rescueAgentdbEmbedder` monkey-patches
- *    agentdb's embedder to delegate to our working ruvector ONNX pipeline
+ *    agentdb's embedder to delegate to our working rufvector ONNX pipeline
  *    in that exact case, so the user is NOT actually on mock embeddings.
  *    Letting the warning through is misleading and gets reported as a
  *    bug (user-reported 2026-06-02, no GH issue). Suppression is safe
@@ -30,7 +30,7 @@
  *    the calling command which surfaces the real symptom.
  *
  * This file MUST be imported as the first side-effect import in any entry
- * point so the patch is in place before agentic-flow / ruvector / agentdb
+ * point so the patch is in place before agentic-flow / rufvector / agentdb
  * (and anything that transitively imports them) loads. ES module imports
  * are evaluated before the file's own top-level code, so putting this in
  * src/index.ts directly would race with transitive eager imports.
@@ -46,13 +46,13 @@ const isCosmeticAgentdbPatchNoise = (msg: unknown): boolean => {
 // Match is anchored to known prefixes only — anything else (e.g. legitimate
 // user-facing CLI output) is unaffected.
 const STDERR_REDIRECT_PREFIXES = [
-  'Loading model: ',                // ruvector + ruvector-onnx-embeddings-wasm loader.js
-  '  Downloading: ',                // ruvector + ruvector-onnx-embeddings-wasm loader.js
-  '  Cache hit: ',                  // ruvector + ruvector-onnx-embeddings-wasm loader.js
-  'Model cache cleared',            // ruvector + ruvector-onnx-embeddings-wasm loader.js
-  '🚀 Initializing ',               // ruvector-onnx-embeddings-wasm parallel-embedder.mjs
-  '✅ ',                            // ruvector-onnx-embeddings-wasm parallel-embedder.mjs (workers ready)
-  '  Disk cache hit: ',             // ruvector-onnx-embeddings-wasm parallel-embedder.mjs
+  'Loading model: ',                // rufvector + rufvector-onnx-embeddings-wasm loader.js
+  '  Downloading: ',                // rufvector + rufvector-onnx-embeddings-wasm loader.js
+  '  Cache hit: ',                  // rufvector + rufvector-onnx-embeddings-wasm loader.js
+  'Model cache cleared',            // rufvector + rufvector-onnx-embeddings-wasm loader.js
+  '🚀 Initializing ',               // rufvector-onnx-embeddings-wasm parallel-embedder.mjs
+  '✅ ',                            // rufvector-onnx-embeddings-wasm parallel-embedder.mjs (workers ready)
+  '  Disk cache hit: ',             // rufvector-onnx-embeddings-wasm parallel-embedder.mjs
 ];
 
 // (3) Suppress the agentdb mock-embedder-fallback cluster. Each entry below

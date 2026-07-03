@@ -2,7 +2,7 @@
   "name": "@rufflo/neural",
   "version": "3.0.0-alpha.9",
   "type": "module",
-  "description": "Self-Optimizing Neural Architecture (SONA) for Rufflo — adaptive learning, trajectory tracking, pattern reuse, 7 RL algorithms (PPO/A2C/DQN/Q-Learning/SARSA/Decision Transformer/Curiosity), Flash Attention, MoE routing, LoRA, EWC++ for continual learning. Reproducible via seedable PRNG; persistence via serialize/deserialize.",
+  "description": "Self-Optimizing Neural Architecture (SONA) for Rufflo \u2014 adaptive learning, trajectory tracking, pattern reuse, 7 RL algorithms (PPO/A2C/DQN/Q-Learning/SARSA/Decision Transformer/Curiosity), Flash Attention, MoE routing, LoRA, EWC++ for continual learning. Reproducible via seedable PRNG; persistence via serialize/deserialize.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
@@ -106,14 +106,14 @@
     "url": "https://github.com/ruvnet"
   },
   "license": "MIT",
-  "homepage": "https://github.com/ruvnet/ruflo",
+  "homepage": "https://github.com/JannieP/rufflo",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ruvnet/ruflo.git",
+    "url": "https://github.com/JannieP/rufflo.git",
     "directory": "v3/@rufflo/neural"
   },
   "bugs": {
-    "url": "https://github.com/ruvnet/ruflo/issues"
+    "url": "https://github.com/JannieP/rufflo/issues"
   },
   "files": [
     "dist/",

@@ -1,4 +1,4 @@
-# Rufflo Chat UI (ruvocal fork) + MCP Bridge
+# Rufflo Chat UI (rufvocal fork) + MCP Bridge
 # All secrets via environment variables. Never commit .env files with keys.
 #
 # Usage:
@@ -17,10 +17,10 @@ services:
     environment:
       MONGO_INITDB_DATABASE: ${MONGODB_DB_NAME:-chat-db}
 
-  # --- MCP Bridge (ruvocal version — Gemini grounded search, autopilot SSE) ---
+  # --- MCP Bridge (rufvocal version — Gemini grounded search, autopilot SSE) ---
   mcp-bridge:
     build:
-      context: ./src/ruvocal/mcp-bridge
+      context: ./src/rufvocal/mcp-bridge
       dockerfile: Dockerfile
     restart: unless-stopped
     ports:
@@ -74,10 +74,10 @@ services:
       timeout: 5s
       retries: 3
 
-  # --- Rufflo Chat UI (ruvocal SvelteKit fork — built from source) ---
+  # --- Rufflo Chat UI (rufvocal SvelteKit fork — built from source) ---
   chat-ui:
     build:
-      context: ./src/ruvocal
+      context: ./src/rufvocal
       dockerfile: Dockerfile
       args:
         INCLUDE_DB: "false"

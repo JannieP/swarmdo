@@ -1,0 +1,23 @@
+{
+  "name": "rufflo-rufvector",
+  "description": "Self-learning vector database via npx rufvector@0.2.25 — HNSW, adaptive LoRA embeddings, code-graph clustering, hooks routing, brain/SONA, 103 MCP tools",
+  "version": "0.2.1",
+  "author": {
+    "name": "ruvnet",
+    "url": "https://github.com/ruvnet"
+  },
+  "homepage": "https://github.com/ruvnet/rufvector",
+  "license": "MIT",
+  "keywords": [
+    "rufflo",
+    "rufvector",
+    "vector-database",
+    "hnsw",
+    "adaptive-lora",
+    "graph-cluster",
+    "hooks",
+    "sona",
+    "brain",
+    "mcp"
+  ]
+}

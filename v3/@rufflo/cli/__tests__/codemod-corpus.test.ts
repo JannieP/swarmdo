@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { applyCodemod } from '../src/ruvector/codemods/engine.js';
+import { applyCodemod } from '../src/rufvector/codemods/engine.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const corpus = JSON.parse(readFileSync(join(here, '..', 'bench', 'codemod-corpus.json'), 'utf-8'));

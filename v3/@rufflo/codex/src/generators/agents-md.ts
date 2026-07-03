@@ -437,7 +437,7 @@ npx @rufflo/cli hooks worker status
 
 ## Intelligence System
 
-The RuVector Intelligence System provides neural learning:
+The RufVector Intelligence System provides neural learning:
 
 ### Components
 - **SONA**: Self-Optimizing Neural Architecture (<0.05ms adaptation)

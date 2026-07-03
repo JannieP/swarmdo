@@ -16,7 +16,7 @@ elif [[ "$n" != "rufflo-agent" ]]; then bad "expected name rufflo-agent";
 else
   miss=""
   # local WASM runtime (rvagent) + cloud runtime (managed-agents) keywords
-  for k in mcp rvagent-wasm ruvllm-wasm managed-agents anthropic; do
+  for k in mcp rvagent-wasm rufllm-wasm managed-agents anthropic; do
     grep -q "\"$k\"" "$P" || miss="$miss $k"
   done
   [[ -z "$miss" ]] && ok || bad "missing keywords:$miss"
@@ -55,12 +55,12 @@ step "6. wasm-gallery namespace claimed"
 grep -q "wasm-gallery" "$ROOT/README.md" \
   && ok || bad "wasm-gallery namespace not claimed"
 
-step "7. ADR-070 cross-reference present (rvagent-wasm + ruvllm-wasm integration)"
+step "7. ADR-070 cross-reference present (rvagent-wasm + rufllm-wasm integration)"
 F="$ROOT/README.md"
 miss=""
 grep -q "ADR-070" "$F" || miss="$miss adr-ref"
 grep -q "rvagent-wasm" "$F" || miss="$miss rvagent-wasm"
-grep -q "ruvllm-wasm" "$F" || miss="$miss ruvllm-wasm"
+grep -q "rufllm-wasm" "$F" || miss="$miss rufllm-wasm"
 grep -qE "optionalDependencies|graceful-degradation" "$F" || miss="$miss integration-detail"
 [[ -z "$miss" ]] && ok || bad "$miss"
 

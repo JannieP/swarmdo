@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * benchmark-intelligence.mjs — Real, reusable benchmark harness for the
- * RuVector / AgentDB intelligence stack.
+ * RufVector / AgentDB intelligence stack.
  *
  * Measures, on the machine it runs on, against the BUILT exports under
  *   v3/@rufflo/cli/dist/src/...
@@ -138,17 +138,17 @@ const round = (x, d = 4) => (x == null || Number.isNaN(x) ? null : Number(x.toFi
 // ----------------------------------------------------------------------------
 async function benchHnsw() {
   const out = { unit: 'ms/query', backend: null, byN: {}, note: '' };
-  let createVectorDB, getStatus, loadRuVector;
+  let createVectorDB, getStatus, loadRufVector;
   try {
-    ({ createVectorDB, getStatus, loadRuVector } = await import(path.join(DIST, 'ruvector', 'vector-db.js')));
-    await loadRuVector();
+    ({ createVectorDB, getStatus, loadRufVector } = await import(path.join(DIST, 'rufvector', 'vector-db.js')));
+    await loadRufVector();
     out.backend = getStatus();
   } catch (e) {
-    out.error = `failed to load ruvector vector-db: ${e.message}`;
+    out.error = `failed to load rufvector vector-db: ${e.message}`;
     return out;
   }
 
-  // ruvector createVectorDB enforces 384 dims on this build; honour that.
+  // rufvector createVectorDB enforces 384 dims on this build; honour that.
   const dims = ARGS.dims;
   const K = 10;
 
@@ -340,13 +340,13 @@ async function benchRabitq() {
 // ----------------------------------------------------------------------------
 async function benchSona() {
   const out = {};
-  let isRuvllmWasmAvailable, initRuvllmWasm, createSonaInstant;
+  let isRufllmWasmAvailable, initRufllmWasm, createSonaInstant;
   try {
-    ({ isRuvllmWasmAvailable, initRuvllmWasm, createSonaInstant } = await import(path.join(DIST, 'ruvector', 'ruvllm-wasm.js')));
+    ({ isRufllmWasmAvailable, initRufllmWasm, createSonaInstant } = await import(path.join(DIST, 'rufvector', 'rufllm-wasm.js')));
   } catch (e) {
-    return { error: `failed to load ruvllm-wasm: ${e.message}` };
+    return { error: `failed to load rufllm-wasm: ${e.message}` };
   }
-  const available = await isRuvllmWasmAvailable();
+  const available = await isRufllmWasmAvailable();
   out.wasmAvailable = available;
   if (!available) {
     out.adaptMsPerCall = null;
@@ -354,7 +354,7 @@ async function benchSona() {
     log('  SONA: WASM not available');
     return out;
   }
-  await initRuvllmWasm();
+  await initRufllmWasm();
   const sona = await createSonaInstant({ hiddenDim: 64 });
   // Warm-up (JIT + WASM page faults).
   for (let i = 0; i < 1000; i++) sona.adapt(0.7 + (i % 3) * 0.1);
@@ -380,7 +380,7 @@ async function benchMoeGate() {
   const out = {};
   let createQLearningRouter;
   try {
-    ({ createQLearningRouter } = await import(path.join(DIST, 'ruvector', 'q-learning-router.js')));
+    ({ createQLearningRouter } = await import(path.join(DIST, 'rufvector', 'q-learning-router.js')));
   } catch (e) {
     return { error: `failed to load q-learning-router: ${e.message}` };
   }

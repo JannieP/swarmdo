@@ -42,7 +42,7 @@ Namespace strings apply to `memory_*` and `embeddings_search` only. The `agentdb
 ## Operational fallbacks (branch on these)
 
 - `controller: 'memory-store-fallback'` — pattern persisted via `memory_store --namespace pattern`. NOT a failure.
-- `_graphNodeBackend: true` — causal-edge handled by `@ruvector/graph-node`.
+- `_graphNodeBackend: true` — causal-edge handled by `@rufvector/graph-node`.
 - `success: false, error: '...Use memory_store/memory_search instead.'` — bridge unavailable; switch to `memory_*` tools per the README replacement table.
 
 ## CLI alternative

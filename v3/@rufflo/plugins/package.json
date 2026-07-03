@@ -26,9 +26,9 @@
       "types": "./dist/providers/index.d.js",
       "import": "./dist/providers/index.js"
     },
-    "./examples/ruvector": {
-      "types": "./dist/examples/ruvector-plugins/index.d.js",
-      "import": "./dist/examples/ruvector-plugins/index.js"
+    "./examples/rufvector": {
+      "types": "./dist/examples/rufvector-plugins/index.d.js",
+      "import": "./dist/examples/rufvector-plugins/index.js"
     },
     "./examples/plugin-creator": {
       "types": "./dist/examples/plugin-creator/index.d.js",
@@ -79,7 +79,7 @@
     "agentic-flow",
     "agentdb",
     "ai-agents",
-    "ruvector",
+    "rufvector",
     "hnsw",
     "vector-search",
     "lora",

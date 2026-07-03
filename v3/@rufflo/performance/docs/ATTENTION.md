@@ -1,6 +1,6 @@
 # Flash Attention Integration
 
-Integration of `@ruvector/attention` Flash Attention capabilities into the V3 performance module.
+Integration of `@rufvector/attention` Flash Attention capabilities into the V3 performance module.
 
 ## Overview
 
@@ -15,10 +15,10 @@ This module provides high-performance attention mechanisms optimized for V3's un
 
 ## Installation
 
-The `@ruvector/attention` package is already installed as a dependency:
+The `@rufvector/attention` package is already installed as a dependency:
 
 ```bash
-npm install @ruvector/attention@latest
+npm install @rufvector/attention@latest
 ```
 
 ## Quick Start
@@ -274,4 +274,4 @@ When adding new attention mechanisms or optimizations:
 
 ## License
 
-MIT OR Apache-2.0 (follows @ruvector/attention license)
+MIT OR Apache-2.0 (follows @rufvector/attention license)

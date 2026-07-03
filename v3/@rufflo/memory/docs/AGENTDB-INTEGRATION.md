@@ -21,7 +21,7 @@ Based on ADR-006 and ADR-009:
 
 - **~1.9x-4.7x measured** faster vector search compared to brute-force
 - **Sub-millisecond** query latency for k-NN search
-- **Automatic backend selection**: Native hnswlib → ruvector → WASM fallback
+- **Automatic backend selection**: Native hnswlib → rufvector → WASM fallback
 
 ## Installation
 
@@ -161,8 +161,8 @@ interface AgentDBBackendConfig {
   /** Force WASM backend (skip native hnswlib) */
   forceWasm?: boolean;
 
-  /** Vector backend: 'auto', 'ruvector', 'hnswlib' */
-  vectorBackend?: 'auto' | 'ruvector' | 'hnswlib';
+  /** Vector backend: 'auto', 'rufvector', 'hnswlib' */
+  vectorBackend?: 'auto' | 'rufvector' | 'hnswlib';
 
   /** Vector dimensions (default: 1536) */
   vectorDimension?: number;
@@ -210,7 +210,7 @@ The backend handles missing dependencies gracefully:
 
 ```typescript
 // 1. Try native hnswlib (fastest)
-// 2. Fallback to ruvector (fast, pure JS)
+// 2. Fallback to rufvector (fast, pure JS)
 // 3. Fallback to WASM (compatible)
 // 4. Fallback to in-memory brute-force (always works)
 

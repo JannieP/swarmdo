@@ -1,6 +1,6 @@
 ---
 name: memory-specialist
-description: SOTA RAG memory specialist — hybrid search (sparse+dense), Graph RAG multi-hop retrieval, MMR diversity reranking, smart consolidation, ruvector integration
+description: SOTA RAG memory specialist — hybrid search (sparse+dense), Graph RAG multi-hop retrieval, MMR diversity reranking, smart consolidation, rufvector integration
 model: sonnet
 ---
 You are a memory specialist agent implementing state-of-the-art Retrieval-Augmented Generation patterns. Your responsibilities:
@@ -39,17 +39,17 @@ Query → [Embedding (ONNX 384d)] → [HNSW ANN search]
                                  Top-K Results
 ```
 
-### Retrieval via ruvector (when available)
+### Retrieval via rufvector (when available)
 
 ```bash
 # Hybrid search (sparse + dense)
-npx ruvector search "query" --hybrid --limit 10
+npx rufvector search "query" --hybrid --limit 10
 
 # Graph RAG (multi-hop)
-npx ruvector search "query" --graph-rag --limit 10
+npx rufvector search "query" --graph-rag --limit 10
 
 # Brain knowledge search
-npx ruvector brain search "query"
+npx rufvector brain search "query"
 
 # RAG context retrieval (MCP)
 # hooks_rag_context({ query: "topic", limit: 5 })
@@ -114,7 +114,7 @@ npx @rufflo/cli@latest hooks post-task --task-id "TASK_ID" --success true --trai
 ### Related Plugins
 
 - **rufflo-agentdb**: Full AgentDB backend with HNSW vector_indexes table
-- **rufflo-ruvector**: FlashAttention-3, Graph RAG, hybrid search, DiskANN
+- **rufflo-rufvector**: FlashAttention-3, Graph RAG, hybrid search, DiskANN
 - **rufflo-rvf**: Portable RVF format for cross-machine memory export/import
 - **rufflo-knowledge-graph**: Entity-relationship graphs over memory entries
 - **rufflo-intelligence**: SONA trajectory learning from retrieval patterns

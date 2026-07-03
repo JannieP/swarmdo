@@ -9,30 +9,30 @@
 
 # CI workflow files — a malicious workflow change can compromise everything
 # that runs in CI. Always require explicit review.
-/.github/workflows/                @ruvnet
-/.github/CODEOWNERS                @ruvnet
-/.github/supply-chain/             @ruvnet
-/.github/dependabot.yml            @ruvnet
+/.github/workflows/                @JannieP
+/.github/CODEOWNERS                @JannieP
+/.github/supply-chain/             @JannieP
+/.github/dependabot.yml            @JannieP
 
 # Lockfiles — silent dep substitution via lockfile editing is a known supply-
 # chain attack vector. Maintainer review required.
-/package-lock.json                 @ruvnet
-/v3/pnpm-lock.yaml                 @ruvnet
-**/package-lock.json               @ruvnet
-**/pnpm-lock.yaml                  @ruvnet
+/package-lock.json                 @JannieP
+/v3/pnpm-lock.yaml                 @JannieP
+**/package-lock.json               @JannieP
+**/pnpm-lock.yaml                  @JannieP
 
 # Plugin manifests — listing in the marketplace, publishing identity.
-**/.claude-plugin/plugin.json      @ruvnet
+**/.claude-plugin/plugin.json      @JannieP
 
 # Witness manifests + provenance — the ADR-103 root of trust.
-/verification/                     @ruvnet
-/v3/docs/adr/ADR-103-witness-temporal-history.md @ruvnet
+/verification/                     @JannieP
+/v3/docs/adr/ADR-103-witness-temporal-history.md @JannieP
 
 # Supply chain scripts themselves — the auditor's audit.
-/scripts/audit-supply-chain.mjs    @ruvnet
-/scripts/audit-package-dep-overlap.mjs @ruvnet
-/scripts/audit-plugin-packages.mjs @ruvnet
-/scripts/audit-hook-commands.mjs   @ruvnet
+/scripts/audit-supply-chain.mjs    @JannieP
+/scripts/audit-package-dep-overlap.mjs @JannieP
+/scripts/audit-plugin-packages.mjs @JannieP
+/scripts/audit-hook-commands.mjs   @JannieP
 
 # Default fallback — every other PR gets standard review.
-*                                  @ruvnet
+*                                  @JannieP
