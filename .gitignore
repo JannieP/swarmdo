@@ -172,3 +172,4 @@ hive-mind-prompt-*.txt
 .env.*
 !.env.example
 !.env.*.example
+.claude/scheduled_tasks.lock
