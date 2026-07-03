@@ -32,7 +32,7 @@
       "Bash(ls:*)",
       "Bash(npx:*)",
       "mcp__rufflo__*",
-      "mcp__ruv-swarm__*",
+      "mcp__ruf-swarm__*",
       "mcp__flow-nexus__*"
     ],
     "deny": [

@@ -24,7 +24,7 @@ All exports from `@rufflo/guidance`. Each module is also available as a standalo
 | `@rufflo/guidance/coherence` | `CoherenceScheduler`, `EconomicGovernor`, `createCoherenceScheduler`, `createEconomicGovernor` |
 | `@rufflo/guidance/capabilities` | `CapabilityAlgebra`, `createCapabilityAlgebra` |
 | `@rufflo/guidance/conformance-kit` | `SimulatedRuntime`, `MemoryClerkCell`, `ConformanceRunner`, `createMemoryClerkCell`, `createConformanceRunner` |
-| `@rufflo/guidance/ruvbot-integration` | `RuvBotGuidanceBridge`, `AIDefenceGate`, `RuvBotMemoryAdapter`, `createRuvBotBridge`, `createAIDefenceGate`, `createRuvBotMemoryAdapter` |
+| `@rufflo/guidance/rufbot-integration` | `RufBotGuidanceBridge`, `AIDefenceGate`, `RufBotMemoryAdapter`, `createRufBotBridge`, `createAIDefenceGate`, `createRufBotMemoryAdapter` |
 | `@rufflo/guidance/meta-governance` | `MetaGovernor`, `createMetaGovernor` |
 | `@rufflo/guidance/adversarial` | `ThreatDetector`, `CollusionDetector`, `MemoryQuorum`, `createThreatDetector`, `createCollusionDetector`, `createMemoryQuorum` |
 | `@rufflo/guidance/trust` | `TrustAccumulator`, `TrustScoreLedger`, `TrustSystem`, `getTrustBasedRateLimit`, `createTrustAccumulator`, `createTrustSystem` |

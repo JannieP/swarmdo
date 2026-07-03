@@ -534,7 +534,7 @@ runs:
   main: 'dist/index.js'
 
 // index.js
-const { SwarmAction } = require('ruv-swarm');
+const { SwarmAction } = require('ruf-swarm');
 
 async function run() {
   const swarm = new SwarmAction({

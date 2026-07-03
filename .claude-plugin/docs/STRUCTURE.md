@@ -99,7 +99,7 @@ The plugin configures 3 MCP servers:
    - Swarm coordination
    - Agent management
 
-2. **ruv-swarm** (Optional)
+2. **ruf-swarm** (Optional)
    - Enhanced coordination
    - WASM acceleration
 

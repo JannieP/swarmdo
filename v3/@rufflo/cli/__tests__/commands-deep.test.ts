@@ -1444,7 +1444,7 @@ describe('Init System', () => {
 
     it('should have all MCP servers enabled', () => {
       expect(FULL_INIT_OPTIONS.mcp.claudeFlow).toBe(true);
-      expect(FULL_INIT_OPTIONS.mcp.ruvSwarm).toBe(true);
+      expect(FULL_INIT_OPTIONS.mcp.rufSwarm).toBe(true);
       expect(FULL_INIT_OPTIONS.mcp.flowNexus).toBe(true);
     });
   });

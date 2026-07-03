@@ -8,14 +8,14 @@ Create and manage AI swarms directly from GitHub Pull Requests, enabling seamles
 ### 1. PR-Based Swarm Creation
 ```bash
 # Create swarm from PR description using gh CLI
-gh pr view 123 --json body,title,labels,files | npx ruv-swarm swarm create-from-pr
+gh pr view 123 --json body,title,labels,files | npx ruf-swarm swarm create-from-pr
 
 # Auto-spawn agents based on PR labels
-gh pr view 123 --json labels | npx ruv-swarm swarm auto-spawn
+gh pr view 123 --json labels | npx ruf-swarm swarm auto-spawn
 
 # Create swarm with PR context
 gh pr view 123 --json body,labels,author,assignees | \
-  npx ruv-swarm swarm init --from-pr-data
+  npx ruf-swarm swarm init --from-pr-data
 ```
 
 ### 2. PR Comment Commands
@@ -50,7 +50,7 @@ jobs:
           COMMENT_BODY_FILE=$(mktemp)
           printf '%s' "${{ github.event.comment.body }}" > "$COMMENT_BODY_FILE"
           if grep -q '^/swarm' "$COMMENT_BODY_FILE"; then
-            npx ruv-swarm github handle-comment \
+            npx ruf-swarm github handle-comment \
               --pr ${{ github.event.pull_request.number }} \
               --comment-file "$COMMENT_BODY_FILE"
           fi
@@ -79,7 +79,7 @@ Map PR labels to agent types:
 # Small PR (< 100 lines): ring topology
 # Medium PR (100-500 lines): mesh topology  
 # Large PR (> 500 lines): hierarchical topology
-npx ruv-swarm github pr-topology --pr 123
+npx ruf-swarm github pr-topology --pr 123
 ```
 
 ## PR Swarm Commands
@@ -90,7 +90,7 @@ npx ruv-swarm github pr-topology --pr 123
 PR_DIFF=$(gh pr diff 123)
 PR_INFO=$(gh pr view 123 --json title,body,labels,files,reviews)
 
-npx ruv-swarm github pr-init 123 \
+npx ruf-swarm github pr-init 123 \
   --auto-agents \
   --pr-data "$PR_INFO" \
   --diff "$PR_DIFF" \
@@ -100,7 +100,7 @@ npx ruv-swarm github pr-init 123 \
 ### Progress Updates
 ```bash
 # Post swarm progress to PR using gh CLI
-PROGRESS=$(npx ruv-swarm github pr-progress 123 --format markdown)
+PROGRESS=$(npx ruf-swarm github pr-progress 123 --format markdown)
 
 gh pr comment 123 --body "$PROGRESS"
 
@@ -116,7 +116,7 @@ fi
 PR_FILES=$(gh pr view 123 --json files --jq '.files[].path')
 
 # Run swarm review
-REVIEW_RESULTS=$(npx ruv-swarm github pr-review 123 \
+REVIEW_RESULTS=$(npx ruf-swarm github pr-review 123 \
   --agents "security,performance,style" \
   --files "$PR_FILES")
 
@@ -135,7 +135,7 @@ done
 ### 1. Multi-PR Swarm Coordination
 ```bash
 # Coordinate swarms across related PRs
-npx ruv-swarm github multi-pr \
+npx ruf-swarm github multi-pr \
   --prs "123,124,125" \
   --strategy "parallel" \
   --share-memory
@@ -144,7 +144,7 @@ npx ruv-swarm github multi-pr \
 ### 2. PR Dependency Analysis
 ```bash
 # Analyze PR dependencies
-npx ruv-swarm github pr-deps 123 \
+npx ruf-swarm github pr-deps 123 \
   --spawn-agents \
   --resolve-conflicts
 ```
@@ -152,7 +152,7 @@ npx ruv-swarm github pr-deps 123 \
 ### 3. Automated PR Fixes
 ```bash
 # Auto-fix PR issues
-npx ruv-swarm github pr-fix 123 \
+npx ruf-swarm github pr-fix 123 \
   --issues "lint,test-failures" \
   --commit-fixes
 ```
@@ -187,7 +187,7 @@ required_status_checks:
 ```bash
 # Auto-merge when swarm completes using gh CLI
 # Check swarm completion status
-SWARM_STATUS=$(npx ruv-swarm github pr-status 123)
+SWARM_STATUS=$(npx ruf-swarm github pr-status 123)
 
 if [[ "$SWARM_STATUS" == "complete" ]]; then
   # Check review requirements
@@ -213,7 +213,7 @@ createServer((req, res) => {
     const event = JSON.parse(body);
     
     if (event.action === 'opened' && event.pull_request) {
-      execSync(`npx ruv-swarm github pr-init ${event.pull_request.number}`);
+      execSync(`npx ruf-swarm github pr-init ${event.pull_request.number}`);
     }
     
     res.writeHead(200);
@@ -227,7 +227,7 @@ createServer((req, res) => {
 ### Feature Development PR
 ```bash
 # PR #456: Add user authentication
-npx ruv-swarm github pr-init 456 \
+npx ruf-swarm github pr-init 456 \
   --topology hierarchical \
   --agents "architect,coder,tester,security" \
   --auto-assign-tasks
@@ -236,7 +236,7 @@ npx ruv-swarm github pr-init 456 \
 ### Bug Fix PR
 ```bash
 # PR #789: Fix memory leak
-npx ruv-swarm github pr-init 789 \
+npx ruf-swarm github pr-init 789 \
   --topology mesh \
   --agents "debugger,analyst,tester" \
   --priority high
@@ -245,7 +245,7 @@ npx ruv-swarm github pr-init 789 \
 ### Documentation PR
 ```bash
 # PR #321: Update API docs
-npx ruv-swarm github pr-init 321 \
+npx ruf-swarm github pr-init 321 \
   --topology ring \
   --agents "researcher,writer,reviewer" \
   --validate-links
@@ -256,7 +256,7 @@ npx ruv-swarm github pr-init 321 \
 ### PR Swarm Analytics
 ```bash
 # Generate PR swarm report
-npx ruv-swarm github pr-report 123 \
+npx ruf-swarm github pr-report 123 \
   --metrics "completion-time,agent-efficiency,token-usage" \
   --format markdown
 ```
@@ -264,7 +264,7 @@ npx ruv-swarm github pr-report 123 \
 ### Dashboard Integration
 ```bash
 # Export to GitHub Insights
-npx ruv-swarm github export-metrics \
+npx ruf-swarm github export-metrics \
   --pr 123 \
   --to-insights
 ```

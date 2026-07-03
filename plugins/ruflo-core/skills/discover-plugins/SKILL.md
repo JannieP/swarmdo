@@ -69,7 +69,7 @@ When starting a new project, exploring rufflo capabilities, or wondering which p
 |--------|-------------|-------------|
 | **rufflo-jujutsu** | PR review, merge decisions, diff risk scoring | Diff analysis, risk classification, reviewer recommendations |
 | **rufflo-docs** | After API changes, before releases | Doc generation, drift detection, API documentation |
-| **rufflo-rufllm** | Local LLM inference, custom model configs | RuVLLM integration, MicroLoRA fine-tuning, chat formatting |
+| **rufflo-rufllm** | Local LLM inference, custom model configs | RufLLM integration, MicroLoRA fine-tuning, chat formatting |
 | **rufflo-agent** | Sandboxed code execution, untrusted workloads | WASM agent sandboxing, community gallery |
 | **rufflo-plugin-creator** | Building new rufflo plugins | Scaffold structure, validate frontmatter, test MCP references |
 | **rufflo-migrations** | Database schema changes | Sequential migration numbering, up/down pairs, dry-run, rollback validation |

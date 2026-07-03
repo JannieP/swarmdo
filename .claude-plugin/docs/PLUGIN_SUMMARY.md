@@ -112,7 +112,7 @@ cd rufflo
    - Memory management
    - Neural training
 
-2. **ruv-swarm** (Optional)
+2. **ruf-swarm** (Optional)
    - Enhanced coordination
    - WASM acceleration (2.8-4.4x speed)
    - SIMD optimization

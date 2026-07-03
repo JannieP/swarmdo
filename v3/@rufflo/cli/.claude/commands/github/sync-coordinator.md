@@ -1,7 +1,7 @@
 # GitHub Sync Coordinator
 
 ## Purpose
-Multi-package synchronization and version alignment with ruv-swarm coordination for seamless integration between claude-code-flow and ruv-swarm packages.
+Multi-package synchronization and version alignment with ruf-swarm coordination for seamless integration between claude-code-flow and ruf-swarm packages.
 
 ## Capabilities
 - **Package synchronization** with intelligent dependency resolution
@@ -67,9 +67,9 @@ Bash("gh api repos/:owner/:repo/git/refs -f ref='refs/heads/sync/documentation' 
 // Update file
 Bash(`gh api repos/:owner/:repo/contents/claude-code-flow/claude-code-flow/CLAUDE.md \
   --method PUT \
-  -f message="docs: Synchronize CLAUDE.md with ruv-swarm integration patterns" \
+  -f message="docs: Synchronize CLAUDE.md with ruf-swarm integration patterns" \
   -f branch="sync/documentation" \
-  -f content="$(echo '# Claude Code Configuration for ruv-swarm\n\n[synchronized content]' | base64)" \
+  -f content="$(echo '# Claude Code Configuration for ruf-swarm\n\n[synchronized content]' | base64)" \
   -f sha="$(gh api repos/:owner/:repo/contents/claude-code-flow/claude-code-flow/CLAUDE.md?ref=sync/documentation --jq '.sha' 2>/dev/null || echo '')")`)
 
 // Store sync state in memory
@@ -97,7 +97,7 @@ mcp__github__push_files {
       content: "[PR manager documentation]"
     },
     {
-      path: "ruv-swarm/npm/src/github-coordinator/claude-hooks.js",
+      path: "ruf-swarm/npm/src/github-coordinator/claude-hooks.js",
       content: "[GitHub coordination hooks]"
     }
   ],
@@ -120,7 +120,7 @@ Bash(`gh pr create \
 
 ### Integration Points
 - Claude-code-flow: GitHub command modes in .claude/commands/github/
-- ruv-swarm: GitHub coordination hooks and utilities
+- ruf-swarm: GitHub coordination hooks and utilities
 - Documentation: Synchronized CLAUDE.md instructions
 
 ### Testing
@@ -130,7 +130,7 @@ Bash(`gh pr create \
 - [x] Cross-package compatibility
 
 ### Swarm Coordination
-This integration uses ruv-swarm agents for:
+This integration uses ruf-swarm agents for:
 - Multi-agent GitHub workflow management
 - Automated testing and validation
 - Progress tracking and coordination
@@ -193,7 +193,7 @@ This integration uses ruv-swarm agents for:
     key: "sync/complete/status",
     value: {
       timestamp: Date.now(),
-      packages_synced: ["claude-code-flow", "ruv-swarm"],
+      packages_synced: ["claude-code-flow", "ruf-swarm"],
       version_alignment: "completed",
       documentation_sync: "completed",
       github_integration: "completed",
@@ -224,14 +224,14 @@ const syncStrategy = {
 ```javascript
 // Keep documentation consistent across packages
 const docSyncPattern = {
-  sourceOfTruth: "ruv-swarm/docs/CLAUDE.md",
+  sourceOfTruth: "ruf-swarm/docs/CLAUDE.md",
   targets: [
     "claude-code-flow/claude-code-flow/CLAUDE.md",
     "CLAUDE.md"  // Root level
   ],
   customSections: {
     "claude-code-flow": "GitHub Commands Integration",
-    "ruv-swarm": "MCP Tools Reference"
+    "ruf-swarm": "MCP Tools Reference"
   }
 }
 ```
@@ -240,7 +240,7 @@ const docSyncPattern = {
 ```javascript
 // Comprehensive testing across synchronized packages
 const testMatrix = {
-  packages: ["claude-code-flow", "ruv-swarm"],
+  packages: ["claude-code-flow", "ruf-swarm"],
   tests: [
     "unit_tests",
     "integration_tests", 

@@ -156,9 +156,9 @@ Add to ~/.claude/settings.json:
       "command": "npx",
       "args": ["rufflo@alpha", "mcp", "start"]
     },
-    "ruv-swarm": {
+    "ruf-swarm": {
       "command": "npx",
-      "args": ["ruv-swarm", "mcp", "start"]
+      "args": ["ruf-swarm", "mcp", "start"]
     },
     "flow-nexus": {
       "command": "npx",
@@ -179,11 +179,11 @@ MCP_INSTRUCTIONS
         npx rufflo@alpha --version 2>/dev/null || npm install -g rufflo@alpha
         success "Rufflo MCP server installed"
 
-        read -p "Install optional ruv-swarm MCP? (y/n) [n]: " INSTALL_RUV
+        read -p "Install optional ruf-swarm MCP? (y/n) [n]: " INSTALL_RUV
         if [ "$INSTALL_RUV" = "y" ]; then
-            info "Installing ruv-swarm MCP server..."
-            npx ruv-swarm --version 2>/dev/null || npm install -g ruv-swarm
-            success "ruv-swarm MCP server installed"
+            info "Installing ruf-swarm MCP server..."
+            npx ruf-swarm --version 2>/dev/null || npm install -g ruf-swarm
+            success "ruf-swarm MCP server installed"
         fi
 
         read -p "Install optional flow-nexus MCP? (y/n) [n]: " INSTALL_NEXUS

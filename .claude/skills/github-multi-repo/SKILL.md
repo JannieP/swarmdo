@@ -45,7 +45,7 @@ npx rufflo skill run github-multi-repo init \
 ```bash
 # Synchronize package versions and dependencies
 npx rufflo skill run github-multi-repo sync \
-  --packages "claude-code-flow,ruv-swarm" \
+  --packages "claude-code-flow,ruf-swarm" \
   --align-versions \
   --update-docs
 ```
@@ -162,7 +162,7 @@ mcp__rufflo__swarm_init({
     key: "sync/packages/status",
     value: {
       timestamp: Date.now(),
-      packages_synced: ["claude-code-flow", "ruv-swarm"],
+      packages_synced: ["claude-code-flow", "ruf-swarm"],
       status: "synchronized"
     }
   })
@@ -204,7 +204,7 @@ mcp__rufflo__swarm_init({
         content: "[GitHub modes documentation]"
       },
       {
-        path: "ruv-swarm/src/github-coordinator/hooks.js",
+        path: "ruf-swarm/src/github-coordinator/hooks.js",
         content: "[GitHub coordination hooks]"
       }
     ],
@@ -258,7 +258,7 @@ mcp__rufflo__swarm_init({
     action: "store",
     key: "architecture/analysis/results",
     value: {
-      repositories_analyzed: ["claude-code-flow", "ruv-swarm"],
+      repositories_analyzed: ["claude-code-flow", "ruf-swarm"],
       optimization_areas: ["structure", "workflows", "templates"],
       recommendations: ["standardize_structure", "improve_workflows"]
     }
@@ -290,9 +290,9 @@ mcp__rufflo__swarm_init({
         content: JSON.stringify({
           version: "1.0",
           mcp_servers: {
-            "ruv-swarm": {
+            "ruf-swarm": {
               command: "npx",
-              args: ["ruv-swarm", "mcp", "start"]
+              args: ["ruf-swarm", "mcp", "start"]
             }
           }
         })
@@ -306,7 +306,7 @@ mcp__rufflo__swarm_init({
         content: JSON.stringify({
           name: "claude-project-template",
           engines: { node: ">=20.0.0" },
-          dependencies: { "ruv-swarm": "^1.0.11" }
+          dependencies: { "ruf-swarm": "^1.0.11" }
         })
       }
     ],
@@ -318,7 +318,7 @@ mcp__rufflo__swarm_init({
 ```javascript
 // Synchronize structure across repositories
 [Structure Standardization]:
-  const repositories = ["claude-code-flow", "ruv-swarm", "claude-extensions"]
+  const repositories = ["claude-code-flow", "ruf-swarm", "claude-extensions"]
 
   // Update common files across all repositories
   repositories.forEach(repo => {
@@ -500,7 +500,7 @@ dependencies:
 
 ### 1. Webhook-Based Coordination
 ```javascript
-const { MultiRepoSwarm } = require('ruv-swarm');
+const { MultiRepoSwarm } = require('ruf-swarm');
 
 const swarm = new MultiRepoSwarm({
   webhook: {
@@ -613,7 +613,7 @@ ruv-FANN/
 │   │   ├── src/
 │   │   ├── .claude/
 │   │   └── package.json
-│   ├── ruv-swarm/
+│   ├── ruf-swarm/
 │   │   ├── src/
 │   │   ├── wasm/
 │   │   └── package.json

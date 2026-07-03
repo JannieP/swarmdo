@@ -1,6 +1,6 @@
 # rufflo-rufllm
 
-RuVLLM local inference with chat formatting, model configuration, MicroLoRA fine-tuning, and SONA real-time adaptation.
+RufLLM local inference with chat formatting, model configuration, MicroLoRA fine-tuning, and SONA real-time adaptation.
 
 ## Install
 

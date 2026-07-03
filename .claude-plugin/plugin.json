@@ -55,9 +55,9 @@
       "description": "Core Rufflo MCP server for swarm coordination, agent management, and task orchestration (40+ tools)",
       "optional": false
     },
-    "ruv-swarm": {
+    "ruf-swarm": {
       "command": "npx",
-      "args": ["ruv-swarm", "mcp", "start"],
+      "args": ["ruf-swarm", "mcp", "start"],
       "description": "Enhanced swarm coordination with WASM acceleration (2.8-4.4x speed improvement)",
       "optional": true
     },

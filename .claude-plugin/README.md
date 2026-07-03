@@ -308,7 +308,7 @@ Then in Claude Code:
 ```bash
 # Add MCP servers to Claude Code
 claude mcp add rufflo npx rufflo@alpha mcp start
-claude mcp add ruv-swarm npx ruv-swarm mcp start  # Optional
+claude mcp add ruf-swarm npx ruf-swarm mcp start  # Optional
 claude mcp add flow-nexus npx flow-nexus@latest mcp start  # Optional
 ```
 
@@ -525,14 +525,14 @@ Rufflo integrates with 3 MCP servers providing 110+ tools:
 - Neural training
 - Performance monitoring
 
-### ruv-swarm MCP (Optional)
+### ruf-swarm MCP (Optional)
 
 ```json
 {
   "mcpServers": {
-    "ruv-swarm": {
+    "ruf-swarm": {
       "command": "npx",
-      "args": ["ruv-swarm", "mcp", "start"]
+      "args": ["ruf-swarm", "mcp", "start"]
     }
   }
 }

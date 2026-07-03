@@ -96,7 +96,8 @@
     "rufvector-graph-transformer-wasm": "file:v3/vendor/rufvector-graph-transformer-wasm",
     "rufvector-onnx-embeddings-wasm": "file:v3/vendor/rufvector-onnx-embeddings-wasm",
     "semver": "7.7.3",
-    "zod": "3.25.76"
+    "zod": "3.25.76",
+    "ruf-swarm": "file:v3/vendor/ruf-swarm"
   },
   "optionalDependencies": {
     "@rufflo/aidefence": "file:v3/@rufflo/aidefence",

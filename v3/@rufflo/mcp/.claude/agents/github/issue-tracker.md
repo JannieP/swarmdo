@@ -89,7 +89,7 @@ hooks:
 # GitHub Issue Tracker
 
 ## Purpose
-Intelligent issue management and project coordination with ruv-swarm integration for automated tracking, progress monitoring, and team coordination, enhanced with **self-learning** and **continuous improvement** capabilities powered by Agentic-Flow v2.0.0-alpha.
+Intelligent issue management and project coordination with ruf-swarm integration for automated tracking, progress monitoring, and team coordination, enhanced with **self-learning** and **continuous improvement** capabilities powered by Agentic-Flow v2.0.0-alpha.
 
 ## Core Capabilities
 - **Automated issue creation** with smart templates and labeling
@@ -318,7 +318,7 @@ mcp__rufflo__agent_spawn { type: "coder", name: "Implementation Planner" }
 mcp__github__create_issue {
   owner: "ruvnet",
   repo: "ruv-FANN",
-  title: "Integration Review: claude-code-flow and ruv-swarm complete integration",
+  title: "Integration Review: claude-code-flow and ruf-swarm complete integration",
   body: `## 🔄 Integration Review
   
   ### Overview
@@ -372,7 +372,7 @@ mcp__github__add_issue_comment {
   - Final validation and merge preparation
   
   ---
-  🤖 Generated with Claude Code using ruv-swarm coordination`
+  🤖 Generated with Claude Code using ruf-swarm coordination`
 }
 
 // Store progress in swarm memory
@@ -424,7 +424,7 @@ mcp__github__update_issue {
   Bash(`gh issue create \
     --repo :owner/:repo \
     --title "Bug: PR merge conflicts in integration branch" \
-    --body "Resolve merge conflicts in integration/claude-code-flow-ruv-swarm..." \
+    --body "Resolve merge conflicts in integration/claude-code-flow-ruf-swarm..." \
     --label "bug,integration,urgent"`)
     
   Bash(`gh issue create \

@@ -42,19 +42,19 @@ describe('ADR-111 Phase 1 — generateWgKeyPair', () => {
 
 describe('ADR-111 Phase 1 — deriveMeshIP', () => {
   it('is deterministic for the same nodeId', () => {
-    const ip1 = deriveMeshIP('ruvultra');
-    const ip2 = deriveMeshIP('ruvultra');
+    const ip1 = deriveMeshIP('rufultra');
+    const ip2 = deriveMeshIP('rufultra');
     expect(ip1).toBe(ip2);
   });
 
   it('produces different IPs for different nodeIds', () => {
-    const a = deriveMeshIP('ruvultra');
+    const a = deriveMeshIP('rufultra');
     const b = deriveMeshIP('macbook-1');
     expect(a).not.toBe(b);
   });
 
   it('default subnet output is in 10.50.0.0/16', () => {
-    for (const nodeId of ['a', 'b', 'c', 'ruvultra', 'macbook', 'edge-1', 'edge-2']) {
+    for (const nodeId of ['a', 'b', 'c', 'rufultra', 'macbook', 'edge-1', 'edge-2']) {
       const ip = deriveMeshIP(nodeId);
       expect(ip).toMatch(/^10\.50\.\d{1,3}\.\d{1,3}\/32$/);
     }

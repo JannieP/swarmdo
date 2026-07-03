@@ -1983,7 +1983,7 @@ npx @rufflo/cli@latest hive-mind consensus --propose "task"
 ### Optional Integrations
 | Package | Command |
 |---------|---------|
-| ruv-swarm | \`npx ruv-swarm mcp start\` |
+| ruf-swarm | \`npx ruf-swarm mcp start\` |
 | flow-nexus | \`npx flow-nexus@latest mcp start\` |
 | agentic-jujutsu | \`npx agentic-jujutsu@latest\` |
 
@@ -1993,7 +1993,7 @@ npx @rufflo/cli@latest hive-mind consensus --propose "task"
 claude mcp add rufflo -- npx -y rufflo@latest
 
 # Optional servers
-claude mcp add ruv-swarm -- npx -y ruv-swarm mcp start
+claude mcp add ruf-swarm -- npx -y ruf-swarm mcp start
 claude mcp add flow-nexus -- npx -y flow-nexus@latest mcp start
 \`\`\`
 

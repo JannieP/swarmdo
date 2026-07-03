@@ -1,20 +1,20 @@
 /**
- * RuvBot Integration Bridge
+ * RufBot Integration Bridge
  *
- * Bridges ruvbot (npm: ruvbot@0.1.8) with the @rufflo/guidance control
- * plane. Wires ruvbot events to guidance hooks, wraps AIDefence as an
+ * Bridges rufbot (npm: rufbot@0.1.8) with the @rufflo/guidance control
+ * plane. Wires rufbot events to guidance hooks, wraps AIDefence as an
  * enforcement gate, governs memory operations, and feeds trust accumulation.
  *
- * ruvbot is an optional peer dependency. All types and classes are exported
- * regardless of whether ruvbot is installed. Runtime calls that require the
- * ruvbot package will throw a clear error if the package is missing.
+ * rufbot is an optional peer dependency. All types and classes are exported
+ * regardless of whether rufbot is installed. Runtime calls that require the
+ * rufbot package will throw a clear error if the package is missing.
  *
  * Components:
- * 1. RuvBotGuidanceBridge  - Event wiring, gate delegation, trust tracking
+ * 1. RufBotGuidanceBridge  - Event wiring, gate delegation, trust tracking
  * 2. AIDefenceGate         - Prompt injection, jailbreak, PII detection gate
- * 3. RuvBotMemoryAdapter   - Governed memory read/write with proof logging
+ * 3. RufBotMemoryAdapter   - Governed memory read/write with proof logging
  *
- * @module @rufflo/guidance/ruvbot-integration
+ * @module @rufflo/guidance/rufbot-integration
  */
 
 import type { GateResult, GateDecision } from './types.js';
@@ -24,24 +24,24 @@ import type { CoherenceScore } from './coherence.js';
 import type { TrustRecord, GateOutcome } from './trust.js';
 
 // ============================================================================
-// RuvBot Ambient Types (optional peer dependency)
+// RufBot Ambient Types (optional peer dependency)
 // ============================================================================
 
 /**
- * Minimal interface for a ruvbot instance. Mirrors the event-emitter surface
- * exposed by `createRuvBot()` without importing the package at compile time.
+ * Minimal interface for a rufbot instance. Mirrors the event-emitter surface
+ * exposed by `createRufBot()` without importing the package at compile time.
  */
-export interface RuvBotInstance {
+export interface RufBotInstance {
   on(event: string, handler: (...args: unknown[]) => void): void;
   off(event: string, handler: (...args: unknown[]) => void): void;
   emit?(event: string, ...args: unknown[]): void;
 }
 
 /**
- * Minimal interface for ruvbot's AIDefence guard returned by
+ * Minimal interface for rufbot's AIDefence guard returned by
  * `createAIDefenceGuard()`.
  */
-export interface RuvBotAIDefenceGuard {
+export interface RufBotAIDefenceGuard {
   check(input: string): Promise<{
     safe: boolean;
     threats: Array<{
@@ -54,9 +54,9 @@ export interface RuvBotAIDefenceGuard {
 }
 
 /**
- * Minimal interface for ruvbot's memory subsystem.
+ * Minimal interface for rufbot's memory subsystem.
  */
-export interface RuvBotMemory {
+export interface RufBotMemory {
   read(key: string, namespace?: string): Promise<unknown>;
   write(key: string, value: unknown, namespace?: string): Promise<void>;
   delete?(key: string, namespace?: string): Promise<void>;
@@ -97,9 +97,9 @@ export interface AIDefenceGateConfig {
 }
 
 /**
- * Configuration for the RuvBotGuidanceBridge.
+ * Configuration for the RufBotGuidanceBridge.
  */
-export interface RuvBotBridgeConfig {
+export interface RufBotBridgeConfig {
   enableAIDefence: boolean;
   enableMemoryGovernance: boolean;
   enableTrustTracking: boolean;
@@ -109,9 +109,9 @@ export interface RuvBotBridgeConfig {
 }
 
 /**
- * A normalized ruvbot event for internal processing.
+ * A normalized rufbot event for internal processing.
  */
-export interface RuvBotEvent {
+export interface RufBotEvent {
   type: string;
   timestamp: number;
   sessionId?: string;
@@ -133,7 +133,7 @@ const BLOCK_SEVERITY_THRESHOLDS: Record<
   high: new Set(['high', 'critical']),
 };
 
-/** Maps ruvbot threat type strings to our typed threat type. */
+/** Maps rufbot threat type strings to our typed threat type. */
 const THREAT_TYPE_MAP: Record<string, AIDefenceThreat['type']> = {
   'prompt-injection': 'prompt-injection',
   'prompt_injection': 'prompt-injection',
@@ -146,7 +146,7 @@ const THREAT_TYPE_MAP: Record<string, AIDefenceThreat['type']> = {
   'homoglyph': 'homoglyph',
 };
 
-/** Maps ruvbot severity strings to our typed severity. */
+/** Maps rufbot severity strings to our typed severity. */
 const SEVERITY_MAP: Record<string, AIDefenceThreat['severity']> = {
   low: 'low',
   medium: 'medium',
@@ -158,44 +158,44 @@ const SEVERITY_MAP: Record<string, AIDefenceThreat['severity']> = {
 // Dynamic Import Helper
 // ============================================================================
 
-/** Resolved ruvbot module cache (null = not attempted, undefined = failed). */
-let ruvbotModuleCache: Record<string, unknown> | null = null;
+/** Resolved rufbot module cache (null = not attempted, undefined = failed). */
+let rufbotModuleCache: Record<string, unknown> | null = null;
 
 /**
  * Module specifiers kept in variables so TypeScript does not attempt
  * compile-time resolution of this optional peer dependency.
  */
-const RUVBOT_MODULE = 'ruvbot';
-const RUVBOT_CORE_MODULE = 'ruvbot/core';
+const RUFBOT_MODULE = 'rufbot';
+const RUFBOT_CORE_MODULE = 'rufbot/core';
 
 /**
- * Attempt to dynamically import the ruvbot package.
+ * Attempt to dynamically import the rufbot package.
  * Throws a descriptive error if the package is not installed.
  */
-async function requireRuvBot(): Promise<Record<string, unknown>> {
-  if (ruvbotModuleCache) return ruvbotModuleCache;
+async function requireRufBot(): Promise<Record<string, unknown>> {
+  if (rufbotModuleCache) return rufbotModuleCache;
 
   try {
-    const mod = await import(RUVBOT_MODULE) as Record<string, unknown>;
-    ruvbotModuleCache = mod;
+    const mod = await import(RUFBOT_MODULE) as Record<string, unknown>;
+    rufbotModuleCache = mod;
     return mod;
   } catch {
     throw new Error(
-      'ruvbot is not installed. Install it with: npm install ruvbot@0.1.8\n' +
-      'ruvbot is an optional peer dependency of @rufflo/guidance.',
+      'rufbot is not installed. Install it with: npm install rufbot@0.1.8\n' +
+      'rufbot is an optional peer dependency of @rufflo/guidance.',
     );
   }
 }
 
 /**
- * Attempt to dynamically import ruvbot/core sub-export.
+ * Attempt to dynamically import rufbot/core sub-export.
  */
-async function requireRuvBotCore(): Promise<Record<string, unknown>> {
+async function requireRufBotCore(): Promise<Record<string, unknown>> {
   try {
-    return await import(RUVBOT_CORE_MODULE) as Record<string, unknown>;
+    return await import(RUFBOT_CORE_MODULE) as Record<string, unknown>;
   } catch {
     // Fall back to the main export
-    return requireRuvBot();
+    return requireRufBot();
   }
 }
 
@@ -204,21 +204,21 @@ async function requireRuvBotCore(): Promise<Record<string, unknown>> {
 // ============================================================================
 
 /**
- * Wraps ruvbot's 6-layer AIDefence as an enforcement gate compatible with the
+ * Wraps rufbot's 6-layer AIDefence as an enforcement gate compatible with the
  * guidance control plane's GateResult / GateDecision interface.
  *
  * Supports:
  * - Prompt injection detection
  * - Jailbreak detection
  * - PII detection
- * - Control character and homoglyph detection (via ruvbot internals)
+ * - Control character and homoglyph detection (via rufbot internals)
  * - Configurable sensitivity / block threshold
  *
  * Evaluates both input (pre-processing) and output (post-processing) text.
  */
 export class AIDefenceGate {
   private config: AIDefenceGateConfig;
-  private guard: RuvBotAIDefenceGuard | null = null;
+  private guard: RufBotAIDefenceGuard | null = null;
   private guardInitPromise: Promise<void> | null = null;
 
   constructor(config: Partial<AIDefenceGateConfig> = {}) {
@@ -231,23 +231,23 @@ export class AIDefenceGate {
   }
 
   /**
-   * Lazily initialize the underlying ruvbot AIDefence guard.
+   * Lazily initialize the underlying rufbot AIDefence guard.
    * Safe to call multiple times; only the first call creates the guard.
    */
-  private async ensureGuard(): Promise<RuvBotAIDefenceGuard> {
+  private async ensureGuard(): Promise<RufBotAIDefenceGuard> {
     if (this.guard) return this.guard;
 
     if (!this.guardInitPromise) {
       this.guardInitPromise = (async () => {
-        const mod = await requireRuvBot();
+        const mod = await requireRufBot();
         const createGuard = mod['createAIDefenceGuard'] as
-          | ((config?: Record<string, unknown>) => RuvBotAIDefenceGuard)
+          | ((config?: Record<string, unknown>) => RufBotAIDefenceGuard)
           | undefined;
 
         if (typeof createGuard !== 'function') {
           throw new Error(
-            'ruvbot does not export createAIDefenceGuard. ' +
-            'Ensure ruvbot@0.1.8 or later is installed.',
+            'rufbot does not export createAIDefenceGuard. ' +
+            'Ensure rufbot@0.1.8 or later is installed.',
           );
         }
 
@@ -411,19 +411,19 @@ export class AIDefenceGate {
 }
 
 // ============================================================================
-// RuvBotMemoryAdapter
+// RufBotMemoryAdapter
 // ============================================================================
 
 /**
- * Wraps ruvbot's memory read/write operations with guidance control plane
+ * Wraps rufbot's memory read/write operations with guidance control plane
  * governance. Every write passes through the MemoryWriteGate for authority
  * and coherence checks. All operations are logged to a proof chain.
  */
-export class RuvBotMemoryAdapter {
+export class RufBotMemoryAdapter {
   private readonly memoryGate: import('./memory-gate.js').MemoryWriteGate;
   private readonly coherenceScheduler: import('./coherence.js').CoherenceScheduler;
   private proofChain: import('./proof.js').ProofChain | null = null;
-  private ruvbotMemory: RuvBotMemory | null = null;
+  private rufbotMemory: RufBotMemory | null = null;
   private operationLog: Array<{
     operation: 'read' | 'write' | 'delete';
     key: string;
@@ -441,10 +441,10 @@ export class RuvBotMemoryAdapter {
   }
 
   /**
-   * Attach a ruvbot memory instance for proxied operations.
+   * Attach a rufbot memory instance for proxied operations.
    */
-  attachMemory(memory: RuvBotMemory): void {
-    this.ruvbotMemory = memory;
+  attachMemory(memory: RufBotMemory): void {
+    this.rufbotMemory = memory;
   }
 
   /**
@@ -455,7 +455,7 @@ export class RuvBotMemoryAdapter {
   }
 
   /**
-   * Governed read: reads through ruvbot memory, logs to proof chain.
+   * Governed read: reads through rufbot memory, logs to proof chain.
    */
   async read(
     key: string,
@@ -463,7 +463,7 @@ export class RuvBotMemoryAdapter {
   ): Promise<unknown> {
     this.ensureMemoryAttached();
 
-    const value = await this.ruvbotMemory!.read(key, namespace);
+    const value = await this.rufbotMemory!.read(key, namespace);
 
     this.operationLog.push({
       operation: 'read',
@@ -477,7 +477,7 @@ export class RuvBotMemoryAdapter {
 
   /**
    * Governed write: runs through MemoryWriteGate, checks coherence,
-   * logs to proof chain, then delegates to ruvbot memory.
+   * logs to proof chain, then delegates to rufbot memory.
    *
    * Returns the WriteDecision. If denied, the write is not performed.
    */
@@ -513,8 +513,8 @@ export class RuvBotMemoryAdapter {
       return decision;
     }
 
-    // Step 4: Perform the write through ruvbot
-    await this.ruvbotMemory!.write(key, value, namespace);
+    // Step 4: Perform the write through rufbot
+    await this.rufbotMemory!.write(key, value, namespace);
 
     return decision;
   }
@@ -547,8 +547,8 @@ export class RuvBotMemoryAdapter {
     }
 
     // Perform the delete if the underlying memory supports it
-    if (typeof this.ruvbotMemory!.delete === 'function') {
-      await this.ruvbotMemory!.delete(key, namespace);
+    if (typeof this.rufbotMemory!.delete === 'function') {
+      await this.rufbotMemory!.delete(key, namespace);
     }
 
     this.operationLog.push({
@@ -591,9 +591,9 @@ export class RuvBotMemoryAdapter {
   // ===== Private Helpers =====
 
   private ensureMemoryAttached(): void {
-    if (!this.ruvbotMemory) {
+    if (!this.rufbotMemory) {
       throw new Error(
-        'No ruvbot memory instance attached. Call attachMemory() before ' +
+        'No rufbot memory instance attached. Call attachMemory() before ' +
         'performing memory operations.',
       );
     }
@@ -601,13 +601,13 @@ export class RuvBotMemoryAdapter {
 }
 
 // ============================================================================
-// RuvBotGuidanceBridge
+// RufBotGuidanceBridge
 // ============================================================================
 
 /**
- * Bridges a ruvbot instance with the @rufflo/guidance control plane.
+ * Bridges a rufbot instance with the @rufflo/guidance control plane.
  *
- * Wires ruvbot event hooks to guidance enforcement and trust systems:
+ * Wires rufbot event hooks to guidance enforcement and trust systems:
  *
  * - `message`        -> EnforcementGates (secrets, destructive ops) + AIDefence
  * - `agent:spawn`    -> ManifestValidator
@@ -616,19 +616,19 @@ export class RuvBotMemoryAdapter {
  * - `ready`          -> Trust accumulator initialization
  * - `error`          -> Trust 'deny' outcome recording
  *
- * All gate outcomes are fed into the TrustAccumulator so that ruvbot agents
+ * All gate outcomes are fed into the TrustAccumulator so that rufbot agents
  * build (or lose) trust over time.
  */
-export class RuvBotGuidanceBridge {
-  private readonly config: RuvBotBridgeConfig;
-  private ruvbot: RuvBotInstance | null = null;
+export class RufBotGuidanceBridge {
+  private readonly config: RufBotBridgeConfig;
+  private rufbot: RufBotInstance | null = null;
 
   // Guidance components (injected)
   private gates: import('./gates.js').EnforcementGates | null = null;
   private manifestValidator: import('./manifest-validator.js').ManifestValidator | null = null;
   private trustSystem: import('./trust.js').TrustSystem | null = null;
   private aiDefenceGate: AIDefenceGate | null = null;
-  private memoryAdapter: RuvBotMemoryAdapter | null = null;
+  private memoryAdapter: RufBotMemoryAdapter | null = null;
 
   // Session proof chains keyed by sessionId
   private sessionChains: Map<string, import('./proof.js').ProofChain> = new Map();
@@ -637,10 +637,10 @@ export class RuvBotGuidanceBridge {
   private boundHandlers: Map<string, (...args: unknown[]) => void> = new Map();
 
   // Event log for diagnostics
-  private eventLog: RuvBotEvent[] = [];
+  private eventLog: RufBotEvent[] = [];
   private static readonly MAX_EVENT_LOG = 1000;
 
-  constructor(config: Partial<RuvBotBridgeConfig> = {}) {
+  constructor(config: Partial<RufBotBridgeConfig> = {}) {
     this.config = {
       enableAIDefence: config.enableAIDefence ?? true,
       enableMemoryGovernance: config.enableMemoryGovernance ?? true,
@@ -660,7 +660,7 @@ export class RuvBotGuidanceBridge {
     manifestValidator?: import('./manifest-validator.js').ManifestValidator;
     trustSystem?: import('./trust.js').TrustSystem;
     aiDefenceGate?: AIDefenceGate;
-    memoryAdapter?: RuvBotMemoryAdapter;
+    memoryAdapter?: RufBotMemoryAdapter;
   }): void {
     if (components.gates) this.gates = components.gates;
     if (components.manifestValidator) this.manifestValidator = components.manifestValidator;
@@ -670,17 +670,17 @@ export class RuvBotGuidanceBridge {
   }
 
   /**
-   * Connect to a ruvbot instance and wire all event handlers.
+   * Connect to a rufbot instance and wire all event handlers.
    *
    * This is the primary entry point. Once called, the bridge will
-   * intercept ruvbot events and route them through guidance gates.
+   * intercept rufbot events and route them through guidance gates.
    */
-  connect(ruvbot: RuvBotInstance): void {
-    if (this.ruvbot) {
+  connect(rufbot: RufBotInstance): void {
+    if (this.rufbot) {
       this.disconnect();
     }
 
-    this.ruvbot = ruvbot;
+    this.rufbot = rufbot;
 
     // Wire event handlers
     this.wireEvent('message', this.handleMessage.bind(this));
@@ -694,21 +694,21 @@ export class RuvBotGuidanceBridge {
   }
 
   /**
-   * Disconnect from the ruvbot instance, removing all event handlers.
+   * Disconnect from the rufbot instance, removing all event handlers.
    */
   disconnect(): void {
-    if (!this.ruvbot) return;
+    if (!this.rufbot) return;
 
     for (const [event, handler] of this.boundHandlers) {
-      this.ruvbot.off(event, handler);
+      this.rufbot.off(event, handler);
     }
 
     this.boundHandlers.clear();
-    this.ruvbot = null;
+    this.rufbot = null;
   }
 
   /**
-   * Evaluate a ruvbot AIDefence result and return a GateResult-compatible
+   * Evaluate a rufbot AIDefence result and return a GateResult-compatible
    * decision. Can be called independently of event wiring.
    */
   async evaluateAIDefence(input: string): Promise<GateResult> {
@@ -739,22 +739,22 @@ export class RuvBotGuidanceBridge {
   /**
    * Get the event log for diagnostics.
    */
-  getEventLog(): ReadonlyArray<RuvBotEvent> {
+  getEventLog(): ReadonlyArray<RufBotEvent> {
     return this.eventLog;
   }
 
   /**
    * Get the current bridge configuration.
    */
-  getConfig(): RuvBotBridgeConfig {
+  getConfig(): RufBotBridgeConfig {
     return { ...this.config };
   }
 
   /**
-   * Whether the bridge is currently connected to a ruvbot instance.
+   * Whether the bridge is currently connected to a rufbot instance.
    */
   get connected(): boolean {
-    return this.ruvbot !== null;
+    return this.rufbot !== null;
   }
 
   // ===== Event Handlers =====
@@ -857,7 +857,7 @@ export class RuvBotGuidanceBridge {
     if (this.config.enableProofChain) {
       if (!this.config.proofSigningKey) {
         throw new Error(
-          'RuvBotBridgeConfig.proofSigningKey is required when enableProofChain is true',
+          'RufBotBridgeConfig.proofSigningKey is required when enableProofChain is true',
         );
       }
       const { createProofChain } = await import('./proof.js');
@@ -937,11 +937,11 @@ export class RuvBotGuidanceBridge {
 
   private wireEvent(event: string, handler: (...args: unknown[]) => void): void {
     this.boundHandlers.set(event, handler);
-    this.ruvbot!.on(event, handler);
+    this.rufbot!.on(event, handler);
   }
 
   private logEvent(type: string, data: Record<string, unknown>): void {
-    const event: RuvBotEvent = {
+    const event: RufBotEvent = {
       type,
       timestamp: Date.now(),
       sessionId: data['sessionId'] as string | undefined,
@@ -951,8 +951,8 @@ export class RuvBotGuidanceBridge {
 
     this.eventLog.push(event);
 
-    if (this.eventLog.length > RuvBotGuidanceBridge.MAX_EVENT_LOG) {
-      this.eventLog = this.eventLog.slice(-RuvBotGuidanceBridge.MAX_EVENT_LOG);
+    if (this.eventLog.length > RufBotGuidanceBridge.MAX_EVENT_LOG) {
+      this.eventLog = this.eventLog.slice(-RufBotGuidanceBridge.MAX_EVENT_LOG);
     }
   }
 }
@@ -984,38 +984,38 @@ function gateDecisionToTrustOutcome(decision: GateDecision): GateOutcome {
 // ============================================================================
 
 /**
- * Create a fully wired RuvBotGuidanceBridge.
+ * Create a fully wired RufBotGuidanceBridge.
  *
- * Connects the bridge to a ruvbot instance and attaches the guidance
+ * Connects the bridge to a rufbot instance and attaches the guidance
  * control plane components. The bridge immediately begins intercepting
- * ruvbot events.
+ * rufbot events.
  *
- * @param ruvbotInstance - A ruvbot instance (from createRuvBot())
+ * @param rufbotInstance - A rufbot instance (from createRufBot())
  * @param guidancePlane - A GuidanceControlPlane or individual components
  * @param config - Optional bridge configuration
- * @returns The connected RuvBotGuidanceBridge
+ * @returns The connected RufBotGuidanceBridge
  */
-export function createRuvBotBridge(
-  ruvbotInstance: RuvBotInstance,
+export function createRufBotBridge(
+  rufbotInstance: RufBotInstance,
   guidancePlane: {
     gates?: import('./gates.js').EnforcementGates;
     manifestValidator?: import('./manifest-validator.js').ManifestValidator;
     trustSystem?: import('./trust.js').TrustSystem;
     aiDefenceGate?: AIDefenceGate;
-    memoryAdapter?: RuvBotMemoryAdapter;
+    memoryAdapter?: RufBotMemoryAdapter;
   },
-  config?: Partial<RuvBotBridgeConfig>,
-): RuvBotGuidanceBridge {
-  const bridge = new RuvBotGuidanceBridge(config);
+  config?: Partial<RufBotBridgeConfig>,
+): RufBotGuidanceBridge {
+  const bridge = new RufBotGuidanceBridge(config);
   bridge.attachGuidance(guidancePlane);
-  bridge.connect(ruvbotInstance);
+  bridge.connect(rufbotInstance);
   return bridge;
 }
 
 /**
  * Create an AIDefenceGate with optional configuration.
  *
- * The gate lazily initializes the underlying ruvbot AIDefence guard
+ * The gate lazily initializes the underlying rufbot AIDefence guard
  * on the first evaluation call.
  *
  * @param config - Optional gate configuration
@@ -1028,18 +1028,18 @@ export function createAIDefenceGate(
 }
 
 /**
- * Create a RuvBotMemoryAdapter with governance components.
+ * Create a RufBotMemoryAdapter with governance components.
  *
- * The adapter wraps ruvbot memory operations with MemoryWriteGate authority
+ * The adapter wraps rufbot memory operations with MemoryWriteGate authority
  * checks and CoherenceScheduler tracking.
  *
  * @param memoryGate - The MemoryWriteGate for authority/rate/contradiction checks
  * @param coherenceScheduler - The CoherenceScheduler for drift tracking
- * @returns A new RuvBotMemoryAdapter instance
+ * @returns A new RufBotMemoryAdapter instance
  */
-export function createRuvBotMemoryAdapter(
+export function createRufBotMemoryAdapter(
   memoryGate: import('./memory-gate.js').MemoryWriteGate,
   coherenceScheduler: import('./coherence.js').CoherenceScheduler,
-): RuvBotMemoryAdapter {
-  return new RuvBotMemoryAdapter(memoryGate, coherenceScheduler);
+): RufBotMemoryAdapter {
+  return new RufBotMemoryAdapter(memoryGate, coherenceScheduler);
 }

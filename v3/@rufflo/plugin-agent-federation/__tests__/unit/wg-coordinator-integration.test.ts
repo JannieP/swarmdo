@@ -113,18 +113,18 @@ describe('ADR-111 Phase 3 — coordinator wg integration', () => {
       wgMesh,
       wgCommandSink: (c) => { cmdsSeen.push(c); },
     });
-    await discovery.addStaticPeer('ws://ruvultra:9100', {
-      nodeId: 'ruvultra',
+    await discovery.addStaticPeer('ws://rufultra:9100', {
+      nodeId: 'rufultra',
       publicKey: 'pk',
-      endpoint: 'ws://ruvultra:9100',
+      endpoint: 'ws://rufultra:9100',
       capabilities: { agentTypes: [], maxConcurrentSessions: 1, supportedProtocols: ['websocket'], complianceModes: [] },
       version: '1.0.0',
       signature: 'sig',
       timestamp: new Date().toISOString(),
     });
-    attachWgMetadata(discovery.getPeer('ruvultra'), 'ruvultra');
+    attachWgMetadata(discovery.getPeer('rufultra'), 'rufultra');
 
-    const ok = await coordinator.evictPeer('ruvultra', 'MANUAL_EVICT');
+    const ok = await coordinator.evictPeer('rufultra', 'MANUAL_EVICT');
     expect(ok).toBe(true);
     expect(cmdsSeen.find(c => c.verb === 'remove-peer')).toBeDefined();
   });

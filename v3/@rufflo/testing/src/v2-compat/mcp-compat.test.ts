@@ -31,23 +31,23 @@ const TOOL_NAME_MAPPING: Record<string, string> = {
   'swarm_status': 'swarm/status',
   'swarm/get-status': 'swarm/status',
   'swarm/get-comprehensive-status': 'swarm/status',
-  'mcp__ruv-swarm__swarm_init': 'swarm/init',
-  'mcp__ruv-swarm__swarm_status': 'swarm/status',
-  'mcp__ruv-swarm__agent_spawn': 'agent/spawn',
-  'mcp__ruv-swarm__agent_list': 'agent/list',
-  'mcp__ruv-swarm__agent_metrics': 'agent/status',
+  'mcp__ruf-swarm__swarm_init': 'swarm/init',
+  'mcp__ruf-swarm__swarm_status': 'swarm/status',
+  'mcp__ruf-swarm__agent_spawn': 'agent/spawn',
+  'mcp__ruf-swarm__agent_list': 'agent/list',
+  'mcp__ruf-swarm__agent_metrics': 'agent/status',
 
   // Memory tools
   'memory/query': 'memory/search',
-  'mcp__ruv-swarm__memory_usage': 'memory/list',
+  'mcp__ruf-swarm__memory_usage': 'memory/list',
 
   // Config tools
   'config/get': 'config/load',
   'config/update': 'config/save',
 
   // Neural tools
-  'mcp__ruv-swarm__neural_status': 'hooks/metrics',
-  'mcp__ruv-swarm__neural_train': 'hooks/pretrain',
+  'mcp__ruf-swarm__neural_status': 'hooks/metrics',
+  'mcp__ruf-swarm__neural_train': 'hooks/pretrain',
 };
 
 /**
@@ -207,8 +207,8 @@ describe('V2 MCP Tool Compatibility', () => {
       expect(v3Params.priority).toBe('high');
     });
 
-    it('should handle mcp__ruv-swarm__agent_spawn', async () => {
-      const result = await mockMCP.callTool('mcp__ruv-swarm__agent_spawn', { type: 'coder' });
+    it('should handle mcp__ruf-swarm__agent_spawn', async () => {
+      const result = await mockMCP.callTool('mcp__ruf-swarm__agent_spawn', { type: 'coder' });
 
       expect(result).toHaveProperty('id');
       expect(result).toHaveProperty('type');
@@ -249,7 +249,7 @@ describe('V2 MCP Tool Compatibility', () => {
         consensus: 'quorum',
       };
 
-      const v3Params = mockMCP.translateParams('mcp__ruv-swarm__swarm_init', v2Params);
+      const v3Params = mockMCP.translateParams('mcp__ruf-swarm__swarm_init', v2Params);
 
       expect(v3Params.topology).toBe('mesh');
       expect(v3Params.maxAgents).toBe(10);
@@ -372,26 +372,26 @@ describe('V2 MCP Tool Compatibility', () => {
 
   describe('Neural/Learning Tools', () => {
     it('should translate neural_status to hooks/metrics', () => {
-      const v3Name = mockMCP.translateToolName('mcp__ruv-swarm__neural_status');
+      const v3Name = mockMCP.translateToolName('mcp__ruf-swarm__neural_status');
 
       expect(v3Name).toBe('hooks/metrics');
     });
 
     it('should translate neural_train to hooks/pretrain', () => {
-      const v3Name = mockMCP.translateToolName('mcp__ruv-swarm__neural_train');
+      const v3Name = mockMCP.translateToolName('mcp__ruf-swarm__neural_train');
 
       expect(v3Name).toBe('hooks/pretrain');
     });
 
     it('should return compatible metrics response', async () => {
-      const result = await mockMCP.callTool('mcp__ruv-swarm__neural_status', {}) as Record<string, unknown>;
+      const result = await mockMCP.callTool('mcp__ruf-swarm__neural_status', {}) as Record<string, unknown>;
 
       expect(result).toHaveProperty('patterns');
       expect(result).toHaveProperty('successRate');
     });
 
     it('should handle pretrain operation', async () => {
-      const result = await mockMCP.callTool('mcp__ruv-swarm__neural_train', {
+      const result = await mockMCP.callTool('mcp__ruf-swarm__neural_train', {
         data: { source: 'repo' },
       }) as Record<string, unknown>;
 

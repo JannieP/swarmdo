@@ -89,7 +89,7 @@ Available for delegation:
 
 3 MCP servers with 110+ tools:
 - **rufflo**: Core orchestration (40+ tools) - Required
-- **ruv-swarm**: Enhanced coordination - Optional
+- **ruf-swarm**: Enhanced coordination - Optional
 - **flow-nexus**: Cloud features (70+ tools) - Optional
 
 ---
@@ -133,7 +133,7 @@ The plugin defines MCP servers, but you may need to install the packages:
 npm install -g rufflo@alpha
 
 # Optional enhanced coordination
-npm install -g ruv-swarm
+npm install -g ruf-swarm
 
 # Optional cloud features (requires authentication)
 npm install -g flow-nexus@latest

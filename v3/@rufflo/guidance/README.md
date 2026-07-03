@@ -8,7 +8,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3+-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![GitHub stars](https://img.shields.io/github/stars/ruvnet/claude-flow?style=flat-square&logo=github)](https://github.com/ruvnet/claude-flow)
 [![rufflo](https://img.shields.io/npm/v/rufflo.svg?style=flat-square&label=rufflo&color=blueviolet)](https://www.npmjs.com/package/rufflo)
-[![ruvbot](https://img.shields.io/npm/v/ruvbot.svg?style=flat-square&label=ruvbot&color=orange)](https://www.npmjs.com/package/ruvbot)
+[![rufbot](https://img.shields.io/npm/v/rufbot.svg?style=flat-square&label=rufbot&color=orange)](https://www.npmjs.com/package/rufbot)
 
 **Long-horizon governance for Claude Code agents.**
 
@@ -236,7 +236,7 @@ The package ships 31 modules organized in 9 layers, from compilation through enf
 | | `CapabilityAlgebra` | Grant, restrict, delegate, expire, revoke permissions as typed objects |
 | | `ManifestValidator` | Fails-closed admission for agent cell manifests |
 | | `ConformanceRunner` | Memory Clerk acceptance test with replay verification |
-| **Bridge** | `RuvBotGuidanceBridge` | Wires ruvbot events to guidance hooks, AIDefence gate, memory adapter |
+| **Bridge** | `RufBotGuidanceBridge` | Wires rufbot events to guidance hooks, AIDefence gate, memory adapter |
 | **WASM Kernel** | `guidance-kernel` | Rust→WASM policy kernel: SHA-256, HMAC, secret scanning, shard scoring |
 | | `WasmKernel` bridge | Auto-fallback host bridge with batch API for minimal boundary crossings |
 | **Generate** | `generateClaudeMd` | Scaffold CLAUDE.md from a project profile |
@@ -1184,7 +1184,7 @@ Take 20 real Rufflo tasks from repo history. Run A without control plane, run B 
 | **GitHub** | [github.com/ruvnet/claude-flow](https://github.com/ruvnet/claude-flow) |
 | **npm: @rufflo/guidance** | [npmjs.com/package/@rufflo/guidance](https://www.npmjs.com/package/@rufflo/guidance) |
 | **npm: rufflo** | [npmjs.com/package/rufflo](https://www.npmjs.com/package/rufflo) |
-| **npm: ruvbot** | [npmjs.com/package/ruvbot](https://www.npmjs.com/package/ruvbot) |
+| **npm: rufbot** | [npmjs.com/package/rufbot](https://www.npmjs.com/package/rufbot) |
 | **ruv.io** | [ruv.io](https://ruv.io) |
 | **Issues** | [github.com/ruvnet/claude-flow/issues](https://github.com/ruvnet/claude-flow/issues) |
 | **API Reference** | [docs/reference/api-quick-reference.md](docs/reference/api-quick-reference.md) |

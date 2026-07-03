@@ -220,23 +220,23 @@ export type {
   ReplayTestResult,
 } from './conformance-kit.js';
 export {
-  RuvBotGuidanceBridge,
+  RufBotGuidanceBridge,
   AIDefenceGate,
-  RuvBotMemoryAdapter,
-  createRuvBotBridge,
+  RufBotMemoryAdapter,
+  createRufBotBridge,
   createAIDefenceGate,
-  createRuvBotMemoryAdapter,
-} from './ruvbot-integration.js';
+  createRufBotMemoryAdapter,
+} from './rufbot-integration.js';
 export type {
-  RuvBotInstance,
-  RuvBotAIDefenceGuard,
-  RuvBotMemory,
+  RufBotInstance,
+  RufBotAIDefenceGuard,
+  RufBotMemory,
   AIDefenceThreat,
   AIDefenceResult,
   AIDefenceGateConfig,
-  RuvBotBridgeConfig,
-  RuvBotEvent,
-} from './ruvbot-integration.js';
+  RufBotBridgeConfig,
+  RufBotEvent,
+} from './rufbot-integration.js';
 export { MetaGovernor, createMetaGovernor } from './meta-governance.js';
 export type {
   InvariantCheckResult,

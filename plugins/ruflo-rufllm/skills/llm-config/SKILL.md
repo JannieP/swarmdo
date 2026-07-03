@@ -1,13 +1,13 @@
 ---
 name: llm-config
-description: Configure RuVLLM local inference with model selection, MicroLoRA fine-tuning, and SONA adaptation
+description: Configure RufLLM local inference with model selection, MicroLoRA fine-tuning, and SONA adaptation
 argument-hint: "[--model MODEL] [--adapter microlora|sona]"
 allowed-tools: mcp__rufflo__rufllm_generate_config mcp__rufflo__rufllm_status mcp__rufflo__rufllm_microlora_create mcp__rufflo__rufllm_microlora_adapt mcp__rufflo__rufllm_sona_create mcp__rufflo__rufllm_sona_adapt Bash
 ---
 
 # LLM Configuration
 
-Configure RuVLLM for local inference and fine-tuning.
+Configure RufLLM for local inference and fine-tuning.
 
 ## When to use
 

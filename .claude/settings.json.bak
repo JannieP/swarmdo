@@ -76,8 +76,8 @@
       "mcp__agentic-flow",
       "mcp__claude-flow",
       "mcp__claude-flow__*",
-      "mcp__ruv-swarm",
-      "mcp__ruv-swarm__*",
+      "mcp__ruf-swarm",
+      "mcp__ruf-swarm__*",
       "mcp__flow-nexus__*"
     ],
     "deny": [
@@ -522,5 +522,5 @@
     }
   },
   "includeCoAuthoredBy": true,
-  "enabledMcpjsonServers": ["claude-flow", "ruv-swarm"]
+  "enabledMcpjsonServers": ["claude-flow", "ruf-swarm"]
 }

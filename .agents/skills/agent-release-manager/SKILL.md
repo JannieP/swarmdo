@@ -5,7 +5,7 @@ description: Agent skill for release-manager - invoke with $agent-release-manage
 
 ---
 name: release-manager
-description: Automated release coordination and deployment with ruv-swarm orchestration for seamless version management, testing, and deployment across multiple packages
+description: Automated release coordination and deployment with ruf-swarm orchestration for seamless version management, testing, and deployment across multiple packages
 type: development
 color: "#FF6B35"
 tools:
@@ -29,22 +29,22 @@ tools:
 hooks:
   pre_task: |
     echo "🚀 Initializing release management pipeline..."
-    npx ruv-swarm hook pre-task --mode release-manager
+    npx ruf-swarm hook pre-task --mode release-manager
   post_edit: |
     echo "📝 Validating release changes and updating documentation..."
-    npx ruv-swarm hook post-edit --mode release-manager --validate-release
+    npx ruf-swarm hook post-edit --mode release-manager --validate-release
   post_task: |
     echo "✅ Release management task completed. Updating release status..."
-    npx ruv-swarm hook post-task --mode release-manager --update-status
+    npx ruf-swarm hook post-task --mode release-manager --update-status
   notification: |
     echo "📢 Sending release notifications to stakeholders..."
-    npx ruv-swarm hook notification --mode release-manager
+    npx ruf-swarm hook notification --mode release-manager
 ---
 
 # GitHub Release Manager
 
 ## Purpose
-Automated release coordination and deployment with ruv-swarm orchestration for seamless version management, testing, and deployment across multiple packages.
+Automated release coordination and deployment with ruf-swarm orchestration for seamless version management, testing, and deployment across multiple packages.
 
 ## Capabilities
 - **Automated release pipelines** with comprehensive testing
@@ -98,9 +98,9 @@ mcp__github__push_files {
       }, null, 2)
     },
     {
-      path: "ruv-swarm$npm$package.json", 
+      path: "ruf-swarm$npm$package.json", 
       content: JSON.stringify({
-        name: "ruv-swarm",
+        name: "ruf-swarm",
         version: "1.0.12",
         // ... rest of package.json
       }, null, 2)
@@ -139,9 +139,9 @@ Bash("cd $workspaces$ruv-FANN$claude-code-flow$claude-code-flow && npm run test"
 Bash("cd $workspaces$ruv-FANN$claude-code-flow$claude-code-flow && npm run lint")
 Bash("cd $workspaces$ruv-FANN$claude-code-flow$claude-code-flow && npm run build")
 
-Bash("cd $workspaces$ruv-FANN$ruv-swarm$npm && npm install")
-Bash("cd $workspaces$ruv-FANN$ruv-swarm$npm && npm run test:all")
-Bash("cd $workspaces$ruv-FANN$ruv-swarm$npm && npm run lint")
+Bash("cd $workspaces$ruv-FANN$ruf-swarm$npm && npm install")
+Bash("cd $workspaces$ruv-FANN$ruf-swarm$npm && npm run test:all")
+Bash("cd $workspaces$ruv-FANN$ruf-swarm$npm && npm run lint")
 
 // Create release PR with validation results
 mcp__github__create_pull_request {
@@ -160,7 +160,7 @@ mcp__github__create_pull_request {
 
 ### 📦 Package Updates
 - **rufflo**: v1.0.71 → v1.0.72
-- **ruv-swarm**: v1.0.11 → v1.0.12
+- **ruf-swarm**: v1.0.11 → v1.0.12
 
 ### 🔧 Changes
 #### Added
@@ -190,7 +190,7 @@ mcp__github__create_pull_request {
 - [x] Documentation: Updated and synchronized
 
 ### 🐝 Swarm Coordination
-This release was coordinated using ruv-swarm agents:
+This release was coordinated using ruf-swarm agents:
 - **Release Coordinator**: Overall release management
 - **QA Engineer**: Comprehensive testing validation
 - **Release Reviewer**: Code quality and standards review
@@ -201,7 +201,7 @@ This release was coordinated using ruv-swarm agents:
 This release is production-ready with comprehensive validation and testing.
 
 ---
-🤖 Generated with Claude Code using ruv-swarm coordination`
+🤖 Generated with Claude Code using ruf-swarm coordination`
 }
 ```
 
@@ -227,7 +227,7 @@ This release is production-ready with comprehensive validation and testing.
   
   // Update all release-related files
   Write("$tmp$release-v1.0.72$claude-code-flow$claude-code-flow$package.json", "[updated package.json]")
-  Write("$tmp$release-v1.0.72$ruv-swarm$npm$package.json", "[updated package.json]")
+  Write("$tmp$release-v1.0.72$ruf-swarm$npm$package.json", "[updated package.json]")
   Write("$tmp$release-v1.0.72/CHANGELOG.md", "[release changelog]")
   Write("$tmp$release-v1.0.72/RELEASE_NOTES.md", "[detailed release notes]")
   
@@ -235,7 +235,7 @@ This release is production-ready with comprehensive validation and testing.
   
   // Run comprehensive validation
   Bash("cd $workspaces$ruv-FANN$claude-code-flow$claude-code-flow && npm install && npm test && npm run lint && npm run build")
-  Bash("cd $workspaces$ruv-FANN$ruv-swarm$npm && npm install && npm run test:all && npm run lint")
+  Bash("cd $workspaces$ruv-FANN$ruf-swarm$npm && npm install && npm run test:all && npm run lint")
   
   // Create release PR using gh CLI
   Bash(`gh pr create \
@@ -263,7 +263,7 @@ This release is production-ready with comprehensive validation and testing.
       timestamp: Date.now(),
       version: "1.0.72",
       stage: "validation_complete",
-      packages: ["rufflo", "ruv-swarm"],
+      packages: ["rufflo", "ruf-swarm"],
       validation_passed: true,
       ready_for_review: true
     }
@@ -352,7 +352,7 @@ jobs:
       - name: Install and Test
         run: |
           cd claude-code-flow$claude-code-flow && npm install && npm test
-          cd ../..$ruv-swarm$npm && npm install && npm test:all
+          cd ../..$ruf-swarm$npm && npm install && npm test:all
       - name: Validate Release
         run: npx rufflo release validate
 ```

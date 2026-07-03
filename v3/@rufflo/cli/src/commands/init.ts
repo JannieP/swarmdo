@@ -283,7 +283,7 @@ const initAction = async (ctx: CommandContext): Promise<CommandResult> => {
     // require a login, get committed into .mcp.json, and add per-session MCP
     // tool-definition token cost. --cloud-mcp restores the all-three behavior.
     if (!cloudMcp) {
-      options.mcp = { ...options.mcp, ruvSwarm: false, flowNexus: false };
+      options.mcp = { ...options.mcp, rufSwarm: false, flowNexus: false };
     }
   } else {
     options = { ...DEFAULT_INIT_OPTIONS, targetDir: cwd, force };
@@ -1150,12 +1150,12 @@ export const initCommand: Command = {
       default: false,
     },
     {
-      // #2356: under --full, the auth-gated cloud MCP servers (ruv-swarm,
+      // #2356: under --full, the auth-gated cloud MCP servers (ruf-swarm,
       // flow-nexus) get written into a committed .mcp.json and add MCP
       // tool-definition token cost every session. Keep them opt-in even with
       // --full; pass --cloud-mcp to register them.
       name: 'cloud-mcp',
-      description: 'Register auth-gated cloud MCP servers (ruv-swarm, flow-nexus) in .mcp.json (only relevant with --full)',
+      description: 'Register auth-gated cloud MCP servers (ruf-swarm, flow-nexus) in .mcp.json (only relevant with --full)',
       type: 'boolean',
       default: false,
     },

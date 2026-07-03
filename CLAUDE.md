@@ -96,7 +96,7 @@
 - Keep task cycles short with verification gates
 
 ```javascript
-mcp__ruv-swarm__swarm_init({
+mcp__ruf-swarm__swarm_init({
   topology: "hierarchical",
   maxAgents: 8,
   strategy: "specialized"
@@ -122,7 +122,7 @@ For complex tasks, spawn both Claude and Codex workers in parallel:
 
 ```javascript
 // STEP 1: Initialize dual-mode swarm
-mcp__ruv-swarm__swarm_init({
+mcp__ruf-swarm__swarm_init({
   topology: "hierarchical",
   maxAgents: 8,
   strategy: "specialized"
@@ -257,7 +257,7 @@ When the user requests a complex task (multi-file changes, feature implementatio
 
 ```javascript
 // STEP 1: Initialize swarm coordination via MCP
-mcp__ruv-swarm__swarm_init({
+mcp__ruf-swarm__swarm_init({
   topology: "hierarchical",
   maxAgents: 8,
   strategy: "specialized"
@@ -855,7 +855,7 @@ Run `npx rufflo@v3alpha doctor` to check:
 ```bash
 # Add MCP servers
 claude mcp add rufflo npx rufflo@v3alpha mcp start
-claude mcp add ruv-swarm npx ruv-swarm mcp start  # Optional
+claude mcp add ruf-swarm npx ruf-swarm mcp start  # Optional
 claude mcp add flow-nexus npx flow-nexus@latest mcp start  # Optional
 
 # Start daemon

@@ -67,7 +67,7 @@ jobs:
           
       - name: Analyze Changes
         run: |
-          npx ruv-swarm actions analyze \
+          npx ruf-swarm actions analyze \
             --commit ${{ github.sha }} \
             --suggest-tests \
             --optimize-pipeline
@@ -76,7 +76,7 @@ jobs:
 ### 2. Dynamic Workflow Generation
 ```bash
 # Generate workflows based on code analysis
-npx ruv-swarm actions generate-workflow \
+npx ruf-swarm actions generate-workflow \
   --analyze-codebase \
   --detect-languages \
   --create-optimal-pipeline
@@ -87,7 +87,7 @@ npx ruv-swarm actions generate-workflow \
 # Smart test runner
 - name: Swarm Test Selection
   run: |
-    npx ruv-swarm actions smart-test \
+    npx ruf-swarm actions smart-test \
       --changed-files ${{ steps.files.outputs.all }} \
       --impact-analysis \
       --parallel-safe
@@ -110,12 +110,12 @@ jobs:
       - name: Detect Languages
         id: detect
         run: |
-          npx ruv-swarm actions detect-stack \
+          npx ruf-swarm actions detect-stack \
             --output json > stack.json
             
       - name: Dynamic Build Matrix
         run: |
-          npx ruv-swarm actions create-matrix \
+          npx ruf-swarm actions create-matrix \
             --from stack.json \
             --parallel-builds
 ```
@@ -136,7 +136,7 @@ jobs:
       - name: Security Analysis Swarm
         run: |
           # Use gh CLI for issue creation
-          SECURITY_ISSUES=$(npx ruv-swarm actions security \
+          SECURITY_ISSUES=$(npx ruf-swarm actions security \
             --deep-scan \
             --format json)
           
@@ -157,7 +157,7 @@ jobs:
 ### Pipeline Optimization
 ```bash
 # Optimize existing workflows
-npx ruv-swarm actions optimize \
+npx ruf-swarm actions optimize \
   --workflow ".github$workflows$ci.yml" \
   --suggest-parallelization \
   --reduce-redundancy \
@@ -168,7 +168,7 @@ npx ruv-swarm actions optimize \
 ```bash
 # Analyze failed runs using gh CLI
 gh run view ${{ github.run_id }} --json jobs,conclusion | \
-  npx ruv-swarm actions analyze-failure \
+  npx ruf-swarm actions analyze-failure \
     --suggest-fixes \
     --auto-retry-flaky
 
@@ -184,7 +184,7 @@ fi
 ### Resource Management
 ```bash
 # Optimize resource usage
-npx ruv-swarm actions resources \
+npx ruf-swarm actions resources \
   --analyze-usage \
   --suggest-runners \
   --cost-optimize
@@ -205,7 +205,7 @@ jobs:
     steps:
       - name: Diagnose and Fix
         run: |
-          npx ruv-swarm actions self-heal \
+          npx ruf-swarm actions self-heal \
             --run-id ${{ github.event.workflow_run.id }} \
             --auto-fix-common \
             --create-pr-complex
@@ -226,13 +226,13 @@ jobs:
       - name: Analyze Risk
         id: risk
         run: |
-          npx ruv-swarm actions deploy-risk \
+          npx ruf-swarm actions deploy-risk \
             --changes ${{ github.sha }} \
             --history 30d
             
       - name: Choose Strategy
         run: |
-          npx ruv-swarm actions deploy-strategy \
+          npx ruf-swarm actions deploy-strategy \
             --risk ${{ steps.risk.outputs.level }} \
             --auto-execute
 ```
@@ -249,7 +249,7 @@ jobs:
     steps:
       - name: Performance Analysis
         run: |
-          npx ruv-swarm actions perf-test \
+          npx ruf-swarm actions perf-test \
             --baseline main \
             --threshold 10% \
             --auto-profile-regression
@@ -271,7 +271,7 @@ runs:
   main: 'dist$index.js'
 
 // index.js
-const { SwarmAction } = require('ruv-swarm');
+const { SwarmAction } = require('ruf-swarm');
 
 async function run() {
   const swarm = new SwarmAction({
@@ -295,7 +295,7 @@ jobs:
     steps:
       - id: set-matrix
         run: |
-          MATRIX=$(npx ruv-swarm actions test-matrix \
+          MATRIX=$(npx ruf-swarm actions test-matrix \
             --detect-frameworks \
             --optimize-coverage)
           echo "matrix=${MATRIX}" >> $GITHUB_OUTPUT
@@ -309,7 +309,7 @@ jobs:
 ### Intelligent Parallelization
 ```bash
 # Determine optimal parallelization
-npx ruv-swarm actions parallel-strategy \
+npx ruf-swarm actions parallel-strategy \
   --analyze-dependencies \
   --time-estimates \
   --cost-aware
@@ -320,7 +320,7 @@ npx ruv-swarm actions parallel-strategy \
 ### Workflow Analytics
 ```bash
 # Analyze workflow performance
-npx ruv-swarm actions analytics \
+npx ruf-swarm actions analytics \
   --workflow "ci.yml" \
   --period 30d \
   --identify-bottlenecks \
@@ -330,7 +330,7 @@ npx ruv-swarm actions analytics \
 ### Cost Optimization
 ```bash
 # Optimize GitHub Actions costs
-npx ruv-swarm actions cost-optimize \
+npx ruf-swarm actions cost-optimize \
   --analyze-usage \
   --suggest-caching \
   --recommend-self-hosted
@@ -339,7 +339,7 @@ npx ruv-swarm actions cost-optimize \
 ### Failure Patterns
 ```bash
 # Identify failure patterns
-npx ruv-swarm actions failure-patterns \
+npx ruf-swarm actions failure-patterns \
   --period 90d \
   --classify-failures \
   --suggest-preventions
@@ -362,7 +362,7 @@ jobs:
           PR_DATA=$(gh pr view ${{ github.event.pull_request.number }} --json files,labels)
           
           # Run validation with swarm
-          RESULTS=$(npx ruv-swarm actions pr-validate \
+          RESULTS=$(npx ruf-swarm actions pr-validate \
             --spawn-agents "linter,tester,security,docs" \
             --parallel \
             --pr-data "$PR_DATA")
@@ -385,7 +385,7 @@ jobs:
     steps:
       - name: Release Swarm
         run: |
-          npx ruv-swarm actions release \
+          npx ruf-swarm actions release \
             --analyze-changes \
             --generate-notes \
             --create-artifacts \
@@ -405,7 +405,7 @@ jobs:
     steps:
       - name: Documentation Swarm
         run: |
-          npx ruv-swarm actions update-docs \
+          npx ruf-swarm actions update-docs \
             --analyze-changes \
             --update-api-docs \
             --check-examples
@@ -436,7 +436,7 @@ jobs:
 ### Predictive Failures
 ```bash
 # Predict potential failures
-npx ruv-swarm actions predict \
+npx ruf-swarm actions predict \
   --analyze-history \
   --identify-risks \
   --suggest-preventive
@@ -445,7 +445,7 @@ npx ruv-swarm actions predict \
 ### Workflow Recommendations
 ```bash
 # Get workflow recommendations
-npx ruv-swarm actions recommend \
+npx ruf-swarm actions recommend \
   --analyze-repo \
   --suggest-workflows \
   --industry-best-practices
@@ -454,7 +454,7 @@ npx ruv-swarm actions recommend \
 ### Automated Optimization
 ```bash
 # Continuously optimize workflows
-npx ruv-swarm actions auto-optimize \
+npx ruf-swarm actions auto-optimize \
   --monitor-performance \
   --apply-improvements \
   --track-savings
@@ -466,7 +466,7 @@ npx ruv-swarm actions auto-optimize \
 ```yaml
 - name: Debug Swarm
   run: |
-    npx ruv-swarm actions debug \
+    npx ruf-swarm actions debug \
       --verbose \
       --trace-agents \
       --export-logs
@@ -475,7 +475,7 @@ npx ruv-swarm actions auto-optimize \
 ### Performance Profiling
 ```bash
 # Profile workflow performance
-npx ruv-swarm actions profile \
+npx ruf-swarm actions profile \
   --workflow "ci.yml" \
   --identify-slow-steps \
   --suggest-optimizations

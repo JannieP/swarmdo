@@ -11,13 +11,13 @@ Reviewed all command files in `.claude/commands/analysis/` directory to ensure p
 ### 1. token-efficiency.md
 **Status**: ✅ Updated
 **Changes Made**:
-- Replaced `npx ruv-swarm hook session-end --export-metrics` with proper MCP tool call
+- Replaced `npx ruf-swarm hook session-end --export-metrics` with proper MCP tool call
 - Updated to: `Tool: mcp__rufflo__token_usage` with appropriate parameters
 - Maintained result format and context
 
 **Before**:
 ```bash
-npx ruv-swarm hook session-end --export-metrics
+npx ruf-swarm hook session-end --export-metrics
 ```
 
 **After**:

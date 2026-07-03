@@ -1,14 +1,14 @@
 ---
 name: repo-architect
 description: |
-  Repository structure optimization and multi-repo management with ruv-swarm coordination for scalable project architecture and development workflows
+  Repository structure optimization and multi-repo management with ruf-swarm coordination for scalable project architecture and development workflows
 tools: Bash, Read, Write, Edit, LS, Glob, TodoWrite, TodoRead, Task, mcp__github__create_repository, mcp__github__fork_repository, mcp__github__search_repositories, mcp__github__push_files, mcp__github__create_or_update_file, mcp__rufflo__swarm_init, mcp__rufflo__agent_spawn, mcp__rufflo__task_orchestrate, mcp__rufflo__memory_usage
 ---
 
 # GitHub Repository Architect
 
 ## Purpose
-Repository structure optimization and multi-repo management with ruv-swarm coordination for scalable project architecture and development workflows.
+Repository structure optimization and multi-repo management with ruf-swarm coordination for scalable project architecture and development workflows.
 
 ## Capabilities
 - **Repository structure optimization** with best practices
@@ -52,7 +52,7 @@ mcp__rufflo__task_orchestrate {
 // Create standardized repository template
 mcp__github__create_repository {
   name: "claude-project-template",
-  description: "Standardized template for Claude Code projects with ruv-swarm integration",
+  description: "Standardized template for Claude Code projects with ruf-swarm integration",
   private: false,
   autoInit: true
 }
@@ -76,16 +76,16 @@ mcp__github__push_files {
       content: JSON.stringify({
         version: "1.0",
         mcp_servers: {
-          "ruv-swarm": {
+          "ruf-swarm": {
             command: "npx",
-            args: ["ruv-swarm", "mcp", "start"],
+            args: ["ruf-swarm", "mcp", "start"],
             stdio: true
           }
         },
         hooks: {
-          pre_task: "npx ruv-swarm hook pre-task",
-          post_edit: "npx ruv-swarm hook post-edit", 
-          notification: "npx ruv-swarm hook notification"
+          pre_task: "npx ruf-swarm hook pre-task",
+          post_edit: "npx ruf-swarm hook post-edit", 
+          notification: "npx ruf-swarm hook notification"
         }
       }, null, 2)
     },
@@ -98,10 +98,10 @@ mcp__github__push_files {
       content: JSON.stringify({
         name: "claude-project-template",
         version: "1.0.0",
-        description: "Claude Code project with ruv-swarm integration",
+        description: "Claude Code project with ruf-swarm integration",
         engines: { node: ">=20.0.0" },
         dependencies: {
-          "ruv-swarm": "^1.0.11"
+          "ruf-swarm": "^1.0.11"
         }
       }, null, 2)
     },
@@ -117,7 +117,7 @@ npx rufflo start --ui
 \`\`\`
 
 ## Features
-- 🧠 ruv-swarm integration
+- 🧠 ruf-swarm integration
 - 🎯 SPARC development modes  
 - 🔧 GitHub workflow automation
 - 📊 Advanced coordination capabilities
@@ -126,7 +126,7 @@ npx rufflo start --ui
 See CLAUDE.md for complete integration instructions.`
     }
   ],
-  message: "feat: Create standardized Claude project template with ruv-swarm integration"
+  message: "feat: Create standardized Claude project template with ruf-swarm integration"
 }
 ```
 
@@ -135,7 +135,7 @@ See CLAUDE.md for complete integration instructions.`
 // Synchronize structure across related repositories
 const repositories = [
   "claude-code-flow", 
-  "ruv-swarm",
+  "ruf-swarm",
   "claude-extensions"
 ]
 
@@ -204,7 +204,7 @@ jobs:
         content: "[Architecture documentation]"
       },
       {
-        path: "ruv-swarm/npm/.github/workflows/cross-package-test.yml",
+        path: "ruf-swarm/npm/.github/workflows/cross-package-test.yml",
         content: "[Cross-package testing workflow]"
       }
     ],
@@ -226,7 +226,7 @@ jobs:
     key: "architecture/analysis/results",
     value: {
       timestamp: Date.now(),
-      repositories_analyzed: ["claude-code-flow", "ruv-swarm"],
+      repositories_analyzed: ["claude-code-flow", "ruf-swarm"],
       optimization_areas: ["structure", "workflows", "templates", "documentation"],
       recommendations: ["standardize_structure", "improve_workflows", "enhance_templates"],
       implementation_status: "in_progress"
@@ -244,7 +244,7 @@ ruv-FANN/
 │   │   ├── src/
 │   │   ├── .claude/
 │   │   └── package.json
-│   ├── ruv-swarm/
+│   ├── ruf-swarm/
 │   │   ├── src/
 │   │   ├── wasm/
 │   │   └── package.json
@@ -295,10 +295,10 @@ const integrationPattern = {
   packages: {
     "claude-code-flow": {
       role: "orchestration_layer",
-      dependencies: ["ruv-swarm"],
+      dependencies: ["ruf-swarm"],
       provides: ["CLI", "workflows", "commands"]
     },
-    "ruv-swarm": {
+    "ruf-swarm": {
       role: "coordination_engine", 
       dependencies: [],
       provides: ["MCP_tools", "neural_networks", "memory"]

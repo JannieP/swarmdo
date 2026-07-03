@@ -161,17 +161,17 @@ export const V2_MCP_TOOLS: V2MCPTool[] = [
   { name: 'swarm_status', parameters: {}, returnType: 'SwarmStatus', v3Equivalent: 'swarm/status' },
   { name: 'swarm/get-status', parameters: {}, returnType: 'SwarmStatus', v3Equivalent: 'swarm/status' },
   { name: 'swarm/get-comprehensive-status', parameters: {}, returnType: 'ComprehensiveStatus', v3Equivalent: 'swarm/status' },
-  { name: 'mcp__ruv-swarm__swarm_init', parameters: { topology: { type: 'string', required: false } }, returnType: 'SwarmInfo', v3Equivalent: 'swarm/init' },
-  { name: 'mcp__ruv-swarm__swarm_status', parameters: {}, returnType: 'SwarmStatus', v3Equivalent: 'swarm/status' },
-  { name: 'mcp__ruv-swarm__agent_spawn', parameters: { type: { type: 'string', required: true } }, returnType: 'AgentInfo', v3Equivalent: 'agent/spawn' },
-  { name: 'mcp__ruv-swarm__agent_list', parameters: {}, returnType: 'AgentInfo[]', v3Equivalent: 'agent/list' },
-  { name: 'mcp__ruv-swarm__agent_metrics', parameters: { id: { type: 'string', required: true } }, returnType: 'AgentMetrics', v3Equivalent: 'agent/status' },
+  { name: 'mcp__ruf-swarm__swarm_init', parameters: { topology: { type: 'string', required: false } }, returnType: 'SwarmInfo', v3Equivalent: 'swarm/init' },
+  { name: 'mcp__ruf-swarm__swarm_status', parameters: {}, returnType: 'SwarmStatus', v3Equivalent: 'swarm/status' },
+  { name: 'mcp__ruf-swarm__agent_spawn', parameters: { type: { type: 'string', required: true } }, returnType: 'AgentInfo', v3Equivalent: 'agent/spawn' },
+  { name: 'mcp__ruf-swarm__agent_list', parameters: {}, returnType: 'AgentInfo[]', v3Equivalent: 'agent/list' },
+  { name: 'mcp__ruf-swarm__agent_metrics', parameters: { id: { type: 'string', required: true } }, returnType: 'AgentMetrics', v3Equivalent: 'agent/status' },
 
   // Memory tools
   { name: 'memory/query', parameters: { search: { type: 'string', required: true } }, returnType: 'MemoryEntry[]', v3Equivalent: 'memory/search' },
   { name: 'memory/store', parameters: { content: { type: 'string', required: true }, type: { type: 'string', required: false } }, returnType: 'MemoryEntry', v3Equivalent: 'memory/store' },
   { name: 'memory/delete', parameters: { id: { type: 'string', required: true } }, returnType: 'boolean', v3Equivalent: 'memory/delete' },
-  { name: 'mcp__ruv-swarm__memory_usage', parameters: {}, returnType: 'MemoryStats', v3Equivalent: 'memory/list' },
+  { name: 'mcp__ruf-swarm__memory_usage', parameters: {}, returnType: 'MemoryStats', v3Equivalent: 'memory/list' },
 
   // Config tools
   { name: 'config/get', parameters: { key: { type: 'string', required: true } }, returnType: 'any', v3Equivalent: 'config/load' },
@@ -184,8 +184,8 @@ export const V2_MCP_TOOLS: V2MCPTool[] = [
   { name: 'task/complete', parameters: { taskId: { type: 'string', required: true }, result: { type: 'any', required: false } }, returnType: 'boolean', v3Equivalent: 'task/complete' },
 
   // Neural/Learning tools
-  { name: 'mcp__ruv-swarm__neural_status', parameters: {}, returnType: 'NeuralStatus', v3Equivalent: 'hooks/metrics' },
-  { name: 'mcp__ruv-swarm__neural_train', parameters: { data: { type: 'object', required: true } }, returnType: 'TrainingResult', v3Equivalent: 'hooks/pretrain' },
+  { name: 'mcp__ruf-swarm__neural_status', parameters: {}, returnType: 'NeuralStatus', v3Equivalent: 'hooks/metrics' },
+  { name: 'mcp__ruf-swarm__neural_train', parameters: { data: { type: 'object', required: true } }, returnType: 'TrainingResult', v3Equivalent: 'hooks/pretrain' },
 
   // GitHub integration tools
   { name: 'github/pr-create', parameters: { title: { type: 'string', required: true }, body: { type: 'string', required: false } }, returnType: 'PRInfo', v3Equivalent: 'github/pr-create' },
@@ -388,17 +388,17 @@ export class V2CompatibilityValidator {
       'swarm_status': 'swarm/status',
       'swarm/get-status': 'swarm/status',
       'swarm/get-comprehensive-status': 'swarm/status',
-      'mcp__ruv-swarm__swarm_init': 'swarm/init',
-      'mcp__ruv-swarm__swarm_status': 'swarm/status',
-      'mcp__ruv-swarm__agent_spawn': 'agent/spawn',
-      'mcp__ruv-swarm__agent_list': 'agent/list',
-      'mcp__ruv-swarm__agent_metrics': 'agent/status',
+      'mcp__ruf-swarm__swarm_init': 'swarm/init',
+      'mcp__ruf-swarm__swarm_status': 'swarm/status',
+      'mcp__ruf-swarm__agent_spawn': 'agent/spawn',
+      'mcp__ruf-swarm__agent_list': 'agent/list',
+      'mcp__ruf-swarm__agent_metrics': 'agent/status',
       'memory/query': 'memory/search',
-      'mcp__ruv-swarm__memory_usage': 'memory/list',
+      'mcp__ruf-swarm__memory_usage': 'memory/list',
       'config/get': 'config/load',
       'config/update': 'config/save',
-      'mcp__ruv-swarm__neural_status': 'hooks/metrics',
-      'mcp__ruv-swarm__neural_train': 'hooks/pretrain',
+      'mcp__ruf-swarm__neural_status': 'hooks/metrics',
+      'mcp__ruf-swarm__neural_train': 'hooks/pretrain',
     };
 
     const v3Tools = [

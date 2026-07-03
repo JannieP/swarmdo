@@ -27,7 +27,7 @@ hooks:
 # GitHub Integration Modes
 
 ## Overview
-This document describes all GitHub integration modes available in Rufflo with ruv-swarm coordination. Each mode is optimized for specific GitHub workflows and includes batch tool integration for maximum efficiency.
+This document describes all GitHub integration modes available in Rufflo with ruf-swarm coordination. Each mode is optimized for specific GitHub workflows and includes batch tool integration for maximum efficiency.
 
 ## GitHub Workflow Modes
 
@@ -134,7 +134,7 @@ This document describes all GitHub integration modes available in Rufflo with ru
 
 ### Managing repository synchronization:
 ```bash
-/github sync-coordinator "Synchronize claude-code-flow and ruv-swarm packages, align versions, and update cross-dependencies"
+/github sync-coordinator "Synchronize claude-code-flow and ruf-swarm packages, align versions, and update cross-dependencies"
 ```
 
 ### Setting up automated issue tracking:
@@ -157,9 +157,9 @@ All GitHub modes support batch operations for maximum efficiency:
   Bash("git checkout main && git pull")
 ```
 
-## Integration with ruv-swarm
+## Integration with ruf-swarm
 
-All GitHub modes can be enhanced with ruv-swarm coordination:
+All GitHub modes can be enhanced with ruf-swarm coordination:
 
 ```javascript
 // Initialize swarm for GitHub workflow

@@ -260,7 +260,7 @@ npx rufflo@v3alpha github multi-repo-security \
 ### 1. Webhook-Based Coordination
 ```javascript
 // webhook-coordinator.js
-const { MultiRepoSwarm } = require('ruv-swarm');
+const { MultiRepoSwarm } = require('ruf-swarm');
 
 const swarm = new MultiRepoSwarm({
   webhook: {

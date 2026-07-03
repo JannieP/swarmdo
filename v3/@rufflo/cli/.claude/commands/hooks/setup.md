@@ -1,4 +1,4 @@
-# Setting Up ruv-swarm Hooks
+# Setting Up ruf-swarm Hooks
 
 ## Quick Start
 

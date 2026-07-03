@@ -183,9 +183,9 @@ const decideRouting = (task) => {
 // Both Claude Code and Codex can use these
 mcp__rufflo__memory_search  // Find patterns
 mcp__rufflo__memory_store   // Store results
-mcp__ruv-swarm__swarm_init       // Initialize coordination
-mcp__ruv-swarm__swarm_status     // Check status
-mcp__ruv-swarm__agent_spawn      // Spawn agents
+mcp__ruf-swarm__swarm_init       // Initialize coordination
+mcp__ruf-swarm__swarm_status     // Check status
+mcp__ruf-swarm__agent_spawn      // Spawn agents
 ```
 
 ### Coordination Pattern

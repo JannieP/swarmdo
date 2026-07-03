@@ -8,7 +8,7 @@ author: Rufflo Team
 requires:
   - gh (GitHub CLI)
   - rufflo
-  - ruv-swarm (optional for enhanced coordination)
+  - ruf-swarm (optional for enhanced coordination)
   - mcp-github (optional for MCP integration)
 dependencies:
   - git
@@ -313,23 +313,23 @@ npx rufflo github release-deploy \
 
   // Spawn package-specific agents
   Task("Package A Manager", "Coordinate rufflo package release v1.0.72", "coder")
-  Task("Package B Manager", "Coordinate ruv-swarm package release v1.0.12", "coder")
+  Task("Package B Manager", "Coordinate ruf-swarm package release v1.0.12", "coder")
   Task("Integration Tester", "Validate cross-package compatibility", "tester")
   Task("Version Coordinator", "Align dependencies and versions", "coordinator")
 
   // Update all packages simultaneously
   Write("packages$rufflo$package.json", "[v1.0.72 content]")
-  Write("packages$ruv-swarm$package.json", "[v1.0.12 content]")
+  Write("packages$ruf-swarm$package.json", "[v1.0.12 content]")
   Write("CHANGELOG.md", "[consolidated changelog]")
 
   // Run cross-package validation
   Bash("cd packages$rufflo && npm install && npm test")
-  Bash("cd packages$ruv-swarm && npm install && npm test")
+  Bash("cd packages$ruf-swarm && npm install && npm test")
   Bash("npm run test:integration")
 
   // Create unified release PR
   Bash(`gh pr create \
-    --title "Release: rufflo v1.0.72, ruv-swarm v1.0.12" \
+    --title "Release: rufflo v1.0.72, ruf-swarm v1.0.12" \
     --body "Multi-package coordinated release with cross-compatibility validation"`)
 ```
 

@@ -610,7 +610,7 @@ Run `npx @rufflo/cli@latest doctor` to check:
 ```bash
 # Add MCP servers (auto-detects MCP mode when stdin is piped)
 claude mcp add rufflo -- npx -y @rufflo/cli@latest
-claude mcp add ruv-swarm -- npx -y ruv-swarm mcp start  # Optional
+claude mcp add ruf-swarm -- npx -y ruf-swarm mcp start  # Optional
 claude mcp add flow-nexus -- npx -y flow-nexus@latest mcp start  # Optional
 
 # Start daemon
@@ -692,7 +692,7 @@ This includes:
 - All 27 hooks + 12 background workers
 - RufVector intelligence system details
 - Hive-Mind consensus mechanisms
-- Integration ecosystem (agentic-flow, agentdb, ruv-swarm, flow-nexus, agentic-jujutsu)
+- Integration ecosystem (agentic-flow, agentdb, ruf-swarm, flow-nexus, agentic-jujutsu)
 - Performance targets and status
 
 ## Support

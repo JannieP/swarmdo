@@ -205,7 +205,7 @@ The swarm automatically:
 claude mcp add rufflo npx rufflo@alpha mcp start
 
 # Enhanced coordination (optional)
-claude mcp add ruv-swarm npx ruv-swarm mcp start
+claude mcp add ruf-swarm npx ruf-swarm mcp start
 
 # Cloud features (optional - requires auth)
 claude mcp add flow-nexus npx flow-nexus@latest mcp start

@@ -1,6 +1,6 @@
 ---
 name: release-manager
-description: Automated release coordination and deployment with ruv-swarm orchestration for seamless version management, testing, and deployment across multiple packages
+description: Automated release coordination and deployment with ruf-swarm orchestration for seamless version management, testing, and deployment across multiple packages
 type: development
 color: "#FF6B35"
 capabilities:
@@ -82,7 +82,7 @@ hooks:
 # GitHub Release Manager
 
 ## Purpose
-Automated release coordination and deployment with ruv-swarm orchestration for seamless version management, testing, and deployment across multiple packages, enhanced with **self-learning** and **continuous improvement** capabilities powered by Agentic-Flow v3.0.0-alpha.1.
+Automated release coordination and deployment with ruf-swarm orchestration for seamless version management, testing, and deployment across multiple packages, enhanced with **self-learning** and **continuous improvement** capabilities powered by Agentic-Flow v3.0.0-alpha.1.
 
 ## Core Capabilities
 - **Automated release pipelines** with comprehensive testing
@@ -331,9 +331,9 @@ mcp__github__push_files {
       }, null, 2)
     },
     {
-      path: "ruv-swarm/npm/package.json", 
+      path: "ruf-swarm/npm/package.json", 
       content: JSON.stringify({
-        name: "ruv-swarm",
+        name: "ruf-swarm",
         version: "1.0.12",
         // ... rest of package.json
       }, null, 2)
@@ -393,7 +393,7 @@ mcp__github__create_pull_request {
 
 ### 📦 Package Updates
 - **rufflo**: v1.0.71 → v1.0.72
-- **ruv-swarm**: v1.0.11 → v1.0.12
+- **ruf-swarm**: v1.0.11 → v1.0.12
 
 ### 🔧 Changes
 #### Added
@@ -423,7 +423,7 @@ mcp__github__create_pull_request {
 - [x] Documentation: Updated and synchronized
 
 ### 🐝 Swarm Coordination
-This release was coordinated using ruv-swarm agents:
+This release was coordinated using ruf-swarm agents:
 - **Release Coordinator**: Overall release management
 - **QA Engineer**: Comprehensive testing validation
 - **Release Reviewer**: Code quality and standards review
@@ -434,7 +434,7 @@ This release was coordinated using ruv-swarm agents:
 This release is production-ready with comprehensive validation and testing.
 
 ---
-🤖 Generated with Claude Code using ruv-swarm coordination`
+🤖 Generated with Claude Code using ruf-swarm coordination`
 }
 ```
 
@@ -460,7 +460,7 @@ This release is production-ready with comprehensive validation and testing.
   
   // Update all release-related files
   Write("/tmp/release-v1.0.72/claude-code-flow/claude-code-flow/package.json", "[updated package.json]")
-  Write("/tmp/release-v1.0.72/ruv-swarm/npm/package.json", "[updated package.json]")
+  Write("/tmp/release-v1.0.72/ruf-swarm/npm/package.json", "[updated package.json]")
   Write("/tmp/release-v1.0.72/CHANGELOG.md", "[release changelog]")
   Write("/tmp/release-v1.0.72/RELEASE_NOTES.md", "[detailed release notes]")
   
@@ -496,7 +496,7 @@ This release is production-ready with comprehensive validation and testing.
       timestamp: Date.now(),
       version: "1.0.72",
       stage: "validation_complete",
-      packages: ["rufflo", "ruv-swarm"],
+      packages: ["rufflo", "ruf-swarm"],
       validation_passed: true,
       ready_for_review: true
     }
@@ -585,7 +585,7 @@ jobs:
       - name: Install and Test
         run: |
           cd claude-code-flow/claude-code-flow && npm install && npm test
-          cd ../../ruv-swarm/npm && npm install && npm test:all
+          cd ../../ruf-swarm/npm && npm install && npm test:all
       - name: Validate Release
         run: npx rufflo release validate
 ```

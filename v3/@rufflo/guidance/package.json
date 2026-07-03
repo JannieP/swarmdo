@@ -78,9 +78,9 @@
       "types": "./dist/conformance-kit.d.ts",
       "import": "./dist/conformance-kit.js"
     },
-    "./ruvbot-integration": {
-      "types": "./dist/ruvbot-integration.d.ts",
-      "import": "./dist/ruvbot-integration.js"
+    "./rufbot-integration": {
+      "types": "./dist/rufbot-integration.d.ts",
+      "import": "./dist/rufbot-integration.js"
     },
     "./trust": {
       "types": "./dist/trust.d.ts",
@@ -174,7 +174,7 @@
     "adversarial-defense",
     "prompt-injection",
     "wasm",
-    "ruvbot",
+    "rufbot",
     "ruv",
     "ai-safety",
     "agent-orchestration",

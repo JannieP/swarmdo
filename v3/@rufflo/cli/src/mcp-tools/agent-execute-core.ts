@@ -252,7 +252,7 @@ async function callOllamaCompat(
   const model = resolveOllamaModel(input.model);
   const startedAt = Date.now();
   // OLLAMA_BASE_URL lets users point at local/self-hosted endpoints
-  // (e.g. http://ruvultra:11434, http://localhost:11434) instead of
+  // (e.g. http://rufultra:11434, http://localhost:11434) instead of
   // Ollama Cloud. Default is the public cloud endpoint.
   const base = (process.env.OLLAMA_BASE_URL || 'https://ollama.com').replace(/\/+$/, '');
   const url = `${base}/v1/chat/completions`;

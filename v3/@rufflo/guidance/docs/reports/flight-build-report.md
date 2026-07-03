@@ -233,5 +233,5 @@ npx ts-node -e "
 - **GitHub**: [github.com/ruvnet/claude-flow](https://github.com/ruvnet/claude-flow)
 - **npm**: [@rufflo/guidance](https://www.npmjs.com/package/@rufflo/guidance)
 - **npm**: [rufflo](https://www.npmjs.com/package/rufflo)
-- **npm**: [ruvbot](https://www.npmjs.com/package/ruvbot)
+- **npm**: [rufbot](https://www.npmjs.com/package/rufbot)
 - **ruv.io**: [ruv.io](https://ruv.io)

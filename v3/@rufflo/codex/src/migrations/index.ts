@@ -170,7 +170,7 @@ const WARNING_PATTERNS: Array<{ pattern: RegExp | string; message: string }> = [
   { pattern: 'TodoWrite', message: 'TodoWrite - Codex uses different task tracking approach' },
   { pattern: /--dangerously-skip-permissions/g, message: 'Dangerous permission skip detected - use Codex approval_policy instead' },
   { pattern: /mcp__rufflo__/g, message: 'MCP tool calls need migration to Codex MCP configuration' },
-  { pattern: /mcp__ruv-swarm__/g, message: 'Swarm MCP calls - ensure ruv-swarm MCP server is configured in config.toml' },
+  { pattern: /mcp__ruf-swarm__/g, message: 'Swarm MCP calls - ensure ruf-swarm MCP server is configured in config.toml' },
 ];
 
 /**

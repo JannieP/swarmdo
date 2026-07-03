@@ -191,8 +191,8 @@ export interface StatuslineConfig {
 export interface MCPConfig {
   /** Include rufflo MCP server */
   claudeFlow: boolean;
-  /** Include ruv-swarm MCP server */
-  ruvSwarm: boolean;
+  /** Include ruf-swarm MCP server */
+  rufSwarm: boolean;
   /** Include flow-nexus MCP server */
   flowNexus: boolean;
   /** Auto-start MCP server */
@@ -440,7 +440,7 @@ export const DEFAULT_INIT_OPTIONS: InitOptions = {
   },
   mcp: {
     claudeFlow: true,
-    ruvSwarm: false,
+    rufSwarm: false,
     flowNexus: false,
     autoStart: false,
     port: 3000,
@@ -571,7 +571,7 @@ export const FULL_INIT_OPTIONS: InitOptions = {
   },
   mcp: {
     claudeFlow: true,
-    ruvSwarm: true,
+    rufSwarm: true,
     flowNexus: true,
     autoStart: false,
     port: 3000,

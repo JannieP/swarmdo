@@ -7,7 +7,7 @@ tags: [code-review, github, swarm, pr-management, automation]
 author: Claude Code Flow
 requires:
   - github-cli
-  - ruv-swarm
+  - ruf-swarm
   - rufflo
 capabilities:
   - Multi-agent code review
@@ -27,7 +27,7 @@ capabilities:
 ### Simple Review
 ```bash
 # Initialize review swarm for PR
-gh pr view 123 --json files,diff | npx ruv-swarm github review-init --pr 123
+gh pr view 123 --json files,diff | npx ruf-swarm github review-init --pr 123
 
 # Post review status
 gh pr comment 123 --body "🔍 Multi-agent code review initiated"
@@ -40,7 +40,7 @@ PR_DATA=$(gh pr view 123 --json files,additions,deletions,title,body)
 PR_DIFF=$(gh pr diff 123)
 
 # Initialize comprehensive review
-npx ruv-swarm github review-init \
+npx ruf-swarm github review-init \
   --pr 123 \
   --pr-data "$PR_DATA" \
   --diff "$PR_DIFF" \
@@ -108,7 +108,7 @@ PR_DATA=$(gh pr view 123 --json files,additions,deletions,title,body)
 PR_DIFF=$(gh pr diff 123)
 
 # Start multi-agent review
-npx ruv-swarm github review-init \
+npx ruf-swarm github review-init \
   --pr 123 \
   --pr-data "$PR_DATA" \
   --diff "$PR_DIFF" \
@@ -138,7 +138,7 @@ gh pr comment 123 --body "🔍 Multi-agent code review initiated"
 CHANGED_FILES=$(gh pr view 123 --json files --jq '.files[].path')
 
 # Run security-focused review
-SECURITY_RESULTS=$(npx ruv-swarm github review-security \
+SECURITY_RESULTS=$(npx ruf-swarm github review-security \
   --pr 123 \
   --files "$CHANGED_FILES" \
   --check "owasp,cve,secrets,permissions" \
@@ -215,7 +215,7 @@ fi
 
 ```bash
 # Run performance analysis
-npx ruv-swarm github review-performance \
+npx ruf-swarm github review-performance \
   --pr 123 \
   --profile "cpu,memory,io" \
   --benchmark-against main \
@@ -255,7 +255,7 @@ npx ruv-swarm github review-performance \
 
 ```bash
 # Architecture review
-npx ruv-swarm github review-architecture \
+npx ruf-swarm github review-architecture \
   --pr 123 \
   --check "patterns,coupling,cohesion,solid" \
   --visualize-impact \
@@ -295,7 +295,7 @@ npx ruv-swarm github review-architecture \
 
 ```bash
 # Style enforcement with auto-fix
-npx ruv-swarm github review-style \
+npx ruf-swarm github review-style \
   --pr 123 \
   --check "formatting,naming,docs,tests" \
   --auto-fix "formatting,imports,whitespace"
@@ -334,14 +334,14 @@ npx ruv-swarm github review-style \
 
 ```bash
 # Create swarm from PR description using gh CLI
-gh pr view 123 --json body,title,labels,files | npx ruv-swarm swarm create-from-pr
+gh pr view 123 --json body,title,labels,files | npx ruf-swarm swarm create-from-pr
 
 # Auto-spawn agents based on PR labels
-gh pr view 123 --json labels | npx ruv-swarm swarm auto-spawn
+gh pr view 123 --json labels | npx ruf-swarm swarm auto-spawn
 
 # Create swarm with full PR context
 gh pr view 123 --json body,labels,author,assignees | \
-  npx ruv-swarm swarm init --from-pr-data
+  npx ruf-swarm swarm init --from-pr-data
 ```
 
 ### Label-Based Agent Assignment
@@ -368,7 +368,7 @@ Map PR labels to specialized agents:
 # Small PR (< 100 lines): ring topology
 # Medium PR (100-500 lines): mesh topology
 # Large PR (> 500 lines): hierarchical topology
-npx ruv-swarm github pr-topology --pr 123
+npx ruf-swarm github pr-topology --pr 123
 ```
 
 ---
@@ -399,12 +399,12 @@ createServer((req, res) => {
     const event = JSON.parse(body);
 
     if (event.action === 'opened' && event.pull_request) {
-      execSync(`npx ruv-swarm github pr-init ${event.pull_request.number}`);
+      execSync(`npx ruf-swarm github pr-init ${event.pull_request.number}`);
     }
 
     if (event.comment && event.comment.body.startsWith('$swarm')) {
       const command = event.comment.body;
-      execSync(`npx ruv-swarm github handle-comment --pr ${event.issue.number} --command "${command}"`);
+      execSync(`npx ruf-swarm github handle-comment --pr ${event.issue.number} --command "${command}"`);
     }
 
     res.writeHead(200);
@@ -519,7 +519,7 @@ jobs:
           PR_DIFF=$(gh pr diff $PR_NUM)
 
           # Run swarm review
-          REVIEW_OUTPUT=$(npx ruv-swarm github review-all \
+          REVIEW_OUTPUT=$(npx ruf-swarm github review-all \
             --pr $PR_NUM \
             --pr-data "$PR_DATA" \
             --diff "$PR_DIFF" \
@@ -558,7 +558,7 @@ PR_DIFF=$(gh pr diff 123 --color never)
 PR_FILES=$(gh pr view 123 --json files)
 
 # Generate review comments
-COMMENTS=$(npx ruv-swarm github review-comment \
+COMMENTS=$(npx ruf-swarm github review-comment \
   --pr 123 \
   --diff "$PR_DIFF" \
   --files "$PR_FILES" \
@@ -588,7 +588,7 @@ done
 
 ```bash
 # Manage review comments efficiently
-npx ruv-swarm github review-comments \
+npx ruf-swarm github review-comments \
   --pr 123 \
   --group-by "agent,severity" \
   --summarize \
@@ -617,7 +617,7 @@ protection_rules:
 
 ```bash
 # Set quality gate thresholds
-npx ruv-swarm github quality-gates \
+npx ruf-swarm github quality-gates \
   --define '{
     "security": {"threshold": "no-critical"},
     "performance": {"regression": "<5%"},
@@ -631,7 +631,7 @@ npx ruv-swarm github quality-gates \
 
 ```bash
 # Monitor review effectiveness
-npx ruv-swarm github review-metrics \
+npx ruf-swarm github review-metrics \
   --period 30d \
   --metrics "issues-found,false-positives,fix-rate,time-to-review" \
   --export-dashboard \
@@ -648,7 +648,7 @@ Analyze PRs with full project context:
 
 ```bash
 # Review with comprehensive context
-npx ruv-swarm github review-context \
+npx ruf-swarm github review-context \
   --pr 123 \
   --load-related-prs \
   --analyze-impact \
@@ -662,14 +662,14 @@ Train review agents on your codebase patterns:
 
 ```bash
 # Learn from past reviews
-npx ruv-swarm github review-learn \
+npx ruf-swarm github review-learn \
   --analyze-past-reviews \
   --identify-patterns \
   --improve-suggestions \
   --reduce-false-positives
 
 # Train on your codebase
-npx ruv-swarm github review-train \
+npx ruf-swarm github review-train \
   --learn-patterns \
   --adapt-to-style \
   --improve-accuracy
@@ -681,7 +681,7 @@ Coordinate reviews across related pull requests:
 
 ```bash
 # Analyze related PRs together
-npx ruv-swarm github review-batch \
+npx ruf-swarm github review-batch \
   --prs "123,124,125" \
   --check-consistency \
   --verify-integration \
@@ -692,7 +692,7 @@ npx ruv-swarm github review-batch \
 
 ```bash
 # Coordinate swarms across related PRs
-npx ruv-swarm github multi-pr \
+npx ruf-swarm github multi-pr \
   --prs "123,124,125" \
   --strategy "parallel" \
   --share-memory
@@ -760,7 +760,7 @@ module.exports = CustomReviewAgent;
 
 ```bash
 # Register custom review agent
-npx ruv-swarm github register-agent \
+npx ruf-swarm github register-agent \
   --name "custom-reviewer" \
   --file ".$custom-review-agent.js" \
   --category "standards"
@@ -792,7 +792,7 @@ jobs:
     steps:
       - name: Run Swarm Review
         run: |
-          npx ruv-swarm github review-all \
+          npx ruf-swarm github review-all \
             --pr ${{ github.event.pull_request.number }} \
             --include-build-results
 ```
@@ -801,7 +801,7 @@ jobs:
 
 ```bash
 # Auto-fix common issues
-npx ruv-swarm github pr-fix 123 \
+npx ruf-swarm github pr-fix 123 \
   --issues "lint,test-failures,formatting" \
   --commit-fixes \
   --push-changes
@@ -811,7 +811,7 @@ npx ruv-swarm github pr-fix 123 \
 
 ```bash
 # Post swarm progress to PR using gh CLI
-PROGRESS=$(npx ruv-swarm github pr-progress 123 --format markdown)
+PROGRESS=$(npx ruf-swarm github pr-progress 123 --format markdown)
 
 gh pr comment 123 --body "$PROGRESS"
 
@@ -829,7 +829,7 @@ fi
 
 ```bash
 # Review authentication system changes
-npx ruv-swarm github review-init \
+npx ruf-swarm github review-init \
   --pr 456 \
   --agents "security,authentication,audit" \
   --depth "maximum" \
@@ -841,7 +841,7 @@ npx ruv-swarm github review-init \
 
 ```bash
 # Review database optimization
-npx ruv-swarm github review-init \
+npx ruf-swarm github review-init \
   --pr 789 \
   --agents "performance,database,caching" \
   --benchmark \
@@ -853,7 +853,7 @@ npx ruv-swarm github review-init \
 
 ```bash
 # Review new component library
-npx ruv-swarm github review-init \
+npx ruf-swarm github review-init \
   --pr 321 \
   --agents "accessibility,style,i18n,docs" \
   --visual-regression \
@@ -866,7 +866,7 @@ npx ruv-swarm github review-init \
 ```bash
 # Review new feature implementation
 gh pr view 456 --json body,labels,files | \
-  npx ruv-swarm github pr-init 456 \
+  npx ruf-swarm github pr-init 456 \
     --topology hierarchical \
     --agents "architect,coder,tester,security" \
     --auto-assign-tasks
@@ -876,7 +876,7 @@ gh pr view 456 --json body,labels,files | \
 
 ```bash
 # Review bug fix with debugging focus
-npx ruv-swarm github pr-init 789 \
+npx ruf-swarm github pr-init 789 \
   --topology mesh \
   --agents "debugger,analyst,tester" \
   --priority high \
@@ -891,7 +891,7 @@ npx ruv-swarm github pr-init 789 \
 
 ```bash
 # Launch real-time review dashboard
-npx ruv-swarm github review-dashboard \
+npx ruf-swarm github review-dashboard \
   --real-time \
   --show "agent-activity,issue-trends,fix-rates,coverage"
 ```
@@ -900,7 +900,7 @@ npx ruv-swarm github review-dashboard \
 
 ```bash
 # Create comprehensive review report
-npx ruv-swarm github review-report \
+npx ruf-swarm github review-report \
   --format "markdown" \
   --include "summary,details,trends,recommendations" \
   --email-stakeholders \
@@ -911,7 +911,7 @@ npx ruv-swarm github review-report \
 
 ```bash
 # Generate PR-specific analytics
-npx ruv-swarm github pr-report 123 \
+npx ruf-swarm github pr-report 123 \
   --metrics "completion-time,agent-efficiency,token-usage,issue-density" \
   --format markdown \
   --compare-baseline
@@ -921,7 +921,7 @@ npx ruv-swarm github pr-report 123 \
 
 ```bash
 # Export metrics to GitHub Insights
-npx ruv-swarm github export-metrics \
+npx ruf-swarm github export-metrics \
   --pr 123 \
   --to-insights \
   --dashboard-url
@@ -997,7 +997,7 @@ npx ruv-swarm github export-metrics \
 
 ```bash
 # Auto-merge when swarm completes and passes checks
-SWARM_STATUS=$(npx ruv-swarm github pr-status 123)
+SWARM_STATUS=$(npx ruf-swarm github pr-status 123)
 
 if [[ "$SWARM_STATUS" == "complete" ]]; then
   # Check review requirements
@@ -1063,13 +1063,13 @@ fi
 **Solution:**
 ```bash
 # Check swarm status
-npx ruv-swarm swarm-status
+npx ruf-swarm swarm-status
 
 # Verify GitHub CLI authentication
 gh auth status
 
 # Re-initialize swarm
-npx ruv-swarm github review-init --pr 123 --force
+npx ruf-swarm github review-init --pr 123 --force
 ```
 
 <$details>
@@ -1086,7 +1086,7 @@ gh auth status
 gh api rate_limit
 
 # Use batch comment posting
-npx ruv-swarm github review-comments --pr 123 --batch
+npx ruf-swarm github review-comments --pr 123 --batch
 ```
 
 <$details>
@@ -1097,13 +1097,13 @@ npx ruv-swarm github review-comments --pr 123 --batch
 **Solution:**
 ```bash
 # Use incremental review for large PRs
-npx ruv-swarm github review-init --pr 123 --incremental
+npx ruf-swarm github review-init --pr 123 --incremental
 
 # Reduce agent count
-npx ruv-swarm github review-init --pr 123 --agents "security,style" --max-agents 3
+npx ruf-swarm github review-init --pr 123 --agents "security,style" --max-agents 3
 
 # Enable parallel processing
-npx ruv-swarm github review-init --pr 123 --parallel --cache-results
+npx ruf-swarm github review-init --pr 123 --parallel --cache-results
 ```
 
 <$details>
@@ -1119,7 +1119,7 @@ npx ruv-swarm github review-init --pr 123 --parallel --cache-results
 
 ### Documentation
 - [GitHub CLI Documentation](https:/$cli.github.com$manual/)
-- [RUV Swarm Guide](https:/$github.com$ruvnet$ruv-swarm)
+- [RUV Swarm Guide](https:/$github.com$ruvnet$ruf-swarm)
 - [Rufflo Integration](https:/$github.com$ruvnet$rufflo)
 
 ### Support

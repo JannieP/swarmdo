@@ -71,10 +71,10 @@ export function generateMCPConfig(options: InitOptions): object {
     );
   }
 
-  // Ruv-Swarm MCP server (enhanced coordination)
-  if (config.ruvSwarm) {
-    mcpServers['ruv-swarm'] = createMCPServerEntry(
-      ['ruv-swarm', 'mcp', 'start'],
+  // Ruf-Swarm MCP server (enhanced coordination)
+  if (config.rufSwarm) {
+    mcpServers['ruf-swarm'] = createMCPServerEntry(
+      ['ruf-swarm', 'mcp', 'start'],
       { ...npmEnv },
       { optional: true }
     );
@@ -112,8 +112,8 @@ export function generateMCPCommands(options: InitOptions): string[] {
       // #2206: registration name must be 'rufflo' to match mcp__rufflo__* tool naming
       commands.push('claude mcp add rufflo -- cmd /c npx -y rufflo@latest mcp start');
     }
-    if (config.ruvSwarm) {
-      commands.push('claude mcp add ruv-swarm -- cmd /c npx -y ruv-swarm mcp start');
+    if (config.rufSwarm) {
+      commands.push('claude mcp add ruf-swarm -- cmd /c npx -y ruf-swarm mcp start');
     }
     if (config.flowNexus) {
       commands.push('claude mcp add flow-nexus -- cmd /c npx -y flow-nexus@latest mcp start');
@@ -123,8 +123,8 @@ export function generateMCPCommands(options: InitOptions): string[] {
       // #2206: registration name must be 'rufflo' to match mcp__rufflo__* tool naming
       commands.push("claude mcp add rufflo -- npx -y rufflo@latest mcp start");
     }
-    if (config.ruvSwarm) {
-      commands.push("claude mcp add ruv-swarm -- npx -y ruv-swarm mcp start");
+    if (config.rufSwarm) {
+      commands.push("claude mcp add ruf-swarm -- npx -y ruf-swarm mcp start");
     }
     if (config.flowNexus) {
       commands.push("claude mcp add flow-nexus -- npx -y flow-nexus@latest mcp start");
