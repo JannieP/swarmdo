@@ -1,19 +1,12 @@
 <div align="center">
 
-[![Swarmdo Banner](swarmdo/assets/swarmdo-small.jpeg)](https://cognitum.one/agentic-engineering)
+[![swarmdo](assets/swarmdo-banner.svg)](https://swarmdo.com)
 
-[![Try the UI Beta — swarmdo.com](https://img.shields.io/badge/_Try_the_UI_Beta-swarmdo.com-6366f1?style=for-the-badge&logoColor=white&logo=svelte)](https://swarmdo.com)
-[![Goal Planner — swarmdo.com](https://img.shields.io/badge/_Goal_Planner-swarmdo.com-8b5cf6?style=for-the-badge&logoColor=white&logo=react)](https://swarmdo.com)
-[![Live Agents — swarmdo.com/agents](https://img.shields.io/badge/_Live_Agents-swarmdo.com%2Fagents-10b981?style=for-the-badge&logoColor=white&logo=react)](https://swarmdo.com)
+[![npm version (swarmdo)](https://img.shields.io/npm/v/swarmdo?label=npx%20swarmdo&style=for-the-badge&logo=npm&color=cb3837)](https://www.npmjs.com/package/swarmdo)
+[![MIT License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](https://github.com/JannieP/swarmdo/blob/main/LICENSE)
+[![Website](https://img.shields.io/badge/swarmdo.com-e2a33c?style=for-the-badge&logoColor=black)](https://swarmdo.com)
 
-[![npm version (swarmdo)](https://img.shields.io/npm/v/swarmdo?label=swarmdo&style=for-the-badge&logo=npm&color=cb3837)](https://www.npmjs.com/package/swarmdo)
-[![Ecosystem downloads](https://img.shields.io/badge/ecosystem%20downloads-8.1M%2B-blue?style=for-the-badge&logo=npm)](the upstream project (see NOTICE))
-[![Git clones (14d)](https://img.shields.io/badge/git%20clones%2014d-106k-blueviolet?style=for-the-badge&logo=github)](the upstream project (see NOTICE))
-
-[![Star on GitHub](https://img.shields.io/github/stars/upstream/claude-flow?style=for-the-badge&logo=github&color=gold)](the upstream project (see NOTICE))
-[![MIT License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](https://opensource.org/licenses/MIT)
-[![Claude Code](https://img.shields.io/badge/Claude%20Code-Plugin-D97757?style=for-the-badge&logoColor=white&logo=anthropic)](the upstream project (see NOTICE))
-[![Codex Plugin](https://img.shields.io/badge/Codex-Plugin-412991?style=for-the-badge&logoColor=white&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0yMi4yODIgOS44MjFhNS45ODUgNS45ODUgMCAwIDAtLjUxNi00LjkxIDYuMDQ2IDYuMDQ2IDAgMCAwLTYuNTEtMi45QTYuMDY1IDYuMDY1IDAgMCAwIDQuOTgxIDQuMThhNS45ODUgNS45ODUgMCAwIDAtMy45OTggMi45IDYuMDQ2IDYuMDQ2IDAgMCAwIC43NDMgNy4wOTcgNS45OCA1Ljk4IDAgMCAwIC41MSA0LjkxMSA2LjA1MSA2LjA1MSAwIDAgMCA2LjUxNSAyLjlBNS45ODUgNS45ODUgMCAwIDAgMTMuMjYgMjRhNi4wNTYgNi4wNTYgMCAwIDAgNS43NzItNC4yMDYgNS45OSA1Ljk5IDAgMCAwIDMuOTk4LTIuOSA2LjA1NiA2LjA1NiAwIDAgMC0uNzQ3LTcuMDczek0xMy4yNiAyMi40M2E0LjQ3NiA0LjQ3NiAwIDAgMS0yLjg3Ni0xLjA0bC4xNDItLjA4IDQuNzc4LTIuNzU4YS43OTUuNzk1IDAgMCAwIC4zOTMtLjY4MXYtNi43MzdsMi4wMiAxLjE2OGEuMDcxLjA3MSAwIDAgMSAuMDM4LjA1MnY1LjU4M2E0LjUwNCA0LjUwNCAwIDAgMS00LjQ5NSA0LjQ5NHpNMy42IDE4LjMwNGE0LjQ3IDQuNDcgMCAwIDEtLjUzNS0zLjAxNGwuMTQyLjA4NSA0Ljc4MyAyLjc1OWEuNzcxLjc3MSAwIDAgMCAuNzgxIDBsNS44NDMtMy4zNjl2Mi4zMzJhLjA4LjA4IDAgMCAxLS4wMzMuMDYyTDkuNzQgMTkuOTVhNC41IDQuNSAwIDAgMS02LjE0LTEuNjQ2ek0yLjM0IDcuODk2YTQuNDg1IDQuNDg1IDAgMCAxIDIuMzY2LTEuOTczVjExLjZhLjc2Ni43NjYgMCAwIDAgLjM4OC42NzdsNS44MTUgMy4zNTQtMi4wMiAxLjE2OGEuMDc2LjA3NiAwIDAgMS0uMDcyIDBsLTQuODMtMi43ODZBNC41MDQgNC41MDQgMCAwIDEgMi4zNCA3Ljg3MnptMTYuNTk3IDMuODU1LTUuODMzLTMuMzg3IDIuMDE2LTEuMTY1YS4wNzYuMDc2IDAgMCAxIC4wNzEgMGw0LjgzIDIuNzkxYTQuNDk0IDQuNDk0IDAgMCAxLS42NzYgOC4xMDR2LTUuNjc3YS43OS43OSAwIDAgMC0uNDA3LS42Njd6bTIuMDEtMy4wMjMtLjE0MS0uMDg1LTQuNzc0LTIuNzgyYS43NzYuNzc2IDAgMCAwLS43ODUgMEw5LjQwOSA5LjIzVjYuODk3YS4wNjYuMDY2IDAgMCAxIC4wMjgtLjA2Mmw0LjgzLTIuNzg3YTQuNDk5IDQuNDk5IDAgMCAxIDYuNjggNC42NnpNOC4zMDcgMTIuODYzbC0yLjAyLTEuMTY0YS4wOC4wOCAwIDAgMS0uMDM4LS4wNTdWNi4wNzRhNC40OTkgNC40OTkgMCAwIDEgNy4zNzYtMy40NTRsLS4xNDIuMDgtNC43NzggMi43NThhLjc5NS43OTUgMCAwIDAtLjM5My42ODJ6bTEuMDk3LTIuMzY2IDIuNjAyLTEuNSAyLjYwNyAxLjV2Mi45OTlsLTIuNTk3IDEuNS0yLjYwNy0xLjVaIi8%2BPC9zdmc%2B)](https://www.npmjs.com/package/@swarmdo/codex)
+*Based on the original, hugely popular **ruflo** — renamed, self-contained, and MIT-licensed. Full lineage in [NOTICE](NOTICE).*
 [![🕸️ SwarmVector Graph Ai](https://img.shields.io/badge/SwarmVector_Agentic-DB-06b6d4?style=for-the-badge&logoColor=white&logo=graphql)](the upstream project (see NOTICE))
 
 # Swarmdo
