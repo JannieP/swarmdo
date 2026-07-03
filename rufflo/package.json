@@ -1,6 +1,6 @@
 {
   "name": "rufflo-bridge",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "private": true,
   "description": "Rufflo MCP-bridge + docker tooling (NOT published \u2014 the canonical `rufflo` npm package is the repo root). Resolves the post-rename name collision where this wrapper and the root umbrella both became `rufflo`.",
   "main": "bin/rufflo.js",
@@ -41,7 +41,7 @@
     "package:rvf": "bash src/scripts/package-rvf.sh"
   },
   "dependencies": {
-    "@rufflo/cli": "^1.1.0"
+    "@rufflo/cli": "^1.1.1"
   },
   "optionalDependencies": {
     "metaharness": "~0.2.6",
