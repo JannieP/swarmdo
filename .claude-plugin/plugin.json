@@ -51,20 +51,22 @@
   "mcpServers": {
     "rufflo": {
       "command": "npx",
-      "args": ["rufflo@alpha", "mcp", "start"],
+      "args": [
+        "rufflo@alpha",
+        "mcp",
+        "start"
+      ],
       "description": "Core Rufflo MCP server for swarm coordination, agent management, and task orchestration (40+ tools)",
       "optional": false
     },
     "ruf-swarm": {
       "command": "npx",
-      "args": ["ruf-swarm", "mcp", "start"],
+      "args": [
+        "ruf-swarm",
+        "mcp",
+        "start"
+      ],
       "description": "Enhanced swarm coordination with WASM acceleration (2.8-4.4x speed improvement)",
-      "optional": true
-    },
-    "flow-nexus": {
-      "command": "npx",
-      "args": ["flow-nexus@latest", "mcp", "start"],
-      "description": "Cloud-based orchestration platform with 70+ tools (requires authentication)",
       "optional": true
     }
   }

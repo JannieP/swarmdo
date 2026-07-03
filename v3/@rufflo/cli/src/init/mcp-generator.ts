@@ -80,14 +80,6 @@ export function generateMCPConfig(options: InitOptions): object {
     );
   }
 
-  // Flow Nexus MCP server (cloud features)
-  if (config.flowNexus) {
-    mcpServers['flow-nexus'] = createMCPServerEntry(
-      ['flow-nexus@latest', 'mcp', 'start'],
-      { ...npmEnv },
-      { optional: true, requiresAuth: true }
-    );
-  }
 
   return { mcpServers };
 }
@@ -115,9 +107,6 @@ export function generateMCPCommands(options: InitOptions): string[] {
     if (config.rufSwarm) {
       commands.push('claude mcp add ruf-swarm -- cmd /c npx -y ruf-swarm mcp start');
     }
-    if (config.flowNexus) {
-      commands.push('claude mcp add flow-nexus -- cmd /c npx -y flow-nexus@latest mcp start');
-    }
   } else {
     if (config.claudeFlow) {
       // #2206: registration name must be 'rufflo' to match mcp__rufflo__* tool naming
@@ -125,9 +114,6 @@ export function generateMCPCommands(options: InitOptions): string[] {
     }
     if (config.rufSwarm) {
       commands.push("claude mcp add ruf-swarm -- npx -y ruf-swarm mcp start");
-    }
-    if (config.flowNexus) {
-      commands.push("claude mcp add flow-nexus -- npx -y flow-nexus@latest mcp start");
     }
   }
 

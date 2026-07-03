@@ -85,7 +85,6 @@ cd rufflo
 | Swarm | 15 | init, spawn, status, monitor, strategies |
 | Workflows | 5 | create, execute, export |
 | Training | 5 | neural-train, pattern-learn, model-update |
-| Flow Nexus | 9 | swarm, workflow, neural-network, sandbox |
 | **Total** | **150+** | **19 categories** |
 
 ### Agents: 74+
@@ -118,7 +117,6 @@ cd rufflo
    - SIMD optimization
    - Advanced topology management
 
-3. **flow-nexus** (Optional)
    - 70+ cloud tools
    - E2B sandbox execution
    - Distributed neural training
@@ -295,7 +293,6 @@ Should show `rufflo` as active.
 - **Repository**: https://github.com/ruvnet/claude-flow
 - **Issues**: https://github.com/ruvnet/claude-flow/issues
 - **Discussions**: https://github.com/ruvnet/claude-flow/discussions
-- **Website**: https://flow-nexus.ruv.io
 
 ---
 

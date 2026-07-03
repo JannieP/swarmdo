@@ -160,9 +160,7 @@ Add to ~/.claude/settings.json:
       "command": "npx",
       "args": ["ruf-swarm", "mcp", "start"]
     },
-    "flow-nexus": {
       "command": "npx",
-      "args": ["flow-nexus@latest", "mcp", "start"]
     }
   }
 }
@@ -186,13 +184,6 @@ MCP_INSTRUCTIONS
             success "ruf-swarm MCP server installed"
         fi
 
-        read -p "Install optional flow-nexus MCP? (y/n) [n]: " INSTALL_NEXUS
-        if [ "$INSTALL_NEXUS" = "y" ]; then
-            info "Installing flow-nexus MCP server..."
-            npx flow-nexus@latest --version 2>/dev/null || npm install -g flow-nexus@latest
-            success "flow-nexus MCP server installed"
-        fi
-    fi
 fi
 
 # Installation complete

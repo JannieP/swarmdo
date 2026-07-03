@@ -75,7 +75,6 @@ export interface SkillsConfig {
   /** Include GitHub integration skills */
   github: boolean;
   /** Include Flow Nexus skills */
-  flowNexus: boolean;
   /** Include browser automation skills (agent-browser) */
   browser: boolean;
   /** Include V3 implementation skills */
@@ -193,8 +192,6 @@ export interface MCPConfig {
   claudeFlow: boolean;
   /** Include ruf-swarm MCP server */
   rufSwarm: boolean;
-  /** Include flow-nexus MCP server */
-  flowNexus: boolean;
   /** Auto-start MCP server */
   autoStart: boolean;
   /** Server port */
@@ -385,7 +382,6 @@ export const DEFAULT_INIT_OPTIONS: InitOptions = {
     core: true,
     agentdb: true,
     github: true,
-    flowNexus: false,
     browser: true,
     v3: true,
     dualMode: false,  // Optional: enable with --dual flag
@@ -441,7 +437,6 @@ export const DEFAULT_INIT_OPTIONS: InitOptions = {
   mcp: {
     claudeFlow: true,
     rufSwarm: false,
-    flowNexus: false,
     autoStart: false,
     port: 3000,
   },
@@ -494,7 +489,6 @@ export const MINIMAL_INIT_OPTIONS: InitOptions = {
     core: true,
     agentdb: false,
     github: false,
-    flowNexus: false,
     browser: false,
     v3: false,
     dualMode: false,
@@ -555,7 +549,6 @@ export const FULL_INIT_OPTIONS: InitOptions = {
     core: true,
     agentdb: true,
     github: true,
-    flowNexus: true,
     browser: true,
     v3: true,
     dualMode: true,  // Include in full init
@@ -572,7 +565,6 @@ export const FULL_INIT_OPTIONS: InitOptions = {
   mcp: {
     claudeFlow: true,
     rufSwarm: true,
-    flowNexus: true,
     autoStart: false,
     port: 3000,
   },

@@ -62,11 +62,6 @@ const SKILLS_MAP: Record<string, string[]> = {
     'github-release-management',
     'github-workflow-automation',
   ],
-  flowNexus: [
-    'flow-nexus-neural',
-    'flow-nexus-platform',
-    'flow-nexus-swarm',
-  ],
   v3: [
     'v3-cli-modernization',
     'v3-core-implementation',
@@ -83,7 +78,7 @@ const SKILLS_MAP: Record<string, string[]> = {
 /**
  * Commands to copy based on configuration
  * ADR-128 Phase 4: every subdirectory under .claude/commands/ now has a
- * corresponding key. The flow-nexus/ dir was deleted (belongs to the plugin).
+ * corresponding key.
  * New substrate keys default true; opt-in keys (pair, training, stream-chain,
  * truth, verify) default false per ADR-128 §Phase 3 opt-in rationale.
  */
@@ -129,7 +124,6 @@ const AGENTS_MAP: Record<string, string[]> = {
   templates: ['templates'],
   testing: ['testing'],
   sublinear: ['sublinear'],
-  flowNexus: ['flow-nexus'],
   analysis: ['analysis'],
   architecture: ['architecture'],
   development: ['development'],
@@ -1022,7 +1016,6 @@ async function copySkills(
     if (skillsConfig.core) skillsToCopy.push(...SKILLS_MAP.core);
     if (skillsConfig.agentdb) skillsToCopy.push(...SKILLS_MAP.agentdb);
     if (skillsConfig.github) skillsToCopy.push(...SKILLS_MAP.github);
-    if (skillsConfig.flowNexus) skillsToCopy.push(...SKILLS_MAP.flowNexus);
     if (skillsConfig.browser) skillsToCopy.push(...SKILLS_MAP.browser);
     if (skillsConfig.v3) skillsToCopy.push(...SKILLS_MAP.v3);
     if (skillsConfig.dualMode) skillsToCopy.push(...SKILLS_MAP.dualMode);
@@ -1984,7 +1977,6 @@ npx @rufflo/cli@latest hive-mind consensus --propose "task"
 | Package | Command |
 |---------|---------|
 | ruf-swarm | \`npx ruf-swarm mcp start\` |
-| flow-nexus | \`npx flow-nexus@latest mcp start\` |
 | agentic-jujutsu | \`npx agentic-jujutsu@latest\` |
 
 ### MCP Server Setup
@@ -1994,7 +1986,6 @@ claude mcp add rufflo -- npx -y rufflo@latest
 
 # Optional servers
 claude mcp add ruf-swarm -- npx -y ruf-swarm mcp start
-claude mcp add flow-nexus -- npx -y flow-nexus@latest mcp start
 \`\`\`
 
 ---

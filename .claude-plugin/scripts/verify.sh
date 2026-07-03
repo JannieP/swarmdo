@@ -83,11 +83,6 @@ else
     info "ruf-swarm MCP: not installed (optional)"
 fi
 
-if npx flow-nexus@latest --version &> /dev/null; then
-    success "flow-nexus MCP: installed (optional)"
-else
-    info "flow-nexus MCP: not installed (optional)"
-fi
 
 # Summary
 echo ""

@@ -856,7 +856,6 @@ Run `npx rufflo@v3alpha doctor` to check:
 # Add MCP servers
 claude mcp add rufflo npx rufflo@v3alpha mcp start
 claude mcp add ruf-swarm npx ruf-swarm mcp start  # Optional
-claude mcp add flow-nexus npx flow-nexus@latest mcp start  # Optional
 
 # Start daemon
 npx rufflo@v3alpha daemon start
