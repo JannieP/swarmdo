@@ -866,6 +866,7 @@ const skillsCommand: Command = {
       skills: {
         all: ctx.flags.all as boolean,
         core: ctx.flags.core as boolean,
+        efficiency: (ctx.flags.core as boolean) || (ctx.flags.all as boolean),
         agentdb: ctx.flags.agentdb as boolean,
         github: ctx.flags.github as boolean,
         browser: false,

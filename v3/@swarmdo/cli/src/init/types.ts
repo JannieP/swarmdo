@@ -70,6 +70,8 @@ export interface HooksConfig {
 export interface SkillsConfig {
   /** Include core skills (swarm, memory, sparc) */
   core: boolean;
+  /** Token-efficiency skills: caveman-compress, ponytail */
+  efficiency: boolean;
   /** Include AgentDB skills */
   agentdb: boolean;
   /** Include GitHub integration skills */
@@ -380,6 +382,7 @@ export const DEFAULT_INIT_OPTIONS: InitOptions = {
   },
   skills: {
     core: true,
+    efficiency: true,
     agentdb: true,
     github: true,
     browser: true,
@@ -487,6 +490,7 @@ export const MINIMAL_INIT_OPTIONS: InitOptions = {
   },
   skills: {
     core: true,
+    efficiency: true,
     agentdb: false,
     github: false,
     browser: false,
@@ -547,6 +551,7 @@ export const FULL_INIT_OPTIONS: InitOptions = {
   },
   skills: {
     core: true,
+    efficiency: true,
     agentdb: true,
     github: true,
     browser: true,

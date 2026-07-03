@@ -62,6 +62,10 @@ const SKILLS_MAP: Record<string, string[]> = {
     'github-release-management',
     'github-workflow-automation',
   ],
+  efficiency: [
+    'caveman-compress',
+    'ponytail',
+  ],
   v3: [
     'v3-cli-modernization',
     'v3-core-implementation',
@@ -1014,6 +1018,7 @@ async function copySkills(
     Object.values(SKILLS_MAP).forEach(skills => skillsToCopy.push(...skills));
   } else {
     if (skillsConfig.core) skillsToCopy.push(...SKILLS_MAP.core);
+    if (skillsConfig.efficiency) skillsToCopy.push(...SKILLS_MAP.efficiency);
     if (skillsConfig.agentdb) skillsToCopy.push(...SKILLS_MAP.agentdb);
     if (skillsConfig.github) skillsToCopy.push(...SKILLS_MAP.github);
     if (skillsConfig.browser) skillsToCopy.push(...SKILLS_MAP.browser);

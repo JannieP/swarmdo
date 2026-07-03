@@ -14,3 +14,12 @@ of each ancestor (see LICENSE for the governing license text):
 The MIT license requires preservation of the above copyright notice and the
 license text. It does not imply endorsement of this derivative by the
 original authors.
+
+Additional vendored MIT-licensed components:
+
+- caveman — Copyright (c) JuliusBrussee (github.com/JuliusBrussee/caveman), MIT.
+  Token-compression skills vendored as plugins/swarmdo-caveman and the bundled
+  caveman-compress skill.
+- ponytail — Copyright (c) DietrichGebert (github.com/DietrichGebert/ponytail), MIT.
+  Anti-over-engineering skills vendored as plugins/swarmdo-ponytail and the
+  bundled ponytail skill.

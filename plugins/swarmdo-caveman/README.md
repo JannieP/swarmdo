@@ -1,0 +1,11 @@
+# swarmdo-caveman
+
+Token compression skills for swarmdo. Why use many token when few token do
+trick: `/caveman-compress <file>` rewrites memory files (CLAUDE.md, todos,
+preferences) into caveman-speak — all technical substance, code, URLs, and
+structure preserved, tokens cut hard. A human-readable backup is kept as
+`<file>.original.md`. `/caveman` speaks compressed in-session; `cavecrew`
+runs a compressed multi-agent crew; `caveman-stats` measures savings.
+
+Vendored from [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman)
+under MIT. See NOTICE.

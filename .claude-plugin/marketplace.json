@@ -74,7 +74,7 @@
     {
       "name": "swarmdo-agent",
       "source": "./plugins/swarmdo-agent",
-      "description": "Agent runtimes — local WASM-sandboxed agents (rvagent) + Anthropic Claude Managed Agents (cloud); one interface, local-vs-cloud backends"
+      "description": "Agent runtimes \u2014 local WASM-sandboxed agents (rvagent) + Anthropic Claude Managed Agents (cloud); one interface, local-vs-cloud backends"
     },
     {
       "name": "swarmdo-workflows",
@@ -109,7 +109,7 @@
     {
       "name": "swarmdo-adr",
       "source": "./plugins/swarmdo-adr",
-      "description": "ADR lifecycle management — create, index, supersede, and link Architecture Decision Records to code"
+      "description": "ADR lifecycle management \u2014 create, index, supersede, and link Architecture Decision Records to code"
     },
     {
       "name": "swarmdo-cost-tracker",
@@ -119,7 +119,7 @@
     {
       "name": "swarmdo-ddd",
       "source": "./plugins/swarmdo-ddd",
-      "description": "Domain-Driven Design scaffolding — bounded contexts, aggregate roots, domain events, and anti-corruption layers"
+      "description": "Domain-Driven Design scaffolding \u2014 bounded contexts, aggregate roots, domain events, and anti-corruption layers"
     },
     {
       "name": "swarmdo-federation",
@@ -129,7 +129,7 @@
     {
       "name": "swarmdo-graph-intelligence",
       "source": "./plugins/swarmdo-graph-intelligence",
-      "description": "Real-time graph intelligence — personalized PageRank, streaming delta updates, witness-signed reasoning, and federation-distributable vectors"
+      "description": "Real-time graph intelligence \u2014 personalized PageRank, streaming delta updates, witness-signed reasoning, and federation-distributable vectors"
     },
     {
       "name": "swarmdo-iot-cognitum",
@@ -139,47 +139,57 @@
     {
       "name": "swarmdo-knowledge-graph",
       "source": "./plugins/swarmdo-knowledge-graph",
-      "description": "Knowledge graph construction — entity extraction, relation mapping, and pathfinder graph traversal"
+      "description": "Knowledge graph construction \u2014 entity extraction, relation mapping, and pathfinder graph traversal"
     },
     {
       "name": "swarmdo-market-data",
       "source": "./plugins/swarmdo-market-data",
-      "description": "Market data ingestion — feed normalization, OHLCV vectorization, and HNSW-indexed pattern matching"
+      "description": "Market data ingestion \u2014 feed normalization, OHLCV vectorization, and HNSW-indexed pattern matching"
     },
     {
       "name": "swarmdo-migrations",
       "source": "./plugins/swarmdo-migrations",
-      "description": "Schema migration management — generate, validate, dry-run, and rollback database migrations"
+      "description": "Schema migration management \u2014 generate, validate, dry-run, and rollback database migrations"
     },
     {
       "name": "swarmdo-neural-trader",
       "source": "./plugins/swarmdo-neural-trader",
-      "description": "Neural trading strategies — self-learning LSTM/Transformer/N-BEATS models with Rust/NAPI backtesting"
+      "description": "Neural trading strategies \u2014 self-learning LSTM/Transformer/N-BEATS models with Rust/NAPI backtesting"
     },
     {
       "name": "swarmdo-observability",
       "source": "./plugins/swarmdo-observability",
-      "description": "Structured logging, distributed tracing, and metrics — correlate agent swarm activity with application telemetry"
+      "description": "Structured logging, distributed tracing, and metrics \u2014 correlate agent swarm activity with application telemetry"
     },
     {
       "name": "swarmdo-swarmvector",
       "source": "./plugins/swarmdo-swarmvector",
-      "description": "Self-learning vector database — HNSW, FlashAttention-3, Graph RAG, hybrid search, DiskANN, and Brain AGI"
+      "description": "Self-learning vector database \u2014 HNSW, FlashAttention-3, Graph RAG, hybrid search, DiskANN, and Brain AGI"
     },
     {
       "name": "swarmdo-sparc",
       "source": "./plugins/swarmdo-sparc",
-      "description": "SPARC methodology — Specification, Pseudocode, Architecture, Refinement, Completion phases with quality gates"
+      "description": "SPARC methodology \u2014 Specification, Pseudocode, Architecture, Refinement, Completion phases with quality gates"
     },
     {
       "name": "swarmdo-metaharness",
       "source": "./plugins/swarmdo-metaharness",
-      "description": "MetaHarness integration — surfaces score/genome/mint/mcp-scan/threat-model via skills; pairs with @metaharness/router (ADR-148/149) for cost-optimal model routing; honors ADR-150 optional-augmentation constraint"
+      "description": "MetaHarness integration \u2014 surfaces score/genome/mint/mcp-scan/threat-model via skills; pairs with @metaharness/router (ADR-148/149) for cost-optimal model routing; honors ADR-150 optional-augmentation constraint"
     },
     {
       "name": "swarmdo-arena",
       "source": "./plugins/swarmdo-arena",
-      "description": "Competitive ruliology for swarmdo swarms — arenas, tournaments, and adaptive co-evolution of program strategies (ADR-147/148); strategies-as-programs compete under payoff games"
+      "description": "Competitive ruliology for swarmdo swarms \u2014 arenas, tournaments, and adaptive co-evolution of program strategies (ADR-147/148); strategies-as-programs compete under payoff games"
+    },
+    {
+      "name": "swarmdo-caveman",
+      "source": "./plugins/swarmdo-caveman",
+      "description": "Token compression \u2014 /caveman-compress rewrites memory files into few-token caveman-speak, substance preserved (MIT, vendored)"
+    },
+    {
+      "name": "swarmdo-ponytail",
+      "source": "./plugins/swarmdo-ponytail",
+      "description": "Anti-over-engineering \u2014 /ponytail makes agents think like the laziest senior dev: YAGNI, stdlib first, one line before fifty (MIT, vendored)"
     }
   ]
 }
