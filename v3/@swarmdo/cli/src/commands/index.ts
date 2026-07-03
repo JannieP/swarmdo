@@ -27,6 +27,7 @@ const commandLoaders: Record<string, CommandLoader> = {
   start: () => import('./start.js'),
   status: () => import('./status.js'),
   statusline: () => import('./statusline.js'),
+  compress: () => import('./compress.js'),
   task: () => import('./task.js'),
   session: () => import('./session.js'),
   // Original Commands
@@ -251,7 +252,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
   ] = await Promise.all([
     loadCommand('daemon'), loadCommand('doctor'), loadCommand('embeddings'), loadCommand('neural'),
     loadCommand('performance'), loadCommand('security'), loadCommand('swarmvector'), loadCommand('hive-mind'),
-    loadCommand('config'), loadCommand('statusline'), loadCommand('completions'), loadCommand('migrate'), loadCommand('workflow'),
+    loadCommand('config'), loadCommand('statusline'), loadCommand('compress'), loadCommand('completions'), loadCommand('migrate'), loadCommand('workflow'),
     loadCommand('analyze'), loadCommand('route'), loadCommand('progress'), loadCommand('providers'),
     loadCommand('plugins'), loadCommand('deployment'), loadCommand('claims'), loadCommand('issues'),
     loadCommand('update'), loadCommand('process'), loadCommand('guidance'), loadCommand('appliance'),
