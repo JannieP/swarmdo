@@ -37,14 +37,14 @@ services:
     environment:
       POSTGRES_USER: claude
       POSTGRES_PASSWORD: rufflo-test
-      POSTGRES_DB: claude_flow
+      POSTGRES_DB: rufflo
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/01-init.sql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U claude -d claude_flow"]
+      test: ["CMD-SHELL", "pg_isready -U claude -d rufflo"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -102,21 +102,21 @@ CREATE EXTENSION IF NOT EXISTS rufvector VERSION '0.1.0';
 -- Enable additional required extensions
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
--- Create the claude_flow schema
-CREATE SCHEMA IF NOT EXISTS claude_flow;
+-- Create the rufflo schema
+CREATE SCHEMA IF NOT EXISTS rufflo;
 
 -- Grant permissions
-GRANT ALL ON SCHEMA claude_flow TO claude;
+GRANT ALL ON SCHEMA rufflo TO claude;
 
 -- Set search path
-SET search_path TO claude_flow, public;
+SET search_path TO rufflo, public;
 
 -- ============================================
 -- PART 2: CORE TABLES
 -- ============================================
 
 -- Embeddings table with RufVector vector type (384-dim for all-MiniLM-L6-v2)
-CREATE TABLE IF NOT EXISTS claude_flow.embeddings (
+CREATE TABLE IF NOT EXISTS rufflo.embeddings (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     content TEXT NOT NULL,
     embedding rufvector(384),
@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS claude_flow.embeddings (
 );
 
 -- Patterns table for learned patterns (ReasoningBank)
-CREATE TABLE IF NOT EXISTS claude_flow.patterns (
+CREATE TABLE IF NOT EXISTS rufflo.patterns (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name VARCHAR(255) NOT NULL,
     description TEXT,
@@ -142,7 +142,7 @@ CREATE TABLE IF NOT EXISTS claude_flow.patterns (
 );
 
 -- Agents table for multi-agent memory coordination
-CREATE TABLE IF NOT EXISTS claude_flow.agents (
+CREATE TABLE IF NOT EXISTS rufflo.agents (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     agent_id VARCHAR(255) NOT NULL UNIQUE,
     agent_type VARCHAR(50),
@@ -153,7 +153,7 @@ CREATE TABLE IF NOT EXISTS claude_flow.agents (
 );
 
 -- Trajectories table for SONA reinforcement learning
-CREATE TABLE IF NOT EXISTS claude_flow.trajectories (
+CREATE TABLE IF NOT EXISTS rufflo.trajectories (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     trajectory_id VARCHAR(255) NOT NULL UNIQUE,
     agent_type VARCHAR(50),
@@ -167,7 +167,7 @@ CREATE TABLE IF NOT EXISTS claude_flow.trajectories (
 );
 
 -- Memory entries table (main storage for Rufflo memory)
-CREATE TABLE IF NOT EXISTS claude_flow.memory_entries (
+CREATE TABLE IF NOT EXISTS rufflo.memory_entries (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     key VARCHAR(255) NOT NULL,
     value TEXT NOT NULL,
@@ -181,20 +181,20 @@ CREATE TABLE IF NOT EXISTS claude_flow.memory_entries (
 );
 
 -- Hyperbolic embeddings for hierarchical data
-CREATE TABLE IF NOT EXISTS claude_flow.hyperbolic_embeddings (
+CREATE TABLE IF NOT EXISTS rufflo.hyperbolic_embeddings (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     content TEXT NOT NULL,
     euclidean_embedding rufvector(384),
     poincare_embedding real[],  -- Array for hyperbolic operations
     curvature FLOAT DEFAULT -1.0,
     hierarchy_level INT DEFAULT 0,
-    parent_id UUID REFERENCES claude_flow.hyperbolic_embeddings(id),
+    parent_id UUID REFERENCES rufflo.hyperbolic_embeddings(id),
     metadata JSONB DEFAULT '{}',
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Graph nodes for GNN operations
-CREATE TABLE IF NOT EXISTS claude_flow.graph_nodes (
+CREATE TABLE IF NOT EXISTS rufflo.graph_nodes (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     node_id VARCHAR(255) NOT NULL UNIQUE,
     node_type VARCHAR(50),
@@ -204,10 +204,10 @@ CREATE TABLE IF NOT EXISTS claude_flow.graph_nodes (
 );
 
 -- Graph edges for message passing
-CREATE TABLE IF NOT EXISTS claude_flow.graph_edges (
+CREATE TABLE IF NOT EXISTS rufflo.graph_edges (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    source_id UUID REFERENCES claude_flow.graph_nodes(id),
-    target_id UUID REFERENCES claude_flow.graph_nodes(id),
+    source_id UUID REFERENCES rufflo.graph_nodes(id),
+    target_id UUID REFERENCES rufflo.graph_nodes(id),
     edge_type VARCHAR(50),
     weight FLOAT DEFAULT 1.0,
     metadata JSONB DEFAULT '{}',
@@ -220,51 +220,51 @@ CREATE TABLE IF NOT EXISTS claude_flow.graph_edges (
 
 -- HNSW index for embeddings (cosine distance)
 CREATE INDEX IF NOT EXISTS idx_embeddings_hnsw
-ON claude_flow.embeddings
+ON rufflo.embeddings
 USING hnsw (embedding rufvector_cosine_ops)
 WITH (m = 16, ef_construction = 100);
 
 -- HNSW index for patterns
 CREATE INDEX IF NOT EXISTS idx_patterns_hnsw
-ON claude_flow.patterns
+ON rufflo.patterns
 USING hnsw (embedding rufvector_cosine_ops)
 WITH (m = 16, ef_construction = 100);
 
 -- HNSW index for agent memory
 CREATE INDEX IF NOT EXISTS idx_agents_hnsw
-ON claude_flow.agents
+ON rufflo.agents
 USING hnsw (memory_embedding rufvector_cosine_ops)
 WITH (m = 16, ef_construction = 64);
 
 -- HNSW index for memory entries
 CREATE INDEX IF NOT EXISTS idx_memory_entries_hnsw
-ON claude_flow.memory_entries
+ON rufflo.memory_entries
 USING hnsw (embedding rufvector_cosine_ops)
 WITH (m = 16, ef_construction = 100);
 
 -- HNSW index for hyperbolic embeddings
 CREATE INDEX IF NOT EXISTS idx_hyperbolic_hnsw
-ON claude_flow.hyperbolic_embeddings
+ON rufflo.hyperbolic_embeddings
 USING hnsw (euclidean_embedding rufvector_cosine_ops)
 WITH (m = 16, ef_construction = 100);
 
 -- HNSW index for graph nodes
 CREATE INDEX IF NOT EXISTS idx_graph_nodes_hnsw
-ON claude_flow.graph_nodes
+ON rufflo.graph_nodes
 USING hnsw (embedding rufvector_cosine_ops)
 WITH (m = 16, ef_construction = 64);
 
 -- Additional indices for common queries
-CREATE INDEX IF NOT EXISTS idx_embeddings_namespace ON claude_flow.embeddings(namespace);
-CREATE INDEX IF NOT EXISTS idx_memory_entries_namespace ON claude_flow.memory_entries(namespace);
-CREATE INDEX IF NOT EXISTS idx_memory_entries_key ON claude_flow.memory_entries(key);
+CREATE INDEX IF NOT EXISTS idx_embeddings_namespace ON rufflo.embeddings(namespace);
+CREATE INDEX IF NOT EXISTS idx_memory_entries_namespace ON rufflo.memory_entries(namespace);
+CREATE INDEX IF NOT EXISTS idx_memory_entries_key ON rufflo.memory_entries(key);
 
 -- ============================================
 -- PART 4: CORE SEARCH FUNCTIONS
 -- ============================================
 
 -- Semantic similarity search using RufVector HNSW
-CREATE OR REPLACE FUNCTION claude_flow.search_similar(
+CREATE OR REPLACE FUNCTION rufflo.search_similar(
     query_embedding rufvector(384),
     limit_count INT DEFAULT 10,
     min_similarity FLOAT DEFAULT 0.5
@@ -282,7 +282,7 @@ BEGIN
         e.content,
         (1 - (e.embedding <=> query_embedding))::FLOAT AS similarity,
         e.metadata
-    FROM claude_flow.embeddings e
+    FROM rufflo.embeddings e
     WHERE e.embedding IS NOT NULL
       AND (1 - (e.embedding <=> query_embedding)) >= min_similarity
     ORDER BY e.embedding <=> query_embedding
@@ -291,7 +291,7 @@ END;
 $$ LANGUAGE plpgsql STABLE;
 
 -- Memory search with namespace filtering
-CREATE OR REPLACE FUNCTION claude_flow.search_memory(
+CREATE OR REPLACE FUNCTION rufflo.search_memory(
     query_embedding rufvector(384),
     namespace_filter VARCHAR(100) DEFAULT NULL,
     limit_count INT DEFAULT 10,
@@ -314,7 +314,7 @@ BEGIN
         m.namespace,
         (1 - (m.embedding <=> query_embedding))::FLOAT AS similarity,
         m.metadata
-    FROM claude_flow.memory_entries m
+    FROM rufflo.memory_entries m
     WHERE m.embedding IS NOT NULL
       AND (1 - (m.embedding <=> query_embedding)) >= min_similarity
       AND (namespace_filter IS NULL OR m.namespace = namespace_filter)
@@ -325,7 +325,7 @@ END;
 $$ LANGUAGE plpgsql STABLE;
 
 -- Pattern search with type filtering
-CREATE OR REPLACE FUNCTION claude_flow.search_patterns(
+CREATE OR REPLACE FUNCTION rufflo.search_patterns(
     query_embedding rufvector(384),
     pattern_type_filter VARCHAR(50) DEFAULT NULL,
     limit_count INT DEFAULT 10,
@@ -348,7 +348,7 @@ BEGIN
         (1 - (p.embedding <=> query_embedding))::FLOAT AS similarity,
         p.confidence,
         p.metadata
-    FROM claude_flow.patterns p
+    FROM rufflo.patterns p
     WHERE p.embedding IS NOT NULL
       AND p.confidence >= min_confidence
       AND (pattern_type_filter IS NULL OR p.pattern_type = pattern_type_filter)
@@ -358,7 +358,7 @@ END;
 $$ LANGUAGE plpgsql STABLE;
 
 -- Agent routing by expertise similarity
-CREATE OR REPLACE FUNCTION claude_flow.find_agents(
+CREATE OR REPLACE FUNCTION rufflo.find_agents(
     query_embedding rufvector(384),
     agent_type_filter VARCHAR(50) DEFAULT NULL,
     limit_count INT DEFAULT 5
@@ -376,7 +376,7 @@ BEGIN
         a.agent_type,
         (1 - (a.memory_embedding <=> query_embedding))::FLOAT AS similarity,
         a.state
-    FROM claude_flow.agents a
+    FROM rufflo.agents a
     WHERE a.memory_embedding IS NOT NULL
       AND (agent_type_filter IS NULL OR a.agent_type = agent_type_filter)
     ORDER BY a.memory_embedding <=> query_embedding
@@ -389,7 +389,7 @@ $$ LANGUAGE plpgsql STABLE;
 -- ============================================
 
 -- Convert Euclidean to Poincaré embedding
-CREATE OR REPLACE FUNCTION claude_flow.to_poincare(
+CREATE OR REPLACE FUNCTION rufflo.to_poincare(
     euclidean real[],
     curvature FLOAT DEFAULT -1.0
 )
@@ -400,7 +400,7 @@ END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- Poincaré distance (geodesic)
-CREATE OR REPLACE FUNCTION claude_flow.poincare_distance(
+CREATE OR REPLACE FUNCTION rufflo.poincare_distance(
     x real[],
     y real[],
     curvature FLOAT DEFAULT -1.0
@@ -412,7 +412,7 @@ END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- Hyperbolic search in Poincaré ball
-CREATE OR REPLACE FUNCTION claude_flow.hyperbolic_search(
+CREATE OR REPLACE FUNCTION rufflo.hyperbolic_search(
     query rufvector(384),
     limit_count INT DEFAULT 10,
     curvature FLOAT DEFAULT -1.0
@@ -433,7 +433,7 @@ BEGIN
     SELECT array_agg(x::real ORDER BY ordinality) INTO query_arr
     FROM unnest(string_to_array(trim(both '[]' from query::text), ',')) WITH ORDINALITY AS t(x, ordinality);
 
-    query_poincare := claude_flow.to_poincare(query_arr, curvature);
+    query_poincare := rufflo.to_poincare(query_arr, curvature);
 
     RETURN QUERY
     SELECT
@@ -443,7 +443,7 @@ BEGIN
         COALESCE(rufvector_poincare_distance(he.poincare_embedding, query_poincare, curvature), 999.0)::FLOAT AS hyp_dist,
         he.hierarchy_level,
         he.metadata
-    FROM claude_flow.hyperbolic_embeddings he
+    FROM rufflo.hyperbolic_embeddings he
     WHERE he.euclidean_embedding IS NOT NULL
     ORDER BY he.euclidean_embedding <-> query
     LIMIT limit_count;
@@ -455,7 +455,7 @@ $$ LANGUAGE plpgsql STABLE;
 -- ============================================
 
 -- Get RufVector version info
-CREATE OR REPLACE FUNCTION claude_flow.rufvector_info()
+CREATE OR REPLACE FUNCTION rufflo.rufvector_info()
 RETURNS TABLE (
     version TEXT,
     simd_info TEXT
@@ -467,7 +467,7 @@ END;
 $$ LANGUAGE plpgsql STABLE;
 
 -- Cosine similarity helper (converts cosine distance to similarity)
-CREATE OR REPLACE FUNCTION claude_flow.cosine_similarity(
+CREATE OR REPLACE FUNCTION rufflo.cosine_similarity(
     a rufvector,
     b rufvector
 )
@@ -478,7 +478,7 @@ END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- L2 distance helper
-CREATE OR REPLACE FUNCTION claude_flow.l2_distance(
+CREATE OR REPLACE FUNCTION rufflo.l2_distance(
     a rufvector,
     b rufvector
 )
@@ -489,7 +489,7 @@ END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- Upsert memory entry
-CREATE OR REPLACE FUNCTION claude_flow.upsert_memory(
+CREATE OR REPLACE FUNCTION rufflo.upsert_memory(
     p_key VARCHAR(255),
     p_value TEXT,
     p_embedding rufvector(384) DEFAULT NULL,
@@ -501,11 +501,11 @@ RETURNS UUID AS $$
 DECLARE
     v_id UUID;
 BEGIN
-    INSERT INTO claude_flow.memory_entries (key, value, embedding, namespace, metadata, ttl, updated_at)
+    INSERT INTO rufflo.memory_entries (key, value, embedding, namespace, metadata, ttl, updated_at)
     VALUES (p_key, p_value, p_embedding, p_namespace, p_metadata, p_ttl, NOW())
     ON CONFLICT (key, namespace) DO UPDATE SET
         value = EXCLUDED.value,
-        embedding = COALESCE(EXCLUDED.embedding, claude_flow.memory_entries.embedding),
+        embedding = COALESCE(EXCLUDED.embedding, rufflo.memory_entries.embedding),
         metadata = EXCLUDED.metadata,
         ttl = EXCLUDED.ttl,
         updated_at = NOW()
@@ -535,19 +535,19 @@ BEGIN
     RAISE NOTICE 'RufVector Version: %', v_version;
     RAISE NOTICE 'SIMD: %', v_simd;
     RAISE NOTICE '';
-    RAISE NOTICE 'Schema: claude_flow';
+    RAISE NOTICE 'Schema: rufflo';
     RAISE NOTICE 'Tables: embeddings, patterns, agents, trajectories,';
     RAISE NOTICE '        memory_entries, hyperbolic_embeddings,';
     RAISE NOTICE '        graph_nodes, graph_edges';
     RAISE NOTICE 'Indices: 6 HNSW indices + 3 B-tree indices';
     RAISE NOTICE '';
     RAISE NOTICE 'Key Functions:';
-    RAISE NOTICE '  - claude_flow.search_similar(embedding, limit, min_sim)';
-    RAISE NOTICE '  - claude_flow.search_memory(embedding, namespace, limit)';
-    RAISE NOTICE '  - claude_flow.search_patterns(embedding, type, limit)';
-    RAISE NOTICE '  - claude_flow.find_agents(embedding, type, limit)';
-    RAISE NOTICE '  - claude_flow.hyperbolic_search(embedding, limit, curvature)';
-    RAISE NOTICE '  - claude_flow.upsert_memory(key, value, embedding, namespace)';
+    RAISE NOTICE '  - rufflo.search_similar(embedding, limit, min_sim)';
+    RAISE NOTICE '  - rufflo.search_memory(embedding, namespace, limit)';
+    RAISE NOTICE '  - rufflo.search_patterns(embedding, type, limit)';
+    RAISE NOTICE '  - rufflo.find_agents(embedding, type, limit)';
+    RAISE NOTICE '  - rufflo.hyperbolic_search(embedding, limit, curvature)';
+    RAISE NOTICE '  - rufflo.upsert_memory(key, value, embedding, namespace)';
     RAISE NOTICE '';
     RAISE NOTICE 'Operators: <=> (cosine), <-> (L2), <#> (neg inner product)';
     RAISE NOTICE '';
@@ -571,7 +571,7 @@ docker-compose up -d
 docker-compose ps
 
 # Check RufVector version
-docker exec rufvector-postgres psql -U claude -d claude_flow -c "SELECT rufvector_version();"
+docker exec rufvector-postgres psql -U claude -d rufflo -c "SELECT rufvector_version();"
 \`\`\`
 
 ## Connection Details
@@ -580,10 +580,10 @@ docker exec rufvector-postgres psql -U claude -d claude_flow -c "SELECT rufvecto
 |---------|-------|
 | Host | localhost |
 | Port | 5432 |
-| Database | claude_flow |
+| Database | rufflo |
 | Username | claude |
 | Password | rufflo-test |
-| Schema | claude_flow |
+| Schema | rufflo |
 
 ## RufVector Syntax
 
@@ -766,7 +766,7 @@ export const setupCommand: Command = {
         '',
         `  cd ${outputDir}`,
         '  docker-compose up -d',
-        '  docker exec rufvector-postgres psql -U claude -d claude_flow -c "SELECT rufvector_version();"',
+        '  docker exec rufvector-postgres psql -U claude -d rufflo -c "SELECT rufvector_version();"',
       ].join('\n'), 'Setup Complete');
 
       output.writeln();

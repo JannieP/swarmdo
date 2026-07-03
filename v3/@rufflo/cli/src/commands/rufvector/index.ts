@@ -75,7 +75,7 @@ export const rufvectorCommand: Command = {
       short: 's',
       description: 'Schema name',
       type: 'string',
-      default: 'claude_flow',
+      default: 'rufflo',
     },
   ],
   examples: [

@@ -157,7 +157,7 @@ function getConnectionConfig(ctx: CommandContext) {
     user: (ctx.flags.user as string) || process.env.PGUSER || 'postgres',
     password: (ctx.flags.password as string) || process.env.PGPASSWORD || '',
     ssl: (ctx.flags.ssl as boolean) || process.env.PGSSLMODE === 'require',
-    schema: validateSchemaName((ctx.flags.schema as string) || 'claude_flow'),
+    schema: validateSchemaName((ctx.flags.schema as string) || 'rufflo'),
   };
 }
 
@@ -252,7 +252,7 @@ export const migrateCommand: Command = {
       short: 's',
       description: 'Schema name',
       type: 'string',
-      default: 'claude_flow',
+      default: 'rufflo',
     },
   ],
   examples: [

@@ -95,7 +95,7 @@ function generateInsertSQL(entry: MemoryEntry): string {
     ? `'${escapeString(validateTimestamp(String(entry.updated_at)))}'::timestamptz`
     : 'NOW()';
 
-  return `INSERT INTO claude_flow.memory_entries (key, value, embedding, namespace, metadata, created_at, updated_at)
+  return `INSERT INTO rufflo.memory_entries (key, value, embedding, namespace, metadata, created_at, updated_at)
 VALUES (
   '${key}',
   '${value}',
@@ -107,7 +107,7 @@ VALUES (
 )
 ON CONFLICT (key, namespace) DO UPDATE SET
   value = EXCLUDED.value,
-  embedding = COALESCE(EXCLUDED.embedding, claude_flow.memory_entries.embedding),
+  embedding = COALESCE(EXCLUDED.embedding, rufflo.memory_entries.embedding),
   metadata = EXCLUDED.metadata,
   updated_at = NOW();`;
 }
@@ -164,7 +164,7 @@ export const importCommand: Command = {
       short: 'd',
       description: 'Database name',
       type: 'string',
-      default: 'claude_flow',
+      default: 'rufflo',
     },
     {
       name: 'user',
@@ -332,7 +332,7 @@ export const importCommand: Command = {
 
         output.writeln();
         output.printInfo('To execute the import:');
-        output.writeln(`  docker exec -i ${containerName} psql -U claude -d claude_flow < ${outputFile}`);
+        output.writeln(`  docker exec -i ${containerName} psql -U claude -d rufflo < ${outputFile}`);
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
         output.printError(`Failed to write SQL file: ${errorMessage}`);
@@ -351,7 +351,7 @@ export const importCommand: Command = {
         output.printInfo('Executing import...');
         output.writeln();
         output.writeln(output.dim('Command:'));
-        output.writeln(output.dim(`  docker exec -i ${containerName} psql -U claude -d claude_flow < ${tempFile}`));
+        output.writeln(output.dim(`  docker exec -i ${containerName} psql -U claude -d rufflo < ${tempFile}`));
         output.writeln();
 
         // Execute via child_process (CRIT-02: use execFileSync to prevent command injection)
@@ -366,7 +366,7 @@ export const importCommand: Command = {
           const sqlContent = fs.readFileSync(tempFile, 'utf-8');
           const result = execFileSync('docker', [
             'exec', '-i', containerName,
-            'psql', '-U', 'claude', '-d', 'claude_flow',
+            'psql', '-U', 'claude', '-d', 'rufflo',
           ], {
             encoding: 'utf-8',
             timeout: 60000,
@@ -383,7 +383,7 @@ export const importCommand: Command = {
           output.printError(`Import failed: ${execErrorMessage}`);
           output.writeln();
           output.printInfo('You can manually run the import with:');
-          output.writeln(`  docker exec -i ${containerName} psql -U claude -d claude_flow < ${tempFile}`);
+          output.writeln(`  docker exec -i ${containerName} psql -U claude -d rufflo < ${tempFile}`);
           return { success: false, message: execErrorMessage };
         } finally {
           // Clean up temp file
@@ -418,7 +418,7 @@ export const importCommand: Command = {
 
     // Show verification command
     output.printInfo('To verify the import:');
-    output.writeln(`  docker exec ${containerName} psql -U claude -d claude_flow -c "SELECT COUNT(*) FROM claude_flow.memory_entries;"`);
+    output.writeln(`  docker exec ${containerName} psql -U claude -d rufflo -c "SELECT COUNT(*) FROM rufflo.memory_entries;"`);
     output.writeln();
 
     return { success: true };
