@@ -600,6 +600,7 @@ const wizardCommand: Command = {
               { value: 'agentdb', label: 'AgentDB', hint: 'Vector database skills', selected: true },
               { value: 'github', label: 'GitHub', hint: 'GitHub integration skills', selected: true },
               { value: 'v3', label: 'V3', hint: 'V3 implementation skills', selected: true },
+              { value: 'efficiency', label: 'Efficiency', hint: 'caveman-compress + ponytail (token savings, YAGNI)', selected: true },
             ],
           });
 
@@ -607,6 +608,7 @@ const wizardCommand: Command = {
           options.skills.agentdb = skillSets.includes('agentdb');
           options.skills.github = skillSets.includes('github');
           options.skills.v3 = skillSets.includes('v3');
+          options.skills.efficiency = skillSets.includes('efficiency');
         }
 
         // Hooks selection
