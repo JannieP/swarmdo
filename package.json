@@ -1,6 +1,6 @@
 {
   "name": "rufflo",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "description": "Rufflo - Enterprise AI agent orchestration for Claude Code. Deploy 60+ specialized agents in coordinated swarms with self-learning, fault-tolerant consensus, vector memory, and MCP integration",
   "main": "dist/index.js",
   "type": "module",
