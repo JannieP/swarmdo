@@ -1028,7 +1028,7 @@ HOOKS COMMANDS:
   npx agentic-flow hooks pretrain        Analyze repository to bootstrap intelligence
   npx agentic-flow hooks build-agents    Generate optimized agent configurations
   npx agentic-flow hooks metrics         View learning metrics dashboard
-  npx agentic-flow hooks intelligence    RuVector intelligence commands (SONA + MoE + HNSW)
+  npx agentic-flow hooks intelligence    SwarmVector intelligence commands (SONA + MoE + HNSW)
   npx agentic-flow hooks init            Initialize hooks in project
 
   Self-learning hooks for intelligent agent routing and optimization.
@@ -1041,7 +1041,7 @@ WORKERS COMMANDS:
   npx agentic-flow workers stats         Get worker statistics
   npx agentic-flow workers results       View worker analysis results
   npx agentic-flow workers benchmark     Run worker performance benchmarks
-  npx agentic-flow workers native        Run native ruvector workers
+  npx agentic-flow workers native        Run native swarmvector workers
 
   Background workers for non-blocking analysis tasks.
 

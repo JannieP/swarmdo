@@ -2,7 +2,7 @@
  * AgentDB Init Command - Initialize database with backend detection
  */
 interface InitOptions {
-    backend?: 'auto' | 'rufvector' | 'hnswlib';
+    backend?: 'auto' | 'swarmvector' | 'hnswlib';
     dimension?: number;
     model?: string;
     preset?: 'small' | 'medium' | 'large';

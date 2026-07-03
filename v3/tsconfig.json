@@ -3,31 +3,31 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@rufflo/security": ["./@rufflo/security/src"],
-      "@rufflo/memory": ["./@rufflo/memory/src"],
-      "@rufflo/integration": ["./@rufflo/integration/src"],
-      "@rufflo/swarm": ["./@rufflo/swarm/src"],
-      "@rufflo/performance": ["./@rufflo/performance/src"],
-      "@rufflo/cli": ["./@rufflo/cli/src"],
-      "@rufflo/neural": ["./@rufflo/neural/src"],
-      "@rufflo/testing": ["./@rufflo/testing/src"],
-      "@rufflo/deployment": ["./@rufflo/deployment/src"],
-      "@rufflo/shared": ["./@rufflo/shared/src"],
-      "@rufflo/hooks": ["./@rufflo/hooks/src"]
+      "@swarmdo/security": ["./@swarmdo/security/src"],
+      "@swarmdo/memory": ["./@swarmdo/memory/src"],
+      "@swarmdo/integration": ["./@swarmdo/integration/src"],
+      "@swarmdo/swarm": ["./@swarmdo/swarm/src"],
+      "@swarmdo/performance": ["./@swarmdo/performance/src"],
+      "@swarmdo/cli": ["./@swarmdo/cli/src"],
+      "@swarmdo/neural": ["./@swarmdo/neural/src"],
+      "@swarmdo/testing": ["./@swarmdo/testing/src"],
+      "@swarmdo/deployment": ["./@swarmdo/deployment/src"],
+      "@swarmdo/shared": ["./@swarmdo/shared/src"],
+      "@swarmdo/hooks": ["./@swarmdo/hooks/src"]
     }
   },
   "references": [
-    { "path": "./@rufflo/shared" },
-    { "path": "./@rufflo/security" },
-    { "path": "./@rufflo/memory" },
-    { "path": "./@rufflo/integration" },
-    { "path": "./@rufflo/swarm" },
-    { "path": "./@rufflo/performance" },
-    { "path": "./@rufflo/cli" },
-    { "path": "./@rufflo/neural" },
-    { "path": "./@rufflo/testing" },
-    { "path": "./@rufflo/deployment" },
-    { "path": "./@rufflo/hooks" }
+    { "path": "./@swarmdo/shared" },
+    { "path": "./@swarmdo/security" },
+    { "path": "./@swarmdo/memory" },
+    { "path": "./@swarmdo/integration" },
+    { "path": "./@swarmdo/swarm" },
+    { "path": "./@swarmdo/performance" },
+    { "path": "./@swarmdo/cli" },
+    { "path": "./@swarmdo/neural" },
+    { "path": "./@swarmdo/testing" },
+    { "path": "./@swarmdo/deployment" },
+    { "path": "./@swarmdo/hooks" }
   ],
   "include": [],
   "exclude": ["node_modules", "dist"]

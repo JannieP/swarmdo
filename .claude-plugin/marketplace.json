@@ -1,185 +1,185 @@
 {
-  "name": "rufflo",
-  "description": "Rufflo Marketplace: Claude Code native agents, swarms, workers, and MCP tools for continuous software engineering",
+  "name": "swarmdo",
+  "description": "Swarmdo Marketplace: Claude Code native agents, swarms, workers, and MCP tools for continuous software engineering",
   "owner": {
     "name": "ruvnet",
     "url": "https://github.com/ruvnet"
   },
   "plugins": [
     {
-      "name": "rufflo-core",
-      "source": "./plugins/ruflo-core",
-      "description": "Core Rufflo MCP tools, commands, and Claude Code orchestration patterns"
+      "name": "swarmdo-core",
+      "source": "./plugins/swarmdo-core",
+      "description": "Core Swarmdo MCP tools, commands, and Claude Code orchestration patterns"
     },
     {
-      "name": "rufflo-swarm",
-      "source": "./plugins/ruflo-swarm",
+      "name": "swarmdo-swarm",
+      "source": "./plugins/swarmdo-swarm",
       "description": "Agent teams, swarm coordination, Monitor streams, and worktree isolation"
     },
     {
-      "name": "rufflo-loop-workers",
-      "source": "./plugins/ruflo-loop-workers",
+      "name": "swarmdo-loop-workers",
+      "source": "./plugins/swarmdo-loop-workers",
       "description": "Cache-aware /loop workers and CronCreate background automation"
     },
     {
-      "name": "rufflo-security-audit",
-      "source": "./plugins/ruflo-security-audit",
+      "name": "swarmdo-security-audit",
+      "source": "./plugins/swarmdo-security-audit",
       "description": "Security review, dependency scanning, policy gates, and CVE monitoring"
     },
     {
-      "name": "rufflo-rag-memory",
-      "source": "./plugins/ruflo-rag-memory",
-      "description": "RufVector memory with HNSW search, AgentDB, and semantic retrieval"
+      "name": "swarmdo-rag-memory",
+      "source": "./plugins/swarmdo-rag-memory",
+      "description": "SwarmVector memory with HNSW search, AgentDB, and semantic retrieval"
     },
     {
-      "name": "rufflo-testgen",
-      "source": "./plugins/ruflo-testgen",
+      "name": "swarmdo-testgen",
+      "source": "./plugins/swarmdo-testgen",
       "description": "Test gap detection, coverage analysis, and automated test generation"
     },
     {
-      "name": "rufflo-docs",
-      "source": "./plugins/ruflo-docs",
+      "name": "swarmdo-docs",
+      "source": "./plugins/swarmdo-docs",
       "description": "Documentation generation, drift detection, and API docs automation"
     },
     {
-      "name": "rufflo-autopilot",
-      "source": "./plugins/ruflo-autopilot",
+      "name": "swarmdo-autopilot",
+      "source": "./plugins/swarmdo-autopilot",
       "description": "Autonomous /loop-driven task completion with learning, prediction, and progress tracking"
     },
     {
-      "name": "rufflo-intelligence",
-      "source": "./plugins/ruflo-intelligence",
+      "name": "swarmdo-intelligence",
+      "source": "./plugins/swarmdo-intelligence",
       "description": "Self-learning neural intelligence with SONA patterns, trajectory learning, and model routing"
     },
     {
-      "name": "rufflo-agentdb",
-      "source": "./plugins/ruflo-agentdb",
-      "description": "AgentDB memory controllers with HNSW vector search, RufVector embeddings, and causal graphs"
+      "name": "swarmdo-agentdb",
+      "source": "./plugins/swarmdo-agentdb",
+      "description": "AgentDB memory controllers with HNSW vector search, SwarmVector embeddings, and causal graphs"
     },
     {
-      "name": "rufflo-aidefence",
-      "source": "./plugins/ruflo-aidefence",
+      "name": "swarmdo-aidefence",
+      "source": "./plugins/swarmdo-aidefence",
       "description": "AI safety scanning, PII detection, prompt injection defense, and adaptive threat learning"
     },
     {
-      "name": "rufflo-browser",
-      "source": "./plugins/ruflo-browser",
+      "name": "swarmdo-browser",
+      "source": "./plugins/swarmdo-browser",
       "description": "Agentic browser automation with Playwright for testing, scraping, and UI interaction"
     },
     {
-      "name": "rufflo-jujutsu",
-      "source": "./plugins/ruflo-jujutsu",
+      "name": "swarmdo-jujutsu",
+      "source": "./plugins/swarmdo-jujutsu",
       "description": "Advanced git workflows with diff analysis, risk scoring, and reviewer recommendations"
     },
     {
-      "name": "rufflo-agent",
-      "source": "./plugins/ruflo-agent",
+      "name": "swarmdo-agent",
+      "source": "./plugins/swarmdo-agent",
       "description": "Agent runtimes — local WASM-sandboxed agents (rvagent) + Anthropic Claude Managed Agents (cloud); one interface, local-vs-cloud backends"
     },
     {
-      "name": "rufflo-workflows",
-      "source": "./plugins/ruflo-workflows",
+      "name": "swarmdo-workflows",
+      "source": "./plugins/swarmdo-workflows",
       "description": "Visual workflow automation with templates, orchestration, and lifecycle management"
     },
     {
-      "name": "rufflo-daa",
-      "source": "./plugins/ruflo-daa",
+      "name": "swarmdo-daa",
+      "source": "./plugins/swarmdo-daa",
       "description": "Dynamic Agentic Architecture with cognitive patterns, knowledge sharing, and adaptive agents"
     },
     {
-      "name": "rufflo-rufllm",
-      "source": "./plugins/ruflo-rufllm",
-      "description": "RufLLM local inference with chat formatting, MicroLoRA fine-tuning, and SONA adaptation"
+      "name": "swarmdo-swarmllm",
+      "source": "./plugins/swarmdo-swarmllm",
+      "description": "SwarmLLM local inference with chat formatting, MicroLoRA fine-tuning, and SONA adaptation"
     },
     {
-      "name": "rufflo-rvf",
-      "source": "./plugins/ruflo-rvf",
+      "name": "swarmdo-rvf",
+      "source": "./plugins/swarmdo-rvf",
       "description": "RVF format for portable agent memory, session persistence, and cross-platform transfer"
     },
     {
-      "name": "rufflo-plugin-creator",
-      "source": "./plugins/ruflo-plugin-creator",
+      "name": "swarmdo-plugin-creator",
+      "source": "./plugins/swarmdo-plugin-creator",
       "description": "Scaffold, validate, and publish new Claude Code plugins with proper structure"
     },
     {
-      "name": "rufflo-goals",
-      "source": "./plugins/ruflo-goals",
+      "name": "swarmdo-goals",
+      "source": "./plugins/swarmdo-goals",
       "description": "Long-horizon goal planning, deep research orchestration, and adaptive replanning using GOAP"
     },
     {
-      "name": "rufflo-adr",
-      "source": "./plugins/ruflo-adr",
+      "name": "swarmdo-adr",
+      "source": "./plugins/swarmdo-adr",
       "description": "ADR lifecycle management — create, index, supersede, and link Architecture Decision Records to code"
     },
     {
-      "name": "rufflo-cost-tracker",
-      "source": "./plugins/ruflo-cost-tracker",
+      "name": "swarmdo-cost-tracker",
+      "source": "./plugins/swarmdo-cost-tracker",
       "description": "Token usage tracking, model cost attribution per agent, budget alerts, and optimization recommendations"
     },
     {
-      "name": "rufflo-ddd",
-      "source": "./plugins/ruflo-ddd",
+      "name": "swarmdo-ddd",
+      "source": "./plugins/swarmdo-ddd",
       "description": "Domain-Driven Design scaffolding — bounded contexts, aggregate roots, domain events, and anti-corruption layers"
     },
     {
-      "name": "rufflo-federation",
-      "source": "./plugins/ruflo-federation",
+      "name": "swarmdo-federation",
+      "source": "./plugins/swarmdo-federation",
       "description": "Cross-installation agent federation with zero-trust security, PII-gated data flow, and compliance-grade audit trails"
     },
     {
-      "name": "rufflo-graph-intelligence",
-      "source": "./plugins/ruflo-graph-intelligence",
+      "name": "swarmdo-graph-intelligence",
+      "source": "./plugins/swarmdo-graph-intelligence",
       "description": "Real-time graph intelligence — personalized PageRank, streaming delta updates, witness-signed reasoning, and federation-distributable vectors"
     },
     {
-      "name": "rufflo-iot-cognitum",
-      "source": "./plugins/ruflo-iot-cognitum",
+      "name": "swarmdo-iot-cognitum",
+      "source": "./plugins/swarmdo-iot-cognitum",
       "description": "IoT device lifecycle, telemetry anomaly detection, fleet management, and witness chain verification for Cognitum Seed hardware"
     },
     {
-      "name": "rufflo-knowledge-graph",
-      "source": "./plugins/ruflo-knowledge-graph",
+      "name": "swarmdo-knowledge-graph",
+      "source": "./plugins/swarmdo-knowledge-graph",
       "description": "Knowledge graph construction — entity extraction, relation mapping, and pathfinder graph traversal"
     },
     {
-      "name": "rufflo-market-data",
-      "source": "./plugins/ruflo-market-data",
+      "name": "swarmdo-market-data",
+      "source": "./plugins/swarmdo-market-data",
       "description": "Market data ingestion — feed normalization, OHLCV vectorization, and HNSW-indexed pattern matching"
     },
     {
-      "name": "rufflo-migrations",
-      "source": "./plugins/ruflo-migrations",
+      "name": "swarmdo-migrations",
+      "source": "./plugins/swarmdo-migrations",
       "description": "Schema migration management — generate, validate, dry-run, and rollback database migrations"
     },
     {
-      "name": "rufflo-neural-trader",
-      "source": "./plugins/ruflo-neural-trader",
+      "name": "swarmdo-neural-trader",
+      "source": "./plugins/swarmdo-neural-trader",
       "description": "Neural trading strategies — self-learning LSTM/Transformer/N-BEATS models with Rust/NAPI backtesting"
     },
     {
-      "name": "rufflo-observability",
-      "source": "./plugins/ruflo-observability",
+      "name": "swarmdo-observability",
+      "source": "./plugins/swarmdo-observability",
       "description": "Structured logging, distributed tracing, and metrics — correlate agent swarm activity with application telemetry"
     },
     {
-      "name": "rufflo-rufvector",
-      "source": "./plugins/ruflo-rufvector",
+      "name": "swarmdo-swarmvector",
+      "source": "./plugins/swarmdo-swarmvector",
       "description": "Self-learning vector database — HNSW, FlashAttention-3, Graph RAG, hybrid search, DiskANN, and Brain AGI"
     },
     {
-      "name": "rufflo-sparc",
-      "source": "./plugins/ruflo-sparc",
+      "name": "swarmdo-sparc",
+      "source": "./plugins/swarmdo-sparc",
       "description": "SPARC methodology — Specification, Pseudocode, Architecture, Refinement, Completion phases with quality gates"
     },
     {
-      "name": "rufflo-metaharness",
-      "source": "./plugins/ruflo-metaharness",
+      "name": "swarmdo-metaharness",
+      "source": "./plugins/swarmdo-metaharness",
       "description": "MetaHarness integration — surfaces score/genome/mint/mcp-scan/threat-model via skills; pairs with @metaharness/router (ADR-148/149) for cost-optimal model routing; honors ADR-150 optional-augmentation constraint"
     },
     {
-      "name": "rufflo-arena",
-      "source": "./plugins/ruflo-arena",
-      "description": "Competitive ruliology for rufflo swarms — arenas, tournaments, and adaptive co-evolution of program strategies (ADR-147/148); strategies-as-programs compete under payoff games"
+      "name": "swarmdo-arena",
+      "source": "./plugins/swarmdo-arena",
+      "description": "Competitive ruliology for swarmdo swarms — arenas, tournaments, and adaptive co-evolution of program strategies (ADR-147/148); strategies-as-programs compete under payoff games"
     }
   ]
 }

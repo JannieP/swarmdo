@@ -1,8 +1,8 @@
-# @rufflo/plugin-quantum-optimizer
+# @swarmdo/plugin-quantum-optimizer
 
-[![npm version](https://img.shields.io/npm/v/@rufflo/plugin-quantum-optimizer.svg)](https://www.npmjs.com/package/@rufflo/plugin-quantum-optimizer)
-[![license](https://img.shields.io/npm/l/@rufflo/plugin-quantum-optimizer.svg)](https://github.com/ruvnet/claude-flow/blob/main/LICENSE)
-[![downloads](https://img.shields.io/npm/dm/@rufflo/plugin-quantum-optimizer.svg)](https://www.npmjs.com/package/@rufflo/plugin-quantum-optimizer)
+[![npm version](https://img.shields.io/npm/v/@swarmdo/plugin-quantum-optimizer.svg)](https://www.npmjs.com/package/@swarmdo/plugin-quantum-optimizer)
+[![license](https://img.shields.io/npm/l/@swarmdo/plugin-quantum-optimizer.svg)](https://github.com/ruvnet/claude-flow/blob/main/LICENSE)
+[![downloads](https://img.shields.io/npm/dm/@swarmdo/plugin-quantum-optimizer.svg)](https://www.npmjs.com/package/@swarmdo/plugin-quantum-optimizer)
 
 An exotic optimization plugin implementing quantum-inspired algorithms including Quantum Annealing simulation, QAOA (Quantum Approximate Optimization Algorithm) emulation, and Grover-inspired search acceleration. The plugin provides dramatic speedups for dependency resolution, optimal scheduling, and constraint satisfaction while running entirely on classical WASM-accelerated hardware.
 
@@ -11,19 +11,19 @@ An exotic optimization plugin implementing quantum-inspired algorithms including
 ### npm
 
 ```bash
-npm install @rufflo/plugin-quantum-optimizer
+npm install @swarmdo/plugin-quantum-optimizer
 ```
 
 ### CLI
 
 ```bash
-npx rufflo plugins install --name @rufflo/plugin-quantum-optimizer
+npx swarmdo plugins install --name @swarmdo/plugin-quantum-optimizer
 ```
 
 ## Quick Start
 
 ```typescript
-import { QuantumOptimizerPlugin } from '@rufflo/plugin-quantum-optimizer';
+import { QuantumOptimizerPlugin } from '@swarmdo/plugin-quantum-optimizer';
 
 // Initialize the plugin
 const plugin = new QuantumOptimizerPlugin();
@@ -262,11 +262,11 @@ interface QuantumOptimizerConfig {
 
 ## Dependencies
 
-- `rufvector-exotic-wasm` - Quantum-inspired optimization algorithms
-- `rufvector-sparse-inference-wasm` - Efficient sparse matrix operations for quantum simulation
+- `swarmvector-exotic-wasm` - Quantum-inspired optimization algorithms
+- `swarmvector-sparse-inference-wasm` - Efficient sparse matrix operations for quantum simulation
 - `micro-hnsw-wasm` - Amplitude-inspired search acceleration
-- `rufvector-dag-wasm` - Quantum circuit DAG representation
-- `rufvector-hyperbolic-hnsw-wasm` - Hyperbolic embeddings for quantum state spaces
+- `swarmvector-dag-wasm` - Quantum circuit DAG representation
+- `swarmvector-hyperbolic-hnsw-wasm` - Hyperbolic embeddings for quantum state spaces
 
 ## Theoretical Background
 
@@ -291,9 +291,9 @@ Amplitude amplification for unstructured search achieving O(sqrt(N)) complexity.
 
 | Plugin | Description | Synergy |
 |--------|-------------|---------|
-| [@rufflo/plugin-neural-coordination](https://www.npmjs.com/package/@rufflo/plugin-neural-coordination) | Multi-agent coordination | Quantum optimizer schedules tasks across coordinated agent swarms |
-| [@rufflo/plugin-cognitive-kernel](https://www.npmjs.com/package/@rufflo/plugin-cognitive-kernel) | Cognitive augmentation | Optimizes cognitive load distribution and attention allocation |
-| [@rufflo/plugin-hyperbolic-reasoning](https://www.npmjs.com/package/@rufflo/plugin-hyperbolic-reasoning) | Hierarchical reasoning | Quantum algorithms optimize hierarchical constraint satisfaction |
+| [@swarmdo/plugin-neural-coordination](https://www.npmjs.com/package/@swarmdo/plugin-neural-coordination) | Multi-agent coordination | Quantum optimizer schedules tasks across coordinated agent swarms |
+| [@swarmdo/plugin-cognitive-kernel](https://www.npmjs.com/package/@swarmdo/plugin-cognitive-kernel) | Cognitive augmentation | Optimizes cognitive load distribution and attention allocation |
+| [@swarmdo/plugin-hyperbolic-reasoning](https://www.npmjs.com/package/@swarmdo/plugin-hyperbolic-reasoning) | Hierarchical reasoning | Quantum algorithms optimize hierarchical constraint satisfaction |
 
 ## License
 

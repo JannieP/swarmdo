@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /**
- * Regression guard for ruvnet/ruflo#2021.
+ * Regression guard for ruvnet/swarmdo#2021.
  *
- * #2021 happened because a dep bump (`@rufflo/memory` alpha.14 → 16)
+ * #2021 happened because a dep bump (`@swarmdo/memory` alpha.14 → 16)
  * silently invalidated witness marker `#1825`, whose marker string was
- * the literal pinned-version line in `v3/@rufflo/cli/package.json`.
+ * the literal pinned-version line in `v3/@swarmdo/cli/package.json`.
  * The change landed on main without going through a PR, so the full
  * `witness-verify` job (cross-platform, builds dist, slow) didn't gate
  * it. The scheduled 12-hour cron then filed a HIGH-severity issue.
@@ -96,7 +96,7 @@ if (drift.length > 0) {
     `\nFix path: either restore the marker string in the cited file,\n` +
     `or update verification/<os>/manifest.md.json (edit the 'marker'\n` +
     `field for the drifted id, then run:\n\n` +
-    `  node plugins/rufflo-core/scripts/witness/regen.mjs \\\n` +
+    `  node plugins/swarmdo-core/scripts/witness/regen.mjs \\\n` +
     `    --manifest verification/<os>/manifest.md.json \\\n` +
     `    --history  verification/<os>/history.jsonl\n\n` +
     `…for each of macos, linux, windows. The regen re-signs the\n` +

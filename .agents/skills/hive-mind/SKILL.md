@@ -40,22 +40,22 @@ Byzantine fault-tolerant consensus and distributed swarm coordination.
 
 ### Initialize Hive-Mind
 ```bash
-npx rufflo hive-mind init --topology hierarchical-mesh --consensus raft
+npx swarmdo hive-mind init --topology hierarchical-mesh --consensus raft
 ```
 
 ### Spawn Queen
 ```bash
-npx rufflo hive-mind spawn --role queen --name coordinator
+npx swarmdo hive-mind spawn --role queen --name coordinator
 ```
 
 ### Check Consensus Status
 ```bash
-npx rufflo hive-mind consensus --status
+npx swarmdo hive-mind consensus --status
 ```
 
 ### View Sessions
 ```bash
-npx rufflo hive-mind sessions --active
+npx swarmdo hive-mind sessions --active
 ```
 
 ## Best Practices

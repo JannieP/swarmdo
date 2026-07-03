@@ -55,7 +55,7 @@ export async function statusCommand(options: StatusOptions = {}): Promise<void> 
       const configs = configQuery.all() as Array<{ key: string; value: string }>;
       const configMap = new Map(configs.map(c => [c.key, c.value]));
 
-      const backend = configMap.get('backend') as 'rufvector' | 'hnswlib' | undefined;
+      const backend = configMap.get('backend') as 'swarmvector' | 'hnswlib' | undefined;
       const dimension = configMap.get('dimension');
       const version = configMap.get('version');
 
@@ -113,7 +113,7 @@ export async function statusCommand(options: StatusOptions = {}): Promise<void> 
       console.log('');
 
       // Performance info
-      if (backend === 'rufvector' && detection.backend === 'rufvector') {
+      if (backend === 'swarmvector' && detection.backend === 'swarmvector') {
         console.log(`${colors.bright}${colors.green}⚡ Performance:${colors.reset}`);
         console.log(`  Search speed:  ${colors.green}150x faster${colors.reset} than pure SQLite`);
         console.log(`  Vector ops:    ${colors.green}Sub-millisecond${colors.reset} latency`);
@@ -151,6 +151,6 @@ export async function statusCommand(options: StatusOptions = {}): Promise<void> 
   }
 }
 
-function getBackendColor(backend: 'rufvector' | 'hnswlib'): string {
-  return backend === 'rufvector' ? colors.green : colors.yellow;
+function getBackendColor(backend: 'swarmvector' | 'hnswlib'): string {
+  return backend === 'swarmvector' ? colors.green : colors.yellow;
 }

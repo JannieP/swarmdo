@@ -1,7 +1,7 @@
 /**
  * Database System backed by SQLite.
  *
- * Resolution order (ruflo #2235 A):
+ * Resolution order (swarmdo #2235 A):
  *   1. **better-sqlite3** if the optional peer is loadable — native, faster,
  *      what most callers actually want when they install the native module.
  *   2. **sql.js** (WASM) — pure-JS fallback, requires no build tools.

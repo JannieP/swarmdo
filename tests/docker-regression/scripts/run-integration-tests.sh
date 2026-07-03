@@ -1,5 +1,5 @@
 #!/bin/bash
-# Rufflo Integration Test Suite
+# Swarmdo Integration Test Suite
 # End-to-end integration tests
 
 set -e
@@ -44,9 +44,9 @@ run_test() {
 # ============================================================================
 echo "── E2E: Code Review Workflow ──"
 
-run_test "Init swarm for code review" "npx rufflo swarm init --topology hierarchical 2>/dev/null || echo 'init ok'"
-run_test "Spawn reviewer agent" "npx rufflo agent spawn reviewer --dry-run 2>/dev/null || echo 'spawn ok'"
-run_test "Route review task" "npx rufflo hooks route 'Review code changes' 2>/dev/null || echo 'routed'"
+run_test "Init swarm for code review" "npx swarmdo swarm init --topology hierarchical 2>/dev/null || echo 'init ok'"
+run_test "Spawn reviewer agent" "npx swarmdo agent spawn reviewer --dry-run 2>/dev/null || echo 'spawn ok'"
+run_test "Route review task" "npx swarmdo hooks route 'Review code changes' 2>/dev/null || echo 'routed'"
 run_test "Complete code review workflow" "echo 'code review workflow' && echo 'ok'"
 
 # ============================================================================
@@ -55,10 +55,10 @@ run_test "Complete code review workflow" "echo 'code review workflow' && echo 'o
 echo ""
 echo "── E2E: TDD Development Workflow ──"
 
-run_test "Init TDD swarm" "npx rufflo swarm init --topology mesh 2>/dev/null || echo 'init ok'"
-run_test "Spawn test-architect" "npx rufflo agent spawn test-architect --dry-run 2>/dev/null || echo 'spawn ok'"
-run_test "Spawn coder" "npx rufflo agent spawn coder --dry-run 2>/dev/null || echo 'spawn ok'"
-run_test "Route testing task" "npx rufflo hooks route 'Write unit tests with TDD' 2>/dev/null || echo 'routed'"
+run_test "Init TDD swarm" "npx swarmdo swarm init --topology mesh 2>/dev/null || echo 'init ok'"
+run_test "Spawn test-architect" "npx swarmdo agent spawn test-architect --dry-run 2>/dev/null || echo 'spawn ok'"
+run_test "Spawn coder" "npx swarmdo agent spawn coder --dry-run 2>/dev/null || echo 'spawn ok'"
+run_test "Route testing task" "npx swarmdo hooks route 'Write unit tests with TDD' 2>/dev/null || echo 'routed'"
 run_test "Complete TDD workflow" "echo 'tdd workflow' && echo 'ok'"
 
 # ============================================================================
@@ -67,10 +67,10 @@ run_test "Complete TDD workflow" "echo 'tdd workflow' && echo 'ok'"
 echo ""
 echo "── E2E: Security Audit Workflow ──"
 
-run_test "Init security swarm" "npx rufflo swarm init --topology hierarchical-mesh 2>/dev/null || echo 'init ok'"
-run_test "Spawn security-architect" "npx rufflo agent spawn security-architect --dry-run 2>/dev/null || echo 'spawn ok'"
-run_test "Spawn security-auditor" "npx rufflo agent spawn security-auditor --dry-run 2>/dev/null || echo 'spawn ok'"
-run_test "Route security task" "npx rufflo hooks route 'Audit for CVE vulnerabilities' 2>/dev/null || echo 'routed'"
+run_test "Init security swarm" "npx swarmdo swarm init --topology hierarchical-mesh 2>/dev/null || echo 'init ok'"
+run_test "Spawn security-architect" "npx swarmdo agent spawn security-architect --dry-run 2>/dev/null || echo 'spawn ok'"
+run_test "Spawn security-auditor" "npx swarmdo agent spawn security-auditor --dry-run 2>/dev/null || echo 'spawn ok'"
+run_test "Route security task" "npx swarmdo hooks route 'Audit for CVE vulnerabilities' 2>/dev/null || echo 'routed'"
 run_test "Complete security workflow" "echo 'security workflow' && echo 'ok'"
 
 # ============================================================================
@@ -79,10 +79,10 @@ run_test "Complete security workflow" "echo 'security workflow' && echo 'ok'"
 echo ""
 echo "── E2E: Performance Optimization Workflow ──"
 
-run_test "Init performance swarm" "npx rufflo swarm init --topology distributed 2>/dev/null || echo 'init ok'"
-run_test "Spawn performance-engineer" "npx rufflo agent spawn performance-engineer --dry-run 2>/dev/null || echo 'spawn ok'"
-run_test "Spawn perf-analyzer" "npx rufflo agent spawn perf-analyzer --dry-run 2>/dev/null || echo 'spawn ok'"
-run_test "Route performance task" "npx rufflo hooks route 'Optimize memory usage' 2>/dev/null || echo 'routed'"
+run_test "Init performance swarm" "npx swarmdo swarm init --topology distributed 2>/dev/null || echo 'init ok'"
+run_test "Spawn performance-engineer" "npx swarmdo agent spawn performance-engineer --dry-run 2>/dev/null || echo 'spawn ok'"
+run_test "Spawn perf-analyzer" "npx swarmdo agent spawn perf-analyzer --dry-run 2>/dev/null || echo 'spawn ok'"
+run_test "Route performance task" "npx swarmdo hooks route 'Optimize memory usage' 2>/dev/null || echo 'routed'"
 run_test "Complete performance workflow" "echo 'performance workflow' && echo 'ok'"
 
 # ============================================================================
@@ -103,10 +103,10 @@ run_test "MCP task_orchestrate" "echo 'mcp task_orchestrate' && echo 'ok'"
 echo ""
 echo "── Hooks + Learning Integration ──"
 
-run_test "Pre-edit triggers learning" "npx rufflo hooks pre-edit /tmp/test.ts 2>/dev/null || echo 'triggered'"
-run_test "Post-edit stores pattern" "npx rufflo hooks post-edit /tmp/test.ts --success true 2>/dev/null || echo 'stored'"
-run_test "Routing uses learned patterns" "npx rufflo hooks route 'Similar task' 2>/dev/null || echo 'routed'"
-run_test "Metrics reflect learning" "npx rufflo hooks metrics 2>/dev/null || echo 'metrics'"
+run_test "Pre-edit triggers learning" "npx swarmdo hooks pre-edit /tmp/test.ts 2>/dev/null || echo 'triggered'"
+run_test "Post-edit stores pattern" "npx swarmdo hooks post-edit /tmp/test.ts --success true 2>/dev/null || echo 'stored'"
+run_test "Routing uses learned patterns" "npx swarmdo hooks route 'Similar task' 2>/dev/null || echo 'routed'"
+run_test "Metrics reflect learning" "npx swarmdo hooks metrics 2>/dev/null || echo 'metrics'"
 
 # ============================================================================
 # 7. MEMORY PERSISTENCE INTEGRATION
@@ -124,7 +124,7 @@ run_test "Pattern survives consolidation" "echo 'pattern survival' && echo 'ok'"
 echo ""
 echo "── Multi-Agent Coordination ──"
 
-run_test "15-agent concurrent init" "npx rufflo swarm init --agents 15 2>/dev/null || echo 'init 15 agents'"
+run_test "15-agent concurrent init" "npx swarmdo swarm init --agents 15 2>/dev/null || echo 'init 15 agents'"
 run_test "Task distribution" "echo 'task distribution' && echo 'ok'"
 run_test "Result aggregation" "echo 'result aggregation' && echo 'ok'"
 run_test "Consensus mechanism" "echo 'consensus mechanism' && echo 'ok'"

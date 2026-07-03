@@ -2,7 +2,7 @@
  * Prime Radiant Plugin - Main Plugin Class
  *
  * PrimeRadiantPlugin class implementing the IPlugin interface:
- * - register(): Register with rufflo plugin system
+ * - register(): Register with swarmdo plugin system
  * - initialize(): Load WASM bundle, set up engines
  * - shutdown(): Cleanup WASM resources
  *
@@ -591,7 +591,7 @@ class ResultCache<T> implements IResultCache<T> {
 // ============================================================================
 
 /**
- * Prime Radiant Plugin for Rufflo V3
+ * Prime Radiant Plugin for Swarmdo V3
  *
  * Provides mathematical AI interpretability capabilities:
  * - Sheaf Laplacian coherence detection
@@ -621,7 +621,7 @@ export class PrimeRadiantPlugin implements IPlugin {
   }
 
   /**
-   * Register the plugin with rufflo
+   * Register the plugin with swarmdo
    */
   async register(context: PluginContext): Promise<void> {
     this.context = context;

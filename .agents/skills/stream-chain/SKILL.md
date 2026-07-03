@@ -26,7 +26,7 @@ Each step in a chain receives the complete output from the previous step, enabli
 ### Run a Custom Chain
 
 ```bash
-rufflo stream-chain run \
+swarmdo stream-chain run \
   "Analyze codebase structure" \
   "Identify improvement areas" \
   "Generate action plan"
@@ -35,7 +35,7 @@ rufflo stream-chain run \
 ### Execute a Pipeline
 
 ```bash
-rufflo stream-chain pipeline analysis
+swarmdo stream-chain pipeline analysis
 ```
 
 ---
@@ -47,7 +47,7 @@ Execute custom stream chains with your own prompts for maximum flexibility.
 ### Syntax
 
 ```bash
-rufflo stream-chain run <prompt1> <prompt2> [...] [options]
+swarmdo stream-chain run <prompt1> <prompt2> [...] [options]
 ```
 
 **Requirements:**
@@ -89,7 +89,7 @@ Step 3 receives:
 #### Basic Development Chain
 
 ```bash
-rufflo stream-chain run \
+swarmdo stream-chain run \
   "Write a user authentication function" \
   "Add input validation and error handling" \
   "Create unit tests with edge cases"
@@ -98,7 +98,7 @@ rufflo stream-chain run \
 #### Security Audit Workflow
 
 ```bash
-rufflo stream-chain run \
+swarmdo stream-chain run \
   "Analyze authentication system for vulnerabilities" \
   "Identify and categorize security issues by severity" \
   "Propose fixes with implementation priority" \
@@ -110,7 +110,7 @@ rufflo stream-chain run \
 #### Code Refactoring Chain
 
 ```bash
-rufflo stream-chain run \
+swarmdo stream-chain run \
   "Identify code smells in src/ directory" \
   "Create refactoring plan with specific changes" \
   "Apply refactoring to top 3 priority items" \
@@ -121,7 +121,7 @@ rufflo stream-chain run \
 #### Data Processing Pipeline
 
 ```bash
-rufflo stream-chain run \
+swarmdo stream-chain run \
   "Extract data from API responses" \
   "Transform data into normalized format" \
   "Validate data against schema" \
@@ -137,7 +137,7 @@ Execute battle-tested workflows optimized for common development tasks.
 ### Syntax
 
 ```bash
-rufflo stream-chain pipeline <type> [options]
+swarmdo stream-chain pipeline <type> [options]
 ```
 
 ### Available Pipelines
@@ -147,7 +147,7 @@ rufflo stream-chain pipeline <type> [options]
 Comprehensive codebase analysis and improvement identification.
 
 ```bash
-rufflo stream-chain pipeline analysis
+swarmdo stream-chain pipeline analysis
 ```
 
 **Workflow Steps:**
@@ -166,7 +166,7 @@ rufflo stream-chain pipeline analysis
 Systematic code refactoring with prioritization.
 
 ```bash
-rufflo stream-chain pipeline refactor
+swarmdo stream-chain pipeline refactor
 ```
 
 **Workflow Steps:**
@@ -185,7 +185,7 @@ rufflo stream-chain pipeline refactor
 Comprehensive test generation with coverage analysis.
 
 ```bash
-rufflo stream-chain pipeline test
+swarmdo stream-chain pipeline test
 ```
 
 **Workflow Steps:**
@@ -204,7 +204,7 @@ rufflo stream-chain pipeline test
 Performance optimization with profiling and implementation.
 
 ```bash
-rufflo stream-chain pipeline optimize
+swarmdo stream-chain pipeline optimize
 ```
 
 **Workflow Steps:**
@@ -231,25 +231,25 @@ rufflo stream-chain pipeline optimize
 #### Quick Analysis
 
 ```bash
-rufflo stream-chain pipeline analysis
+swarmdo stream-chain pipeline analysis
 ```
 
 #### Extended Refactoring
 
 ```bash
-rufflo stream-chain pipeline refactor --timeout 60 --verbose
+swarmdo stream-chain pipeline refactor --timeout 60 --verbose
 ```
 
 #### Debug Test Generation
 
 ```bash
-rufflo stream-chain pipeline test --debug
+swarmdo stream-chain pipeline test --debug
 ```
 
 #### Comprehensive Optimization
 
 ```bash
-rufflo stream-chain pipeline optimize --timeout 90 --verbose
+swarmdo stream-chain pipeline optimize --timeout 90 --verbose
 ```
 
 ### Pipeline Output
@@ -265,7 +265,7 @@ Each pipeline execution provides:
 
 ## Custom Pipeline Definitions
 
-Define reusable pipelines in `.rufflo$config.json`:
+Define reusable pipelines in `.swarmdo$config.json`:
 
 ### Configuration Format
 
@@ -301,8 +301,8 @@ Define reusable pipelines in `.rufflo$config.json`:
 ### Execute Custom Pipeline
 
 ```bash
-rufflo stream-chain pipeline security
-rufflo stream-chain pipeline documentation
+swarmdo stream-chain pipeline security
+swarmdo stream-chain pipeline documentation
 ```
 
 ---
@@ -314,7 +314,7 @@ rufflo stream-chain pipeline documentation
 Chain different agent types for complex workflows:
 
 ```bash
-rufflo stream-chain run \
+swarmdo stream-chain run \
   "Research best practices for API design" \
   "Design REST API with discovered patterns" \
   "Implement API endpoints with validation" \
@@ -328,7 +328,7 @@ rufflo stream-chain run \
 Process and transform data through multiple stages:
 
 ```bash
-rufflo stream-chain run \
+swarmdo stream-chain run \
   "Extract user data from CSV files" \
   "Normalize and validate data format" \
   "Enrich data with external API calls" \
@@ -341,7 +341,7 @@ rufflo stream-chain run \
 Systematic code migration with validation:
 
 ```bash
-rufflo stream-chain run \
+swarmdo stream-chain run \
   "Analyze legacy codebase dependencies" \
   "Create migration plan with risk assessment" \
   "Generate modernized code for high-priority modules" \
@@ -354,10 +354,10 @@ rufflo stream-chain run \
 Comprehensive code quality workflow:
 
 ```bash
-rufflo stream-chain pipeline analysis
-rufflo stream-chain pipeline refactor
-rufflo stream-chain pipeline test
-rufflo stream-chain pipeline optimize
+swarmdo stream-chain pipeline analysis
+swarmdo stream-chain pipeline refactor
+swarmdo stream-chain pipeline test
+swarmdo stream-chain pipeline optimize
 ```
 
 ---
@@ -398,7 +398,7 @@ Order prompts to build on previous outputs:
 
 Include validation in your chains:
 ```bash
-rufflo stream-chain run \
+swarmdo stream-chain run \
   "Implement feature X" \
   "Write tests for feature X" \
   "Verify tests pass and cover edge cases"
@@ -408,7 +408,7 @@ rufflo stream-chain run \
 
 Use chains for iterative improvement:
 ```bash
-rufflo stream-chain run \
+swarmdo stream-chain run \
   "Generate initial implementation" \
   "Review and identify issues" \
   "Refine based on issues found" \
@@ -417,16 +417,16 @@ rufflo stream-chain run \
 
 ---
 
-## Integration with Rufflo
+## Integration with Swarmdo
 
 ### Combine with Swarm Coordination
 
 ```bash
 # Initialize swarm for coordination
-rufflo swarm init --topology mesh
+swarmdo swarm init --topology mesh
 
 # Execute stream chain with swarm agents
-rufflo stream-chain run \
+swarmdo stream-chain run \
   "Agent 1: Research task" \
   "Agent 2: Implement solution" \
   "Agent 3: Test implementation" \
@@ -439,12 +439,12 @@ Stream chains automatically store context in memory for cross-session persistenc
 
 ```bash
 # Execute chain with memory
-rufflo stream-chain run \
+swarmdo stream-chain run \
   "Analyze requirements" \
   "Design architecture" \
   --verbose
 
-# Results stored in .rufflo$memory$stream-chain/
+# Results stored in .swarmdo$memory$stream-chain/
 ```
 
 ### Neural Pattern Training
@@ -453,7 +453,7 @@ Successful chains train neural patterns for improved performance:
 
 ```bash
 # Enable neural training
-rufflo stream-chain pipeline optimize --debug
+swarmdo stream-chain pipeline optimize --debug
 
 # Patterns learned and stored for future optimizations
 ```
@@ -467,7 +467,7 @@ rufflo stream-chain pipeline optimize --debug
 If steps timeout, increase timeout value:
 
 ```bash
-rufflo stream-chain run "complex task" --timeout 120
+swarmdo stream-chain run "complex task" --timeout 120
 ```
 
 ### Context Loss
@@ -475,7 +475,7 @@ rufflo stream-chain run "complex task" --timeout 120
 If context not flowing properly, use `--debug`:
 
 ```bash
-rufflo stream-chain run "step 1" "step 2" --debug
+swarmdo stream-chain run "step 1" "step 2" --debug
 ```
 
 ### Pipeline Not Found
@@ -484,7 +484,7 @@ Verify pipeline name and custom definitions:
 
 ```bash
 # Check available pipelines
-cat .rufflo$config.json | grep -A 10 "streamChain"
+cat .swarmdo$config.json | grep -A 10 "streamChain"
 ```
 
 ---
@@ -513,7 +513,7 @@ cat .rufflo$config.json | grep -A 10 "streamChain"
 
 ```bash
 # Full feature development chain
-rufflo stream-chain run \
+swarmdo stream-chain run \
   "Analyze requirements for user profile feature" \
   "Design database schema and API endpoints" \
   "Implement backend with validation" \
@@ -528,7 +528,7 @@ rufflo stream-chain run \
 
 ```bash
 # Automated code review workflow
-rufflo stream-chain run \
+swarmdo stream-chain run \
   "Analyze recent git changes" \
   "Identify code quality issues" \
   "Check for security vulnerabilities" \
@@ -540,7 +540,7 @@ rufflo stream-chain run \
 
 ```bash
 # Framework migration helper
-rufflo stream-chain run \
+swarmdo stream-chain run \
   "Analyze current Vue 2 codebase" \
   "Identify Vue 3 breaking changes" \
   "Create migration checklist" \

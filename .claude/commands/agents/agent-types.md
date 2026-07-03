@@ -1,6 +1,6 @@
 # agent-types
 
-Complete guide to all 54 available agent types in Rufflo.
+Complete guide to all 54 available agent types in Swarmdo.
 
 ## Core Development Agents
 - `coder` - Implementation specialist
@@ -22,5 +22,5 @@ Complete guide to all 54 available agent types in Rufflo.
 
 For full list and details:
 ```bash
-npx rufflo agents list
+npx swarmdo agents list
 ```

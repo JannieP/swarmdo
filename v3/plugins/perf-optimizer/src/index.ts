@@ -1,7 +1,7 @@
 /**
- * @rufflo/plugin-perf-optimizer
+ * @swarmdo/plugin-perf-optimizer
  *
- * AI-powered performance optimization plugin for Rufflo V3.
+ * AI-powered performance optimization plugin for Swarmdo V3.
  *
  * Features:
  * - Bottleneck detection using trace analysis
@@ -10,10 +10,10 @@
  * - JavaScript bundle optimization
  * - Configuration tuning with SONA learning
  *
- * Uses RufVector WASM packages for high-performance analysis:
- * - rufvector-sparse-inference-wasm: Efficient trace processing
- * - rufvector-fpga-transformer-wasm: Fast configuration optimization
- * - rufvector-gnn-wasm: Dependency chain analysis
+ * Uses SwarmVector WASM packages for high-performance analysis:
+ * - swarmvector-sparse-inference-wasm: Efficient trace processing
+ * - swarmvector-fpga-transformer-wasm: Fast configuration optimization
+ * - swarmvector-gnn-wasm: Dependency chain analysis
  */
 
 // Types
@@ -35,16 +35,16 @@ export { PerfFpgaBridge, createPerfFpgaBridge } from './bridges/fpga-bridge.js';
 
 // Plugin metadata
 export const pluginMetadata = {
-  name: '@rufflo/plugin-perf-optimizer',
+  name: '@swarmdo/plugin-perf-optimizer',
   version: '3.0.0-alpha.1',
   description: 'AI-powered performance optimization for bottleneck detection, memory analysis, and configuration tuning',
   category: 'performance',
   tags: ['performance', 'optimization', 'tracing', 'memory', 'database', 'bundle'],
-  author: 'Rufflo Team',
+  author: 'Swarmdo Team',
   license: 'MIT',
   repository: 'https://github.com/ruvnet/claude-flow',
   engines: {
-    'rufflo': '>=3.0.0-alpha.1',
+    'swarmdo': '>=3.0.0-alpha.1',
     node: '>=18.0.0',
   },
   capabilities: {
@@ -57,9 +57,9 @@ export const pluginMetadata = {
     ],
     bridges: ['sparse', 'fpga'],
     wasmPackages: [
-      'rufvector-sparse-inference-wasm',
-      'rufvector-fpga-transformer-wasm',
-      'rufvector-gnn-wasm',
+      'swarmvector-sparse-inference-wasm',
+      'swarmvector-fpga-transformer-wasm',
+      'swarmvector-gnn-wasm',
       'micro-hnsw-wasm',
       'sona',
     ],
@@ -145,7 +145,7 @@ export async function initializePlugin(
 }
 
 /**
- * Plugin entry point for Rufflo plugin loader
+ * Plugin entry point for Swarmdo plugin loader
  */
 export default {
   metadata: pluginMetadata,

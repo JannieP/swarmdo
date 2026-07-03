@@ -101,7 +101,7 @@ const rows = buildCorpus();
 // Strip _meta for the bundled artifact (keep it small + clean for the loader)
 const bundled = rows.map(r => ({ embedding: r.embedding, scores: r.scores }));
 
-const outPath = process.argv[2] ?? resolve('v3/@rufflo/cli/assets/model-router/seed-rows.json');
+const outPath = process.argv[2] ?? resolve('v3/@swarmdo/cli/assets/model-router/seed-rows.json');
 mkdirSync(dirname(outPath), { recursive: true });
 writeFileSync(outPath, JSON.stringify(bundled, null, 0));
 console.log(`wrote ${rows.length} rows (${bundled.length} bundled) to ${outPath}`);
@@ -121,6 +121,6 @@ writeFileSync(provPath, JSON.stringify({
   },
   scores_by_tier: SCORES_BY_TIER,
   templates: { cheap: CHEAP_TEMPLATES.map(t=>t[0]), mid: MID_TEMPLATES.map(t=>t[0]), strong: STRONG_TEMPLATES.map(t=>t[0]) },
-  caveat: 'Synthetic deterministic corpus with hand-set scores per ADR-148. To be replaced by real DRACO trajectories once RUFFLO_ROUTER_TRAJECTORY=1 collection runs in production.',
+  caveat: 'Synthetic deterministic corpus with hand-set scores per ADR-148. To be replaced by real DRACO trajectories once SWARMDO_ROUTER_TRAJECTORY=1 collection runs in production.',
 }, null, 2));
 console.log(`wrote provenance: ${provPath}`);

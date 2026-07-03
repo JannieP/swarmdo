@@ -27,7 +27,7 @@ describe('AttentionBridge', () => {
     });
 
     it('should have correct name and version', () => {
-      expect(bridge.name).toBe('rufvector-attention-wasm');
+      expect(bridge.name).toBe('swarmvector-attention-wasm');
       expect(bridge.version).toBe('0.1.0');
     });
 
@@ -253,7 +253,7 @@ describe('NervousSystemBridge', () => {
     });
 
     it('should have correct name and version', () => {
-      expect(bridge.name).toBe('rufvector-nervous-system-wasm');
+      expect(bridge.name).toBe('swarmvector-nervous-system-wasm');
       expect(bridge.version).toBe('0.1.0');
     });
 

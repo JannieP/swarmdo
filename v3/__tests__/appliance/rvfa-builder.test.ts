@@ -14,14 +14,14 @@ import {
   RvfaBuilder,
   encryptApiKeys,
   decryptApiKeys,
-} from '../../@rufflo/cli/src/appliance/rvfa-builder.js';
-import { RvfaReader } from '../../@rufflo/cli/src/appliance/rvfa-format.js';
+} from '../../@swarmdo/cli/src/appliance/rvfa-builder.js';
+import { RvfaReader } from '../../@swarmdo/cli/src/appliance/rvfa-format.js';
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
-const EXPECTED_SECTION_IDS = ['kernel', 'runtime', 'rufflo', 'models', 'data', 'verify'];
+const EXPECTED_SECTION_IDS = ['kernel', 'runtime', 'swarmdo', 'models', 'data', 'verify'];
 
 /** Paths to clean up after each test. */
 const cleanupPaths: string[] = [];

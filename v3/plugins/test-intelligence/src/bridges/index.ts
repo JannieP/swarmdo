@@ -1,7 +1,7 @@
 /**
  * Test Intelligence Plugin - Bridges Barrel Export
  *
- * @module @rufflo/plugin-test-intelligence/bridges
+ * @module @swarmdo/plugin-test-intelligence/bridges
  */
 
 export {

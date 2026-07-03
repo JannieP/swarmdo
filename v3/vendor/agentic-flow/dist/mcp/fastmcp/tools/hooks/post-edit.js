@@ -134,7 +134,7 @@ export const hookPostEditTool = {
             routingAccuracy: intel.metrics.totalRoutes > 0
                 ? intel.metrics.successfulRoutes / intel.metrics.totalRoutes
                 : 0,
-            // RuVector Intelligence additions
+            // SwarmVector Intelligence additions
             intelligenceEnabled,
             learningOutcome,
             intelligenceStats,

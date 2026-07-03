@@ -4,13 +4,13 @@
  *
  * Intercepts Claude Code's PreCompact, SessionStart, and UserPromptSubmit
  * lifecycle events to persist conversation history in SQLite (primary),
- * RufVector PostgreSQL (optional), or JSON (fallback), enabling "infinite
+ * SwarmVector PostgreSQL (optional), or JSON (fallback), enabling "infinite
  * context" across compaction boundaries.
  *
  * Backend priority:
  *   1. better-sqlite3 (native, WAL mode, indexed queries, ACID transactions)
- *   2. RufVector PostgreSQL (if RUFVECTOR_* env vars set - TB-scale, GNN search)
- *   3. AgentDB from @rufflo/memory (HNSW vector search)
+ *   2. SwarmVector PostgreSQL (if SWARMVECTOR_* env vars set - TB-scale, GNN search)
+ *   3. AgentDB from @swarmdo/memory (HNSW vector search)
  *   4. JsonFileBackend (zero dependencies, always works)
  *
  * Proactive archiving:
@@ -35,31 +35,31 @@ import { createRequire } from 'module';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const PROJECT_ROOT = join(__dirname, '../..');
-const DATA_DIR = join(PROJECT_ROOT, '.rufflo', 'data');
+const DATA_DIR = join(PROJECT_ROOT, '.swarmdo', 'data');
 const ARCHIVE_JSON_PATH = join(DATA_DIR, 'transcript-archive.json');
 const ARCHIVE_DB_PATH = join(DATA_DIR, 'transcript-archive.db');
 
 const NAMESPACE = 'transcript-archive';
-const RESTORE_BUDGET = parseInt(process.env.RUFFLO_COMPACT_RESTORE_BUDGET || '4000', 10);
+const RESTORE_BUDGET = parseInt(process.env.SWARMDO_COMPACT_RESTORE_BUDGET || '4000', 10);
 const MAX_MESSAGES = 500;
-const BLOCK_COMPACTION = process.env.RUFFLO_BLOCK_COMPACTION === 'true';
-const COMPACT_INSTRUCTION_BUDGET = parseInt(process.env.RUFFLO_COMPACT_INSTRUCTION_BUDGET || '2000', 10);
-const RETENTION_DAYS = parseInt(process.env.RUFFLO_RETENTION_DAYS || '30', 10);
-const AUTO_OPTIMIZE = process.env.RUFFLO_AUTO_OPTIMIZE !== 'false'; // on by default
+const BLOCK_COMPACTION = process.env.SWARMDO_BLOCK_COMPACTION === 'true';
+const COMPACT_INSTRUCTION_BUDGET = parseInt(process.env.SWARMDO_COMPACT_INSTRUCTION_BUDGET || '2000', 10);
+const RETENTION_DAYS = parseInt(process.env.SWARMDO_RETENTION_DAYS || '30', 10);
+const AUTO_OPTIMIZE = process.env.SWARMDO_AUTO_OPTIMIZE !== 'false'; // on by default
 
 // ============================================================================
 // Context Autopilot — prevent compaction by managing context size in real-time
 // ============================================================================
-const AUTOPILOT_ENABLED = process.env.RUFFLO_CONTEXT_AUTOPILOT !== 'false'; // on by default
-const CONTEXT_WINDOW_TOKENS = parseInt(process.env.RUFFLO_CONTEXT_WINDOW || '200000', 10);
-const AUTOPILOT_WARN_PCT = parseFloat(process.env.RUFFLO_AUTOPILOT_WARN || '0.70');
-const AUTOPILOT_PRUNE_PCT = parseFloat(process.env.RUFFLO_AUTOPILOT_PRUNE || '0.85');
+const AUTOPILOT_ENABLED = process.env.SWARMDO_CONTEXT_AUTOPILOT !== 'false'; // on by default
+const CONTEXT_WINDOW_TOKENS = parseInt(process.env.SWARMDO_CONTEXT_WINDOW || '200000', 10);
+const AUTOPILOT_WARN_PCT = parseFloat(process.env.SWARMDO_AUTOPILOT_WARN || '0.70');
+const AUTOPILOT_PRUNE_PCT = parseFloat(process.env.SWARMDO_AUTOPILOT_PRUNE || '0.85');
 const AUTOPILOT_STATE_PATH = join(DATA_DIR, 'autopilot-state.json');
 
 // Approximate tokens per character (Claude averages ~3.5 chars per token)
 const CHARS_PER_TOKEN = 3.5;
 
-const DEBUG = !!(process.env.RUFLO_DEBUG || process.env.DEBUG);
+const DEBUG = !!(process.env.SWARMDO_DEBUG || process.env.DEBUG);
 
 // ── Graceful shutdown (FIX 3) ───────────────────────────────────────────────
 // The active backend is created mid-handler and closed at the end. SQLite holds
@@ -465,10 +465,10 @@ class JsonFileBackend {
 }
 
 // ============================================================================
-// RufVector PostgreSQL Backend (optional, TB-scale, GNN-enhanced)
+// SwarmVector PostgreSQL Backend (optional, TB-scale, GNN-enhanced)
 // ============================================================================
 
-class RufVectorBackend {
+class SwarmVectorBackend {
   constructor(config) {
     this.config = config;
     this.pool = null;
@@ -487,7 +487,7 @@ class RufVectorBackend {
       max: 3,
       idleTimeoutMillis: 10000,
       connectionTimeoutMillis: 3000,
-      application_name: 'rufflo-context-persistence',
+      application_name: 'swarmdo-context-persistence',
     });
 
     // Test connection and create schema
@@ -706,29 +706,29 @@ class RufVectorBackend {
 }
 
 /**
- * Parse RufVector config from environment variables.
+ * Parse SwarmVector config from environment variables.
  * Returns null if required vars are not set.
  */
-function getRufVectorConfig() {
-  const host = process.env.RUFVECTOR_HOST || process.env.PGHOST;
-  const database = process.env.RUFVECTOR_DATABASE || process.env.PGDATABASE;
-  const user = process.env.RUFVECTOR_USER || process.env.PGUSER;
-  const password = process.env.RUFVECTOR_PASSWORD || process.env.PGPASSWORD;
+function getSwarmVectorConfig() {
+  const host = process.env.SWARMVECTOR_HOST || process.env.PGHOST;
+  const database = process.env.SWARMVECTOR_DATABASE || process.env.PGDATABASE;
+  const user = process.env.SWARMVECTOR_USER || process.env.PGUSER;
+  const password = process.env.SWARMVECTOR_PASSWORD || process.env.PGPASSWORD;
 
   if (!host || !database || !user) return null;
 
   return {
     host,
-    port: parseInt(process.env.RUFVECTOR_PORT || process.env.PGPORT || '5432', 10),
+    port: parseInt(process.env.SWARMVECTOR_PORT || process.env.PGPORT || '5432', 10),
     database,
     user,
     password: password || '',
-    ssl: process.env.RUFVECTOR_SSL === 'true',
+    ssl: process.env.SWARMVECTOR_SSL === 'true',
   };
 }
 
 // ============================================================================
-// Backend resolution: SQLite > RufVector PostgreSQL > AgentDB > JSON
+// Backend resolution: SQLite > SwarmVector PostgreSQL > AgentDB > JSON
 // ============================================================================
 
 async function resolveBackend() {
@@ -739,24 +739,24 @@ async function resolveBackend() {
     return { backend: trackBackend(backend), type: 'sqlite' };
   } catch { /* fall through */ }
 
-  // Tier 2: RufVector PostgreSQL (TB-scale, vector search, GNN)
+  // Tier 2: SwarmVector PostgreSQL (TB-scale, vector search, GNN)
   try {
-    const rvConfig = getRufVectorConfig();
+    const rvConfig = getSwarmVectorConfig();
     if (rvConfig) {
-      const backend = new RufVectorBackend(rvConfig);
+      const backend = new SwarmVectorBackend(rvConfig);
       await backend.initialize();
-      return { backend: trackBackend(backend), type: 'rufvector' };
+      return { backend: trackBackend(backend), type: 'swarmvector' };
     }
   } catch { /* fall through */ }
 
-  // Tier 3: AgentDB from @rufflo/memory (HNSW)
+  // Tier 3: AgentDB from @swarmdo/memory (HNSW)
   try {
-    const localDist = join(PROJECT_ROOT, 'v3/@rufflo/memory/dist/index.js');
+    const localDist = join(PROJECT_ROOT, 'v3/@swarmdo/memory/dist/index.js');
     let memPkg = null;
     if (existsSync(localDist)) {
       memPkg = await import(`file://${localDist}`);
     } else {
-      memPkg = await import('@rufflo/memory');
+      memPkg = await import('@swarmdo/memory');
     }
     if (memPkg?.AgentDBBackend) {
       const backend = new memPkg.AgentDBBackend();
@@ -1350,18 +1350,18 @@ async function autoOptimize(backend, backendType) {
     } catch { /* non-critical */ }
   }
 
-  // Step 5: Auto-sync to RufVector if available
+  // Step 5: Auto-sync to SwarmVector if available
   let synced = 0;
   if (backendType === 'sqlite' && backend.allForSync) {
     try {
-      const rvConfig = getRufVectorConfig();
+      const rvConfig = getSwarmVectorConfig();
       if (rvConfig) {
-        const rvBackend = new RufVectorBackend(rvConfig);
+        const rvBackend = new SwarmVectorBackend(rvConfig);
         await rvBackend.initialize();
 
         const allEntries = backend.allForSync(NAMESPACE);
         if (allEntries.length > 0) {
-          // Add hash embeddings for vector search in RufVector
+          // Add hash embeddings for vector search in SwarmVector
           const entriesToSync = allEntries.map(e => ({
             ...e,
             _embedding: createHashEmbedding(e.content),
@@ -1372,7 +1372,7 @@ async function autoOptimize(backend, backendType) {
 
         await rvBackend.shutdown();
       }
-    } catch { /* RufVector sync is best-effort */ }
+    } catch { /* SwarmVector sync is best-effort */ }
   }
 
   return { pruned, synced, decayed, embedded };
@@ -1692,7 +1692,7 @@ async function doPreCompact() {
 
   const archiveResult = await storeChunks(backend, chunks, sessionId, trigger || 'auto');
 
-  // Auto-optimize: prune stale entries + sync to RufVector if available
+  // Auto-optimize: prune stale entries + sync to SwarmVector if available
   const optimizeResult = await autoOptimize(backend, type);
 
   const total = await backend.count(NAMESPACE);
@@ -1861,7 +1861,7 @@ async function doStatus() {
   console.log('\n=== Context Persistence Archive Status ===\n');
   const backendLabel = {
     sqlite: ARCHIVE_DB_PATH,
-    rufvector: `${process.env.RUFVECTOR_HOST || 'N/A'}:${process.env.RUFVECTOR_PORT || '5432'}`,
+    swarmvector: `${process.env.SWARMVECTOR_HOST || 'N/A'}:${process.env.SWARMVECTOR_PORT || '5432'}`,
     agentdb: 'in-memory HNSW',
     json: ARCHIVE_JSON_PATH,
   };
@@ -1874,8 +1874,8 @@ async function doStatus() {
   console.log(`  Proactive:   enabled (UserPromptSubmit hook)`);
   console.log(`  Auto-opt:    ${AUTO_OPTIMIZE ? 'enabled' : 'disabled'} (importance ranking, pruning, sync)`);
   console.log(`  Retention:   ${RETENTION_DAYS} days (prune never-accessed entries)`);
-  const rvConfig = getRufVectorConfig();
-  console.log(`  RufVector:    ${rvConfig ? `${rvConfig.host}:${rvConfig.port}/${rvConfig.database} (auto-sync enabled)` : 'not configured'}`);
+  const rvConfig = getSwarmVectorConfig();
+  console.log(`  SwarmVector:    ${rvConfig ? `${rvConfig.host}:${rvConfig.port}/${rvConfig.database} (auto-sync enabled)` : 'not configured'}`);
 
   // Self-learning stats
   if (type === 'sqlite' && backend.db) {
@@ -1935,10 +1935,10 @@ async function doStatus() {
 
 export {
   SQLiteBackend,
-  RufVectorBackend,
+  SwarmVectorBackend,
   JsonFileBackend,
   resolveBackend,
-  getRufVectorConfig,
+  getSwarmVectorConfig,
   createEmbedding,
   createHashEmbedding,
   getOnnxPipeline,

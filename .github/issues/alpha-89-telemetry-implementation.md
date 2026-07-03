@@ -42,7 +42,7 @@ The token tracking and telemetry system has been successfully implemented and co
 
 ### Real Token Data Capture
 ```bash
-$ ./rufflo hive-mind spawn "test" --claude --non-interactive
+$ ./swarmdo hive-mind spawn "test" --claude --non-interactive
 ```
 
 **Actual Output (Real Claude API Response):**
@@ -58,15 +58,15 @@ $ ./rufflo hive-mind spawn "test" --claude --non-interactive
 ### Commands Working
 ```bash
 # Setup confirmed working
-$ ./rufflo analysis setup-telemetry
+$ ./swarmdo analysis setup-telemetry
 ✅ Telemetry ENABLED for this session!
 
 # Usage analysis working  
-$ ./rufflo analysis token-usage --breakdown --cost-analysis
+$ ./swarmdo analysis token-usage --breakdown --cost-analysis
 🔢 TOKEN USAGE ANALYSIS: [Shows comprehensive breakdown]
 
 # Cost tracking working
-$ ./rufflo analysis claude-cost  
+$ ./swarmdo analysis claude-cost  
 💰 Current Session Usage: [Shows real token counts]
 ```
 
@@ -191,7 +191,7 @@ The Alpha-89 telemetry implementation is **COMPLETE and WORKING**. The system su
 
 **Key Success**: Confirmed real token data capture with actual Claude API responses showing input tokens, output tokens, and cache utilization metrics.
 
-This implementation provides the foundation for advanced usage analytics, cost management, and performance optimization in Rufflo v2.0.0.
+This implementation provides the foundation for advanced usage analytics, cost management, and performance optimization in Swarmdo v2.0.0.
 
 ---
 

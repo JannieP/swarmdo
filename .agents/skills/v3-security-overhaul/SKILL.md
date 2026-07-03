@@ -1,13 +1,13 @@
 ---
 name: "V3 Security Overhaul"
-description: "Complete security architecture overhaul for rufflo v3. Addresses critical CVEs (CVE-1, CVE-2, CVE-3) and implements secure-by-default patterns. Use for security-first v3 implementation."
+description: "Complete security architecture overhaul for swarmdo v3. Addresses critical CVEs (CVE-1, CVE-2, CVE-3) and implements secure-by-default patterns. Use for security-first v3 implementation."
 ---
 
 # V3 Security Overhaul
 
 ## What This Skill Does
 
-Orchestrates comprehensive security overhaul for rufflo v3, addressing critical vulnerabilities and establishing security-first development practices using specialized v3 security agents.
+Orchestrates comprehensive security overhaul for swarmdo v3, addressing critical vulnerabilities and establishing security-first development practices using specialized v3 security agents.
 
 ## Quick Start
 

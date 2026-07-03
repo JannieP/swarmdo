@@ -1,4 +1,4 @@
-# 🚀 Rufflo Plugin - Complete Enterprise AI Agent Orchestration
+# 🚀 Swarmdo Plugin - Complete Enterprise AI Agent Orchestration
 
 [![Version](https://img.shields.io/badge/version-2.5.0-blue.svg)](https://github.com/ruvnet/claude-flow)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
@@ -25,7 +25,7 @@
 
 ## 🌟 Overview
 
-Rufflo is the most comprehensive Claude Code plugin for enterprise AI agent orchestration. It provides a complete ecosystem for:
+Swarmdo is the most comprehensive Claude Code plugin for enterprise AI agent orchestration. It provides a complete ecosystem for:
 
 - **Multi-Agent Coordination**: 74+ specialized agents with swarm intelligence
 - **SPARC Methodology**: Systematic development with 18 specialized modes
@@ -279,7 +279,7 @@ Or from local directory:
 
 ```bash
 git clone https://github.com/ruvnet/claude-flow.git
-cd rufflo
+cd swarmdo
 ```
 
 Then in Claude Code:
@@ -297,8 +297,8 @@ Then in Claude Code:
 
 ```bash
 # Add MCP servers to Claude Code
-claude mcp add rufflo npx rufflo@alpha mcp start
-claude mcp add ruf-swarm npx ruf-swarm mcp start  # Optional
+claude mcp add swarmdo npx swarmdo@alpha mcp start
+claude mcp add swarmdo-swarm npx swarmdo-swarm mcp start  # Optional
 ```
 
 ### 4. Verify Installation
@@ -336,7 +336,7 @@ In Claude Code:
 ```bash
 # Clone the repository
 git clone https://github.com/ruvnet/claude-flow.git
-cd rufflo/claude-plugin
+cd swarmdo/claude-plugin
 
 # Run installation script
 bash scripts/install.sh
@@ -350,7 +350,7 @@ cp -r agents ~/.claude/agents/
 
 ```bash
 # Run setup via npx
-npx rufflo@alpha init --plugin
+npx swarmdo@alpha init --plugin
 
 # This will:
 # 1. Create .claude directory
@@ -366,7 +366,7 @@ npx rufflo@alpha init --plugin
 ### Directory Structure
 
 ```
-rufflo/
+swarmdo/
 ├── .claude-plugin/
 │   ├── plugin.json          # Plugin metadata
 │   ├── README.md            # This file
@@ -490,16 +490,16 @@ rufflo/
 
 ## 🔌 MCP Integration
 
-Rufflo integrates with 3 MCP servers providing 110+ tools:
+Swarmdo integrates with 3 MCP servers providing 110+ tools:
 
-### Rufflo MCP (Required)
+### Swarmdo MCP (Required)
 
 ```json
 {
   "mcpServers": {
-    "rufflo": {
+    "swarmdo": {
       "command": "npx",
-      "args": ["rufflo@alpha", "mcp", "start"]
+      "args": ["swarmdo@alpha", "mcp", "start"]
     }
   }
 }
@@ -513,14 +513,14 @@ Rufflo integrates with 3 MCP servers providing 110+ tools:
 - Neural training
 - Performance monitoring
 
-### ruf-swarm MCP (Optional)
+### swarmdo-swarm MCP (Optional)
 
 ```json
 {
   "mcpServers": {
-    "ruf-swarm": {
+    "swarmdo-swarm": {
       "command": "npx",
-      "args": ["ruf-swarm", "mcp", "start"]
+      "args": ["swarmdo-swarm", "mcp", "start"]
     }
   }
 }

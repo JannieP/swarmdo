@@ -12,11 +12,11 @@
 //   node scripts/train-from-trajectories.mjs                        # stats only
 //   node scripts/train-from-trajectories.mjs --write production-rows.json
 //   node scripts/train-from-trajectories.mjs \
-//     --union v3/@rufflo/cli/assets/model-router/seed-rows.json \
+//     --union v3/@swarmdo/cli/assets/model-router/seed-rows.json \
 //     --write merged-rows.json
 //
 // FLAGS
-//   --in <path>      Trajectory JSONL (default: $RUFFLO_ROUTER_TRAJECTORY_PATH
+//   --in <path>      Trajectory JSONL (default: $SWARMDO_ROUTER_TRAJECTORY_PATH
 //                    or .swarm/model-router-trajectories.jsonl)
 //   --write <path>   Write training-row JSON array to this path
 //   --union <path>   Read existing seed-rows.json + union with paired rows
@@ -32,11 +32,11 @@
 
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { pairTrajectoryRows } from '../v3/@rufflo/cli/dist/src/rufvector/router-trajectory.js';
+import { pairTrajectoryRows } from '../v3/@swarmdo/cli/dist/src/swarmvector/router-trajectory.js';
 
 const ARGS = (() => {
   const a = {
-    in: process.env.RUFFLO_ROUTER_TRAJECTORY_PATH
+    in: process.env.SWARMDO_ROUTER_TRAJECTORY_PATH
       ?? resolve('.swarm', 'model-router-trajectories.jsonl'),
     write: null,
     union: null,
@@ -58,7 +58,7 @@ const ARGS = (() => {
 
 function parseJsonl(path) {
   if (!existsSync(path)) {
-    console.error(`[trajectory-train] no trajectory file at ${path} — has RUFFLO_ROUTER_TRAJECTORY=1 been set on any prior run?`);
+    console.error(`[trajectory-train] no trajectory file at ${path} — has SWARMDO_ROUTER_TRAJECTORY=1 been set on any prior run?`);
     return [];
   }
   const text = readFileSync(path, 'utf8');
@@ -156,11 +156,11 @@ if (ARGS.json) {
   if (pairs.length === 0 && stats.totalRows > 0) {
     console.log('No usable pairs — common causes:');
     console.log('  • decisions logged without embeddings (route() called without embedding arg)');
-    console.log('  • outcomes never written (RUFFLO_ROUTER_TRAJECTORY unset during executeAgentTask)');
+    console.log('  • outcomes never written (SWARMDO_ROUTER_TRAJECTORY unset during executeAgentTask)');
   }
   if (stats.totalRows === 0) {
     console.log('Empty trajectory file. Enable recording with:');
-    console.log('  export RUFFLO_ROUTER_TRAJECTORY=1');
+    console.log('  export SWARMDO_ROUTER_TRAJECTORY=1');
     console.log('Then run any agent_spawn → executeAgentTask flow to accumulate rows.');
   }
 }

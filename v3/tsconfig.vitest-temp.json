@@ -24,76 +24,76 @@
     "incremental": true,
     "baseUrl": "./",
     "paths": {
-      "@rufflo/security": [
-        "./@rufflo/security/src"
+      "@swarmdo/security": [
+        "./@swarmdo/security/src"
       ],
-      "@rufflo/memory": [
-        "./@rufflo/memory/src"
+      "@swarmdo/memory": [
+        "./@swarmdo/memory/src"
       ],
-      "@rufflo/integration": [
-        "./@rufflo/integration/src"
+      "@swarmdo/integration": [
+        "./@swarmdo/integration/src"
       ],
-      "@rufflo/swarm": [
-        "./@rufflo/swarm/src"
+      "@swarmdo/swarm": [
+        "./@swarmdo/swarm/src"
       ],
-      "@rufflo/performance": [
-        "./@rufflo/performance/src"
+      "@swarmdo/performance": [
+        "./@swarmdo/performance/src"
       ],
-      "@rufflo/cli": [
-        "./@rufflo/cli/src"
+      "@swarmdo/cli": [
+        "./@swarmdo/cli/src"
       ],
-      "@rufflo/neural": [
-        "./@rufflo/neural/src"
+      "@swarmdo/neural": [
+        "./@swarmdo/neural/src"
       ],
-      "@rufflo/testing": [
-        "./@rufflo/testing/src"
+      "@swarmdo/testing": [
+        "./@swarmdo/testing/src"
       ],
-      "@rufflo/deployment": [
-        "./@rufflo/deployment/src"
+      "@swarmdo/deployment": [
+        "./@swarmdo/deployment/src"
       ],
-      "@rufflo/shared": [
-        "./@rufflo/shared/src"
+      "@swarmdo/shared": [
+        "./@swarmdo/shared/src"
       ],
-      "@rufflo/hooks": [
-        "./@rufflo/hooks/src"
+      "@swarmdo/hooks": [
+        "./@swarmdo/hooks/src"
       ]
     },
     "emitDeclarationOnly": false,
-    "tsBuildInfoFile": "/workspaces/rufflo/v3/node_modules/.pnpm/vitest@1.6.1_@types+node@20.19.27/node_modules/vitest/dist/vendor/tsconfig.tmp.tsbuildinfo"
+    "tsBuildInfoFile": "/workspaces/swarmdo/v3/node_modules/.pnpm/vitest@1.6.1_@types+node@20.19.27/node_modules/vitest/dist/vendor/tsconfig.tmp.tsbuildinfo"
   },
   "references": [
     {
-      "path": "./@rufflo/shared"
+      "path": "./@swarmdo/shared"
     },
     {
-      "path": "./@rufflo/security"
+      "path": "./@swarmdo/security"
     },
     {
-      "path": "./@rufflo/memory"
+      "path": "./@swarmdo/memory"
     },
     {
-      "path": "./@rufflo/integration"
+      "path": "./@swarmdo/integration"
     },
     {
-      "path": "./@rufflo/swarm"
+      "path": "./@swarmdo/swarm"
     },
     {
-      "path": "./@rufflo/performance"
+      "path": "./@swarmdo/performance"
     },
     {
-      "path": "./@rufflo/cli"
+      "path": "./@swarmdo/cli"
     },
     {
-      "path": "./@rufflo/neural"
+      "path": "./@swarmdo/neural"
     },
     {
-      "path": "./@rufflo/testing"
+      "path": "./@swarmdo/testing"
     },
     {
-      "path": "./@rufflo/deployment"
+      "path": "./@swarmdo/deployment"
     },
     {
-      "path": "./@rufflo/hooks"
+      "path": "./@swarmdo/hooks"
     }
   ],
   "include": [],

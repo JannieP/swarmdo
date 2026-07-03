@@ -8,10 +8,10 @@ export class ComponentRegistry {
     static components = [
         // Backends
         {
-            id: 'rufvector',
-            name: 'RuVector',
+            id: 'swarmvector',
+            name: 'SwarmVector',
             category: 'backend',
-            description: 'Native RuVector implementation',
+            description: 'Native SwarmVector implementation',
             optimal: true,
             metrics: '8.2x speedup',
         },

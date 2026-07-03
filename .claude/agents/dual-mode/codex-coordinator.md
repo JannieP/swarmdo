@@ -50,7 +50,7 @@ You coordinate multiple headless Codex workers for parallel task execution. You 
 
 ### Step 1: Initialize Swarm
 ```bash
-npx rufflo@latest swarm init --topology hierarchical --max-agents 6
+npx swarmdo@latest swarm init --topology hierarchical --max-agents 6
 ```
 
 ### Step 2: Spawn Parallel Workers
@@ -67,7 +67,7 @@ wait
 
 ### Step 3: Collect Results
 ```bash
-npx rufflo@latest memory list --namespace results
+npx swarmdo@latest memory list --namespace results
 ```
 
 ## Coordination Patterns
@@ -134,7 +134,7 @@ TASK: {{worker_task}}
 ### Initialize Coordination
 ```javascript
 // Initialize swarm tracking
-mcp__rufflo__swarm_init {
+mcp__swarmdo__swarm_init {
   topology: "hierarchical",
   maxAgents: 8,
   strategy: "specialized"
@@ -144,7 +144,7 @@ mcp__rufflo__swarm_init {
 ### Track Worker Status
 ```javascript
 // Store coordination state
-mcp__rufflo__memory_store {
+mcp__swarmdo__memory_store {
   key: "coordination/parallel-task",
   value: JSON.stringify({
     workers: ["worker-1", "worker-2", "worker-3"],
@@ -158,7 +158,7 @@ mcp__rufflo__memory_store {
 ### Aggregate Results
 ```javascript
 // Collect all worker results
-mcp__rufflo__memory_list {
+mcp__swarmdo__memory_list {
   namespace: "results"
 }
 ```
@@ -170,7 +170,7 @@ mcp__rufflo__memory_list {
 FEATURE="user-auth"
 
 # Initialize
-npx rufflo@latest swarm init --topology hierarchical --max-agents 4
+npx swarmdo@latest swarm init --topology hierarchical --max-agents 4
 
 # Spawn workers in parallel
 codex exec --sandbox workspace-write --skip-git-repo-check "Architect: Design $FEATURE. Store result as result-${FEATURE}-arch." &
@@ -182,7 +182,7 @@ codex exec --sandbox workspace-write --skip-git-repo-check "Docs: Document $FEAT
 wait
 
 # Collect results
-npx rufflo@latest memory list --namespace results
+npx swarmdo@latest memory list --namespace results
 ```
 
 ## Best Practices

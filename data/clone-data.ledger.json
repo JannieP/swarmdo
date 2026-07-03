@@ -1,22 +1,22 @@
 {
-  "schema": "rufflo-clone-tracker-ledger/v1",
+  "schema": "swarmdo-clone-tracker-ledger/v1",
   "created_at": "2026-05-19T23:17:49.428Z",
   "repos": [
-    "ruvnet/ruflo",
+    "ruvnet/swarmdo",
     "ruvnet/agentdb",
     "ruvnet/agentic-flow",
-    "ruvnet/rufvector",
+    "ruvnet/swarmvector",
     "ruvnet/ruv-FANN"
   ],
   "vector_layout": [
-    "rufflo_clones",
-    "rufflo_uniques",
+    "swarmdo_clones",
+    "swarmdo_uniques",
     "agentdb_clones",
     "agentdb_uniques",
     "agentic_flow_clones",
     "agentic_flow_uniques",
-    "rufvector_clones",
-    "rufvector_uniques",
+    "swarmvector_clones",
+    "swarmvector_uniques",
     "ruv_FANN_clones",
     "ruv_FANN_uniques"
   ],
@@ -41,7 +41,7 @@
         "uniques": 25490
       },
       "repos": {
-        "ruvnet/ruflo": {
+        "ruvnet/swarmdo": {
           "count": 89536,
           "uniques": 22752,
           "days": [
@@ -269,7 +269,7 @@
             }
           ]
         },
-        "ruvnet/rufvector": {
+        "ruvnet/swarmvector": {
           "count": 20283,
           "uniques": 2066,
           "days": [
@@ -424,9 +424,9 @@
       },
       "npm_headline_total": 4255420,
       "npm": {
-        "rufflo": 298601,
-        "@rufflo/cli": 537029,
-        "@rufflo/memory": 272833,
+        "swarmdo": 298601,
+        "@swarmdo/cli": 537029,
+        "@swarmdo/memory": 272833,
         "agentdb": 1457393,
         "agentic-flow": 923814
       }
@@ -451,7 +451,7 @@
         "uniques": 0
       },
       "repos": {
-        "ruvnet/ruflo": {
+        "ruvnet/swarmdo": {
           "count": 0,
           "uniques": 0,
           "days": [],
@@ -469,7 +469,7 @@
           "days": [],
           "error": "fetch-failed"
         },
-        "ruvnet/rufvector": {
+        "ruvnet/swarmvector": {
           "count": 0,
           "uniques": 0,
           "days": [],
@@ -484,9 +484,9 @@
       },
       "npm_headline_total": 4255420,
       "npm": {
-        "rufflo": 298601,
-        "@rufflo/cli": 537029,
-        "@rufflo/memory": 272833,
+        "swarmdo": 298601,
+        "@swarmdo/cli": 537029,
+        "@swarmdo/memory": 272833,
         "agentdb": 1457393,
         "agentic-flow": 923814
       }
@@ -511,7 +511,7 @@
         "uniques": 0
       },
       "repos": {
-        "ruvnet/ruflo": {
+        "ruvnet/swarmdo": {
           "count": 0,
           "uniques": 0,
           "days": [],
@@ -529,7 +529,7 @@
           "days": [],
           "error": "fetch-failed"
         },
-        "ruvnet/rufvector": {
+        "ruvnet/swarmvector": {
           "count": 0,
           "uniques": 0,
           "days": [],
@@ -544,9 +544,9 @@
       },
       "npm_headline_total": 4595811,
       "npm": {
-        "rufflo": 341975,
-        "@rufflo/cli": 589175,
-        "@rufflo/memory": 318622,
+        "swarmdo": 341975,
+        "@swarmdo/cli": 589175,
+        "@swarmdo/memory": 318622,
         "agentdb": 1571065,
         "agentic-flow": 989760
       }
@@ -571,7 +571,7 @@
         "uniques": 0
       },
       "repos": {
-        "ruvnet/ruflo": {
+        "ruvnet/swarmdo": {
           "count": 0,
           "uniques": 0,
           "days": [],
@@ -589,7 +589,7 @@
           "days": [],
           "error": "fetch-failed"
         },
-        "ruvnet/rufvector": {
+        "ruvnet/swarmvector": {
           "count": 0,
           "uniques": 0,
           "days": [],
@@ -604,9 +604,9 @@
       },
       "npm_headline_total": 4831624,
       "npm": {
-        "rufflo": 370919,
-        "@rufflo/cli": 624020,
-        "@rufflo/memory": 351840,
+        "swarmdo": 370919,
+        "@swarmdo/cli": 624020,
+        "@swarmdo/memory": 351840,
         "agentdb": 1651215,
         "agentic-flow": 1038040
       }
@@ -631,7 +631,7 @@
         "uniques": 0
       },
       "repos": {
-        "ruvnet/ruflo": {
+        "ruvnet/swarmdo": {
           "count": 0,
           "uniques": 0,
           "days": [],
@@ -649,7 +649,7 @@
           "days": [],
           "error": "fetch-failed"
         },
-        "ruvnet/rufvector": {
+        "ruvnet/swarmvector": {
           "count": 0,
           "uniques": 0,
           "days": [],
@@ -664,9 +664,9 @@
       },
       "npm_headline_total": 5298606,
       "npm": {
-        "rufflo": 445603,
-        "@rufflo/cli": 700351,
-        "@rufflo/memory": 405476,
+        "swarmdo": 445603,
+        "@swarmdo/cli": 700351,
+        "@swarmdo/memory": 405476,
         "agentdb": 1806449,
         "agentic-flow": 1112895
       }
@@ -691,7 +691,7 @@
         "uniques": 0
       },
       "repos": {
-        "ruvnet/ruflo": {
+        "ruvnet/swarmdo": {
           "count": 0,
           "uniques": 0,
           "days": [],
@@ -709,7 +709,7 @@
           "days": [],
           "error": "fetch-failed"
         },
-        "ruvnet/rufvector": {
+        "ruvnet/swarmvector": {
           "count": 0,
           "uniques": 0,
           "days": [],
@@ -724,9 +724,9 @@
       },
       "npm_headline_total": 6156712,
       "npm": {
-        "rufflo": 548443,
-        "@rufflo/cli": 797305,
-        "@rufflo/memory": 523555,
+        "swarmdo": 548443,
+        "@swarmdo/cli": 797305,
+        "@swarmdo/memory": 523555,
         "agentdb": 2120329,
         "agentic-flow": 1284066
       }
@@ -751,7 +751,7 @@
         "uniques": 0
       },
       "repos": {
-        "ruvnet/ruflo": {
+        "ruvnet/swarmdo": {
           "count": 0,
           "uniques": 0,
           "days": [],
@@ -769,7 +769,7 @@
           "days": [],
           "error": "fetch-failed"
         },
-        "ruvnet/rufvector": {
+        "ruvnet/swarmvector": {
           "count": 0,
           "uniques": 0,
           "days": [],
@@ -784,9 +784,9 @@
       },
       "npm_headline_total": 3792259,
       "npm": {
-        "rufflo": 0,
-        "@rufflo/cli": 0,
-        "@rufflo/memory": 0,
+        "swarmdo": 0,
+        "@swarmdo/cli": 0,
+        "@swarmdo/memory": 0,
         "agentdb": 2368787,
         "agentic-flow": 1423472
       }
@@ -811,7 +811,7 @@
         "uniques": 0
       },
       "repos": {
-        "ruvnet/ruflo": {
+        "ruvnet/swarmdo": {
           "count": 0,
           "uniques": 0,
           "days": [],
@@ -829,7 +829,7 @@
           "days": [],
           "error": "fetch-failed"
         },
-        "ruvnet/rufvector": {
+        "ruvnet/swarmvector": {
           "count": 0,
           "uniques": 0,
           "days": [],
@@ -844,9 +844,9 @@
       },
       "npm_headline_total": 3914171,
       "npm": {
-        "rufflo": 0,
-        "@rufflo/cli": 0,
-        "@rufflo/memory": 0,
+        "swarmdo": 0,
+        "@swarmdo/cli": 0,
+        "@swarmdo/memory": 0,
         "agentdb": 2449168,
         "agentic-flow": 1465003
       }
@@ -871,7 +871,7 @@
         "uniques": 0
       },
       "repos": {
-        "ruvnet/ruflo": {
+        "ruvnet/swarmdo": {
           "count": 0,
           "uniques": 0,
           "days": [],
@@ -889,7 +889,7 @@
           "days": [],
           "error": "fetch-failed"
         },
-        "ruvnet/rufvector": {
+        "ruvnet/swarmvector": {
           "count": 0,
           "uniques": 0,
           "days": [],
@@ -904,9 +904,9 @@
       },
       "npm_headline_total": 3914171,
       "npm": {
-        "rufflo": 0,
-        "@rufflo/cli": 0,
-        "@rufflo/memory": 0,
+        "swarmdo": 0,
+        "@swarmdo/cli": 0,
+        "@swarmdo/memory": 0,
         "agentdb": 2449168,
         "agentic-flow": 1465003
       }
@@ -931,7 +931,7 @@
         "uniques": 0
       },
       "repos": {
-        "ruvnet/ruflo": {
+        "ruvnet/swarmdo": {
           "count": 0,
           "uniques": 0,
           "days": [],
@@ -949,7 +949,7 @@
           "days": [],
           "error": "fetch-failed"
         },
-        "ruvnet/rufvector": {
+        "ruvnet/swarmvector": {
           "count": 0,
           "uniques": 0,
           "days": [],
@@ -964,9 +964,9 @@
       },
       "npm_headline_total": 4054869,
       "npm": {
-        "rufflo": 0,
-        "@rufflo/cli": 0,
-        "@rufflo/memory": 0,
+        "swarmdo": 0,
+        "@swarmdo/cli": 0,
+        "@swarmdo/memory": 0,
         "agentdb": 2539711,
         "agentic-flow": 1515158
       }

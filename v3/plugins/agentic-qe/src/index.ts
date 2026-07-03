@@ -1,6 +1,6 @@
 /**
  * Agentic-QE Plugin Entry Point
- * Plugin exports for rufflo V3 integration
+ * Plugin exports for swarmdo V3 integration
  *
  * @module v3/plugins/agentic-qe
  * @version 3.5.59
@@ -309,16 +309,16 @@ export const PLUGIN_METADATA = {
   ],
   dependencies: {
     required: [
-      '@rufflo/plugins',
-      '@rufflo/memory',
-      '@rufflo/security',
-      '@rufflo/embeddings',
+      '@swarmdo/plugins',
+      '@swarmdo/memory',
+      '@swarmdo/security',
+      '@swarmdo/embeddings',
     ],
     optional: [
-      '@rufflo/browser',
-      '@rufvector/attention',
-      '@rufvector/gnn',
-      '@rufvector/sona',
+      '@swarmdo/browser',
+      '@swarmvector/attention',
+      '@swarmvector/gnn',
+      '@swarmvector/sona',
     ],
   },
 } as const;

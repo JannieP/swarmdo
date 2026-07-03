@@ -1,11 +1,11 @@
 {
   "$schema": "./allowed-deps.schema.json",
   "version": 1,
-  "comment": "Top-level dependency allowlist for rufflo. Adding any new top-level (non-transitive) dependency to any package.json under plugins/* or v3/@rufflo/* MUST be matched by an entry here. CI enforces. Transitive deps are out of scope. Maintained per ADR-123 supply-chain hardening.",
+  "comment": "Top-level dependency allowlist for swarmdo. Adding any new top-level (non-transitive) dependency to any package.json under plugins/* or v3/@swarmdo/* MUST be matched by an entry here. CI enforces. Transitive deps are out of scope. Maintained per ADR-123 supply-chain hardening.",
   "policies": {
     "rejectInRegistry": [
-      "rufflo-graph-intellligence",
-      "rufflo-graph-intelligance",
+      "swarmdo-graph-intellligence",
+      "swarmdo-graph-intelligance",
       "sublinear-time-solvor",
       "sublinear-time-server",
       "agent-browse",
@@ -16,14 +16,14 @@
     "comment": "rejectInRegistry blocks installation of these known typosquats even if a future maintainer is fooled into adding them"
   },
   "packages": {
-    "rufflo-graph-intelligence": {
+    "swarmdo-graph-intelligence": {
       "comment": "ADR-123 plugin",
       "dependencies": [
         "sublinear-time-solver",
         "zod"
       ],
       "peerDependencies": [
-        "@rufflo/cli"
+        "@swarmdo/cli"
       ],
       "devDependencies": [
         "@types/node",
@@ -31,7 +31,7 @@
         "vitest"
       ]
     },
-    "@rufflo/browser": {
+    "@swarmdo/browser": {
       "comment": "ADR-122 substrate",
       "dependencies": [
         "agent-browser",
@@ -39,7 +39,7 @@
         "zod"
       ],
       "peerDependencies": [
-        "@rufflo/cli"
+        "@swarmdo/cli"
       ],
       "devDependencies": [
         "@types/node",
@@ -49,7 +49,7 @@
     }
   },
   "actions": {
-    "comment": "ADR-127 Phase 1 — all uses: refs in .claude/agents/github/, .claude/skills/github-*/, and v3/@rufflo/cli/.claude/commands/github/ must be either SHA-pinned or present in this list. Phase 3 will upgrade @v3 refs to @v4; until then the non-SHA refs are tracked here. ruvnet/swarm-action@v1 is a first-party action requiring SHA-pin in a future phase (ADR-127 Phase 3 note).",
+    "comment": "ADR-127 Phase 1 — all uses: refs in .claude/agents/github/, .claude/skills/github-*/, and v3/@swarmdo/cli/.claude/commands/github/ must be either SHA-pinned or present in this list. Phase 3 will upgrade @v3 refs to @v4; until then the non-SHA refs are tracked here. ruvnet/swarm-action@v1 is a first-party action requiring SHA-pin in a future phase (ADR-127 Phase 3 note).",
     "allowed": [
       "actions/checkout",
       "actions/setup-node",

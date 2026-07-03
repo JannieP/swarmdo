@@ -19,7 +19,7 @@
  * - Rate limiting for fair resource allocation
  *
  * @packageDocumentation
- * @module @rufflo/plugin-financial-risk
+ * @module @swarmdo/plugin-financial-risk
  */
 
 // Export all types
@@ -63,7 +63,7 @@ import { DEFAULT_FINANCIAL_CONFIG } from './types.js';
  * Plugin metadata
  */
 export const pluginMetadata = {
-  name: '@rufflo/plugin-financial-risk',
+  name: '@swarmdo/plugin-financial-risk',
   version: '3.0.0-alpha.1',
   description: 'High-performance financial risk analysis with portfolio risk, anomaly detection, and compliance checking',
   author: 'rUv',
@@ -72,10 +72,10 @@ export const pluginMetadata = {
   tags: ['finance', 'risk', 'portfolio', 'var', 'anomaly-detection', 'compliance', 'basel3', 'mifid2'],
   wasmPackages: [
     'micro-hnsw-wasm',
-    'rufvector-sparse-inference-wasm',
-    'rufvector-gnn-wasm',
-    'rufvector-economy-wasm',
-    'rufvector-learning-wasm',
+    'swarmvector-sparse-inference-wasm',
+    'swarmvector-gnn-wasm',
+    'swarmvector-economy-wasm',
+    'swarmvector-learning-wasm',
   ],
 };
 

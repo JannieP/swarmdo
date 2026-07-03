@@ -1,10 +1,10 @@
 /**
  * Native Attention Wrappers
  *
- * Properly wraps @rufvector/attention native Rust implementations
+ * Properly wraps @swarmvector/attention native Rust implementations
  * with TypedArray conversions and proper error handling
  */
-import * as nativeAttention from '@rufvector/attention';
+import * as nativeAttention from '@swarmvector/attention';
 /**
  * Convert regular array to Float32Array if needed
  */

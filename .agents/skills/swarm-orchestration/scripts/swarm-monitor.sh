@@ -5,4 +5,4 @@
 set -e
 
 echo "Starting swarm monitor..."
-npx @rufflo/cli swarm status --watch --interval 5
+npx @swarmdo/cli swarm status --watch --interval 5

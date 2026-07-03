@@ -22,7 +22,7 @@ export default defineConfig({
   resolve: {
     alias: {
       // Mock unavailable WASM dependencies
-      '@rufvector/gnn-wasm': '/workspaces/rufflo/v3/plugins/hyperbolic-reasoning/tests/__mocks__/gnn-wasm.ts',
+      '@swarmvector/gnn-wasm': '/workspaces/swarmdo/v3/plugins/hyperbolic-reasoning/tests/__mocks__/gnn-wasm.ts',
     },
   },
 });

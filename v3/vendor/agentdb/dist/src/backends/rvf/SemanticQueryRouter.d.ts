@@ -1,7 +1,7 @@
 /**
  * SemanticQueryRouter - Intent-Based Query Routing for AgentDB
  *
- * Wraps @rufvector/router's SemanticRouter for intelligent query routing
+ * Wraps @swarmvector/router's SemanticRouter for intelligent query routing
  * based on learned intent embeddings. Routes queries to appropriate
  * handlers (e.g., different memory stores, search strategies) based
  * on semantic similarity.
@@ -45,8 +45,8 @@ export interface RouterStats {
 /**
  * SemanticQueryRouter - Route queries to intents via learned embeddings
  *
- * Uses @rufvector/router's N-API VectorDb (HNSW + SIMD) for sub-millisecond
- * routing. Falls back to built-in brute-force search if @rufvector/router
+ * Uses @swarmvector/router's N-API VectorDb (HNSW + SIMD) for sub-millisecond
+ * routing. Falls back to built-in brute-force search if @swarmvector/router
  * is not available.
  */
 export declare class SemanticQueryRouter {
@@ -66,11 +66,11 @@ export declare class SemanticQueryRouter {
     private constructor();
     /**
      * Create a new semantic query router.
-     * Lazy-loads @rufvector/router; falls back to built-in search.
+     * Lazy-loads @swarmvector/router; falls back to built-in search.
      */
     static create(config: RouterConfig): Promise<SemanticQueryRouter>;
     /**
-     * Check if @rufvector/router is available.
+     * Check if @swarmvector/router is available.
      */
     static isAvailable(): Promise<boolean>;
     /**
@@ -94,13 +94,13 @@ export declare class SemanticQueryRouter {
      * Get router statistics.
      */
     getStats(): RouterStats;
-    /** Whether using native @rufvector/router */
+    /** Whether using native @swarmvector/router */
     get isNative(): boolean;
     /** Check if destroyed */
     get isDestroyed(): boolean;
     /**
      * Save router state to disk (ADR-007 Phase 1 persistence).
-     * Requires @rufvector/router native save support or falls back to JSON.
+     * Requires @swarmvector/router native save support or falls back to JSON.
      */
     save(path: string): Promise<boolean>;
     /**

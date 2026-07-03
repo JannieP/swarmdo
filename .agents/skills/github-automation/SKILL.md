@@ -27,23 +27,23 @@ gh pr create --title "feat: description" --body "## Summary\n..."
 
 ### Review Code
 ```bash
-npx rufflo github review --pr 123
+npx swarmdo github review --pr 123
 ```
 
 ### Manage Issues
 ```bash
-npx rufflo github issues list --state open
-npx rufflo github issues create --title "Bug: ..."
+npx swarmdo github issues list --state open
+npx swarmdo github issues create --title "Bug: ..."
 ```
 
 ### Setup Workflow
 ```bash
-npx rufflo workflow create --template ci
+npx swarmdo workflow create --template ci
 ```
 
 ### Release Management
 ```bash
-npx rufflo deployment release --version 1.0.0
+npx swarmdo deployment release --version 1.0.0
 ```
 
 ## Agent Types

@@ -1,8 +1,8 @@
-# @rufflo/plugin-neural-coordination
+# @swarmdo/plugin-neural-coordination
 
-[![npm version](https://img.shields.io/npm/v/@rufflo/plugin-neural-coordination.svg)](https://www.npmjs.com/package/@rufflo/plugin-neural-coordination)
-[![license](https://img.shields.io/npm/l/@rufflo/plugin-neural-coordination.svg)](https://github.com/ruvnet/claude-flow/blob/main/LICENSE)
-[![downloads](https://img.shields.io/npm/dm/@rufflo/plugin-neural-coordination.svg)](https://www.npmjs.com/package/@rufflo/plugin-neural-coordination)
+[![npm version](https://img.shields.io/npm/v/@swarmdo/plugin-neural-coordination.svg)](https://www.npmjs.com/package/@swarmdo/plugin-neural-coordination)
+[![license](https://img.shields.io/npm/l/@swarmdo/plugin-neural-coordination.svg)](https://github.com/ruvnet/claude-flow/blob/main/LICENSE)
+[![downloads](https://img.shields.io/npm/dm/@swarmdo/plugin-neural-coordination.svg)](https://www.npmjs.com/package/@swarmdo/plugin-neural-coordination)
 
 A cutting-edge multi-agent coordination plugin combining the SONA self-optimizing neural architecture with graph neural networks for agent communication topology optimization. The plugin enables emergent protocol development, neural consensus mechanisms, collective memory formation, and adaptive swarm behavior while maintaining interpretability of agent interactions.
 
@@ -11,19 +11,19 @@ A cutting-edge multi-agent coordination plugin combining the SONA self-optimizin
 ### npm
 
 ```bash
-npm install @rufflo/plugin-neural-coordination
+npm install @swarmdo/plugin-neural-coordination
 ```
 
 ### CLI
 
 ```bash
-npx rufflo plugins install --name @rufflo/plugin-neural-coordination
+npx swarmdo plugins install --name @swarmdo/plugin-neural-coordination
 ```
 
 ## Quick Start
 
 ```typescript
-import { NeuralCoordinationPlugin } from '@rufflo/plugin-neural-coordination';
+import { NeuralCoordinationPlugin } from '@swarmdo/plugin-neural-coordination';
 
 // Initialize the plugin
 const plugin = new NeuralCoordinationPlugin();
@@ -239,10 +239,10 @@ interface NeuralCoordinationConfig {
 ## Dependencies
 
 - `sona` - Self-Optimizing Neural Architecture for agent adaptation
-- `rufvector-gnn-wasm` - Communication graph optimization and message routing
-- `rufvector-nervous-system-wasm` - Neural coordination layer for collective behavior
-- `rufvector-attention-wasm` - Multi-head attention for agent-to-agent communication
-- `rufvector-learning-wasm` - Multi-agent reinforcement learning (MARL)
+- `swarmvector-gnn-wasm` - Communication graph optimization and message routing
+- `swarmvector-nervous-system-wasm` - Neural coordination layer for collective behavior
+- `swarmvector-attention-wasm` - Multi-head attention for agent-to-agent communication
+- `swarmvector-learning-wasm` - Multi-agent reinforcement learning (MARL)
 
 ## Use Cases
 
@@ -256,9 +256,9 @@ interface NeuralCoordinationConfig {
 
 | Plugin | Description | Synergy |
 |--------|-------------|---------|
-| [@rufflo/plugin-cognitive-kernel](https://www.npmjs.com/package/@rufflo/plugin-cognitive-kernel) | Cognitive augmentation with working memory | Enhances individual agent reasoning within coordinated swarms |
-| [@rufflo/plugin-quantum-optimizer](https://www.npmjs.com/package/@rufflo/plugin-quantum-optimizer) | Quantum-inspired optimization | Optimizes task allocation and resource scheduling across agents |
-| [@rufflo/plugin-hyperbolic-reasoning](https://www.npmjs.com/package/@rufflo/plugin-hyperbolic-reasoning) | Hierarchical reasoning | Enables hierarchical agent organization and taxonomic coordination |
+| [@swarmdo/plugin-cognitive-kernel](https://www.npmjs.com/package/@swarmdo/plugin-cognitive-kernel) | Cognitive augmentation with working memory | Enhances individual agent reasoning within coordinated swarms |
+| [@swarmdo/plugin-quantum-optimizer](https://www.npmjs.com/package/@swarmdo/plugin-quantum-optimizer) | Quantum-inspired optimization | Optimizes task allocation and resource scheduling across agents |
+| [@swarmdo/plugin-hyperbolic-reasoning](https://www.npmjs.com/package/@swarmdo/plugin-hyperbolic-reasoning) | Hierarchical reasoning | Enables hierarchical agent organization and taxonomic coordination |
 
 ## License
 

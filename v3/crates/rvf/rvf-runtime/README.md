@@ -1,6 +1,6 @@
 # rvf-runtime
 
-RuVector Format runtime providing the RvfStore API, background compaction, and streaming I/O.
+SwarmVector Format runtime providing the RvfStore API, background compaction, and streaming I/O.
 
 ## Overview
 

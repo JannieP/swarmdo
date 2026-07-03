@@ -16,7 +16,7 @@
  * Integrates with ReasoningBank for self-learning capabilities
  */
 import { z } from 'zod';
-import { createReasoningBank, } from '../../@rufflo/neural/src/index.js';
+import { createReasoningBank, } from '../../@swarmdo/neural/src/index.js';
 // ============================================================================
 // Singleton ReasoningBank Instance
 // ============================================================================

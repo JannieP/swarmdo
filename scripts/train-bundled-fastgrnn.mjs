@@ -1,25 +1,25 @@
 // Train a tiny-dancer FastGRNN safetensors artifact from the measured v2
 // seed corpus (ADR-149 iter 10). Pipes the same `{embedding, scores}` rows
 // the KRR trainer consumes through `@metaharness/router`'s `trainNativeRouter`
-// (which internally calls `@rufvector/tiny-dancer`'s `trainRouter`).
+// (which internally calls `@swarmvector/tiny-dancer`'s `trainRouter`).
 //
 // USAGE
 //   node scripts/train-bundled-fastgrnn.mjs                # default output
 //   node scripts/train-bundled-fastgrnn.mjs --out ./my.safetensors
 //
 // Then to use the artifact:
-//   RUFFLO_ROUTER_NEURAL=1 \
-//   RUFFLO_ROUTER_MODEL_PATH=./assets/model-router/seed-router.fastgrnn.safetensors \
+//   SWARMDO_ROUTER_NEURAL=1 \
+//   SWARMDO_ROUTER_MODEL_PATH=./assets/model-router/seed-router.fastgrnn.safetensors \
 //   node ...
 
 import { readFileSync, statSync } from 'node:fs';
 import { resolve } from 'node:path';
 import * as mh from '@metaharness/router';
 // iter 35 — single source of truth for prices.
-import { blendedPrice } from '../v3/@rufflo/cli/dist/src/rufvector/model-prices.js';
+import { blendedPrice } from '../v3/@swarmdo/cli/dist/src/swarmvector/model-prices.js';
 
 const args = (() => {
-  const a = { out: resolve('v3/@rufflo/cli/assets/model-router/seed-router.fastgrnn.safetensors'), epochs: 40, hiddenDim: 12, lr: 0.05 };
+  const a = { out: resolve('v3/@swarmdo/cli/assets/model-router/seed-router.fastgrnn.safetensors'), epochs: 40, hiddenDim: 12, lr: 0.05 };
   for (let i = 2; i < process.argv.length; i++) {
     if (process.argv[i] === '--out') a.out = process.argv[++i];
     else if (process.argv[i] === '--epochs') a.epochs = parseInt(process.argv[++i], 10);
@@ -29,7 +29,7 @@ const args = (() => {
   return a;
 })();
 
-const seedPath = resolve('v3/@rufflo/cli/assets/model-router/seed-rows.json');
+const seedPath = resolve('v3/@swarmdo/cli/assets/model-router/seed-rows.json');
 console.log(`[fastgrnn] reading measured seed corpus from ${seedPath}`);
 const rows = JSON.parse(readFileSync(seedPath, 'utf8'));
 console.log(`[fastgrnn] ${rows.length} rows, dim=${rows[0].embedding.length}, candidates=${Object.keys(rows[0].scores).length}`);
@@ -40,7 +40,7 @@ const PRICES = Object.fromEntries(Object.keys(rows[0].scores).map(m => [m, blend
 
 console.log(`[fastgrnn] checking native backend availability...`);
 const nativeAvailable = await mh.isNativeRouterAvailable();
-console.log(`[fastgrnn] tiny-dancer native: ${nativeAvailable ? 'available' : 'NOT available — install @rufvector/tiny-dancer'}`);
+console.log(`[fastgrnn] tiny-dancer native: ${nativeAvailable ? 'available' : 'NOT available — install @swarmvector/tiny-dancer'}`);
 if (!nativeAvailable) {
   console.error('[fastgrnn] cannot train without the native backend.');
   process.exit(2);
@@ -60,4 +60,4 @@ const size = statSync(args.out).size;
 console.log(`[fastgrnn] trained in ${trainMs.toFixed(0)}ms`);
 console.log(`[fastgrnn] epochsRun=${res.epochsRun} trainLoss=${res.trainLoss.toFixed(4)} trainAcc=${res.trainAccuracy.toFixed(3)} valAcc=${res.valAccuracy.toFixed(3)}`);
 console.log(`[fastgrnn] wrote ${args.out} (${size} bytes)`);
-console.log(`[fastgrnn] to use: RUFFLO_ROUTER_NEURAL=1 RUFFLO_ROUTER_MODEL_PATH=${args.out}`);
+console.log(`[fastgrnn] to use: SWARMDO_ROUTER_NEURAL=1 SWARMDO_ROUTER_MODEL_PATH=${args.out}`);

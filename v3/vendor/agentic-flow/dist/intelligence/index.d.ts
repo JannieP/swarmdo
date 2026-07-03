@@ -1,16 +1,16 @@
 /**
- * RuVector Intelligence Layer - Unified Exports
+ * SwarmVector Intelligence Layer - Unified Exports
  *
- * Exposes the full power of RuVector ecosystem:
+ * Exposes the full power of SwarmVector ecosystem:
  *
  * Features Used:
- * - @rufvector/sona: Micro-LoRA, Base-LoRA, EWC++, ReasoningBank, Trajectories
- * - @rufvector/attention: Multi-head, Flash, Hyperbolic, MoE, Graph, DualSpace
- * - ruvector core: HNSW indexing, vector similarity search
+ * - @swarmvector/sona: Micro-LoRA, Base-LoRA, EWC++, ReasoningBank, Trajectories
+ * - @swarmvector/attention: Multi-head, Flash, Hyperbolic, MoE, Graph, DualSpace
+ * - swarmvector core: HNSW indexing, vector similarity search
  *
- * Note: @rufvector/sona and @rufvector/attention are optional on Windows
+ * Note: @swarmvector/sona and @swarmvector/attention are optional on Windows
  */
-export { RuVectorIntelligence, createIntelligenceLayer, IntelligencePresets, sonaAvailable, attentionAvailable, type RuVectorIntelligenceConfig, type Trajectory, type TrajectoryStep, type AgentRoutingResult, type LearningOutcome, type OperationResult, } from './RuVectorIntelligence.js';
+export { SwarmVectorIntelligence, createIntelligenceLayer, IntelligencePresets, sonaAvailable, attentionAvailable, type SwarmVectorIntelligenceConfig, type Trajectory, type TrajectoryStep, type AgentRoutingResult, type LearningOutcome, type OperationResult, } from './SwarmVectorIntelligence.js';
 export interface SonaConfig {
     embeddingDim?: number;
     hiddenDim?: number;
@@ -41,7 +41,7 @@ export { EnhancedAgentBooster, getEnhancedBooster, enhancedApply, benchmark as b
 export { WasmPatternIndex, WasmAgentRouter, getWasmPatternIndex, getWasmAgentRouter, initWasmAcceleration, getWasmAccelerationStatus, type PatternEntry, type AgentProfile, } from './wasm-acceleration.js';
 export { TinyDancerRouter, getTinyDancerRouter, initTinyDancer, isTinyDancerAvailable, type RouteResult, type RouterMetrics, type TinyDancerConfig, } from '../routing/TinyDancerRouter.js';
 export { OnnxEmbeddingsWasm, getOnnxEmbeddingsWasm, initOnnxEmbeddingsWasm, isOnnxWasmAvailable, isSIMDEnabled, embed as onnxEmbed, embedBatch as onnxEmbedBatch, cosineSimilarity as onnxCosineSimilarity, type OnnxEmbeddingResult, type OnnxBatchResult, type OnnxEmbeddingsStats, } from '../wasm/onnx-embeddings-wasm.js';
-export { initRuVectorWasm, isWasmInitialized, isWasmSupported, RuVectorHnswIndex, RuVectorSemanticMatcher, generateIdentity, signData, verifySignature, type WasmIdentityKeys, type HnswSearchResult, type SemanticMatch, } from '../wasm/ruvector-edge.js';
+export { initSwarmVectorWasm, isWasmInitialized, isWasmSupported, SwarmVectorHnswIndex, SwarmVectorSemanticMatcher, generateIdentity, signData, verifySignature, type WasmIdentityKeys, type HnswSearchResult, type SemanticMatch, } from '../wasm/swarmvector-edge.js';
 export { initEdgeFull, isEdgeFullAvailable, getEdgeFull, getEdgeFullStats, EdgeFullHnswIndex, EdgeFullGraphDB, EdgeFullSonaEngine, EdgeFullOnnxEmbeddings, EdgeFullDagWorkflow, cosineSimilarity as edgeFullCosineSimilarity, dotProduct, normalize, isSIMDEnabled as edgeFullSIMDEnabled, type EdgeFullStats, } from '../wasm/edge-full.js';
 export { EmbeddingService, getEmbeddingService, embed, embedBatch, textSimilarity, simpleEmbed, semanticSearch, findDuplicates, clusterTexts, pretrainCodePatterns, pretrainFromRepo, type EmbeddingBackend, type EmbeddingStats, type SimilarityResult, type SearchResult, type DuplicateGroup, } from './EmbeddingService.js';
 //# sourceMappingURL=index.d.ts.map

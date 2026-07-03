@@ -1,7 +1,7 @@
 {
-  "name": "@rufflo/plugin-code-intelligence",
+  "name": "@swarmdo/plugin-code-intelligence",
   "version": "3.0.0-alpha.3",
-  "description": "Advanced code intelligence plugin for Rufflo V3 - semantic search, architecture analysis, refactoring impact, module splitting, and pattern learning",
+  "description": "Advanced code intelligence plugin for Swarmdo V3 - semantic search, architecture analysis, refactoring impact, module splitting, and pattern learning",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -44,7 +44,7 @@
     "tag": "v3alpha"
   },
   "keywords": [
-    "rufflo",
+    "swarmdo",
     "plugin",
     "code-intelligence",
     "semantic-search",
@@ -53,11 +53,11 @@
     "code-analysis",
     "mcp"
   ],
-  "author": "Rufflo Team",
+  "author": "Swarmdo Team",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JannieP/rufflo.git",
+    "url": "https://github.com/JannieP/swarmdo.git",
     "directory": "v3/plugins/code-intelligence"
   },
   "dependencies": {
@@ -69,7 +69,7 @@
     "vitest": "^1.0.0"
   },
   "peerDependencies": {
-    "@rufflo/plugins": "^3.0.0-alpha.1"
+    "@swarmdo/plugins": "^3.0.0-alpha.1"
   },
   "engines": {
     "node": ">=20.0.0"

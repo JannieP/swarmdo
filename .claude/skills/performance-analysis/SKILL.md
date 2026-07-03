@@ -1,7 +1,7 @@
 ---
 name: performance-analysis
 description: |
-  Comprehensive performance analysis, bottleneck detection, and optimization recommendations for Rufflo swarms
+  Comprehensive performance analysis, bottleneck detection, and optimization recommendations for Swarmdo swarms
 ---
 
 # Performance Analysis Skill
@@ -20,17 +20,17 @@ This skill consolidates all performance analysis capabilities:
 
 ### Basic Bottleneck Detection
 ```bash
-npx rufflo bottleneck detect
+npx swarmdo bottleneck detect
 ```
 
 ### Generate Performance Report
 ```bash
-npx rufflo analysis performance-report --format html --include-metrics
+npx swarmdo analysis performance-report --format html --include-metrics
 ```
 
 ### Analyze and Auto-Fix
 ```bash
-npx rufflo bottleneck detect --fix --threshold 15
+npx swarmdo bottleneck detect --fix --threshold 15
 ```
 
 ## Core Capabilities
@@ -39,7 +39,7 @@ npx rufflo bottleneck detect --fix --threshold 15
 
 #### Command Syntax
 ```bash
-npx rufflo bottleneck detect [options]
+npx swarmdo bottleneck detect [options]
 ```
 
 #### Options
@@ -52,19 +52,19 @@ npx rufflo bottleneck detect [options]
 #### Usage Examples
 ```bash
 # Basic detection for current swarm
-npx rufflo bottleneck detect
+npx swarmdo bottleneck detect
 
 # Analyze specific swarm over 24 hours
-npx rufflo bottleneck detect --swarm-id swarm-123 -t 24h
+npx swarmdo bottleneck detect --swarm-id swarm-123 -t 24h
 
 # Export detailed analysis
-npx rufflo bottleneck detect -t 24h -e bottlenecks.json
+npx swarmdo bottleneck detect -t 24h -e bottlenecks.json
 
 # Auto-fix detected issues
-npx rufflo bottleneck detect --fix --threshold 15
+npx swarmdo bottleneck detect --fix --threshold 15
 
 # Low threshold for sensitive detection
-npx rufflo bottleneck detect --threshold 10 --export critical-issues.json
+npx swarmdo bottleneck detect --threshold 10 --export critical-issues.json
 ```
 
 #### Metrics Analyzed
@@ -163,14 +163,14 @@ Automatic analysis during task execution:
 #### MCP Integration
 ```javascript
 // Check for bottlenecks in Claude Code
-mcp__rufflo__bottleneck_detect({
+mcp__swarmdo__bottleneck_detect({
   timeRange: "1h",
   threshold: 20,
   autoFix: false
 })
 
 // Get detailed task results with bottleneck analysis
-mcp__rufflo__task_results({
+mcp__swarmdo__task_results({
   taskId: "task-123",
   format: "detailed"
 })
@@ -214,7 +214,7 @@ mcp__rufflo__task_results({
 
 #### Command Syntax
 ```bash
-npx rufflo analysis performance-report [options]
+npx swarmdo analysis performance-report [options]
 ```
 
 #### Options
@@ -260,26 +260,26 @@ npx rufflo analysis performance-report [options]
 #### Usage Examples
 ```bash
 # Generate HTML report with all metrics
-npx rufflo analysis performance-report --format html --include-metrics
+npx swarmdo analysis performance-report --format html --include-metrics
 
 # Compare current swarm with previous
-npx rufflo analysis performance-report --compare swarm-123 --format markdown
+npx swarmdo analysis performance-report --compare swarm-123 --format markdown
 
 # Custom output with specific sections
-npx rufflo analysis performance-report \
+npx swarmdo analysis performance-report \
   --sections summary,metrics,recommendations \
   --output reports/perf-analysis.html \
   --format html
 
 # Weekly performance report
-npx rufflo analysis performance-report \
+npx swarmdo analysis performance-report \
   --time-range 7d \
   --include-metrics \
   --format markdown \
   --output docs/weekly-performance.md
 
 # JSON format for CI/CD integration
-npx rufflo analysis performance-report \
+npx swarmdo analysis performance-report \
   --format json \
   --output build/performance.json
 ```
@@ -368,11 +368,11 @@ Typical improvements after bottleneck resolution:
 ### Continuous Monitoring
 ```bash
 # Monitor performance in real-time
-npx rufflo swarm monitor --interval 5
+npx swarmdo swarm monitor --interval 5
 
 # Generate hourly reports
 while true; do
-  npx rufflo analysis performance-report \
+  npx swarmdo analysis performance-report \
     --format json \
     --output logs/perf-$(date +%Y%m%d-%H%M).json
   sleep 3600
@@ -392,12 +392,12 @@ jobs:
       - uses: actions/checkout@v2
       - name: Run Performance Analysis
         run: |
-          npx rufflo analysis performance-report \
+          npx swarmdo analysis performance-report \
             --format json \
             --output performance.json
       - name: Check Performance Thresholds
         run: |
-          npx rufflo bottleneck detect \
+          npx swarmdo bottleneck detect \
             --threshold 15 \
             --export bottlenecks.json
       - name: Upload Reports
@@ -418,12 +418,12 @@ const fs = require('fs');
 async function analyzePerformance() {
   // Run bottleneck detection
   const bottlenecks = await runCommand(
-    'npx rufflo bottleneck detect --format json'
+    'npx swarmdo bottleneck detect --format json'
   );
 
   // Generate performance report
   const report = await runCommand(
-    'npx rufflo analysis performance-report --format json'
+    'npx swarmdo analysis performance-report --format json'
   );
 
   // Analyze results
@@ -497,37 +497,37 @@ analyzePerformance().catch(console.error);
 **High Memory Usage**
 ```bash
 # Analyze memory bottlenecks
-npx rufflo bottleneck detect --threshold 10
+npx swarmdo bottleneck detect --threshold 10
 
 # Check cache performance
-npx rufflo cache manage --action stats
+npx swarmdo cache manage --action stats
 
 # Review memory metrics
-npx rufflo memory usage
+npx swarmdo memory usage
 ```
 
 **Slow Task Execution**
 ```bash
 # Identify slow tasks
-npx rufflo task status --detailed
+npx swarmdo task status --detailed
 
 # Analyze coordination overhead
-npx rufflo bottleneck detect --time-range 1h
+npx swarmdo bottleneck detect --time-range 1h
 
 # Check agent utilization
-npx rufflo agent metrics
+npx swarmdo agent metrics
 ```
 
 **Poor Cache Performance**
 ```bash
 # Analyze cache hit rates
-npx rufflo analysis performance-report --sections metrics
+npx swarmdo analysis performance-report --sections metrics
 
 # Review cache strategy
-npx rufflo cache manage --action analyze
+npx swarmdo cache manage --action analyze
 
 # Enable cache warming
-npx rufflo bottleneck detect --fix
+npx swarmdo bottleneck detect --fix
 ```
 
 ## Integration with Other Skills
@@ -539,11 +539,11 @@ npx rufflo bottleneck detect --fix
 
 ## Related Commands
 
-- `npx rufflo swarm monitor` - Real-time monitoring
-- `npx rufflo token usage` - Token optimization analysis
-- `npx rufflo cache manage` - Cache optimization
-- `npx rufflo agent metrics` - Agent performance metrics
-- `npx rufflo task status` - Task execution analysis
+- `npx swarmdo swarm monitor` - Real-time monitoring
+- `npx swarmdo token usage` - Token optimization analysis
+- `npx swarmdo cache manage` - Cache optimization
+- `npx swarmdo agent metrics` - Agent performance metrics
+- `npx swarmdo task status` - Task execution analysis
 
 ## See Also
 
@@ -557,4 +557,4 @@ npx rufflo bottleneck detect --fix
 
 **Version**: 1.0.0
 **Last Updated**: 2025-10-19
-**Maintainer**: Rufflo Team
+**Maintainer**: Swarmdo Team

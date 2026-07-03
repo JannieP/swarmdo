@@ -9,14 +9,14 @@
  *   const db = new AgentDB({ forceWasm: true });
  *
  * This entry point:
- * - Uses RuVector (WASM-based) for vector search
+ * - Uses SwarmVector (WASM-based) for vector search
  * - Uses sql.js (WASM-based) for SQLite
  * - Does NOT require any native module compilation
  * - Works on Windows without Visual Studio Build Tools
  * - Works in browsers and edge runtimes
  */
 
-// Main AgentDB class (uses RuVector/WASM backends when forceWasm: true)
+// Main AgentDB class (uses SwarmVector/WASM backends when forceWasm: true)
 export { AgentDB } from './core/AgentDB.js';
 import { AgentDB as AgentDBClass } from './core/AgentDB.js';
 export default AgentDBClass;
@@ -131,8 +131,8 @@ export type {
   VectorStats
 } from './backends/VectorBackend.js';
 
-export { RuVectorBackend } from './backends/ruvector/RuVectorBackend.js';
-export { RuVectorLearning } from './backends/ruvector/RuVectorLearning.js';
+export { SwarmVectorBackend } from './backends/swarmvector/SwarmVectorBackend.js';
+export { SwarmVectorLearning } from './backends/swarmvector/SwarmVectorLearning.js';
 export { RvfBackend } from './backends/rvf/RvfBackend.js';
 // Note: HNSWLibBackend is NOT exported - use the main entry point if you need it
 

@@ -63,8 +63,8 @@ export async function doctorCommand(options = {}) {
         const result = await detectBackend();
         console.log(`  ✅ Detected backend: ${result.backend}`);
         console.log(`     Features: GNN=${result.features.gnn ? 'Yes' : 'No'}, Graph=${result.features.graph ? 'Yes' : 'No'}`);
-        if (result.backend === 'rufvector') {
-            console.log('     🚀 Using RuVector (150x faster than SQLite)');
+        if (result.backend === 'swarmvector') {
+            console.log('     🚀 Using SwarmVector (150x faster than SQLite)');
         }
         passedChecks++;
     }
@@ -220,14 +220,14 @@ export async function doctorCommand(options = {}) {
     // Backend optimization
     try {
         const result = await detectBackend();
-        if (result.backend === 'rufvector' && result.features.gnn) {
-            recommendations.push('✅ RuVector with GNN enabled - maximum performance (150x faster).');
+        if (result.backend === 'swarmvector' && result.features.gnn) {
+            recommendations.push('✅ SwarmVector with GNN enabled - maximum performance (150x faster).');
         }
-        else if (result.backend === 'rufvector') {
-            recommendations.push('✅ RuVector enabled - good performance (50x faster than SQLite).');
+        else if (result.backend === 'swarmvector') {
+            recommendations.push('✅ SwarmVector enabled - good performance (50x faster than SQLite).');
         }
         else {
-            recommendations.push('💡 Consider using --backend ruvector for 150x performance improvement.');
+            recommendations.push('💡 Consider using --backend swarmvector for 150x performance improvement.');
         }
     }
     catch { }

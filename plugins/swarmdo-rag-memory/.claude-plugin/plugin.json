@@ -1,0 +1,22 @@
+{
+  "name": "swarmdo-rag-memory",
+  "description": "SwarmVector memory with HNSW search, AgentDB, and semantic retrieval",
+  "version": "0.2.0",
+  "author": {
+    "name": "ruvnet",
+    "url": "https://github.com/ruvnet"
+  },
+  "homepage": "https://github.com/JannieP/swarmdo",
+  "license": "MIT",
+  "keywords": [
+    "swarmdo",
+    "memory",
+    "hnsw",
+    "agentdb",
+    "rag",
+    "vector-search",
+    "mcp",
+    "claude-memories",
+    "bridged-memory"
+  ]
+}

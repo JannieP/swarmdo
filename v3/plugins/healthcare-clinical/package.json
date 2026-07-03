@@ -1,7 +1,7 @@
 {
-  "name": "@rufflo/plugin-healthcare-clinical",
+  "name": "@swarmdo/plugin-healthcare-clinical",
   "version": "3.0.0-alpha.2",
-  "description": "HIPAA-compliant clinical decision support plugin with patient similarity search, drug interaction detection, and clinical pathway recommendations using RufVector WASM packages.",
+  "description": "HIPAA-compliant clinical decision support plugin with patient similarity search, drug interaction detection, and clinical pathway recommendations using SwarmVector WASM packages.",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -51,7 +51,7 @@
     "tag": "v3alpha"
   },
   "keywords": [
-    "rufflo",
+    "swarmdo",
     "plugin",
     "healthcare",
     "clinical-decision-support",
@@ -68,13 +68,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JannieP/rufflo.git",
+    "url": "https://github.com/JannieP/swarmdo.git",
     "directory": "v3/plugins/healthcare-clinical"
   },
   "bugs": {
-    "url": "https://github.com/JannieP/rufflo/issues"
+    "url": "https://github.com/JannieP/swarmdo/issues"
   },
-  "homepage": "https://github.com/JannieP/rufflo/tree/main/v3/plugins/healthcare-clinical#readme",
+  "homepage": "https://github.com/JannieP/swarmdo/tree/main/v3/plugins/healthcare-clinical#readme",
   "engines": {
     "node": ">=20.0.0"
   },
@@ -88,7 +88,7 @@
   },
   "optionalDependencies": {
     "micro-hnsw-wasm": "^0.2.0",
-    "rufvector-hyperbolic-hnsw-wasm": "^0.1.0",
-    "rufvector-sparse-inference-wasm": "^0.1.0"
+    "swarmvector-hyperbolic-hnsw-wasm": "^0.1.0",
+    "swarmvector-sparse-inference-wasm": "^0.1.0"
   }
 }

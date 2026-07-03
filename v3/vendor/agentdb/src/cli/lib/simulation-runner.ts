@@ -472,7 +472,7 @@ export class SimulationRunner {
     };
 
     // Scenario-specific adjustments
-    if (scenarioId === 'hnsw' && config.backend === 'rufvector') {
+    if (scenarioId === 'hnsw' && config.backend === 'swarmvector') {
       baseMetrics.latencyUs.p50 *= 0.122; // 8.2x speedup
       baseMetrics.qps *= 8.2;
     }

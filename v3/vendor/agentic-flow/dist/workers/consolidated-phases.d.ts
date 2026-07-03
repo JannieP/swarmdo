@@ -1,7 +1,7 @@
 /**
  * Consolidated Phase System
  *
- * Eliminates redundancy between phase-executors.ts and ruvector-native-integration.ts
+ * Eliminates redundancy between phase-executors.ts and swarmvector-native-integration.ts
  * by providing a unified phase registry that:
  * 1. Uses native implementations as primary (faster, SIMD-optimized)
  * 2. Falls back to legacy implementations if needed

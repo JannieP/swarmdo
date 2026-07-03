@@ -2,7 +2,7 @@
  * SONA Agent Training Service
  *
  * Train specialized models for specific agents, tasks, and codebases
- * Uses @rufvector/sona for continuous learning and adaptation
+ * Uses @swarmvector/sona for continuous learning and adaptation
  */
 import { EventEmitter } from 'events';
 export interface AgentConfig {

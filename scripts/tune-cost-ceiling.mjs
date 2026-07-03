@@ -1,7 +1,7 @@
 // Cost-ceiling hyperparameter tuning from recorded trajectories (ADR-149 iter 40).
 //
 // Iter 29 added a quality-best-under-budget selector mode keyed on
-// RUFFLO_ROUTER_COST_CEILING_USD_PER_MTOK. Iter 39 tuned the cost-
+// SWARMDO_ROUTER_COST_CEILING_USD_PER_MTOK. Iter 39 tuned the cost-
 // optimal mode's qualityBar from trajectory data; this iter does the
 // same for cost-ceiling.
 //
@@ -32,15 +32,15 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import * as mh from '@metaharness/router';
-import { blendedPrice, costUsd } from '../v3/@rufflo/cli/dist/src/rufvector/model-prices.js';
-import { IsotonicCalibrator } from '../v3/@rufflo/cli/dist/src/rufvector/router-calibrator.js';
+import { blendedPrice, costUsd } from '../v3/@swarmdo/cli/dist/src/swarmvector/model-prices.js';
+import { IsotonicCalibrator } from '../v3/@swarmdo/cli/dist/src/swarmvector/router-calibrator.js';
 
 const ARGS = (() => {
   const a = {
-    in: process.env.RUFFLO_ROUTER_TRAJECTORY_PATH
+    in: process.env.SWARMDO_ROUTER_TRAJECTORY_PATH
       ?? resolve('.swarm', 'model-router-trajectories.jsonl'),
-    artifact: resolve('v3/@rufflo/cli/assets/model-router/seed-router.krr.json'),
-    calibratorDir: resolve('v3/@rufflo/cli/assets/model-router'),
+    artifact: resolve('v3/@swarmdo/cli/assets/model-router/seed-router.krr.json'),
+    calibratorDir: resolve('v3/@swarmdo/cli/assets/model-router'),
     // Defaults span the bundled model price range: Ling ($0.10) → Opus ($240).
     ceilings: '1,5,10,20,50,100,250',
     since: null,

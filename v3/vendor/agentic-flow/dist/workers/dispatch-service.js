@@ -1,7 +1,7 @@
 /**
  * WorkerDispatchService - Dispatches and manages background workers
  *
- * Integrates with RuVector ecosystem:
+ * Integrates with SwarmVector ecosystem:
  * - SONA: Self-learning trajectory tracking
  * - ReasoningBank: Pattern storage and memory retrieval
  * - HNSW: Vector indexing for semantic search
@@ -10,13 +10,13 @@ import { EventEmitter } from 'events';
 import { getWorkerRegistry } from './worker-registry.js';
 import { getResourceGovernor } from './resource-governor.js';
 import { getTriggerDetector } from './trigger-detector.js';
-import { getRuVectorWorkerIntegration, createRuVectorWorkerContext } from './ruvector-integration.js';
+import { getSwarmVectorWorkerIntegration, createSwarmVectorWorkerContext } from './swarmvector-integration.js';
 import { customWorkerManager } from './custom-worker-factory.js';
 export class WorkerDispatchService extends EventEmitter {
     registry;
     governor;
     detector;
-    ruvector;
+    swarmvector;
     runningWorkers = new Map();
     workerImplementations = new Map();
     constructor() {
@@ -24,11 +24,11 @@ export class WorkerDispatchService extends EventEmitter {
         this.registry = getWorkerRegistry();
         this.governor = getResourceGovernor();
         this.detector = getTriggerDetector();
-        this.ruvector = getRuVectorWorkerIntegration();
+        this.swarmvector = getSwarmVectorWorkerIntegration();
         this.registerDefaultWorkers();
-        // Initialize RuVector in background
-        this.ruvector.initialize().catch(err => {
-            console.warn('[WorkerDispatch] RuVector init failed:', err);
+        // Initialize SwarmVector in background
+        this.swarmvector.initialize().catch(err => {
+            console.warn('[WorkerDispatch] SwarmVector init failed:', err);
         });
     }
     /**
@@ -92,19 +92,19 @@ export class WorkerDispatchService extends EventEmitter {
         return { triggers, workerIds };
     }
     /**
-     * Execute worker in background with RuVector integration
+     * Execute worker in background with SwarmVector integration
      */
     async executeWorker(workerId, trigger, topic, sessionId, signal) {
         const startTime = Date.now();
         // Update status to running
         this.registry.updateStatus(workerId, 'running');
         this.governor.update(workerId, { status: 'running', startedAt: startTime });
-        // Initialize RuVector trajectory tracking
-        let ruvectorContext = null;
+        // Initialize SwarmVector trajectory tracking
+        let swarmvectorContext = null;
         let phaseStartTime = startTime;
         let currentPhaseDeposits = 0;
         try {
-            ruvectorContext = await createRuVectorWorkerContext({
+            swarmvectorContext = await createSwarmVectorWorkerContext({
                 workerId,
                 trigger,
                 topic,
@@ -116,9 +116,9 @@ export class WorkerDispatchService extends EventEmitter {
             });
         }
         catch (e) {
-            // RuVector is optional - continue without it
+            // SwarmVector is optional - continue without it
         }
-        // Create context with RuVector-enhanced callbacks
+        // Create context with SwarmVector-enhanced callbacks
         const context = {
             workerId,
             trigger,
@@ -132,10 +132,10 @@ export class WorkerDispatchService extends EventEmitter {
                 this.registry.updateStatus(workerId, 'running', { progress, currentPhase: phase });
                 this.governor.update(workerId, { progress, currentPhase: phase });
                 this.emit('worker:progress', { workerId, progress, phase });
-                // Record phase in RuVector trajectory
-                if (ruvectorContext) {
+                // Record phase in SwarmVector trajectory
+                if (swarmvectorContext) {
                     try {
-                        await ruvectorContext.recordStep(phase, {
+                        await swarmvectorContext.recordStep(phase, {
                             duration: phaseDuration,
                             memoryDeposits: currentPhaseDeposits,
                             successRate: Math.min(1, progress / 100)
@@ -162,9 +162,9 @@ export class WorkerDispatchService extends EventEmitter {
                 throw new Error(`No implementation for worker type: ${trigger}`);
             }
             // Find relevant patterns from previous runs
-            if (ruvectorContext) {
+            if (swarmvectorContext) {
                 try {
-                    const patterns = await ruvectorContext.findPatterns(3);
+                    const patterns = await swarmvectorContext.findPatterns(3);
                     if (patterns.length > 0) {
                         this.emit('worker:patterns', { workerId, patterns });
                     }
@@ -175,10 +175,10 @@ export class WorkerDispatchService extends EventEmitter {
             }
             // Execute worker
             const results = await implementation(context);
-            // Complete RuVector trajectory and trigger learning
-            if (ruvectorContext) {
+            // Complete SwarmVector trajectory and trigger learning
+            if (swarmvectorContext) {
                 try {
-                    const learningResult = await ruvectorContext.complete(results);
+                    const learningResult = await swarmvectorContext.complete(results);
                     this.emit('worker:learning', { workerId, ...learningResult });
                 }
                 catch (e) {
@@ -195,9 +195,9 @@ export class WorkerDispatchService extends EventEmitter {
         catch (error) {
             const errorMessage = error instanceof Error ? error.message : String(error);
             // Complete trajectory with failure
-            if (ruvectorContext) {
+            if (swarmvectorContext) {
                 try {
-                    await ruvectorContext.complete({
+                    await swarmvectorContext.complete({
                         status: signal.aborted ? 'cancelled' : 'failed',
                         data: { error: errorMessage },
                         completedPhases: 0,
@@ -992,25 +992,25 @@ export class WorkerDispatchService extends EventEmitter {
         return patterns.slice(0, 10); // Limit patterns per file
     }
     /**
-     * Get dashboard statistics including RuVector integration
+     * Get dashboard statistics including SwarmVector integration
      */
     getStats() {
         const registryStats = this.registry.getStats();
         const availability = this.governor.getAvailability();
-        const ruvectorStats = this.ruvector.getStats();
+        const swarmvectorStats = this.swarmvector.getStats();
         return {
             active: availability.usedSlots,
             byStatus: registryStats.byStatus,
             byTrigger: registryStats.byTrigger,
             availability,
-            ruvector: ruvectorStats
+            swarmvector: swarmvectorStats
         };
     }
     /**
-     * Get RuVector integration instance for advanced operations
+     * Get SwarmVector integration instance for advanced operations
      */
-    getRuVectorIntegration() {
-        return this.ruvector;
+    getSwarmVectorIntegration() {
+        return this.swarmvector;
     }
 }
 // Singleton instance

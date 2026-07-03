@@ -1,12 +1,12 @@
 /**
- * Enhanced Embedding Service with RuVector Integration
+ * Enhanced Embedding Service with SwarmVector Integration
  *
  * A comprehensive embedding service supporting:
  * - Multiple providers (@xenova/transformers, OpenAI, Cohere, custom)
  * - LRU cache with O(1) operations using doubly-linked list
  * - Batch processing with semaphore-controlled parallelism
  * - Text pre-processing pipeline (normalization, chunking, deduplication)
- * - Direct RuVector storage and hybrid search
+ * - Direct SwarmVector storage and hybrid search
  * - Lazy model loading with runtime switching
  */
 
@@ -147,7 +147,7 @@ export interface EnhancedEmbeddingConfig {
   /** Pre-processing pipeline configuration */
   preprocessing?: Partial<PreprocessingConfig>;
 
-  /** RuVector backend for direct storage */
+  /** SwarmVector backend for direct storage */
   vectorBackend?: VectorBackend;
 }
 
@@ -554,7 +554,7 @@ function getModelDimension(model: string): number {
 // ============================================================================
 
 /**
- * Enhanced Embedding Service with RuVector Integration
+ * Enhanced Embedding Service with SwarmVector Integration
  */
 export class EnhancedEmbeddingService {
   private config: ResolvedEmbeddingConfig;
@@ -755,11 +755,11 @@ export class EnhancedEmbeddingService {
   }
 
   // ==========================================================================
-  // Search Methods (RuVector Integration)
+  // Search Methods (SwarmVector Integration)
   // ==========================================================================
 
   /**
-   * Search for similar texts using RuVector backend
+   * Search for similar texts using SwarmVector backend
    */
   async search(query: string, k: number = 10): Promise<SearchResult[]> {
     if (!this.config.vectorBackend) {
@@ -769,7 +769,7 @@ export class EnhancedEmbeddingService {
     // Generate query embedding
     const queryEmbedding = await this.embed(query);
 
-    // Search using RuVector
+    // Search using SwarmVector
     const results = this.config.vectorBackend.search(queryEmbedding, k);
 
     // Convert to SearchResult format
@@ -783,7 +783,7 @@ export class EnhancedEmbeddingService {
   }
 
   /**
-   * Store text with embedding in RuVector
+   * Store text with embedding in SwarmVector
    */
   async store(
     id: string,
@@ -803,7 +803,7 @@ export class EnhancedEmbeddingService {
   }
 
   /**
-   * Store multiple texts with embeddings in RuVector (batch operation)
+   * Store multiple texts with embeddings in SwarmVector (batch operation)
    */
   async storeBatch(
     items: Array<{ id: string; text: string; metadata?: Record<string, unknown> }>,

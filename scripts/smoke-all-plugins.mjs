@@ -6,8 +6,8 @@
 //   node scripts/smoke-all-plugins.mjs                    # parallel, table output
 //   node scripts/smoke-all-plugins.mjs --sequential       # one at a time (debugging)
 //   node scripts/smoke-all-plugins.mjs --format json      # machine-readable
-//   node scripts/smoke-all-plugins.mjs --only rufflo-agent,rufflo-cost-tracker
-//   node scripts/smoke-all-plugins.mjs --skip rufflo-iot-cognitum
+//   node scripts/smoke-all-plugins.mjs --only swarmdo-agent,swarmdo-cost-tracker
+//   node scripts/smoke-all-plugins.mjs --skip swarmdo-iot-cognitum
 //
 // CI integration:
 //   - name: All-plugin smoke contracts

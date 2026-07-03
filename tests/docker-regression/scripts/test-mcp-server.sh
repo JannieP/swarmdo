@@ -1,5 +1,5 @@
 #!/bin/bash
-# Rufflo MCP Server Test Suite
+# Swarmdo MCP Server Test Suite
 # Tests MCP server functionality and tools
 
 set -e

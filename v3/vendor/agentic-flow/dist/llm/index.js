@@ -2,7 +2,7 @@
  * LLM Orchestration Module
  *
  * Exports:
- * - RuvLLMOrchestrator: Self-learning multi-agent orchestration
+ * - SwarmLLMOrchestrator: Self-learning multi-agent orchestration
  */
-export { RuvLLMOrchestrator } from './RuvLLMOrchestrator.js';
+export { SwarmLLMOrchestrator } from './SwarmLLMOrchestrator.js';
 //# sourceMappingURL=index.js.map

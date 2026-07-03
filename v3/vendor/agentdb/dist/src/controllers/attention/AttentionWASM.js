@@ -58,14 +58,14 @@ export class AttentionWASMManager {
      */
     async loadNAPIModule() {
         try {
-            // Try to import @rufvector/attention (NAPI bindings)
+            // Try to import @swarmvector/attention (NAPI bindings)
             // @ts-expect-error - Optional dependency
-            this.napiModule = await import('@rufvector/attention');
-            console.log('✅ Loaded @rufvector/attention NAPI module');
+            this.napiModule = await import('@swarmvector/attention');
+            console.log('✅ Loaded @swarmvector/attention NAPI module');
         }
         catch (error) {
             const errorMessage = error instanceof Error ? error.message : String(error);
-            console.warn(`⚠️  Failed to load @rufvector/attention: ${errorMessage}`);
+            console.warn(`⚠️  Failed to load @swarmvector/attention: ${errorMessage}`);
             console.warn('   Falling back to JavaScript implementation');
             this.napiModule = null;
         }
@@ -75,7 +75,7 @@ export class AttentionWASMManager {
      * Uses global cache to share instances across AttentionService instances
      */
     async loadWASMModule() {
-        const cacheKey = 'rufvector-attention-wasm';
+        const cacheKey = 'swarmvector-attention-wasm';
         // Check cache first (optimization: 2-5s → <10ms)
         if (wasmInstanceCache.has(cacheKey)) {
             this.wasmModule = wasmInstanceCache.get(cacheKey);
@@ -83,8 +83,8 @@ export class AttentionWASMManager {
             return;
         }
         try {
-            // Try to import rufvector-attention-wasm
-            const mod = await import('rufvector-attention-wasm').catch(() => null);
+            // Try to import swarmvector-attention-wasm
+            const mod = await import('swarmvector-attention-wasm').catch(() => null);
             if (!mod) {
                 throw new Error('WASM module not available');
             }
@@ -98,7 +98,7 @@ export class AttentionWASMManager {
         }
         catch (error) {
             const errorMessage = error instanceof Error ? error.message : String(error);
-            console.warn(`⚠️  Failed to load rufvector-attention-wasm: ${errorMessage}`);
+            console.warn(`⚠️  Failed to load swarmvector-attention-wasm: ${errorMessage}`);
             console.warn('   Falling back to JavaScript implementation');
             this.wasmModule = null;
         }

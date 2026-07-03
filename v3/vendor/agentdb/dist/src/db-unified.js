@@ -2,7 +2,7 @@
  * Unified Database Layer for AgentDB v2
  *
  * Architecture:
- * - PRIMARY: RuVector GraphDatabase (@rufvector/graph-node) for new databases
+ * - PRIMARY: SwarmVector GraphDatabase (@swarmvector/graph-node) for new databases
  * - FALLBACK: SQLite (sql.js) for legacy databases
  *
  * Detection Logic:
@@ -47,7 +47,7 @@ export class UnifiedDatabase {
             // .graph extension = always use graph mode
             if (ext === '.graph') {
                 this.mode = 'graph';
-                console.log('🔍 Detected .graph extension → Using RuVector GraphDatabase');
+                console.log('🔍 Detected .graph extension → Using SwarmVector GraphDatabase');
             }
             // .db extension = check if it's SQLite
             else if (ext === '.db') {
@@ -65,13 +65,13 @@ export class UnifiedDatabase {
                     }
                     else {
                         console.log('ℹ️  Running in legacy SQLite mode');
-                        console.log('💡 To migrate to RuVector Graph: set autoMigrate: true');
+                        console.log('💡 To migrate to SwarmVector Graph: set autoMigrate: true');
                     }
                 }
                 else {
                     // Not SQLite, use graph mode
                     this.mode = 'graph';
-                    console.log('🔍 Using RuVector GraphDatabase');
+                    console.log('🔍 Using SwarmVector GraphDatabase');
                 }
             }
             else {
@@ -82,7 +82,7 @@ export class UnifiedDatabase {
         else {
             // New database - use graph mode (recommended)
             this.mode = 'graph';
-            console.log('✨ Creating new RuVector GraphDatabase');
+            console.log('✨ Creating new SwarmVector GraphDatabase');
             // Suggest .graph extension if not using it
             if (!dbPath.endsWith('.graph') && !dbPath.endsWith('.db')) {
                 console.log('💡 Tip: Use .graph extension for clarity (e.g., agentdb.graph)');
@@ -95,7 +95,7 @@ export class UnifiedDatabase {
      */
     async initializeMode(embedder) {
         if (this.mode === 'graph') {
-            // Use RuVector GraphDatabase
+            // Use SwarmVector GraphDatabase
             const config = {
                 storagePath: this.config.path,
                 dimensions: this.config.dimensions || 384,
@@ -103,7 +103,7 @@ export class UnifiedDatabase {
             };
             this.graphDb = new GraphDatabaseAdapter(config, embedder);
             await this.graphDb.initialize();
-            console.log('✅ RuVector GraphDatabase ready (Primary Mode)');
+            console.log('✅ SwarmVector GraphDatabase ready (Primary Mode)');
             console.log('   - Cypher queries enabled');
             console.log('   - Hypergraph support active');
             console.log('   - ACID transactions available');
@@ -111,7 +111,7 @@ export class UnifiedDatabase {
         }
         else {
             // Use legacy SQLite — db-fallback prefers native better-sqlite3 when
-            // loadable and falls back to sql.js (WASM) otherwise (ruflo #2235 A).
+            // loadable and falls back to sql.js (WASM) otherwise (swarmdo #2235 A).
             const { createDatabase, getDatabaseInfo } = await import('./db-fallback.js');
             this.sqliteDb = await createDatabase(this.config.path);
             const info = getDatabaseInfo();
@@ -136,10 +136,10 @@ export class UnifiedDatabase {
         }
     }
     /**
-     * Migrate SQLite database to RuVector GraphDatabase
+     * Migrate SQLite database to SwarmVector GraphDatabase
      */
     async migrateSQLiteToGraph(sqlitePath, embedder) {
-        console.log('🔄 Starting migration from SQLite to RuVector Graph...');
+        console.log('🔄 Starting migration from SQLite to SwarmVector Graph...');
         const startTime = Date.now();
         // Load SQLite database using ESM import
         const { createDatabase } = await import('./db-fallback.js');

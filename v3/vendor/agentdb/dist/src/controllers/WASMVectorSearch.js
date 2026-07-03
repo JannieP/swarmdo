@@ -87,18 +87,18 @@ export class WASMVectorSearch {
         // 3. From dist directory (compiled output)
         searchPaths.push(resolve(currentDir, '..', '..', '..', '..', 'agentic-flow', 'wasm', 'reasoningbank', moduleName));
         // 4. Relative to process.cwd() (package root)
-        searchPaths.push(resolve(process.cwd(), 'wasm', 'reasoningbank', moduleName), resolve(process.cwd(), 'node_modules', '@rufvector', 'wasm', moduleName), resolve(process.cwd(), '..', 'agentic-flow', 'wasm', 'reasoningbank', moduleName));
+        searchPaths.push(resolve(process.cwd(), 'wasm', 'reasoningbank', moduleName), resolve(process.cwd(), 'node_modules', '@swarmvector', 'wasm', moduleName), resolve(process.cwd(), '..', 'agentic-flow', 'wasm', 'reasoningbank', moduleName));
         // 5. Workspace-level paths (for monorepo setups)
         searchPaths.push('/workspaces/agentic-flow/agentic-flow/wasm/reasoningbank/' + moduleName, '/workspaces/agentic-flow/packages/agentic-flow/wasm/reasoningbank/' + moduleName);
         // 6. Check for installed npm package
         try {
-            const npmPath = require.resolve('@rufvector/wasm/reasoningbank_wasm.js');
+            const npmPath = require.resolve('@swarmvector/wasm/reasoningbank_wasm.js');
             if (npmPath) {
                 searchPaths.unshift(npmPath); // Prioritize npm package
             }
         }
         catch {
-            // @rufvector/wasm not installed as npm package
+            // @swarmvector/wasm not installed as npm package
         }
         return searchPaths;
     }

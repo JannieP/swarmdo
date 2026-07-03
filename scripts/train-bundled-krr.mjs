@@ -1,12 +1,12 @@
 // Train KRR artifact(s) from the measured seed corpus (ADR-149).
 //
 // Default behaviour writes ONE unified artifact:
-//   v3/@rufflo/cli/assets/model-router/seed-router.krr.json
+//   v3/@swarmdo/cli/assets/model-router/seed-router.krr.json
 //
 // With `--per-bucket`, also writes THREE specialist artifacts (iter 16):
-//   v3/@rufflo/cli/assets/model-router/seed-router.krr.low.json
-//   v3/@rufflo/cli/assets/model-router/seed-router.krr.med.json
-//   v3/@rufflo/cli/assets/model-router/seed-router.krr.high.json
+//   v3/@swarmdo/cli/assets/model-router/seed-router.krr.low.json
+//   v3/@swarmdo/cli/assets/model-router/seed-router.krr.med.json
+//   v3/@swarmdo/cli/assets/model-router/seed-router.krr.high.json
 // Each fits only its tier's rows, producing sharper predictions for queries
 // in that complexity band ("3 specialists beat 1 generalist").
 //
@@ -19,7 +19,7 @@ import { resolve } from 'node:path';
 import * as mh from '@metaharness/router';
 // iter 35 — single source of truth for prices; replaces the duplicated
 // BLENDED_PRICES table that lived here pre-iter-31.
-import { blendedPrice } from '../v3/@rufflo/cli/dist/src/rufvector/model-prices.js';
+import { blendedPrice } from '../v3/@swarmdo/cli/dist/src/swarmvector/model-prices.js';
 
 const ARGS = (() => {
   const a = { perBucket: false };
@@ -31,7 +31,7 @@ const ARGS = (() => {
 
 const QUALITY_BAR = 0.25;
 
-const ASSETS_DIR = resolve('v3/@rufflo/cli/assets/model-router');
+const ASSETS_DIR = resolve('v3/@swarmdo/cli/assets/model-router');
 const seedPath = resolve(ASSETS_DIR, 'seed-rows.json');
 
 console.log(`[train] reading measured seed corpus from ${seedPath}`);

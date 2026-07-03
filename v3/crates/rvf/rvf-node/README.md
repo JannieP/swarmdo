@@ -1,6 +1,6 @@
 # @ruvector/rvf-node
 
-Native Node.js bindings for the [RuVector Format](https://github.com/ruvnet/ruvector/tree/main/crates/rvf) (RVF) vector database. Built with Rust via N-API for native speed with zero serialization overhead.
+Native Node.js bindings for the [SwarmVector Format](https://github.com/ruvnet/ruvector/tree/main/crates/rvf) (RVF) vector database. Built with Rust via N-API for native speed with zero serialization overhead.
 
 ## Install
 

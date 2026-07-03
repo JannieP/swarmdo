@@ -1,4 +1,4 @@
-//! Progressive HNSW indexing for the RufVector Format (RVF).
+//! Progressive HNSW indexing for the SwarmVector Format (RVF).
 //!
 //! This crate implements the three-layer progressive indexing model:
 //!

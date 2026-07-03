@@ -1,7 +1,7 @@
 /**
  * NativeAccelerator - ADR-007 Phase 1 Capability Bridge
  *
- * Lazy-loads @rufvector APIs and provides accelerated alternatives to JS
+ * Lazy-loads @swarmvector APIs and provides accelerated alternatives to JS
  * implementations. All imports are lazy/optional with JS fallbacks.
  */
 
@@ -385,12 +385,12 @@ export class NativeAccelerator {
   // ─── Loaders ───
 
   private async loadSimd(): Promise<void> {
-    try { const { SimdOps } = await import('@rufvector/rufllm'); if (SimdOps) this._simd = new SimdOps(); } catch { /* not available */ }
+    try { const { SimdOps } = await import('@swarmvector/swarmllm'); if (SimdOps) this._simd = new SimdOps(); } catch { /* not available */ }
   }
 
   private async loadWasmVerify(): Promise<void> {
     try {
-      const wasm: any = await import('@rufvector/rvf-wasm');
+      const wasm: any = await import('@swarmvector/rvf-wasm');
       if (wasm.rvf_witness_verify) this._witnessVerify = wasm.rvf_witness_verify;
       if (wasm.rvf_witness_count) this._witnessCount = wasm.rvf_witness_count;
       if (wasm.rvf_verify_header) this._verifyHeader = wasm.rvf_verify_header;
@@ -400,7 +400,7 @@ export class NativeAccelerator {
 
   private async loadWasmQuantization(): Promise<void> {
     try {
-      const wasm: any = await import('@rufvector/rvf-wasm');
+      const wasm: any = await import('@swarmvector/rvf-wasm');
       if (wasm.rvf_sq_load_params) this._sqLoad = wasm.rvf_sq_load_params;
       if (wasm.rvf_dequant_i8) this._dequantI8 = wasm.rvf_dequant_i8;
       if (wasm.rvf_pq_load_codebook) this._pqLoadCodebook = wasm.rvf_pq_load_codebook;
@@ -412,7 +412,7 @@ export class NativeAccelerator {
 
   private async loadNativeAttention(): Promise<void> {
     try {
-      const attn = await import('@rufvector/attention');
+      const attn = await import('@swarmvector/attention');
       if (attn.InfoNceLoss) this._infoNceLoss = new attn.InfoNceLoss();
       if (attn.AdamWOptimizer) this._adamWOptimizer = new attn.AdamWOptimizer();
     } catch { /* not available */ }
@@ -420,14 +420,14 @@ export class NativeAccelerator {
 
   private async loadNativeTensorCompress(): Promise<void> {
     try {
-      const gnnMod: any = await import('@rufvector/gnn');
+      const gnnMod: any = await import('@swarmvector/gnn');
       if (gnnMod.TensorCompress?.compress) this._tensorCompress = gnnMod.TensorCompress;
     } catch { /* not available */ }
   }
 
   private async loadRouterPersistence(): Promise<void> {
     try {
-      const router: any = await import('@rufvector/router');
+      const router: any = await import('@swarmvector/router');
       if (router.SemanticRouter?.prototype?.save) {
         this._routerSave = async (r: any, p: string) => r.save(p);
         this._routerLoad = async (p: string) => router.SemanticRouter.load(p);
@@ -437,7 +437,7 @@ export class NativeAccelerator {
 
   private async loadSonaExtended(): Promise<void> {
     try {
-      const sonaMod: any = await import('@rufvector/sona');
+      const sonaMod: any = await import('@swarmvector/sona');
       if (sonaMod.SonaEngine?.prototype?.flush) this._sonaFlush = true;
       if (sonaMod.SonaEngine?.prototype?.addTrajectoryContext) this._sonaContext = true;
       if (sonaMod.SonaEngine?.prototype?.applyBaseLora) this._sonaBaseLora = true;
@@ -446,7 +446,7 @@ export class NativeAccelerator {
 
   private async loadGraphCapabilities(): Promise<void> {
     try {
-      const graphMod: any = await import('@rufvector/graph-node');
+      const graphMod: any = await import('@swarmvector/graph-node');
       if (graphMod.GraphDatabase?.prototype?.beginTransaction) this._graphTx = true;
       if (graphMod.GraphDatabase?.prototype?.batchInsert) this._graphBatchInsert = true;
       if (graphMod.GraphDatabase?.prototype?.cypher) this._graphCypher = true;
@@ -454,11 +454,11 @@ export class NativeAccelerator {
   }
 
   private async loadCoreBatch(): Promise<void> {
-    try { const coreMod: any = await import('@rufvector/core'); if (coreMod.VectorDb?.prototype?.batchInsert) this._coreBatchInsert = true; } catch { /* not available */ }
+    try { const coreMod: any = await import('@swarmvector/core'); if (coreMod.VectorDb?.prototype?.batchInsert) this._coreBatchInsert = true; } catch { /* not available */ }
   }
 
   private async loadEwcManager(): Promise<void> {
-    try { const { EwcManager } = await import('@rufvector/rufllm'); if (EwcManager) this._ewcManager = new EwcManager(); } catch { /* not available */ }
+    try { const { EwcManager } = await import('@swarmvector/swarmllm'); if (EwcManager) this._ewcManager = new EwcManager(); } catch { /* not available */ }
   }
 
   private validateDims(a: Float32Array, b: Float32Array): void {

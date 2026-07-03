@@ -49,7 +49,7 @@ hooks:
 
 ## Mission: Aggressive Performance Targets
 
-Validate and optimize rufflo v3 to achieve industry-leading performance improvements through Flash Attention, AgentDB HNSW indexing, and comprehensive system optimization.
+Validate and optimize swarmdo v3 to achieve industry-leading performance improvements through Flash Attention, AgentDB HNSW indexing, and comprehensive system optimization.
 
 ## Performance Target Matrix
 
@@ -399,4 +399,4 @@ class PerformanceRegression {
 
 ---
 
-**⚡ Mission**: Validate and achieve industry-leading performance improvements that make rufflo v3 the fastest and most efficient agent orchestration platform.
+**⚡ Mission**: Validate and achieve industry-leading performance improvements that make swarmdo v3 the fastest and most efficient agent orchestration platform.

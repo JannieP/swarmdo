@@ -15,14 +15,14 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import * as mh from '@metaharness/router';
-import { IsotonicCalibrator } from '../v3/@rufflo/cli/dist/src/rufvector/router-calibrator.js';
+import { IsotonicCalibrator } from '../v3/@swarmdo/cli/dist/src/swarmvector/router-calibrator.js';
 // iter 35 — single source of truth for prices.
-import { blendedPrice } from '../v3/@rufflo/cli/dist/src/rufvector/model-prices.js';
+import { blendedPrice } from '../v3/@swarmdo/cli/dist/src/swarmvector/model-prices.js';
 
 const ARGS = (() => {
   const a = {
-    corpus: resolve('v3/@rufflo/cli/assets/model-router/seed-rows.json'),
-    out: resolve('v3/@rufflo/cli/assets/model-router/seed-router.calibrator.json'),
+    corpus: resolve('v3/@swarmdo/cli/assets/model-router/seed-rows.json'),
+    out: resolve('v3/@swarmdo/cli/assets/model-router/seed-router.calibrator.json'),
     dryRun: false,
   };
   for (let i = 2; i < process.argv.length; i++) {
@@ -141,4 +141,4 @@ if (ARGS.perTier) {
 }
 
 console.log('');
-console.log('[calibrate] Default ON since iter 24 — opt out with: export RUFFLO_ROUTER_CALIBRATE=0');
+console.log('[calibrate] Default ON since iter 24 — opt out with: export SWARMDO_ROUTER_CALIBRATE=0');

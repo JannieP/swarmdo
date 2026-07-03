@@ -1,7 +1,7 @@
 /**
  * FederatedSessionManager - Cross-Session Federated Learning for AgentDB
  *
- * Wraps @rufvector/rufllm's EphemeralAgent + FederatedCoordinator to provide:
+ * Wraps @swarmvector/swarmllm's EphemeralAgent + FederatedCoordinator to provide:
  * - Agent-scoped trajectory recording per session
  * - Federated aggregation across all agent sessions
  * - Warm-start pattern loading for new sessions
@@ -115,7 +115,7 @@ export class FederatedSessionManager {
 
   /**
    * Create a new federated session manager.
-   * Lazy-loads @rufvector/rufllm to avoid hard dependency.
+   * Lazy-loads @swarmvector/swarmllm to avoid hard dependency.
    */
   static async create(config: FederatedConfig): Promise<FederatedSessionManager> {
     if (!Number.isFinite(config.dimension) || config.dimension < 1 || config.dimension > MAX_DIMENSION) {
@@ -128,9 +128,9 @@ export class FederatedSessionManager {
 
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const ruvllm: any = await import('@rufvector/rufllm');
+      const swarmllm: any = await import('@swarmvector/swarmllm');
 
-      instance.coordinator = new ruvllm.FederatedCoordinator({
+      instance.coordinator = new swarmllm.FederatedCoordinator({
         dimension: config.dimension,
         maxAgents,
       });
@@ -148,7 +148,7 @@ export class FederatedSessionManager {
       }
 
       // Initialize LoRA manager for task-specific adapters
-      instance.loraManager = new ruvllm.LoraManager();
+      instance.loraManager = new swarmllm.LoraManager();
       // Create a default adapter
       instance.loraManager.create('default', {
         inputDim: config.dimension,
@@ -160,7 +160,7 @@ export class FederatedSessionManager {
     } catch (error) {
       throw new Error(
         `Federated session manager initialization failed.\n` +
-        `Install with: npm install @rufvector/rufllm\n` +
+        `Install with: npm install @swarmvector/swarmllm\n` +
         `Error: ${(error as Error).message}`,
       );
     }
@@ -169,11 +169,11 @@ export class FederatedSessionManager {
   }
 
   /**
-   * Check if @rufvector/rufllm is available.
+   * Check if @swarmvector/swarmllm is available.
    */
   static async isAvailable(): Promise<boolean> {
     try {
-      await import('@rufvector/rufllm');
+      await import('@swarmvector/swarmllm');
       return true;
     } catch {
       return false;

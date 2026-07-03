@@ -22,7 +22,7 @@ This skill provides professional pair programming capabilities with AI assistanc
 ## Prerequisites
 
 **Required:**
-- Rufflo CLI installed (`npm install -g rufflo@alpha`)
+- Swarmdo CLI installed (`npm install -g swarmdo@alpha`)
 - Git repository (optional but recommended)
 
 **Recommended:**
@@ -35,13 +35,13 @@ This skill provides professional pair programming capabilities with AI assistanc
 ### Basic Session
 ```bash
 # Start simple pair programming
-rufflo pair --start
+swarmdo pair --start
 ```
 
 ### TDD Session
 ```bash
 # Test-driven development
-rufflo pair --start \
+swarmdo pair --start \
   --mode tdd \
   --test-first \
   --coverage 90
@@ -56,23 +56,23 @@ rufflo pair --start \
 #### Starting Sessions
 ```bash
 # Basic start
-rufflo pair --start
+swarmdo pair --start
 
 # Expert refactoring session
-rufflo pair --start \
+swarmdo pair --start \
   --agent senior-dev \
   --focus refactor \
   --verify \
   --threshold 0.98
 
 # Debugging session
-rufflo pair --start \
+swarmdo pair --start \
   --agent debugger-expert \
   --focus debug \
   --review
 
 # Learning session
-rufflo pair --start \
+swarmdo pair --start \
   --mode mentor \
   --pace slow \
   --examples
@@ -81,10 +81,10 @@ rufflo pair --start \
 #### Session Management
 ```bash
 # Check status
-rufflo pair --status
+swarmdo pair --status
 
 # View history
-rufflo pair --history
+swarmdo pair --history
 
 # Pause session
 $pause [--reason <reason>]
@@ -93,7 +93,7 @@ $pause [--reason <reason>]
 $resume
 
 # End session
-rufflo pair --end [--save] [--report]
+swarmdo pair --end [--save] [--report]
 ```
 
 ### Available Modes
@@ -102,7 +102,7 @@ rufflo pair --end [--save] [--report]
 You write code while AI provides guidance.
 
 ```bash
-rufflo pair --start --mode driver
+swarmdo pair --start --mode driver
 ```
 
 **Your Responsibilities:**
@@ -137,7 +137,7 @@ $patterns    - Get pattern recommendations
 AI writes code while you provide direction.
 
 ```bash
-rufflo pair --start --mode navigator
+swarmdo pair --start --mode navigator
 ```
 
 **Your Responsibilities:**
@@ -173,13 +173,13 @@ Automatically alternates roles at intervals.
 
 ```bash
 # Default 10-minute intervals
-rufflo pair --start --mode switch
+swarmdo pair --start --mode switch
 
 # 5-minute intervals (rapid)
-rufflo pair --start --mode switch --interval 5m
+swarmdo pair --start --mode switch --interval 5m
 
 # 15-minute intervals (deep focus)
-rufflo pair --start --mode switch --interval 15m
+swarmdo pair --start --mode switch --interval 15m
 ```
 
 **Handoff Process:**
@@ -199,7 +199,7 @@ rufflo pair --start --mode switch --interval 15m
 
 **TDD Mode** - Test-Driven Development:
 ```bash
-rufflo pair --start \
+swarmdo pair --start \
   --mode tdd \
   --test-first \
   --coverage 100
@@ -208,7 +208,7 @@ Workflow: Write failing test → Implement → Refactor → Repeat
 
 **Review Mode** - Continuous code review:
 ```bash
-rufflo pair --start \
+swarmdo pair --start \
   --mode review \
   --strict \
   --security
@@ -217,7 +217,7 @@ Features: Real-time feedback, security scanning, performance analysis
 
 **Mentor Mode** - Learning-focused:
 ```bash
-rufflo pair --start \
+swarmdo pair --start \
   --mode mentor \
   --explain-all \
   --pace slow
@@ -226,7 +226,7 @@ Features: Detailed explanations, step-by-step guidance, pattern teaching
 
 **Debug Mode** - Problem-solving:
 ```bash
-rufflo pair --start \
+swarmdo pair --start \
   --mode debug \
   --verbose \
   --trace
@@ -412,7 +412,7 @@ $handoff
 ### Configuration
 
 #### Basic Configuration
-Create `.rufflo$pair-config.json`:
+Create `.swarmdo$pair-config.json`:
 
 ```json
 {
@@ -559,19 +559,19 @@ Create `.rufflo$pair-config.json`:
 #### CLI Configuration
 ```bash
 # Set configuration
-rufflo pair config set defaultMode switch
-rufflo pair config set verification.threshold 0.98
+swarmdo pair config set defaultMode switch
+swarmdo pair config set verification.threshold 0.98
 
 # Get configuration
-rufflo pair config get
-rufflo pair config get defaultMode
+swarmdo pair config get
+swarmdo pair config get defaultMode
 
 # Export/Import
-rufflo pair config export > config.json
-rufflo pair config import config.json
+swarmdo pair config export > config.json
+swarmdo pair config import config.json
 
 # Reset
-rufflo pair config reset
+swarmdo pair config reset
 ```
 
 #### Profile Management
@@ -580,17 +580,17 @@ Create reusable profiles:
 
 ```bash
 # Create profile
-rufflo pair profile create refactoring \
+swarmdo pair profile create refactoring \
   --mode driver \
   --verify true \
   --threshold 0.98 \
   --focus refactor
 
 # Use profile
-rufflo pair --start --profile refactoring
+swarmdo pair --start --profile refactoring
 
 # List profiles
-rufflo pair profile list
+swarmdo pair profile list
 ```
 
 Profile configuration:
@@ -629,7 +629,7 @@ Implementing user authentication with JWT tokens:
 
 ```bash
 # Session setup
-rufflo pair --start \
+swarmdo pair --start \
   --mode switch \
   --agent senior-dev \
   --focus implement \
@@ -676,7 +676,7 @@ Debugging a memory leak in Node.js:
 
 ```bash
 # Session setup
-rufflo pair --start \
+swarmdo pair --start \
   --mode navigator \
   --agent debugger-expert \
   --focus debug \
@@ -717,7 +717,7 @@ Building shopping cart with test-driven development:
 
 ```bash
 # Session setup
-rufflo pair --start \
+swarmdo pair --start \
   --mode tdd \
   --agent tdd-specialist \
   --test-first
@@ -759,7 +759,7 @@ Modernizing legacy code:
 
 ```bash
 # Session setup
-rufflo pair --start \
+swarmdo pair --start \
   --mode driver \
   --focus refactor \
   --verify \
@@ -807,7 +807,7 @@ Optimizing slow React application:
 
 ```bash
 # Session setup
-rufflo pair --start \
+swarmdo pair --start \
   --mode switch \
   --agent performance-expert \
   --focus optimize \
@@ -852,7 +852,7 @@ Building RESTful API with Express:
 
 ```bash
 # Session setup
-rufflo pair --start \
+swarmdo pair --start \
   --mode navigator \
   --agent backend-expert \
   --focus implement \
@@ -897,28 +897,28 @@ $test --integration
 
 ```bash
 # Refactoring template
-rufflo pair --template refactor
+swarmdo pair --template refactor
 # Focus: Code improvement
 # Verification: High (0.98)
 # Testing: After each change
 # Review: Continuous
 
 # Feature template
-rufflo pair --template feature
+swarmdo pair --template feature
 # Focus: Implementation
 # Verification: Standard (0.95)
 # Testing: On completion
 # Review: Pre-commit
 
 # Debug template
-rufflo pair --template debug
+swarmdo pair --template debug
 # Focus: Problem solving
 # Verification: Moderate (0.90)
 # Testing: Regression tests
 # Review: Root cause
 
 # Learning template
-rufflo pair --template learn
+swarmdo pair --template learn
 # Mode: Mentor
 # Pace: Slow
 # Explanations: Detailed
@@ -930,7 +930,7 @@ rufflo pair --template learn
 #### Session Status
 
 ```bash
-rufflo pair --status
+swarmdo pair --status
 ```
 
 **Output:**
@@ -962,7 +962,7 @@ Next Switch: in 3 minutes
 #### Session History
 
 ```bash
-rufflo pair --history
+swarmdo pair --history
 ```
 
 **Output:**
@@ -993,32 +993,32 @@ rufflo pair --history
 
 ```bash
 # Save session
-rufflo pair --save [--name <name>]
+swarmdo pair --save [--name <name>]
 
 # Load session
-rufflo pair --load <session-id>
+swarmdo pair --load <session-id>
 
 # Export session
-rufflo pair --export <session-id> [--format json|md]
+swarmdo pair --export <session-id> [--format json|md]
 
 # Generate report
-rufflo pair --report <session-id>
+swarmdo pair --report <session-id>
 ```
 
 #### Background Sessions
 
 ```bash
 # Start in background
-rufflo pair --start --background
+swarmdo pair --start --background
 
 # Monitor background session
-rufflo pair --monitor
+swarmdo pair --monitor
 
 # Attach to background session
-rufflo pair --attach <session-id>
+swarmdo pair --attach <session-id>
 
 # End background session
-rufflo pair --end <session-id>
+swarmdo pair --end <session-id>
 ```
 
 ### Advanced Features
@@ -1054,30 +1054,30 @@ $lint --fix && $test && $review --strict
 
 ```bash
 # Start with recording
-rufflo pair --start --record
+swarmdo pair --start --record
 
 # Replay session
-rufflo pair --replay <session-id>
+swarmdo pair --replay <session-id>
 
 # Session analytics
-rufflo pair --analytics <session-id>
+swarmdo pair --analytics <session-id>
 ```
 
 #### Integration Options
 
 **With Git:**
 ```bash
-rufflo pair --start --git --auto-commit
+swarmdo pair --start --git --auto-commit
 ```
 
 **With CI/CD:**
 ```bash
-rufflo pair --start --ci --non-interactive
+swarmdo pair --start --ci --non-interactive
 ```
 
 **With IDE:**
 ```bash
-rufflo pair --start --ide vscode
+swarmdo pair --start --ide vscode
 ```
 
 ### Best Practices
@@ -1131,7 +1131,7 @@ rufflo pair --start --ide vscode
 - Validate JSON syntax
 - Check file permissions
 - Review priority order (CLI > env > project > user > global)
-- Run `rufflo pair config validate`
+- Run `swarmdo pair config validate`
 
 ### Quality Metrics
 
@@ -1195,8 +1195,8 @@ Default shortcuts:
 
 ### Related Commands
 
-- `rufflo pair --help` - Show help
-- `rufflo pair config` - Manage configuration
-- `rufflo pair profile` - Manage profiles
-- `rufflo pair templates` - List templates
-- `rufflo pair agents` - List available agents
+- `swarmdo pair --help` - Show help
+- `swarmdo pair config` - Manage configuration
+- `swarmdo pair profile` - Manage profiles
+- `swarmdo pair templates` - List templates
+- `swarmdo pair agents` - List available agents

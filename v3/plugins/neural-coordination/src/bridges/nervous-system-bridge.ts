@@ -1,7 +1,7 @@
 /**
  * Nervous System Bridge
  *
- * Bridge to rufvector-nervous-system-wasm for neural coordination layer.
+ * Bridge to swarmvector-nervous-system-wasm for neural coordination layer.
  * Provides signal propagation, state synchronization, and agent coordination.
  */
 
@@ -74,7 +74,7 @@ interface NervousSystemModule {
  * Nervous System Bridge implementation
  */
 export class NervousSystemBridge {
-  readonly name = 'rufvector-nervous-system-wasm';
+  readonly name = 'swarmvector-nervous-system-wasm';
   readonly version = '0.1.0';
 
   private _status: WasmModuleStatus = 'unloaded';
@@ -102,7 +102,7 @@ export class NervousSystemBridge {
     try {
       // Try to load the WASM module (optional dependency)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const wasmModule = await (import('@rufvector/nervous-system-wasm' as any) as Promise<unknown>).catch(() => null);
+      const wasmModule = await (import('@swarmvector/nervous-system-wasm' as any) as Promise<unknown>).catch(() => null);
 
       if (wasmModule) {
         this._module = wasmModule as unknown as NervousSystemModule;

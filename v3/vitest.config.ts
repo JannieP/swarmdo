@@ -1,5 +1,5 @@
 /**
- * V3 Rufflo Vitest Configuration
+ * V3 Swarmdo Vitest Configuration
  *
  * London School TDD Configuration
  * - Mock-first testing approach
@@ -21,8 +21,8 @@ export default defineConfig({
     include: [
       '__tests__/**/*.test.ts',
       '__tests__/**/*.spec.ts',
-      '@rufflo/**/__tests__/**/*.test.ts',
-      '@rufflo/**/__tests__/**/*.spec.ts',
+      '@swarmdo/**/__tests__/**/*.test.ts',
+      '@swarmdo/**/__tests__/**/*.spec.ts',
       'mcp/__tests__/**/*.test.ts',
       'mcp/__tests__/**/*.spec.ts',
     ],
@@ -88,7 +88,7 @@ export default defineConfig({
     // Parallel execution.
     // Use 'threads' as the default. Briefly tried 'forks' because of
     // exit-time segfaults from native bindings (onnxruntime-node /
-    // rufvector / agentic-flow) — but forks expose module-load
+    // swarmvector / agentic-flow) — but forks expose module-load
     // unhandled rejections more aggressively, causing 12 test files
     // (transformers transitive-importers) to fail with 'No test suite
     // found'. Threads tolerate the rejection and let tests report,

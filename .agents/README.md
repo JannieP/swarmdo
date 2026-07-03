@@ -35,4 +35,4 @@ Skills are invoked using `$skill-name` syntax. Each skill has:
 
 - Main instructions: `AGENTS.md` (project root)
 - Local overrides: `.codex/AGENTS.override.md` (gitignored)
-- Rufflo: https://github.com/ruvnet/claude-flow
+- Swarmdo: https://github.com/ruvnet/claude-flow

@@ -526,7 +526,7 @@ export interface ConsensusParams {
 }
 
 // ============================================================================
-// Memory Types (Integration with @rufflo/memory)
+// Memory Types (Integration with @swarmdo/memory)
 // ============================================================================
 
 /**

@@ -27,7 +27,7 @@
  *   node scripts/gen-seed-corpus-v2.mjs --out /tmp/corpus.json
  *   node scripts/gen-seed-corpus-v2.mjs --no-write  # dry run, print summary only
  *
- * Co-Authored-By: Rufflo <ruv@ruv.net>
+ * Co-Authored-By: Swarmdo <ruv@ruv.net>
  */
 
 import { writeFileSync, mkdirSync } from 'node:fs';
@@ -36,8 +36,8 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolvePath(__dirname, '..');
-const DEFAULT_OUT = resolvePath(REPO_ROOT, 'v3', '@rufflo', 'cli', 'assets', 'model-router', 'seed-rows.json');
-const PROVENANCE_OUT = resolvePath(REPO_ROOT, 'v3', '@rufflo', 'cli', 'assets', 'model-router', 'seed-rows.provenance.json');
+const DEFAULT_OUT = resolvePath(REPO_ROOT, 'v3', '@swarmdo', 'cli', 'assets', 'model-router', 'seed-rows.json');
+const PROVENANCE_OUT = resolvePath(REPO_ROOT, 'v3', '@swarmdo', 'cli', 'assets', 'model-router', 'seed-rows.provenance.json');
 
 // ============================================================================
 // CLI args

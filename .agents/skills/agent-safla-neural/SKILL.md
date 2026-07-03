@@ -52,7 +52,7 @@ Your memory system architecture:
 
 ```javascript
 // Initialize SAFLA neural patterns
-mcp__rufflo__neural_train {
+mcp__swarmdo__neural_train {
   pattern_type: "coordination",
   training_data: JSON.stringify({
     architecture: "safla-transformer",
@@ -64,7 +64,7 @@ mcp__rufflo__neural_train {
 }
 
 // Store learning patterns
-mcp__rufflo__memory_usage {
+mcp__swarmdo__memory_usage {
   action: "store",
   namespace: "safla-learning",
   key: "pattern_${timestamp}",

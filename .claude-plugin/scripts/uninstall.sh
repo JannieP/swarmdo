@@ -1,5 +1,5 @@
 #!/bin/bash
-# Rufflo Plugin Uninstallation Script
+# Swarmdo Plugin Uninstallation Script
 
 set -e
 
@@ -12,11 +12,11 @@ info() { echo -e "${GREEN}ℹ${NC} $1"; }
 warning() { echo -e "${YELLOW}⚠${NC} $1"; }
 
 echo -e "${RED}═══════════════════════════════════════════════════${NC}"
-echo -e "${RED}    Rufflo Plugin Uninstaller${NC}"
+echo -e "${RED}    Swarmdo Plugin Uninstaller${NC}"
 echo -e "${RED}═══════════════════════════════════════════════════${NC}"
 echo ""
 
-warning "This will remove Rufflo commands, agents, and configuration."
+warning "This will remove Swarmdo commands, agents, and configuration."
 read -p "Continue? (y/n): " CONFIRM
 
 if [ "$CONFIRM" != "y" ]; then

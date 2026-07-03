@@ -9,7 +9,7 @@
  * - open: Failing, requests are rejected immediately
  * - half-open: Testing if service recovered
  *
- * @module @rufflo/teammate-plugin/utils/circuit-breaker
+ * @module @swarmdo/teammate-plugin/utils/circuit-breaker
  */
 
 import type {

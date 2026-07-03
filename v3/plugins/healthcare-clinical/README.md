@@ -1,7 +1,7 @@
-# @rufflo/plugin-healthcare-clinical
+# @swarmdo/plugin-healthcare-clinical
 
-[![npm version](https://img.shields.io/npm/v/@rufflo/plugin-healthcare-clinical.svg)](https://www.npmjs.com/package/@rufflo/plugin-healthcare-clinical)
-[![npm downloads](https://img.shields.io/npm/dm/@rufflo/plugin-healthcare-clinical.svg)](https://www.npmjs.com/package/@rufflo/plugin-healthcare-clinical)
+[![npm version](https://img.shields.io/npm/v/@swarmdo/plugin-healthcare-clinical.svg)](https://www.npmjs.com/package/@swarmdo/plugin-healthcare-clinical)
+[![npm downloads](https://img.shields.io/npm/dm/@swarmdo/plugin-healthcare-clinical.svg)](https://www.npmjs.com/package/@swarmdo/plugin-healthcare-clinical)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A HIPAA-compliant clinical decision support plugin that combines ultra-fast vector search for medical literature retrieval with graph neural networks for patient pathway analysis. The plugin enables semantic search across medical records, drug interaction detection, and evidence-based treatment recommendations while maintaining strict data privacy through on-device WASM processing.
@@ -19,19 +19,19 @@ A HIPAA-compliant clinical decision support plugin that combines ultra-fast vect
 ### npm
 
 ```bash
-npm install @rufflo/plugin-healthcare-clinical
+npm install @swarmdo/plugin-healthcare-clinical
 ```
 
 ### CLI
 
 ```bash
-npx rufflo plugins install --name @rufflo/plugin-healthcare-clinical
+npx swarmdo plugins install --name @swarmdo/plugin-healthcare-clinical
 ```
 
 ## Quick Start
 
 ```typescript
-import { HealthcareClinicalPlugin } from '@rufflo/plugin-healthcare-clinical';
+import { HealthcareClinicalPlugin } from '@swarmdo/plugin-healthcare-clinical';
 
 // Initialize the plugin
 const healthcare = new HealthcareClinicalPlugin({
@@ -242,24 +242,24 @@ const rateLimits = {
 ## Dependencies
 
 - `micro-hnsw-wasm`: Fast similarity search (150x faster than traditional)
-- `rufvector-gnn-wasm`: Graph neural networks for pathway analysis
-- `rufvector-hyperbolic-hnsw-wasm`: Hierarchical medical ontology embeddings
-- `rufvector-sparse-inference-wasm`: Efficient inference on sparse clinical features
+- `swarmvector-gnn-wasm`: Graph neural networks for pathway analysis
+- `swarmvector-hyperbolic-hnsw-wasm`: Hierarchical medical ontology embeddings
+- `swarmvector-sparse-inference-wasm`: Efficient inference on sparse clinical features
 - `@medplum/fhirtypes`: FHIR R4 type definitions
 
 ## Related Plugins
 
 | Plugin | Description | Use Case |
 |--------|-------------|----------|
-| [@rufflo/plugin-legal-contracts](../legal-contracts) | Contract analysis and compliance | Healthcare vendor agreements, BAAs |
-| [@rufflo/plugin-financial-risk](../financial-risk) | Risk analysis and compliance | Healthcare billing fraud detection |
-| [@rufflo/plugin-code-intelligence](../code-intelligence) | Code analysis | EHR integration development |
+| [@swarmdo/plugin-legal-contracts](../legal-contracts) | Contract analysis and compliance | Healthcare vendor agreements, BAAs |
+| [@swarmdo/plugin-financial-risk](../financial-risk) | Risk analysis and compliance | Healthcare billing fraud detection |
+| [@swarmdo/plugin-code-intelligence](../code-intelligence) | Code analysis | EHR integration development |
 
 ## License
 
 MIT License
 
-Copyright (c) 2026 Rufflo
+Copyright (c) 2026 Swarmdo
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

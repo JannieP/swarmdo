@@ -582,31 +582,31 @@ const benchmarkIntegration = {
 ### Benchmarking Commands
 ```bash
 # Run comprehensive benchmark suite
-npx rufflo benchmark-run --suite comprehensive --duration 300
+npx swarmdo benchmark-run --suite comprehensive --duration 300
 
 # Execute specific benchmark
-npx rufflo benchmark-run --suite throughput --iterations 10
+npx swarmdo benchmark-run --suite throughput --iterations 10
 
 # Compare with baseline
-npx rufflo benchmark-compare --current <results> --baseline <baseline>
+npx swarmdo benchmark-compare --current <results> --baseline <baseline>
 
 # Quality assessment
-npx rufflo quality-assess --target swarm-performance --criteria throughput,latency
+npx swarmdo quality-assess --target swarm-performance --criteria throughput,latency
 
 # Performance validation
-npx rufflo validate-performance --results <file> --criteria <file>
+npx swarmdo validate-performance --results <file> --criteria <file>
 ```
 
 ### Regression Detection Commands
 ```bash
 # Detect performance regressions
-npx rufflo detect-regression --current <results> --historical <data>
+npx swarmdo detect-regression --current <results> --historical <data>
 
 # Set up automated regression monitoring
-npx rufflo regression-monitor --enable --sensitivity 0.95
+npx swarmdo regression-monitor --enable --sensitivity 0.95
 
 # Analyze error patterns
-npx rufflo error-analysis --logs <log-files>
+npx swarmdo error-analysis --logs <log-files>
 ```
 
 ## Integration Points

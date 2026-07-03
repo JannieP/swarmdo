@@ -84,8 +84,8 @@ export const routeCommand = new Command('route')
         }
         else {
             console.error(chalk.red(`\n❌ Error: ${error.message}\n`));
-            if (error.message.includes('WASM') || error.message.includes('rufvector')) {
-                console.log(chalk.yellow('💡 Tip: Install @rufvector/rufllm for WASM-accelerated routing.'));
+            if (error.message.includes('WASM') || error.message.includes('swarmvector')) {
+                console.log(chalk.yellow('💡 Tip: Install @swarmvector/swarmllm for WASM-accelerated routing.'));
             }
         }
         process.exit(1);
@@ -96,9 +96,9 @@ export const routeCommand = new Command('route')
  */
 async function checkWasmAvailability(verbose) {
     try {
-        await import('@rufvector/rufllm');
+        await import('@swarmvector/swarmllm');
         if (verbose) {
-            console.log(chalk.green('✅ Using WASM-accelerated routing (@rufvector/rufllm)\n'));
+            console.log(chalk.green('✅ Using WASM-accelerated routing (@swarmvector/swarmllm)\n'));
         }
         return true;
     }
@@ -137,7 +137,7 @@ async function routePrompt(prompt, context, history, options, wasmAvailable) {
  * WASM-accelerated routing with FastGRNN
  */
 async function routeWithFastGRNN(prompt, context, history, options) {
-    // In production, this would use @rufvector/rufllm
+    // In production, this would use @swarmvector/swarmllm
     // For now, simulate FastGRNN decision
     const hiddenDim = parseInt(String(options.hiddenDim || '128'));
     const updateGate = parseFloat(String(options.updateGate || '0.8'));
@@ -407,7 +407,7 @@ routeCommand.on('--help', () => {
     console.log('  $ agentdb route stats');
     console.log('');
     console.log('WASM Acceleration:');
-    console.log('  This command uses @rufvector/rufllm FastGRNN for model selection.');
+    console.log('  This command uses @swarmvector/swarmllm FastGRNN for model selection.');
     console.log('  Falls back gracefully to heuristic-based routing if WASM is unavailable.');
     console.log('');
     console.log('Supported Models:');

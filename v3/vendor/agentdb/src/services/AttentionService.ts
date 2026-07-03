@@ -1,8 +1,8 @@
 /**
- * AttentionService - RuVector Attention Mechanisms Integration
+ * AttentionService - SwarmVector Attention Mechanisms Integration
  *
  * This service provides a unified interface for attention mechanisms with
- * RuVector WASM/NAPI bindings and robust JavaScript fallback implementations.
+ * SwarmVector WASM/NAPI bindings and robust JavaScript fallback implementations.
  *
  * Architecture:
  * - HyperbolicAttention: Tree-structured Poincare embeddings for causal chains
@@ -65,7 +65,7 @@ let wasmLoadAttempted = false;
 let napiLoadAttempted = false;
 
 /**
- * Attempt to load the rufvector-attention-wasm module
+ * Attempt to load the swarmvector-attention-wasm module
  */
 async function loadWasmModule(): Promise<boolean> {
   if (wasmLoadAttempted) return wasmInitialized;
@@ -73,7 +73,7 @@ async function loadWasmModule(): Promise<boolean> {
 
   try {
     // Dynamic import for WASM module
-    const wasm = await import('rufvector-attention-wasm');
+    const wasm = await import('swarmvector-attention-wasm');
     if (wasm.default) {
       await wasm.default(); // Initialize WASM
     } else if (wasm.init) {
@@ -94,7 +94,7 @@ async function loadWasmModule(): Promise<boolean> {
 }
 
 /**
- * Attempt to load the @rufvector/attention NAPI module
+ * Attempt to load the @swarmvector/attention NAPI module
  */
 async function loadNapiModule(): Promise<boolean> {
   if (napiLoadAttempted) return napiInitialized;
@@ -102,7 +102,7 @@ async function loadNapiModule(): Promise<boolean> {
 
   try {
     // Dynamic import for NAPI module
-    napiModule = await import('@rufvector/attention');
+    napiModule = await import('@swarmvector/attention');
     napiInitialized = true;
     if (PERFORMANCE_LOGGING) {
       console.log('[AttentionService] NAPI module loaded successfully');
@@ -269,7 +269,7 @@ export interface MoEAttentionResult {
 /**
  * AttentionService - Unified interface for attention mechanisms
  *
- * Provides fallback implementations until RuVector WASM/NAPI bindings are available.
+ * Provides fallback implementations until SwarmVector WASM/NAPI bindings are available.
  * All mechanisms are opt-in via configuration flags.
  */
 export class AttentionService {

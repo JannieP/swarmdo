@@ -196,7 +196,7 @@ describe('MigrationUtilities', () => {
         version: '2.0',
         memory: {
           path: './db',
-          backend: 'rufvector'
+          backend: 'swarmvector'
         },
         swarm: {
           topology: 'mesh',
@@ -219,7 +219,7 @@ describe('MigrationUtilities', () => {
     it('should detect missing backend field', () => {
       const config = {
         version: '2.0',
-        memory: { path: './db', backend: 'rufvector' as const }
+        memory: { path: './db', backend: 'swarmvector' as const }
       } as any;
 
       const result = MigrationUtilities.validateMigratedConfig(config);
@@ -234,7 +234,7 @@ describe('MigrationUtilities', () => {
       const config = {
         backend: 'agentdb',
         version: '2.0',
-        memory: { backend: 'rufvector' as const }
+        memory: { backend: 'swarmvector' as const }
       } as any;
 
       const result = MigrationUtilities.validateMigratedConfig(config);
@@ -251,7 +251,7 @@ describe('MigrationUtilities', () => {
         version: '2.0',
         memory: {
           path: './db',
-          backend: 'rufvector'
+          backend: 'swarmvector'
           // enableHNSW not set
         },
         swarm: {
@@ -280,7 +280,7 @@ describe('MigrationUtilities', () => {
         version: '2.0',
         memory: {
           path: './db',
-          backend: 'rufvector',
+          backend: 'swarmvector',
           enableHNSW: true
           // enableQuantization not set
         },

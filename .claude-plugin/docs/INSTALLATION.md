@@ -1,4 +1,4 @@
-# 📦 Rufflo Plugin Installation Guide
+# 📦 Swarmdo Plugin Installation Guide
 
 ## Quick Installation
 
@@ -24,7 +24,7 @@ If you've cloned the repository:
 ```bash
 # Clone the repository
 git clone https://github.com/ruvnet/claude-flow.git
-cd rufflo
+cd swarmdo
 
 # In Claude Code, install the plugin
 /plugin add .
@@ -44,7 +44,7 @@ Restart to activate the plugin:
 /plugin list
 ```
 
-Look for `rufflo` in the active plugins list.
+Look for `swarmdo` in the active plugins list.
 
 Try a command:
 ```
@@ -87,8 +87,8 @@ Available for delegation:
 ### ✅ MCP Integration
 
 3 MCP servers with 110+ tools:
-- **rufflo**: Core orchestration (40+ tools) - Required
-- **ruf-swarm**: Enhanced coordination - Optional
+- **swarmdo**: Core orchestration (40+ tools) - Required
+- **swarmdo-swarm**: Enhanced coordination - Optional
 
 ---
 
@@ -103,19 +103,19 @@ Available for delegation:
 ### Update Plugin
 
 ```
-/plugin update rufflo
+/plugin update swarmdo
 ```
 
 Or pull latest from GitHub:
 ```
-cd /path/to/rufflo
+cd /path/to/swarmdo
 git pull
 ```
 
 ### Remove Plugin
 
 ```
-/plugin remove rufflo
+/plugin remove swarmdo
 ```
 
 ---
@@ -128,10 +128,10 @@ The plugin defines MCP servers, but you may need to install the packages:
 
 ```bash
 # Core MCP (recommended)
-npm install -g rufflo@alpha
+npm install -g swarmdo@alpha
 
 # Optional enhanced coordination
-npm install -g ruf-swarm
+npm install -g swarmdo-swarm
 
 # Optional cloud features (requires authentication)
 ```
@@ -149,7 +149,7 @@ In Claude Code:
 /plugin list
 ```
 
-Look for `rufflo` in the list with status "active".
+Look for `swarmdo` in the list with status "active".
 
 ### Test Commands
 
@@ -197,7 +197,7 @@ ls -la agents/
 ```
 # Try local installation
 git clone https://github.com/ruvnet/claude-flow.git
-cd rufflo
+cd swarmdo
 /plugin add .
 ```
 
@@ -217,7 +217,7 @@ cd rufflo
 To remove the plugin:
 
 ```
-/plugin remove rufflo
+/plugin remove swarmdo
 ```
 
 This will remove all commands, agents, and hooks.
@@ -235,7 +235,7 @@ This will remove all commands, agents, and hooks.
 After installation, the plugin structure is:
 
 ```
-rufflo/
+swarmdo/
 ├── .claude-plugin/
 │   ├── plugin.json          # Plugin metadata
 │   ├── README.md            # Documentation

@@ -1,7 +1,7 @@
 /**
  * Hyperbolic Bridge - Poincare Ball and Lorentz Model Operations
  *
- * Bridge to @rufvector/hyperbolic-hnsw-wasm for hyperbolic geometry operations
+ * Bridge to @swarmvector/hyperbolic-hnsw-wasm for hyperbolic geometry operations
  * including embeddings, distance computation, and hierarchical search.
  */
 
@@ -111,7 +111,7 @@ export class HyperbolicBridge {
 
     try {
       // Dynamic import - module may not be installed
-      const wasmModule = await import(/* webpackIgnore: true */ '@rufvector/hyperbolic-hnsw-wasm' as string).catch(() => null);
+      const wasmModule = await import(/* webpackIgnore: true */ '@swarmvector/hyperbolic-hnsw-wasm' as string).catch(() => null);
 
       if (wasmModule) {
         this._module = wasmModule as unknown as HyperbolicWasmModule;

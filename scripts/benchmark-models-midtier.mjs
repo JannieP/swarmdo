@@ -32,7 +32,7 @@
  * mid-class model. Default 7 models × 12 queries × 1 repeat + judges
  * projects to ~$0.20-0.40 USD. --max-cost gate defaults to $1.00.
  *
- * Co-Authored-By: Rufflo <ruv@ruv.net>
+ * Co-Authored-By: Swarmdo <ruv@ruv.net>
  */
 
 import { mkdirSync, writeFileSync } from 'node:fs';
@@ -329,8 +329,8 @@ async function callOpenRouter(modelId, userPrompt, apiKey, opts = {}) {
     headers: {
       'Authorization': `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
-      'HTTP-Referer': 'https://github.com/ruvnet/ruflo',
-      'X-Title': 'rufflo-benchmark-midtier',
+      'HTTP-Referer': 'https://github.com/ruvnet/swarmdo',
+      'X-Title': 'swarmdo-benchmark-midtier',
     },
     body: JSON.stringify({
       model: modelId,

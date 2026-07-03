@@ -1,7 +1,7 @@
 /**
  * Quantum Optimizer Plugin - Bridges Barrel Export
  *
- * @module @rufflo/plugin-quantum-optimizer/bridges
+ * @module @swarmdo/plugin-quantum-optimizer/bridges
  */
 
 export {

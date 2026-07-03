@@ -23,7 +23,7 @@ function generateSecureSessionId(): string {
 }
 
 // Default session directory
-const DEFAULT_SESSION_DIR = '.rufflo/sessions';
+const DEFAULT_SESSION_DIR = '.swarmdo/sessions';
 
 // ============================================================================
 // Input Schemas

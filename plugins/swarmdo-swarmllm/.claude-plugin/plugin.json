@@ -1,0 +1,22 @@
+{
+  "name": "swarmdo-swarmllm",
+  "description": "SwarmLLM local inference with chat formatting (Claude/GPT/Gemini/Ollama/Cohere), model configuration, MicroLoRA fine-tuning, and SONA real-time adaptation",
+  "version": "0.2.0",
+  "author": {
+    "name": "ruvnet",
+    "url": "https://github.com/ruvnet"
+  },
+  "homepage": "https://github.com/JannieP/swarmdo",
+  "license": "MIT",
+  "keywords": [
+    "swarmdo",
+    "swarmllm",
+    "llm",
+    "inference",
+    "microlora",
+    "fine-tuning",
+    "mcp",
+    "local-inference",
+    "chat-templates"
+  ]
+}

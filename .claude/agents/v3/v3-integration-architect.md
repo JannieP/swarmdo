@@ -1,7 +1,7 @@
 ---
 name: v3-integration-architect
 description: |
-  V3 Integration Architect for deep agentic-flow@alpha integration. Implements ADR-001 to eliminate 10,000+ duplicate lines and build rufflo as specialized extension rather than parallel implementation.
+  V3 Integration Architect for deep agentic-flow@alpha integration. Implements ADR-001 to eliminate 10,000+ duplicate lines and build swarmdo as specialized extension rather than parallel implementation.
 ---
 
 # V3 Integration Architect
@@ -10,7 +10,7 @@ description: |
 
 ## Core Mission: ADR-001 Implementation
 
-Transform rufflo from parallel implementation to specialized extension of agentic-flow, eliminating 10,000+ lines of duplicate code while achieving 100% feature parity and performance improvements.
+Transform swarmdo from parallel implementation to specialized extension of agentic-flow, eliminating 10,000+ lines of duplicate code while achieving 100% feature parity and performance improvements.
 
 ## Integration Strategy
 
@@ -19,7 +19,7 @@ Transform rufflo from parallel implementation to specialized extension of agenti
 ┌─────────────────────────────────────────┐
 │         FUNCTIONALITY OVERLAP           │
 ├─────────────────────────────────────────┤
-│  rufflo          agentic-flow      │
+│  swarmdo          agentic-flow      │
 ├─────────────────────────────────────────┤
 │ SwarmCoordinator  →   Swarm System      │ 80% overlap
 │ AgentManager      →   Agent Lifecycle   │ 70% overlap
@@ -36,7 +36,7 @@ TARGET: <5,000 lines orchestration (vs 15,000+ currently)
 import { Agent as AgenticFlowAgent } from 'agentic-flow@alpha';
 
 export class ClaudeFlowAgent extends AgenticFlowAgent {
-  // Add rufflo specific capabilities
+  // Add swarmdo specific capabilities
   async handleClaudeFlowTask(task: ClaudeTask): Promise<TaskResult> {
     return this.executeWithSONA(task);
   }
@@ -293,7 +293,7 @@ class BackwardCompatibility {
 - Performance benchmarking collaboration
 
 ### **Swarm Specialist (Agent #8)**
-- Swarm system migration from rufflo to agentic-flow
+- Swarm system migration from swarmdo to agentic-flow
 - Topology coordination and optimization
 - Agent communication protocol alignment
 

@@ -1,0 +1,56 @@
+{
+  "name": "@swarmdo/plugin-agent-federation",
+  "version": "1.0.0-alpha.16",
+  "description": "Cross-installation agent federation with zero-trust security, PII-gated data flow, and compliance-grade audit trails.",
+  "homepage": "https://github.com/JannieP/swarmdo",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "swarmdo-federation": "dist/bin.js"
+  },
+  "files": [
+    "dist/**",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@noble/ed25519": "^2.0.0"
+  },
+  "peerDependencies": {
+    "agentic-flow": ">=2.0.12-fix.8 <3",
+    "midstreamer": ">=0.3.1"
+  },
+  "peerDependenciesMeta": {
+    "agentic-flow": {
+      "optional": true
+    },
+    "midstreamer": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@swarmdo/shared": "workspace:*",
+    "@swarmdo/security": "workspace:*",
+    "agentic-flow": "2.0.12-fix.8",
+    "typescript": "^5.4.0",
+    "vitest": "^4.0.16"
+  },
+  "keywords": [
+    "federation",
+    "multi-agent",
+    "trust",
+    "pii",
+    "security",
+    "audit",
+    "compliance"
+  ],
+  "author": "Swarmdo Team",
+  "license": "MIT"
+}

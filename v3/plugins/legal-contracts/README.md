@@ -1,7 +1,7 @@
-# @rufflo/plugin-legal-contracts
+# @swarmdo/plugin-legal-contracts
 
-[![npm version](https://img.shields.io/npm/v/@rufflo/plugin-legal-contracts.svg)](https://www.npmjs.com/package/@rufflo/plugin-legal-contracts)
-[![npm downloads](https://img.shields.io/npm/dm/@rufflo/plugin-legal-contracts.svg)](https://www.npmjs.com/package/@rufflo/plugin-legal-contracts)
+[![npm version](https://img.shields.io/npm/v/@swarmdo/plugin-legal-contracts.svg)](https://www.npmjs.com/package/@swarmdo/plugin-legal-contracts)
+[![npm downloads](https://img.shields.io/npm/dm/@swarmdo/plugin-legal-contracts.svg)](https://www.npmjs.com/package/@swarmdo/plugin-legal-contracts)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A comprehensive legal contract analysis plugin combining hyperbolic embeddings for legal ontology navigation with fast vector search for clause similarity. The plugin enables automated clause extraction, risk scoring, obligation tracking, and regulatory compliance checking while maintaining attorney-client privilege through on-device processing.
@@ -19,19 +19,19 @@ A comprehensive legal contract analysis plugin combining hyperbolic embeddings f
 ### npm
 
 ```bash
-npm install @rufflo/plugin-legal-contracts
+npm install @swarmdo/plugin-legal-contracts
 ```
 
 ### CLI
 
 ```bash
-npx rufflo plugins install --name @rufflo/plugin-legal-contracts
+npx swarmdo plugins install --name @swarmdo/plugin-legal-contracts
 ```
 
 ## Quick Start
 
 ```typescript
-import { LegalContractsPlugin } from '@rufflo/plugin-legal-contracts';
+import { LegalContractsPlugin } from '@swarmdo/plugin-legal-contracts';
 
 // Initialize the plugin
 const legal = new LegalContractsPlugin({
@@ -352,9 +352,9 @@ const rateLimits = {
 ## Dependencies
 
 - `micro-hnsw-wasm`: Fast semantic search for clause similarity and precedent matching
-- `rufvector-hyperbolic-hnsw-wasm`: Legal taxonomy navigation (contract types, clause hierarchies)
-- `rufvector-attention-wasm`: Cross-attention for contract comparison (redline analysis)
-- `rufvector-dag-wasm`: Contract dependency graphs (obligations, conditions, timelines)
+- `swarmvector-hyperbolic-hnsw-wasm`: Legal taxonomy navigation (contract types, clause hierarchies)
+- `swarmvector-attention-wasm`: Cross-attention for contract comparison (redline analysis)
+- `swarmvector-dag-wasm`: Contract dependency graphs (obligations, conditions, timelines)
 - `pdf-parse`: PDF document parsing
 - `mammoth`: DOCX document parsing
 
@@ -362,15 +362,15 @@ const rateLimits = {
 
 | Plugin | Description | Use Case |
 |--------|-------------|----------|
-| [@rufflo/plugin-financial-risk](../financial-risk) | Financial risk analysis | Financial contract risk assessment |
-| [@rufflo/plugin-healthcare-clinical](../healthcare-clinical) | Clinical decision support | Healthcare BAA and compliance agreements |
-| [@rufflo/plugin-code-intelligence](../code-intelligence) | Code analysis | Software licensing and IP contracts |
+| [@swarmdo/plugin-financial-risk](../financial-risk) | Financial risk analysis | Financial contract risk assessment |
+| [@swarmdo/plugin-healthcare-clinical](../healthcare-clinical) | Clinical decision support | Healthcare BAA and compliance agreements |
+| [@swarmdo/plugin-code-intelligence](../code-intelligence) | Code analysis | Software licensing and IP contracts |
 
 ## License
 
 MIT License
 
-Copyright (c) 2026 Rufflo
+Copyright (c) 2026 Swarmdo
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

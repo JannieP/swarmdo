@@ -5,7 +5,7 @@
  *  1. GraphEdgesSource reads edges from graph_edges correctly
  *  2. KnowledgeGraphAdapter can be created with GraphEdgesSource (autoRegister path)
  *  3. Exported SparseMatrix has correct structure
- *  4. rufflo-plugin-creator SKILL.md mentions graph_adapter stub
+ *  4. swarmdo-plugin-creator SKILL.md mentions graph_adapter stub
  *
  * Usage: node scripts/smoke-graph-plugin-adapter.mjs
  */
@@ -17,7 +17,7 @@ import * as os from 'os';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, '..');
-const distBase = path.join(projectRoot, 'v3/@rufflo/cli/dist/src');
+const distBase = path.join(projectRoot, 'v3/@swarmdo/cli/dist/src');
 
 let passed = 0, failed = 0;
 function pass(l) { console.log(`  PASS  ${l}`); passed++; }
@@ -28,7 +28,7 @@ function assert(c, l, r = '') { c ? pass(l) : fail(l, r || 'assertion false'); }
 
 const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'adr130-p4-'));
 const dbPath = path.join(tmpDir, 'memory.db');
-process.env.RUFFLO_MEMORY_PATH = tmpDir;
+process.env.SWARMDO_MEMORY_PATH = tmpDir;
 
 async function cleanup() {
   try { fs.rmSync(tmpDir, { recursive: true, force: true }); } catch {}
@@ -71,9 +71,9 @@ async function testGraphEdgesSource() {
 // ─── TEST 2: graph_adapter field in plugin.json (structural check) ──────────
 
 async function testPluginJsonStub() {
-  console.log('\nTEST 2: rufflo-plugin-creator SKILL.md mentions graph_adapter stub');
+  console.log('\nTEST 2: swarmdo-plugin-creator SKILL.md mentions graph_adapter stub');
   try {
-    const skillPath = path.join(projectRoot, 'plugins/rufflo-plugin-creator/skills/create-plugin/SKILL.md');
+    const skillPath = path.join(projectRoot, 'plugins/swarmdo-plugin-creator/skills/create-plugin/SKILL.md');
     assert(fs.existsSync(skillPath), '2a: create-plugin SKILL.md exists');
 
     const content = fs.readFileSync(skillPath, 'utf-8');
@@ -90,7 +90,7 @@ async function testPluginJsonStub() {
 async function testAdapterExports() {
   console.log('\nTEST 3: knowledge-graph-adapter exports GraphEdgesSource and createAutoGraphAdapter');
   try {
-    const adapterPath = path.join(projectRoot, 'plugins/rufflo-graph-intelligence/src/adapters/knowledge-graph-adapter.ts');
+    const adapterPath = path.join(projectRoot, 'plugins/swarmdo-graph-intelligence/src/adapters/knowledge-graph-adapter.ts');
     assert(fs.existsSync(adapterPath), '3a: knowledge-graph-adapter.ts exists');
 
     const content = fs.readFileSync(adapterPath, 'utf-8');
@@ -108,7 +108,7 @@ async function testAdapterExports() {
 async function testAdapterBackwardCompat() {
   console.log('\nTEST 4: existing adapters have fallback path documented');
   try {
-    const adaptersDir = path.join(projectRoot, 'plugins/rufflo-graph-intelligence/src/adapters');
+    const adaptersDir = path.join(projectRoot, 'plugins/swarmdo-graph-intelligence/src/adapters');
     const adapters = fs.readdirSync(adaptersDir).filter(f => f.endsWith('.ts') && f !== 'index.ts' && f !== 'knowledge-graph-adapter.ts');
 
     for (const adapter of adapters) {

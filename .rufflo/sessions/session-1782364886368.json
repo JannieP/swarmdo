@@ -1,0 +1,21 @@
+{
+  "id": "session-1782364886368",
+  "startedAt": "2026-06-25T05:21:26.368Z",
+  "platform": "darwin",
+  "cwd": "/Users/janpieterse/Projects/ruflo",
+  "context": {
+    "lastMatchedPatterns": [
+      "mem_mqt20y54_wufy166j",
+      "mem_mqt20y54_jxsgrlu9",
+      "mem_mqt20y54_ncpe3nga"
+    ]
+  },
+  "metrics": {
+    "edits": 7,
+    "commands": 0,
+    "tasks": 0,
+    "errors": 0
+  },
+  "endedAt": "2026-06-28T05:09:39.242Z",
+  "duration": 258492878
+}

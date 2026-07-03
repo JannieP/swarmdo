@@ -1,7 +1,7 @@
 /**
  * WorkerDispatchService - Dispatches and manages background workers
  *
- * Integrates with RuVector ecosystem:
+ * Integrates with SwarmVector ecosystem:
  * - SONA: Self-learning trajectory tracking
  * - ReasoningBank: Pattern storage and memory retrieval
  * - HNSW: Vector indexing for semantic search
@@ -9,14 +9,14 @@
 import { EventEmitter } from 'events';
 import { WorkerId, WorkerTrigger, WorkerInfo, WorkerResults, DetectedTrigger, WorkerContext } from './types.js';
 import { ResourceGovernor } from './resource-governor.js';
-import { RuVectorWorkerIntegration } from './ruvector-integration.js';
+import { SwarmVectorWorkerIntegration } from './swarmvector-integration.js';
 import { CustomWorkerInstance } from './custom-worker-factory.js';
 type WorkerImplementation = (context: WorkerContext) => Promise<WorkerResults>;
 export declare class WorkerDispatchService extends EventEmitter {
     private registry;
     private governor;
     private detector;
-    private ruvector;
+    private swarmvector;
     private runningWorkers;
     private workerImplementations;
     constructor();
@@ -35,7 +35,7 @@ export declare class WorkerDispatchService extends EventEmitter {
         workerIds: WorkerId[];
     }>;
     /**
-     * Execute worker in background with RuVector integration
+     * Execute worker in background with SwarmVector integration
      */
     private executeWorker;
     /**
@@ -104,19 +104,19 @@ export declare class WorkerDispatchService extends EventEmitter {
      */
     private extractPatterns;
     /**
-     * Get dashboard statistics including RuVector integration
+     * Get dashboard statistics including SwarmVector integration
      */
     getStats(): {
         active: number;
         byStatus: Record<string, number>;
         byTrigger: Record<string, number>;
         availability: ReturnType<ResourceGovernor['getAvailability']>;
-        ruvector: ReturnType<RuVectorWorkerIntegration['getStats']>;
+        swarmvector: ReturnType<SwarmVectorWorkerIntegration['getStats']>;
     };
     /**
-     * Get RuVector integration instance for advanced operations
+     * Get SwarmVector integration instance for advanced operations
      */
-    getRuVectorIntegration(): RuVectorWorkerIntegration;
+    getSwarmVectorIntegration(): SwarmVectorWorkerIntegration;
 }
 export declare function getWorkerDispatchService(): WorkerDispatchService;
 export {};

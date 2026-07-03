@@ -2,7 +2,7 @@
  * Sparse Inference Bridge for Performance Optimizer
  *
  * Provides efficient trace analysis using sparse inference techniques
- * from rufvector-sparse-inference-wasm for processing large performance traces.
+ * from swarmvector-sparse-inference-wasm for processing large performance traces.
  */
 
 import type {
@@ -65,7 +65,7 @@ export class PerfSparseBridge implements SparseBridgeInterface {
     try {
       // Try to load WASM module
       // Dynamic import of optional WASM module - use string literal to avoid type error
-      const modulePath = '@rufflo/rufvector-upstream';
+      const modulePath = '@swarmdo/swarmvector-upstream';
       const wasmModule = await import(/* @vite-ignore */ modulePath).catch(() => null);
 
       if (wasmModule) {

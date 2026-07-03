@@ -3,7 +3,7 @@
  *
  * Provides a unified interface to all AgentDB controllers with:
  * - sql.js WASM for relational storage (with better-sqlite3 fallback)
- * - RuVector for optimized vector search (150x faster than SQLite)
+ * - SwarmVector for optimized vector search (150x faster than SQLite)
  * - Unified integration passing vector backend to all controllers
  */
 import { ReflexionMemory } from '../controllers/ReflexionMemory.js';
@@ -43,13 +43,13 @@ export class AgentDB {
             provider: 'transformers'
         });
         await this.embedder.initialize();
-        // Initialize vector backend (RuVector preferred, HNSWLib fallback)
+        // Initialize vector backend (SwarmVector preferred, HNSWLib fallback)
         this.vectorBackend = await createBackend(this.config.vectorBackend || 'auto', {
             dimensions: vectorDimension,
             metric: 'cosine'
         });
         // Initialize controllers WITH vector backend for optimized search
-        // This enables 150x faster vector search via RuVector instead of SQLite brute-force
+        // This enables 150x faster vector search via SwarmVector instead of SQLite brute-force
         this.reflexion = new ReflexionMemory(this.db, this.embedder, this.vectorBackend);
         this.skills = new SkillLibrary(this.db, this.embedder, this.vectorBackend);
         this.causalGraph = new CausalMemoryGraph(this.db, undefined, // graphBackend - not used in default initialization

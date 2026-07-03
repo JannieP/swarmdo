@@ -278,7 +278,7 @@ export class HelpFormatter {
         sections.push(chalk.bold('AVAILABLE COMPONENTS:\n'));
         // Graph Backends
         sections.push(chalk.yellow('[Graph Backends]'));
-        sections.push('  --backend ruvector         RuVector native (8.2x speedup) ' + chalk.green('✅ OPTIMAL'));
+        sections.push('  --backend swarmvector         SwarmVector native (8.2x speedup) ' + chalk.green('✅ OPTIMAL'));
         sections.push('  --backend hnswlib          Baseline for comparison');
         sections.push('  --backend faiss            Facebook AI Similarity Search\n');
         // Attention
@@ -312,7 +312,7 @@ export class HelpFormatter {
         sections.push(chalk.bold('EXAMPLES:\n'));
         sections.push(chalk.gray('  # Optimal production configuration'));
         sections.push('  agentdb simulate --custom \\');
-        sections.push('    --backend ruvector \\');
+        sections.push('    --backend swarmvector \\');
         sections.push('    --attention-heads 8 \\');
         sections.push('    --search beam 5 \\');
         sections.push('    --search dynamic-k \\');
@@ -321,7 +321,7 @@ export class HelpFormatter {
         sections.push('    --neural-full\n');
         sections.push(chalk.gray('  # Memory-constrained configuration'));
         sections.push('  agentdb simulate --custom \\');
-        sections.push('    --backend ruvector \\');
+        sections.push('    --backend swarmvector \\');
         sections.push('    --attention-heads 8 \\');
         sections.push('    --neural-edges \\');
         sections.push('    --cluster louvain\n');

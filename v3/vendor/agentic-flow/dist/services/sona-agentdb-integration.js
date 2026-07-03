@@ -5,7 +5,7 @@
  * for ultra-fast adaptive learning with pattern matching
  */
 import { EventEmitter } from 'events';
-import { SonaEngine } from '@rufvector/sona';
+import { SonaEngine } from '@swarmvector/sona';
 import agentdb from 'agentdb';
 import { ValidationUtils } from './sona-types.js';
 /**

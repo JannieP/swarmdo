@@ -5,7 +5,7 @@
  * - HNSW vector indexing (150x faster pattern search)
  * - Semantic matching (intelligent agent routing)
  *
- * Uses @rufvector/edge for browser/edge compatibility.
+ * Uses @swarmvector/edge for browser/edge compatibility.
  * Falls back to pure JS when WASM unavailable.
  */
 export interface PatternEntry {

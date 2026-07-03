@@ -16,7 +16,7 @@ const v3Root = path.join(__dirname, '..');
 const VERSION = '3.0.0-alpha.1';
 const TAG = 'v3alpha';
 
-// All @rufflo packages
+// All @swarmdo packages
 const packages = [
   'shared',
   'security',
@@ -57,7 +57,7 @@ const publishOrder = [
 ];
 
 function updatePackageJson(pkgName) {
-  const pkgPath = path.join(v3Root, '@rufflo', pkgName, 'package.json');
+  const pkgPath = path.join(v3Root, '@swarmdo', pkgName, 'package.json');
 
   if (!fs.existsSync(pkgPath)) {
     console.log(`⚠️  ${pkgName}: package.json not found`);
@@ -127,7 +127,7 @@ function updatePackageJson(pkgName) {
 }
 
 function updateMainPackage() {
-  const pkgPath = path.join(v3Root, 'rufflo', 'package.json');
+  const pkgPath = path.join(v3Root, 'swarmdo', 'package.json');
   const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
 
   pkg.version = VERSION;
@@ -146,28 +146,28 @@ function updateMainPackage() {
   }
 
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
-  console.log(`✅ rufflo: Updated for publishing`);
+  console.log(`✅ swarmdo: Updated for publishing`);
 }
 
 console.log('📦 Preparing V3 packages for npm publishing...\n');
 
-// Update all @rufflo packages
+// Update all @swarmdo packages
 for (const pkg of packages) {
   updatePackageJson(pkg);
 }
 
-// Update main rufflo package
+// Update main swarmdo package
 updateMainPackage();
 
 console.log('\n✅ All packages prepared for publishing!');
 console.log(`\n📋 Publish order (${publishOrder.length} packages + main):`);
-publishOrder.forEach((pkg, i) => console.log(`   ${i + 1}. @rufflo/${pkg}`));
-console.log(`   ${publishOrder.length + 1}. rufflo`);
+publishOrder.forEach((pkg, i) => console.log(`   ${i + 1}. @swarmdo/${pkg}`));
+console.log(`   ${publishOrder.length + 1}. swarmdo`);
 
 console.log('\n🚀 To publish, run:');
 console.log('   npm login');
 console.log('   cd v3 && npm run build');
 for (const pkg of publishOrder) {
-  console.log(`   cd @rufflo/${pkg} && npm publish --tag v3alpha && cd ../..`);
+  console.log(`   cd @swarmdo/${pkg} && npm publish --tag v3alpha && cd ../..`);
 }
-console.log('   cd rufflo && npm publish --tag v3alpha');
+console.log('   cd swarmdo && npm publish --tag v3alpha');

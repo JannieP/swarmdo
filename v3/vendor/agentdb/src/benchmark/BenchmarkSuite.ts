@@ -1020,7 +1020,7 @@ export class BenchmarkSuite {
     // Detect backend
     const detection = await detectBackends();
     const backendName = detection.available;
-    const isNative = detection.ruvector.native;
+    const isNative = detection.swarmvector.native;
 
     console.log('=' .repeat(70));
     console.log('AgentDB Benchmark Suite');

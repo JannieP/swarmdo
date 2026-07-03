@@ -1,6 +1,6 @@
-# Rufflo V3
+# Swarmdo V3
 
-> **Modular AI Agent Coordination System** - A complete reimagining of Rufflo with 15-agent hierarchical mesh swarm coordination.
+> **Modular AI Agent Coordination System** - A complete reimagining of Swarmdo with 15-agent hierarchical mesh swarm coordination.
 
 [![Version](https://img.shields.io/badge/version-3.0.0--alpha.1-blue.svg)](https://github.com/ruvnet/claude-flow)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20.0.0-green.svg)](https://nodejs.org/)
@@ -9,7 +9,7 @@
 
 ## Introduction
 
-Rufflo V3 is a next-generation AI agent coordination system built on 10 Architecture Decision Records (ADRs). It provides a modular, security-first, high-performance platform for orchestrating multi-agent swarms with hierarchical mesh topology.
+Swarmdo V3 is a next-generation AI agent coordination system built on 10 Architecture Decision Records (ADRs). It provides a modular, security-first, high-performance platform for orchestrating multi-agent swarms with hierarchical mesh topology.
 
 V3 represents a complete architectural overhaul:
 - **10x faster testing** with Vitest
@@ -67,7 +67,7 @@ V3 represents a complete architectural overhaul:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                     @rufflo/v3-monorepo                    │
+│                     @swarmdo/v3-monorepo                    │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
@@ -100,7 +100,7 @@ V3 represents a complete architectural overhaul:
 
 ```
 v3/
-├── @rufflo/                    # Modular packages
+├── @swarmdo/                    # Modular packages
 │   ├── security/                    # Security module
 │   │   └── src/
 │   │       ├── index.ts             # Password hashing, validators
@@ -192,8 +192,8 @@ v3/
 │   └── implementation/              # Implementation details
 │
 ├── helpers/                         # Cross-platform helpers
-│   ├── rufflo-v3.sh            # Master helper (Linux/macOS)
-│   ├── rufflo-v3.ps1           # Master helper (Windows)
+│   ├── swarmdo-v3.sh            # Master helper (Linux/macOS)
+│   ├── swarmdo-v3.ps1           # Master helper (Windows)
 │   └── templates/                   # Helper templates
 │
 ├── scripts/                         # Utility scripts
@@ -207,22 +207,22 @@ v3/
 
 ## Modules
 
-### @rufflo/security
+### @swarmdo/security
 Security-first implementation with CVE fixes, input validation, and credential management.
 
 ```typescript
-import { PasswordHasher, validateInput, sanitizePath } from '@rufflo/security';
+import { PasswordHasher, validateInput, sanitizePath } from '@swarmdo/security';
 
 const hasher = new PasswordHasher();
 const hash = await hasher.hash('password');
 const valid = await hasher.verify('password', hash);
 ```
 
-### @rufflo/memory
+### @swarmdo/memory
 Unified memory service with AgentDB, HNSW indexing, and ~1.9x-4.7x measured faster search.
 
 ```typescript
-import { HybridMemoryRepository, HNSWIndex } from '@rufflo/memory';
+import { HybridMemoryRepository, HNSWIndex } from '@swarmdo/memory';
 
 const memory = new HybridMemoryRepository({
   backend: 'agentdb',
@@ -233,11 +233,11 @@ await memory.store({ key: 'knowledge', value: 'context', embedding: [...] });
 const results = await memory.search({ query: 'knowledge', limit: 10 });
 ```
 
-### @rufflo/swarm
+### @swarmdo/swarm
 15-agent hierarchical mesh coordination with consensus protocols.
 
 ```typescript
-import { UnifiedSwarmCoordinator } from '@rufflo/swarm';
+import { UnifiedSwarmCoordinator } from '@swarmdo/swarm';
 
 const coordinator = new UnifiedSwarmCoordinator({
   topology: 'hierarchical-mesh',
@@ -248,22 +248,22 @@ await coordinator.initialize();
 await coordinator.spawnAgent({ type: 'queen-coordinator' });
 ```
 
-### @rufflo/integration
+### @swarmdo/integration
 Deep integration with agentic-flow@alpha per ADR-001.
 
 ```typescript
-import { AgenticFlowBridge } from '@rufflo/integration';
+import { AgenticFlowBridge } from '@swarmdo/integration';
 
 const bridge = new AgenticFlowBridge();
 await bridge.initialize();
 const agent = await bridge.createAgent({ type: 'coder' });
 ```
 
-### @rufflo/performance
+### @swarmdo/performance
 Benchmarking framework with Flash Attention validation.
 
 ```typescript
-import { BenchmarkRunner, formatTime } from '@rufflo/performance';
+import { BenchmarkRunner, formatTime } from '@swarmdo/performance';
 
 const runner = new BenchmarkRunner();
 const result = await runner.run('map-lookup', () => map.get(key), {
@@ -272,49 +272,49 @@ const result = await runner.run('map-lookup', () => map.get(key), {
 });
 ```
 
-### @rufflo/neural
+### @swarmdo/neural
 SONA learning integration for self-optimizing agents.
 
 ```typescript
-import { SONAAdapter } from '@rufflo/neural';
+import { SONAAdapter } from '@swarmdo/neural';
 
 const sona = new SONAAdapter();
 await sona.train({ patterns: learningData });
 const prediction = await sona.predict(context);
 ```
 
-### @rufflo/cli
+### @swarmdo/cli
 Modern CLI with interactive prompts and formatted output.
 
 ```bash
-npx @rufflo/cli swarm init --topology hierarchical-mesh
-npx @rufflo/cli agent spawn --type queen-coordinator
-npx @rufflo/cli memory search "knowledge"
+npx @swarmdo/cli swarm init --topology hierarchical-mesh
+npx @swarmdo/cli agent spawn --type queen-coordinator
+npx @swarmdo/cli memory search "knowledge"
 ```
 
-### @rufflo/testing
+### @swarmdo/testing
 TDD London School framework with mocks, fixtures, and regression testing.
 
 ```typescript
-import { createMockAgent, createTestFixture } from '@rufflo/testing';
+import { createMockAgent, createTestFixture } from '@swarmdo/testing';
 
 const mockAgent = createMockAgent({ type: 'coder' });
 const fixture = createTestFixture('swarm-coordination');
 ```
 
-### @rufflo/shared
+### @swarmdo/shared
 Common types, events, utilities, and core interfaces.
 
 ```typescript
-import { EventBus, Result, success, failure } from '@rufflo/shared';
-import type { AgentId, TaskStatus } from '@rufflo/shared/types';
+import { EventBus, Result, success, failure } from '@swarmdo/shared';
+import type { AgentId, TaskStatus } from '@swarmdo/shared/types';
 ```
 
-### @rufflo/deployment
+### @swarmdo/deployment
 Release management and CI/CD automation.
 
 ```typescript
-import { ReleaseManager } from '@rufflo/deployment';
+import { ReleaseManager } from '@swarmdo/deployment';
 
 const release = new ReleaseManager();
 await release.prepare({ version: '3.0.0', changelog: '...' });
@@ -325,7 +325,7 @@ await release.prepare({ version: '3.0.0', changelog: '...' });
 ### Quick Start
 
 ```typescript
-import { initializeV3Swarm } from '@rufflo/v3';
+import { initializeV3Swarm } from '@swarmdo/v3';
 
 // Initialize the swarm
 const swarm = await initializeV3Swarm();
@@ -351,18 +351,18 @@ const result = await swarm.waitForTask(task.id);
 
 ```typescript
 // Import everything
-import * as claudeFlow from '@rufflo/v3';
+import * as claudeFlow from '@swarmdo/v3';
 
 // Or import specific modules for tree-shaking
-import { UnifiedSwarmCoordinator } from '@rufflo/swarm';
-import { PasswordHasher } from '@rufflo/security';
-import { HNSWIndex } from '@rufflo/memory';
+import { UnifiedSwarmCoordinator } from '@swarmdo/swarm';
+import { PasswordHasher } from '@swarmdo/security';
+import { HNSWIndex } from '@swarmdo/memory';
 ```
 
 ### MCP Server
 
 ```typescript
-import { createMCPServer } from '@rufflo/v3/mcp';
+import { createMCPServer } from '@swarmdo/v3/mcp';
 
 const server = createMCPServer({
   transport: 'stdio',
@@ -378,14 +378,14 @@ Cross-platform automation for V3 development:
 
 ```bash
 # Linux/macOS
-./helpers/rufflo-v3.sh init
-./helpers/rufflo-v3.sh status
-./helpers/rufflo-v3.sh update domain 3
+./helpers/swarmdo-v3.sh init
+./helpers/swarmdo-v3.sh status
+./helpers/swarmdo-v3.sh update domain 3
 
 # Windows (PowerShell)
-.\helpers\rufflo-v3.ps1 init
-.\helpers\rufflo-v3.ps1 status
-.\helpers\rufflo-v3.ps1 update domain 3
+.\helpers\swarmdo-v3.ps1 init
+.\helpers\swarmdo-v3.ps1 status
+.\helpers\swarmdo-v3.ps1 update domain 3
 ```
 
 Features:
@@ -399,7 +399,7 @@ Features:
 ```bash
 # Clone the repository
 git clone https://github.com/ruvnet/claude-flow.git
-cd rufflo/v3
+cd swarmdo/v3
 
 # Install dependencies
 pnpm install
@@ -452,20 +452,20 @@ pnpm test:coverage
 - [Helper System](./helpers/README.md)
 
 ### Modules
-- [@rufflo/security](./@rufflo/security/)
-- [@rufflo/memory](./@rufflo/memory/)
-- [@rufflo/swarm](./@rufflo/swarm/)
-- [@rufflo/integration](./@rufflo/integration/)
-- [@rufflo/performance](./@rufflo/performance/)
-- [@rufflo/neural](./@rufflo/neural/)
-- [@rufflo/cli](./@rufflo/cli/)
-- [@rufflo/testing](./@rufflo/testing/)
-- [@rufflo/shared](./@rufflo/shared/)
-- [@rufflo/deployment](./@rufflo/deployment/)
+- [@swarmdo/security](./@swarmdo/security/)
+- [@swarmdo/memory](./@swarmdo/memory/)
+- [@swarmdo/swarm](./@swarmdo/swarm/)
+- [@swarmdo/integration](./@swarmdo/integration/)
+- [@swarmdo/performance](./@swarmdo/performance/)
+- [@swarmdo/neural](./@swarmdo/neural/)
+- [@swarmdo/cli](./@swarmdo/cli/)
+- [@swarmdo/testing](./@swarmdo/testing/)
+- [@swarmdo/shared](./@swarmdo/shared/)
+- [@swarmdo/deployment](./@swarmdo/deployment/)
 
 ### Examples
-- [AgentDB Example](./@rufflo/memory/examples/agentdb-example.ts)
-- [Cross-Platform Usage](./@rufflo/memory/examples/cross-platform-usage.ts)
+- [AgentDB Example](./@swarmdo/memory/examples/agentdb-example.ts)
+- [Cross-Platform Usage](./@swarmdo/memory/examples/cross-platform-usage.ts)
 
 ### MCP Tools
 - [Agent Tools](./mcp/tools/agent-tools.ts)

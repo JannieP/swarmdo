@@ -1,7 +1,7 @@
 /**
  * NativeAccelerator - ADR-007 Phase 1 Capability Bridge
  *
- * Lazy-loads @rufvector APIs and provides accelerated alternatives to JS
+ * Lazy-loads @swarmvector APIs and provides accelerated alternatives to JS
  * implementations. All imports are lazy/optional with JS fallbacks.
  */
 import { WasmStoreBridge } from './WasmStoreBridge.js';

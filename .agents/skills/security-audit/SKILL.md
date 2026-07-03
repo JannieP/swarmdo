@@ -33,83 +33,83 @@ Comprehensive security scanning and vulnerability detection. Includes input vali
 Run comprehensive security analysis on the codebase
 
 ```bash
-npx @rufflo/cli security scan --depth full
+npx @swarmdo/cli security scan --depth full
 ```
 
 **Example:**
 ```bash
-npx @rufflo/cli security scan --depth full --output security-report.json
+npx @swarmdo/cli security scan --depth full --output security-report.json
 ```
 
 ### Input Validation Check
 Check for input validation issues
 
 ```bash
-npx @rufflo/cli security scan --check input-validation
+npx @swarmdo/cli security scan --check input-validation
 ```
 
 **Example:**
 ```bash
-npx @rufflo/cli security scan --check input-validation --path ./src/api
+npx @swarmdo/cli security scan --check input-validation --path ./src/api
 ```
 
 ### Path Traversal Check
 Check for path traversal vulnerabilities
 
 ```bash
-npx @rufflo/cli security scan --check path-traversal
+npx @swarmdo/cli security scan --check path-traversal
 ```
 
 ### SQL Injection Check
 Check for SQL injection vulnerabilities
 
 ```bash
-npx @rufflo/cli security scan --check sql-injection
+npx @swarmdo/cli security scan --check sql-injection
 ```
 
 ### XSS Check
 Check for cross-site scripting vulnerabilities
 
 ```bash
-npx @rufflo/cli security scan --check xss
+npx @swarmdo/cli security scan --check xss
 ```
 
 ### CVE Scan
 Scan dependencies for known CVEs
 
 ```bash
-npx @rufflo/cli security cve --scan
+npx @swarmdo/cli security cve --scan
 ```
 
 **Example:**
 ```bash
-npx @rufflo/cli security cve --scan --severity high
+npx @swarmdo/cli security cve --scan --severity high
 ```
 
 ### Security Audit Report
 Generate full security audit report
 
 ```bash
-npx @rufflo/cli security audit --report
+npx @swarmdo/cli security audit --report
 ```
 
 **Example:**
 ```bash
-npx @rufflo/cli security audit --report --format markdown --output SECURITY.md
+npx @swarmdo/cli security audit --report --format markdown --output SECURITY.md
 ```
 
 ### Threat Modeling
 Run threat modeling analysis
 
 ```bash
-npx @rufflo/cli security threats --analyze
+npx @swarmdo/cli security threats --analyze
 ```
 
 ### Validate Secrets
 Check for hardcoded secrets
 
 ```bash
-npx @rufflo/cli security validate --check secrets
+npx @swarmdo/cli security validate --check secrets
 ```
 
 

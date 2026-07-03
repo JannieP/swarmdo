@@ -1,5 +1,5 @@
 /**
- * Code Intelligence Plugin for Rufflo V3
+ * Code Intelligence Plugin for Swarmdo V3
  *
  * A comprehensive code intelligence plugin combining graph neural networks
  * for code structure analysis with ultra-fast vector search for semantic
@@ -14,7 +14,7 @@
  *
  * Based on ADR-035: Advanced Code Intelligence Plugin
  *
- * @module @rufflo/plugin-code-intelligence
+ * @module @swarmdo/plugin-code-intelligence
  */
 
 // Export types
@@ -52,10 +52,10 @@ import { DEFAULT_CONFIG } from './types.js';
  * Plugin metadata
  */
 export const pluginMetadata = {
-  name: '@rufflo/plugin-code-intelligence',
+  name: '@swarmdo/plugin-code-intelligence',
   version: '3.0.0-alpha.1',
   description: 'Advanced code intelligence plugin for semantic search, architecture analysis, and refactoring',
-  author: 'Rufflo Team',
+  author: 'Swarmdo Team',
   category: 'code-intelligence',
   keywords: ['code', 'intelligence', 'semantic-search', 'architecture', 'refactoring'],
   homepage: 'https://github.com/ruvnet/claude-flow',

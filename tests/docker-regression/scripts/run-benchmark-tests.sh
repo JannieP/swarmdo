@@ -1,5 +1,5 @@
 #!/bin/bash
-# Rufflo Benchmark Runner
+# Swarmdo Benchmark Runner
 # Standalone benchmark test execution
 
 set -e

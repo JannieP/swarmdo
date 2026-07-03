@@ -89,7 +89,7 @@ export async function statusCommand(options = {}) {
             console.log(`  Compression:   ${detection.features.compression ? colors.green + '✅ Available' : colors.yellow + '⚠️  Not available'}${colors.reset}`);
             console.log('');
             // Performance info
-            if (backend === 'rufvector' && detection.backend === 'rufvector') {
+            if (backend === 'swarmvector' && detection.backend === 'swarmvector') {
                 console.log(`${colors.bright}${colors.green}⚡ Performance:${colors.reset}`);
                 console.log(`  Search speed:  ${colors.green}150x faster${colors.reset} than pure SQLite`);
                 console.log(`  Vector ops:    ${colors.green}Sub-millisecond${colors.reset} latency`);
@@ -124,6 +124,6 @@ export async function statusCommand(options = {}) {
     }
 }
 function getBackendColor(backend) {
-    return backend === 'rufvector' ? colors.green : colors.yellow;
+    return backend === 'swarmvector' ? colors.green : colors.yellow;
 }
 //# sourceMappingURL=status.js.map

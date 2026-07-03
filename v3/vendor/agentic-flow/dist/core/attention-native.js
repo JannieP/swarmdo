@@ -1,19 +1,19 @@
 /**
  * Native Attention Wrappers
  *
- * Properly wraps @rufvector/attention native Rust implementations
+ * Properly wraps @swarmvector/attention native Rust implementations
  * with TypedArray conversions and proper error handling
  *
- * Note: @rufvector/attention is optional - falls back gracefully
+ * Note: @swarmvector/attention is optional - falls back gracefully
  */
 let nativeAttention = null;
 let attentionAvailable = false;
 try {
-    nativeAttention = await import('@rufvector/attention');
+    nativeAttention = await import('@swarmvector/attention');
     attentionAvailable = true;
 }
 catch {
-    console.warn('[attention-native] @rufvector/attention not available');
+    console.warn('[attention-native] @swarmvector/attention not available');
 }
 export { attentionAvailable };
 /**

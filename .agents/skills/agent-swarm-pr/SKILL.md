@@ -16,11 +16,11 @@ tools:
   - mcp__github__create_pr_comment
   - mcp__github__get_pr_diff
   - mcp__github__merge_pull_request
-  - mcp__rufflo__swarm_init
-  - mcp__rufflo__agent_spawn
-  - mcp__rufflo__task_orchestrate
-  - mcp__rufflo__memory_usage
-  - mcp__rufflo__coordination_sync
+  - mcp__swarmdo__swarm_init
+  - mcp__swarmdo__agent_spawn
+  - mcp__swarmdo__task_orchestrate
+  - mcp__swarmdo__memory_usage
+  - mcp__swarmdo__coordination_sync
   - TodoWrite
   - TodoRead
   - Bash
@@ -49,14 +49,14 @@ Create and manage AI swarms directly from GitHub Pull Requests, enabling seamles
 ### 1. PR-Based Swarm Creation
 ```bash
 # Create swarm from PR description using gh CLI
-gh pr view 123 --json body,title,labels,files | npx ruf-swarm swarm create-from-pr
+gh pr view 123 --json body,title,labels,files | npx swarmdo-swarm swarm create-from-pr
 
 # Auto-spawn agents based on PR labels
-gh pr view 123 --json labels | npx ruf-swarm swarm auto-spawn
+gh pr view 123 --json labels | npx swarmdo-swarm swarm auto-spawn
 
 # Create swarm with PR context
 gh pr view 123 --json body,labels,author,assignees | \
-  npx ruf-swarm swarm init --from-pr-data
+  npx swarmdo-swarm swarm init --from-pr-data
 ```
 
 ### 2. PR Comment Commands
@@ -89,7 +89,7 @@ jobs:
       - name: Handle Swarm Command
         run: |
           if [[ "${{ github.event.comment.body }}" == $swarm* ]]; then
-            npx ruf-swarm github handle-comment \
+            npx swarmdo-swarm github handle-comment \
               --pr ${{ github.event.pull_request.number }} \
               --comment "${{ github.event.comment.body }}"
           fi
@@ -117,7 +117,7 @@ Map PR labels to agent types:
 # Small PR (< 100 lines): ring topology
 # Medium PR (100-500 lines): mesh topology  
 # Large PR (> 500 lines): hierarchical topology
-npx ruf-swarm github pr-topology --pr 123
+npx swarmdo-swarm github pr-topology --pr 123
 ```
 
 ## PR Swarm Commands
@@ -128,7 +128,7 @@ npx ruf-swarm github pr-topology --pr 123
 PR_DIFF=$(gh pr diff 123)
 PR_INFO=$(gh pr view 123 --json title,body,labels,files,reviews)
 
-npx ruf-swarm github pr-init 123 \
+npx swarmdo-swarm github pr-init 123 \
   --auto-agents \
   --pr-data "$PR_INFO" \
   --diff "$PR_DIFF" \
@@ -138,7 +138,7 @@ npx ruf-swarm github pr-init 123 \
 ### Progress Updates
 ```bash
 # Post swarm progress to PR using gh CLI
-PROGRESS=$(npx ruf-swarm github pr-progress 123 --format markdown)
+PROGRESS=$(npx swarmdo-swarm github pr-progress 123 --format markdown)
 
 gh pr comment 123 --body "$PROGRESS"
 
@@ -154,7 +154,7 @@ fi
 PR_FILES=$(gh pr view 123 --json files --jq '.files[].path')
 
 # Run swarm review
-REVIEW_RESULTS=$(npx ruf-swarm github pr-review 123 \
+REVIEW_RESULTS=$(npx swarmdo-swarm github pr-review 123 \
   --agents "security,performance,style" \
   --files "$PR_FILES")
 
@@ -173,7 +173,7 @@ done
 ### 1. Multi-PR Swarm Coordination
 ```bash
 # Coordinate swarms across related PRs
-npx ruf-swarm github multi-pr \
+npx swarmdo-swarm github multi-pr \
   --prs "123,124,125" \
   --strategy "parallel" \
   --share-memory
@@ -182,7 +182,7 @@ npx ruf-swarm github multi-pr \
 ### 2. PR Dependency Analysis
 ```bash
 # Analyze PR dependencies
-npx ruf-swarm github pr-deps 123 \
+npx swarmdo-swarm github pr-deps 123 \
   --spawn-agents \
   --resolve-conflicts
 ```
@@ -190,7 +190,7 @@ npx ruf-swarm github pr-deps 123 \
 ### 3. Automated PR Fixes
 ```bash
 # Auto-fix PR issues
-npx ruf-swarm github pr-fix 123 \
+npx swarmdo-swarm github pr-fix 123 \
   --issues "lint,test-failures" \
   --commit-fixes
 ```
@@ -225,7 +225,7 @@ required_status_checks:
 ```bash
 # Auto-merge when swarm completes using gh CLI
 # Check swarm completion status
-SWARM_STATUS=$(npx ruf-swarm github pr-status 123)
+SWARM_STATUS=$(npx swarmdo-swarm github pr-status 123)
 
 if [[ "$SWARM_STATUS" == "complete" ]]; then
   # Check review requirements
@@ -251,7 +251,7 @@ createServer((req, res) => {
     const event = JSON.parse(body);
     
     if (event.action === 'opened' && event.pull_request) {
-      execSync(`npx ruf-swarm github pr-init ${event.pull_request.number}`);
+      execSync(`npx swarmdo-swarm github pr-init ${event.pull_request.number}`);
     }
     
     res.writeHead(200);
@@ -265,7 +265,7 @@ createServer((req, res) => {
 ### Feature Development PR
 ```bash
 # PR #456: Add user authentication
-npx ruf-swarm github pr-init 456 \
+npx swarmdo-swarm github pr-init 456 \
   --topology hierarchical \
   --agents "architect,coder,tester,security" \
   --auto-assign-tasks
@@ -274,7 +274,7 @@ npx ruf-swarm github pr-init 456 \
 ### Bug Fix PR
 ```bash
 # PR #789: Fix memory leak
-npx ruf-swarm github pr-init 789 \
+npx swarmdo-swarm github pr-init 789 \
   --topology mesh \
   --agents "debugger,analyst,tester" \
   --priority high
@@ -283,7 +283,7 @@ npx ruf-swarm github pr-init 789 \
 ### Documentation PR
 ```bash
 # PR #321: Update API docs
-npx ruf-swarm github pr-init 321 \
+npx swarmdo-swarm github pr-init 321 \
   --topology ring \
   --agents "researcher,writer,reviewer" \
   --validate-links
@@ -294,7 +294,7 @@ npx ruf-swarm github pr-init 321 \
 ### PR Swarm Analytics
 ```bash
 # Generate PR swarm report
-npx ruf-swarm github pr-report 123 \
+npx swarmdo-swarm github pr-report 123 \
   --metrics "completion-time,agent-efficiency,token-usage" \
   --format markdown
 ```
@@ -302,7 +302,7 @@ npx ruf-swarm github pr-report 123 \
 ### Dashboard Integration
 ```bash
 # Export to GitHub Insights
-npx ruf-swarm github export-metrics \
+npx swarmdo-swarm github export-metrics \
   --pr 123 \
   --to-insights
 ```
@@ -328,15 +328,15 @@ When using with Claude Code:
 ### Multi-Agent PR Analysis
 ```bash
 # Initialize PR-specific swarm with intelligent topology selection
-mcp__rufflo__swarm_init { topology: "mesh", maxAgents: 8 }
-mcp__rufflo__agent_spawn { type: "coordinator", name: "PR Coordinator" }
-mcp__rufflo__agent_spawn { type: "reviewer", name: "Code Reviewer" }
-mcp__rufflo__agent_spawn { type: "tester", name: "Test Engineer" }
-mcp__rufflo__agent_spawn { type: "analyst", name: "Impact Analyzer" }
-mcp__rufflo__agent_spawn { type: "optimizer", name: "Performance Optimizer" }
+mcp__swarmdo__swarm_init { topology: "mesh", maxAgents: 8 }
+mcp__swarmdo__agent_spawn { type: "coordinator", name: "PR Coordinator" }
+mcp__swarmdo__agent_spawn { type: "reviewer", name: "Code Reviewer" }
+mcp__swarmdo__agent_spawn { type: "tester", name: "Test Engineer" }
+mcp__swarmdo__agent_spawn { type: "analyst", name: "Impact Analyzer" }
+mcp__swarmdo__agent_spawn { type: "optimizer", name: "Performance Optimizer" }
 
 # Store PR context for swarm coordination
-mcp__rufflo__memory_usage {
+mcp__swarmdo__memory_usage {
   action: "store",
   key: "pr/#{pr_number}$analysis",
   value: { 
@@ -348,7 +348,7 @@ mcp__rufflo__memory_usage {
 }
 
 # Orchestrate comprehensive PR workflow
-mcp__rufflo__task_orchestrate {
+mcp__swarmdo__task_orchestrate {
   task: "Execute multi-agent PR review and validation workflow",
   strategy: "parallel",
   priority: "high",
@@ -408,17 +408,17 @@ const prPostHook = async (results) => {
 ### Intelligent PR Merge Coordination
 ```bash
 # Coordinate merge decision with swarm consensus
-mcp__rufflo__coordination_sync { swarmId: "pr-review-swarm" }
+mcp__swarmdo__coordination_sync { swarmId: "pr-review-swarm" }
 
 # Analyze merge readiness with multiple agents
-mcp__rufflo__task_orchestrate {
+mcp__swarmdo__task_orchestrate {
   task: "Evaluate PR merge readiness with comprehensive validation",
   strategy: "sequential",
   priority: "critical"
 }
 
 # Store merge decision context
-mcp__rufflo__memory_usage {
+mcp__swarmdo__memory_usage {
   action: "store",
   key: "pr$merge_decisions/#{pr_number}",
   value: {

@@ -10,11 +10,11 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
-const DATA_DIR = path.join(process.cwd(), '.rufflo', 'data');
+const DATA_DIR = path.join(process.cwd(), '.swarmdo', 'data');
 const STORE_PATH = path.join(DATA_DIR, 'auto-memory-store.json');
 const RANKED_PATH = path.join(DATA_DIR, 'ranked-context.json');
 const PENDING_PATH = path.join(DATA_DIR, 'pending-insights.jsonl');
-const SESSION_DIR = path.join(process.cwd(), '.rufflo', 'sessions');
+const SESSION_DIR = path.join(process.cwd(), '.swarmdo', 'sessions');
 const SESSION_FILE = path.join(SESSION_DIR, 'current.json');
 
 // ── Safety limits (fixes #1530, #1531) ─────────────────────────────────────
@@ -60,7 +60,7 @@ function tokenize(text) {
 // Silently severing stored values means later reasoning can be built on
 // incomplete text. Warn (debug-gated) and mark the cut point with an ellipsis
 // so it is visible that the value was clipped.
-var DEBUG = !!(process.env.RUFLO_DEBUG || process.env.DEBUG);
+var DEBUG = !!(process.env.SWARMDO_DEBUG || process.env.DEBUG);
 function clip(text, max, label) {
   text = text == null ? "" : String(text);
   if (text.length <= max) return text;
@@ -98,7 +98,7 @@ function bootstrapFromMemoryFiles() {
   var projectSlug = process.cwd().replace(/[^a-zA-Z0-9]/g, '-');
   var candidates = [
     path.join(os.homedir(), ".claude", "projects", projectSlug, "memory"),
-    path.join(process.cwd(), ".rufflo", "memory"),
+    path.join(process.cwd(), ".swarmdo", "memory"),
     path.join(process.cwd(), ".claude", "memory"),
   ];
   for (var i = 0; i < candidates.length; i++) {

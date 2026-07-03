@@ -85,7 +85,7 @@ const entryEstimate = await mcp__sublinear-time-solver__estimateEntry({
 });
 ```
 
-## Integration with Rufflo
+## Integration with Swarmdo
 
 ### Swarm Coordination
 - **Matrix Distribution**: Distribute large matrix operations across swarm agents

@@ -74,7 +74,7 @@ export const defaultSwarmConfig: V3SwarmConfig = {
   loadBalancingStrategy: 'capability-match',
 
   // V3 Extensions
-  name: 'rufflo-v3-swarm',
+  name: 'swarmdo-v3-swarm',
   version: '3.0.0',
   description: '15-agent hierarchical mesh swarm for V3 implementation',
 

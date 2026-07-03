@@ -29,12 +29,12 @@ import * as os from 'os';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, '..');
-const distBase = path.join(projectRoot, 'v3/@rufflo/cli/dist/src');
+const distBase = path.join(projectRoot, 'v3/@swarmdo/cli/dist/src');
 const jsonMode = process.argv.includes('--json');
 
 const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'adr130-bench-'));
 const dbPath = path.join(tmpDir, 'memory.db');
-process.env.RUFFLO_MEMORY_PATH = tmpDir;
+process.env.SWARMDO_MEMORY_PATH = tmpDir;
 
 function percentile(sorted, p) {
   const idx = Math.ceil((p / 100) * sorted.length) - 1;

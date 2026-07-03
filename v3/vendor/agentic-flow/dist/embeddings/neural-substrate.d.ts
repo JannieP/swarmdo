@@ -1,10 +1,10 @@
 /**
  * Neural Embedding Substrate Integration
  *
- * Wraps ruvector's NeuralSubstrate for agentic-flow agents
+ * Wraps swarmvector's NeuralSubstrate for agentic-flow agents
  * treating embeddings as a synthetic nervous system.
  *
- * Based on ruvector@0.1.85 neural-embeddings.ts
+ * Based on swarmvector@0.1.85 neural-embeddings.ts
  */
 export interface DriftResult {
     distance: number;

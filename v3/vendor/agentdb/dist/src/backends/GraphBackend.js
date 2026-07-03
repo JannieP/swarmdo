@@ -2,7 +2,7 @@
  * GraphBackend Interface - Graph database capabilities (Optional)
  *
  * Provides property graph storage and Cypher-like query capabilities.
- * Available when @rufvector/graph-node is installed.
+ * Available when @swarmvector/graph-node is installed.
  *
  * Features:
  * - Node and relationship management

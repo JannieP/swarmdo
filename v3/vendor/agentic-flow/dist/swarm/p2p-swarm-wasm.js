@@ -6,7 +6,7 @@
  * - HNSW indexing (fast member/capability search)
  * - Semantic matching (intelligent task routing)
  */
-import { initRuVectorWasm, isWasmInitialized, generateIdentity, signData, verifySignature, RuVectorHnswIndex, RuVectorSemanticMatcher, } from '../wasm/ruvector-edge.js';
+import { initSwarmVectorWasm, isWasmInitialized, generateIdentity, signData, verifySignature, SwarmVectorHnswIndex, SwarmVectorSemanticMatcher, } from '../wasm/swarmvector-edge.js';
 import { logger } from '../utils/logger.js';
 //=============================================================================
 // WASM-Enhanced Identity Manager
@@ -28,7 +28,7 @@ export class WasmIdentityManager {
         if (this.initialized)
             return;
         // Try to initialize WASM
-        await initRuVectorWasm();
+        await initSwarmVectorWasm();
         // Generate identity (uses WASM if available)
         const identity = await generateIdentity();
         this.publicKey = identity.publicKey;
@@ -139,7 +139,7 @@ export class WasmMemberIndex {
     dimensions;
     constructor(dimensions = 128) {
         this.dimensions = dimensions;
-        this.hnswIndex = new RuVectorHnswIndex(dimensions, 16, 200);
+        this.hnswIndex = new SwarmVectorHnswIndex(dimensions, 16, 200);
     }
     /**
      * Add or update member
@@ -232,7 +232,7 @@ export class WasmTaskRouter {
     dimensions;
     constructor(dimensions = 128) {
         this.dimensions = dimensions;
-        this.semanticMatcher = new RuVectorSemanticMatcher();
+        this.semanticMatcher = new SwarmVectorSemanticMatcher();
     }
     /**
      * Register agent for task routing

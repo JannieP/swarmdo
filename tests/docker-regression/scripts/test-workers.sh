@@ -1,5 +1,5 @@
 #!/bin/bash
-# Rufflo Background Workers Test Suite
+# Swarmdo Background Workers Test Suite
 # Tests all 10 background workers and scheduling
 
 set -e

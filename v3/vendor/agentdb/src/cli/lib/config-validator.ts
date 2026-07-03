@@ -35,12 +35,12 @@ export class ConfigValidator {
 
     // Validate backend
     if (config.backend) {
-      const validBackends = ['rufvector', 'hnswlib', 'faiss'];
+      const validBackends = ['swarmvector', 'hnswlib', 'faiss'];
       if (!validBackends.includes(config.backend)) {
         errors.push(`Invalid backend: ${config.backend}. Must be one of: ${validBackends.join(', ')}`);
       }
-      if (config.backend !== 'rufvector') {
-        warnings.push('Using non-optimal backend. RuVector provides 8.2x speedup.');
+      if (config.backend !== 'swarmvector') {
+        warnings.push('Using non-optimal backend. SwarmVector provides 8.2x speedup.');
       }
     }
 
@@ -150,7 +150,7 @@ export class ConfigValidator {
    */
   static isOptimal(config: SimulationConfig): boolean {
     const optimalChecks = [
-      config.backend === 'rufvector',
+      config.backend === 'swarmvector',
       config.attentionHeads === 8 || config.attentionHeads === undefined,
       config.searchStrategy === 'beam-dynamic' || config.searchStrategy === undefined,
       config.beamWidth === 5 || config.beamWidth === undefined,
@@ -166,7 +166,7 @@ export class ConfigValidator {
    */
   static getOptimalConfig(scenario: string): Partial<SimulationConfig> {
     const baseOptimal = {
-      backend: 'rufvector',
+      backend: 'swarmvector',
       attentionHeads: 8,
       searchStrategy: 'beam-dynamic',
       beamWidth: 5,

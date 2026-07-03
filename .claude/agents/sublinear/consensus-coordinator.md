@@ -145,7 +145,7 @@ class SwarmCoordinator {
 }
 ```
 
-## Integration with Rufflo
+## Integration with Swarmdo
 
 ### Swarm Consensus Protocols
 - **Agent Agreement**: Coordinate agreement across swarm agents

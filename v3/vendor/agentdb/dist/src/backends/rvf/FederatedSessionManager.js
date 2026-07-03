@@ -1,7 +1,7 @@
 /**
  * FederatedSessionManager - Cross-Session Federated Learning for AgentDB
  *
- * Wraps @rufvector/rufllm's EphemeralAgent + FederatedCoordinator to provide:
+ * Wraps @swarmvector/swarmllm's EphemeralAgent + FederatedCoordinator to provide:
  * - Agent-scoped trajectory recording per session
  * - Federated aggregation across all agent sessions
  * - Warm-start pattern loading for new sessions
@@ -47,7 +47,7 @@ export class FederatedSessionManager {
     }
     /**
      * Create a new federated session manager.
-     * Lazy-loads @rufvector/rufllm to avoid hard dependency.
+     * Lazy-loads @swarmvector/swarmllm to avoid hard dependency.
      */
     static async create(config) {
         if (!Number.isFinite(config.dimension) || config.dimension < 1 || config.dimension > MAX_DIMENSION) {
@@ -58,8 +58,8 @@ export class FederatedSessionManager {
         const loraRank = Math.min(Math.max(1, config.loraRank ?? 4), MAX_LORA_RANK);
         try {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const ruvllm = await import('@rufvector/rufllm');
-            instance.coordinator = new ruvllm.FederatedCoordinator({
+            const swarmllm = await import('@swarmvector/swarmllm');
+            instance.coordinator = new swarmllm.FederatedCoordinator({
                 dimension: config.dimension,
                 maxAgents,
             });
@@ -70,7 +70,7 @@ export class FederatedSessionManager {
                 instance.coordinator.setConsolidationInterval(Math.max(1, config.consolidationInterval));
             }
             // Initialize LoRA manager for task-specific adapters
-            instance.loraManager = new ruvllm.LoraManager();
+            instance.loraManager = new swarmllm.LoraManager();
             // Create a default adapter
             instance.loraManager.create('default', {
                 inputDim: config.dimension,
@@ -82,17 +82,17 @@ export class FederatedSessionManager {
         }
         catch (error) {
             throw new Error(`Federated session manager initialization failed.\n` +
-                `Install with: npm install @rufvector/rufllm\n` +
+                `Install with: npm install @swarmvector/swarmllm\n` +
                 `Error: ${error.message}`);
         }
         return instance;
     }
     /**
-     * Check if @rufvector/rufllm is available.
+     * Check if @swarmvector/swarmllm is available.
      */
     static async isAvailable() {
         try {
-            await import('@rufvector/rufllm');
+            await import('@swarmvector/swarmllm');
             return true;
         }
         catch {

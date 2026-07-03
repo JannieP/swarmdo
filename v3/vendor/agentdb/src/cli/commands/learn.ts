@@ -127,7 +127,7 @@ export const learnCommand = new Command('learn')
         console.log(JSON.stringify({ error: error.message, wasmAvailable: false }, null, 2));
       } else {
         console.error(chalk.red(`\n❌ Error: ${error.message}\n`));
-        if (error.message.includes('WASM') || error.message.includes('rufvector')) {
+        if (error.message.includes('WASM') || error.message.includes('swarmvector')) {
           console.log(chalk.yellow('💡 Tip: WASM modules may not be available. Running with fallback implementation.'));
         }
       }
@@ -159,8 +159,8 @@ async function runCurriculumLearning(data: any[], options: LearnOptions): Promis
   let wasmModule: any = null;
 
   try {
-    // Attempt to load @rufvector/attention for curriculum scheduler
-    wasmModule = await import('@rufvector/attention');
+    // Attempt to load @swarmvector/attention for curriculum scheduler
+    wasmModule = await import('@swarmvector/attention');
     useWasm = true;
     if (options.verbose) {
       console.log(chalk.green('✅ Using WASM-accelerated curriculum learning\n'));
@@ -241,7 +241,7 @@ async function runContrastiveLearning(data: any[], options: LearnOptions): Promi
   // Try to use WASM-accelerated implementation
   let useWasm = false;
   try {
-    await import('@rufvector/attention');
+    await import('@swarmvector/attention');
     useWasm = true;
     if (options.verbose) {
       console.log(chalk.green('✅ Using WASM-accelerated contrastive learning\n'));
@@ -325,7 +325,7 @@ async function runHardNegativeMining(data: any[], options: LearnOptions): Promis
   // Try to use WASM-accelerated implementation
   let useWasm = false;
   try {
-    await import('@rufvector/attention');
+    await import('@swarmvector/attention');
     useWasm = true;
     if (options.verbose) {
       console.log(chalk.green('✅ Using WASM-accelerated negative mining\n'));
@@ -506,7 +506,7 @@ learnCommand.on('--help', () => {
   console.log('  [{"id": 1, "embedding": [...], "label": "..."}, ...]');
   console.log('');
   console.log('WASM Acceleration:');
-  console.log('  This command uses @rufvector/attention WASM modules when available.');
+  console.log('  This command uses @swarmvector/attention WASM modules when available.');
   console.log('  Falls back gracefully to JavaScript implementation if WASM is unavailable.');
   console.log('');
 });

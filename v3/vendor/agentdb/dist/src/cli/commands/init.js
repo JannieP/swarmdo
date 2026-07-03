@@ -22,7 +22,7 @@ function printDetectionInfo(detection) {
     console.log(formatDetectionResult(detection));
 }
 function getBackendColor(backend) {
-    return backend === 'rufvector' ? colors.green : colors.yellow;
+    return backend === 'swarmvector' ? colors.green : colors.yellow;
 }
 export async function initCommand(options = {}) {
     const { backend = 'auto', dimension = 384, model, preset, inMemory = false, dryRun = false, dbPath = './agentdb.db' } = options;
@@ -34,9 +34,9 @@ export async function initCommand(options = {}) {
             return;
         }
         // Validate backend selection
-        if (backend === 'rufvector' && detection.backend !== 'rufvector') {
-            console.error(`${colors.red}❌ Error: RuVector not available${colors.reset}`);
-            console.error(`   Install with: ${colors.cyan}npm install @rufvector/core${colors.reset}`);
+        if (backend === 'swarmvector' && detection.backend !== 'swarmvector') {
+            console.error(`${colors.red}❌ Error: SwarmVector not available${colors.reset}`);
+            console.error(`   Install with: ${colors.cyan}npm install @swarmvector/core${colors.reset}`);
             process.exit(1);
         }
         if (backend === 'hnswlib' && detection.backend !== 'hnswlib') {
@@ -115,13 +115,13 @@ export async function initCommand(options = {}) {
     `).run('version', '2.0.0');
         db.close();
         console.log(`${colors.green}✅ AgentDB initialized successfully${colors.reset}\n`);
-        if (selectedBackend === 'rufvector' && detection.features.gnn) {
+        if (selectedBackend === 'swarmvector' && detection.features.gnn) {
             console.log(`${colors.bright}${colors.magenta}🧠 Bonus:${colors.reset} GNN self-learning available`);
             console.log(`   Use ${colors.cyan}agentdb train${colors.reset} to enable adaptive patterns\n`);
         }
         if (selectedBackend === 'hnswlib') {
-            console.log(`${colors.yellow}💡 Tip:${colors.reset} Install RuVector for 150x performance boost`);
-            console.log(`   ${colors.cyan}npm install @rufvector/core${colors.reset}\n`);
+            console.log(`${colors.yellow}💡 Tip:${colors.reset} Install SwarmVector for 150x performance boost`);
+            console.log(`   ${colors.cyan}npm install @swarmvector/core${colors.reset}\n`);
         }
     }
     catch (error) {

@@ -10,10 +10,10 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const mod = await import('../.claude/helpers/context-persistence-hook.mjs');
 const {
   SQLiteBackend,
-  RufVectorBackend,
+  SwarmVectorBackend,
   JsonFileBackend,
   resolveBackend,
-  getRufVectorConfig,
+  getSwarmVectorConfig,
   createHashEmbedding,
   hashContent,
   parseTranscript,
@@ -653,37 +653,37 @@ describe('no-op conditions', () => {
 });
 
 // ============================================================================
-// RufVector Config Tests
+// SwarmVector Config Tests
 // ============================================================================
 
-describe('getRufVectorConfig', () => {
+describe('getSwarmVectorConfig', () => {
   it('should return null when no env vars set', () => {
     // Save and clear env vars
     const saved = { ...process.env };
-    delete process.env.RUFVECTOR_HOST;
-    delete process.env.RUFVECTOR_DATABASE;
-    delete process.env.RUFVECTOR_USER;
+    delete process.env.SWARMVECTOR_HOST;
+    delete process.env.SWARMVECTOR_DATABASE;
+    delete process.env.SWARMVECTOR_USER;
     delete process.env.PGHOST;
     delete process.env.PGDATABASE;
     delete process.env.PGUSER;
 
-    const config = getRufVectorConfig();
+    const config = getSwarmVectorConfig();
     assert.equal(config, null);
 
     // Restore env
     Object.assign(process.env, saved);
   });
 
-  it('should parse config from RUFVECTOR_* env vars', () => {
+  it('should parse config from SWARMVECTOR_* env vars', () => {
     const saved = { ...process.env };
-    process.env.RUFVECTOR_HOST = 'pg.example.com';
-    process.env.RUFVECTOR_PORT = '5433';
-    process.env.RUFVECTOR_DATABASE = 'claude_flow';
-    process.env.RUFVECTOR_USER = 'admin';
-    process.env.RUFVECTOR_PASSWORD = 'secret123';
-    process.env.RUFVECTOR_SSL = 'true';
+    process.env.SWARMVECTOR_HOST = 'pg.example.com';
+    process.env.SWARMVECTOR_PORT = '5433';
+    process.env.SWARMVECTOR_DATABASE = 'claude_flow';
+    process.env.SWARMVECTOR_USER = 'admin';
+    process.env.SWARMVECTOR_PASSWORD = 'secret123';
+    process.env.SWARMVECTOR_SSL = 'true';
 
-    const config = getRufVectorConfig();
+    const config = getSwarmVectorConfig();
     assert.ok(config);
     assert.equal(config.host, 'pg.example.com');
     assert.equal(config.port, 5433);
@@ -693,26 +693,26 @@ describe('getRufVectorConfig', () => {
     assert.equal(config.ssl, true);
 
     // Cleanup
-    delete process.env.RUFVECTOR_HOST;
-    delete process.env.RUFVECTOR_PORT;
-    delete process.env.RUFVECTOR_DATABASE;
-    delete process.env.RUFVECTOR_USER;
-    delete process.env.RUFVECTOR_PASSWORD;
-    delete process.env.RUFVECTOR_SSL;
+    delete process.env.SWARMVECTOR_HOST;
+    delete process.env.SWARMVECTOR_PORT;
+    delete process.env.SWARMVECTOR_DATABASE;
+    delete process.env.SWARMVECTOR_USER;
+    delete process.env.SWARMVECTOR_PASSWORD;
+    delete process.env.SWARMVECTOR_SSL;
     Object.assign(process.env, saved);
   });
 
   it('should fall back to PG* env vars', () => {
     const saved = { ...process.env };
-    delete process.env.RUFVECTOR_HOST;
-    delete process.env.RUFVECTOR_DATABASE;
-    delete process.env.RUFVECTOR_USER;
+    delete process.env.SWARMVECTOR_HOST;
+    delete process.env.SWARMVECTOR_DATABASE;
+    delete process.env.SWARMVECTOR_USER;
     process.env.PGHOST = 'localhost';
     process.env.PGDATABASE = 'testdb';
     process.env.PGUSER = 'testuser';
     process.env.PGPORT = '5434';
 
-    const config = getRufVectorConfig();
+    const config = getSwarmVectorConfig();
     assert.ok(config);
     assert.equal(config.host, 'localhost');
     assert.equal(config.port, 5434);
@@ -728,13 +728,13 @@ describe('getRufVectorConfig', () => {
 });
 
 // ============================================================================
-// RufVectorBackend Class Tests (mock-based, no real PostgreSQL)
+// SwarmVectorBackend Class Tests (mock-based, no real PostgreSQL)
 // ============================================================================
 
-describe('RufVectorBackend', () => {
+describe('SwarmVectorBackend', () => {
   it('should be exported and constructable', () => {
-    assert.ok(RufVectorBackend);
-    const backend = new RufVectorBackend({
+    assert.ok(SwarmVectorBackend);
+    const backend = new SwarmVectorBackend({
       host: 'localhost', port: 5432, database: 'test', user: 'test', password: 'test',
     });
     assert.ok(backend);
@@ -742,7 +742,7 @@ describe('RufVectorBackend', () => {
   });
 
   it('hashExists should return false (async-only for pg)', () => {
-    const backend = new RufVectorBackend({
+    const backend = new SwarmVectorBackend({
       host: 'localhost', port: 5432, database: 'test', user: 'test', password: 'test',
     });
     // Synchronous hashExists always returns false for pg (uses ON CONFLICT for dedup)
@@ -820,8 +820,8 @@ describe('resolveBackend priority', () => {
     await backend.shutdown();
   });
 
-  it('should not resolve rufvector when env vars are absent', () => {
-    const config = getRufVectorConfig();
+  it('should not resolve swarmvector when env vars are absent', () => {
+    const config = getSwarmVectorConfig();
     assert.equal(config, null);
   });
 });
@@ -1151,7 +1151,7 @@ describe('autoOptimize', () => {
     const result = await autoOptimize(backend, 'sqlite');
 
     assert.equal(result.pruned, 1);
-    assert.equal(result.synced, 0); // No RufVector configured
+    assert.equal(result.synced, 0); // No SwarmVector configured
 
     const remaining = await backend.count(NAMESPACE);
     assert.equal(remaining, 1);

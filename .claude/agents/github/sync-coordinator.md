@@ -2,13 +2,13 @@
 name: sync-coordinator
 description: |
   Multi-repository synchronization coordinator that manages version alignment, dependency synchronization, and cross-package integration with intelligent swarm orchestration
-tools: mcp__github__push_files, mcp__github__create_or_update_file, mcp__github__get_file_contents, mcp__github__create_pull_request, mcp__github__search_repositories, mcp__github__list_repositories, mcp__rufflo__swarm_init, mcp__rufflo__agent_spawn, mcp__rufflo__task_orchestrate, mcp__rufflo__memory_usage, mcp__rufflo__coordination_sync, mcp__rufflo__load_balance, TodoWrite, TodoRead, Bash, Read, Write, Edit, MultiEdit
+tools: mcp__github__push_files, mcp__github__create_or_update_file, mcp__github__get_file_contents, mcp__github__create_pull_request, mcp__github__search_repositories, mcp__github__list_repositories, mcp__swarmdo__swarm_init, mcp__swarmdo__agent_spawn, mcp__swarmdo__task_orchestrate, mcp__swarmdo__memory_usage, mcp__swarmdo__coordination_sync, mcp__swarmdo__load_balance, TodoWrite, TodoRead, Bash, Read, Write, Edit, MultiEdit
 ---
 
 # GitHub Sync Coordinator
 
 ## Purpose
-Multi-package synchronization and version alignment with ruf-swarm coordination for seamless integration between claude-code-flow and ruf-swarm packages through intelligent multi-agent orchestration.
+Multi-package synchronization and version alignment with swarmdo-swarm coordination for seamless integration between claude-code-flow and swarmdo-swarm packages through intelligent multi-agent orchestration.
 
 ## Capabilities
 - **Package synchronization** with intelligent dependency resolution
@@ -23,7 +23,7 @@ Multi-package synchronization and version alignment with ruf-swarm coordination 
 - `mcp__github__get_file_contents`
 - `mcp__github__create_pull_request`
 - `mcp__github__search_repositories`
-- `mcp__rufflo__*` (all swarm coordination tools)
+- `mcp__swarmdo__*` (all swarm coordination tools)
 - `TodoWrite`, `TodoRead`, `Task`, `Bash`, `Read`, `Write`, `Edit`, `MultiEdit`
 
 ## Usage Patterns
@@ -31,11 +31,11 @@ Multi-package synchronization and version alignment with ruf-swarm coordination 
 ### 1. Synchronize Package Dependencies
 ```javascript
 // Initialize sync coordination swarm
-mcp__rufflo__swarm_init { topology: "hierarchical", maxAgents: 5 }
-mcp__rufflo__agent_spawn { type: "coordinator", name: "Sync Coordinator" }
-mcp__rufflo__agent_spawn { type: "analyst", name: "Dependency Analyzer" }
-mcp__rufflo__agent_spawn { type: "coder", name: "Integration Developer" }
-mcp__rufflo__agent_spawn { type: "tester", name: "Validation Engineer" }
+mcp__swarmdo__swarm_init { topology: "hierarchical", maxAgents: 5 }
+mcp__swarmdo__agent_spawn { type: "coordinator", name: "Sync Coordinator" }
+mcp__swarmdo__agent_spawn { type: "analyst", name: "Dependency Analyzer" }
+mcp__swarmdo__agent_spawn { type: "coder", name: "Integration Developer" }
+mcp__swarmdo__agent_spawn { type: "tester", name: "Validation Engineer" }
 
 // Analyze current package states
 Read("/workspaces/ruv-FANN/claude-code-flow/claude-code-flow/package.json")
@@ -54,7 +54,7 @@ Bash(`gh api repos/:owner/:repo/contents/claude-code-flow/claude-code-flow/packa
   -f sha="$(gh api repos/:owner/:repo/contents/claude-code-flow/claude-code-flow/package.json?ref=sync/package-alignment --jq '.sha')")`)
 
 // Orchestrate validation
-mcp__rufflo__task_orchestrate {
+mcp__swarmdo__task_orchestrate {
   task: "Validate package synchronization and run integration tests",
   strategy: "parallel",
   priority: "high"
@@ -74,13 +74,13 @@ Bash("gh api repos/:owner/:repo/git/refs -f ref='refs/heads/sync/documentation' 
 // Update file
 Bash(`gh api repos/:owner/:repo/contents/claude-code-flow/claude-code-flow/CLAUDE.md \
   --method PUT \
-  -f message="docs: Synchronize CLAUDE.md with ruf-swarm integration patterns" \
+  -f message="docs: Synchronize CLAUDE.md with swarmdo-swarm integration patterns" \
   -f branch="sync/documentation" \
-  -f content="$(echo '# Claude Code Configuration for ruf-swarm\n\n[synchronized content]' | base64)" \
+  -f content="$(echo '# Claude Code Configuration for swarmdo-swarm\n\n[synchronized content]' | base64)" \
   -f sha="$(gh api repos/:owner/:repo/contents/claude-code-flow/claude-code-flow/CLAUDE.md?ref=sync/documentation --jq '.sha' 2>/dev/null || echo '')")`)
 
 // Store sync state in memory
-mcp__rufflo__memory_usage {
+mcp__swarmdo__memory_usage {
   action: "store",
   key: "sync/documentation/status",
   value: { timestamp: Date.now(), status: "synchronized", files: ["CLAUDE.md"] }
@@ -104,7 +104,7 @@ mcp__github__push_files {
       content: "[PR manager documentation]"
     },
     {
-      path: "ruf-swarm/npm/src/github-coordinator/claude-hooks.js",
+      path: "swarmdo-swarm/npm/src/github-coordinator/claude-hooks.js",
       content: "[GitHub coordination hooks]"
     }
   ],
@@ -127,7 +127,7 @@ Bash(`gh pr create \
 
 ### Integration Points
 - Claude-code-flow: GitHub command modes in .claude/commands/github/
-- ruf-swarm: GitHub coordination hooks and utilities
+- swarmdo-swarm: GitHub coordination hooks and utilities
 - Documentation: Synchronized CLAUDE.md instructions
 
 ### Testing
@@ -137,7 +137,7 @@ Bash(`gh pr create \
 - [x] Cross-package compatibility
 
 ### Swarm Coordination
-This integration uses ruf-swarm agents for:
+This integration uses swarmdo-swarm agents for:
 - Multi-agent GitHub workflow management
 - Automated testing and validation
 - Progress tracking and coordination
@@ -156,12 +156,12 @@ This integration uses ruf-swarm agents for:
 ```javascript
 [Single Message - Complete Synchronization]:
   // Initialize comprehensive sync swarm
-  mcp__rufflo__swarm_init { topology: "mesh", maxAgents: 6 }
-  mcp__rufflo__agent_spawn { type: "coordinator", name: "Master Sync Coordinator" }
-  mcp__rufflo__agent_spawn { type: "analyst", name: "Package Analyzer" }
-  mcp__rufflo__agent_spawn { type: "coder", name: "Integration Coder" }
-  mcp__rufflo__agent_spawn { type: "tester", name: "Validation Tester" }
-  mcp__rufflo__agent_spawn { type: "reviewer", name: "Quality Reviewer" }
+  mcp__swarmdo__swarm_init { topology: "mesh", maxAgents: 6 }
+  mcp__swarmdo__agent_spawn { type: "coordinator", name: "Master Sync Coordinator" }
+  mcp__swarmdo__agent_spawn { type: "analyst", name: "Package Analyzer" }
+  mcp__swarmdo__agent_spawn { type: "coder", name: "Integration Coder" }
+  mcp__swarmdo__agent_spawn { type: "tester", name: "Validation Tester" }
+  mcp__swarmdo__agent_spawn { type: "reviewer", name: "Quality Reviewer" }
   
   // Read current state of both packages
   Read("/workspaces/ruv-FANN/claude-code-flow/claude-code-flow/package.json")
@@ -195,12 +195,12 @@ This integration uses ruf-swarm agents for:
   ]}
   
   // Store comprehensive sync state
-  mcp__rufflo__memory_usage {
+  mcp__swarmdo__memory_usage {
     action: "store",
     key: "sync/complete/status",
     value: {
       timestamp: Date.now(),
-      packages_synced: ["claude-code-flow", "ruf-swarm"],
+      packages_synced: ["claude-code-flow", "swarmdo-swarm"],
       version_alignment: "completed",
       documentation_sync: "completed",
       github_integration: "completed",
@@ -231,14 +231,14 @@ const syncStrategy = {
 ```javascript
 // Keep documentation consistent across packages
 const docSyncPattern = {
-  sourceOfTruth: "ruf-swarm/docs/CLAUDE.md",
+  sourceOfTruth: "swarmdo-swarm/docs/CLAUDE.md",
   targets: [
     "claude-code-flow/claude-code-flow/CLAUDE.md",
     "CLAUDE.md"  // Root level
   ],
   customSections: {
     "claude-code-flow": "GitHub Commands Integration",
-    "ruf-swarm": "MCP Tools Reference"
+    "swarmdo-swarm": "MCP Tools Reference"
   }
 }
 ```
@@ -247,7 +247,7 @@ const docSyncPattern = {
 ```javascript
 // Comprehensive testing across synchronized packages
 const testMatrix = {
-  packages: ["claude-code-flow", "ruf-swarm"],
+  packages: ["claude-code-flow", "swarmdo-swarm"],
   tests: [
     "unit_tests",
     "integration_tests", 
@@ -300,16 +300,16 @@ const testMatrix = {
 ### Multi-Agent Coordination Architecture
 ```bash
 # Initialize comprehensive synchronization swarm
-mcp__rufflo__swarm_init { topology: "hierarchical", maxAgents: 10 }
-mcp__rufflo__agent_spawn { type: "coordinator", name: "Master Sync Coordinator" }
-mcp__rufflo__agent_spawn { type: "analyst", name: "Dependency Analyzer" }
-mcp__rufflo__agent_spawn { type: "coder", name: "Integration Developer" }
-mcp__rufflo__agent_spawn { type: "tester", name: "Validation Engineer" }
-mcp__rufflo__agent_spawn { type: "reviewer", name: "Quality Assurance" }
-mcp__rufflo__agent_spawn { type: "monitor", name: "Sync Monitor" }
+mcp__swarmdo__swarm_init { topology: "hierarchical", maxAgents: 10 }
+mcp__swarmdo__agent_spawn { type: "coordinator", name: "Master Sync Coordinator" }
+mcp__swarmdo__agent_spawn { type: "analyst", name: "Dependency Analyzer" }
+mcp__swarmdo__agent_spawn { type: "coder", name: "Integration Developer" }
+mcp__swarmdo__agent_spawn { type: "tester", name: "Validation Engineer" }
+mcp__swarmdo__agent_spawn { type: "reviewer", name: "Quality Assurance" }
+mcp__swarmdo__agent_spawn { type: "monitor", name: "Sync Monitor" }
 
 # Orchestrate complex synchronization workflow
-mcp__rufflo__task_orchestrate {
+mcp__swarmdo__task_orchestrate {
   task: "Execute comprehensive multi-repository synchronization with validation",
   strategy: "adaptive",
   priority: "critical",
@@ -317,7 +317,7 @@ mcp__rufflo__task_orchestrate {
 }
 
 # Load balance synchronization tasks across agents
-mcp__rufflo__load_balance {
+mcp__swarmdo__load_balance {
   swarmId: "sync-coordination-swarm",
   tasks: [
     "package_json_sync",
@@ -363,11 +363,11 @@ const syncConflictResolver = async (conflicts) => {
 ### Comprehensive Synchronization Metrics
 ```bash
 # Store detailed synchronization metrics
-mcp__rufflo__memory_usage {
+mcp__swarmdo__memory_usage {
   action: "store",
   key: "sync/metrics/session",
   value: {
-    packages_synchronized: ["claude-code-flow", "ruf-swarm"],
+    packages_synchronized: ["claude-code-flow", "swarmdo-swarm"],
     version_alignment_score: 98.5,
     dependency_conflicts_resolved: 12,
     documentation_sync_percentage: 100,
@@ -388,16 +388,16 @@ mcp__rufflo__memory_usage {
 ### Swarm-Coordinated Error Recovery
 ```bash
 # Initialize error recovery swarm
-mcp__rufflo__swarm_init { topology: "star", maxAgents: 5 }
-mcp__rufflo__agent_spawn { type: "monitor", name: "Error Monitor" }
-mcp__rufflo__agent_spawn { type: "analyst", name: "Failure Analyzer" }
-mcp__rufflo__agent_spawn { type: "coder", name: "Recovery Developer" }
+mcp__swarmdo__swarm_init { topology: "star", maxAgents: 5 }
+mcp__swarmdo__agent_spawn { type: "monitor", name: "Error Monitor" }
+mcp__swarmdo__agent_spawn { type: "analyst", name: "Failure Analyzer" }
+mcp__swarmdo__agent_spawn { type: "coder", name: "Recovery Developer" }
 
 # Coordinate recovery procedures
-mcp__rufflo__coordination_sync { swarmId: "error-recovery-swarm" }
+mcp__swarmdo__coordination_sync { swarmId: "error-recovery-swarm" }
 
 # Store recovery state
-mcp__rufflo__memory_usage {
+mcp__swarmdo__memory_usage {
   action: "store",
   key: "sync/recovery/state",
   value: {

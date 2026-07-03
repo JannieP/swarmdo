@@ -1,8 +1,8 @@
 #!/bin/bash
-# Rufflo V3 Status Display Template (Linux/macOS)
+# Swarmdo V3 Status Display Template (Linux/macOS)
 
-METRICS_DIR="${PROJECT_ROOT:-.}/.rufflo/metrics"
-SECURITY_DIR="${PROJECT_ROOT:-.}/.rufflo/security"
+METRICS_DIR="${PROJECT_ROOT:-.}/.swarmdo/metrics"
+SECURITY_DIR="${PROJECT_ROOT:-.}/.swarmdo/security"
 
 # Colors
 GREEN='\033[0;32m'
@@ -55,7 +55,7 @@ get_color() {
 display_status() {
     get_metrics
 
-    echo -e "${BOLD}${PURPLE}⚡ Rufflo V3 Development Status${RESET}"
+    echo -e "${BOLD}${PURPLE}⚡ Swarmdo V3 Development Status${RESET}"
     echo -e "${BLUE}============================================${RESET}"
     echo ""
 
@@ -85,7 +85,7 @@ display_status() {
     fi
 
     echo ""
-    echo -e "${BLUE}Commands: rufflo-v3.sh {status|update|validate|checkpoint}${RESET}"
+    echo -e "${BLUE}Commands: swarmdo-v3.sh {status|update|validate|checkpoint}${RESET}"
 }
 
 display_status

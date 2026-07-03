@@ -71,6 +71,6 @@ runBenchmarks, runSelectedBenchmarks,
 formatReportAsMarkdown, formatComparisonAsMarkdown, } from './benchmark/index.js';
 // Re-export all controllers for convenience
 export * from './controllers/index.js';
-// LLM Router - Multi-provider LLM integration with RuvLLM support
-export { LLMRouter, isRuvLLMInstalled, } from './services/LLMRouter.js';
+// LLM Router - Multi-provider LLM integration with SwarmLLM support
+export { LLMRouter, isSwarmLLMInstalled, } from './services/LLMRouter.js';
 //# sourceMappingURL=index.js.map

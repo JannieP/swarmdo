@@ -52,7 +52,7 @@ function validateConfigPath(inputPath: string, cwd: string = process.cwd()): str
 
 const loadConfigSchema = z.object({
   path: z.string().optional()
-    .describe('Configuration file path (defaults to ./rufflo.config.json)'),
+    .describe('Configuration file path (defaults to ./swarmdo.config.json)'),
   scope: z.enum(['global', 'project', 'user']).default('project')
     .describe('Configuration scope'),
   merge: z.boolean().default(true)
@@ -65,7 +65,7 @@ const saveConfigSchema = z.object({
   config: z.record(z.unknown())
     .describe('Configuration object to save'),
   path: z.string().optional()
-    .describe('Configuration file path (defaults to ./rufflo.config.json)'),
+    .describe('Configuration file path (defaults to ./swarmdo.config.json)'),
   scope: z.enum(['global', 'project', 'user']).default('project')
     .describe('Configuration scope'),
   merge: z.boolean().default(true)
@@ -244,7 +244,7 @@ async function handleLoadConfig(
   input: z.infer<typeof loadConfigSchema>,
   context?: ToolContext
 ): Promise<LoadConfigResult> {
-  const inputPath = input.path || './rufflo.config.json';
+  const inputPath = input.path || './swarmdo.config.json';
   // Validate path to prevent traversal attacks
   const safePath = validateConfigPath(inputPath);
   const loadedAt = new Date().toISOString();
@@ -292,7 +292,7 @@ async function handleSaveConfig(
   input: z.infer<typeof saveConfigSchema>,
   context?: ToolContext
 ): Promise<SaveConfigResult> {
-  const inputPath = input.path || './rufflo.config.json';
+  const inputPath = input.path || './swarmdo.config.json';
   // Validate path to prevent traversal attacks
   const safePath = validateConfigPath(inputPath);
   const savedAt = new Date().toISOString();

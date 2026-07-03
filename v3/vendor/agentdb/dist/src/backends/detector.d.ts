@@ -2,17 +2,17 @@
  * Backend Detection - Auto-detect available vector backends
  *
  * Detection priority:
- * 1. RuVector (@rufvector/core) - preferred for performance
+ * 1. SwarmVector (@swarmvector/core) - preferred for performance
  * 2. HNSWLib (hnswlib-node) - stable fallback
  *
  * Additional features detected:
- * - @rufvector/gnn - GNN learning capabilities
- * - @rufvector/graph-node - Graph database capabilities
+ * - @swarmvector/gnn - GNN learning capabilities
+ * - @swarmvector/graph-node - Graph database capabilities
  */
 /**
  * Backend type identifier
  */
-export type BackendType = 'rufvector' | 'hnswlib' | 'auto';
+export type BackendType = 'swarmvector' | 'hnswlib' | 'auto';
 /**
  * Platform information
  */
@@ -29,7 +29,7 @@ export interface PlatformInfo {
  */
 export interface DetectionResult {
     /** Detected backend type */
-    backend: 'rufvector' | 'hnswlib';
+    backend: 'swarmvector' | 'hnswlib';
     /** Available feature flags */
     features: {
         /** GNN learning available */

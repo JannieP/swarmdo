@@ -1,15 +1,15 @@
 /**
- * Intelligence Bridge - Connects hooks to RuVectorIntelligence layer
+ * Intelligence Bridge - Connects hooks to SwarmVectorIntelligence layer
  *
- * This bridges the gap between hook tools and the full RuVector ecosystem:
- * - @rufvector/sona: Micro-LoRA, EWC++, ReasoningBank, Trajectories
- * - @rufvector/attention: MoE, Flash, Hyperbolic, Graph attention
- * - ruvector core: HNSW indexing (150x faster search)
+ * This bridges the gap between hook tools and the full SwarmVector ecosystem:
+ * - @swarmvector/sona: Micro-LoRA, EWC++, ReasoningBank, Trajectories
+ * - @swarmvector/attention: MoE, Flash, Hyperbolic, Graph attention
+ * - swarmvector core: HNSW indexing (150x faster search)
  * - TensorCompress: Tiered compression based on access frequency (v2.0.1-alpha.24+)
  *
  * Persistence: SQLite-based storage for cross-platform compatibility
  */
-import { RuVectorIntelligence, type AgentRoutingResult, type Trajectory, type LearningOutcome } from '../../../../intelligence/index.js';
+import { SwarmVectorIntelligence, type AgentRoutingResult, type Trajectory, type LearningOutcome } from '../../../../intelligence/index.js';
 import { type IntelligenceStore } from '../../../../intelligence/IntelligenceStore.js';
 /**
  * Get the SQLite store singleton
@@ -48,9 +48,9 @@ export declare function getMultiAlgorithmStats(): Promise<{
     avgRewardPerAlgorithm: Record<string, number>;
 }>;
 /**
- * Get or create the RuVectorIntelligence singleton
+ * Get or create the SwarmVectorIntelligence singleton
  */
-export declare function getIntelligence(): Promise<RuVectorIntelligence>;
+export declare function getIntelligence(): Promise<SwarmVectorIntelligence>;
 /**
  * Route a task using SONA + MoE Attention + HNSW
  *

@@ -2,7 +2,7 @@
  * LearningBackend Interface - GNN self-learning capabilities (Optional)
  *
  * Provides Graph Neural Network (GNN) based learning for query enhancement
- * and adaptive pattern recognition. Available when @rufvector/gnn is installed.
+ * and adaptive pattern recognition. Available when @swarmvector/gnn is installed.
  *
  * Features:
  * - Query enhancement using attention mechanisms
@@ -79,7 +79,7 @@ export interface LearningStats {
  * LearningBackend - Optional GNN-based learning interface
  *
  * Implementations:
- * - RuVectorLearning: Native Rust GNN with @rufvector/gnn
+ * - SwarmVectorLearning: Native Rust GNN with @swarmvector/gnn
  * - MockLearningBackend: No-op implementation for testing
  */
 export interface LearningBackend {

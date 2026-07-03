@@ -1,6 +1,6 @@
 export const meta = {
   name: 'plugin-contract-audit',
-  description: 'Run every rufflo plugin smoke contract, fan diagnosis agents out over the failures, and report a punch list',
+  description: 'Run every swarmdo plugin smoke contract, fan diagnosis agents out over the failures, and report a punch list',
   phases: [
     { title: 'Sweep', detail: 'run all plugins/*/scripts/smoke.sh, collect pass/fail' },
     { title: 'Diagnose', detail: 'one agent per failing plugin — root cause + minimal fix' },
@@ -55,7 +55,7 @@ const filterClause = FILTER
   ? `Only audit plugins whose directory name contains "${FILTER}". `
   : ''
 const sweep = await agent(
-  `From the repo root, audit every rufflo plugin's smoke contract. ${filterClause}For each script matching the glob plugins/*/scripts/smoke.sh, run it with bash and capture its output and exit code. Each smoke script prints a trailing "N passed, M failed" line.
+  `From the repo root, audit every swarmdo plugin's smoke contract. ${filterClause}For each script matching the glob plugins/*/scripts/smoke.sh, run it with bash and capture its output and exit code. Each smoke script prints a trailing "N passed, M failed" line.
 For every plugin report: plugin (the directory name under plugins/), passed (integer), failed (integer), exitCode (integer), and failingChecks (the "→ ..." lines that printed FAIL, verbatim, empty array if none).
 Do NOT modify any files — this is read/run only. Return every audited plugin via the schema, not just the failing ones.`,
   { label: 'sweep:all-smokes', phase: 'Sweep', schema: SWEEP_SCHEMA, agentType: 'tester' }

@@ -1,11 +1,11 @@
 {
   "schema": 1,
-  "generator": "rufflo-hand-authored",
-  "template": "rufflo-self",
+  "generator": "swarmdo-hand-authored",
+  "template": "swarmdo-self",
   "template_version": "3.11.0",
   "vars": {
-    "name": "rufflo",
-    "description": "Rufflo — multi-agent orchestration platform built on @rufflo/cli",
+    "name": "swarmdo",
+    "description": "Swarmdo — multi-agent orchestration platform built on @swarmdo/cli",
     "host": "claude-code"
   },
   "hosts": ["claude-code"],
@@ -16,6 +16,6 @@
   "generated_at": "2026-06-16T20:00:00.000Z",
   "meta": {
     "surface": "cli",
-    "adr_anchor": "ADR-150 — rufflo's metaharness integration; this manifest covers the security-relevant surface that mcp-policy.json governs"
+    "adr_anchor": "ADR-150 — swarmdo's metaharness integration; this manifest covers the security-relevant surface that mcp-policy.json governs"
   }
 }

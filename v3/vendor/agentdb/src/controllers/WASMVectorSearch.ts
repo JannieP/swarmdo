@@ -139,7 +139,7 @@ export class WASMVectorSearch {
     // 4. Relative to process.cwd() (package root)
     searchPaths.push(
       resolve(process.cwd(), 'wasm', 'reasoningbank', moduleName),
-      resolve(process.cwd(), 'node_modules', '@rufvector', 'wasm', moduleName),
+      resolve(process.cwd(), 'node_modules', '@swarmvector', 'wasm', moduleName),
       resolve(process.cwd(), '..', 'agentic-flow', 'wasm', 'reasoningbank', moduleName),
     );
 
@@ -151,12 +151,12 @@ export class WASMVectorSearch {
 
     // 6. Check for installed npm package
     try {
-      const npmPath = require.resolve('@rufvector/wasm/reasoningbank_wasm.js');
+      const npmPath = require.resolve('@swarmvector/wasm/reasoningbank_wasm.js');
       if (npmPath) {
         searchPaths.unshift(npmPath); // Prioritize npm package
       }
     } catch {
-      // @rufvector/wasm not installed as npm package
+      // @swarmvector/wasm not installed as npm package
     }
 
     return searchPaths;

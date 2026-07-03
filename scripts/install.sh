@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
-# Rufflo Installer (formerly Rufflo)
-# https://github.com/ruvnet/ruflo
+# Swarmdo Installer (formerly Swarmdo)
+# https://github.com/ruvnet/swarmdo
 #
 # Usage:
 #   curl -fsSL https://cdn.jsdelivr.net/gh/ruvnet/claude-flow@main/scripts/install.sh | bash
@@ -16,9 +16,9 @@
 #   --version=X.X.X       Specific version
 #
 # Options (via environment - requires export):
-#   export RUFFLO_VERSION=alpha
-#   export RUFFLO_MINIMAL=1
-#   export RUFFLO_GLOBAL=1
+#   export SWARMDO_VERSION=alpha
+#   export SWARMDO_MINIMAL=1
+#   export SWARMDO_GLOBAL=1
 #
 
 set -euo pipefail
@@ -34,12 +34,12 @@ DIM='\033[2m'
 NC='\033[0m' # No Color
 
 # Default configuration (can be overridden by env vars)
-VERSION="${RUFLO_VERSION:-${RUFFLO_VERSION:-latest}}"
-MINIMAL="${RUFFLO_MINIMAL:-0}"
-GLOBAL="${RUFFLO_GLOBAL:-0}"
-SETUP_MCP="${RUFFLO_SETUP_MCP:-0}"
-RUN_DOCTOR="${RUFFLO_DOCTOR:-0}"
-RUN_INIT="${RUFFLO_INIT:-1}"
+VERSION="${SWARMDO_VERSION:-${SWARMDO_VERSION:-latest}}"
+MINIMAL="${SWARMDO_MINIMAL:-0}"
+GLOBAL="${SWARMDO_GLOBAL:-0}"
+SETUP_MCP="${SWARMDO_SETUP_MCP:-0}"
+RUN_DOCTOR="${SWARMDO_DOCTOR:-0}"
+RUN_INIT="${SWARMDO_INIT:-1}"
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
@@ -80,12 +80,12 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         --help|-h)
-            echo "Rufflo Installer"
+            echo "Swarmdo Installer"
             echo ""
             echo "Usage: curl -fsSL .../install.sh | bash -s -- [OPTIONS]"
             echo ""
             echo "Options:"
-            echo "  --global, -g     Install globally (npm install -g rufflo)"
+            echo "  --global, -g     Install globally (npm install -g swarmdo)"
             echo "  --minimal, -m    Minimal install (skip optional deps)"
             echo "  --setup-mcp      Auto-configure MCP server for Claude Code"
             echo "  --doctor, -d     Run diagnostics after install"
@@ -101,7 +101,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-PACKAGE="rufflo@${VERSION}"
+PACKAGE="swarmdo@${VERSION}"
 
 # Progress animation
 SPINNER_CHARS="⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
@@ -115,7 +115,7 @@ spinner() {
 print_banner() {
     echo ""
     echo -e "${CYAN}╔═══════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${CYAN}║${NC}  ${BOLD}Rufflo${NC} — AI Agent Orchestration for Claude Code     ${CYAN}║${NC}"
+    echo -e "${CYAN}║${NC}  ${BOLD}Swarmdo${NC} — AI Agent Orchestration for Claude Code     ${CYAN}║${NC}"
     echo -e "${CYAN}╚═══════════════════════════════════════════════════════════╝${NC}"
     echo ""
 }
@@ -256,10 +256,10 @@ verify_installation() {
 
     local VERSION_OUTPUT
     if [ "$GLOBAL" = "1" ]; then
-        VERSION_OUTPUT=$(rufflo --version 2>/dev/null || rufflo --version 2>/dev/null || echo "")
+        VERSION_OUTPUT=$(swarmdo --version 2>/dev/null || swarmdo --version 2>/dev/null || echo "")
         if [ -z "$VERSION_OUTPUT" ]; then
             print_warning "Global command not found in PATH"
-            print_substep "Try: ${BOLD}npm install -g rufflo@${VERSION}${NC}"
+            print_substep "Try: ${BOLD}npm install -g swarmdo@${VERSION}${NC}"
             return 0  # Don't fail - npm might need PATH refresh
         fi
     else
@@ -285,27 +285,27 @@ show_quickstart() {
 
     if [ "$GLOBAL" = "1" ]; then
         echo -e "  ${DIM}# Initialize project${NC}"
-        echo -e "  ${BOLD}rufflo init --wizard${NC}"
+        echo -e "  ${BOLD}swarmdo init --wizard${NC}"
         echo ""
         echo -e "  ${DIM}# Run system diagnostics${NC}"
-        echo -e "  ${BOLD}rufflo doctor${NC}"
+        echo -e "  ${BOLD}swarmdo doctor${NC}"
         echo ""
         echo -e "  ${DIM}# Add as MCP server to Claude Code${NC}"
-        echo -e "  ${BOLD}claude mcp add rufflo -- rufflo mcp start${NC}"
+        echo -e "  ${BOLD}claude mcp add swarmdo -- swarmdo mcp start${NC}"
     else
         echo -e "  ${DIM}# Initialize project${NC}"
-        echo -e "  ${BOLD}npx rufflo@latest init --wizard${NC}"
+        echo -e "  ${BOLD}npx swarmdo@latest init --wizard${NC}"
         echo ""
         echo -e "  ${DIM}# Run system diagnostics${NC}"
-        echo -e "  ${BOLD}npx rufflo@latest doctor${NC}"
+        echo -e "  ${BOLD}npx swarmdo@latest doctor${NC}"
         echo ""
         echo -e "  ${DIM}# Add as MCP server to Claude Code${NC}"
-        echo -e "  ${BOLD}claude mcp add rufflo -- npx -y rufflo@latest mcp start${NC}"
+        echo -e "  ${BOLD}claude mcp add swarmdo -- npx -y swarmdo@latest mcp start${NC}"
     fi
 
     echo ""
-    echo -e "${DIM}Documentation: https://github.com/ruvnet/ruflo${NC}"
-    echo -e "${DIM}Issues: https://github.com/ruvnet/ruflo/issues${NC}"
+    echo -e "${DIM}Documentation: https://github.com/ruvnet/swarmdo${NC}"
+    echo -e "${DIM}Issues: https://github.com/ruvnet/swarmdo/issues${NC}"
     echo ""
 }
 
@@ -322,21 +322,21 @@ setup_mcp_server() {
     fi
 
     # Check if already configured
-    if claude mcp list 2>/dev/null | grep -q "rufflo\|rufflo"; then
+    if claude mcp list 2>/dev/null | grep -q "swarmdo\|swarmdo"; then
         print_substep "MCP server already configured ✓"
         return 0
     fi
 
-    # Add MCP server (pass RUFFLO_CWD so tools resolve paths correctly
+    # Add MCP server (pass SWARMDO_CWD so tools resolve paths correctly
     # even when the MCP server is spawned with cwd='/')
     if [ "$GLOBAL" = "1" ]; then
-        claude mcp add rufflo -e RUFFLO_CWD="$HOME" -- rufflo mcp start 2>/dev/null && \
+        claude mcp add swarmdo -e SWARMDO_CWD="$HOME" -- swarmdo mcp start 2>/dev/null && \
             print_substep "MCP server configured ✓" || \
-            print_warning "MCP setup failed - run manually: claude mcp add rufflo -e RUFFLO_CWD=\"\$HOME\" -- rufflo mcp start"
+            print_warning "MCP setup failed - run manually: claude mcp add swarmdo -e SWARMDO_CWD=\"\$HOME\" -- swarmdo mcp start"
     else
-        claude mcp add rufflo -e RUFFLO_CWD="$HOME" -- npx -y rufflo@${VERSION} mcp start 2>/dev/null && \
+        claude mcp add swarmdo -e SWARMDO_CWD="$HOME" -- npx -y swarmdo@${VERSION} mcp start 2>/dev/null && \
             print_substep "MCP server configured ✓" || \
-            print_warning "MCP setup failed - run manually: claude mcp add rufflo -e RUFFLO_CWD=\"\$HOME\" -- npx -y rufflo@latest mcp start"
+            print_warning "MCP setup failed - run manually: claude mcp add swarmdo -e SWARMDO_CWD=\"\$HOME\" -- npx -y swarmdo@latest mcp start"
     fi
     echo ""
 }
@@ -350,9 +350,9 @@ run_doctor() {
     echo ""
 
     if [ "$GLOBAL" = "1" ]; then
-        rufflo doctor 2>&1 || true
+        swarmdo doctor 2>&1 || true
     else
-        npx rufflo@${VERSION} doctor 2>&1 || true
+        npx swarmdo@${VERSION} doctor 2>&1 || true
     fi
     echo ""
 }
@@ -366,9 +366,9 @@ run_init() {
     echo ""
 
     if [ "$GLOBAL" = "1" ]; then
-        rufflo init --yes 2>&1 || true
+        swarmdo init --yes 2>&1 || true
     else
-        npx rufflo@${VERSION} init --yes 2>&1 || true
+        npx swarmdo@${VERSION} init --yes 2>&1 || true
     fi
     echo ""
 }
@@ -385,7 +385,7 @@ main() {
     run_init
     show_quickstart
 
-    print_success "${BOLD}Rufflo is ready!${NC}"
+    print_success "${BOLD}Swarmdo is ready!${NC}"
     echo ""
 }
 

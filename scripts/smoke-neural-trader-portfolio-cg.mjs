@@ -4,15 +4,15 @@
  *
  * Locks in three layers:
  *
- *   [1/3] STATIC ADAPTER CONTRACT — `plugins/rufflo-neural-trader/src/sublinear-adapter.ts`
+ *   [1/3] STATIC ADAPTER CONTRACT — `plugins/swarmdo-neural-trader/src/sublinear-adapter.ts`
  *         must export the `SublinearAdapter` class with the documented
  *         `solveCG(matrix, vector, opts)` method, an `isMcpAvailable()`
  *         detection static, and the `SolveResult` shape (solution,
  *         iterations, residual, latencyMs, path, optional degraded/reason).
  *         The companion runtime mirror `sublinear-adapter.mjs` must agree.
  *
- *   [2/3] STATIC SKILL CONTRACT — `plugins/rufflo-neural-trader/skills/trader-portfolio-cg/SKILL.md`
- *         must exist with `mcp__rufflo-sublinear__solve` in `allowed-tools`,
+ *   [2/3] STATIC SKILL CONTRACT — `plugins/swarmdo-neural-trader/skills/trader-portfolio-cg/SKILL.md`
+ *         must exist with `mcp__swarmdo-sublinear__solve` in `allowed-tools`,
  *         must reference the canonical `trading-risk` namespace for storage,
  *         must document the disable env flag and the legacy Neumann fallback.
  *
@@ -37,7 +37,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, '..');
-const PLUGIN_DIR = join(REPO_ROOT, 'plugins', 'rufflo-neural-trader');
+const PLUGIN_DIR = join(REPO_ROOT, 'plugins', 'swarmdo-neural-trader');
 const ADAPTER_TS = join(PLUGIN_DIR, 'src', 'sublinear-adapter.ts');
 const ADAPTER_MJS = join(PLUGIN_DIR, 'src', 'sublinear-adapter.mjs');
 const SKILL_MD = join(PLUGIN_DIR, 'skills', 'trader-portfolio-cg', 'SKILL.md');
@@ -79,7 +79,7 @@ if (!existsSync(ADAPTER_TS)) {
   check(
     'adapter exposes `SublinearAdapter.detectSublinearTool()` (native-dispatch probe, #55)',
     /static\s+detectSublinearTool\s*\(/.test(src),
-    'native dispatch is gated by this two-probe detection (globalThis + RUFLO_SUBLINEAR_NATIVE env var)',
+    'native dispatch is gated by this two-probe detection (globalThis + SWARMDO_SUBLINEAR_NATIVE env var)',
   );
   check(
     'adapter calls `detectSublinearTool()` before falling back to local CG',
@@ -87,8 +87,8 @@ if (!existsSync(ADAPTER_TS)) {
     'the dispatch path must consult the detection probe — otherwise native is unreachable',
   );
   check(
-    'adapter honours `RUFLO_SUBLINEAR_NATIVE` env-var override',
-    /RUFLO_SUBLINEAR_NATIVE/.test(src),
+    'adapter honours `SWARMDO_SUBLINEAR_NATIVE` env-var override',
+    /SWARMDO_SUBLINEAR_NATIVE/.test(src),
     'operator-controlled native-dispatch override (#55) must be wired in the detection',
   );
   check(
@@ -109,8 +109,8 @@ if (!existsSync(ADAPTER_TS)) {
     'expected an `isSymmetric` helper and a `degraded: true` path for non-SPD input',
   );
   check(
-    'adapter references the MCP tool by canonical name `mcp__rufflo-sublinear__solve`',
-    /mcp__rufflo-sublinear__solve/.test(src),
+    'adapter references the MCP tool by canonical name `mcp__swarmdo-sublinear__solve`',
+    /mcp__swarmdo-sublinear__solve/.test(src),
     'expected the canonical tool name string for runtime dispatch',
   );
 }
@@ -148,13 +148,13 @@ if (!existsSync(SKILL_MD)) {
     'frontmatter must name the skill explicitly',
   );
   check(
-    'skill declares `mcp__rufflo-sublinear__solve` in allowed-tools',
-    /^allowed-tools:[^\n]*mcp__rufflo-sublinear__solve/m.test(skill),
+    'skill declares `mcp__swarmdo-sublinear__solve` in allowed-tools',
+    /^allowed-tools:[^\n]*mcp__swarmdo-sublinear__solve/m.test(skill),
     'the MCP tool that powers Phase 3 must be allow-listed',
   );
   check(
-    'skill declares `mcp__rufflo__memory_store` for artifact persistence',
-    /^allowed-tools:[^\n]*mcp__rufflo__memory_store/m.test(skill),
+    'skill declares `mcp__swarmdo__memory_store` for artifact persistence',
+    /^allowed-tools:[^\n]*mcp__swarmdo__memory_store/m.test(skill),
     'persistence to trading-risk namespace requires memory_store',
   );
   check(
@@ -163,8 +163,8 @@ if (!existsSync(SKILL_MD)) {
     'ADR-126 Phase 1 canonical 5-namespace alignment — portfolio weights belong in trading-risk',
   );
   check(
-    'skill documents the `RUFLO_NEURAL_TRADER_DISABLE_CG` disable flag',
-    /RUFLO_NEURAL_TRADER_DISABLE_CG/.test(skill),
+    'skill documents the `SWARMDO_NEURAL_TRADER_DISABLE_CG` disable flag',
+    /SWARMDO_NEURAL_TRADER_DISABLE_CG/.test(skill),
     'A/B validation and emergency cut-over require an explicit disable flag',
   );
   check(
@@ -178,8 +178,8 @@ if (!existsSync(SKILL_MD)) {
     'artifact provenance must record which path produced the weights',
   );
   check(
-    'skill documents the `RUFLO_SUBLINEAR_NATIVE` env-var override',
-    /RUFLO_SUBLINEAR_NATIVE/.test(skill),
+    'skill documents the `SWARMDO_SUBLINEAR_NATIVE` env-var override',
+    /SWARMDO_SUBLINEAR_NATIVE/.test(skill),
     'native-dispatch override is the operator-controlled rollout switch (#55)',
   );
 }
@@ -219,8 +219,8 @@ try {
   );
 
   // Contract note: the actual native-vs-JS dispatch is a *runtime* path —
-  // determined by whether the harness has mounted `mcp__rufflo-sublinear__solve`
-  // (or `RUFLO_SUBLINEAR_NATIVE=1` is set). The smoke validates the contract
+  // determined by whether the harness has mounted `mcp__swarmdo-sublinear__solve`
+  // (or `SWARMDO_SUBLINEAR_NATIVE=1` is set). The smoke validates the contract
   // that both paths exist and the result shape carries `method` + `solver`;
   // the actual 40-60× speedup measurement happens in the bench when the
   // daemon is up (CI exercises the native path).

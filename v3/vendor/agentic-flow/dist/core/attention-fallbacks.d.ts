@@ -1,7 +1,7 @@
 /**
  * Attention Module Fallbacks
  *
- * Since @rufvector/attention is completely broken, provide JavaScript fallbacks
+ * Since @swarmvector/attention is completely broken, provide JavaScript fallbacks
  * Performance will be slower but functionality will work
  */
 export interface AttentionConfig {
@@ -21,7 +21,7 @@ export declare function scaledDotProductAttention(query: number[], key: number[]
 /**
  * Multi-Head Attention (JavaScript fallback)
  *
- * Replaces broken @rufvector/attention.multiHeadAttention
+ * Replaces broken @swarmvector/attention.multiHeadAttention
  */
 export declare class MultiHeadAttention {
     private numHeads;
@@ -43,7 +43,7 @@ export declare class MultiHeadAttention {
 /**
  * Flash Attention (optimized fallback)
  *
- * Replaces broken @rufvector/attention.flashAttention
+ * Replaces broken @swarmvector/attention.flashAttention
  * Uses tiling/chunking for better memory efficiency
  */
 export declare class FlashAttention {

@@ -4,7 +4,7 @@
  * Uses WebAssembly-accelerated neural pathfinding with embeddings
  * to match tasks to the best-suited teammates based on semantic similarity.
  *
- * @module @rufflo/teammate-plugin/semantic
+ * @module @swarmdo/teammate-plugin/semantic
  * @version 1.0.0-alpha.1
  */
 
@@ -17,7 +17,7 @@ async function loadNeuralBMSSP(): Promise<void> {
   if (WasmNeuralBMSSP) return;
 
   try {
-    const bmssp = await import('@rufnet/bmssp');
+    const bmssp = await import('@swarmnet/bmssp');
     await bmssp.default(); // Initialize WASM
     WasmNeuralBMSSP = bmssp.WasmNeuralBMSSP;
   } catch (error) {

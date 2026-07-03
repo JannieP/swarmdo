@@ -1,6 +1,6 @@
-# 🚀 Rufflo Plugin - Quickstart Guide
+# 🚀 Swarmdo Plugin - Quickstart Guide
 
-Get started with Rufflo in 5 minutes!
+Get started with Swarmdo in 5 minutes!
 
 ---
 
@@ -20,7 +20,7 @@ In Claude Code:
 ```bash
 # Clone the repository
 git clone https://github.com/ruvnet/claude-flow.git
-cd rufflo
+cd swarmdo
 ```
 
 Then in Claude Code:
@@ -39,7 +39,7 @@ In Claude Code:
 /plugin list
 ```
 
-Look for `rufflo` in the active plugins.
+Look for `swarmdo` in the active plugins.
 
 Try a command:
 ```
@@ -202,10 +202,10 @@ The swarm automatically:
 
 ```bash
 # Core MCP (required)
-claude mcp add rufflo npx rufflo@alpha mcp start
+claude mcp add swarmdo npx swarmdo@alpha mcp start
 
 # Enhanced coordination (optional)
-claude mcp add ruf-swarm npx ruf-swarm mcp start
+claude mcp add swarmdo-swarm npx swarmdo-swarm mcp start
 
 # Cloud features (optional - requires auth)
 ```
@@ -215,7 +215,7 @@ claude mcp add ruf-swarm npx ruf-swarm mcp start
 In Claude Code:
 
 ```
-List available MCP tools for rufflo
+List available MCP tools for swarmdo
 ```
 
 Expected: 40+ tools including:
@@ -296,10 +296,10 @@ ls ~/.claude/commands/
 cat ~/.claude/settings.json
 
 # Verify MCP package
-npx rufflo@alpha --version
+npx swarmdo@alpha --version
 
 # Reinstall if needed
-npm install -g rufflo@alpha
+npm install -g swarmdo@alpha
 ```
 
 ### Agents Not Spawning
@@ -355,6 +355,6 @@ chmod -R 755 ~/.claude/agents/
 
 ## 🚀 You're Ready!
 
-Start building with Rufflo's enterprise AI agent orchestration.
+Start building with Swarmdo's enterprise AI agent orchestration.
 
 **Happy coding!** 🎉

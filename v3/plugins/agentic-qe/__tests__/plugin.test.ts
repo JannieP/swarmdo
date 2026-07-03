@@ -68,14 +68,14 @@ class MockAQEPlugin {
     this.metadata = Object.freeze({
       name: 'agentic-qe',
       version: '3.2.3',
-      description: 'Quality Engineering plugin for Rufflo V3',
+      description: 'Quality Engineering plugin for Swarmdo V3',
       author: 'rUv',
       license: 'MIT',
       dependencies: [
-        '@rufflo/plugins',
-        '@rufflo/memory',
-        '@rufflo/security',
-        '@rufflo/embeddings',
+        '@swarmdo/plugins',
+        '@swarmdo/memory',
+        '@swarmdo/security',
+        '@swarmdo/embeddings',
       ],
       tags: ['testing', 'quality', 'coverage', 'security', 'tdd'],
       minCoreVersion: '3.0.0-alpha.50',
@@ -321,9 +321,9 @@ describe('AQEPlugin', () => {
     });
 
     it('should have required dependencies', () => {
-      expect(plugin.metadata.dependencies).toContain('@rufflo/plugins');
-      expect(plugin.metadata.dependencies).toContain('@rufflo/memory');
-      expect(plugin.metadata.dependencies).toContain('@rufflo/security');
+      expect(plugin.metadata.dependencies).toContain('@swarmdo/plugins');
+      expect(plugin.metadata.dependencies).toContain('@swarmdo/memory');
+      expect(plugin.metadata.dependencies).toContain('@swarmdo/security');
     });
 
     it('should have expected tags', () => {

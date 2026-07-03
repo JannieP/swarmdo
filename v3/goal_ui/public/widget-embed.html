@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RuFlo Research Widget Embed Example</title>
-  <meta name="description" content="Example of embedding RuFlo Research Widget on third-party sites">
+  <title>Swarmdo Research Widget Embed Example</title>
+  <meta name="description" content="Example of embedding Swarmdo Research Widget on third-party sites">
   <style>
     body {
       margin: 0;
@@ -50,7 +50,7 @@
       overflow-x: auto;
       font-size: 0.85rem;
     }
-    #ruflo-research-widget-container {
+    #swarmdo-research-widget-container {
       max-width: 1200px;
       margin: 0 auto;
       min-height: 400px;
@@ -68,7 +68,7 @@
 </head>
 <body>
   <div class="header">
-    <h1>🎯 RuFlo Research Widget</h1>
+    <h1>🎯 Swarmdo Research Widget</h1>
     <p>Goal-Oriented Action Planning for AI Research</p>
     <p style="font-size: 0.9rem;">Embedded Widget Example</p>
   </div>
@@ -76,12 +76,12 @@
   <div class="instructions">
     <h2>📦 How to Embed This Widget</h2>
     <p>Copy and paste this code into your website:</p>
-    <pre><code>&lt;!-- RuFlo Research Widget Container --&gt;
-&lt;div id="ruflo-research-widget-container"&gt;&lt;/div&gt;
+    <pre><code>&lt;!-- Swarmdo Research Widget Container --&gt;
+&lt;div id="swarmdo-research-widget-container"&gt;&lt;/div&gt;
 
 &lt;!-- Optional: Configuration --&gt;
 &lt;script&gt;
-  window.RufloResearchWidgetConfig = {
+  window.SwarmdoResearchWidgetConfig = {
     primaryColor: "#8b5cf6",
     accentColor: "#22c55e",
     backgroundColor: "#1a1a1a",
@@ -99,13 +99,13 @@
   </div>
 
   <!-- Widget Container -->
-  <div id="ruflo-research-widget-container"></div>
+  <div id="swarmdo-research-widget-container"></div>
 
   <!-- Widget Configuration (Optional) -->
   <script>
-    // Configuration for the RuFlo Research Widget
+    // Configuration for the Swarmdo Research Widget
     // All properties are optional - widget will use defaults if not specified
-    window.RufloResearchWidgetConfig = {
+    window.SwarmdoResearchWidgetConfig = {
       primaryColor: "#8b5cf6",        // Purple - main brand color
       accentColor: "#22c55e",         // Green - success/accent color
       backgroundColor: "#1a1a1a",     // Dark background
@@ -117,11 +117,11 @@
 
     // Log when widget is ready
     window.addEventListener('load', function() {
-      if (window.RufloResearchWidget) {
-        console.log('✅ RuFlo Research Widget loaded successfully!');
-        console.log('Widget version:', window.RufloResearchWidget.version);
+      if (window.SwarmdoResearchWidget) {
+        console.log('✅ Swarmdo Research Widget loaded successfully!');
+        console.log('Widget version:', window.SwarmdoResearchWidget.version);
       } else {
-        console.error('❌ RuFlo Research Widget failed to load');
+        console.error('❌ Swarmdo Research Widget failed to load');
       }
     });
 
@@ -129,9 +129,9 @@
     window.addEventListener('error', function(e) {
       if (e.filename && e.filename.includes('widget.js')) {
         console.error('Failed to load widget.js:', e.message);
-        document.getElementById('ruflo-research-widget-container').innerHTML =
+        document.getElementById('swarmdo-research-widget-container').innerHTML =
           '<div style="padding: 2rem; text-align: center; color: #ef4444;">' +
-          '⚠️ Failed to load RuFlo Research Widget. Please check console for details.' +
+          '⚠️ Failed to load Swarmdo Research Widget. Please check console for details.' +
           '</div>';
       }
     }, true);

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Rufflo Agent Router
+ * Swarmdo Agent Router
  * Routes tasks to optimal agents based on learned patterns
  */
 

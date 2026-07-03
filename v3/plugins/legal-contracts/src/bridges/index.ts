@@ -1,7 +1,7 @@
 /**
  * Legal Contracts Plugin - Bridges Barrel Export
  *
- * @module @rufflo/plugin-legal-contracts/bridges
+ * @module @swarmdo/plugin-legal-contracts/bridges
  */
 
 export {

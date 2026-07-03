@@ -2,7 +2,7 @@
  * VectorBackend - Unified interface for vector database backends
  *
  * Provides abstraction over different vector search implementations
- * (RuVector, hnswlib-node) for AgentDB v2.
+ * (SwarmVector, hnswlib-node) for AgentDB v2.
  *
  * Design:
  * - String-based IDs for all operations (backends handle label mapping internally)
@@ -69,7 +69,7 @@ export interface VectorStats {
   metric: string;
 
   /** Backend name */
-  backend: 'rufvector' | 'hnswlib' | 'rvf';
+  backend: 'swarmvector' | 'hnswlib' | 'rvf';
 
   /** Memory usage in bytes (0 if not available) */
   memoryUsage: number;
@@ -86,7 +86,7 @@ export interface VectorStats {
  */
 export interface VectorBackend {
   /** Backend name for detection and logging */
-  readonly name: 'rufvector' | 'hnswlib' | 'rvf';
+  readonly name: 'swarmvector' | 'hnswlib' | 'rvf';
 
   /**
    * Insert a single vector with optional metadata
@@ -149,7 +149,7 @@ export interface VectorBackend {
 /**
  * VectorBackendAsync - Extended interface for async-native backends (e.g., RVF)
  *
- * Backends like @rufvector/rvf are fully async. This interface provides
+ * Backends like @swarmvector/rvf are fully async. This interface provides
  * native async methods while maintaining backward compatibility with
  * the sync VectorBackend interface.
  */

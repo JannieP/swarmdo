@@ -1,6 +1,6 @@
 # rvf-index
 
-Progressive HNSW indexing with tiered Layer A/B/C search for RuVector Format.
+Progressive HNSW indexing with tiered Layer A/B/C search for SwarmVector Format.
 
 ## Overview
 

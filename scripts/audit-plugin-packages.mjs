@@ -4,15 +4,15 @@
  *
  * Scans v3/plugins/<name>/package.json and fails CI on any of:
  *
- *   A. (#1903) A `@rufflo/*` package referenced as a hard `dependencies`
+ *   A. (#1903) A `@swarmdo/*` package referenced as a hard `dependencies`
  *      entry, OR as a `peerDependencies` entry that is NOT marked
  *      `peerDependenciesMeta[name].optional: true`, that is not in the
  *      KNOWN_PUBLISHED allow-list. npm 7+ auto-installs non-optional peers,
- *      so an unpublished one (e.g. `@rufflo/rufvector-upstream`) makes
+ *      so an unpublished one (e.g. `@swarmdo/swarmvector-upstream`) makes
  *      `npm install <plugin>` fail with E404.
  *
- *   B. (#1902) A `peerDependencies` range for a `@rufflo/*` or
- *      `@rufvector/*` target that is a "bare stable" range (`>=X.Y.Z`,
+ *   B. (#1902) A `peerDependencies` range for a `@swarmdo/*` or
+ *      `@swarmvector/*` target that is a "bare stable" range (`>=X.Y.Z`,
  *      `^X.Y.Z`, `~X.Y.Z`, `X.Y.Z`) with no prerelease component. Those
  *      ranges DON'T satisfy a prerelease publish like `3.0.0-alpha.15`, so
  *      npm can't find a matching version. Use `>=X.Y.Z-0` or `*`.
@@ -39,32 +39,32 @@ const REPO_ROOT = process.cwd();
 const PLUGINS_DIR = join(REPO_ROOT, 'v3', 'plugins');
 const JSON_OUT = process.argv.includes('--json');
 
-// @rufflo/* packages known to be published to the npm registry. A hard
-// dep / non-optional peer on anything @rufflo/* NOT in this set fails the
-// audit. Refresh with: for n in <pkg>; do npm view @rufflo/$n version; done
+// @swarmdo/* packages known to be published to the npm registry. A hard
+// dep / non-optional peer on anything @swarmdo/* NOT in this set fails the
+// audit. Refresh with: for n in <pkg>; do npm view @swarmdo/$n version; done
 const KNOWN_PUBLISHED = new Set([
-  '@rufflo/aidefence',
-  '@rufflo/browser',
-  '@rufflo/claims',
-  '@rufflo/cli',
-  '@rufflo/cli-core',
-  '@rufflo/codex',
-  '@rufflo/deployment',
-  '@rufflo/embeddings',
-  '@rufflo/guidance',
-  '@rufflo/hooks',
-  '@rufflo/integration',
-  '@rufflo/mcp',
-  '@rufflo/memory',
-  '@rufflo/neural',
-  '@rufflo/performance',
-  '@rufflo/plugins',
-  '@rufflo/providers',
-  '@rufflo/security',
-  '@rufflo/shared',
-  '@rufflo/swarm',
-  '@rufflo/testing',
-  // plugin-* packages publish under @rufflo/plugin-<name>; the plugin
+  '@swarmdo/aidefence',
+  '@swarmdo/browser',
+  '@swarmdo/claims',
+  '@swarmdo/cli',
+  '@swarmdo/cli-core',
+  '@swarmdo/codex',
+  '@swarmdo/deployment',
+  '@swarmdo/embeddings',
+  '@swarmdo/guidance',
+  '@swarmdo/hooks',
+  '@swarmdo/integration',
+  '@swarmdo/mcp',
+  '@swarmdo/memory',
+  '@swarmdo/neural',
+  '@swarmdo/performance',
+  '@swarmdo/plugins',
+  '@swarmdo/providers',
+  '@swarmdo/security',
+  '@swarmdo/shared',
+  '@swarmdo/swarm',
+  '@swarmdo/testing',
+  // plugin-* packages publish under @swarmdo/plugin-<name>; the plugin
   // store loads them by tarball, but if one plugin hard-depends on another
   // it must be published. Add entries here if/when that happens.
 ]);
@@ -139,29 +139,29 @@ for (const dir of plugins) {
   const peers = pkg.peerDependencies || {};
   const peerMeta = pkg.peerDependenciesMeta || {};
 
-  // --- Check A: unpublished @rufflo/* as hard dep / non-optional peer
+  // --- Check A: unpublished @swarmdo/* as hard dep / non-optional peer
   for (const [name] of Object.entries(deps)) {
-    if (name.startsWith('@rufflo/') && !KNOWN_PUBLISHED.has(name)) {
-      note(dir, 'A', `"${name}" is a hard dependency but not a published @rufflo package — \`npm install\` will E404. Make it an optional peerDependency or remove it (the runtime should fall back when absent).`);
+    if (name.startsWith('@swarmdo/') && !KNOWN_PUBLISHED.has(name)) {
+      note(dir, 'A', `"${name}" is a hard dependency but not a published @swarmdo package — \`npm install\` will E404. Make it an optional peerDependency or remove it (the runtime should fall back when absent).`);
     }
   }
   for (const [name] of Object.entries(peers)) {
     const optional = peerMeta[name] && peerMeta[name].optional === true;
-    if (name.startsWith('@rufflo/') && !KNOWN_PUBLISHED.has(name) && !optional) {
-      note(dir, 'A', `"${name}" is a non-optional peerDependency but not a published @rufflo package — npm 7+ auto-installs peers and will E404. Add \`peerDependenciesMeta["${name}"].optional: true\`.`);
+    if (name.startsWith('@swarmdo/') && !KNOWN_PUBLISHED.has(name) && !optional) {
+      note(dir, 'A', `"${name}" is a non-optional peerDependency but not a published @swarmdo package — npm 7+ auto-installs peers and will E404. Add \`peerDependenciesMeta["${name}"].optional: true\`.`);
     }
   }
 
-  // --- Check B: bare-stable peer ranges for prerelease @rufflo targets.
-  // All @rufflo packages currently publish as 3.x prereleases, so a bare
-  // ">=3.0.0" can never resolve. We only flag @rufflo/* here (and only
-  // when non-optional, or optional-but-@rufflo since the project always
-  // ships those as prereleases). Optional @rufvector/* WASM peers are exempt —
+  // --- Check B: bare-stable peer ranges for prerelease @swarmdo targets.
+  // All @swarmdo packages currently publish as 3.x prereleases, so a bare
+  // ">=3.0.0" can never resolve. We only flag @swarmdo/* here (and only
+  // when non-optional, or optional-but-@swarmdo since the project always
+  // ships those as prereleases). Optional @swarmvector/* WASM peers are exempt —
   // a bare range there at worst means the optional dep doesn't get installed.
   for (const [name, range] of Object.entries(peers)) {
-    if (!name.startsWith('@rufflo/')) continue;
+    if (!name.startsWith('@swarmdo/')) continue;
     if (isPrereleaseSafeRange(range)) continue;
-    note(dir, 'B', `peerDependency "${name}": "${range}" can't resolve any @rufflo publish — they're all 3.x prereleases. Use ">=${String(range).replace(/^[\^~>=\s]+/, '')}-0" or "*".`);
+    note(dir, 'B', `peerDependency "${name}": "${range}" can't resolve any @swarmdo publish — they're all 3.x prereleases. Use ">=${String(range).replace(/^[\^~>=\s]+/, '')}-0" or "*".`);
   }
 
   // --- Check C: export-ish paths must be covered by `files`
@@ -198,7 +198,7 @@ if (JSON_OUT) {
   if (issues.length === 0) {
     console.log('  ✓ no install-safety issues');
   } else {
-    const labels = { A: 'unpublished @rufflo dep', B: 'prerelease-unsafe peer range', C: 'export not in files', D: 'export missing after build', PARSE: 'invalid package.json' };
+    const labels = { A: 'unpublished @swarmdo dep', B: 'prerelease-unsafe peer range', C: 'export not in files', D: 'export missing after build', PARSE: 'invalid package.json' };
     for (const i of issues) {
       console.log(`  ✗ [${i.code}] ${i.plugin}: ${i.message}`);
     }

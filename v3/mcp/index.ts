@@ -1,7 +1,7 @@
 /**
  * V3 MCP Module
  *
- * Optimized MCP (Model Context Protocol) implementation for Rufflo V3
+ * Optimized MCP (Model Context Protocol) implementation for Swarmdo V3
  *
  * Features:
  * - High-performance server with <400ms startup
@@ -17,7 +17,7 @@
  * - Tool execution: <50ms overhead
  * - Connection acquire: <5ms
  *
- * @module @rufflo/mcp
+ * @module @swarmdo/mcp
  * @version 3.0.0
  */
 
@@ -141,7 +141,7 @@ export {
  *
  * @example
  * ```typescript
- * import { quickStart } from '@rufflo/mcp';
+ * import { quickStart } from '@swarmdo/mcp';
  *
  * const server = await quickStart({
  *   transport: 'stdio',
@@ -185,4 +185,4 @@ export const VERSION = '3.0.0';
 /**
  * Module name
  */
-export const MODULE_NAME = '@rufflo/mcp';
+export const MODULE_NAME = '@swarmdo/mcp';

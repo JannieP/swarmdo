@@ -1,4 +1,4 @@
-# Rufflo Deep Regression Test Environment
+# Swarmdo Deep Regression Test Environment
 # Comprehensive testing for all capabilities
 
 FROM node:20-bookworm
@@ -41,28 +41,28 @@ COPY v3/ ./v3/
 RUN npm install --legacy-peer-deps
 
 # Build v3 packages
-WORKDIR /app/v3/@rufflo/shared
+WORKDIR /app/v3/@swarmdo/shared
 RUN npm install --legacy-peer-deps && npm run build || true
 
-WORKDIR /app/v3/@rufflo/hooks
+WORKDIR /app/v3/@swarmdo/hooks
 RUN npm install --legacy-peer-deps && npm run build || true
 
-WORKDIR /app/v3/@rufflo/plugins
+WORKDIR /app/v3/@swarmdo/plugins
 RUN npm install --legacy-peer-deps && npm run build || true
 
-WORKDIR /app/v3/@rufflo/security
+WORKDIR /app/v3/@swarmdo/security
 RUN npm install --legacy-peer-deps && npm run build || true
 
-WORKDIR /app/v3/@rufflo/swarm
+WORKDIR /app/v3/@swarmdo/swarm
 RUN npm install --legacy-peer-deps && npm run build || true
 
-WORKDIR /app/v3/@rufflo/cli
+WORKDIR /app/v3/@swarmdo/cli
 RUN npm install --legacy-peer-deps && npm run build || true
 
-WORKDIR /app/v3/@rufflo/memory
+WORKDIR /app/v3/@swarmdo/memory
 RUN npm install --legacy-peer-deps && npm run build || true
 
-WORKDIR /app/v3/@rufflo/mcp
+WORKDIR /app/v3/@swarmdo/mcp
 RUN npm install --legacy-peer-deps && npm run build || true
 
 # Return to app root
@@ -79,11 +79,11 @@ RUN mkdir -p /app/data /app/reports /app/logs
 
 # Set environment variables
 ENV NODE_ENV=test
-ENV RUFFLO_MODE=test
-ENV RUFFLO_MEMORY_PATH=/app/data
-ENV RUFFLO_LOG_LEVEL=debug
-ENV RUFFLO_MAX_AGENTS=15
-ENV RUFFLO_SECURITY_MODE=strict
+ENV SWARMDO_MODE=test
+ENV SWARMDO_MEMORY_PATH=/app/data
+ENV SWARMDO_LOG_LEVEL=debug
+ENV SWARMDO_MAX_AGENTS=15
+ENV SWARMDO_SECURITY_MODE=strict
 ENV CI=true
 
 # Health check

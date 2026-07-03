@@ -27,22 +27,22 @@ Claims-based authorization for secure agent operations and access control.
 
 ### Check Claim
 ```bash
-npx rufflo claims check --agent agent-123 --claim write
+npx swarmdo claims check --agent agent-123 --claim write
 ```
 
 ### Grant Claim
 ```bash
-npx rufflo claims grant --agent agent-123 --claim write --scope "/src/**"
+npx swarmdo claims grant --agent agent-123 --claim write --scope "/src/**"
 ```
 
 ### Revoke Claim
 ```bash
-npx rufflo claims revoke --agent agent-123 --claim write
+npx swarmdo claims revoke --agent agent-123 --claim write
 ```
 
 ### List Claims
 ```bash
-npx rufflo claims list --agent agent-123
+npx swarmdo claims list --agent agent-123
 ```
 
 ## Scope Patterns

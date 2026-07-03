@@ -2,13 +2,13 @@
 name: github-modes
 description: |
   Comprehensive GitHub integration modes for workflow orchestration, PR management, and repository coordination with batch optimization
-tools: mcp__rufflo__swarm_init, mcp__rufflo__agent_spawn, mcp__rufflo__task_orchestrate, Bash, TodoWrite, Read, Write
+tools: mcp__swarmdo__swarm_init, mcp__swarmdo__agent_spawn, mcp__swarmdo__task_orchestrate, Bash, TodoWrite, Read, Write
 ---
 
 # GitHub Integration Modes
 
 ## Overview
-This document describes all GitHub integration modes available in Rufflo with ruf-swarm coordination. Each mode is optimized for specific GitHub workflows and includes batch tool integration for maximum efficiency.
+This document describes all GitHub integration modes available in Swarmdo with swarmdo-swarm coordination. Each mode is optimized for specific GitHub workflows and includes batch tool integration for maximum efficiency.
 
 ## GitHub Workflow Modes
 
@@ -115,7 +115,7 @@ This document describes all GitHub integration modes available in Rufflo with ru
 
 ### Managing repository synchronization:
 ```bash
-/github sync-coordinator "Synchronize claude-code-flow and ruf-swarm packages, align versions, and update cross-dependencies"
+/github sync-coordinator "Synchronize claude-code-flow and swarmdo-swarm packages, align versions, and update cross-dependencies"
 ```
 
 ### Setting up automated issue tracking:
@@ -138,17 +138,17 @@ All GitHub modes support batch operations for maximum efficiency:
   Bash("git checkout main && git pull")
 ```
 
-## Integration with ruf-swarm
+## Integration with swarmdo-swarm
 
-All GitHub modes can be enhanced with ruf-swarm coordination:
+All GitHub modes can be enhanced with swarmdo-swarm coordination:
 
 ```javascript
 // Initialize swarm for GitHub workflow
-mcp__rufflo__swarm_init { topology: "hierarchical", maxAgents: 5 }
-mcp__rufflo__agent_spawn { type: "coordinator", name: "GitHub Coordinator" }
-mcp__rufflo__agent_spawn { type: "reviewer", name: "Code Reviewer" }
-mcp__rufflo__agent_spawn { type: "tester", name: "QA Agent" }
+mcp__swarmdo__swarm_init { topology: "hierarchical", maxAgents: 5 }
+mcp__swarmdo__agent_spawn { type: "coordinator", name: "GitHub Coordinator" }
+mcp__swarmdo__agent_spawn { type: "reviewer", name: "Code Reviewer" }
+mcp__swarmdo__agent_spawn { type: "tester", name: "QA Agent" }
 
 // Execute GitHub workflow with coordination
-mcp__rufflo__task_orchestrate { task: "GitHub workflow", strategy: "parallel" }
+mcp__swarmdo__task_orchestrate { task: "GitHub workflow", strategy: "parallel" }
 ```

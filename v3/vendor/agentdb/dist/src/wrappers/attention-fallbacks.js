@@ -1,7 +1,7 @@
 /**
  * Attention Module Fallbacks
  *
- * Since @rufvector/attention is completely broken, provide JavaScript fallbacks
+ * Since @swarmvector/attention is completely broken, provide JavaScript fallbacks
  * Performance will be slower but functionality will work
  *
  * Optimized version includes:
@@ -433,7 +433,7 @@ seqLen, dim, mask // [seqLen * seqLen] attention mask
 /**
  * Multi-Head Attention (JavaScript fallback)
  *
- * Replaces broken @rufvector/attention.multiHeadAttention
+ * Replaces broken @swarmvector/attention.multiHeadAttention
  */
 export class MultiHeadAttention {
     numHeads;
@@ -684,7 +684,7 @@ export class MultiHeadAttentionOptimized {
 /**
  * Flash Attention (optimized fallback)
  *
- * Replaces broken @rufvector/attention.flashAttention
+ * Replaces broken @swarmvector/attention.flashAttention
  * Uses tiling/chunking for better memory efficiency
  */
 export class FlashAttention {
@@ -1329,7 +1329,7 @@ export class MoEAttention {
  */
 export function isNativeAttentionAvailable() {
     try {
-        const attention = require('@rufvector/attention');
+        const attention = require('@swarmvector/attention');
         // Try a simple operation
         const result = attention.flashAttention(new Float32Array([1, 0]), new Float32Array([1, 0]), new Float32Array([1, 0]), 1);
         return true;

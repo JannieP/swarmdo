@@ -1,8 +1,8 @@
-# Claude Code Configuration - Rufflo v3.5
+# Claude Code Configuration - Swarmdo v3.5
 
-> **Rufflo v3.6** (2026-04-29) — Stable release with agent federation and comms-first coordination.
+> **Swarmdo v3.6** (2026-04-29) — Stable release with agent federation and comms-first coordination.
 > 6,000+ commits, 314 MCP tools, 16 agent roles + custom types, 19 AgentDB controllers, 21 native plugins.
-> Packages: `@rufflo/cli@3.6.10`, `rufflo@3.6.10`, `rufflo@3.6.10`
+> Packages: `@swarmdo/cli@3.6.10`, `swarmdo@3.6.10`, `swarmdo@3.6.10`
 
 ## Behavioral Rules (Always Enforced)
 
@@ -38,12 +38,12 @@
 
 | Package | Path | Purpose |
 |---------|------|---------|
-| `@rufflo/cli` | `v3/@rufflo/cli/` | CLI entry point (26 commands) |
-| `@rufflo/codex` | `v3/@rufflo/codex/` | Dual-mode Claude + Codex collaboration |
-| `@rufflo/guidance` | `v3/@rufflo/guidance/` | Governance control plane |
-| `@rufflo/hooks` | `v3/@rufflo/hooks/` | 17 hooks + 12 workers |
-| `@rufflo/memory` | `v3/@rufflo/memory/` | AgentDB + HNSW search |
-| `@rufflo/security` | `v3/@rufflo/security/` | Input validation, CVE remediation |
+| `@swarmdo/cli` | `v3/@swarmdo/cli/` | CLI entry point (26 commands) |
+| `@swarmdo/codex` | `v3/@swarmdo/codex/` | Dual-mode Claude + Codex collaboration |
+| `@swarmdo/guidance` | `v3/@swarmdo/guidance/` | Governance control plane |
+| `@swarmdo/hooks` | `v3/@swarmdo/hooks/` | 17 hooks + 12 workers |
+| `@swarmdo/memory` | `v3/@swarmdo/memory/` | AgentDB + HNSW search |
+| `@swarmdo/security` | `v3/@swarmdo/security/` | Input validation, CVE remediation |
 
 ## Concurrency: 1 MESSAGE = ALL RELATED OPERATIONS
 
@@ -96,7 +96,7 @@
 - Keep task cycles short with verification gates
 
 ```javascript
-mcp__ruf-swarm__swarm_init({
+mcp__swarmdo-swarm__swarm_init({
   topology: "hierarchical",
   maxAgents: 8,
   strategy: "specialized"
@@ -122,7 +122,7 @@ For complex tasks, spawn both Claude and Codex workers in parallel:
 
 ```javascript
 // STEP 1: Initialize dual-mode swarm
-mcp__ruf-swarm__swarm_init({
+mcp__swarmdo-swarm__swarm_init({
   topology: "hierarchical",
   maxAgents: 8,
   strategy: "specialized"
@@ -136,11 +136,11 @@ Task("Reviewer", "Review code quality and security. Store findings in 'collabora
 
 // 🟢 Codex workers (implementation, optimization)
 // Spawn via CLI for Codex platform
-Bash("npx rufflo-codex dual run --worker 'codex:coder:Implement the solution based on architect design' --namespace collaboration")
-Bash("npx rufflo-codex dual run --worker 'codex:optimizer:Optimize performance based on implementation' --namespace collaboration")
+Bash("npx swarmdo-codex dual run --worker 'codex:coder:Implement the solution based on architect design' --namespace collaboration")
+Bash("npx swarmdo-codex dual run --worker 'codex:optimizer:Optimize performance based on implementation' --namespace collaboration")
 
 // STEP 3: Coordinate via shared memory
-Bash("npx rufflo@v3alpha memory store --namespace collaboration --key 'task-context' --value '[task description]'")
+Bash("npx swarmdo@v3alpha memory store --namespace collaboration --key 'task-context' --value '[task description]'")
 ```
 
 ### Collaboration Templates (Pre-Built Pipelines)
@@ -156,12 +156,12 @@ Bash("npx rufflo@v3alpha memory store --namespace collaboration --key 'task-cont
 
 ```bash
 # Run a collaboration template
-npx rufflo-codex dual run feature --task "Add user authentication with OAuth"
-npx rufflo-codex dual run security --target "./src"
-npx rufflo-codex dual run refactor --target "./src/legacy"
+npx swarmdo-codex dual run feature --task "Add user authentication with OAuth"
+npx swarmdo-codex dual run security --target "./src"
+npx swarmdo-codex dual run refactor --target "./src/legacy"
 
 # Custom multi-platform swarm
-npx rufflo-codex dual run \
+npx swarmdo-codex dual run \
   --worker "claude:architect:Design the API structure" \
   --worker "codex:coder:Implement REST endpoints" \
   --worker "claude:tester:Write integration tests" \
@@ -169,10 +169,10 @@ npx rufflo-codex dual run \
   --namespace "api-feature"
 
 # Check collaboration status
-npx rufflo-codex dual status
+npx swarmdo-codex dual status
 
 # List available templates
-npx rufflo-codex dual templates
+npx swarmdo-codex dual templates
 ```
 
 ### Shared Memory Coordination
@@ -181,13 +181,13 @@ All workers share state via the `collaboration` namespace:
 
 ```bash
 # Store context for cross-platform sharing
-npx rufflo@v3alpha memory store --namespace collaboration --key "design-decisions" --value "..."
+npx swarmdo@v3alpha memory store --namespace collaboration --key "design-decisions" --value "..."
 
 # Search for patterns across all workers
-npx rufflo@v3alpha memory search --namespace collaboration --query "authentication patterns"
+npx swarmdo@v3alpha memory search --namespace collaboration --query "authentication patterns"
 
 # Retrieve specific findings
-npx rufflo@v3alpha memory retrieve --namespace collaboration --key "security-findings"
+npx swarmdo@v3alpha memory retrieve --namespace collaboration --key "security-findings"
 ```
 
 ### Cross-Platform Learning
@@ -196,13 +196,13 @@ Both platforms learn from each other's outputs:
 
 ```bash
 # After successful collaboration, train patterns
-npx rufflo@v3alpha hooks post-task --task-id "dual-[id]" --success true --train-neural true
+npx swarmdo@v3alpha hooks post-task --task-id "dual-[id]" --success true --train-neural true
 
 # Store successful collaboration patterns
-npx rufflo@v3alpha memory store --namespace patterns --key "dual-mode-[pattern]" --value "[what worked]"
+npx swarmdo@v3alpha memory store --namespace patterns --key "dual-mode-[pattern]" --value "[what worked]"
 
 # Transfer learnings to both platforms
-npx rufflo@v3alpha hooks transfer store --pattern "dual-collab-success"
+npx swarmdo@v3alpha hooks transfer store --pattern "dual-collab-success"
 ```
 
 ### Worker Dependency Levels
@@ -230,7 +230,7 @@ Level 3: [🟢 Optimizer]           # Depends on Reviewer approval
 ### Programmatic API
 
 ```typescript
-import { DualModeOrchestrator, CollaborationTemplates } from '@rufflo/codex';
+import { DualModeOrchestrator, CollaborationTemplates } from '@swarmdo/codex';
 
 const orchestrator = new DualModeOrchestrator({
   namespace: 'my-feature',
@@ -257,7 +257,7 @@ When the user requests a complex task (multi-file changes, feature implementatio
 
 ```javascript
 // STEP 1: Initialize swarm coordination via MCP
-mcp__ruf-swarm__swarm_init({
+mcp__swarmdo-swarm__swarm_init({
   topology: "hierarchical",
   maxAgents: 8,
   strategy: "specialized"
@@ -336,7 +336,7 @@ TodoWrite({ todos: [
 
 ## Project Configuration
 
-This project is configured with Rufflo V3 (Anti-Drift Defaults):
+This project is configured with Swarmdo V3 (Anti-Drift Defaults):
 - **Topology**: hierarchical (prevents drift via central coordination)
 - **Max Agents**: 8 (smaller team = less drift)
 - **Strategy**: specialized (clear roles, no overlap)
@@ -387,28 +387,28 @@ This project is configured with Rufflo V3 (Anti-Drift Defaults):
 
 ```bash
 # Initialize project
-npx rufflo@v3alpha init --wizard
+npx swarmdo@v3alpha init --wizard
 
 # Start daemon with background workers
-npx rufflo@v3alpha daemon start
+npx swarmdo@v3alpha daemon start
 
 # Spawn an agent
-npx rufflo@v3alpha agent spawn -t coder --name my-coder
+npx swarmdo@v3alpha agent spawn -t coder --name my-coder
 
 # Initialize swarm
-npx rufflo@v3alpha swarm init --v3-mode
+npx swarmdo@v3alpha swarm init --v3-mode
 
 # Search memory (HNSW-indexed)
-npx rufflo@v3alpha memory search -q "authentication patterns"
+npx swarmdo@v3alpha memory search -q "authentication patterns"
 
 # System diagnostics
-npx rufflo@v3alpha doctor --fix
+npx swarmdo@v3alpha doctor --fix
 
 # Security scan
-npx rufflo@v3alpha security scan --depth full
+npx swarmdo@v3alpha security scan --depth full
 
 # Performance benchmark
-npx rufflo@v3alpha performance benchmark --suite all
+npx swarmdo@v3alpha performance benchmark --suite all
 ```
 
 ## Headless Background Instances (claude -p)
@@ -492,7 +492,7 @@ claude -p --resume "abc-123" --fork-session "Try approach B: CQRS pattern"
 ### V3 Specialized Agents
 `security-architect`, `security-auditor`, `memory-specialist`, `performance-engineer`
 
-### @rufflo/security Module
+### @swarmdo/security Module
 CVE remediation, input validation, path security:
 - `InputValidator` — Zod-based validation at boundaries
 - `PathValidator` — Path traversal prevention
@@ -503,7 +503,7 @@ CVE remediation, input validation, path security:
 ### Token Optimizer (Agent Booster)
 Integrates agentic-flow optimizations for 30-50% token reduction:
 ```typescript
-import { getTokenOptimizer } from '@rufflo/integration';
+import { getTokenOptimizer } from '@swarmdo/integration';
 const optimizer = await getTokenOptimizer();
 
 // Compact context (32% fewer tokens)
@@ -689,8 +689,8 @@ Task({
 | `TaskCompleted` | Task marked complete | Train patterns, notify lead via SendMessage |
 
 ```bash
-npx rufflo@v3alpha hooks teammate-idle --auto-assign true
-npx rufflo@v3alpha hooks task-completed -i task-123 --train-patterns true
+npx swarmdo@v3alpha hooks teammate-idle --auto-assign true
+npx swarmdo@v3alpha hooks task-completed -i task-123 --train-patterns true
 ```
 
 ### Rules
@@ -736,35 +736,35 @@ npx rufflo@v3alpha hooks task-completed -i task-123 --train-patterns true
 
 ```bash
 # Core hooks
-npx rufflo@v3alpha hooks pre-task --description "[task]"
-npx rufflo@v3alpha hooks post-task --task-id "[id]" --success true
-npx rufflo@v3alpha hooks post-edit --file "[file]" --train-patterns
+npx swarmdo@v3alpha hooks pre-task --description "[task]"
+npx swarmdo@v3alpha hooks post-task --task-id "[id]" --success true
+npx swarmdo@v3alpha hooks post-edit --file "[file]" --train-patterns
 
 # Session management
-npx rufflo@v3alpha hooks session-start --session-id "[id]"
-npx rufflo@v3alpha hooks session-end --export-metrics true
-npx rufflo@v3alpha hooks session-restore --session-id "[id]"
+npx swarmdo@v3alpha hooks session-start --session-id "[id]"
+npx swarmdo@v3alpha hooks session-end --export-metrics true
+npx swarmdo@v3alpha hooks session-restore --session-id "[id]"
 
 # Intelligence routing
-npx rufflo@v3alpha hooks route --task "[task]"
-npx rufflo@v3alpha hooks explain --topic "[topic]"
+npx swarmdo@v3alpha hooks route --task "[task]"
+npx swarmdo@v3alpha hooks explain --topic "[topic]"
 
 # Neural learning
-npx rufflo@v3alpha hooks pretrain --model-type moe --epochs 10
-npx rufflo@v3alpha hooks build-agents --agent-types coder,tester
+npx swarmdo@v3alpha hooks pretrain --model-type moe --epochs 10
+npx swarmdo@v3alpha hooks build-agents --agent-types coder,tester
 
 # Background workers
-npx rufflo@v3alpha hooks worker list
-npx rufflo@v3alpha hooks worker dispatch --trigger audit
-npx rufflo@v3alpha hooks worker status
+npx swarmdo@v3alpha hooks worker list
+npx swarmdo@v3alpha hooks worker dispatch --trigger audit
+npx swarmdo@v3alpha hooks worker status
 ```
 
-## Intelligence System (RufVector)
+## Intelligence System (SwarmVector)
 
-V3 includes the RufVector Intelligence System (measured numbers: see [audit](docs/reviews/intelligence-system-audit-2026-05-29.md) + [`scripts/benchmark-intelligence.mjs`](scripts/benchmark-intelligence.mjs)):
+V3 includes the SwarmVector Intelligence System (measured numbers: see [audit](docs/reviews/intelligence-system-audit-2026-05-29.md) + [`scripts/benchmark-intelligence.mjs`](scripts/benchmark-intelligence.mjs)):
 - **SONA**: Self-Optimizing Neural Architecture (measured 0.0043ms/adapt, target <0.05ms met)
 - **MoE**: Mixture of Experts for specialized routing (gate converges — confidence 0.13→0.88 after rewards)
-- **HNSW**: measured ~1.9x at N=20k, ~3.2x–4.7x at N=5k vs brute force (recall@10 ~0.99); ANN wins above the crossover, rufvector NAPI backend (WASM not active on test host)
+- **HNSW**: measured ~1.9x at N=20k, ~3.2x–4.7x at N=5k vs brute force (recall@10 ~0.99); ANN wins above the crossover, swarmvector NAPI backend (WASM not active on test host)
 - **EWC++**: Elastic Weight Consolidation (prevents forgetting)
 - **Flash Attention**: unverified — no benchmark exists for this claim
 
@@ -782,7 +782,7 @@ Features:
 - **Normalization**: L2, L1, min-max, z-score
 - **Hyperbolic embeddings**: Poincare ball model for hierarchical data
 - **agentic-flow ONNX integration**: speedup unverified (no benchmark; backend reported `onnx`, model all-MiniLM-L6-v2, 384-dim)
-- **Neural substrate**: Integration with RufVector
+- **Neural substrate**: Integration with SwarmVector
 
 ## Hive-Mind Consensus
 
@@ -805,7 +805,7 @@ Features:
 
 | Metric | Measured / Target | Status |
 |--------|-------------------|--------|
-| HNSW Search | ~1.9x at N=20k, ~3.2x–4.7x at N=5k vs brute force (recall@10 ~0.99); ties/loses below crossover | **Measured** (rufvector NAPI; 150x-12,500x NOT reproduced — was brute-force fallback) |
+| HNSW Search | ~1.9x at N=20k, ~3.2x–4.7x at N=5k vs brute force (recall@10 ~0.99); ties/loses below crossover | **Measured** (swarmvector NAPI; 150x-12,500x NOT reproduced — was brute-force fallback) |
 | Int8 Quantization | 3.84x compression, reconstruction cosine 0.99999 | **Measured** |
 | RaBitQ Quantization | 32x compression, 0.60ms/query (14,760-vec index) | **Measured** |
 | SONA Adaptation | 0.0043ms/adapt (target <0.05ms met) | **Measured** |
@@ -818,8 +818,8 @@ Features:
 
 ```bash
 # Configuration
-RUFFLO_CONFIG=./rufflo.config.json
-RUFFLO_LOG_LEVEL=info
+SWARMDO_CONFIG=./swarmdo.config.json
+SWARMDO_LOG_LEVEL=info
 
 # Provider API Keys
 ANTHROPIC_API_KEY=sk-ant-...
@@ -827,18 +827,18 @@ OPENAI_API_KEY=sk-...
 GOOGLE_API_KEY=...
 
 # MCP Server
-RUFFLO_MCP_PORT=3000
-RUFFLO_MCP_HOST=localhost
-RUFFLO_MCP_TRANSPORT=stdio
+SWARMDO_MCP_PORT=3000
+SWARMDO_MCP_HOST=localhost
+SWARMDO_MCP_TRANSPORT=stdio
 
 # Memory
-RUFFLO_MEMORY_BACKEND=hybrid
-RUFFLO_MEMORY_PATH=./data/memory
+SWARMDO_MEMORY_BACKEND=hybrid
+SWARMDO_MEMORY_PATH=./data/memory
 ```
 
 ## Doctor Health Checks
 
-Run `npx rufflo@v3alpha doctor` to check:
+Run `npx swarmdo@v3alpha doctor` to check:
 - Node.js version (20+)
 - npm version (9+)
 - Git installation
@@ -854,14 +854,14 @@ Run `npx rufflo@v3alpha doctor` to check:
 
 ```bash
 # Add MCP servers
-claude mcp add rufflo npx rufflo@v3alpha mcp start
-claude mcp add ruf-swarm npx ruf-swarm mcp start  # Optional
+claude mcp add swarmdo npx swarmdo@v3alpha mcp start
+claude mcp add swarmdo-swarm npx swarmdo-swarm mcp start  # Optional
 
 # Start daemon
-npx rufflo@v3alpha daemon start
+npx swarmdo@v3alpha daemon start
 
 # Run doctor
-npx rufflo@v3alpha doctor --fix
+npx swarmdo@v3alpha doctor --fix
 ```
 
 ## Claude Code vs MCP Tools
@@ -942,41 +942,41 @@ memory_search_unified({ query: "authentication security", limit: 5 })
 
 ### Publishing Rules
 
-- MUST publish ALL THREE packages when publishing CLI changes: `@rufflo/cli`, `rufflo`, AND `rufflo`
+- MUST publish ALL THREE packages when publishing CLI changes: `@swarmdo/cli`, `swarmdo`, AND `swarmdo`
 - MUST update ALL dist-tags for ALL THREE packages after publishing (latest + alpha + v3alpha all point to the same version)
-- Publish order: `@rufflo/cli` first, then `rufflo` (umbrella), then `rufflo` (alias umbrella)
+- Publish order: `@swarmdo/cli` first, then `swarmdo` (umbrella), then `swarmdo` (alias umbrella)
 - MUST run verification for ALL THREE before telling user publishing is complete
 
 ```bash
 # Replace 3.7.1 below with your chosen stable version (patch/minor/major per the rules above)
 
-# STEP 1: Build and publish @rufflo/cli
-cd v3/@rufflo/cli
+# STEP 1: Build and publish @swarmdo/cli
+cd v3/@swarmdo/cli
 npm version 3.7.1 --no-git-tag-version
 npm run build
 npm publish                              # default tag is `latest` — no --tag flag
-npm dist-tag add @rufflo/cli@3.7.1 alpha     # historical compat
-npm dist-tag add @rufflo/cli@3.7.1 v3alpha   # historical compat
+npm dist-tag add @swarmdo/cli@3.7.1 alpha     # historical compat
+npm dist-tag add @swarmdo/cli@3.7.1 v3alpha   # historical compat
 
-# STEP 2: Publish rufflo umbrella
-cd /Users/cohen/Projects/rufflo                    # or your repo root
+# STEP 2: Publish swarmdo umbrella
+cd /Users/cohen/Projects/swarmdo                    # or your repo root
 npm version 3.7.1 --no-git-tag-version
 npm publish
-npm dist-tag add rufflo@3.7.1 alpha
-npm dist-tag add rufflo@3.7.1 v3alpha
+npm dist-tag add swarmdo@3.7.1 alpha
+npm dist-tag add swarmdo@3.7.1 v3alpha
 
-# STEP 3: Publish rufflo wrapper (CRITICAL — DON'T FORGET — this is what users run)
-cd rufflo
+# STEP 3: Publish swarmdo wrapper (CRITICAL — DON'T FORGET — this is what users run)
+cd swarmdo
 npm version 3.7.1 --no-git-tag-version
 npm publish
-npm dist-tag add rufflo@3.7.1 alpha
-npm dist-tag add rufflo@3.7.1 v3alpha
+npm dist-tag add swarmdo@3.7.1 alpha
+npm dist-tag add swarmdo@3.7.1 v3alpha
 ```
 
 **Verification (run before telling user publishing is complete):**
 
 ```bash
-for pkg in @rufflo/cli rufflo rufflo; do
+for pkg in @swarmdo/cli swarmdo swarmdo; do
   echo "$pkg: $(npm view $pkg@latest version)"
   npm view $pkg dist-tags --json
 done
@@ -987,20 +987,20 @@ done
 
 | Package | Tag | Command Users Run |
 |---------|-----|-------------------|
-| `@rufflo/cli` | `latest` | `npx @rufflo/cli@latest` |
-| `@rufflo/cli` | `alpha` | `npx @rufflo/cli@alpha` (legacy compat) |
-| `@rufflo/cli` | `v3alpha` | `npx @rufflo/cli@v3alpha` (legacy compat) |
-| `rufflo` | `latest` | `npx rufflo@latest` |
-| `rufflo` | `alpha` | `npx rufflo@alpha` (legacy compat) |
-| `rufflo` | `v3alpha` | `npx rufflo@v3alpha` (legacy compat) |
-| `rufflo` | `latest` | `npx rufflo@latest` |
-| `rufflo` | `alpha` | `npx rufflo@alpha` (legacy compat) |
-| `rufflo` | `v3alpha` | `npx rufflo@v3alpha` (legacy compat) |
+| `@swarmdo/cli` | `latest` | `npx @swarmdo/cli@latest` |
+| `@swarmdo/cli` | `alpha` | `npx @swarmdo/cli@alpha` (legacy compat) |
+| `@swarmdo/cli` | `v3alpha` | `npx @swarmdo/cli@v3alpha` (legacy compat) |
+| `swarmdo` | `latest` | `npx swarmdo@latest` |
+| `swarmdo` | `alpha` | `npx swarmdo@alpha` (legacy compat) |
+| `swarmdo` | `v3alpha` | `npx swarmdo@v3alpha` (legacy compat) |
+| `swarmdo` | `latest` | `npx swarmdo@latest` |
+| `swarmdo` | `alpha` | `npx swarmdo@alpha` (legacy compat) |
+| `swarmdo` | `v3alpha` | `npx swarmdo@v3alpha` (legacy compat) |
 
-- Never forget the `rufflo` package — it's the thin wrapper users actually run via `npx rufflo`
+- Never forget the `swarmdo` package — it's the thin wrapper users actually run via `npx swarmdo`
 - The legacy `alpha` and `v3alpha` tags MUST stay pointed at the latest stable so old install commands keep working
-- `rufflo` source is in `/rufflo/` — it depends on `@rufflo/cli`
-- Also remember to update `rufflo/package.json` overrides when adding new pinned transitives (see #2112 lesson — root overrides do NOT propagate to the published `rufflo` wrapper)
+- `swarmdo` source is in `/swarmdo/` — it depends on `@swarmdo/cli`
+- Also remember to update `swarmdo/package.json` overrides when adding new pinned transitives (see #2112 lesson — root overrides do NOT propagate to the published `swarmdo` wrapper)
 
 ### GitHub Release after publish
 
@@ -1018,7 +1018,7 @@ gh release create v3.7.1 --title "v3.7.1 — <one-line headline>" \
 The plugin registry is stored on IPFS via Pinata for decentralized, immutable distribution.
 
 ### Registry Location
-- **Current CID**: Stored in `v3/@rufflo/cli/src/plugins/store/discovery.ts`
+- **Current CID**: Stored in `v3/@swarmdo/cli/src/plugins/store/discovery.ts`
 - **Gateway**: `https://gateway.pinata.cloud/ipfs/{CID}`
 - **Format**: JSON with plugin metadata, categories, featured/trending lists
 
@@ -1036,20 +1036,20 @@ PINATA_API_JWT=your-jwt-token
 
 1. **Fetch current registry**:
 ```bash
-curl -s "https://gateway.pinata.cloud/ipfs/$(grep LIVE_REGISTRY_CID v3/@rufflo/cli/src/plugins/store/discovery.ts | cut -d"'" -f2)" > /tmp/registry.json
+curl -s "https://gateway.pinata.cloud/ipfs/$(grep LIVE_REGISTRY_CID v3/@swarmdo/cli/src/plugins/store/discovery.ts | cut -d"'" -f2)" > /tmp/registry.json
 ```
 
 2. **Add plugin entry** to the `plugins` array:
 ```json
 {
-  "id": "@rufflo/your-plugin",
-  "name": "@rufflo/your-plugin",
+  "id": "@swarmdo/your-plugin",
+  "name": "@swarmdo/your-plugin",
   "displayName": "Your Plugin",
   "description": "Plugin description",
   "version": "1.0.0-alpha.1",
   "size": 100000,
   "checksum": "sha256:abc123",
-  "author": {"id": "rufflo-team", "displayName": "Rufflo Team", "verified": true},
+  "author": {"id": "swarmdo-team", "displayName": "Swarmdo Team", "verified": true},
   "license": "MIT",
   "categories": ["official"],
   "tags": ["your", "tags"],
@@ -1106,11 +1106,11 @@ curl -s "https://gateway.pinata.cloud/ipfs/{NEW_CID}" | jq '.totalPlugins'
 
 ## MetaHarness Integration (ADR-150)
 
-Rufflo integrates with the upstream `metaharness` / `@metaharness/*` ecosystem as a sibling agent-harness scaffolding system (same author, designed around rufflo's primitives). Both `metaharness` and `@metaharness/router` are in `optionalDependencies` — never required at runtime.
+Swarmdo integrates with the upstream `metaharness` / `@metaharness/*` ecosystem as a sibling agent-harness scaffolding system (same author, designed around swarmdo's primitives). Both `metaharness` and `@metaharness/router` are in `optionalDependencies` — never required at runtime.
 
 ### Architectural constraint (load-bearing)
 
-**Rufflo remains operational if every MetaHarness package is removed.** Four rules:
+**Swarmdo remains operational if every MetaHarness package is removed.** Four rules:
 1. **Removable**: `npm ls --without @metaharness/*` must still produce a working CLI
 2. **Optional in package.json**: `@metaharness/*` packages MUST be in `optionalDependencies`, never in `dependencies`
 3. **Graceful degradation**: every code path that touches MetaHarness catches `MODULE_NOT_FOUND` and falls back
@@ -1119,56 +1119,56 @@ Rufflo integrates with the upstream `metaharness` / `@metaharness/*` ecosystem a
 ### Command + tool surface
 
 ```bash
-# CLI subcommands (npx rufflo metaharness …)
-npx rufflo metaharness score                      # 5-dim readiness scorecard
-npx rufflo metaharness genome                     # 7-section categorical report
-npx rufflo metaharness mcp-scan --fail-on high    # static security findings
-npx rufflo metaharness threat-model               # enterprise threat report
-npx rufflo metaharness oia-audit --alert-on-worst high
+# CLI subcommands (npx swarmdo metaharness …)
+npx swarmdo metaharness score                      # 5-dim readiness scorecard
+npx swarmdo metaharness genome                     # 7-section categorical report
+npx swarmdo metaharness mcp-scan --fail-on high    # static security findings
+npx swarmdo metaharness threat-model               # enterprise threat report
+npx swarmdo metaharness oia-audit --alert-on-worst high
                                                  # composite weekly audit → memory
-npx rufflo metaharness audit-list --since 30d     # enumerate audit records
-npx rufflo metaharness audit-trend \              # diff two audits (drift)
+npx swarmdo metaharness audit-list --since 30d     # enumerate audit records
+npx swarmdo metaharness audit-trend \              # diff two audits (drift)
   --baseline-key <a> --current-key <b> --alert-on-worsening \
   --alert-on-distance-below 0.85               # iter 38 — structural-distance gate (ADR-152 §3.1)
-npx rufflo metaharness similarity \               # iter 36 — ADR-152 §3.1 weighted similarity
+npx swarmdo metaharness similarity \               # iter 36 — ADR-152 §3.1 weighted similarity
   --a a.json --b b.json [--per-dimension] [--alert-below 0.5]
-npx rufflo metaharness drift-from-history \       # iter 53 — 1-command drift (composes 3 primitives)
+npx swarmdo metaharness drift-from-history \       # iter 53 — 1-command drift (composes 3 primitives)
   [--baseline-since 7d] [--baseline-key <key>] [--baseline-file <path>] \
   [--threshold 0.95] [--alert-on-new-severity high] [--dry-run]
                                                  # iter 66 — --baseline-key skips audit-list (~14x faster)
                                                  # iter 67 — --baseline-file skips memory entirely (~19x faster)
                                                  # iter 78 — --alert-on-new-severity adds orthogonal finding-severity gate
-npx rufflo metaharness mint --name foo --template vertical:coding --confirm
+npx swarmdo metaharness mint --name foo --template vertical:coding --confirm
 
 # Dedicated command
-npx rufflo eject --name my-harness                # lift rufflo project → standalone harness
+npx swarmdo eject --name my-harness                # lift swarmdo project → standalone harness
                                                  # dry-run by default; refuses in-repo target
 
 # Doctor health check
-npx rufflo doctor --component metaharness         # report metaharness availability + version
+npx swarmdo doctor --component metaharness         # report metaharness availability + version
 
 # MCP tools (callable by Claude Code agents)
-mcp__rufflo__metaharness_score
-mcp__rufflo__metaharness_genome
-mcp__rufflo__metaharness_mcp_scan
-mcp__rufflo__metaharness_threat_model
-mcp__rufflo__metaharness_oia_audit
-mcp__rufflo__metaharness_audit_list
-mcp__rufflo__metaharness_audit_trend
-mcp__rufflo__metaharness_similarity          # iter 36 — ADR-152 §3.1 genome similarity
-mcp__rufflo__metaharness_drift_from_history  # iter 53 — 1-command drift detection
+mcp__swarmdo__metaharness_score
+mcp__swarmdo__metaharness_genome
+mcp__swarmdo__metaharness_mcp_scan
+mcp__swarmdo__metaharness_threat_model
+mcp__swarmdo__metaharness_oia_audit
+mcp__swarmdo__metaharness_audit_list
+mcp__swarmdo__metaharness_audit_trend
+mcp__swarmdo__metaharness_similarity          # iter 36 — ADR-152 §3.1 genome similarity
+mcp__swarmdo__metaharness_drift_from_history  # iter 53 — 1-command drift detection
 ```
 
 ### Routing integration (ADR-148/149)
 
-`@metaharness/router@~0.3.2` is wired as the cost-optimal model router behind the `RUFFLO_ROUTER_NEURAL=1` triple-gate. The `routedBy` field on every routing decision carries `'metaharness-knn' | 'metaharness-krr' | 'fastgrnn'` when the neural path is active.
+`@metaharness/router@~0.3.2` is wired as the cost-optimal model router behind the `SWARMDO_ROUTER_NEURAL=1` triple-gate. The `routedBy` field on every routing decision carries `'metaharness-knn' | 'metaharness-krr' | 'fastgrnn'` when the neural path is active.
 
 ### SelfEvolvingRouter parallel-logging (ADR-150 Phase 2)
 
-When `RUFFLO_ROUTER_PARALLEL_LOG=1` is set, every `route()` call writes a paired-decision row (bandit pick + neural-augmented pick + outcome) to `.swarm/router-parallel.jsonl`. Analyze with:
+When `SWARMDO_ROUTER_PARALLEL_LOG=1` is set, every `route()` call writes a paired-decision row (bandit pick + neural-augmented pick + outcome) to `.swarm/router-parallel.jsonl`. Analyze with:
 
 ```bash
-node plugins/rufflo-metaharness/scripts/router-parallel-analyze.mjs \
+node plugins/swarmdo-metaharness/scripts/router-parallel-analyze.mjs \
   --input .swarm/router-parallel.jsonl --strict
 ```
 
@@ -1176,14 +1176,14 @@ The 3-criteria AND-gate from ADR-150 review-round-1: `quality > 2% AND cost < 1%
 
 ### CI workflows
 
-- `metaharness-ci.yml` — score / mcp-scan / router-compat / eject-dryrun jobs on every PR touching `plugins/rufflo-metaharness/**`
+- `metaharness-ci.yml` — score / mcp-scan / router-compat / eject-dryrun jobs on every PR touching `plugins/swarmdo-metaharness/**`
 - `no-metaharness-smoke.yml` — enforces the four architectural-constraint rules above on every PR
 - `oia-audit-weekly.yml` — Sundays 04:17 UTC, runs composite audit, uploads 90-day artifact
 
 ### Cross-references
 
 - [ADR-150](v3/docs/adr/ADR-150-metaharness-integration-surfaces.md) — decision + implementation notes
-- [Issue #2399](https://github.com/ruvnet/ruflo/issues/2399) — phase tracker
+- [Issue #2399](https://github.com/ruvnet/swarmdo/issues/2399) — phase tracker
 - [Research gist](https://gist.github.com/ruvnet/19d166ff9acf368c9da4172d91ac9113) — graded evidence
 - Upstream: `github.com/ruvnet/agent-harness-generator`
 
@@ -1193,62 +1193,62 @@ Plugins are distributed via IPFS and can be installed with the CLI. Browse and i
 
 ```bash
 # List all available plugins
-npx rufflo@v3alpha plugins list
+npx swarmdo@v3alpha plugins list
 
 # Install a plugin
-npx rufflo@v3alpha plugins install @rufflo/plugin-name
+npx swarmdo@v3alpha plugins install @swarmdo/plugin-name
 
 # Enable/disable
-npx rufflo@v3alpha plugins enable @rufflo/plugin-name
-npx rufflo@v3alpha plugins disable @rufflo/plugin-name
+npx swarmdo@v3alpha plugins enable @swarmdo/plugin-name
+npx swarmdo@v3alpha plugins disable @swarmdo/plugin-name
 ```
 
 ### Core Plugins
 
 | Plugin | Version | Description |
 |--------|---------|-------------|
-| `@rufflo/embeddings` | 3.0.0-alpha.1 | Vector embeddings with sql.js, HNSW, hyperbolic support |
-| `@rufflo/security` | 3.0.0-alpha.1 | Input validation, path security, CVE remediation |
-| `@rufflo/claims` | 3.0.0-alpha.8 | Claims-based authorization (check, grant, revoke, list) |
-| `@rufflo/neural` | 3.0.0-alpha.7 | Neural pattern training (SONA, MoE, EWC++) |
-| `@rufflo/plugins` | 3.0.0-alpha.1 | Plugin system core (manager, discovery, store) |
-| `@rufflo/performance` | 3.0.0-alpha.1 | Performance profiling and benchmarking |
+| `@swarmdo/embeddings` | 3.0.0-alpha.1 | Vector embeddings with sql.js, HNSW, hyperbolic support |
+| `@swarmdo/security` | 3.0.0-alpha.1 | Input validation, path security, CVE remediation |
+| `@swarmdo/claims` | 3.0.0-alpha.8 | Claims-based authorization (check, grant, revoke, list) |
+| `@swarmdo/neural` | 3.0.0-alpha.7 | Neural pattern training (SONA, MoE, EWC++) |
+| `@swarmdo/plugins` | 3.0.0-alpha.1 | Plugin system core (manager, discovery, store) |
+| `@swarmdo/performance` | 3.0.0-alpha.1 | Performance profiling and benchmarking |
 
 ### Integration Plugins
 
 | Plugin | Version | Description |
 |--------|---------|-------------|
-| `@rufflo/plugin-agentic-qe` | 3.0.0-alpha.4 | Agentic quality engineering integration |
-| `@rufflo/plugin-prime-radiant` | 0.1.5 | Prime Radiant intelligence integration |
-| `@rufflo/plugin-gastown-bridge` | 3.0.0-alpha.1 | Gastown bridge protocol integration |
-| `@rufflo/teammate-plugin` | 1.0.0-alpha.1 | Multi-agent teammate coordination |
-| `@rufflo/plugin-code-intelligence` | 0.1.0 | Advanced code analysis and intelligence |
-| `@rufflo/plugin-test-intelligence` | 0.1.0 | Intelligent test generation and gap analysis |
-| `@rufflo/plugin-perf-optimizer` | 0.1.0 | Performance optimization automation |
-| `@rufflo/plugin-neural-coordinator` | 0.1.0 | Neural network coordination across agents |
-| `@rufflo/plugin-cognitive-kernel` | 0.1.0 | Core cognitive processing kernel |
-| `@rufflo/plugin-quantum-optimizer` | 0.1.0 | Quantum-inspired optimization algorithms |
-| `@rufflo/plugin-hyperbolic-reasoning` | 0.1.0 | Hyperbolic space reasoning for hierarchical data |
+| `@swarmdo/plugin-agentic-qe` | 3.0.0-alpha.4 | Agentic quality engineering integration |
+| `@swarmdo/plugin-prime-radiant` | 0.1.5 | Prime Radiant intelligence integration |
+| `@swarmdo/plugin-gastown-bridge` | 3.0.0-alpha.1 | Gastown bridge protocol integration |
+| `@swarmdo/teammate-plugin` | 1.0.0-alpha.1 | Multi-agent teammate coordination |
+| `@swarmdo/plugin-code-intelligence` | 0.1.0 | Advanced code analysis and intelligence |
+| `@swarmdo/plugin-test-intelligence` | 0.1.0 | Intelligent test generation and gap analysis |
+| `@swarmdo/plugin-perf-optimizer` | 0.1.0 | Performance optimization automation |
+| `@swarmdo/plugin-neural-coordinator` | 0.1.0 | Neural network coordination across agents |
+| `@swarmdo/plugin-cognitive-kernel` | 0.1.0 | Core cognitive processing kernel |
+| `@swarmdo/plugin-quantum-optimizer` | 0.1.0 | Quantum-inspired optimization algorithms |
+| `@swarmdo/plugin-hyperbolic-reasoning` | 0.1.0 | Hyperbolic space reasoning for hierarchical data |
 
 ### Domain-Specific Plugins
 
 | Plugin | Version | Description |
 |--------|---------|-------------|
-| `@rufflo/plugin-healthcare-clinical` | 0.1.0 | Healthcare clinical workflow automation |
-| `@rufflo/plugin-financial-risk` | 0.1.0 | Financial risk assessment and modeling |
-| `@rufflo/plugin-legal-contracts` | 0.1.0 | Legal contract analysis and generation |
+| `@swarmdo/plugin-healthcare-clinical` | 0.1.0 | Healthcare clinical workflow automation |
+| `@swarmdo/plugin-financial-risk` | 0.1.0 | Financial risk assessment and modeling |
+| `@swarmdo/plugin-legal-contracts` | 0.1.0 | Legal contract analysis and generation |
 
 ### Plugin Development
 
 ```bash
 # Create a new plugin from template
-npx rufflo@v3alpha plugins create my-plugin
+npx swarmdo@v3alpha plugins create my-plugin
 
 # Test locally
-npx rufflo@v3alpha plugins install ./path/to/my-plugin
+npx swarmdo@v3alpha plugins install ./path/to/my-plugin
 
 # Publish to registry (requires Pinata credentials)
-npx rufflo@v3alpha plugins publish
+npx swarmdo@v3alpha plugins publish
 ```
 
 Registry source: IPFS via Pinata (`QmXbfEAaR7D2Ujm4GAkbwcGZQMHqAMpwDoje4583uNP834`)
@@ -1260,4 +1260,4 @@ Registry source: IPFS via Pinata (`QmXbfEAaR7D2Ujm4GAkbwcGZQMHqAMpwDoje4583uNP83
 
 ---
 
-Remember: **Rufflo coordinates, Claude Code creates!**
+Remember: **Swarmdo coordinates, Claude Code creates!**

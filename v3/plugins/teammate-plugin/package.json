@@ -1,7 +1,7 @@
 {
-  "name": "@rufflo/teammate-plugin",
+  "name": "@swarmdo/teammate-plugin",
   "version": "1.0.0-alpha.1",
-  "description": "Native TeammateTool integration plugin for Rufflo - bridges Claude Code v2.1.19+ multi-agent capabilities",
+  "description": "Native TeammateTool integration plugin for Swarmdo - bridges Claude Code v2.1.19+ multi-agent capabilities",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -43,7 +43,7 @@
   "keywords": [
     "claude",
     "claude-code",
-    "rufflo",
+    "swarmdo",
     "teammate",
     "multi-agent",
     "swarm",
@@ -54,13 +54,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JannieP/rufflo.git",
+    "url": "https://github.com/JannieP/swarmdo.git",
     "directory": "v3/plugins/teammate-plugin"
   },
   "bugs": {
-    "url": "https://github.com/JannieP/rufflo/issues"
+    "url": "https://github.com/JannieP/swarmdo/issues"
   },
-  "homepage": "https://github.com/JannieP/rufflo#readme",
+  "homepage": "https://github.com/JannieP/swarmdo#readme",
   "engines": {
     "node": ">=18.0.0"
   },
@@ -74,7 +74,7 @@
   },
   "dependencies": {
     "eventemitter3": "^5.0.1",
-    "@rufnet/bmssp": "file:../../@rufnet/bmssp"
+    "@swarmnet/bmssp": "file:../../@swarmnet/bmssp"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",

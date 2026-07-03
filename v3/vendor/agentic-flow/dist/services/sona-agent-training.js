@@ -2,10 +2,10 @@
  * SONA Agent Training Service
  *
  * Train specialized models for specific agents, tasks, and codebases
- * Uses @rufvector/sona for continuous learning and adaptation
+ * Uses @swarmvector/sona for continuous learning and adaptation
  */
 import { EventEmitter } from 'events';
-import { SonaEngine } from '@rufvector/sona';
+import { SonaEngine } from '@swarmvector/sona';
 /**
  * SONA Agent Factory - Create and manage specialized agents
  */

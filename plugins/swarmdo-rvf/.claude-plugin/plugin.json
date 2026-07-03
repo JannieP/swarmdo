@@ -1,0 +1,22 @@
+{
+  "name": "swarmdo-rvf",
+  "description": "RVF format for portable agent memory, session persistence, and cross-platform transfer",
+  "version": "0.2.0",
+  "author": {
+    "name": "ruvnet",
+    "url": "https://github.com/ruvnet"
+  },
+  "homepage": "https://github.com/JannieP/swarmdo",
+  "license": "MIT",
+  "keywords": [
+    "swarmdo",
+    "rvf",
+    "memory",
+    "session",
+    "persistence",
+    "transfer",
+    "mcp",
+    "cognitive-containers",
+    "lineage-tracking"
+  ]
+}

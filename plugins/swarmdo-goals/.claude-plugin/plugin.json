@@ -1,0 +1,26 @@
+{
+  "name": "swarmdo-goals",
+  "description": "Long-horizon goal planning, deep research orchestration, and adaptive replanning using GOAP algorithms",
+  "version": "0.2.0",
+  "author": {
+    "name": "ruvnet",
+    "url": "https://github.com/ruvnet"
+  },
+  "homepage": "https://github.com/JannieP/swarmdo",
+  "license": "MIT",
+  "keywords": [
+    "swarmdo",
+    "goals",
+    "goap",
+    "research",
+    "planning",
+    "deep-research",
+    "long-horizon",
+    "dossier",
+    "investigation",
+    "osint",
+    "mcp",
+    "evidence-grading",
+    "legacy-namespaces"
+  ]
+}

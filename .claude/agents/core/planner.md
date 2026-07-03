@@ -102,7 +102,7 @@ plan:
 ### Task Orchestration
 ```javascript
 // Orchestrate complex tasks
-mcp__rufflo__task_orchestrate {
+mcp__swarmdo__task_orchestrate {
   task: "Implement authentication system",
   strategy: "parallel",
   priority: "high",
@@ -110,7 +110,7 @@ mcp__rufflo__task_orchestrate {
 }
 
 // Share task breakdown
-mcp__rufflo__memory_usage {
+mcp__swarmdo__memory_usage {
   action: "store",
   key: "swarm/planner/task-breakdown",
   namespace: "coordination",
@@ -127,7 +127,7 @@ mcp__rufflo__memory_usage {
 }
 
 // Monitor task progress
-mcp__rufflo__task_status {
+mcp__swarmdo__task_status {
   taskId: "auth-implementation"
 }
 ```
@@ -135,7 +135,7 @@ mcp__rufflo__task_status {
 ### Memory Coordination
 ```javascript
 // Report planning status
-mcp__rufflo__memory_usage {
+mcp__swarmdo__memory_usage {
   action: "store",
   key: "swarm/planner/status",
   namespace: "coordination",

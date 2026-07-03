@@ -3,7 +3,7 @@
  *
  * All vector math, activation functions, and element-wise operations
  * with 4-wide loop unrolling for performance-critical paths.
- * Used by NativeAccelerator when @rufvector/rufllm is unavailable.
+ * Used by NativeAccelerator when @swarmvector/swarmllm is unavailable.
  */
 
 // Pre-computed CRC32C (Castagnoli) lookup table

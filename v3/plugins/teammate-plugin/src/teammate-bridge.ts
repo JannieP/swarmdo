@@ -13,7 +13,7 @@
  * - Session memory persistence
  * - Teleport/session resume
  *
- * @module @rufflo/teammate-plugin/bridge
+ * @module @swarmdo/teammate-plugin/bridge
  * @version 1.0.0-alpha.1
  */
 

@@ -1,5 +1,5 @@
 {
-  "name": "@rufvector/rvf-node-linux-arm64-gnu",
+  "name": "@swarmvector/rvf-node-linux-arm64-gnu",
   "version": "0.1.7",
   "cpu": [
     "arm64"
@@ -8,7 +8,7 @@
   "files": [
     "rvf-node.linux-arm64-gnu.node"
   ],
-  "description": "RuVector Format Node.js native bindings",
+  "description": "SwarmVector Format Node.js native bindings",
   "license": "MIT",
   "os": [
     "linux"

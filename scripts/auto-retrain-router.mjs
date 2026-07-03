@@ -25,7 +25,7 @@
 //   node scripts/auto-retrain-router.mjs                       # swap if gate passes
 //   node scripts/auto-retrain-router.mjs --margin 0.01         # tighter improvement bar
 //   node scripts/auto-retrain-router.mjs --min-new-rows 50     # require ≥50 production rows
-//   RUFFLO_ROUTER_TRAJECTORY_PATH=... node scripts/auto-retrain-router.mjs
+//   SWARMDO_ROUTER_TRAJECTORY_PATH=... node scripts/auto-retrain-router.mjs
 //
 // Exits 0 on every gated outcome (no-swap is success). Exits 1 only on
 // I/O errors. JSON report goes to stdout; the decision and reason are in
@@ -35,18 +35,18 @@ import { readFileSync, writeFileSync, copyFileSync, existsSync, mkdtempSync, ren
 import { resolve, join, dirname } from 'node:path';
 import { tmpdir } from 'node:os';
 import * as mh from '@metaharness/router';
-import { pairTrajectoryRows } from '../v3/@rufflo/cli/dist/src/rufvector/router-trajectory.js';
-import { IsotonicCalibrator } from '../v3/@rufflo/cli/dist/src/rufvector/router-calibrator.js';
+import { pairTrajectoryRows } from '../v3/@swarmdo/cli/dist/src/swarmvector/router-trajectory.js';
+import { IsotonicCalibrator } from '../v3/@swarmdo/cli/dist/src/swarmvector/router-calibrator.js';
 // iter 35 — single source of truth for prices.
-import { blendedPrice } from '../v3/@rufflo/cli/dist/src/rufvector/model-prices.js';
+import { blendedPrice } from '../v3/@swarmdo/cli/dist/src/swarmvector/model-prices.js';
 
 const ARGS = (() => {
   const a = {
-    in: process.env.RUFFLO_ROUTER_TRAJECTORY_PATH
+    in: process.env.SWARMDO_ROUTER_TRAJECTORY_PATH
       ?? resolve('.swarm', 'model-router-trajectories.jsonl'),
-    seedRows: resolve('v3/@rufflo/cli/assets/model-router/seed-rows.json'),
-    artifact: resolve('v3/@rufflo/cli/assets/model-router/seed-router.krr.json'),
-    calibratorPath: resolve('v3/@rufflo/cli/assets/model-router/seed-router.calibrator.json'),
+    seedRows: resolve('v3/@swarmdo/cli/assets/model-router/seed-rows.json'),
+    artifact: resolve('v3/@swarmdo/cli/assets/model-router/seed-router.krr.json'),
+    calibratorPath: resolve('v3/@swarmdo/cli/assets/model-router/seed-router.calibrator.json'),
     margin: 0.005,           // 0.5 percentage points by default
     minNewRows: 10,
     dryRun: false,

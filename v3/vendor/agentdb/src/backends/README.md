@@ -5,7 +5,7 @@
 
 ## Overview
 
-This directory contains the backend abstraction layer for AgentDB v2, providing a unified interface for vector operations across multiple implementations (RuVector, HNSWLib).
+This directory contains the backend abstraction layer for AgentDB v2, providing a unified interface for vector operations across multiple implementations (SwarmVector, HNSWLib).
 
 ## Directory Structure
 
@@ -18,11 +18,11 @@ backends/
 ├── GraphBackend.ts              # Graph database interface (optional)
 ├── detector.ts                  # Backend auto-detection
 ├── factory.ts                   # Backend creation and initialization
-├── ruvector/
+├── swarmvector/
 │   ├── index.ts
-│   ├── RuVectorBackend.ts      # RuVector implementation
-│   ├── RuVectorLearning.ts     # GNN implementation
-│   └── RuVectorGraph.ts        # Graph implementation (planned)
+│   ├── SwarmVectorBackend.ts      # SwarmVector implementation
+│   ├── SwarmVectorLearning.ts     # GNN implementation
+│   └── SwarmVectorGraph.ts        # Graph implementation (planned)
 └── hnswlib/
     ├── index.ts
     └── HNSWLibBackend.ts       # HNSWLib adapter
@@ -33,14 +33,14 @@ backends/
 ### Installation
 
 ```bash
-# Recommended: RuVector (150x faster)
-npm install @ruvector/core
+# Recommended: SwarmVector (150x faster)
+npm install @swarmvector/core
 
 # Optional: GNN learning
-npm install @ruvector/gnn
+npm install @swarmvector/gnn
 
 # Optional: Graph database
-npm install @ruvector/graph-node
+npm install @swarmvector/graph-node
 
 # Fallback: HNSWLib
 npm install hnswlib-node
@@ -81,7 +81,7 @@ All vector backends implement this interface:
 
 ```typescript
 interface VectorBackend {
-  readonly name: 'rufvector' | 'hnswlib';
+  readonly name: 'swarmvector' | 'hnswlib';
   
   insert(id: string, embedding: Float32Array, metadata?: Record<string, any>): void;
   insertBatch(items: Array<{id, embedding, metadata?}>): void;
@@ -127,9 +127,9 @@ interface GraphBackend {
 
 ## Backend Implementations
 
-### RuVector (Recommended)
+### SwarmVector (Recommended)
 
-**Package:** `@ruvector/core`
+**Package:** `@swarmvector/core`
 
 **Features:**
 - ✅ Native Rust bindings (Linux, macOS, Windows)
@@ -170,8 +170,8 @@ const detection = await detectBackends();
 
 console.log(detection);
 // {
-//   available: 'rufvector',
-//   ruvector: {
+//   available: 'swarmvector',
+//   swarmvector: {
 //     core: true,
 //     gnn: true,
 //     graph: false,
@@ -182,9 +182,9 @@ console.log(detection);
 ```
 
 Priority:
-1. Check for `@ruvector/core` (preferred)
-2. Check for optional `@ruvector/gnn` and `@ruvector/graph-node`
-3. Fallback to `hnswlib-node` if RuVector unavailable
+1. Check for `@swarmvector/core` (preferred)
+2. Check for optional `@swarmvector/gnn` and `@swarmvector/graph-node`
+3. Fallback to `hnswlib-node` if SwarmVector unavailable
 4. Clear error messages if no backend available
 
 ## Configuration
@@ -204,7 +204,7 @@ Priority:
 
 ### Backend-Specific Tuning
 
-**RuVector:**
+**SwarmVector:**
 ```typescript
 {
   dimension: 384,
@@ -258,9 +258,9 @@ const results = backend.search(query, 10);
 ### GNN Learning
 
 ```typescript
-import { RuVectorLearning } from '@agentdb/backends';
+import { SwarmVectorLearning } from '@agentdb/backends';
 
-const learning = new RuVectorLearning({
+const learning = new SwarmVectorLearning({
   enabled: true,
   inputDim: 384,
   heads: 4,
@@ -281,9 +281,9 @@ console.log(`Loss: ${result.finalLoss}, Improvement: ${result.improvement}%`);
 ### Graph Queries
 
 ```typescript
-import { RuVectorGraph } from '@agentdb/backends';
+import { SwarmVectorGraph } from '@agentdb/backends';
 
-const graph = new RuVectorGraph();
+const graph = new SwarmVectorGraph();
 
 // Create nodes
 const node1 = await graph.createNode(['Memory'], { content: 'User likes dark mode' });
@@ -315,20 +315,20 @@ const items = Array.from({ length: 10000 }, (_, i) => ({
 console.time('insertBatch');
 backend.insertBatch(items);
 console.timeEnd('insertBatch');
-// RuVector: ~50ms, HNSWLib: ~200ms
+// SwarmVector: ~50ms, HNSWLib: ~200ms
 
 // Search
 console.time('search');
 const results = backend.search(queryEmbedding, 10);
 console.timeEnd('search');
-// RuVector: ~1.5ms, HNSWLib: ~3ms
+// SwarmVector: ~1.5ms, HNSWLib: ~3ms
 
 // Stats
 const stats = backend.getStats();
 console.log(`Backend: ${stats.backend}`);
 console.log(`Vectors: ${stats.count}`);
 console.log(`Memory: ${(stats.memoryUsage / 1024 / 1024).toFixed(2)} MB`);
-// RuVector: ~15MB, HNSWLib: ~45MB
+// SwarmVector: ~15MB, HNSWLib: ~45MB
 ```
 
 ## Testing
@@ -360,7 +360,7 @@ npm run benchmark:backends
 ```
 Error: No vector backend available.
 Install one of:
-  - npm install @ruvector/core (recommended)
+  - npm install @swarmvector/core (recommended)
   - npm install hnswlib-node (fallback)
 ```
 
@@ -380,10 +380,10 @@ Warning: Using WASM fallback. Performance may be degraded.
 Warning: GNN learning not available
 ```
 
-**Solution:** Install `@ruvector/gnn` for learning features, or continue without GNN (optional).
+**Solution:** Install `@swarmvector/gnn` for learning features, or continue without GNN (optional).
 
 ## Support
 
 - **Issues:** https://github.com/ruvnet/agentic-flow/issues
-- **RuVector:** https://github.com/ruvnet/ruvector
+- **SwarmVector:** https://github.com/ruvnet/swarmvector
 - **HNSWLib:** https://github.com/nmslib/hnswlib

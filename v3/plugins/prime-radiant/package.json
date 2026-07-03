@@ -1,5 +1,5 @@
 {
-  "name": "@rufflo/plugin-prime-radiant",
+  "name": "@swarmdo/plugin-prime-radiant",
   "version": "0.1.5",
   "description": "Mathematical AI interpretability plugin providing sheaf cohomology, spectral analysis, causal inference, and quantum topology for coherence validation, consensus verification, and hallucination prevention.",
   "type": "module",
@@ -29,7 +29,7 @@
     "prepublishOnly": "npm run build"
   },
   "keywords": [
-    "rufflo",
+    "swarmdo",
     "plugin",
     "ai-interpretability",
     "sheaf-cohomology",
@@ -43,29 +43,29 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JannieP/rufflo.git",
+    "url": "https://github.com/JannieP/swarmdo.git",
     "directory": "v3/plugins/prime-radiant"
   },
   "bugs": {
-    "url": "https://github.com/JannieP/rufflo/issues"
+    "url": "https://github.com/JannieP/swarmdo/issues"
   },
-  "homepage": "https://github.com/JannieP/rufflo/tree/main/v3/plugins/prime-radiant#readme",
+  "homepage": "https://github.com/JannieP/swarmdo/tree/main/v3/plugins/prime-radiant#readme",
   "engines": {
     "node": ">=20.0.0"
   },
   "peerDependencies": {
-    "@rufflo/memory": ">=3.0.0-0",
-    "@rufflo/security": ">=3.0.0-0",
-    "@rufflo/coordination": ">=3.0.0-0"
+    "@swarmdo/memory": ">=3.0.0-0",
+    "@swarmdo/security": ">=3.0.0-0",
+    "@swarmdo/coordination": ">=3.0.0-0"
   },
   "peerDependenciesMeta": {
-    "@rufflo/memory": {
+    "@swarmdo/memory": {
       "optional": true
     },
-    "@rufflo/security": {
+    "@swarmdo/security": {
       "optional": true
     },
-    "@rufflo/coordination": {
+    "@swarmdo/coordination": {
       "optional": true
     }
   },

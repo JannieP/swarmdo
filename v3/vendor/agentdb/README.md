@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/License-MIT_OR_Apache--2.0-yellow?style=for-the-badge)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178c6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-[![🕸️ RuVector Engine](https://img.shields.io/badge/RuVector_Engine-Rust_+_NAPI-06b6d4?style=for-the-badge&logoColor=white&logo=rust)](https://github.com/ruvnet/ruvector)
+[![🕸️ SwarmVector Engine](https://img.shields.io/badge/SwarmVector_Engine-Rust_+_NAPI-06b6d4?style=for-the-badge&logoColor=white&logo=rust)](https://github.com/ruvnet/swarmvector)
 [![🧠 SONA Self-Learning](https://img.shields.io/badge/SONA-Self_Learning-8b5cf6?style=for-the-badge&logoColor=white)](#-self-learning-loop)
 [![🔌 MCP Compatible](https://img.shields.io/badge/MCP-41_tools-D97757?style=for-the-badge&logoColor=white&logo=anthropic)](#-mcp-integration)
 [![⭐ Star on GitHub](https://img.shields.io/github/stars/ruvnet/agentdb?style=for-the-badge&logo=github&color=gold)](https://github.com/ruvnet/agentdb)
@@ -22,7 +22,7 @@ A single-file cognitive container — vectors, indexes, learning state, and a cr
 
 > Most vector databases store embeddings and call it done. AgentDB watches *which* results your agent actually used, learns from that signal, and ranks the next query better. The bandit underneath also picks the right RL algorithm, the right compression tier, and the right pattern weighting on its own — so the database itself gets sharper while you focus on the agent.
 
-> The name: a database that thinks like an agent — episodic memory, skill library, causal reasoning, and a learning loop, all in one file. Built by [`rUv`](https://ruv.io) on the [`ruvector`](https://github.com/ruvnet/ruvector) Rust engine.
+> The name: a database that thinks like an agent — episodic memory, skill library, causal reasoning, and a learning loop, all in one file. Built by [`rUv`](https://ruv.io) on the [`swarmvector`](https://github.com/ruvnet/swarmvector) Rust engine.
 
 ### What AgentDB Does
 
@@ -102,7 +102,7 @@ That registers 41 MCP tools — `agentdb_pattern_store`, `agentdb_pattern_search
 | 🧠 **Self-Learning Search** | Up to **+36% search quality** from feedback alone — Thompson Sampling bandit re-tunes ranking, RL choice, and compression tier with zero manual config |
 | 🐝 **Cognitive Memory** | 6 human-inspired patterns — episodic replay (Reflexion), skill library, causal reasoning, hierarchical context, semantic clustering, working memory |
 | 🤖 **9 RL Algorithms** | Q-Learning, SARSA, DQN, PPO, Actor-Critic, Policy Gradient, Decision Transformer, MCTS, Model-Based RL — bandit picks the right one per task |
-| ⚡ **150× faster than SQLite** | RuVector Rust engine via NAPI bindings; HNSW vector search; sub-millisecond reads on 100k+ vectors |
+| ⚡ **150× faster than SQLite** | SwarmVector Rust engine via NAPI bindings; HNSW vector search; sub-millisecond reads on 100k+ vectors |
 | 🔍 **Hybrid Search** | BM25 keyword + dense vector fused with Reciprocal Rank Fusion — exact terms *and* semantic intent in one query |
 | 🕸️ **Graph Intelligence** | Cypher queries, causal edges, GNN 8-head attention (+12.4% recall), hyperedges for n-ary relationships |
 | 💾 **Single-file Storage** | Everything (vectors, indexes, learning state, audit log) in one `.rvf` "Cognitive Container" — no servers, no API keys, no monthly bills |
@@ -150,7 +150,7 @@ Each decision logs reward over time. Bad arms decay fast. Good arms stick.
 | HNSW query (1M vectors) | **2–5 ms** | ~100 ms (brute force) | `benchmarks/vector-search/` |
 | Bulk insert (10k vectors) | **<100 ms** | ~12 s (sql.js) | `benchmarks/database/` |
 | Memory footprint (1M × 384d) | **~96 MB (PQ8)** | ~1.5 GB (raw f32) | `benchmarks/quantization/` |
-| Self-learning quality lift | **+36%** | n/a | `benchmarks/ruvector-performance.test.ts` |
+| Self-learning quality lift | **+36%** | n/a | `benchmarks/swarmvector-performance.test.ts` |
 | GNN attention recall | **+12.4%** | baseline HNSW | `benchmarks/attention-performance.ts` |
 
 Run them yourself: `npm run bench` from this repo.
@@ -243,8 +243,8 @@ AgentDB powers the memory + learning layer in:
 | Project | What it uses AgentDB for |
 |---|---|
 | [**`agentic-flow`**](https://github.com/ruvnet/agentic-flow) | ReasoningBank backend, ReflexionMemory, NightlyLearner consolidation, 30+ agent memory namespaces |
-| [**`ruflo`**](https://github.com/ruvnet/ruflo) | Plugin marketplace memory, agent federation audit log, hierarchical recall for /adr-index, swarm coordination patterns |
-| [**`@ruvector`**](https://github.com/ruvnet/ruvector) | Reference downstream for the Rust engine — every release is verified against AgentDB's test suite |
+| [**`swarmdo`**](https://github.com/ruvnet/swarmdo) | Plugin marketplace memory, agent federation audit log, hierarchical recall for /adr-index, swarm coordination patterns |
+| [**`@swarmvector`**](https://github.com/ruvnet/swarmvector) | Reference downstream for the Rust engine — every release is verified against AgentDB's test suite |
 
 If you ship something on top of AgentDB, [open an issue](https://github.com/ruvnet/agentdb/issues) and we'll add you.
 
@@ -277,8 +277,8 @@ docker compose -f docker/docker-compose.yml up
 |---|---|
 | [**Full README** (deep)](docs/README-full.md) | Every feature, every API, every option — the complete reference (2,900+ lines) |
 | [**PUBLISHING.md**](docs/PUBLISHING.md) | npm publish flow, dist-tag policy, release verification |
-| [**ADR-071**](docs/ADR-071-agentdb-ruvector-wasm-capabilities-review.md) | WASM integration design |
-| [**ADR-072**](docs/ADR-072-ruvector-advanced-features-integration.md) | RuVector advanced-feature integration |
+| [**ADR-071**](docs/ADR-071-agentdb-swarmvector-wasm-capabilities-review.md) | WASM integration design |
+| [**ADR-072**](docs/ADR-072-swarmvector-advanced-features-integration.md) | SwarmVector advanced-feature integration |
 | [**Examples**](examples/) | End-to-end runnable scripts — RAG chatbot, code-review agent, RL training, edge deploy |
 | [**Benchmarks**](benchmarks/) | Reproducible perf harness — HNSW, attention, quantization, RL, end-to-end |
 
@@ -292,7 +292,7 @@ docker compose -f docker/docker-compose.yml up
 | 🌐 **Source** | https://github.com/ruvnet/agentdb |
 | 🐛 **Issues** | https://github.com/ruvnet/agentdb/issues |
 | 🎨 **Marketing site** | [`ui/`](./ui) (Vite + React + shadcn/ui) |
-| 🧬 **Engine** | [`@ruvector`](https://github.com/ruvnet/ruvector) (Rust + NAPI) |
+| 🧬 **Engine** | [`@swarmvector`](https://github.com/ruvnet/swarmvector) (Rust + NAPI) |
 | 🔗 **Reference consumer** | [`agentic-flow`](https://github.com/ruvnet/agentic-flow) (uses this as a git submodule at `packages/agentdb/`) |
 
 ---
@@ -305,7 +305,7 @@ docker compose -f docker/docker-compose.yml up
 | Issues & Bugs | [GitHub Issues](https://github.com/ruvnet/agentdb/issues) |
 | Enterprise | [ruv.io](https://ruv.io) |
 | Community | [Agentics Foundation Discord](https://discord.com/invite/dfxmpwkG2D) |
-| Engine | [`ruvector`](https://github.com/ruvnet/ruvector) |
+| Engine | [`swarmvector`](https://github.com/ruvnet/swarmvector) |
 | Powered by | [Cognitum.one](https://cognitum.one) |
 
 ## License

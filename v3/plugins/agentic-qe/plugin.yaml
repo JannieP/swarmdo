@@ -1,5 +1,5 @@
 # agentic-qe Plugin Manifest
-# Quality Engineering plugin for Rufflo V3
+# Quality Engineering plugin for Swarmdo V3
 
 name: agentic-qe
 version: 3.5.59
@@ -11,8 +11,8 @@ description: |
 
 author: rUv
 license: MIT
-homepage: https://github.com/ruvnet/ruflo/tree/main/v3/plugins/agentic-qe
-repository: https://github.com/ruvnet/ruflo
+homepage: https://github.com/ruvnet/swarmdo/tree/main/v3/plugins/agentic-qe
+repository: https://github.com/ruvnet/swarmdo
 
 # Plugin metadata
 metadata:
@@ -32,15 +32,15 @@ metadata:
 # Dependencies
 dependencies:
   required:
-    - "@rufflo/plugins": ">=3.0.0"
-    - "@rufflo/memory": ">=3.0.0"
-    - "@rufflo/security": ">=3.0.0"
-    - "@rufflo/embeddings": ">=3.0.0"
+    - "@swarmdo/plugins": ">=3.0.0"
+    - "@swarmdo/memory": ">=3.0.0"
+    - "@swarmdo/security": ">=3.0.0"
+    - "@swarmdo/embeddings": ">=3.0.0"
   optional:
-    - "@rufflo/browser": ">=3.0.0"  # For E2E/visual testing
-    - "@rufvector/attention": ">=1.0.0"   # Enhanced pattern matching
-    - "@rufvector/gnn": ">=1.0.0"         # Code graph analysis
-    - "@rufvector/sona": ">=1.0.0"        # Self-optimizing learning
+    - "@swarmdo/browser": ">=3.0.0"  # For E2E/visual testing
+    - "@swarmvector/attention": ">=1.0.0"   # Enhanced pattern matching
+    - "@swarmvector/gnn": ">=1.0.0"         # Code graph analysis
+    - "@swarmvector/sona": ">=1.0.0"        # Self-optimizing learning
 
 # Bounded contexts and their agents
 contexts:
@@ -988,7 +988,7 @@ implementation:
       files: 8
       estimatedLines: 1210
       deliverables:
-        - Plugin registers with @rufflo/plugins SDK
+        - Plugin registers with @swarmdo/plugins SDK
         - Type-safe configuration validation
         - Basic lifecycle hooks (onLoad, onUnload)
 

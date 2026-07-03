@@ -1,10 +1,10 @@
 /**
- * Intelligence MCP Tools - Expose RuVector Intelligence via MCP
+ * Intelligence MCP Tools - Expose SwarmVector Intelligence via MCP
  *
- * These tools provide direct access to the full RuVector ecosystem:
- * - @rufvector/sona: Micro-LoRA (~0.05ms), EWC++, Trajectory tracking
- * - @rufvector/attention: MoE, Flash, Hyperbolic, Graph attention
- * - ruvector core: HNSW indexing (150x faster than brute force)
+ * These tools provide direct access to the full SwarmVector ecosystem:
+ * - @swarmvector/sona: Micro-LoRA (~0.05ms), EWC++, Trajectory tracking
+ * - @swarmvector/attention: MoE, Flash, Hyperbolic, Graph attention
+ * - swarmvector core: HNSW indexing (150x faster than brute force)
  *
  * Available both as MCP tools AND CLI hooks.
  */

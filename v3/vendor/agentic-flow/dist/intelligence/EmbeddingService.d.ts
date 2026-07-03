@@ -1,7 +1,7 @@
 /**
  * EmbeddingService - Unified embedding interface for agentic-flow
  *
- * Uses ruvector@0.1.61+ for ONNX embeddings with:
+ * Uses swarmvector@0.1.61+ for ONNX embeddings with:
  * - SIMD128 acceleration (6x faster)
  * - Parallel worker threads (7 workers)
  * - all-MiniLM-L6-v2 model (384 dimensions)
@@ -270,7 +270,7 @@ export declare class EmbeddingService {
         timeMs: number;
     }>;
     /**
-     * Intelligent pretrain using ruvector worker pool
+     * Intelligent pretrain using swarmvector worker pool
      * Analyzes repo structure, code patterns, and prepares cache
      * Uses parallel workers for maximum throughput
      */
@@ -318,7 +318,7 @@ export declare class EmbeddingService {
         cancel: () => void;
     };
     /**
-     * AI-enhanced pretrain using ruvector attention mechanisms
+     * AI-enhanced pretrain using swarmvector attention mechanisms
      * Uses HyperbolicAttention for code structure, MoE for routing
      */
     pretrainWithAI(options?: {

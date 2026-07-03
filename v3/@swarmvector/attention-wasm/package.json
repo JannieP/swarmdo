@@ -1,0 +1,32 @@
+{
+  "name": "@swarmvector/attention-wasm",
+  "type": "module",
+  "collaborators": [
+    "Ruvector Team"
+  ],
+  "description": "High-performance WebAssembly attention mechanisms: Multi-Head, Flash, Hyperbolic, MoE, CGT Sheaf Attention with GPU acceleration for transformers and LLMs",
+  "version": "2.2.2",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ruvnet/swarmvector"
+  },
+  "files": [
+    "swarmvector_attention_wasm_bg.wasm",
+    "swarmvector_attention_wasm.js",
+    "swarmvector_attention_wasm.d.ts"
+  ],
+  "main": "swarmvector_attention_wasm.js",
+  "homepage": "https://ruv.io/swarmvector",
+  "types": "swarmvector_attention_wasm.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ],
+  "keywords": [
+    "wasm",
+    "attention",
+    "transformer",
+    "flash-attention",
+    "llm"
+  ]
+}

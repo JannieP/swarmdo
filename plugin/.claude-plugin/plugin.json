@@ -1,13 +1,13 @@
 {
-  "name": "rufflo",
+  "name": "swarmdo",
   "description": "Multi-agent swarm coordination, memory management, SPARC methodology, and intelligent hooks for Claude Code. Provides 60+ skills, 100+ commands, and 80+ specialized agents.",
   "version": "3.0.0",
   "author": {
     "name": "ruvnet",
     "url": "https://github.com/ruvnet"
   },
-  "homepage": "https://github.com/JannieP/rufflo",
-  "repository": "https://github.com/JannieP/rufflo",
+  "homepage": "https://github.com/JannieP/swarmdo",
+  "repository": "https://github.com/JannieP/swarmdo",
   "license": "MIT",
   "keywords": [
     "swarm",

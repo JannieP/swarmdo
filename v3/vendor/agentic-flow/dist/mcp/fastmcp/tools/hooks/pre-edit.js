@@ -27,7 +27,7 @@ export const hookPreEditTool = {
         const intel = loadIntelligence();
         const ext = path.extname(filePath);
         const dir = path.dirname(filePath);
-        // START TRAJECTORY TRACKING (RuVector Intelligence)
+        // START TRAJECTORY TRACKING (SwarmVector Intelligence)
         let trajectoryId = null;
         let intelligenceEnabled = false;
         let similarPatterns = [];
@@ -109,7 +109,7 @@ export const hookPreEditTool = {
             relatedFiles,
             memories,
             errorHints: errorHints.slice(0, 2),
-            // RuVector Intelligence additions
+            // SwarmVector Intelligence additions
             trajectoryId,
             intelligenceEnabled,
             similarPatterns: similarPatterns.slice(0, 3),

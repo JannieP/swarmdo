@@ -1,7 +1,7 @@
-# @rufflo/plugin-test-intelligence
+# @swarmdo/plugin-test-intelligence
 
-[![npm version](https://img.shields.io/npm/v/@rufflo/plugin-test-intelligence.svg)](https://www.npmjs.com/package/@rufflo/plugin-test-intelligence)
-[![npm downloads](https://img.shields.io/npm/dm/@rufflo/plugin-test-intelligence.svg)](https://www.npmjs.com/package/@rufflo/plugin-test-intelligence)
+[![npm version](https://img.shields.io/npm/v/@swarmdo/plugin-test-intelligence.svg)](https://www.npmjs.com/package/@swarmdo/plugin-test-intelligence)
+[![npm downloads](https://img.shields.io/npm/dm/@swarmdo/plugin-test-intelligence.svg)](https://www.npmjs.com/package/@swarmdo/plugin-test-intelligence)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A comprehensive test intelligence plugin combining reinforcement learning for optimal test selection with graph neural networks for code-to-test mapping. The plugin enables predictive test selection (run only tests likely to fail), flaky test detection, mutation testing optimization, and test coverage gap identification while integrating seamlessly with popular testing frameworks.
@@ -19,19 +19,19 @@ A comprehensive test intelligence plugin combining reinforcement learning for op
 ### npm
 
 ```bash
-npm install @rufflo/plugin-test-intelligence
+npm install @swarmdo/plugin-test-intelligence
 ```
 
 ### CLI
 
 ```bash
-npx rufflo plugins install --name @rufflo/plugin-test-intelligence
+npx swarmdo plugins install --name @swarmdo/plugin-test-intelligence
 ```
 
 ## Quick Start
 
 ```typescript
-import { TestIntelligencePlugin } from '@rufflo/plugin-test-intelligence';
+import { TestIntelligencePlugin } from '@swarmdo/plugin-test-intelligence';
 
 // Initialize the plugin
 const testIntel = new TestIntelligencePlugin({
@@ -370,9 +370,9 @@ Execution History --> SONA Learning --> RL Policy
 ## Dependencies
 
 - `micro-hnsw-wasm`: Fast code-to-test similarity matching
-- `rufvector-learning-wasm`: RL-based test selection and prioritization
-- `rufvector-gnn-wasm`: Code-test dependency graphs for impact analysis
-- `rufvector-sparse-inference-wasm`: Efficient flaky test pattern detection
+- `swarmvector-learning-wasm`: RL-based test selection and prioritization
+- `swarmvector-gnn-wasm`: Code-test dependency graphs for impact analysis
+- `swarmvector-sparse-inference-wasm`: Efficient flaky test pattern detection
 - `sona`: Continuous learning from test execution history
 - `istanbul-lib-coverage`: Coverage report parsing
 
@@ -380,15 +380,15 @@ Execution History --> SONA Learning --> RL Policy
 
 | Plugin | Description | Use Case |
 |--------|-------------|----------|
-| [@rufflo/plugin-code-intelligence](../code-intelligence) | Code analysis | Impact analysis for test prioritization |
-| [@rufflo/plugin-perf-optimizer](../perf-optimizer) | Performance optimization | Test performance profiling |
-| [@rufflo/plugin-financial-risk](../financial-risk) | Risk analysis | Test risk scoring for critical paths |
+| [@swarmdo/plugin-code-intelligence](../code-intelligence) | Code analysis | Impact analysis for test prioritization |
+| [@swarmdo/plugin-perf-optimizer](../perf-optimizer) | Performance optimization | Test performance profiling |
+| [@swarmdo/plugin-financial-risk](../financial-risk) | Risk analysis | Test risk scoring for critical paths |
 
 ## License
 
 MIT License
 
-Copyright (c) 2026 Rufflo
+Copyright (c) 2026 Swarmdo
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

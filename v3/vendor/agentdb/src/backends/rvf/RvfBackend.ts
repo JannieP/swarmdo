@@ -1,7 +1,7 @@
 /**
  * RvfBackend - RVF Format Vector Storage for AgentDB
  *
- * Implements VectorBackend and VectorBackendAsync using the @rufvector/rvf SDK.
+ * Implements VectorBackend and VectorBackendAsync using the @swarmvector/rvf SDK.
  * Uses N-API backend (fast) on Node.js with WASM fallback for browser/edge.
  *
  * Features:
@@ -16,7 +16,7 @@
  * - Performance statistics tracking
  *
  * Security:
- * - Path validation (reuses RuVectorBackend patterns)
+ * - Path validation (reuses SwarmVectorBackend patterns)
  * - Bounded batch sizes and metadata limits
  * - No prototype pollution in metadata handling
  */
@@ -86,12 +86,12 @@ interface PerfStats {
 }
 
 /**
- * RvfBackend - VectorBackend + VectorBackendAsync implementation using @rufvector/rvf
+ * RvfBackend - VectorBackend + VectorBackendAsync implementation using @swarmvector/rvf
  */
 export class RvfBackend implements VectorBackendAsync {
   readonly name = 'rvf' as const;
 
-  // RVF database handle (unknown since @rufvector/rvf types not available at compile-time)
+  // RVF database handle (unknown since @swarmvector/rvf types not available at compile-time)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private db: any = null;
   private dim: number;
@@ -133,7 +133,7 @@ export class RvfBackend implements VectorBackendAsync {
 
   /**
    * Initialize the RVF database connection.
-   * Lazy-loads @rufvector/rvf to avoid hard dependency.
+   * Lazy-loads @swarmvector/rvf to avoid hard dependency.
    */
   async initialize(): Promise<void> {
     if (this.initialized) return;
@@ -144,7 +144,7 @@ export class RvfBackend implements VectorBackendAsync {
     }
 
     try {
-      const { RvfDatabase } = await import('@rufvector/rvf');
+      const { RvfDatabase } = await import('@swarmvector/rvf');
       const rvfBackendType = this.config.rvfBackend ?? 'auto';
 
       // Map AgentDB metric names to RVF metric names
@@ -185,7 +185,7 @@ export class RvfBackend implements VectorBackendAsync {
       const msg = (error as Error).message;
       throw new Error(
         `RVF backend initialization failed.\n` +
-        `Install with: npm install @rufvector/rvf\n` +
+        `Install with: npm install @swarmvector/rvf\n` +
         `Error: ${msg}`,
       );
     }
@@ -264,7 +264,7 @@ export class RvfBackend implements VectorBackendAsync {
 
   async load(path: string): Promise<void> {
     validatePath(path);
-    const { RvfDatabase } = await import('@rufvector/rvf');
+    const { RvfDatabase } = await import('@swarmvector/rvf');
     const rvfBackendType = this.config.rvfBackend ?? 'auto';
     if (this.db) {
       await this.db.close();
@@ -603,7 +603,7 @@ export class RvfBackend implements VectorBackendAsync {
       validatePath(path);
     }
 
-    const { RvfDatabase } = await import('@rufvector/rvf');
+    const { RvfDatabase } = await import('@swarmvector/rvf');
     const backendType = config?.rvfBackend ?? 'auto';
     const db = await RvfDatabase.openReadonly(path, backendType);
 

@@ -5,7 +5,7 @@ This directory contains the V3 monorepo packages. Root CLAUDE.md rules apply her
 ## Build & Test
 
 ```bash
-# From v3/@rufflo/<package>
+# From v3/@swarmdo/<package>
 npm install && npm run build && npm test
 ```
 
@@ -13,12 +13,12 @@ npm install && npm run build && npm test
 
 | Package | Path | Purpose |
 |---------|------|---------|
-| `@rufflo/cli` | `@rufflo/cli/` | CLI entry point (26 commands, 140+ subcommands) |
-| `@rufflo/guidance` | `@rufflo/guidance/` | Governance control plane (compile, enforce, prove, evolve) |
-| `@rufflo/hooks` | `@rufflo/hooks/` | 17 hooks + 12 background workers |
-| `@rufflo/memory` | `@rufflo/memory/` | AgentDB + HNSW vector search |
-| `@rufflo/shared` | `@rufflo/shared/` | Shared types and utilities |
-| `@rufflo/security` | `@rufflo/security/` | Input validation, path security, CVE remediation |
+| `@swarmdo/cli` | `@swarmdo/cli/` | CLI entry point (26 commands, 140+ subcommands) |
+| `@swarmdo/guidance` | `@swarmdo/guidance/` | Governance control plane (compile, enforce, prove, evolve) |
+| `@swarmdo/hooks` | `@swarmdo/hooks/` | 17 hooks + 12 background workers |
+| `@swarmdo/memory` | `@swarmdo/memory/` | AgentDB + HNSW vector search |
+| `@swarmdo/shared` | `@swarmdo/shared/` | Shared types and utilities |
+| `@swarmdo/security` | `@swarmdo/security/` | Input validation, path security, CVE remediation |
 
 ## Code Quality
 
@@ -35,7 +35,7 @@ npm install && npm run build && npm test
 
 | Metric | Measured / Target | Status |
 |--------|-------------------|--------|
-| HNSW Search | ~1.9x at N=20k, ~3.2x–4.7x at N=5k vs brute force (recall@10 ~0.99) | **Measured** (rufvector NAPI; 150x-12,500x NOT reproduced) |
+| HNSW Search | ~1.9x at N=20k, ~3.2x–4.7x at N=5k vs brute force (recall@10 ~0.99) | **Measured** (swarmvector NAPI; 150x-12,500x NOT reproduced) |
 | Int8 Quantization | 3.84x compression, reconstruction cosine 0.99999 | **Measured** |
 | RaBitQ Quantization | 32x compression, 0.60ms/query | **Measured** |
 | SONA Adaptation | 0.0043ms/adapt (target <0.05ms met) | **Measured** |

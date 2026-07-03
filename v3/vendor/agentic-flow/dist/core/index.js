@@ -1,7 +1,7 @@
 /**
  * Production-Ready Wrappers for Alpha Packages
  *
- * These wrappers provide stable, performant alternatives to broken @rufvector/* alpha APIs.
+ * These wrappers provide stable, performant alternatives to broken @swarmvector/* alpha APIs.
  * All wrappers have been tested and verified to work correctly.
  *
  * Performance improvements:
@@ -10,7 +10,7 @@
  * - Attention fallbacks: All modules working (native completely broken)
  * - Embedding service: 3 production providers (OpenAI, Transformers.js, Mock)
  *
- * Usage: Import from this module instead of @rufvector/* packages:
+ * Usage: Import from this module instead of @swarmvector/* packages:
  *
  * @example
  * ```typescript
@@ -46,8 +46,8 @@ export { EmbeddingService, OpenAIEmbeddingService, TransformersEmbeddingService,
  */
 export function shouldUseNativePackage(packageName) {
     const alphaPackages = [
-        '@rufvector/gnn',
-        '@rufvector/attention',
+        '@swarmvector/gnn',
+        '@swarmvector/attention',
         'agentdb-cli', // Use programmatic API instead
     ];
     return !alphaPackages.some((pkg) => packageName.includes(pkg));

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Rufflo Test Utilities
+# Swarmdo Test Utilities
 # Shared functions for test scripts
 
 # Colors

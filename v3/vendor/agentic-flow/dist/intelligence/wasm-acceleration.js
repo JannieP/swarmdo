@@ -5,10 +5,10 @@
  * - HNSW vector indexing (150x faster pattern search)
  * - Semantic matching (intelligent agent routing)
  *
- * Uses @rufvector/edge for browser/edge compatibility.
+ * Uses @swarmvector/edge for browser/edge compatibility.
  * Falls back to pure JS when WASM unavailable.
  */
-import { initRuVectorWasm, isWasmInitialized, RuVectorHnswIndex, RuVectorSemanticMatcher, } from '../wasm/ruvector-edge.js';
+import { initSwarmVectorWasm, isWasmInitialized, SwarmVectorHnswIndex, SwarmVectorSemanticMatcher, } from '../wasm/swarmvector-edge.js';
 import { logger } from '../utils/logger.js';
 // Default embedding dimension (matches SONA)
 const DEFAULT_DIM = 128;
@@ -22,13 +22,13 @@ export class WasmPatternIndex {
     dimensions;
     constructor(dimensions = DEFAULT_DIM) {
         this.dimensions = dimensions;
-        this.hnswIndex = new RuVectorHnswIndex(dimensions, 16, 200);
+        this.hnswIndex = new SwarmVectorHnswIndex(dimensions, 16, 200);
     }
     /**
      * Initialize WASM (call once at startup)
      */
     static async init() {
-        return await initRuVectorWasm();
+        return await initSwarmVectorWasm();
     }
     /**
      * Add pattern to index
@@ -128,13 +128,13 @@ export class WasmAgentRouter {
     dimensions;
     constructor(dimensions = DEFAULT_DIM) {
         this.dimensions = dimensions;
-        this.semanticMatcher = new RuVectorSemanticMatcher();
+        this.semanticMatcher = new SwarmVectorSemanticMatcher();
     }
     /**
      * Initialize WASM (call once at startup)
      */
     static async init() {
-        return await initRuVectorWasm();
+        return await initSwarmVectorWasm();
     }
     /**
      * Register agent for routing
@@ -267,7 +267,7 @@ export function getWasmAgentRouter(dimensions = DEFAULT_DIM) {
  * Initialize WASM acceleration for intelligence layer
  */
 export async function initWasmAcceleration() {
-    const initialized = await initRuVectorWasm();
+    const initialized = await initSwarmVectorWasm();
     const patternIndex = getWasmPatternIndex();
     const agentRouter = getWasmAgentRouter();
     logger.info('WASM acceleration initialized for intelligence layer', {

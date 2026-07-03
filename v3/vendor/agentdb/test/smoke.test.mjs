@@ -1,7 +1,7 @@
 /**
  * agentdb smoke test (node:test).
  * Vendored fork of the upstream `agentdb` (internal ruv->ruf sweep; name kept).
- * rufflo loads it via `await import('agentdb')`.
+ * swarmdo loads it via `await import('agentdb')`.
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';

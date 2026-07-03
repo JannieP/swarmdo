@@ -1,7 +1,7 @@
 /**
  * AgentDB Migration Command
  * Migrate legacy AgentDB v1 and claude-flow memory databases to v2 format
- * with RuVector GNN optimization
+ * with SwarmVector GNN optimization
  */
 
 import { createDatabase } from '../../db-fallback.js';
@@ -440,7 +440,7 @@ export async function migrateCommand(options: MigrationOptions): Promise<void> {
         rvfBackend.close();
       } catch (rvfError) {
         console.error(`${colors.yellow}RVF export failed: ${(rvfError as Error).message}${colors.reset}`);
-        console.error(`   Install: npm install @rufvector/rvf @rufvector/rvf-node`);
+        console.error(`   Install: npm install @swarmvector/rvf @swarmvector/rvf-node`);
       }
     }
 
@@ -829,5 +829,5 @@ function printMigrationReport(stats: MigrationStats, totalTime: number): void {
   console.log(`  Total time:            ${colors.blue}${(totalTime / 1000).toFixed(2)}s${colors.reset}`);
   console.log(`  Records/second:        ${colors.blue}${stats.performance.recordsPerSecond}${colors.reset}\n`);
 
-  console.log(`${colors.bright}${colors.green}✅ Database ready for RuVector GNN training${colors.reset}\n`);
+  console.log(`${colors.bright}${colors.green}✅ Database ready for SwarmVector GNN training${colors.reset}\n`);
 }

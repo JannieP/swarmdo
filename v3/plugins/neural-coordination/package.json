@@ -1,5 +1,5 @@
 {
-  "name": "@rufflo/plugin-neural-coordination",
+  "name": "@swarmdo/plugin-neural-coordination",
   "version": "3.0.0-alpha.1",
   "description": "Neural coordination plugin for multi-agent swarm intelligence using SONA, GNN, and attention mechanisms",
   "main": "./dist/index.js",
@@ -40,7 +40,7 @@
     "prepublishOnly": "npm run clean && npm run build && npm run typecheck"
   },
   "keywords": [
-    "rufflo",
+    "swarmdo",
     "neural-coordination",
     "multi-agent",
     "swarm",
@@ -50,11 +50,11 @@
     "gnn",
     "attention"
   ],
-  "author": "Rufflo Team",
+  "author": "Swarmdo Team",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JannieP/rufflo.git",
+    "url": "https://github.com/JannieP/swarmdo.git",
     "directory": "v3/plugins/neural-coordination"
   },
   "dependencies": {

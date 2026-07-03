@@ -2,7 +2,7 @@
  * FilterBuilder - Constructs RvfFilterExpr objects from a simple predicate DSL.
  *
  * Translates field-name-based predicates into field-ID-based RvfFilterExpr
- * objects that the @rufvector/rvf SDK expects.
+ * objects that the @swarmvector/rvf SDK expects.
  *
  * Usage:
  *   const filter = new FilterBuilder()

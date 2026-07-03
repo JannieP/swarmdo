@@ -1,7 +1,7 @@
 /**
  * Authentication Middleware
  *
- * Provides authentication for RuVector integration endpoints:
+ * Provides authentication for SwarmVector integration endpoints:
  * - API key validation
  * - JWT token verification (HMAC-SHA256)
  * - Role-based access control (RBAC)

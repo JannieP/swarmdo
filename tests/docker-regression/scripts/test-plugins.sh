@@ -1,10 +1,10 @@
 #!/bin/bash
-# Rufflo RufVector Plugins Test Suite
+# Swarmdo SwarmVector Plugins Test Suite
 # Tests all WASM plugins and vector operations
 
 set -e
 
-echo "=== RUFVECTOR PLUGINS TEST SUITE ==="
+echo "=== SWARMVECTOR PLUGINS TEST SUITE ==="
 echo ""
 
 PASSED=0
@@ -41,9 +41,9 @@ run_test() {
 # ============================================================================
 echo "── Plugin Infrastructure ──"
 
-run_test "Plugin registry init" "node -e \"const { getDefaultRegistry } = require('/app/v3/@rufflo/plugins/dist/index.js'); console.log('registry ok');\" 2>/dev/null || echo 'registry ok'"
-run_test "Plugin builder" "node -e \"const { PluginBuilder } = require('/app/v3/@rufflo/plugins/dist/index.js'); console.log('builder ok');\" 2>/dev/null || echo 'builder ok'"
-run_test "Base plugin class" "node -e \"const { BasePlugin } = require('/app/v3/@rufflo/plugins/dist/index.js'); console.log('base ok');\" 2>/dev/null || echo 'base ok'"
+run_test "Plugin registry init" "node -e \"const { getDefaultRegistry } = require('/app/v3/@swarmdo/plugins/dist/index.js'); console.log('registry ok');\" 2>/dev/null || echo 'registry ok'"
+run_test "Plugin builder" "node -e \"const { PluginBuilder } = require('/app/v3/@swarmdo/plugins/dist/index.js'); console.log('builder ok');\" 2>/dev/null || echo 'builder ok'"
+run_test "Base plugin class" "node -e \"const { BasePlugin } = require('/app/v3/@swarmdo/plugins/dist/index.js'); console.log('base ok');\" 2>/dev/null || echo 'base ok'"
 
 # ============================================================================
 # 2. SEMANTIC CODE SEARCH PLUGIN
@@ -221,7 +221,7 @@ run_test "Resource limiting" "echo 'Resource limiting' && echo 'ok'"
 # SUMMARY
 # ============================================================================
 echo ""
-echo "=== RufVector Plugins Summary ==="
+echo "=== SwarmVector Plugins Summary ==="
 echo "Total: $TOTAL | Passed: $PASSED | Failed: $FAILED"
 
 if [ $FAILED -gt 0 ]; then

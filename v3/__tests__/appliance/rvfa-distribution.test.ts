@@ -15,12 +15,12 @@ import {
   RvfaPublisher,
   type RvfpHeader,
   type CreatePatchOptions,
-} from '../../@rufflo/cli/src/appliance/rvfa-distribution.js';
+} from '../../@swarmdo/cli/src/appliance/rvfa-distribution.js';
 import {
   RvfaWriter,
   RvfaReader,
   createDefaultHeader,
-} from '../../@rufflo/cli/src/appliance/rvfa-format.js';
+} from '../../@swarmdo/cli/src/appliance/rvfa-format.js';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -58,7 +58,7 @@ function buildTestRvfa(
   const secs = sections ?? [
     { id: 'kernel', data: 'kernel-payload-original' },
     { id: 'runtime', data: 'runtime-payload-original' },
-    { id: 'rufflo', data: 'rufflo-payload-original' },
+    { id: 'swarmdo', data: 'swarmdo-payload-original' },
   ];
   for (const s of secs) {
     writer.addSection(s.id, Buffer.from(s.data), { compression: 'none' });
@@ -280,8 +280,8 @@ describe('RvfaPatcher.applyPatch', () => {
     const runtime = reader.extractSection('runtime');
     assert.equal(runtime.toString('utf-8'), 'runtime-payload-original');
 
-    const rufflo = reader.extractSection('rufflo');
-    assert.equal(rufflo.toString('utf-8'), 'rufflo-payload-original');
+    const swarmdo = reader.extractSection('swarmdo');
+    assert.equal(swarmdo.toString('utf-8'), 'swarmdo-payload-original');
   });
 
   it('creates a backup file', async () => {

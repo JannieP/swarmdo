@@ -1,0 +1,25 @@
+{
+  "name": "swarmdo-agent",
+  "description": "Agent runtimes for swarmdo \u2014 local WASM-sandboxed agents (rvagent: 10 wasm_agent_*/wasm_gallery_* MCP tools, built on @swarmvector/rvagent-wasm + @swarmvector/swarmllm-wasm per ADR-070) plus Anthropic Claude Managed Agents as a cloud backend (managed_agent_* MCP tools per ADR-115). One interface, local-vs-cloud runtimes.",
+  "version": "0.2.0",
+  "author": {
+    "name": "ruvnet",
+    "url": "https://github.com/ruvnet"
+  },
+  "homepage": "https://github.com/JannieP/swarmdo",
+  "license": "MIT",
+  "keywords": [
+    "swarmdo",
+    "agent",
+    "rvagent",
+    "rvagent-wasm",
+    "swarmllm-wasm",
+    "wasm",
+    "sandbox",
+    "managed-agents",
+    "anthropic",
+    "cloud",
+    "mcp",
+    "gallery"
+  ]
+}

@@ -7,7 +7,7 @@
 //!
 //! Wire format: 64-byte header + TLV sections + optional HMAC-SHA256 signature.
 
-/// Magic bytes for witness bundle: "RVWW" (RufVector Witness).
+/// Magic bytes for witness bundle: "RVWW" (SwarmVector Witness).
 pub const WITNESS_MAGIC: u32 = 0x5257_5657;
 
 /// Size of the witness header in bytes.

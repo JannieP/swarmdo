@@ -1,5 +1,5 @@
 /**
- * RuVector Edge-Full Integration
+ * SwarmVector Edge-Full Integration
  *
  * Complete WASM toolkit for edge AI providing:
  *
@@ -18,7 +18,7 @@
  * - Raft consensus
  * - SIMD acceleration
  *
- * @see https://github.com/ruvnet/ruvector/tree/main/examples/edge-full
+ * @see https://github.com/ruvnet/swarmvector/tree/main/examples/edge-full
  */
 import { logger } from '../utils/logger.js';
 // Module state
@@ -40,16 +40,16 @@ export async function initEdgeFull() {
         try {
             // Import individual modules to avoid main module ONNX export bug
             const [edgeMod, graphMod, rvliteMod, sonaMod, dagMod] = await Promise.all([
-                import('@rufvector/edge-full/edge').catch(() => null),
-                import('@rufvector/edge-full/graph').catch(() => null),
-                import('@rufvector/edge-full/rvlite').catch(() => null),
-                import('@rufvector/edge-full/sona').catch(() => null),
-                import('@rufvector/edge-full/dag').catch(() => null),
+                import('@swarmvector/edge-full/edge').catch(() => null),
+                import('@swarmvector/edge-full/graph').catch(() => null),
+                import('@swarmvector/edge-full/rvlite').catch(() => null),
+                import('@swarmvector/edge-full/sona').catch(() => null),
+                import('@swarmvector/edge-full/dag').catch(() => null),
             ]);
             // Also try ONNX separately (may fail on some platforms)
             let onnxMod = null;
             try {
-                onnxMod = await import('@rufvector/edge-full/onnx');
+                onnxMod = await import('@swarmvector/edge-full/onnx');
             }
             catch {
                 logger.debug('ONNX module not available');

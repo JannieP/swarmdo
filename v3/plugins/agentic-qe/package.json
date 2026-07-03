@@ -1,7 +1,7 @@
 {
-  "name": "@rufflo/plugin-agentic-qe",
+  "name": "@swarmdo/plugin-agentic-qe",
   "version": "3.0.0-alpha.5",
-  "description": "Quality Engineering plugin for Rufflo V3 with 51 specialized agents across 12 DDD bounded contexts",
+  "description": "Quality Engineering plugin for Swarmdo V3 with 51 specialized agents across 12 DDD bounded contexts",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -28,7 +28,7 @@
     "test:watch": "vitest"
   },
   "keywords": [
-    "rufflo",
+    "swarmdo",
     "plugin",
     "quality-engineering",
     "testing",
@@ -43,45 +43,45 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JannieP/rufflo.git",
+    "url": "https://github.com/JannieP/swarmdo.git",
     "directory": "v3/plugins/agentic-qe"
   },
-  "homepage": "https://github.com/JannieP/rufflo/tree/main/v3/plugins/agentic-qe",
+  "homepage": "https://github.com/JannieP/swarmdo/tree/main/v3/plugins/agentic-qe",
   "bugs": {
-    "url": "https://github.com/JannieP/rufflo/issues"
+    "url": "https://github.com/JannieP/swarmdo/issues"
   },
   "dependencies": {
     "zod": "^3.23.0"
   },
   "peerDependencies": {
-    "@rufflo/plugins": ">=3.0.0-0",
-    "@rufflo/memory": ">=3.0.0-0",
-    "@rufflo/security": ">=3.0.0-0",
-    "@rufflo/embeddings": ">=3.0.0-0"
+    "@swarmdo/plugins": ">=3.0.0-0",
+    "@swarmdo/memory": ">=3.0.0-0",
+    "@swarmdo/security": ">=3.0.0-0",
+    "@swarmdo/embeddings": ">=3.0.0-0"
   },
   "peerDependenciesMeta": {
-    "@rufflo/plugins": {
+    "@swarmdo/plugins": {
       "optional": true
     },
-    "@rufflo/memory": {
+    "@swarmdo/memory": {
       "optional": true
     },
-    "@rufflo/security": {
+    "@swarmdo/security": {
       "optional": true
     },
-    "@rufflo/embeddings": {
+    "@swarmdo/embeddings": {
       "optional": true
     },
-    "@rufflo/browser": {
+    "@swarmdo/browser": {
       "optional": true
     },
-    "@rufvector/attention": {
+    "@swarmvector/attention": {
       "optional": true
     },
-    "@rufvector/gnn": {
+    "@swarmvector/gnn": {
       "optional": true
     },
-    "@rufvector/sona": {
+    "@swarmvector/sona": {
       "optional": true
     }
   },

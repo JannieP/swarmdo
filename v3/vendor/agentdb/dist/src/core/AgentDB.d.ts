@@ -7,8 +7,8 @@ export interface AgentDBConfig {
     attentionConfig?: Record<string, any>;
     /** Force use of sql.js WASM even if better-sqlite3 is available */
     forceWasm?: boolean;
-    /** Vector backend type: 'auto' | 'rufvector' | 'hnswlib' */
-    vectorBackend?: 'auto' | 'rufvector' | 'hnswlib';
+    /** Vector backend type: 'auto' | 'swarmvector' | 'hnswlib' */
+    vectorBackend?: 'auto' | 'swarmvector' | 'hnswlib';
     /** Vector dimension (default: 384 for MiniLM) */
     vectorDimension?: number;
 }

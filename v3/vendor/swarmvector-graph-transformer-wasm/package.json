@@ -1,0 +1,31 @@
+{
+  "name": "swarmvector-graph-transformer-wasm",
+  "type": "module",
+  "collaborators": [
+    "Ruvector Team"
+  ],
+  "description": "WASM bindings for swarmvector-graph-transformer: proof-gated graph attention in the browser",
+  "version": "2.0.4",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ruvnet/swarmvector"
+  },
+  "files": [
+    "swarmvector_graph_transformer_wasm_bg.wasm",
+    "swarmvector_graph_transformer_wasm.js",
+    "swarmvector_graph_transformer_wasm.d.ts"
+  ],
+  "main": "swarmvector_graph_transformer_wasm.js",
+  "types": "swarmvector_graph_transformer_wasm.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ],
+  "keywords": [
+    "wasm",
+    "graph-transformer",
+    "attention",
+    "verified",
+    "webassembly"
+  ]
+}

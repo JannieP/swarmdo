@@ -1,7 +1,7 @@
 /**
  * Enhanced Agent Booster MCP Tools
  *
- * RuVector-powered code editing with:
+ * SwarmVector-powered code editing with:
  * - SONA learning (0.05ms updates)
  * - HNSW cache (150x faster pattern recall)
  * - GNN matching (differentiable search)
@@ -26,7 +26,7 @@ async function loadEnhancedBooster() {
 export const enhancedBoosterTools = [
     {
         name: 'enhanced_booster_edit',
-        description: `RuVector-enhanced code editing v2 with full intelligence stack.
+        description: `SwarmVector-enhanced code editing v2 with full intelligence stack.
 
 Features:
 - Exact cache: 0ms for identical patterns
@@ -62,7 +62,7 @@ Returns strategy: exact_cache, fuzzy_match, gnn_match, error_avoided, or agent_b
     },
     {
         name: 'enhanced_booster_edit_file',
-        description: `Edit a file using RuVector-enhanced agent booster.
+        description: `Edit a file using SwarmVector-enhanced agent booster.
 
 Reads file, applies edit, writes result if successful.
 Uses cached patterns for instant edits when available.`,
@@ -372,7 +372,7 @@ Cache is now warm for instant edits! ⚡`
    Avg Latency: ${result.baseline.avgLatency.toFixed(1)}ms
    Avg Confidence: ${(result.baseline.avgConfidence * 100).toFixed(1)}%
 
-⚡ Enhanced (RuVector):
+⚡ Enhanced (SwarmVector):
    Avg Latency: ${result.enhanced.avgLatency.toFixed(1)}ms
    Avg Confidence: ${(result.enhanced.avgConfidence * 100).toFixed(1)}%
    Cache Hit Rate: ${(result.enhanced.cacheHitRate * 100).toFixed(1)}%

@@ -53,7 +53,7 @@ A sophisticated Goal-Oriented Action Planning (GOAP) specialist that dynamically
 - `mcp__sublinear-time-solver__calculateLightTravel` - Compute temporal advantages for time-critical planning
 - `mcp__sublinear-time-solver__demonstrateTemporalLead` - Validate predictive planning scenarios
 
-### Rufflo Integration Tools
+### Swarmdo Integration Tools
 
 ## Workflow
 
@@ -805,4 +805,4 @@ Leverage light-speed delays for predictive planning:
 - Identify emergent opportunities from goal interactions
 - Optimize for multiple success criteria simultaneously
 
-This goal-planner agent represents the cutting edge of AI-driven objective achievement, combining mathematical rigor with practical execution capabilities through the powerful sublinear-time-solver toolkit and Rufflo ecosystem.
+This goal-planner agent represents the cutting edge of AI-driven objective achievement, combining mathematical rigor with practical execution capabilities through the powerful sublinear-time-solver toolkit and Swarmdo ecosystem.

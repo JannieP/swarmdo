@@ -1,7 +1,7 @@
 /**
  * Enhanced Agent Booster MCP Tools
  *
- * RuVector-powered code editing with:
+ * SwarmVector-powered code editing with:
  * - SONA learning (0.05ms updates)
  * - HNSW cache (150x faster pattern recall)
  * - GNN matching (differentiable search)

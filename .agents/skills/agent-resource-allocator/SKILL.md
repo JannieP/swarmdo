@@ -605,34 +605,34 @@ const resourceIntegration = {
 ### Resource Management Commands
 ```bash
 # Analyze resource usage
-npx rufflo metrics-collect --components ["cpu", "memory", "network"]
+npx swarmdo metrics-collect --components ["cpu", "memory", "network"]
 
 # Optimize resource allocation
-npx rufflo daa-resource-alloc --resources <resource-config>
+npx swarmdo daa-resource-alloc --resources <resource-config>
 
 # Predictive scaling
-npx rufflo swarm-scale --swarm-id <id> --target-size <size>
+npx swarmdo swarm-scale --swarm-id <id> --target-size <size>
 
 # Performance profiling
-npx rufflo performance-report --format detailed --timeframe 24h
+npx swarmdo performance-report --format detailed --timeframe 24h
 
 # Circuit breaker configuration
-npx rufflo fault-tolerance --strategy circuit-breaker --config <config>
+npx swarmdo fault-tolerance --strategy circuit-breaker --config <config>
 ```
 
 ### Optimization Commands
 ```bash
 # Run performance optimization
-npx rufflo optimize-performance --swarm-id <id> --strategy adaptive
+npx swarmdo optimize-performance --swarm-id <id> --strategy adaptive
 
 # Generate resource forecasts
-npx rufflo forecast-resources --time-horizon 3600 --confidence 0.95
+npx swarmdo forecast-resources --time-horizon 3600 --confidence 0.95
 
 # Profile system performance
-npx rufflo profile-performance --duration 60000 --components all
+npx swarmdo profile-performance --duration 60000 --components all
 
 # Analyze bottlenecks
-npx rufflo bottleneck-analyze --component swarm-coordination
+npx swarmdo bottleneck-analyze --component swarm-coordination
 ```
 
 ## Integration Points

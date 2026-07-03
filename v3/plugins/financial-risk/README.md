@@ -1,7 +1,7 @@
-# @rufflo/plugin-financial-risk
+# @swarmdo/plugin-financial-risk
 
-[![npm version](https://img.shields.io/npm/v/@rufflo/plugin-financial-risk.svg)](https://www.npmjs.com/package/@rufflo/plugin-financial-risk)
-[![npm downloads](https://img.shields.io/npm/dm/@rufflo/plugin-financial-risk.svg)](https://www.npmjs.com/package/@rufflo/plugin-financial-risk)
+[![npm version](https://img.shields.io/npm/v/@swarmdo/plugin-financial-risk.svg)](https://www.npmjs.com/package/@swarmdo/plugin-financial-risk)
+[![npm downloads](https://img.shields.io/npm/dm/@swarmdo/plugin-financial-risk.svg)](https://www.npmjs.com/package/@swarmdo/plugin-financial-risk)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A high-performance financial risk analysis plugin combining sparse inference for efficient market signal processing with graph neural networks for transaction network analysis. The plugin enables real-time anomaly detection, portfolio risk scoring, and automated compliance reporting while maintaining the explainability required by financial regulators (SEC, FINRA, Basel III).
@@ -19,19 +19,19 @@ A high-performance financial risk analysis plugin combining sparse inference for
 ### npm
 
 ```bash
-npm install @rufflo/plugin-financial-risk
+npm install @swarmdo/plugin-financial-risk
 ```
 
 ### CLI
 
 ```bash
-npx rufflo plugins install --name @rufflo/plugin-financial-risk
+npx swarmdo plugins install --name @swarmdo/plugin-financial-risk
 ```
 
 ## Quick Start
 
 ```typescript
-import { FinancialRiskPlugin } from '@rufflo/plugin-financial-risk';
+import { FinancialRiskPlugin } from '@swarmdo/plugin-financial-risk';
 
 // Initialize the plugin
 const finance = new FinancialRiskPlugin({
@@ -305,24 +305,24 @@ const rateLimits = {
 ## Dependencies
 
 - `micro-hnsw-wasm`: Fast similarity search for historical pattern matching
-- `rufvector-sparse-inference-wasm`: Efficient processing of sparse financial features
-- `rufvector-gnn-wasm`: Transaction network analysis for fraud detection
-- `rufvector-economy-wasm`: Token economics and market microstructure modeling
-- `rufvector-learning-wasm`: Reinforcement learning for adaptive risk thresholds
+- `swarmvector-sparse-inference-wasm`: Efficient processing of sparse financial features
+- `swarmvector-gnn-wasm`: Transaction network analysis for fraud detection
+- `swarmvector-economy-wasm`: Token economics and market microstructure modeling
+- `swarmvector-learning-wasm`: Reinforcement learning for adaptive risk thresholds
 
 ## Related Plugins
 
 | Plugin | Description | Use Case |
 |--------|-------------|----------|
-| [@rufflo/plugin-legal-contracts](../legal-contracts) | Contract analysis | Financial agreements, derivatives documentation |
-| [@rufflo/plugin-healthcare-clinical](../healthcare-clinical) | Clinical decision support | Healthcare portfolio analysis |
-| [@rufflo/plugin-perf-optimizer](../perf-optimizer) | Performance optimization | High-frequency trading latency optimization |
+| [@swarmdo/plugin-legal-contracts](../legal-contracts) | Contract analysis | Financial agreements, derivatives documentation |
+| [@swarmdo/plugin-healthcare-clinical](../healthcare-clinical) | Clinical decision support | Healthcare portfolio analysis |
+| [@swarmdo/plugin-perf-optimizer](../perf-optimizer) | Performance optimization | High-frequency trading latency optimization |
 
 ## License
 
 MIT License
 
-Copyright (c) 2026 Rufflo
+Copyright (c) 2026 Swarmdo
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

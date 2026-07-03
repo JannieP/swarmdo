@@ -1,0 +1,46 @@
+{
+  "name": "@swarmvector/rvf",
+  "version": "0.2.2",
+  "description": "SwarmVector Format \u2014 unified TypeScript SDK for vector intelligence",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist/",
+    "package.json"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "bench": "tsx bench/index.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "vector",
+    "database",
+    "binary-format",
+    "hnsw",
+    "simd",
+    "rvf"
+  ],
+  "license": "MIT",
+  "repository": "https://github.com/ruvnet/swarmvector",
+  "dependencies": {
+    "@swarmvector/rvf-node": "file:../rvf-node"
+  },
+  "optionalDependencies": {
+    "@swarmvector/rvf-wasm": "file:../rvf-wasm",
+    "@swarmvector/rvf-solver": "file:../rvf-solver"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0"
+  }
+}

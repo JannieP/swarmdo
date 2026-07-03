@@ -1,4 +1,4 @@
-# Rufflo V3 Progress Manager Template (Windows PowerShell)
+# Swarmdo V3 Progress Manager Template (Windows PowerShell)
 
 param(
     [Parameter(Mandatory=$true, Position=0)]
@@ -8,13 +8,13 @@ param(
     [string]$Value
 )
 
-$MetricsDir = Join-Path ${env:PROJECT_ROOT} ".rufflo\metrics"
-$SecurityDir = Join-Path ${env:PROJECT_ROOT} ".rufflo\security"
+$MetricsDir = Join-Path ${env:PROJECT_ROOT} ".swarmdo\metrics"
+$SecurityDir = Join-Path ${env:PROJECT_ROOT} ".swarmdo\security"
 
 # Fallback if PROJECT_ROOT not set
 if ([string]::IsNullOrEmpty(${env:PROJECT_ROOT})) {
-    $MetricsDir = ".rufflo\metrics"
-    $SecurityDir = ".rufflo\security"
+    $MetricsDir = ".swarmdo\metrics"
+    $SecurityDir = ".swarmdo\security"
 }
 
 function Log-Success { param([string]$Message) Write-Host "✅ $Message" -ForegroundColor Green }

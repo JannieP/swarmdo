@@ -51,15 +51,15 @@ No mechanism existed to:
 
 ```bash
 # 1. Train a neural pattern
-npx rufflo hooks neural-train --pattern-type coordination --epochs 50
+npx swarmdo hooks neural-train --pattern-type coordination --epochs 50
 # ✅ Returns success with modelId
 
 # 2. Try to retrieve the pattern
-npx rufflo hooks neural-patterns --action analyze --model-id <modelId>
+npx swarmdo hooks neural-patterns --action analyze --model-id <modelId>
 # ❌ Pattern not found (not persisted)
 
 # 3. Try to get statistics
-npx rufflo hooks neural-patterns --action stats --pattern-type coordination
+npx swarmdo hooks neural-patterns --action stats --pattern-type coordination
 # ❌ Empty results or error
 ```
 
@@ -160,15 +160,15 @@ After deploying the fix:
 
 ```bash
 # 1. Train a pattern (now persists automatically)
-npx rufflo hooks neural-train --pattern-type coordination --epochs 50
+npx swarmdo hooks neural-train --pattern-type coordination --epochs 50
 # ✅ Returns: { success: true, modelId: "model_coordination_...", accuracy: 0.87 }
 
 # 2. Retrieve the pattern (now works)
-npx rufflo hooks neural-patterns --action analyze
+npx swarmdo hooks neural-patterns --action analyze
 # ✅ Returns: { total_patterns: 1, patterns: [...] }
 
 # 3. Get statistics (now has data)
-npx rufflo hooks neural-patterns --action stats --pattern-type coordination
+npx swarmdo hooks neural-patterns --action stats --pattern-type coordination
 # ✅ Returns: { total_trainings: 1, avg_accuracy: 0.87, ... }
 ```
 

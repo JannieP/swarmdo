@@ -1,7 +1,7 @@
 /**
- * RuVector-Enhanced Agent Booster v2
+ * SwarmVector-Enhanced Agent Booster v2
  *
- * Full upgrade with all RuVector capabilities:
+ * Full upgrade with all SwarmVector capabilities:
  * - Semantic fuzzy matching (cosine similarity on embeddings)
  * - ONNX embeddings for semantic code understanding
  * - Parallel batch apply for multi-file edits
@@ -23,25 +23,25 @@ import { extname, join } from 'path';
 import { homedir } from 'os';
 import { promisify } from 'util';
 const execAsync = promisify(exec);
-// RuVector imports
+// SwarmVector imports
 let IntelligenceEngine = null;
 let createIntelligenceEngine = null;
 let differentiableSearch = null;
 let isGnnAvailable = null;
 let TensorCompress = null;
 try {
-    const ruvector = await import('rufvector');
-    IntelligenceEngine = ruvector.IntelligenceEngine;
-    createIntelligenceEngine = ruvector.createIntelligenceEngine;
-    differentiableSearch = ruvector.differentiableSearch;
-    isGnnAvailable = ruvector.isGnnAvailable;
-    TensorCompress = ruvector.TensorCompress;
+    const swarmvector = await import('swarmvector');
+    IntelligenceEngine = swarmvector.IntelligenceEngine;
+    createIntelligenceEngine = swarmvector.createIntelligenceEngine;
+    differentiableSearch = swarmvector.differentiableSearch;
+    isGnnAvailable = swarmvector.isGnnAvailable;
+    TensorCompress = swarmvector.TensorCompress;
 }
 catch {
-    // RuVector not available
+    // SwarmVector not available
 }
 /**
- * RuVector-Enhanced Agent Booster v2
+ * SwarmVector-Enhanced Agent Booster v2
  */
 export class EnhancedAgentBooster {
     intelligence;
@@ -96,7 +96,7 @@ export class EnhancedAgentBooster {
                 // Not available
             }
         }
-        // Initialize RuVector intelligence if available
+        // Initialize SwarmVector intelligence if available
         if (createIntelligenceEngine) {
             this.intelligence = createIntelligenceEngine({
                 embeddingDim: 384, // Higher dim for ONNX
@@ -296,7 +296,7 @@ export class EnhancedAgentBooster {
         return { recompressed, tierChanges };
     }
     /**
-     * Apply code edit with full RuVector enhancement
+     * Apply code edit with full SwarmVector enhancement
      */
     async apply(request) {
         await this.init();

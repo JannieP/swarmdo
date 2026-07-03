@@ -26,32 +26,32 @@ Vector embeddings for semantic search and pattern matching with HNSW indexing.
 
 ### Initialize Embeddings
 ```bash
-npx rufflo embeddings init --backend sqlite
+npx swarmdo embeddings init --backend sqlite
 ```
 
 ### Embed Text
 ```bash
-npx rufflo embeddings embed --text "authentication patterns"
+npx swarmdo embeddings embed --text "authentication patterns"
 ```
 
 ### Batch Embed
 ```bash
-npx rufflo embeddings batch --file documents.json
+npx swarmdo embeddings batch --file documents.json
 ```
 
 ### Semantic Search
 ```bash
-npx rufflo embeddings search --query "security best practices" --top-k 5
+npx swarmdo embeddings search --query "security best practices" --top-k 5
 ```
 
 ## Memory Integration
 
 ```bash
 # Store with embeddings
-npx rufflo memory store --key "pattern-1" --value "description" --embed
+npx swarmdo memory store --key "pattern-1" --value "description" --embed
 
 # Search with embeddings
-npx rufflo memory search --query "related patterns" --semantic
+npx swarmdo memory search --query "related patterns" --semantic
 ```
 
 ## Quantization

@@ -2,7 +2,7 @@
  * VectorBackend - Unified interface for vector database backends
  *
  * Provides abstraction over different vector search implementations
- * (RuVector, hnswlib-node) for AgentDB v2.
+ * (SwarmVector, hnswlib-node) for AgentDB v2.
  *
  * Design:
  * - String-based IDs for all operations (backends handle label mapping internally)

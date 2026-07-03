@@ -218,14 +218,14 @@ export class EnhancedAgentDBWrapper {
                 this.gnnService = this._gnnService;
             }
             else {
-                // Import GNN from @rufvector/gnn - use any for flexible access
-                const gnnModule = await import('@rufvector/gnn');
+                // Import GNN from @swarmvector/gnn - use any for flexible access
+                const gnnModule = await import('@swarmvector/gnn');
                 const GraphNeuralNetwork = gnnModule.GraphNeuralNetwork || gnnModule.default?.GraphNeuralNetwork;
                 if (!GraphNeuralNetwork) {
-                    throw new Error('GraphNeuralNetwork not found in @rufvector/gnn');
+                    throw new Error('GraphNeuralNetwork not found in @swarmvector/gnn');
                 }
-                // Pre-validate the heads/dimension alignment that @rufvector/gnn
-                // RuvectorLayer panics on (issue #118 / ruvector#216). The constraint
+                // Pre-validate the heads/dimension alignment that @swarmvector/gnn
+                // RuvectorLayer panics on (issue #118 / swarmvector#216). The constraint
                 // is `EMBEDDING_DIM % num_heads == 0` per layer; if violated, the
                 // native side panics through the FFI boundary and tears down the
                 // process. We refuse to construct in that case and disable GNN.

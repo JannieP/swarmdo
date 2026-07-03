@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // check-metaharness-compat — exercise the @metaharness/router public API
-// surface that rufflo depends on (via ADR-148/149). If the upstream ships
-// a breaking change, this fails BEFORE a rufflo release goes out with a
+// surface that swarmdo depends on (via ADR-148/149). If the upstream ships
+// a breaking change, this fails BEFORE a swarmdo release goes out with a
 // broken neural-router.ts.
 //
 // Tested surfaces (must all succeed):
@@ -17,7 +17,7 @@
 //
 // EXIT CODES
 //   0  all checks passed (or @metaharness/router not installed —
-//      ADR-150 graceful degradation: rufflo runs without it)
+//      ADR-150 graceful degradation: swarmdo runs without it)
 //   1  at least one API contract broke
 //   2  unexpected error
 
@@ -43,7 +43,7 @@ async function main() {
       const payload = {
         skipped: true,
         reason: 'metaharness-router-not-installed',
-        hint: 'This script verifies the upstream API surface. Install with `npm i --include=optional` in v3/@rufflo/cli/ to enable.',
+        hint: 'This script verifies the upstream API surface. Install with `npm i --include=optional` in v3/@swarmdo/cli/ to enable.',
         results: [],
         generatedAt: new Date().toISOString(),
       };
@@ -73,7 +73,7 @@ async function main() {
   }
 
   // ───── 3. Router.fromExamples + route(embedding) ─────
-  // Mirrors the exact shape used in v3/@rufflo/cli/src/rufvector/neural-router.ts:
+  // Mirrors the exact shape used in v3/@swarmdo/cli/src/swarmvector/neural-router.ts:
   //   - rows: { embedding: number[], scores: Record<string, number> }
   //   - prices: Record<modelId, number>
   //   - opts: { qualityBar?: number, k?: number }
@@ -101,14 +101,14 @@ async function main() {
       });
 
       // Upstream provides `predict(candidate, embedding)` per-candidate;
-      // rufflo wraps it as `predictAll(embedding)` via map (see neural-router.ts
+      // swarmdo wraps it as `predictAll(embedding)` via map (see neural-router.ts
       // ~L515). We only verify the method exists — the exact candidate
       // shape varies between Router/TrainedRouter/NativeRouter and a
       // signature test would be fragile. The real coverage is the
       // benchmark run in CI.
       const hasPredict = typeof router.predict === 'function';
       results.push({
-        check: 'router.predict method present (rufflo predictAll wrapper depends on it)',
+        check: 'router.predict method present (swarmdo predictAll wrapper depends on it)',
         ok: hasPredict,
         detail: hasPredict ? 'function' : 'missing — would break neural-router.ts predictAll wrapper',
       });
@@ -125,7 +125,7 @@ async function main() {
       // Round-trip an empty/minimal JSON shape — we only care that
       // fromJSON ACCEPTS the shape, not that the model is meaningful.
       // The exact JSON schema is captured in `dist/router-krr.json`
-      // bundled with rufflo; we don't load that here to keep this
+      // bundled with swarmdo; we don't load that here to keep this
       // independent of the v3 source tree.
       const minimal = { type: 'krr', features: [], outputs: [], weights: [], lambda: 0.1 };
       try {
@@ -179,10 +179,10 @@ async function main() {
     console.log(`**${payload.checksPassed}/${payload.checksRun} passed.**`);
     if (failed.length) {
       console.log('');
-      console.log('⚠ Upstream API has changed. Investigate v3/@rufflo/cli/src/rufvector/neural-router.ts before publishing.');
+      console.log('⚠ Upstream API has changed. Investigate v3/@swarmdo/cli/src/swarmvector/neural-router.ts before publishing.');
     } else {
       console.log('');
-      console.log('✓ Upstream API matches rufflo\'s expectations.');
+      console.log('✓ Upstream API matches swarmdo\'s expectations.');
     }
   }
 

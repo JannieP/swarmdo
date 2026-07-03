@@ -4,7 +4,7 @@
  * Uses WebAssembly-accelerated shortest path algorithms (10-15x faster than JS)
  * to optimize message routing, delegation chains, and team topology.
  *
- * @module @rufflo/teammate-plugin/topology
+ * @module @swarmdo/teammate-plugin/topology
  * @version 1.0.0-alpha.1
  */
 
@@ -17,7 +17,7 @@ async function loadBMSSP(): Promise<void> {
   if (WasmGraph) return;
 
   try {
-    const bmssp = await import('@rufnet/bmssp');
+    const bmssp = await import('@swarmnet/bmssp');
     await bmssp.default(); // Initialize WASM
     WasmGraph = bmssp.WasmGraph;
   } catch (error) {

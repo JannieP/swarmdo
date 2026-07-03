@@ -2,7 +2,7 @@
  * FilterBuilder - Constructs RvfFilterExpr objects from a simple predicate DSL.
  *
  * Translates field-name-based predicates into field-ID-based RvfFilterExpr
- * objects that the @rufvector/rvf SDK expects.
+ * objects that the @swarmvector/rvf SDK expects.
  *
  * Usage:
  *   const filter = new FilterBuilder()
@@ -14,7 +14,7 @@
  *   FilterBuilder.buildFilter({ status: 'active', score: { $gt: 0.5 } });
  */
 
-/** Re-export filter types from @rufvector/rvf for convenience */
+/** Re-export filter types from @swarmvector/rvf for convenience */
 export type RvfFilterValue = number | string | boolean;
 
 export type RvfFilterExpr =

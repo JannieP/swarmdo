@@ -115,7 +115,7 @@ export declare class SelfLearningRvfBackend implements VectorBackendAsync {
     getWitnessChain(): Uint8Array | null;
     /**
      * Verify the witness chain using native WASM verification (ADR-007 Phase 1).
-     * Falls back to structural check if @rufvector/rvf-wasm is unavailable.
+     * Falls back to structural check if @swarmvector/rvf-wasm is unavailable.
      */
     verifyWitnessChain(): WitnessVerifyResult | null;
     /** Get the native accelerator (ADR-007) */

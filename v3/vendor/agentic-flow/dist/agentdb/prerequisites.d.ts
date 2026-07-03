@@ -3,7 +3,7 @@
  *
  * Mirrors the registry that lives in the upstream `agentdb` package
  * (`agentdb/dist/controllers/prerequisites.js`). Exposing it through the
- * `agentic-flow/agentdb` re-export means consumers (e.g. ruflo) can rely on
+ * `agentic-flow/agentdb` re-export means consumers (e.g. swarmdo) can rely on
  * a single import surface regardless of which agentdb version is installed.
  *
  * Issue #146 Gap 2.

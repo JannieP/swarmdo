@@ -3,9 +3,9 @@
  * Uses learned patterns, context, and exploration/exploitation balance
  *
  * NOW WITH FULL RUVECTOR INTELLIGENCE:
- * - @rufvector/sona: Micro-LoRA (~0.05ms), trajectories
- * - @rufvector/attention: MoE attention-based ranking
- * - ruvector: HNSW indexing (150x faster search)
+ * - @swarmvector/sona: Micro-LoRA (~0.05ms), trajectories
+ * - @swarmvector/attention: MoE attention-based ranking
+ * - swarmvector: HNSW indexing (150x faster search)
  */
 import { z } from 'zod';
 import * as path from 'path';
@@ -13,7 +13,7 @@ import { loadIntelligence, getAgentForFile, simpleEmbed, cosineSimilarity } from
 import { routeTaskIntelligent, findSimilarPatterns, getIntelligenceStats } from './intelligence-bridge.js';
 // Exploration rate for epsilon-greedy selection
 const EXPLORATION_RATE = 0.1;
-// Flag to use RuVector intelligence (can be toggled)
+// Flag to use SwarmVector intelligence (can be toggled)
 const USE_RUVECTOR_INTELLIGENCE = process.env.RUVECTOR_INTELLIGENCE_ENABLED !== 'false';
 // Available agent types
 const availableAgents = [
@@ -65,7 +65,7 @@ export const hookRouteTool = {
                     score: intelligentResult.routingResults[0]?.confidence || 0,
                     factors: [
                         {
-                            name: 'ruvector_intelligence',
+                            name: 'swarmvector_intelligence',
                             weight: 3.0,
                             agent: intelligentResult.agent,
                             evidence: `SONA + MoE routing in ${intelligentResult.latencyMs.toFixed(2)}ms`
@@ -87,12 +87,12 @@ export const hookRouteTool = {
                     latencyMs: Date.now() - startTime,
                     timestamp: new Date().toISOString(),
                     intelligenceStats: stats,
-                    engine: 'rufvector' // Mark that we used RuVector
+                    engine: 'swarmvector' // Mark that we used SwarmVector
                 };
             }
             catch (error) {
                 // Fall back to simple routing if intelligence fails
-                console.warn('[Route] RuVector intelligence failed, using fallback:', error);
+                console.warn('[Route] SwarmVector intelligence failed, using fallback:', error);
             }
         }
         // FALLBACK: Simple Q-learning routing (original implementation)

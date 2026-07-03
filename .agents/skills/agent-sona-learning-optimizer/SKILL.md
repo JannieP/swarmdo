@@ -47,7 +47,7 @@ I am a **self-optimizing agent** powered by SONA (Self-Optimizing Neural Archite
 
 ## Performance Characteristics
 
-Based on vibecast test-rufvector-sona benchmarks:
+Based on vibecast test-swarmvector-sona benchmarks:
 
 ### Throughput
 - **2211 ops$sec** (target)
@@ -67,13 +67,13 @@ Pre-task and post-task hooks for SONA learning are available via:
 
 ```bash
 # Pre-task: Initialize trajectory
-npx rufflo@alpha hooks pre-task --description "$TASK"
+npx swarmdo@alpha hooks pre-task --description "$TASK"
 
 # Post-task: Record outcome
-npx rufflo@alpha hooks post-task --task-id "$ID" --success true
+npx swarmdo@alpha hooks post-task --task-id "$ID" --success true
 ```
 
 ## References
 
-- **Package**: @rufvector$sona@0.1.1
-- **Integration Guide**: docs/RUFVECTOR_SONA_INTEGRATION.md
+- **Package**: @swarmvector$sona@0.1.1
+- **Integration Guide**: docs/SWARMVECTOR_SONA_INTEGRATION.md

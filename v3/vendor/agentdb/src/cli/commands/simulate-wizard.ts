@@ -221,11 +221,11 @@ async function customWizard(): Promise<void> {
       name: 'backend',
       message: '1/6 Choose vector backend:',
       choices: [
-        { name: '🚀 RuVector (8.2x speedup) [OPTIMAL]', value: 'rufvector' },
+        { name: '🚀 SwarmVector (8.2x speedup) [OPTIMAL]', value: 'swarmvector' },
         { name: '📦 hnswlib (baseline)', value: 'hnswlib' },
         { name: '🔬 FAISS', value: 'faiss' },
       ],
-      default: 'rufvector',
+      default: 'swarmvector',
     },
     {
       type: 'list',

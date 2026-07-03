@@ -4,7 +4,7 @@
  * Tests for RateLimiter, CircuitBreaker, MetricsCollector,
  * HealthChecker, and retry utilities.
  *
- * @module @rufflo/teammate-plugin/tests/utils
+ * @module @swarmdo/teammate-plugin/tests/utils
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';

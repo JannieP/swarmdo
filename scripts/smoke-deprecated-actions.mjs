@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Deprecated-action regression guard for ruvnet/ruflo#2089 — ADR-127 Phase 3.
+ * Deprecated-action regression guard for ruvnet/swarmdo#2089 — ADR-127 Phase 3.
  *
  * Fails if any file in scope references:
  *   - actions/checkout@v3   (replaced by @v4 in Phase 3)
@@ -16,7 +16,7 @@
  * Scope:
  *   .claude/agents/github/[name].md
  *   .claude/skills/github-[name]/SKILL.md
- *   v3/@rufflo/cli/.claude/commands/github/[name].md
+ *   v3/@swarmdo/cli/.claude/commands/github/[name].md
  *
  * Zero runtime dependencies — pure readFileSync + regex.
  * Exit 0: no deprecated refs found.
@@ -37,8 +37,8 @@ const SCAN_TREES = [
   join(REPO_ROOT, '.claude', 'agents', 'github'),
   join(REPO_ROOT, '.claude', 'skills'),
   join(REPO_ROOT, '.claude', 'commands', 'github'),
-  join(REPO_ROOT, 'v3', '@rufflo', 'cli', '.claude', 'agents', 'github'),
-  join(REPO_ROOT, 'v3', '@rufflo', 'cli', '.claude', 'commands', 'github'),
+  join(REPO_ROOT, 'v3', '@swarmdo', 'cli', '.claude', 'agents', 'github'),
+  join(REPO_ROOT, 'v3', '@swarmdo', 'cli', '.claude', 'commands', 'github'),
 ];
 
 // Deprecated refs: [pattern, description, replacement]

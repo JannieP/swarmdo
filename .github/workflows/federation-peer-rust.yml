@@ -1,6 +1,6 @@
 name: federation-peer-rust
 
-# Builds + tests the v3/crates/rufflo-federation-peer crate (ADR-120
+# Builds + tests the v3/crates/swarmdo-federation-peer crate (ADR-120
 # Step 3). Triggers only on changes to the crate or this workflow.
 # Two jobs:
 #
@@ -17,11 +17,11 @@ on:
   push:
     branches: [main]
     paths:
-      - 'v3/crates/rufflo-federation-peer/**'
+      - 'v3/crates/swarmdo-federation-peer/**'
       - '.github/workflows/federation-peer-rust.yml'
   pull_request:
     paths:
-      - 'v3/crates/rufflo-federation-peer/**'
+      - 'v3/crates/swarmdo-federation-peer/**'
       - '.github/workflows/federation-peer-rust.yml'
   workflow_dispatch:
 
@@ -41,19 +41,19 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-            v3/crates/rufflo-federation-peer/target
-          key: federation-peer-${{ runner.os }}-${{ hashFiles('v3/crates/rufflo-federation-peer/Cargo.toml') }}
+            v3/crates/swarmdo-federation-peer/target
+          key: federation-peer-${{ runner.os }}-${{ hashFiles('v3/crates/swarmdo-federation-peer/Cargo.toml') }}
 
       - name: cargo build (no native features)
-        working-directory: v3/crates/rufflo-federation-peer
+        working-directory: v3/crates/swarmdo-federation-peer
         run: cargo build --verbose
 
       - name: cargo test (no native features)
-        working-directory: v3/crates/rufflo-federation-peer
+        working-directory: v3/crates/swarmdo-federation-peer
         run: cargo test --verbose
 
       - name: cargo clippy (no native features)
-        working-directory: v3/crates/rufflo-federation-peer
+        working-directory: v3/crates/swarmdo-federation-peer
         run: cargo clippy --all-targets -- -D warnings
         continue-on-error: true
 
@@ -72,9 +72,9 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-            v3/crates/rufflo-federation-peer/target
-          key: federation-peer-native-${{ runner.os }}-${{ hashFiles('v3/crates/rufflo-federation-peer/Cargo.toml') }}
+            v3/crates/swarmdo-federation-peer/target
+          key: federation-peer-native-${{ runner.os }}-${{ hashFiles('v3/crates/swarmdo-federation-peer/Cargo.toml') }}
 
       - name: cargo check --features native (resolves midstreamer-quic + aimds-*)
-        working-directory: v3/crates/rufflo-federation-peer
+        working-directory: v3/crates/swarmdo-federation-peer
         run: cargo check --features native --verbose

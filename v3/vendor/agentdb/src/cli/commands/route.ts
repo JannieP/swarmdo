@@ -126,8 +126,8 @@ export const routeCommand = new Command('route')
         console.log(JSON.stringify({ error: error.message, wasmAvailable: false }, null, 2));
       } else {
         console.error(chalk.red(`\n❌ Error: ${error.message}\n`));
-        if (error.message.includes('WASM') || error.message.includes('rufvector')) {
-          console.log(chalk.yellow('💡 Tip: Install @rufvector/rufllm for WASM-accelerated routing.'));
+        if (error.message.includes('WASM') || error.message.includes('swarmvector')) {
+          console.log(chalk.yellow('💡 Tip: Install @swarmvector/swarmllm for WASM-accelerated routing.'));
         }
       }
       process.exit(1);
@@ -139,9 +139,9 @@ export const routeCommand = new Command('route')
  */
 async function checkWasmAvailability(verbose: boolean): Promise<boolean> {
   try {
-    await import('@rufvector/rufllm');
+    await import('@swarmvector/swarmllm');
     if (verbose) {
-      console.log(chalk.green('✅ Using WASM-accelerated routing (@rufvector/rufllm)\n'));
+      console.log(chalk.green('✅ Using WASM-accelerated routing (@swarmvector/swarmllm)\n'));
     }
     return true;
   } catch (error) {
@@ -196,7 +196,7 @@ async function routeWithFastGRNN(
   history: any[],
   options: RouteOptions
 ): Promise<ModelSelection> {
-  // In production, this would use @rufvector/rufllm
+  // In production, this would use @swarmvector/swarmllm
   // For now, simulate FastGRNN decision
 
   const hiddenDim = parseInt(String(options.hiddenDim || '128'));
@@ -499,7 +499,7 @@ routeCommand.on('--help', () => {
   console.log('  $ agentdb route stats');
   console.log('');
   console.log('WASM Acceleration:');
-  console.log('  This command uses @rufvector/rufllm FastGRNN for model selection.');
+  console.log('  This command uses @swarmvector/swarmllm FastGRNN for model selection.');
   console.log('  Falls back gracefully to heuristic-based routing if WASM is unavailable.');
   console.log('');
   console.log('Supported Models:');

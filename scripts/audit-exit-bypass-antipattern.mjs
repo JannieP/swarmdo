@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // audit-exit-bypass-antipattern — static analyzer for the iter-75 bug class.
 //
-// THE BUG (iter 75 in plugins/rufflo-cost-tracker/scripts/budget.mjs):
+// THE BUG (iter 75 in plugins/swarmdo-cost-tracker/scripts/budget.mjs):
 //
 //   const alert = alertLevel(utilization);
 //   ...
@@ -20,7 +20,7 @@
 // USAGE
 //   node scripts/audit-exit-bypass-antipattern.mjs                # scan all plugins
 //   node scripts/audit-exit-bypass-antipattern.mjs --format json  # CI-consumable
-//   node scripts/audit-exit-bypass-antipattern.mjs --only rufflo-cost-tracker
+//   node scripts/audit-exit-bypass-antipattern.mjs --only swarmdo-cost-tracker
 //
 // EXIT CODES
 //   0  no violations found

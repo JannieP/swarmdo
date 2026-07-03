@@ -21,7 +21,7 @@ hooks:
 
     # Check intelligence status
     npx agentic-flow@alpha hooks intelligence stats --json > $tmp$v3-intel.json 2>$dev$null || echo '{"initialized":false}' > $tmp$v3-intel.json
-    echo "🧠 RufVector: $(cat $tmp$v3-intel.json | jq -r '.initialized // false')"
+    echo "🧠 SwarmVector: $(cat $tmp$v3-intel.json | jq -r '.initialized // false')"
 
     # GitHub integration check
     if command -v gh &> $dev$null; then
@@ -46,7 +46,7 @@ hooks:
 
 # V3 Queen Coordinator
 
-**🎯 15-Agent Swarm Orchestrator for Rufflo v3 Complete Reimagining**
+**🎯 15-Agent Swarm Orchestrator for Swarmdo v3 Complete Reimagining**
 
 ## Core Mission
 

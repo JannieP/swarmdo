@@ -2,23 +2,23 @@
  * Backend Factory - Automatic Backend Detection and Selection
  *
  * Detects available vector backends and creates appropriate instances.
- * Priority: RuVector (native/WASM) > RVF (native/WASM) > HNSWLib (Node.js)
+ * Priority: SwarmVector (native/WASM) > RVF (native/WASM) > HNSWLib (Node.js)
  *
  * Features:
- * - Automatic detection of @rufvector and @rufvector/rvf packages
- * - Native vs WASM detection for RuVector and RVF
+ * - Automatic detection of @swarmvector and @swarmvector/rvf packages
+ * - Native vs WASM detection for SwarmVector and RVF
  * - GNN and Graph capabilities detection
- * - Graceful fallback chain: RuVector -> RVF -> HNSWLib
+ * - Graceful fallback chain: SwarmVector -> RVF -> HNSWLib
  * - Clear error messages for missing dependencies
  */
 
 import type { VectorBackend, VectorConfig } from './VectorBackend.js';
-import { RuVectorBackend } from './ruvector/RuVectorBackend.js';
+import { SwarmVectorBackend } from './swarmvector/SwarmVectorBackend.js';
 
 // Note: HNSWLibBackend and RvfBackend are lazy-loaded to avoid import failures
 // on systems without build tools. The imports happen in helper functions.
 
-export type BackendType = 'auto' | 'rufvector' | 'rvf' | 'hnswlib';
+export type BackendType = 'auto' | 'swarmvector' | 'rvf' | 'hnswlib';
 
 export interface RvfDetection {
   sdk: boolean;
@@ -27,8 +27,8 @@ export interface RvfDetection {
 }
 
 export interface BackendDetection {
-  available: 'rufvector' | 'rvf' | 'hnswlib' | 'sqljsrvf' | 'none';
-  ruvector: {
+  available: 'swarmvector' | 'rvf' | 'hnswlib' | 'sqljsrvf' | 'none';
+  swarmvector: {
     core: boolean;
     gnn: boolean;
     graph: boolean;
@@ -45,7 +45,7 @@ export interface BackendDetection {
 export async function detectBackends(): Promise<BackendDetection> {
   const result: BackendDetection = {
     available: 'none',
-    ruvector: {
+    swarmvector: {
       core: false,
       gnn: false,
       graph: false,
@@ -60,50 +60,50 @@ export async function detectBackends(): Promise<BackendDetection> {
     sqljsRvf: false,
   };
 
-  // Check RuVector packages (main package or scoped packages)
+  // Check SwarmVector packages (main package or scoped packages)
   try {
-    // Try main ruvector package first
-    const ruvector = await import('rufvector');
-    result.ruvector.core = true;
-    result.ruvector.gnn = true; // Main package includes GNN
-    result.ruvector.graph = true; // Main package includes Graph
-    result.ruvector.native = ruvector.isNative?.() ?? false;
-    result.available = 'rufvector';
+    // Try main swarmvector package first
+    const swarmvector = await import('swarmvector');
+    result.swarmvector.core = true;
+    result.swarmvector.gnn = true; // Main package includes GNN
+    result.swarmvector.graph = true; // Main package includes Graph
+    result.swarmvector.native = swarmvector.isNative?.() ?? false;
+    result.available = 'swarmvector';
   } catch {
     // Try scoped packages as fallback
     try {
-      const core = await import('@rufvector/core');
-      result.ruvector.core = true;
-      result.ruvector.native = core.isNative?.() ?? false;
-      result.available = 'rufvector';
+      const core = await import('@swarmvector/core');
+      result.swarmvector.core = true;
+      result.swarmvector.native = core.isNative?.() ?? false;
+      result.available = 'swarmvector';
 
       // Check optional packages
       try {
-        await import('@rufvector/gnn');
-        result.ruvector.gnn = true;
+        await import('@swarmvector/gnn');
+        result.swarmvector.gnn = true;
       } catch {
         // GNN not installed - this is optional
       }
 
       try {
-        await import('@rufvector/graph-node');
-        result.ruvector.graph = true;
+        await import('@swarmvector/graph-node');
+        result.swarmvector.graph = true;
       } catch {
         // Graph not installed - this is optional
       }
     } catch {
-      // RuVector not installed - will try RVF or HNSWLib fallback
+      // SwarmVector not installed - will try RVF or HNSWLib fallback
     }
   }
 
-  // Check RVF SDK (@rufvector/rvf with N-API or WASM backend)
+  // Check RVF SDK (@swarmvector/rvf with N-API or WASM backend)
   try {
-    await import('@rufvector/rvf');
+    await import('@swarmvector/rvf');
     result.rvf.sdk = true;
 
     // Check for N-API native backend
     try {
-      await import('@rufvector/rvf-node');
+      await import('@swarmvector/rvf-node');
       result.rvf.node = true;
     } catch {
       // N-API backend not available
@@ -111,7 +111,7 @@ export async function detectBackends(): Promise<BackendDetection> {
 
     // Check for WASM backend
     try {
-      await import('@rufvector/rvf-wasm');
+      await import('@swarmvector/rvf-wasm');
       result.rvf.wasm = true;
     } catch {
       // WASM backend not available
@@ -159,7 +159,7 @@ async function createHNSWLibBackend(config: VectorConfig): Promise<VectorBackend
 }
 
 /**
- * Lazy-load RvfBackend to avoid import failures when @rufvector/rvf is not installed
+ * Lazy-load RvfBackend to avoid import failures when @swarmvector/rvf is not installed
  */
 async function createRvfBackend(config: VectorConfig): Promise<VectorBackend> {
   const { RvfBackend } = await import('./rvf/RvfBackend.js');
@@ -178,7 +178,7 @@ async function createSqlJsRvfBackend(config: VectorConfig): Promise<VectorBacken
 /**
  * Create vector backend with automatic detection
  *
- * @param type - Backend type: 'auto', 'rufvector', 'rvf', or 'hnswlib'
+ * @param type - Backend type: 'auto', 'swarmvector', 'rvf', or 'hnswlib'
  * @param config - Vector configuration
  * @returns Initialized VectorBackend instance
  */
@@ -191,18 +191,18 @@ export async function createBackend(
   let backend: VectorBackend;
 
   // Handle explicit backend selection
-  if (type === 'rufvector') {
-    if (!detection.ruvector.core) {
+  if (type === 'swarmvector') {
+    if (!detection.swarmvector.core) {
       throw new Error(
-        'RuVector not available.\n' +
-        'Install with: npm install @rufvector/core\n' +
-        'Optional GNN support: npm install @rufvector/gnn\n' +
-        'Optional Graph support: npm install @rufvector/graph-node'
+        'SwarmVector not available.\n' +
+        'Install with: npm install @swarmvector/core\n' +
+        'Optional GNN support: npm install @swarmvector/gnn\n' +
+        'Optional Graph support: npm install @swarmvector/graph-node'
       );
     }
-    backend = new RuVectorBackend(config);
+    backend = new SwarmVectorBackend(config);
   } else if (type === 'rvf') {
-    // Try native @rufvector/rvf first, fall back to sql.js-rvf
+    // Try native @swarmvector/rvf first, fall back to sql.js-rvf
     if (detection.rvf.sdk) {
       backend = await createRvfBackend(config);
       console.log(
@@ -214,9 +214,9 @@ export async function createBackend(
     } else {
       throw new Error(
         'RVF backend not available.\n' +
-        'Install with: npm install @rufvector/rvf\n' +
-        'Native backend: npm install @rufvector/rvf-node\n' +
-        'WASM backend: npm install @rufvector/rvf-wasm'
+        'Install with: npm install @swarmvector/rvf\n' +
+        'Native backend: npm install @swarmvector/rvf-node\n' +
+        'WASM backend: npm install @swarmvector/rvf-wasm'
       );
     }
   } else if (type === 'hnswlib') {
@@ -228,14 +228,14 @@ export async function createBackend(
     }
     backend = await createHNSWLibBackend(config);
   } else {
-    // Auto-detect best available backend (priority: ruvector > rvf > hnswlib)
-    if (detection.ruvector.core) {
-      backend = new RuVectorBackend(config);
+    // Auto-detect best available backend (priority: swarmvector > rvf > hnswlib)
+    if (detection.swarmvector.core) {
+      backend = new SwarmVectorBackend(config);
       console.log(
-        `[AgentDB] Using RuVector backend (${detection.ruvector.native ? 'native' : 'WASM'})`
+        `[AgentDB] Using SwarmVector backend (${detection.swarmvector.native ? 'native' : 'WASM'})`
       );
 
-      // Try to initialize RuVector, fallback to RVF then HNSWLib if it fails
+      // Try to initialize SwarmVector, fallback to RVF then HNSWLib if it fails
       try {
         await (backend as unknown as { initialize(): Promise<void> }).initialize();
         return backend;
@@ -244,7 +244,7 @@ export async function createBackend(
 
         // Try RVF as first fallback
         if (detection.rvf.sdk) {
-          console.log('[AgentDB] RuVector initialization failed, trying RVF backend');
+          console.log('[AgentDB] SwarmVector initialization failed, trying RVF backend');
           console.log(`[AgentDB] Reason: ${errorMessage.split('\n')[0]}`);
           try {
             backend = await createRvfBackend(config);
@@ -282,8 +282,8 @@ export async function createBackend(
       throw new Error(
         'No vector backend available.\n' +
         'Install one of:\n' +
-        '  - npm install @rufvector/core (recommended)\n' +
-        '  - npm install @rufvector/rvf (single-file format)\n' +
+        '  - npm install @swarmvector/core (recommended)\n' +
+        '  - npm install @swarmvector/rvf (single-file format)\n' +
         '  - npm install hnswlib-node (fallback)'
       );
     }
@@ -307,8 +307,8 @@ export async function createBackend(
 export async function getRecommendedBackend(): Promise<BackendType> {
   const detection = await detectBackends();
 
-  if (detection.ruvector.core) {
-    return 'rufvector';
+  if (detection.swarmvector.core) {
+    return 'swarmvector';
   } else if (detection.rvf.sdk) {
     return 'rvf';
   } else if (detection.hnswlib) {
@@ -321,11 +321,11 @@ export async function getRecommendedBackend(): Promise<BackendType> {
 /**
  * Check if a specific backend is available
  */
-export async function isBackendAvailable(backend: 'rufvector' | 'rvf' | 'hnswlib'): Promise<boolean> {
+export async function isBackendAvailable(backend: 'swarmvector' | 'rvf' | 'hnswlib'): Promise<boolean> {
   const detection = await detectBackends();
 
-  if (backend === 'rufvector') {
-    return detection.ruvector.core;
+  if (backend === 'swarmvector') {
+    return detection.swarmvector.core;
   }
   if (backend === 'rvf') {
     return detection.rvf.sdk;
@@ -337,8 +337,8 @@ export async function isBackendAvailable(backend: 'rufvector' | 'rvf' | 'hnswlib
 /**
  * Get installation instructions for a backend
  */
-export function getInstallCommand(backend: 'rufvector' | 'rvf' | 'hnswlib'): string {
-  if (backend === 'rufvector') return 'npm install ruvector';
-  if (backend === 'rvf') return 'npm install @rufvector/rvf @rufvector/rvf-node';
+export function getInstallCommand(backend: 'swarmvector' | 'rvf' | 'hnswlib'): string {
+  if (backend === 'swarmvector') return 'npm install swarmvector';
+  if (backend === 'rvf') return 'npm install @swarmvector/rvf @swarmvector/rvf-node';
   return 'npm install hnswlib-node';
 }

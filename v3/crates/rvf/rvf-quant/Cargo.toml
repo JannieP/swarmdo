@@ -2,10 +2,10 @@
 name = "rvf-quant"
 version = "0.2.0"
 edition = "2021"
-description = "RufVector Format temperature-tiered vector quantization (f32/f16/u8/binary)"
+description = "SwarmVector Format temperature-tiered vector quantization (f32/f16/u8/binary)"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/ruvnet/rufvector"
-homepage = "https://github.com/ruvnet/rufvector"
+repository = "https://github.com/ruvnet/swarmvector"
+homepage = "https://github.com/ruvnet/swarmvector"
 readme = "README.md"
 categories = ["algorithms", "compression"]
 keywords = ["vector", "quantization", "compression", "embedding", "rvf"]

@@ -2,7 +2,7 @@
  * Controller Prerequisites Registry
  *
  * Documents which agentdb controllers can be auto-activated by downstream
- * consumers (e.g. ruflo's memory bridge) versus which require external
+ * consumers (e.g. swarmdo's memory bridge) versus which require external
  * dependencies that the embedding host has to supply.
  *
  * Issue #146 Gap 2 — downstream consumers were reading dist source to discover

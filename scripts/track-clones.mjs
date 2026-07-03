@@ -1,17 +1,17 @@
 #!/usr/bin/env node
 /**
- * Clone tracker — fetches 14-day GitHub clone numbers for the rufflo
+ * Clone tracker — fetches 14-day GitHub clone numbers for the swarmdo
  * ecosystem repos and appends a snapshot to `data/clone-data.rvf`
- * (a RufVector RVF vector store).
+ * (a SwarmVector RVF vector store).
  *
  * Scheduled by `.github/workflows/clone-tracker.yml` every ~13 days,
  * which is just inside GitHub's 14-day clone-data retention window.
  *
  * Each snapshot is a 10-dimensional vector:
- *   [rufflo_clones,      rufflo_uniques,
+ *   [swarmdo_clones,      swarmdo_uniques,
  *    agentdb_clones,    agentdb_uniques,
  *    agentic_clones,    agentic_uniques,
- *    rufvector_clones,   rufvector_uniques,
+ *    swarmvector_clones,   swarmvector_uniques,
  *    ruv-FANN_clones,   ruv-FANN_uniques]
  *
  * Vector ID: `<ISO-date>-<run-id>`.
@@ -40,18 +40,18 @@ const LEDGER_PATH = path_resolve(DATA_DIR, 'clone-data.ledger.json');
 const PROOF_PATH = path_resolve(DATA_DIR, 'clone-data.proof.json');
 
 const REPOS = [
-  'ruvnet/ruflo',
+  'ruvnet/swarmdo',
   'ruvnet/agentdb',
   'ruvnet/agentic-flow',
-  'ruvnet/rufvector',
+  'ruvnet/swarmvector',
   'ruvnet/ruv-FANN',
 ];
 
 const NPM_PKGS_HEADLINE = [
-  'rufflo',
-  'rufflo',
-  '@rufflo/cli',
-  '@rufflo/memory',
+  'swarmdo',
+  'swarmdo',
+  '@swarmdo/cli',
+  '@swarmdo/memory',
   'agentdb',
   'agentic-flow',
 ];
@@ -92,8 +92,8 @@ async function fetchNpmDownloads(pkg) {
 // ============================================================
 
 async function loadOrCreateRvf() {
-  const rvfModule = await import('@rufvector/rvf').catch((err) => {
-    console.error(`  [warn] @rufvector/rvf import failed: ${err.message?.slice(0, 80)}`);
+  const rvfModule = await import('@swarmvector/rvf').catch((err) => {
+    console.error(`  [warn] @swarmvector/rvf import failed: ${err.message?.slice(0, 80)}`);
     console.error('  [warn] Falling back to JSON ledger only; RVF write skipped.');
     return null;
   });
@@ -114,14 +114,14 @@ async function loadOrCreateRvf() {
 function readLedger() {
   if (!existsSync(LEDGER_PATH)) {
     return {
-      schema: 'rufflo-clone-tracker-ledger/v1',
+      schema: 'swarmdo-clone-tracker-ledger/v1',
       created_at: new Date().toISOString(),
       repos: REPOS,
       vector_layout: [
-        'rufflo_clones', 'rufflo_uniques',
+        'swarmdo_clones', 'swarmdo_uniques',
         'agentdb_clones', 'agentdb_uniques',
         'agentic_flow_clones', 'agentic_flow_uniques',
-        'rufvector_clones', 'rufvector_uniques',
+        'swarmvector_clones', 'swarmvector_uniques',
         'ruv_FANN_clones', 'ruv_FANN_uniques',
       ],
       snapshots: [],
@@ -191,7 +191,7 @@ async function main() {
   writeLedger(ledger);
   console.error(`  ledger:          ${LEDGER_PATH} (snapshot #${ledger.snapshot_count})`);
 
-  // ---- Append to RVF (RufVector vector store) ----
+  // ---- Append to RVF (SwarmVector vector store) ----
   const db = await loadOrCreateRvf();
   if (db) {
     try {
@@ -221,7 +221,7 @@ async function main() {
   const ledgerBytes = readFileSync(LEDGER_PATH);
   const ledgerSha = createHash('sha256').update(ledgerBytes).digest('hex');
   const proof = {
-    schema: 'rufflo-ecosystem-proof/v2',
+    schema: 'swarmdo-ecosystem-proof/v2',
     generated_at: now,
     sources: {
       github_clones: 'https://api.github.com/repos/{owner}/{repo}/traffic/clones (14-day rolling window)',

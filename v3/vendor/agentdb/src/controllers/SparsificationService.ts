@@ -93,19 +93,19 @@ export class SparsificationService {
     try {
       // Try NAPI first (fastest)
       // Use dynamic import with string to avoid TypeScript module resolution
-      const napiModuleName = '@rufvector/sparsifier';
+      const napiModuleName = '@swarmvector/sparsifier';
       const napi = await import(/* @vite-ignore */ napiModuleName).catch(() => null);
       if (napi) {
         this.napiModule = napi;
-        console.log('✅ SparsificationService: Loaded @rufvector/sparsifier NAPI module');
+        console.log('✅ SparsificationService: Loaded @swarmvector/sparsifier NAPI module');
       } else {
         // Fall back to WASM
-        const wasmModuleName = 'ruvector-sparsifier-wasm';
+        const wasmModuleName = 'swarmvector-sparsifier-wasm';
         const wasm = await import(/* @vite-ignore */ wasmModuleName).catch(() => null);
         if (wasm) {
           await wasm.default();
           this.wasmModule = wasm;
-          console.log('✅ SparsificationService: Loaded ruvector-sparsifier-wasm module');
+          console.log('✅ SparsificationService: Loaded swarmvector-sparsifier-wasm module');
         } else {
           console.warn('⚠️  SparsificationService: No native bindings available, using JavaScript fallback');
         }

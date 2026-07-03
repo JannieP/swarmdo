@@ -1,10 +1,10 @@
 /**
- * @rufflo/teammate-plugin Types
+ * @swarmdo/teammate-plugin Types
  *
  * Complete type definitions for TeammateTool integration.
  * Requires Claude Code >= 2.1.19
  *
- * @module @rufflo/teammate-plugin/types
+ * @module @swarmdo/teammate-plugin/types
  * @version 1.0.0-alpha.1
  */
 

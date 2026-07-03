@@ -1,4 +1,4 @@
-//! RufVector Format runtime — the main user-facing API.
+//! SwarmVector Format runtime — the main user-facing API.
 //!
 //! This crate provides [`RvfStore`], the primary interface for creating,
 //! opening, querying, and managing RVF vector stores. It ties together

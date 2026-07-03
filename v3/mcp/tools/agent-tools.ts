@@ -13,7 +13,7 @@
 import { z } from 'zod';
 import { randomBytes } from 'crypto';
 import { MCPTool, ToolContext } from '../types.js';
-import { sanitizeErrorForLogging } from '../../@rufflo/shared/src/utils/secure-logger.js';
+import { sanitizeErrorForLogging } from '../../@swarmdo/shared/src/utils/secure-logger.js';
 
 // Secure ID generation helper
 function generateSecureAgentId(): string {
@@ -160,7 +160,7 @@ async function handleSpawnAgent(
   // Try to use swarmCoordinator if available
   if (context?.swarmCoordinator) {
     try {
-      const { UnifiedSwarmCoordinator } = await import('@rufflo/swarm');
+      const { UnifiedSwarmCoordinator } = await import('@swarmdo/swarm');
       const coordinator = context.swarmCoordinator as InstanceType<typeof UnifiedSwarmCoordinator>;
 
       // Spawn agent using the coordinator
@@ -205,7 +205,7 @@ async function handleListAgents(
   // Try to use swarmCoordinator if available
   if (context?.swarmCoordinator) {
     try {
-      const { UnifiedSwarmCoordinator } = await import('@rufflo/swarm');
+      const { UnifiedSwarmCoordinator } = await import('@swarmdo/swarm');
       const coordinator = context.swarmCoordinator as InstanceType<typeof UnifiedSwarmCoordinator>;
 
       // Get swarm status
@@ -269,7 +269,7 @@ async function handleTerminateAgent(
   // Try to use swarmCoordinator if available
   if (context?.swarmCoordinator) {
     try {
-      const { UnifiedSwarmCoordinator } = await import('@rufflo/swarm');
+      const { UnifiedSwarmCoordinator } = await import('@swarmdo/swarm');
       const coordinator = context.swarmCoordinator as InstanceType<typeof UnifiedSwarmCoordinator>;
 
       // Terminate agent
@@ -306,7 +306,7 @@ async function handleAgentStatus(
   // Try to use swarmCoordinator if available
   if (context?.swarmCoordinator) {
     try {
-      const { UnifiedSwarmCoordinator } = await import('@rufflo/swarm');
+      const { UnifiedSwarmCoordinator } = await import('@swarmdo/swarm');
       const coordinator = context.swarmCoordinator as InstanceType<typeof UnifiedSwarmCoordinator>;
 
       // Get agent status

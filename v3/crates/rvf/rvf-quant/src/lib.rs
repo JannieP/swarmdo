@@ -1,4 +1,4 @@
-//! Temperature-tiered vector quantization for the RufVector Format (RVF).
+//! Temperature-tiered vector quantization for the SwarmVector Format (RVF).
 //!
 //! Provides three quantization levels mapped to temperature tiers:
 //!

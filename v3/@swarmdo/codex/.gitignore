@@ -1,0 +1,12 @@
+
+# Codex local configuration
+.codex/
+
+# Swarmdo runtime data
+.swarmdo/data/
+.swarmdo/logs/
+
+# Environment variables
+.env
+.env.local
+.env.*.local

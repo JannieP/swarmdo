@@ -1,6 +1,6 @@
 //! QR Cognitive Seed types for ADR-034.
 //!
-//! Defines the RVQS (RufVector QR Seed) binary format — a compact
+//! Defines the RVQS (SwarmVector QR Seed) binary format — a compact
 //! self-bootstrapping cognitive payload that fits in a single QR code.
 //! Scan and mount a portable brain.
 

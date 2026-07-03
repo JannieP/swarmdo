@@ -1,7 +1,7 @@
 /**
  * TinyDancer Router - FastGRNN-based Neural Agent Routing
  *
- * Integrates @rufvector/tiny-dancer for production-grade AI agent orchestration.
+ * Integrates @swarmvector/tiny-dancer for production-grade AI agent orchestration.
  *
  * Features:
  * - FastGRNN Neural Routing: Efficient gated recurrent network for fast inference
@@ -26,7 +26,7 @@ export async function initTinyDancer() {
     if (initialized)
         return tinyDancerModule !== null;
     try {
-        const mod = await import('@rufvector/tiny-dancer');
+        const mod = await import('@swarmvector/tiny-dancer');
         tinyDancerModule = mod;
         initialized = true;
         if (tinyDancerModule.isAvailable?.()) {

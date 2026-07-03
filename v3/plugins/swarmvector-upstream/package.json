@@ -1,0 +1,127 @@
+{
+  "name": "@swarmdo/swarmvector-upstream",
+  "version": "3.0.0-alpha.1",
+  "description": "SwarmVector WASM package bridges for Swarmdo plugins",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./hnsw": {
+      "import": "./dist/bridges/hnsw.js",
+      "types": "./dist/bridges/hnsw.d.ts"
+    },
+    "./attention": {
+      "import": "./dist/bridges/attention.js",
+      "types": "./dist/bridges/attention.d.ts"
+    },
+    "./gnn": {
+      "import": "./dist/bridges/gnn.js",
+      "types": "./dist/bridges/gnn.d.ts"
+    },
+    "./hyperbolic": {
+      "import": "./dist/bridges/hyperbolic.js",
+      "types": "./dist/bridges/hyperbolic.d.ts"
+    },
+    "./learning": {
+      "import": "./dist/bridges/learning.js",
+      "types": "./dist/bridges/learning.d.ts"
+    },
+    "./exotic": {
+      "import": "./dist/bridges/exotic.js",
+      "types": "./dist/bridges/exotic.d.ts"
+    },
+    "./cognitive": {
+      "import": "./dist/bridges/cognitive.js",
+      "types": "./dist/bridges/cognitive.d.ts"
+    },
+    "./sona": {
+      "import": "./dist/bridges/sona.js",
+      "types": "./dist/bridges/sona.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rimraf dist",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "swarmdo",
+    "swarmvector",
+    "wasm",
+    "vector-search",
+    "neural",
+    "graph",
+    "quantum"
+  ],
+  "author": "Swarmdo Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JannieP/swarmdo.git",
+    "directory": "v3/plugins/swarmvector-upstream"
+  },
+  "dependencies": {
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.3.0",
+    "vitest": "^4.0.16"
+  },
+  "peerDependencies": {
+    "@swarmvector/sona": ">=0.1.0",
+    "@swarmvector/attention-wasm": "file:../../@swarmvector/attention-wasm",
+    "@swarmvector/learning-wasm": "file:../../@swarmvector/learning-wasm",
+    "@swarmvector/exotic-wasm": "file:../../@swarmvector/exotic-wasm"
+  },
+  "peerDependenciesMeta": {
+    "@swarmvector/micro-hnsw-wasm": {
+      "optional": true
+    },
+    "@swarmvector/attention-wasm": {
+      "optional": true
+    },
+    "@swarmvector/gnn-wasm": {
+      "optional": true
+    },
+    "@swarmvector/hyperbolic-hnsw-wasm": {
+      "optional": true
+    },
+    "@swarmvector/learning-wasm": {
+      "optional": true
+    },
+    "@swarmvector/exotic-wasm": {
+      "optional": true
+    },
+    "@swarmvector/cognitum-gate-kernel": {
+      "optional": true
+    },
+    "@swarmvector/sona": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "v3alpha"
+  },
+  "optionalDependencies": {
+    "@swarmvector/micro-hnsw-wasm": ">=0.1.0",
+    "@swarmvector/gnn-wasm": ">=0.1.0",
+    "@swarmvector/hyperbolic-hnsw-wasm": ">=0.1.0",
+    "@swarmvector/cognitum-gate-kernel": ">=0.1.0"
+  }
+}

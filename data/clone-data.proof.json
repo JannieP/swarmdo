@@ -1,5 +1,5 @@
 {
-  "schema": "rufflo-ecosystem-proof/v2",
+  "schema": "swarmdo-ecosystem-proof/v2",
   "generated_at": "2026-07-03T13:17:13.448Z",
   "sources": {
     "github_clones": "https://api.github.com/repos/{owner}/{repo}/traffic/clones (14-day rolling window)",

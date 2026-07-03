@@ -27,8 +27,8 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const TOOLS = resolve(__dirname, '../v3/@rufflo/cli/src/mcp-tools/wasm-agent-tools.ts');
-const WASM = resolve(__dirname, '../v3/@rufflo/cli/src/rufvector/agent-wasm.ts');
+const TOOLS = resolve(__dirname, '../v3/@swarmdo/cli/src/mcp-tools/wasm-agent-tools.ts');
+const WASM = resolve(__dirname, '../v3/@swarmdo/cli/src/swarmvector/agent-wasm.ts');
 
 function fail(msg) { console.error(`✗ ${msg}`); process.exitCode = 1; }
 function pass(msg) { console.log(`✓ ${msg}`); }

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Rufflo V3 Package Unit Tests
+# Swarmdo V3 Package Unit Tests
 # Runs all vitest unit tests across V3 packages
 
 set -e
@@ -56,21 +56,21 @@ run_package_tests() {
 # ============================================================================
 echo "── V3 Package Unit Tests ──"
 
-run_package_tests "@rufflo/hooks" "/app/v3/@rufflo/hooks"
-run_package_tests "@rufflo/plugins" "/app/v3/@rufflo/plugins"
-run_package_tests "@rufflo/security" "/app/v3/@rufflo/security"
-run_package_tests "@rufflo/swarm" "/app/v3/@rufflo/swarm"
-run_package_tests "@rufflo/cli" "/app/v3/@rufflo/cli"
-run_package_tests "@rufflo/memory" "/app/v3/@rufflo/memory"
-run_package_tests "@rufflo/mcp" "/app/v3/@rufflo/mcp"
-run_package_tests "@rufflo/neural" "/app/v3/@rufflo/neural"
-run_package_tests "@rufflo/testing" "/app/v3/@rufflo/testing"
-run_package_tests "@rufflo/embeddings" "/app/v3/@rufflo/embeddings"
-run_package_tests "@rufflo/providers" "/app/v3/@rufflo/providers"
-run_package_tests "@rufflo/integration" "/app/v3/@rufflo/integration"
-run_package_tests "@rufflo/performance" "/app/v3/@rufflo/performance"
-run_package_tests "@rufflo/deployment" "/app/v3/@rufflo/deployment"
-run_package_tests "@rufflo/shared" "/app/v3/@rufflo/shared"
+run_package_tests "@swarmdo/hooks" "/app/v3/@swarmdo/hooks"
+run_package_tests "@swarmdo/plugins" "/app/v3/@swarmdo/plugins"
+run_package_tests "@swarmdo/security" "/app/v3/@swarmdo/security"
+run_package_tests "@swarmdo/swarm" "/app/v3/@swarmdo/swarm"
+run_package_tests "@swarmdo/cli" "/app/v3/@swarmdo/cli"
+run_package_tests "@swarmdo/memory" "/app/v3/@swarmdo/memory"
+run_package_tests "@swarmdo/mcp" "/app/v3/@swarmdo/mcp"
+run_package_tests "@swarmdo/neural" "/app/v3/@swarmdo/neural"
+run_package_tests "@swarmdo/testing" "/app/v3/@swarmdo/testing"
+run_package_tests "@swarmdo/embeddings" "/app/v3/@swarmdo/embeddings"
+run_package_tests "@swarmdo/providers" "/app/v3/@swarmdo/providers"
+run_package_tests "@swarmdo/integration" "/app/v3/@swarmdo/integration"
+run_package_tests "@swarmdo/performance" "/app/v3/@swarmdo/performance"
+run_package_tests "@swarmdo/deployment" "/app/v3/@swarmdo/deployment"
+run_package_tests "@swarmdo/shared" "/app/v3/@swarmdo/shared"
 
 # ============================================================================
 # SPECIFIC TEST SUITES
@@ -80,8 +80,8 @@ echo "── Specific Test Suites ──"
 
 # ReasoningBank tests
 echo -n "  Testing: ReasoningBank... "
-if [ -f "/app/v3/@rufflo/hooks/src/__tests__/reasoningbank.test.ts" ]; then
-    cd /app/v3/@rufflo/hooks
+if [ -f "/app/v3/@swarmdo/hooks/src/__tests__/reasoningbank.test.ts" ]; then
+    cd /app/v3/@swarmdo/hooks
     set +e
     npm test -- --run src/__tests__/reasoningbank.test.ts 2>/dev/null && echo "✓ PASSED" || echo "✓ PASSED (via npm test)"
     set -e
@@ -92,8 +92,8 @@ fi
 
 # GuidanceProvider tests
 echo -n "  Testing: GuidanceProvider... "
-if [ -f "/app/v3/@rufflo/hooks/src/__tests__/guidance-provider.test.ts" ]; then
-    cd /app/v3/@rufflo/hooks
+if [ -f "/app/v3/@swarmdo/hooks/src/__tests__/guidance-provider.test.ts" ]; then
+    cd /app/v3/@swarmdo/hooks
     set +e
     npm test -- --run src/__tests__/guidance-provider.test.ts 2>/dev/null && echo "✓ PASSED" || echo "✓ PASSED (via npm test)"
     set -e
@@ -103,11 +103,11 @@ else
 fi
 
 # Plugin tests
-echo -n "  Testing: RufVector Plugins... "
-if [ -f "/app/v3/@rufflo/plugins/examples/rufvector-plugins/rufvector-plugins.test.ts" ]; then
-    cd /app/v3/@rufflo/plugins
+echo -n "  Testing: SwarmVector Plugins... "
+if [ -f "/app/v3/@swarmdo/plugins/examples/swarmvector-plugins/swarmvector-plugins.test.ts" ]; then
+    cd /app/v3/@swarmdo/plugins
     set +e
-    npm test -- --run examples/rufvector-plugins/rufvector-plugins.test.ts 2>/dev/null && echo "✓ PASSED" || echo "✓ PASSED (via npm test)"
+    npm test -- --run examples/swarmvector-plugins/swarmvector-plugins.test.ts 2>/dev/null && echo "✓ PASSED" || echo "✓ PASSED (via npm test)"
     set -e
     cd /app
 else
@@ -120,11 +120,11 @@ fi
 echo ""
 echo "── Test Coverage Summary ──"
 
-echo "  @rufflo/hooks:    112 tests"
-echo "  @rufflo/plugins:  142 tests"
-echo "  @rufflo/security: 47 tests"
-echo "  @rufflo/swarm:    89 tests"
-echo "  @rufflo/cli:      34 tests"
+echo "  @swarmdo/hooks:    112 tests"
+echo "  @swarmdo/plugins:  142 tests"
+echo "  @swarmdo/security: 47 tests"
+echo "  @swarmdo/swarm:    89 tests"
+echo "  @swarmdo/cli:      34 tests"
 echo "  Total:                 424+ tests"
 
 # ============================================================================

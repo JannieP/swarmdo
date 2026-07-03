@@ -1,17 +1,17 @@
 
 !/memory/agents/README.md
 !/memory/sessions/README.md
-!bin/rufflo
-!v3/@rufflo/
+!bin/swarmdo
+!v3/@swarmdo/
 # Binaries
 # Build outputs
 
-# Rufflo specific
+# Swarmdo specific
 # Dependencies
 # Development
 # Dot folders to ignore (except .claude, .claude-plugin, .git, .github, .githooks)
 # Environment
-# Exclude @rufflo module directories from ignore patterns
+# Exclude @swarmdo module directories from ignore patterns
 # IDE
 # Logs
 # MCP/Swarm
@@ -55,7 +55,7 @@
 .Python
 .agentic-flow/
 .cache/
-.rufflo/
+.swarmdo/
 .claude/settings.local.json
 .deno/
 .env
@@ -66,7 +66,7 @@
 .idea/
 .mcp.json
 # Plugin-shipped .mcp.json templates are part of the plugin contract (smoke
-# step "registers a 'rufflo' MCP server" asserts they're committed). Exempt
+# step "registers a 'swarmdo' MCP server" asserts they're committed). Exempt
 # them from the repo-level .mcp.json ignore. User-specific .mcp.json at
 # the repo root or other paths stays ignored.
 !plugins/*/.mcp.json
@@ -76,7 +76,7 @@
 .research/
 .roo/
 .roomodes
-.ruf-swarm/
+.swarmdo-swarm/
 .swarm/
 .swarm/memory.db*
 .turbo/
@@ -84,18 +84,18 @@
 /coordination/
 /memory/
 /memory/agents/*
-/memory/rufflo-data.json
+/memory/swarmdo-data.json
 /memory/sessions/*
 Thumbs.db
 __pycache__/
 analyzing
 api-project/
-bin/rufflo-*
+bin/swarmdo-*
 build/
-rufflo
-rufflo-mcp-wrapper
-rufflo.config.json
-rufflo.db
+swarmdo
+swarmdo-mcp-wrapper
+swarmdo.config.json
+swarmdo.db
 coordination/memory_bank/*
 coordination/orchestration/*
 coordination/subtasks/*
@@ -132,17 +132,17 @@ ui_*.log
 yarn-debug.log*
 yarn-error.log*
 
-# Rufflo generated files
+# Swarmdo generated files
 .claude/settings.local.json
 .mcp.json
 !plugins/*/.mcp.json
-rufflo.config.json
+swarmdo.config.json
 .swarm/
 .hive-mind/
-.rufflo/
+.swarmdo/
 /memory/
 /coordination/
-/memory/rufflo-data.json
+/memory/swarmdo-data.json
 /memory/sessions/*
 !/memory/sessions/README.md
 /memory/agents/*
@@ -156,16 +156,16 @@ rufflo.config.json
 *.sqlite
 *.sqlite-journal
 *.sqlite-wal
-rufflo
+swarmdo
 # Removed Windows wrapper files per user request
 hive-mind-prompt-*.txt
 
 # Codex local configuration
 .codex/
 
-# Rufflo runtime data
-.rufflo/data/
-.rufflo/logs/
+# Swarmdo runtime data
+.swarmdo/data/
+.swarmdo/logs/
 
 # Environment variables — block ALL .env variants except .example templates
 .env

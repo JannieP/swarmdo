@@ -26,18 +26,18 @@ export class MincutService {
         try {
             // Try NAPI first
             // @ts-expect-error - Optional dependency may not be installed
-            const napi = await import('@rufvector/mincut');
+            const napi = await import('@swarmvector/mincut');
             this.napiModule = napi;
-            console.log('✅ Loaded @rufvector/mincut NAPI module');
+            console.log('✅ Loaded @swarmvector/mincut NAPI module');
         }
         catch (err) {
             // Fall back to WASM
             try {
                 // @ts-expect-error - Optional dependency may not be installed
-                const wasm = await import('ruvector-mincut-wasm');
+                const wasm = await import('swarmvector-mincut-wasm');
                 await wasm.default();
                 this.wasmModule = wasm;
-                console.log('✅ Loaded ruvector-mincut-wasm module');
+                console.log('✅ Loaded swarmvector-mincut-wasm module');
             }
             catch (wasmErr) {
                 console.warn('⚠️  No mincut bindings available, using fallback');

@@ -1,0 +1,148 @@
+# ============================================================
+# Swarmdo RVFA Appliance Builder
+# ADR-058: Self-Contained Swarmdo RVF Appliance
+#
+# Builds the rootfs layers for an RVFA appliance.
+# Usage:
+#   docker build -f Dockerfile.appliance -t swarmdo-appliance:build .
+#   docker run --rm swarmdo-appliance:build swarmdo --version
+#   docker run --rm swarmdo-appliance:build swarmdo doctor
+#   docker run --rm -i swarmdo-appliance:build swarmdo mcp start
+# ============================================================
+
+# ------------------------------------------------------------------
+# Stage 1: Build — install Swarmdo with dependencies
+# ------------------------------------------------------------------
+FROM node:22-alpine AS build
+
+# Install dumb-init for proper PID 1 signal handling
+# and git for any npm packages that need it during install
+RUN apk add --no-cache dumb-init git
+
+WORKDIR /build
+
+# Install Swarmdo globally.
+# --omit=optional: skip heavy native deps (onnxruntime, better-sqlite3, etc.)
+# --ignore-scripts: skip postinstall scripts that may compile native addons
+# These keep the image under the 100MB target.
+RUN npm install -g swarmdo@latest \
+      --omit=optional \
+      --ignore-scripts \
+      --no-audit \
+      --no-fund \
+    && npm cache clean --force
+
+# Strip files that are never needed at runtime.
+# This typically saves 5-15MB depending on dependency tree.
+RUN GLOBAL_NM="$(npm config get prefix)/lib/node_modules" \
+    && find "$GLOBAL_NM" -type f \( \
+         -name "*.md" -o \
+         -name "*.map" -o \
+         -name "*.d.ts" -o \
+         -name "*.ts" ! -name "*.d.ts" -o \
+         -name "CHANGELOG*" -o \
+         -name "LICENSE*" -o \
+         -name ".npmignore" -o \
+         -name ".eslintrc*" -o \
+         -name ".prettierrc*" -o \
+         -name "tsconfig.json" -o \
+         -name "jest.config*" -o \
+         -name "vitest.config*" \
+       \) -delete 2>/dev/null || true \
+    && find "$GLOBAL_NM" -type d \( \
+         -name ".github" -o \
+         -name "test" -o \
+         -name "tests" -o \
+         -name "__tests__" -o \
+         -name "docs" -o \
+         -name "examples" -o \
+         -name "benchmark" \
+       \) -exec rm -rf {} + 2>/dev/null || true
+
+# Prune known-heavy optional transitive dependencies.
+# The CLI has graceful fallbacks for all of these.
+RUN GLOBAL_NM="$(npm config get prefix)/lib/node_modules" \
+    && rm -rf \
+       "$GLOBAL_NM/swarmdo/node_modules/agentic-flow" \
+       "$GLOBAL_NM/swarmdo/node_modules/@opentelemetry" \
+       "$GLOBAL_NM/swarmdo/node_modules/onnxruntime-node" \
+       "$GLOBAL_NM/swarmdo/node_modules/onnxruntime-web" \
+       "$GLOBAL_NM/swarmdo/node_modules/onnx-proto" \
+       "$GLOBAL_NM/swarmdo/node_modules/@anthropic-ai" \
+       "$GLOBAL_NM/swarmdo/node_modules/@xenova" \
+       "$GLOBAL_NM/swarmdo/node_modules/agentdb" \
+       "$GLOBAL_NM/swarmdo/node_modules/@swarmvector" \
+       "$GLOBAL_NM/swarmdo/node_modules/swarmvector" \
+       "$GLOBAL_NM/swarmdo/node_modules/tiktoken" \
+       "$GLOBAL_NM/swarmdo/node_modules/@img" \
+       "$GLOBAL_NM/swarmdo/node_modules/better-sqlite3" \
+       "$GLOBAL_NM/swarmdo/node_modules/sharp" \
+       "$GLOBAL_NM/swarmdo/node_modules/@google" \
+       "$GLOBAL_NM/swarmdo/node_modules/@swarmdo/embeddings" \
+       "$GLOBAL_NM/swarmdo/node_modules/@swarmdo/codex" \
+       "$GLOBAL_NM/swarmdo/node_modules/@swarmdo/guidance" \
+       "$GLOBAL_NM/swarmdo/node_modules/@swarmdo/neural" \
+       "$GLOBAL_NM/swarmdo/node_modules/@grpc" \
+       "$GLOBAL_NM/swarmdo/node_modules/gun" \
+    2>/dev/null || true
+
+# Stage the pruned install into /staged for a clean COPY
+RUN GLOBAL_PREFIX="$(npm config get prefix)" \
+    && mkdir -p /staged/lib /staged/bin \
+    && cp -a "$GLOBAL_PREFIX/lib/node_modules" /staged/lib/ \
+    && cp -a "$GLOBAL_PREFIX/bin/swarmdo" /staged/bin/ 2>/dev/null || true \
+    && cp -a "$GLOBAL_PREFIX/bin/swarmdo" /staged/bin/ 2>/dev/null || true
+
+# ------------------------------------------------------------------
+# Stage 2: Production — minimal Alpine runtime
+# ------------------------------------------------------------------
+FROM node:22-alpine AS production
+
+# Runtime dependencies only:
+#   dumb-init  — proper signal forwarding for PID 1
+#   ca-certs   — TLS for cloud API calls
+#   bash       — shell scripts in hooks
+RUN apk add --no-cache \
+      dumb-init \
+      ca-certificates \
+      bash
+
+# Create non-root user for the appliance
+RUN addgroup -g 1001 -S swarmdo \
+    && adduser -S -D -H -u 1001 -h /home/swarmdo -s /bin/bash -G swarmdo swarmdo \
+    && mkdir -p /home/swarmdo/.swarmdo /home/swarmdo/data \
+    && chown -R swarmdo:swarmdo /home/swarmdo
+
+# Copy only the global node_modules and bin links from the build stage
+COPY --from=build /staged/lib/node_modules /usr/local/lib/node_modules
+COPY --from=build /staged/bin/ /usr/local/bin/
+COPY --from=build /usr/bin/dumb-init /usr/bin/dumb-init
+
+# Ensure bin symlinks resolve correctly
+RUN ln -sf /usr/local/lib/node_modules/swarmdo/bin/swarmdo.js /usr/local/bin/swarmdo 2>/dev/null || true \
+    && chmod +x /usr/local/bin/swarmdo 2>/dev/null || true
+
+# Production environment
+ENV NODE_ENV=production \
+    SWARMDO_HOME=/home/swarmdo/.swarmdo \
+    SWARMDO_MEMORY_PATH=/home/swarmdo/data/memory \
+    SWARMDO_LOG_LEVEL=info
+
+# Switch to non-root user
+USER swarmdo
+WORKDIR /home/swarmdo
+
+# Volumes for persistent data across container restarts
+VOLUME ["/home/swarmdo/data"]
+
+# Health check via the doctor command
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+    CMD swarmdo doctor -c version || exit 1
+
+# Use dumb-init as PID 1 for proper signal handling
+ENTRYPOINT ["dumb-init", "--"]
+
+# Default: print help. Override with:
+#   docker run --rm swarmdo-appliance:build swarmdo mcp start
+#   docker run --rm swarmdo-appliance:build swarmdo doctor
+CMD ["swarmdo", "--help"]

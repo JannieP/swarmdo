@@ -91,7 +91,7 @@ class MockPrimeRadiantPlugin {
       author: 'rUv',
       license: 'MIT',
       wasmSize: '92KB',
-      dependencies: ['@rufflo/memory', '@rufflo/security', '@rufflo/coordination'],
+      dependencies: ['@swarmdo/memory', '@swarmdo/security', '@swarmdo/coordination'],
       tags: [
         'sheaf-cohomology',
         'causal-inference',
@@ -432,9 +432,9 @@ describe('PrimeRadiantPlugin', () => {
     });
 
     it('should have required dependencies', () => {
-      expect(plugin.metadata.dependencies).toContain('@rufflo/memory');
-      expect(plugin.metadata.dependencies).toContain('@rufflo/security');
-      expect(plugin.metadata.dependencies).toContain('@rufflo/coordination');
+      expect(plugin.metadata.dependencies).toContain('@swarmdo/memory');
+      expect(plugin.metadata.dependencies).toContain('@swarmdo/security');
+      expect(plugin.metadata.dependencies).toContain('@swarmdo/coordination');
     });
 
     it('should have expected tags', () => {

@@ -1,7 +1,7 @@
 /**
  * AgentDB v2 Security Validation
  *
- * Comprehensive input validation for RuVector integration:
+ * Comprehensive input validation for SwarmVector integration:
  * - Vector dimension and value validation (NaN/Infinity prevention)
  * - ID sanitization (path traversal prevention)
  * - Search options validation (bounds checking)

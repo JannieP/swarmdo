@@ -1,5 +1,5 @@
 #!/bin/bash
-# Rufflo CLI Commands Test Suite
+# Swarmdo CLI Commands Test Suite
 # Tests all CLI commands and options
 
 set -e
@@ -45,9 +45,9 @@ run_test() {
 # ============================================================================
 echo "── Basic CLI Commands ──"
 
-run_test "Version check" "npx rufflo --version || npx rufflo -v || echo '3.0.0'"
-run_test "Help command" "npx rufflo --help || npx rufflo -h || echo 'Usage: rufflo'"
-run_test "List agents" "npx rufflo --list || npx rufflo agents list || echo 'Available agents'"
+run_test "Version check" "npx swarmdo --version || npx swarmdo -v || echo '3.0.0'"
+run_test "Help command" "npx swarmdo --help || npx swarmdo -h || echo 'Usage: swarmdo'"
+run_test "List agents" "npx swarmdo --list || npx swarmdo agents list || echo 'Available agents'"
 
 # ============================================================================
 # 2. INIT COMMANDS
@@ -55,8 +55,8 @@ run_test "List agents" "npx rufflo --list || npx rufflo agents list || echo 'Ava
 echo ""
 echo "── Init Commands ──"
 
-run_test "Init project" "npx rufflo init --force 2>/dev/null || echo 'initialized'"
-run_test "Init with topology" "npx rufflo init --topology hierarchical 2>/dev/null || echo 'initialized'"
+run_test "Init project" "npx swarmdo init --force 2>/dev/null || echo 'initialized'"
+run_test "Init with topology" "npx swarmdo init --topology hierarchical 2>/dev/null || echo 'initialized'"
 
 # ============================================================================
 # 3. AGENT COMMANDS
@@ -64,10 +64,10 @@ run_test "Init with topology" "npx rufflo init --topology hierarchical 2>/dev/nu
 echo ""
 echo "── Agent Commands ──"
 
-run_test "Agent list" "npx rufflo agent list 2>/dev/null || npx rufflo --list || echo 'agents listed'"
-run_test "Agent info coder" "npx rufflo agent info coder 2>/dev/null || echo 'coder agent info'"
-run_test "Agent info tester" "npx rufflo agent info tester 2>/dev/null || echo 'tester agent info'"
-run_test "Agent info reviewer" "npx rufflo agent info reviewer 2>/dev/null || echo 'reviewer agent info'"
+run_test "Agent list" "npx swarmdo agent list 2>/dev/null || npx swarmdo --list || echo 'agents listed'"
+run_test "Agent info coder" "npx swarmdo agent info coder 2>/dev/null || echo 'coder agent info'"
+run_test "Agent info tester" "npx swarmdo agent info tester 2>/dev/null || echo 'tester agent info'"
+run_test "Agent info reviewer" "npx swarmdo agent info reviewer 2>/dev/null || echo 'reviewer agent info'"
 
 # ============================================================================
 # 4. SWARM COMMANDS
@@ -75,9 +75,9 @@ run_test "Agent info reviewer" "npx rufflo agent info reviewer 2>/dev/null || ec
 echo ""
 echo "── Swarm Commands ──"
 
-run_test "Swarm init hierarchical" "npx rufflo swarm init --topology hierarchical 2>/dev/null || echo 'swarm init'"
-run_test "Swarm init mesh" "npx rufflo swarm init --topology mesh 2>/dev/null || echo 'swarm init'"
-run_test "Swarm status" "npx rufflo swarm status 2>/dev/null || echo 'swarm status'"
+run_test "Swarm init hierarchical" "npx swarmdo swarm init --topology hierarchical 2>/dev/null || echo 'swarm init'"
+run_test "Swarm init mesh" "npx swarmdo swarm init --topology mesh 2>/dev/null || echo 'swarm init'"
+run_test "Swarm status" "npx swarmdo swarm status 2>/dev/null || echo 'swarm status'"
 
 # ============================================================================
 # 5. HOOKS COMMANDS
@@ -85,11 +85,11 @@ run_test "Swarm status" "npx rufflo swarm status 2>/dev/null || echo 'swarm stat
 echo ""
 echo "── Hooks Commands ──"
 
-run_test "Hooks list" "npx rufflo hooks list 2>/dev/null || echo 'hooks listed'"
-run_test "Hooks metrics" "npx rufflo hooks metrics 2>/dev/null || echo 'hooks metrics'"
-run_test "Hooks route test" "npx rufflo hooks route 'test task' 2>/dev/null || echo 'task routed'"
-run_test "Hooks pre-edit" "npx rufflo hooks pre-edit /tmp/test.ts 2>/dev/null || echo 'pre-edit'"
-run_test "Hooks pretrain" "npx rufflo hooks pretrain --dry-run 2>/dev/null || echo 'pretrain'"
+run_test "Hooks list" "npx swarmdo hooks list 2>/dev/null || echo 'hooks listed'"
+run_test "Hooks metrics" "npx swarmdo hooks metrics 2>/dev/null || echo 'hooks metrics'"
+run_test "Hooks route test" "npx swarmdo hooks route 'test task' 2>/dev/null || echo 'task routed'"
+run_test "Hooks pre-edit" "npx swarmdo hooks pre-edit /tmp/test.ts 2>/dev/null || echo 'pre-edit'"
+run_test "Hooks pretrain" "npx swarmdo hooks pretrain --dry-run 2>/dev/null || echo 'pretrain'"
 
 # ============================================================================
 # 6. MCP COMMANDS
@@ -97,8 +97,8 @@ run_test "Hooks pretrain" "npx rufflo hooks pretrain --dry-run 2>/dev/null || ec
 echo ""
 echo "── MCP Commands ──"
 
-run_test "MCP status" "npx rufflo mcp status 2>/dev/null || echo 'mcp status'"
-run_test "MCP tools list" "npx rufflo mcp tools 2>/dev/null || echo 'mcp tools'"
+run_test "MCP status" "npx swarmdo mcp status 2>/dev/null || echo 'mcp status'"
+run_test "MCP tools list" "npx swarmdo mcp tools 2>/dev/null || echo 'mcp tools'"
 
 # ============================================================================
 # 7. MEMORY COMMANDS
@@ -106,8 +106,8 @@ run_test "MCP tools list" "npx rufflo mcp tools 2>/dev/null || echo 'mcp tools'"
 echo ""
 echo "── Memory Commands ──"
 
-run_test "Memory status" "npx rufflo memory status 2>/dev/null || echo 'memory status'"
-run_test "Memory stats" "npx rufflo memory stats 2>/dev/null || echo 'memory stats'"
+run_test "Memory status" "npx swarmdo memory status 2>/dev/null || echo 'memory status'"
+run_test "Memory stats" "npx swarmdo memory stats 2>/dev/null || echo 'memory stats'"
 
 # ============================================================================
 # 8. CONFIG COMMANDS
@@ -115,8 +115,8 @@ run_test "Memory stats" "npx rufflo memory stats 2>/dev/null || echo 'memory sta
 echo ""
 echo "── Config Commands ──"
 
-run_test "Config show" "npx rufflo config show 2>/dev/null || echo 'config show'"
-run_test "Config get mode" "npx rufflo config get mode 2>/dev/null || echo 'mode=test'"
+run_test "Config show" "npx swarmdo config show 2>/dev/null || echo 'config show'"
+run_test "Config get mode" "npx swarmdo config get mode 2>/dev/null || echo 'mode=test'"
 
 # ============================================================================
 # SUMMARY

@@ -495,7 +495,7 @@ async function handleSystemHealth(input, context) {
  */
 async function handleSystemInfo(input, context) {
     const result = {
-        name: 'rufflo',
+        name: 'swarmdo',
         version: '3.0.0',
         nodeVersion: process.version,
         platform: process.platform,

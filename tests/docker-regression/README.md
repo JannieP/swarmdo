@@ -1,6 +1,6 @@
-# Rufflo Deep Regression Test Suite
+# Swarmdo Deep Regression Test Suite
 
-Comprehensive Docker-based test suite for verifying all Rufflo capabilities.
+Comprehensive Docker-based test suite for verifying all Swarmdo capabilities.
 
 ## Quick Start
 
@@ -24,7 +24,7 @@ docker-compose up --build security-tests
 | Agents (54+) | 60+ | All agent types and spawn |
 | Swarm | 45+ | Topologies and coordination |
 | Hooks | 50+ | Self-learning and routing |
-| Plugins | 70+ | RufVector WASM plugins |
+| Plugins | 70+ | SwarmVector WASM plugins |
 | Security | 55+ | Security features and CVE |
 | Memory | 50+ | AgentDB and HNSW |
 | Workers | 60+ | Background workers |
@@ -109,10 +109,10 @@ bash scripts/run-all-tests.sh
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `TEST_REPORT_PATH` | `/app/reports` | Report output directory |
-| `RUFFLO_MODE` | `test` | Operating mode |
-| `RUFFLO_MEMORY_PATH` | `/app/data` | Memory storage path |
-| `RUFFLO_LOG_LEVEL` | `debug` | Log verbosity |
-| `RUFFLO_MAX_AGENTS` | `15` | Max concurrent agents |
+| `SWARMDO_MODE` | `test` | Operating mode |
+| `SWARMDO_MEMORY_PATH` | `/app/data` | Memory storage path |
+| `SWARMDO_LOG_LEVEL` | `debug` | Log verbosity |
+| `SWARMDO_MAX_AGENTS` | `15` | Max concurrent agents |
 | `MCP_SERVER_HOST` | `mcp-server` | MCP server hostname |
 | `MCP_SERVER_PORT` | `3000` | MCP server port |
 
@@ -165,11 +165,11 @@ regression-tests:
 
 | Package | Tests | Pass Rate |
 |---------|-------|-----------|
-| @rufflo/hooks | 112 | 100% |
-| @rufflo/plugins | 142 | 100% |
-| @rufflo/security | 47 | 100% |
-| @rufflo/swarm | 89 | 100% |
-| @rufflo/cli | 34 | 100% |
+| @swarmdo/hooks | 112 | 100% |
+| @swarmdo/plugins | 142 | 100% |
+| @swarmdo/security | 47 | 100% |
+| @swarmdo/swarm | 89 | 100% |
+| @swarmdo/cli | 34 | 100% |
 
 ### Feature Coverage
 
@@ -230,4 +230,4 @@ docker-compose up unit-tests
 
 ## License
 
-MIT - Part of Rufflo
+MIT - Part of Swarmdo

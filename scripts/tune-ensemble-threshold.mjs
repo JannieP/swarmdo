@@ -1,6 +1,6 @@
 // Ensemble-uncertainty threshold tuning from recorded trajectories (iter 47).
 //
-// Iter 44 added RUFFLO_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD — when
+// Iter 44 added SWARMDO_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD — when
 // the unified KRR and bucket specialist disagree on the picked model's
 // quality by > threshold, the selector returns null so the caller falls
 // back to bandit. Iter 45 surfaced the disagreement value per decision.
@@ -32,7 +32,7 @@ import { resolve } from 'node:path';
 
 const ARGS = (() => {
   const a = {
-    in: process.env.RUFFLO_ROUTER_TRAJECTORY_PATH
+    in: process.env.SWARMDO_ROUTER_TRAJECTORY_PATH
       ?? resolve('.swarm', 'model-router-trajectories.jsonl'),
     thresholds: '0.025,0.05,0.10,0.15,0.20,0.25,0.30,0.40,0.50',
     since: null,
@@ -95,7 +95,7 @@ function printTable(p) {
   console.log(`    Balanced     (~10% fallback):  threshold=${p.recommend.balanced.threshold.toFixed(3)}  (~${p.recommend.balanced.fallbackRatePct}% of decisions)`);
   console.log(`    Aggressive   (~20% fallback):  threshold=${p.recommend.aggressive.threshold.toFixed(3)}  (~${p.recommend.aggressive.fallbackRatePct}% of decisions)`);
   console.log('');
-  console.log('  Set via:  export RUFFLO_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD=<value>');
+  console.log('  Set via:  export SWARMDO_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD=<value>');
   console.log('');
 }
 

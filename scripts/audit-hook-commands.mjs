@@ -6,13 +6,13 @@
  * that does a bare `npx <pkg>@alpha …` re-resolves the dist-tag and re-installs
  * from cold cache on every fire; when that install crashes (e.g. an arborist
  * `Invalid Version` on npm 10.8.x) the user sees a hook error in Claude Code
- * after every turn. The fix: invoke `scripts/rufflo-hook.sh` (prefers a locally-
- * installed `rufflo`/`rufflo` binary, falls back to `npx --prefer-offline`,
+ * after every turn. The fix: invoke `scripts/swarmdo-hook.sh` (prefers a locally-
+ * installed `swarmdo`/`swarmdo` binary, falls back to `npx --prefer-offline`,
  * always exits 0). This guard fails CI if any hook `command` regresses.
  *
  * Rules, per hook `command` string:
  *   1. If it invokes `npx`, it MUST also pass `--prefer-offline`.
- *   2. If it invokes `npx` or `scripts/rufflo-hook.sh`, it MUST be non-fatal:
+ *   2. If it invokes `npx` or `scripts/swarmdo-hook.sh`, it MUST be non-fatal:
  *      end with `|| true` / `|| exit 0`, or the hook entry must set
  *      `continueOnError: true`.
  *
@@ -61,7 +61,7 @@ function collectCommands(hooksJson) {
 
 const NPX_RE = /(^|[\s;&|(])npx\b/;
 const PREFER_OFFLINE_RE = /--prefer-offline\b/;
-const SHIM_RE = /rufflo-hook\.sh/;
+const SHIM_RE = /swarmdo-hook\.sh/;
 const NONFATAL_RE = /\|\|\s*(true|exit\s+0)\b/;
 
 const files = findHooksFiles(REPO_ROOT);
@@ -81,7 +81,7 @@ for (const file of files) {
     if (usesNpx && !PREFER_OFFLINE_RE.test(command)) {
       violations.push({
         file: rel, where,
-        reason: 'invokes `npx` without `--prefer-offline` — re-resolves the dist-tag and re-installs from cold cache on every hook fire (#1921). Use scripts/rufflo-hook.sh, or add `--prefer-offline`.',
+        reason: 'invokes `npx` without `--prefer-offline` — re-resolves the dist-tag and re-installs from cold cache on every hook fire (#1921). Use scripts/swarmdo-hook.sh, or add `--prefer-offline`.',
         command,
       });
       continue;

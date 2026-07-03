@@ -12,11 +12,11 @@ tags:
   - deployment
   - security
 authors:
-  - rufflo
+  - swarmdo
 requires:
   - gh (GitHub CLI)
   - git
-  - rufflo@alpha
+  - swarmdo@alpha
   - node (v16+)
 priority: high
 progressive_disclosure: true
@@ -36,7 +36,7 @@ This skill provides comprehensive GitHub Actions automation with AI swarm coordi
 ### Initialize GitHub Workflow Automation
 ```bash
 # Start with a simple workflow
-npx ruf-swarm actions generate-workflow \
+npx swarmdo-swarm actions generate-workflow \
   --analyze-codebase \
   --detect-languages \
   --create-optimal-pipeline
@@ -45,13 +45,13 @@ npx ruf-swarm actions generate-workflow \
 ### Common Commands
 ```bash
 # Optimize existing workflow
-npx ruf-swarm actions optimize \
+npx swarmdo-swarm actions optimize \
   --workflow ".github$workflows$ci.yml" \
   --suggest-parallelization
 
 # Analyze failed runs
 gh run view <run-id> --json jobs,conclusion | \
-  npx ruf-swarm actions analyze-failure \
+  npx swarmdo-swarm actions analyze-failure \
     --suggest-fixes
 ```
 
@@ -73,7 +73,7 @@ gh run view <run-id> --json jobs,conclusion | \
 
 ```bash
 # Usage example
-npx rufflo@alpha github gh-coordinator \
+npx swarmdo@alpha github gh-coordinator \
   "Coordinate multi-repo release across 5 repositories"
 ```
 
@@ -87,7 +87,7 @@ npx rufflo@alpha github gh-coordinator \
 # Create PR with automated review
 gh pr create --title "Feature: New capability" \
   --body "Automated PR with swarm review" | \
-  npx ruf-swarm actions pr-validate \
+  npx swarmdo-swarm actions pr-validate \
     --spawn-agents "linter,tester,security,docs"
 ```
 
@@ -99,7 +99,7 @@ gh pr create --title "Feature: New capability" \
 
 ```bash
 # Create coordinated issue workflow
-npx rufflo@alpha github issue-tracker \
+npx swarmdo@alpha github issue-tracker \
   "Manage sprint issues with automated tracking"
 ```
 
@@ -111,7 +111,7 @@ npx rufflo@alpha github issue-tracker \
 
 ```bash
 # Automated release management
-npx rufflo@alpha github release-manager \
+npx swarmdo@alpha github release-manager \
   "Create v2.0.0 release with changelog and deployment"
 ```
 
@@ -123,7 +123,7 @@ npx rufflo@alpha github release-manager \
 
 ```bash
 # Optimize repository structure
-npx rufflo@alpha github repo-architect \
+npx swarmdo@alpha github repo-architect \
   "Restructure monorepo with optimal organization"
 ```
 
@@ -136,7 +136,7 @@ npx rufflo@alpha github repo-architect \
 ```bash
 # Automated code review
 gh pr view 123 --json files | \
-  npx ruf-swarm actions pr-validate \
+  npx swarmdo-swarm actions pr-validate \
     --deep-review \
     --security-scan
 ```
@@ -149,7 +149,7 @@ gh pr view 123 --json files | \
 
 ```bash
 # Orchestrate CI/CD pipeline
-npx rufflo@alpha github ci-orchestrator \
+npx swarmdo@alpha github ci-orchestrator \
   "Setup parallel test execution with smart caching"
 ```
 
@@ -161,7 +161,7 @@ npx rufflo@alpha github ci-orchestrator \
 
 ```bash
 # Security audit
-npx ruf-swarm actions security \
+npx swarmdo-swarm actions security \
   --deep-scan \
   --compliance-check \
   --create-issues
@@ -194,7 +194,7 @@ jobs:
 
       - name: Analyze Changes
         run: |
-          npx ruf-swarm actions analyze \
+          npx swarmdo-swarm actions analyze \
             --commit ${{ github.sha }} \
             --suggest-tests \
             --optimize-pipeline
@@ -215,12 +215,12 @@ jobs:
       - name: Detect Languages
         id: detect
         run: |
-          npx ruf-swarm actions detect-stack \
+          npx swarmdo-swarm actions detect-stack \
             --output json > stack.json
 
       - name: Dynamic Build Matrix
         run: |
-          npx ruf-swarm actions create-matrix \
+          npx swarmdo-swarm actions create-matrix \
             --from stack.json \
             --parallel-builds
 ```
@@ -240,7 +240,7 @@ jobs:
     steps:
       - name: Security Analysis Swarm
         run: |
-          SECURITY_ISSUES=$(npx ruf-swarm actions security \
+          SECURITY_ISSUES=$(npx swarmdo-swarm actions security \
             --deep-scan \
             --format json)
 
@@ -268,7 +268,7 @@ jobs:
     steps:
       - name: Diagnose and Fix
         run: |
-          npx ruf-swarm actions self-heal \
+          npx swarmdo-swarm actions self-heal \
             --run-id ${{ github.event.workflow_run.id }} \
             --auto-fix-common \
             --create-pr-complex
@@ -289,13 +289,13 @@ jobs:
       - name: Analyze Risk
         id: risk
         run: |
-          npx ruf-swarm actions deploy-risk \
+          npx swarmdo-swarm actions deploy-risk \
             --changes ${{ github.sha }} \
             --history 30d
 
       - name: Choose Strategy
         run: |
-          npx ruf-swarm actions deploy-strategy \
+          npx swarmdo-swarm actions deploy-strategy \
             --risk ${{ steps.risk.outputs.level }} \
             --auto-execute
 ```
@@ -312,7 +312,7 @@ jobs:
     steps:
       - name: Performance Analysis
         run: |
-          npx ruf-swarm actions perf-test \
+          npx swarmdo-swarm actions perf-test \
             --baseline main \
             --threshold 10% \
             --auto-profile-regression
@@ -332,7 +332,7 @@ jobs:
         run: |
           PR_DATA=$(gh pr view ${{ github.event.pull_request.number }} --json files,labels)
 
-          RESULTS=$(npx ruf-swarm actions pr-validate \
+          RESULTS=$(npx swarmdo-swarm actions pr-validate \
             --spawn-agents "linter,tester,security,docs" \
             --parallel \
             --pr-data "$PR_DATA")
@@ -355,7 +355,7 @@ jobs:
     steps:
       - name: Release Swarm
         run: |
-          npx ruf-swarm actions release \
+          npx swarmdo-swarm actions release \
             --analyze-changes \
             --generate-notes \
             --create-artifacts \
@@ -372,7 +372,7 @@ jobs:
 #### Workflow Analytics
 ```bash
 # Analyze workflow performance
-npx ruf-swarm actions analytics \
+npx swarmdo-swarm actions analytics \
   --workflow "ci.yml" \
   --period 30d \
   --identify-bottlenecks \
@@ -382,7 +382,7 @@ npx ruf-swarm actions analytics \
 #### Cost Optimization
 ```bash
 # Optimize GitHub Actions costs
-npx ruf-swarm actions cost-optimize \
+npx swarmdo-swarm actions cost-optimize \
   --analyze-usage \
   --suggest-caching \
   --recommend-self-hosted
@@ -391,7 +391,7 @@ npx ruf-swarm actions cost-optimize \
 #### Failure Pattern Analysis
 ```bash
 # Identify failure patterns
-npx ruf-swarm actions failure-patterns \
+npx swarmdo-swarm actions failure-patterns \
   --period 90d \
   --classify-failures \
   --suggest-preventions
@@ -400,7 +400,7 @@ npx ruf-swarm actions failure-patterns \
 #### Resource Management
 ```bash
 # Optimize resource usage
-npx ruf-swarm actions resources \
+npx swarmdo-swarm actions resources \
   --analyze-usage \
   --suggest-runners \
   --cost-optimize
@@ -420,7 +420,7 @@ npx ruf-swarm actions resources \
 # Automatically select relevant tests
 - name: Swarm Test Selection
   run: |
-    npx ruf-swarm actions smart-test \
+    npx swarmdo-swarm actions smart-test \
       --changed-files ${{ steps.files.outputs.all }} \
       --impact-analysis \
       --parallel-safe
@@ -436,7 +436,7 @@ jobs:
     steps:
       - id: set-matrix
         run: |
-          MATRIX=$(npx ruf-swarm actions test-matrix \
+          MATRIX=$(npx swarmdo-swarm actions test-matrix \
             --detect-frameworks \
             --optimize-coverage)
           echo "matrix=${MATRIX}" >> $GITHUB_OUTPUT
@@ -450,7 +450,7 @@ jobs:
 #### Intelligent Parallelization
 ```bash
 # Determine optimal parallelization
-npx ruf-swarm actions parallel-strategy \
+npx swarmdo-swarm actions parallel-strategy \
   --analyze-dependencies \
   --time-estimates \
   --cost-aware
@@ -466,7 +466,7 @@ npx ruf-swarm actions parallel-strategy \
 #### Predictive Failures
 ```bash
 # Predict potential failures
-npx ruf-swarm actions predict \
+npx swarmdo-swarm actions predict \
   --analyze-history \
   --identify-risks \
   --suggest-preventive
@@ -475,7 +475,7 @@ npx ruf-swarm actions predict \
 #### Workflow Recommendations
 ```bash
 # Get workflow recommendations
-npx ruf-swarm actions recommend \
+npx swarmdo-swarm actions recommend \
   --analyze-repo \
   --suggest-workflows \
   --industry-best-practices
@@ -484,7 +484,7 @@ npx ruf-swarm actions recommend \
 #### Automated Optimization
 ```bash
 # Continuously optimize workflows
-npx ruf-swarm actions auto-optimize \
+npx swarmdo-swarm actions auto-optimize \
   --monitor-performance \
   --apply-improvements \
   --track-savings
@@ -511,7 +511,7 @@ runs:
   main: 'dist$index.js'
 
 // index.js
-const { SwarmAction } = require('ruf-swarm');
+const { SwarmAction } = require('swarmdo-swarm');
 
 async function run() {
   const swarm = new SwarmAction({
@@ -527,7 +527,7 @@ run().catch(error => core.setFailed(error.message));
 
 <$details>
 
-## Integration with Rufflo
+## Integration with Swarmdo
 
 ### 🔄 Swarm Coordination Patterns
 
@@ -537,19 +537,19 @@ run().catch(error => core.setFailed(error.message));
 #### Initialize GitHub Swarm
 ```javascript
 // Step 1: Initialize swarm coordination
-mcp__rufflo__swarm_init {
+mcp__swarmdo__swarm_init {
   topology: "hierarchical",
   maxAgents: 8
 }
 
 // Step 2: Spawn specialized agents
-mcp__rufflo__agent_spawn { type: "coordinator", name: "GitHub Coordinator" }
-mcp__rufflo__agent_spawn { type: "reviewer", name: "Code Reviewer" }
-mcp__rufflo__agent_spawn { type: "tester", name: "QA Agent" }
-mcp__rufflo__agent_spawn { type: "analyst", name: "Security Analyst" }
+mcp__swarmdo__agent_spawn { type: "coordinator", name: "GitHub Coordinator" }
+mcp__swarmdo__agent_spawn { type: "reviewer", name: "Code Reviewer" }
+mcp__swarmdo__agent_spawn { type: "tester", name: "QA Agent" }
+mcp__swarmdo__agent_spawn { type: "analyst", name: "Security Analyst" }
 
 // Step 3: Orchestrate GitHub workflow
-mcp__rufflo__task_orchestrate {
+mcp__swarmdo__task_orchestrate {
   task: "Complete PR review and merge workflow",
   strategy: "parallel",
   priority: "high"
@@ -559,17 +559,17 @@ mcp__rufflo__task_orchestrate {
 #### GitHub Hooks Integration
 ```bash
 # Pre-task: Setup GitHub context
-npx rufflo@alpha hooks pre-task \
+npx swarmdo@alpha hooks pre-task \
   --description "PR review workflow" \
   --context "pr-123"
 
 # During task: Track progress
-npx rufflo@alpha hooks notify \
+npx swarmdo@alpha hooks notify \
   --message "Completed security scan" \
   --type "github-action"
 
 # Post-task: Export results
-npx rufflo@alpha hooks post-task \
+npx swarmdo@alpha hooks post-task \
   --task-id "pr-review-123" \
   --export-github-summary
 ```
@@ -623,7 +623,7 @@ jobs:
     steps:
       - name: Initialize Swarm
         run: |
-          npx ruf-swarm init --topology ${{ inputs.topology }}
+          npx swarmdo-swarm init --topology ${{ inputs.topology }}
 ```
 
 #### 2. Implement Proper Caching
@@ -674,7 +674,7 @@ jobs:
     SWARM_CONFIG: ${{ secrets.SWARM_CONFIG }}
     API_KEY: ${{ secrets.API_KEY }}
   run: |
-    npx ruf-swarm init --config "$SWARM_CONFIG"
+    npx swarmdo-swarm init --config "$SWARM_CONFIG"
 ```
 
 #### 2. Use OIDC Authentication
@@ -702,7 +702,7 @@ permissions:
 ```yaml
 - name: Audit Swarm Actions
   run: |
-    npx ruf-swarm actions audit \
+    npx swarmdo-swarm actions audit \
       --export-logs \
       --compliance-report
 ```
@@ -737,7 +737,7 @@ jobs:
 ```yaml
 - name: Quick Fail Check
   run: |
-    if ! npx ruf-swarm actions pre-check; then
+    if ! npx swarmdo-swarm actions pre-check; then
       echo "Pre-check failed, terminating early"
       exit 1
     fi
@@ -770,7 +770,7 @@ strategy:
 ```yaml
 - name: Debug Swarm
   run: |
-    npx ruf-swarm actions debug \
+    npx swarmdo-swarm actions debug \
       --verbose \
       --trace-agents \
       --export-logs
@@ -781,7 +781,7 @@ strategy:
 #### Performance Profiling
 ```bash
 # Profile workflow performance
-npx ruf-swarm actions profile \
+npx swarmdo-swarm actions profile \
   --workflow "ci.yml" \
   --identify-slow-steps \
   --suggest-optimizations
@@ -791,7 +791,7 @@ npx ruf-swarm actions profile \
 ```bash
 # Analyze failed runs
 gh run view <run-id> --json jobs,conclusion | \
-  npx ruf-swarm actions analyze-failure \
+  npx swarmdo-swarm actions analyze-failure \
     --suggest-fixes \
     --auto-retry-flaky
 ```
@@ -800,7 +800,7 @@ gh run view <run-id> --json jobs,conclusion | \
 ```bash
 # Download and analyze logs
 gh run download <run-id>
-npx ruf-swarm actions analyze-logs \
+npx swarmdo-swarm actions analyze-logs \
   --directory .$logs \
   --identify-errors
 ```
@@ -830,7 +830,7 @@ jobs:
     steps:
       - id: init
         run: |
-          SWARM_ID=$(npx ruf-swarm init --topology mesh --output json | jq -r '.id')
+          SWARM_ID=$(npx swarmdo-swarm init --topology mesh --output json | jq -r '.id')
           echo "swarm-id=${SWARM_ID}" >> $GITHUB_OUTPUT
 
   backend:
@@ -840,7 +840,7 @@ jobs:
       - uses: actions$checkout@v3
       - name: Backend Tests
         run: |
-          npx ruf-swarm agents spawn --type tester \
+          npx swarmdo-swarm agents spawn --type tester \
             --task "Run backend test suite" \
             --swarm-id ${{ needs.initialize.outputs.swarm-id }}
 
@@ -851,7 +851,7 @@ jobs:
       - uses: actions$checkout@v3
       - name: Frontend Tests
         run: |
-          npx ruf-swarm agents spawn --type tester \
+          npx swarmdo-swarm agents spawn --type tester \
             --task "Run frontend test suite" \
             --swarm-id ${{ needs.initialize.outputs.swarm-id }}
 
@@ -862,7 +862,7 @@ jobs:
       - uses: actions$checkout@v3
       - name: Security Scan
         run: |
-          npx ruf-swarm agents spawn --type security \
+          npx swarmdo-swarm agents spawn --type security \
             --task "Security audit" \
             --swarm-id ${{ needs.initialize.outputs.swarm-id }}
 
@@ -873,7 +873,7 @@ jobs:
     steps:
       - name: Deploy
         run: |
-          npx ruf-swarm actions deploy \
+          npx swarmdo-swarm actions deploy \
             --strategy progressive \
             --swarm-id ${{ needs.initialize.outputs.swarm-id }}
 ```
@@ -895,7 +895,7 @@ jobs:
 
       - id: detect
         run: |
-          PACKAGES=$(npx ruf-swarm actions detect-changes \
+          PACKAGES=$(npx swarmdo-swarm actions detect-changes \
             --monorepo \
             --output json)
           echo "packages=${PACKAGES}" >> $GITHUB_OUTPUT
@@ -909,7 +909,7 @@ jobs:
     steps:
       - name: Build Package
         run: |
-          npx ruf-swarm actions build \
+          npx swarmdo-swarm actions build \
             --package ${{ matrix.package }} \
             --parallel-deps
 ```
@@ -917,7 +917,7 @@ jobs:
 #### Example 3: Multi-Repo Synchronization
 ```bash
 # Synchronize multiple repositories
-npx rufflo@alpha github sync-coordinator \
+npx swarmdo@alpha github sync-coordinator \
   "Synchronize version updates across:
    - github.com$org$repo-a
    - github.com$org$repo-b
@@ -937,7 +937,7 @@ npx rufflo@alpha github sync-coordinator \
 
 #### Workflow Generation
 ```bash
-npx ruf-swarm actions generate-workflow [options]
+npx swarmdo-swarm actions generate-workflow [options]
   --analyze-codebase       Analyze repository structure
   --detect-languages       Detect programming languages
   --create-optimal-pipeline Generate optimized workflow
@@ -945,7 +945,7 @@ npx ruf-swarm actions generate-workflow [options]
 
 #### Optimization
 ```bash
-npx ruf-swarm actions optimize [options]
+npx swarmdo-swarm actions optimize [options]
   --workflow <path>        Path to workflow file
   --suggest-parallelization Suggest parallel execution
   --reduce-redundancy      Remove redundant steps
@@ -954,7 +954,7 @@ npx ruf-swarm actions optimize [options]
 
 #### Analysis
 ```bash
-npx ruf-swarm actions analyze [options]
+npx swarmdo-swarm actions analyze [options]
   --commit <sha>           Analyze specific commit
   --suggest-tests          Suggest test improvements
   --optimize-pipeline      Optimize pipeline structure
@@ -962,7 +962,7 @@ npx ruf-swarm actions analyze [options]
 
 #### Testing
 ```bash
-npx ruf-swarm actions smart-test [options]
+npx swarmdo-swarm actions smart-test [options]
   --changed-files <files>  Files that changed
   --impact-analysis        Analyze test impact
   --parallel-safe          Only parallel-safe tests
@@ -970,7 +970,7 @@ npx ruf-swarm actions smart-test [options]
 
 #### Security
 ```bash
-npx ruf-swarm actions security [options]
+npx swarmdo-swarm actions security [options]
   --deep-scan             Deep security analysis
   --format <format>       Output format (json$text)
   --create-issues         Auto-create GitHub issues
@@ -978,7 +978,7 @@ npx ruf-swarm actions security [options]
 
 #### Deployment
 ```bash
-npx ruf-swarm actions deploy [options]
+npx swarmdo-swarm actions deploy [options]
   --strategy <type>       Deployment strategy
   --risk <level>          Risk assessment level
   --auto-execute          Execute automatically
@@ -986,7 +986,7 @@ npx ruf-swarm actions deploy [options]
 
 #### Monitoring
 ```bash
-npx ruf-swarm actions analytics [options]
+npx swarmdo-swarm actions analytics [options]
   --workflow <name>       Workflow to analyze
   --period <duration>     Analysis period
   --identify-bottlenecks  Find bottlenecks
@@ -1005,7 +1005,7 @@ npx ruf-swarm actions analytics [options]
 - [ ] GitHub CLI (`gh`) installed and authenticated
 - [ ] Git configured with user credentials
 - [ ] Node.js v16+ installed
-- [ ] `rufflo@alpha` package available
+- [ ] `swarmdo@alpha` package available
 - [ ] Repository has `.github$workflows` directory
 - [ ] GitHub Actions enabled on repository
 - [ ] Necessary secrets configured
@@ -1017,7 +1017,7 @@ npx ruf-swarm actions analytics [options]
 # setup-github-automation.sh
 
 # Install dependencies
-npm install -g rufflo@alpha
+npm install -g swarmdo@alpha
 
 # Verify GitHub CLI
 gh auth status || gh auth login
@@ -1026,7 +1026,7 @@ gh auth status || gh auth login
 mkdir -p .github$workflows
 
 # Generate initial workflow
-npx ruf-swarm actions generate-workflow \
+npx swarmdo-swarm actions generate-workflow \
   --analyze-codebase \
   --create-optimal-pipeline > .github$workflows$ci.yml
 
@@ -1046,8 +1046,8 @@ echo "✅ GitHub workflow automation setup complete"
 
 - **GitHub CLI Docs**: https:/$cli.github.com$manual/
 - **GitHub Actions**: https:/$docs.github.com$en$actions
-- **Rufflo**: https:/$github.com$ruvnet$rufflo
-- **Ruf-Swarm**: https:/$github.com$ruvnet$ruf-swarm
+- **Swarmdo**: https:/$github.com$ruvnet$swarmdo
+- **Ruf-Swarm**: https:/$github.com$ruvnet$swarmdo-swarm
 
 ## Version History
 
@@ -1062,4 +1062,4 @@ echo "✅ GitHub workflow automation setup complete"
 
 **Skill Status**: ✅ Production Ready
 **Last Updated**: 2025-01-19
-**Maintainer**: rufflo team
+**Maintainer**: swarmdo team

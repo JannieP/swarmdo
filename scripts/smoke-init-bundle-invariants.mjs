@@ -2,20 +2,20 @@
 /**
  * Init-bundle invariants smoke — ADR-128 Phase 5 (#2095).
  *
- * Statically asserts three properties of the @rufflo/cli init bundle:
+ * Statically asserts three properties of the @swarmdo/cli init bundle:
  *
  *   1. NO ORPHANED DIRECTORIES — every subdirectory under
- *      v3/@rufflo/cli/.claude/{commands,agents}/ is reachable from
+ *      v3/@swarmdo/cli/.claude/{commands,agents}/ is reachable from
  *      COMMANDS_MAP or AGENTS_MAP in executor.ts. An "orphaned" directory is
  *      one that ships in the tarball but is never copied by any init path.
  *
  *   2. SKILLS_MAP COMPLETENESS — every skill name in SKILLS_MAP (all arrays)
  *      has a corresponding SKILL.md at
- *      v3/@rufflo/cli/.claude/skills/{name}/SKILL.md. Catches Phase 1
+ *      v3/@swarmdo/cli/.claude/skills/{name}/SKILL.md. Catches Phase 1
  *      regressions where a skill dir disappears from the package.
  *
  *   3. NO INIT–PLUGIN AGENT BASENAME COLLISION — no .md file in
- *      v3/@rufflo/cli/.claude/agents/(any path) shares a basename with any
+ *      v3/@swarmdo/cli/.claude/agents/(any path) shares a basename with any
  *      .md file in plugins/(any plugin)/agents/. Enforces the "plugin is canonical"
  *      dedup rule from ADR-128 Phase 2.
  *
@@ -28,8 +28,8 @@ import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 const REPO_ROOT = process.cwd();
-const EXECUTOR_TS = join(REPO_ROOT, 'v3', '@rufflo', 'cli', 'src', 'init', 'executor.ts');
-const CLI_DOT_CLAUDE = join(REPO_ROOT, 'v3', '@rufflo', 'cli', '.claude');
+const EXECUTOR_TS = join(REPO_ROOT, 'v3', '@swarmdo', 'cli', 'src', 'init', 'executor.ts');
+const CLI_DOT_CLAUDE = join(REPO_ROOT, 'v3', '@swarmdo', 'cli', '.claude');
 const PLUGINS_DIR = join(REPO_ROOT, 'plugins');
 
 // ---------------------------------------------------------------------------
@@ -97,7 +97,7 @@ for (const dir of commandsDirs) {
   if (!commandsValues.has(dir)) {
     orphanViolations.push({
       type: 'orphan-command-dir',
-      path: `v3/@rufflo/cli/.claude/commands/${dir}`,
+      path: `v3/@swarmdo/cli/.claude/commands/${dir}`,
       message: `commands/${dir}/ has no COMMANDS_MAP entry`,
     });
   }
@@ -107,7 +107,7 @@ for (const dir of agentsDirs) {
   if (!agentsValues.has(dir)) {
     orphanViolations.push({
       type: 'orphan-agent-dir',
-      path: `v3/@rufflo/cli/.claude/agents/${dir}`,
+      path: `v3/@swarmdo/cli/.claude/agents/${dir}`,
       message: `agents/${dir}/ has no AGENTS_MAP entry`,
     });
   }
@@ -130,7 +130,7 @@ for (const skillName of skillsMapValues) {
     missingSkills.push({
       type: 'missing-skill',
       // Report the SKILL.md path for clarity even though README.md is accepted
-      path: `v3/@rufflo/cli/.claude/skills/${skillName}/SKILL.md`,
+      path: `v3/@swarmdo/cli/.claude/skills/${skillName}/SKILL.md`,
       message: `SKILLS_MAP references '${skillName}' but neither SKILL.md nor README.md found in package`,
     });
   }
@@ -200,5 +200,5 @@ for (const v of allViolations) {
   }
 }
 
-console.error('\nADR-128: https://github.com/ruvnet/ruflo/blob/main/v3/docs/adr/ADR-128-init-bundle-reduce-refactor.md\n');
+console.error('\nADR-128: https://github.com/ruvnet/swarmdo/blob/main/v3/docs/adr/ADR-128-init-bundle-reduce-refactor.md\n');
 process.exit(1);

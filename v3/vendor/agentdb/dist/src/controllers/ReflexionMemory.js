@@ -837,7 +837,7 @@ export class ReflexionMemory {
     }
     /**
      * Delete an episode by id. Closes the gap from issue #150 (downstream:
-     * ruflo#1784, RuVector#427) — once an episode is written there was no
+     * swarmdo#1784, SwarmVector#427) — once an episode is written there was no
      * first-class way to remove it through any backend.
      *
      * Strategy mirrors storeEpisode: when a graph backend is present we go
@@ -892,7 +892,7 @@ export class ReflexionMemory {
                 console.warn(`[ReflexionMemory] deleteEpisode: graph backend delete failed: ${msg}`);
             }
         }
-        // 3. Vector backend (HNSW/RuVector); some implementations don't expose
+        // 3. Vector backend (HNSW/SwarmVector); some implementations don't expose
         //    delete — guard with a feature check.
         if (this.vectorBackend && typeof this.vectorBackend.delete === 'function') {
             try {

@@ -15,7 +15,7 @@
 // versions without complex native dependencies. Same async send/receive
 // API surface as QuicTransport.
 //
-// Federation use case (ruvnet/ruflo ADR-104): two peers on the same
+// Federation use case (ruvnet/swarmdo ADR-104): two peers on the same
 // tailnet can call loadQuicTransport({ serverName: 'peer.tailnet' }) and
 // exchange signed envelopes today, with zero code change required when
 // the native QUIC build lands later.

@@ -1,8 +1,8 @@
-# @rufflo/teammate-plugin
+# @swarmdo/teammate-plugin
 
-Native **TeammateTool** integration plugin for Rufflo. Bridges Claude Code v2.1.19+ multi-agent orchestration capabilities with Rufflo's swarm system.
+Native **TeammateTool** integration plugin for Swarmdo. Bridges Claude Code v2.1.19+ multi-agent orchestration capabilities with Swarmdo's swarm system.
 
-[![npm version](https://badge.fury.io/js/%40rufflo%2Fteammate-plugin.svg)](https://badge.fury.io/js/%40rufflo%2Fteammate-plugin)
+[![npm version](https://badge.fury.io/js/%40swarmdo%2Fteammate-plugin.svg)](https://badge.fury.io/js/%40swarmdo%2Fteammate-plugin)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Requirements
@@ -38,32 +38,32 @@ Install directly using Claude Code's plugin system:
 
 ```bash
 # Install from npm registry
-claude plugins install @rufflo/teammate-plugin
+claude plugins install @swarmdo/teammate-plugin
 
-# Or install from Rufflo plugin registry (IPFS-backed)
-claude plugins install teammate-plugin --registry rufflo
+# Or install from Swarmdo plugin registry (IPFS-backed)
+claude plugins install teammate-plugin --registry swarmdo
 ```
 
 ### Via npm
 
 ```bash
-npm install @rufflo/teammate-plugin
+npm install @swarmdo/teammate-plugin
 ```
 
 Or with pnpm:
 
 ```bash
-pnpm add @rufflo/teammate-plugin
+pnpm add @swarmdo/teammate-plugin
 ```
 
-### Via Rufflo CLI
+### Via Swarmdo CLI
 
 ```bash
-# Install via rufflo plugin manager
-npx @rufflo/cli@latest plugins install --name @rufflo/teammate-plugin
+# Install via swarmdo plugin manager
+npx @swarmdo/cli@latest plugins install --name @swarmdo/teammate-plugin
 
-# Or add to your rufflo.config.json
-npx @rufflo/cli@latest config set plugins.teammate-plugin.enabled true
+# Or add to your swarmdo.config.json
+npx @swarmdo/cli@latest config set plugins.teammate-plugin.enabled true
 ```
 
 ### Verify Installation
@@ -72,14 +72,14 @@ npx @rufflo/cli@latest config set plugins.teammate-plugin.enabled true
 # Check plugin is loaded
 claude plugins list
 
-# Or via rufflo
-npx @rufflo/cli@latest plugins list
+# Or via swarmdo
+npx @swarmdo/cli@latest plugins list
 ```
 
 ## Quick Start
 
 ```typescript
-import { createTeammateBridge } from '@rufflo/teammate-plugin';
+import { createTeammateBridge } from '@swarmdo/teammate-plugin';
 
 // Initialize the bridge
 const bridge = await createTeammateBridge();
@@ -160,7 +160,7 @@ The main class for interacting with TeammateTool.
 #### Initialization
 
 ```typescript
-import { createTeammateBridge, TeammateBridge } from '@rufflo/teammate-plugin';
+import { createTeammateBridge, TeammateBridge } from '@swarmdo/teammate-plugin';
 
 // Factory function (recommended)
 const bridge = await createTeammateBridge({
@@ -345,7 +345,7 @@ if (canTeleport) {
 The plugin provides 16 MCP tools for use with Claude Code's MCP server:
 
 ```typescript
-import { TEAMMATE_MCP_TOOLS, handleMCPTool } from '@rufflo/teammate-plugin';
+import { TEAMMATE_MCP_TOOLS, handleMCPTool } from '@swarmdo/teammate-plugin';
 
 // List all tools
 console.log(TEAMMATE_MCP_TOOLS.map(t => t.name));
@@ -404,7 +404,7 @@ bridge.on('teleport:completed', ({ team, result }) => {
 ## Error Handling
 
 ```typescript
-import { TeammateError, TeammateErrorCode } from '@rufflo/teammate-plugin';
+import { TeammateError, TeammateErrorCode } from '@swarmdo/teammate-plugin';
 
 try {
   await bridge.launchSwarm('my-team', 'plan-id');
@@ -428,7 +428,7 @@ try {
 ## Configuration
 
 ```typescript
-import { createTeammateBridge, DEFAULT_PLUGIN_CONFIG } from '@rufflo/teammate-plugin';
+import { createTeammateBridge, DEFAULT_PLUGIN_CONFIG } from '@swarmdo/teammate-plugin';
 
 const bridge = await createTeammateBridge({
   autoInitialize: true,
@@ -476,19 +476,19 @@ const bridge = await createTeammateBridge({
 });
 ```
 
-## Integration with Rufflo
+## Integration with Swarmdo
 
 ```typescript
-import { createTeammateBridge } from '@rufflo/teammate-plugin';
-import { UnifiedSwarmCoordinator } from '@rufflo/swarm';
+import { createTeammateBridge } from '@swarmdo/teammate-plugin';
+import { UnifiedSwarmCoordinator } from '@swarmdo/swarm';
 
 // Create bridge
 const bridge = await createTeammateBridge();
 
-// Map Rufflo topology to team config
+// Map Swarmdo topology to team config
 const teamConfig = {
   name: 'cf-team',
-  topology: 'hierarchical',  // Maps to Rufflo's hierarchical
+  topology: 'hierarchical',  // Maps to Swarmdo's hierarchical
   maxTeammates: 8,
   planModeRequired: true,
 };
@@ -496,7 +496,7 @@ const teamConfig = {
 // Create team
 const team = await bridge.spawnTeam(teamConfig);
 
-// Map Rufflo agent types to teammate configs
+// Map Swarmdo agent types to teammate configs
 const agentMapping = {
   'coder': { role: 'coder', tools: ['Edit', 'Write', 'Read', 'Bash'] },
   'tester': { role: 'tester', tools: ['Read', 'Bash', 'Glob'] },
@@ -504,7 +504,7 @@ const agentMapping = {
   'architect': { role: 'architect', tools: ['Read', 'Glob', 'Grep'] },
 };
 
-// Spawn teammates with Rufflo agent types
+// Spawn teammates with Swarmdo agent types
 for (const [type, config] of Object.entries(agentMapping)) {
   await bridge.spawnTeammate({
     name: `${type}-1`,
@@ -602,7 +602,7 @@ npm run test:coverage
 ### Verify Plugin Functionality
 
 ```typescript
-import { createTeammateBridge, TEAMMATE_MCP_TOOLS } from '@rufflo/teammate-plugin';
+import { createTeammateBridge, TEAMMATE_MCP_TOOLS } from '@swarmdo/teammate-plugin';
 
 async function verifyPlugin() {
   console.log('=== Plugin Verification ===\n');
@@ -640,28 +640,28 @@ verifyPlugin().catch(console.error);
 
 ```bash
 # Check plugin is registered
-npx @rufflo/cli@latest plugins list | grep teammate
+npx @swarmdo/cli@latest plugins list | grep teammate
 
 # Check plugin info
-npx @rufflo/cli@latest plugins info teammate-plugin
+npx @swarmdo/cli@latest plugins info teammate-plugin
 
 # Test MCP tools
-npx @rufflo/cli@latest mcp tools | grep teammate
+npx @swarmdo/cli@latest mcp tools | grep teammate
 ```
 
 ## Plugin Registry (IPFS)
 
-This plugin is published to the Rufflo Plugin Registry on IPFS for decentralized distribution.
+This plugin is published to the Swarmdo Plugin Registry on IPFS for decentralized distribution.
 
 ### Registry Entry
 
 ```json
 {
   "name": "teammate-plugin",
-  "package": "@rufflo/teammate-plugin",
+  "package": "@swarmdo/teammate-plugin",
   "version": "1.0.0-alpha.1",
   "description": "Native TeammateTool integration for Claude Code v2.1.19+",
-  "author": "Rufflo Team",
+  "author": "Swarmdo Team",
   "license": "MIT",
   "repository": "https://github.com/ruvnet/claude-flow",
   "keywords": ["claude-code", "teammate", "multi-agent", "swarm"],
@@ -686,20 +686,20 @@ This plugin is published to the Rufflo Plugin Registry on IPFS for decentralized
 
 ```bash
 # Install from IPFS-backed registry
-npx @rufflo/cli@latest plugins install teammate-plugin --registry ipfs
+npx @swarmdo/cli@latest plugins install teammate-plugin --registry ipfs
 
 # Or specify registry CID directly
-npx @rufflo/cli@latest plugins install teammate-plugin --cid <registry-cid>
+npx @swarmdo/cli@latest plugins install teammate-plugin --cid <registry-cid>
 ```
 
 ### Verify Registry Integrity
 
 ```bash
 # Check plugin hash matches registry
-npx @rufflo/cli@latest plugins verify teammate-plugin
+npx @swarmdo/cli@latest plugins verify teammate-plugin
 
 # View registry metadata
-npx @rufflo/cli@latest plugins registry info
+npx @swarmdo/cli@latest plugins registry info
 ```
 
 ## License
@@ -708,6 +708,6 @@ MIT
 
 ## Related
 
-- [Rufflo](https://github.com/ruvnet/claude-flow) - Multi-agent orchestration framework
+- [Swarmdo](https://github.com/ruvnet/claude-flow) - Multi-agent orchestration framework
 - [Claude Code](https://github.com/anthropics/claude-code) - Anthropic's CLI for Claude
 - [ADR-027](../implementation/adrs/ADR-027-teammate-tool-integration.md) - Architecture decision record

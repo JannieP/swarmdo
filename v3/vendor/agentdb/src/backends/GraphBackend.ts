@@ -2,7 +2,7 @@
  * GraphBackend Interface - Graph database capabilities (Optional)
  *
  * Provides property graph storage and Cypher-like query capabilities.
- * Available when @rufvector/graph-node is installed.
+ * Available when @swarmvector/graph-node is installed.
  *
  * Features:
  * - Node and relationship management
@@ -106,7 +106,7 @@ export interface GraphStats {
  * GraphBackend - Optional graph database interface
  *
  * Implementations:
- * - RuVectorGraph: Native Rust graph with @rufvector/graph-node
+ * - SwarmVectorGraph: Native Rust graph with @swarmvector/graph-node
  * - MockGraphBackend: No-op implementation for testing
  */
 export interface GraphBackend {

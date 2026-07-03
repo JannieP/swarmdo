@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /**
- * Smoke: #2105 — RUFFLO_DB_PATH env var + --path flag on memory subcommands.
+ * Smoke: #2105 — SWARMDO_DB_PATH env var + --path flag on memory subcommands.
  *
  * Verifies the three-tier path resolution in resolveDbPath():
  *   1. --path flag wins over everything
- *   2. RUFFLO_DB_PATH env var is honoured when --path is absent
+ *   2. SWARMDO_DB_PATH env var is honoured when --path is absent
  *   3. Default path (cwd/.swarm/memory.db) used when neither is set
  *
  * Tests both the exported resolveDbPath() function directly and the
@@ -62,14 +62,14 @@ const require = createRequire(import.meta.url);
 let resolveDbPath;
 try {
   const mod = await import(
-    join(ROOT, 'v3/@rufflo/cli/dist/src/memory/memory-initializer.js')
+    join(ROOT, 'v3/@swarmdo/cli/dist/src/memory/memory-initializer.js')
   );
   resolveDbPath = mod.resolveDbPath;
 } catch {
   // Try source fallback
   try {
     const mod = await import(
-      join(ROOT, 'v3/@rufflo/cli/src/memory/memory-initializer.js')
+      join(ROOT, 'v3/@swarmdo/cli/src/memory/memory-initializer.js')
     );
     resolveDbPath = mod.resolveDbPath;
   } catch (e) {
@@ -84,35 +84,35 @@ mkdirSync(tmpDir, { recursive: true });
 try {
   if (resolveDbPath) {
     // Save and restore env vars
-    const origDbPath = process.env.RUFFLO_DB_PATH;
-    const origMemPath = process.env.RUFFLO_MEMORY_PATH;
+    const origDbPath = process.env.SWARMDO_DB_PATH;
+    const origMemPath = process.env.SWARMDO_MEMORY_PATH;
 
     // Test 1a: --path flag wins
-    delete process.env.RUFFLO_DB_PATH;
-    delete process.env.RUFFLO_MEMORY_PATH;
+    delete process.env.SWARMDO_DB_PATH;
+    delete process.env.SWARMDO_MEMORY_PATH;
     const cliResult = resolveDbPath(join(tmpDir, 'flag.db'));
     check('--path flag overrides everything', () => {
       ok(cliResult.endsWith('flag.db'), `Expected flag.db, got: ${cliResult}`);
     });
 
-    // Test 1b: RUFFLO_DB_PATH env var used when no --path
-    process.env.RUFFLO_DB_PATH = join(tmpDir, 'env.db');
-    delete process.env.RUFFLO_MEMORY_PATH;
+    // Test 1b: SWARMDO_DB_PATH env var used when no --path
+    process.env.SWARMDO_DB_PATH = join(tmpDir, 'env.db');
+    delete process.env.SWARMDO_MEMORY_PATH;
     const envResult = resolveDbPath(undefined);
-    check('RUFFLO_DB_PATH env var honoured without --path flag', () => {
+    check('SWARMDO_DB_PATH env var honoured without --path flag', () => {
       ok(envResult.endsWith('env.db'), `Expected env.db, got: ${envResult}`);
     });
 
-    // Test 1c: --path wins over RUFFLO_DB_PATH
-    process.env.RUFFLO_DB_PATH = join(tmpDir, 'env.db');
+    // Test 1c: --path wins over SWARMDO_DB_PATH
+    process.env.SWARMDO_DB_PATH = join(tmpDir, 'env.db');
     const flagWinsResult = resolveDbPath(join(tmpDir, 'flag2.db'));
-    check('--path flag wins over RUFFLO_DB_PATH env var', () => {
+    check('--path flag wins over SWARMDO_DB_PATH env var', () => {
       ok(flagWinsResult.endsWith('flag2.db'), `Expected flag2.db, got: ${flagWinsResult}`);
     });
 
     // Test 1d: default path used when neither set
-    delete process.env.RUFFLO_DB_PATH;
-    delete process.env.RUFFLO_MEMORY_PATH;
+    delete process.env.SWARMDO_DB_PATH;
+    delete process.env.SWARMDO_MEMORY_PATH;
     const defaultResult = resolveDbPath(undefined);
     check('default path used when no flag or env var', () => {
       ok(
@@ -121,16 +121,16 @@ try {
       );
     });
 
-    // Test 1e: RUFFLO_MEMORY_PATH provides directory, memory.db appended
-    process.env.RUFFLO_MEMORY_PATH = tmpDir;
-    delete process.env.RUFFLO_DB_PATH;
-    // Reset cache so RUFFLO_MEMORY_PATH takes effect
+    // Test 1e: SWARMDO_MEMORY_PATH provides directory, memory.db appended
+    process.env.SWARMDO_MEMORY_PATH = tmpDir;
+    delete process.env.SWARMDO_DB_PATH;
+    // Reset cache so SWARMDO_MEMORY_PATH takes effect
     const { _resetMemoryRootCache } = await import(
-      join(ROOT, 'v3/@rufflo/cli/dist/src/memory/memory-initializer.js')
-    ).catch(() => import(join(ROOT, 'v3/@rufflo/cli/src/memory/memory-initializer.js')));
+      join(ROOT, 'v3/@swarmdo/cli/dist/src/memory/memory-initializer.js')
+    ).catch(() => import(join(ROOT, 'v3/@swarmdo/cli/src/memory/memory-initializer.js')));
     if (_resetMemoryRootCache) _resetMemoryRootCache();
     const memPathResult = resolveDbPath(undefined);
-    check('RUFFLO_MEMORY_PATH provides directory, memory.db appended', () => {
+    check('SWARMDO_MEMORY_PATH provides directory, memory.db appended', () => {
       ok(
         memPathResult === pathResolve(tmpDir, 'memory.db') ||
           memPathResult.endsWith('memory.db'),
@@ -139,10 +139,10 @@ try {
     });
 
     // Restore env
-    if (origDbPath !== undefined) process.env.RUFFLO_DB_PATH = origDbPath;
-    else delete process.env.RUFFLO_DB_PATH;
-    if (origMemPath !== undefined) process.env.RUFFLO_MEMORY_PATH = origMemPath;
-    else delete process.env.RUFFLO_MEMORY_PATH;
+    if (origDbPath !== undefined) process.env.SWARMDO_DB_PATH = origDbPath;
+    else delete process.env.SWARMDO_DB_PATH;
+    if (origMemPath !== undefined) process.env.SWARMDO_MEMORY_PATH = origMemPath;
+    else delete process.env.SWARMDO_MEMORY_PATH;
     if (_resetMemoryRootCache) _resetMemoryRootCache();
   }
 
@@ -153,13 +153,13 @@ try {
   let memoryCommand;
   try {
     const mod = await import(
-      join(ROOT, 'v3/@rufflo/cli/dist/src/commands/memory.js')
+      join(ROOT, 'v3/@swarmdo/cli/dist/src/commands/memory.js')
     );
     memoryCommand = mod.memoryCommand || mod.default;
   } catch {
     try {
       const mod = await import(
-        join(ROOT, 'v3/@rufflo/cli/src/commands/memory.js')
+        join(ROOT, 'v3/@swarmdo/cli/src/commands/memory.js')
       );
       memoryCommand = mod.memoryCommand || mod.default;
     } catch (e) {

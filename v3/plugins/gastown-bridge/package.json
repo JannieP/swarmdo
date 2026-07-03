@@ -1,7 +1,7 @@
 {
-  "name": "@rufflo/plugin-gastown-bridge",
+  "name": "@swarmdo/plugin-gastown-bridge",
   "version": "0.1.4",
-  "description": "Gas Town orchestrator integration for Rufflo V3 with WASM-accelerated formula parsing and graph analysis",
+  "description": "Gas Town orchestrator integration for Swarmdo V3 with WASM-accelerated formula parsing and graph analysis",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -54,7 +54,7 @@
     "prepublishOnly": "npm run build"
   },
   "keywords": [
-    "rufflo",
+    "swarmdo",
     "plugin",
     "gastown",
     "beads",
@@ -68,21 +68,21 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JannieP/rufflo.git",
+    "url": "https://github.com/JannieP/swarmdo.git",
     "directory": "v3/plugins/gastown-bridge"
   },
   "bugs": {
-    "url": "https://github.com/JannieP/rufflo/issues"
+    "url": "https://github.com/JannieP/swarmdo/issues"
   },
-  "homepage": "https://github.com/JannieP/rufflo/tree/main/v3/plugins/gastown-bridge#readme",
+  "homepage": "https://github.com/JannieP/swarmdo/tree/main/v3/plugins/gastown-bridge#readme",
   "engines": {
     "node": ">=20.0.0"
   },
   "peerDependencies": {
-    "@rufflo/memory": ">=3.0.0-alpha.1"
+    "@swarmdo/memory": ">=3.0.0-alpha.1"
   },
   "peerDependenciesMeta": {
-    "@rufflo/memory": {
+    "@swarmdo/memory": {
       "optional": true
     }
   },

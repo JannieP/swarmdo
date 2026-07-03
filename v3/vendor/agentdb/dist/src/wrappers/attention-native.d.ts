@@ -1,7 +1,7 @@
 /**
  * Native Attention Wrappers
  *
- * Properly wraps @rufvector/attention native Rust implementations
+ * Properly wraps @swarmvector/attention native Rust implementations
  * with TypedArray conversions and proper error handling
  */
 export interface AttentionConfig {

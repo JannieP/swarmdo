@@ -1,7 +1,7 @@
 /**
  * Attention Type Definitions for AgentDB v2
  *
- * Shared types for @rufvector/attention integration across memory controllers.
+ * Shared types for @swarmvector/attention integration across memory controllers.
  * These types are used by AttentionService and all enhanced controllers.
  *
  * @module types/attention

@@ -1,58 +1,58 @@
 <div align="center">
 
-[![Rufflo Banner](rufflo/assets/rufflo-small.jpeg)](https://cognitum.one/agentic-engineering)
+[![Swarmdo Banner](swarmdo/assets/swarmdo-small.jpeg)](https://cognitum.one/agentic-engineering)
 
-<!-- Try Rufflo — the 4 badges first-time visitors actually act on -->
-[![npm version (rufflo)](https://img.shields.io/npm/v/rufflo?label=npx%20rufflo&style=for-the-badge&logo=npm&color=cb3837)](https://www.npmjs.com/package/rufflo)
+<!-- Try Swarmdo — the 4 badges first-time visitors actually act on -->
+[![npm version (swarmdo)](https://img.shields.io/npm/v/swarmdo?label=npx%20swarmdo&style=for-the-badge&logo=npm&color=cb3837)](https://www.npmjs.com/package/swarmdo)
 [![MIT License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Star on GitHub](https://img.shields.io/github/stars/ruvnet/claude-flow?style=for-the-badge&logo=github&color=gold)](https://github.com/ruvnet/claude-flow)
 
 <!-- Ecosystem strip (collapsed visually with flat-square) -->
-[![🕸️ RufVector Agentic DB](https://img.shields.io/badge/RufVector_Agentic-DB-06b6d4?style=flat-square&logoColor=white&logo=graphql)](https://github.com/ruvnet/rufvector)
-[![Ecosystem downloads](https://img.shields.io/badge/ecosystem%20downloads-8.1M%2B-blue?style=flat-square&logo=npm)](https://github.com/ruvnet/ruflo/blob/main/data/clone-data.proof.json)
-[![Git clones (14d)](https://img.shields.io/badge/git%20clones%2014d-106k-blueviolet?style=flat-square&logo=github)](https://github.com/ruvnet/ruflo/blob/main/data/clone-data.ledger.json)
+[![🕸️ SwarmVector Agentic DB](https://img.shields.io/badge/SwarmVector_Agentic-DB-06b6d4?style=flat-square&logoColor=white&logo=graphql)](https://github.com/ruvnet/swarmvector)
+[![Ecosystem downloads](https://img.shields.io/badge/ecosystem%20downloads-8.1M%2B-blue?style=flat-square&logo=npm)](https://github.com/ruvnet/swarmdo/blob/main/data/clone-data.proof.json)
+[![Git clones (14d)](https://img.shields.io/badge/git%20clones%2014d-106k-blueviolet?style=flat-square&logo=github)](https://github.com/ruvnet/swarmdo/blob/main/data/clone-data.ledger.json)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Plugin-D97757?style=flat-square&logoColor=white&logo=anthropic)](https://github.com/ruvnet/claude-flow)
-[![Codex Plugin](https://img.shields.io/badge/Codex-Plugin-412991?style=flat-square&logoColor=white&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0yMi4yODIgOS44MjFhNS45ODUgNS45ODUgMCAwIDAtLjUxNi00LjkxIDYuMDQ2IDYuMDQ2IDAgMCAwLTYuNTEtMi45QTYuMDY1IDYuMDY1IDAgMCAwIDQuOTgxIDQuMThhNS45ODUgNS45ODUgMCAwIDAtMy45OTggMi45IDYuMDQ2IDYuMDQ2IDAgMCAwIC43NDMgNy4wOTcgNS45OCA1Ljk4IDAgMCAwIC41MSA0LjkxMSA2LjA1MSA2LjA1MSAwIDAgMCA2LjUxNSAyLjlBNS45ODUgNS45ODUgMCAwIDAgMTMuMjYgMjRhNi4wNTYgNi4wNTYgMCAwIDAgNS43NzItNC4yMDYgNS45OSA1Ljk5IDAgMCAwIDMuOTk4LTIuOSA2LjA1NiA2LjA1NiAwIDAgMC0uNzQ3LTcuMDczek0xMy4yNiAyMi40M2E0LjQ3NiA0LjQ3NiAwIDAgMS0yLjg3Ni0xLjA0bC4xNDItLjA4IDQuNzc4LTIuNzU4YS43OTUuNzk1IDAgMCAwIC4zOTMtLjY4MXYtNi43MzdsMi4wMiAxLjE2OGEuMDcxLjA3MSAwIDAgMSAuMDM4LjA1MnY1LjU4M2E0LjUwNCA0LjUwNCAwIDAgMS00LjQ5NSA0LjQ5NHpNMy42IDE4LjMwNGE0LjQ3IDQuNDcgMCAwIDEtLjUzNS0zLjAxNGwuMTQyLjA4NSA0Ljc4MyAyLjc1OWEuNzcxLjc3MSAwIDAgMCAuNzgxIDBsNS44NDMtMy4zNjl2Mi4zMzJhLjA4LjA4IDAgMCAxLS4wMzMuMDYyTDkuNzQgMTkuOTVhNC41IDQuNSAwIDAgMS02LjE0LTEuNjQ2ek0yLjM0IDcuODk2YTQuNDg1IDQuNDg1IDAgMCAxIDIuMzY2LTEuOTczVjExLjZhLjc2Ni43NjYgMCAwIDAgLjM4OC42NzdsNS44MTUgMy4zNTQtMi4wMiAxLjE2OGEuMDc2LjA3NiAwIDAgMS0uMDcyIDBsLTQuODMtMi43ODZBNC41MDQgNC41MDQgMCAwIDEgMi4zNCA3Ljg3MnptMTYuNTk3IDMuODU1LTUuODMzLTMuMzg3IDIuMDE2LTEuMTY1YS4wNzYuMDc2IDAgMCAxIC4wNzEgMGw0LjgzIDIuNzkxYTQuNDk0IDQuNDk0IDAgMCAxLS42NzYgOC4xMDR2LTUuNjc3YS43OS43OSAwIDAgMC0uNDA3LS42Njd6bTIuMDEtMy4wMjMtLjE0MS0uMDg1LTQuNzc0LTIuNzgyYS43NzYuNzc2IDAgMCAwLS43ODUgMEw5LjQwOSA5LjIzVjYuODk3YS4wNjYuMDY2IDAgMCAxIC4wMjgtLjA2Mmw0LjgzLTIuNzg3YTQuNDk5IDQuNDk5IDAgMCAxIDYuNjggNC42NnpNOC4zMDcgMTIuODYzbC0yLjAyLTEuMTY0YS4wOC4wOCAwIDAgMS0uMDM4LS4wNTdWNi4wNzRhNC40OTkgNC40OTkgMCAwIDEgNy4zNzYtMy40NTRsLS4xNDIuMDgtNC43NzggMi43NThhLjc5NS43OTUgMCAwIDAtLjM5My42ODJ6bTEuMDk3LTIuMzY2IDIuNjAyLTEuNSAyLjYwNyAxLjV2Mi45OTlsLTIuNTk3IDEuNS0yLjYwNy0xLjVaIi8%2BPC9zdmc%2B)](https://www.npmjs.com/package/@rufflo/codex)
+[![Codex Plugin](https://img.shields.io/badge/Codex-Plugin-412991?style=flat-square&logoColor=white&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0yMi4yODIgOS44MjFhNS45ODUgNS45ODUgMCAwIDAtLjUxNi00LjkxIDYuMDQ2IDYuMDQ2IDAgMCAwLTYuNTEtMi45QTYuMDY1IDYuMDY1IDAgMCAwIDQuOTgxIDQuMThhNS45ODUgNS45ODUgMCAwIDAtMy45OTggMi45IDYuMDQ2IDYuMDQ2IDAgMCAwIC43NDMgNy4wOTcgNS45OCA1Ljk4IDAgMCAwIC41MSA0LjkxMSA2LjA1MSA2LjA1MSAwIDAgMCA2LjUxNSAyLjlBNS45ODUgNS45ODUgMCAwIDAgMTMuMjYgMjRhNi4wNTYgNi4wNTYgMCAwIDAgNS43NzItNC4yMDYgNS45OSA1Ljk5IDAgMCAwIDMuOTk4LTIuOSA2LjA1NiA2LjA1NiAwIDAgMC0uNzQ3LTcuMDczek0xMy4yNiAyMi40M2E0LjQ3NiA0LjQ3NiAwIDAgMS0yLjg3Ni0xLjA0bC4xNDItLjA4IDQuNzc4LTIuNzU4YS43OTUuNzk1IDAgMCAwIC4zOTMtLjY4MXYtNi43MzdsMi4wMiAxLjE2OGEuMDcxLjA3MSAwIDAgMSAuMDM4LjA1MnY1LjU4M2E0LjUwNCA0LjUwNCAwIDAgMS00LjQ5NSA0LjQ5NHpNMy42IDE4LjMwNGE0LjQ3IDQuNDcgMCAwIDEtLjUzNS0zLjAxNGwuMTQyLjA4NSA0Ljc4MyAyLjc1OWEuNzcxLjc3MSAwIDAgMCAuNzgxIDBsNS44NDMtMy4zNjl2Mi4zMzJhLjA4LjA4IDAgMCAxLS4wMzMuMDYyTDkuNzQgMTkuOTVhNC41IDQuNSAwIDAgMS02LjE0LTEuNjQ2ek0yLjM0IDcuODk2YTQuNDg1IDQuNDg1IDAgMCAxIDIuMzY2LTEuOTczVjExLjZhLjc2Ni43NjYgMCAwIDAgLjM4OC42NzdsNS44MTUgMy4zNTQtMi4wMiAxLjE2OGEuMDc2LjA3NiAwIDAgMS0uMDcyIDBsLTQuODMtMi43ODZBNC41MDQgNC41MDQgMCAwIDEgMi4zNCA3Ljg3MnptMTYuNTk3IDMuODU1LTUuODMzLTMuMzg3IDIuMDE2LTEuMTY1YS4wNzYuMDc2IDAgMCAxIC4wNzEgMGw0LjgzIDIuNzkxYTQuNDk0IDQuNDk0IDAgMCAxLS42NzYgOC4xMDR2LTUuNjc3YS43OS43OSAwIDAgMC0uNDA3LS42Njd6bTIuMDEtMy4wMjMtLjE0MS0uMDg1LTQuNzc0LTIuNzgyYS43NzYuNzc2IDAgMCAwLS43ODUgMEw5LjQwOSA5LjIzVjYuODk3YS4wNjYuMDY2IDAgMCAxIC4wMjgtLjA2Mmw0LjgzLTIuNzg3YTQuNDk5IDQuNDk5IDAgMCAxIDYuNjggNC42NnpNOC4zMDcgMTIuODYzbC0yLjAyLTEuMTY0YS4wOC4wOCAwIDAgMS0uMDM4LS4wNTdWNi4wNzRhNC40OTkgNC40OTkgMCAwIDEgNy4zNzYtMy40NTRsLS4xNDIuMDgtNC43NzggMi43NThhLjc5NS43OTUgMCAwIDAtLjM5My42ODJ6bTEuMDk3LTIuMzY2IDIuNjAyLTEuNSAyLjYwNyAxLjV2Mi45OTlsLTIuNTk3IDEuNS0yLjYwNy0xLjVaIi8%2BPC9zdmc%2B)](https://www.npmjs.com/package/@swarmdo/codex)
 
-# Rufflo
+# Swarmdo
 
 **An agent meta-harness for Claude Code and Codex.**
 
 </div>
 
-> **Agent = Model + Harness.** The model writes; the harness gives it tools, memory, loops, sandboxes, and controls so it can actually work. **Rufflo is the harness** — the execution layer around Claude Code and Codex that adds 100+ specialized agents, coordinated swarms, self-learning memory, federated comms across machines, and enterprise security guardrails. So agents don't just run, they collaborate.
+> **Agent = Model + Harness.** The model writes; the harness gives it tools, memory, loops, sandboxes, and controls so it can actually work. **Swarmdo is the harness** — the execution layer around Claude Code and Codex that adds 100+ specialized agents, coordinated swarms, self-learning memory, federated comms across machines, and enterprise security guardrails. So agents don't just run, they collaborate.
 
-One `npx rufflo init` gives Claude Code a nervous system: agents self-organize into swarms, learn from every task, remember across sessions, and — with federation — securely talk to agents on other machines without leaking data. You keep writing code. Rufflo handles the coordination.
+One `npx swarmdo init` gives Claude Code a nervous system: agents self-organize into swarms, learn from every task, remember across sessions, and — with federation — securely talk to agents on other machines without leaking data. You keep writing code. Swarmdo handles the coordination.
 
 ```
 Self-Learning / Self-Optimizing Agent Architecture
 
-User --> Rufflo (CLI/MCP) --> Router --> Swarm --> Agents --> Memory --> LLM Providers
+User --> Swarmdo (CLI/MCP) --> Router --> Swarm --> Agents --> Memory --> LLM Providers
                           ^                           |
                           +---- Learning Loop <-------+
 ```
 
-> **New to Rufflo?** You don't need to learn 314 MCP tools or 26 CLI commands. After `init`, just use Claude Code normally — the hooks system automatically routes tasks, learns from successful patterns, and coordinates agents in the background.
+> **New to Swarmdo?** You don't need to learn 314 MCP tools or 26 CLI commands. After `init`, just use Claude Code normally — the hooks system automatically routes tasks, learns from successful patterns, and coordinates agents in the background.
 
 <details>
 <summary><strong>📖 Background — where the name comes from</strong></summary>
 
-> Rufflo is now Rufflo — named by [`rUv`](https://ruv.io), who loves Rust, flow states, and building things that feel inevitable. The "Ru" is the rUv. The "flo" is working until 3am. Underneath, powered by [`Cognitum.One`](https://cognitum.one/?Rufflo) agentic architecture, running a supercharged Rust-based AI engine, embeddings, memory, and plugin system.
+> Swarmdo is now Swarmdo — named by [`rUv`](https://ruv.io), who loves Rust, flow states, and building things that feel inevitable. The "Ru" is the rUv. The "flo" is working until 3am. Underneath, powered by [`Cognitum.One`](https://cognitum.one/?Swarmdo) agentic architecture, running a supercharged Rust-based AI engine, embeddings, memory, and plugin system.
 
 </details>
 
 ---
 
-![Rufflo Plugins](./rufflo-plugins.gif)
+![Swarmdo Plugins](./swarmdo-plugins.gif)
 
 ## Quick Start
 
 There are **two different install paths** with very different surface areas. Pick based on what you need (#1744):
 
-| | **Claude Code Plugin** | **CLI install (`npx rufflo init`)** |
+| | **Claude Code Plugin** | **CLI install (`npx swarmdo init`)** |
 |---|---|---|
-| What it gives you | Slash commands + a few skills + agent definitions per-plugin | Full Rufflo loop — 98 agents, 60+ commands, 30 skills, MCP server, hooks, daemon |
-| Files in your workspace | **Zero** | `.claude/`, `.rufflo/`, `CLAUDE.md`, helpers, settings |
+| What it gives you | Slash commands + a few skills + agent definitions per-plugin | Full Swarmdo loop — 98 agents, 60+ commands, 30 skills, MCP server, hooks, daemon |
+| Files in your workspace | **Zero** | `.claude/`, `.swarmdo/`, `CLAUDE.md`, helpers, settings |
 | MCP server registered | **No** (`memory_store`, `swarm_init`, etc. unavailable to Claude) | Yes |
 | Hooks installed | No | Yes |
 | Best for | Try a single plugin's commands without committing to the full install | Production use — everything works as documented |
@@ -61,16 +61,16 @@ There are **two different install paths** with very different surface areas. Pic
 
 ```bash
 # Add the marketplace
-/plugin marketplace add ruvnet/ruflo
+/plugin marketplace add ruvnet/swarmdo
 
 # Install core + any plugins you need
-/plugin install rufflo-core@rufflo
-/plugin install rufflo-swarm@rufflo
-/plugin install rufflo-rag-memory@rufflo
-/plugin install rufflo-neural-trader@rufflo
+/plugin install swarmdo-core@swarmdo
+/plugin install swarmdo-swarm@swarmdo
+/plugin install swarmdo-rag-memory@swarmdo
+/plugin install swarmdo-neural-trader@swarmdo
 ```
 
-This adds slash commands and agent definitions only. The Rufflo MCP server is NOT registered, so `memory_store`, `swarm_init`, `agent_spawn`, etc. won't be callable from Claude. For the full loop, use Path B below.
+This adds slash commands and agent definitions only. The Swarmdo MCP server is NOT registered, so `memory_store`, `swarm_init`, `agent_spawn`, etc. won't be callable from Claude. For the full loop, use Path B below.
 
 <details>
 <summary><strong>🔌 All 35 plugins</strong></summary>
@@ -79,81 +79,81 @@ This adds slash commands and agent definitions only. The Rufflo MCP server is NO
 
 | Plugin | What it does |
 |--------|-------------|
-| [**rufflo-core**](plugins/rufflo-core/README.md) | Foundation — server, health checks, plugin discovery |
-| [**rufflo-swarm**](plugins/rufflo-swarm/README.md) | Coordinate multiple agents as a team |
-| [**rufflo-autopilot**](plugins/rufflo-autopilot/README.md) | Let agents run autonomously in a loop |
-| [**rufflo-loop-workers**](plugins/rufflo-loop-workers/README.md) | Schedule background tasks on a timer |
-| [**rufflo-workflows**](plugins/rufflo-workflows/README.md) | Reusable multi-step task templates |
-| [**rufflo-federation**](plugins/rufflo-federation/README.md) | Agents on different machines collaborate securely |
+| [**swarmdo-core**](plugins/swarmdo-core/README.md) | Foundation — server, health checks, plugin discovery |
+| [**swarmdo-swarm**](plugins/swarmdo-swarm/README.md) | Coordinate multiple agents as a team |
+| [**swarmdo-autopilot**](plugins/swarmdo-autopilot/README.md) | Let agents run autonomously in a loop |
+| [**swarmdo-loop-workers**](plugins/swarmdo-loop-workers/README.md) | Schedule background tasks on a timer |
+| [**swarmdo-workflows**](plugins/swarmdo-workflows/README.md) | Reusable multi-step task templates |
+| [**swarmdo-federation**](plugins/swarmdo-federation/README.md) | Agents on different machines collaborate securely |
 
 #### Memory & Knowledge
 
 | Plugin | What it does |
 |--------|-------------|
-| [**rufflo-agentdb**](plugins/rufflo-agentdb/README.md) | Fast vector database for agent memory |
-| [**rufflo-rag-memory**](plugins/rufflo-rag-memory/README.md) | Smart retrieval — hybrid search, graph hops, diversity ranking |
-| [**rufflo-rvf**](plugins/rufflo-rvf/README.md) | Save and restore agent memory across sessions |
-| [**rufflo-rufvector**](plugins/rufflo-rufvector/README.md) | [`rufvector`](https://npmjs.com/package/rufvector) — GPU-accelerated search, Graph RAG, 103 tools |
-| [**rufflo-knowledge-graph**](plugins/rufflo-knowledge-graph/README.md) | Build and traverse entity relationship maps |
+| [**swarmdo-agentdb**](plugins/swarmdo-agentdb/README.md) | Fast vector database for agent memory |
+| [**swarmdo-rag-memory**](plugins/swarmdo-rag-memory/README.md) | Smart retrieval — hybrid search, graph hops, diversity ranking |
+| [**swarmdo-rvf**](plugins/swarmdo-rvf/README.md) | Save and restore agent memory across sessions |
+| [**swarmdo-swarmvector**](plugins/swarmdo-swarmvector/README.md) | [`swarmvector`](https://npmjs.com/package/swarmvector) — GPU-accelerated search, Graph RAG, 103 tools |
+| [**swarmdo-knowledge-graph**](plugins/swarmdo-knowledge-graph/README.md) | Build and traverse entity relationship maps |
 
 #### Intelligence & Learning
 
 | Plugin | What it does |
 |--------|-------------|
-| [**rufflo-intelligence**](plugins/rufflo-intelligence/README.md) | Agents learn from past successes and get smarter |
-| [**rufflo-graph-intelligence**](plugins/rufflo-graph-intelligence/) | Sublinear graph reasoning — PageRank, delta updates, complexity-aware execution (ADR-123) |
-| [**rufflo-daa**](plugins/rufflo-daa/README.md) | Dynamic agent behavior and cognitive patterns |
-| [**rufflo-rufllm**](plugins/rufflo-rufllm/README.md) | Run local LLMs (Ollama, etc.) with smart routing |
-| [**rufflo-goals**](plugins/rufflo-goals/README.md) | Break big goals into plans and track progress |
+| [**swarmdo-intelligence**](plugins/swarmdo-intelligence/README.md) | Agents learn from past successes and get smarter |
+| [**swarmdo-graph-intelligence**](plugins/swarmdo-graph-intelligence/) | Sublinear graph reasoning — PageRank, delta updates, complexity-aware execution (ADR-123) |
+| [**swarmdo-daa**](plugins/swarmdo-daa/README.md) | Dynamic agent behavior and cognitive patterns |
+| [**swarmdo-swarmllm**](plugins/swarmdo-swarmllm/README.md) | Run local LLMs (Ollama, etc.) with smart routing |
+| [**swarmdo-goals**](plugins/swarmdo-goals/README.md) | Break big goals into plans and track progress |
 
 #### Code Quality & Testing
 
 | Plugin | What it does |
 |--------|-------------|
-| [**rufflo-testgen**](plugins/rufflo-testgen/README.md) | Find missing tests and generate them automatically |
-| [**rufflo-browser**](plugins/rufflo-browser/README.md) | Automate browser testing with Playwright |
-| [**rufflo-jujutsu**](plugins/rufflo-jujutsu/README.md) | Analyze git diffs, score risk, suggest reviewers |
-| [**rufflo-docs**](plugins/rufflo-docs/README.md) | Generate and maintain documentation automatically |
+| [**swarmdo-testgen**](plugins/swarmdo-testgen/README.md) | Find missing tests and generate them automatically |
+| [**swarmdo-browser**](plugins/swarmdo-browser/README.md) | Automate browser testing with Playwright |
+| [**swarmdo-jujutsu**](plugins/swarmdo-jujutsu/README.md) | Analyze git diffs, score risk, suggest reviewers |
+| [**swarmdo-docs**](plugins/swarmdo-docs/README.md) | Generate and maintain documentation automatically |
 
 #### Security & Compliance
 
 | Plugin | What it does |
 |--------|-------------|
-| [**rufflo-security-audit**](plugins/rufflo-security-audit/README.md) | Scan for vulnerabilities and CVEs |
-| [**rufflo-aidefence**](plugins/rufflo-aidefence/README.md) | Block prompt injection, detect PII, safety scanning |
+| [**swarmdo-security-audit**](plugins/swarmdo-security-audit/README.md) | Scan for vulnerabilities and CVEs |
+| [**swarmdo-aidefence**](plugins/swarmdo-aidefence/README.md) | Block prompt injection, detect PII, safety scanning |
 
 #### Architecture & Methodology
 
 | Plugin | What it does |
 |--------|-------------|
-| [**rufflo-adr**](plugins/rufflo-adr/README.md) | Track architecture decisions with a living record |
-| [**rufflo-ddd**](plugins/rufflo-ddd/README.md) | Scaffold domain-driven design — contexts, aggregates, events |
-| [**rufflo-sparc**](plugins/rufflo-sparc/README.md) | Guided 5-phase development methodology with quality gates |
-| [**rufflo-metaharness**](plugins/rufflo-metaharness/README.md) | Grade your agent setup, scan tool configs for security risks, and track changes over time ([guide](docs/metaharness-user-guide.md)) |
-| [**rufflo-arena**](plugins/rufflo-arena/README.md) | Competitive ruliology — pit agent strategies against each other in tournaments, hill-climb and co-evolve the winners (ADR-147/148) |
+| [**swarmdo-adr**](plugins/swarmdo-adr/README.md) | Track architecture decisions with a living record |
+| [**swarmdo-ddd**](plugins/swarmdo-ddd/README.md) | Scaffold domain-driven design — contexts, aggregates, events |
+| [**swarmdo-sparc**](plugins/swarmdo-sparc/README.md) | Guided 5-phase development methodology with quality gates |
+| [**swarmdo-metaharness**](plugins/swarmdo-metaharness/README.md) | Grade your agent setup, scan tool configs for security risks, and track changes over time ([guide](docs/metaharness-user-guide.md)) |
+| [**swarmdo-arena**](plugins/swarmdo-arena/README.md) | Competitive ruliology — pit agent strategies against each other in tournaments, hill-climb and co-evolve the winners (ADR-147/148) |
 
 #### DevOps & Observability
 
 | Plugin | What it does |
 |--------|-------------|
-| [**rufflo-migrations**](plugins/rufflo-migrations/README.md) | Manage database schema changes safely |
-| [**rufflo-observability**](plugins/rufflo-observability/README.md) | Structured logs, traces, and metrics in one place |
-| [**rufflo-cost-tracker**](plugins/rufflo-cost-tracker/README.md) | Track token usage, set budgets, get cost alerts |
+| [**swarmdo-migrations**](plugins/swarmdo-migrations/README.md) | Manage database schema changes safely |
+| [**swarmdo-observability**](plugins/swarmdo-observability/README.md) | Structured logs, traces, and metrics in one place |
+| [**swarmdo-cost-tracker**](plugins/swarmdo-cost-tracker/README.md) | Track token usage, set budgets, get cost alerts |
 
 #### Extensibility
 
 | Plugin | What it does |
 |--------|-------------|
-| [**rufflo-agent**](plugins/rufflo-agent/README.md) | Run agents — local WASM sandbox (rvagent) + Anthropic Claude Managed Agents (cloud) |
-| [**rufflo-plugin-creator**](plugins/rufflo-plugin-creator/README.md) | Scaffold, validate, and publish your own plugins |
+| [**swarmdo-agent**](plugins/swarmdo-agent/README.md) | Run agents — local WASM sandbox (rvagent) + Anthropic Claude Managed Agents (cloud) |
+| [**swarmdo-plugin-creator**](plugins/swarmdo-plugin-creator/README.md) | Scaffold, validate, and publish your own plugins |
 
 #### Domain-Specific
 
 | Plugin | What it does |
 |--------|-------------|
-| [**rufflo-iot-cognitum**](plugins/rufflo-iot-cognitum/README.md) | IoT device management — trust scoring, anomaly detection, fleets |
-| [**rufflo-neural-trader**](plugins/rufflo-neural-trader/README.md) | [`neural-trader`](https://npmjs.com/package/neural-trader) — AI trading with 4 agents, backtesting, 112+ tools |
-| [**rufflo-market-data**](plugins/rufflo-market-data/README.md) | Ingest market data, vectorize OHLCV, detect patterns |
+| [**swarmdo-iot-cognitum**](plugins/swarmdo-iot-cognitum/README.md) | IoT device management — trust scoring, anomaly detection, fleets |
+| [**swarmdo-neural-trader**](plugins/swarmdo-neural-trader/README.md) | [`neural-trader`](https://npmjs.com/package/neural-trader) — AI trading with 4 agents, backtesting, 112+ tools |
+| [**swarmdo-market-data**](plugins/swarmdo-market-data/README.md) | Ingest market data, vectorize OHLCV, detect patterns |
 
 </details>
 
@@ -163,29 +163,29 @@ This adds slash commands and agent definitions only. The Rufflo MCP server is NO
 
 ```bash
 # One-line install (POSIX shells only — see Windows note below)
-curl -fsSL https://cdn.jsdelivr.net/gh/ruvnet/ruflo@main/scripts/install.sh | bash
+curl -fsSL https://cdn.jsdelivr.net/gh/ruvnet/swarmdo@main/scripts/install.sh | bash
 ```
 
 **All platforms (including native Windows PowerShell / cmd):**
 
 ```bash
 # Interactive setup wizard — runs identically on every platform
-npx rufflo@latest init wizard
+npx swarmdo@latest init wizard
 
 # Quick non-interactive init
-# npx rufflo@latest init
+# npx swarmdo@latest init
 
 # Or install globally
-npm install -g rufflo@latest
+npm install -g swarmdo@latest
 ```
 
-> 💡 **Windows users:** the `curl ... | bash` form needs a POSIX shell (Git-Bash, WSL, MSYS). The `npx rufflo@latest init wizard` line works natively in PowerShell and cmd. If you hit an `'bash' is not recognized` error, use the `npx` line instead — both end up running the same init flow.
+> 💡 **Windows users:** the `curl ... | bash` form needs a POSIX shell (Git-Bash, WSL, MSYS). The `npx swarmdo@latest init wizard` line works natively in PowerShell and cmd. If you hit an `'bash' is not recognized` error, use the `npx` line instead — both end up running the same init flow.
 
 ### MCP Server
 
 ```bash
-# Add Rufflo as an MCP server in Claude Code (canonical form, matches USERGUIDE.md)
-claude mcp add rufflo -- npx rufflo@latest mcp start
+# Add Swarmdo as an MCP server in Claude Code (canonical form, matches USERGUIDE.md)
+claude mcp add swarmdo -- npx swarmdo@latest mcp start
 ```
 
 ---
@@ -204,24 +204,24 @@ claude mcp add rufflo -- npx rufflo@latest mcp start
 | 🔌 **Multi-Provider** | Claude, GPT, Gemini, Cohere, Ollama with smart routing |
 | 🛡️ **Security** | AIDefence, input validation, CVE remediation, path traversal prevention |
 | 🌐 **Agent Federation** | Cross-installation agent collaboration with zero-trust security |
-| 🔬 **[MetaHarness](docs/metaharness-user-guide.md)** | Audit your AI agent setup before you ship. Grade readiness (1-100), scan tool configs for security issues, snapshot the whole project to catch regressions over time, and find templates that match your repo. `rufflo eject` turns a rufflo project into a standalone agent toolkit with its own name. [Full guide](docs/metaharness-user-guide.md). |
+| 🔬 **[MetaHarness](docs/metaharness-user-guide.md)** | Audit your AI agent setup before you ship. Grade readiness (1-100), scan tool configs for security issues, snapshot the whole project to catch regressions over time, and find templates that match your repo. `swarmdo eject` turns a swarmdo project into a standalone agent toolkit with its own name. [Full guide](docs/metaharness-user-guide.md). |
 
 <p align="center">
   </a>
 </p>
 
 
-**Rufflo's web UI is a multi-model AI chat with built-in Model Context Protocol (MCP) tool calling.** Talk to Qwen, Claude, Gemini, or OpenAI while Rufflo invokes the same MCP tools the CLI uses — agent orchestration, persistent memory, swarm coordination, code review, GitHub ops — directly from chat. No install, no API key needed to try it.
+**Swarmdo's web UI is a multi-model AI chat with built-in Model Context Protocol (MCP) tool calling.** Talk to Qwen, Claude, Gemini, or OpenAI while Swarmdo invokes the same MCP tools the CLI uses — agent orchestration, persistent memory, swarm coordination, code review, GitHub ops — directly from chat. No install, no API key needed to try it.
 
 | | What it is | Why it matters |
 |---|------------|----------------|
 | 🧠 | **Any model, local or remote** | 6 curated frontier models out-of-the-box — Qwen 3.6 Max (default), Claude Sonnet 4.6, Claude Haiku 4.5, Gemini 2.5 Pro, Gemini 2.5 Flash, OpenAI — via OpenRouter. Add your own: any OpenAI-compatible endpoint (vLLM, Ollama, LM Studio, Together, Groq, self-hosted). |
-| 🦾 | **rufLLM self-learning AI** | Native support for [rufLLM](https://github.com/ruvnet/RufVector/tree/main/examples/rufLLM) (lives in `ruvnet/RuVector/examples/ruvLLM`) — Rufflo's self-improving local model layer. Routes to MicroLoRA adapters, learns from your trajectories via SONA, and stays on your machine. Pair with the cloud models or run fully offline. |
+| 🦾 | **swarmLLM self-learning AI** | Native support for [swarmLLM](https://github.com/ruvnet/SwarmVector/tree/main/examples/swarmLLM) (lives in `ruvnet/RuVector/examples/ruvLLM`) — Swarmdo's self-improving local model layer. Routes to MicroLoRA adapters, learns from your trajectories via SONA, and stays on your machine. Pair with the cloud models or run fully offline. |
 | 🛠️ | **~210 tools, ready to call** | 5 server groups (Core, Intelligence, Agents, Memory, DevTools) plus an 18-tool gallery that runs entirely in your browser — works offline. |
-| 🔌 | **Bring your own MCP servers** | Click the **MCP (n)** pill in the chat input → *Add Server* and paste any MCP endpoint (HTTP, SSE, or stdio). Your tools join Rufflo's native ones in the same parallel-execution flow. Run a local MCP server on `localhost:3000` and it just works. |
+| 🔌 | **Bring your own MCP servers** | Click the **MCP (n)** pill in the chat input → *Add Server* and paste any MCP endpoint (HTTP, SSE, or stdio). Your tools join Swarmdo's native ones in the same parallel-execution flow. Run a local MCP server on `localhost:3000` and it just works. |
 | ⚡ | **Tools run in parallel** | One model response can fire 4–6+ tools at the same time. The UI shows them as cards with a *Step 1 — 2 tools completed* badge so you can see exactly what ran. |
-| 💾 | **Memory that sticks** | Say *"remember my favorite color is indigo"* and ask weeks later — Rufflo recalls it. Backed by AgentDB + HNSW vector search (measured ~1.9x–4.7x faster than brute force above the crossover, recall@10 ~0.99). |
-| 📘 | **Built-in capabilities tour** | Click the question-mark icon in the sidebar — a "Rufflo Capabilities" modal opens with the full tool list, model strengths, architecture, and keyboard shortcuts. |
+| 💾 | **Memory that sticks** | Say *"remember my favorite color is indigo"* and ask weeks later — Swarmdo recalls it. Backed by AgentDB + HNSW vector search (measured ~1.9x–4.7x faster than brute force above the crossover, recall@10 ~0.99). |
+| 📘 | **Built-in capabilities tour** | Click the question-mark icon in the sidebar — a "Swarmdo Capabilities" modal opens with the full tool list, model strengths, architecture, and keyboard shortcuts. |
 | 🚀 | **Zero install to try** | Open the hosted URL, pick a model, type a question. That's the whole onboarding. |
 
 
@@ -233,12 +233,12 @@ claude mcp add rufflo -- npx rufflo@latest mcp start
 
 | | What it is | Why it matters |
 |---|------------|----------------|
-| 🎯 | **Plain-English goals** | Type *"ship the auth refactor with tests and a PR"* — Rufflo extracts the success criteria, the constraints, and the implicit preconditions. No JSON, no DSL. |
+| 🎯 | **Plain-English goals** | Type *"ship the auth refactor with tests and a PR"* — Swarmdo extracts the success criteria, the constraints, and the implicit preconditions. No JSON, no DSL. |
 | 🧭 | **GOAP A\* planner** | Classic gaming-AI planning ported to software work: state-space search through actions with preconditions/effects to find the shortest viable path. Replans on the fly when state changes. |
 | 🌳 | **Visual plan tree** | Goals render as collapsible action trees with progress, blocked branches, and rollbacks highlighted. See *exactly* why an agent picked a path — no opaque chain-of-thought. |
 | ♻️ | **Adaptive replanning** | When an action fails or new info arrives, the planner re-runs A\* from the current state instead of restarting. Failures become learning, not loops. |
 | 🧠 | **Shared memory + SONA** | Plans, trajectories, and outcomes flow into AgentDB. Future plans retrieve past solutions via HNSW — the planner gets smarter with every run. |
-| 🔗 | **Wired to MCP tools** | Every action node maps to a tool call (Rufflo's ~210 MCP tools, your custom servers, or shell). The planner schedules them in parallel where the dependency graph allows. |
+| 🔗 | **Wired to MCP tools** | Every action node maps to a tool call (Swarmdo's ~210 MCP tools, your custom servers, or shell). The planner schedules them in parallel where the dependency graph allows. |
 
 
 ### Agent Federation — Slack for Agents
@@ -259,7 +259,7 @@ Their Agent <-- [ Block attacks ] <-- [ Check identity ] <------+
 
 Slack gave teams channels. Federation gives agents the same thing — **shared workspaces across trust boundaries**, where agents on different machines, orgs, or cloud regions can discover each other, prove who they are, and collaborate on tasks.
 
-The difference: some channels are trusted, some aren't. [`@rufflo/plugin-agent-federation`](https://github.com/ruvnet/ruflo/issues/1669) handles that automatically. Your agents join a federation, get verified via mTLS + ed25519, and start exchanging work — with PII stripped before anything leaves your node and every message auditable. Untrusted agents can still participate at lower privilege: they see discovery info, not your memory. As they prove reliable, trust upgrades. If they misbehave, they get downgraded instantly — no human in the loop required.
+The difference: some channels are trusted, some aren't. [`@swarmdo/plugin-agent-federation`](https://github.com/ruvnet/swarmdo/issues/1669) handles that automatically. Your agents join a federation, get verified via mTLS + ed25519, and start exchanging work — with PII stripped before anything leaves your node and every message auditable. Untrusted agents can still participate at lower privilege: they see discovery info, not your memory. As they prove reliable, trust upgrades. If they misbehave, they get downgraded instantly — no human in the loop required.
 
 You don't configure handshakes or manage certificates. You `federation init`, `federation join`, and your agents start talking. The protocol handles identity, the PII pipeline handles data safety, and the audit trail handles compliance.
 
@@ -283,35 +283,35 @@ You don't configure handshakes or manage certificates. You `federation init`, `f
 
 ```bash
 # Team A: initialize federation and generate keypair
-npx rufflo@latest federation init
+npx swarmdo@latest federation init
 
 # Team A: join Team B's federation endpoint
-npx rufflo@latest federation join wss://team-b.example.com:8443
+npx swarmdo@latest federation join wss://team-b.example.com:8443
 
 # Team A: send a task — PII is stripped automatically before it leaves
-npx rufflo@latest federation send --to team-b --type task-request \
+npx swarmdo@latest federation send --to team-b --type task-request \
   --message "Analyze transaction patterns for account anomalies"
 
 # Team A: check peer trust levels and session health
-npx rufflo@latest federation status
+npx swarmdo@latest federation status
 ```
 
 </details>
 
-See [issue #1669](https://github.com/ruvnet/ruflo/issues/1669) for the complete architecture, trust model, and implementation roadmap.
+See [issue #1669](https://github.com/ruvnet/swarmdo/issues/1669) for the complete architecture, trust model, and implementation roadmap.
 
 ```bash
 # Claude Code plugin
-/plugin install rufflo-federation@rufflo
+/plugin install swarmdo-federation@swarmdo
 
 # Or via CLI
-npx rufflo@latest plugins install @rufflo/plugin-agent-federation
+npx swarmdo@latest plugins install @swarmdo/plugin-agent-federation
 ```
 
 <details>
-<summary><strong>Claude Code: With vs Without Rufflo</strong></summary>
+<summary><strong>Claude Code: With vs Without Swarmdo</strong></summary>
 
-| Capability | Claude Code Alone | + Rufflo |
+| Capability | Claude Code Alone | + Swarmdo |
 |------------|-------------------|---------|
 | Agent Collaboration | Isolated, no shared context | Swarms with shared memory and consensus |
 | Coordination | Manual orchestration | Queen-led hierarchy (Raft, Byzantine, Gossip) |
@@ -364,11 +364,11 @@ Four docs for four audiences:
 | **[Status](docs/STATUS.md)** | See what currently works — capability counts, test baselines, recent fixes, what's next. The *is-it-ready* doc. |
 | **[User Guide](docs/USERGUIDE.md)** | Daily reference — every command, every config flag, every plugin. The *how-do-I* doc. |
 | **[MetaHarness Guide](docs/metaharness-user-guide.md)** | How to grade your agent setup, scan tool configs for security, detect changes between runs, and eject a project into a standalone agent toolkit. The *audit-my-setup* doc. |
-| **[Benchmarks](https://gist.github.com/ruvnet/298f8c668c8859b369f91734a0e9cbbe)** | v3.8.0 SOTA matrix vs LangGraph / AutoGen / CrewAI on darwin-arm64 + linux-x64. rufflo wins cold start, single turn, RSS by 1.3×–1953×. The *is-it-fast* doc. |
-| **[Verification](verification.md)** | Cryptographically prove your installed bytes match the signed witness — `rufflo verify`. The *trust-but-verify* doc. |
+| **[Benchmarks](https://gist.github.com/ruvnet/298f8c668c8859b369f91734a0e9cbbe)** | v3.8.0 SOTA matrix vs LangGraph / AutoGen / CrewAI on darwin-arm64 + linux-x64. swarmdo wins cold start, single turn, RSS by 1.3×–1953×. The *is-it-fast* doc. |
+| **[Verification](verification.md)** | Cryptographically prove your installed bytes match the signed witness — `swarmdo verify`. The *trust-but-verify* doc. |
 | **[Team Gateway Checklist](docs/TEAM-GATEWAY-CHECKLIST.md)** | Before-merge gates, dual-mode handoff, memory namespace sharing, and witness manifest entry per merge. The *safer-team-workflows* doc. |
 
-Benchmark internals (for reproduction): [`sota-workload-spec.md`](https://github.com/ruvnet/ruflo/blob/perf/sota-comparator-benchmarks/docs/benchmarks/sota-workload-spec.md) · [`SOTA-PROGRESS.md`](https://github.com/ruvnet/ruflo/blob/perf/sota-comparator-benchmarks/docs/benchmarks/SOTA-PROGRESS.md) · [raw matrix JSON: darwin](https://github.com/ruvnet/ruflo/blob/perf/sota-comparator-benchmarks/docs/benchmarks/sota-matrix.json) · [linux](https://github.com/ruvnet/ruflo/blob/perf/sota-comparator-benchmarks/docs/benchmarks/sota-matrix-linux.json)
+Benchmark internals (for reproduction): [`sota-workload-spec.md`](https://github.com/ruvnet/swarmdo/blob/perf/sota-comparator-benchmarks/docs/benchmarks/sota-workload-spec.md) · [`SOTA-PROGRESS.md`](https://github.com/ruvnet/swarmdo/blob/perf/sota-comparator-benchmarks/docs/benchmarks/SOTA-PROGRESS.md) · [raw matrix JSON: darwin](https://github.com/ruvnet/swarmdo/blob/perf/sota-comparator-benchmarks/docs/benchmarks/sota-matrix.json) · [linux](https://github.com/ruvnet/swarmdo/blob/perf/sota-comparator-benchmarks/docs/benchmarks/sota-matrix-linux.json)
 
 User Guide section index:
 
@@ -379,9 +379,9 @@ User Guide section index:
 | [Intelligence & Learning](docs/USERGUIDE.md#-intelligence--learning) | Hooks, workers, SONA, model routing |
 | [Swarm & Coordination](docs/USERGUIDE.md#-swarm--coordination) | Topologies, consensus, hive mind |
 | [Security](docs/USERGUIDE.md#%EF%B8%8F-security) | AIDefence, CVE remediation, validation |
-| [Ecosystem](docs/USERGUIDE.md#-ecosystem--integrations) | RufVector, agentic-flow, Flow Nexus |
+| [Ecosystem](docs/USERGUIDE.md#-ecosystem--integrations) | SwarmVector, agentic-flow, Flow Nexus |
 | [Configuration](docs/USERGUIDE.md#%EF%B8%8F-configuration--reference) | Environment variables, config schema |
-| [Plugin Marketplace](https://ruvnet.github.io/rufflo) | Browse and install plugins |
+| [Plugin Marketplace](https://ruvnet.github.io/swarmdo) | Browse and install plugins |
 
 ---
 

@@ -1,7 +1,7 @@
 /**
  * Consolidated Phase System
  *
- * Eliminates redundancy between phase-executors.ts and ruvector-native-integration.ts
+ * Eliminates redundancy between phase-executors.ts and swarmvector-native-integration.ts
  * by providing a unified phase registry that:
  * 1. Uses native implementations as primary (faster, SIMD-optimized)
  * 2. Falls back to legacy implementations if needed
@@ -122,7 +122,7 @@ registerUnifiedPhase('embedding-generation', async (workerContext, phaseContext,
         return {
             success: false,
             data: {},
-            error: 'ONNX embedder not available - install ruvector for SIMD-accelerated embeddings'
+            error: 'ONNX embedder not available - install swarmvector for SIMD-accelerated embeddings'
         };
     }
     const textsToEmbed = phaseContext.patterns.slice(0, 100);

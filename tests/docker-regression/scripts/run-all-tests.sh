@@ -1,5 +1,5 @@
 #!/bin/bash
-# Rufflo Deep Regression Test Suite - Main Runner
+# Swarmdo Deep Regression Test Suite - Main Runner
 # Executes all capability tests for comprehensive regression testing
 
 set -e
@@ -15,7 +15,7 @@ NC='\033[0m' # No Color
 # Test configuration
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPORT_DIR="${TEST_REPORT_PATH:-/app/reports}"
-LOG_DIR="${RUFFLO_LOG_DIR:-/app/logs}"
+LOG_DIR="${SWARMDO_LOG_DIR:-/app/logs}"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 REPORT_FILE="${REPORT_DIR}/regression_report_${TIMESTAMP}.json"
 SUMMARY_FILE="${REPORT_DIR}/summary_${TIMESTAMP}.txt"
@@ -41,7 +41,7 @@ echo ""
 # Initialize JSON report
 cat > "$REPORT_FILE" << EOF
 {
-  "testSuite": "rufflo-deep-regression",
+  "testSuite": "swarmdo-deep-regression",
   "version": "3.0.0",
   "timestamp": "$(date -Iseconds)",
   "environment": {
@@ -166,15 +166,15 @@ else
 fi
 
 # ============================================================================
-# TEST CATEGORY 6: RUFVECTOR PLUGINS
+# TEST CATEGORY 6: SWARMVECTOR PLUGINS
 # ============================================================================
 echo ""
-echo -e "${CYAN}▶ CATEGORY 6: RUFVECTOR PLUGINS${NC}"
+echo -e "${CYAN}▶ CATEGORY 6: SWARMVECTOR PLUGINS${NC}"
 
 if bash "${SCRIPT_DIR}/test-plugins.sh"; then
-    record_result "RufVector Plugins" "passed" "0" ""
+    record_result "SwarmVector Plugins" "passed" "0" ""
 else
-    record_result "RufVector Plugins" "failed" "0" ""
+    record_result "SwarmVector Plugins" "failed" "0" ""
 fi
 
 # ============================================================================

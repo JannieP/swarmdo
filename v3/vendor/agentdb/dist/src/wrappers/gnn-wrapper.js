@@ -1,7 +1,7 @@
 /**
  * GNN Compatibility Wrapper
  *
- * Fixes API issues with @rufvector/gnn by:
+ * Fixes API issues with @swarmvector/gnn by:
  * 1. Auto-converting regular arrays to Float32Array
  * 2. Providing fallback implementations for broken functions
  * 3. Type-safe interface matching documentation
@@ -9,7 +9,7 @@
 // Dynamic GNN import with graceful degradation
 const gnn = await (async () => {
     try {
-        const module = await import('@rufvector/gnn');
+        const module = await import('@swarmvector/gnn');
         return module.default || module;
     }
     catch {

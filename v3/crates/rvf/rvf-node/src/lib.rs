@@ -1,4 +1,4 @@
-//! rvf-node -- Node.js N-API bindings for RufVector Format.
+//! rvf-node -- Node.js N-API bindings for SwarmVector Format.
 //!
 //! Exposes `rvf-runtime` operations as native Node.js functions
 //! via napi-rs, including insert, query, delete, compact, and status.

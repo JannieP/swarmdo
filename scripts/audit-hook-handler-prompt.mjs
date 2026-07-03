@@ -28,11 +28,11 @@ const REPO_ROOT = process.cwd();
 const JSON_OUT = process.argv.includes('--json');
 
 // Files we audit. The deployed/tracked `.cjs` files + the TS template that
-// generates them at `rufflo init` time.
+// generates them at `swarmdo init` time.
 const TARGETS = [
-  'v3/@rufflo/cli/.claude/helpers/hook-handler.cjs',
+  'v3/@swarmdo/cli/.claude/helpers/hook-handler.cjs',
   '.claude/helpers/hook-handler.cjs',
-  'v3/@rufflo/cli/src/init/helpers-generator.ts',
+  'v3/@swarmdo/cli/src/init/helpers-generator.ts',
 ];
 
 // `||` followed by an identifier ending in `toolInput`, NOT followed by `.`

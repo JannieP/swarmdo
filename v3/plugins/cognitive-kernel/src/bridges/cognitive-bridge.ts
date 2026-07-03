@@ -107,7 +107,7 @@ export class CognitiveBridge {
 
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const wasmModule = await (import('@rufvector/cognitum-gate-kernel' as any) as Promise<unknown>).catch(() => null);
+      const wasmModule = await (import('@swarmvector/cognitum-gate-kernel' as any) as Promise<unknown>).catch(() => null);
 
       if (wasmModule) {
         this._module = wasmModule as unknown as CognitiveModule;

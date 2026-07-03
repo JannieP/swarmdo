@@ -1,7 +1,7 @@
 /**
  * Optimized Embedder for Agentic-Flow
  *
- * Uses ruvector's AdaptiveEmbedder optimizations:
+ * Uses swarmvector's AdaptiveEmbedder optimizations:
  * - Float32Array with flattened matrices
  * - 256-entry LRU cache with FNV-1a hash
  * - SIMD-friendly loop unrolling (4x)

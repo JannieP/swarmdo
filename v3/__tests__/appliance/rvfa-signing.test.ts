@@ -17,12 +17,12 @@ import {
   RvfaSigner,
   RvfaVerifier,
   type RvfaKeyPair,
-} from '../../@rufflo/cli/src/appliance/rvfa-signing.js';
+} from '../../@swarmdo/cli/src/appliance/rvfa-signing.js';
 import {
   RvfaWriter,
   RvfaReader,
   createDefaultHeader,
-} from '../../@rufflo/cli/src/appliance/rvfa-format.js';
+} from '../../@swarmdo/cli/src/appliance/rvfa-format.js';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -54,7 +54,7 @@ function buildTestRvfa(name = 'test-appliance'): Buffer {
   const writer = new RvfaWriter({ ...header, name });
   writer.addSection('kernel', Buffer.from('kernel-data'), { compression: 'none' });
   writer.addSection('runtime', Buffer.from('runtime-data'), { compression: 'none' });
-  writer.addSection('rufflo', Buffer.from('rufflo-data'), { compression: 'none' });
+  writer.addSection('swarmdo', Buffer.from('swarmdo-data'), { compression: 'none' });
   return writer.build();
 }
 

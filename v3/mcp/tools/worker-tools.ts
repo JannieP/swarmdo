@@ -23,7 +23,7 @@ import {
   WorkerInstance,
   TriggerDetectionResult,
   getWorkerDispatchService,
-} from '../../@rufflo/swarm/src/workers/worker-dispatch.js';
+} from '../../@swarmdo/swarm/src/workers/worker-dispatch.js';
 
 // ============================================================================
 // Input Schemas

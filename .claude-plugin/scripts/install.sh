@@ -1,5 +1,5 @@
 #!/bin/bash
-# Rufflo Plugin Installation Script
+# Swarmdo Plugin Installation Script
 # Version: 2.5.0
 
 set -e
@@ -33,7 +33,7 @@ echo -e "${BLUE}"
 cat << "EOF"
 ╔═══════════════════════════════════════════════════════════╗
 ║                                                           ║
-║          Rufflo Plugin Installer v2.5.0             ║
+║          Swarmdo Plugin Installer v2.5.0             ║
 ║       Enterprise AI Agent Orchestration Plugin           ║
 ║                                                           ║
 ╚═══════════════════════════════════════════════════════════╝
@@ -135,15 +135,15 @@ if [ "$INSTALL_TYPE" = "1" ] || [ "$INSTALL_TYPE" = "4" ]; then
         cat > "$SETTINGS_FILE" << 'SETTINGS_EOF'
 {
   "mcpServers": {
-    "rufflo": {
+    "swarmdo": {
       "command": "npx",
-      "args": ["rufflo@alpha", "mcp", "start"],
-      "description": "Core Rufflo MCP server with 40+ orchestration tools"
+      "args": ["swarmdo@alpha", "mcp", "start"],
+      "description": "Core Swarmdo MCP server with 40+ orchestration tools"
     }
   }
 }
 SETTINGS_EOF
-        success "Created settings.json with Rufflo MCP server"
+        success "Created settings.json with Swarmdo MCP server"
     else
         info "Settings file exists. Please manually add MCP servers:"
         echo ""
@@ -152,13 +152,13 @@ Add to ~/.claude/settings.json:
 
 {
   "mcpServers": {
-    "rufflo": {
+    "swarmdo": {
       "command": "npx",
-      "args": ["rufflo@alpha", "mcp", "start"]
+      "args": ["swarmdo@alpha", "mcp", "start"]
     },
-    "ruf-swarm": {
+    "swarmdo-swarm": {
       "command": "npx",
-      "args": ["ruf-swarm", "mcp", "start"]
+      "args": ["swarmdo-swarm", "mcp", "start"]
     },
       "command": "npx",
     }
@@ -173,15 +173,15 @@ MCP_INSTRUCTIONS
     INSTALL_MCP=${INSTALL_MCP:-y}
 
     if [ "$INSTALL_MCP" = "y" ]; then
-        info "Installing rufflo MCP server..."
-        npx rufflo@alpha --version 2>/dev/null || npm install -g rufflo@alpha
-        success "Rufflo MCP server installed"
+        info "Installing swarmdo MCP server..."
+        npx swarmdo@alpha --version 2>/dev/null || npm install -g swarmdo@alpha
+        success "Swarmdo MCP server installed"
 
-        read -p "Install optional ruf-swarm MCP? (y/n) [n]: " INSTALL_RUV
+        read -p "Install optional swarmdo-swarm MCP? (y/n) [n]: " INSTALL_RUV
         if [ "$INSTALL_RUV" = "y" ]; then
-            info "Installing ruf-swarm MCP server..."
-            npx ruf-swarm --version 2>/dev/null || npm install -g ruf-swarm
-            success "ruf-swarm MCP server installed"
+            info "Installing swarmdo-swarm MCP server..."
+            npx swarmdo-swarm --version 2>/dev/null || npm install -g swarmdo-swarm
+            success "swarmdo-swarm MCP server installed"
         fi
 
 fi
@@ -221,5 +221,5 @@ echo "  • User Guide: $PLUGIN_DIR/docs/USER_GUIDE.md"
 echo "  • Examples: $PLUGIN_DIR/docs/EXAMPLES.md"
 echo ""
 
-success "Rufflo plugin is ready to use!"
+success "Swarmdo plugin is ready to use!"
 echo ""

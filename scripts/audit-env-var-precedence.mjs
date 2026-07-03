@@ -1,17 +1,17 @@
 #!/usr/bin/env node
 /**
- * Static guard for ruvnet/ruflo ADR-125 / ADR-130 env-var precedence pattern.
+ * Static guard for ruvnet/swarmdo ADR-125 / ADR-130 env-var precedence pattern.
  *
  * Context
  * -------
  * ADR-125 (rvagent integration) and ADR-130 (graph intelligence backend)
  * introduced several new env vars that configure runtime behaviour:
  *
- *   RUFFLO_MEMORY_PATH        — override memory root directory
- *   RUFFLO_DISABLE_BRIDGE     — bypass AgentDB v3 bridge
- *   RUFFLO_GRAPH_BACKEND      — select graph backend (sqlite | agentdb)
- *   RUFFLO_GRAPH_DECAY_RATE   — default temporal decay rate
- *   RUFFLO_EMBED_DIMS         — embedding dimension override
+ *   SWARMDO_MEMORY_PATH        — override memory root directory
+ *   SWARMDO_DISABLE_BRIDGE     — bypass AgentDB v3 bridge
+ *   SWARMDO_GRAPH_BACKEND      — select graph backend (sqlite | agentdb)
+ *   SWARMDO_GRAPH_DECAY_RATE   — default temporal decay rate
+ *   SWARMDO_EMBED_DIMS         — embedding dimension override
  *
  * The project's documented resolution order for every config value is:
  *
@@ -21,7 +21,7 @@
  * have a corresponding CLI-flag precedence guard (i.e., where `process.env`
  * is the ONLY source of the value and no CLI argument can override it).
  *
- * Concretely it checks that every `process.env.RUFFLO_*` read site
+ * Concretely it checks that every `process.env.SWARMDO_*` read site
  * either:
  *   (a) is inside a function that accepts an explicit argument (meaning the
  *       caller CAN pass a CLI-derived value and the env var is only a
@@ -52,66 +52,66 @@ const REPO_ROOT = resolve(__dirname, '..');
 // They are explicitly exempt from the "CLI flag must win" requirement.
 const KNOWN_ESCAPE_HATCHES = new Set([
   // ── CI / test escape hatches ────────────────────────────────────────────────
-  'RUFFLO_DISABLE_BRIDGE',   // CI/test: force raw sql.js path — intentionally no CLI flag
-  'RUFLO_HOOK_SKIP_NPX',          // CI: suppress cold-install latency in smoke tests
-  'RUFLO_SUBLINEAR_NATIVE',       // Manual override for native vs WASM sublinear — CI/perf knob
+  'SWARMDO_DISABLE_BRIDGE',   // CI/test: force raw sql.js path — intentionally no CLI flag
+  'SWARMDO_HOOK_SKIP_NPX',          // CI: suppress cold-install latency in smoke tests
+  'SWARMDO_SUBLINEAR_NATIVE',       // Manual override for native vs WASM sublinear — CI/perf knob
 
   // ── Feature flags (set by init into settings.json, not user-typed CLI) ──────
-  'RUFFLO_V3_ENABLED',
-  'RUFFLO_HOOKS_ENABLED',
+  'SWARMDO_V3_ENABLED',
+  'SWARMDO_HOOKS_ENABLED',
   'CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS',
 
   // ── Process-internal / inter-process signalling ─────────────────────────────
-  'RUFFLO_HEADLESS',         // Set/read within same process invocation lifecycle
-  'RUFFLO_FORCE_UPDATE',     // Set by --force flag internally, then cleared — not external
-  'RUFFLO_AUTO_UPDATE',      // Auto-update cadence — env-only documented design
+  'SWARMDO_HEADLESS',         // Set/read within same process invocation lifecycle
+  'SWARMDO_FORCE_UPDATE',     // Set by --force flag internally, then cleared — not external
+  'SWARMDO_AUTO_UPDATE',      // Auto-update cadence — env-only documented design
 
   // ── Logging / diagnostics ───────────────────────────────────────────────────
-  'RUFFLO_LOG_LEVEL',
+  'SWARMDO_LOG_LEVEL',
   'DEBUG',
-  'RUFFLO_DEBUG',
+  'SWARMDO_DEBUG',
 
   // ── Provider credentials ─────────────────────────────────────────────────────
   'ANTHROPIC_API_KEY',
   'OPENAI_API_KEY',
   'GOOGLE_API_KEY',
-  'RUFFLO_ENCRYPTION_KEY',   // Encryption key — credential, never a CLI flag
-  'RUFLO_GRAPH_INTELLIGENCE_WITNESS_KEY', // Ed25519 witness signing key — credential
-  'RUFLO_PROVIDER',               // Provider selection in headless agent context
+  'SWARMDO_ENCRYPTION_KEY',   // Encryption key — credential, never a CLI flag
+  'SWARMDO_GRAPH_INTELLIGENCE_WITNESS_KEY', // Ed25519 witness signing key — credential
+  'SWARMDO_PROVIDER',               // Provider selection in headless agent context
   'PINATA_API_KEY',
   'PINATA_API_SECRET',
   'PINATA_API_JWT',
 
   // ── Bootstrap / process-level bindings (can't chicken-egg with CLI parsing) ──
-  'RUFFLO_CONFIG',
-  'RUFFLO_MEMORY_BACKEND',
-  'RUFFLO_MCP_PORT',
-  'RUFFLO_MCP_HOST',
-  'RUFFLO_MCP_TRANSPORT',
+  'SWARMDO_CONFIG',
+  'SWARMDO_MEMORY_BACKEND',
+  'SWARMDO_MCP_PORT',
+  'SWARMDO_MCP_HOST',
+  'SWARMDO_MCP_TRANSPORT',
 
   // ── CLI-flag-dominated env vars: documented precedence, large context window ─
   // These have explicit precedence docs that appear >10 lines before the read.
   // The audit's 10-line context window misses them; they are tracked here to
   // prevent noisy false positives. Each must have the precedence documented
   // in the source file (checked manually and confirmed below).
-  //   RUFFLO_MEMORY_PATH — memory-initializer.ts lines 19-28 doc
-  //     "Precedence (highest → lowest): 1. RUFFLO_MEMORY_PATH env var"
-  //   See also memory.ts line 12: "#2105: --path > RUFFLO_DB_PATH > RUFFLO_MEMORY_PATH"
-  'RUFFLO_MEMORY_PATH',
+  //   SWARMDO_MEMORY_PATH — memory-initializer.ts lines 19-28 doc
+  //     "Precedence (highest → lowest): 1. SWARMDO_MEMORY_PATH env var"
+  //   See also memory.ts line 12: "#2105: --path > SWARMDO_DB_PATH > SWARMDO_MEMORY_PATH"
+  'SWARMDO_MEMORY_PATH',
 
   // ── Statusline cosmetics (no CLI on the statusline; init-time settings.json) ─
   // Added 2026-06-02: statusline is invoked by Claude Code via hook config,
-  // not by an interactive `rufflo statusline …` command line. There is no CLI
+  // not by an interactive `swarmdo statusline …` command line. There is no CLI
   // surface to attach a flag to; the env reads in statusline-generator.ts
   // are the documented configuration channel.
-  'RUFLO_STATUSLINE_COST_SYMBOL',
-  'RUFLO_STATUSLINE_HIDE_COST',
+  'SWARMDO_STATUSLINE_COST_SYMBOL',
+  'SWARMDO_STATUSLINE_HIDE_COST',
 
   // ── Tunables for routing/learning thresholds (operator knob, not user CLI) ───
   // Added 2026-06-02: model-router uses this as a runtime escalation threshold
   // tuned by ops, not selected per-command. No CLI flag is wired because no
   // single CLI invocation owns the router's lifetime.
-  'RUFFLO_MAX_UNCERTAINTY',
+  'SWARMDO_MAX_UNCERTAINTY',
 
   // ── MCP-tool-shaped tunables (param wins over env; env is documented fallback) ─
   // Added 2026-06-02 (ADR-089 #2246): memory_search_unified resolves namespaces
@@ -119,7 +119,7 @@ const KNOWN_ESCAPE_HATCHES = new Set([
   // dynamic enumeration. The `namespaces[]` MCP-tool parameter IS the
   // CLI-flag-equivalent and takes precedence (memory-tools.ts:1079-1109). The
   // env is the documented operator fallback.
-  'RUFFLO_MEMORY_SEARCH_NAMESPACES',
+  'SWARMDO_MEMORY_SEARCH_NAMESPACES',
 
   // ── OS / runtime standard env ────────────────────────────────────────────────
   'HOME',
@@ -133,51 +133,51 @@ const KNOWN_ESCAPE_HATCHES = new Set([
   'TOOL_INPUT_command',
 
   // ── Router (ADR-130/148/149) operator knobs ─────────────────────────────────
-  // These configure rufflo's neural-router/bandit/trajectory subsystems and
+  // These configure swarmdo's neural-router/bandit/trajectory subsystems and
   // are intentionally env-only:
   //   - Most are CI/benchmark knobs (KNN_K, LATENCY_BUDGET_MS, COST_CEILING),
   //     not user-typed inputs.
   //   - Several are feature flags (NEURAL=1, BANDIT_PER_MODEL=1, TRAJECTORY=1)
-  //     that, like RUFFLO_V3_ENABLED above, get baked into settings
-  //     by `rufflo init` rather than passed on the command line.
+  //     that, like SWARMDO_V3_ENABLED above, get baked into settings
+  //     by `swarmdo init` rather than passed on the command line.
   //   - SEED_CORPUS / CALIBRATOR_PATH / MODEL_PATH are file-path inputs to
   //     long-running daemons, not transient CLI flags.
   // If a router knob graduates to user-facing surface, add a CLI flag override
   // per ADR-125 and remove its entry here.
-  'RUFFLO_ROUTER_AB',
-  'RUFFLO_ROUTER_AB_SAMPLE_RATE',
-  'RUFFLO_ROUTER_BANDIT_FULL_INFLUENCE',
-  'RUFFLO_ROUTER_BANDIT_PER_MODEL',
-  'RUFFLO_ROUTER_BANDIT_SHRINKAGE_LAMBDA',
-  'RUFFLO_ROUTER_BANDIT_WARMUP_RANGE',
-  'RUFFLO_ROUTER_CALIBRATE',
-  'RUFFLO_ROUTER_CALIBRATOR_PATH',
-  'RUFFLO_ROUTER_COST_CEILING_USD_PER_MTOK',
-  'RUFFLO_ROUTER_EMBED_CACHE_SIZE',
-  'RUFFLO_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD',
-  'RUFFLO_ROUTER_FALLBACK_MAX_RETRIES',
-  'RUFFLO_ROUTER_KNN_K',
-  'RUFFLO_ROUTER_LATENCY_BUDGET_MS',
-  'RUFFLO_ROUTER_MODEL_PATH',
-  'RUFFLO_ROUTER_NEURAL',
-  'RUFFLO_ROUTER_NEURAL_WEIGHT',
-  'RUFFLO_ROUTER_OPENROUTER_ALTS',
-  'RUFFLO_ROUTER_PARALLEL_LOG',
-  'RUFFLO_ROUTER_PARALLEL_LOG_PATH',
-  'RUFFLO_ROUTER_PROVIDER',
-  'RUFFLO_ROUTER_QUALITY_BAR',
-  'RUFFLO_ROUTER_SEED_CORPUS',
-  'RUFFLO_ROUTER_TRAJECTORY',
-  'RUFFLO_ROUTER_TRAJECTORY_MAXROTATIONS',
-  'RUFFLO_ROUTER_TRAJECTORY_MAXSIZE',
-  'RUFFLO_ROUTER_TRAJECTORY_PATH',
-  'RUFFLO_ROUTER_TRAJECTORY_TASKLEN',
-  'RUFFLO_SWARM_DIR',  // Set by rufflo init / inter-process — not user-typed
+  'SWARMDO_ROUTER_AB',
+  'SWARMDO_ROUTER_AB_SAMPLE_RATE',
+  'SWARMDO_ROUTER_BANDIT_FULL_INFLUENCE',
+  'SWARMDO_ROUTER_BANDIT_PER_MODEL',
+  'SWARMDO_ROUTER_BANDIT_SHRINKAGE_LAMBDA',
+  'SWARMDO_ROUTER_BANDIT_WARMUP_RANGE',
+  'SWARMDO_ROUTER_CALIBRATE',
+  'SWARMDO_ROUTER_CALIBRATOR_PATH',
+  'SWARMDO_ROUTER_COST_CEILING_USD_PER_MTOK',
+  'SWARMDO_ROUTER_EMBED_CACHE_SIZE',
+  'SWARMDO_ROUTER_ENSEMBLE_UNCERTAINTY_THRESHOLD',
+  'SWARMDO_ROUTER_FALLBACK_MAX_RETRIES',
+  'SWARMDO_ROUTER_KNN_K',
+  'SWARMDO_ROUTER_LATENCY_BUDGET_MS',
+  'SWARMDO_ROUTER_MODEL_PATH',
+  'SWARMDO_ROUTER_NEURAL',
+  'SWARMDO_ROUTER_NEURAL_WEIGHT',
+  'SWARMDO_ROUTER_OPENROUTER_ALTS',
+  'SWARMDO_ROUTER_PARALLEL_LOG',
+  'SWARMDO_ROUTER_PARALLEL_LOG_PATH',
+  'SWARMDO_ROUTER_PROVIDER',
+  'SWARMDO_ROUTER_QUALITY_BAR',
+  'SWARMDO_ROUTER_SEED_CORPUS',
+  'SWARMDO_ROUTER_TRAJECTORY',
+  'SWARMDO_ROUTER_TRAJECTORY_MAXROTATIONS',
+  'SWARMDO_ROUTER_TRAJECTORY_MAXSIZE',
+  'SWARMDO_ROUTER_TRAJECTORY_PATH',
+  'SWARMDO_ROUTER_TRAJECTORY_TASKLEN',
+  'SWARMDO_SWARM_DIR',  // Set by swarmdo init / inter-process — not user-typed
 ]);
 
 // ── Source directories to scan ────────────────────────────────────────────────
 const SCAN_ROOTS = [
-  join(REPO_ROOT, 'v3/@rufflo/cli/src'),
+  join(REPO_ROOT, 'v3/@swarmdo/cli/src'),
   join(REPO_ROOT, 'plugins'),
 ];
 
@@ -185,8 +185,8 @@ const SCAN_ROOTS = [
 const SKIP_DIRS = new Set(['node_modules', '.git', 'dist', 'build', 'coverage', '__tests__', 'tests']);
 const SCAN_EXTS = new Set(['.ts', '.mjs', '.cjs', '.js']);
 
-// ── Regex to find process.env.RUFFLO_* reads ────────────────────────────
-// Matches: process.env.RUFFLO_FOO or process.env['RUFFLO_FOO']
+// ── Regex to find process.env.SWARMDO_* reads ────────────────────────────
+// Matches: process.env.SWARMDO_FOO or process.env['SWARMDO_FOO']
 const ENV_READ_RE = /process\.env(?:\.([A-Z_]+)|\[['"]([A-Z_]+)['"]\])/g;
 
 // ── Indicator that a CLI arg takes precedence ─────────────────────────────────
@@ -240,7 +240,7 @@ for (const root of SCAN_ROOTS) {
     while ((match = ENV_READ_RE.exec(text)) !== null) {
       const varName = match[1] || match[2];
       if (!varName) continue;
-      if (!varName.startsWith('RUFFLO_') && !varName.startsWith('RUFLO_')) continue;
+      if (!varName.startsWith('SWARMDO_') && !varName.startsWith('SWARMDO_')) continue;
       if (KNOWN_ESCAPE_HATCHES.has(varName)) continue;
 
       // Find the line number
@@ -291,7 +291,7 @@ if (warnings.length > 0) {
 }
 
 if (violations.length === 0) {
-  console.log('\n  ok: all RUFFLO_* / RUFLO_* env var reads have documented CLI-flag precedence');
+  console.log('\n  ok: all SWARMDO_* / SWARMDO_* env var reads have documented CLI-flag precedence');
   console.log('  ok: or are registered as known escape-hatch env vars (CI/test/credential use)');
   process.exit(0);
 }
@@ -304,9 +304,9 @@ for (const v of violations) {
 console.error(`
 Remediation:
   Option A — Wire a CLI flag that takes precedence:
-    Before: const val = process.env.RUFFLO_FOO;
-    After:  const val = options.foo ?? process.env.RUFFLO_FOO ?? DEFAULT;
-    Then add "// CLI flag options.foo takes precedence over RUFFLO_FOO env var"
+    Before: const val = process.env.SWARMDO_FOO;
+    After:  const val = options.foo ?? process.env.SWARMDO_FOO ?? DEFAULT;
+    Then add "// CLI flag options.foo takes precedence over SWARMDO_FOO env var"
 
   Option B — Register as an escape hatch (CI/test/credential only):
     Add the env var name to KNOWN_ESCAPE_HATCHES in scripts/audit-env-var-precedence.mjs

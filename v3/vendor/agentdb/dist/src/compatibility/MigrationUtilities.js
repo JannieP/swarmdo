@@ -121,7 +121,7 @@ export class MigrationUtilities {
             version: '2.0',
             memory: {
                 path: v1Config.memoryPath || ':memory:',
-                backend: 'rufvector',
+                backend: 'swarmvector',
                 enableHNSW: true,
                 enableQuantization: true,
                 cacheSize: 1000,

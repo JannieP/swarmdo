@@ -1,8 +1,8 @@
-# @rufflo/plugin-cognitive-kernel
+# @swarmdo/plugin-cognitive-kernel
 
-[![npm version](https://img.shields.io/npm/v/@rufflo/plugin-cognitive-kernel.svg)](https://www.npmjs.com/package/@rufflo/plugin-cognitive-kernel)
-[![license](https://img.shields.io/npm/l/@rufflo/plugin-cognitive-kernel.svg)](https://github.com/ruvnet/claude-flow/blob/main/LICENSE)
-[![downloads](https://img.shields.io/npm/dm/@rufflo/plugin-cognitive-kernel.svg)](https://www.npmjs.com/package/@rufflo/plugin-cognitive-kernel)
+[![npm version](https://img.shields.io/npm/v/@swarmdo/plugin-cognitive-kernel.svg)](https://www.npmjs.com/package/@swarmdo/plugin-cognitive-kernel)
+[![license](https://img.shields.io/npm/l/@swarmdo/plugin-cognitive-kernel.svg)](https://github.com/ruvnet/claude-flow/blob/main/LICENSE)
+[![downloads](https://img.shields.io/npm/dm/@swarmdo/plugin-cognitive-kernel.svg)](https://www.npmjs.com/package/@swarmdo/plugin-cognitive-kernel)
 
 A cutting-edge cognitive augmentation plugin combining the Cognitum Gate Kernel with SONA self-optimizing architecture to provide LLMs with enhanced cognitive capabilities. The plugin enables dynamic working memory, attention control mechanisms, meta-cognitive self-monitoring, and cognitive scaffolding while maintaining low latency through WASM acceleration.
 
@@ -11,19 +11,19 @@ A cutting-edge cognitive augmentation plugin combining the Cognitum Gate Kernel 
 ### npm
 
 ```bash
-npm install @rufflo/plugin-cognitive-kernel
+npm install @swarmdo/plugin-cognitive-kernel
 ```
 
 ### CLI
 
 ```bash
-npx rufflo plugins install --name @rufflo/plugin-cognitive-kernel
+npx swarmdo plugins install --name @swarmdo/plugin-cognitive-kernel
 ```
 
 ## Quick Start
 
 ```typescript
-import { CognitiveKernelPlugin } from '@rufflo/plugin-cognitive-kernel';
+import { CognitiveKernelPlugin } from '@swarmdo/plugin-cognitive-kernel';
 
 // Initialize the plugin
 const plugin = new CognitiveKernelPlugin();
@@ -267,8 +267,8 @@ interface CognitiveKernelConfig {
 
 - `cognitum-gate-kernel` - Core cognitive kernel for memory gating and attention control
 - `sona` - Self-Optimizing Neural Architecture for adaptive cognition
-- `rufvector-attention-wasm` - Multi-head attention for cognitive focus
-- `rufvector-nervous-system-wasm` - Coordination between cognitive subsystems
+- `swarmvector-attention-wasm` - Multi-head attention for cognitive focus
+- `swarmvector-nervous-system-wasm` - Coordination between cognitive subsystems
 - `micro-hnsw-wasm` - Fast retrieval for episodic memory
 
 ## Use Cases
@@ -283,9 +283,9 @@ interface CognitiveKernelConfig {
 
 | Plugin | Description | Synergy |
 |--------|-------------|---------|
-| [@rufflo/plugin-neural-coordination](https://www.npmjs.com/package/@rufflo/plugin-neural-coordination) | Multi-agent coordination | Cognitive kernel provides enhanced reasoning for coordinated agents |
-| [@rufflo/plugin-hyperbolic-reasoning](https://www.npmjs.com/package/@rufflo/plugin-hyperbolic-reasoning) | Hierarchical reasoning | Combines hierarchical structure with cognitive scaffolding |
-| [@rufflo/plugin-quantum-optimizer](https://www.npmjs.com/package/@rufflo/plugin-quantum-optimizer) | Quantum-inspired optimization | Optimizes cognitive resource allocation and attention scheduling |
+| [@swarmdo/plugin-neural-coordination](https://www.npmjs.com/package/@swarmdo/plugin-neural-coordination) | Multi-agent coordination | Cognitive kernel provides enhanced reasoning for coordinated agents |
+| [@swarmdo/plugin-hyperbolic-reasoning](https://www.npmjs.com/package/@swarmdo/plugin-hyperbolic-reasoning) | Hierarchical reasoning | Combines hierarchical structure with cognitive scaffolding |
+| [@swarmdo/plugin-quantum-optimizer](https://www.npmjs.com/package/@swarmdo/plugin-quantum-optimizer) | Quantum-inspired optimization | Optimizes cognitive resource allocation and attention scheduling |
 
 ## Architecture
 

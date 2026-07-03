@@ -6,10 +6,10 @@
  * - 10 hook tools (pre/post edit, command, routing, etc.)
  * - 9 intelligence tools (SONA, attention, trajectory, patterns)
  *
- * RuVector Intelligence Features:
- * - @rufvector/sona: Micro-LoRA (~0.05ms), EWC++, Trajectory tracking
- * - @rufvector/attention: MoE, Flash, Hyperbolic, Graph attention
- * - ruvector core: HNSW indexing (150x faster)
+ * SwarmVector Intelligence Features:
+ * - @swarmvector/sona: Micro-LoRA (~0.05ms), EWC++, Trajectory tracking
+ * - @swarmvector/attention: MoE, Flash, Hyperbolic, Graph attention
+ * - swarmvector core: HNSW indexing (150x faster)
  */
 export {};
 //# sourceMappingURL=hooks-server.d.ts.map

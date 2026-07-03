@@ -218,7 +218,7 @@ echo "=============================================="
 echo ""
 
 build_wasm_module "gastown-formula-wasm"
-build_wasm_module "rufvector-gnn-wasm"
+build_wasm_module "swarmvector-gnn-wasm"
 
 echo "=============================================="
 echo -e "${GREEN}WASM build complete!${NC}"
@@ -229,7 +229,7 @@ echo -e "${CYAN}Bundle Size Report:${NC}"
 echo "--------------------------------------------"
 
 formula_wasm="$WASM_DIR/gastown-formula-wasm/pkg/gastown_formula_wasm_bg.wasm"
-gnn_wasm="$WASM_DIR/rufvector-gnn-wasm/pkg/rufvector_gnn_wasm_bg.wasm"
+gnn_wasm="$WASM_DIR/swarmvector-gnn-wasm/pkg/swarmvector_gnn_wasm_bg.wasm"
 
 formula_size=$(get_size "$formula_wasm")
 formula_gz_size=$(get_size "${formula_wasm}.gz")
@@ -242,7 +242,7 @@ total_gz_size=$((formula_gz_size + gnn_gz_size))
 printf "%-30s %10s %10s\n" "Module" "Raw" "Gzipped"
 printf "%-30s %10s %10s\n" "------------------------------" "----------" "----------"
 printf "%-30s %10s %10s\n" "gastown-formula-wasm" "$(format_size $formula_size)" "$(format_size $formula_gz_size)"
-printf "%-30s %10s %10s\n" "rufvector-gnn-wasm" "$(format_size $gnn_size)" "$(format_size $gnn_gz_size)"
+printf "%-30s %10s %10s\n" "swarmvector-gnn-wasm" "$(format_size $gnn_size)" "$(format_size $gnn_gz_size)"
 printf "%-30s %10s %10s\n" "------------------------------" "----------" "----------"
 printf "%-30s %10s %10s\n" "TOTAL" "$(format_size $total_size)" "$(format_size $total_gz_size)"
 echo ""
@@ -260,5 +260,5 @@ fi
 echo ""
 echo "Output:"
 echo "  - $WASM_DIR/gastown-formula-wasm/pkg/"
-echo "  - $WASM_DIR/rufvector-gnn-wasm/pkg/"
+echo "  - $WASM_DIR/swarmvector-gnn-wasm/pkg/"
 echo ""

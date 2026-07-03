@@ -2,7 +2,7 @@
 #
 # V3 Repository Cleanup Script
 # Removes build artifacts, backup files, and cleans up .gitignore
-# Part of rufflo v3 migration cleanup (Master Plan Section 5)
+# Part of swarmdo v3 migration cleanup (Master Plan Section 5)
 #
 
 set -e
@@ -19,7 +19,7 @@ TOTAL_SAVED=0
 FILES_REMOVED=0
 
 echo -e "${BLUE}╔════════════════════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}║  Rufflo V3 Repository Cleanup Script             ║${NC}"
+echo -e "${BLUE}║  Swarmdo V3 Repository Cleanup Script             ║${NC}"
 echo -e "${BLUE}║  Master Plan Section 5: Repository Cleanup            ║${NC}"
 echo -e "${BLUE}╚════════════════════════════════════════════════════════╝${NC}"
 echo ""

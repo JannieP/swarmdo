@@ -1,5 +1,5 @@
 {
-  "name": "@rufflo/plugin-cognitive-kernel",
+  "name": "@swarmdo/plugin-cognitive-kernel",
   "version": "3.0.0-alpha.1",
   "description": "Cognitive kernel plugin for LLM augmentation with working memory, attention control, meta-cognition, and scaffolding",
   "main": "./dist/index.js",
@@ -40,7 +40,7 @@
     "prepublishOnly": "npm run clean && npm run build && npm run typecheck"
   },
   "keywords": [
-    "rufflo",
+    "swarmdo",
     "cognitive-kernel",
     "working-memory",
     "attention",
@@ -49,11 +49,11 @@
     "sona",
     "cognitum"
   ],
-  "author": "Rufflo Team",
+  "author": "Swarmdo Team",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JannieP/rufflo.git",
+    "url": "https://github.com/JannieP/swarmdo.git",
     "directory": "v3/plugins/cognitive-kernel"
   },
   "dependencies": {

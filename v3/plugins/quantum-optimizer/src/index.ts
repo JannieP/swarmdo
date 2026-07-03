@@ -1,7 +1,7 @@
 /**
- * @rufflo/plugin-quantum-optimizer
+ * @swarmdo/plugin-quantum-optimizer
  *
- * Quantum-inspired optimization plugin for Rufflo V3.
+ * Quantum-inspired optimization plugin for Swarmdo V3.
  *
  * Provides MCP tools for:
  * - Simulated quantum annealing (QUBO, Ising, SAT, Max-Cut)
@@ -10,7 +10,7 @@
  * - Dependency resolution using quantum optimization
  * - Task scheduling with DAG analysis
  *
- * @module @rufflo/plugin-quantum-optimizer
+ * @module @swarmdo/plugin-quantum-optimizer
  * @version 3.0.0-alpha.1
  */
 
@@ -88,7 +88,7 @@ export { default } from './mcp-tools.js';
  * Plugin metadata
  */
 export const pluginMetadata = {
-  name: '@rufflo/plugin-quantum-optimizer',
+  name: '@swarmdo/plugin-quantum-optimizer',
   version: '3.0.0-alpha.1',
   description: 'Quantum-inspired optimization for combinatorial problems',
   category: 'exotic',
@@ -104,9 +104,9 @@ export const pluginMetadata = {
   ],
   bridges: ['exotic-bridge', 'dag-bridge'],
   wasmPackages: [
-    '@rufvector/exotic-wasm',
-    '@rufvector/dag-wasm',
-    '@rufvector/sparse-inference-wasm',
+    '@swarmvector/exotic-wasm',
+    '@swarmvector/dag-wasm',
+    '@swarmvector/sparse-inference-wasm',
   ],
 } as const;
 

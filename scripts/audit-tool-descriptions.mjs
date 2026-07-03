@@ -27,7 +27,7 @@ import { readFileSync, readdirSync, writeFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
 const REPO_ROOT = process.cwd();
-const TOOLS_DIR = join(REPO_ROOT, 'v3/@rufflo/cli/src/mcp-tools');
+const TOOLS_DIR = join(REPO_ROOT, 'v3/@swarmdo/cli/src/mcp-tools');
 const BASELINE_FILE = join(REPO_ROOT, 'verification/mcp-tool-baseline.json');
 
 const GUIDANCE_PATTERNS = [

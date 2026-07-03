@@ -12,7 +12,7 @@
  * - metadata: Additional contextual information
  *
  * AgentDB v2 Migration:
- * - Uses VectorBackend abstraction for 8x faster search (RuVector/hnswlib)
+ * - Uses VectorBackend abstraction for 8x faster search (SwarmVector/hnswlib)
  * - Optional GNN enhancement via LearningBackend
  * - 100% backward compatible with v1 API
  * - New features: useGNN option, recordOutcome for learning

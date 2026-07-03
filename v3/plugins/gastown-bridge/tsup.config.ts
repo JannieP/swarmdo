@@ -24,9 +24,9 @@ const pkg = JSON.parse(
 );
 
 const banner = `/**
- * @rufflo/plugin-gastown-bridge v${pkg.version}
+ * @swarmdo/plugin-gastown-bridge v${pkg.version}
  *
- * WASM-accelerated Gas Town orchestration for Rufflo V3
+ * WASM-accelerated Gas Town orchestration for Swarmdo V3
  * Bundle optimized: <100KB gzipped total
  *
  * @license MIT
@@ -62,10 +62,10 @@ export default defineConfig([
     },
     external: [
       // Peer dependencies - not bundled
-      '@rufflo/memory',
+      '@swarmdo/memory',
       // WASM modules - loaded dynamically
       'gastown-formula-wasm',
-      'rufvector-gnn-wasm',
+      'swarmvector-gnn-wasm',
       // Node built-ins
       'child_process',
       'util',

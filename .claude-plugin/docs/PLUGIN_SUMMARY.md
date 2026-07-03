@@ -1,4 +1,4 @@
-# 🎉 Rufflo Plugin - Complete Summary
+# 🎉 Swarmdo Plugin - Complete Summary
 
 ## ✅ Plugin Status: PRODUCTION READY
 
@@ -12,7 +12,7 @@
 ## 📦 Plugin Structure
 
 ```
-rufflo/
+swarmdo/
 ├── .claude-plugin/
 │   ├── plugin.json           ✓ Official plugin metadata
 │   ├── marketplace.json      ✓ Marketplace distribution metadata
@@ -60,7 +60,7 @@ rufflo/
 ### From Local Directory:
 
 ```
-cd rufflo
+cd swarmdo
 /plugin add .
 /restart
 ```
@@ -103,7 +103,7 @@ cd rufflo
 
 ### MCP Integration: 110+ Tools
 
-1. **rufflo** (Required)
+1. **swarmdo** (Required)
    - 40+ orchestration tools
    - Swarm coordination
    - Agent management
@@ -111,7 +111,7 @@ cd rufflo
    - Memory management
    - Neural training
 
-2. **ruf-swarm** (Optional)
+2. **swarmdo-swarm** (Optional)
    - Enhanced coordination
    - WASM acceleration (2.8-4.4x speed)
    - SIMD optimization
@@ -206,7 +206,7 @@ All documentation follows official Claude Code plugin guidelines.
 - **Format**: JSON configuration
 - **Location**: `hooks/hooks.json`
 - **Events**: pre-task, post-task, post-edit, session-start, session-end
-- **Integration**: Rufflo coordination
+- **Integration**: Swarmdo coordination
 
 ### MCP Servers
 - **Protocol**: Model Context Protocol
@@ -225,18 +225,18 @@ All documentation follows official Claude Code plugin guidelines.
 
 ### Update
 ```
-/plugin update rufflo
+/plugin update swarmdo
 ```
 
 Or pull latest from GitHub:
 ```
-cd /path/to/rufflo
+cd /path/to/swarmdo
 git pull
 ```
 
 ### Remove
 ```
-/plugin remove rufflo
+/plugin remove swarmdo
 ```
 
 ### List Installed
@@ -262,7 +262,7 @@ After installation, verify with:
 /plugin list
 ```
 
-Should show `rufflo` as active.
+Should show `swarmdo` as active.
 
 ---
 
@@ -323,7 +323,7 @@ The plugin is configured via `.claude-plugin/plugin.json`:
 
 ```json
 {
-  "name": "rufflo",
+  "name": "swarmdo",
   "version": "2.5.0",
   "description": "Enterprise AI agent orchestration plugin...",
   "author": {
@@ -335,9 +335,9 @@ The plugin is configured via `.claude-plugin/plugin.json`:
     "url": "https://github.com/ruvnet/claude-flow.git"
   },
   "mcpServers": {
-    "rufflo": {
+    "swarmdo": {
       "command": "npx",
-      "args": ["rufflo@alpha", "mcp", "start"]
+      "args": ["swarmdo@alpha", "mcp", "start"]
     }
   }
 }

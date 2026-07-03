@@ -3,7 +3,7 @@
 //
 // Empirical probe of Claude Code's nested-subagent depth cap (announced 2026-06-09
 // by Boris Cherny: "Capped at depth=5 to start"). Runs a fresh `claude -p` session,
-// spawns rufflo-agent:nested-coordinator at L1, and that coordinator recursively
+// spawns swarmdo-agent:nested-coordinator at L1, and that coordinator recursively
 // spawns more nested-coordinators (L2, L3, ...) until either (a) some level's
 // Agent-tool call returns an error, or (b) we reach L7 (one past the announced
 // cap) and stop voluntarily.
@@ -13,8 +13,8 @@
 //   - writes results to docs/probes/nested-spawn-depth-<ISO timestamp>.txt
 //   - exits 0 on completion (regardless of observed cap); 1 only on infra failure
 //
-// Required state: rufflo-agent plugin cache must contain the nested-* agents
-// (run `claude plugin details rufflo-agent` first — expect Agents (9) listed).
+// Required state: swarmdo-agent plugin cache must contain the nested-* agents
+// (run `claude plugin details swarmdo-agent` first — expect Agents (9) listed).
 
 import { spawn } from 'node:child_process';
 import { writeFileSync, mkdirSync } from 'node:fs';

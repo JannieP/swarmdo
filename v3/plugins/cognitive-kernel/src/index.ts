@@ -63,10 +63,10 @@ import { SonaBridge, createSonaBridge } from './bridges/sona-bridge.js';
  * Cognitive Kernel Plugin metadata
  */
 export const PLUGIN_METADATA = {
-  name: '@rufflo/plugin-cognitive-kernel',
+  name: '@swarmdo/plugin-cognitive-kernel',
   version: '3.0.0-alpha.1',
   description: 'Cognitive kernel plugin for LLM augmentation',
-  author: 'Rufflo Team',
+  author: 'Swarmdo Team',
   keywords: [
     'cognitive-kernel',
     'working-memory',
@@ -144,7 +144,7 @@ export function getMCPTools(): MCPTool[] {
 }
 
 /**
- * Plugin interface for registration with Rufflo
+ * Plugin interface for registration with Swarmdo
  */
 export const cognitiveKernelPlugin = {
   metadata: PLUGIN_METADATA,

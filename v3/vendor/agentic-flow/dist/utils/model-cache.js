@@ -145,7 +145,7 @@ export async function getCachedOnnxEmbedder() {
             return originalEmit.apply(process, [name, data, ...args]);
         };
         try {
-            const onnxModule = await import('rufvector-onnx-embeddings-wasm');
+            const onnxModule = await import('swarmvector-onnx-embeddings-wasm');
             const EmbedderClass = onnxModule.OnnxEmbeddings || onnxModule.default;
             if (EmbedderClass) {
                 const embedder = new EmbedderClass();
@@ -168,9 +168,9 @@ export async function getCachedTransformersPipeline(task = 'feature-extraction',
     );
 }
 export async function getCachedRuvectorCore() {
-    return modelCache.getOrLoad('ruvector-core', async () => {
-        const ruvector = await import('rufvector');
-        return ruvector;
+    return modelCache.getOrLoad('swarmvector-core', async () => {
+        const swarmvector = await import('swarmvector');
+        return swarmvector;
     }, 50 * 1024 * 1024);
 }
 //# sourceMappingURL=model-cache.js.map

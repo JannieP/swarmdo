@@ -1,7 +1,7 @@
 /**
  * Attention Bridge
  *
- * Bridge to rufvector-attention-wasm for multi-head attention computation.
+ * Bridge to swarmvector-attention-wasm for multi-head attention computation.
  * Enables agent-to-agent communication weighting and focus management.
  */
 
@@ -83,7 +83,7 @@ interface AttentionModule {
  * Attention Bridge implementation
  */
 export class AttentionBridge {
-  readonly name = 'rufvector-attention-wasm';
+  readonly name = 'swarmvector-attention-wasm';
   readonly version = '0.1.0';
 
   private _status: WasmModuleStatus = 'unloaded';
@@ -110,10 +110,10 @@ export class AttentionBridge {
 
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const wasmModule = await (import('@rufvector/attention-wasm' as any) as Promise<unknown>).catch(() => null);
+      const wasmModule = await (import('@swarmvector/attention-wasm' as any) as Promise<unknown>).catch(() => null);
 
       // Only adopt the WASM module if it actually exposes the attention API this
-      // bridge calls. The forked @rufvector/attention-wasm resolves (unlike the
+      // bridge calls. The forked @swarmvector/attention-wasm resolves (unlike the
       // never-installed upstream package), but its native surface differs, so a
       // bare truthiness check would swap in a module missing flashAttention()
       // etc. Fall back to the JS mock module when the interface is absent.

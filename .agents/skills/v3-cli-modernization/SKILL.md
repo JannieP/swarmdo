@@ -1,13 +1,13 @@
 ---
 name: "V3 CLI Modernization"
-description: "CLI modernization and hooks system enhancement for rufflo v3. Implements interactive prompts, command decomposition, enhanced hooks integration, and intelligent workflow automation."
+description: "CLI modernization and hooks system enhancement for swarmdo v3. Implements interactive prompts, command decomposition, enhanced hooks integration, and intelligent workflow automation."
 ---
 
 # V3 CLI Modernization
 
 ## What This Skill Does
 
-Modernizes rufflo v3 CLI with interactive prompts, intelligent command decomposition, enhanced hooks integration, performance optimization, and comprehensive workflow automation capabilities.
+Modernizes swarmdo v3 CLI with interactive prompts, intelligent command decomposition, enhanced hooks integration, performance optimization, and comprehensive workflow automation capabilities.
 
 ## Quick Start
 
@@ -866,7 +866,7 @@ Task("CLI modernization implementation",
 ### Interactive Command Enhancement
 ```bash
 # Enhanced interactive commands
-rufflo swarm init --interactive
-rufflo learning start --guided
-rufflo workflow create --from-intent "setup new project"
+swarmdo swarm init --interactive
+swarmdo learning start --guided
+swarmdo workflow create --from-intent "setup new project"
 ```

@@ -1,7 +1,7 @@
-# @rufflo/plugin-code-intelligence
+# @swarmdo/plugin-code-intelligence
 
-[![npm version](https://img.shields.io/npm/v/@rufflo/plugin-code-intelligence.svg)](https://www.npmjs.com/package/@rufflo/plugin-code-intelligence)
-[![npm downloads](https://img.shields.io/npm/dm/@rufflo/plugin-code-intelligence.svg)](https://www.npmjs.com/package/@rufflo/plugin-code-intelligence)
+[![npm version](https://img.shields.io/npm/v/@swarmdo/plugin-code-intelligence.svg)](https://www.npmjs.com/package/@swarmdo/plugin-code-intelligence)
+[![npm downloads](https://img.shields.io/npm/dm/@swarmdo/plugin-code-intelligence.svg)](https://www.npmjs.com/package/@swarmdo/plugin-code-intelligence)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A comprehensive code intelligence plugin combining graph neural networks for code structure analysis with ultra-fast vector search for semantic code similarity. The plugin enables dead code detection, API surface analysis, refactoring impact prediction, and architectural drift monitoring while integrating seamlessly with existing IDE workflows.
@@ -19,19 +19,19 @@ A comprehensive code intelligence plugin combining graph neural networks for cod
 ### npm
 
 ```bash
-npm install @rufflo/plugin-code-intelligence
+npm install @swarmdo/plugin-code-intelligence
 ```
 
 ### CLI
 
 ```bash
-npx rufflo plugins install --name @rufflo/plugin-code-intelligence
+npx swarmdo plugins install --name @swarmdo/plugin-code-intelligence
 ```
 
 ## Quick Start
 
 ```typescript
-import { CodeIntelligencePlugin } from '@rufflo/plugin-code-intelligence';
+import { CodeIntelligencePlugin } from '@swarmdo/plugin-code-intelligence';
 
 // Initialize the plugin
 const codeIntel = new CodeIntelligencePlugin({
@@ -341,10 +341,10 @@ const rateLimits = {
 ## Dependencies
 
 - `micro-hnsw-wasm`: Semantic code search and clone detection (150x faster)
-- `rufvector-gnn-wasm`: Code dependency graphs, call graphs, and control flow analysis
-- `rufvector-mincut-wasm`: Module boundary detection and optimal code splitting
+- `swarmvector-gnn-wasm`: Code dependency graphs, call graphs, and control flow analysis
+- `swarmvector-mincut-wasm`: Module boundary detection and optimal code splitting
 - `sona`: Self-optimizing learning from code review patterns
-- `rufvector-dag-wasm`: Build dependency analysis and incremental compilation
+- `swarmvector-dag-wasm`: Build dependency analysis and incremental compilation
 - `@babel/parser`: JavaScript/TypeScript AST parsing
 - `typescript`: TypeScript compiler API
 
@@ -352,15 +352,15 @@ const rateLimits = {
 
 | Plugin | Description | Use Case |
 |--------|-------------|----------|
-| [@rufflo/plugin-test-intelligence](../test-intelligence) | Test optimization | Predictive test selection based on code changes |
-| [@rufflo/plugin-perf-optimizer](../perf-optimizer) | Performance optimization | Code performance bottleneck detection |
-| [@rufflo/plugin-legal-contracts](../legal-contracts) | Contract analysis | Software licensing compliance |
+| [@swarmdo/plugin-test-intelligence](../test-intelligence) | Test optimization | Predictive test selection based on code changes |
+| [@swarmdo/plugin-perf-optimizer](../perf-optimizer) | Performance optimization | Code performance bottleneck detection |
+| [@swarmdo/plugin-legal-contracts](../legal-contracts) | Contract analysis | Software licensing compliance |
 
 ## License
 
 MIT License
 
-Copyright (c) 2026 Rufflo
+Copyright (c) 2026 Swarmdo
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

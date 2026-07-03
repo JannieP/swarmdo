@@ -537,7 +537,7 @@ export interface IPlugin {
   readonly description: string;
 
   /**
-   * Register the plugin with rufflo
+   * Register the plugin with swarmdo
    * Called once when plugin is loaded
    */
   register(context: PluginContext): Promise<void>;

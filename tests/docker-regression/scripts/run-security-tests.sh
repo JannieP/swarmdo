@@ -1,5 +1,5 @@
 #!/bin/bash
-# Rufflo Security Test Runner
+# Swarmdo Security Test Runner
 # Standalone security test execution
 
 set -e

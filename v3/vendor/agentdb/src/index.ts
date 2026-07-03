@@ -132,10 +132,10 @@ export {
 // Re-export all controllers for convenience
 export * from './controllers/index.js';
 
-// LLM Router - Multi-provider LLM integration with RuvLLM support
+// LLM Router - Multi-provider LLM integration with SwarmLLM support
 export {
   LLMRouter,
-  isRuvLLMInstalled,
+  isSwarmLLMInstalled,
   type LLMConfig,
   type LLMResponse,
 } from './services/LLMRouter.js';

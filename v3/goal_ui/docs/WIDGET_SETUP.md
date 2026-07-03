@@ -1,4 +1,4 @@
-# Rufflo Research Widget - Embeddable Research Interface
+# Swarmdo Research Widget - Embeddable Research Interface
 
 ## Overview
 The GOAP widget is a fully-featured, embeddable research planning interface with 100% fidelity to the main application. It can be embedded on any website using a simple script tag.
@@ -45,11 +45,11 @@ The widget.js is a self-contained bundle that includes:
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Site with Rufflo Research Widget</title>
+  <title>My Site with Swarmdo Research Widget</title>
 </head>
 <body>
   <!-- Widget Container -->
-  <div id="rufflo-research-widget-container"></div>
+  <div id="swarmdo-research-widget-container"></div>
 
   <!-- Load Widget Script -->
   <script src="https://your-domain.com/widget.js"></script>
@@ -60,11 +60,11 @@ The widget.js is a self-contained bundle that includes:
 ### With Custom Configuration
 
 ```html
-<div id="rufflo-research-widget-container"></div>
+<div id="swarmdo-research-widget-container"></div>
 
 <script>
   // Configure widget appearance (optional)
-  window.RuffloResearchWidgetConfig = {
+  window.SwarmdoResearchWidgetConfig = {
     primaryColor: "#8b5cf6",
     accentColor: "#22c55e",
     backgroundColor: "#1a1a1a",
@@ -84,13 +84,13 @@ The widget.js is a self-contained bundle that includes:
 <div id="my-custom-container"></div>
 
 <script>
-  window.RuffloResearchWidgetConfig = { /* ... */ };
+  window.SwarmdoResearchWidgetConfig = { /* ... */ };
 </script>
 
 <script src="https://your-domain.com/widget.js"></script>
 <script>
   // Manually initialize with custom container
-  window.RuffloResearchWidget.init('my-custom-container');
+  window.SwarmdoResearchWidget.init('my-custom-container');
 </script>
 ```
 
@@ -108,10 +108,10 @@ The widget.js is a self-contained bundle that includes:
 
 ## API
 
-The widget exposes a global `RuffloResearchWidget` object:
+The widget exposes a global `SwarmdoResearchWidget` object:
 
 ```javascript
-window.RuffloResearchWidget = {
+window.SwarmdoResearchWidget = {
   init: (containerId?: string) => void,
   version: string
 }
@@ -176,7 +176,7 @@ Ensure your Supabase project is configured with the required edge functions:
 
 ### Styling conflicts
 - Widget uses scoped CSS variables
-- Customize via `RuffloResearchWidgetConfig`
+- Customize via `SwarmdoResearchWidgetConfig`
 - Override specific styles if needed
 
 ### API errors
@@ -188,5 +188,5 @@ Ensure your Supabase project is configured with the required edge functions:
 
 For issues or questions:
 - Check the demo page at `/demo`
-- Review console logs with `[Rufflo Research]` prefix
+- Review console logs with `[Swarmdo Research]` prefix
 - Inspect network requests for API failures

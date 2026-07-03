@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
- * Regression guard for ruvnet/ruflo#2042 — agent_execute hardcoded the
+ * Regression guard for ruvnet/swarmdo#2042 — agent_execute hardcoded the
  * Anthropic SDK and ignored the v3 provider system. Reporter: @ummcke00.
  *
  * The fix routes executeAgentTask() through callAnthropicMessages(),
  * which dispatches to Anthropic / OpenRouter / Ollama based on:
- *   1. Explicit `RUFLO_PROVIDER=...`
+ *   1. Explicit `SWARMDO_PROVIDER=...`
  *   2. Available API keys when no provider is forced
  *
  * This smoke statically asserts the wiring:
@@ -25,7 +25,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const SOURCE = resolve(__dirname, '../v3/@rufflo/cli/src/mcp-tools/agent-execute-core.ts');
+const SOURCE = resolve(__dirname, '../v3/@swarmdo/cli/src/mcp-tools/agent-execute-core.ts');
 
 function fail(msg) { console.error(`✗ ${msg}`); process.exitCode = 1; }
 function pass(msg) { console.log(`✓ ${msg}`); }

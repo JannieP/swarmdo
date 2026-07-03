@@ -27,8 +27,8 @@ interface WidgetConfig {
 
 declare global {
   interface Window {
-    RuffloResearchWidgetConfig?: WidgetConfig;
-    RuffloResearchWidget?: {
+    SwarmdoResearchWidgetConfig?: WidgetConfig;
+    SwarmdoResearchWidget?: {
       init: (containerId?: string) => void;
       version: string;
     };
@@ -36,21 +36,21 @@ declare global {
 }
 
 // Widget initialization function
-function initRuffloResearchWidget(containerId: string = "rufflo-research-widget-container"): void {
-  console.log("[Rufflo Research] Starting initialization...");
+function initSwarmdoResearchWidget(containerId: string = "swarmdo-research-widget-container"): void {
+  console.log("[Swarmdo Research] Starting initialization...");
   
   const container = document.getElementById(containerId);
   if (!container) {
-    console.error(`[Rufflo Research] Container with id "${containerId}" not found`);
+    console.error(`[Swarmdo Research] Container with id "${containerId}" not found`);
     return;
   }
 
-  console.log("[Rufflo Research] Container found:", containerId);
+  console.log("[Swarmdo Research] Container found:", containerId);
 
   // Apply widget config if provided
-  const config = window.RuffloResearchWidgetConfig;
+  const config = window.SwarmdoResearchWidgetConfig;
   if (config) {
-    console.log("[Rufflo Research] Applying configuration:", config);
+    console.log("[Swarmdo Research] Applying configuration:", config);
     if (config.primaryColor) container.style.setProperty("--primary", config.primaryColor);
     if (config.accentColor) container.style.setProperty("--accent", config.accentColor);
     if (config.backgroundColor) container.style.setProperty("--background", config.backgroundColor);
@@ -78,9 +78,9 @@ function initRuffloResearchWidget(containerId: string = "rufflo-research-widget-
       )
     );
 
-    console.log("[Rufflo Research] ✅ Successfully initialized and rendered");
+    console.log("[Swarmdo Research] ✅ Successfully initialized and rendered");
   } catch (error) {
-    console.error("[Rufflo Research] ❌ Initialization error:", error);
+    console.error("[Swarmdo Research] ❌ Initialization error:", error);
   }
 }
 
@@ -88,28 +88,28 @@ function initRuffloResearchWidget(containerId: string = "rufflo-research-widget-
 function autoInit(): void {
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => {
-      console.log("[Rufflo Research] DOM ready, auto-initializing...");
-      initRuffloResearchWidget();
+      console.log("[Swarmdo Research] DOM ready, auto-initializing...");
+      initSwarmdoResearchWidget();
     });
   } else {
-    console.log("[Rufflo Research] DOM already loaded, initializing...");
+    console.log("[Swarmdo Research] DOM already loaded, initializing...");
     // Use setTimeout to ensure script has fully loaded
-    setTimeout(() => initRuffloResearchWidget(), 0);
+    setTimeout(() => initSwarmdoResearchWidget(), 0);
   }
 }
 
 // Initialize only in browser environment
 if (typeof window !== "undefined") {
   // Expose global API
-  window.RuffloResearchWidget = {
-    init: initRuffloResearchWidget,
+  window.SwarmdoResearchWidget = {
+    init: initSwarmdoResearchWidget,
     version: "1.0.0",
   };
   
-  console.log("[Rufflo Research] API exposed on window.RuffloResearchWidget");
+  console.log("[Swarmdo Research] API exposed on window.SwarmdoResearchWidget");
   
   // Auto-initialize
   autoInit();
 }
 
-export default initRuffloResearchWidget;
+export default initSwarmdoResearchWidget;

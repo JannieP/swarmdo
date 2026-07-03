@@ -329,7 +329,7 @@ export class SelfLearningRvfBackend {
     } }
     /**
      * Verify the witness chain using native WASM verification (ADR-007 Phase 1).
-     * Falls back to structural check if @rufvector/rvf-wasm is unavailable.
+     * Falls back to structural check if @swarmvector/rvf-wasm is unavailable.
      */
     verifyWitnessChain() {
         const chain = this.getWitnessChain();

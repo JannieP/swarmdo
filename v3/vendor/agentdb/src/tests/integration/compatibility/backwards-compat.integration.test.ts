@@ -121,7 +121,7 @@ describe('Backwards Compatibility Integration', () => {
         backend: 'agentdb',
         memory: {
           path: './db',
-          backend: 'rufvector' as const,
+          backend: 'swarmvector' as const,
           enableHNSW: true
         }
       };
@@ -203,7 +203,7 @@ describe('Backwards Compatibility Integration', () => {
         version: '2.0' as const,
         memory: {
           path: './db',
-          backend: 'rufvector' as const,
+          backend: 'swarmvector' as const,
           enableHNSW: true,
           enableQuantization: true
         },
@@ -239,7 +239,7 @@ describe('Backwards Compatibility Integration', () => {
       expect(v2Config.backend).toBe('agentdb');
       expect(v2Config.version).toBe('2.0');
       expect(v2Config.memory.path).toBe('./swarm.db');
-      expect(v2Config.memory.backend).toBe('rufvector');
+      expect(v2Config.memory.backend).toBe('swarmvector');
       expect(v2Config.memory.enableHNSW).toBe(true);
       expect(v2Config.swarm.topology).toBe('mesh');
       expect(v2Config.swarm.maxAgents).toBe(10);

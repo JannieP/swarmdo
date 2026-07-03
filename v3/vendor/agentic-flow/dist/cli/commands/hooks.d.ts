@@ -4,9 +4,9 @@
  * Provides CLI interface for agentic-flow hook tools
  *
  * NOW WITH FULL RUVECTOR INTELLIGENCE:
- * - @rufvector/sona: Micro-LoRA (~0.05ms), EWC++, Trajectory tracking
- * - @rufvector/attention: MoE, Flash, Hyperbolic, Graph attention
- * - ruvector core: HNSW indexing (150x faster)
+ * - @swarmvector/sona: Micro-LoRA (~0.05ms), EWC++, Trajectory tracking
+ * - @swarmvector/attention: MoE, Flash, Hyperbolic, Graph attention
+ * - swarmvector core: HNSW indexing (150x faster)
  *
  * Available as BOTH:
  * 1. CLI Commands (agentic-flow hooks ...)

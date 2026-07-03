@@ -6,14 +6,14 @@
  * - 10 hook tools (pre/post edit, command, routing, etc.)
  * - 9 intelligence tools (SONA, attention, trajectory, patterns)
  *
- * RuVector Intelligence Features:
- * - @rufvector/sona: Micro-LoRA (~0.05ms), EWC++, Trajectory tracking
- * - @rufvector/attention: MoE, Flash, Hyperbolic, Graph attention
- * - ruvector core: HNSW indexing (150x faster)
+ * SwarmVector Intelligence Features:
+ * - @swarmvector/sona: Micro-LoRA (~0.05ms), EWC++, Trajectory tracking
+ * - @swarmvector/attention: MoE, Flash, Hyperbolic, Graph attention
+ * - swarmvector core: HNSW indexing (150x faster)
  */
 import { FastMCP } from 'fastmcp';
 import { allHookTools, hookTools, intelligenceTools } from '../tools/hooks/index.js';
-console.error('🧠 Starting FastMCP Hook Server with RuVector Intelligence...');
+console.error('🧠 Starting FastMCP Hook Server with SwarmVector Intelligence...');
 console.error(`📦 Loading ${allHookTools.length} tools (${hookTools.length} hooks + ${intelligenceTools.length} intelligence)`);
 // Create server
 const server = new FastMCP({
@@ -55,7 +55,7 @@ console.error('');
 console.error('🔌 Starting stdio transport...');
 // Start server
 server.start({ transportType: 'stdio' }).then(() => {
-    console.error('✅ Hook Server running on stdio with RuVector Intelligence');
+    console.error('✅ Hook Server running on stdio with SwarmVector Intelligence');
 }).catch((error) => {
     console.error('❌ Failed to start:', error);
     process.exit(1);

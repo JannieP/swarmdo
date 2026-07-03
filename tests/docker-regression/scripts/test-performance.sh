@@ -1,5 +1,5 @@
 #!/bin/bash
-# Rufflo Performance Benchmark Test Suite
+# Swarmdo Performance Benchmark Test Suite
 # Tests performance metrics and benchmarks
 
 set -e
@@ -41,7 +41,7 @@ run_test() {
 # ============================================================================
 echo "── Startup Performance ──"
 
-run_test "CLI startup < 500ms" "time (npx rufflo --version 2>/dev/null || echo 'v3.0.0') 2>&1 | grep -q real || echo 'ok'"
+run_test "CLI startup < 500ms" "time (npx swarmdo --version 2>/dev/null || echo 'v3.0.0') 2>&1 | grep -q real || echo 'ok'"
 run_test "MCP server startup" "echo 'mcp startup benchmark' && echo 'ok'"
 run_test "Memory init < 100ms" "echo 'memory init benchmark' && echo 'ok'"
 

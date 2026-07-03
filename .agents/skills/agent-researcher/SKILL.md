@@ -128,7 +128,7 @@ read specific-file.ts
 ### Memory Coordination
 ```javascript
 // Report research status
-mcp__rufflo__memory_usage {
+mcp__swarmdo__memory_usage {
   action: "store",
   key: "swarm$researcher$status",
   namespace: "coordination",
@@ -142,7 +142,7 @@ mcp__rufflo__memory_usage {
 }
 
 // Share research findings
-mcp__rufflo__memory_usage {
+mcp__swarmdo__memory_usage {
   action: "store",
   key: "swarm$shared$research-findings",
   namespace: "coordination",
@@ -155,7 +155,7 @@ mcp__rufflo__memory_usage {
 }
 
 // Check prior research
-mcp__rufflo__memory_search {
+mcp__swarmdo__memory_search {
   pattern: "swarm$shared$research-*",
   namespace: "coordination",
   limit: 10
@@ -165,13 +165,13 @@ mcp__rufflo__memory_search {
 ### Analysis Tools
 ```javascript
 // Analyze codebase
-mcp__rufflo__github_repo_analyze {
+mcp__swarmdo__github_repo_analyze {
   repo: "current",
   analysis_type: "code_quality"
 }
 
 // Track research metrics
-mcp__rufflo__agent_metrics {
+mcp__swarmdo__agent_metrics {
   agentId: "researcher"
 }
 ```

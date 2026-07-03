@@ -1,7 +1,7 @@
 /**
  * Exotic Bridge - Quantum-Inspired Optimization Algorithms
  *
- * Bridge to @rufvector/exotic-wasm for quantum-inspired optimization
+ * Bridge to @swarmvector/exotic-wasm for quantum-inspired optimization
  * including simulated quantum annealing, QAOA emulation, and Grover search.
  */
 
@@ -104,10 +104,10 @@ export class ExoticBridge {
 
     try {
       // Dynamic import - module may not be installed
-      const wasmModule = await import(/* webpackIgnore: true */ '@rufvector/exotic-wasm' as string).catch(() => null);
+      const wasmModule = await import(/* webpackIgnore: true */ '@swarmvector/exotic-wasm' as string).catch(() => null);
 
       // Adopt the native module only if it exposes the allocator API this bridge
-      // relies on. The forked @rufvector/exotic-wasm resolves (unlike the
+      // relies on. The forked @swarmvector/exotic-wasm resolves (unlike the
       // never-installed upstream package) but its native surface differs, so a
       // bare truthiness check would swap in an incompatible module. Fall back to
       // the mock module when the interface is absent.

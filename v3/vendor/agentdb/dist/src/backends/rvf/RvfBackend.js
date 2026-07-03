@@ -1,7 +1,7 @@
 /**
  * RvfBackend - RVF Format Vector Storage for AgentDB
  *
- * Implements VectorBackend and VectorBackendAsync using the @rufvector/rvf SDK.
+ * Implements VectorBackend and VectorBackendAsync using the @swarmvector/rvf SDK.
  * Uses N-API backend (fast) on Node.js with WASM fallback for browser/edge.
  *
  * Features:
@@ -16,7 +16,7 @@
  * - Performance statistics tracking
  *
  * Security:
- * - Path validation (reuses RuVectorBackend patterns)
+ * - Path validation (reuses SwarmVectorBackend patterns)
  * - Bounded batch sizes and metadata limits
  * - No prototype pollution in metadata handling
  */
@@ -25,11 +25,11 @@ import { validatePath, validateId, validateMetadata, validateDimension, MAX_BATC
 /** Re-export FilterBuilder for external use */
 export { FilterBuilder } from './FilterBuilder.js';
 /**
- * RvfBackend - VectorBackend + VectorBackendAsync implementation using @rufvector/rvf
+ * RvfBackend - VectorBackend + VectorBackendAsync implementation using @swarmvector/rvf
  */
 export class RvfBackend {
     name = 'rvf';
-    // RVF database handle (unknown since @rufvector/rvf types not available at compile-time)
+    // RVF database handle (unknown since @swarmvector/rvf types not available at compile-time)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     db = null;
     dim;
@@ -62,7 +62,7 @@ export class RvfBackend {
     }
     /**
      * Initialize the RVF database connection.
-     * Lazy-loads @rufvector/rvf to avoid hard dependency.
+     * Lazy-loads @swarmvector/rvf to avoid hard dependency.
      */
     async initialize() {
         if (this.initialized)
@@ -72,7 +72,7 @@ export class RvfBackend {
             validatePath(storagePath);
         }
         try {
-            const { RvfDatabase } = await import('@rufvector/rvf');
+            const { RvfDatabase } = await import('@swarmvector/rvf');
             const rvfBackendType = this.config.rvfBackend ?? 'auto';
             // Map AgentDB metric names to RVF metric names
             const rvfMetric = this.metricType === 'ip' ? 'dotproduct' : this.metricType;
@@ -110,7 +110,7 @@ export class RvfBackend {
         catch (error) {
             const msg = error.message;
             throw new Error(`RVF backend initialization failed.\n` +
-                `Install with: npm install @rufvector/rvf\n` +
+                `Install with: npm install @swarmvector/rvf\n` +
                 `Error: ${msg}`);
         }
     }
@@ -176,7 +176,7 @@ export class RvfBackend {
     }
     async load(path) {
         validatePath(path);
-        const { RvfDatabase } = await import('@rufvector/rvf');
+        const { RvfDatabase } = await import('@swarmvector/rvf');
         const rvfBackendType = this.config.rvfBackend ?? 'auto';
         if (this.db) {
             await this.db.close();
@@ -479,7 +479,7 @@ export class RvfBackend {
         if (path !== ':memory:') {
             validatePath(path);
         }
-        const { RvfDatabase } = await import('@rufvector/rvf');
+        const { RvfDatabase } = await import('@swarmvector/rvf');
         const backendType = config?.rvfBackend ?? 'auto';
         const db = await RvfDatabase.openReadonly(path, backendType);
         // Probe dimension from the store

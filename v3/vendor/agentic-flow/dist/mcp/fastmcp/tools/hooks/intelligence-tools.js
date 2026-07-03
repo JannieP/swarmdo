@@ -1,10 +1,10 @@
 /**
- * Intelligence MCP Tools - Expose RuVector Intelligence via MCP
+ * Intelligence MCP Tools - Expose SwarmVector Intelligence via MCP
  *
- * These tools provide direct access to the full RuVector ecosystem:
- * - @rufvector/sona: Micro-LoRA (~0.05ms), EWC++, Trajectory tracking
- * - @rufvector/attention: MoE, Flash, Hyperbolic, Graph attention
- * - ruvector core: HNSW indexing (150x faster than brute force)
+ * These tools provide direct access to the full SwarmVector ecosystem:
+ * - @swarmvector/sona: Micro-LoRA (~0.05ms), EWC++, Trajectory tracking
+ * - @swarmvector/attention: MoE, Flash, Hyperbolic, Graph attention
+ * - swarmvector core: HNSW indexing (150x faster than brute force)
  *
  * Available both as MCP tools AND CLI hooks.
  */
@@ -16,7 +16,7 @@ import { getIntelligence, routeTaskIntelligent, beginTaskTrajectory, recordTraje
  */
 export const intelligenceRouteTool = {
     name: 'intelligence_route',
-    description: 'Route task using RuVector intelligence: SONA Micro-LoRA (~0.05ms) + MoE attention + HNSW (150x faster)',
+    description: 'Route task using SwarmVector intelligence: SONA Micro-LoRA (~0.05ms) + MoE attention + HNSW (150x faster)',
     parameters: z.object({
         task: z.string().describe('Task description to route'),
         file: z.string().optional().describe('Optional file context'),
@@ -40,7 +40,7 @@ export const intelligenceRouteTool = {
                 })),
                 features: result.usedFeatures,
                 latencyMs: result.latencyMs,
-                engine: 'ruvector-sona-moe-hnsw',
+                engine: 'swarmvector-sona-moe-hnsw',
                 timestamp: new Date().toISOString(),
             };
         }
@@ -262,7 +262,7 @@ export const intelligencePatternSearchTool = {
  */
 export const intelligenceStatsTool = {
     name: 'intelligence_stats',
-    description: 'Get RuVector intelligence layer statistics: SONA, HNSW, attention metrics',
+    description: 'Get SwarmVector intelligence layer statistics: SONA, HNSW, attention metrics',
     parameters: z.object({}),
     execute: async (_, { onProgress }) => {
         const startTime = Date.now();

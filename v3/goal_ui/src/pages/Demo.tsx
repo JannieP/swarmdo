@@ -10,12 +10,12 @@ const Demo = () => {
   const [copied, setCopied] = useState(false);
   const [widgetLoaded, setWidgetLoaded] = useState(false);
 
-  const embedCode = `<!-- Rufflo Research Widget -->
-<div id="rufflo-research-widget-container"></div>
+  const embedCode = `<!-- Swarmdo Research Widget -->
+<div id="swarmdo-research-widget-container"></div>
 
 <!-- Optional: Configure widget appearance -->
 <script>
-  window.RuffloResearchWidgetConfig = {
+  window.SwarmdoResearchWidgetConfig = {
     primaryColor: "#8b5cf6",
     accentColor: "#22c55e",
     backgroundColor: "#1a1a1a",
@@ -34,7 +34,7 @@ const Demo = () => {
 
   useEffect(() => {
     // Configure widget before loading
-    (window as any).RuffloResearchWidgetConfig = {
+    (window as any).SwarmdoResearchWidgetConfig = {
       primaryColor: "#8b5cf6",
       accentColor: "#22c55e",
       backgroundColor: "#1a1a1a",
@@ -90,11 +90,11 @@ const Demo = () => {
           console.log("[Demo] Widget loaded successfully");
 
           // Check if widget initialized
-          if ((window as any).RuffloResearchWidget) {
-            console.log("[Demo] Widget version:", (window as any).RuffloResearchWidget.version);
+          if ((window as any).SwarmdoResearchWidget) {
+            console.log("[Demo] Widget version:", (window as any).SwarmdoResearchWidget.version);
             toast({
               title: "Widget Ready",
-              description: "Rufflo Research Widget loaded successfully",
+              description: "Swarmdo Research Widget loaded successfully",
             });
           }
         };
@@ -126,8 +126,8 @@ const Demo = () => {
           link.parentNode.removeChild(link);
         }
         // Clear widget config
-        delete (window as any).RuffloResearchWidgetConfig;
-        delete (window as any).RuffloResearchWidget;
+        delete (window as any).SwarmdoResearchWidgetConfig;
+        delete (window as any).SwarmdoResearchWidget;
       };
     };
 
@@ -253,7 +253,7 @@ const Demo = () => {
 
           {/* Widget Container */}
           <div
-            id="rufflo-research-widget-container"
+            id="swarmdo-research-widget-container"
             className="min-h-[600px] rounded-lg border border-border overflow-hidden"
             style={{
               background: widgetLoaded ? 'transparent' : 'repeating-linear-gradient(45deg, rgba(255,255,255,.05), rgba(255,255,255,.05) 10px, transparent 10px, transparent 20px)'

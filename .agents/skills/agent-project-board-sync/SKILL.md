@@ -17,17 +17,17 @@ tools:
   - Grep
   - LS
   - TodoWrite
-  - mcp__rufflo__swarm_init
-  - mcp__rufflo__agent_spawn
-  - mcp__rufflo__task_orchestrate
-  - mcp__rufflo__swarm_status
-  - mcp__rufflo__memory_usage
-  - mcp__rufflo__github_repo_analyze
-  - mcp__rufflo__github_pr_manage
-  - mcp__rufflo__github_issue_track
-  - mcp__rufflo__github_metrics
-  - mcp__rufflo__workflow_create
-  - mcp__rufflo__workflow_execute
+  - mcp__swarmdo__swarm_init
+  - mcp__swarmdo__agent_spawn
+  - mcp__swarmdo__task_orchestrate
+  - mcp__swarmdo__swarm_status
+  - mcp__swarmdo__memory_usage
+  - mcp__swarmdo__github_repo_analyze
+  - mcp__swarmdo__github_pr_manage
+  - mcp__swarmdo__github_issue_track
+  - mcp__swarmdo__github_metrics
+  - mcp__swarmdo__workflow_create
+  - mcp__swarmdo__workflow_execute
 hooks:
   pre:
     - "gh auth status || (echo 'GitHub CLI not authenticated' && exit 1)"
@@ -56,7 +56,7 @@ PROJECT_ID=$(gh project list --owner @me --format json | \
   jq -r '.projects[] | select(.title == "Development Board") | .id')
 
 # Initialize swarm with project
-npx ruf-swarm github board-init \
+npx swarmdo-swarm github board-init \
   --project-id "$PROJECT_ID" \
   --sync-mode "bidirectional" \
   --create-views "swarm-status,agent-workload,priority"
@@ -71,7 +71,7 @@ gh project field-create $PROJECT_ID --owner @me \
 ### 2. Task Synchronization
 ```bash
 # Sync swarm tasks with project cards
-npx ruf-swarm github board-sync \
+npx swarmdo-swarm github board-sync \
   --map-status '{
     "todo": "To Do",
     "in_progress": "In Progress",
@@ -85,7 +85,7 @@ npx ruf-swarm github board-sync \
 ### 3. Real-time Updates
 ```bash
 # Enable real-time board updates
-npx ruf-swarm github board-realtime \
+npx swarmdo-swarm github board-realtime \
   --webhook-endpoint "https:/$api.example.com$github-sync" \
   --update-frequency "immediate" \
   --batch-updates false
@@ -173,7 +173,7 @@ mapping:
 ### 1. Auto-Assignment
 ```bash
 # Automatically assign cards to agents
-npx ruf-swarm github board-auto-assign \
+npx swarmdo-swarm github board-auto-assign \
   --strategy "load-balanced" \
   --consider "expertise,workload,availability" \
   --update-cards
@@ -182,7 +182,7 @@ npx ruf-swarm github board-auto-assign \
 ### 2. Progress Tracking
 ```bash
 # Track and visualize progress
-npx ruf-swarm github board-progress \
+npx swarmdo-swarm github board-progress \
   --show "burndown,velocity,cycle-time" \
   --time-period "sprint" \
   --export-metrics
@@ -191,7 +191,7 @@ npx ruf-swarm github board-progress \
 ### 3. Smart Card Movement
 ```bash
 # Intelligent card state transitions
-npx ruf-swarm github board-smart-move \
+npx swarmdo-swarm github board-smart-move \
   --rules '{
     "auto-progress": "when:all-subtasks-done",
     "auto-review": "when:tests-pass",
@@ -213,7 +213,7 @@ echo "$ISSUES" | jq -r '.[].number' | while read -r issue; do
 done
 
 # Process with swarm
-npx ruf-swarm github board-import-issues \
+npx swarmdo-swarm github board-import-issues \
   --issues "$ISSUES" \
   --add-to-column "Backlog" \
   --parse-checklist \
@@ -223,7 +223,7 @@ npx ruf-swarm github board-import-issues \
 ### Bulk Operations
 ```bash
 # Bulk card operations
-npx ruf-swarm github board-bulk \
+npx swarmdo-swarm github board-bulk \
   --filter "status:blocked" \
   --action "add-label:needs-attention" \
   --notify-assignees
@@ -232,7 +232,7 @@ npx ruf-swarm github board-bulk \
 ### Card Templates
 ```bash
 # Create cards from templates
-npx ruf-swarm github board-template \
+npx swarmdo-swarm github board-template \
   --template "feature-development" \
   --variables '{
     "feature": "User Authentication",
@@ -247,7 +247,7 @@ npx ruf-swarm github board-template \
 ### 1. Multi-Board Sync
 ```bash
 # Sync across multiple boards
-npx ruf-swarm github multi-board-sync \
+npx swarmdo-swarm github multi-board-sync \
   --boards "Development,QA,Release" \
   --sync-rules '{
     "Development->QA": "when:ready-for-test",
@@ -258,7 +258,7 @@ npx ruf-swarm github multi-board-sync \
 ### 2. Cross-Organization Sync
 ```bash
 # Sync boards across organizations
-npx ruf-swarm github cross-org-sync \
+npx swarmdo-swarm github cross-org-sync \
   --source "org1/Project-A" \
   --target "org2/Project-B" \
   --field-mapping "custom" \
@@ -268,7 +268,7 @@ npx ruf-swarm github cross-org-sync \
 ### 3. External Tool Integration
 ```bash
 # Sync with external tools
-npx ruf-swarm github board-integrate \
+npx swarmdo-swarm github board-integrate \
   --tool "jira" \
   --mapping "bidirectional" \
   --sync-frequency "5m" \
@@ -291,7 +291,7 @@ ISSUE_METRICS=$(echo "$PROJECT_DATA" | jq -r '.items[] | select(.content.type ==
   done)
 
 # Generate analytics with swarm
-npx ruf-swarm github board-analytics \
+npx swarmdo-swarm github board-analytics \
   --project-data "$PROJECT_DATA" \
   --issue-metrics "$ISSUE_METRICS" \
   --metrics "throughput,cycle-time,wip" \
@@ -331,7 +331,7 @@ npx ruf-swarm github board-analytics \
 ### Reports
 ```bash
 # Generate reports
-npx ruf-swarm github board-report \
+npx swarmdo-swarm github board-report \
   --type "sprint-summary" \
   --format "markdown" \
   --include "velocity,burndown,blockers" \
@@ -343,7 +343,7 @@ npx ruf-swarm github board-report \
 ### Sprint Management
 ```bash
 # Manage sprints with swarms
-npx ruf-swarm github sprint-manage \
+npx swarmdo-swarm github sprint-manage \
   --sprint "Sprint 23" \
   --auto-populate \
   --capacity-planning \
@@ -353,7 +353,7 @@ npx ruf-swarm github sprint-manage \
 ### Milestone Tracking
 ```bash
 # Track milestone progress
-npx ruf-swarm github milestone-track \
+npx swarmdo-swarm github milestone-track \
   --milestone "v2.0 Release" \
   --update-board \
   --show-dependencies \
@@ -363,7 +363,7 @@ npx ruf-swarm github milestone-track \
 ### Release Planning
 ```bash
 # Plan releases using board data
-npx ruf-swarm github release-plan-board \
+npx swarmdo-swarm github release-plan-board \
   --analyze-velocity \
   --estimate-completion \
   --identify-risks \
@@ -375,7 +375,7 @@ npx ruf-swarm github release-plan-board \
 ### Work Distribution
 ```bash
 # Distribute work among team
-npx ruf-swarm github board-distribute \
+npx swarmdo-swarm github board-distribute \
   --strategy "skills-based" \
   --balance-workload \
   --respect-preferences \
@@ -385,7 +385,7 @@ npx ruf-swarm github board-distribute \
 ### Standup Automation
 ```bash
 # Generate standup reports
-npx ruf-swarm github standup-report \
+npx swarmdo-swarm github standup-report \
   --team "frontend" \
   --include "yesterday,today,blockers" \
   --format "slack" \
@@ -395,7 +395,7 @@ npx ruf-swarm github standup-report \
 ### Review Coordination
 ```bash
 # Coordinate reviews via board
-npx ruf-swarm github review-coordinate \
+npx swarmdo-swarm github review-coordinate \
   --board "Code Review" \
   --assign-reviewers \
   --track-feedback \
@@ -427,7 +427,7 @@ npx ruf-swarm github review-coordinate \
 ### Sync Issues
 ```bash
 # Diagnose sync problems
-npx ruf-swarm github board-diagnose \
+npx swarmdo-swarm github board-diagnose \
   --check "permissions,webhooks,rate-limits" \
   --test-sync \
   --show-conflicts
@@ -436,7 +436,7 @@ npx ruf-swarm github board-diagnose \
 ### Performance
 ```bash
 # Optimize board performance
-npx ruf-swarm github board-optimize \
+npx swarmdo-swarm github board-optimize \
   --analyze-size \
   --archive-completed \
   --index-fields \
@@ -446,7 +446,7 @@ npx ruf-swarm github board-optimize \
 ### Data Recovery
 ```bash
 # Recover board data
-npx ruf-swarm github board-recover \
+npx swarmdo-swarm github board-recover \
   --backup-id "2024-01-15" \
   --restore-cards \
   --preserve-current \
@@ -458,7 +458,7 @@ npx ruf-swarm github board-recover \
 ### Agile Development Board
 ```bash
 # Setup agile board
-npx ruf-swarm github agile-board \
+npx swarmdo-swarm github agile-board \
   --methodology "scrum" \
   --sprint-length "2w" \
   --ceremonies "planning,review,retro" \
@@ -468,7 +468,7 @@ npx ruf-swarm github agile-board \
 ### Kanban Flow Board
 ```bash
 # Setup kanban board
-npx ruf-swarm github kanban-board \
+npx swarmdo-swarm github kanban-board \
   --wip-limits '{
     "In Progress": 5,
     "Review": 3
@@ -480,7 +480,7 @@ npx ruf-swarm github kanban-board \
 ### Research Project Board
 ```bash
 # Setup research board
-npx ruf-swarm github research-board \
+npx swarmdo-swarm github research-board \
   --phases "ideation,research,experiment,analysis,publish" \
   --track-citations \
   --collaborate-external
@@ -491,7 +491,7 @@ npx ruf-swarm github research-board \
 ### Performance Metrics
 ```bash
 # Track board performance
-npx ruf-swarm github board-kpis \
+npx swarmdo-swarm github board-kpis \
   --metrics '[
     "average-cycle-time",
     "throughput-per-sprint",
@@ -504,7 +504,7 @@ npx ruf-swarm github board-kpis \
 ### Team Metrics
 ```bash
 # Track team performance
-npx ruf-swarm github team-metrics \
+npx swarmdo-swarm github team-metrics \
   --board "Development" \
   --per-member \
   --include "velocity,quality,collaboration" \

@@ -2,12 +2,12 @@
  * Smoke test: ADR-130 Phase 1 — graph_edges schema migration
  *
  * Acceptance criteria (ADR-130 §Phase 1):
- *  1. graph_edges table created by rufvector setup (MEMORY_SCHEMA_V3) without error
+ *  1. graph_edges table created by swarmvector setup (MEMORY_SCHEMA_V3) without error
  *  2. agentdb_causal-edge inserts a row with 384-dim embedding blob
  *  3. Legacy unprefixed ID is auto-prefixed as "mem:" with deprecation warning
  *  4. Double-write to graph-node native retained (tested via isGraphBackendAvailable guard)
  *
- * Runs without @rufvector/graph-node — tests the sql.js fallback path.
+ * Runs without @swarmvector/graph-node — tests the sql.js fallback path.
  *
  * Usage: node scripts/smoke-graph-schema-migration.mjs
  */
@@ -67,7 +67,7 @@ async function testSchemaCreation() {
   try {
     // Dynamically import initializeMemoryDatabase
     const { initializeMemoryDatabase, MEMORY_SCHEMA_V3 } = await import(
-      path.join(projectRoot, 'v3/@rufflo/cli/dist/src/memory/memory-initializer.js')
+      path.join(projectRoot, 'v3/@swarmdo/cli/dist/src/memory/memory-initializer.js')
     );
 
     // Initialize db into tmpDir
@@ -109,7 +109,7 @@ async function testEdgeInsert() {
 
   try {
     const { insertGraphEdge, countGraphEdges, _resetBridgeDb } = await import(
-      path.join(projectRoot, 'v3/@rufflo/cli/dist/src/memory/graph-edge-writer.js')
+      path.join(projectRoot, 'v3/@swarmdo/cli/dist/src/memory/graph-edge-writer.js')
     );
 
     // Reset cache so it picks up our tmpDir db
@@ -139,7 +139,7 @@ async function testEdgeInsert() {
 
     // Verify decoding round-trip
     const { decodeEmbedding } = await import(
-      path.join(projectRoot, 'v3/@rufflo/cli/dist/src/memory/embedding-quantization.js')
+      path.join(projectRoot, 'v3/@swarmdo/cli/dist/src/memory/embedding-quantization.js')
     );
     const decoded = decodeEmbedding(embRef);
     assert(decoded !== null, '2d: embedding decodes without error');
@@ -158,7 +158,7 @@ async function testLegacyIdPrefix() {
 
   try {
     const { insertGraphEdge, countGraphEdges, _resetBridgeDb } = await import(
-      path.join(projectRoot, 'v3/@rufflo/cli/dist/src/memory/graph-edge-writer.js')
+      path.join(projectRoot, 'v3/@swarmdo/cli/dist/src/memory/graph-edge-writer.js')
     );
 
     _resetBridgeDb();
@@ -194,7 +194,7 @@ async function testPQEncoding() {
 
   try {
     const { encodeEmbedding, decodeEmbedding, encodedByteSize } = await import(
-      path.join(projectRoot, 'v3/@rufflo/cli/dist/src/memory/embedding-quantization.js')
+      path.join(projectRoot, 'v3/@swarmdo/cli/dist/src/memory/embedding-quantization.js')
     );
 
     // Test 384-dim encoding
@@ -250,7 +250,7 @@ async function testTableAutoCreate() {
 
     // Now insert via graph-edge-writer — it should auto-create graph_edges
     const { insertGraphEdge, _resetBridgeDb } = await import(
-      path.join(projectRoot, 'v3/@rufflo/cli/dist/src/memory/graph-edge-writer.js')
+      path.join(projectRoot, 'v3/@swarmdo/cli/dist/src/memory/graph-edge-writer.js')
     );
     _resetBridgeDb();
 

@@ -93,7 +93,7 @@ const SyncStatusSchema = z.enum([
 ]);
 
 /**
- * AgentDB entry schema (compatible with rufflo memory)
+ * AgentDB entry schema (compatible with swarmdo memory)
  */
 const AgentDBEntrySchema = z.object({
   key: z.string(),
@@ -210,7 +210,7 @@ export interface SyncState {
 }
 
 /**
- * AgentDB interface (to be provided by rufflo)
+ * AgentDB interface (to be provided by swarmdo)
  */
 export interface IAgentDBService {
   store(key: string, value: unknown, namespace?: string, metadata?: Record<string, unknown>): Promise<void>;

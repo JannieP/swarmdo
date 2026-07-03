@@ -2,7 +2,7 @@
  * LLM Router Service - Multi-Provider LLM Integration
  *
  * Supports multiple LLM providers:
- * - RuvLLM (local, self-contained, SIMD-optimized, no external deps)
+ * - SwarmLLM (local, self-contained, SIMD-optimized, no external deps)
  * - OpenRouter (99% cost savings, 200+ models)
  * - Google Gemini (free tier available)
  * - Anthropic Claude (highest quality)
@@ -12,55 +12,55 @@
  * - Cost constraints
  * - Quality requirements
  * - Speed requirements
- * - Privacy requirements (local models via RuvLLM or ONNX)
+ * - Privacy requirements (local models via SwarmLLM or ONNX)
  */
 
 import * as fs from 'fs';
 import * as path from 'path';
 
-// Lazy-loaded RuvLLM to avoid import failures if not installed
-let RuvLLMEngine: any = null;
-let ruvllmInstance: any = null;
-let ruvllmLoadAttempted = false;
+// Lazy-loaded SwarmLLM to avoid import failures if not installed
+let SwarmLLMEngine: any = null;
+let swarmllmInstance: any = null;
+let swarmllmLoadAttempted = false;
 
-async function loadRuvLLM(): Promise<boolean> {
-  if (ruvllmLoadAttempted) {
-    return RuvLLMEngine !== null;
+async function loadSwarmLLM(): Promise<boolean> {
+  if (swarmllmLoadAttempted) {
+    return SwarmLLMEngine !== null;
   }
-  ruvllmLoadAttempted = true;
+  swarmllmLoadAttempted = true;
 
   try {
     // Use createRequire for CommonJS compatibility with ESM
     const { createRequire } = await import('module');
     const require = createRequire(import.meta.url);
-    const ruvllm = require('@rufvector/rufllm');
-    RuvLLMEngine = ruvllm.RuvLLM;
+    const swarmllm = require('@swarmvector/swarmllm');
+    SwarmLLMEngine = swarmllm.SwarmLLM;
     return true;
   } catch (error) {
-    // RuvLLM not installed - that's okay, use other providers
-    console.debug?.('[LLMRouter] RuvLLM not available:', (error as Error).message);
+    // SwarmLLM not installed - that's okay, use other providers
+    console.debug?.('[LLMRouter] SwarmLLM not available:', (error as Error).message);
     return false;
   }
 }
 
-function getRuvLLMInstance(config?: { embeddingDim?: number }): any {
-  if (!RuvLLMEngine) return null;
-  if (!ruvllmInstance) {
-    ruvllmInstance = new RuvLLMEngine(config || { embeddingDim: 768 });
+function getSwarmLLMInstance(config?: { embeddingDim?: number }): any {
+  if (!SwarmLLMEngine) return null;
+  if (!swarmllmInstance) {
+    swarmllmInstance = new SwarmLLMEngine(config || { embeddingDim: 768 });
   }
-  return ruvllmInstance;
+  return swarmllmInstance;
 }
 
 export interface LLMConfig {
-  provider?: 'ruvllm' | 'openrouter' | 'gemini' | 'anthropic' | 'onnx';
+  provider?: 'swarmllm' | 'openrouter' | 'gemini' | 'anthropic' | 'onnx';
   model?: string;
   temperature?: number;
   maxTokens?: number;
   apiKey?: string;
   priority?: 'quality' | 'balanced' | 'cost' | 'speed' | 'privacy';
-  /** RuvLLM-specific: embedding dimension (384, 768, 1024) */
+  /** SwarmLLM-specific: embedding dimension (384, 768, 1024) */
   embeddingDim?: number;
-  /** RuvLLM-specific: enable adaptive learning */
+  /** SwarmLLM-specific: enable adaptive learning */
   learningEnabled?: boolean;
 }
 
@@ -134,17 +134,17 @@ export class LLMRouter {
   /**
    * Select default provider based on available API keys and installed packages
    */
-  private selectDefaultProvider(): 'ruvllm' | 'openrouter' | 'gemini' | 'anthropic' | 'onnx' {
-    // Prefer RuvLLM for local inference (no API keys needed)
-    if (this.ruvllmAvailable) return 'ruvllm';
+  private selectDefaultProvider(): 'swarmllm' | 'openrouter' | 'gemini' | 'anthropic' | 'onnx' {
+    // Prefer SwarmLLM for local inference (no API keys needed)
+    if (this.swarmllmAvailable) return 'swarmllm';
     if (process.env.OPENROUTER_API_KEY) return 'openrouter';
     if (process.env.GOOGLE_GEMINI_API_KEY) return 'gemini';
     if (process.env.ANTHROPIC_API_KEY) return 'anthropic';
     return 'onnx'; // Fallback to local ONNX models
   }
 
-  // Track RuvLLM availability (set during async init)
-  private ruvllmAvailable: boolean = false;
+  // Track SwarmLLM availability (set during async init)
+  private swarmllmAvailable: boolean = false;
 
   /**
    * Select default model for provider
@@ -153,7 +153,7 @@ export class LLMRouter {
     const p = provider || this.config?.provider || 'openrouter';
 
     const defaults: Record<string, string> = {
-      ruvllm: 'ruvllm-sona',  // RuvLLM with SONA adaptive learning
+      swarmllm: 'swarmllm-sona',  // SwarmLLM with SONA adaptive learning
       openrouter: 'anthropic/claude-3.5-sonnet',
       gemini: 'gemini-1.5-flash',
       anthropic: 'claude-3-5-sonnet-20241022',
@@ -170,7 +170,7 @@ export class LLMRouter {
     const p = provider || this.config?.provider || 'openrouter';
 
     const envKeys: Record<string, string> = {
-      ruvllm: '',  // No API key needed - local inference
+      swarmllm: '',  // No API key needed - local inference
       openrouter: 'OPENROUTER_API_KEY',
       gemini: 'GOOGLE_GEMINI_API_KEY',
       anthropic: 'ANTHROPIC_API_KEY',
@@ -182,29 +182,29 @@ export class LLMRouter {
   }
 
   /**
-   * Initialize async components (call after construction for RuvLLM support)
+   * Initialize async components (call after construction for SwarmLLM support)
    */
   async initialize(): Promise<void> {
-    this.ruvllmAvailable = await loadRuvLLM();
+    this.swarmllmAvailable = await loadSwarmLLM();
 
-    // Re-select provider now that we know RuvLLM availability
-    if (this.ruvllmAvailable && !this.config.apiKey) {
-      // If no API keys configured, prefer RuvLLM
+    // Re-select provider now that we know SwarmLLM availability
+    if (this.swarmllmAvailable && !this.config.apiKey) {
+      // If no API keys configured, prefer SwarmLLM
       const hasApiKeys = process.env.OPENROUTER_API_KEY ||
                          process.env.GOOGLE_GEMINI_API_KEY ||
                          process.env.ANTHROPIC_API_KEY;
       if (!hasApiKeys) {
-        this.config.provider = 'ruvllm';
-        this.config.model = 'ruvllm-sona';
+        this.config.provider = 'swarmllm';
+        this.config.model = 'swarmllm-sona';
       }
     }
   }
 
   /**
-   * Check if RuvLLM is available
+   * Check if SwarmLLM is available
    */
-  isRuvLLMAvailable(): boolean {
-    return this.ruvllmAvailable;
+  isSwarmLLMAvailable(): boolean {
+    return this.swarmllmAvailable;
   }
 
   /**
@@ -225,8 +225,8 @@ export class LLMRouter {
     let cost = 0;
 
     try {
-      if (provider === 'ruvllm') {
-        const response = await this.callRuvLLM(prompt, temperature, maxTokens);
+      if (provider === 'swarmllm') {
+        const response = await this.callSwarmLLM(prompt, temperature, maxTokens);
         content = response.content;
         tokensUsed = response.tokensUsed;
         cost = response.cost;
@@ -252,10 +252,10 @@ export class LLMRouter {
         cost = 0;
       }
     } catch (error) {
-      // Fallback to RuvLLM if available, otherwise simple response
-      if (this.ruvllmAvailable && provider !== 'ruvllm') {
+      // Fallback to SwarmLLM if available, otherwise simple response
+      if (this.swarmllmAvailable && provider !== 'swarmllm') {
         try {
-          const response = await this.callRuvLLM(prompt, temperature, maxTokens);
+          const response = await this.callSwarmLLM(prompt, temperature, maxTokens);
           content = response.content;
           tokensUsed = response.tokensUsed;
           cost = 0;
@@ -284,7 +284,7 @@ export class LLMRouter {
   }
 
   /**
-   * Call RuvLLM for local inference (no API keys, no external services)
+   * Call SwarmLLM for local inference (no API keys, no external services)
    *
    * Features:
    * - SIMD-optimized CPU inference
@@ -293,19 +293,19 @@ export class LLMRouter {
    * - FastGRNN routing
    * - Zero cost, full privacy
    */
-  private async callRuvLLM(
+  private async callSwarmLLM(
     prompt: string,
     temperature: number,
     maxTokens: number
   ): Promise<{ content: string; tokensUsed: number; cost: number }> {
-    const engine = getRuvLLMInstance({ embeddingDim: this.config.embeddingDim || 768 });
+    const engine = getSwarmLLMInstance({ embeddingDim: this.config.embeddingDim || 768 });
 
     if (!engine) {
-      throw new Error('RuvLLM not available. Install with: npm install @rufvector/rufllm');
+      throw new Error('SwarmLLM not available. Install with: npm install @swarmvector/swarmllm');
     }
 
     try {
-      // Use RuvLLM's query method which includes routing and memory
+      // Use SwarmLLM's query method which includes routing and memory
       const result = engine.query(prompt, {
         temperature,
         maxTokens,
@@ -339,12 +339,12 @@ export class LLMRouter {
   }
 
   /**
-   * Get embeddings using RuvLLM (768-dimensional by default)
+   * Get embeddings using SwarmLLM (768-dimensional by default)
    */
   async getEmbedding(text: string): Promise<Float32Array | null> {
-    if (!this.ruvllmAvailable) return null;
+    if (!this.swarmllmAvailable) return null;
 
-    const engine = getRuvLLMInstance({ embeddingDim: this.config.embeddingDim || 768 });
+    const engine = getSwarmLLMInstance({ embeddingDim: this.config.embeddingDim || 768 });
     if (!engine) return null;
 
     try {
@@ -356,12 +356,12 @@ export class LLMRouter {
   }
 
   /**
-   * Compute similarity between two texts using RuvLLM
+   * Compute similarity between two texts using SwarmLLM
    */
   async computeSimilarity(text1: string, text2: string): Promise<number | null> {
-    if (!this.ruvllmAvailable) return null;
+    if (!this.swarmllmAvailable) return null;
 
-    const engine = getRuvLLMInstance();
+    const engine = getSwarmLLMInstance();
     if (!engine) return null;
 
     try {
@@ -372,12 +372,12 @@ export class LLMRouter {
   }
 
   /**
-   * Add to RuvLLM's HNSW memory
+   * Add to SwarmLLM's HNSW memory
    */
   async addToMemory(content: string, metadata?: Record<string, unknown>): Promise<number | null> {
-    if (!this.ruvllmAvailable) return null;
+    if (!this.swarmllmAvailable) return null;
 
-    const engine = getRuvLLMInstance();
+    const engine = getSwarmLLMInstance();
     if (!engine) return null;
 
     try {
@@ -388,12 +388,12 @@ export class LLMRouter {
   }
 
   /**
-   * Search RuvLLM's HNSW memory
+   * Search SwarmLLM's HNSW memory
    */
   async searchMemory(query: string, k: number = 10): Promise<any[] | null> {
-    if (!this.ruvllmAvailable) return null;
+    if (!this.swarmllmAvailable) return null;
 
-    const engine = getRuvLLMInstance();
+    const engine = getSwarmLLMInstance();
     if (!engine) return null;
 
     try {
@@ -404,12 +404,12 @@ export class LLMRouter {
   }
 
   /**
-   * Get RuvLLM statistics
+   * Get SwarmLLM statistics
    */
-  getRuvLLMStats(): any | null {
-    if (!this.ruvllmAvailable) return null;
+  getSwarmLLMStats(): any | null {
+    if (!this.swarmllmAvailable) return null;
 
-    const engine = getRuvLLMInstance();
+    const engine = getSwarmLLMInstance();
     if (!engine) return null;
 
     try {
@@ -586,8 +586,8 @@ export class LLMRouter {
    * Optimize model selection based on task priority
    */
   optimizeModelSelection(taskDescription: string, priority: 'quality' | 'balanced' | 'cost' | 'speed' | 'privacy'): LLMConfig {
-    // Use RuvLLM for privacy/speed/cost if available
-    const useRuvLLM = this.ruvllmAvailable &&
+    // Use SwarmLLM for privacy/speed/cost if available
+    const useSwarmLLM = this.swarmllmAvailable &&
                       (priority === 'privacy' || priority === 'speed' || priority === 'cost');
 
     const recommendations: Record<string, Partial<LLMConfig>> = {
@@ -596,20 +596,20 @@ export class LLMRouter {
         model: 'claude-3-5-sonnet-20241022'
       },
       balanced: {
-        provider: this.ruvllmAvailable ? 'ruvllm' : 'openrouter',
-        model: this.ruvllmAvailable ? 'ruvllm-sona' : 'anthropic/claude-3.5-sonnet'
+        provider: this.swarmllmAvailable ? 'swarmllm' : 'openrouter',
+        model: this.swarmllmAvailable ? 'swarmllm-sona' : 'anthropic/claude-3.5-sonnet'
       },
       cost: {
-        provider: useRuvLLM ? 'ruvllm' : 'gemini',
-        model: useRuvLLM ? 'ruvllm-sona' : 'gemini-1.5-flash'
+        provider: useSwarmLLM ? 'swarmllm' : 'gemini',
+        model: useSwarmLLM ? 'swarmllm-sona' : 'gemini-1.5-flash'
       },
       speed: {
-        provider: useRuvLLM ? 'ruvllm' : 'openrouter',
-        model: useRuvLLM ? 'ruvllm-sona' : 'meta-llama/llama-3.1-8b-instruct:free'
+        provider: useSwarmLLM ? 'swarmllm' : 'openrouter',
+        model: useSwarmLLM ? 'swarmllm-sona' : 'meta-llama/llama-3.1-8b-instruct:free'
       },
       privacy: {
-        provider: useRuvLLM ? 'ruvllm' : 'onnx',
-        model: useRuvLLM ? 'ruvllm-sona' : 'Xenova/gpt2'
+        provider: useSwarmLLM ? 'swarmllm' : 'onnx',
+        model: useSwarmLLM ? 'swarmllm-sona' : 'Xenova/gpt2'
       }
     };
 
@@ -629,8 +629,8 @@ export class LLMRouter {
   /**
    * Check if provider is available (has API key or is local)
    */
-  isProviderAvailable(provider: 'ruvllm' | 'openrouter' | 'gemini' | 'anthropic' | 'onnx'): boolean {
-    if (provider === 'ruvllm') return this.ruvllmAvailable;
+  isProviderAvailable(provider: 'swarmllm' | 'openrouter' | 'gemini' | 'anthropic' | 'onnx'): boolean {
+    if (provider === 'swarmllm') return this.swarmllmAvailable;
     if (provider === 'onnx') return true; // Always available
 
     const apiKey = this.getApiKey(provider);
@@ -642,7 +642,7 @@ export class LLMRouter {
    */
   getAvailableProviders(): string[] {
     const providers: string[] = [];
-    if (this.ruvllmAvailable) providers.push('ruvllm');
+    if (this.swarmllmAvailable) providers.push('swarmllm');
     if (process.env.OPENROUTER_API_KEY) providers.push('openrouter');
     if (process.env.GOOGLE_GEMINI_API_KEY) providers.push('gemini');
     if (process.env.ANTHROPIC_API_KEY) providers.push('anthropic');
@@ -652,8 +652,8 @@ export class LLMRouter {
 }
 
 /**
- * Check if RuvLLM is available (static helper)
+ * Check if SwarmLLM is available (static helper)
  */
-export async function isRuvLLMInstalled(): Promise<boolean> {
-  return loadRuvLLM();
+export async function isSwarmLLMInstalled(): Promise<boolean> {
+  return loadSwarmLLM();
 }

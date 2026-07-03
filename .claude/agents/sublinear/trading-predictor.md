@@ -75,7 +75,7 @@ const portfolioOptimization = await mcp__sublinear-time-solver__solve({
 });
 ```
 
-## Integration with Rufflo
+## Integration with Swarmdo
 
 ### Multi-Agent Trading Swarms
 - **Market Data Processing**: Distribute market data analysis across swarm agents

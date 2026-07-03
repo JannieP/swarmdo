@@ -1,5 +1,5 @@
 #!/bin/bash
-# Rufflo Memory/AgentDB Test Suite
+# Swarmdo Memory/AgentDB Test Suite
 # Tests memory management, AgentDB, and HNSW indexing
 
 set -e
@@ -41,8 +41,8 @@ run_test() {
 # ============================================================================
 echo "── Memory Initialization ──"
 
-run_test "Memory status" "npx rufflo memory status 2>/dev/null || echo 'memory status ok'"
-run_test "Memory path config" "echo 'memory path: ${RUFFLO_MEMORY_PATH:-./data}' && echo 'ok'"
+run_test "Memory status" "npx swarmdo memory status 2>/dev/null || echo 'memory status ok'"
+run_test "Memory path config" "echo 'memory path: ${SWARMDO_MEMORY_PATH:-./data}' && echo 'ok'"
 run_test "AgentDB initialization" "echo 'AgentDB init' && echo 'ok'"
 run_test "SQLite backend" "echo 'SQLite backend' && echo 'ok'"
 run_test "Hybrid backend" "echo 'Hybrid backend (SQLite + AgentDB)' && echo 'ok'"
@@ -153,7 +153,7 @@ run_test "Session export" "echo 'session export' && echo 'ok'"
 echo ""
 echo "── Memory Statistics ──"
 
-run_test "Memory stats" "npx rufflo memory stats 2>/dev/null || echo 'stats ok'"
+run_test "Memory stats" "npx swarmdo memory stats 2>/dev/null || echo 'stats ok'"
 run_test "Vector count" "echo 'vector count' && echo 'ok'"
 run_test "Index size" "echo 'index size' && echo 'ok'"
 run_test "Search metrics" "echo 'search metrics' && echo 'ok'"

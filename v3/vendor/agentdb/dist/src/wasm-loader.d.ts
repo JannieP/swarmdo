@@ -9,7 +9,7 @@
  *   const db = new AgentDB({ forceWasm: true });
  *
  * This entry point:
- * - Uses RuVector (WASM-based) for vector search
+ * - Uses SwarmVector (WASM-based) for vector search
  * - Uses sql.js (WASM-based) for SQLite
  * - Does NOT require any native module compilation
  * - Works on Windows without Visual Studio Build Tools
@@ -44,8 +44,8 @@ export { type QuantizationStats, type QuantizedVector, type ProductQuantizerConf
 export { KeywordIndex, HybridSearch, createKeywordIndex, createHybridSearch, type HybridSearchOptions, type HybridSearchResult, type HybridQuery, type BM25Config, } from './search/index.js';
 export { BenchmarkSuite, Benchmark, VectorInsertBenchmark, VectorSearchBenchmark, MemoryUsageBenchmark, ConcurrencyBenchmark, QuantizationBenchmark, runBenchmarks, runSelectedBenchmarks, formatReportAsMarkdown, formatComparisonAsMarkdown, type LatencyStats, type BenchmarkResult, type BenchmarkReport, type ComparisonReport, type BenchmarkConfig, } from './benchmark/index.js';
 export type { VectorBackend, VectorConfig, SearchResult, SearchOptions, VectorStats } from './backends/VectorBackend.js';
-export { RuVectorBackend } from './backends/ruvector/RuVectorBackend.js';
-export { RuVectorLearning } from './backends/ruvector/RuVectorLearning.js';
+export { SwarmVectorBackend } from './backends/swarmvector/SwarmVectorBackend.js';
+export { SwarmVectorLearning } from './backends/swarmvector/SwarmVectorLearning.js';
 export { RvfBackend } from './backends/rvf/RvfBackend.js';
 export { createBackend, detectBackends, getRecommendedBackend, isBackendAvailable, getInstallCommand } from './backends/factory.js';
 export type { BackendType, BackendDetection, RvfDetection } from './backends/factory.js';

@@ -1,0 +1,20 @@
+{
+  "name": "swarmdo-docs",
+  "description": "Documentation generation, API docs (JSDoc/TSDoc/OpenAPI), and drift detection — drives the `document` background worker via hooks_worker-dispatch; uses Haiku model for cost-efficient docs work",
+  "version": "0.2.0",
+  "author": {
+    "name": "ruvnet",
+    "url": "https://github.com/ruvnet"
+  },
+  "homepage": "https://github.com/JannieP/swarmdo",
+  "license": "MIT",
+  "keywords": [
+    "swarmdo",
+    "documentation",
+    "api-docs",
+    "drift-detection",
+    "jsdoc",
+    "openapi",
+    "mcp"
+  ]
+}

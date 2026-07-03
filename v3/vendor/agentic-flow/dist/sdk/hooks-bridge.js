@@ -150,7 +150,7 @@ export const sessionStartHook = async (input, toolUseId, { signal }) => {
             };
         }
         const stats = await bridge.getIntelligenceStats();
-        const message = `RuVector Intelligence active. ` +
+        const message = `SwarmVector Intelligence active. ` +
             `Trajectories: ${stats.trajectoryCount}, ` +
             `Features: ${stats.features?.join(', ') || 'none'}`;
         logger.info('Session started', { sessionId: session_id, source, stats });

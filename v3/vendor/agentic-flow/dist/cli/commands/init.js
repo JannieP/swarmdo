@@ -165,7 +165,7 @@ npx agentic-flow@alpha hooks metrics
 # Transfer patterns from another project
 npx agentic-flow@alpha hooks transfer <sourceProject>
 
-# RuVector intelligence (SONA, MoE, HNSW 150x faster)
+# SwarmVector intelligence (SONA, MoE, HNSW 150x faster)
 npx agentic-flow@alpha hooks intelligence
 \`\`\`
 
@@ -235,7 +235,7 @@ const SETTINGS_TEMPLATE = {
             "Bash(npm run:*)",
             "mcp__agentic-flow",
             "mcp__claude-flow",
-            "mcp__ruv-swarm"
+            "mcp__swarmdo-swarm"
         ]
     },
     hooks: {

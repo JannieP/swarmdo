@@ -2,10 +2,10 @@
 name = "rvf-index"
 version = "0.2.0"
 edition = "2021"
-description = "RufVector Format progressive HNSW indexing with Layer A/B/C tiered search"
+description = "SwarmVector Format progressive HNSW indexing with Layer A/B/C tiered search"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/ruvnet/rufvector"
-homepage = "https://github.com/ruvnet/rufvector"
+repository = "https://github.com/ruvnet/swarmvector"
+homepage = "https://github.com/ruvnet/swarmvector"
 readme = "README.md"
 categories = ["algorithms", "data-structures"]
 keywords = ["vector", "hnsw", "nearest-neighbor", "indexing", "rvf"]

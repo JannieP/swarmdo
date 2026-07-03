@@ -1,5 +1,5 @@
 {
-  "name": "@rufvector/rvf-node-win32-x64-msvc",
+  "name": "@swarmvector/rvf-node-win32-x64-msvc",
   "version": "0.1.7",
   "cpu": [
     "x64"
@@ -8,7 +8,7 @@
   "files": [
     "rvf-node.win32-x64-msvc.node"
   ],
-  "description": "RuVector Format Node.js native bindings",
+  "description": "SwarmVector Format Node.js native bindings",
   "license": "MIT",
   "os": [
     "win32"

@@ -1,7 +1,7 @@
 /**
  * SonaLearningBackend - Native SONA Engine Integration for AgentDB
  *
- * Wraps @rufvector/sona's N-API SonaEngine providing:
+ * Wraps @swarmvector/sona's N-API SonaEngine providing:
  * - Sub-millisecond micro-LoRA query enhancement
  * - Trajectory-based learning from agent interactions
  * - EWC++ protection against catastrophic forgetting
@@ -73,7 +73,7 @@ const MAX_HIDDEN_DIM = 4096;
 const MAX_PATTERNS_K = 100;
 
 /**
- * SonaLearningBackend - Native adaptive learning via @rufvector/sona
+ * SonaLearningBackend - Native adaptive learning via @swarmvector/sona
  */
 export class SonaLearningBackend {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -95,7 +95,7 @@ export class SonaLearningBackend {
 
   /**
    * Create a new SONA learning backend.
-   * Lazy-loads @rufvector/sona to avoid hard dependency.
+   * Lazy-loads @swarmvector/sona to avoid hard dependency.
    */
   static async create(config: SonaConfig): Promise<SonaLearningBackend> {
     const dim = config.hiddenDim;
@@ -106,7 +106,7 @@ export class SonaLearningBackend {
     const instance = new SonaLearningBackend(dim);
 
     try {
-      const { SonaEngine } = await import('@rufvector/sona');
+      const { SonaEngine } = await import('@swarmvector/sona');
 
       instance.engine = SonaEngine.withConfig({
         hiddenDim: dim,
@@ -123,7 +123,7 @@ export class SonaLearningBackend {
     } catch (error) {
       throw new Error(
         `SONA engine initialization failed.\n` +
-        `Install with: npm install @rufvector/sona\n` +
+        `Install with: npm install @swarmvector/sona\n` +
         `Error: ${(error as Error).message}`,
       );
     }
@@ -132,11 +132,11 @@ export class SonaLearningBackend {
   }
 
   /**
-   * Check if @rufvector/sona is available.
+   * Check if @swarmvector/sona is available.
    */
   static async isAvailable(): Promise<boolean> {
     try {
-      await import('@rufvector/sona');
+      await import('@swarmvector/sona');
       return true;
     } catch {
       return false;

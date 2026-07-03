@@ -4,9 +4,9 @@
  * Provides CLI interface for agentic-flow hook tools
  *
  * NOW WITH FULL RUVECTOR INTELLIGENCE:
- * - @rufvector/sona: Micro-LoRA (~0.05ms), EWC++, Trajectory tracking
- * - @rufvector/attention: MoE, Flash, Hyperbolic, Graph attention
- * - ruvector core: HNSW indexing (150x faster)
+ * - @swarmvector/sona: Micro-LoRA (~0.05ms), EWC++, Trajectory tracking
+ * - @swarmvector/attention: MoE, Flash, Hyperbolic, Graph attention
+ * - swarmvector core: HNSW indexing (150x faster)
  *
  * Available as BOTH:
  * 1. CLI Commands (agentic-flow hooks ...)
@@ -25,7 +25,7 @@ import { hookPretrainTool } from '../../mcp/fastmcp/tools/hooks/pretrain.js';
 import { hookBuildAgentsTool } from '../../mcp/fastmcp/tools/hooks/build-agents.js';
 import { hookMetricsTool } from '../../mcp/fastmcp/tools/hooks/metrics.js';
 import { hookTransferTool } from '../../mcp/fastmcp/tools/hooks/transfer.js';
-// Import intelligence tools (RuVector SONA + Attention + HNSW)
+// Import intelligence tools (SwarmVector SONA + Attention + HNSW)
 import { intelligenceRouteTool, intelligenceTrajectoryStartTool, intelligenceTrajectoryStepTool, intelligenceTrajectoryEndTool, intelligencePatternStoreTool, intelligencePatternSearchTool, intelligenceStatsTool, intelligenceLearnTool, intelligenceAttentionTool } from '../../mcp/fastmcp/tools/hooks/intelligence-tools.js';
 const mockContext = {
     onProgress: (update) => {
@@ -532,8 +532,8 @@ line1 += \` \${c.dim}in\${c.reset} \${c.project}\${project}\${c.reset}\`;
 if (branch) line1 += \` \${c.dim}on\${c.reset} \${c.symbol}⎇\${c.reset} \${c.branch}\${branch}\${c.reset}\`;
 lines.push(line1);
 
-// Line 2: RuVector stats (compact with symbols)
-let line2 = \`\${c.brain}🧠 RuVector\${c.reset}\`;
+// Line 2: SwarmVector stats (compact with symbols)
+let line2 = \`\${c.brain}🧠 SwarmVector\${c.reset}\`;
 line2 += \` \${c.symbol}◆\${c.reset} \${c.patterns}\${patterns}\${c.reset} \${c.dim}patterns\${c.reset}\`;
 if (memories > 0 || dbSize > 0) {
   line2 += \` \${c.symbol}⬡\${c.reset} \${c.memory}\${memories > 0 ? memories : formatSize(dbSize)}\${c.reset} \${c.dim}mem\${c.reset}\`;
@@ -667,7 +667,7 @@ console.log(lines.join('\\n'));
                         'Bash(npm run:*)',
                         'mcp__agentic-flow',
                         'mcp__claude-flow',
-                        'mcp__ruv-swarm'
+                        'mcp__swarmdo-swarm'
                     ]
                 },
                 statusLine: options.statusline !== false ? {
@@ -696,7 +696,7 @@ console.log(lines.join('\\n'));
     // Create intelligence subcommand group
     const intelligence = new Command('intelligence')
         .alias('intel')
-        .description('RuVector intelligence: SONA Micro-LoRA (~0.05ms) + MoE attention + HNSW (150x faster)');
+        .description('SwarmVector intelligence: SONA Micro-LoRA (~0.05ms) + MoE attention + HNSW (150x faster)');
     // Intelligence route command
     intelligence
         .command('route <task>')
@@ -712,7 +712,7 @@ console.log(lines.join('\\n'));
                 console.log(JSON.stringify(result, null, 2));
             }
             else {
-                console.log(`\n⚡ RuVector Intelligence Route`);
+                console.log(`\n⚡ SwarmVector Intelligence Route`);
                 console.log(`🎯 Agent: ${result.agent}`);
                 console.log(`📊 Confidence: ${((result.confidence || 0) * 100).toFixed(1)}%`);
                 console.log(`🔧 Engine: ${result.engine}`);
@@ -890,7 +890,7 @@ console.log(lines.join('\\n'));
     // Intelligence stats command
     intelligence
         .command('stats')
-        .description('Get RuVector intelligence layer statistics')
+        .description('Get SwarmVector intelligence layer statistics')
         .option('-j, --json', 'Output as JSON')
         .action(async (options) => {
         try {
@@ -899,7 +899,7 @@ console.log(lines.join('\\n'));
                 console.log(JSON.stringify(result, null, 2));
             }
             else {
-                console.log(`\n📊 RuVector Intelligence Stats`);
+                console.log(`\n📊 SwarmVector Intelligence Stats`);
                 console.log(`\n🧠 SONA Engine:`);
                 console.log(`   Micro-LoRA: ${result.features?.sona?.microLora || 'rank-1 (~0.05ms)'}`);
                 console.log(`   Base-LoRA: ${result.features?.sona?.baseLora || 'rank-8'}`);

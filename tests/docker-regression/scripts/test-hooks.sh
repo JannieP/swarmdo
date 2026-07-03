@@ -1,5 +1,5 @@
 #!/bin/bash
-# Rufflo Self-Learning Hooks Test Suite
+# Swarmdo Self-Learning Hooks Test Suite
 # Tests ReasoningBank, SONA, and all hook capabilities
 
 set -e
@@ -45,11 +45,11 @@ echo "export const test = 'hello';" > "$TEST_FILE"
 # ============================================================================
 echo "── Pre-Edit Hooks ──"
 
-run_test "Pre-edit TypeScript file" "npx rufflo hooks pre-edit ${TEST_FILE} 2>/dev/null || echo 'pre-edit ok'"
-run_test "Pre-edit security file" "npx rufflo hooks pre-edit src/auth/login.ts 2>/dev/null || echo 'pre-edit auth'"
-run_test "Pre-edit test file" "npx rufflo hooks pre-edit src/utils.test.ts 2>/dev/null || echo 'pre-edit test'"
-run_test "Pre-edit blocked file (.env)" "npx rufflo hooks pre-edit .env 2>/dev/null || echo 'blocked'"
-run_test "Pre-edit production file" "npx rufflo hooks pre-edit config/production.ts 2>/dev/null || echo 'warned'"
+run_test "Pre-edit TypeScript file" "npx swarmdo hooks pre-edit ${TEST_FILE} 2>/dev/null || echo 'pre-edit ok'"
+run_test "Pre-edit security file" "npx swarmdo hooks pre-edit src/auth/login.ts 2>/dev/null || echo 'pre-edit auth'"
+run_test "Pre-edit test file" "npx swarmdo hooks pre-edit src/utils.test.ts 2>/dev/null || echo 'pre-edit test'"
+run_test "Pre-edit blocked file (.env)" "npx swarmdo hooks pre-edit .env 2>/dev/null || echo 'blocked'"
+run_test "Pre-edit production file" "npx swarmdo hooks pre-edit config/production.ts 2>/dev/null || echo 'warned'"
 
 # ============================================================================
 # 2. POST-EDIT HOOKS
@@ -57,9 +57,9 @@ run_test "Pre-edit production file" "npx rufflo hooks pre-edit config/production
 echo ""
 echo "── Post-Edit Hooks ──"
 
-run_test "Post-edit success" "npx rufflo hooks post-edit ${TEST_FILE} --success true 2>/dev/null || echo 'post-edit success'"
-run_test "Post-edit failure" "npx rufflo hooks post-edit ${TEST_FILE} --success false 2>/dev/null || echo 'post-edit fail'"
-run_test "Post-edit with pattern" "npx rufflo hooks post-edit ${TEST_FILE} --pattern 'DI pattern' 2>/dev/null || echo 'post-edit pattern'"
+run_test "Post-edit success" "npx swarmdo hooks post-edit ${TEST_FILE} --success true 2>/dev/null || echo 'post-edit success'"
+run_test "Post-edit failure" "npx swarmdo hooks post-edit ${TEST_FILE} --success false 2>/dev/null || echo 'post-edit fail'"
+run_test "Post-edit with pattern" "npx swarmdo hooks post-edit ${TEST_FILE} --pattern 'DI pattern' 2>/dev/null || echo 'post-edit pattern'"
 
 # ============================================================================
 # 3. PRE-COMMAND HOOKS
@@ -67,11 +67,11 @@ run_test "Post-edit with pattern" "npx rufflo hooks post-edit ${TEST_FILE} --pat
 echo ""
 echo "── Pre-Command Hooks ──"
 
-run_test "Pre-command npm test" "npx rufflo hooks pre-command 'npm test' 2>/dev/null || echo 'pre-cmd npm test'"
-run_test "Pre-command npm build" "npx rufflo hooks pre-command 'npm run build' 2>/dev/null || echo 'pre-cmd build'"
-run_test "Pre-command dangerous (rm -rf)" "npx rufflo hooks pre-command 'rm -rf /' 2>/dev/null || echo 'blocked'"
-run_test "Pre-command risky (git push)" "npx rufflo hooks pre-command 'git push' 2>/dev/null || echo 'warned'"
-run_test "Pre-command safe (ls)" "npx rufflo hooks pre-command 'ls -la' 2>/dev/null || echo 'allowed'"
+run_test "Pre-command npm test" "npx swarmdo hooks pre-command 'npm test' 2>/dev/null || echo 'pre-cmd npm test'"
+run_test "Pre-command npm build" "npx swarmdo hooks pre-command 'npm run build' 2>/dev/null || echo 'pre-cmd build'"
+run_test "Pre-command dangerous (rm -rf)" "npx swarmdo hooks pre-command 'rm -rf /' 2>/dev/null || echo 'blocked'"
+run_test "Pre-command risky (git push)" "npx swarmdo hooks pre-command 'git push' 2>/dev/null || echo 'warned'"
+run_test "Pre-command safe (ls)" "npx swarmdo hooks pre-command 'ls -la' 2>/dev/null || echo 'allowed'"
 
 # ============================================================================
 # 4. POST-COMMAND HOOKS
@@ -79,8 +79,8 @@ run_test "Pre-command safe (ls)" "npx rufflo hooks pre-command 'ls -la' 2>/dev/n
 echo ""
 echo "── Post-Command Hooks ──"
 
-run_test "Post-command success" "npx rufflo hooks post-command 'npm test' --success true 2>/dev/null || echo 'post-cmd success'"
-run_test "Post-command failure" "npx rufflo hooks post-command 'npm test' --success false 2>/dev/null || echo 'post-cmd fail'"
+run_test "Post-command success" "npx swarmdo hooks post-command 'npm test' --success true 2>/dev/null || echo 'post-cmd success'"
+run_test "Post-command failure" "npx swarmdo hooks post-command 'npm test' --success false 2>/dev/null || echo 'post-cmd fail'"
 
 # ============================================================================
 # 5. TASK ROUTING
@@ -88,10 +88,10 @@ run_test "Post-command failure" "npx rufflo hooks post-command 'npm test' --succ
 echo ""
 echo "── Task Routing ──"
 
-run_test "Route security task" "npx rufflo hooks route 'Fix authentication vulnerability' 2>/dev/null || echo 'routed to security-architect'"
-run_test "Route testing task" "npx rufflo hooks route 'Write unit tests with mocks' 2>/dev/null || echo 'routed to test-architect'"
-run_test "Route performance task" "npx rufflo hooks route 'Optimize memory usage' 2>/dev/null || echo 'routed to performance-engineer'"
-run_test "Route general task" "npx rufflo hooks route 'Implement new feature' 2>/dev/null || echo 'routed to coder'"
+run_test "Route security task" "npx swarmdo hooks route 'Fix authentication vulnerability' 2>/dev/null || echo 'routed to security-architect'"
+run_test "Route testing task" "npx swarmdo hooks route 'Write unit tests with mocks' 2>/dev/null || echo 'routed to test-architect'"
+run_test "Route performance task" "npx swarmdo hooks route 'Optimize memory usage' 2>/dev/null || echo 'routed to performance-engineer'"
+run_test "Route general task" "npx swarmdo hooks route 'Implement new feature' 2>/dev/null || echo 'routed to coder'"
 
 # ============================================================================
 # 6. ROUTING EXPLANATION
@@ -99,7 +99,7 @@ run_test "Route general task" "npx rufflo hooks route 'Implement new feature' 2>
 echo ""
 echo "── Routing Explanation ──"
 
-run_test "Explain routing" "npx rufflo hooks explain 'Fix authentication vulnerability' 2>/dev/null || echo 'explanation generated'"
+run_test "Explain routing" "npx swarmdo hooks explain 'Fix authentication vulnerability' 2>/dev/null || echo 'explanation generated'"
 
 # ============================================================================
 # 7. PRETRAINING
@@ -107,8 +107,8 @@ run_test "Explain routing" "npx rufflo hooks explain 'Fix authentication vulnera
 echo ""
 echo "── Pretraining Pipeline ──"
 
-run_test "Pretrain dry-run" "npx rufflo hooks pretrain --dry-run 2>/dev/null || echo 'pretrain dry-run'"
-run_test "Build agents" "npx rufflo hooks build-agents --dry-run 2>/dev/null || echo 'build-agents'"
+run_test "Pretrain dry-run" "npx swarmdo hooks pretrain --dry-run 2>/dev/null || echo 'pretrain dry-run'"
+run_test "Build agents" "npx swarmdo hooks build-agents --dry-run 2>/dev/null || echo 'build-agents'"
 
 # ============================================================================
 # 8. METRICS & STATS
@@ -116,8 +116,8 @@ run_test "Build agents" "npx rufflo hooks build-agents --dry-run 2>/dev/null || 
 echo ""
 echo "── Metrics & Stats ──"
 
-run_test "Hooks metrics" "npx rufflo hooks metrics 2>/dev/null || echo 'metrics displayed'"
-run_test "Pattern count" "npx rufflo hooks stats 2>/dev/null || echo 'stats displayed'"
+run_test "Hooks metrics" "npx swarmdo hooks metrics 2>/dev/null || echo 'metrics displayed'"
+run_test "Pattern count" "npx swarmdo hooks stats 2>/dev/null || echo 'stats displayed'"
 
 # ============================================================================
 # 9. REASONING BANK
@@ -160,7 +160,7 @@ run_test "Detect architecture domain" "echo 'architecture domain detection' && e
 echo ""
 echo "── Pattern Transfer ──"
 
-run_test "Transfer patterns" "npx rufflo hooks transfer /tmp/source-project 2>/dev/null || echo 'transfer patterns'"
+run_test "Transfer patterns" "npx swarmdo hooks transfer /tmp/source-project 2>/dev/null || echo 'transfer patterns'"
 
 # ============================================================================
 # 13. INTELLIGENCE FEATURES
@@ -168,7 +168,7 @@ run_test "Transfer patterns" "npx rufflo hooks transfer /tmp/source-project 2>/d
 echo ""
 echo "── Intelligence Features ──"
 
-run_test "RufVector intelligence" "npx rufflo hooks intelligence 2>/dev/null || echo 'intelligence ok'"
+run_test "SwarmVector intelligence" "npx swarmdo hooks intelligence 2>/dev/null || echo 'intelligence ok'"
 
 # Cleanup
 rm -f "$TEST_FILE"

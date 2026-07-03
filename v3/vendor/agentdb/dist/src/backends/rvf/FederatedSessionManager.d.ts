@@ -1,7 +1,7 @@
 /**
  * FederatedSessionManager - Cross-Session Federated Learning for AgentDB
  *
- * Wraps @rufvector/rufllm's EphemeralAgent + FederatedCoordinator to provide:
+ * Wraps @swarmvector/swarmllm's EphemeralAgent + FederatedCoordinator to provide:
  * - Agent-scoped trajectory recording per session
  * - Federated aggregation across all agent sessions
  * - Warm-start pattern loading for new sessions
@@ -93,11 +93,11 @@ export declare class FederatedSessionManager {
     private constructor();
     /**
      * Create a new federated session manager.
-     * Lazy-loads @rufvector/rufllm to avoid hard dependency.
+     * Lazy-loads @swarmvector/swarmllm to avoid hard dependency.
      */
     static create(config: FederatedConfig): Promise<FederatedSessionManager>;
     /**
-     * Check if @rufvector/rufllm is available.
+     * Check if @swarmvector/swarmllm is available.
      */
     static isAvailable(): Promise<boolean>;
     /**

@@ -1,16 +1,16 @@
 {
-  "_comment_skillListingBudgetFraction": "#1834 \u2014 repo has 367 SKILL.md files (5x duplicates of common skills) across .agents/skills, .claude/skills, archive/v2/.claude/skills, v3/@rufflo/{cli,mcp}/.claude/skills. With Claude Code's default 1% budget, ~378 descriptions get truncated. Bumping to 6% covers the actual usage (5.5%). Long-term fix is to prune the duplicates and archive paths (see #1834).",
+  "_comment_skillListingBudgetFraction": "#1834 \u2014 repo has 367 SKILL.md files (5x duplicates of common skills) across .agents/skills, .claude/skills, archive/v2/.claude/skills, v3/@swarmdo/{cli,mcp}/.claude/skills. With Claude Code's default 1% budget, ~378 descriptions get truncated. Bumping to 6% covers the actual usage (5.5%). Long-term fix is to prune the duplicates and archive paths (see #1834).",
   "skillListingBudgetFraction": 0.06,
   "customInstructions": "Follow the project's CLAUDE.md guidelines. Use concurrent execution for all operations. Prioritize v3 implementation with security-first development, 15-agent swarm coordination, phased performance optimization, and cross-platform helper automation.",
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
-    "RUFFLO_V3_ENABLED": "true",
-    "RUFFLO_HOOKS_ENABLED": "true"
+    "SWARMDO_V3_ENABLED": "true",
+    "SWARMDO_HOOKS_ENABLED": "true"
   },
   "permissions": {
     "allow": [
-      "Bash(npx @rufflo*)",
-      "Bash(npx rufflo*)",
+      "Bash(npx @swarmdo*)",
+      "Bash(npx swarmdo*)",
       "Bash(node .claude/*)",
       "Bash(npm run:*)",
       "Bash(npm test:*)",
@@ -31,8 +31,8 @@
       "Bash(pwd)",
       "Bash(ls:*)",
       "Bash(npx:*)",
-      "mcp__rufflo__*",
-      "mcp__ruf-swarm__*"
+      "mcp__swarmdo__*",
+      "mcp__swarmdo-swarm__*"
     ],
     "deny": [
       "Read(./.env)",
@@ -157,8 +157,8 @@
     ]
   },
   "attribution": {
-    "commit": "Co-Authored-By: Rufflo <ruv@ruv.net>",
-    "pr": "\ud83e\udd16 Generated with [Rufflo](https://github.com/ruvnet/ruflo)"
+    "commit": "Co-Authored-By: Swarmdo <ruv@ruv.net>",
+    "pr": "\ud83e\udd16 Generated with [Swarmdo](https://github.com/ruvnet/swarmdo)"
   },
   "claudeFlow": {
     "version": "3.6.11",
@@ -295,17 +295,17 @@
     "command": "sh -c 'exec node \"${CLAUDE_PROJECT_DIR:-.}/.claude/helpers/statusline.cjs\"'"
   },
   "mcpServers": {
-    "rufflo": {
+    "swarmdo": {
       "command": "npx",
       "args": [
         "-y",
-        "rufflo@latest",
+        "swarmdo@latest",
         "mcp",
         "start"
       ]
     }
   },
   "enabledMcpjsonServers": [
-    "rufflo"
+    "swarmdo"
   ]
 }

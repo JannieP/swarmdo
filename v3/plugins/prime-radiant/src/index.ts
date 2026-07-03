@@ -1,7 +1,7 @@
 /**
  * Prime Radiant Plugin - Entry Point
  *
- * Mathematical AI Interpretability for Rufflo V3
+ * Mathematical AI Interpretability for Swarmdo V3
  *
  * Provides:
  * - Sheaf Laplacian coherence detection (CohomologyEngine)
@@ -263,11 +263,11 @@ export const pluginMetadata = {
   wasmSize: '92KB',
   dependencies: {
     required: [
-      '@rufflo/memory',
-      '@rufflo/security',
-      '@rufflo/coordination',
+      '@swarmdo/memory',
+      '@swarmdo/security',
+      '@swarmdo/coordination',
     ],
-    optional: ['@rufflo/embeddings', '@rufflo/aidefence'],
+    optional: ['@swarmdo/embeddings', '@swarmdo/aidefence'],
   },
   capabilities: [
     'coherence-checking',

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Regression guard for ruvnet/ruflo#1880.
+ * Regression guard for ruvnet/swarmdo#1880.
  *
  * The 12-hour scheduled witness verification runs `verify.mjs` in a
  * source-only checkout (no `npm ci`, no `npm run build`) and conflates
@@ -33,7 +33,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
 const REPO_ROOT = process.cwd();
-const VERIFY = resolve(REPO_ROOT, 'plugins/rufflo-core/scripts/witness/verify.mjs');
+const VERIFY = resolve(REPO_ROOT, 'plugins/swarmdo-core/scripts/witness/verify.mjs');
 const REAL_MANIFEST = resolve(REPO_ROOT, 'verification/macos/manifest.md.json');
 
 if (!existsSync(VERIFY)) {

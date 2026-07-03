@@ -3,7 +3,7 @@
  * benchmark-seed-corpus.mjs — DRACO-style measurement of the bundled
  * seed corpus (ADR-149).
  *
- * For each row in `v3/@rufflo/cli/assets/model-router/seed-rows.json`,
+ * For each row in `v3/@swarmdo/cli/assets/model-router/seed-rows.json`,
  * runs the templated task against every candidate model in the registry,
  * LLM-judges each response (anthropic/claude-sonnet-4-6 by default) over a
  * 3-criterion rubric tuned to the row's expected tier, and writes the
@@ -33,7 +33,7 @@
  * are longer (~200 input / ~400 output). Projected: ~$1-3 USD. Default
  * --max-cost gate is $5.00.
  *
- * Co-Authored-By: Rufflo <ruv@ruv.net>
+ * Co-Authored-By: Swarmdo <ruv@ruv.net>
  */
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
@@ -42,8 +42,8 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolvePath(__dirname, '..');
-const SEED_PATH = resolvePath(REPO_ROOT, 'v3', '@rufflo', 'cli', 'assets', 'model-router', 'seed-rows.json');
-const PROVENANCE_PATH = resolvePath(REPO_ROOT, 'v3', '@rufflo', 'cli', 'assets', 'model-router', 'seed-rows.provenance.json');
+const SEED_PATH = resolvePath(REPO_ROOT, 'v3', '@swarmdo', 'cli', 'assets', 'model-router', 'seed-rows.json');
+const PROVENANCE_PATH = resolvePath(REPO_ROOT, 'v3', '@swarmdo', 'cli', 'assets', 'model-router', 'seed-rows.provenance.json');
 
 // ============================================================================
 // Candidate registry — the models we'll score every row against.
@@ -265,8 +265,8 @@ async function callOR(modelId, prompt, apiKey, opts = {}) {
     headers: {
       'Authorization': `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
-      'HTTP-Referer': 'https://github.com/ruvnet/ruflo',
-      'X-Title': 'rufflo-benchmark-seed-corpus',
+      'HTTP-Referer': 'https://github.com/ruvnet/swarmdo',
+      'X-Title': 'swarmdo-benchmark-seed-corpus',
     },
     body: JSON.stringify({
       model: modelId,

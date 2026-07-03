@@ -1,5 +1,5 @@
 #!/bin/bash
-# Rufflo V3 Configuration Validator Template (Linux/macOS)
+# Swarmdo V3 Configuration Validator Template (Linux/macOS)
 
 set -e
 
@@ -18,13 +18,13 @@ log_warning() { echo -e "${YELLOW}⚠️  WARNING: $1${RESET}"; ((WARNINGS++)); 
 log_success() { echo -e "${GREEN}✅ $1${RESET}"; }
 log_info() { echo -e "${BLUE}ℹ️  $1${RESET}"; }
 
-echo -e "${BLUE}🔍 Rufflo V3 Configuration Validation${RESET}"
+echo -e "${BLUE}🔍 Swarmdo V3 Configuration Validation${RESET}"
 echo "==========================================="
 echo ""
 
 # Check required directories
 echo "📁 Checking Directory Structure..."
-required_dirs=(".claude" ".claude/helpers" ".rufflo/metrics" ".rufflo/security")
+required_dirs=(".claude" ".claude/helpers" ".swarmdo/metrics" ".swarmdo/security")
 
 for dir in "${required_dirs[@]}"; do
     if [ -d "$dir" ]; then
@@ -37,7 +37,7 @@ done
 # Check required files
 echo ""
 echo "📄 Checking Required Files..."
-required_files=(".rufflo/metrics/v3-progress.json" ".rufflo/metrics/performance.json" ".rufflo/security/audit-status.json")
+required_files=(".swarmdo/metrics/v3-progress.json" ".swarmdo/metrics/performance.json" ".swarmdo/security/audit-status.json")
 
 for file in "${required_files[@]}"; do
     if [ -f "$file" ]; then

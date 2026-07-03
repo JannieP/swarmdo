@@ -11,7 +11,7 @@ const SIGNING_KEY: &[u8] = b"agi-e2e-test-signing-key-32bytes";
 const ORCH_JSON: &[u8] = br#"{"model":"claude-opus-4-6","max_turns":100}"#;
 const TASKS_JSON: &[u8] = br#"[{"id":1,"spec":"fix bug"}]"#;
 const GRADERS_JSON: &[u8] = br#"[{"type":"test_pass"}]"#;
-const TOOLS_JSON: &[u8] = br#"[{"name":"rufvector_query","type":"search"}]"#;
+const TOOLS_JSON: &[u8] = br#"[{"name":"swarmvector_query","type":"search"}]"#;
 const COHER_JSON: &[u8] = br#"{"min_cut":0.7,"rollback":true}"#;
 
 /// Build a fully-populated container with every optional section.

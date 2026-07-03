@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
- * rufflo-internal witness regen — thin wrapper around the canonical
- * implementation in `plugins/rufflo-core/scripts/witness/regen.mjs`.
+ * swarmdo-internal witness regen — thin wrapper around the canonical
+ * implementation in `plugins/swarmdo-core/scripts/witness/regen.mjs`.
  *
- * The plugin script is project-agnostic; this wrapper hard-codes rufflo's
+ * The plugin script is project-agnostic; this wrapper hard-codes swarmdo's
  * paths so contributors can run a one-liner. Add new fix entries by
  * editing `witness-fixes.json` at the repo root.
  *
@@ -14,7 +14,7 @@
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
-import { regenerate, appendHistory, osDir } from '../plugins/rufflo-core/scripts/witness/lib.mjs';
+import { regenerate, appendHistory, osDir } from '../plugins/swarmdo-core/scripts/witness/lib.mjs';
 
 const REPO_ROOT = process.cwd();
 
@@ -37,10 +37,10 @@ const newFixes = existsSync(FIXES_CONFIG)
 
 const releases = {};
 for (const [key, pkgPath] of [
-  ['rufflo', 'rufflo/package.json'],
-  ['rufflo', 'package.json'],
-  ['@rufflo/cli', 'v3/@rufflo/cli/package.json'],
-  ['@rufflo/memory', 'v3/@rufflo/memory/package.json'],
+  ['swarmdo', 'swarmdo/package.json'],
+  ['swarmdo', 'package.json'],
+  ['@swarmdo/cli', 'v3/@swarmdo/cli/package.json'],
+  ['@swarmdo/memory', 'v3/@swarmdo/memory/package.json'],
 ]) {
   const fullPath = join(REPO_ROOT, pkgPath);
   if (existsSync(fullPath)) releases[key] = JSON.parse(readFileSync(fullPath, 'utf8')).version;

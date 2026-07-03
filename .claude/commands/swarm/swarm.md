@@ -1,10 +1,10 @@
 # swarm
 
-Main swarm orchestration command for Rufflo.
+Main swarm orchestration command for Swarmdo.
 
 ## Usage
 ```bash
-npx rufflo swarm <objective> [options]
+npx swarmdo swarm <objective> [options]
 ```
 
 ## Options
@@ -17,11 +17,11 @@ npx rufflo swarm <objective> [options]
 ## Examples
 ```bash
 # Basic swarm
-npx rufflo swarm "Build REST API"
+npx swarmdo swarm "Build REST API"
 
 # With strategy
-npx rufflo swarm "Research AI patterns" --strategy research
+npx swarmdo swarm "Research AI patterns" --strategy research
 
 # Open in Claude Code
-npx rufflo swarm "Build API" --claude
+npx swarmdo swarm "Build API" --claude
 ```

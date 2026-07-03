@@ -1,7 +1,7 @@
 /**
  * SolverBandit - Thompson Sampling bandit for AgentDB decisions (ADR-010)
  *
- * General-purpose multi-armed bandit inspired by @rufvector/rvf-solver's
+ * General-purpose multi-armed bandit inspired by @swarmvector/rvf-solver's
  * 18-bucket architecture. Provides explore/exploit decisions for any
  * context-dependent selection problem (skills, patterns, algorithms, tiers).
  *

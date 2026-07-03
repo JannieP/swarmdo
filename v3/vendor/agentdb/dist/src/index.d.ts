@@ -39,5 +39,5 @@ export { type QuantizationStats, type QuantizedVector, type ProductQuantizerConf
 export { KeywordIndex, HybridSearch, createKeywordIndex, createHybridSearch, type HybridSearchOptions, type HybridSearchResult, type HybridQuery, type BM25Config, } from './search/index.js';
 export { BenchmarkSuite, Benchmark, VectorInsertBenchmark, VectorSearchBenchmark, MemoryUsageBenchmark, ConcurrencyBenchmark, QuantizationBenchmark, runBenchmarks, runSelectedBenchmarks, formatReportAsMarkdown, formatComparisonAsMarkdown, type LatencyStats, type BenchmarkResult, type BenchmarkReport, type ComparisonReport, type BenchmarkConfig, } from './benchmark/index.js';
 export * from './controllers/index.js';
-export { LLMRouter, isRuvLLMInstalled, type LLMConfig, type LLMResponse, } from './services/LLMRouter.js';
+export { LLMRouter, isSwarmLLMInstalled, type LLMConfig, type LLMResponse, } from './services/LLMRouter.js';
 //# sourceMappingURL=index.d.ts.map

@@ -30,14 +30,14 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import * as mh from '@metaharness/router';
-import { IsotonicCalibrator } from '../v3/@rufflo/cli/dist/src/rufvector/router-calibrator.js';
+import { IsotonicCalibrator } from '../v3/@swarmdo/cli/dist/src/swarmvector/router-calibrator.js';
 
 const ARGS = (() => {
   const a = {
-    in: process.env.RUFFLO_ROUTER_TRAJECTORY_PATH
+    in: process.env.SWARMDO_ROUTER_TRAJECTORY_PATH
       ?? resolve('.swarm', 'model-router-trajectories.jsonl'),
-    artifact: resolve('v3/@rufflo/cli/assets/model-router/seed-router.krr.json'),
-    out: resolve('v3/@rufflo/cli/assets/model-router/seed-router.calibrator.production.json'),
+    artifact: resolve('v3/@swarmdo/cli/assets/model-router/seed-router.krr.json'),
+    out: resolve('v3/@swarmdo/cli/assets/model-router/seed-router.calibrator.production.json'),
     minPairs: 50,
     dryRun: false,
     format: 'table',
@@ -85,7 +85,7 @@ function printTable(p) {
     console.log('  --dry-run: not writing.');
   } else if (p.written) {
     console.log(`  Wrote: ${p.written}`);
-    console.log('  To use in production, point RUFFLO_ROUTER_CALIBRATOR_PATH at it,');
+    console.log('  To use in production, point SWARMDO_ROUTER_CALIBRATOR_PATH at it,');
     console.log('  OR atomically rename over the bundled calibrator after validation.');
   }
   console.log('');

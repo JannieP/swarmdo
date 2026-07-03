@@ -4,7 +4,7 @@ Train neural patterns from operations.
 
 ## Usage
 ```bash
-npx rufflo training neural-train [options]
+npx swarmdo training neural-train [options]
 ```
 
 ## Options
@@ -15,11 +15,11 @@ npx rufflo training neural-train [options]
 ## Examples
 ```bash
 # Train from recent ops
-npx rufflo training neural-train --data recent
+npx swarmdo training neural-train --data recent
 
 # Specific model
-npx rufflo training neural-train --model task-predictor
+npx swarmdo training neural-train --model task-predictor
 
 # Custom epochs
-npx rufflo training neural-train --epochs 100
+npx swarmdo training neural-train --epochs 100
 ```

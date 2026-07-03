@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Rufflo Hook Handler (Cross-Platform)
+ * Swarmdo Hook Handler (Cross-Platform)
  * Dispatches hook events to the appropriate helper modules.
  */
 

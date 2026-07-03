@@ -1,7 +1,7 @@
 {
-  "name": "@rufvector/rvf-node",
+  "name": "@swarmvector/rvf-node",
   "version": "0.1.4",
-  "description": "RuVector Format Node.js native bindings",
+  "description": "SwarmVector Format Node.js native bindings",
   "main": "index.js",
   "types": "index.d.ts",
   "napi": {

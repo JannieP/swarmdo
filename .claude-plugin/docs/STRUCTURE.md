@@ -1,4 +1,4 @@
-# Rufflo Plugin Structure
+# Swarmdo Plugin Structure
 
 ## Official Claude Code Plugin Format
 
@@ -7,7 +7,7 @@ This plugin follows the official Claude Code plugin specification.
 ## Directory Structure
 
 ```
-rufflo/
+swarmdo/
 ├── .claude-plugin/              # Plugin metadata and documentation
 │   ├── plugin.json              # Plugin manifest
 │   ├── marketplace.json         # Marketplace distribution metadata
@@ -86,19 +86,19 @@ Users install with:
 
 ### Hooks (`hooks/hooks.json`)
 - Event handler configuration
-- Integration with Rufflo coordination
+- Integration with Swarmdo coordination
 - Pre/post task execution, session management
 
 ## MCP Integration
 
 The plugin configures 3 MCP servers:
 
-1. **rufflo** (Required)
+1. **swarmdo** (Required)
    - 40+ orchestration tools
    - Swarm coordination
    - Agent management
 
-2. **ruf-swarm** (Optional)
+2. **swarmdo-swarm** (Optional)
    - Enhanced coordination
    - WASM acceleration
 

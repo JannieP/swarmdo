@@ -1,5 +1,5 @@
 /**
- * Legal Contracts Plugin for Rufflo V3
+ * Legal Contracts Plugin for Swarmdo V3
  *
  * A comprehensive legal contract analysis plugin combining hyperbolic embeddings
  * for legal ontology navigation with fast vector search for clause similarity.
@@ -13,7 +13,7 @@
  *
  * Based on ADR-034: Legal Contract Analysis Plugin
  *
- * @module @rufflo/plugin-legal-contracts
+ * @module @swarmdo/plugin-legal-contracts
  */
 
 // Export types
@@ -51,10 +51,10 @@ import { DEFAULT_CONFIG } from './types.js';
  * Plugin metadata
  */
 export const pluginMetadata = {
-  name: '@rufflo/plugin-legal-contracts',
+  name: '@swarmdo/plugin-legal-contracts',
   version: '3.0.0-alpha.1',
   description: 'Legal contract analysis plugin for clause extraction, risk assessment, and comparison',
-  author: 'Rufflo Team',
+  author: 'Swarmdo Team',
   category: 'legal',
   keywords: ['legal', 'contracts', 'clause', 'risk', 'compliance'],
   homepage: 'https://github.com/ruvnet/claude-flow',

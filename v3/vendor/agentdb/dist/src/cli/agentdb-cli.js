@@ -159,10 +159,10 @@ class AgentDBCLI {
         });
         this.nightlyLearner = new NightlyLearner(this.db, this.embedder);
         // ReflexionMemory and SkillLibrary support optional GNN/Graph backends
-        // These will be undefined if @rufvector/gnn or @rufvector/graph-node are not installed
+        // These will be undefined if @swarmvector/gnn or @swarmvector/graph-node are not installed
         this.reflexion = new ReflexionMemory(this.db, this.embedder, undefined, // vectorBackend - would be created with detectBackends()
-        undefined, // learningBackend - requires @rufvector/gnn
-        undefined // graphBackend - requires @rufvector/graph-node
+        undefined, // learningBackend - requires @swarmvector/gnn
+        undefined // graphBackend - requires @swarmvector/graph-node
         );
         this.skills = new SkillLibrary(this.db, this.embedder);
     }
@@ -2745,7 +2745,7 @@ ${colors.bright}${colors.cyan}AgentDB v2 CLI - Vector Intelligence with Auto Bac
 
 ${colors.bright}CORE COMMANDS:${colors.reset}
   ${colors.cyan}init${colors.reset} [options]              Initialize database with backend detection
-    --backend <type>           Backend: auto (default), ruvector, hnswlib
+    --backend <type>           Backend: auto (default), swarmvector, hnswlib
     --dimension <n>            Vector dimension (default: 384)
     --model <name>             Embedding model (default: Xenova/all-MiniLM-L6-v2)
                                Popular: Xenova/bge-base-en-v1.5 (768d production)
@@ -2787,7 +2787,7 @@ ${colors.bright}SETUP COMMANDS:${colors.reset}
 
   agentdb migrate <source-db> [--target <target-db>] [--no-optimize] [--dry-run] [-v]
     Migrate legacy AgentDB v1 or claude-flow memory databases to v2 format
-    Automatically detects source type and optimizes for RuVector GNN
+    Automatically detects source type and optimizes for SwarmVector GNN
     Options:
       --target <path>     Target database path (default: source-v2.db)
       --no-optimize       Skip GNN optimization analysis

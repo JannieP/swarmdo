@@ -16,7 +16,7 @@ import * as os from 'os';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, '..');
-const distBase = path.join(projectRoot, 'v3/@rufflo/cli/dist/src');
+const distBase = path.join(projectRoot, 'v3/@swarmdo/cli/dist/src');
 // Windows: absolute paths must be file:// URLs for dynamic import() — a bare
 // C:\... path fails with ERR_UNSUPPORTED_ESM_URL_SCHEME (hit while debugging
 // #2312 locally). No-op on POSIX.
@@ -41,7 +41,7 @@ function assert(c, l, r = '') { c ? pass(l) : fail(l, r || 'assertion false'); }
 const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'adr130-p3-'));
 const dbPath = path.join(tmpDir, 'memory.db');
 // Set early so all lazy imports in hooks modules pick up the right path
-process.env.RUFFLO_MEMORY_PATH = tmpDir;
+process.env.SWARMDO_MEMORY_PATH = tmpDir;
 
 async function cleanup() {
   try { fs.rmSync(tmpDir, { recursive: true, force: true }); } catch {}

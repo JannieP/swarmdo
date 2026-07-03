@@ -1,5 +1,5 @@
 {
-  "name": "rufflo",
+  "name": "swarmdo",
   "version": "2.5.0",
   "description": "Enterprise AI agent orchestration plugin with 150+ commands, 74+ specialized agents, SPARC methodology, swarm coordination, GitHub integration, and neural training capabilities",
   "author": {
@@ -49,20 +49,20 @@
     "node": ">=20.0.0"
   },
   "mcpServers": {
-    "rufflo": {
+    "swarmdo": {
       "command": "npx",
       "args": [
-        "rufflo@alpha",
+        "swarmdo@alpha",
         "mcp",
         "start"
       ],
-      "description": "Core Rufflo MCP server for swarm coordination, agent management, and task orchestration (40+ tools)",
+      "description": "Core Swarmdo MCP server for swarm coordination, agent management, and task orchestration (40+ tools)",
       "optional": false
     },
-    "ruf-swarm": {
+    "swarmdo-swarm": {
       "command": "npx",
       "args": [
-        "ruf-swarm",
+        "swarmdo-swarm",
         "mcp",
         "start"
       ],

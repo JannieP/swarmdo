@@ -1,12 +1,12 @@
 /**
- * @rufflo/teammate-plugin
+ * @swarmdo/teammate-plugin
  *
- * Native TeammateTool integration plugin for Rufflo.
- * Bridges Claude Code v2.1.19+ multi-agent capabilities with Rufflo.
+ * Native TeammateTool integration plugin for Swarmdo.
+ * Bridges Claude Code v2.1.19+ multi-agent capabilities with Swarmdo.
  *
  * @example
  * ```typescript
- * import { createTeammateBridge, TEAMMATE_MCP_TOOLS } from '@rufflo/teammate-plugin';
+ * import { createTeammateBridge, TEAMMATE_MCP_TOOLS } from '@swarmdo/teammate-plugin';
  *
  * // Initialize bridge
  * const bridge = await createTeammateBridge();
@@ -32,7 +32,7 @@
  * });
  * ```
  *
- * @module @rufflo/teammate-plugin
+ * @module @swarmdo/teammate-plugin
  * @version 1.0.0-alpha.1
  * @requires Claude Code >= 2.1.19
  */

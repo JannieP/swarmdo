@@ -20,10 +20,10 @@ export class ComponentRegistry {
   private static components: Component[] = [
     // Backends
     {
-      id: 'rufvector',
-      name: 'RuVector',
+      id: 'swarmvector',
+      name: 'SwarmVector',
       category: 'backend',
-      description: 'Native RuVector implementation',
+      description: 'Native SwarmVector implementation',
       optimal: true,
       metrics: '8.2x speedup',
     },

@@ -1,7 +1,7 @@
 /**
- * @rufflo/plugin-test-intelligence
+ * @swarmdo/plugin-test-intelligence
  *
- * AI-powered test intelligence plugin for Rufflo V3.
+ * AI-powered test intelligence plugin for Swarmdo V3.
  *
  * Features:
  * - Predictive test selection using reinforcement learning
@@ -10,8 +10,8 @@
  * - Mutation testing optimization
  * - Test case generation suggestions
  *
- * Uses RufVector WASM packages for high-performance analysis:
- * - rufvector-learning-wasm: RL-based test selection
+ * Uses SwarmVector WASM packages for high-performance analysis:
+ * - swarmvector-learning-wasm: RL-based test selection
  * - SONA: Continuous pattern learning
  * - micro-hnsw-wasm: Code-to-test similarity matching
  */
@@ -35,16 +35,16 @@ export { TestSonaBridge, createTestSonaBridge } from './bridges/sona-bridge.js';
 
 // Plugin metadata
 export const pluginMetadata = {
-  name: '@rufflo/plugin-test-intelligence',
+  name: '@swarmdo/plugin-test-intelligence',
   version: '3.0.0-alpha.1',
   description: 'AI-powered test intelligence for predictive selection, flaky detection, and coverage optimization',
   category: 'testing',
   tags: ['testing', 'ci-optimization', 'machine-learning', 'coverage', 'mutation-testing'],
-  author: 'Rufflo Team',
+  author: 'Swarmdo Team',
   license: 'MIT',
   repository: 'https://github.com/ruvnet/claude-flow',
   engines: {
-    'rufflo': '>=3.0.0-alpha.1',
+    'swarmdo': '>=3.0.0-alpha.1',
     node: '>=18.0.0',
   },
   capabilities: {
@@ -57,7 +57,7 @@ export const pluginMetadata = {
     ],
     bridges: ['learning', 'sona'],
     wasmPackages: [
-      'rufvector-learning-wasm',
+      'swarmvector-learning-wasm',
       'micro-hnsw-wasm',
       'sona',
     ],
@@ -127,7 +127,7 @@ export async function initializePlugin(
 }
 
 /**
- * Plugin entry point for Rufflo plugin loader
+ * Plugin entry point for Swarmdo plugin loader
  */
 export default {
   metadata: pluginMetadata,

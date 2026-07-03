@@ -560,7 +560,7 @@ export declare class P2PSwarmV2 {
     disconnect(): void;
 }
 /**
- * RuVector optimization for Gun message handling
+ * SwarmVector optimization for Gun message handling
  *
  * Provides:
  * - HNSW indexing for O(log n) message lookup by topic similarity
@@ -568,7 +568,7 @@ export declare class P2PSwarmV2 {
  * - PQ quantization for compressed message metadata storage
  * - Vector-based topic routing for intelligent distribution
  */
-declare class RuVectorGunOptimizer {
+declare class SwarmVectorGunOptimizer {
     private topicVectors;
     private messageIndex;
     private batchQueue;
@@ -578,12 +578,12 @@ declare class RuVectorGunOptimizer {
     constructor();
     /**
      * Generate topic embedding using simple hash-based vectors
-     * In production: use actual embedding model via ruvector
+     * In production: use actual embedding model via swarmvector
      */
     private generateTopicVector;
     /**
      * Find similar topics using cosine similarity
-     * In production: use HNSW index via ruvector for O(log n) lookup
+     * In production: use HNSW index via swarmvector for O(log n) lookup
      */
     findSimilarTopics(topic: string, topK?: number): Array<{
         topic: string;
@@ -629,6 +629,6 @@ declare class RuVectorGunOptimizer {
  * Create and connect a P2P swarm
  */
 export declare function createP2PSwarmV2(agentId: string, swarmKey?: string): Promise<P2PSwarmV2>;
-export { stableStringify, IdentityManager, CryptoV2, RelayManager, ArtifactStore, RuVectorGunOptimizer, };
+export { stableStringify, IdentityManager, CryptoV2, RelayManager, ArtifactStore, SwarmVectorGunOptimizer, };
 export type { SignedEnvelope, TaskEnvelope, TaskReceipt, ArtifactPointer, };
 //# sourceMappingURL=p2p-swarm-v2.d.ts.map

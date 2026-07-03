@@ -1,7 +1,7 @@
 /**
  * SONA Service - Self-Optimizing Neural Architecture
  *
- * Production implementation based on vibecast test-ruvector-sona patterns
+ * Production implementation based on vibecast test-swarmvector-sona patterns
  * Achieves +55.3% quality improvement with optimal configuration
  *
  * Key Performance Metrics:
@@ -10,9 +10,9 @@
  * - 0.452ms per-layer cost
  * - Sub-millisecond token latency
  *
- * Based on: https://github.com/ruvnet/vibecast/tree/claude/test-ruvector-sona-01Raj3Q3P4qjff4JGVipJhvz
+ * Based on: https://github.com/ruvnet/vibecast/tree/claude/test-swarmvector-sona-01Raj3Q3P4qjff4JGVipJhvz
  */
-import { SonaEngine } from '@rufvector/sona';
+import { SonaEngine } from '@swarmvector/sona';
 import { EventEmitter } from 'events';
 /**
  * SONA Service - Main orchestration class

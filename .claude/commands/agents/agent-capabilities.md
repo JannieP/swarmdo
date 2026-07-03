@@ -14,8 +14,8 @@ Matrix of agent capabilities and their specializations.
 ## Querying Capabilities
 ```bash
 # List all capabilities
-npx rufflo agents capabilities
+npx swarmdo agents capabilities
 
 # For specific agent
-npx rufflo agents capabilities --type coder
+npx swarmdo agents capabilities --type coder
 ```

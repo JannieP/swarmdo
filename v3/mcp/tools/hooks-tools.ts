@@ -25,7 +25,7 @@ import {
   createReasoningBank,
   type Trajectory,
   type TrajectoryStep,
-} from '../../@rufflo/neural/src/index.js';
+} from '../../@swarmdo/neural/src/index.js';
 
 // ============================================================================
 // Singleton ReasoningBank Instance

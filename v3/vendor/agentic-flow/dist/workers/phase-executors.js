@@ -339,7 +339,7 @@ registerPhaseExecutor('dependency-graph', async (workerContext, phaseContext, op
 // Learning Phases
 // ============================================================================
 registerPhaseExecutor('vectorization', async (workerContext, phaseContext, options) => {
-    // Placeholder - actual vectorization happens in RuVector integration
+    // Placeholder - actual vectorization happens in SwarmVector integration
     phaseContext.patterns.push(`Vectorization: ${phaseContext.patterns.length} patterns ready`);
     return {
         success: true,
@@ -348,7 +348,7 @@ registerPhaseExecutor('vectorization', async (workerContext, phaseContext, optio
 });
 // embedding-generation is now in consolidated-phases.ts with real ONNX implementation
 registerPhaseExecutor('pattern-storage', async (workerContext, phaseContext, options) => {
-    // Placeholder - storage happens in RuVector/ReasoningBank
+    // Placeholder - storage happens in SwarmVector/ReasoningBank
     phaseContext.patterns.push(`Pattern storage: ${phaseContext.patterns.length} patterns`);
     return {
         success: true,
@@ -356,7 +356,7 @@ registerPhaseExecutor('pattern-storage', async (workerContext, phaseContext, opt
     };
 });
 registerPhaseExecutor('sona-training', async (workerContext, phaseContext, options) => {
-    // Placeholder - SONA training happens in RuVector integration
+    // Placeholder - SONA training happens in SwarmVector integration
     phaseContext.patterns.push('SONA training triggered');
     return {
         success: true,

@@ -45,7 +45,7 @@ import { createTransport, TransportManager, createTransportManager } from './tra
  * Default server configuration
  */
 const DEFAULT_CONFIG: Partial<MCPServerConfig> = {
-  name: 'Rufflo MCP Server V3',
+  name: 'Swarmdo MCP Server V3',
   version: '3.0.0',
   transport: 'stdio',
   host: 'localhost',
@@ -94,7 +94,7 @@ export class MCPServer extends EventEmitter implements IMCPServer {
 
   // Server information
   private readonly serverInfo = {
-    name: 'Rufflo MCP Server V3',
+    name: 'Swarmdo MCP Server V3',
     version: '3.0.0',
   };
 
@@ -480,7 +480,7 @@ export class MCPServer extends EventEmitter implements IMCPServer {
       protocolVersion: this.protocolVersion,
       capabilities: this.capabilities,
       serverInfo: this.serverInfo,
-      instructions: 'Rufflo MCP Server V3 ready for tool execution',
+      instructions: 'Swarmdo MCP Server V3 ready for tool execution',
     };
 
     this.logger.info('Session initialized', {

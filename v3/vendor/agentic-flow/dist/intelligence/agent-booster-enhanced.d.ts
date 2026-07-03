@@ -1,7 +1,7 @@
 /**
- * RuVector-Enhanced Agent Booster v2
+ * SwarmVector-Enhanced Agent Booster v2
  *
- * Full upgrade with all RuVector capabilities:
+ * Full upgrade with all SwarmVector capabilities:
  * - Semantic fuzzy matching (cosine similarity on embeddings)
  * - ONNX embeddings for semantic code understanding
  * - Parallel batch apply for multi-file edits
@@ -94,7 +94,7 @@ export interface PrefetchResult {
     confidence: number;
 }
 /**
- * RuVector-Enhanced Agent Booster v2
+ * SwarmVector-Enhanced Agent Booster v2
  */
 export declare class EnhancedAgentBooster {
     private intelligence;
@@ -156,7 +156,7 @@ export declare class EnhancedAgentBooster {
      */
     private recompressPatterns;
     /**
-     * Apply code edit with full RuVector enhancement
+     * Apply code edit with full SwarmVector enhancement
      */
     apply(request: EnhancedEditRequest): Promise<EnhancedEditResult>;
     /**

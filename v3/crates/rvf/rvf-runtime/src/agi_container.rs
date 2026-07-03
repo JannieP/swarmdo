@@ -468,9 +468,9 @@ mod tests {
     }"#;
 
     const TOOL_REGISTRY: &[u8] = br#"[
-        {"name": "rufvector_query", "type": "vector_search"},
-        {"name": "rufvector_cypher", "type": "graph_query"},
-        {"name": "rufvector_commit_delta", "type": "write"},
+        {"name": "swarmvector_query", "type": "vector_search"},
+        {"name": "swarmvector_cypher", "type": "graph_query"},
+        {"name": "swarmvector_commit_delta", "type": "write"},
         {"name": "rvf_snapshot", "type": "snapshot"},
         {"name": "rvf_witness_export", "type": "export"},
         {"name": "eval_run", "type": "evaluation"}

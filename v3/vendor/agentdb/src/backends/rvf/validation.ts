@@ -2,10 +2,10 @@
  * Shared validation utilities for RVF backends (native + sql.js fallback)
  *
  * Extracted from RvfBackend.ts to avoid duplication between
- * RvfBackend (native @rufvector/rvf) and SqlJsRvfBackend (built-in sql.js).
+ * RvfBackend (native @swarmvector/rvf) and SqlJsRvfBackend (built-in sql.js).
  */
 
-// Security constants (aligned with RuVectorBackend)
+// Security constants (aligned with SwarmVectorBackend)
 export const MAX_VECTOR_DIMENSION = 4096;
 export const MAX_BATCH_SIZE = 10000;
 export const MAX_PATH_LENGTH = 4096;

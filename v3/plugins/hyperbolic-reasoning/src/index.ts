@@ -1,7 +1,7 @@
 /**
- * @rufflo/plugin-hyperbolic-reasoning
+ * @swarmdo/plugin-hyperbolic-reasoning
  *
- * Hyperbolic reasoning plugin for Rufflo V3.
+ * Hyperbolic reasoning plugin for Swarmdo V3.
  *
  * Provides MCP tools for:
  * - Hierarchy embedding in Poincare ball
@@ -10,7 +10,7 @@
  * - Hierarchy comparison and alignment
  * - Entailment graph construction
  *
- * @module @rufflo/plugin-hyperbolic-reasoning
+ * @module @swarmdo/plugin-hyperbolic-reasoning
  * @version 3.0.0-alpha.1
  */
 
@@ -115,7 +115,7 @@ export { default } from './mcp-tools.js';
  * Plugin metadata
  */
 export const pluginMetadata = {
-  name: '@rufflo/plugin-hyperbolic-reasoning',
+  name: '@swarmdo/plugin-hyperbolic-reasoning',
   version: '3.0.0-alpha.1',
   description: 'Hyperbolic geometry for hierarchical reasoning',
   category: 'exotic',
@@ -131,10 +131,10 @@ export const pluginMetadata = {
   ],
   bridges: ['hyperbolic-bridge', 'gnn-bridge'],
   wasmPackages: [
-    '@rufvector/hyperbolic-hnsw-wasm',
-    '@rufvector/attention-wasm',
-    '@rufvector/gnn-wasm',
-    '@rufvector/sona',
+    '@swarmvector/hyperbolic-hnsw-wasm',
+    '@swarmvector/attention-wasm',
+    '@swarmvector/gnn-wasm',
+    '@swarmvector/sona',
   ],
 } as const;
 

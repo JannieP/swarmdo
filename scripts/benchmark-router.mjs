@@ -2,12 +2,12 @@
 /**
  * benchmark-router.mjs — Before/after benchmark for #2334:
  *   shipped heuristic+Thompson-bandit  vs  @metaharness/router (k-NN, KRR)
- *   vs  @rufvector/tiny-dancer FastGRNN score()
+ *   vs  @swarmvector/tiny-dancer FastGRNN score()
  *
  * What this measures, on the machine it runs on, against:
- *   - v3/@rufflo/cli/dist/src/rufvector/model-router.js  (must be built)
+ *   - v3/@swarmdo/cli/dist/src/swarmvector/model-router.js  (must be built)
  *   - @metaharness/router@0.3.2  Router (k-NN), trainRouter (KRR) — pure TS, no native deps
- *   - @rufvector/tiny-dancer@0.1.22 trainRouter() + score() (native FastGRNN)
+ *   - @swarmvector/tiny-dancer@0.1.22 trainRouter() + score() (native FastGRNN)
  *
  * Honest scope:
  *   - This is a SYNTHETIC corpus benchmark. We do NOT have a ground-truth
@@ -34,7 +34,7 @@ import { createRequire } from 'node:module';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..');
-const DIST = path.join(REPO_ROOT, 'v3', '@rufflo', 'cli', 'dist', 'src');
+const DIST = path.join(REPO_ROOT, 'v3', '@swarmdo', 'cli', 'dist', 'src');
 const require = createRequire(import.meta.url);
 
 // ----------------------------------------------------------------------------
@@ -131,14 +131,14 @@ function embed(task, label, dim) {
 }
 
 // ----------------------------------------------------------------------------
-// Run the INTEGRATED rufflo path with neural gate ON (ADR-148 in-tree)
+// Run the INTEGRATED swarmdo path with neural gate ON (ADR-148 in-tree)
 // ----------------------------------------------------------------------------
 async function runIntegratedNeural(test, dim) {
-  process.env.RUFFLO_ROUTER_NEURAL = '1';
+  process.env.SWARMDO_ROUTER_NEURAL = '1';
   // Clear any earlier cached config from previous runs in the same process.
-  const nr = await import(path.join(DIST, 'rufvector', 'neural-router.js'));
+  const nr = await import(path.join(DIST, 'swarmvector', 'neural-router.js'));
   nr.__resetNeuralRouterForTests();
-  const routerMod = require(path.join(DIST, 'rufvector', 'model-router.js'));
+  const routerMod = require(path.join(DIST, 'swarmvector', 'model-router.js'));
   routerMod.resetModelRouter?.();
 
   // Status check
@@ -165,9 +165,9 @@ async function runIntegratedNeural(test, dim) {
   }
   lat.sort((a,b)=>a-b);
   // Unset to avoid leaking into later runs in same process
-  delete process.env.RUFFLO_ROUTER_NEURAL;
+  delete process.env.SWARMDO_ROUTER_NEURAL;
   return {
-    name: 'INTEGRATED rufflo path (RUFFLO_ROUTER_NEURAL=1)',
+    name: 'INTEGRATED swarmdo path (SWARMDO_ROUTER_NEURAL=1)',
     accuracy: correct / test.length,
     costAdjReward,
     latency: { mean: lat.reduce((a,b)=>a+b,0)/lat.length, p50: lat[Math.floor(lat.length*0.5)], p95: lat[Math.floor(lat.length*0.95)] },
@@ -184,7 +184,7 @@ async function runIntegratedNeural(test, dim) {
 // Run heuristic+bandit baseline (cold, no prior outcomes)
 // ----------------------------------------------------------------------------
 async function runBaseline(queries) {
-  const routerMod = require(path.join(DIST, 'rufvector', 'model-router.js'));
+  const routerMod = require(path.join(DIST, 'swarmvector', 'model-router.js'));
   // Use a fresh router (no learned state)
   routerMod.resetModelRouter?.();
   const lat = [];
@@ -307,7 +307,7 @@ async function runMetaharnessKRR(train, test) {
 // Run tiny-dancer score() pipeline: train on train split, eval on test split
 // ----------------------------------------------------------------------------
 async function runTinyDancer(train, test, dim, options) {
-  const td = require('@rufvector/tiny-dancer');
+  const td = require('@swarmvector/tiny-dancer');
   // Build DRACO rows from train: scores reflect the label deterministically
   // (cheap-label query: cheap model good enough; strong-label: needs opus)
   const rows = train.map(q => ({
@@ -362,8 +362,8 @@ async function runTinyDancer(train, test, dim, options) {
 // Main
 // ----------------------------------------------------------------------------
 async function main() {
-  if (!existsSync(path.join(DIST, 'rufvector', 'model-router.js'))) {
-    console.error('[bench] dist not built — run `npm --prefix v3/@rufflo/cli run build`');
+  if (!existsSync(path.join(DIST, 'swarmvector', 'model-router.js'))) {
+    console.error('[bench] dist not built — run `npm --prefix v3/@swarmdo/cli run build`');
     process.exit(2);
   }
 
@@ -386,9 +386,9 @@ async function main() {
   const td = await runTinyDancer(train, test, ARGS.dim, { epochs: ARGS.epochs, hidden: ARGS.hidden });
 
   // Agreement rates pairwise (baseline ↔ each system)
-  const routerMod = require(path.join(DIST, 'rufvector', 'model-router.js'));
+  const routerMod = require(path.join(DIST, 'swarmvector', 'model-router.js'));
   const m = await import('@metaharness/router');
-  const tdMod = require('@rufvector/tiny-dancer');
+  const tdMod = require('@swarmvector/tiny-dancer');
   const router_knn = m.Router.fromExamples(
     train.map(q => ({ embedding: q.embedding,
       scores: q.label === 'cheap' ? { haiku:0.94, sonnet:0.92, opus:0.93 } : { haiku:0.30, sonnet:0.62, opus:0.91 } })),

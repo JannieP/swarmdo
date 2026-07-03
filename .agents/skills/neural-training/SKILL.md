@@ -38,27 +38,27 @@ Train and optimize neural patterns using SONA, MoE, and EWC++ systems.
 
 ### Train Patterns
 ```bash
-npx rufflo neural train --model-type moe --epochs 10
+npx swarmdo neural train --model-type moe --epochs 10
 ```
 
 ### Check Status
 ```bash
-npx rufflo neural status
+npx swarmdo neural status
 ```
 
 ### View Patterns
 ```bash
-npx rufflo neural patterns --type all
+npx swarmdo neural patterns --type all
 ```
 
 ### Predict
 ```bash
-npx rufflo neural predict --input "task description"
+npx swarmdo neural predict --input "task description"
 ```
 
 ### Optimize
 ```bash
-npx rufflo neural optimize --target latency
+npx swarmdo neural optimize --target latency
 ```
 
 ## Best Practices

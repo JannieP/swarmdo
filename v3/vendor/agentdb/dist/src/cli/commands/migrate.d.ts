@@ -1,7 +1,7 @@
 /**
  * AgentDB Migration Command
  * Migrate legacy AgentDB v1 and claude-flow memory databases to v2 format
- * with RuVector GNN optimization
+ * with SwarmVector GNN optimization
  */
 interface MigrationOptions {
     sourceDb: string;

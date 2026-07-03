@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Verify @rufflo/plugin-agent-federation install + exports (#1949).
+# Verify @swarmdo/plugin-agent-federation install + exports (#1949).
 #
 # The verification job's Checks 2 and 3 are blocked because a transitive
 # dep brings in `cookies@0.9.1`, which is the latest published `cookies`
@@ -10,7 +10,7 @@
 # the install + the Check-2 exports probe inside a clean temp dir.
 #
 # Investigation + dep chain in #1949:
-#   @rufflo/plugin-agent-federation
+#   @swarmdo/plugin-agent-federation
 #     └─ agentic-flow
 #          └─ fastmcp
 #               └─ mcp-proxy
@@ -30,7 +30,7 @@
 set -euo pipefail
 
 TAG="${1:-alpha}"
-WORK="$(mktemp -d -t rufflo-fed-check.XXXXXXXX)"
+WORK="$(mktemp -d -t swarmdo-fed-check.XXXXXXXX)"
 trap 'rm -rf "$WORK"' EXIT
 
 printf '[verify-federation] using temp dir: %s\n' "$WORK"
@@ -38,7 +38,7 @@ printf '[verify-federation] pinning cookies@0.9.0 to work around registry block 
 
 cat > "$WORK/package.json" <<'EOF'
 {
-  "name": "rufflo-federation-verify",
+  "name": "swarmdo-federation-verify",
   "private": true,
   "version": "0.0.0",
   "overrides": {
@@ -49,8 +49,8 @@ EOF
 
 cd "$WORK"
 
-printf '[verify-federation] installing @rufflo/plugin-agent-federation@%s\n' "$TAG"
-if ! npm install "@rufflo/plugin-agent-federation@${TAG}" --no-audit --no-fund --loglevel=error; then
+printf '[verify-federation] installing @swarmdo/plugin-agent-federation@%s\n' "$TAG"
+if ! npm install "@swarmdo/plugin-agent-federation@${TAG}" --no-audit --no-fund --loglevel=error; then
   printf '[verify-federation] install FAILED — registry may have blocked another dep, or the tag does not exist\n' >&2
   exit 1
 fi
@@ -62,7 +62,7 @@ printf '[verify-federation] resolved cookies version: %s\n' "${COOKIES_VER:-(not
 # Check 2 — required exports present
 printf '[verify-federation] Check 2: required exports\n'
 EXPORTS_OK=$(node --input-type=module -e "
-const m = await import('@rufflo/plugin-agent-federation');
+const m = await import('@swarmdo/plugin-agent-federation');
 const want = ['FederationNodeState','FederationBreakerService','InMemorySpendReporter'];
 const missing = want.filter(n => !(n in m));
 if (missing.length) { console.error('missing: ' + missing.join(',')); process.exit(1); }
@@ -80,7 +80,7 @@ printf '[verify-federation] Check 2 OK — FederationNodeState, FederationBreake
 # breaker scenario (which the plugin's own tests cover).
 printf '[verify-federation] Check 3: breaker/reporter wire-up smoke\n'
 SMOKE_OK=$(node --input-type=module -e "
-const { FederationBreakerService, InMemorySpendReporter } = await import('@rufflo/plugin-agent-federation');
+const { FederationBreakerService, InMemorySpendReporter } = await import('@swarmdo/plugin-agent-federation');
 try {
   const reporter = new InMemorySpendReporter();
   const breaker = new FederationBreakerService({ spendReporter: reporter });

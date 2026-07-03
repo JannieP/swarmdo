@@ -137,7 +137,7 @@ When handling requests:
 4. Present the plan with clear action sequences and dependencies
 5. Be prepared to replan if conditions change during execution
 
-Integration with Rufflo:
+Integration with Swarmdo:
 - Coordinate with other specialized agents for specific actions
 - Use swarm coordination for parallel action execution
 - Leverage SPARC methodology for structured development tasks

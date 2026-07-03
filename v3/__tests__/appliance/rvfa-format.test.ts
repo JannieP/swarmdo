@@ -16,7 +16,7 @@ import {
   validateHeader,
   RVFA_MAGIC,
   RVFA_VERSION,
-} from '../../@rufflo/cli/src/appliance/rvfa-format.js';
+} from '../../@swarmdo/cli/src/appliance/rvfa-format.js';
 
 // -- Helpers ------------------------------------------------------------------
 
@@ -28,7 +28,7 @@ function makeWriter(profile: 'cloud' | 'hybrid' | 'offline' = 'cloud') {
 function addTestSections(writer: RvfaWriter): void {
   writer.addSection('kernel', Buffer.from('kernel-payload'), { compression: 'none' });
   writer.addSection('runtime', Buffer.from('runtime-payload'), { compression: 'gzip' });
-  writer.addSection('rufflo', Buffer.from('rufflo-payload'), { compression: 'none' });
+  writer.addSection('swarmdo', Buffer.from('swarmdo-payload'), { compression: 'none' });
 }
 
 // -- 1. Format constants ------------------------------------------------------
@@ -60,12 +60,12 @@ describe('createDefaultHeader', () => {
     });
   }
 
-  it('cloud profile does not include rufllm capability', () => {
-    assert.ok(!createDefaultHeader('cloud').capabilities.includes('rufllm'));
+  it('cloud profile does not include swarmllm capability', () => {
+    assert.ok(!createDefaultHeader('cloud').capabilities.includes('swarmllm'));
   });
 
-  it('offline profile includes rufllm capability', () => {
-    assert.ok(createDefaultHeader('offline').capabilities.includes('rufllm'));
+  it('offline profile includes swarmllm capability', () => {
+    assert.ok(createDefaultHeader('offline').capabilities.includes('swarmllm'));
   });
 });
 
@@ -190,7 +190,7 @@ describe('RvfaWriter', () => {
     const writer = makeWriter();
     writer.addSection('kernel', Buffer.from('aaa'), { compression: 'none' });
     writer.addSection('runtime', Buffer.from('bbbbb'), { compression: 'none' });
-    writer.addSection('rufflo', Buffer.from('ccccccc'), { compression: 'none' });
+    writer.addSection('swarmdo', Buffer.from('ccccccc'), { compression: 'none' });
 
     const reader = RvfaReader.fromBuffer(writer.build());
     const sections = reader.getSections();
@@ -288,7 +288,7 @@ describe('RvfaReader', () => {
     const writer = makeWriter();
     writer.addSection('kernel', Buffer.from('k'), { compression: 'none' });
     writer.addSection('runtime', Buffer.from('r'), { compression: 'none' });
-    writer.addSection('rufflo', Buffer.from('f'), { compression: 'none' });
+    writer.addSection('swarmdo', Buffer.from('f'), { compression: 'none' });
     writer.addSection('models', Buffer.from('m'), { compression: 'none' });
     writer.addSection('data', Buffer.from('d'), { compression: 'none' });
     writer.addSection('verify', Buffer.from('v'), { compression: 'none' });

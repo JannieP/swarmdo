@@ -65,7 +65,7 @@ async function handleInitSwarm(input, context) {
     // Try to use swarmCoordinator if available
     if (context?.swarmCoordinator) {
         try {
-            const { UnifiedSwarmCoordinator } = await import('@rufflo/swarm');
+            const { UnifiedSwarmCoordinator } = await import('@swarmdo/swarm');
             const coordinator = context.swarmCoordinator;
             // Initialize the coordinator with the config
             await coordinator.initialize({
@@ -113,7 +113,7 @@ async function handleSwarmStatus(input, context) {
     // Try to use swarmCoordinator if available
     if (context?.swarmCoordinator) {
         try {
-            const { UnifiedSwarmCoordinator } = await import('@rufflo/swarm');
+            const { UnifiedSwarmCoordinator } = await import('@swarmdo/swarm');
             const coordinator = context.swarmCoordinator;
             // Get swarm status
             const status = await coordinator.getStatus();
@@ -206,7 +206,7 @@ async function handleScaleSwarm(input, context) {
     // Try to use swarmCoordinator if available
     if (context?.swarmCoordinator) {
         try {
-            const { UnifiedSwarmCoordinator } = await import('@rufflo/swarm');
+            const { UnifiedSwarmCoordinator } = await import('@swarmdo/swarm');
             const coordinator = context.swarmCoordinator;
             // Get current status
             const beforeStatus = await coordinator.getStatus();

@@ -153,7 +153,7 @@ claude -p "Write user tests" --session-id test-1 &
 wait
 
 # 3. Interactive: Claude Code reviews results
-npx rufflo@v3alpha memory list --namespace results
+npx swarmdo@v3alpha memory list --namespace results
 ```
 
 ### Decision Prompt Template
@@ -181,17 +181,17 @@ const decideRouting = (task) => {
 ### Shared Tools (Both Platforms)
 ```javascript
 // Both Claude Code and Codex can use these
-mcp__rufflo__memory_search  // Find patterns
-mcp__rufflo__memory_store   // Store results
-mcp__ruf-swarm__swarm_init       // Initialize coordination
-mcp__ruf-swarm__swarm_status     // Check status
-mcp__ruf-swarm__agent_spawn      // Spawn agents
+mcp__swarmdo__memory_search  // Find patterns
+mcp__swarmdo__memory_store   // Store results
+mcp__swarmdo-swarm__swarm_init       // Initialize coordination
+mcp__swarmdo-swarm__swarm_status     // Check status
+mcp__swarmdo-swarm__agent_spawn      // Spawn agents
 ```
 
 ### Coordination Pattern
 ```javascript
 // 1. Store design from interactive phase
-mcp__rufflo__memory_store {
+mcp__swarmdo__memory_store {
   key: "design/api-feature",
   value: JSON.stringify({
     endpoints: [...],
@@ -202,13 +202,13 @@ mcp__rufflo__memory_store {
 }
 
 // 2. Workers read shared design
-mcp__rufflo__memory_search {
+mcp__swarmdo__memory_search {
   query: "api feature design",
   namespace: "shared"
 }
 
 // 3. Workers store results
-mcp__rufflo__memory_store {
+mcp__swarmdo__memory_store {
   key: "result-worker-1",
   value: "implementation complete",
   namespace: "results",
@@ -241,7 +241,7 @@ mcp__rufflo__memory_store {
 
 ```bash
 # Check what platform to use
-npx rufflo@v3alpha hooks route --task "[your task]"
+npx swarmdo@v3alpha hooks route --task "[your task]"
 
 # Spawn hybrid workflow
 /dual-coordinate --workflow hybrid_development --task "[feature]"

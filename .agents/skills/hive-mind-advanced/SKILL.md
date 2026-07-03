@@ -4,7 +4,7 @@ description: Advanced Hive Mind collective intelligence system for queen-led mul
 version: 1.0.0
 category: coordination
 tags: [hive-mind, swarm, queen-worker, consensus, collective-intelligence, multi-agent, coordination]
-author: Rufflo Team
+author: Swarmdo Team
 ---
 
 # Hive Mind Advanced Skill
@@ -13,7 +13,7 @@ Master the advanced Hive Mind collective intelligence system for sophisticated m
 
 ## Overview
 
-The Hive Mind system represents the pinnacle of multi-agent coordination in Rufflo, implementing a queen-led hierarchical architecture where a strategic queen coordinator directs specialized worker agents through collective decision-making and shared memory.
+The Hive Mind system represents the pinnacle of multi-agent coordination in Swarmdo, implementing a queen-led hierarchical architecture where a strategic queen coordinator directs specialized worker agents through collective decision-making and shared memory.
 
 ## Core Concepts
 
@@ -58,45 +58,45 @@ Requires 2/3 majority for decision approval, ensuring robust consensus even with
 
 ```bash
 # Basic initialization
-npx rufflo hive-mind init
+npx swarmdo hive-mind init
 
 # Force reinitialize
-npx rufflo hive-mind init --force
+npx swarmdo hive-mind init --force
 
 # Custom configuration
-npx rufflo hive-mind init --config hive-config.json
+npx swarmdo hive-mind init --config hive-config.json
 ```
 
 ### 2. Spawn a Swarm
 
 ```bash
 # Basic spawn with objective
-npx rufflo hive-mind spawn "Build microservices architecture"
+npx swarmdo hive-mind spawn "Build microservices architecture"
 
 # Strategic queen type
-npx rufflo hive-mind spawn "Research AI patterns" --queen-type strategic
+npx swarmdo hive-mind spawn "Research AI patterns" --queen-type strategic
 
 # Tactical queen with max workers
-npx rufflo hive-mind spawn "Implement API" --queen-type tactical --max-workers 12
+npx swarmdo hive-mind spawn "Implement API" --queen-type tactical --max-workers 12
 
 # Adaptive queen with consensus
-npx rufflo hive-mind spawn "Optimize system" --queen-type adaptive --consensus byzantine
+npx swarmdo hive-mind spawn "Optimize system" --queen-type adaptive --consensus byzantine
 
 # Generate Claude Code commands
-npx rufflo hive-mind spawn "Build full-stack app" --claude
+npx swarmdo hive-mind spawn "Build full-stack app" --claude
 ```
 
 ### 3. Monitor Status
 
 ```bash
 # Check hive mind status
-npx rufflo hive-mind status
+npx swarmdo hive-mind status
 
 # Get detailed metrics
-npx rufflo hive-mind metrics
+npx swarmdo hive-mind metrics
 
 # Monitor collective memory
-npx rufflo hive-mind memory
+npx swarmdo hive-mind memory
 ```
 
 ## Advanced Workflows
@@ -107,16 +107,16 @@ npx rufflo hive-mind memory
 
 ```bash
 # List active sessions
-npx rufflo hive-mind sessions
+npx swarmdo hive-mind sessions
 
 # Pause a session
-npx rufflo hive-mind pause <session-id>
+npx swarmdo hive-mind pause <session-id>
 
 # Resume a paused session
-npx rufflo hive-mind resume <session-id>
+npx swarmdo hive-mind resume <session-id>
 
 # Stop a running session
-npx rufflo hive-mind stop <session-id>
+npx swarmdo hive-mind stop <session-id>
 ```
 
 **Session Features**
@@ -226,7 +226,7 @@ const config = {
 Generate Claude Code spawn commands directly:
 
 ```bash
-npx rufflo hive-mind spawn "Build REST API" --claude
+npx swarmdo hive-mind spawn "Build REST API" --claude
 ```
 
 Output:
@@ -241,7 +241,7 @@ Task("Test Engineer", "Create Jest test suite...", "tester")
 
 ```bash
 # Use hive mind for SPARC workflow
-npx rufflo sparc tdd "User authentication" --hive-mind
+npx swarmdo sparc tdd "User authentication" --hive-mind
 
 # Spawns:
 # - Specification agent
@@ -255,10 +255,10 @@ npx rufflo sparc tdd "User authentication" --hive-mind
 
 ```bash
 # Repository analysis with hive mind
-npx rufflo hive-mind spawn "Analyze repo quality" --objective "owner$repo"
+npx swarmdo hive-mind spawn "Analyze repo quality" --objective "owner$repo"
 
 # PR review coordination
-npx rufflo hive-mind spawn "Review PR #123" --queen-type tactical
+npx swarmdo hive-mind spawn "Review PR #123" --queen-type tactical
 ```
 
 ## Performance Optimization
@@ -346,7 +346,7 @@ const insights = hiveMind.getPerformanceInsights();
 
 ## Hooks Integration
 
-Hive Mind integrates with Rufflo hooks for automation:
+Hive Mind integrates with Swarmdo hooks for automation:
 
 **Pre-Task Hooks**
 - Auto-assign agents by file type
@@ -372,17 +372,17 @@ Hive Mind integrates with Rufflo hooks for automation:
 
 **Strategic Queens** - For research, planning, and analysis
 ```bash
-npx rufflo hive-mind spawn "Research ML frameworks" --queen-type strategic
+npx swarmdo hive-mind spawn "Research ML frameworks" --queen-type strategic
 ```
 
 **Tactical Queens** - For implementation and execution
 ```bash
-npx rufflo hive-mind spawn "Build authentication" --queen-type tactical
+npx swarmdo hive-mind spawn "Build authentication" --queen-type tactical
 ```
 
 **Adaptive Queens** - For optimization and dynamic tasks
 ```bash
-npx rufflo hive-mind spawn "Optimize performance" --queen-type adaptive
+npx swarmdo hive-mind spawn "Optimize performance" --queen-type adaptive
 ```
 
 ### 2. Leverage Consensus
@@ -418,13 +418,13 @@ await memory.associate('jwt-auth', 'oauth2', 0.7);
 
 ```bash
 # Regular status checks
-npx rufflo hive-mind status
+npx swarmdo hive-mind status
 
 # Track metrics
-npx rufflo hive-mind metrics
+npx swarmdo hive-mind metrics
 
 # Analyze memory usage
-npx rufflo hive-mind memory
+npx swarmdo hive-mind memory
 ```
 
 ### 5. Session Management
@@ -442,7 +442,7 @@ await sessionManager.saveCheckpoint(
 **Resume Sessions**
 ```bash
 # Resume from any previous state
-npx rufflo hive-mind resume <session-id>
+npx swarmdo hive-mind resume <session-id>
 ```
 
 ## Troubleshooting
@@ -452,13 +452,13 @@ npx rufflo hive-mind resume <session-id>
 **High Memory Usage**
 ```bash
 # Run garbage collection
-npx rufflo hive-mind memory --gc
+npx swarmdo hive-mind memory --gc
 
 # Optimize database
-npx rufflo hive-mind memory --optimize
+npx swarmdo hive-mind memory --optimize
 
 # Export and clear
-npx rufflo hive-mind memory --export --clear
+npx swarmdo hive-mind memory --export --clear
 ```
 
 **Low Cache Hit Rate**
@@ -492,10 +492,10 @@ npx rufflo hive-mind memory --export --clear
 **No Consensus Reached (Byzantine)**
 ```bash
 # Switch to weighted consensus for more decisive results
-npx rufflo hive-mind spawn "..." --consensus weighted
+npx swarmdo hive-mind spawn "..." --consensus weighted
 
 # Or use simple majority
-npx rufflo hive-mind spawn "..." --consensus majority
+npx swarmdo hive-mind spawn "..." --consensus majority
 ```
 
 ## Advanced Topics
@@ -532,10 +532,10 @@ Run multiple hive minds simultaneously:
 
 ```bash
 # Frontend hive
-npx rufflo hive-mind spawn "Build UI" --name frontend-hive
+npx swarmdo hive-mind spawn "Build UI" --name frontend-hive
 
 # Backend hive
-npx rufflo hive-mind spawn "Build API" --name backend-hive
+npx swarmdo hive-mind spawn "Build API" --name backend-hive
 
 # They share collective memory for coordination
 ```
@@ -544,10 +544,10 @@ npx rufflo hive-mind spawn "Build API" --name backend-hive
 
 ```bash
 # Export session for backup
-npx rufflo hive-mind export <session-id> --output backup.json
+npx swarmdo hive-mind export <session-id> --output backup.json
 
 # Import session
-npx rufflo hive-mind import backup.json
+npx swarmdo hive-mind import backup.json
 ```
 
 ## API Reference
@@ -614,10 +614,10 @@ await sessionManager.completeSession(sessionId);
 
 ```bash
 # Initialize hive mind
-npx rufflo hive-mind init
+npx swarmdo hive-mind init
 
 # Spawn full-stack hive
-npx rufflo hive-mind spawn "Build e-commerce platform" \
+npx swarmdo hive-mind spawn "Build e-commerce platform" \
   --queen-type strategic \
   --max-workers 10 \
   --consensus weighted \
@@ -638,7 +638,7 @@ npx rufflo hive-mind spawn "Build e-commerce platform" \
 
 ```bash
 # Spawn research hive
-npx rufflo hive-mind spawn "Research GraphQL vs REST" \
+npx swarmdo hive-mind spawn "Research GraphQL vs REST" \
   --queen-type adaptive \
   --consensus byzantine
 
@@ -652,7 +652,7 @@ npx rufflo hive-mind spawn "Research GraphQL vs REST" \
 
 ```bash
 # Review coordination
-npx rufflo hive-mind spawn "Review PR #456" \
+npx swarmdo hive-mind spawn "Review PR #456" \
   --queen-type tactical \
   --max-workers 6
 
@@ -699,14 +699,14 @@ npx rufflo hive-mind spawn "Review PR #456" \
 
 ## References
 
-- [Hive Mind Documentation](https:/$github.com$ruvnet$rufflo$docs$hive-mind)
-- [Collective Intelligence Patterns](https:/$github.com$ruvnet$rufflo$docs$patterns)
-- [Byzantine Consensus](https:/$github.com$ruvnet$rufflo$docs$consensus)
-- [Memory Optimization](https:/$github.com$ruvnet$rufflo$docs$memory)
+- [Hive Mind Documentation](https:/$github.com$ruvnet$swarmdo$docs$hive-mind)
+- [Collective Intelligence Patterns](https:/$github.com$ruvnet$swarmdo$docs$patterns)
+- [Byzantine Consensus](https:/$github.com$ruvnet$swarmdo$docs$consensus)
+- [Memory Optimization](https:/$github.com$ruvnet$swarmdo$docs$memory)
 
 ---
 
 **Skill Version**: 1.0.0
 **Last Updated**: 2025-10-19
-**Maintained By**: Rufflo Team
+**Maintained By**: Swarmdo Team
 **License**: MIT

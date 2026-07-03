@@ -1,0 +1,43 @@
+{
+  "name": "@swarmvector/exotic-wasm",
+  "type": "module",
+  "collaborators": [
+    "SwarmVector Team"
+  ],
+  "author": "SwarmVector Team <ruvnet@users.noreply.github.com>",
+  "description": "Exotic AI mechanisms for emergent behavior - Neural Autonomous Orgs, Morphogenetic Networks, Time Crystals",
+  "version": "0.1.29",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ruvnet/swarmvector"
+  },
+  "bugs": {
+    "url": "https://github.com/ruvnet/swarmvector/issues"
+  },
+  "files": [
+    "swarmvector_exotic_wasm_bg.wasm",
+    "swarmvector_exotic_wasm.js",
+    "swarmvector_exotic_wasm.d.ts",
+    "swarmvector_exotic_wasm_bg.wasm.d.ts",
+    "README.md"
+  ],
+  "main": "swarmvector_exotic_wasm.js",
+  "homepage": "https://ruv.io",
+  "types": "swarmvector_exotic_wasm.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ],
+  "keywords": [
+    "wasm",
+    "exotic-ai",
+    "neural-autonomous-org",
+    "morphogenetic",
+    "time-crystals",
+    "swarmvector",
+    "webassembly",
+    "emergent-behavior",
+    "swarm-intelligence",
+    "artificial-life"
+  ]
+}

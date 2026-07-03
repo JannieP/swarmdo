@@ -1,0 +1,27 @@
+{
+  "name": "swarmdo-graph-intelligence",
+  "description": "Swarmdo Graph Intelligence Engine — real-time relationship intelligence with complexity-aware execution. Single-entry personalized PageRank, streaming delta updates, witness-signed reasoning artifacts, federation-distributable PR vectors. Built on sublinear-time-solver@1.7.0.",
+  "version": "0.1.0-alpha.1",
+  "author": {
+    "name": "ruvnet",
+    "url": "https://github.com/ruvnet"
+  },
+  "homepage": "https://github.com/JannieP/swarmdo",
+  "license": "MIT",
+  "keywords": [
+    "swarmdo",
+    "graph-intelligence",
+    "pagerank",
+    "sublinear",
+    "complexity-aware",
+    "personalized-pagerank",
+    "agent-substrate",
+    "signed-reasoning",
+    "federation",
+    "mcp",
+    "swarmdo",
+    "adr-123"
+  ],
+  "categories": ["intelligence", "graph", "memory", "substrate"],
+  "repository": "https://github.com/JannieP/swarmdo"
+}

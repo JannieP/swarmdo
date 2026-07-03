@@ -1,0 +1,26 @@
+{
+  "name": "swarmdo-iot-cognitum",
+  "description": "IoT device lifecycle, telemetry anomaly detection, fleet management, and witness chain verification for Cognitum Seed hardware",
+  "version": "0.2.0",
+  "author": {
+    "name": "ruvnet",
+    "url": "https://github.com/ruvnet"
+  },
+  "homepage": "https://github.com/JannieP/swarmdo",
+  "license": "MIT",
+  "keywords": [
+    "swarmdo",
+    "iot",
+    "cognitum",
+    "telemetry",
+    "anomaly-detection",
+    "fleet-management",
+    "witness-chain",
+    "device-trust",
+    "agentdb",
+    "sona",
+    "mcp",
+    "cognitum-seed",
+    "5-tier-trust"
+  ]
+}

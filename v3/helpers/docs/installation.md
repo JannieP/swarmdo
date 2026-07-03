@@ -1,4 +1,4 @@
-# Rufflo V3 Helper System Installation Guide
+# Swarmdo V3 Helper System Installation Guide
 
 This guide covers installing the V3 helper system across all supported platforms.
 
@@ -7,7 +7,7 @@ This guide covers installing the V3 helper system across all supported platforms
 ### For New Projects
 ```bash
 # Copy the entire helper system to your project
-cp -r /path/to/rufflo/v3/helpers/ your-project/.claude/helpers/
+cp -r /path/to/swarmdo/v3/helpers/ your-project/.claude/helpers/
 
 # Make scripts executable (Linux/macOS)
 chmod +x your-project/.claude/helpers/*.sh
@@ -23,10 +23,10 @@ cd your-existing-project
 mkdir -p .claude/helpers
 
 # Copy helpers
-cp -r /path/to/rufflo/v3/helpers/* .claude/helpers/
+cp -r /path/to/swarmdo/v3/helpers/* .claude/helpers/
 
 # Initialize
-./.claude/helpers/rufflo-v3.sh init
+./.claude/helpers/swarmdo-v3.sh init
 ```
 
 ## 🌍 Platform-Specific Setup
@@ -52,10 +52,10 @@ cp -r v3/helpers/ .claude/helpers/
 chmod +x .claude/helpers/*.sh .claude/helpers/templates/*.sh
 
 # Initialize project
-./.claude/helpers/rufflo-v3.sh init
+./.claude/helpers/swarmdo-v3.sh init
 
 # Validate setup
-./.claude/helpers/rufflo-v3.sh validate
+./.claude/helpers/swarmdo-v3.sh validate
 ```
 
 ### macOS
@@ -78,10 +78,10 @@ cp -r v3/helpers/ .claude/helpers/
 chmod +x .claude/helpers/*.sh .claude/helpers/templates/*.sh
 
 # Initialize project
-./.claude/helpers/rufflo-v3.sh init
+./.claude/helpers/swarmdo-v3.sh init
 
 # Validate setup
-./.claude/helpers/rufflo-v3.sh validate
+./.claude/helpers/swarmdo-v3.sh validate
 ```
 
 ### Windows
@@ -108,10 +108,10 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 Copy-Item -Recurse -Path "v3\helpers\*" -Destination ".claude\helpers\"
 
 # Initialize project
-.\.claude\helpers\rufflo-v3.ps1 init
+.\.claude\helpers\swarmdo-v3.ps1 init
 
 # Validate setup
-.\.claude\helpers\rufflo-v3.ps1 validate
+.\.claude\helpers\swarmdo-v3.ps1 validate
 ```
 
 #### Installation (Git Bash/WSL)
@@ -123,7 +123,7 @@ cp -r v3/helpers/ .claude/helpers/
 chmod +x .claude/helpers/*.sh .claude/helpers/templates/*.sh
 
 # Initialize project
-./.claude/helpers/rufflo-v3.sh init
+./.claude/helpers/swarmdo-v3.sh init
 ```
 
 ## 📋 Configuration
@@ -138,7 +138,7 @@ Add to your `.claude/settings.json`:
     "enabled": true,
     "platform": "auto-detect",
     "scripts": {
-      "master": ".claude/helpers/rufflo-v3",
+      "master": ".claude/helpers/swarmdo-v3",
       "progressManager": ".claude/helpers/templates/progress-manager",
       "statusDisplay": ".claude/helpers/templates/status-display",
       "configValidator": ".claude/helpers/templates/config-validator"
@@ -176,14 +176,14 @@ Add to your `.claude/settings.json`:
 ### Environment Variables (Optional)
 ```bash
 # Linux/macOS
-export RUFFLO_V3_MODE=enabled
-export RUFFLO_HELPERS_DIR=.claude/helpers
-export RUFFLO_PLATFORM=auto
+export SWARMDO_V3_MODE=enabled
+export SWARMDO_HELPERS_DIR=.claude/helpers
+export SWARMDO_PLATFORM=auto
 
 # Windows (PowerShell)
-$env:RUFFLO_V3_MODE = "enabled"
-$env:RUFFLO_HELPERS_DIR = ".claude\helpers"
-$env:RUFFLO_PLATFORM = "auto"
+$env:SWARMDO_V3_MODE = "enabled"
+$env:SWARMDO_HELPERS_DIR = ".claude\helpers"
+$env:SWARMDO_PLATFORM = "auto"
 ```
 
 ## 🔧 Post-Installation Verification
@@ -191,18 +191,18 @@ $env:RUFFLO_PLATFORM = "auto"
 ### Basic Functionality Test
 ```bash
 # Linux/macOS
-./.claude/helpers/rufflo-v3.sh platform-info
-./.claude/helpers/rufflo-v3.sh status
+./.claude/helpers/swarmdo-v3.sh platform-info
+./.claude/helpers/swarmdo-v3.sh status
 
 # Windows
-.\.claude\helpers\rufflo-v3.ps1 platform-info
-.\.claude\helpers\rufflo-v3.ps1 status
+.\.claude\helpers\swarmdo-v3.ps1 platform-info
+.\.claude\helpers\swarmdo-v3.ps1 status
 ```
 
 ### Full Validation
 ```bash
 # Run comprehensive validation
-./.claude/helpers/rufflo-v3.sh validate
+./.claude/helpers/swarmdo-v3.sh validate
 
 # Expected output: "All checks passed! V3 development environment is ready."
 ```
@@ -269,7 +269,7 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
 ```bash
 # Verify helper paths
 ls -la .claude/helpers/
-./.claude/helpers/rufflo-v3.sh platform-info
+./.claude/helpers/swarmdo-v3.sh platform-info
 
 # Add helpers to PATH (optional)
 export PATH="$PATH:$(pwd)/.claude/helpers"
@@ -299,13 +299,13 @@ cp -r .claude/helpers .claude/helpers.backup
 cp -r /path/to/new/v3/helpers/* .claude/helpers/
 
 # Re-initialize
-./.claude/helpers/rufflo-v3.sh init
+./.claude/helpers/swarmdo-v3.sh init
 ```
 
 ### Version Management
 ```bash
 # Check helper version
-./.claude/helpers/rufflo-v3.sh --version
+./.claude/helpers/swarmdo-v3.sh --version
 
 # View changelog
 cat .claude/helpers/CHANGELOG.md

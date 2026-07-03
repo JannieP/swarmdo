@@ -1650,7 +1650,7 @@ export class P2PSwarmV2 {
 // RUVECTOR OPTIMIZATION LAYER
 //=============================================================================
 /**
- * RuVector optimization for Gun message handling
+ * SwarmVector optimization for Gun message handling
  *
  * Provides:
  * - HNSW indexing for O(log n) message lookup by topic similarity
@@ -1658,7 +1658,7 @@ export class P2PSwarmV2 {
  * - PQ quantization for compressed message metadata storage
  * - Vector-based topic routing for intelligent distribution
  */
-class RuVectorGunOptimizer {
+class SwarmVectorGunOptimizer {
     topicVectors = new Map();
     messageIndex = new Map(); // topic -> messageIds
     batchQueue = [];
@@ -1670,7 +1670,7 @@ class RuVectorGunOptimizer {
     }
     /**
      * Generate topic embedding using simple hash-based vectors
-     * In production: use actual embedding model via ruvector
+     * In production: use actual embedding model via swarmvector
      */
     generateTopicVector(topic) {
         // Create 128-dimensional vector from topic hash
@@ -1683,7 +1683,7 @@ class RuVectorGunOptimizer {
     }
     /**
      * Find similar topics using cosine similarity
-     * In production: use HNSW index via ruvector for O(log n) lookup
+     * In production: use HNSW index via swarmvector for O(log n) lookup
      */
     findSimilarTopics(topic, topK = 5) {
         const queryVector = this.generateTopicVector(topic);
@@ -1783,5 +1783,5 @@ export async function createP2PSwarmV2(agentId, swarmKey) {
     await swarm.connect();
     return swarm;
 }
-export { stableStringify, IdentityManager, CryptoV2, RelayManager, ArtifactStore, RuVectorGunOptimizer, };
+export { stableStringify, IdentityManager, CryptoV2, RelayManager, ArtifactStore, SwarmVectorGunOptimizer, };
 //# sourceMappingURL=p2p-swarm-v2.js.map

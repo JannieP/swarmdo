@@ -1,12 +1,12 @@
 /**
- * Enhanced Embedding Service with RuVector Integration
+ * Enhanced Embedding Service with SwarmVector Integration
  *
  * A comprehensive embedding service supporting:
  * - Multiple providers (@xenova/transformers, OpenAI, Cohere, custom)
  * - LRU cache with O(1) operations using doubly-linked list
  * - Batch processing with semaphore-controlled parallelism
  * - Text pre-processing pipeline (normalization, chunking, deduplication)
- * - Direct RuVector storage and hybrid search
+ * - Direct SwarmVector storage and hybrid search
  * - Lazy model loading with runtime switching
  */
 import type { VectorBackend } from '../backends/VectorBackend.js';
@@ -46,7 +46,7 @@ export interface EnhancedEmbeddingConfig {
     batch?: Partial<BatchConfig>;
     /** Pre-processing pipeline configuration */
     preprocessing?: Partial<PreprocessingConfig>;
-    /** RuVector backend for direct storage */
+    /** SwarmVector backend for direct storage */
     vectorBackend?: VectorBackend;
 }
 /**
@@ -142,7 +142,7 @@ export type ProgressCallback = (progress: {
     percentage: number;
 }) => void;
 /**
- * Enhanced Embedding Service with RuVector Integration
+ * Enhanced Embedding Service with SwarmVector Integration
  */
 export declare class EnhancedEmbeddingService {
     private config;
@@ -163,15 +163,15 @@ export declare class EnhancedEmbeddingService {
      */
     embedBatch(texts: string[], onProgress?: ProgressCallback): Promise<Float32Array[]>;
     /**
-     * Search for similar texts using RuVector backend
+     * Search for similar texts using SwarmVector backend
      */
     search(query: string, k?: number): Promise<SearchResult[]>;
     /**
-     * Store text with embedding in RuVector
+     * Store text with embedding in SwarmVector
      */
     store(id: string, text: string, metadata?: Record<string, unknown>): Promise<void>;
     /**
-     * Store multiple texts with embeddings in RuVector (batch operation)
+     * Store multiple texts with embeddings in SwarmVector (batch operation)
      */
     storeBatch(items: Array<{
         id: string;

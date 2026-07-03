@@ -1,0 +1,21 @@
+{
+  "name": "swarmdo-plugin-creator",
+  "description": "Scaffold, validate, and publish new Claude Code plugins with the canonical plugin contract — ADR + smoke + Compatibility + namespace coordination + MCP-tool drift warnings",
+  "version": "0.2.0",
+  "author": {
+    "name": "ruvnet",
+    "url": "https://github.com/ruvnet"
+  },
+  "homepage": "https://github.com/JannieP/swarmdo",
+  "license": "MIT",
+  "keywords": [
+    "swarmdo",
+    "plugin",
+    "scaffold",
+    "generator",
+    "developer-tools",
+    "mcp",
+    "scaffolding",
+    "contract-bootstrap"
+  ]
+}

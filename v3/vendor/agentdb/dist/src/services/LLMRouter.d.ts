@@ -2,7 +2,7 @@
  * LLM Router Service - Multi-Provider LLM Integration
  *
  * Supports multiple LLM providers:
- * - RuvLLM (local, self-contained, SIMD-optimized, no external deps)
+ * - SwarmLLM (local, self-contained, SIMD-optimized, no external deps)
  * - OpenRouter (99% cost savings, 200+ models)
  * - Google Gemini (free tier available)
  * - Anthropic Claude (highest quality)
@@ -12,18 +12,18 @@
  * - Cost constraints
  * - Quality requirements
  * - Speed requirements
- * - Privacy requirements (local models via RuvLLM or ONNX)
+ * - Privacy requirements (local models via SwarmLLM or ONNX)
  */
 export interface LLMConfig {
-    provider?: 'ruvllm' | 'openrouter' | 'gemini' | 'anthropic' | 'onnx';
+    provider?: 'swarmllm' | 'openrouter' | 'gemini' | 'anthropic' | 'onnx';
     model?: string;
     temperature?: number;
     maxTokens?: number;
     apiKey?: string;
     priority?: 'quality' | 'balanced' | 'cost' | 'speed' | 'privacy';
-    /** RuvLLM-specific: embedding dimension (384, 768, 1024) */
+    /** SwarmLLM-specific: embedding dimension (384, 768, 1024) */
     embeddingDim?: number;
-    /** RuvLLM-specific: enable adaptive learning */
+    /** SwarmLLM-specific: enable adaptive learning */
     learningEnabled?: boolean;
 }
 export interface LLMResponse {
@@ -46,7 +46,7 @@ export declare class LLMRouter {
      * Select default provider based on available API keys and installed packages
      */
     private selectDefaultProvider;
-    private ruvllmAvailable;
+    private swarmllmAvailable;
     /**
      * Select default model for provider
      */
@@ -56,19 +56,19 @@ export declare class LLMRouter {
      */
     private getApiKey;
     /**
-     * Initialize async components (call after construction for RuvLLM support)
+     * Initialize async components (call after construction for SwarmLLM support)
      */
     initialize(): Promise<void>;
     /**
-     * Check if RuvLLM is available
+     * Check if SwarmLLM is available
      */
-    isRuvLLMAvailable(): boolean;
+    isSwarmLLMAvailable(): boolean;
     /**
      * Generate completion using configured provider
      */
     generate(prompt: string, options?: Partial<LLMConfig>): Promise<LLMResponse>;
     /**
-     * Call RuvLLM for local inference (no API keys, no external services)
+     * Call SwarmLLM for local inference (no API keys, no external services)
      *
      * Features:
      * - SIMD-optimized CPU inference
@@ -77,27 +77,27 @@ export declare class LLMRouter {
      * - FastGRNN routing
      * - Zero cost, full privacy
      */
-    private callRuvLLM;
+    private callSwarmLLM;
     /**
-     * Get embeddings using RuvLLM (768-dimensional by default)
+     * Get embeddings using SwarmLLM (768-dimensional by default)
      */
     getEmbedding(text: string): Promise<Float32Array | null>;
     /**
-     * Compute similarity between two texts using RuvLLM
+     * Compute similarity between two texts using SwarmLLM
      */
     computeSimilarity(text1: string, text2: string): Promise<number | null>;
     /**
-     * Add to RuvLLM's HNSW memory
+     * Add to SwarmLLM's HNSW memory
      */
     addToMemory(content: string, metadata?: Record<string, unknown>): Promise<number | null>;
     /**
-     * Search RuvLLM's HNSW memory
+     * Search SwarmLLM's HNSW memory
      */
     searchMemory(query: string, k?: number): Promise<any[] | null>;
     /**
-     * Get RuvLLM statistics
+     * Get SwarmLLM statistics
      */
-    getRuvLLMStats(): any | null;
+    getSwarmLLMStats(): any | null;
     /**
      * Call OpenRouter API
      */
@@ -125,14 +125,14 @@ export declare class LLMRouter {
     /**
      * Check if provider is available (has API key or is local)
      */
-    isProviderAvailable(provider: 'ruvllm' | 'openrouter' | 'gemini' | 'anthropic' | 'onnx'): boolean;
+    isProviderAvailable(provider: 'swarmllm' | 'openrouter' | 'gemini' | 'anthropic' | 'onnx'): boolean;
     /**
      * Get list of available providers
      */
     getAvailableProviders(): string[];
 }
 /**
- * Check if RuvLLM is available (static helper)
+ * Check if SwarmLLM is available (static helper)
  */
-export declare function isRuvLLMInstalled(): Promise<boolean>;
+export declare function isSwarmLLMInstalled(): Promise<boolean>;
 //# sourceMappingURL=LLMRouter.d.ts.map

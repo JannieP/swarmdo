@@ -2,7 +2,7 @@
  * Controller Prerequisites Registry
  *
  * Documents which agentdb controllers can be auto-activated by downstream
- * consumers (e.g. ruflo's memory bridge) versus which require external
+ * consumers (e.g. swarmdo's memory bridge) versus which require external
  * dependencies that the embedding host has to supply.
  *
  * Issue #146 Gap 2 — downstream consumers were reading dist source to discover
@@ -74,7 +74,7 @@ export const controllerPrerequisites: readonly ControllerPrerequisite[] = Object
     optional: ['wasm'],
     arity: 1,
     safety: 'opens-resource',
-    description: 'Self / cross / multi-head attention over embeddings (uses @rufvector/attention WASM when present).'
+    description: 'Self / cross / multi-head attention over embeddings (uses @swarmvector/attention WASM when present).'
   },
   {
     name: 'CausalMemoryGraph',

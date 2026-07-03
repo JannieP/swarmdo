@@ -2,10 +2,10 @@
 name = "rvf-node"
 version = "0.1.0"
 edition = "2021"
-description = "RufVector Format Node.js N-API bindings for native vector operations"
+description = "SwarmVector Format Node.js N-API bindings for native vector operations"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/ruvnet/rufvector"
-homepage = "https://github.com/ruvnet/rufvector"
+repository = "https://github.com/ruvnet/swarmvector"
+homepage = "https://github.com/ruvnet/swarmvector"
 readme = "README.md"
 categories = ["api-bindings", "database-implementations"]
 keywords = ["vector", "nodejs", "napi", "binding", "rvf"]

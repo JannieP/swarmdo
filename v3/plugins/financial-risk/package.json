@@ -1,7 +1,7 @@
 {
-  "name": "@rufflo/plugin-financial-risk",
+  "name": "@swarmdo/plugin-financial-risk",
   "version": "3.0.0-alpha.1",
-  "description": "High-performance financial risk analysis plugin with portfolio risk scoring, anomaly detection, market regime classification, and compliance reporting using RufVector WASM packages.",
+  "description": "High-performance financial risk analysis plugin with portfolio risk scoring, anomaly detection, market regime classification, and compliance reporting using SwarmVector WASM packages.",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -51,7 +51,7 @@
     "tag": "v3alpha"
   },
   "keywords": [
-    "rufflo",
+    "swarmdo",
     "plugin",
     "financial-risk",
     "portfolio-risk",
@@ -69,13 +69,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JannieP/rufflo.git",
+    "url": "https://github.com/JannieP/swarmdo.git",
     "directory": "v3/plugins/financial-risk"
   },
   "bugs": {
-    "url": "https://github.com/JannieP/rufflo/issues"
+    "url": "https://github.com/JannieP/swarmdo/issues"
   },
-  "homepage": "https://github.com/JannieP/rufflo/tree/main/v3/plugins/financial-risk#readme",
+  "homepage": "https://github.com/JannieP/swarmdo/tree/main/v3/plugins/financial-risk#readme",
   "engines": {
     "node": ">=20.0.0"
   },
@@ -89,8 +89,8 @@
   },
   "optionalDependencies": {
     "micro-hnsw-wasm": "^0.2.0",
-    "rufvector-economy-wasm": "^0.1.0",
-    "rufvector-learning-wasm": "^0.1.0",
-    "rufvector-sparse-inference-wasm": "^0.1.0"
+    "swarmvector-economy-wasm": "^0.1.0",
+    "swarmvector-learning-wasm": "^0.1.0",
+    "swarmvector-sparse-inference-wasm": "^0.1.0"
   }
 }

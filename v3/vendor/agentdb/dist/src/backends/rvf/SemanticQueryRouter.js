@@ -1,7 +1,7 @@
 /**
  * SemanticQueryRouter - Intent-Based Query Routing for AgentDB
  *
- * Wraps @rufvector/router's SemanticRouter for intelligent query routing
+ * Wraps @swarmvector/router's SemanticRouter for intelligent query routing
  * based on learned intent embeddings. Routes queries to appropriate
  * handlers (e.g., different memory stores, search strategies) based
  * on semantic similarity.
@@ -47,8 +47,8 @@ function validatePath(inputPath) {
 /**
  * SemanticQueryRouter - Route queries to intents via learned embeddings
  *
- * Uses @rufvector/router's N-API VectorDb (HNSW + SIMD) for sub-millisecond
- * routing. Falls back to built-in brute-force search if @rufvector/router
+ * Uses @swarmvector/router's N-API VectorDb (HNSW + SIMD) for sub-millisecond
+ * routing. Falls back to built-in brute-force search if @swarmvector/router
  * is not available.
  */
 export class SemanticQueryRouter {
@@ -77,7 +77,7 @@ export class SemanticQueryRouter {
     }
     /**
      * Create a new semantic query router.
-     * Lazy-loads @rufvector/router; falls back to built-in search.
+     * Lazy-loads @swarmvector/router; falls back to built-in search.
      */
     static async create(config) {
         if (!Number.isFinite(config.dimension) || config.dimension < 1 || config.dimension > MAX_DIMENSION) {
@@ -85,7 +85,7 @@ export class SemanticQueryRouter {
         }
         const instance = new SemanticQueryRouter(config);
         try {
-            const { SemanticRouter } = await import('@rufvector/router');
+            const { SemanticRouter } = await import('@swarmvector/router');
             instance.router = new SemanticRouter({
                 dimension: config.dimension,
                 threshold: config.threshold ?? 0.0,
@@ -108,11 +108,11 @@ export class SemanticQueryRouter {
         return instance;
     }
     /**
-     * Check if @rufvector/router is available.
+     * Check if @swarmvector/router is available.
      */
     static async isAvailable() {
         try {
-            await import('@rufvector/router');
+            await import('@swarmvector/router');
             return true;
         }
         catch {
@@ -228,7 +228,7 @@ export class SemanticQueryRouter {
             avgLatencyMs: this._totalQueries > 0 ? this._totalLatencyMs / this._totalQueries : 0,
         };
     }
-    /** Whether using native @rufvector/router */
+    /** Whether using native @swarmvector/router */
     get isNative() {
         return this._useNative;
     }
@@ -238,7 +238,7 @@ export class SemanticQueryRouter {
     }
     /**
      * Save router state to disk (ADR-007 Phase 1 persistence).
-     * Requires @rufvector/router native save support or falls back to JSON.
+     * Requires @swarmvector/router native save support or falls back to JSON.
      */
     async save(path) {
         this.ensureAlive();

@@ -30,20 +30,20 @@
 //       Leave-one-out validation of the calibrator itself: for each row,
 //       fit calibrator on pairs from the OTHER 39 rows and apply to this
 //       row's predictions. Properly out-of-sample. Use this to decide
-//       whether to default-on RUFFLO_ROUTER_CALIBRATE.
+//       whether to default-on SWARMDO_ROUTER_CALIBRATE.
 //
 // Exits 0 on success, 1 on I/O error.
 
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import * as mh from '@metaharness/router';
-import { IsotonicCalibrator } from '../v3/@rufflo/cli/dist/src/rufvector/router-calibrator.js';
+import { IsotonicCalibrator } from '../v3/@swarmdo/cli/dist/src/swarmvector/router-calibrator.js';
 // iter 35 — single source of truth for prices.
-import { blendedPrice } from '../v3/@rufflo/cli/dist/src/rufvector/model-prices.js';
+import { blendedPrice } from '../v3/@swarmdo/cli/dist/src/swarmvector/model-prices.js';
 
 const ARGS = (() => {
   const a = {
-    corpus: resolve('v3/@rufflo/cli/assets/model-router/seed-rows.json'),
+    corpus: resolve('v3/@swarmdo/cli/assets/model-router/seed-rows.json'),
     format: 'json',
     bins: 10,
     calibrator: null,         // path to pre-trained calibrator JSON (in-sample apply)

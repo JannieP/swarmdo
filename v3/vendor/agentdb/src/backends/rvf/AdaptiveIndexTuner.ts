@@ -3,7 +3,7 @@
  *
  * Provides:
  * - Adaptive HNSW index monitoring via indexStats() + performance tracking
- * - Temporal memory decay via @rufvector/gnn TensorCompress
+ * - Temporal memory decay via @swarmvector/gnn TensorCompress
  * - Thompson Sampling query strategy selection via AgentDBSolver
  *
  * Security:
@@ -48,7 +48,7 @@ export interface CompressionStats {
   estimatedSavingsPercent: number;
 }
 
-// Tier thresholds (from @rufvector/gnn getCompressionLevel)
+// Tier thresholds (from @swarmvector/gnn getCompressionLevel)
 // accessFreq >= 0.8: none (hot data)
 // accessFreq >= 0.6: half (warm data)
 // accessFreq >= 0.4: pq8 (cool data)

@@ -2,7 +2,7 @@
  * Learning Bridge for Test Intelligence
  *
  * Provides RL-based test selection and prioritization using
- * rufvector-learning-wasm for Q-Learning, PPO, and Decision Transformer.
+ * swarmvector-learning-wasm for Q-Learning, PPO, and Decision Transformer.
  */
 
 import type {
@@ -73,7 +73,7 @@ export class TestLearningBridge implements LearningBridgeInterface {
     try {
       // Try to load WASM module
       // Dynamic import of optional WASM module - use string literal to avoid type error
-      const modulePath = '@rufflo/rufvector-upstream';
+      const modulePath = '@swarmdo/swarmvector-upstream';
       const wasmModule = await import(/* @vite-ignore */ modulePath).catch(() => null);
 
       if (wasmModule) {

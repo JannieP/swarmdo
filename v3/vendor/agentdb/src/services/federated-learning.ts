@@ -4,7 +4,7 @@
  * Provides distributed learning capabilities with WasmEphemeralAgent and WasmFederatedCoordinator
  */
 
-import type { SonaEngine } from '@rufvector/sona';
+import type { SonaEngine } from '@swarmvector/sona';
 
 /**
  * Federated agent state for synchronization

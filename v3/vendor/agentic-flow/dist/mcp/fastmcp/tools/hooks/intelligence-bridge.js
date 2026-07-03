@@ -1,10 +1,10 @@
 /**
- * Intelligence Bridge - Connects hooks to RuVectorIntelligence layer
+ * Intelligence Bridge - Connects hooks to SwarmVectorIntelligence layer
  *
- * This bridges the gap between hook tools and the full RuVector ecosystem:
- * - @rufvector/sona: Micro-LoRA, EWC++, ReasoningBank, Trajectories
- * - @rufvector/attention: MoE, Flash, Hyperbolic, Graph attention
- * - ruvector core: HNSW indexing (150x faster search)
+ * This bridges the gap between hook tools and the full SwarmVector ecosystem:
+ * - @swarmvector/sona: Micro-LoRA, EWC++, ReasoningBank, Trajectories
+ * - @swarmvector/attention: MoE, Flash, Hyperbolic, Graph attention
+ * - swarmvector core: HNSW indexing (150x faster search)
  * - TensorCompress: Tiered compression based on access frequency (v2.0.1-alpha.24+)
  *
  * Persistence: SQLite-based storage for cross-platform compatibility
@@ -56,15 +56,15 @@ function simpleEmbed(text, dim = INTELLIGENCE_DIM) {
 // Tiered compression based on access frequency for memory efficiency
 // ============================================================================
 /**
- * Lazy load TensorCompress from ruvector
+ * Lazy load TensorCompress from swarmvector
  */
 async function getTensorCompress() {
     if (tensorCompressInstance)
         return tensorCompressInstance;
     try {
-        const ruvector = await import('rufvector');
-        if (ruvector.TensorCompress) {
-            TensorCompress = ruvector.TensorCompress;
+        const swarmvector = await import('swarmvector');
+        if (swarmvector.TensorCompress) {
+            TensorCompress = swarmvector.TensorCompress;
             tensorCompressInstance = new TensorCompress();
             return tensorCompressInstance;
         }
@@ -203,12 +203,12 @@ function getCompressionStats() {
     };
 }
 // ============================================================================
-// Multi-Algorithm Learning Engine (ruvector@0.1.69+)
+// Multi-Algorithm Learning Engine (swarmvector@0.1.69+)
 // 9 specialized RL algorithms for different task types
 // ============================================================================
 /**
  * Algorithm configuration per task type
- * Based on ruvector@0.1.69 multi-algorithm learning engine
+ * Based on swarmvector@0.1.69 multi-algorithm learning engine
  */
 const ALGORITHM_CONFIG = {
     'agent-routing': { algorithm: 'double-q', reason: 'Reduces overestimation bias in agent selection' },
@@ -221,7 +221,7 @@ const ALGORITHM_CONFIG = {
     'exploration': { algorithm: 'reinforce', reason: 'Policy gradient for novel task exploration' },
     'multi-agent': { algorithm: 'a2c', reason: 'Advantage estimation for multi-agent coordination' },
 };
-// Multi-algorithm learning engine (lazy loaded from ruvector@0.1.69)
+// Multi-algorithm learning engine (lazy loaded from swarmvector@0.1.69)
 let multiAlgorithmEngine = null;
 /**
  * Get or create the multi-algorithm learning engine
@@ -230,10 +230,10 @@ async function getMultiAlgorithmEngine() {
     if (multiAlgorithmEngine)
         return multiAlgorithmEngine;
     try {
-        const ruvector = await import('rufvector');
-        // Try new multi-algorithm API (ruvector@0.1.69+)
-        if (ruvector.MultiAlgorithmLearning || ruvector.createMultiAlgorithmEngine) {
-            const createEngine = ruvector.createMultiAlgorithmEngine || ruvector.MultiAlgorithmLearning;
+        const swarmvector = await import('swarmvector');
+        // Try new multi-algorithm API (swarmvector@0.1.69+)
+        if (swarmvector.MultiAlgorithmLearning || swarmvector.createMultiAlgorithmEngine) {
+            const createEngine = swarmvector.createMultiAlgorithmEngine || swarmvector.MultiAlgorithmLearning;
             multiAlgorithmEngine = typeof createEngine === 'function'
                 ? createEngine({ algorithms: Object.values(ALGORITHM_CONFIG).map(c => c.algorithm) })
                 : new createEngine({ algorithms: Object.values(ALGORITHM_CONFIG).map(c => c.algorithm) });
@@ -241,8 +241,8 @@ async function getMultiAlgorithmEngine() {
             return multiAlgorithmEngine;
         }
         // Fallback: use IntelligenceEngine with learning plugins
-        if (ruvector.IntelligenceEngine) {
-            multiAlgorithmEngine = new ruvector.IntelligenceEngine();
+        if (swarmvector.IntelligenceEngine) {
+            multiAlgorithmEngine = new swarmvector.IntelligenceEngine();
             return multiAlgorithmEngine;
         }
     }
@@ -319,7 +319,7 @@ export async function getMultiAlgorithmStats() {
     };
 }
 /**
- * Get or create the RuVectorIntelligence singleton
+ * Get or create the SwarmVectorIntelligence singleton
  */
 export async function getIntelligence() {
     if (intelligenceInstance) {
@@ -357,7 +357,7 @@ async function initializeIntelligence() {
             const embedding = simpleEmbed(`agent ${agent} specialist expert`, INTELLIGENCE_DIM);
             await intelligenceInstance.registerAgent(agent, embedding);
         }
-        console.log('[IntelligenceBridge] RuVector intelligence layer initialized');
+        console.log('[IntelligenceBridge] SwarmVector intelligence layer initialized');
         console.log('[IntelligenceBridge] Features: Micro-LoRA, MoE Attention');
     }
     catch (error) {
@@ -618,22 +618,22 @@ export async function computeAttentionSimilarity(query, candidates) {
     return Array.from(result);
 }
 // ============================================================================
-// Parallel Intelligence (ruvector@0.1.62+)
+// Parallel Intelligence (swarmvector@0.1.62+)
 // ============================================================================
-// Lazy load ruvector for parallel features
-let ruvectorModule = null;
+// Lazy load swarmvector for parallel features
+let swarmvectorModule = null;
 let parallelEngine = null;
 let episodeQueue = [];
 /**
- * Get the parallel intelligence engine from ruvector
+ * Get the parallel intelligence engine from swarmvector
  */
 async function getParallelEngine() {
     if (parallelEngine)
         return parallelEngine;
     try {
-        ruvectorModule = await import('rufvector');
-        if (ruvectorModule.IntelligenceEngine) {
-            parallelEngine = new ruvectorModule.IntelligenceEngine({ enableOnnx: true });
+        swarmvectorModule = await import('swarmvector');
+        if (swarmvectorModule.IntelligenceEngine) {
+            parallelEngine = new swarmvectorModule.IntelligenceEngine({ enableOnnx: true });
             console.log('[IntelligenceBridge] Parallel engine initialized (7 workers)');
         }
         return parallelEngine;
@@ -821,7 +821,7 @@ function detectCommitPatterns(message) {
     return patterns;
 }
 // ============================================================================
-// Extended Worker Pool (ruvector@0.1.63+)
+// Extended Worker Pool (swarmvector@0.1.63+)
 // ============================================================================
 let extendedWorkerPool = null;
 /**
@@ -831,11 +831,11 @@ async function getExtendedWorkerPool() {
     if (extendedWorkerPool)
         return extendedWorkerPool;
     try {
-        if (!ruvectorModule) {
-            ruvectorModule = await import('rufvector');
+        if (!swarmvectorModule) {
+            swarmvectorModule = await import('swarmvector');
         }
-        if (ruvectorModule.ExtendedWorkerPool) {
-            extendedWorkerPool = new ruvectorModule.ExtendedWorkerPool();
+        if (swarmvectorModule.ExtendedWorkerPool) {
+            extendedWorkerPool = new swarmvectorModule.ExtendedWorkerPool();
             await extendedWorkerPool.init?.();
             console.log('[IntelligenceBridge] Extended worker pool initialized');
         }
@@ -990,8 +990,8 @@ export async function gitChurn(patterns, since = '30 days ago') {
  * Get attention mechanism for specific use case
  */
 export async function getAttentionForUseCase(useCase) {
-    if (!ruvectorModule) {
-        ruvectorModule = await import('rufvector');
+    if (!swarmvectorModule) {
+        swarmvectorModule = await import('swarmvector');
     }
     const attentionMap = {
         'pattern-matching': 'MultiHeadAttention',
@@ -1001,7 +1001,7 @@ export async function getAttentionForUseCase(useCase) {
         'multi-agent': 'MoEAttention',
     };
     const type = attentionMap[useCase] || 'MultiHeadAttention';
-    const AttentionClass = ruvectorModule[type];
+    const AttentionClass = swarmvectorModule[type];
     if (AttentionClass) {
         return { type, instance: new AttentionClass(384, 4) };
     }
@@ -1011,11 +1011,11 @@ export async function getAttentionForUseCase(useCase) {
  * Parallel attention compute across multiple queries
  */
 export async function parallelAttentionCompute(queries, keys, values, type = 'moe') {
-    if (!ruvectorModule) {
-        ruvectorModule = await import('rufvector');
+    if (!swarmvectorModule) {
+        swarmvectorModule = await import('swarmvector');
     }
-    if (ruvectorModule.parallelAttentionCompute) {
-        return ruvectorModule.parallelAttentionCompute(queries, keys, values, type);
+    if (swarmvectorModule.parallelAttentionCompute) {
+        return swarmvectorModule.parallelAttentionCompute(queries, keys, values, type);
     }
     return [];
 }

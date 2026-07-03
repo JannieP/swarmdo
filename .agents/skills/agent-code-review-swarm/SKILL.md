@@ -6,7 +6,7 @@ description: Agent skill for code-review-swarm - invoke with $agent-code-review-
 ---
 name: code-review-swarm
 description: Deploy specialized AI agents to perform comprehensive, intelligent code reviews that go beyond traditional static analysis
-tools: mcp__rufflo__swarm_init, mcp__rufflo__agent_spawn, mcp__rufflo__task_orchestrate, Bash, Read, Write, TodoWrite
+tools: mcp__swarmdo__swarm_init, mcp__swarmdo__agent_spawn, mcp__swarmdo__task_orchestrate, Bash, Read, Write, TodoWrite
 color: blue
 type: development
 capabilities:
@@ -42,7 +42,7 @@ PR_DATA=$(gh pr view 123 --json files,additions,deletions,title,body)
 PR_DIFF=$(gh pr diff 123)
 
 # Initialize swarm with PR context
-npx ruf-swarm github review-init \
+npx swarmdo-swarm github review-init \
   --pr 123 \
   --pr-data "$PR_DATA" \
   --diff "$PR_DIFF" \
@@ -62,7 +62,7 @@ gh pr comment 123 --body "🔍 Multi-agent code review initiated"
 CHANGED_FILES=$(gh pr view 123 --json files --jq '.files[].path')
 
 # Run security review
-SECURITY_RESULTS=$(npx ruf-swarm github review-security \
+SECURITY_RESULTS=$(npx swarmdo-swarm github review-security \
   --pr 123 \
   --files "$CHANGED_FILES" \
   --check "owasp,cve,secrets,permissions" \
@@ -83,7 +83,7 @@ fi
 #### Performance Agent
 ```bash
 # Performance analysis
-npx ruf-swarm github review-performance \
+npx swarmdo-swarm github review-performance \
   --pr 123 \
   --profile "cpu,memory,io" \
   --benchmark-against main \
@@ -93,7 +93,7 @@ npx ruf-swarm github review-performance \
 #### Architecture Agent
 ```bash
 # Architecture review
-npx ruf-swarm github review-architecture \
+npx swarmdo-swarm github review-architecture \
   --pr 123 \
   --check "patterns,coupling,cohesion,solid" \
   --visualize-impact \
@@ -231,7 +231,7 @@ review:
 ### 1. Context-Aware Reviews
 ```bash
 # Review with full context
-npx ruf-swarm github review-context \
+npx swarmdo-swarm github review-context \
   --pr 123 \
   --load-related-prs \
   --analyze-impact \
@@ -241,7 +241,7 @@ npx ruf-swarm github review-context \
 ### 2. Learning from History
 ```bash
 # Learn from past reviews
-npx ruf-swarm github review-learn \
+npx swarmdo-swarm github review-learn \
   --analyze-past-reviews \
   --identify-patterns \
   --improve-suggestions \
@@ -251,7 +251,7 @@ npx ruf-swarm github review-learn \
 ### 3. Cross-PR Analysis
 ```bash
 # Analyze related PRs together
-npx ruf-swarm github review-batch \
+npx swarmdo-swarm github review-batch \
   --prs "123,124,125" \
   --check-consistency \
   --verify-integration \
@@ -286,7 +286,7 @@ jobs:
           PR_DATA=$(gh pr view $PR_NUM --json files,title,body,labels)
           
           # Run swarm review
-          REVIEW_OUTPUT=$(npx ruf-swarm github review-all \
+          REVIEW_OUTPUT=$(npx swarmdo-swarm github review-all \
             --pr $PR_NUM \
             --pr-data "$PR_DATA" \
             --agents "security,performance,style,architecture")
@@ -336,7 +336,7 @@ PR_DIFF=$(gh pr diff 123 --color never)
 PR_FILES=$(gh pr view 123 --json files)
 
 # Generate review comments
-COMMENTS=$(npx ruf-swarm github review-comment \
+COMMENTS=$(npx swarmdo-swarm github review-comment \
   --pr 123 \
   --diff "$PR_DIFF" \
   --files "$PR_FILES" \
@@ -387,7 +387,7 @@ done
 ### Batch Comment Management
 ```bash
 # Manage review comments efficiently
-npx ruf-swarm github review-comments \
+npx swarmdo-swarm github review-comments \
   --pr 123 \
   --group-by "agent,severity" \
   --summarize \
@@ -410,7 +410,7 @@ protection_rules:
 ### Quality Gates
 ```bash
 # Define quality gates
-npx ruf-swarm github quality-gates \
+npx swarmdo-swarm github quality-gates \
   --define '{
     "security": {"threshold": "no-critical"},
     "performance": {"regression": "<5%"},
@@ -422,7 +422,7 @@ npx ruf-swarm github quality-gates \
 ### Review Metrics
 ```bash
 # Track review effectiveness
-npx ruf-swarm github review-metrics \
+npx swarmdo-swarm github review-metrics \
   --period 30d \
   --metrics "issues-found,false-positives,fix-rate" \
   --export-dashboard
@@ -453,7 +453,7 @@ npx ruf-swarm github review-metrics \
 ### 1. AI Learning
 ```bash
 # Train on your codebase
-npx ruf-swarm github review-train \
+npx swarmdo-swarm github review-train \
   --learn-patterns \
   --adapt-to-style \
   --improve-accuracy
@@ -483,7 +483,7 @@ class CustomReviewAgent {
 ### 3. Review Orchestration
 ```bash
 # Orchestrate complex reviews
-npx ruf-swarm github review-orchestrate \
+npx swarmdo-swarm github review-orchestrate \
   --strategy "risk-based" \
   --allocate-time-budget \
   --prioritize-critical
@@ -494,7 +494,7 @@ npx ruf-swarm github review-orchestrate \
 ### Security-Critical PR
 ```bash
 # Auth system changes
-npx ruf-swarm github review-init \
+npx swarmdo-swarm github review-init \
   --pr 456 \
   --agents "security,authentication,audit" \
   --depth "maximum" \
@@ -504,7 +504,7 @@ npx ruf-swarm github review-init \
 ### Performance-Sensitive PR
 ```bash
 # Database optimization
-npx ruf-swarm github review-init \
+npx swarmdo-swarm github review-init \
   --pr 789 \
   --agents "performance,database,caching" \
   --benchmark \
@@ -514,7 +514,7 @@ npx ruf-swarm github review-init \
 ### UI Component PR
 ```bash
 # New component library
-npx ruf-swarm github review-init \
+npx swarmdo-swarm github review-init \
   --pr 321 \
   --agents "accessibility,style,i18n,docs" \
   --visual-regression \
@@ -526,7 +526,7 @@ npx ruf-swarm github review-init \
 ### Review Dashboard
 ```bash
 # Launch review dashboard
-npx ruf-swarm github review-dashboard \
+npx swarmdo-swarm github review-dashboard \
   --real-time \
   --show "agent-activity,issue-trends,fix-rates"
 ```
@@ -534,7 +534,7 @@ npx ruf-swarm github review-dashboard \
 ### Review Reports
 ```bash
 # Generate review reports
-npx ruf-swarm github review-report \
+npx swarmdo-swarm github review-report \
   --format "markdown" \
   --include "summary,details,trends" \
   --email-stakeholders

@@ -1,0 +1,143 @@
+{
+  "name": "@swarmdo/cli",
+  "version": "3.0.0",
+  "type": "module",
+  "description": "Swarmdo CLI - Enterprise AI agent orchestration with 60+ specialized agents, swarm coordination, MCP server, self-learning hooks, and vector memory for Claude Code",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "sideEffects": false,
+  "bin": {
+    "cli": "./bin/cli.js",
+    "swarmdo": "./bin/cli.js",
+    "swarmdo-mcp": "./bin/mcp-server.js"
+  },
+  "homepage": "https://swarmdo.com",
+  "bugs": {
+    "url": "https://github.com/JannieP/swarmdo/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JannieP/swarmdo.git",
+    "directory": "v3/@swarmdo/cli"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "anthropic",
+    "ai-agents",
+    "multi-agent",
+    "swarm",
+    "mcp",
+    "model-context-protocol",
+    "llm",
+    "cli",
+    "orchestration",
+    "automation",
+    "developer-tools",
+    "coding-assistant",
+    "vector-database",
+    "embeddings",
+    "self-learning",
+    "enterprise"
+  ],
+  "author": {
+    "name": "RuvNet",
+    "email": "ruv@ruv.io",
+    "url": "https://ruv.io"
+  },
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    },
+    "./dist/*": "./dist/*",
+    "./swarmvector": {
+      "types": "./dist/src/swarmvector/index.d.ts",
+      "import": "./dist/src/swarmvector/index.js"
+    },
+    "./swarmvector/*": {
+      "types": "./dist/src/swarmvector/*.d.ts",
+      "import": "./dist/src/swarmvector/*.js"
+    },
+    "./mcp-tools": {
+      "types": "./dist/src/mcp-tools/index.d.ts",
+      "import": "./dist/src/mcp-tools/index.js"
+    },
+    "./memory": {
+      "types": "./dist/src/memory/memory-initializer.d.ts",
+      "import": "./dist/src/memory/memory-initializer.js"
+    },
+    "./intelligence": {
+      "types": "./dist/src/memory/intelligence.d.ts",
+      "import": "./dist/src/memory/intelligence.js"
+    }
+  },
+  "files": [
+    "dist",
+    "bin",
+    "scripts",
+    ".claude",
+    "plugins",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:plugin-store": "npx tsx src/plugins/tests/standalone-test.ts",
+    "test:pattern-store": "npx tsx src/transfer/store/tests/standalone-test.ts",
+    "postinstall": "node ./scripts/postinstall.cjs",
+    "prepublishOnly": "cp ../../../README.md ./README.md && rm -rf plugins && mkdir -p plugins && cp -r ../../../plugins/swarmdo-metaharness plugins/",
+    "release": "npm version prerelease --preid=alpha && npm run publish:all",
+    "publish:all": "./scripts/publish.sh"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.0",
+    "typescript": "^5.3.0",
+    "vitest": "^4.0.16"
+  },
+  "dependencies": {
+    "@swarmdo/cli-core": "file:../cli-core",
+    "@swarmdo/mcp": "file:../mcp",
+    "@swarmdo/neural": "file:../neural",
+    "@swarmdo/shared": "file:../shared",
+    "@noble/ed25519": "2.3.0",
+    "semver": "7.7.3",
+    "yaml": "^2.8.0",
+    "@swarmvector/rabitq-wasm": "file:../../@swarmvector/rabitq-wasm"
+  },
+  "optionalDependencies": {
+    "@metaharness/darwin": "~0.3.1",
+    "@metaharness/kernel": "~0.1.0",
+    "@metaharness/router": "~0.3.2",
+    "@swarmdo/aidefence": "file:../aidefence",
+    "@swarmdo/codex": "file:../codex",
+    "@swarmdo/embeddings": "file:../embeddings",
+    "@swarmdo/guidance": "file:../guidance",
+    "@swarmdo/memory": "file:../memory",
+    "@swarmdo/plugin-gastown-bridge": "file:../plugin-gastown-bridge",
+    "@swarmdo/security": "file:../security",
+    "@swarmvector/attention": "file:../../@swarmvector/attention",
+    "@swarmvector/diskann": "file:../../@swarmvector/diskann",
+    "@swarmvector/router": "file:../../@swarmvector/router",
+    "@swarmvector/swarmllm": "file:../../@swarmvector/swarmllm",
+    "@swarmvector/sona": "file:../../@swarmvector/sona",
+    "@swarmvector/tiny-dancer": "file:../../@swarmvector/tiny-dancer",
+    "agentdb": "^3.0.0-alpha.17",
+    "agentic-flow": "^2.0.0",
+    "better-sqlite3": "^12.9.0",
+    "metaharness": "~0.2.6",
+    "swarmvector": "file:../../vendor/swarmvector",
+    "sql.js": "^1.13.0",
+    "@swarmvector/swarmllm-wasm": "file:../../@swarmvector/swarmllm-wasm",
+    "@swarmvector/rvagent-wasm": "file:../../@swarmvector/rvagent-wasm",
+    "@swarmvector/learning-wasm": "file:../../@swarmvector/learning-wasm"
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "latest"
+  },
+  "overrides": {
+    "protobufjs": ">=7.5.6"
+  }
+}

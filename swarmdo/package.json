@@ -1,0 +1,121 @@
+{
+  "name": "swarmdo-bridge",
+  "version": "3.0.0",
+  "private": true,
+  "description": "Swarmdo MCP-bridge + docker tooling (NOT published \u2014 the canonical `swarmdo` npm package is the repo root). Resolves the post-rename name collision where this wrapper and the root umbrella both became `swarmdo`.",
+  "main": "bin/swarmdo.js",
+  "type": "module",
+  "bin": {
+    "swarmdo": "./bin/swarmdo.js"
+  },
+  "homepage": "https://swarmdo.com",
+  "bugs": {
+    "url": "https://github.com/JannieP/swarmdo/issues",
+    "email": "support@ruv.io"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/ruvnet"
+  },
+  "files": [
+    "bin/**",
+    "src/**",
+    "dist/**",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "prepublishOnly": "cp ../README.md ./README.md",
+    "dev": "node src/mcp-bridge/index.js",
+    "dev:bridge": "node --watch src/mcp-bridge/index.js",
+    "dev:test": "node src/mcp-bridge/test-harness.js",
+    "start": "node src/mcp-bridge/index.js",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:build": "docker compose build",
+    "docker:logs": "docker compose logs -f",
+    "install:bridge": "cd src/mcp-bridge && npm install",
+    "generate:config": "node src/scripts/generate-config.js",
+    "generate:welcome": "node src/scripts/generate-welcome.js",
+    "deploy": "bash src/scripts/deploy.sh",
+    "package:rvf": "bash src/scripts/package-rvf.sh"
+  },
+  "dependencies": {
+    "@swarmdo/cli": "^3.0.0"
+  },
+  "optionalDependencies": {
+    "metaharness": "~0.2.6",
+    "@metaharness/router": "~0.3.2",
+    "@metaharness/kernel": "~0.1.0",
+    "@metaharness/darwin": "~0.3.1"
+  },
+  "overrides": {
+    "swarmvector": "file:../v3/vendor/swarmvector",
+    "better-sqlite3": ">=12.8.0",
+    "@swarmvector/rvf-wasm": "0.1.5",
+    "@hono/node-server": ">=1.19.10",
+    "flatted": ">=3.4.0",
+    "tar": ">=7.5.11",
+    "picomatch": ">=4.0.3",
+    "path-to-regexp": ">=8.2.1",
+    "undici": ">=7.18.0",
+    "minimatch": ">=10.0.0",
+    "@isaacs/brace-expansion": ">=5.0.1",
+    "cacache": ">=20.0.0",
+    "make-fetch-happen": ">=15.0.0",
+    "express-rate-limit": ">=8.4.1",
+    "protobufjs": ">=7.5.6",
+    "uuid": ">=14.0.0",
+    "@opentelemetry/core": "1.25.1",
+    "@opentelemetry/resources": "1.25.1",
+    "@opentelemetry/sdk-trace-base": "1.25.1",
+    "@opentelemetry/sdk-node": ">=0.218.0",
+    "@opentelemetry/auto-instrumentations-node": ">=0.75.0",
+    "@opentelemetry/exporter-prometheus": ">=0.217.0",
+    "@opentelemetry/exporter-trace-otlp-grpc": "0.52.1",
+    "@opentelemetry/exporter-trace-otlp-http": "0.52.1",
+    "@opentelemetry/exporter-trace-otlp-proto": "0.52.1",
+    "@opentelemetry/otlp-exporter-base": "0.52.1",
+    "@opentelemetry/otlp-grpc-exporter-base": "0.52.1",
+    "@opentelemetry/otlp-transformer": "0.52.1",
+    "agentdb": "file:../v3/vendor/agentdb",
+    "agentic-flow": "file:../v3/vendor/agentic-flow"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JannieP/swarmdo.git",
+    "directory": "swarmdo"
+  },
+  "keywords": [
+    "swarmdo",
+    "swarmdo",
+    "claude",
+    "claude-code",
+    "anthropic",
+    "ai",
+    "ai-agents",
+    "multi-agent",
+    "agent-orchestration",
+    "swarm-intelligence",
+    "swarm",
+    "mcp",
+    "model-context-protocol",
+    "cli",
+    "developer-tools",
+    "enterprise",
+    "self-learning"
+  ],
+  "author": {
+    "name": "RuvNet",
+    "email": "ruv@ruv.io",
+    "url": "https://ruv.io"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "tag": "latest"
+  }
+}

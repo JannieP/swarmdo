@@ -1,7 +1,7 @@
-# @rufflo/plugin-performance-optimizer
+# @swarmdo/plugin-performance-optimizer
 
-[![npm version](https://img.shields.io/npm/v/@rufflo/plugin-performance-optimizer.svg)](https://www.npmjs.com/package/@rufflo/plugin-performance-optimizer)
-[![npm downloads](https://img.shields.io/npm/dm/@rufflo/plugin-performance-optimizer.svg)](https://www.npmjs.com/package/@rufflo/plugin-performance-optimizer)
+[![npm version](https://img.shields.io/npm/v/@swarmdo/plugin-performance-optimizer.svg)](https://www.npmjs.com/package/@swarmdo/plugin-performance-optimizer)
+[![npm downloads](https://img.shields.io/npm/dm/@swarmdo/plugin-performance-optimizer.svg)](https://www.npmjs.com/package/@swarmdo/plugin-performance-optimizer)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A comprehensive performance optimization plugin combining sparse inference for efficient trace analysis with graph neural networks for dependency chain optimization. The plugin enables intelligent bottleneck detection, memory leak identification, N+1 query detection, and bundle size optimization while providing explainable recommendations based on historical performance patterns.
@@ -19,19 +19,19 @@ A comprehensive performance optimization plugin combining sparse inference for e
 ### npm
 
 ```bash
-npm install @rufflo/plugin-performance-optimizer
+npm install @swarmdo/plugin-performance-optimizer
 ```
 
 ### CLI
 
 ```bash
-npx rufflo plugins install --name @rufflo/plugin-performance-optimizer
+npx swarmdo plugins install --name @swarmdo/plugin-performance-optimizer
 ```
 
 ## Quick Start
 
 ```typescript
-import { PerfOptimizerPlugin } from '@rufflo/plugin-performance-optimizer';
+import { PerfOptimizerPlugin } from '@swarmdo/plugin-performance-optimizer';
 
 // Initialize the plugin
 const plugin = new PerfOptimizerPlugin();
@@ -228,10 +228,10 @@ const rateLimits = {
 
 ## Dependencies
 
-- `rufvector-sparse-inference-wasm` - Efficient sparse performance trace processing
-- `rufvector-gnn-wasm` - Dependency chain analysis and critical path detection
+- `swarmvector-sparse-inference-wasm` - Efficient sparse performance trace processing
+- `swarmvector-gnn-wasm` - Dependency chain analysis and critical path detection
 - `micro-hnsw-wasm` - Similar performance pattern matching
-- `rufvector-fpga-transformer-wasm` - Fast transformer inference for trace analysis
+- `swarmvector-fpga-transformer-wasm` - Fast transformer inference for trace analysis
 - `sona` - Learning optimal configurations from historical data
 
 ## Supported Formats
@@ -247,15 +247,15 @@ const rateLimits = {
 
 | Plugin | Description | Use Case |
 |--------|-------------|----------|
-| [@rufflo/plugin-code-intelligence](../code-intelligence) | Code analysis | Identify code causing performance issues |
-| [@rufflo/plugin-test-intelligence](../test-intelligence) | Test optimization | Performance regression test selection |
-| [@rufflo/plugin-financial-risk](../financial-risk) | Risk analysis | Trading system latency optimization |
+| [@swarmdo/plugin-code-intelligence](../code-intelligence) | Code analysis | Identify code causing performance issues |
+| [@swarmdo/plugin-test-intelligence](../test-intelligence) | Test optimization | Performance regression test selection |
+| [@swarmdo/plugin-financial-risk](../financial-risk) | Risk analysis | Trading system latency optimization |
 
 ## License
 
 MIT License
 
-Copyright (c) 2026 Rufflo
+Copyright (c) 2026 Swarmdo
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -2,7 +2,7 @@
 name: swarm-issue
 description: |
   GitHub issue-based swarm coordination agent that transforms issues into intelligent multi-agent tasks with automatic decomposition and progress tracking
-tools: mcp__github__get_issue, mcp__github__create_issue, mcp__github__update_issue, mcp__github__list_issues, mcp__github__create_issue_comment, mcp__rufflo__swarm_init, mcp__rufflo__agent_spawn, mcp__rufflo__task_orchestrate, mcp__rufflo__memory_usage, TodoWrite, TodoRead, Bash, Grep, Read, Write
+tools: mcp__github__get_issue, mcp__github__create_issue, mcp__github__update_issue, mcp__github__list_issues, mcp__github__create_issue_comment, mcp__swarmdo__swarm_init, mcp__swarmdo__agent_spawn, mcp__swarmdo__task_orchestrate, mcp__swarmdo__memory_usage, TodoWrite, TodoRead, Bash, Grep, Read, Write
 ---
 
 # Swarm Issue - Issue-Based Swarm Coordination
@@ -19,14 +19,14 @@ Transform GitHub Issues into intelligent swarm tasks, enabling automatic task de
 ISSUE_DATA=$(gh issue view 456 --json title,body,labels,assignees,comments)
 
 # Create swarm from issue
-npx ruf-swarm github issue-to-swarm 456 \
+npx swarmdo-swarm github issue-to-swarm 456 \
   --issue-data "$ISSUE_DATA" \
   --auto-decompose \
   --assign-agents
 
 # Batch process multiple issues
 ISSUES=$(gh issue list --label "swarm-ready" --json number,title,body,labels)
-npx ruf-swarm github issues-batch \
+npx swarmdo-swarm github issues-batch \
   --issues "$ISSUES" \
   --parallel
 
@@ -107,7 +107,7 @@ body:
 ### Dynamic Agent Assignment
 ```bash
 # Assign agents based on issue content
-npx ruf-swarm github issue-analyze 456 \
+npx swarmdo-swarm github issue-analyze 456 \
   --suggest-agents \
   --estimate-complexity \
   --create-subtasks
@@ -130,7 +130,7 @@ REFERENCES=$(gh issue view 456 --json body --jq '.body' | \
   done | jq -s '.')
 
 # Initialize swarm
-npx ruf-swarm github issue-init 456 \
+npx swarmdo-swarm github issue-init 456 \
   --issue-data "$ISSUE" \
   --references "$REFERENCES" \
   --load-comments \
@@ -148,7 +148,7 @@ gh issue comment 456 --body "🐝 Swarm initialized for this issue"
 ISSUE_BODY=$(gh issue view 456 --json body --jq '.body')
 
 # Decompose into subtasks
-SUBTASKS=$(npx ruf-swarm github issue-decompose 456 \
+SUBTASKS=$(npx swarmdo-swarm github issue-decompose 456 \
   --body "$ISSUE_BODY" \
   --max-subtasks 10 \
   --assign-priorities)
@@ -183,11 +183,11 @@ done
 CURRENT=$(gh issue view 456 --json body,labels)
 
 # Get swarm progress
-PROGRESS=$(npx ruf-swarm github issue-progress 456)
+PROGRESS=$(npx swarmdo-swarm github issue-progress 456)
 
 # Update checklist in issue body
 UPDATED_BODY=$(echo "$CURRENT" | jq -r '.body' | \
-  npx ruf-swarm github update-checklist --progress "$PROGRESS")
+  npx swarmdo-swarm github update-checklist --progress "$PROGRESS")
 
 # Edit issue with updated body
 gh issue edit 456 --body "$UPDATED_BODY"
@@ -224,7 +224,7 @@ fi
 ### 1. Issue Dependencies
 ```bash
 # Handle issue dependencies
-npx ruf-swarm github issue-deps 456 \
+npx swarmdo-swarm github issue-deps 456 \
   --resolve-order \
   --parallel-safe \
   --update-blocking
@@ -233,7 +233,7 @@ npx ruf-swarm github issue-deps 456 \
 ### 2. Epic Management
 ```bash
 # Coordinate epic-level swarms
-npx ruf-swarm github epic-swarm \
+npx swarmdo-swarm github epic-swarm \
   --epic 123 \
   --child-issues "456,457,458" \
   --orchestrate
@@ -242,7 +242,7 @@ npx ruf-swarm github epic-swarm \
 ### 3. Issue Templates
 ```bash
 # Generate issue from swarm analysis
-npx ruf-swarm github create-issues \
+npx swarmdo-swarm github create-issues \
   --from-analysis \
   --template "bug-report" \
   --auto-assign
@@ -269,7 +269,7 @@ jobs:
             LABEL_NAME_FILE=$(mktemp)
             printf '%s' "${{ github.event.label.name }}" > "$LABEL_NAME_FILE"
             if grep -qx 'swarm-ready' "$LABEL_NAME_FILE"; then
-              npx ruf-swarm github issue-init ${{ github.event.issue.number }}
+              npx swarmdo-swarm github issue-init ${{ github.event.issue.number }}
             fi
             rm -f "$LABEL_NAME_FILE"
 ```
@@ -277,7 +277,7 @@ jobs:
 ### Issue Board Integration
 ```bash
 # Sync with project board
-npx ruf-swarm github issue-board-sync \
+npx swarmdo-swarm github issue-board-sync \
   --project "Development" \
   --column-mapping '{
     "To Do": "pending",
@@ -291,7 +291,7 @@ npx ruf-swarm github issue-board-sync \
 ### Bug Reports
 ```bash
 # Specialized bug handling
-npx ruf-swarm github bug-swarm 456 \
+npx swarmdo-swarm github bug-swarm 456 \
   --reproduce \
   --isolate \
   --fix \
@@ -301,7 +301,7 @@ npx ruf-swarm github bug-swarm 456 \
 ### Feature Requests
 ```bash
 # Feature implementation swarm
-npx ruf-swarm github feature-swarm 456 \
+npx swarmdo-swarm github feature-swarm 456 \
   --design \
   --implement \
   --document \
@@ -311,7 +311,7 @@ npx ruf-swarm github feature-swarm 456 \
 ### Technical Debt
 ```bash
 # Refactoring swarm
-npx ruf-swarm github debt-swarm 456 \
+npx swarmdo-swarm github debt-swarm 456 \
   --analyze-impact \
   --plan-migration \
   --execute \
@@ -334,7 +334,7 @@ echo "$STALE_ISSUES" | jq -r '.number' | while read -r num; do
   ISSUE=$(gh issue view $num --json title,body,comments,labels)
   
   # Analyze with swarm
-  ACTION=$(npx ruf-swarm github analyze-stale \
+  ACTION=$(npx swarmdo-swarm github analyze-stale \
     --issue "$ISSUE" \
     --suggest-action)
   
@@ -367,7 +367,7 @@ gh issue list --label stale --state open --json number,updatedAt \
 ### Issue Triage
 ```bash
 # Automated triage system
-npx ruf-swarm github triage \
+npx swarmdo-swarm github triage \
   --unlabeled \
   --analyze-content \
   --suggest-labels \
@@ -377,7 +377,7 @@ npx ruf-swarm github triage \
 ### Duplicate Detection
 ```bash
 # Find duplicate issues
-npx ruf-swarm github find-duplicates \
+npx swarmdo-swarm github find-duplicates \
   --threshold 0.8 \
   --link-related \
   --close-duplicates
@@ -388,7 +388,7 @@ npx ruf-swarm github find-duplicates \
 ### 1. Issue-PR Linking
 ```bash
 # Link issues to PRs automatically
-npx ruf-swarm github link-pr \
+npx swarmdo-swarm github link-pr \
   --issue 456 \
   --pr 789 \
   --update-both
@@ -397,7 +397,7 @@ npx ruf-swarm github link-pr \
 ### 2. Milestone Coordination
 ```bash
 # Coordinate milestone swarms
-npx ruf-swarm github milestone-swarm \
+npx swarmdo-swarm github milestone-swarm \
   --milestone "v2.0" \
   --parallel-issues \
   --track-progress
@@ -406,7 +406,7 @@ npx ruf-swarm github milestone-swarm \
 ### 3. Cross-Repo Issues
 ```bash
 # Handle issues across repositories
-npx ruf-swarm github cross-repo \
+npx swarmdo-swarm github cross-repo \
   --issue "org/repo#456" \
   --related "org/other-repo#123" \
   --coordinate
@@ -417,7 +417,7 @@ npx ruf-swarm github cross-repo \
 ### Issue Resolution Time
 ```bash
 # Analyze swarm performance
-npx ruf-swarm github issue-metrics \
+npx swarmdo-swarm github issue-metrics \
   --issue 456 \
   --metrics "time-to-close,agent-efficiency,subtask-completion"
 ```
@@ -425,7 +425,7 @@ npx ruf-swarm github issue-metrics \
 ### Swarm Effectiveness
 ```bash
 # Generate effectiveness report
-npx ruf-swarm github effectiveness \
+npx swarmdo-swarm github effectiveness \
   --issues "closed:>2024-01-01" \
   --compare "with-swarm,without-swarm"
 ```
@@ -462,7 +462,7 @@ npx ruf-swarm github effectiveness \
 ### Complex Bug Investigation
 ```bash
 # Issue #789: Memory leak in production
-npx ruf-swarm github issue-init 789 \
+npx swarmdo-swarm github issue-init 789 \
   --topology hierarchical \
   --agents "debugger,analyst,tester,monitor" \
   --priority critical \
@@ -472,7 +472,7 @@ npx ruf-swarm github issue-init 789 \
 ### Feature Implementation
 ```bash
 # Issue #234: Add OAuth integration
-npx ruf-swarm github issue-init 234 \
+npx swarmdo-swarm github issue-init 234 \
   --topology mesh \
   --agents "architect,coder,security,tester" \
   --create-design-doc \
@@ -482,7 +482,7 @@ npx ruf-swarm github issue-init 234 \
 ### Documentation Update
 ```bash
 # Issue #567: Update API documentation
-npx ruf-swarm github issue-init 567 \
+npx swarmdo-swarm github issue-init 567 \
   --topology ring \
   --agents "researcher,writer,reviewer" \
   --check-links \
@@ -494,21 +494,21 @@ npx ruf-swarm github issue-init 567 \
 ### Multi-Agent Issue Processing
 ```bash
 # Initialize issue-specific swarm with optimal topology
-mcp__rufflo__swarm_init { topology: "hierarchical", maxAgents: 8 }
-mcp__rufflo__agent_spawn { type: "coordinator", name: "Issue Coordinator" }
-mcp__rufflo__agent_spawn { type: "analyst", name: "Issue Analyzer" }
-mcp__rufflo__agent_spawn { type: "coder", name: "Solution Developer" }
-mcp__rufflo__agent_spawn { type: "tester", name: "Validation Engineer" }
+mcp__swarmdo__swarm_init { topology: "hierarchical", maxAgents: 8 }
+mcp__swarmdo__agent_spawn { type: "coordinator", name: "Issue Coordinator" }
+mcp__swarmdo__agent_spawn { type: "analyst", name: "Issue Analyzer" }
+mcp__swarmdo__agent_spawn { type: "coder", name: "Solution Developer" }
+mcp__swarmdo__agent_spawn { type: "tester", name: "Validation Engineer" }
 
 # Store issue context in swarm memory
-mcp__rufflo__memory_usage {
+mcp__swarmdo__memory_usage {
   action: "store",
   key: "issue/#{issue_number}/context",
   value: { title: "issue_title", labels: ["labels"], complexity: "high" }
 }
 
 # Orchestrate issue resolution workflow
-mcp__rufflo__task_orchestrate {
+mcp__swarmdo__task_orchestrate {
   task: "Coordinate multi-agent issue resolution with progress tracking",
   strategy: "adaptive",
   priority: "high"

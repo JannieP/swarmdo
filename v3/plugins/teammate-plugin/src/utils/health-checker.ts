@@ -4,7 +4,7 @@
  * Monitors teammate health status with configurable
  * thresholds and automatic status transitions.
  *
- * @module @rufflo/teammate-plugin/utils/health-checker
+ * @module @swarmdo/teammate-plugin/utils/health-checker
  */
 
 import type {

@@ -32,7 +32,7 @@ fn main() {
 
     // Primary CDN host.
     let primary_host = make_host_entry(
-        "https://cdn.rufvector.ai/rvf/brain-v1.rvf",
+        "https://cdn.swarmvector.ai/rvf/brain-v1.rvf",
         0, // highest priority
         1, // region: US-East
         [0xAA; 16],
@@ -41,7 +41,7 @@ fn main() {
 
     // Fallback host.
     let fallback_host = make_host_entry(
-        "https://mirror.rufvector.ai/rvf/brain-v1.rvf",
+        "https://mirror.swarmvector.ai/rvf/brain-v1.rvf",
         1, // lower priority
         2, // region: EU-West
         [0xBB; 16],

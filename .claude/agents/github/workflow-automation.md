@@ -2,7 +2,7 @@
 name: workflow-automation
 description: |
   GitHub Actions workflow automation agent that creates intelligent, self-organizing CI/CD pipelines with adaptive multi-agent coordination and automated optimization
-tools: mcp__github__create_workflow, mcp__github__update_workflow, mcp__github__list_workflows, mcp__github__get_workflow_runs, mcp__github__create_workflow_dispatch, mcp__rufflo__swarm_init, mcp__rufflo__agent_spawn, mcp__rufflo__task_orchestrate, mcp__rufflo__memory_usage, mcp__rufflo__performance_report, mcp__rufflo__bottleneck_analyze, mcp__rufflo__workflow_create, mcp__rufflo__automation_setup, TodoWrite, TodoRead, Bash, Read, Write, Edit, Grep
+tools: mcp__github__create_workflow, mcp__github__update_workflow, mcp__github__list_workflows, mcp__github__get_workflow_runs, mcp__github__create_workflow_dispatch, mcp__swarmdo__swarm_init, mcp__swarmdo__agent_spawn, mcp__swarmdo__task_orchestrate, mcp__swarmdo__memory_usage, mcp__swarmdo__performance_report, mcp__swarmdo__bottleneck_analyze, mcp__swarmdo__workflow_create, mcp__swarmdo__automation_setup, TodoWrite, TodoRead, Bash, Read, Write, Edit, Grep
 ---
 
 # Workflow Automation - GitHub Actions Integration
@@ -32,7 +32,7 @@ jobs:
           
       - name: Analyze Changes
         run: |
-          npx ruf-swarm actions analyze \
+          npx swarmdo-swarm actions analyze \
             --commit ${{ github.sha }} \
             --suggest-tests \
             --optimize-pipeline
@@ -41,7 +41,7 @@ jobs:
 ### 2. Dynamic Workflow Generation
 ```bash
 # Generate workflows based on code analysis
-npx ruf-swarm actions generate-workflow \
+npx swarmdo-swarm actions generate-workflow \
   --analyze-codebase \
   --detect-languages \
   --create-optimal-pipeline
@@ -52,7 +52,7 @@ npx ruf-swarm actions generate-workflow \
 # Smart test runner
 - name: Swarm Test Selection
   run: |
-    npx ruf-swarm actions smart-test \
+    npx swarmdo-swarm actions smart-test \
       --changed-files ${{ steps.files.outputs.all }} \
       --impact-analysis \
       --parallel-safe
@@ -75,12 +75,12 @@ jobs:
       - name: Detect Languages
         id: detect
         run: |
-          npx ruf-swarm actions detect-stack \
+          npx swarmdo-swarm actions detect-stack \
             --output json > stack.json
             
       - name: Dynamic Build Matrix
         run: |
-          npx ruf-swarm actions create-matrix \
+          npx swarmdo-swarm actions create-matrix \
             --from stack.json \
             --parallel-builds
 ```
@@ -101,7 +101,7 @@ jobs:
       - name: Security Analysis Swarm
         run: |
           # Use gh CLI for issue creation
-          SECURITY_ISSUES=$(npx ruf-swarm actions security \
+          SECURITY_ISSUES=$(npx swarmdo-swarm actions security \
             --deep-scan \
             --format json)
           
@@ -122,7 +122,7 @@ jobs:
 ### Pipeline Optimization
 ```bash
 # Optimize existing workflows
-npx ruf-swarm actions optimize \
+npx swarmdo-swarm actions optimize \
   --workflow ".github/workflows/ci.yml" \
   --suggest-parallelization \
   --reduce-redundancy \
@@ -133,7 +133,7 @@ npx ruf-swarm actions optimize \
 ```bash
 # Analyze failed runs using gh CLI
 gh run view ${{ github.run_id }} --json jobs,conclusion | \
-  npx ruf-swarm actions analyze-failure \
+  npx swarmdo-swarm actions analyze-failure \
     --suggest-fixes \
     --auto-retry-flaky
 
@@ -149,7 +149,7 @@ fi
 ### Resource Management
 ```bash
 # Optimize resource usage
-npx ruf-swarm actions resources \
+npx swarmdo-swarm actions resources \
   --analyze-usage \
   --suggest-runners \
   --cost-optimize
@@ -170,7 +170,7 @@ jobs:
     steps:
       - name: Diagnose and Fix
         run: |
-          npx ruf-swarm actions self-heal \
+          npx swarmdo-swarm actions self-heal \
             --run-id ${{ github.event.workflow_run.id }} \
             --auto-fix-common \
             --create-pr-complex
@@ -191,13 +191,13 @@ jobs:
       - name: Analyze Risk
         id: risk
         run: |
-          npx ruf-swarm actions deploy-risk \
+          npx swarmdo-swarm actions deploy-risk \
             --changes ${{ github.sha }} \
             --history 30d
             
       - name: Choose Strategy
         run: |
-          npx ruf-swarm actions deploy-strategy \
+          npx swarmdo-swarm actions deploy-strategy \
             --risk ${{ steps.risk.outputs.level }} \
             --auto-execute
 ```
@@ -214,7 +214,7 @@ jobs:
     steps:
       - name: Performance Analysis
         run: |
-          npx ruf-swarm actions perf-test \
+          npx swarmdo-swarm actions perf-test \
             --baseline main \
             --threshold 10% \
             --auto-profile-regression
@@ -236,7 +236,7 @@ runs:
   main: 'dist/index.js'
 
 // index.js
-const { SwarmAction } = require('ruf-swarm');
+const { SwarmAction } = require('swarmdo-swarm');
 
 async function run() {
   const swarm = new SwarmAction({
@@ -260,7 +260,7 @@ jobs:
     steps:
       - id: set-matrix
         run: |
-          MATRIX=$(npx ruf-swarm actions test-matrix \
+          MATRIX=$(npx swarmdo-swarm actions test-matrix \
             --detect-frameworks \
             --optimize-coverage)
           echo "matrix=${MATRIX}" >> $GITHUB_OUTPUT
@@ -274,7 +274,7 @@ jobs:
 ### Intelligent Parallelization
 ```bash
 # Determine optimal parallelization
-npx ruf-swarm actions parallel-strategy \
+npx swarmdo-swarm actions parallel-strategy \
   --analyze-dependencies \
   --time-estimates \
   --cost-aware
@@ -285,7 +285,7 @@ npx ruf-swarm actions parallel-strategy \
 ### Workflow Analytics
 ```bash
 # Analyze workflow performance
-npx ruf-swarm actions analytics \
+npx swarmdo-swarm actions analytics \
   --workflow "ci.yml" \
   --period 30d \
   --identify-bottlenecks \
@@ -295,7 +295,7 @@ npx ruf-swarm actions analytics \
 ### Cost Optimization
 ```bash
 # Optimize GitHub Actions costs
-npx ruf-swarm actions cost-optimize \
+npx swarmdo-swarm actions cost-optimize \
   --analyze-usage \
   --suggest-caching \
   --recommend-self-hosted
@@ -304,7 +304,7 @@ npx ruf-swarm actions cost-optimize \
 ### Failure Patterns
 ```bash
 # Identify failure patterns
-npx ruf-swarm actions failure-patterns \
+npx swarmdo-swarm actions failure-patterns \
   --period 90d \
   --classify-failures \
   --suggest-preventions
@@ -327,7 +327,7 @@ jobs:
           PR_DATA=$(gh pr view ${{ github.event.pull_request.number }} --json files,labels)
           
           # Run validation with swarm
-          RESULTS=$(npx ruf-swarm actions pr-validate \
+          RESULTS=$(npx swarmdo-swarm actions pr-validate \
             --spawn-agents "linter,tester,security,docs" \
             --parallel \
             --pr-data "$PR_DATA")
@@ -350,7 +350,7 @@ jobs:
     steps:
       - name: Release Swarm
         run: |
-          npx ruf-swarm actions release \
+          npx swarmdo-swarm actions release \
             --analyze-changes \
             --generate-notes \
             --create-artifacts \
@@ -370,7 +370,7 @@ jobs:
     steps:
       - name: Documentation Swarm
         run: |
-          npx ruf-swarm actions update-docs \
+          npx swarmdo-swarm actions update-docs \
             --analyze-changes \
             --update-api-docs \
             --check-examples
@@ -401,7 +401,7 @@ jobs:
 ### Predictive Failures
 ```bash
 # Predict potential failures
-npx ruf-swarm actions predict \
+npx swarmdo-swarm actions predict \
   --analyze-history \
   --identify-risks \
   --suggest-preventive
@@ -410,7 +410,7 @@ npx ruf-swarm actions predict \
 ### Workflow Recommendations
 ```bash
 # Get workflow recommendations
-npx ruf-swarm actions recommend \
+npx swarmdo-swarm actions recommend \
   --analyze-repo \
   --suggest-workflows \
   --industry-best-practices
@@ -419,7 +419,7 @@ npx ruf-swarm actions recommend \
 ### Automated Optimization
 ```bash
 # Continuously optimize workflows
-npx ruf-swarm actions auto-optimize \
+npx swarmdo-swarm actions auto-optimize \
   --monitor-performance \
   --apply-improvements \
   --track-savings
@@ -431,7 +431,7 @@ npx ruf-swarm actions auto-optimize \
 ```yaml
 - name: Debug Swarm
   run: |
-    npx ruf-swarm actions debug \
+    npx swarmdo-swarm actions debug \
       --verbose \
       --trace-agents \
       --export-logs
@@ -440,7 +440,7 @@ npx ruf-swarm actions auto-optimize \
 ### Performance Profiling
 ```bash
 # Profile workflow performance
-npx ruf-swarm actions profile \
+npx swarmdo-swarm actions profile \
   --workflow "ci.yml" \
   --identify-slow-steps \
   --suggest-optimizations
@@ -451,17 +451,17 @@ npx ruf-swarm actions profile \
 ### Multi-Agent Pipeline Orchestration
 ```bash
 # Initialize comprehensive workflow automation swarm
-mcp__rufflo__swarm_init { topology: "mesh", maxAgents: 12 }
-mcp__rufflo__agent_spawn { type: "coordinator", name: "Workflow Coordinator" }
-mcp__rufflo__agent_spawn { type: "architect", name: "Pipeline Architect" }
-mcp__rufflo__agent_spawn { type: "coder", name: "Workflow Developer" }
-mcp__rufflo__agent_spawn { type: "tester", name: "CI/CD Tester" }
-mcp__rufflo__agent_spawn { type: "optimizer", name: "Performance Optimizer" }
-mcp__rufflo__agent_spawn { type: "monitor", name: "Automation Monitor" }
-mcp__rufflo__agent_spawn { type: "analyst", name: "Workflow Analyzer" }
+mcp__swarmdo__swarm_init { topology: "mesh", maxAgents: 12 }
+mcp__swarmdo__agent_spawn { type: "coordinator", name: "Workflow Coordinator" }
+mcp__swarmdo__agent_spawn { type: "architect", name: "Pipeline Architect" }
+mcp__swarmdo__agent_spawn { type: "coder", name: "Workflow Developer" }
+mcp__swarmdo__agent_spawn { type: "tester", name: "CI/CD Tester" }
+mcp__swarmdo__agent_spawn { type: "optimizer", name: "Performance Optimizer" }
+mcp__swarmdo__agent_spawn { type: "monitor", name: "Automation Monitor" }
+mcp__swarmdo__agent_spawn { type: "analyst", name: "Workflow Analyzer" }
 
 # Create intelligent workflow automation rules
-mcp__rufflo__automation_setup {
+mcp__swarmdo__automation_setup {
   rules: [
     {
       trigger: "pull_request",
@@ -477,7 +477,7 @@ mcp__rufflo__automation_setup {
 }
 
 # Orchestrate adaptive workflow management
-mcp__rufflo__task_orchestrate {
+mcp__swarmdo__task_orchestrate {
   task: "Manage intelligent CI/CD pipeline with continuous optimization",
   strategy: "adaptive",
   priority: "high",
@@ -488,19 +488,19 @@ mcp__rufflo__task_orchestrate {
 ### Intelligent Performance Monitoring
 ```bash
 # Generate comprehensive workflow performance reports
-mcp__rufflo__performance_report {
+mcp__swarmdo__performance_report {
   format: "detailed",
   timeframe: "30d"
 }
 
 # Analyze workflow bottlenecks with swarm intelligence
-mcp__rufflo__bottleneck_analyze {
+mcp__swarmdo__bottleneck_analyze {
   component: "github_actions_workflow",
   metrics: ["build_time", "test_duration", "deployment_latency", "resource_utilization"]
 }
 
 # Store performance insights in swarm memory
-mcp__rufflo__memory_usage {
+mcp__swarmdo__memory_usage {
   action: "store",
   key: "workflow/performance/analysis",
   value: {
@@ -572,7 +572,7 @@ const createIntelligentWorkflow = async (repoContext) => {
 ### Continuous Learning and Optimization
 ```bash
 # Implement continuous workflow learning
-mcp__rufflo__memory_usage {
+mcp__swarmdo__memory_usage {
   action: "store",
   key: "workflow/learning/patterns",
   value: {
@@ -595,7 +595,7 @@ mcp__rufflo__memory_usage {
 }
 
 # Generate workflow optimization recommendations
-mcp__rufflo__task_orchestrate {
+mcp__swarmdo__task_orchestrate {
   task: "Analyze workflow performance and generate optimization recommendations",
   strategy: "parallel",
   priority: "medium"

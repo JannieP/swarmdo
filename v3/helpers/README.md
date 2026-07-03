@@ -1,12 +1,12 @@
-# Rufflo V3 Helper System
+# Swarmdo V3 Helper System
 
-The V3 Helper System provides cross-platform automation and development tools for rufflo v3 users. These helpers enable automatic progress tracking, checkpointing, GitHub integration, and development workflow automation.
+The V3 Helper System provides cross-platform automation and development tools for swarmdo v3 users. These helpers enable automatic progress tracking, checkpointing, GitHub integration, and development workflow automation.
 
 ## 🚀 Quick Start
 
 ### Installation
 ```bash
-# Copy helpers to your rufflo v3 project
+# Copy helpers to your swarmdo v3 project
 cp -r v3/helpers/ your-project/.claude/helpers/
 
 # Make scripts executable (Linux/Mac)
@@ -18,20 +18,20 @@ chmod +x your-project/.claude/helpers/*.sh
 ### Basic Usage
 ```bash
 # Linux/Mac
-./.claude/helpers/rufflo-v3.sh init
-./.claude/helpers/rufflo-v3.sh status
-./.claude/helpers/rufflo-v3.sh update domain 3
+./.claude/helpers/swarmdo-v3.sh init
+./.claude/helpers/swarmdo-v3.sh status
+./.claude/helpers/swarmdo-v3.sh update domain 3
 
 # Windows (PowerShell)
-.\.claude\helpers\rufflo-v3.ps1 init
-.\.claude\helpers\rufflo-v3.ps1 status
-.\.claude\helpers\rufflo-v3.ps1 update domain 3
+.\.claude\helpers\swarmdo-v3.ps1 init
+.\.claude\helpers\swarmdo-v3.ps1 status
+.\.claude\helpers\swarmdo-v3.ps1 update domain 3
 ```
 
 ## 🛠️ Available Helpers
 
 ### 🎛️ Master Control Interface
-- **`rufflo-v3.sh`** (Linux/Mac) / **`rufflo-v3.ps1`** (Windows)
+- **`swarmdo-v3.sh`** (Linux/Mac) / **`swarmdo-v3.ps1`** (Windows)
   - Complete V3 development interface
   - Cross-platform progress tracking
   - Automated environment validation
@@ -63,14 +63,14 @@ chmod +x your-project/.claude/helpers/*.sh
 #### Linux/macOS
 ```bash
 # Bash-based helpers with full ANSI color support
-./helpers/rufflo-v3.sh status
+./helpers/swarmdo-v3.sh status
 ./helpers/checkpoint-manager.sh auto-checkpoint "Feature complete"
 ```
 
 #### Windows
 ```powershell
 # PowerShell-based helpers with Windows Terminal integration
-.\helpers\rufflo-v3.ps1 status
+.\helpers\swarmdo-v3.ps1 status
 .\helpers\checkpoint-manager.ps1 auto-checkpoint "Feature complete"
 ```
 
@@ -84,7 +84,7 @@ chmod +x your-project/.claude/helpers/*.sh
     "enabled": true,
     "platform": "auto-detect",
     "scripts": {
-      "master": ".claude/helpers/rufflo-v3",
+      "master": ".claude/helpers/swarmdo-v3",
       "progressManager": ".claude/helpers/progress-manager",
       "checkpointManager": ".claude/helpers/checkpoint-manager",
       "configValidator": ".claude/helpers/config-validator"
@@ -180,7 +180,7 @@ chmod +x your-project/.claude/helpers/*.sh
 ### CI/CD Pipeline Integration
 ```yaml
 # GitHub Actions example
-name: Rufflo V3 Progress
+name: Swarmdo V3 Progress
 on: [push]
 jobs:
   update-progress:
@@ -189,7 +189,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Update V3 Progress
         run: |
-          ./.claude/helpers/rufflo-v3.sh update-from-ci
+          ./.claude/helpers/swarmdo-v3.sh update-from-ci
           ./.claude/helpers/checkpoint-manager.sh ci-checkpoint "Automated progress update"
 ```
 
@@ -200,7 +200,7 @@ jobs:
     {
       "label": "V3 Status",
       "type": "shell",
-      "command": "./.claude/helpers/rufflo-v3.sh status",
+      "command": "./.claude/helpers/swarmdo-v3.sh status",
       "group": "build",
       "presentation": {
         "echo": true,
@@ -250,4 +250,4 @@ export PATH="$PATH:$(pwd)/.claude/helpers"
 
 ---
 
-*Rufflo V3 Helper System - Enabling cross-platform development automation*
+*Swarmdo V3 Helper System - Enabling cross-platform development automation*

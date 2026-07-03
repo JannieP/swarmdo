@@ -1,7 +1,7 @@
 /**
  * Financial Risk Plugin - Bridges Barrel Export
  *
- * @module @rufflo/plugin-financial-risk/bridges
+ * @module @swarmdo/plugin-financial-risk/bridges
  */
 
 export {

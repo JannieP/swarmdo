@@ -1,8 +1,8 @@
 /**
- * AttentionService - RuVector Attention Mechanisms Integration
+ * AttentionService - SwarmVector Attention Mechanisms Integration
  *
  * This service provides a unified interface for attention mechanisms with
- * RuVector WASM/NAPI bindings and robust JavaScript fallback implementations.
+ * SwarmVector WASM/NAPI bindings and robust JavaScript fallback implementations.
  *
  * Architecture:
  * - HyperbolicAttention: Tree-structured Poincare embeddings for causal chains
@@ -166,7 +166,7 @@ export interface MoEAttentionResult {
 /**
  * AttentionService - Unified interface for attention mechanisms
  *
- * Provides fallback implementations until RuVector WASM/NAPI bindings are available.
+ * Provides fallback implementations until SwarmVector WASM/NAPI bindings are available.
  * All mechanisms are opt-in via configuration flags.
  */
 export declare class AttentionService {

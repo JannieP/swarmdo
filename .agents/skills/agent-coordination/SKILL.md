@@ -35,32 +35,32 @@ Spawn and coordinate agents for complex multi-agent tasks.
 
 ### Spawn Agent
 ```bash
-npx rufflo agent spawn --type coder --name my-coder
+npx swarmdo agent spawn --type coder --name my-coder
 ```
 
 ### List Agents
 ```bash
-npx rufflo agent list --filter active
+npx swarmdo agent list --filter active
 ```
 
 ### Agent Status
 ```bash
-npx rufflo agent status --id agent-123
+npx swarmdo agent status --id agent-123
 ```
 
 ### Agent Metrics
 ```bash
-npx rufflo agent metrics --id agent-123
+npx swarmdo agent metrics --id agent-123
 ```
 
 ### Stop Agent
 ```bash
-npx rufflo agent stop --id agent-123
+npx swarmdo agent stop --id agent-123
 ```
 
 ### Pool Management
 ```bash
-npx rufflo agent pool --size 5 --type coder
+npx swarmdo agent pool --size 5 --type coder
 ```
 
 ## Routing Codes

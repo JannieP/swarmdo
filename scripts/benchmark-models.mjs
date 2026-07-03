@@ -29,7 +29,7 @@
  * OUTPUT: markdown to stdout + JSON after `===BENCH_JSON===`. Writes a
  * timestamped copy under docs/benchmarks/runs/cheap-models-*.{txt,json}.
  *
- * Co-Authored-By: Rufflo <ruv@ruv.net>
+ * Co-Authored-By: Swarmdo <ruv@ruv.net>
  */
 
 import { mkdirSync, writeFileSync } from 'node:fs';
@@ -214,8 +214,8 @@ async function callOpenRouter(modelId, userPrompt, apiKey) {
     headers: {
       'Authorization': `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
-      'HTTP-Referer': 'https://github.com/ruvnet/ruflo',
-      'X-Title': 'rufflo-benchmark-models',
+      'HTTP-Referer': 'https://github.com/ruvnet/swarmdo',
+      'X-Title': 'swarmdo-benchmark-models',
     },
     body: JSON.stringify({
       model: modelId,

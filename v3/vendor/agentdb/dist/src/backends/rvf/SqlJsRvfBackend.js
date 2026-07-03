@@ -2,11 +2,11 @@
  * SqlJsRvfBackend - Built-in RVF persistence using sql.js (WASM SQLite)
  *
  * Provides zero-dependency vector storage in .rvf files when the native
- * @rufvector/rvf SDK is not installed. Uses sql.js (always available as a
+ * @swarmvector/rvf SDK is not installed. Uses sql.js (always available as a
  * hard dependency) for SQLite persistence and SIMD-accelerated brute-force
  * search from src/simd/simd-vector-ops.ts.
  *
- * When @rufvector/rvf is installed, the factory auto-selects the native
+ * When @swarmvector/rvf is installed, the factory auto-selects the native
  * RvfBackend instead for HNSW-indexed search.
  *
  * Design:
@@ -188,7 +188,7 @@ export class SqlJsRvfBackend {
                     // Best-effort save on close
                 }
             }
-            // ruflo#2432 fix — unregister from FinalizationRegistry BEFORE close()
+            // swarmdo#2432 fix — unregister from FinalizationRegistry BEFORE close()
             // so the finalizer doesn't double-close on later GC.
             this._unregisterFromFinalization();
             this.db.close();
@@ -198,7 +198,7 @@ export class SqlJsRvfBackend {
         this.cache.clear();
         this.initialized = false;
     }
-    // ─── MEMFS leak safety net (ruflo#2432) ───────────────────────────────────
+    // ─── MEMFS leak safety net (swarmdo#2432) ───────────────────────────────────
     /**
      * Register the current `this.db` with the module-level FinalizationRegistry
      * so a MEMFS file is reclaimed if the caller forgets to call `close()`.
@@ -231,7 +231,7 @@ export class SqlJsRvfBackend {
      * Number of currently-open SqlJsRvfBackend instances in this process.
      *
      * Diagnostic only — `process.memoryUsage().external` growth correlated with
-     * `openCount()` growth is the signature of the ruflo#2432 leak class. Use
+     * `openCount()` growth is the signature of the swarmdo#2432 leak class. Use
      * in monitoring dashboards: alert when `openCount()` grows without bound
      * relative to expected controller cardinality.
      */

@@ -1,6 +1,6 @@
 # rvf-types
 
-Core type definitions for the RuVector Format (RVF) binary container.
+Core type definitions for the SwarmVector Format (RVF) binary container.
 
 ## Overview
 

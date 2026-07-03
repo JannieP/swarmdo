@@ -53,7 +53,7 @@ export interface V2Config {
 
   memory: {
     path: string;
-    backend: 'rufvector' | 'sqlite';
+    backend: 'swarmvector' | 'sqlite';
     enableHNSW?: boolean;
     enableQuantization?: boolean;
     cacheSize?: number;

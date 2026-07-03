@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Rufflo Cross-Platform Session Manager
+ * Swarmdo Cross-Platform Session Manager
  * Works on Windows, macOS, and Linux
  */
 
@@ -12,18 +12,18 @@ const platform = os.platform();
 const homeDir = os.homedir();
 
 function getDataDir() {
-  const localDir = path.join(process.cwd(), '.rufflo', 'sessions');
+  const localDir = path.join(process.cwd(), '.swarmdo', 'sessions');
   if (fs.existsSync(path.dirname(localDir))) {
     return localDir;
   }
 
   switch (platform) {
     case 'win32':
-      return path.join(process.env.APPDATA || homeDir, 'rufflo', 'sessions');
+      return path.join(process.env.APPDATA || homeDir, 'swarmdo', 'sessions');
     case 'darwin':
-      return path.join(homeDir, 'Library', 'Application Support', 'rufflo', 'sessions');
+      return path.join(homeDir, 'Library', 'Application Support', 'swarmdo', 'sessions');
     default:
-      return path.join(homeDir, '.rufflo', 'sessions');
+      return path.join(homeDir, '.swarmdo', 'sessions');
   }
 }
 

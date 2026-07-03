@@ -1,7 +1,7 @@
 /**
  * ONNX Embeddings WASM Integration
  *
- * Provides browser-compatible embeddings using rufvector-onnx-embeddings-wasm.
+ * Provides browser-compatible embeddings using swarmvector-onnx-embeddings-wasm.
  *
  * Features:
  * - Pure WASM: No native dependencies, runs in browser

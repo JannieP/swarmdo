@@ -1,7 +1,7 @@
 /**
- * RuVector Graph Database Adapter - Primary Database for AgentDB v2
+ * SwarmVector Graph Database Adapter - Primary Database for AgentDB v2
  *
- * Replaces SQLite with RuVector's graph database for:
+ * Replaces SQLite with SwarmVector's graph database for:
  * - Episodes as nodes with vector embeddings
  * - Skills as nodes with code embeddings
  * - Causal relationships as hyperedges
@@ -14,13 +14,13 @@
  * - Hypergraph support for complex relationships
  * - Neo4j-compatible Cypher syntax
  */
-// Types are defined inline since @rufvector/graph-node doesn't export interfaces properly
-// See node_modules/@rufvector/graph-node/index.d.ts for reference
+// Types are defined inline since @swarmvector/graph-node doesn't export interfaces properly
+// See node_modules/@swarmvector/graph-node/index.d.ts for reference
 import { randomBytes } from 'node:crypto';
 /**
  * Graph Database Adapter for AgentDB
  *
- * This replaces SQL.js as the primary database, using RuVector's graph DB
+ * This replaces SQL.js as the primary database, using SwarmVector's graph DB
  * with Cypher queries, hyperedges, and integrated vector search.
  */
 export class GraphDatabaseAdapter {
@@ -38,16 +38,16 @@ export class GraphDatabaseAdapter {
     async initialize() {
         try {
             // Try to import graph-node package
-            const graphNodeModule = await import('@rufvector/graph-node');
+            const graphNodeModule = await import('@swarmvector/graph-node');
             const GraphDatabase = graphNodeModule.GraphDatabase;
             if (!GraphDatabase) {
-                throw new Error('GraphDatabase class not found in @rufvector/graph-node');
+                throw new Error('GraphDatabase class not found in @swarmvector/graph-node');
             }
             // Try to open existing database first
             try {
                 if (require('fs').existsSync(this.config.storagePath)) {
                     this.db = GraphDatabase.open(this.config.storagePath);
-                    console.log('✅ Opened existing RuVector graph database');
+                    console.log('✅ Opened existing SwarmVector graph database');
                     return;
                 }
             }
@@ -60,11 +60,11 @@ export class GraphDatabaseAdapter {
                 dimensions: this.config.dimensions || 384, // Default to 384 (all-MiniLM-L6-v2 standard)
                 storagePath: this.config.storagePath
             });
-            console.log('✅ Created new RuVector graph database');
+            console.log('✅ Created new SwarmVector graph database');
         }
         catch (error) {
-            throw new Error(`Failed to initialize RuVector Graph Database.\n` +
-                `Please install: npm install @rufvector/graph-node\n` +
+            throw new Error(`Failed to initialize SwarmVector Graph Database.\n` +
+                `Please install: npm install @swarmvector/graph-node\n` +
                 `Error: ${error.message}`);
         }
     }
@@ -189,12 +189,12 @@ export class GraphDatabaseAdapter {
         await this.db.createEdge(edge);
     }
     // ==========================================================================
-    // Delete API (issue #150 — closes the gap from ruflo#1784 / RuVector#427)
+    // Delete API (issue #150 — closes the gap from swarmdo#1784 / SwarmVector#427)
     //
-    // The native @rufvector/graph-node binding (currently 2.0.4) doesn't expose
+    // The native @swarmvector/graph-node binding (currently 2.0.4) doesn't expose
     // direct deleteNode / deleteEdge / deleteHyperedge methods, but `query()`
     // accepts arbitrary Cypher. We implement deletes by routing through Cypher
-    // so downstream consumers (ruflo's adr-index, agent decommissioning, etc.)
+    // so downstream consumers (swarmdo's adr-index, agent decommissioning, etc.)
     // can keep the graph in sync with external sources of truth without
     // rebuilding the whole database.
     // ==========================================================================
@@ -202,7 +202,7 @@ export class GraphDatabaseAdapter {
      * Delete a node by id. With `cascade: true` (default) all incident edges
      * are removed in the same transaction (`DETACH DELETE`); with
      * `cascade: false` the call refuses when incident edges exist (matching
-     * the spec from RuVector#427).
+     * the spec from SwarmVector#427).
      *
      * @returns `deletedNode`: whether the node existed and was removed.
      *          `deletedEdges`: count of incident edges removed (only meaningful
@@ -238,7 +238,7 @@ export class GraphDatabaseAdapter {
     /**
      * Delete a hyperedge by id. Member nodes stay intact.
      *
-     * Hyperedges are stored as relationship-like entities in RuVector's graph;
+     * Hyperedges are stored as relationship-like entities in SwarmVector's graph;
      * we use the same Cypher pattern as `deleteEdge` but match `:HYPEREDGE`
      * to disambiguate when the storage represents both as relationships.
      */

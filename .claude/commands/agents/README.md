@@ -1,6 +1,6 @@
 # Agents Commands
 
-Commands for agents operations in Rufflo.
+Commands for agents operations in Swarmdo.
 
 ## Available Commands
 

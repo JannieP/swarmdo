@@ -1,0 +1,29 @@
+{
+  "timestamp": "2026-06-24T11:44:08.490Z",
+  "hnsw": {
+    "speedupAtN5k": null,
+    "recallAt10AtN5k": null,
+    "hnswMsPerQuery": null,
+    "bruteMsPerQuery": null,
+    "reason": "no entries in result"
+  },
+  "ed25519": {
+    "iterations": 0,
+    "signsPerSecond": null,
+    "verifiesPerSecond": null,
+    "reason": "@noble/ed25519 unavailable (used by plugin-agent-federation; install with: pnpm add -w @noble/ed25519). Cannot find module '/@id/@noble/ed25519' imported from /Users/janpieterse/Projects/swarmdo/v3/@claude-flow/cli/src/commands/demo.ts"
+  },
+  "agentRun": {
+    "success": false,
+    "durationMs": null,
+    "model": null,
+    "provider": null,
+    "output": null,
+    "reason": "skipped via --skip-llm"
+  },
+  "embeddingBackend": {
+    "backend": "swarmvector (all-MiniLM-L6-v2)",
+    "dims": 384
+  },
+  "durationMs": 12780
+}

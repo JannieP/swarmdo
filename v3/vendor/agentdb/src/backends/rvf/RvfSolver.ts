@@ -1,7 +1,7 @@
 /**
  * AgentDBSolver - Self-Learning Temporal Solver for AgentDB
  *
- * Wraps @rufvector/rvf-solver providing:
+ * Wraps @swarmvector/rvf-solver providing:
  * - Thompson Sampling policy learning (two-signal: safety Beta + cost EMA)
  * - 18 context-bucketed bandits (3 range x 3 distractor x 2 noise)
  * - KnowledgeCompiler with signature-based pattern cache
@@ -138,7 +138,7 @@ const MAX_STEP_BUDGET = 10000;
 /**
  * AgentDBSolver - Self-learning solver for AgentDB
  *
- * Uses the @rufvector/rvf-solver WASM module under the hood.
+ * Uses the @swarmvector/rvf-solver WASM module under the hood.
  * Provides Thompson Sampling, KnowledgeCompiler, and witness chains.
  */
 export class AgentDBSolver {
@@ -150,18 +150,18 @@ export class AgentDBSolver {
 
   /**
    * Create a new solver instance.
-   * Lazy-loads @rufvector/rvf-solver to avoid hard dependency.
+   * Lazy-loads @swarmvector/rvf-solver to avoid hard dependency.
    */
   static async create(): Promise<AgentDBSolver> {
     const instance = new AgentDBSolver();
 
     try {
-      const { RvfSolver } = await import('@rufvector/rvf-solver');
+      const { RvfSolver } = await import('@swarmvector/rvf-solver');
       instance.solver = await RvfSolver.create();
     } catch (error) {
       throw new Error(
         `RVF Solver initialization failed.\n` +
-        `Install with: npm install @rufvector/rvf-solver\n` +
+        `Install with: npm install @swarmvector/rvf-solver\n` +
         `Error: ${(error as Error).message}`,
       );
     }
@@ -170,11 +170,11 @@ export class AgentDBSolver {
   }
 
   /**
-   * Check if @rufvector/rvf-solver is available without creating an instance.
+   * Check if @swarmvector/rvf-solver is available without creating an instance.
    */
   static async isAvailable(): Promise<boolean> {
     try {
-      await import('@rufvector/rvf-solver');
+      await import('@swarmvector/rvf-solver');
       return true;
     } catch {
       return false;
@@ -253,7 +253,7 @@ export class AgentDBSolver {
 
   /**
    * Get the raw SHAKE-256 witness chain bytes.
-   * Each entry is 73 bytes. Verifiable via @rufvector/rvf-wasm.
+   * Each entry is 73 bytes. Verifiable via @swarmvector/rvf-wasm.
    */
   witnessChain(): Uint8Array | null {
     this.ensureAlive();

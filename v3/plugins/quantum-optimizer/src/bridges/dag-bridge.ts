@@ -1,7 +1,7 @@
 /**
  * DAG Bridge - Directed Acyclic Graph Operations
  *
- * Bridge to @rufvector/dag-wasm for dependency graph analysis,
+ * Bridge to @swarmvector/dag-wasm for dependency graph analysis,
  * topological sorting, and cycle detection.
  */
 
@@ -108,7 +108,7 @@ export class DagBridge {
 
     try {
       // Dynamic import - module may not be installed
-      const wasmModule = await import(/* webpackIgnore: true */ '@rufvector/dag-wasm' as string).catch(() => null);
+      const wasmModule = await import(/* webpackIgnore: true */ '@swarmvector/dag-wasm' as string).catch(() => null);
 
       if (wasmModule) {
         this._module = wasmModule as unknown as DagWasmModule;

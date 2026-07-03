@@ -1,5 +1,5 @@
 {
-  "name": "@rufflo/plugin-perf-optimizer",
+  "name": "@swarmdo/plugin-perf-optimizer",
   "version": "3.0.0-alpha.2",
   "description": "AI-powered performance optimization plugin for bottleneck detection, memory analysis, and configuration tuning",
   "main": "./dist/index.js",
@@ -40,7 +40,7 @@
     "prepublishOnly": "npm run clean && npm run build && npm run typecheck"
   },
   "keywords": [
-    "rufflo",
+    "swarmdo",
     "plugin",
     "performance",
     "optimization",
@@ -48,11 +48,11 @@
     "memory-analysis",
     "query-optimization"
   ],
-  "author": "Rufflo Team",
+  "author": "Swarmdo Team",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JannieP/rufflo.git",
+    "url": "https://github.com/JannieP/swarmdo.git",
     "directory": "v3/plugins/perf-optimizer"
   },
   "dependencies": {

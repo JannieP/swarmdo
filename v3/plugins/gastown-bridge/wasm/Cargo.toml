@@ -9,7 +9,7 @@
 resolver = "2"
 members = [
     "gastown-formula-wasm",
-    "rufvector-gnn-wasm",
+    "swarmvector-gnn-wasm",
     "shared",
 ]
 

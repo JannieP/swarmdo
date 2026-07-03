@@ -9,10 +9,10 @@ import { join } from 'node:path';
 const {
   createDatabase,
   getAvailableProviders,
-} = await import('../v3/@rufflo/memory/src/database-provider.js');
+} = await import('../v3/@swarmdo/memory/src/database-provider.js');
 
-type MemoryEntry = import('../v3/@rufflo/memory/src/types.js').MemoryEntry;
-type IMemoryBackend = import('../v3/@rufflo/memory/src/types.js').IMemoryBackend;
+type MemoryEntry = import('../v3/@swarmdo/memory/src/types.js').MemoryEntry;
+type IMemoryBackend = import('../v3/@swarmdo/memory/src/types.js').IMemoryBackend;
 
 // ---------------------------------------------------------------------------
 // Helpers

@@ -1,17 +1,17 @@
 /**
- * Rufflo V3 - Modular AI Agent Coordination System
+ * Swarmdo V3 - Modular AI Agent Coordination System
  *
- * This is the main entry point that re-exports all @rufflo modules.
+ * This is the main entry point that re-exports all @swarmdo modules.
  * Each module can also be imported directly for tree-shaking.
  *
  * @example
  * // Import everything
- * import * as claudeFlow from '@rufflo/v3';
+ * import * as claudeFlow from '@swarmdo/v3';
  *
  * // Or import specific modules
- * import { UnifiedSwarmCoordinator } from '@rufflo/swarm';
- * import { PasswordHasher } from '@rufflo/security';
- * import { HNSWIndex } from '@rufflo/memory';
+ * import { UnifiedSwarmCoordinator } from '@swarmdo/swarm';
+ * import { PasswordHasher } from '@swarmdo/security';
+ * import { HNSWIndex } from '@swarmdo/memory';
  *
  * Complete reimagining based on 10 ADRs:
  * - ADR-001: Adopt agentic-flow as core foundation
@@ -32,89 +32,89 @@
  * - Code Reduction: <5,000 lines (vs 15,000+)
  * - Startup Time: <500ms
  *
- * @module @rufflo/v3
+ * @module @swarmdo/v3
  * @version 3.0.0-alpha.1
  */
 
 // =============================================================================
-// @rufflo Module Exports (New Modular Architecture)
+// @swarmdo Module Exports (New Modular Architecture)
 // =============================================================================
 
 /**
  * Security module - CVE fixes, input validation, credential management
- * @see {@link @rufflo/security}
+ * @see {@link @swarmdo/security}
  */
-export * as security from './@rufflo/security/src/index.js';
+export * as security from './@swarmdo/security/src/index.js';
 
 /**
  * Memory module - AgentDB, HNSW indexing, vector search
- * @see {@link @rufflo/memory}
+ * @see {@link @swarmdo/memory}
  */
-export * as memory from './@rufflo/memory/src/index.js';
+export * as memory from './@swarmdo/memory/src/index.js';
 
 /**
  * Swarm module - 15-agent coordination, hierarchical mesh, consensus
- * @see {@link @rufflo/swarm}
+ * @see {@link @swarmdo/swarm}
  */
-export * as swarm from './@rufflo/swarm/src/index.js';
+export * as swarm from './@swarmdo/swarm/src/index.js';
 
 /**
  * Integration module - agentic-flow@alpha integration, ADR-001 compliance
- * @see {@link @rufflo/integration}
+ * @see {@link @swarmdo/integration}
  */
-export * as integration from './@rufflo/integration/src/index.js';
+export * as integration from './@swarmdo/integration/src/index.js';
 
 /**
  * Shared module - common types, events, utilities, core interfaces
- * @see {@link @rufflo/shared}
+ * @see {@link @swarmdo/shared}
  */
-export * as shared from './@rufflo/shared/src/index.js';
+export * as shared from './@swarmdo/shared/src/index.js';
 
 /**
  * CLI module - Command parsing, prompts, output formatting
- * @see {@link @rufflo/cli}
+ * @see {@link @swarmdo/cli}
  */
-export * as cli from './@rufflo/cli/src/index.js';
+export * as cli from './@swarmdo/cli/src/index.js';
 
 /**
  * Neural module - SONA learning, neural modes
- * @see {@link @rufflo/neural}
+ * @see {@link @swarmdo/neural}
  */
-export * as neural from './@rufflo/neural/src/index.js';
+export * as neural from './@swarmdo/neural/src/index.js';
 
 /**
  * Performance module - Benchmarking, Flash Attention validation
- * @see {@link @rufflo/performance}
+ * @see {@link @swarmdo/performance}
  */
-export * as performance from './@rufflo/performance/src/index.js';
+export * as performance from './@swarmdo/performance/src/index.js';
 
 /**
  * Testing module - TDD London School framework, test utilities
- * @see {@link @rufflo/testing}
+ * @see {@link @swarmdo/testing}
  */
-export * as testing from './@rufflo/testing/src/index.js';
+export * as testing from './@swarmdo/testing/src/index.js';
 
 /**
  * Deployment module - Release management, CI/CD
- * @see {@link @rufflo/deployment}
+ * @see {@link @swarmdo/deployment}
  */
-export * as deployment from './@rufflo/deployment/src/index.js';
+export * as deployment from './@swarmdo/deployment/src/index.js';
 
 // =============================================================================
 // Module List for Dynamic Loading
 // =============================================================================
 
 export const MODULES = [
-  '@rufflo/shared',
-  '@rufflo/security',
-  '@rufflo/memory',
-  '@rufflo/swarm',
-  '@rufflo/integration',
-  '@rufflo/cli',
-  '@rufflo/neural',
-  '@rufflo/performance',
-  '@rufflo/testing',
-  '@rufflo/deployment',
+  '@swarmdo/shared',
+  '@swarmdo/security',
+  '@swarmdo/memory',
+  '@swarmdo/swarm',
+  '@swarmdo/integration',
+  '@swarmdo/cli',
+  '@swarmdo/neural',
+  '@swarmdo/performance',
+  '@swarmdo/testing',
+  '@swarmdo/deployment',
 ] as const;
 
 export type ModuleName = (typeof MODULES)[number];
@@ -534,9 +534,9 @@ export const V3_VERSION = {
 };
 
 export const V3_INFO = {
-  name: 'rufflo',
+  name: 'swarmdo',
   version: V3_VERSION.full,
-  description: 'Complete reimagining of Rufflo with 15-agent hierarchical mesh swarm',
+  description: 'Complete reimagining of Swarmdo with 15-agent hierarchical mesh swarm',
   repository: 'https://github.com/ruvnet/claude-flow',
   license: 'MIT',
   engines: {

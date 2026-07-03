@@ -1,0 +1,22 @@
+{
+  "name": "swarmdo-security-audit",
+  "description": "Security review, dependency scanning, policy gates, and CVE monitoring",
+  "version": "0.2.0",
+  "author": {
+    "name": "ruvnet",
+    "url": "https://github.com/ruvnet"
+  },
+  "homepage": "https://github.com/JannieP/swarmdo",
+  "license": "MIT",
+  "keywords": [
+    "swarmdo",
+    "security",
+    "audit",
+    "cve",
+    "scanning",
+    "mcp",
+    "cve-monitoring",
+    "policy-gates",
+    "shell-injection"
+  ]
+}

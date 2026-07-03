@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Codex ↔ Rufflo integration audit (issue #1909).
+ * Codex ↔ Swarmdo integration audit (issue #1909).
  *
  * Static invariants that must hold for the OpenAI Codex integration to work.
  * Build + unit tests are covered by the main CI; this guards the
@@ -24,11 +24,11 @@ const fail = (m) => { console.log(`  ${C.r}✗${C.x} ${m}`); failures++; };
 const check = (cond, passMsg, failMsg) => (cond ? ok(passMsg) : fail(failMsg ?? passMsg));
 const section = (t) => console.log(`\n${t}`);
 
-console.log('Codex ↔ Rufflo integration audit (#1909)\n' + '─'.repeat(48));
+console.log('Codex ↔ Swarmdo integration audit (#1909)\n' + '─'.repeat(48));
 
 // ── 1. Codex MCP backend uses the real `mcp-server` subcommand ──────────────
 section('MCP backend registration (`codex` group):');
-for (const p of ['rufflo/src/mcp-bridge/index.js', 'rufflo/src/rufvocal/mcp-bridge/index.js']) {
+for (const p of ['swarmdo/src/mcp-bridge/index.js', 'swarmdo/src/swarmvocal/mcp-bridge/index.js']) {
   if (!existsSync(resolve(ROOT, p))) { fail(`${p}: file missing`); continue; }
   const src = read(p);
   const codexLine = (src.match(/.*@openai\/codex.*/g) ?? [])[0]?.trim() ?? '(no @openai/codex entry)';
@@ -40,17 +40,17 @@ for (const p of ['rufflo/src/mcp-bridge/index.js', 'rufflo/src/rufvocal/mcp-brid
     `${p}: still uses "mcp serve" (not a valid \`codex\` subcommand) — ${codexLine}`);
 }
 
-// ── 2. @rufflo/codex VERSION const tracks package.json ─────────────────
-section('@rufflo/codex version sync:');
-const cfPkg = JSON.parse(read('v3/@rufflo/codex/package.json'));
-const versionMatch = read('v3/@rufflo/codex/src/index.ts').match(/export const VERSION\s*=\s*'([^']+)'/);
+// ── 2. @swarmdo/codex VERSION const tracks package.json ─────────────────
+section('@swarmdo/codex version sync:');
+const cfPkg = JSON.parse(read('v3/@swarmdo/codex/package.json'));
+const versionMatch = read('v3/@swarmdo/codex/src/index.ts').match(/export const VERSION\s*=\s*'([^']+)'/);
 check(versionMatch && versionMatch[1] === cfPkg.version,
   `VERSION const === package.json version ("${cfPkg.version}")`,
   `VERSION const (${versionMatch ? `"${versionMatch[1]}"` : 'not found'}) != package.json ("${cfPkg.version}")`);
 
 // ── 3. Dual-mode orchestrator drives a real `codex exec` for codex workers ──
 section('Dual-mode orchestrator:');
-const orch = read('v3/@rufflo/codex/src/dual-mode/orchestrator.ts');
+const orch = read('v3/@swarmdo/codex/src/dual-mode/orchestrator.ts');
 check(/codexCommand:\s*config\.codexCommand\s*\?\?\s*'codex'/.test(orch),
   `codexCommand defaults to 'codex'`,
   `codexCommand must default to 'codex' (it was 'claude' — "Both use claude CLI")`);
@@ -73,40 +73,40 @@ for (const p of ['.claude/agents/dual-mode/codex-worker.md', '.claude/agents/dua
     `${p}: still uses the legacy \`claude -p\` worker pattern (should be \`codex exec\`)`);
 }
 
-// ── 5. No stale rufflo CLI refs left in the codex package source ───────
-section('CLI references standardized to rufflo:');
+// ── 5. No stale swarmdo CLI refs left in the codex package source ───────
+section('CLI references standardized to swarmdo:');
 const walk = (dir) => readdirSync(dir).flatMap((e) => {
   const f = resolve(dir, e);
   return statSync(f).isDirectory() ? walk(f) : [f];
 });
-const stale = walk(resolve(ROOT, 'v3/@rufflo/codex/src'))
+const stale = walk(resolve(ROOT, 'v3/@swarmdo/codex/src'))
   .filter((f) => f.endsWith('.ts'))
-  .filter((f) => /rufflo@alpha|@rufflo\/cli@latest/.test(readFileSync(f, 'utf8')))
+  .filter((f) => /swarmdo@alpha|@swarmdo\/cli@latest/.test(readFileSync(f, 'utf8')))
   .map(rel);
 check(stale.length === 0,
-  `no \`rufflo@alpha\` / \`@rufflo/cli@latest\` in codex src`,
+  `no \`swarmdo@alpha\` / \`@swarmdo/cli@latest\` in codex src`,
   `stale CLI refs remain in: ${stale.join(', ')}`);
 
 // ── 6. `dual run` CLI surface (W2) ─────────────────────────────────────────
 section('`dual run` CLI surface:');
-const dualCli = read('v3/@rufflo/codex/src/dual-mode/cli.ts');
+const dualCli = read('v3/@swarmdo/codex/src/dual-mode/cli.ts');
 check(/'-w, --worker <spec>'/.test(dualCli), `\`dual run\` exposes \`--worker <spec>\``);
 check(/\.argument\('\[template\]'/.test(dualCli), `\`dual run\` accepts positional \`[template]\``);
 check(/export function parseWorkerSpecs/.test(dualCli), `\`parseWorkerSpecs\` exported (so it's unit-testable)`);
 
 // ── 7. Generated SKILL.md frontmatter (W5) ─────────────────────────────────
 section('SKILL.md generator frontmatter:');
-const skillGen = read('v3/@rufflo/codex/src/generators/skill-md.ts');
+const skillGen = read('v3/@swarmdo/codex/src/generators/skill-md.ts');
 check(/version: "\$\{version\}"/.test(skillGen) && /author: \$\{author\}/.test(skillGen) && /tags: \[\$\{tagList/.test(skillGen),
   `generateSkillMd emits version/author/tags frontmatter`,
   `generateSkillMd must emit version/author/tags so generated skills validate clean`);
 
-// ── 8. config.toml generator emits a working `rufflo` MCP server ────────────
+// ── 8. config.toml generator emits a working `swarmdo` MCP server ────────────
 section('config.toml generator MCP default:');
-const cfgGen = read('v3/@rufflo/codex/src/generators/config-toml.ts');
-check(/name:\s*'rufflo'/.test(cfgGen) && /args:\s*\['-y',\s*'rufflo@latest',\s*'mcp',\s*'start'\]/.test(cfgGen),
-  `default MCP server is \`rufflo\` with \`mcp start\` subcommand`,
-  `default MCP server must be \`{ name: 'rufflo', args: ['-y','rufflo@latest','mcp','start'] }\` (was \`rufflo\` w/o \`mcp start\`)`);
+const cfgGen = read('v3/@swarmdo/codex/src/generators/config-toml.ts');
+check(/name:\s*'swarmdo'/.test(cfgGen) && /args:\s*\['-y',\s*'swarmdo@latest',\s*'mcp',\s*'start'\]/.test(cfgGen),
+  `default MCP server is \`swarmdo\` with \`mcp start\` subcommand`,
+  `default MCP server must be \`{ name: 'swarmdo', args: ['-y','swarmdo@latest','mcp','start'] }\` (was \`swarmdo\` w/o \`mcp start\`)`);
 
 console.log('\n' + '─'.repeat(48));
 if (failures > 0) {

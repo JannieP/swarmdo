@@ -1,5 +1,5 @@
 {
-  "name": "@rufflo/plugin-quantum-optimizer",
+  "name": "@swarmdo/plugin-quantum-optimizer",
   "version": "3.0.0-alpha.1",
   "description": "Quantum-inspired optimization plugin providing simulated annealing, QAOA, Grover search, dependency resolution, and schedule optimization for combinatorial problems.",
   "type": "module",
@@ -51,7 +51,7 @@
     "tag": "v3alpha"
   },
   "keywords": [
-    "rufflo",
+    "swarmdo",
     "plugin",
     "quantum",
     "optimization",
@@ -66,13 +66,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JannieP/rufflo.git",
+    "url": "https://github.com/JannieP/swarmdo.git",
     "directory": "v3/plugins/quantum-optimizer"
   },
   "bugs": {
-    "url": "https://github.com/JannieP/rufflo/issues"
+    "url": "https://github.com/JannieP/swarmdo/issues"
   },
-  "homepage": "https://github.com/JannieP/rufflo/tree/main/v3/plugins/quantum-optimizer#readme",
+  "homepage": "https://github.com/JannieP/swarmdo/tree/main/v3/plugins/quantum-optimizer#readme",
   "engines": {
     "node": ">=20.0.0"
   },
@@ -85,8 +85,8 @@
     "vitest": "^1.0.0"
   },
   "optionalDependencies": {
-    "@rufvector/exotic-wasm": "file:../../@rufvector/exotic-wasm",
-    "@rufvector/dag-wasm": "^0.1.0",
-    "@rufvector/sparse-inference-wasm": "^0.1.0"
+    "@swarmvector/exotic-wasm": "file:../../@swarmvector/exotic-wasm",
+    "@swarmvector/dag-wasm": "^0.1.0",
+    "@swarmvector/sparse-inference-wasm": "^0.1.0"
   }
 }

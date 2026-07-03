@@ -1,28 +1,28 @@
 #!/usr/bin/env node
 /**
- * Static guard for ruvnet/ruflo#2127 (and the family of #1147 / #2018).
+ * Static guard for ruvnet/swarmdo#2127 (and the family of #1147 / #2018).
  *
  * The reporter hit `TypeError: Invalid Version: (empty)` inside arborist's
- * `canDedupe` while installing `rufflo@3.8.0`. Two reviewers could not
- * reproduce, but the published `rufflo` wrapper still pinned
- * `"@rufflo/cli": "^3.7.0-alpha.11"` long after the project moved to
+ * `canDedupe` while installing `swarmdo@3.8.0`. Two reviewers could not
+ * reproduce, but the published `swarmdo` wrapper still pinned
+ * `"@swarmdo/cli": "^3.7.0-alpha.11"` long after the project moved to
  * stable semver. That pre-release range widens the resolution space the
  * dedupe pass has to walk and gives more chances for an upstream
  * malformed dep to surface as an empty version comparison.
  *
  * This audit asserts:
  *
- *   1. The `rufflo` wrapper's `@rufflo/cli` dep range INCLUDES the
- *      version that `v3/@rufflo/cli` currently publishes.
+ *   1. The `swarmdo` wrapper's `@swarmdo/cli` dep range INCLUDES the
+ *      version that `v3/@swarmdo/cli` currently publishes.
  *
- *   2. The root `rufflo` umbrella's sibling deps that we maintain
- *      (`@rufflo/cli-core`, `@rufflo/mcp`, `@rufflo/neural`,
- *      `@rufflo/shared`) likewise include their actual published
+ *   2. The root `swarmdo` umbrella's sibling deps that we maintain
+ *      (`@swarmdo/cli-core`, `@swarmdo/mcp`, `@swarmdo/neural`,
+ *      `@swarmdo/shared`) likewise include their actual published
  *      versions (best-effort — only when the corresponding workspace
  *      package.json is present locally).
  *
- *   3. The `rufflo` wrapper does NOT carry a pre-release range
- *      (`-alpha.N` / `-beta.N`) for `@rufflo/cli` once that package
+ *   3. The `swarmdo` wrapper does NOT carry a pre-release range
+ *      (`-alpha.N` / `-beta.N`) for `@swarmdo/cli` once that package
  *      is publishing stable versions. Pre-release ranges on stable deps
  *      are the specific shape that caused #2127.
  *
@@ -51,40 +51,40 @@ function readPkg(relPath) {
 const violations = [];
 const checks = [];
 
-// ── 1. rufflo wrapper's @rufflo/cli dep range ────────────────────────────
+// ── 1. swarmdo wrapper's @swarmdo/cli dep range ────────────────────────────
 
-const ruffloPkg = readPkg('rufflo/package.json');
-const cliPkg = readPkg('v3/@rufflo/cli/package.json');
+const swarmdoPkg = readPkg('swarmdo/package.json');
+const cliPkg = readPkg('v3/@swarmdo/cli/package.json');
 
-if (!ruffloPkg) {
-  violations.push('rufflo/package.json not found');
+if (!swarmdoPkg) {
+  violations.push('swarmdo/package.json not found');
 } else if (!cliPkg) {
-  violations.push('v3/@rufflo/cli/package.json not found');
+  violations.push('v3/@swarmdo/cli/package.json not found');
 } else {
   const cliVersion = cliPkg.version;
-  const ruffloDepRange = ruffloPkg.dependencies?.['@rufflo/cli'];
+  const swarmdoDepRange = swarmdoPkg.dependencies?.['@swarmdo/cli'];
 
-  if (!ruffloDepRange) {
+  if (!swarmdoDepRange) {
     violations.push(
-      `rufflo/package.json does not declare @rufflo/cli — wrapper must depend on the CLI it wraps`
+      `swarmdo/package.json does not declare @swarmdo/cli — wrapper must depend on the CLI it wraps`
     );
   } else {
-    checks.push(`rufflo wraps @rufflo/cli with range "${ruffloDepRange}" — cli published as ${cliVersion}`);
+    checks.push(`swarmdo wraps @swarmdo/cli with range "${swarmdoDepRange}" — cli published as ${cliVersion}`);
 
     // 1a. Range must include the current cli version
-    if (!semver.satisfies(cliVersion, ruffloDepRange, { includePrerelease: true })) {
+    if (!semver.satisfies(cliVersion, swarmdoDepRange, { includePrerelease: true })) {
       violations.push(
-        `rufflo's "@rufflo/cli": "${ruffloDepRange}" does NOT include the cli's actual ` +
+        `swarmdo's "@swarmdo/cli": "${swarmdoDepRange}" does NOT include the cli's actual ` +
         `version ${cliVersion}. Bump the range to "^${cliVersion}" or wider that covers it.`
       );
     }
 
     // 1b. If the cli is on stable semver (no pre-release), the dep must not be on a pre-release range
     const cliPrerelease = semver.prerelease(cliVersion);
-    const rangeUsesPrerelease = /-alpha\.|-beta\.|-rc\.|alpha\.\d+|beta\.\d+|rc\.\d+/.test(ruffloDepRange);
+    const rangeUsesPrerelease = /-alpha\.|-beta\.|-rc\.|alpha\.\d+|beta\.\d+|rc\.\d+/.test(swarmdoDepRange);
     if (!cliPrerelease && rangeUsesPrerelease) {
       violations.push(
-        `rufflo's "@rufflo/cli": "${ruffloDepRange}" carries a pre-release tag but cli ${cliVersion} ` +
+        `swarmdo's "@swarmdo/cli": "${swarmdoDepRange}" carries a pre-release tag but cli ${cliVersion} ` +
         `is on stable semver. Pre-release ranges widen the dedupe walk and have caused real-world ` +
         `crashes (see #1147 / #2018 / #2127). Replace with a plain caret range like "^${cliVersion}".`
       );
@@ -92,14 +92,14 @@ if (!ruffloPkg) {
   }
 }
 
-// ── 2. root rufflo umbrella sibling deps ────────────────────────────────
+// ── 2. root swarmdo umbrella sibling deps ────────────────────────────────
 
 const rootPkg = readPkg('package.json');
 const siblingsToCheck = [
-  { dep: '@rufflo/cli-core', workspace: 'v3/@rufflo/cli-core/package.json' },
-  { dep: '@rufflo/mcp',      workspace: 'v3/@rufflo/mcp/package.json' },
-  { dep: '@rufflo/neural',   workspace: 'v3/@rufflo/neural/package.json' },
-  { dep: '@rufflo/shared',   workspace: 'v3/@rufflo/shared/package.json' },
+  { dep: '@swarmdo/cli-core', workspace: 'v3/@swarmdo/cli-core/package.json' },
+  { dep: '@swarmdo/mcp',      workspace: 'v3/@swarmdo/mcp/package.json' },
+  { dep: '@swarmdo/neural',   workspace: 'v3/@swarmdo/neural/package.json' },
+  { dep: '@swarmdo/shared',   workspace: 'v3/@swarmdo/shared/package.json' },
 ];
 
 for (const { dep, workspace } of siblingsToCheck) {
@@ -107,11 +107,11 @@ for (const { dep, workspace } of siblingsToCheck) {
   if (!wsPkg) continue; // best-effort — skip if workspace missing
   const range = rootPkg?.dependencies?.[dep];
   if (!range) continue;
-  checks.push(`rufflo umbrella → ${dep}: range "${range}" — workspace at ${wsPkg.version}`);
+  checks.push(`swarmdo umbrella → ${dep}: range "${range}" — workspace at ${wsPkg.version}`);
 
   if (!semver.satisfies(wsPkg.version, range, { includePrerelease: true })) {
     violations.push(
-      `rufflo's "${dep}": "${range}" does NOT include the workspace's actual ` +
+      `swarmdo's "${dep}": "${range}" does NOT include the workspace's actual ` +
       `version ${wsPkg.version}. Bump the range.`
     );
   }
@@ -131,5 +131,5 @@ if (violations.length === 0) {
 console.error('\nviolations:');
 for (const v of violations) console.error(`  ✗ ${v}`);
 console.error(`\n${violations.length} violation(s) — see remediation hints above.`);
-console.error('Reference: ruvnet/ruflo#2127 (Invalid Version dedupe crash).');
+console.error('Reference: ruvnet/swarmdo#2127 (Invalid Version dedupe crash).');
 process.exit(1);

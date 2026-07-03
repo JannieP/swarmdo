@@ -1,7 +1,7 @@
 /**
  * RvfBackend - RVF Format Vector Storage for AgentDB
  *
- * Implements VectorBackend and VectorBackendAsync using the @rufvector/rvf SDK.
+ * Implements VectorBackend and VectorBackendAsync using the @swarmvector/rvf SDK.
  * Uses N-API backend (fast) on Node.js with WASM fallback for browser/edge.
  *
  * Features:
@@ -16,7 +16,7 @@
  * - Performance statistics tracking
  *
  * Security:
- * - Path validation (reuses RuVectorBackend patterns)
+ * - Path validation (reuses SwarmVectorBackend patterns)
  * - Bounded batch sizes and metadata limits
  * - No prototype pollution in metadata handling
  */
@@ -63,7 +63,7 @@ interface PerfStats {
     compactionCount: number;
 }
 /**
- * RvfBackend - VectorBackend + VectorBackendAsync implementation using @rufvector/rvf
+ * RvfBackend - VectorBackend + VectorBackendAsync implementation using @swarmvector/rvf
  */
 export declare class RvfBackend implements VectorBackendAsync {
     readonly name: "rvf";
@@ -80,7 +80,7 @@ export declare class RvfBackend implements VectorBackendAsync {
     constructor(config: VectorConfig | RvfConfig);
     /**
      * Initialize the RVF database connection.
-     * Lazy-loads @rufvector/rvf to avoid hard dependency.
+     * Lazy-loads @swarmvector/rvf to avoid hard dependency.
      */
     initialize(): Promise<void>;
     insert(id: string, embedding: Float32Array, metadata?: Record<string, unknown>): void;

@@ -1,5 +1,5 @@
 /**
- * IntelligenceStore - SQLite persistence for RuVector intelligence layer
+ * IntelligenceStore - SQLite persistence for SwarmVector intelligence layer
  *
  * Uses sql.js (pure JS SQLite) as primary backend for cross-platform compatibility
  * Falls back to better-sqlite3 only if sql.js fails

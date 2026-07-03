@@ -137,12 +137,12 @@ Once deployed, your widget will be available at:
 Share this code with users who want to embed the widget:
 
 ```html
-<!-- Rufflo Research Widget Container -->
-<div id="rufflo-research-widget-container"></div>
+<!-- Swarmdo Research Widget Container -->
+<div id="swarmdo-research-widget-container"></div>
 
 <!-- Configuration (optional) -->
 <script>
-  window.RuffloResearchWidgetConfig = {
+  window.SwarmdoResearchWidgetConfig = {
     primaryColor: "#8b5cf6",
     accentColor: "#22c55e",
     backgroundColor: "#1a1a1a"

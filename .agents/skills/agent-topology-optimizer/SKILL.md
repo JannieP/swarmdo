@@ -731,31 +731,31 @@ class SimulatedAnnealingOptimizer {
 ### Topology Optimization Commands
 ```bash
 # Analyze current topology
-npx rufflo topology-analyze --swarm-id <id> --metrics performance
+npx swarmdo topology-analyze --swarm-id <id> --metrics performance
 
 # Optimize topology automatically
-npx rufflo topology-optimize --swarm-id <id> --strategy adaptive
+npx swarmdo topology-optimize --swarm-id <id> --strategy adaptive
 
 # Compare topology configurations
-npx rufflo topology-compare --topologies ["hierarchical", "mesh", "hybrid"]
+npx swarmdo topology-compare --topologies ["hierarchical", "mesh", "hybrid"]
 
 # Generate topology recommendations
-npx rufflo topology-recommend --workload-profile <file> --constraints <file>
+npx swarmdo topology-recommend --workload-profile <file> --constraints <file>
 
 # Monitor topology performance
-npx rufflo topology-monitor --swarm-id <id> --interval 60
+npx swarmdo topology-monitor --swarm-id <id> --interval 60
 ```
 
 ### Agent Placement Commands
 ```bash
 # Optimize agent placement
-npx rufflo placement-optimize --algorithm genetic --agents <agent-list>
+npx swarmdo placement-optimize --algorithm genetic --agents <agent-list>
 
 # Analyze placement efficiency
-npx rufflo placement-analyze --current-placement <config>
+npx swarmdo placement-analyze --current-placement <config>
 
 # Generate placement recommendations
-npx rufflo placement-recommend --communication-patterns <file>
+npx swarmdo placement-recommend --communication-patterns <file>
 ```
 
 ## Integration Points

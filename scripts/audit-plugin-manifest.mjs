@@ -15,7 +15,7 @@
 // USAGE
 //   node scripts/audit-plugin-manifest.mjs                 # all plugins
 //   node scripts/audit-plugin-manifest.mjs --format json   # CI-consumable
-//   node scripts/audit-plugin-manifest.mjs --only rufflo-cost-tracker
+//   node scripts/audit-plugin-manifest.mjs --only swarmdo-cost-tracker
 //
 // CHECKS per plugins/<name>/.claude-plugin/plugin.json
 //   1. File exists and parses as JSON.
@@ -67,7 +67,7 @@ function discoverManifests() {
     if (!s.isDirectory()) continue;
     const manifest = join(dir, '.claude-plugin', 'plugin.json');
     // Only include plugins that opt into the SKILL convention (presence
-    // of .claude-plugin/). TS-source plugins like rufflo-arena have
+    // of .claude-plugin/). TS-source plugins like swarmdo-arena have
     // package.json instead — skip them silently.
     if (!existsSync(manifest)) continue;
     out.push({ plugin, path: manifest });

@@ -7,7 +7,7 @@ description: "Achieve aggressive v3 performance targets: unverified (no benchmar
 
 ## What This Skill Does
 
-Validates and optimizes rufflo v3 to achieve industry-leading performance through Flash Attention, AgentDB HNSW indexing, and comprehensive system optimization with continuous benchmarking.
+Validates and optimizes swarmdo v3 to achieve industry-leading performance through Flash Attention, AgentDB HNSW indexing, and comprehensive system optimization with continuous benchmarking.
 
 ## Quick Start
 

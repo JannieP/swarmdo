@@ -1,7 +1,7 @@
 /**
  * Healthcare Clinical Plugin - Bridges Barrel Export
  *
- * @module @rufflo/plugin-healthcare-clinical/bridges
+ * @module @swarmdo/plugin-healthcare-clinical/bridges
  */
 
 export {

@@ -15,7 +15,7 @@
  * Implements ADR-001: agentic-flow@alpha compatibility
  */
 import { z } from 'zod';
-import { getDefaultFederationHub, } from '../../@rufflo/swarm/src/federation-hub.js';
+import { getDefaultFederationHub, } from '../../@swarmdo/swarm/src/federation-hub.js';
 // ============================================================================
 // Input Schemas
 // ============================================================================

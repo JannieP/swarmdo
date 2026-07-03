@@ -1,7 +1,7 @@
 /**
  * WasmStoreBridge - WASM in-memory vector store bridge
  *
- * Delegates to @rufvector/rvf-wasm store functions for browser-side
+ * Delegates to @swarmvector/rvf-wasm store functions for browser-side
  * in-memory vector storage. All methods handle the case where
  * rvf-wasm init() hasn't been called and return safe defaults.
  */

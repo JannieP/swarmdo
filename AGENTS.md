@@ -1,4 +1,4 @@
-# Rufflo V3 - Agent Guide
+# Swarmdo V3 - Agent Guide
 
 > **For OpenAI Codex CLI** - Agentic AI Foundation standard
 > Skills: `$skill-name` | Config: `.agents/config.toml`
@@ -9,10 +9,10 @@
 
 ```
 ╔═══════════════════════════════════════════════════════════════════════════╗
-║  1. rufflo = LEDGER (tracks state, stores memory, coordinates)       ║
+║  1. swarmdo = LEDGER (tracks state, stores memory, coordinates)       ║
 ║  2. Codex = EXECUTOR (writes code, runs commands, creates files)          ║
-║  3. NEVER stop after calling rufflo - IMMEDIATELY continue working   ║
-║  4. If you need something BUILT/EXECUTED, YOU do it, not rufflo      ║
+║  3. NEVER stop after calling swarmdo - IMMEDIATELY continue working   ║
+║  4. If you need something BUILT/EXECUTED, YOU do it, not swarmdo      ║
 ║  5. ALWAYS search memory BEFORE starting: memory search --query "task"    ║
 ║  6. ALWAYS store patterns AFTER success: memory store --namespace patterns║
 ╚═══════════════════════════════════════════════════════════════════════════╝
@@ -35,18 +35,18 @@
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### ❌ WRONG: Expecting rufflo to execute tasks
+### ❌ WRONG: Expecting swarmdo to execute tasks
 ```bash
-npx rufflo swarm start --objective "Build API"
-# WRONG: Waiting for rufflo to build the API
+npx swarmdo swarm start --objective "Build API"
+# WRONG: Waiting for swarmdo to build the API
 # Claude-flow does NOT execute code!
 ```
 
-### ✅ CORRECT: Codex executes, rufflo tracks
+### ✅ CORRECT: Codex executes, swarmdo tracks
 ```bash
-# 1. Tell rufflo what you're doing (optional coordination)
-npx rufflo swarm init --topology hierarchical --max-agents 1
-npx rufflo agent spawn --type coder --name codex-worker
+# 1. Tell swarmdo what you're doing (optional coordination)
+npx swarmdo swarm init --topology hierarchical --max-agents 1
+npx swarmdo agent spawn --type coder --name codex-worker
 
 # 2. YOU (CODEX) DO THE ACTUAL WORK:
 mkdir -p src
@@ -54,8 +54,8 @@ cat > src/api.ts << 'EOF'
 export function hello() { return "Hello World"; }
 EOF
 
-# 3. Report to rufflo what you did (optional)
-npx rufflo memory store --key "api-created" --value "src/api.ts" --namespace results
+# 3. Report to swarmdo what you did (optional)
+npx swarmdo memory store --key "api-created" --value "src/api.ts" --namespace results
 ```
 
 ### The Division of Labor
@@ -63,7 +63,7 @@ npx rufflo memory store --key "api-created" --value "src/api.ts" --namespace res
 | Component | Role | Examples |
 |-----------|------|----------|
 | **CODEX** | EXECUTES | Write files, run tests, create code, shell commands |
-| **rufflo** | ORCHESTRATES | Track agents, store memory, coordinate tasks |
+| **swarmdo** | ORCHESTRATES | Track agents, store memory, coordinate tasks |
 
 ---
 
@@ -71,16 +71,16 @@ npx rufflo memory store --key "api-created" --value "src/api.ts" --namespace res
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│  ❌ WRONG: Call rufflo → STOP → Wait for results                   │
-│  ✅ RIGHT: Call rufflo → IMMEDIATELY continue → YOU do the work    │
+│  ❌ WRONG: Call swarmdo → STOP → Wait for results                   │
+│  ✅ RIGHT: Call swarmdo → IMMEDIATELY continue → YOU do the work    │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### ❌ WRONG Pattern (Stopping)
 ```bash
-npx rufflo swarm init --topology hierarchical
-npx rufflo agent spawn --type coder --name worker-1
-npx rufflo swarm start --objective "Build hello world"
+npx swarmdo swarm init --topology hierarchical
+npx swarmdo agent spawn --type coder --name worker-1
+npx swarmdo swarm start --objective "Build hello world"
 # WRONG: Codex stops here and waits for something to happen
 # Nothing will happen! Claude-flow doesn't execute code!
 ```
@@ -88,19 +88,19 @@ npx rufflo swarm start --objective "Build hello world"
 ### ✅ CORRECT Pattern (Continue Immediately)
 ```bash
 # Step 1: Coordination (optional)
-npx rufflo swarm init --topology hierarchical
-npx rufflo agent spawn --type coder --name worker-1
+npx swarmdo swarm init --topology hierarchical
+npx swarmdo agent spawn --type coder --name worker-1
 
 # Step 2: IMMEDIATELY DO THE WORK YOURSELF - DON'T WAIT!
 echo 'console.log("Hello World!");' > hello.js
 node hello.js
 
 # Step 3: Report what you did
-npx rufflo memory store --key "result" --value "Hello World printed" --namespace results
+npx swarmdo memory store --key "result" --value "Hello World printed" --namespace results
 ```
 
 ### The Rule
-**After ANY rufflo command, IMMEDIATELY continue with your own work.**
+**After ANY swarmdo command, IMMEDIATELY continue with your own work.**
 
 Claude-flow commands return instantly. They create coordination RECORDS only.
 You must ALWAYS follow up with YOUR OWN execution.
@@ -114,9 +114,9 @@ You must ALWAYS follow up with YOUR OWN execution.
 
 ---
 
-### When to Use Rufflo Commands
+### When to Use Swarmdo Commands
 
-| Use Case | Rufflo Command | Then Codex Does |
+| Use Case | Swarmdo Command | Then Codex Does |
 |----------|---------------------|-----------------|
 | Track progress | `memory store --key "step1" --value "done"` | Continue to next step |
 | Multi-step tasks | `task create --description "step 2"` | Execute step 2 |
@@ -127,14 +127,14 @@ You must ALWAYS follow up with YOUR OWN execution.
 
 ```bash
 # STEP 1: Optional - register with orchestrator
-npx rufflo swarm init --topology mesh --max-agents 1
+npx swarmdo swarm init --topology mesh --max-agents 1
 
 # STEP 2: CODEX DOES THE WORK
 echo 'console.log("Hello World!");' > hello.js
 node hello.js
 
 # STEP 3: Optional - report completion
-npx rufflo memory store --key "hello-result" --value "printed Hello World" --namespace results
+npx swarmdo memory store --key "hello-result" --value "printed Hello World" --namespace results
 ```
 
 **REMEMBER: If you need something DONE, YOU do it. Claude-flow just tracks.**
@@ -147,32 +147,32 @@ npx rufflo memory store --key "hello-result" --value "printed Hello World" --nam
 
 ```bash
 # 5-AGENT SWARM - Run these commands in sequence:
-npx rufflo swarm init --topology hierarchical --max-agents 8
-npx rufflo agent spawn --type coordinator --name coord-1
-npx rufflo agent spawn --type coder --name coder-1
-npx rufflo agent spawn --type coder --name coder-2
-npx rufflo agent spawn --type tester --name tester-1
-npx rufflo agent spawn --type reviewer --name reviewer-1
-npx rufflo swarm start --objective "Your task here" --strategy development
+npx swarmdo swarm init --topology hierarchical --max-agents 8
+npx swarmdo agent spawn --type coordinator --name coord-1
+npx swarmdo agent spawn --type coder --name coder-1
+npx swarmdo agent spawn --type coder --name coder-2
+npx swarmdo agent spawn --type tester --name tester-1
+npx swarmdo agent spawn --type reviewer --name reviewer-1
+npx swarmdo swarm start --objective "Your task here" --strategy development
 ```
 
 ### Common Swarm Patterns
 
 | Task | Exact Command |
 |------|---------------|
-| Init hierarchical swarm | `npx rufflo swarm init --topology hierarchical --max-agents 8` |
-| Init mesh swarm | `npx rufflo swarm init --topology mesh --max-agents 5` |
-| Init V3 mode (15 agents) | `npx rufflo swarm init --v3-mode` |
-| Spawn coder | `npx rufflo agent spawn --type coder --name coder-1` |
-| Spawn tester | `npx rufflo agent spawn --type tester --name tester-1` |
-| Spawn coordinator | `npx rufflo agent spawn --type coordinator --name coord-1` |
-| Spawn architect | `npx rufflo agent spawn --type architect --name arch-1` |
-| Spawn reviewer | `npx rufflo agent spawn --type reviewer --name rev-1` |
-| Spawn researcher | `npx rufflo agent spawn --type researcher --name res-1` |
-| Start swarm | `npx rufflo swarm start --objective "task" --strategy development` |
-| Check swarm status | `npx rufflo swarm status` |
-| List agents | `npx rufflo agent list` |
-| Stop swarm | `npx rufflo swarm stop` |
+| Init hierarchical swarm | `npx swarmdo swarm init --topology hierarchical --max-agents 8` |
+| Init mesh swarm | `npx swarmdo swarm init --topology mesh --max-agents 5` |
+| Init V3 mode (15 agents) | `npx swarmdo swarm init --v3-mode` |
+| Spawn coder | `npx swarmdo agent spawn --type coder --name coder-1` |
+| Spawn tester | `npx swarmdo agent spawn --type tester --name tester-1` |
+| Spawn coordinator | `npx swarmdo agent spawn --type coordinator --name coord-1` |
+| Spawn architect | `npx swarmdo agent spawn --type architect --name arch-1` |
+| Spawn reviewer | `npx swarmdo agent spawn --type reviewer --name rev-1` |
+| Spawn researcher | `npx swarmdo agent spawn --type researcher --name res-1` |
+| Start swarm | `npx swarmdo swarm start --objective "task" --strategy development` |
+| Check swarm status | `npx swarmdo swarm status` |
+| List agents | `npx swarmdo agent list` |
+| Stop swarm | `npx swarmdo swarm stop` |
 
 ### Agent Types (Use with `--type`)
 
@@ -191,20 +191,20 @@ npx rufflo swarm start --objective "Your task here" --strategy development
 
 | Action | Command |
 |--------|---------|
-| Create task | `npx rufflo task create --type implementation --description "desc"` |
-| List tasks | `npx rufflo task list` |
-| Assign task | `npx rufflo task assign TASK_ID --agent AGENT_NAME` |
-| Task status | `npx rufflo task status TASK_ID` |
-| Cancel task | `npx rufflo task cancel TASK_ID` |
+| Create task | `npx swarmdo task create --type implementation --description "desc"` |
+| List tasks | `npx swarmdo task list` |
+| Assign task | `npx swarmdo task assign TASK_ID --agent AGENT_NAME` |
+| Task status | `npx swarmdo task status TASK_ID` |
+| Cancel task | `npx swarmdo task cancel TASK_ID` |
 
 ### Memory Commands
 
 | Action | Command |
 |--------|---------|
-| Store | `npx rufflo memory store --key "key" --value "value" --namespace patterns` |
-| Search | `npx rufflo memory search --query "search terms"` |
-| List | `npx rufflo memory list --namespace patterns` |
-| Retrieve | `npx rufflo memory retrieve --key "key"` |
+| Store | `npx swarmdo memory store --key "key" --value "value" --namespace patterns` |
+| Search | `npx swarmdo memory search --query "search terms"` |
+| List | `npx swarmdo memory list --namespace patterns` |
+| Retrieve | `npx swarmdo memory retrieve --key "key"` |
 
 ---
 
@@ -214,8 +214,8 @@ npx rufflo swarm start --objective "Your task here" --strategy development
 
 **Step 1: Setup coordination** (returns instantly - don't stop!)
 ```bash
-npx rufflo swarm init --topology mesh --max-agents 5
-npx rufflo agent spawn --type coder --name hello-main
+npx swarmdo swarm init --topology mesh --max-agents 5
+npx swarmdo agent spawn --type coder --name hello-main
 # ⚠️ DON'T STOP HERE - CONTINUE IMMEDIATELY TO STEP 2
 ```
 
@@ -231,15 +231,15 @@ node /tmp/hello-swarm.js
 
 **Step 3: Report completion** (optional - store results)
 ```bash
-npx rufflo memory store --key "hello-world-result" --value "Executed: Hello World from Swarm!" --namespace results
+npx swarmdo memory store --key "hello-world-result" --value "Executed: Hello World from Swarm!" --namespace results
 ```
 
 ### Recipe 1b: 5-Agent Concurrent Hello World (COMPLETE)
 ```bash
 # COORDINATION (instant - creates records only)
-npx rufflo swarm init --topology hierarchical --max-agents 5
+npx swarmdo swarm init --topology hierarchical --max-agents 5
 for i in 1 2 3 4 5; do
-  npx rufflo agent spawn --type coder --name "worker-$i"
+  npx swarmdo agent spawn --type coder --name "worker-$i"
 done
 
 # ⚠️ NOW YOU DO THE ACTUAL CONCURRENT WORK:
@@ -250,70 +250,70 @@ wait
 echo "All 5 workers completed!"
 
 # REPORT (optional)
-npx rufflo memory store --key "concurrent-result" --value "5 workers completed" --namespace results
+npx swarmdo memory store --key "concurrent-result" --value "5 workers completed" --namespace results
 ```
 
 ### Recipe 1b: Hello World (Single Command Block)
 ```bash
 # All-in-one execution
-npx rufflo swarm init --topology mesh --max-agents 5 && \
-npx rufflo agent spawn --type coder --name hello-main && \
-npx rufflo swarm start --objective "Print hello world" --strategy development && \
+npx swarmdo swarm init --topology mesh --max-agents 5 && \
+npx swarmdo agent spawn --type coder --name hello-main && \
+npx swarmdo swarm start --objective "Print hello world" --strategy development && \
 echo 'console.log("Hello World from Swarm!");' > /tmp/hello-swarm.js && \
 node /tmp/hello-swarm.js && \
-npx rufflo memory store --key "hello-world-result" --value "Success" --namespace results
+npx swarmdo memory store --key "hello-world-result" --value "Success" --namespace results
 ```
 
 ### Recipe 2: Feature Implementation (6 Agents)
 ```bash
-npx rufflo swarm init --topology hierarchical --max-agents 8
-npx rufflo agent spawn --type coordinator --name lead
-npx rufflo agent spawn --type architect --name arch
-npx rufflo agent spawn --type coder --name impl-1
-npx rufflo agent spawn --type coder --name impl-2
-npx rufflo agent spawn --type tester --name test
-npx rufflo agent spawn --type reviewer --name review
-npx rufflo swarm start --objective "Implement [feature]" --strategy development
+npx swarmdo swarm init --topology hierarchical --max-agents 8
+npx swarmdo agent spawn --type coordinator --name lead
+npx swarmdo agent spawn --type architect --name arch
+npx swarmdo agent spawn --type coder --name impl-1
+npx swarmdo agent spawn --type coder --name impl-2
+npx swarmdo agent spawn --type tester --name test
+npx swarmdo agent spawn --type reviewer --name review
+npx swarmdo swarm start --objective "Implement [feature]" --strategy development
 ```
 
 ### Recipe 3: Bug Fix (4 Agents)
 ```bash
-npx rufflo swarm init --topology hierarchical --max-agents 4
-npx rufflo agent spawn --type coordinator --name lead
-npx rufflo agent spawn --type researcher --name debug
-npx rufflo agent spawn --type coder --name fix
-npx rufflo agent spawn --type tester --name verify
-npx rufflo swarm start --objective "Fix [bug]" --strategy development
+npx swarmdo swarm init --topology hierarchical --max-agents 4
+npx swarmdo agent spawn --type coordinator --name lead
+npx swarmdo agent spawn --type researcher --name debug
+npx swarmdo agent spawn --type coder --name fix
+npx swarmdo agent spawn --type tester --name verify
+npx swarmdo swarm start --objective "Fix [bug]" --strategy development
 ```
 
 ### Recipe 4: Security Audit (3 Agents)
 ```bash
-npx rufflo swarm init --topology hierarchical --max-agents 4
-npx rufflo agent spawn --type coordinator --name lead
-npx rufflo agent spawn --type security-architect --name audit
-npx rufflo agent spawn --type reviewer --name review
-npx rufflo swarm start --objective "Security audit" --strategy development
+npx swarmdo swarm init --topology hierarchical --max-agents 4
+npx swarmdo agent spawn --type coordinator --name lead
+npx swarmdo agent spawn --type security-architect --name audit
+npx swarmdo agent spawn --type reviewer --name review
+npx swarmdo swarm start --objective "Security audit" --strategy development
 ```
 
 ### Recipe 5: V3 Full Coordination (15 Agents)
 ```bash
-npx rufflo swarm init --v3-mode
-npx rufflo swarm coordinate --agents 15
+npx swarmdo swarm init --v3-mode
+npx swarmdo swarm coordinate --agents 15
 ```
 
 ---
 
 ## 📋 BEHAVIORAL RULES
 
-- **YOU (CODEX) execute tasks** - rufflo only orchestrates
+- **YOU (CODEX) execute tasks** - swarmdo only orchestrates
 - Do what is asked; nothing more, nothing less
 - NEVER create files unless absolutely necessary
 - ALWAYS prefer editing existing files
 - NEVER save to root folder
 - NEVER commit secrets or .env files
 - ALWAYS read a file before editing it
-- NEVER wait for rufflo to "do work" - it doesn't execute, YOU do
-- Use rufflo commands to TRACK progress, not to EXECUTE tasks
+- NEVER wait for swarmdo to "do work" - it doesn't execute, YOU do
+- Use swarmdo commands to TRACK progress, not to EXECUTE tasks
 
 ## 📁 FILE ORGANIZATION
 
@@ -347,64 +347,64 @@ npx rufflo swarm coordinate --agents 15
 
 ### Swarm Commands
 ```bash
-npx rufflo swarm init [--topology TYPE] [--max-agents N] [--v3-mode]
-npx rufflo swarm start --objective "task" --strategy [development|research]
-npx rufflo swarm status [SWARM_ID]
-npx rufflo swarm stop [SWARM_ID]
-npx rufflo swarm scale --count N
-npx rufflo swarm coordinate --agents N
+npx swarmdo swarm init [--topology TYPE] [--max-agents N] [--v3-mode]
+npx swarmdo swarm start --objective "task" --strategy [development|research]
+npx swarmdo swarm status [SWARM_ID]
+npx swarmdo swarm stop [SWARM_ID]
+npx swarmdo swarm scale --count N
+npx swarmdo swarm coordinate --agents N
 ```
 
 ### Agent Commands
 ```bash
-npx rufflo agent spawn --type TYPE --name NAME
-npx rufflo agent list [--filter active|idle|busy]
-npx rufflo agent status AGENT_ID
-npx rufflo agent stop AGENT_ID
-npx rufflo agent metrics [AGENT_ID]
-npx rufflo agent health
-npx rufflo agent logs AGENT_ID
+npx swarmdo agent spawn --type TYPE --name NAME
+npx swarmdo agent list [--filter active|idle|busy]
+npx swarmdo agent status AGENT_ID
+npx swarmdo agent stop AGENT_ID
+npx swarmdo agent metrics [AGENT_ID]
+npx swarmdo agent health
+npx swarmdo agent logs AGENT_ID
 ```
 
 ### Task Commands
 ```bash
-npx rufflo task create --type TYPE --description "desc"
-npx rufflo task list [--all]
-npx rufflo task status TASK_ID
-npx rufflo task assign TASK_ID --agent AGENT_NAME
-npx rufflo task cancel TASK_ID
-npx rufflo task retry TASK_ID
+npx swarmdo task create --type TYPE --description "desc"
+npx swarmdo task list [--all]
+npx swarmdo task status TASK_ID
+npx swarmdo task assign TASK_ID --agent AGENT_NAME
+npx swarmdo task cancel TASK_ID
+npx swarmdo task retry TASK_ID
 ```
 
 ### Memory Commands
 ```bash
-npx rufflo memory store --key KEY --value VALUE [--namespace NS]
-npx rufflo memory search --query "terms" [--namespace NS]
-npx rufflo memory list [--namespace NS]
-npx rufflo memory retrieve --key KEY [--namespace NS]
-npx rufflo memory init [--force]
+npx swarmdo memory store --key KEY --value VALUE [--namespace NS]
+npx swarmdo memory search --query "terms" [--namespace NS]
+npx swarmdo memory list [--namespace NS]
+npx swarmdo memory retrieve --key KEY [--namespace NS]
+npx swarmdo memory init [--force]
 ```
 
 ### Hooks Commands
 ```bash
-npx rufflo hooks pre-task --description "task"
-npx rufflo hooks post-task --task-id ID --success true
-npx rufflo hooks route --task "task"
-npx rufflo hooks session-start --session-id ID
-npx rufflo hooks session-end --export-metrics true
-npx rufflo hooks worker list
-npx rufflo hooks worker dispatch --trigger audit
+npx swarmdo hooks pre-task --description "task"
+npx swarmdo hooks post-task --task-id ID --success true
+npx swarmdo hooks route --task "task"
+npx swarmdo hooks session-start --session-id ID
+npx swarmdo hooks session-end --export-metrics true
+npx swarmdo hooks worker list
+npx swarmdo hooks worker dispatch --trigger audit
 ```
 
 ### System Commands
 ```bash
-npx rufflo init [--wizard] [--codex] [--full]
-npx rufflo daemon start
-npx rufflo daemon stop
-npx rufflo daemon status
-npx rufflo doctor [--fix]
-npx rufflo status
-npx rufflo mcp start
+npx swarmdo init [--wizard] [--codex] [--full]
+npx swarmdo daemon start
+npx swarmdo daemon stop
+npx swarmdo daemon status
+npx swarmdo doctor [--fix]
+npx swarmdo status
+npx swarmdo mcp start
 ```
 
 ---
@@ -447,9 +447,9 @@ npx rufflo mcp start
 
 ### Environment Variables
 ```bash
-RUFFLO_CONFIG=./rufflo.config.json
-RUFFLO_LOG_LEVEL=info
-RUFFLO_MEMORY_BACKEND=hybrid
+SWARMDO_CONFIG=./swarmdo.config.json
+SWARMDO_LOG_LEVEL=info
+SWARMDO_MEMORY_BACKEND=hybrid
 ```
 
 ---
@@ -479,7 +479,7 @@ Codex doesn't have native hooks like Claude Code, but uses **MCP (Model Context 
 
 ### MCP Auto-Registration
 
-When you run `npx rufflo init --codex`, the MCP server is **automatically registered** with Codex.
+When you run `npx swarmdo init --codex`, the MCP server is **automatically registered** with Codex.
 
 ```bash
 # Verify MCP is registered:
@@ -487,16 +487,16 @@ codex mcp list
 
 # Expected output:
 # Name         Command  Args                   Status
-# rufflo  npx      rufflo mcp start  enabled
+# swarmdo  npx      swarmdo mcp start  enabled
 
 # If not present, add manually:
-codex mcp add rufflo -- npx rufflo mcp start
+codex mcp add swarmdo -- npx swarmdo mcp start
 ```
 
 ### Test MCP Connection
 ```bash
 # Test MCP server starts correctly:
-npx rufflo mcp start --test
+npx swarmdo mcp start --test
 ```
 
 ### MCP Tools Available
@@ -603,13 +603,13 @@ Use tool: memory_store
 
 ### CLI Fallback (if MCP unavailable)
 ```bash
-npx rufflo memory search --query "keywords" --namespace patterns
-npx rufflo memory store --key "pattern-x" --value "what worked" --namespace patterns
+npx swarmdo memory search --query "keywords" --namespace patterns
+npx swarmdo memory store --key "pattern-x" --value "what worked" --namespace patterns
 ```
 
 ### Coordination via MCP
 
-When rufflo is added as MCP server, Codex can call tools directly:
+When swarmdo is added as MCP server, Codex can call tools directly:
 ```
 Use tool: swarm_init with topology="hierarchical"
 Use tool: memory_store with key="result" value="success"
@@ -618,9 +618,9 @@ Use tool: memory_store with key="result" value="success"
 ### config.toml MCP Setup
 ```toml
 # ~/.codex/config.toml
-[mcp_servers.rufflo]
+[mcp_servers.swarmdo]
 command = "npx"
-args = ["rufflo", "mcp", "start"]
+args = ["swarmdo", "mcp", "start"]
 enabled = true
 ```
 
@@ -631,4 +631,4 @@ enabled = true
 - Docs: https://github.com/ruvnet/claude-flow
 - Issues: https://github.com/ruvnet/claude-flow/issues
 
-**Remember: Codex executes, rufflo orchestrates!**
+**Remember: Codex executes, swarmdo orchestrates!**

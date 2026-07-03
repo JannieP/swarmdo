@@ -5,7 +5,7 @@
  * - InfoNCE contrastive loss for embedding refinement
  * - Hard negative mining for effective training samples
  * - Curriculum scheduling for progressive difficulty
- * - AdamW optimizer for weight updates (via @rufvector/attention when available)
+ * - AdamW optimizer for weight updates (via @swarmvector/attention when available)
  *
  * Security:
  * - Operates on embeddings only (no user text)

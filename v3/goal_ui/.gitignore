@@ -27,16 +27,16 @@ public/widget.css
 *.sln
 *.sw?
 
-# Rufflo generated files
+# Swarmdo generated files
 .claude/settings.local.json
 .mcp.json
-rufflo.config.json
+swarmdo.config.json
 .swarm/
 .hive-mind/
-.rufflo/
+.swarmdo/
 memory/
 coordination/
-memory/rufflo-data.json
+memory/swarmdo-data.json
 memory/sessions/*
 !memory/sessions/README.md
 memory/agents/*
@@ -50,6 +50,6 @@ coordination/orchestration/*
 *.sqlite
 *.sqlite-journal
 *.sqlite-wal
-rufflo
+swarmdo
 # Removed Windows wrapper files per user request
 hive-mind-prompt-*.txt

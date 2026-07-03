@@ -1,7 +1,7 @@
 /**
  * NativeAccelerator - ADR-007 Phase 1 Capability Bridge
  *
- * Lazy-loads @rufvector APIs and provides accelerated alternatives to JS
+ * Lazy-loads @swarmvector APIs and provides accelerated alternatives to JS
  * implementations. All imports are lazy/optional with JS fallbacks.
  */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -498,7 +498,7 @@ export class NativeAccelerator {
     // ─── Loaders ───
     async loadSimd() {
         try {
-            const { SimdOps } = await import('@rufvector/rufllm');
+            const { SimdOps } = await import('@swarmvector/swarmllm');
             if (SimdOps)
                 this._simd = new SimdOps();
         }
@@ -506,7 +506,7 @@ export class NativeAccelerator {
     }
     async loadWasmVerify() {
         try {
-            const wasm = await import('@rufvector/rvf-wasm');
+            const wasm = await import('@swarmvector/rvf-wasm');
             if (wasm.rvf_witness_verify)
                 this._witnessVerify = wasm.rvf_witness_verify;
             if (wasm.rvf_witness_count)
@@ -520,7 +520,7 @@ export class NativeAccelerator {
     }
     async loadWasmQuantization() {
         try {
-            const wasm = await import('@rufvector/rvf-wasm');
+            const wasm = await import('@swarmvector/rvf-wasm');
             if (wasm.rvf_sq_load_params)
                 this._sqLoad = wasm.rvf_sq_load_params;
             if (wasm.rvf_dequant_i8)
@@ -535,7 +535,7 @@ export class NativeAccelerator {
     async loadWasmStore() { await this._wasmStore.initialize(); }
     async loadNativeAttention() {
         try {
-            const attn = await import('@rufvector/attention');
+            const attn = await import('@swarmvector/attention');
             if (attn.InfoNceLoss)
                 this._infoNceLoss = new attn.InfoNceLoss();
             if (attn.AdamWOptimizer)
@@ -545,7 +545,7 @@ export class NativeAccelerator {
     }
     async loadNativeTensorCompress() {
         try {
-            const gnnMod = await import('@rufvector/gnn');
+            const gnnMod = await import('@swarmvector/gnn');
             if (gnnMod.TensorCompress?.compress)
                 this._tensorCompress = gnnMod.TensorCompress;
         }
@@ -553,7 +553,7 @@ export class NativeAccelerator {
     }
     async loadRouterPersistence() {
         try {
-            const router = await import('@rufvector/router');
+            const router = await import('@swarmvector/router');
             if (router.SemanticRouter?.prototype?.save) {
                 this._routerSave = async (r, p) => r.save(p);
                 this._routerLoad = async (p) => router.SemanticRouter.load(p);
@@ -563,7 +563,7 @@ export class NativeAccelerator {
     }
     async loadSonaExtended() {
         try {
-            const sonaMod = await import('@rufvector/sona');
+            const sonaMod = await import('@swarmvector/sona');
             if (sonaMod.SonaEngine?.prototype?.flush)
                 this._sonaFlush = true;
             if (sonaMod.SonaEngine?.prototype?.addTrajectoryContext)
@@ -575,7 +575,7 @@ export class NativeAccelerator {
     }
     async loadGraphCapabilities() {
         try {
-            const graphMod = await import('@rufvector/graph-node');
+            const graphMod = await import('@swarmvector/graph-node');
             if (graphMod.GraphDatabase?.prototype?.beginTransaction)
                 this._graphTx = true;
             if (graphMod.GraphDatabase?.prototype?.batchInsert)
@@ -587,7 +587,7 @@ export class NativeAccelerator {
     }
     async loadCoreBatch() {
         try {
-            const coreMod = await import('@rufvector/core');
+            const coreMod = await import('@swarmvector/core');
             if (coreMod.VectorDb?.prototype?.batchInsert)
                 this._coreBatchInsert = true;
         }
@@ -595,7 +595,7 @@ export class NativeAccelerator {
     }
     async loadEwcManager() {
         try {
-            const { EwcManager } = await import('@rufvector/rufllm');
+            const { EwcManager } = await import('@swarmvector/swarmllm');
             if (EwcManager)
                 this._ewcManager = new EwcManager();
         }

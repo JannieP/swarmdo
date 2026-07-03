@@ -2,7 +2,7 @@
 //!
 //! An AGI container is a single RVF file that packages the complete intelligence
 //! runtime: micro Linux kernel, Claude Code orchestrator config, Claude Flow
-//! swarm manager, RufVector world model, evaluation harness, witness chains,
+//! swarm manager, SwarmVector world model, evaluation harness, witness chains,
 //! and tool adapters.
 //!
 //! Wire format: 64-byte `AgiContainerHeader` + TLV manifest sections.
@@ -10,7 +10,7 @@
 //! alongside the KERNEL_SEG, WASM_SEG, VEC_SEG, INDEX_SEG, WITNESS_SEG, and
 //! CRYPTO_SEG that hold the actual payload data.
 
-/// Magic bytes for AGI container manifest: "RVAG" (RufVector AGI).
+/// Magic bytes for AGI container manifest: "RVAG" (SwarmVector AGI).
 pub const AGI_MAGIC: u32 = 0x5256_4147;
 
 /// Size of the AGI container header in bytes.

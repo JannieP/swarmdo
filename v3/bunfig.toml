@@ -1,4 +1,4 @@
-# Bun configuration for rufflo v3
+# Bun configuration for swarmdo v3
 # Bun is used for development, but package works with Node.js too
 
 [install]

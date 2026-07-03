@@ -1,7 +1,7 @@
 /**
- * RuVector Graph Database Adapter - Primary Database for AgentDB v2
+ * SwarmVector Graph Database Adapter - Primary Database for AgentDB v2
  *
- * Replaces SQLite with RuVector's graph database for:
+ * Replaces SQLite with SwarmVector's graph database for:
  * - Episodes as nodes with vector embeddings
  * - Skills as nodes with code embeddings
  * - Causal relationships as hyperedges
@@ -73,7 +73,7 @@ export interface CausalEdge {
 /**
  * Graph Database Adapter for AgentDB
  *
- * This replaces SQL.js as the primary database, using RuVector's graph DB
+ * This replaces SQL.js as the primary database, using SwarmVector's graph DB
  * with Cypher queries, hyperedges, and integrated vector search.
  */
 export declare class GraphDatabaseAdapter {
@@ -126,7 +126,7 @@ export declare class GraphDatabaseAdapter {
      * Delete a node by id. With `cascade: true` (default) all incident edges
      * are removed in the same transaction (`DETACH DELETE`); with
      * `cascade: false` the call refuses when incident edges exist (matching
-     * the spec from RuVector#427).
+     * the spec from SwarmVector#427).
      *
      * @returns `deletedNode`: whether the node existed and was removed.
      *          `deletedEdges`: count of incident edges removed (only meaningful
@@ -147,7 +147,7 @@ export declare class GraphDatabaseAdapter {
     /**
      * Delete a hyperedge by id. Member nodes stay intact.
      *
-     * Hyperedges are stored as relationship-like entities in RuVector's graph;
+     * Hyperedges are stored as relationship-like entities in SwarmVector's graph;
      * we use the same Cypher pattern as `deleteEdge` but match `:HYPEREDGE`
      * to disambiguate when the storage represents both as relationships.
      */

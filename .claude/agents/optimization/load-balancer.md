@@ -351,28 +351,28 @@ class CircuitBreaker {
 ### Load Balancing Commands
 ```bash
 # Initialize load balancer
-npx rufflo agent spawn load-balancer --type coordinator
+npx swarmdo agent spawn load-balancer --type coordinator
 
 # Start load balancing
-npx rufflo load-balance --swarm-id <id> --strategy adaptive
+npx swarmdo load-balance --swarm-id <id> --strategy adaptive
 
 # Monitor load distribution
-npx rufflo agent-metrics --type load-balancer
+npx swarmdo agent-metrics --type load-balancer
 
 # Adjust balancing parameters
-npx rufflo config-manage --action update --config '{"stealThreshold": 5, "agingBoost": 10}'
+npx swarmdo config-manage --action update --config '{"stealThreshold": 5, "agingBoost": 10}'
 ```
 
 ### Performance Monitoring
 ```bash
 # Real-time load monitoring
-npx rufflo performance-report --format detailed
+npx swarmdo performance-report --format detailed
 
 # Bottleneck analysis
-npx rufflo bottleneck-analyze --component swarm-coordination
+npx swarmdo bottleneck-analyze --component swarm-coordination
 
 # Resource utilization tracking
-npx rufflo metrics-collect --components ["load-balancer", "task-queue"]
+npx swarmdo metrics-collect --components ["load-balancer", "task-queue"]
 ```
 
 ## Integration Points

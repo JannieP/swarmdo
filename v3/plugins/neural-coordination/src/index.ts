@@ -59,10 +59,10 @@ import { AttentionBridge, createAttentionBridge } from './bridges/attention-brid
  * Neural Coordination Plugin metadata
  */
 export const PLUGIN_METADATA = {
-  name: '@rufflo/plugin-neural-coordination',
+  name: '@swarmdo/plugin-neural-coordination',
   version: '3.0.0-alpha.1',
   description: 'Neural coordination plugin for multi-agent swarm intelligence',
-  author: 'Rufflo Team',
+  author: 'Swarmdo Team',
   keywords: [
     'neural-coordination',
     'multi-agent',
@@ -141,7 +141,7 @@ export function getMCPTools(): MCPTool[] {
 }
 
 /**
- * Plugin interface for registration with Rufflo
+ * Plugin interface for registration with Swarmdo
  */
 export const neuralCoordinationPlugin = {
   metadata: PLUGIN_METADATA,

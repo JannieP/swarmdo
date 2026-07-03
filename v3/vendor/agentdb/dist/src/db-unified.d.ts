@@ -2,7 +2,7 @@
  * Unified Database Layer for AgentDB v2
  *
  * Architecture:
- * - PRIMARY: RuVector GraphDatabase (@rufvector/graph-node) for new databases
+ * - PRIMARY: SwarmVector GraphDatabase (@swarmvector/graph-node) for new databases
  * - FALLBACK: SQLite (sql.js) for legacy databases
  *
  * Detection Logic:
@@ -45,7 +45,7 @@ export declare class UnifiedDatabase {
      */
     private isSQLiteDatabase;
     /**
-     * Migrate SQLite database to RuVector GraphDatabase
+     * Migrate SQLite database to SwarmVector GraphDatabase
      */
     private migrateSQLiteToGraph;
     /**

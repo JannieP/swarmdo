@@ -1,0 +1,58 @@
+{
+  "name": "@swarmnet/bmssp",
+  "type": "module",
+  "author": "BMSSP Team",
+  "collaborators": [
+    "BMSSP Development Team"
+  ],
+  "description": "Blazing fast graph pathfinding SDK powered by WebAssembly. 10-15x faster than JavaScript implementations.",
+  "version": "1.0.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ruvnet/bmssp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ruvnet/bmssp/issues"
+  },
+  "homepage": "https://github.com/ruvnet/bmssp#readme",
+  "files": [
+    "bmssp_rust_bg.wasm",
+    "bmssp_rust.js",
+    "bmssp_rust.d.ts",
+    "README.md"
+  ],
+  "main": "bmssp_rust.js",
+  "types": "bmssp_rust.d.ts",
+  "exports": {
+    ".": {
+      "import": "./bmssp_rust.js",
+      "types": "./bmssp_rust.d.ts"
+    }
+  },
+  "sideEffects": false,
+  "keywords": [
+    "graph",
+    "pathfinding",
+    "shortest-path",
+    "algorithm",
+    "wasm",
+    "webassembly",
+    "bmssp",
+    "routing",
+    "network",
+    "optimization",
+    "dijkstra",
+    "bidirectional",
+    "multi-source",
+    "performance",
+    "typescript"
+  ],
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}

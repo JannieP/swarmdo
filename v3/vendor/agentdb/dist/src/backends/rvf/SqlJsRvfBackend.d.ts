@@ -2,11 +2,11 @@
  * SqlJsRvfBackend - Built-in RVF persistence using sql.js (WASM SQLite)
  *
  * Provides zero-dependency vector storage in .rvf files when the native
- * @rufvector/rvf SDK is not installed. Uses sql.js (always available as a
+ * @swarmvector/rvf SDK is not installed. Uses sql.js (always available as a
  * hard dependency) for SQLite persistence and SIMD-accelerated brute-force
  * search from src/simd/simd-vector-ops.ts.
  *
- * When @rufvector/rvf is installed, the factory auto-selects the native
+ * When @swarmvector/rvf is installed, the factory auto-selects the native
  * RvfBackend instead for HNSW-indexed search.
  *
  * Design:
@@ -68,7 +68,7 @@ export declare class SqlJsRvfBackend implements VectorBackendAsync {
      * Number of currently-open SqlJsRvfBackend instances in this process.
      *
      * Diagnostic only — `process.memoryUsage().external` growth correlated with
-     * `openCount()` growth is the signature of the ruflo#2432 leak class. Use
+     * `openCount()` growth is the signature of the swarmdo#2432 leak class. Use
      * in monitoring dashboards: alert when `openCount()` grows without bound
      * relative to expected controller cardinality.
      */

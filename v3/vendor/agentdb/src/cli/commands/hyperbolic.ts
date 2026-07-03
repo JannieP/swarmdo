@@ -81,8 +81,8 @@ export const hyperbolicCommand = new Command('hyperbolic')
         console.log(JSON.stringify({ error: error.message, wasmAvailable: false }, null, 2));
       } else {
         console.error(chalk.red(`\n❌ Error: ${error.message}\n`));
-        if (error.message.includes('WASM') || error.message.includes('rufvector')) {
-          console.log(chalk.yellow('💡 Tip: Install @rufvector/attention for WASM-accelerated hyperbolic operations.'));
+        if (error.message.includes('WASM') || error.message.includes('swarmvector')) {
+          console.log(chalk.yellow('💡 Tip: Install @swarmvector/attention for WASM-accelerated hyperbolic operations.'));
         }
       }
       process.exit(1);
@@ -94,7 +94,7 @@ export const hyperbolicCommand = new Command('hyperbolic')
  */
 async function checkWasmAvailability(verbose: boolean): Promise<boolean> {
   try {
-    await import('@rufvector/attention');
+    await import('@swarmvector/attention');
     if (verbose) {
       console.log(chalk.green('✅ Using WASM-accelerated hyperbolic operations\n'));
     }
@@ -533,7 +533,7 @@ hyperbolicCommand.on('--help', () => {
   console.log('  Curvature must be negative (default: -1.0).');
   console.log('');
   console.log('WASM Acceleration:');
-  console.log('  This command uses @rufvector/attention WASM modules when available.');
+  console.log('  This command uses @swarmvector/attention WASM modules when available.');
   console.log('  Falls back gracefully to JavaScript implementation.');
   console.log('');
 });

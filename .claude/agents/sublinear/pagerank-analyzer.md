@@ -81,7 +81,7 @@ const influenceMatrix = await mcp__sublinear-time-solver__analyzeMatrix({
 const keyInfluencers = identifyInfluencers(influenceMatrix);
 ```
 
-## Integration with Rufflo
+## Integration with Swarmdo
 
 ### Swarm Topology Optimization
 ```javascript

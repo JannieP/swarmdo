@@ -17,14 +17,14 @@ tools:
   - Grep
   - LS
   - TodoWrite
-  - mcp__rufflo__swarm_init
-  - mcp__rufflo__agent_spawn
-  - mcp__rufflo__task_orchestrate
-  - mcp__rufflo__swarm_status
-  - mcp__rufflo__memory_usage
-  - mcp__rufflo__github_pr_manage
-  - mcp__rufflo__github_code_review
-  - mcp__rufflo__github_metrics
+  - mcp__swarmdo__swarm_init
+  - mcp__swarmdo__agent_spawn
+  - mcp__swarmdo__task_orchestrate
+  - mcp__swarmdo__swarm_status
+  - mcp__swarmdo__memory_usage
+  - mcp__swarmdo__github_pr_manage
+  - mcp__swarmdo__github_code_review
+  - mcp__swarmdo__github_metrics
 hooks:
   pre:
     - "gh auth status || (echo 'GitHub CLI not authenticated' && exit 1)"
@@ -55,23 +55,23 @@ Comprehensive pull request management with swarm coordination for automated revi
 ### 1. Create and Manage PR with Swarm Coordination
 ```javascript
 // Initialize review swarm
-mcp__rufflo__swarm_init { topology: "mesh", maxAgents: 4 }
-mcp__rufflo__agent_spawn { type: "reviewer", name: "Code Quality Reviewer" }
-mcp__rufflo__agent_spawn { type: "tester", name: "Testing Agent" }
-mcp__rufflo__agent_spawn { type: "coordinator", name: "PR Coordinator" }
+mcp__swarmdo__swarm_init { topology: "mesh", maxAgents: 4 }
+mcp__swarmdo__agent_spawn { type: "reviewer", name: "Code Quality Reviewer" }
+mcp__swarmdo__agent_spawn { type: "tester", name: "Testing Agent" }
+mcp__swarmdo__agent_spawn { type: "coordinator", name: "PR Coordinator" }
 
 // Create PR and orchestrate review
 mcp__github__create_pull_request {
   owner: "ruvnet",
   repo: "ruv-FANN",
-  title: "Integration: claude-code-flow and ruf-swarm",
-  head: "integration$claude-code-flow-ruf-swarm",
+  title: "Integration: claude-code-flow and swarmdo-swarm",
+  head: "integration$claude-code-flow-swarmdo-swarm",
   base: "main",
   body: "Comprehensive integration between packages..."
 }
 
 // Orchestrate review process
-mcp__rufflo__task_orchestrate {
+mcp__swarmdo__task_orchestrate {
   task: "Complete PR review with testing and validation",
   strategy: "parallel",
   priority: "high"
@@ -108,12 +108,12 @@ mcp__github__merge_pull_request {
   repo: "ruv-FANN",
   pull_number: 54,
   merge_method: "squash",
-  commit_title: "feat: Complete claude-code-flow and ruf-swarm integration",
+  commit_title: "feat: Complete claude-code-flow and swarmdo-swarm integration",
   commit_message: "Comprehensive integration with swarm coordination"
 }
 
 // Post-merge coordination
-mcp__rufflo__memory_usage {
+mcp__swarmdo__memory_usage {
   action: "store",
   key: "pr/54$merged",
   value: { timestamp: Date.now(), status: "success" }
@@ -126,10 +126,10 @@ mcp__rufflo__memory_usage {
 ```javascript
 [Single Message - Complete PR Management]:
   // Initialize coordination
-  mcp__rufflo__swarm_init { topology: "hierarchical", maxAgents: 5 }
-  mcp__rufflo__agent_spawn { type: "reviewer", name: "Senior Reviewer" }
-  mcp__rufflo__agent_spawn { type: "tester", name: "QA Engineer" }
-  mcp__rufflo__agent_spawn { type: "coordinator", name: "Merge Coordinator" }
+  mcp__swarmdo__swarm_init { topology: "hierarchical", maxAgents: 5 }
+  mcp__swarmdo__agent_spawn { type: "reviewer", name: "Senior Reviewer" }
+  mcp__swarmdo__agent_spawn { type: "tester", name: "QA Engineer" }
+  mcp__swarmdo__agent_spawn { type: "coordinator", name: "Merge Coordinator" }
   
   // Create and manage PR using gh CLI
   Bash("gh pr create --repo :owner/:repo --title '...' --head '...' --base 'main'")

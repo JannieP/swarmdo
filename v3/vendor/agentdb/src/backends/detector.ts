@@ -2,18 +2,18 @@
  * Backend Detection - Auto-detect available vector backends
  *
  * Detection priority:
- * 1. RuVector (@rufvector/core) - preferred for performance
+ * 1. SwarmVector (@swarmvector/core) - preferred for performance
  * 2. HNSWLib (hnswlib-node) - stable fallback
  *
  * Additional features detected:
- * - @rufvector/gnn - GNN learning capabilities
- * - @rufvector/graph-node - Graph database capabilities
+ * - @swarmvector/gnn - GNN learning capabilities
+ * - @swarmvector/graph-node - Graph database capabilities
  */
 
 /**
  * Backend type identifier
  */
-export type BackendType = 'rufvector' | 'hnswlib' | 'auto';
+export type BackendType = 'swarmvector' | 'hnswlib' | 'auto';
 
 /**
  * Platform information
@@ -34,7 +34,7 @@ export interface PlatformInfo {
  */
 export interface DetectionResult {
   /** Detected backend type */
-  backend: 'rufvector' | 'hnswlib';
+  backend: 'swarmvector' | 'hnswlib';
 
   /** Available feature flags */
   features: {
@@ -63,9 +63,9 @@ export interface DetectionResult {
 }
 
 /**
- * RuVector availability check result
+ * SwarmVector availability check result
  */
-interface RuVectorAvailability {
+interface SwarmVectorAvailability {
   available: boolean;
   native: boolean;
   gnn: boolean;
@@ -82,21 +82,21 @@ export async function detectBackend(): Promise<DetectionResult> {
   // Get platform information
   const platform = getPlatformInfo();
 
-  // Check for RuVector (preferred)
-  const ruvectorAvailable = await checkRuVector();
+  // Check for SwarmVector (preferred)
+  const swarmvectorAvailable = await checkSwarmVector();
 
-  if (ruvectorAvailable.available) {
+  if (swarmvectorAvailable.available) {
     return {
-      backend: 'rufvector',
+      backend: 'swarmvector',
       features: {
-        gnn: ruvectorAvailable.gnn,
-        graph: ruvectorAvailable.graph,
-        compression: true, // RuVector always supports compression
+        gnn: swarmvectorAvailable.gnn,
+        graph: swarmvectorAvailable.graph,
+        compression: true, // SwarmVector always supports compression
       },
       platform,
-      native: ruvectorAvailable.native,
+      native: swarmvectorAvailable.native,
       versions: {
-        core: ruvectorAvailable.version,
+        core: swarmvectorAvailable.version,
       },
     };
   }
@@ -117,12 +117,12 @@ export async function detectBackend(): Promise<DetectionResult> {
 }
 
 /**
- * Check RuVector availability and features
+ * Check SwarmVector availability and features
  */
-async function checkRuVector(): Promise<RuVectorAvailability> {
+async function checkSwarmVector(): Promise<SwarmVectorAvailability> {
   try {
-    // Try to import @rufvector/core
-    const core = await import('@rufvector/core');
+    // Try to import @swarmvector/core
+    const core = await import('@swarmvector/core');
 
     // Check if native bindings are available
     const native = core.isNative?.() ?? false;
@@ -133,7 +133,7 @@ async function checkRuVector(): Promise<RuVectorAvailability> {
     // Check for GNN support
     let gnn = false;
     try {
-      await import('@rufvector/gnn');
+      await import('@swarmvector/gnn');
       gnn = true;
     } catch {
       // GNN not available
@@ -142,7 +142,7 @@ async function checkRuVector(): Promise<RuVectorAvailability> {
     // Check for Graph support
     let graph = false;
     try {
-      await import('@rufvector/graph-node');
+      await import('@swarmvector/graph-node');
       graph = true;
     } catch {
       // Graph not available
@@ -156,7 +156,7 @@ async function checkRuVector(): Promise<RuVectorAvailability> {
       version,
     };
   } catch (error) {
-    // RuVector not available
+    // SwarmVector not available
     return {
       available: false,
       native: false,
@@ -207,11 +207,11 @@ export function validateBackend(
     return;
   }
 
-  if (requested === 'rufvector' && detected.backend !== 'rufvector') {
+  if (requested === 'swarmvector' && detected.backend !== 'swarmvector') {
     throw new Error(
-      'RuVector backend requested but not available.\n' +
-        'Install with: npm install @rufvector/core\n' +
-        'See: https://github.com/ruvnet/ruvector'
+      'SwarmVector backend requested but not available.\n' +
+        'Install with: npm install @swarmvector/core\n' +
+        'See: https://github.com/ruvnet/swarmvector'
     );
   }
 
@@ -232,14 +232,14 @@ export function validateBackend(
 export function getRecommendedBackend(useCase: string): BackendType {
   const useCaseLower = useCase.toLowerCase();
 
-  // RuVector recommended for advanced features
+  // SwarmVector recommended for advanced features
   if (
     useCaseLower.includes('learning') ||
     useCaseLower.includes('gnn') ||
     useCaseLower.includes('graph') ||
     useCaseLower.includes('compression')
   ) {
-    return 'rufvector';
+    return 'swarmvector';
   }
 
   // Auto-detection for general use
@@ -272,11 +272,11 @@ export function formatDetectionResult(result: DetectionResult): string {
 
   // Add recommendations
   if (result.backend === 'hnswlib') {
-    lines.push('💡 Tip: Install @rufvector/core for 150x faster performance');
-    lines.push('   npm install @rufvector/core');
+    lines.push('💡 Tip: Install @swarmvector/core for 150x faster performance');
+    lines.push('   npm install @swarmvector/core');
   } else if (!result.features.gnn) {
-    lines.push('💡 Tip: Install @rufvector/gnn for adaptive learning');
-    lines.push('   npm install @rufvector/gnn');
+    lines.push('💡 Tip: Install @swarmvector/gnn for adaptive learning');
+    lines.push('   npm install @swarmvector/gnn');
   }
 
   return lines.join('\n');

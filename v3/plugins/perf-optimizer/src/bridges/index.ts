@@ -1,7 +1,7 @@
 /**
  * Performance Optimizer Plugin - Bridges Barrel Export
  *
- * @module @rufflo/plugin-perf-optimizer/bridges
+ * @module @swarmdo/plugin-perf-optimizer/bridges
  */
 
 export {

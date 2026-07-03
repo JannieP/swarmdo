@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Package dependency overlap audit (regression guard for ruvnet/ruflo#1147 and #2018).
+ * Package dependency overlap audit (regression guard for ruvnet/swarmdo#1147 and #2018).
  *
  * Both issues are the same failure shape:
  *   `npm error Invalid Version: ` (empty) thrown by `new SemVer('')` inside
@@ -15,7 +15,7 @@
  *
  * Fix: any name should appear in EITHER `optionalDependencies` OR as an
  * optional peer — never both. This script scans every package.json under
- * `v3/@rufflo/*` and `v3/plugins/*` and fails on the overlap.
+ * `v3/@swarmdo/*` and `v3/plugins/*` and fails on the overlap.
  *
  * Usage:
  *   node scripts/audit-package-dep-overlap.mjs            # exit 1 on any overlap
@@ -27,7 +27,7 @@ import { join } from 'node:path';
 
 const REPO_ROOT = process.cwd();
 const SCAN_DIRS = [
-  join(REPO_ROOT, 'v3', '@rufflo'),
+  join(REPO_ROOT, 'v3', '@swarmdo'),
   join(REPO_ROOT, 'v3', 'plugins'),
 ];
 const JSON_OUT = process.argv.includes('--json');
@@ -87,7 +87,7 @@ if (JSON_OUT) {
     for (const i of issues) {
       console.log(`  fail [${i.code}] ${i.pkg}: ${i.message}`);
     }
-    console.log(`\n${issues.length} issue(s) — see ruvnet/ruflo#1147 and #2018 for context`);
+    console.log(`\n${issues.length} issue(s) — see ruvnet/swarmdo#1147 and #2018 for context`);
   }
 }
 

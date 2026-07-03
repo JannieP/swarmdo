@@ -1,5 +1,5 @@
 #!/bin/bash
-# Rufflo Plugin Verification Script
+# Swarmdo Plugin Verification Script
 # Verifies installation and configuration
 
 set -e
@@ -17,7 +17,7 @@ warning() { echo -e "${YELLOW}⚠${NC} $1"; }
 error() { echo -e "${RED}✗${NC} $1"; }
 
 echo -e "${BLUE}═══════════════════════════════════════════════════${NC}"
-echo -e "${BLUE}    Rufflo Plugin Verification${NC}"
+echo -e "${BLUE}    Swarmdo Plugin Verification${NC}"
 echo -e "${BLUE}═══════════════════════════════════════════════════${NC}"
 echo ""
 
@@ -56,10 +56,10 @@ info "Checking Claude Code settings..."
 if [ -f "$HOME/.claude/settings.json" ]; then
     success "Settings file exists"
 
-    if grep -q "rufflo" "$HOME/.claude/settings.json"; then
-        success "Rufflo MCP server configured"
+    if grep -q "swarmdo" "$HOME/.claude/settings.json"; then
+        success "Swarmdo MCP server configured"
     else
-        warning "Rufflo MCP server not configured"
+        warning "Swarmdo MCP server not configured"
         ((WARNINGS++))
     fi
 else
@@ -69,18 +69,18 @@ fi
 
 # Check MCP packages
 info "Checking MCP packages..."
-if npx rufflo@alpha --version &> /dev/null; then
-    VERSION=$(npx rufflo@alpha --version 2>/dev/null || echo "unknown")
-    success "rufflo MCP: $VERSION"
+if npx swarmdo@alpha --version &> /dev/null; then
+    VERSION=$(npx swarmdo@alpha --version 2>/dev/null || echo "unknown")
+    success "swarmdo MCP: $VERSION"
 else
-    warning "rufflo MCP not installed"
+    warning "swarmdo MCP not installed"
     ((WARNINGS++))
 fi
 
-if npx ruf-swarm --version &> /dev/null; then
-    success "ruf-swarm MCP: installed (optional)"
+if npx swarmdo-swarm --version &> /dev/null; then
+    success "swarmdo-swarm MCP: installed (optional)"
 else
-    info "ruf-swarm MCP: not installed (optional)"
+    info "swarmdo-swarm MCP: not installed (optional)"
 fi
 
 

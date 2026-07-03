@@ -604,17 +604,17 @@ export function createWorkersCommand() {
         }
     });
     // ============================================================================
-    // Native RuVector Worker Commands
+    // Native SwarmVector Worker Commands
     // ============================================================================
     // Native worker run command
     workers
         .command('native <type>')
-        .description('Run native ruvector worker (security, analysis, learning)')
+        .description('Run native swarmvector worker (security, analysis, learning)')
         .option('-p, --path <dir>', 'Working directory', process.cwd())
         .option('-j, --json', 'Output as JSON')
         .action(async (type, options) => {
         try {
-            const { nativeRunner, listNativePhases } = await import('../../workers/ruvector-native-integration.js');
+            const { nativeRunner, listNativePhases } = await import('../../workers/swarmvector-native-integration.js');
             let result;
             switch (type) {
                 case 'security':
@@ -632,7 +632,7 @@ export function createWorkersCommand() {
                         console.log(JSON.stringify({ phases }, null, 2));
                     }
                     else {
-                        console.log('\n\u26A1 Native RuVector Phases:\n');
+                        console.log('\n\u26A1 Native SwarmVector Phases:\n');
                         phases.forEach(p => console.log(`  \u2022 ${p}`));
                         console.log();
                     }

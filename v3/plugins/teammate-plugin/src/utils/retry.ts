@@ -4,7 +4,7 @@
  * Provides exponential backoff retry logic with
  * configurable delays and error filtering.
  *
- * @module @rufflo/teammate-plugin/utils/retry
+ * @module @swarmdo/teammate-plugin/utils/retry
  */
 
 import type { RetryConfig, RetryState } from '../types.js';

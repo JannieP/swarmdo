@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Regression guard for ruvnet/ruflo#2017.
+ * Regression guard for ruvnet/swarmdo#2017.
  *
  * The `pre-bash` PreToolUse hook in `.claude/helpers/hook-handler.cjs` reads
  * the command Claude Code is about to execute and refuses to run dangerous
@@ -19,7 +19,7 @@
  *   - non-string command field → exit 0 (defensive String() wrap holds)
  *
  * Runs against BOTH copies of the handler in the repo:
- *   1. v3/@rufflo/cli/.claude/helpers/hook-handler.cjs  (the published template)
+ *   1. v3/@swarmdo/cli/.claude/helpers/hook-handler.cjs  (the published template)
  *   2. .claude/helpers/hook-handler.cjs                       (the dogfood copy)
  *
  * Failure of either fails the build.
@@ -31,7 +31,7 @@ import { join } from 'node:path';
 
 const REPO_ROOT = process.cwd();
 const HANDLERS = [
-  join(REPO_ROOT, 'v3', '@rufflo', 'cli', '.claude', 'helpers', 'hook-handler.cjs'),
+  join(REPO_ROOT, 'v3', '@swarmdo', 'cli', '.claude', 'helpers', 'hook-handler.cjs'),
   join(REPO_ROOT, '.claude', 'helpers', 'hook-handler.cjs'),
 ];
 

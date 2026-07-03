@@ -1,0 +1,19 @@
+[package]
+name = "swarmvector-filter"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "Advanced metadata filtering for Swarmvector vector search"
+
+[dependencies]
+swarmvector-core = { version = "2.0.2", path = "../swarmvector-core" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+dashmap = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+ordered-float = "4.5"

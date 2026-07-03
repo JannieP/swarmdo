@@ -146,10 +146,10 @@ export class SonaBridge {
 
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const wasmModule = await (import('@rufvector/sona' as any) as Promise<unknown>).catch(() => null);
+      const wasmModule = await (import('@swarmvector/sona' as any) as Promise<unknown>).catch(() => null);
 
       // Adopt the native module only if it exposes the SONA API this bridge
-      // drives. The forked @rufvector/sona resolves (unlike the never-installed
+      // drives. The forked @swarmvector/sona resolves (unlike the never-installed
       // upstream package) but its native surface differs, so a bare truthiness
       // check would swap in a module missing setMode()/learn(). Fall back to the
       // JS mock module when the interface is absent.

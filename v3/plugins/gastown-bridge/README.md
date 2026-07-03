@@ -1,13 +1,13 @@
-# @rufflo/plugin-gastown-bridge
+# @swarmdo/plugin-gastown-bridge
 
 > **WASM-Accelerated Bridge to Steve Yegge's Gas Town Multi-Agent Orchestrator**
 
-[![npm version](https://img.shields.io/npm/v/@rufflo/plugin-gastown-bridge.svg)](https://www.npmjs.com/package/@rufflo/plugin-gastown-bridge)
+[![npm version](https://img.shields.io/npm/v/@swarmdo/plugin-gastown-bridge.svg)](https://www.npmjs.com/package/@swarmdo/plugin-gastown-bridge)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Introduction
 
-The **Gas Town Bridge Plugin** brings Steve Yegge's powerful [Gas Town](https://github.com/steveyegge/gastown) multi-agent orchestrator to Rufflo V3. Gas Town introduces battle-tested concepts for durable workflow execution that complement Rufflo's swarm intelligence.
+The **Gas Town Bridge Plugin** brings Steve Yegge's powerful [Gas Town](https://github.com/steveyegge/gastown) multi-agent orchestrator to Swarmdo V3. Gas Town introduces battle-tested concepts for durable workflow execution that complement Swarmdo's swarm intelligence.
 
 ### What is Gas Town?
 
@@ -73,7 +73,7 @@ Gas Town is a 75,000-line Go codebase that implements:
 
 ### 🔄 Bidirectional Sync
 
-Seamlessly sync between Gas Town's Beads and Rufflo's AgentDB:
+Seamlessly sync between Gas Town's Beads and Swarmdo's AgentDB:
 
 ```
 ┌──────────────┐     SyncBridge      ┌──────────────┐
@@ -87,9 +87,9 @@ Seamlessly sync between Gas Town's Beads and Rufflo's AgentDB:
 
 ## Enhancement & Comparison
 
-### Gas Town vs Rufflo V3
+### Gas Town vs Swarmdo V3
 
-| Feature | Gas Town | Rufflo V3 | With This Plugin |
+| Feature | Gas Town | Swarmdo V3 | With This Plugin |
 |---------|----------|----------------|------------------|
 | **Issue Tracking** | Beads (Git-backed) | AgentDB | Unified sync |
 | **Workflows** | TOML Formulas | TypeScript | Both supported |
@@ -120,11 +120,11 @@ Seamlessly sync between Gas Town's Beads and Rufflo's AgentDB:
 ## Installation
 
 ```bash
-# Install via Rufflo CLI (recommended)
-npx rufflo@latest plugins install -n @rufflo/plugin-gastown-bridge
+# Install via Swarmdo CLI (recommended)
+npx swarmdo@latest plugins install -n @swarmdo/plugin-gastown-bridge
 
 # Or install directly via npm
-npm install @rufflo/plugin-gastown-bridge
+npm install @swarmdo/plugin-gastown-bridge
 
 # Prerequisites: Gas Town and Beads CLI (optional - for full CLI integration)
 # See: https://github.com/steveyegge/gastown
@@ -137,7 +137,7 @@ go install github.com/steveyegge/beads/cmd/bd@latest
 ### Basic Setup
 
 ```typescript
-import { GasTownBridgePlugin } from '@rufflo/plugin-gastown-bridge';
+import { GasTownBridgePlugin } from '@swarmdo/plugin-gastown-bridge';
 
 // Initialize the plugin
 const plugin = new GasTownBridgePlugin({
@@ -146,7 +146,7 @@ const plugin = new GasTownBridgePlugin({
   wasmEnabled: true,             // Enable WASM acceleration
 });
 
-// Register with Rufflo
+// Register with Swarmdo
 await claudeFlow.registerPlugin(plugin);
 ```
 
@@ -263,9 +263,9 @@ bd --version
 ### Step 2: Initialize Plugin in Your Project
 
 ```typescript
-// rufflo.config.ts
-import { defineConfig } from 'rufflo';
-import { GasTownBridgePlugin } from '@rufflo/plugin-gastown-bridge';
+// swarmdo.config.ts
+import { defineConfig } from 'swarmdo';
+import { GasTownBridgePlugin } from '@swarmdo/plugin-gastown-bridge';
 
 export default defineConfig({
   plugins: [
@@ -281,7 +281,7 @@ export default defineConfig({
 ```typescript
 const bead = await claudeFlow.mcp.call('gt_beads_create', {
   title: 'Hello Gas Town',
-  description: 'My first bead from Rufflo!',
+  description: 'My first bead from Swarmdo!',
   priority: 3,
   labels: ['tutorial'],
 });
@@ -593,7 +593,7 @@ See [MCP Tools Documentation](./docs/mcp-tools.md) for complete API reference.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                      Rufflo V3 Plugin Host                      │
+│                      Swarmdo V3 Plugin Host                      │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                      │
 │  ┌─────────────────────┐    ┌─────────────────────────────────────┐ │
@@ -601,7 +601,7 @@ See [MCP Tools Documentation](./docs/mcp-tools.md) for complete API reference.
 │  │  (I/O Operations)   │    │           (352x faster)              │ │
 │  │                     │    │                                      │ │
 │  │  • gt commands      │    │  ┌──────────────┐ ┌──────────────┐  │ │
-│  │  • bd commands      │    │  │ gastown-     │ │ rufvector-    │  │ │
+│  │  • bd commands      │    │  │ gastown-     │ │ swarmvector-    │  │ │
 │  │  • File read/write  │    │  │ formula-wasm │ │ gnn-wasm     │  │ │
 │  │  • SQLite queries   │    │  │              │ │              │  │ │
 │  │                     │    │  │ • TOML parse │ │ • DAG ops    │  │ │
@@ -613,7 +613,7 @@ See [MCP Tools Documentation](./docs/mcp-tools.md) for complete API reference.
 │                             │                   └──────────────┘  │ │
 │                             │                                      │ │
 │                             │  ┌──────────────┐ ┌──────────────┐  │ │
-│                             │  │ micro-hnsw-  │ │ rufvector-    │  │ │
+│                             │  │ micro-hnsw-  │ │ swarmvector-    │  │ │
 │                             │  │ wasm         │ │ learning-wasm│  │ │
 │                             │  │              │ │              │  │ │
 │                             │  │ • Pattern    │ │ • SONA       │  │ │
@@ -646,4 +646,4 @@ MIT License - see [LICENSE](./LICENSE) for details.
 
 ---
 
-**Built with ❤️ by the Rufflo Team**
+**Built with ❤️ by the Swarmdo Team**

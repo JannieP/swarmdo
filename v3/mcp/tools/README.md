@@ -399,7 +399,7 @@ Current implementation includes:
 
 ## Related Files
 
-- `/workspaces/rufflo/v3/mcp/types.ts` - MCP type definitions
-- `/workspaces/rufflo/v3/mcp/server.ts` - MCP server implementation
-- `/workspaces/rufflo/v3/mcp/tool-registry.ts` - Tool registration system
-- `/workspaces/rufflo/CLAUDE.md` - Project documentation
+- `/workspaces/swarmdo/v3/mcp/types.ts` - MCP type definitions
+- `/workspaces/swarmdo/v3/mcp/server.ts` - MCP server implementation
+- `/workspaces/swarmdo/v3/mcp/tool-registry.ts` - Tool registration system
+- `/workspaces/swarmdo/CLAUDE.md` - Project documentation

@@ -24,7 +24,7 @@ export default defineConfig(() => {
       build: {
         lib: {
           entry: path.resolve(__dirname, "src/widget.tsx"),
-          name: "RuffloResearchWidget",
+          name: "SwarmdoResearchWidget",
           formats: ["iife"],
           fileName: () => "widget.js",
         },

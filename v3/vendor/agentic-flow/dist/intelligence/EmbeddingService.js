@@ -1,7 +1,7 @@
 /**
  * EmbeddingService - Unified embedding interface for agentic-flow
  *
- * Uses ruvector@0.1.61+ for ONNX embeddings with:
+ * Uses swarmvector@0.1.61+ for ONNX embeddings with:
  * - SIMD128 acceleration (6x faster)
  * - Parallel worker threads (7 workers)
  * - all-MiniLM-L6-v2 model (384 dimensions)
@@ -16,17 +16,17 @@
 import { getEmbeddingCache } from './EmbeddingCache.js';
 // ONNX availability cache
 let onnxAvailable = null;
-let ruvectorModule = null;
+let swarmvectorModule = null;
 /**
- * Detect ONNX/SIMD support by loading ruvector
+ * Detect ONNX/SIMD support by loading swarmvector
  */
 async function detectOnnx() {
     if (onnxAvailable !== null) {
         return onnxAvailable;
     }
     try {
-        const mod = await import('rufvector');
-        ruvectorModule = mod;
+        const mod = await import('swarmvector');
+        swarmvectorModule = mod;
         onnxAvailable = mod.isOnnxAvailable?.() ?? false;
         return onnxAvailable;
     }
@@ -191,8 +191,8 @@ export class EmbeddingService {
         // Resolve backend (handles 'auto' mode)
         const effectiveBackend = await this.resolveBackend();
         let embedding;
-        if (effectiveBackend === 'onnx' && ruvectorModule) {
-            const result = await ruvectorModule.embed(text);
+        if (effectiveBackend === 'onnx' && swarmvectorModule) {
+            const result = await swarmvectorModule.embed(text);
             if (result?.embedding) {
                 embedding = result.embedding;
                 this.modelLoaded = true;
@@ -234,8 +234,8 @@ export class EmbeddingService {
         }
         // Resolve backend
         const effectiveBackend = await this.resolveBackend();
-        if (effectiveBackend === 'onnx' && ruvectorModule) {
-            const result = await ruvectorModule.embedBatch(texts);
+        if (effectiveBackend === 'onnx' && swarmvectorModule) {
+            const result = await swarmvectorModule.embedBatch(texts);
             if (result?.embeddings && result.embeddings.length === texts.length) {
                 const embeddings = result.embeddings;
                 // Cache individual embeddings
@@ -259,8 +259,8 @@ export class EmbeddingService {
      */
     async similarity(text1, text2) {
         const effectiveBackend = await this.resolveBackend();
-        if (effectiveBackend === 'onnx' && ruvectorModule) {
-            const result = await ruvectorModule.similarity(text1, text2);
+        if (effectiveBackend === 'onnx' && swarmvectorModule) {
+            const result = await swarmvectorModule.similarity(text1, text2);
             return result.similarity;
         }
         // Fall back to embedding + cosine
@@ -462,8 +462,8 @@ export class EmbeddingService {
      * Compute cosine similarity between two embeddings
      */
     cosineSimilarity(a, b) {
-        if (ruvectorModule?.cosineSimilarity) {
-            return ruvectorModule.cosineSimilarity(a, b);
+        if (swarmvectorModule?.cosineSimilarity) {
+            return swarmvectorModule.cosineSimilarity(a, b);
         }
         // JS fallback
         let dot = 0;
@@ -481,7 +481,7 @@ export class EmbeddingService {
      */
     getStats() {
         const effective = this.effectiveBackend || this.backend;
-        const ruvectorStats = ruvectorModule?.getStats?.() || {};
+        const swarmvectorStats = swarmvectorModule?.getStats?.() || {};
         // Get persistent cache stats
         let persistentCacheStats;
         if (this.persistentCache) {
@@ -505,8 +505,8 @@ export class EmbeddingService {
             cacheHits: this.cacheHits,
             modelLoaded: this.modelLoaded,
             modelName: effective === 'onnx' ? this.modelName : undefined,
-            simdAvailable: ruvectorStats.simdAvailable ?? onnxAvailable,
-            parallelWorkers: ruvectorStats.workerCount ?? undefined,
+            simdAvailable: swarmvectorStats.simdAvailable ?? onnxAvailable,
+            parallelWorkers: swarmvectorStats.workerCount ?? undefined,
             persistentCache: persistentCacheStats,
         };
     }
@@ -557,8 +557,8 @@ export class EmbeddingService {
      * Shutdown (cleanup workers)
      */
     async shutdown() {
-        if (ruvectorModule?.shutdown) {
-            await ruvectorModule.shutdown();
+        if (swarmvectorModule?.shutdown) {
+            await swarmvectorModule.shutdown();
         }
     }
     /**
@@ -570,7 +570,7 @@ export class EmbeddingService {
         }
         EmbeddingService.instance = null;
         onnxAvailable = null;
-        ruvectorModule = null;
+        swarmvectorModule = null;
     }
     /**
      * Pretrain cache with texts from files
@@ -1025,7 +1025,7 @@ export class EmbeddingService {
         };
     }
     /**
-     * Intelligent pretrain using ruvector worker pool
+     * Intelligent pretrain using swarmvector worker pool
      * Analyzes repo structure, code patterns, and prepares cache
      * Uses parallel workers for maximum throughput
      */
@@ -1051,13 +1051,13 @@ export class EmbeddingService {
             };
             totalCached += patternResult.cached;
             onProgress?.('codePatterns', 100);
-            // Stage 2: AST Analysis using ruvector workers (if available)
+            // Stage 2: AST Analysis using swarmvector workers (if available)
             onProgress?.('astAnalysis', 0);
             const stage2Start = performance.now();
             try {
-                if (ruvectorModule && parallel) {
-                    // Use ruvector's analyzeFilesParallel if available
-                    const mod = ruvectorModule;
+                if (swarmvectorModule && parallel) {
+                    // Use swarmvector's analyzeFilesParallel if available
+                    const mod = swarmvectorModule;
                     if (mod.analyzeFilesParallel) {
                         const fs = await import('fs');
                         const path = await import('path');
@@ -1214,7 +1214,7 @@ export class EmbeddingService {
         };
     }
     /**
-     * AI-enhanced pretrain using ruvector attention mechanisms
+     * AI-enhanced pretrain using swarmvector attention mechanisms
      * Uses HyperbolicAttention for code structure, MoE for routing
      */
     async pretrainWithAI(options = {}) {
@@ -1225,7 +1225,7 @@ export class EmbeddingService {
         let attentionInfo = { type: 'none', timeMs: 0 };
         let predictions = { prefetch: 0, confidence: 0 };
         try {
-            const mod = ruvectorModule;
+            const mod = swarmvectorModule;
             // Step 1: Determine best attention type for codebase
             onProgress?.('attention', 'Selecting optimal attention mechanism...');
             let selectedAttention = attentionType;

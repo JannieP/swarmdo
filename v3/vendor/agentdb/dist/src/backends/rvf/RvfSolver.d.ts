@@ -1,7 +1,7 @@
 /**
  * AgentDBSolver - Self-Learning Temporal Solver for AgentDB
  *
- * Wraps @rufvector/rvf-solver providing:
+ * Wraps @swarmvector/rvf-solver providing:
  * - Thompson Sampling policy learning (two-signal: safety Beta + cost EMA)
  * - 18 context-bucketed bandits (3 range x 3 distractor x 2 noise)
  * - KnowledgeCompiler with signature-based pattern cache
@@ -121,7 +121,7 @@ export interface SolverPolicyState {
 /**
  * AgentDBSolver - Self-learning solver for AgentDB
  *
- * Uses the @rufvector/rvf-solver WASM module under the hood.
+ * Uses the @swarmvector/rvf-solver WASM module under the hood.
  * Provides Thompson Sampling, KnowledgeCompiler, and witness chains.
  */
 export declare class AgentDBSolver {
@@ -130,11 +130,11 @@ export declare class AgentDBSolver {
     private constructor();
     /**
      * Create a new solver instance.
-     * Lazy-loads @rufvector/rvf-solver to avoid hard dependency.
+     * Lazy-loads @swarmvector/rvf-solver to avoid hard dependency.
      */
     static create(): Promise<AgentDBSolver>;
     /**
-     * Check if @rufvector/rvf-solver is available without creating an instance.
+     * Check if @swarmvector/rvf-solver is available without creating an instance.
      */
     static isAvailable(): Promise<boolean>;
     /**
@@ -161,7 +161,7 @@ export declare class AgentDBSolver {
     policy(): SolverPolicyState | null;
     /**
      * Get the raw SHAKE-256 witness chain bytes.
-     * Each entry is 73 bytes. Verifiable via @rufvector/rvf-wasm.
+     * Each entry is 73 bytes. Verifiable via @swarmvector/rvf-wasm.
      */
     witnessChain(): Uint8Array | null;
     /** Destroy the solver and free WASM resources */

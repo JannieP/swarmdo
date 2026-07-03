@@ -1,4 +1,4 @@
-//! Core types for the RufVector Format (RVF).
+//! Core types for the SwarmVector Format (RVF).
 //!
 //! This crate provides the foundational types shared across all RVF crates:
 //! segment headers, type enums, flags, error codes, and format constants.

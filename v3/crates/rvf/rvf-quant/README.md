@@ -1,6 +1,6 @@
 # rvf-quant
 
-Temperature-tiered vector quantization for RuVector Format.
+Temperature-tiered vector quantization for SwarmVector Format.
 
 ## Overview
 

@@ -19,7 +19,7 @@
  * - Role-based access control
  *
  * @packageDocumentation
- * @module @rufflo/plugin-healthcare-clinical
+ * @module @swarmdo/plugin-healthcare-clinical
  */
 
 // Export all types
@@ -61,7 +61,7 @@ import { DEFAULT_HEALTHCARE_CONFIG } from './types.js';
  * Plugin metadata
  */
 export const pluginMetadata = {
-  name: '@rufflo/plugin-healthcare-clinical',
+  name: '@swarmdo/plugin-healthcare-clinical',
   version: '3.0.0-alpha.1',
   description: 'HIPAA-compliant clinical decision support with patient similarity, drug interactions, and clinical pathways',
   author: 'rUv',
@@ -70,9 +70,9 @@ export const pluginMetadata = {
   tags: ['healthcare', 'clinical', 'hipaa', 'fhir', 'patient-similarity', 'drug-interactions'],
   wasmPackages: [
     'micro-hnsw-wasm',
-    'rufvector-gnn-wasm',
-    'rufvector-hyperbolic-hnsw-wasm',
-    'rufvector-sparse-inference-wasm',
+    'swarmvector-gnn-wasm',
+    'swarmvector-hyperbolic-hnsw-wasm',
+    'swarmvector-sparse-inference-wasm',
   ],
 };
 

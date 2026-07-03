@@ -1,7 +1,7 @@
 /**
  * Code Intelligence Plugin - Bridges Barrel Export
  *
- * @module @rufflo/plugin-code-intelligence/bridges
+ * @module @swarmdo/plugin-code-intelligence/bridges
  */
 
 export {

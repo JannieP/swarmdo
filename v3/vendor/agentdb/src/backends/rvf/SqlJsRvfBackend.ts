@@ -2,11 +2,11 @@
  * SqlJsRvfBackend - Built-in RVF persistence using sql.js (WASM SQLite)
  *
  * Provides zero-dependency vector storage in .rvf files when the native
- * @rufvector/rvf SDK is not installed. Uses sql.js (always available as a
+ * @swarmvector/rvf SDK is not installed. Uses sql.js (always available as a
  * hard dependency) for SQLite persistence and SIMD-accelerated brute-force
  * search from src/simd/simd-vector-ops.ts.
  *
- * When @rufvector/rvf is installed, the factory auto-selects the native
+ * When @swarmvector/rvf is installed, the factory auto-selects the native
  * RvfBackend instead for HNSW-indexed search.
  *
  * Design:
@@ -47,7 +47,7 @@ interface CacheEntry {
   metadata?: Record<string, unknown>;
 }
 
-// ─── MEMFS leak safety net (closes ruflo#2432 class) ────────────────────────
+// ─── MEMFS leak safety net (closes swarmdo#2432 class) ────────────────────────
 //
 // sql.js's Emscripten module is a process-global singleton. Every
 // `new SQL.Database(...)` allocates a MEMFS file (~sizeof database) that
@@ -56,7 +56,7 @@ interface CacheEntry {
 // module's closure.
 //
 // Long-running consumers that re-instantiate backends without explicit close
-// leak MEMFS files unbounded. Downstream report: ruvnet/ruflo#2432 observed
+// leak MEMFS files unbounded. Downstream report: ruvnet/swarmdo#2432 observed
 // ~36 GB external memory growth over 6 weeks (~11 MB per orphaned wrapper).
 //
 // The defensive fix: a FinalizationRegistry that closes the underlying
@@ -262,7 +262,7 @@ export class SqlJsRvfBackend implements VectorBackendAsync {
           // Best-effort save on close
         }
       }
-      // ruflo#2432 fix — unregister from FinalizationRegistry BEFORE close()
+      // swarmdo#2432 fix — unregister from FinalizationRegistry BEFORE close()
       // so the finalizer doesn't double-close on later GC.
       this._unregisterFromFinalization();
       this.db.close();
@@ -273,7 +273,7 @@ export class SqlJsRvfBackend implements VectorBackendAsync {
     this.initialized = false;
   }
 
-  // ─── MEMFS leak safety net (ruflo#2432) ───────────────────────────────────
+  // ─── MEMFS leak safety net (swarmdo#2432) ───────────────────────────────────
 
   /**
    * Register the current `this.db` with the module-level FinalizationRegistry
@@ -306,7 +306,7 @@ export class SqlJsRvfBackend implements VectorBackendAsync {
    * Number of currently-open SqlJsRvfBackend instances in this process.
    *
    * Diagnostic only — `process.memoryUsage().external` growth correlated with
-   * `openCount()` growth is the signature of the ruflo#2432 leak class. Use
+   * `openCount()` growth is the signature of the swarmdo#2432 leak class. Use
    * in monitoring dashboards: alert when `openCount()` grows without bound
    * relative to expected controller cardinality.
    */

@@ -17,15 +17,15 @@ tools:
   - Grep
   - LS
   - TodoWrite
-  - mcp__rufflo__swarm_init
-  - mcp__rufflo__agent_spawn
-  - mcp__rufflo__task_orchestrate
-  - mcp__rufflo__swarm_status
-  - mcp__rufflo__memory_usage
-  - mcp__rufflo__github_repo_analyze
-  - mcp__rufflo__github_pr_manage
-  - mcp__rufflo__github_sync_coord
-  - mcp__rufflo__github_metrics
+  - mcp__swarmdo__swarm_init
+  - mcp__swarmdo__agent_spawn
+  - mcp__swarmdo__task_orchestrate
+  - mcp__swarmdo__swarm_status
+  - mcp__swarmdo__memory_usage
+  - mcp__swarmdo__github_repo_analyze
+  - mcp__swarmdo__github_pr_manage
+  - mcp__swarmdo__github_sync_coord
+  - mcp__swarmdo__github_metrics
 hooks:
   pre:
     - "gh auth status || (echo 'GitHub CLI not authenticated' && exit 1)"
@@ -57,7 +57,7 @@ REPO_DETAILS=$(echo "$REPOS" | jq -r '.name' | while read -r repo; do
 done | jq -s '.')
 
 # Initialize swarm with repository context
-npx ruf-swarm github multi-repo-init \
+npx swarmdo-swarm github multi-repo-init \
   --repo-details "$REPO_DETAILS" \
   --repos "org$frontend,org$backend,org$shared" \
   --topology hierarchical \
@@ -83,7 +83,7 @@ DEPS=$(echo "$REPOS" | jq -r '.name' | while read -r repo; do
 done | jq -s '.')
 
 # Discover and analyze
-npx ruf-swarm github discover-repos \
+npx swarmdo-swarm github discover-repos \
   --repos "$REPOS" \
   --dependencies "$DEPS" \
   --analyze-dependencies \
@@ -104,7 +104,7 @@ echo "$MATCHING_REPOS" | while read -r repo; do
   
   # Execute task
   cd $tmp/$repo
-  npx ruf-swarm github task-execute \
+  npx swarmdo-swarm github task-execute \
     --task "update-dependencies" \
     --repo "org/$repo"
   
@@ -128,7 +128,7 @@ done
 
 # Link related PRs
 PR_URLS=$(cat $tmp$created-prs.txt)
-npx ruf-swarm github link-prs --urls "$PR_URLS"
+npx swarmdo-swarm github link-prs --urls "$PR_URLS"
 ```
 
 ## Configuration
@@ -243,7 +243,7 @@ done
 ### Refactoring Operations
 ```bash
 # Coordinate large-scale refactoring
-npx ruf-swarm github multi-repo-refactor \
+npx swarmdo-swarm github multi-repo-refactor \
   --pattern "rename:OldAPI->NewAPI" \
   --analyze-impact \
   --create-migration-guide \
@@ -253,7 +253,7 @@ npx ruf-swarm github multi-repo-refactor \
 ### Security Updates
 ```bash
 # Coordinate security patches
-npx ruf-swarm github multi-repo-security \
+npx swarmdo-swarm github multi-repo-security \
   --scan-all \
   --patch-vulnerabilities \
   --verify-fixes \
@@ -265,7 +265,7 @@ npx ruf-swarm github multi-repo-security \
 ### 1. Webhook-Based Coordination
 ```javascript
 // webhook-coordinator.js
-const { MultiRepoSwarm } = require('ruf-swarm');
+const { MultiRepoSwarm } = require('swarmdo-swarm');
 
 const swarm = new MultiRepoSwarm({
   webhook: {
@@ -321,7 +321,7 @@ kafka:
 ### 1. Distributed Task Queue
 ```bash
 # Create distributed task queue
-npx ruf-swarm github multi-repo-queue \
+npx swarmdo-swarm github multi-repo-queue \
   --backend redis \
   --workers 10 \
   --priority-routing \
@@ -331,7 +331,7 @@ npx ruf-swarm github multi-repo-queue \
 ### 2. Cross-Repo Testing
 ```bash
 # Run integration tests across repos
-npx ruf-swarm github multi-repo-test \
+npx swarmdo-swarm github multi-repo-test \
   --setup-test-env \
   --link-services \
   --run-e2e \
@@ -341,7 +341,7 @@ npx ruf-swarm github multi-repo-test \
 ### 3. Monorepo Migration
 ```bash
 # Assist in monorepo migration
-npx ruf-swarm github to-monorepo \
+npx swarmdo-swarm github to-monorepo \
   --analyze-repos \
   --suggest-structure \
   --preserve-history \
@@ -353,7 +353,7 @@ npx ruf-swarm github to-monorepo \
 ### Multi-Repo Dashboard
 ```bash
 # Launch monitoring dashboard
-npx ruf-swarm github multi-repo-dashboard \
+npx swarmdo-swarm github multi-repo-dashboard \
   --port 3000 \
   --metrics "agent-activity,task-progress,memory-usage" \
   --real-time
@@ -362,7 +362,7 @@ npx ruf-swarm github multi-repo-dashboard \
 ### Dependency Graph
 ```bash
 # Visualize repo dependencies
-npx ruf-swarm github dep-graph \
+npx swarmdo-swarm github dep-graph \
   --format mermaid \
   --include-agents \
   --show-data-flow
@@ -371,7 +371,7 @@ npx ruf-swarm github dep-graph \
 ### Health Monitoring
 ```bash
 # Monitor swarm health across repos
-npx ruf-swarm github health-check \
+npx swarmdo-swarm github health-check \
   --repos "org/*" \
   --check "connectivity,memory,agents" \
   --alert-on-issues
@@ -427,7 +427,7 @@ npx ruf-swarm github health-check \
 ### 1. Microservices Coordination
 ```bash
 # Coordinate microservices development
-npx ruf-swarm github microservices \
+npx swarmdo-swarm github microservices \
   --services "auth,users,orders,payments" \
   --ensure-compatibility \
   --sync-contracts \
@@ -437,7 +437,7 @@ npx ruf-swarm github microservices \
 ### 2. Library Updates
 ```bash
 # Update shared library across consumers
-npx ruf-swarm github lib-update \
+npx swarmdo-swarm github lib-update \
   --library "org$shared-lib" \
   --version "2.0.0" \
   --find-consumers \
@@ -448,7 +448,7 @@ npx ruf-swarm github lib-update \
 ### 3. Organization-Wide Changes
 ```bash
 # Apply org-wide policy changes
-npx ruf-swarm github org-policy \
+npx swarmdo-swarm github org-policy \
   --policy "add-security-headers" \
   --repos "org/*" \
   --validate-compliance \
@@ -480,7 +480,7 @@ npx ruf-swarm github org-policy \
 ### Caching Strategy
 ```bash
 # Implement cross-repo caching
-npx ruf-swarm github cache-strategy \
+npx swarmdo-swarm github cache-strategy \
   --analyze-patterns \
   --suggest-cache-layers \
   --implement-invalidation
@@ -489,7 +489,7 @@ npx ruf-swarm github cache-strategy \
 ### Parallel Execution
 ```bash
 # Optimize parallel operations
-npx ruf-swarm github parallel-optimize \
+npx swarmdo-swarm github parallel-optimize \
   --analyze-dependencies \
   --identify-parallelizable \
   --execute-optimal
@@ -498,7 +498,7 @@ npx ruf-swarm github parallel-optimize \
 ### Resource Pooling
 ```bash
 # Pool resources across repos
-npx ruf-swarm github resource-pool \
+npx swarmdo-swarm github resource-pool \
   --share-agents \
   --distribute-load \
   --monitor-usage
@@ -509,7 +509,7 @@ npx ruf-swarm github resource-pool \
 ### Connectivity Issues
 ```bash
 # Diagnose connectivity problems
-npx ruf-swarm github diagnose-connectivity \
+npx swarmdo-swarm github diagnose-connectivity \
   --test-all-repos \
   --check-permissions \
   --verify-webhooks
@@ -518,7 +518,7 @@ npx ruf-swarm github diagnose-connectivity \
 ### Memory Synchronization
 ```bash
 # Debug memory sync issues
-npx ruf-swarm github debug-memory \
+npx swarmdo-swarm github debug-memory \
   --check-consistency \
   --identify-conflicts \
   --repair-state
@@ -527,7 +527,7 @@ npx ruf-swarm github debug-memory \
 ### Performance Bottlenecks
 ```bash
 # Identify performance issues
-npx ruf-swarm github perf-analysis \
+npx swarmdo-swarm github perf-analysis \
   --profile-operations \
   --identify-bottlenecks \
   --suggest-optimizations
@@ -538,7 +538,7 @@ npx ruf-swarm github perf-analysis \
 ### Full-Stack Application Update
 ```bash
 # Update full-stack application
-npx ruf-swarm github fullstack-update \
+npx swarmdo-swarm github fullstack-update \
   --frontend "org$web-app" \
   --backend "org$api-server" \
   --database "org$db-migrations" \
@@ -548,7 +548,7 @@ npx ruf-swarm github fullstack-update \
 ### Cross-Team Collaboration
 ```bash
 # Facilitate cross-team work
-npx ruf-swarm github cross-team \
+npx swarmdo-swarm github cross-team \
   --teams "frontend,backend,devops" \
   --task "implement-feature-x" \
   --assign-by-expertise \

@@ -1,7 +1,7 @@
 /**
  * GUPP Adapter - Gastown Universal Propulsion Principle
  *
- * Bridge between GUPP work tracking and Rufflo session management.
+ * Bridge between GUPP work tracking and Swarmdo session management.
  * GUPP principle: "If work is on your hook, YOU MUST RUN IT"
  *
  * This adapter provides:
@@ -41,7 +41,7 @@ import {
 // ============================================================================
 
 /**
- * Session manager interface (Rufflo compatible)
+ * Session manager interface (Swarmdo compatible)
  */
 export interface SessionManager {
   /** Get current session ID */
@@ -109,7 +109,7 @@ export interface ResumptionResult {
 // ============================================================================
 
 /**
- * GUPP Adapter - Bridge between Gas Town work tracking and Rufflo sessions
+ * GUPP Adapter - Bridge between Gas Town work tracking and Swarmdo sessions
  *
  * Implements the GUPP principle: "If work is on your hook, YOU MUST RUN IT"
  *

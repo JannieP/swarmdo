@@ -1,0 +1,112 @@
+# Swarmdo v3.5 — Headless Worker Image
+# ADR-020: Headless Worker Integration Architecture - Phase 3
+#
+# Headless workers run CLI daemon in foreground without interactive terminal.
+# Used by docker-compose.workers.yml for scalable worker pools.
+#
+# Build:
+#   docker build -t swarmdo:headless -f v3/@swarmdo/cli/docker/Dockerfile.headless .
+#
+# Run:
+#   docker run -e ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY swarmdo:headless
+
+# ── Stage 1: Install ─────────────────────────────────────────────
+FROM node:22-alpine AS build
+
+RUN apk add --no-cache git
+
+WORKDIR /install
+
+# Install swarmdo with --omit=optional to skip heavy transitive deps
+RUN npm install -g swarmdo@latest \
+      --omit=optional \
+      --ignore-scripts \
+      --no-audit \
+      --no-fund \
+    && npm cache clean --force
+
+# Prune heavy optional transitive deps (CLI works without them)
+RUN GLOBAL_PREFIX=$(npm config get prefix) \
+    && CLI_NM="${GLOBAL_PREFIX}/lib/node_modules/swarmdo/node_modules" \
+    && rm -rf \
+      "${CLI_NM}/agentic-flow" \
+      "${CLI_NM}/@opentelemetry" \
+      "${CLI_NM}/onnxruntime-node" \
+      "${CLI_NM}/onnxruntime-web" \
+      "${CLI_NM}/onnx-proto" \
+      "${CLI_NM}/@anthropic-ai" \
+      "${CLI_NM}/@xenova" \
+      "${CLI_NM}/agentdb" \
+      "${CLI_NM}/@swarmvector" \
+      "${CLI_NM}/swarmvector" \
+      "${CLI_NM}/tiktoken" \
+      "${CLI_NM}/@img" \
+      "${CLI_NM}/better-sqlite3" \
+      "${CLI_NM}/sharp" \
+      "${CLI_NM}/@google" \
+    && rm -rf \
+      "${CLI_NM}/@swarmdo/embeddings" \
+      "${CLI_NM}/@swarmdo/memory" \
+      "${CLI_NM}/@swarmdo/codex" \
+      "${CLI_NM}/@swarmdo/guidance" \
+      "${CLI_NM}/@swarmdo/aidefence" \
+      "${CLI_NM}/@swarmdo/plugin-gastown-bridge" \
+    && NESTED="${CLI_NM}/@swarmdo/cli/node_modules" \
+    && rm -rf \
+      "${NESTED}/agentic-flow" \
+      "${NESTED}/@swarmvector" \
+      "${NESTED}/agentdb" \
+    && rm -rf \
+      "${CLI_NM}/swarmvector-onnx-embeddings-wasm" \
+      "${CLI_NM}/swarmvector-core-linux-x64-gnu" \
+      "${CLI_NM}/@swarmdo/neural" \
+      "${CLI_NM}/@grpc" \
+      "${CLI_NM}/gun"
+
+# Stage the pruned install for copying
+RUN GLOBAL_PREFIX=$(npm config get prefix) \
+    && mkdir -p /staged/lib /staged/bin \
+    && cp -a "${GLOBAL_PREFIX}/lib/node_modules" /staged/lib/ \
+    && cp -a "${GLOBAL_PREFIX}/bin/swarmdo" /staged/bin/ 2>/dev/null || true \
+    && cp -a "${GLOBAL_PREFIX}/bin/swarmdo" /staged/bin/ 2>/dev/null || true \
+    && cp -a "${GLOBAL_PREFIX}/bin/cli" /staged/bin/ 2>/dev/null || true
+
+# ── Stage 2: Production ──────────────────────────────────────────
+FROM node:22-alpine AS production
+
+RUN apk add --no-cache dumb-init git bash ca-certificates curl
+
+# Non-root user
+RUN addgroup -g 1001 -S swarmdo \
+    && adduser -S -D -H -u 1001 -h /home/swarmdo -s /bin/bash -G swarmdo swarmdo \
+    && mkdir -p /home/swarmdo/.swarmdo /workspace /var/log/swarmdo \
+    && chown -R swarmdo:swarmdo /home/swarmdo /workspace /var/log/swarmdo
+
+# Copy global node_modules and bin links from build stage
+COPY --from=build /staged/lib/node_modules /usr/local/lib/node_modules
+COPY --from=build /staged/bin/ /usr/local/bin/
+
+# Ensure bin symlinks
+RUN ln -sf /usr/local/lib/node_modules/swarmdo/bin/swarmdo.js /usr/local/bin/swarmdo 2>/dev/null || true \
+    && ln -sf /usr/local/lib/node_modules/@swarmdo/cli/bin/cli.js /usr/local/bin/swarmdo 2>/dev/null || true \
+    && chmod +x /usr/local/bin/swarmdo 2>/dev/null || true \
+    && chmod +x /usr/local/bin/swarmdo 2>/dev/null || true
+
+ENV NODE_ENV=production \
+    CLAUDE_CODE_HEADLESS=true \
+    CLAUDE_CODE_SANDBOX_MODE=strict \
+    SWARMDO_LOG_LEVEL=info \
+    HOME=/home/swarmdo
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD swarmdo doctor --quiet || exit 1
+
+USER swarmdo
+WORKDIR /workspace
+
+EXPOSE 3000
+
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+
+# Default: start daemon in headless foreground mode
+CMD ["swarmdo", "daemon", "start", "--foreground", "--headless"]

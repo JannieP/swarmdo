@@ -1,0 +1,117 @@
+# Swarmdo v3.5 — Docker Compose Profiles
+#
+# Profiles:
+#   lite     — MCP server only (stdio), minimal footprint
+#   full     — CLI + daemon + all optional deps
+#   workers  — Scalable worker pool (extends docker-compose.workers.yml)
+#
+# Usage:
+#   docker compose -f v3/@swarmdo/cli/docker/docker-compose.yml --profile lite up
+#   docker compose -f v3/@swarmdo/cli/docker/docker-compose.yml --profile full up -d
+#   docker compose -f v3/@swarmdo/cli/docker/docker-compose.yml --profile workers up -d --scale worker=5
+#
+# Environment (required for full/workers):
+#   ANTHROPIC_API_KEY — Your Anthropic API key
+
+services:
+  # ── lite: MCP server on stdio (~80MB) ──────────────────────────
+  mcp:
+    profiles: ["lite"]
+    build:
+      context: ../../../..
+      dockerfile: v3/@swarmdo/cli/docker/Dockerfile
+    image: swarmdo:lite
+    stdin_open: true
+    environment:
+      - NODE_ENV=production
+      - SWARMDO_MCP_TRANSPORT=stdio
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 512M
+        reservations:
+          cpus: "0.25"
+          memory: 128M
+    healthcheck:
+      test: ["CMD", "swarmdo", "doctor", "--quiet"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # ── full: CLI + daemon + optional deps (~800MB) ────────────────
+  swarmdo-full:
+    profiles: ["full"]
+    build:
+      context: ../../../..
+      dockerfile: v3/@swarmdo/cli/docker/Dockerfile.full
+    image: swarmdo:full
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - NODE_ENV=production
+      - SWARMDO_LOG_LEVEL=${SWARMDO_LOG_LEVEL:-info}
+      - SWARMDO_MEMORY_BACKEND=hybrid
+    volumes:
+      - swarmdo-state:/home/swarmdo/.swarmdo
+      - swarmdo-logs:/var/log/swarmdo
+    ports:
+      - "${SWARMDO_MCP_PORT:-3000}:3000"
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: 8G
+        reservations:
+          cpus: "1"
+          memory: 2G
+    command: ["swarmdo", "daemon", "start", "--foreground"]
+    healthcheck:
+      test: ["CMD", "swarmdo", "doctor", "--quiet"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # ── workers: Scalable worker pool ──────────────────────────────
+  worker:
+    profiles: ["workers"]
+    build:
+      context: ../../../..
+      dockerfile: v3/@swarmdo/cli/docker/Dockerfile
+    image: swarmdo:lite
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - CLAUDE_CODE_HEADLESS=true
+      - CLAUDE_CODE_SANDBOX_MODE=${SWARMDO_SANDBOX:-strict}
+      - SWARMDO_WORKERS=${SWARMDO_WORKERS:-audit,optimize,testgaps}
+      - NODE_ENV=production
+    volumes:
+      - worker-state:/home/swarmdo/.swarmdo
+      - worker-logs:/var/log/swarmdo
+    deploy:
+      replicas: ${SWARMDO_WORKER_REPLICAS:-3}
+      resources:
+        limits:
+          cpus: "2"
+          memory: 4G
+        reservations:
+          cpus: "0.5"
+          memory: 1G
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    command: ["swarmdo", "daemon", "start", "--foreground", "--headless"]
+    healthcheck:
+      test: ["CMD", "swarmdo", "doctor", "--quiet"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+volumes:
+  swarmdo-state:
+  swarmdo-logs:
+  worker-state:
+  worker-logs:

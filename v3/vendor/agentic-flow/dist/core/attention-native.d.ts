@@ -1,10 +1,10 @@
 /**
  * Native Attention Wrappers
  *
- * Properly wraps @rufvector/attention native Rust implementations
+ * Properly wraps @swarmvector/attention native Rust implementations
  * with TypedArray conversions and proper error handling
  *
- * Note: @rufvector/attention is optional - falls back gracefully
+ * Note: @swarmvector/attention is optional - falls back gracefully
  */
 declare let attentionAvailable: boolean;
 export { attentionAvailable };

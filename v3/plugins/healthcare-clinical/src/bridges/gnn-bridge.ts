@@ -3,7 +3,7 @@
  *
  * Provides Graph Neural Network capabilities for clinical pathway
  * analysis and drug interaction detection. Integrates with
- * rufvector-gnn-wasm for efficient graph-based reasoning.
+ * swarmvector-gnn-wasm for efficient graph-based reasoning.
  *
  * Use Cases:
  * - Clinical pathway recommendations
@@ -36,7 +36,7 @@ const defaultLogger: Logger = {
 };
 
 /**
- * WASM module interface for rufvector-gnn-wasm
+ * WASM module interface for swarmvector-gnn-wasm
  */
 interface GNNWasmModule {
   create_graph(numNodes: number, numEdges: number, featureDim: number): number;
@@ -538,8 +538,8 @@ export class HealthcareGNNBridge implements GNNBridge {
   private async resolveWasmPath(): Promise<string | null> {
     try {
       // Dynamic import with type assertion for optional WASM package
-      const module = await import(/* webpackIgnore: true */ 'rufvector-gnn-wasm' as string) as { default?: string };
-      // The in-repo rufvector-gnn-wasm fork resolves (the upstream ^0.1.0
+      const module = await import(/* webpackIgnore: true */ 'swarmvector-gnn-wasm' as string) as { default?: string };
+      // The in-repo swarmvector-gnn-wasm fork resolves (the upstream ^0.1.0
       // never did), but its default export is a wasm-bindgen init function,
       // not the path string this loader expects. Only adopt a string path;
       // otherwise keep the JS fallback exactly as before.

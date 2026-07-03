@@ -145,7 +145,7 @@ class BottleneckAnalyzer {
 }
 ```
 
-## Integration with Rufflo
+## Integration with Swarmdo
 
 ### Swarm Performance Optimization
 - **Agent Performance Monitoring**: Monitor individual agent performance

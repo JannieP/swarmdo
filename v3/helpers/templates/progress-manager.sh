@@ -1,10 +1,10 @@
 #!/bin/bash
-# Rufflo V3 Progress Manager Template (Linux/macOS)
+# Swarmdo V3 Progress Manager Template (Linux/macOS)
 
 set -e
 
-METRICS_DIR="${PROJECT_ROOT:-.}/.rufflo/metrics"
-SECURITY_DIR="${PROJECT_ROOT:-.}/.rufflo/security"
+METRICS_DIR="${PROJECT_ROOT:-.}/.swarmdo/metrics"
+SECURITY_DIR="${PROJECT_ROOT:-.}/.swarmdo/security"
 
 # Colors
 GREEN='\033[0;32m'

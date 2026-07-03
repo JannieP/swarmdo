@@ -2,7 +2,7 @@
 /**
  * CLI ↔ MCP tool coverage audit — regression guard for #1916.
  *
- * The `rufflo agent logs <id>` CLI subcommand referenced an `agent_logs` MCP
+ * The `swarmdo agent logs <id>` CLI subcommand referenced an `agent_logs` MCP
  * tool that was never registered, so the command died with
  * `MCP tool not found: agent_logs`. There turned out to be ~20 more CLI
  * subcommands with the same shape (`callMCPTool('<name>', …)` where `<name>`
@@ -13,8 +13,8 @@
  * dangling reference.
  *
  * It scans every `callMCPTool('<name>', …)` reference in
- * `v3/@rufflo/cli/src/commands/*.ts` and checks the name is registered
- * by some MCPTool definition in `v3/@rufflo/cli/src/mcp-tools/*.ts`
+ * `v3/@swarmdo/cli/src/commands/*.ts` and checks the name is registered
+ * by some MCPTool definition in `v3/@swarmdo/cli/src/mcp-tools/*.ts`
  * (the files `mcp-client.ts` assembles into TOOL_REGISTRY).
  *
  * Usage:
@@ -27,7 +27,7 @@ import { readFileSync, readdirSync, existsSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const REPO_ROOT = process.cwd();
-const CLI_SRC = join(REPO_ROOT, 'v3', '@rufflo', 'cli', 'src');
+const CLI_SRC = join(REPO_ROOT, 'v3', '@swarmdo', 'cli', 'src');
 const COMMANDS_DIR = join(CLI_SRC, 'commands');
 const MCP_CLIENT = join(CLI_SRC, 'mcp-client.ts'); // single source of truth for what is registered
 const BASELINE_FILE = join(REPO_ROOT, 'verification', 'cli-mcp-tool-baseline.json');
@@ -48,10 +48,10 @@ function listTs(dir) {
 // `import { … } from '<path>'` and scan that file. A file that defines tools
 // but is never imported into registerTools is NOT registered — so a CLI
 // callMCPTool() against it correctly counts as dangling (this caught the
-// `hooks_coverage-*` tools, which were defined in rufvector/coverage-tools.ts
+// `hooks_coverage-*` tools, which were defined in swarmvector/coverage-tools.ts
 // but never wired in — #1916).
 function resolveImportPath(spec) {
-  // spec like './mcp-tools/agent-tools.js' or '../rufvector/coverage-tools.js'
+  // spec like './mcp-tools/agent-tools.js' or '../swarmvector/coverage-tools.js'
   let p = spec.replace(/^\.\//, '').replace(/^\.\.\//, '../');
   // .js → .ts (source files)
   p = p.replace(/\.js$/, '.ts');

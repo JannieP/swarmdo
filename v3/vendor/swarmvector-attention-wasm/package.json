@@ -1,0 +1,60 @@
+{
+  "name": "swarmvector-attention-wasm",
+  "type": "module",
+  "version": "0.1.32",
+  "description": "High-performance WebAssembly attention mechanisms for transformers and LLMs: Multi-Head, Flash Attention, Hyperbolic, Linear (Performer), MoE, Local-Global, and CGT Sheaf Attention with coherence gating. GPU-accelerated with SIMD fallback.",
+  "license": "MIT OR Apache-2.0",
+  "author": "SwarmVector Team <team@swarmvector.dev>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ruvnet/swarmvector.git"
+  },
+  "homepage": "https://ruv.io/swarmvector",
+  "bugs": {
+    "url": "https://github.com/ruvnet/swarmvector/issues"
+  },
+  "main": "swarmvector_attention_wasm.js",
+  "module": "swarmvector_attention_wasm.js",
+  "types": "swarmvector_attention_wasm.d.ts",
+  "files": [
+    "swarmvector_attention_wasm_bg.wasm",
+    "swarmvector_attention_wasm.js",
+    "swarmvector_attention_wasm.d.ts",
+    "swarmvector_attention_wasm_bg.wasm.d.ts",
+    "README.md"
+  ],
+  "sideEffects": [
+    "./snippets/*"
+  ],
+  "keywords": [
+    "wasm",
+    "webassembly",
+    "attention",
+    "transformer",
+    "llm",
+    "machine-learning",
+    "neural-networks",
+    "multi-head-attention",
+    "flash-attention",
+    "hyperbolic",
+    "moe",
+    "mixture-of-experts",
+    "coherence",
+    "cgt",
+    "sheaf-attention",
+    "ai",
+    "deep-learning",
+    "gpu",
+    "simd",
+    "infonce",
+    "contrastive-learning",
+    "performer",
+    "linear-attention"
+  ],
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -18,7 +18,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const PROJECT_ROOT = join(__dirname, '../..');
-const DATA_DIR = join(PROJECT_ROOT, '.rufflo', 'data');
+const DATA_DIR = join(PROJECT_ROOT, '.swarmdo', 'data');
 const STORE_PATH = join(DATA_DIR, 'auto-memory-store.json');
 
 // Colors
@@ -31,7 +31,7 @@ const log = (msg) => console.log(`${CYAN}[AutoMemory] ${msg}${RESET}`);
 const success = (msg) => console.log(`${GREEN}[AutoMemory] ✓ ${msg}${RESET}`);
 const dim = (msg) => console.log(`  ${DIM}${msg}${RESET}`);
 
-const DEBUG = !!(process.env.RUFLO_DEBUG || process.env.DEBUG);
+const DEBUG = !!(process.env.SWARMDO_DEBUG || process.env.DEBUG);
 
 // ── Graceful shutdown (FIX 3) ───────────────────────────────────────────────
 // Track the backend currently in use so a SIGTERM/SIGINT mid-run can still
@@ -157,7 +157,7 @@ class JsonFileBackend {
  *   2. CWD/node_modules/<pkg>/<relativeFile>          (user's project deps)
  *   3. node_modules walk-up from PROJECT_ROOT
  *   4. node_modules walk-up from CWD
- *   5. Global npm prefix — checks the rufflo / rufflo / @rufflo/cli
+ *   5. Global npm prefix — checks the swarmdo / swarmdo / @swarmdo/cli
  *      bundles, AND the package installed globally on its own
  *
  * Returns the resolved absolute path, or null. See issue #2285.
@@ -166,7 +166,7 @@ async function resolveBundledFile(pkg, relativeFile) {
   const monorepo = join(PROJECT_ROOT, 'v3', pkg, relativeFile);
   if (existsSync(monorepo)) return monorepo;
 
-  const cwd = process.env.RUFFLO_CWD || process.cwd();
+  const cwd = process.env.SWARMDO_CWD || process.cwd();
   const inCwd = join(cwd, 'node_modules', pkg, relativeFile);
   if (existsSync(inCwd)) return inCwd;
 
@@ -186,7 +186,7 @@ async function resolveBundledFile(pkg, relativeFile) {
   const fromCwd = walkUp(cwd);
   if (fromCwd) return fromCwd;
 
-  // Global npm prefix fallback — handles `npm i -g rufflo` and friends, where
+  // Global npm prefix fallback — handles `npm i -g swarmdo` and friends, where
   // the marketplace clone (PROJECT_ROOT) has no access to the bundled deps.
   try {
     const { execSync } = await import('child_process');
@@ -197,7 +197,7 @@ async function resolveBundledFile(pkg, relativeFile) {
     if (npmPrefix) {
       // Both Unix (<prefix>/lib/node_modules) and Windows (<prefix>/node_modules)
       const roots = [join(npmPrefix, 'lib', 'node_modules'), join(npmPrefix, 'node_modules')];
-      const wrappers = ['rufflo', 'rufflo', join('@rufflo', 'cli')];
+      const wrappers = ['swarmdo', 'swarmdo', join('@swarmdo', 'cli')];
       for (const root of roots) {
         for (const wrapper of wrappers) {
           const candidate = join(root, wrapper, 'node_modules', pkg, relativeFile);
@@ -214,7 +214,7 @@ async function resolveBundledFile(pkg, relativeFile) {
 
 async function loadMemoryPackage() {
   // Strategy 1-5: locate dist/index.js across dev/installed/global layouts
-  const resolved = await resolveBundledFile('@rufflo/memory', 'dist/index.js');
+  const resolved = await resolveBundledFile('@swarmdo/memory', 'dist/index.js');
   if (resolved) {
     try {
       return await import(`file://${resolved}`);
@@ -222,27 +222,27 @@ async function loadMemoryPackage() {
   }
 
   // Strategy 6: Use createRequire for CJS-style resolution (handles nested node_modules
-  // when installed as a transitive dependency via npx rufflo / npx rufflo)
+  // when installed as a transitive dependency via npx swarmdo / npx swarmdo)
   try {
     const { createRequire } = await import('module');
     const require = createRequire(join(PROJECT_ROOT, 'package.json'));
-    return require('@rufflo/memory');
+    return require('@swarmdo/memory');
   } catch { /* fall through */ }
 
-  // Strategy 7: ESM import (works when @rufflo/memory is a direct dependency)
+  // Strategy 7: ESM import (works when @swarmdo/memory is a direct dependency)
   try {
-    return await import('@rufflo/memory');
+    return await import('@swarmdo/memory');
   } catch { /* fall through */ }
 
   return null;
 }
 
 // ============================================================================
-// Read config from .rufflo/config.yaml
+// Read config from .swarmdo/config.yaml
 // ============================================================================
 
 function readConfig() {
-  const configPath = join(PROJECT_ROOT, '.rufflo', 'config.yaml');
+  const configPath = join(PROJECT_ROOT, '.swarmdo', 'config.yaml');
   const defaults = {
     learningBridge: { enabled: true, sonaMode: 'balanced', confidenceDecayRate: 0.005, accessBoostAmount: 0.03, consolidationThreshold: 10 },
     memoryGraph: { enabled: true, pageRankDamping: 0.85, maxNodes: 5000, similarityThreshold: 0.8 },
@@ -294,8 +294,8 @@ async function doImport() {
   const bridgeConfig = {
     // Use Claude Code's invocation cwd (the user's project), not PROJECT_ROOT
     // — PROJECT_ROOT resolves to the plugin clone when this hook runs from
-    // ~/.claude/plugins/marketplaces/rufflo/. See issue #2284.
-    workingDir: process.env.RUFFLO_CWD || process.cwd(),
+    // ~/.claude/plugins/marketplaces/swarmdo/. See issue #2284.
+    workingDir: process.env.SWARMDO_CWD || process.cwd(),
     syncMode: 'on-session-end',
   };
 
@@ -331,7 +331,7 @@ async function doImport() {
     // Bridge to AgentDB: store entries with ONNX vector embeddings for semantic search
     let vectorized = 0;
     try {
-      const cliDistPath = await resolveBundledFile('@rufflo/cli', 'dist/src/memory/memory-initializer.js');
+      const cliDistPath = await resolveBundledFile('@swarmdo/cli', 'dist/src/memory/memory-initializer.js');
       if (cliDistPath) {
         const memInit = await import(`file://${cliDistPath}`);
         await memInit.initializeMemoryDatabase({ force: false, verbose: false });
@@ -386,7 +386,7 @@ async function doSync() {
 
   const bridgeConfig = {
     // See doImport — must reflect the user's project, not PROJECT_ROOT (#2284)
-    workingDir: process.env.RUFFLO_CWD || process.cwd(),
+    workingDir: process.env.SWARMDO_CWD || process.cwd(),
     syncMode: 'on-session-end',
   };
 
@@ -419,7 +419,7 @@ async function doSync() {
 
     // Flush intelligence patterns to disk (SONA + ReasoningBank)
     try {
-      const intPath = await resolveBundledFile('@rufflo/cli', 'dist/src/memory/intelligence.js');
+      const intPath = await resolveBundledFile('@swarmdo/cli', 'dist/src/memory/intelligence.js');
       if (intPath) {
         const intelligence = await import(`file://${intPath}`);
         if (intelligence.flushPatterns) {
@@ -459,12 +459,12 @@ async function doStatus() {
 
   // AgentDB vector status
   try {
-    const dbPath = join(PROJECT_ROOT, '.rufflo', 'memory', 'memory.db');
+    const dbPath = join(PROJECT_ROOT, '.swarmdo', 'memory', 'memory.db');
     const swarmDbPath = join(PROJECT_ROOT, '.swarm', 'memory.db');
     const hasDb = existsSync(dbPath) || existsSync(swarmDbPath);
     console.log(`  AgentDB:        ${hasDb ? '✅ sql.js database exists' : '⏸ Not initialized'}`);
 
-    const intPath = await resolveBundledFile('@rufflo/cli', 'dist/src/memory/intelligence.js');
+    const intPath = await resolveBundledFile('@swarmdo/cli', 'dist/src/memory/intelligence.js');
     if (intPath) {
       const intelligence = await import(`file://${intPath}`);
       const stats = intelligence.getIntelligenceStats?.();
@@ -527,7 +527,7 @@ async function doImportAll() {
   // Load memory-initializer for vectorized storage
   let memInit = null;
   try {
-    const cliDistPath = await resolveBundledFile('@rufflo/cli', 'dist/src/memory/memory-initializer.js');
+    const cliDistPath = await resolveBundledFile('@swarmdo/cli', 'dist/src/memory/memory-initializer.js');
     if (cliDistPath) {
       memInit = await import(`file://${cliDistPath}`);
       await memInit.initializeMemoryDatabase({ force: false, verbose: false });
@@ -537,7 +537,7 @@ async function doImportAll() {
   }
 
   if (!memInit) {
-    dim('Cannot vectorize without memory-initializer. Run: cd v3/@rufflo/cli && npm run build');
+    dim('Cannot vectorize without memory-initializer. Run: cd v3/@swarmdo/cli && npm run build');
     return;
   }
 
@@ -618,7 +618,7 @@ const command = process.argv[2] || 'status';
 // Dynamic import() failures can surface as unhandled rejections on a later
 // microtask even when the awaiting call site already caught them, which would
 // otherwise force a non-zero exit. Swallow to keep hooks exit-0, but surface the
-// reason under RUFLO_DEBUG/DEBUG so genuine async bugs aren't silently hidden
+// reason under SWARMDO_DEBUG/DEBUG so genuine async bugs aren't silently hidden
 // (FIX 2 — the previous `() => {}` discarded every rejection process-wide).
 process.on('unhandledRejection', (reason) => {
   if (DEBUG) {

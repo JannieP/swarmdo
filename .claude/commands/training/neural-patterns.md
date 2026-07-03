@@ -14,7 +14,7 @@ Every successful operation trains the neural networks:
 
 ### 2. Manual Training
 ```
-Tool: mcp__rufflo__neural_train
+Tool: mcp__swarmdo__neural_train
 Parameters: {
   "pattern_type": "coordination",
   "training_data": "successful task patterns",
@@ -34,7 +34,7 @@ Parameters: {
 
 ### 4. Improvement Tracking
 ```
-Tool: mcp__rufflo__neural_status
+Tool: mcp__swarmdo__neural_status
 Result: {
   "patterns": {
     "convergent": 0.92,
@@ -48,7 +48,7 @@ Result: {
 
 ## Pattern Analysis
 ```
-Tool: mcp__rufflo__neural_patterns
+Tool: mcp__swarmdo__neural_patterns
 Parameters: {
   "action": "analyze",
   "operation": "recent_edits"
@@ -64,11 +64,11 @@ Parameters: {
 ## CLI Usage
 ```bash
 # Train neural patterns via CLI
-npx rufflo neural train --type coordination --epochs 50
+npx swarmdo neural train --type coordination --epochs 50
 
 # Check neural status
-npx rufflo neural status
+npx swarmdo neural status
 
 # Analyze patterns
-npx rufflo neural patterns --analyze
+npx swarmdo neural patterns --analyze
 ```

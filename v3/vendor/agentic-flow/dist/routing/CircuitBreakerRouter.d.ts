@@ -1,7 +1,7 @@
 /**
  * Circuit Breaker Router - Fault-Tolerant Agent Routing
  *
- * Integrates @rufvector/tiny-dancer circuit breaker pattern for 99.9% uptime.
+ * Integrates @swarmvector/tiny-dancer circuit breaker pattern for 99.9% uptime.
  *
  * Features:
  * - Circuit breaker states: CLOSED, OPEN, HALF_OPEN

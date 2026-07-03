@@ -24,7 +24,7 @@ import {
   type EphemeralAgent,
   type SpawnResult,
   type ConsensusProposal,
-} from '../../@rufflo/swarm/src/federation-hub.js';
+} from '../../@swarmdo/swarm/src/federation-hub.js';
 
 // ============================================================================
 // Input Schemas

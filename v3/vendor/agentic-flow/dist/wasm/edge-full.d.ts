@@ -1,5 +1,5 @@
 /**
- * RuVector Edge-Full Integration
+ * SwarmVector Edge-Full Integration
  *
  * Complete WASM toolkit for edge AI providing:
  *
@@ -18,7 +18,7 @@
  * - Raft consensus
  * - SIMD acceleration
  *
- * @see https://github.com/ruvnet/ruvector/tree/main/examples/edge-full
+ * @see https://github.com/ruvnet/swarmvector/tree/main/examples/edge-full
  */
 /**
  * Main EdgeFull module interface

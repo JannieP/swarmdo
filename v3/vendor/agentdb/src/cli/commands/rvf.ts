@@ -253,7 +253,7 @@ export const rvfCommand = new Command('rvf')
         };
 
         try {
-          const rvf = await import('@rufvector/rvf');
+          const rvf = await import('@swarmvector/rvf');
           result.sdk = true;
           result.sdkVersion = (rvf as Record<string, unknown>).version ?? 'unknown';
         } catch {
@@ -261,14 +261,14 @@ export const rvfCommand = new Command('rvf')
         }
 
         try {
-          await import('@rufvector/rvf-node');
+          await import('@swarmvector/rvf-node');
           result.node = true;
         } catch {
           // N-API not available
         }
 
         try {
-          await import('@rufvector/rvf-wasm');
+          await import('@swarmvector/rvf-wasm');
           result.wasm = true;
         } catch {
           // WASM not available
@@ -286,11 +286,11 @@ export const rvfCommand = new Command('rvf')
           log(`  Platform:  ${colors.blue}${result.platform}${colors.reset}`);
 
           if (!result.sdk) {
-            log(`\n  Install: ${colors.cyan}npm install @rufvector/rvf${colors.reset}`);
+            log(`\n  Install: ${colors.cyan}npm install @swarmvector/rvf${colors.reset}`);
           }
           if (!result.node && !result.wasm) {
-            log(`  Native:  ${colors.cyan}npm install @rufvector/rvf-node${colors.reset}`);
-            log(`  WASM:    ${colors.cyan}npm install @rufvector/rvf-wasm${colors.reset}`);
+            log(`  Native:  ${colors.cyan}npm install @swarmvector/rvf-node${colors.reset}`);
+            log(`  WASM:    ${colors.cyan}npm install @swarmvector/rvf-wasm${colors.reset}`);
           }
           log('');
         }

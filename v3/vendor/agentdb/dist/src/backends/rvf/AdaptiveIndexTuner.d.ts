@@ -3,7 +3,7 @@
  *
  * Provides:
  * - Adaptive HNSW index monitoring via indexStats() + performance tracking
- * - Temporal memory decay via @rufvector/gnn TensorCompress
+ * - Temporal memory decay via @swarmvector/gnn TensorCompress
  * - Thompson Sampling query strategy selection via AgentDBSolver
  *
  * Security:

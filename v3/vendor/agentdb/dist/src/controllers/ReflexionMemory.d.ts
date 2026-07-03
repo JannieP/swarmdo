@@ -202,7 +202,7 @@ export declare class ReflexionMemory {
     warmCache(sessionId?: string): Promise<void>;
     /**
      * Delete an episode by id. Closes the gap from issue #150 (downstream:
-     * ruflo#1784, RuVector#427) — once an episode is written there was no
+     * swarmdo#1784, SwarmVector#427) — once an episode is written there was no
      * first-class way to remove it through any backend.
      *
      * Strategy mirrors storeEpisode: when a graph backend is present we go

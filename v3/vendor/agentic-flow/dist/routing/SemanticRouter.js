@@ -1,7 +1,7 @@
 /**
  * Semantic Router - HNSW-Powered Intent Matching
  *
- * Integrates @rufvector/router for sub-10ms semantic routing.
+ * Integrates @swarmvector/router for sub-10ms semantic routing.
  *
  * Features:
  * - HNSW (Hierarchical Navigable Small World) index
@@ -30,7 +30,7 @@ export class SemanticRouter {
     // Agent registry
     agentIntents;
     intentEmbeddings;
-    // HNSW index simulation (production would use @rufvector/router)
+    // HNSW index simulation (production would use @swarmvector/router)
     indexBuilt = false;
     // Performance tracking
     routingStats;
@@ -73,7 +73,7 @@ export class SemanticRouter {
     /**
      * Build HNSW index for fast routing
      *
-     * In production, this would use @rufvector/router's native HNSW.
+     * In production, this would use @swarmvector/router's native HNSW.
      * For this implementation, we use a simplified version.
      */
     buildIndex() {
@@ -196,7 +196,7 @@ export class SemanticRouter {
     /**
      * Search HNSW index for nearest neighbors
      *
-     * In production, this would use @rufvector/router's native HNSW.
+     * In production, this would use @swarmvector/router's native HNSW.
      * For this implementation, we use brute-force cosine similarity.
      *
      * @param queryEmbedding - Query vector

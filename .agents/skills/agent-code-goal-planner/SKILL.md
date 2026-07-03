@@ -104,14 +104,14 @@ The SPARC methodology enhances GOAP planning by providing a structured framework
 
 ```bash
 # Execute SPARC phases for goal achievement
-npx rufflo sparc run spec-pseudocode "OAuth2 authentication system"
-npx rufflo sparc run architect "microservices communication layer"
-npx rufflo sparc tdd "payment processing feature"
-npx rufflo sparc pipeline "complete feature implementation"
+npx swarmdo sparc run spec-pseudocode "OAuth2 authentication system"
+npx swarmdo sparc run architect "microservices communication layer"
+npx swarmdo sparc tdd "payment processing feature"
+npx swarmdo sparc pipeline "complete feature implementation"
 
 # Batch processing for complex goals
-npx rufflo sparc batch spec,arch,refine "user management system"
-npx rufflo sparc concurrent tdd tasks.json
+npx swarmdo sparc batch spec,arch,refine "user management system"
+npx swarmdo sparc concurrent tdd tasks.json
 ```
 
 ### SPARC-GOAP Feature Implementation Plan
@@ -119,7 +119,7 @@ npx rufflo sparc concurrent tdd tasks.json
 goal: implement_payment_processing_with_sparc
 sparc_phases:
   specification:
-    command: "npx rufflo sparc run spec-pseudocode 'payment processing'"
+    command: "npx swarmdo sparc run spec-pseudocode 'payment processing'"
     deliverables:
       - requirements_doc
       - acceptance_criteria
@@ -130,7 +130,7 @@ sparc_phases:
       - compliance_standards_identified
       
   pseudocode:
-    command: "npx rufflo sparc run pseudocode 'payment flow algorithms'"
+    command: "npx swarmdo sparc run pseudocode 'payment flow algorithms'"
     deliverables:
       - payment_flow_logic
       - error_handling_patterns
@@ -140,7 +140,7 @@ sparc_phases:
       - edge_cases_covered
       
   architecture:
-    command: "npx rufflo sparc run architect 'payment system design'"
+    command: "npx swarmdo sparc run architect 'payment system design'"
     deliverables:
       - system_components
       - api_contracts
@@ -150,7 +150,7 @@ sparc_phases:
       - security_layers_defined
       
   refinement:
-    command: "npx rufflo sparc tdd 'payment feature'"
+    command: "npx swarmdo sparc tdd 'payment feature'"
     deliverables:
       - unit_tests
       - integration_tests
@@ -160,7 +160,7 @@ sparc_phases:
       - all_tests_passing
       
   completion:
-    command: "npx rufflo sparc run integration 'deploy payment system'"
+    command: "npx swarmdo sparc run integration 'deploy payment system'"
     deliverables:
       - deployed_system
       - documentation
@@ -335,32 +335,32 @@ async function implementFeatureWithSPARC(feature: string) {
 
 ```javascript
 // Initialize SPARC-enhanced development swarm
-mcp__rufflo__swarm_init {
+mcp__swarmdo__swarm_init {
   topology: "hierarchical",
   maxAgents: 5
 }
 
 // Spawn SPARC-specific agents
-mcp__rufflo__agent_spawn {
+mcp__swarmdo__agent_spawn {
   type: "sparc-coder",
   capabilities: ["specification", "pseudocode", "architecture", "refinement", "completion"]
 }
 
 // Spawn specialized agents
-mcp__rufflo__agent_spawn {
+mcp__swarmdo__agent_spawn {
   type: "coder",
   capabilities: ["refactoring", "optimization"]
 }
 
 // Orchestrate development tasks
-mcp__rufflo__task_orchestrate {
+mcp__swarmdo__task_orchestrate {
   task: "implement_oauth_system",
   strategy: "adaptive",
   priority: "high"
 }
 
 // Store successful patterns
-mcp__rufflo__memory_usage {
+mcp__swarmdo__memory_usage {
   action: "store",
   namespace: "code-patterns",
   key: "oauth_implementation_plan",
@@ -419,19 +419,19 @@ class SPARCGoalPlanner {
 
 ```bash
 # 1. Initialize SPARC-GOAP planning
-npx rufflo sparc run spec-pseudocode "user authentication feature"
+npx swarmdo sparc run spec-pseudocode "user authentication feature"
 
 # 2. Execute architecture phase
-npx rufflo sparc run architect "authentication system design"
+npx swarmdo sparc run architect "authentication system design"
 
 # 3. TDD implementation with goal tracking
-npx rufflo sparc tdd "authentication feature" --track-goals
+npx swarmdo sparc tdd "authentication feature" --track-goals
 
 # 4. Complete integration with goal validation
-npx rufflo sparc run integration "deploy authentication" --validate-goals
+npx swarmdo sparc run integration "deploy authentication" --validate-goals
 
 # 5. Verify goal achievement
-npx rufflo sparc verify "authentication feature complete"
+npx swarmdo sparc verify "authentication feature complete"
 ```
 
 ## Continuous Improvement

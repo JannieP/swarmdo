@@ -1,15 +1,15 @@
 /**
  * agentic-flow smoke test (node:test).
  * Vendored fork of the upstream `agentic-flow@2.0.14` published tarball
- * (internal ruv->ruf sweep; name kept). rufflo imports these subpaths via
+ * (internal ruv->ruf sweep; name kept). swarmdo imports these subpaths via
  * `await import('agentic-flow/<subpath>')` (all optional / safeImport).
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
-// The subpaths rufflo actually consumes. (agent-booster is intentionally
+// The subpaths swarmdo actually consumes. (agent-booster is intentionally
 // omitted: its exports map entry points to a file the upstream tarball never
-// shipped, so it fails against upstream too and rufflo uses safeImport.)
+// shipped, so it fails against upstream too and swarmdo uses safeImport.)
 const SUBPATHS = [
   'agentic-flow/embeddings',
   'agentic-flow/reasoningbank',

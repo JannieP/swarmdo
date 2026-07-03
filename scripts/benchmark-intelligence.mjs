@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /**
  * benchmark-intelligence.mjs — Real, reusable benchmark harness for the
- * RufVector / AgentDB intelligence stack.
+ * SwarmVector / AgentDB intelligence stack.
  *
  * Measures, on the machine it runs on, against the BUILT exports under
- *   v3/@rufflo/cli/dist/src/...
+ *   v3/@swarmdo/cli/dist/src/...
  * (never against source, never hardcoded):
  *
  *   1. HNSW search vs in-process brute-force cosine baseline
@@ -39,7 +39,7 @@
  *   node scripts/benchmark-intelligence.mjs --queries 50 --dims 384
  *   node scripts/benchmark-intelligence.mjs --json-only
  *
- * Created for the rufflo intelligence stack. Co-Authored-By: Rufflo <ruv@ruv.net>
+ * Created for the swarmdo intelligence stack. Co-Authored-By: Swarmdo <ruv@ruv.net>
  */
 
 import { fileURLToPath } from 'node:url';
@@ -47,7 +47,7 @@ import path from 'node:path';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..');
-const DIST = path.join(REPO_ROOT, 'v3', '@rufflo', 'cli', 'dist', 'src');
+const DIST = path.join(REPO_ROOT, 'v3', '@swarmdo', 'cli', 'dist', 'src');
 
 // ----------------------------------------------------------------------------
 // CLI args
@@ -138,17 +138,17 @@ const round = (x, d = 4) => (x == null || Number.isNaN(x) ? null : Number(x.toFi
 // ----------------------------------------------------------------------------
 async function benchHnsw() {
   const out = { unit: 'ms/query', backend: null, byN: {}, note: '' };
-  let createVectorDB, getStatus, loadRufVector;
+  let createVectorDB, getStatus, loadSwarmVector;
   try {
-    ({ createVectorDB, getStatus, loadRufVector } = await import(path.join(DIST, 'rufvector', 'vector-db.js')));
-    await loadRufVector();
+    ({ createVectorDB, getStatus, loadSwarmVector } = await import(path.join(DIST, 'swarmvector', 'vector-db.js')));
+    await loadSwarmVector();
     out.backend = getStatus();
   } catch (e) {
-    out.error = `failed to load rufvector vector-db: ${e.message}`;
+    out.error = `failed to load swarmvector vector-db: ${e.message}`;
     return out;
   }
 
-  // rufvector createVectorDB enforces 384 dims on this build; honour that.
+  // swarmvector createVectorDB enforces 384 dims on this build; honour that.
   const dims = ARGS.dims;
   const K = 10;
 
@@ -340,21 +340,21 @@ async function benchRabitq() {
 // ----------------------------------------------------------------------------
 async function benchSona() {
   const out = {};
-  let isRufllmWasmAvailable, initRufllmWasm, createSonaInstant;
+  let isSwarmllmWasmAvailable, initSwarmllmWasm, createSonaInstant;
   try {
-    ({ isRufllmWasmAvailable, initRufllmWasm, createSonaInstant } = await import(path.join(DIST, 'rufvector', 'rufllm-wasm.js')));
+    ({ isSwarmllmWasmAvailable, initSwarmllmWasm, createSonaInstant } = await import(path.join(DIST, 'swarmvector', 'swarmllm-wasm.js')));
   } catch (e) {
-    return { error: `failed to load rufllm-wasm: ${e.message}` };
+    return { error: `failed to load swarmllm-wasm: ${e.message}` };
   }
-  const available = await isRufllmWasmAvailable();
+  const available = await isSwarmllmWasmAvailable();
   out.wasmAvailable = available;
   if (!available) {
     out.adaptMsPerCall = null;
-    out.note = 'not measured: @rufvector/rufllm-wasm not available on this machine';
+    out.note = 'not measured: @swarmvector/swarmllm-wasm not available on this machine';
     log('  SONA: WASM not available');
     return out;
   }
-  await initRufllmWasm();
+  await initSwarmllmWasm();
   const sona = await createSonaInstant({ hiddenDim: 64 });
   // Warm-up (JIT + WASM page faults).
   for (let i = 0; i < 1000; i++) sona.adapt(0.7 + (i % 3) * 0.1);
@@ -380,7 +380,7 @@ async function benchMoeGate() {
   const out = {};
   let createQLearningRouter;
   try {
-    ({ createQLearningRouter } = await import(path.join(DIST, 'rufvector', 'q-learning-router.js')));
+    ({ createQLearningRouter } = await import(path.join(DIST, 'swarmvector', 'q-learning-router.js')));
   } catch (e) {
     return { error: `failed to load q-learning-router: ${e.message}` };
   }

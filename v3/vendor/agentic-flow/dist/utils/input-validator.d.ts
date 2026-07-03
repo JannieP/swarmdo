@@ -1,7 +1,7 @@
 /**
  * Input Validation Utilities
  *
- * Provides secure input validation for RuVector integration:
+ * Provides secure input validation for SwarmVector integration:
  * - Task description validation
  * - Configuration validation
  * - Injection attack prevention

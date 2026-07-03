@@ -1,7 +1,7 @@
 /**
  * WasmStoreBridge - WASM in-memory vector store bridge
  *
- * Delegates to @rufvector/rvf-wasm store functions for browser-side
+ * Delegates to @swarmvector/rvf-wasm store functions for browser-side
  * in-memory vector storage. All methods handle the case where
  * rvf-wasm init() hasn't been called and return safe defaults.
  */
@@ -29,7 +29,7 @@ export class WasmStoreBridge {
   async initialize(): Promise<boolean> {
     if (this._initialized) return this.available;
     try {
-      const wasm: any = await import('@rufvector/rvf-wasm');
+      const wasm: any = await import('@swarmvector/rvf-wasm');
       if (wasm.rvf_store_create) this._storeCreate = wasm.rvf_store_create;
       if (wasm.rvf_store_ingest) this._storeIngest = wasm.rvf_store_ingest;
       if (wasm.rvf_store_query) this._storeQuery = wasm.rvf_store_query;

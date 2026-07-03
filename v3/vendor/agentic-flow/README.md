@@ -84,7 +84,7 @@ const status = await client.getStatus(runId);
 
 ### **SONA: Self-Optimizing Neural Architecture** 🧠
 
-Agentic-Flow v2 now includes **SONA** (@ruvector/sona) for sub-millisecond adaptive learning:
+Agentic-Flow v2 now includes **SONA** (@swarmvector/sona) for sub-millisecond adaptive learning:
 
 - 🎓 **+55% Quality Improvement**: Research profile with LoRA fine-tuning
 - ⚡ **<1ms Learning Overhead**: Sub-millisecond pattern learning and retrieval
@@ -1006,7 +1006,7 @@ claude
 
 ## 🧠 Self-Learning Hooks System
 
-Agentic-Flow v2 includes a powerful **self-learning hooks system** powered by RuVector intelligence (SONA Micro-LoRA, MoE attention, HNSW indexing). Hooks automatically learn from your development patterns and optimize agent routing over time.
+Agentic-Flow v2 includes a powerful **self-learning hooks system** powered by SwarmVector intelligence (SONA Micro-LoRA, MoE attention, HNSW indexing). Hooks automatically learn from your development patterns and optimize agent routing over time.
 
 ### Hooks Overview
 
@@ -1241,9 +1241,9 @@ npx agentic-flow@alpha hooks transfer ../other-project --mode merge
 #    🛠️  Target stack: TypeScript, React, Node.js
 ```
 
-### RuVector Intelligence Commands
+### SwarmVector Intelligence Commands
 
-The `intelligence` (alias: `intel`) subcommand provides access to the full RuVector stack:
+The `intelligence` (alias: `intel`) subcommand provides access to the full SwarmVector stack:
 
 #### Intelligence Route
 Route task using SONA + MoE + HNSW (150x faster than brute force):
@@ -1260,7 +1260,7 @@ Options:
 # Example
 npx agentic-flow@alpha hooks intel route "Optimize database queries" --top-k 3
 # Output:
-# ⚡ RuVector Intelligence Route
+# ⚡ SwarmVector Intelligence Route
 # 🎯 Agent: perf-analyzer
 # 📊 Confidence: 96.2%
 # 🔧 Engine: SONA+MoE+HNSW
@@ -1308,12 +1308,12 @@ npx agentic-flow@alpha hooks intel pattern-search "hydration mismatch"
 ```
 
 #### Intelligence Stats
-Get RuVector intelligence layer statistics:
+Get SwarmVector intelligence layer statistics:
 
 ```bash
 npx agentic-flow@alpha hooks intelligence stats
 # Output:
-# 📊 RuVector Intelligence Stats
+# 📊 SwarmVector Intelligence Stats
 #
 # 🧠 SONA Engine:
 #    Micro-LoRA: rank-1 (~0.05ms)
@@ -1574,9 +1574,9 @@ Options:
 npx agentic-flow@alpha workers run security-check --topic "authentication flow"
 ```
 
-### Native RuVector Workers
+### Native SwarmVector Workers
 
-Run native RuVector workers for advanced analysis:
+Run native SwarmVector workers for advanced analysis:
 
 ```bash
 npx agentic-flow@alpha workers native <type> [options]
@@ -1750,10 +1750,10 @@ npm run bench:attention
 
 ```bash
 # Rebuild native bindings
-npm rebuild @ruvector/attention
+npm rebuild @swarmvector/attention
 
 # Verify NAPI runtime
-node -e "console.log(require('@ruvector/attention').runtime)"
+node -e "console.log(require('@swarmvector/attention').runtime)"
 # Should output: "napi"
 ```
 
@@ -1981,7 +1981,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 ## 🙏 Acknowledgments
 
 - **Anthropic** - Claude Agent SDK
-- **@ruvector** - Attention and GNN implementations
+- **@swarmvector** - Attention and GNN implementations
 - **AgentDB Team** - Advanced vector database
 - **Open Source Community** - Invaluable contributions
 

@@ -580,31 +580,31 @@ class DashboardProvider {
 ### Monitoring Commands
 ```bash
 # Start comprehensive monitoring
-npx rufflo performance-report --format detailed --timeframe 24h
+npx swarmdo performance-report --format detailed --timeframe 24h
 
 # Real-time bottleneck analysis
-npx rufflo bottleneck-analyze --component swarm-coordination
+npx swarmdo bottleneck-analyze --component swarm-coordination
 
 # Health check all components
-npx rufflo health-check --components ["swarm", "agents", "coordination"]
+npx swarmdo health-check --components ["swarm", "agents", "coordination"]
 
 # Collect specific metrics
-npx rufflo metrics-collect --components ["cpu", "memory", "network"]
+npx swarmdo metrics-collect --components ["cpu", "memory", "network"]
 
 # Monitor SLA compliance
-npx rufflo sla-monitor --service swarm-coordination --threshold 99.9
+npx swarmdo sla-monitor --service swarm-coordination --threshold 99.9
 ```
 
 ### Alert Configuration
 ```bash
 # Configure performance alerts
-npx rufflo alert-config --metric cpu_usage --threshold 80 --severity warning
+npx swarmdo alert-config --metric cpu_usage --threshold 80 --severity warning
 
 # Set up anomaly detection
-npx rufflo anomaly-setup --models ["statistical", "ml", "time_series"]
+npx swarmdo anomaly-setup --models ["statistical", "ml", "time_series"]
 
 # Configure notification channels
-npx rufflo notification-config --channels ["slack", "email", "webhook"]
+npx swarmdo notification-config --channels ["slack", "email", "webhook"]
 ```
 
 ## Integration Points

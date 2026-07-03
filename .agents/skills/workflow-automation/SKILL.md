@@ -21,27 +21,27 @@ Create and execute automated workflows for complex multi-step processes.
 
 ### Create Workflow
 ```bash
-npx rufflo workflow create --name "deploy-flow" --template ci
+npx swarmdo workflow create --name "deploy-flow" --template ci
 ```
 
 ### Execute Workflow
 ```bash
-npx rufflo workflow execute --name "deploy-flow" --env production
+npx swarmdo workflow execute --name "deploy-flow" --env production
 ```
 
 ### List Workflows
 ```bash
-npx rufflo workflow list
+npx swarmdo workflow list
 ```
 
 ### Export Template
 ```bash
-npx rufflo workflow export --name "deploy-flow" --format yaml
+npx swarmdo workflow export --name "deploy-flow" --format yaml
 ```
 
 ### View Status
 ```bash
-npx rufflo workflow status --name "deploy-flow"
+npx swarmdo workflow status --name "deploy-flow"
 ```
 
 ## Built-in Templates

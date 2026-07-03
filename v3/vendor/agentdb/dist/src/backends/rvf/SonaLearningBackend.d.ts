@@ -1,7 +1,7 @@
 /**
  * SonaLearningBackend - Native SONA Engine Integration for AgentDB
  *
- * Wraps @rufvector/sona's N-API SonaEngine providing:
+ * Wraps @swarmvector/sona's N-API SonaEngine providing:
  * - Sub-millisecond micro-LoRA query enhancement
  * - Trajectory-based learning from agent interactions
  * - EWC++ protection against catastrophic forgetting
@@ -61,7 +61,7 @@ export interface SonaTrainingSample {
     route?: string;
 }
 /**
- * SonaLearningBackend - Native adaptive learning via @rufvector/sona
+ * SonaLearningBackend - Native adaptive learning via @swarmvector/sona
  */
 export declare class SonaLearningBackend {
     private engine;
@@ -76,11 +76,11 @@ export declare class SonaLearningBackend {
     private constructor();
     /**
      * Create a new SONA learning backend.
-     * Lazy-loads @rufvector/sona to avoid hard dependency.
+     * Lazy-loads @swarmvector/sona to avoid hard dependency.
      */
     static create(config: SonaConfig): Promise<SonaLearningBackend>;
     /**
-     * Check if @rufvector/sona is available.
+     * Check if @swarmvector/sona is available.
      */
     static isAvailable(): Promise<boolean>;
     /**

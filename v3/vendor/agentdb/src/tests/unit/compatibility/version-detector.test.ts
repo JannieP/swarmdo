@@ -53,7 +53,7 @@ describe('VersionDetector', () => {
       const config = {
         memory: {
           path: './db',
-          backend: 'rufvector' as const,
+          backend: 'swarmvector' as const,
           enableHNSW: true
         }
       };

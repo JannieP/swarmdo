@@ -1,13 +1,13 @@
 ---
 name: "V3 MCP Optimization"
-description: "MCP server optimization and transport layer enhancement for rufflo v3. Implements connection pooling, load balancing, tool registry optimization, and performance monitoring for sub-100ms response times."
+description: "MCP server optimization and transport layer enhancement for swarmdo v3. Implements connection pooling, load balancing, tool registry optimization, and performance monitoring for sub-100ms response times."
 ---
 
 # V3 MCP Optimization
 
 ## What This Skill Does
 
-Optimizes rufflo v3 MCP (Model Context Protocol) server implementation with advanced transport layer optimizations, connection pooling, load balancing, and comprehensive performance monitoring to achieve sub-100ms response times.
+Optimizes swarmdo v3 MCP (Model Context Protocol) server implementation with advanced transport layer optimizations, connection pooling, load balancing, and comprehensive performance monitoring to achieve sub-100ms response times.
 
 ## Quick Start
 
@@ -75,7 +75,7 @@ export class OptimizedMCPServer {
 
   constructor(config: OptimizedMCPConfig) {
     this.server = new Server({
-      name: 'rufflo-v3',
+      name: 'swarmdo-v3',
       version: '3.0.0'
     }, {
       capabilities: {
