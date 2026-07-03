@@ -166,6 +166,10 @@ curl -fsSL https://cdn.jsdelivr.net/gh/upstream/swarmdo@main/scripts/install.sh 
 # Interactive setup wizard — runs identically on every platform
 npx swarmdo@latest init wizard
 
+# Compress a memory file to save tokens (caveman mode — e2e-verified 33% smaller, backup kept)
+npx swarmdo compress CLAUDE.md
+npx swarmdo compress notes.md --check   # token-free: just report compressibility
+
 # Quick non-interactive init
 # npx swarmdo@latest init
 
