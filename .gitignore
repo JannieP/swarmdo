@@ -92,7 +92,6 @@ analyzing
 api-project/
 bin/swarmdo-*
 build/
-swarmdo
 swarmdo-mcp-wrapper
 swarmdo.config.json
 swarmdo.db
@@ -156,7 +155,6 @@ swarmdo.config.json
 *.sqlite
 *.sqlite-journal
 *.sqlite-wal
-swarmdo
 # Removed Windows wrapper files per user request
 hive-mind-prompt-*.txt
 

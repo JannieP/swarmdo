@@ -37,7 +37,7 @@ User --> Swarmdo (CLI/MCP) --> Router --> Swarm --> Agents --> Memory --> LLM Pr
 
 ---
 
-![Swarmdo Plugins](./swarmdo-plugins.gif)
+![swarmdo in action — one prompt spawns a coordinated agent swarm](swarmdo/assets/swarmdo-demo.svg)
 
 ## Quick Start
 

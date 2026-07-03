@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" role="img" aria-label="swarmdo — agent swarms for Claude Code">
+  <defs>
+    <radialGradient id="glow" cx="78%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#1d2733"/>
+      <stop offset="100%" stop-color="#0f1317"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="300" fill="url(#glow)"/>
+  <rect width="1200" height="300" fill="none" stroke="#232e39" stroke-width="2"/>
+
+  <!-- the swarm: honey boids drifting toward the wordmark -->
+  <g fill="#e2a33c">
+    <circle cx="742" cy="64" r="3" opacity=".85"/>
+    <circle cx="792" cy="98" r="2.4" opacity=".6"/>
+    <circle cx="836" cy="52" r="2" opacity=".5"/>
+    <circle cx="878" cy="120" r="3" opacity=".8"/>
+    <circle cx="922" cy="76" r="2.2" opacity=".55"/>
+    <circle cx="958" cy="142" r="2.8" opacity=".7"/>
+    <circle cx="1002" cy="94" r="2" opacity=".45"/>
+    <circle cx="1036" cy="168" r="3.2" opacity=".85"/>
+    <circle cx="1074" cy="118" r="2.4" opacity=".6"/>
+    <circle cx="1108" cy="196" r="2" opacity=".5"/>
+    <circle cx="1124" cy="84" r="2.6" opacity=".65"/>
+    <circle cx="986" cy="222" r="2.4" opacity=".55"/>
+    <circle cx="1064" cy="248" r="2" opacity=".45"/>
+    <circle cx="906" cy="196" r="2.2" opacity=".5"/>
+    <circle cx="848" cy="238" r="2.8" opacity=".65"/>
+  </g>
+
+  <!-- wordmark -->
+  <g font-family="ui-monospace,'SF Mono','Cascadia Code',Menlo,Consolas,monospace">
+    <text x="96" y="152" font-size="64" font-weight="700" letter-spacing="-1">
+      <tspan fill="#e2a33c">▊</tspan><tspan fill="#edf1f4" dx="14">swarmdo</tspan>
+    </text>
+    <text x="100" y="200" font-size="21" fill="#a9b4be" letter-spacing=".5">one prompt in. a swarm of agents out.</text>
+    <text x="100" y="246" font-size="14" fill="#66737f" letter-spacing="2">AGENT ORCHESTRATION FOR CLAUDE CODE · BASED ON RUFLO · MIT</text>
+  </g>
+</svg>
