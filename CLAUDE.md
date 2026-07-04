@@ -1,8 +1,8 @@
-# Claude Code Configuration - Swarmdo v3.5
+# Claude Code Configuration - Swarmdo v1.3
 
-> **Swarmdo v3.6** (2026-04-29) — Stable release with agent federation and comms-first coordination.
+> **Swarmdo v1.3.0** (2026-07-04) — caveman + ponytail built in, `swarmdo compress`, configurable statusline.
 > 6,000+ commits, 314 MCP tools, 16 agent roles + custom types, 19 AgentDB controllers, 21 native plugins.
-> Packages: `@swarmdo/cli@3.6.10`, `swarmdo@3.6.10`, `swarmdo@3.6.10`
+> Packages: `swarmdo@1.3.0` (umbrella), `@swarmdo/cli@1.3.0`, `swarmdo-bridge@1.3.0` (wrapper in `swarmdo/`)
 
 ## Behavioral Rules (Always Enforced)
 
@@ -140,7 +140,7 @@ Bash("npx swarmdo-codex dual run --worker 'codex:coder:Implement the solution ba
 Bash("npx swarmdo-codex dual run --worker 'codex:optimizer:Optimize performance based on implementation' --namespace collaboration")
 
 // STEP 3: Coordinate via shared memory
-Bash("npx swarmdo@v3alpha memory store --namespace collaboration --key 'task-context' --value '[task description]'")
+Bash("npx swarmdo@latest memory store --namespace collaboration --key 'task-context' --value '[task description]'")
 ```
 
 ### Collaboration Templates (Pre-Built Pipelines)
@@ -181,13 +181,13 @@ All workers share state via the `collaboration` namespace:
 
 ```bash
 # Store context for cross-platform sharing
-npx swarmdo@v3alpha memory store --namespace collaboration --key "design-decisions" --value "..."
+npx swarmdo@latest memory store --namespace collaboration --key "design-decisions" --value "..."
 
 # Search for patterns across all workers
-npx swarmdo@v3alpha memory search --namespace collaboration --query "authentication patterns"
+npx swarmdo@latest memory search --namespace collaboration --query "authentication patterns"
 
 # Retrieve specific findings
-npx swarmdo@v3alpha memory retrieve --namespace collaboration --key "security-findings"
+npx swarmdo@latest memory retrieve --namespace collaboration --key "security-findings"
 ```
 
 ### Cross-Platform Learning
@@ -196,13 +196,13 @@ Both platforms learn from each other's outputs:
 
 ```bash
 # After successful collaboration, train patterns
-npx swarmdo@v3alpha hooks post-task --task-id "dual-[id]" --success true --train-neural true
+npx swarmdo@latest hooks post-task --task-id "dual-[id]" --success true --train-neural true
 
 # Store successful collaboration patterns
-npx swarmdo@v3alpha memory store --namespace patterns --key "dual-mode-[pattern]" --value "[what worked]"
+npx swarmdo@latest memory store --namespace patterns --key "dual-mode-[pattern]" --value "[what worked]"
 
 # Transfer learnings to both platforms
-npx swarmdo@v3alpha hooks transfer store --pattern "dual-collab-success"
+npx swarmdo@latest hooks transfer store --pattern "dual-collab-success"
 ```
 
 ### Worker Dependency Levels
@@ -387,28 +387,28 @@ This project is configured with Swarmdo V3 (Anti-Drift Defaults):
 
 ```bash
 # Initialize project
-npx swarmdo@v3alpha init --wizard
+npx swarmdo@latest init --wizard
 
 # Start daemon with background workers
-npx swarmdo@v3alpha daemon start
+npx swarmdo@latest daemon start
 
 # Spawn an agent
-npx swarmdo@v3alpha agent spawn -t coder --name my-coder
+npx swarmdo@latest agent spawn -t coder --name my-coder
 
 # Initialize swarm
-npx swarmdo@v3alpha swarm init --v3-mode
+npx swarmdo@latest swarm init --v3-mode
 
 # Search memory (HNSW-indexed)
-npx swarmdo@v3alpha memory search -q "authentication patterns"
+npx swarmdo@latest memory search -q "authentication patterns"
 
 # System diagnostics
-npx swarmdo@v3alpha doctor --fix
+npx swarmdo@latest doctor --fix
 
 # Security scan
-npx swarmdo@v3alpha security scan --depth full
+npx swarmdo@latest security scan --depth full
 
 # Performance benchmark
-npx swarmdo@v3alpha performance benchmark --suite all
+npx swarmdo@latest performance benchmark --suite all
 ```
 
 ## Headless Background Instances (claude -p)
@@ -689,8 +689,8 @@ Task({
 | `TaskCompleted` | Task marked complete | Train patterns, notify lead via SendMessage |
 
 ```bash
-npx swarmdo@v3alpha hooks teammate-idle --auto-assign true
-npx swarmdo@v3alpha hooks task-completed -i task-123 --train-patterns true
+npx swarmdo@latest hooks teammate-idle --auto-assign true
+npx swarmdo@latest hooks task-completed -i task-123 --train-patterns true
 ```
 
 ### Rules
@@ -736,27 +736,27 @@ npx swarmdo@v3alpha hooks task-completed -i task-123 --train-patterns true
 
 ```bash
 # Core hooks
-npx swarmdo@v3alpha hooks pre-task --description "[task]"
-npx swarmdo@v3alpha hooks post-task --task-id "[id]" --success true
-npx swarmdo@v3alpha hooks post-edit --file "[file]" --train-patterns
+npx swarmdo@latest hooks pre-task --description "[task]"
+npx swarmdo@latest hooks post-task --task-id "[id]" --success true
+npx swarmdo@latest hooks post-edit --file "[file]" --train-patterns
 
 # Session management
-npx swarmdo@v3alpha hooks session-start --session-id "[id]"
-npx swarmdo@v3alpha hooks session-end --export-metrics true
-npx swarmdo@v3alpha hooks session-restore --session-id "[id]"
+npx swarmdo@latest hooks session-start --session-id "[id]"
+npx swarmdo@latest hooks session-end --export-metrics true
+npx swarmdo@latest hooks session-restore --session-id "[id]"
 
 # Intelligence routing
-npx swarmdo@v3alpha hooks route --task "[task]"
-npx swarmdo@v3alpha hooks explain --topic "[topic]"
+npx swarmdo@latest hooks route --task "[task]"
+npx swarmdo@latest hooks explain --topic "[topic]"
 
 # Neural learning
-npx swarmdo@v3alpha hooks pretrain --model-type moe --epochs 10
-npx swarmdo@v3alpha hooks build-agents --agent-types coder,tester
+npx swarmdo@latest hooks pretrain --model-type moe --epochs 10
+npx swarmdo@latest hooks build-agents --agent-types coder,tester
 
 # Background workers
-npx swarmdo@v3alpha hooks worker list
-npx swarmdo@v3alpha hooks worker dispatch --trigger audit
-npx swarmdo@v3alpha hooks worker status
+npx swarmdo@latest hooks worker list
+npx swarmdo@latest hooks worker dispatch --trigger audit
+npx swarmdo@latest hooks worker status
 ```
 
 ## Intelligence System (SwarmVector)
@@ -838,7 +838,7 @@ SWARMDO_MEMORY_PATH=./data/memory
 
 ## Doctor Health Checks
 
-Run `npx swarmdo@v3alpha doctor` to check:
+Run `npx swarmdo@latest doctor` to check:
 - Node.js version (20+)
 - npm version (9+)
 - Git installation
@@ -854,14 +854,14 @@ Run `npx swarmdo@v3alpha doctor` to check:
 
 ```bash
 # Add MCP servers
-claude mcp add swarmdo npx swarmdo@v3alpha mcp start
+claude mcp add swarmdo npx swarmdo@latest mcp start
 claude mcp add swarmdo-swarm npx swarmdo-swarm mcp start  # Optional
 
 # Start daemon
-npx swarmdo@v3alpha daemon start
+npx swarmdo@latest daemon start
 
 # Run doctor
-npx swarmdo@v3alpha doctor --fix
+npx swarmdo@latest doctor --fix
 ```
 
 ## Claude Code vs MCP Tools
@@ -930,76 +930,61 @@ memory_search_unified({ query: "authentication security", limit: 5 })
 
 ## Publishing to npm
 
-### Versioning policy (stable releases — alpha series ended at 3.7.0-alpha.81, 2026-05-23)
+### Versioning policy (stable releases — swarmdo shipped 1.0.0 on 2026-06-27)
 
-- **From 3.7.0 onward we ship stable semver**, NOT alpha pre-releases.
+- **swarmdo ships stable semver from 1.0.0**, NOT alpha pre-releases.
 - Bump rules (semver discipline):
-  - **PATCH** (3.7.0 → 3.7.1): bug fixes only, no API change, no schema change
-  - **MINOR** (3.7.0 → 3.8.0): backward-compatible additions (new MCP tool, new flag, new agent type)
-  - **MAJOR** (3.x → 4.0.0): breaking change in CLI surface, MCP tool signature, file layout, or default behavior
-- Default tag is `latest` (no `--tag alpha`). The `alpha` and `v3alpha` dist-tags continue to exist for historical compatibility — point them at the same version as `latest`.
+  - **PATCH** (1.3.0 → 1.3.1): bug fixes only, no API change, no schema change
+  - **MINOR** (1.3.0 → 1.4.0): backward-compatible additions (new MCP tool, new flag, new agent type)
+  - **MAJOR** (1.x → 2.0.0): breaking change in CLI surface, MCP tool signature, file layout, or default behavior
+- Default tag is `latest` (no `--tag alpha`). This fork has NO legacy alpha/v3alpha dist-tags — never create them.
 - Never publish a pre-release (`-alpha.N`, `-beta.N`, `-rc.N`) unless the user explicitly asks for a pre-release flow.
 
 ### Publishing Rules
 
-- MUST publish ALL THREE packages when publishing CLI changes: `@swarmdo/cli`, `swarmdo`, AND `swarmdo`
-- MUST update ALL dist-tags for ALL THREE packages after publishing (latest + alpha + v3alpha all point to the same version)
-- Publish order: `@swarmdo/cli` first, then `swarmdo` (umbrella), then `swarmdo` (alias umbrella)
+- MUST publish ALL THREE packages when publishing CLI changes: `@swarmdo/cli`, `swarmdo` (root umbrella), AND `swarmdo-bridge` (wrapper in `swarmdo/`)
+- Only the `latest` dist-tag exists — npm sets it on publish; nothing else to update
+- Publish order: `@swarmdo/cli` first, then `swarmdo` (root umbrella), then `swarmdo-bridge`
 - MUST run verification for ALL THREE before telling user publishing is complete
 
 ```bash
-# Replace 3.7.1 below with your chosen stable version (patch/minor/major per the rules above)
+# Replace 1.4.0 below with your chosen stable version (patch/minor/major per the rules above)
 
 # STEP 1: Build and publish @swarmdo/cli
 cd v3/@swarmdo/cli
-npm version 3.7.1 --no-git-tag-version
+npm version 1.4.0 --no-git-tag-version
 npm run build
 npm publish                              # default tag is `latest` — no --tag flag
-npm dist-tag add @swarmdo/cli@3.7.1 alpha     # historical compat
-npm dist-tag add @swarmdo/cli@3.7.1 v3alpha   # historical compat
 
-# STEP 2: Publish swarmdo umbrella
-cd /Users/cohen/Projects/swarmdo                    # or your repo root
-npm version 3.7.1 --no-git-tag-version
+# STEP 2: Publish swarmdo umbrella (repo root)
+cd "$(git rev-parse --show-toplevel)"
+npm version 1.4.0 --no-git-tag-version
 npm publish
-npm dist-tag add swarmdo@3.7.1 alpha
-npm dist-tag add swarmdo@3.7.1 v3alpha
 
-# STEP 3: Publish swarmdo wrapper (CRITICAL — DON'T FORGET — this is what users run)
+# STEP 3: Publish swarmdo-bridge wrapper
 cd swarmdo
-npm version 3.7.1 --no-git-tag-version
+npm version 1.4.0 --no-git-tag-version
 npm publish
-npm dist-tag add swarmdo@3.7.1 alpha
-npm dist-tag add swarmdo@3.7.1 v3alpha
 ```
 
 **Verification (run before telling user publishing is complete):**
 
 ```bash
-for pkg in @swarmdo/cli swarmdo swarmdo; do
+for pkg in @swarmdo/cli swarmdo swarmdo-bridge; do
   echo "$pkg: $(npm view $pkg@latest version)"
-  npm view $pkg dist-tags --json
 done
-# All three must show latest === alpha === v3alpha === new version
+# All three must show the new version on `latest`
 ```
 
 ### All Tags That Must Be Updated
 
 | Package | Tag | Command Users Run |
 |---------|-----|-------------------|
+| `swarmdo` | `latest` | `npx swarmdo@latest` |
 | `@swarmdo/cli` | `latest` | `npx @swarmdo/cli@latest` |
-| `@swarmdo/cli` | `alpha` | `npx @swarmdo/cli@alpha` (legacy compat) |
-| `@swarmdo/cli` | `v3alpha` | `npx @swarmdo/cli@v3alpha` (legacy compat) |
-| `swarmdo` | `latest` | `npx swarmdo@latest` |
-| `swarmdo` | `alpha` | `npx swarmdo@alpha` (legacy compat) |
-| `swarmdo` | `v3alpha` | `npx swarmdo@v3alpha` (legacy compat) |
-| `swarmdo` | `latest` | `npx swarmdo@latest` |
-| `swarmdo` | `alpha` | `npx swarmdo@alpha` (legacy compat) |
-| `swarmdo` | `v3alpha` | `npx swarmdo@v3alpha` (legacy compat) |
+| `swarmdo-bridge` | `latest` | (dependency of the umbrella) |
 
-- Never forget the `swarmdo` package — it's the thin wrapper users actually run via `npx swarmdo`
-- The legacy `alpha` and `v3alpha` tags MUST stay pointed at the latest stable so old install commands keep working
-- `swarmdo` source is in `/swarmdo/` — it depends on `@swarmdo/cli`
+- The root `swarmdo` package is what users run via `npx swarmdo`; `swarmdo-bridge` lives in `/swarmdo/` and depends on `@swarmdo/cli`
 - Also remember to update `swarmdo/package.json` overrides when adding new pinned transitives (see #2112 lesson — root overrides do NOT propagate to the published `swarmdo` wrapper)
 
 ### GitHub Release after publish
@@ -1007,9 +992,9 @@ done
 Every stable bump SHOULD have a matching `gh release create v<version>` with consolidated release notes pointing at the gist if one exists. Example:
 
 ```bash
-git tag v3.7.1 main
-git push origin v3.7.1
-gh release create v3.7.1 --title "v3.7.1 — <one-line headline>" \
+git tag v1.4.0 main
+git push origin v1.4.0
+gh release create v1.4.0 --title "v1.4.0 — <one-line headline>" \
   --notes-file /tmp/release-notes.md
 ```
 
@@ -1193,14 +1178,14 @@ Plugins are distributed via IPFS and can be installed with the CLI. Browse and i
 
 ```bash
 # List all available plugins
-npx swarmdo@v3alpha plugins list
+npx swarmdo@latest plugins list
 
 # Install a plugin
-npx swarmdo@v3alpha plugins install @swarmdo/plugin-name
+npx swarmdo@latest plugins install @swarmdo/plugin-name
 
 # Enable/disable
-npx swarmdo@v3alpha plugins enable @swarmdo/plugin-name
-npx swarmdo@v3alpha plugins disable @swarmdo/plugin-name
+npx swarmdo@latest plugins enable @swarmdo/plugin-name
+npx swarmdo@latest plugins disable @swarmdo/plugin-name
 ```
 
 ### Core Plugins
@@ -1242,13 +1227,13 @@ npx swarmdo@v3alpha plugins disable @swarmdo/plugin-name
 
 ```bash
 # Create a new plugin from template
-npx swarmdo@v3alpha plugins create my-plugin
+npx swarmdo@latest plugins create my-plugin
 
 # Test locally
-npx swarmdo@v3alpha plugins install ./path/to/my-plugin
+npx swarmdo@latest plugins install ./path/to/my-plugin
 
 # Publish to registry (requires Pinata credentials)
-npx swarmdo@v3alpha plugins publish
+npx swarmdo@latest plugins publish
 ```
 
 Registry source: IPFS via Pinata (`QmXbfEAaR7D2Ujm4GAkbwcGZQMHqAMpwDoje4583uNP834`)
