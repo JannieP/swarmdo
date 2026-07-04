@@ -190,6 +190,50 @@ claude mcp add swarmdo -- npx swarmdo@latest mcp start
 
 ---
 
+## Efficiency: Caveman & Ponytail, Built In
+
+Two of the most-loved Claude Code skills ship inside swarmdo as first-class features — vendored MIT forks with attribution in [NOTICE](NOTICE), integrated across the CLI, the agents, and the init wizard.
+
+### 🪨 Caveman compression
+
+Memory files (CLAUDE.md, notes, todos) get re-read every session — and they're written for humans, not token budgets. Caveman rewrites them in few-token caveman-speak with substance, code, and URLs preserved and the original backed up. E2E-verified: 33% smaller with every technical fact intact.
+
+```bash
+# Inside Claude Code
+/caveman-compress CLAUDE.md
+
+# From any terminal — no Claude Code session needed
+swarmdo compress CLAUDE.md
+swarmdo compress notes.md --check     # token-free dry run: reports type + compressibility
+```
+
+### 💤 Ponytail mode
+
+The laziest senior dev in the room, on demand: YAGNI, standard library before dependencies, one line before fifty, no speculative abstraction. Three intensities plus audit/review/debt lenses.
+
+```bash
+# Inside Claude Code
+/ponytail            # lite | full | ultra
+
+# For spawned agents — per call:
+#   agent_run / agent_execute with ponytail: true
+# or globally:
+export SWARMDO_PONYTAIL=1            # explicit ponytail:false always wins
+```
+
+### Toggling
+
+Everything is opt-in and reversible — skills are user-invoked, so "on" means *available*, never *automatic*.
+
+| Layer | Toggle |
+|-------|--------|
+| This project | `swarmdo efficiency on\|off\|status` |
+| At init | wizard "Efficiency" skill group |
+| Per agent | `ponytail: true/false` on the spawn call |
+| Globally | `SWARMDO_PONYTAIL=1` env |
+
+Credits: [caveman](https://github.com/JuliusBrussee/caveman) by Julius Brussee · [ponytail](https://github.com/DietrichGebert/ponytail) by Dietrich Gebert (both MIT).
+
 ## What You Get
 
 | Capability | Description |
