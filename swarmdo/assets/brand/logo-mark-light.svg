@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="swarmdo logo mark">
+  <g fill="#e2a33c">
+    <circle cx="352" cy="176" r="34"/>
+    <circle cx="284" cy="232" r="26" opacity=".95"/>
+    <circle cx="330" cy="286" r="24" opacity=".9"/>
+  </g>
+  <g fill="#2a333d">
+    <circle cx="216" cy="280" r="20" opacity=".85"/>
+    <circle cx="272" cy="336" r="19" opacity=".8"/>
+    <circle cx="156" cy="322" r="15" opacity=".7"/>
+    <circle cx="214" cy="382" r="14" opacity=".65"/>
+    <circle cx="106" cy="358" r="11" opacity=".55"/>
+    <circle cx="162" cy="420" r="10" opacity=".5"/>
+  </g>
+</svg>

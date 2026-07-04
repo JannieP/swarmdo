@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="360" viewBox="0 0 1280 360" font-family="ui-monospace,'SF Mono','Cascadia Code',Menlo,Consolas,monospace" role="img" aria-label="swarmdo">
+  <rect width="1280" height="360" fill="#0f1317"/>
+  <g fill="#e2a33c">
+    <circle cx="238" cy="122" r="26"/>
+    <circle cx="186" cy="164" r="19" opacity=".92"/>
+    <circle cx="222" cy="206" r="18" opacity=".88"/>
+    <circle cx="136" cy="200" r="15" opacity=".76"/>
+    <circle cx="178" cy="244" r="14" opacity=".72"/>
+    <circle cx="92" cy="232" r="11" opacity=".6"/>
+    <circle cx="136" cy="276" r="10" opacity=".55"/>
+  </g>
+  <text x="320" y="216" font-size="118" font-weight="700" letter-spacing="-3" fill="#edf1f4">swarmdo</text>
+  <text x="326" y="272" font-size="27" letter-spacing="1" fill="#66737f">one prompt in. a swarm of agents out.</text>
+</svg>

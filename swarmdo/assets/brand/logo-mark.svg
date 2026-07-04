@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="swarmdo logo mark">
+  <defs>
+    <radialGradient id="bg" cx="62%" cy="36%" r="80%">
+      <stop offset="0%" stop-color="#1b2530"/>
+      <stop offset="100%" stop-color="#0f1317"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  <!-- swarm flying in delta formation, lead bird brightest -->
+  <g fill="#e2a33c">
+    <circle cx="352" cy="176" r="34"/>
+    <circle cx="284" cy="232" r="26" opacity=".92"/>
+    <circle cx="330" cy="286" r="24" opacity=".88"/>
+    <circle cx="216" cy="280" r="20" opacity=".78"/>
+    <circle cx="272" cy="336" r="19" opacity=".74"/>
+    <circle cx="156" cy="322" r="15" opacity=".62"/>
+    <circle cx="214" cy="382" r="14" opacity=".58"/>
+    <circle cx="106" cy="358" r="11" opacity=".46"/>
+    <circle cx="162" cy="420" r="10" opacity=".42"/>
+  </g>
+</svg>
