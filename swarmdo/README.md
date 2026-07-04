@@ -6,6 +6,7 @@
 [![MIT License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](https://github.com/JannieP/swarmdo/blob/main/LICENSE)
 [![Website](https://img.shields.io/badge/swarmdo.com-e2a33c?style=for-the-badge&logoColor=black)](https://swarmdo.com)
 [![Star on GitHub](https://img.shields.io/github/stars/JannieP/swarmdo?style=for-the-badge&logo=github&color=gold)](https://github.com/JannieP/swarmdo)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-☕-FFDD00?style=for-the-badge&logoColor=black)](https://buymeacoffee.com/swarmdo)
 
 *Based on the original, hugely popular **ruflo** — renamed, self-contained, and MIT-licensed. Full lineage in [NOTICE](NOTICE).*
 [![🕸️ SwarmVector Graph Ai](https://img.shields.io/badge/SwarmVector_Agentic-DB-06b6d4?style=for-the-badge&logoColor=white&logo=graphql)](the upstream project (see NOTICE))
