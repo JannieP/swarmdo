@@ -354,7 +354,7 @@ This project is configured with Swarmdo V3 (Anti-Drift Defaults):
 | `init` | 4 | Project initialization with wizard, presets, skills, hooks |
 | `agent` | 8 | Agent lifecycle (spawn, list, status, stop, metrics, pool, health, logs) |
 | `swarm` | 6 | Multi-agent swarm coordination and orchestration |
-| `memory` | 13 | AgentDB memory with HNSW vector search (measured ~1.9x–4.7x vs brute force above crossover) + WAL-safe `backup` (run/list/restore, keep-N rotation) |
+| `memory` | 14 | AgentDB memory with HNSW vector search (measured ~1.9x–4.7x vs brute force above crossover) + WAL-safe `backup` + `revectorize` (repairs hash-era vectors) |
 | `mcp` | 9 | MCP server management and tool execution |
 | `task` | 9 | Task creation, assignment, lifecycle + dependency graph (`--dependencies`, `ready`, `graph`; dispatcher gates on readiness) |
 | `session` | 7 | Session state management and persistence |

@@ -1758,11 +1758,54 @@ const backupCommand: Command = {
   }
 };
 
+// Revectorize subcommand — re-embed rows written while embeddings were
+// silently hash-based (pre-342ee8977); see memory/revectorize.ts
+const revectorizeCommand: Command = {
+  name: 'revectorize',
+  description: 'Re-embed all stored entries with the real local ONNX chain (repairs hash-era vectors)',
+  options: [
+    DB_PATH_OPTION,
+    { name: 'dry-run', short: 'd', description: 'Report what would be re-embedded', type: 'boolean', default: false },
+    { name: 'json', description: 'Machine-readable output', type: 'boolean', default: false }
+  ],
+  examples: [
+    { command: 'swarmdo memory revectorize --dry-run', description: 'Count entries needing re-embedding' },
+    { command: 'swarmdo memory revectorize', description: 'Re-embed every stored entry with real ONNX vectors' }
+  ],
+  action: async (ctx: CommandContext): Promise<CommandResult> => {
+    const { revectorizeMemory } = await import('../memory/revectorize.js');
+    try {
+      const result = await revectorizeMemory({
+        dbPath: ctx.flags.path as string | undefined,
+        dryRun: ctx.flags['dry-run'] === true,
+      });
+      if (ctx.flags.json === true) {
+        output.writeln(JSON.stringify(result, null, 2));
+        return { success: true, data: result };
+      }
+      if (result.backend === 'mock') {
+        output.printError(result.note ?? 'local ONNX embedder unavailable');
+        return { success: false, exitCode: 1, data: result };
+      }
+      output.printSuccess(
+        result.dryRun
+          ? `${result.scanned} embedded entries — would re-embed all (backend: onnx)`
+          : `Re-embedded ${result.revectorized}/${result.scanned} entries${result.failed ? ` (${result.failed} failed)` : ''}`,
+      );
+      if (result.note) output.printInfo(result.note);
+      return { success: true, data: result };
+    } catch (error) {
+      output.printError(error instanceof Error ? error.message : String(error));
+      return { success: false, exitCode: 1 };
+    }
+  }
+};
+
 // Main memory command
 export const memoryCommand: Command = {
   name: 'memory',
   description: 'Memory management commands',
-  subcommands: [initMemoryCommand, storeCommand, retrieveCommand, searchCommand, listCommand, deleteCommand, statsCommand, configureCommand, cleanupCommand, compressCommand, exportCommand, importCommand, backupCommand],
+  subcommands: [initMemoryCommand, storeCommand, retrieveCommand, searchCommand, listCommand, deleteCommand, statsCommand, configureCommand, cleanupCommand, compressCommand, exportCommand, importCommand, backupCommand, revectorizeCommand],
   options: [],
   examples: [
     { command: 'swarmdo memory store -k "key" -v "value"', description: 'Store data' },
@@ -1789,7 +1832,8 @@ export const memoryCommand: Command = {
       `${output.highlight('compress')}   - Compress database`,
       `${output.highlight('export')}     - Export memory to file`,
       `${output.highlight('import')}     - Import from file`,
-      `${output.highlight('backup')}     - WAL-safe snapshot / rotate / restore`
+      `${output.highlight('backup')}     - WAL-safe snapshot / rotate / restore`,
+      `${output.highlight('revectorize')} - Re-embed entries with real ONNX vectors`
     ]);
 
     return { success: true };
