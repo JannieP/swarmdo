@@ -21,9 +21,11 @@ import path from 'node:path';
 import {
   collectUsage,
   aggregateUsage,
+  aggregateBlocks,
   totalUsage,
   localDateKey,
   normalizeDateBound,
+  type UsageEvent,
 } from '../src/usage/transcript-usage.js';
 import {
   normalizeTranscriptModelId,
@@ -211,6 +213,52 @@ describe('aggregation', () => {
     const t = totalUsage(c.events);
     expect(t.entries).toBe(3);
     expect(t.costUsd).toBeCloseTo(0.5 + SONNET_COST, 10);
+  });
+});
+
+describe('aggregateBlocks (5-hour billing windows)', () => {
+  function ev(iso: string, costUsd = 1): UsageEvent {
+    const ts = new Date(iso).getTime();
+    return {
+      dateKey: iso.slice(0, 10), monthKey: iso.slice(0, 7), timestampMs: ts,
+      model: 'claude-sonnet-4-6', project: '/p', sessionId: 's',
+      inputTokens: 10, outputTokens: 10, cacheWriteTokens: 0, cacheReadTokens: 0,
+      costUsd, costSource: 'computed',
+    };
+  }
+
+  it('anchors blocks at the top of the first-activity hour and spans 5h', () => {
+    const blocks = aggregateBlocks(
+      [ev('2026-07-01T01:10:00Z'), ev('2026-07-01T02:59:00Z'), ev('2026-07-01T05:59:59Z')],
+      { nowMs: new Date('2026-07-01T23:00:00Z').getTime() },
+    );
+    expect(blocks).toHaveLength(1); // all inside [01:00, 06:00)
+    expect(new Date(blocks[0].startMs).toISOString()).toBe('2026-07-01T01:00:00.000Z');
+    expect(blocks[0].totals.entries).toBe(3);
+    expect(blocks[0].totals.costUsd).toBe(3);
+    expect(blocks[0].active).toBe(false);
+  });
+
+  it('starts a fresh block anchored at the next activity after a gap', () => {
+    const blocks = aggregateBlocks(
+      [ev('2026-07-01T01:10:00Z'), ev('2026-07-01T06:00:00Z'), ev('2026-07-01T20:45:00Z')],
+      { nowMs: new Date('2026-07-01T21:00:00Z').getTime() },
+    );
+    expect(blocks.map((b) => new Date(b.startMs).toISOString())).toEqual([
+      '2026-07-01T01:00:00.000Z', // first
+      '2026-07-01T06:00:00.000Z', // 06:00 is exactly past [01,06) — new block
+      '2026-07-01T20:00:00.000Z', // gap → anchored at 20:00, NOT contiguous 11:00/16:00
+    ]);
+    expect(blocks[2].active).toBe(true); // now=21:00 inside [20:00, 01:00)
+  });
+
+  it('handles out-of-order events (sorts before blocking)', () => {
+    const blocks = aggregateBlocks(
+      [ev('2026-07-01T04:00:00Z'), ev('2026-07-01T01:10:00Z')],
+      { nowMs: 0 },
+    );
+    expect(blocks).toHaveLength(1);
+    expect(new Date(blocks[0].startMs).toISOString()).toBe('2026-07-01T01:00:00.000Z');
   });
 });
 

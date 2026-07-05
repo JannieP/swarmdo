@@ -16,9 +16,11 @@
 import type { Command, CommandContext, CommandResult } from '../types.js';
 import { output } from '../output.js';
 import {
+  aggregateBlocks,
   aggregateUsage,
   collectUsage,
   totalUsage,
+  type UsageBlock,
   type UsageCollection,
   type UsageDimension,
   type UsageTotals,
@@ -97,8 +99,83 @@ function jsonPayload(
   };
 }
 
+function fmtClock(ms: number): string {
+  // hourCycle h23: hour12:false alone renders midnight as "24:00:00" on some ICU builds
+  return new Date(ms).toLocaleString('en-CA', { hourCycle: 'h23' }).replace(',', '');
+}
+
+/** Blocks view — 5-hour subscription rate-limit windows with live burn. */
+function runBlocksView(ctx: CommandContext, collection: UsageCollection): CommandResult {
+  const nowMs = Date.now();
+  const blocks = aggregateBlocks(collection.events, { nowMs });
+  const shown = blocks.slice(-12); // recent windows; --json carries all
+
+  if (ctx.flags.json === true) {
+    output.writeln(JSON.stringify({
+      view: 'blocks',
+      blockHours: 5,
+      rows: blocks.map((b: UsageBlock) => ({
+        start: new Date(b.startMs).toISOString(),
+        end: new Date(b.endMs).toISOString(),
+        active: b.active,
+        ...b.totals,
+      })),
+      unpricedModels: collection.unpricedModels,
+    }, null, 2));
+    return { success: true, exitCode: 0 };
+  }
+
+  output.writeln(output.bold('Claude Code usage — 5-hour billing blocks'));
+  output.printTable({
+    columns: [
+      { key: 'window', header: 'Block (local)', align: 'left' },
+      { key: 'input', header: 'Input', align: 'right' },
+      { key: 'output', header: 'Output', align: 'right' },
+      { key: 'total', header: 'Total', align: 'right' },
+      { key: 'cost', header: 'Cost', align: 'right' },
+      { key: 'state', header: '', align: 'left' },
+    ],
+    data: shown.map((b) => ({
+      window: `${fmtClock(b.startMs)} → ${fmtClock(b.endMs).slice(-8)}`,
+      input: fmtInt(b.totals.inputTokens),
+      output: fmtInt(b.totals.outputTokens),
+      total: fmtInt(b.totals.totalTokens),
+      cost: fmtCost(b.totals.costUsd),
+      state: b.active ? 'ACTIVE' : '',
+    })),
+  });
+
+  const active = blocks.find((b) => b.active);
+  if (active) {
+    const elapsedH = (nowMs - active.startMs) / 3_600_000;
+    const remainingMin = Math.max(0, Math.round((active.endMs - nowMs) / 60_000));
+    const burnPerHour = elapsedH > 0 ? active.totals.costUsd / elapsedH : 0;
+    const projected = active.totals.costUsd + burnPerHour * (remainingMin / 60);
+    output.writeln(
+      output.dim(
+        `active block: ${remainingMin} min remaining · burn ${fmtCost(burnPerHour)}/h · projected block total ${fmtCost(projected)}`,
+      ),
+    );
+  } else {
+    output.writeln(output.dim('no active block — next activity starts a fresh 5-hour window'));
+  }
+  if (blocks.length > shown.length) {
+    output.writeln(output.dim(`showing last ${shown.length} of ${blocks.length} blocks (use --json for all)`));
+  }
+  return { success: true, exitCode: 0 };
+}
+
 async function run(ctx: CommandContext): Promise<CommandResult> {
   const viewName = (ctx.args[0] || 'daily').toLowerCase();
+
+  if (viewName === 'blocks') {
+    const since = typeof ctx.flags.since === 'string' ? ctx.flags.since : undefined;
+    const until = typeof ctx.flags.until === 'string' ? ctx.flags.until : undefined;
+    const dirFlag = ctx.flags.dir;
+    const dirs = typeof dirFlag === 'string' ? [dirFlag] : Array.isArray(dirFlag) ? dirFlag.map(String) : undefined;
+    return runBlocksView(ctx, collectUsage({ dirs, since, until }));
+  }
+
   const view = VIEWS[viewName];
   if (!view) {
     output.writeln(output.error(`unknown view: ${viewName} (expected ${Object.keys(VIEWS).join('|')})`));

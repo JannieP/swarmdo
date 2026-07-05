@@ -343,3 +343,48 @@ export function totalUsage(events: UsageEvent[]): UsageTotals {
   for (const e of events) addEvent(t, e);
   return t;
 }
+
+/**
+ * 5-hour billing blocks (ccusage semantics, matching Anthropic subscription
+ * rate-limit windows): a block is anchored at the top of the hour of the
+ * first activity after the previous block ends; entries inside
+ * [start, start + blockHours) belong to it. Gaps longer than a block start
+ * a fresh block anchored at the next activity — blocks are NOT contiguous
+ * wall-clock slots.
+ */
+export interface UsageBlock {
+  startMs: number;
+  endMs: number;
+  totals: UsageTotals;
+  /** true when `now` falls inside this block's window */
+  active: boolean;
+}
+
+function floorToHour(ms: number): number {
+  const HOUR = 3_600_000;
+  return Math.floor(ms / HOUR) * HOUR;
+}
+
+export function aggregateBlocks(
+  events: UsageEvent[],
+  opts: { blockHours?: number; nowMs?: number } = {},
+): UsageBlock[] {
+  const blockMs = (opts.blockHours ?? 5) * 3_600_000;
+  const nowMs = opts.nowMs ?? Date.now();
+  const sorted = [...events].sort((a, b) => a.timestampMs - b.timestampMs);
+
+  const blocks: UsageBlock[] = [];
+  let current: UsageBlock | null = null;
+  for (const e of sorted) {
+    if (!current || e.timestampMs >= current.endMs) {
+      const startMs = floorToHour(e.timestampMs);
+      current = { startMs, endMs: startMs + blockMs, totals: emptyTotals(), active: false };
+      blocks.push(current);
+    }
+    addEvent(current.totals, e);
+  }
+  for (const b of blocks) {
+    b.active = nowMs >= b.startMs && nowMs < b.endMs;
+  }
+  return blocks;
+}
