@@ -59,6 +59,9 @@ const commandLoaders: Record<string, CommandLoader> = {
   verify: () => import('./verify.js'),
   // Analysis Commands
   analyze: () => import('./analyze.js'),
+  // Claude Code transcript token/cost analytics (ccusage-style)
+  usage: () => import('./usage.js'),
+  cost: () => import('./usage.js'), // alias — lazy commands resolve aliases via loader keys
   // Q-Learning Routing Commands
   route: () => import('./route.js'),
   // Progress Commands
@@ -242,22 +245,29 @@ export const commandsByCategory = {
  * Use this for help display and full command listings.
  */
 export async function getCommandsByCategory(): Promise<Record<string, Command[]>> {
+  // NOTE: destructure names MUST stay position-aligned with the Promise.all
+  // list. Before the `usage` command landed, the names lagged the loads by
+  // three slots from 'statusline' onward (completionsCmd received the
+  // statusline module, analyzeCmd received completions, …), scrambling the
+  // categorized help. Every load now has a named slot.
   const [
     daemonCmd, doctorCmd, embeddingsCmd, neuralCmd,
     performanceCmd, securityCmd, swarmvectorCmd, hiveMindCmd,
-    configCmd, completionsCmd, migrateCmd, workflowCmd,
+    configCmd, statuslineCmd, compressCmd, efficiencyCmd,
+    completionsCmd, migrateCmd, workflowCmd,
     analyzeCmd, routeCmd, progressCmd, providersCmd,
     pluginsCmd, deploymentCmd, claimsCmd, issuesCmd,
     updateCmd, processCmd, guidanceCmd, applianceCmd,
-    cleanupCmd, autopilotCmd, demoCmd,
+    cleanupCmd, autopilotCmd, demoCmd, usageCmd,
   ] = await Promise.all([
     loadCommand('daemon'), loadCommand('doctor'), loadCommand('embeddings'), loadCommand('neural'),
     loadCommand('performance'), loadCommand('security'), loadCommand('swarmvector'), loadCommand('hive-mind'),
-    loadCommand('config'), loadCommand('statusline'), loadCommand('compress'), loadCommand('efficiency'), loadCommand('completions'), loadCommand('migrate'), loadCommand('workflow'),
+    loadCommand('config'), loadCommand('statusline'), loadCommand('compress'), loadCommand('efficiency'),
+    loadCommand('completions'), loadCommand('migrate'), loadCommand('workflow'),
     loadCommand('analyze'), loadCommand('route'), loadCommand('progress'), loadCommand('providers'),
     loadCommand('plugins'), loadCommand('deployment'), loadCommand('claims'), loadCommand('issues'),
     loadCommand('update'), loadCommand('process'), loadCommand('guidance'), loadCommand('appliance'),
-    loadCommand('cleanup'), loadCommand('autopilot'), loadCommand('demo'),
+    loadCommand('cleanup'), loadCommand('autopilot'), loadCommand('demo'), loadCommand('usage'),
   ]);
 
   return {
@@ -273,9 +283,10 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
     utility: [
       configCmd, doctorCmd, daemonCmd, completionsCmd,
       migrateCmd, workflowCmd, demoCmd,
+      statuslineCmd, compressCmd, efficiencyCmd,
     ].filter(Boolean) as Command[],
     analysis: [
-      analyzeCmd, routeCmd, progressCmd,
+      analyzeCmd, routeCmd, progressCmd, usageCmd,
     ].filter(Boolean) as Command[],
     management: [
       providersCmd, pluginsCmd, deploymentCmd, claimsCmd,

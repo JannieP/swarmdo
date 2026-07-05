@@ -377,6 +377,7 @@ This project is configured with Swarmdo V3 (Anti-Drift Defaults):
 | `plugins` | 5 | Plugin management (list, install, uninstall, enable, disable) |
 | `deployment` | 5 | Deployment management (deploy, rollback, status, environments, release) |
 | `embeddings` | 4 | Vector embeddings (embed, batch, search, init) — agentic-flow ONNX backend (speedup unverified, no benchmark) |
+| `usage` | 5 | Claude Code token/cost analytics from local transcripts (daily, monthly, models, projects, sessions; alias: `cost`) |
 | `claims` | 4 | Claims-based authorization (check, grant, revoke, list) |
 | `migrate` | 5 | V2 to V3 migration with rollback support |
 | `process` | 4 | Background process management |
