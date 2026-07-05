@@ -27,6 +27,8 @@ export interface TaskRecord {
   startedAt: string | null;
   completedAt: string | null;
   result?: Record<string, unknown>;
+  /** task ids that must be 'completed' before this task is ready (task-deps.ts) */
+  dependsOn?: string[];
 }
 
 export interface TaskStore {
@@ -83,6 +85,7 @@ export const taskTools: MCPTool[] = [
         priority: { type: 'string', description: 'Task priority (low, normal, high, critical)' },
         assignTo: { type: 'array', items: { type: 'string' }, description: 'Agent IDs to assign' },
         tags: { type: 'array', items: { type: 'string' }, description: 'Task tags' },
+        dependsOn: { type: 'array', items: { type: 'string' }, description: 'Task IDs that must complete before this task is ready' },
       },
       required: ['type', 'description'],
     },
@@ -96,6 +99,15 @@ export const taskTools: MCPTool[] = [
       const store = loadTaskStore();
       const taskId = `task-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
+      // `dependencies` is the legacy key the CLI's --dependencies flag has
+      // ALWAYS sent — the handler just never read it. Accept both spellings.
+      const dependsOn = (input.dependsOn as string[]) || (input.dependencies as string[]) || [];
+      if (dependsOn.length > 0) {
+        const { validateDependencies } = await import('./task-deps.js');
+        const check = validateDependencies(store, null, dependsOn);
+        if (!check.ok) return { success: false, error: check.error };
+      }
+
       const task: TaskRecord = {
         taskId,
         type: input.type as string,
@@ -108,6 +120,7 @@ export const taskTools: MCPTool[] = [
         createdAt: new Date().toISOString(),
         startedAt: null,
         completedAt: null,
+        ...(dependsOn.length > 0 ? { dependsOn } : {}),
       };
 
       store.tasks[taskId] = task;
@@ -122,6 +135,7 @@ export const taskTools: MCPTool[] = [
         createdAt: task.createdAt,
         assignedTo: task.assignedTo,
         tags: task.tags,
+        ...(dependsOn.length > 0 ? { dependsOn } : {}),
       };
     },
   },

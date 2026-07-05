@@ -188,6 +188,15 @@ const createCommand: Command = {
         }
       });
 
+      // Handler-level rejections (e.g. dependency validation) come back as
+      // {success:false, error} rather than a thrown MCPClientError — without
+      // this check the CLI printed a "Task created" banner over an empty row.
+      const rejection = result as unknown as { success?: boolean; error?: string };
+      if (rejection.success === false || !result.taskId) {
+        output.printError(`Failed to create task: ${rejection.error ?? 'unknown error'}`);
+        return { success: false, exitCode: 1 };
+      }
+
       output.writeln();
       output.printSuccess(`Task created: ${result.taskId}`);
       output.writeln();
@@ -808,11 +817,78 @@ const dispatchCommand: Command = {
   },
 };
 
+// Ready subcommand — the beads-style "what can run NOW" query (task-deps.ts)
+const readyCommand: Command = {
+  name: 'ready',
+  description: 'List tasks ready to run now (pending, all dependencies completed) and what blocks the rest',
+  options: [
+    { name: 'json', description: 'Machine-readable output', type: 'boolean', default: false }
+  ],
+  examples: [
+    { command: 'swarmdo task ready', description: 'Show ready vs blocked work' }
+  ],
+  action: async (ctx: CommandContext): Promise<CommandResult> => {
+    const { loadTaskStore } = await import('../mcp-tools/task-tools.js');
+    const { readyTasks, blockedTasks } = await import('../mcp-tools/task-deps.js');
+    const store = loadTaskStore(ctx.cwd);
+    const ready = readyTasks(store);
+    const blocked = blockedTasks(store);
+
+    if (ctx.flags.json === true) {
+      output.printJson({
+        ready: ready.map(t => t.taskId),
+        blocked: blocked.map(b => ({ taskId: b.task.taskId, waitingOn: b.waitingOn, missing: b.missing })),
+      });
+      return { success: true, data: { ready, blocked } };
+    }
+
+    output.writeln();
+    output.writeln(output.bold(`Ready (${ready.length})`));
+    if (ready.length === 0) {
+      output.writeln(output.dim('  nothing ready — create tasks or complete blockers'));
+    }
+    for (const t of ready) {
+      output.writeln(`  ${output.success('●')} ${t.taskId}  [${t.priority}] ${t.description.slice(0, 70)}`);
+    }
+    if (blocked.length > 0) {
+      output.writeln();
+      output.writeln(output.bold(`Blocked (${blocked.length})`));
+      for (const b of blocked) {
+        const missingNote = b.missing.length ? ` (missing: ${b.missing.join(', ')})` : '';
+        output.writeln(`  ${output.dim('○')} ${b.task.taskId} ⇐ waiting on ${b.waitingOn.join(', ')}${missingNote}`);
+      }
+    }
+    output.writeln();
+    return { success: true, data: { ready, blocked } };
+  }
+};
+
+// Graph subcommand — flat annotated dependency view
+const graphCommand: Command = {
+  name: 'graph',
+  aliases: ['deps'],
+  description: 'Show the task dependency graph (every task with its dependencies and their states)',
+  action: async (ctx: CommandContext): Promise<CommandResult> => {
+    const { loadTaskStore } = await import('../mcp-tools/task-tools.js');
+    const { renderDepGraph } = await import('../mcp-tools/task-deps.js');
+    const store = loadTaskStore(ctx.cwd);
+    const lines = renderDepGraph(store);
+    output.writeln();
+    if (lines.length === 0) {
+      output.printInfo('no tasks in the store');
+    } else {
+      for (const line of lines) output.writeln(`  ${line}`);
+    }
+    output.writeln();
+    return { success: true };
+  }
+};
+
 // Main task command
 export const taskCommand: Command = {
   name: 'task',
   description: 'Task management commands',
-  subcommands: [createCommand, listCommand, statusCommand, cancelCommand, assignCommand, retryCommand, dispatchCommand],
+  subcommands: [createCommand, listCommand, statusCommand, cancelCommand, assignCommand, retryCommand, dispatchCommand, readyCommand, graphCommand],
   options: [],
   examples: [
     { command: 'swarmdo task create -t implementation -d "Add user auth"', description: 'Create a task' },
@@ -837,7 +913,9 @@ export const taskCommand: Command = {
       `${output.highlight('status')}  - Get task details`,
       `${output.highlight('cancel')}  - Cancel a running task`,
       `${output.highlight('assign')}  - Assign task to agent(s)`,
-      `${output.highlight('retry')}   - Retry a failed task`
+      `${output.highlight('retry')}   - Retry a failed task`,
+      `${output.highlight('ready')}   - List ready vs dependency-blocked tasks`,
+      `${output.highlight('graph')}   - Show the dependency graph`
     ]);
     output.writeln();
     output.writeln('Run "swarmdo task <subcommand> --help" for subcommand help');

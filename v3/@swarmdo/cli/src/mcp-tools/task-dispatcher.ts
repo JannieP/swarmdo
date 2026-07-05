@@ -53,6 +53,10 @@ export interface DispatchTaskOutcome {
 export interface DispatchSummary {
   scanned: number;
   pending: number;
+  /** pending tasks held back by incomplete dependsOn entries (task-deps.ts) */
+  blocked: number;
+  /** task ids that became ready during this pass (a dependency completed) */
+  unblocked: string[];
   dispatched: number;
   completed: number;
   failed: number;
@@ -120,11 +124,20 @@ export async function dispatchPendingTasks(opts: DispatchOptions = {}): Promise<
 
   const store = loadTaskStore(cwd);
   const all = Object.values(store.tasks);
-  const pending = all.filter(t => t.status === 'pending' || t.status === 'in_progress');
+  // Dependency gate (task-deps.ts): a pending task with incomplete
+  // dependsOn entries is NOT dispatchable — running it would execute
+  // against prerequisites that haven't produced their outputs yet.
+  const { isReady, unblockedBy } = await import('./task-deps.js');
+  const pending = all.filter(
+    t => t.status === 'in_progress' || (t.status === 'pending' && isReady(store, t)),
+  );
+  const blocked = all.filter(t => t.status === 'pending' && !isReady(store, t));
 
   const summary: DispatchSummary = {
     scanned: all.length,
     pending: pending.length,
+    blocked: blocked.length,
+    unblocked: [],
     dispatched: 0,
     completed: 0,
     failed: 0,
@@ -132,6 +145,16 @@ export async function dispatchPendingTasks(opts: DispatchOptions = {}): Promise<
     dryRun,
     outcomes: [],
   };
+  for (const b of blocked) {
+    const waiting = (b.dependsOn ?? []).filter((id) => store.tasks[id]?.status !== 'completed');
+    summary.skipped++;
+    summary.outcomes.push({
+      taskId: b.taskId,
+      agentId: null,
+      status: 'skipped',
+      reason: `blocked by incomplete dependencies: ${waiting.join(', ')}`,
+    });
+  }
 
   const agents = loadAgentIds(cwd);
   const queue = pending.slice(0, max);
@@ -174,6 +197,11 @@ export async function dispatchPendingTasks(opts: DispatchOptions = {}): Promise<
       task.result = { output: result.output, model: result.model, usage: result.usage, durationMs };
       summary.completed++;
       summary.outcomes.push({ taskId: task.taskId, agentId, status: 'completed', durationMs });
+      // Surface what this completion released — the beads-style "ready
+      // work" signal callers (and the daemon log) act on.
+      for (const t of unblockedBy(store, task.taskId)) {
+        if (!summary.unblocked.includes(t.taskId)) summary.unblocked.push(t.taskId);
+      }
       syncAgentsAfterTask(cwd, [agentId]);
     } else {
       task.status = 'failed';

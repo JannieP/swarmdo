@@ -290,7 +290,7 @@ Bash("npx @swarmdo/cli@latest hooks worker dispatch --trigger optimize")
 | `swarm` | 6 | Multi-agent swarm coordination and orchestration |
 | `memory` | 13 | AgentDB memory with HNSW vector search (measured ~1.9x–4.7x vs brute force above crossover) + WAL-safe `backup` (run/list/restore, keep-N rotation) |
 | `mcp` | 9 | MCP server management and tool execution |
-| `task` | 6 | Task creation, assignment, and lifecycle |
+| `task` | 9 | Task creation, assignment, lifecycle + dependency graph (`--dependencies`, `ready`, `graph`; dispatcher gates on readiness) |
 | `session` | 7 | Session state management and persistence |
 | `config` | 7 | Configuration management and provider setup |
 | `status` | 3 | System status monitoring with watch mode |
