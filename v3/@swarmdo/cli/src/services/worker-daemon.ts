@@ -1472,18 +1472,24 @@ export class WorkerDaemon extends EventEmitter {
   }
 
   private async runConsolidateWorker(): Promise<unknown> {
-    // Memory consolidation - clean up old patterns
+    // Real memory consolidation (was a zero-writing stub until 2026-07-06):
+    // TTL-expire entries, accumulate EWC Fisher importance, record the run
+    // in the consolidation_runs ledger. See memory/consolidation-worker.ts.
+    const { runMemoryConsolidation } = await import('../memory/consolidation-worker.js');
+    const outcome = await runMemoryConsolidation({ projectRoot: this.projectRoot });
+
     const consolidateFile = join(this.projectRoot, '.swarmdo', 'metrics', 'consolidation.json');
     const metricsDir = join(this.projectRoot, '.swarmdo', 'metrics');
-
     if (!existsSync(metricsDir)) {
       mkdirSync(metricsDir, { recursive: true });
     }
 
     const result = {
       timestamp: new Date().toISOString(),
-      patternsConsolidated: 0,
-      memoryCleaned: 0,
+      ...outcome,
+      // legacy field names kept for readers of the old metrics shape
+      patternsConsolidated: outcome.patternsConsolidated,
+      memoryCleaned: outcome.entriesExpired,
       duplicatesRemoved: 0,
     };
 
