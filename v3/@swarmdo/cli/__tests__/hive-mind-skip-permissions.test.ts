@@ -30,13 +30,15 @@ function shouldSkipPermissions(flags: Record<string, unknown>): boolean {
 }
 
 describe('#2269 hive-mind --dangerously-skip-permissions flag handling', () => {
-  it('parser normalizes the kebab flag to camelCase and leaves the kebab key undefined', () => {
+  it('parser exposes the flag under BOTH key forms (kebab twins)', () => {
     const parser = new CommandParser({ allowUnknownFlags: true });
     const { flags } = parser.parse(['--dangerously-skip-permissions']);
 
-    // This is the heart of the bug: reading the kebab key alone is always
-    // undefined because the parser stores the normalized key.
-    expect(flags['dangerously-skip-permissions']).toBeUndefined();
+    // #2269's original hazard was reads of the kebab key silently getting
+    // undefined. Since the kebab-twin mirror landed in parse(), BOTH key
+    // forms bind — the class of bug this file guards is gone at the root
+    // (contract pinned in flag-kebab-mirror.test.ts).
+    expect(flags['dangerously-skip-permissions']).toBe(true);
     expect(flags.dangerouslySkipPermissions).toBe(true);
   });
 

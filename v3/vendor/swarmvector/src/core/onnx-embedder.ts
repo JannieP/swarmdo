@@ -239,7 +239,16 @@ export async function initOnnxEmbedder(config: OnnxEmbedderConfig = {}): Promise
 
       // Instantiate the .wasm bytes via WebAssembly API (no --experimental-wasm-modules needed).
       const wasmBytes = fs.readFileSync(wasmPath);
-      const wasmResult = await WebAssembly.instantiate(wasmBytes, { './swarmvector_onnx_embeddings_wasm_bg.js': wasmModule });
+      // The import-module name is BAKED into the .wasm at wasm-bindgen build
+      // time. The ruv→ruf rename swept the JS glue filename to swarmvector_*,
+      // but the shipped binary still declares './ruvector_..._bg.js' — with
+      // only the new key, instantiation failed and every embed silently fell
+      // back to hash vectors (backend 'mock'). Provide BOTH keys so either
+      // binary generation instantiates.
+      const wasmResult = await WebAssembly.instantiate(wasmBytes, {
+        './swarmvector_onnx_embeddings_wasm_bg.js': wasmModule,
+        './ruvector_onnx_embeddings_wasm_bg.js': wasmModule,
+      });
       const wasmExports = wasmResult.instance.exports;
       if (typeof wasmModule.__wbg_set_wasm === 'function') {
         wasmModule.__wbg_set_wasm(wasmExports);

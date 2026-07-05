@@ -1673,6 +1673,14 @@ let embeddingModelState: EmbeddingModel | null = null;
 export async function loadEmbeddingModel(options?: {
   modelPath?: string;
   verbose?: boolean;
+  /**
+   * Bypass the AgentDB bridge tier and load a genuinely LOCAL model.
+   * The bridge tier caches `{ loaded: true, model: null }` ("bridge handles
+   * embedding") — correct for generateEmbedding(), but it poisons the
+   * bridge-free generateLocalEmbedding() path (#2312), which sees a loaded
+   * state with no local model and silently falls to hash ('mock').
+   */
+  skipBridge?: boolean;
 }): Promise<{
   success: boolean;
   dimensions: number;
@@ -1680,11 +1688,12 @@ export async function loadEmbeddingModel(options?: {
   loadTime?: number;
   error?: string;
 }> {
-  const { verbose = false } = options || {};
+  const { verbose = false, skipBridge = false } = options || {};
   const startTime = Date.now();
 
-  // Already loaded
-  if (embeddingModelState?.loaded) {
+  // Already loaded — but a bridge-satisfied, model-less state does NOT
+  // count as loaded for a skipBridge (local-only) request.
+  if (embeddingModelState?.loaded && (!skipBridge || embeddingModelState.model)) {
     return {
       success: true,
       dimensions: embeddingModelState.dimensions,
@@ -1694,18 +1703,20 @@ export async function loadEmbeddingModel(options?: {
   }
 
   // ADR-053: Try AgentDB v3 bridge first
-  const bridge = await getBridge();
-  if (bridge) {
-    const bridgeResult = await bridge.bridgeLoadEmbeddingModel();
-    if (bridgeResult && bridgeResult.success) {
-      // Mark local state as loaded too so subsequent calls use cache
-      embeddingModelState = {
-        loaded: true,
-        model: null, // Bridge handles embedding
-        tokenizer: null,
-        dimensions: bridgeResult.dimensions
-      };
-      return bridgeResult;
+  if (!skipBridge) {
+    const bridge = await getBridge();
+    if (bridge) {
+      const bridgeResult = await bridge.bridgeLoadEmbeddingModel();
+      if (bridgeResult && bridgeResult.success) {
+        // Mark local state as loaded too so subsequent calls use cache
+        embeddingModelState = {
+          loaded: true,
+          model: null, // Bridge handles embedding
+          tokenizer: null,
+          dimensions: bridgeResult.dimensions
+        };
+        return bridgeResult;
+      }
     }
   }
 
@@ -1961,9 +1972,11 @@ export async function generateLocalEmbedding(text: string): Promise<{
   model: string;
   backend: 'onnx' | 'mock';
 }> {
-  // Ensure model is loaded
-  if (!embeddingModelState?.loaded) {
-    await loadEmbeddingModel();
+  // Ensure a LOCAL model is loaded. `model === null` means the bridge tier
+  // satisfied a previous load — that state has nothing this bridge-free
+  // path can embed with, and accepting it meant every call fell to hash.
+  if (!embeddingModelState?.loaded || !embeddingModelState.model) {
+    await loadEmbeddingModel({ skipBridge: true });
   }
 
   const state = embeddingModelState!;
