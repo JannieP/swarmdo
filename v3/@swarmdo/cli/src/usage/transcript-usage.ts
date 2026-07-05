@@ -365,6 +365,28 @@ function floorToHour(ms: number): number {
   return Math.floor(ms / HOUR) * HOUR;
 }
 
+/** Live stats for the active block: burn rate and projection. */
+export interface ActiveBlockStats {
+  block: UsageBlock;
+  remainingMin: number;
+  burnPerHourUsd: number;
+  projectedUsd: number;
+}
+
+export function activeBlockStats(blocks: UsageBlock[], nowMs: number): ActiveBlockStats | null {
+  const active = blocks.find((b) => b.active);
+  if (!active) return null;
+  const elapsedH = (nowMs - active.startMs) / 3_600_000;
+  const remainingMin = Math.max(0, Math.round((active.endMs - nowMs) / 60_000));
+  const burnPerHourUsd = elapsedH > 0 ? active.totals.costUsd / elapsedH : 0;
+  return {
+    block: active,
+    remainingMin,
+    burnPerHourUsd,
+    projectedUsd: active.totals.costUsd + burnPerHourUsd * (remainingMin / 60),
+  };
+}
+
 export function aggregateBlocks(
   events: UsageEvent[],
   opts: { blockHours?: number; nowMs?: number } = {},

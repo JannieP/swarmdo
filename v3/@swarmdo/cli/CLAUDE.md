@@ -312,6 +312,7 @@ Bash("npx @swarmdo/cli@latest hooks worker dispatch --trigger optimize")
 | `embeddings` | 4 | Vector embeddings (embed, batch, search, init) — agentic-flow ONNX backend (speedup unverified, no benchmark) |
 | `usage` | 6 | Claude Code token/cost analytics from local transcripts (daily, monthly, models, projects, sessions, 5h `blocks` w/ live burn; alias: `cost`) |
 | `repair` | 1 | Test-Driven Repair — bounded, budget-capped headless claude loop fixes source until a failing test passes (alias: `tdd-repair`; dry-run without `--confirm`) |
+| `hud` | 1 | Single-pane operational HUD: 5h block burn, task readiness, daemon workers, memory snapshots (`--watch`, `--json`) |
 | `claims` | 4 | Claims-based authorization (check, grant, revoke, list) |
 | `migrate` | 5 | V2 to V3 migration with rollback support |
 | `doctor` | 1 | System diagnostics with health checks |

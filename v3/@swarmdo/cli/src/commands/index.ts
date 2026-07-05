@@ -65,6 +65,8 @@ const commandLoaders: Record<string, CommandLoader> = {
   // Test-Driven Repair — bounded headless claude loop (upstream v3.14.0 parity)
   repair: () => import('./repair.js'),
   'tdd-repair': () => import('./repair.js'), // alias via loader key
+  // Single-pane operational HUD (claude-hud demand, swarmdo-native sources)
+  hud: () => import('./hud.js'),
   // Q-Learning Routing Commands
   route: () => import('./route.js'),
   // Progress Commands
@@ -261,7 +263,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
     analyzeCmd, routeCmd, progressCmd, providersCmd,
     pluginsCmd, deploymentCmd, claimsCmd, issuesCmd,
     updateCmd, processCmd, guidanceCmd, applianceCmd,
-    cleanupCmd, autopilotCmd, demoCmd, usageCmd, repairCmd,
+    cleanupCmd, autopilotCmd, demoCmd, usageCmd, repairCmd, hudCmd,
   ] = await Promise.all([
     loadCommand('daemon'), loadCommand('doctor'), loadCommand('embeddings'), loadCommand('neural'),
     loadCommand('performance'), loadCommand('security'), loadCommand('swarmvector'), loadCommand('hive-mind'),
@@ -270,7 +272,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
     loadCommand('analyze'), loadCommand('route'), loadCommand('progress'), loadCommand('providers'),
     loadCommand('plugins'), loadCommand('deployment'), loadCommand('claims'), loadCommand('issues'),
     loadCommand('update'), loadCommand('process'), loadCommand('guidance'), loadCommand('appliance'),
-    loadCommand('cleanup'), loadCommand('autopilot'), loadCommand('demo'), loadCommand('usage'), loadCommand('repair'),
+    loadCommand('cleanup'), loadCommand('autopilot'), loadCommand('demo'), loadCommand('usage'), loadCommand('repair'), loadCommand('hud'),
   ]);
 
   return {
@@ -290,7 +292,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
       statuslineCmd, compressCmd, efficiencyCmd,
     ].filter(Boolean) as Command[],
     analysis: [
-      analyzeCmd, routeCmd, progressCmd, usageCmd,
+      analyzeCmd, routeCmd, progressCmd, usageCmd, hudCmd,
     ].filter(Boolean) as Command[],
     management: [
       providersCmd, pluginsCmd, deploymentCmd, claimsCmd,
