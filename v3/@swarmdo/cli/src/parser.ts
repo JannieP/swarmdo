@@ -266,6 +266,22 @@ export class CommandParser {
     // Apply defaults
     this.applyDefaults(result.flags);
 
+    // Kebab twins: the parser stores flags camelCased (normalizeKey), but
+    // ~120 read sites across 31 command files read the literal kebab form
+    // (`ctx.flags['max-iterations']`) and silently fell back to their
+    // defaults — the flag parsed fine, the read missed. camelCase→kebab is
+    // deterministic, so mirror every camelCased key (after defaults, so
+    // defaulted flags mirror too). Enumeration sites tolerate the twins:
+    // validateFlags() adds raw option names to knownFlags, and the
+    // metaharness argv-rebuild skips keys containing '-'.
+    for (const key of Object.keys(result.flags)) {
+      if (key === '_' || !/[A-Z]/.test(key)) continue;
+      const kebab = key.replace(/([A-Z])/g, (m) => `-${m.toLowerCase()}`);
+      if (!(kebab in result.flags)) {
+        result.flags[kebab] = result.flags[key];
+      }
+    }
+
     return result;
   }
 
@@ -567,6 +583,8 @@ export class CommandParser {
     // Check for unknown flags if not allowed
     if (!this.options.allowUnknownFlags) {
       const knownFlags = new Set(allOptions.map(opt => this.normalizeKey(opt.name)));
+      // Kebab twins (see parse()): the raw option names are known too.
+      for (const opt of allOptions) knownFlags.add(opt.name);
       knownFlags.add('_'); // Positional args
 
       for (const key of Object.keys(flags)) {

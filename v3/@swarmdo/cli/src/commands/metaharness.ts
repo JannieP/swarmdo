@@ -145,6 +145,10 @@ export const metaharnessCommand: Command = {
     for (const [key, value] of Object.entries(ctxFlags)) {
       if (SKIP_KEYS.has(key)) continue;
       if (value === undefined || value === null) continue;
+      // Parser now mirrors camelCased flags to kebab twins (parser.ts
+      // parse()); the camelCase original below re-kebabs to the same argv
+      // flag, so emitting the twin as well would duplicate every flag.
+      if (key.includes('-')) continue;
       // Always use --kebab even for single-char keys: similarity.mjs
       // matches literal `--a` / `--b` via argv loop, not via a parser.
       // Reconstructing as short-form (`-a`) would silently misroute.
