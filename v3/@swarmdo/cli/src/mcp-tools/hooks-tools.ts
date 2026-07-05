@@ -3676,6 +3676,8 @@ export const hooksIntelligenceAttention: MCPTool = {
       }
 
       // Hash-based fallback (deterministic but not semantic)
+      const { assertHashFallbackAllowed } = await import('../memory/embedding-guard.js');
+      assertHashFallbackAllowed('hooks-tools.getQueryEmbedding');
       const arr = new Float32Array(dims);
       let seed = text.split('').reduce((acc, char, i) => acc + char.charCodeAt(0) * (i + 1), 0);
       for (let i = 0; i < dims; i++) {

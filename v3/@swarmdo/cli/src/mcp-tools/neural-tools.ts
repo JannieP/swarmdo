@@ -260,6 +260,8 @@ async function generateEmbedding(text?: string, dims: number = 384): Promise<num
   // Hash-based deterministic embedding (better than pure random for consistency)
   // NOTE: No semantic meaning — only useful for consistent deduplication, not similarity search
   if (text) {
+    const { assertHashFallbackAllowed } = await import('../memory/embedding-guard.js');
+    assertHashFallbackAllowed('neural-tools.generateEmbedding');
     if (embeddingServiceName === 'none') {
       embeddingServiceName = 'hash-fallback';
     }

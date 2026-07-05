@@ -841,6 +841,7 @@ SWARMDO_MEMORY_PATH=./data/memory
 
 # Daemon
 SWARMDO_HEADLESS=0        # hard-forbid billable headless `claude --print` worker sweeps
+SWARMDO_REQUIRE_REAL_EMBEDDINGS=1  # strict mode: hash-embedding fallbacks throw instead of degrading silently
 ```
 
 ## Doctor Health Checks

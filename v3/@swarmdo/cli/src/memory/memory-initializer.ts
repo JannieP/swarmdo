@@ -13,6 +13,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { createRequire } from 'node:module';
 import { readFileMaybeEncrypted, writeFileRestricted } from '../fs-secure.js';
+import { assertHashFallbackAllowed } from './embedding-guard.js';
 
 /**
  * #2356 — cached, synchronous capability probe for @swarmvector/core. `getHNSWStatus`
@@ -1892,6 +1893,7 @@ export async function loadEmbeddingModel(options?: {
     }
 
     // No ONNX model available - use fallback
+    assertHashFallbackAllowed('memory-initializer.loadEmbeddingModel');
     embeddingModelState = {
       loaded: true,
       model: null, // Will use simple hash-based fallback
@@ -2004,6 +2006,7 @@ export async function generateLocalEmbedding(text: string): Promise<{
 
   // Deterministic hash-based fallback (for testing/demo without ONNX).
   // AUDIT #3: backend='mock' — these vectors do NOT carry real semantics.
+  assertHashFallbackAllowed('memory-initializer.generateLocalEmbedding');
   const embedding = generateHashEmbedding(text, state.dimensions);
   return {
     embedding,
