@@ -1675,11 +1675,94 @@ const initMemoryCommand: Command = {
   }
 };
 
+// Backup subcommand — WAL-safe snapshot/rotation/restore (see memory-backup.ts;
+// #2431 corruption incident is the why; ported from upstream v3.23.0)
+const backupCommand: Command = {
+  name: 'backup',
+  description: 'WAL-safe snapshot of the memory DB with keep-N rotation (run|list|restore)',
+  options: [
+    DB_PATH_OPTION,
+    { name: 'output-dir', description: 'Snapshot directory (default: <db dir>/backups)', type: 'string' },
+    { name: 'keep', description: 'Snapshots to retain after each run (0 = never prune)', type: 'number', default: 7 },
+    { name: 'force', description: 'Allow restore to overwrite the live database', type: 'boolean', default: false },
+    { name: 'json', description: 'Machine-readable output', type: 'boolean', default: false }
+  ],
+  examples: [
+    { command: 'swarmdo memory backup', description: 'Snapshot now, keep the newest 7' },
+    { command: 'swarmdo memory backup list', description: 'Show existing snapshots' },
+    { command: 'swarmdo memory backup restore <file> --force', description: 'Roll the live DB back to a snapshot' }
+  ],
+  action: async (ctx: CommandContext): Promise<CommandResult> => {
+    const { createBackup, listBackups, restoreBackup } = await import('../memory/memory-backup.js');
+    const dbPath = ctx.flags.path as string | undefined;
+    const outDir = ctx.flags['output-dir'] as string | undefined;
+    const asJson = ctx.flags.json === true;
+    const action = (ctx.args[0] || 'run').toLowerCase();
+
+    try {
+      if (action === 'list') {
+        const backups = listBackups({ dbPath, outDir });
+        if (asJson) {
+          output.writeln(JSON.stringify(backups, null, 2));
+        } else if (backups.length === 0) {
+          output.printInfo('No snapshots yet — run `swarmdo memory backup` to create one');
+        } else {
+          output.printList(
+            backups.map((b) => `${b.file}  (${(b.bytes / 1024 / 1024).toFixed(2)} MB, ${new Date(b.mtimeMs).toISOString()})`)
+          );
+        }
+        return { success: true, data: backups };
+      }
+
+      if (action === 'restore') {
+        const file = ctx.args[1];
+        if (!file) {
+          output.printError('Usage: swarmdo memory backup restore <snapshot-file> [--force]');
+          return { success: false, exitCode: 1 };
+        }
+        const result = await restoreBackup(file, { dbPath, force: ctx.flags.force === true });
+        if (asJson) {
+          output.writeln(JSON.stringify(result, null, 2));
+        } else {
+          output.printSuccess(`Restored ${result.dbPath}`);
+          output.printList([
+            `Safety snapshot: ${result.safetySnapshot}`,
+            `Integrity: ${result.integrity}`
+          ]);
+        }
+        return { success: true, data: result };
+      }
+
+      if (action !== 'run') {
+        output.printError(`Unknown backup action: ${action} (expected run|list|restore)`);
+        return { success: false, exitCode: 1 };
+      }
+
+      const result = await createBackup({ dbPath, outDir, keep: ctx.flags.keep as number | undefined });
+      if (asJson) {
+        output.writeln(JSON.stringify(result, null, 2));
+      } else {
+        output.printSuccess(`Snapshot written: ${result.dest}`);
+        output.printList([
+          `Size: ${(result.bytes / 1024 / 1024).toFixed(2)} MB`,
+          `Engine: ${result.engine}${result.engine === 'file-copy' ? ' (best-effort — better-sqlite3 unavailable)' : ''}`,
+          `Integrity: ${result.integrity}`,
+          `Pruned: ${result.pruned.length ? result.pruned.join(', ') : 'none'}`
+        ]);
+      }
+      return { success: true, data: result };
+    } catch (error) {
+      output.printError(error instanceof Error ? error.message : String(error));
+      return { success: false, exitCode: 1 };
+    }
+  }
+};
+
 // Main memory command
 export const memoryCommand: Command = {
   name: 'memory',
   description: 'Memory management commands',
-  subcommands: [initMemoryCommand, storeCommand, retrieveCommand, searchCommand, listCommand, deleteCommand, statsCommand, configureCommand, cleanupCommand, compressCommand, exportCommand, importCommand],
+  subcommands: [initMemoryCommand, storeCommand, retrieveCommand, searchCommand, listCommand, deleteCommand, statsCommand, configureCommand, cleanupCommand, compressCommand, exportCommand, importCommand, backupCommand],
   options: [],
   examples: [
     { command: 'swarmdo memory store -k "key" -v "value"', description: 'Store data' },
@@ -1705,7 +1788,8 @@ export const memoryCommand: Command = {
       `${output.highlight('cleanup')}    - Clean expired entries`,
       `${output.highlight('compress')}   - Compress database`,
       `${output.highlight('export')}     - Export memory to file`,
-      `${output.highlight('import')}     - Import from file`
+      `${output.highlight('import')}     - Import from file`,
+      `${output.highlight('backup')}     - WAL-safe snapshot / rotate / restore`
     ]);
 
     return { success: true };

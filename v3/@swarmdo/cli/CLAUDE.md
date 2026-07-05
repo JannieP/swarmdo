@@ -288,7 +288,7 @@ Bash("npx @swarmdo/cli@latest hooks worker dispatch --trigger optimize")
 | `init` | 4 | Project initialization with wizard, presets, skills, hooks |
 | `agent` | 8 | Agent lifecycle (spawn, list, status, stop, metrics, pool, health, logs) |
 | `swarm` | 6 | Multi-agent swarm coordination and orchestration |
-| `memory` | 11 | AgentDB memory with HNSW vector search (measured ~1.9x–4.7x vs brute force above crossover) |
+| `memory` | 13 | AgentDB memory with HNSW vector search (measured ~1.9x–4.7x vs brute force above crossover) + WAL-safe `backup` (run/list/restore, keep-N rotation) |
 | `mcp` | 9 | MCP server management and tool execution |
 | `task` | 6 | Task creation, assignment, and lifecycle |
 | `session` | 7 | Session state management and persistence |
