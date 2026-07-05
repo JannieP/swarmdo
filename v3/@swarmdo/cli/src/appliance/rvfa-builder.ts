@@ -52,7 +52,7 @@ const AGENT_TYPES = 'coder reviewer tester planner researcher security-architect
 
 const HOOK_TYPES = 'pre-edit post-edit pre-command post-command pre-task post-task session-start session-end session-restore notify route explain pretrain build-agents transfer teammate-idle task-completed'.split(' ');
 
-const WORKER_TYPES = 'ultralearn optimize consolidate predict audit map preload deepdive document refactor benchmark testgaps'.split(' ');
+const WORKER_TYPES = 'ultralearn optimize consolidate predict audit map preload deepdive document refactor benchmark testgaps backup'.split(' ');
 
 const OFFLINE_MODELS = [
   { name: 'phi-3-mini-q4', format: 'gguf', sizeHint: '2.3GB', params: '3.8B' },

@@ -1856,6 +1856,7 @@ npx @swarmdo/cli@latest doctor --fix
 | \`refactor\` | normal | Suggestions |
 | \`benchmark\` | normal | Benchmarking |
 | \`testgaps\` | normal | Coverage gaps |
+| \`backup\` | low | Nightly memory.db snapshot |
 
 ---
 

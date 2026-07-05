@@ -2723,7 +2723,7 @@ const workerDispatchCommand: Command = {
 
     if (!trigger) {
       output.printError('--trigger is required');
-      output.writeln('Available triggers: ultralearn, optimize, consolidate, predict, audit, map, preload, deepdive, document, refactor, benchmark, testgaps, oia-audit');
+      output.writeln('Available triggers: ultralearn, optimize, consolidate, predict, audit, map, preload, deepdive, document, refactor, benchmark, testgaps, backup, oia-audit');
       output.writeln(output.dim('Tip: `oia-audit` (ADR-150) also runs as `swarmdo metaharness oia-audit` for direct invocation.'));
       return { success: false, exitCode: 1 };
     }
@@ -4015,6 +4015,7 @@ const workerCommand: Command = {
       `${output.highlight('refactor')}     - Refactoring suggestions`,
       `${output.highlight('benchmark')}    - Performance benchmarks`,
       `${output.highlight('testgaps')}     - Test coverage analysis`,
+      `${output.highlight('backup')}       - WAL-safe memory.db snapshot`,
     ]);
     output.writeln();
     output.writeln('Subcommands:');

@@ -16,7 +16,7 @@ const startCommand: Command = {
   name: 'start',
   description: 'Start the worker daemon with all enabled background workers',
   options: [
-    { name: 'workers', short: 'w', type: 'string', description: 'Comma-separated list of workers to enable (default: map,audit,optimize,consolidate,testgaps)' },
+    { name: 'workers', short: 'w', type: 'string', description: 'Comma-separated list of workers to enable (default: map,audit,optimize,consolidate,testgaps,backup)' },
     { name: 'quiet', short: 'Q', type: 'boolean', description: 'Suppress output' },
     { name: 'background', short: 'b', type: 'boolean', description: 'Run daemon in background (detached process)', default: true },
     { name: 'foreground', short: 'f', type: 'boolean', description: 'Run daemon in foreground (blocks terminal)' },
@@ -1031,7 +1031,7 @@ const triggerCommand: Command = {
     if (!workerType) {
       output.printError('Worker type is required. Use --worker or -w flag.');
       output.writeln();
-      output.writeln('Available workers: map, audit, optimize, consolidate, testgaps, predict, document, ultralearn, refactor, benchmark, deepdive, preload');
+      output.writeln('Available workers: map, audit, optimize, consolidate, testgaps, predict, document, ultralearn, refactor, benchmark, deepdive, preload, backup');
       return { success: false, exitCode: 1 };
     }
 
@@ -1372,6 +1372,7 @@ export const daemonCommand: Command = {
       `${output.highlight('benchmark')}   - Performance benchmarking (manual trigger)`,
       `${output.highlight('deepdive')}    - Deep code analysis (manual trigger)`,
       `${output.highlight('preload')}     - Resource preloading (manual trigger)`,
+      `${output.highlight('backup')}      - WAL-safe memory.db snapshot (24 h interval, keep 7)`,
     ]);
 
     output.writeln();

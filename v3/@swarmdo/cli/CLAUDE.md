@@ -295,7 +295,7 @@ Bash("npx @swarmdo/cli@latest hooks worker dispatch --trigger optimize")
 | `config` | 7 | Configuration management and provider setup |
 | `status` | 3 | System status monitoring with watch mode |
 | `workflow` | 6 | Workflow execution and template management |
-| `hooks` | 17 | Self-learning hooks + 12 background workers |
+| `hooks` | 17 | Self-learning hooks + 13 background workers |
 | `hive-mind` | 6 | Queen-led Byzantine fault-tolerant consensus |
 
 ### Advanced Commands
@@ -412,7 +412,7 @@ CVE remediation, input validation, path security:
 | `pre-bash` | (v2 compat) Alias for pre-command | Same as pre-command |
 | `post-bash` | (v2 compat) Alias for post-command | Same as post-command |
 
-### 12 Background Workers
+### 13 Background Workers
 
 | Worker | Priority | Description |
 |--------|----------|-------------|
@@ -428,6 +428,7 @@ CVE remediation, input validation, path security:
 | `refactor` | normal | Refactoring suggestions |
 | `benchmark` | normal | Performance benchmarking |
 | `testgaps` | normal | Test coverage analysis |
+| `backup` | low | Nightly WAL-safe memory.db snapshot (keep 7) |
 
 ### Essential Hook Commands
 
@@ -590,6 +591,9 @@ SWARMDO_MCP_TRANSPORT=stdio
 # Memory
 SWARMDO_MEMORY_BACKEND=hybrid
 SWARMDO_MEMORY_PATH=./data/memory
+
+# Daemon
+SWARMDO_HEADLESS=0        # hard-forbid billable headless `claude --print` worker sweeps
 ```
 
 ## 🔍 Doctor Health Checks
@@ -689,7 +693,7 @@ For a comprehensive overview of all Swarmdo V3 features, agents, commands, and i
 This includes:
 - All 60+ agent types with routing recommendations
 - All 26 CLI commands with 140+ subcommands
-- All 27 hooks + 12 background workers
+- All 27 hooks + 13 background workers
 - SwarmVector intelligence system details
 - Hive-Mind consensus mechanisms
 - Performance targets and status

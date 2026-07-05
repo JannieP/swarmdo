@@ -143,6 +143,7 @@ npx @swarmdo/cli@latest hooks post-task --task-id "[id]" --success true --store-
 | \`testgaps\` | After adding features |
 | \`map\` | Every 5+ file changes |
 | \`document\` | After API changes |
+| \`backup\` | Nightly memory.db snapshot (automatic) |
 
 \`\`\`bash
 npx @swarmdo/cli@latest hooks worker dispatch --trigger audit

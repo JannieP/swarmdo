@@ -3844,7 +3844,8 @@ type WorkerTrigger =
   | 'document'      // Auto-documentation
   | 'refactor'      // Refactoring suggestions
   | 'benchmark'     // Performance benchmarks
-  | 'testgaps';     // Test coverage analysis
+  | 'testgaps'      // Test coverage analysis
+  | 'backup';       // WAL-safe memory.db snapshot
 
 /**
  * Worker trigger patterns for auto-detection
@@ -3942,6 +3943,11 @@ const WORKER_TRIGGER_PATTERNS: Record<WorkerTrigger, RegExp[]> = {
     /test\s+gaps/i,
     /add\s+tests/i,
   ],
+  backup: [
+    /backup/i,
+    /snapshot/i,
+    /save\s+memory/i,
+  ],
 };
 
 /**
@@ -4024,6 +4030,12 @@ const WORKER_CONFIGS: Record<WorkerTrigger, {
     priority: 'normal',
     estimatedDuration: '30s',
     capabilities: ['testing', 'coverage', 'analysis'],
+  },
+  backup: {
+    description: 'WAL-safe memory.db snapshot with keep-N rotation',
+    priority: 'low',
+    estimatedDuration: '5s',
+    capabilities: ['backup', 'memory', 'safety'],
   },
 };
 
@@ -4137,7 +4149,7 @@ export const hooksWorkerDispatch: MCPTool = {
       trigger: {
         type: 'string',
         description: 'Worker trigger type',
-        enum: ['ultralearn', 'optimize', 'consolidate', 'predict', 'audit', 'map', 'preload', 'deepdive', 'document', 'refactor', 'benchmark', 'testgaps'],
+        enum: ['ultralearn', 'optimize', 'consolidate', 'predict', 'audit', 'map', 'preload', 'deepdive', 'document', 'refactor', 'benchmark', 'testgaps', 'backup'],
       },
       context: { type: 'string', description: 'Context for the worker (file path, topic, etc.)' },
       priority: { type: 'string', description: 'Priority (low, normal, high, critical)' },

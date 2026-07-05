@@ -362,7 +362,7 @@ This project is configured with Swarmdo V3 (Anti-Drift Defaults):
 | `status` | 3 | System status monitoring with watch mode |
 | `start` | 3 | Service startup and quick launch |
 | `workflow` | 6 | Workflow execution and template management |
-| `hooks` | 17 | Self-learning hooks + 12 background workers |
+| `hooks` | 17 | Self-learning hooks + 13 background workers |
 | `hive-mind` | 6 | Queen-led Byzantine fault-tolerant consensus |
 
 ### Advanced Commands
@@ -716,7 +716,7 @@ npx swarmdo@latest hooks task-completed -i task-123 --train-patterns true
 | **Learning** | `intelligence` (trajectory-start/step/end, pattern-store/search, stats, attention) | Reinforcement |
 | **Agent Teams** | `teammate-idle`, `task-completed` | Multi-agent coordination |
 
-### 12 Background Workers
+### 13 Background Workers
 
 | Worker | Priority | Description |
 |--------|----------|-------------|
@@ -732,6 +732,7 @@ npx swarmdo@latest hooks task-completed -i task-123 --train-patterns true
 | `refactor` | normal | Refactoring suggestions |
 | `benchmark` | normal | Performance benchmarking |
 | `testgaps` | normal | Test coverage analysis |
+| `backup` | low | Nightly WAL-safe memory.db snapshot (keep 7) |
 
 ### Essential Hook Commands
 
@@ -835,6 +836,9 @@ SWARMDO_MCP_TRANSPORT=stdio
 # Memory
 SWARMDO_MEMORY_BACKEND=hybrid
 SWARMDO_MEMORY_PATH=./data/memory
+
+# Daemon
+SWARMDO_HEADLESS=0        # hard-forbid billable headless `claude --print` worker sweeps
 ```
 
 ## Doctor Health Checks

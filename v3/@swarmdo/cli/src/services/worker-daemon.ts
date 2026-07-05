@@ -8,6 +8,7 @@
  * - optimize: Performance optimization (15 min interval)
  * - consolidate: Memory consolidation (30 min interval)
  * - testgaps: Test coverage analysis (20 min interval)
+ * - backup: WAL-safe memory.db snapshot (24 h interval)
  */
 
 import { EventEmitter } from 'events';
@@ -41,7 +42,12 @@ export type WorkerType =
   // on their agents via the real executeAgentTask wire. Local-only (NOT a
   // headless `claude --print` sweep). Opt-in (disabled by default) since it
   // makes real, billable LLM calls.
-  | 'dispatch';
+  | 'dispatch'
+  // Nightly WAL-safe snapshot of .swarm/memory.db (memory/memory-backup.ts).
+  // Local-only, default-on — the #2431 corruption incident is the standing
+  // argument for an automatic safety net. Upstream parity: claude-flow
+  // v3.23.0 ships the same worker default-on.
+  | 'backup';
 
 interface WorkerConfig {
   type: WorkerType;
@@ -123,6 +129,7 @@ const DEFAULT_WORKERS: WorkerConfigInternal[] = [
   // Disabled by default (makes billable calls); enable in daemon config or run
   // on demand with `swarmdo daemon trigger -w dispatch`.
   { type: 'dispatch', intervalMs: 60 * 1000, offsetMs: 0, priority: 'normal', description: 'Task queue dispatch (executes pending tasks)', enabled: false },
+  { type: 'backup', intervalMs: 24 * 60 * 60 * 1000, offsetMs: 10 * 60 * 1000, priority: 'low', description: 'Nightly WAL-safe memory.db snapshot (keep 7)', enabled: true },
 ];
 
 // Worker timeout — must exceed the longest per-worker headless timeout (15 min for audit/refactor).
@@ -1309,6 +1316,8 @@ export class WorkerDaemon extends EventEmitter {
         return this.runPreloadWorkerLocal();
       case 'dispatch':
         return this.runDispatchWorker();
+      case 'backup':
+        return this.runBackupWorker();
       default:
         return { status: 'unknown worker type', mode: 'local' };
     }
@@ -1321,6 +1330,32 @@ export class WorkerDaemon extends EventEmitter {
    * stays responsive; remaining tasks drain on the next 60s fire. Never
    * throws — returns a summary the metrics layer can persist.
    */
+  /**
+   * Nightly WAL-safe snapshot of the memory database (default-on, 24h).
+   * Delegates to memory/memory-backup.ts — better-sqlite3 online backup,
+   * quick_check verification, keep-7 rotation. Skips quietly when no
+   * database exists yet.
+   */
+  private async runBackupWorker(): Promise<unknown> {
+    const dbPath = join(this.projectRoot, '.swarm', 'memory.db');
+    const metricsDir = join(this.projectRoot, '.swarmdo', 'metrics');
+    if (!existsSync(metricsDir)) {
+      mkdirSync(metricsDir, { recursive: true });
+    }
+
+    let payload: Record<string, unknown>;
+    if (!existsSync(dbPath)) {
+      payload = { timestamp: new Date().toISOString(), status: 'skipped', reason: 'no memory database', dbPath };
+    } else {
+      const { createBackup } = await import('../memory/memory-backup.js');
+      const result = await createBackup({ dbPath });
+      payload = { timestamp: new Date().toISOString(), status: 'completed', ...result };
+    }
+
+    writeFileSync(join(metricsDir, 'backup.json'), JSON.stringify(payload, null, 2));
+    return payload;
+  }
+
   private async runDispatchWorker(): Promise<unknown> {
     try {
       const { dispatchPendingTasks } = await import('../mcp-tools/task-dispatcher.js');
@@ -1447,7 +1482,11 @@ export class WorkerDaemon extends EventEmitter {
    * Local optimize worker (fallback when headless unavailable)
    */
   private async runOptimizeWorkerLocal(): Promise<unknown> {
-    // Update performance metrics
+    // Honest local telemetry only. Until 2026-07-06 this wrote fabricated
+    // numbers (cacheHitRate: 0.78, avgResponseTime: 45 — literals presented
+    // as measurements) into performance.json. Local mode has no cache or
+    // response-time instrumentation to read; real optimization analysis is
+    // the headless AI path. Report only what the process can observe.
     const optimizeFile = join(this.projectRoot, '.swarmdo', 'metrics', 'performance.json');
     const metricsDir = join(this.projectRoot, '.swarmdo', 'metrics');
 
@@ -1455,16 +1494,15 @@ export class WorkerDaemon extends EventEmitter {
       mkdirSync(metricsDir, { recursive: true });
     }
 
+    const mem = process.memoryUsage();
     const perf = {
       timestamp: new Date().toISOString(),
       mode: 'local',
-      memoryUsage: process.memoryUsage(),
-      uptime: process.uptime(),
-      optimizations: {
-        cacheHitRate: 0.78,
-        avgResponseTime: 45,
-      },
-      note: 'Install Claude Code CLI for AI-powered optimization suggestions',
+      memoryUsage: mem,
+      heapUsedPercent: mem.heapTotal > 0 ? Math.round((mem.heapUsed / mem.heapTotal) * 100) : 0,
+      daemonUptimeSeconds: Math.round(process.uptime()),
+      cpuCount: cpus().length,
+      note: 'local mode reports process observables only; AI-powered optimization suggestions require the headless path (Claude Code CLI)',
     };
 
     writeFileSync(optimizeFile, JSON.stringify(perf, null, 2));

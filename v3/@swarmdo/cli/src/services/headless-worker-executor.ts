@@ -645,6 +645,16 @@ export class HeadlessWorkerExecutor extends EventEmitter {
    *      systems where `claude --version` can take >5s on first invoke.
    */
   async isAvailable(): Promise<boolean> {
+    // SWARMDO_HEADLESS=0|false|off is a hard kill-switch. A box with a real
+    // `claude` on PATH (CI runners, test hosts) must be able to forbid
+    // billable --print sweeps outright — the #2356 token-leak incident is
+    // the standing argument. Checked before the cache so an already-probed
+    // daemon honours a restart with the flag set.
+    const headlessFlag = (process.env.SWARMDO_HEADLESS ?? '').toLowerCase();
+    if (headlessFlag === '0' || headlessFlag === 'false' || headlessFlag === 'off') {
+      return false;
+    }
+
     // Only the `true` result is cached — `false` is re-probed every call
     // so a transient failure doesn't poison the rest of the daemon's life.
     if (this.claudeCodeAvailable === true) {
