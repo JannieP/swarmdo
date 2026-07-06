@@ -207,6 +207,10 @@ function getNestedValue(obj: Record<string, unknown>, key: string): unknown {
 /** Set a nested value by dot-separated key */
 function setNestedValue(obj: Record<string, unknown>, key: string, value: unknown): void {
   const parts = key.split('.');
+  // Reject prototype-polluting path segments before any nested write.
+  for (const part of parts) {
+    if (part === '__proto__' || part === 'constructor' || part === 'prototype') return;
+  }
   let current: Record<string, unknown> = obj;
   for (let i = 0; i < parts.length - 1; i++) {
     const part = parts[i];

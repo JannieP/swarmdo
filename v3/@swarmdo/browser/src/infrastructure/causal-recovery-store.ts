@@ -65,6 +65,13 @@ export class InMemoryBreakStore implements IBreakStore {
 
   /** Record an attempt (success or failure) — denominator for risk scoring. */
   recordAttempt(origin: string, selector: string): void {
+    // Guard against prototype-polluting origin/selector keys.
+    if (
+      origin === '__proto__' || origin === 'constructor' || origin === 'prototype' ||
+      selector === '__proto__' || selector === 'constructor' || selector === 'prototype'
+    ) {
+      return;
+    }
     const perOrigin = this.state.attempts[origin] ?? (this.state.attempts[origin] = {});
     perOrigin[selector] = (perOrigin[selector] ?? 0) + 1;
   }

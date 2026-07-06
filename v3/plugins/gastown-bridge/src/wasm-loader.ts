@@ -472,10 +472,15 @@ function parseTomlFallback(content: string): Formula {
         value = (value as string).slice(1, -1);
       }
 
-      if (currentSection) {
-        (result[currentSection] as Record<string, unknown>)[key] = value;
-      } else {
-        result[key] = value;
+      const keyUnsafe = key === '__proto__' || key === 'constructor' || key === 'prototype';
+      const sectionUnsafe =
+        currentSection === '__proto__' || currentSection === 'constructor' || currentSection === 'prototype';
+      if (!keyUnsafe && !sectionUnsafe) {
+        if (currentSection) {
+          (result[currentSection] as Record<string, unknown>)[key] = value;
+        } else {
+          result[key] = value;
+        }
       }
     }
   }

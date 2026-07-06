@@ -105,7 +105,9 @@ function setNestedValue(obj: Record<string, unknown>, key: string, value: unknow
     throw new Error(`Key exceeds maximum nesting depth of ${MAX_NESTING_DEPTH}`);
   }
   for (const part of parts) {
-    if (DANGEROUS_KEYS.has(part)) {
+    // Inline literal comparison — CodeQL recognizes this as a prototype-pollution
+    // barrier, whereas DANGEROUS_KEYS.has(part) is not tracked by its dataflow.
+    if (part === '__proto__' || part === 'constructor' || part === 'prototype') {
       throw new Error(`Dangerous key segment rejected: ${part}`);
     }
   }

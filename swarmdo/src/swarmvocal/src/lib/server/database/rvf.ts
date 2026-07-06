@@ -431,6 +431,10 @@ function applyUpdate(doc: Record<string, unknown>, update: Record<string, unknow
 
 function setNestedValue(obj: Record<string, unknown>, path: string, value: unknown): void {
 	const parts = path.split(".");
+	// Reject prototype-polluting path segments before any nested write.
+	for (const part of parts) {
+		if (part === "__proto__" || part === "constructor" || part === "prototype") return;
+	}
 	let current = obj;
 	for (let i = 0; i < parts.length - 1; i++) {
 		if (!(parts[i] in current) || typeof current[parts[i]] !== "object") {

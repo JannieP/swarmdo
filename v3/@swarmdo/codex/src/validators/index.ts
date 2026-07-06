@@ -854,14 +854,19 @@ function parseToml(content: string): TomlParseResult {
       value = valueStr;
     }
 
-    // Store in nested structure
-    if (currentSection) {
-      if (!result.data[currentSection]) {
-        result.data[currentSection] = {};
+    // Store in nested structure (skip prototype-polluting keys/sections)
+    const keyUnsafe = key === '__proto__' || key === 'constructor' || key === 'prototype';
+    const sectionUnsafe =
+      currentSection === '__proto__' || currentSection === 'constructor' || currentSection === 'prototype';
+    if (!keyUnsafe && !sectionUnsafe) {
+      if (currentSection) {
+        if (!result.data[currentSection]) {
+          result.data[currentSection] = {};
+        }
+        (result.data[currentSection] as Record<string, unknown>)[key] = value;
+      } else {
+        result.data[key] = value;
       }
-      (result.data[currentSection] as Record<string, unknown>)[key] = value;
-    } else {
-      result.data[key] = value;
     }
   }
 
