@@ -26,6 +26,7 @@ import {
   type UsageTotals,
 } from '../usage/transcript-usage.js';
 import { collectToolErrors, type ToolErrorReport } from '../usage/transcript-errors.js';
+import { computeCacheStats, type CacheStats } from '../usage/cache-stats.js';
 
 const VIEWS: Record<string, { dimension: UsageDimension; label: string }> = {
   daily: { dimension: 'day', label: 'Date' },
@@ -227,6 +228,47 @@ function runErrorsView(ctx: CommandContext, report: ToolErrorReport): CommandRes
   return { success: true, exitCode: 0 };
 }
 
+/** Cache view — prompt-cache efficiency + $ saved by caching (the #1 cost lever). */
+function runCacheView(ctx: CommandContext, collection: UsageCollection): CommandResult {
+  const stats: CacheStats = computeCacheStats(aggregateUsage(collection.events, 'model'));
+  if (ctx.flags.json === true) {
+    output.writeln(JSON.stringify(stats, null, 2));
+    return { success: true, exitCode: 0 };
+  }
+  output.writeln(output.bold('Claude Code usage — prompt cache efficiency'));
+  if (stats.totalInputSide === 0) {
+    output.writeln(output.info('no input tokens found in transcripts'));
+    return { success: true, exitCode: 0 };
+  }
+  const pct = (v: number) => `${(v * 100).toFixed(1)}%`;
+  output.printTable({
+    columns: [
+      { key: 'model', header: 'Model', width: 22 },
+      { key: 'fresh', header: 'Fresh In', width: 12, align: 'right' },
+      { key: 'write', header: 'Cache W', width: 12, align: 'right' },
+      { key: 'read', header: 'Cache R', width: 12, align: 'right' },
+      { key: 'hit', header: 'From cache', width: 11, align: 'right' },
+      { key: 'saved', header: 'Saved', width: 10, align: 'right' },
+    ],
+    data: stats.rows.map((r) => ({
+      model: shortenKey(r.model, 22),
+      fresh: fmtInt(r.freshInput),
+      write: fmtInt(r.cacheWrite),
+      read: fmtInt(r.cacheRead),
+      hit: pct(r.cacheReadPct),
+      saved: r.savingsUsd === null ? '—' : fmtCost(r.savingsUsd),
+    })),
+  });
+  const bits = [`${fmtInt(stats.totalInputSide)} input tokens`, `${pct(stats.overallCacheReadPct)} served from cache`];
+  if (stats.hasPricedSavings) bits.push(`~${fmtCost(stats.totalSavingsUsd)} saved by caching`);
+  output.writeln(output.dim(bits.join(' · ')));
+  if (stats.unpricedModels.length > 0) {
+    output.writeln(output.dim(`savings omitted for unpriced models: ${stats.unpricedModels.join(', ')}`));
+  }
+  output.writeln(output.dim('"From cache" = share of input tokens served as cache reads (0.1x cost); higher is cheaper.'));
+  return { success: true, exitCode: 0 };
+}
+
 async function run(ctx: CommandContext): Promise<CommandResult> {
   const viewName = (ctx.args[0] || 'daily').toLowerCase();
 
@@ -246,9 +288,17 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
     return runErrorsView(ctx, collectToolErrors({ dirs, since, until }));
   }
 
+  if (viewName === 'cache') {
+    const since = typeof ctx.flags.since === 'string' ? ctx.flags.since : undefined;
+    const until = typeof ctx.flags.until === 'string' ? ctx.flags.until : undefined;
+    const dirFlag = ctx.flags.dir;
+    const dirs = typeof dirFlag === 'string' ? [dirFlag] : Array.isArray(dirFlag) ? dirFlag.map(String) : undefined;
+    return runCacheView(ctx, collectUsage({ dirs, since, until }));
+  }
+
   const view = VIEWS[viewName];
   if (!view) {
-    output.writeln(output.error(`unknown view: ${viewName} (expected ${Object.keys(VIEWS).join('|')}|blocks|errors)`));
+    output.writeln(output.error(`unknown view: ${viewName} (expected ${Object.keys(VIEWS).join('|')}|blocks|errors|cache)`));
     return { success: false, exitCode: 1 };
   }
 
