@@ -5270,6 +5270,90 @@ const notifyCommand: Command = {
   }
 };
 
+// Install ready-made Claude Code hook recipes (e.g. desktop notify) into settings
+const recipeCommand: Command = {
+  name: 'recipe',
+  aliases: ['recipes'],
+  description: 'Install ready-made Claude Code hook recipes (desktop notify) into settings — dry-run unless --apply',
+  options: [
+    { name: 'apply', type: 'boolean', description: 'write the change (default: preview only)', default: false },
+    { name: 'shared', type: 'boolean', description: 'target .claude/settings.json (shared/committed) instead of settings.local.json', default: false },
+    { name: 'global', type: 'boolean', description: 'target ~/.claude/settings.json (user-global)', default: false },
+    { name: 'json', type: 'boolean', description: 'machine-readable output', default: false },
+  ],
+  examples: [
+    { command: 'swarmdo hooks recipe', description: 'List hook recipes + install status' },
+    { command: 'swarmdo hooks recipe notify-done', description: 'Preview installing the "ping when Claude finishes" hook' },
+    { command: 'swarmdo hooks recipe notify-done --apply', description: 'Install it into .claude/settings.local.json' },
+    { command: 'swarmdo hooks recipe all --apply', description: 'Install every recipe' },
+  ],
+  action: async (ctx: CommandContext): Promise<CommandResult> => {
+    const fs = await import('node:fs');
+    const path = await import('node:path');
+    const os = await import('node:os');
+    const { RECIPES, findRecipe, recipeNames, applyRecipes, hasRecipe } = await import('../hooks-recipe/recipe.js');
+
+    const cwd = ctx.cwd || process.cwd();
+    let targetFile: string;
+    let targetLabel: string;
+    if (ctx.flags.global === true) { targetFile = path.join(os.homedir(), '.claude', 'settings.json'); targetLabel = '~/.claude/settings.json'; }
+    else if (ctx.flags.shared === true) { targetFile = path.join(cwd, '.claude', 'settings.json'); targetLabel = '.claude/settings.json'; }
+    else { targetFile = path.join(cwd, '.claude', 'settings.local.json'); targetLabel = '.claude/settings.local.json'; }
+
+    let settings: unknown = {};
+    try { settings = JSON.parse(fs.readFileSync(targetFile, 'utf8')); } catch { /* missing/invalid → {} */ }
+
+    const name = (ctx.args[0] || '').toLowerCase();
+
+    if (!name) {
+      if (ctx.flags.json === true) { output.printJson(RECIPES.map((r) => ({ ...r, installed: hasRecipe(settings, r) }))); return { success: true }; }
+      output.writeln(output.bold('Claude Code hook recipes') + output.dim(`  (target: ${targetLabel})`));
+      output.printTable({
+        columns: [
+          { key: 'status', header: '', width: 3 },
+          { key: 'name', header: 'Recipe', width: 16 },
+          { key: 'event', header: 'Event', width: 14 },
+          { key: 'title', header: 'What it does', width: 44 },
+        ],
+        data: RECIPES.map((r) => ({ status: hasRecipe(settings, r) ? '✓' : '·', name: r.name, event: r.event, title: r.title })),
+      });
+      output.writeln(output.dim('✓ = installed · install:  swarmdo hooks recipe <name> --apply   ·   all:  swarmdo hooks recipe all --apply'));
+      return { success: true };
+    }
+
+    const selected = name === 'all' ? RECIPES : (findRecipe(name) ? [findRecipe(name)!] : []);
+    if (selected.length === 0) { output.printError(`unknown recipe '${name}' (choose: ${recipeNames().join(', ')}, or 'all')`); return { success: false, exitCode: 1 }; }
+
+    const { settings: merged, installed, skipped } = applyRecipes(settings, selected);
+
+    if (installed.length === 0) {
+      output.printInfo(`already installed in ${targetLabel}: ${skipped.join(', ')}`);
+      return { success: true, exitCode: 0 };
+    }
+
+    if (ctx.flags.apply !== true) {
+      output.writeln(output.bold('Dry run') + output.dim(` — would add to ${targetLabel}:`));
+      for (const r of selected.filter((x) => installed.includes(x.name))) output.writeln(`  ${output.info(r.event)} → ${r.command}`);
+      if (skipped.length) output.writeln(output.dim(`  (already present: ${skipped.join(', ')})`));
+      output.writeln();
+      output.writeln(output.dim('re-run with --apply to write. Existing hooks and settings are preserved.'));
+      return { success: true, data: { dryRun: true, wouldInstall: installed } };
+    }
+
+    try {
+      fs.mkdirSync(path.dirname(targetFile), { recursive: true });
+      fs.writeFileSync(targetFile, JSON.stringify(merged, null, 2) + '\n', 'utf8');
+    } catch (e) {
+      output.printError(`failed to write ${targetLabel}: ${(e as Error).message}`);
+      return { success: false, exitCode: 1 };
+    }
+    output.printSuccess(`Installed ${installed.join(', ')} → ${targetLabel}`);
+    if (skipped.length) output.writeln(output.dim(`already present: ${skipped.join(', ')}`));
+    output.writeln(output.dim('Restart Claude Code (or run /hooks) to pick up the change.'));
+    return { success: true, data: { installed, file: targetFile } };
+  },
+};
+
 // Main hooks command
 export const hooksCommand: Command = {
   name: 'hooks',
@@ -5292,6 +5376,7 @@ export const hooksCommand: Command = {
     listCommand,
     intelligenceCommand,
     notifyCommand,
+    recipeCommand,
     workerCommand,
     progressHookCommand,
     statuslineCommand,
