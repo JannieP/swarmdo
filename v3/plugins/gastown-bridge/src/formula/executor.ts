@@ -427,7 +427,7 @@ class JsFallbackWasmLoader implements IWasmLoader {
         }
 
         // Key-value pairs
-        const kvMatch = trimmed.match(/^(\w+)\s*=\s*"?([^"]*)"?$/);
+        const kvMatch = trimmed.match(/^(\w+)\s*=\s{0,32}"?([^"]*)"?$/);
         if (kvMatch) {
           const [, key, value] = kvMatch;
 

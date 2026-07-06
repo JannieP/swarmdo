@@ -314,7 +314,7 @@ export class HottEngine implements IHottEngine {
    */
   private parseProposition(prop: string): { type: string; args: string[] } {
     // Simple parsing: A = B, forall x:T. P, exists x:T. P
-    const eqMatch = prop.match(/(.+)\s*=\s*(.+)/);
+    const eqMatch = prop.match(/^([^=]+)=(.+)$/);
     if (eqMatch) {
       const arg1 = eqMatch[1]?.trim() ?? '';
       const arg2 = eqMatch[2]?.trim() ?? '';
@@ -438,8 +438,8 @@ export class HottEngine implements IHottEngine {
     let normalized = term;
 
     // Simplify refl compositions
-    normalized = normalized.replace(/trans\(refl\(([^)]+)\),\s*([^)]+)\)/g, '$2');
-    normalized = normalized.replace(/trans\(([^)]+),\s*refl\(([^)]+)\)\)/g, '$1');
+    normalized = normalized.replace(/trans\(refl\(([^()]+)\),\s*([^()]+)\)/g, '$2');
+    normalized = normalized.replace(/trans\(([^()]+),\s*refl\(([^()]+)\)\)/g, '$1');
 
     // Simplify sym(sym(p)) = p
     normalized = normalized.replace(/sym\(sym\(([^)]+)\)\)/g, '$1');

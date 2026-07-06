@@ -546,10 +546,25 @@ export class GtBridge {
       return parsed;
     } catch {
       // If not JSON, try to extract JSON from output
-      const jsonMatch = output.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
-      if (jsonMatch) {
+      // Extract the outermost {...} or [...] span via indexOf/lastIndexOf
+      // rather than /\{[\s\S]*\}|\[[\s\S]*\]/, whose greedy body backtracks
+      // quadratically on unclosed brace/bracket runs (js/polynomial-redos).
+      // Pick whichever opener appears first — matches the old regex's
+      // leftmost-match behavior.
+      const objStart = output.indexOf('{'), objEnd = output.lastIndexOf('}');
+      const arrStart = output.indexOf('['), arrEnd = output.lastIndexOf(']');
+      const objOk = objStart !== -1 && objEnd > objStart;
+      const arrOk = arrStart !== -1 && arrEnd > arrStart;
+      const jsonStr = objOk && arrOk
+        ? (objStart < arrStart ? output.slice(objStart, objEnd + 1) : output.slice(arrStart, arrEnd + 1))
+        : objOk
+          ? output.slice(objStart, objEnd + 1)
+          : arrOk
+            ? output.slice(arrStart, arrEnd + 1)
+            : null;
+      if (jsonStr) {
         try {
-          const parsed = JSON.parse(jsonMatch[0]) as T;
+          const parsed = JSON.parse(jsonStr) as T;
           parsedCache.set(cacheKey, parsed);
           return parsed;
         } catch {
