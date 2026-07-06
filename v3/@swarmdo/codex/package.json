@@ -64,12 +64,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JannieP/swarmdo.git",
+    "url": "https://github.com/SwarmDo/swarmdo.git",
     "directory": "v3/@swarmdo/codex"
   },
-  "homepage": "https://github.com/JannieP/swarmdo#readme",
+  "homepage": "https://github.com/SwarmDo/swarmdo#readme",
   "bugs": {
-    "url": "https://github.com/JannieP/swarmdo/issues"
+    "url": "https://github.com/SwarmDo/swarmdo/issues"
   },
   "engines": {
     "node": ">=18"

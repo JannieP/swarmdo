@@ -49,13 +49,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JannieP/swarmdo.git",
+    "url": "https://github.com/SwarmDo/swarmdo.git",
     "directory": "v3/@swarmdo/claims"
   },
   "bugs": {
-    "url": "https://github.com/JannieP/swarmdo/issues"
+    "url": "https://github.com/SwarmDo/swarmdo/issues"
   },
-  "homepage": "https://github.com/JannieP/swarmdo#readme",
+  "homepage": "https://github.com/SwarmDo/swarmdo#readme",
   "dependencies": {
     "zod": "^3.22.4"
   },

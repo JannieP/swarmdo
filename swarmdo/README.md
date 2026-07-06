@@ -2,10 +2,10 @@
 
 [![swarmdo](assets/swarmdo-banner.svg)](https://swarmdo.com)
 
-[![npm version (swarmdo)](https://img.shields.io/badge/npx%20swarmdo-v1.3.0-cb3837?style=for-the-badge&logo=npm&logoColor=white)](https://github.com/JannieP/swarmdo/releases)
-[![MIT License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](https://github.com/JannieP/swarmdo/blob/main/LICENSE)
+[![npm version (swarmdo)](https://img.shields.io/badge/npx%20swarmdo-v1.3.0-cb3837?style=for-the-badge&logo=npm&logoColor=white)](https://github.com/SwarmDo/swarmdo/releases)
+[![MIT License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](https://github.com/SwarmDo/swarmdo/blob/main/LICENSE)
 [![Website](https://img.shields.io/badge/swarmdo.com-e2a33c?style=for-the-badge&logoColor=black)](https://swarmdo.com)
-[![Star on GitHub](https://img.shields.io/github/stars/JannieP/swarmdo?style=for-the-badge&logo=github&color=gold)](https://github.com/JannieP/swarmdo)
+[![Star on GitHub](https://img.shields.io/github/stars/SwarmDo/swarmdo?style=for-the-badge&logo=github&color=gold)](https://github.com/SwarmDo/swarmdo)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-☕-FFDD00?style=for-the-badge&logoColor=black)](https://buymeacoffee.com/swarmdo)
 
 *Based on the original, hugely popular **ruflo** — renamed, self-contained, and MIT-licensed. Full lineage in [NOTICE](NOTICE).*

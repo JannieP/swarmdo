@@ -28,7 +28,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JannieP/swarmdo.git",
+    "url": "https://github.com/SwarmDo/swarmdo.git",
     "directory": "v3/@swarmvector/graph-node"
   }
 }

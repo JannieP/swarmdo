@@ -65,13 +65,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JannieP/swarmdo.git",
+    "url": "https://github.com/SwarmDo/swarmdo.git",
     "directory": "v3/plugins/quantum-optimizer"
   },
   "bugs": {
-    "url": "https://github.com/JannieP/swarmdo/issues"
+    "url": "https://github.com/SwarmDo/swarmdo/issues"
   },
-  "homepage": "https://github.com/JannieP/swarmdo/tree/main/v3/plugins/quantum-optimizer#readme",
+  "homepage": "https://github.com/SwarmDo/swarmdo/tree/main/v3/plugins/quantum-optimizer#readme",
   "engines": {
     "node": ">=20.0.0"
   },

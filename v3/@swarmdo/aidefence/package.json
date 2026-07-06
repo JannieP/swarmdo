@@ -58,13 +58,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JannieP/swarmdo.git",
+    "url": "git+https://github.com/SwarmDo/swarmdo.git",
     "directory": "v3/@swarmdo/aidefence"
   },
   "bugs": {
-    "url": "https://github.com/JannieP/swarmdo/issues"
+    "url": "https://github.com/SwarmDo/swarmdo/issues"
   },
-  "homepage": "https://github.com/JannieP/swarmdo/tree/main/v3/@swarmdo/aidefence#readme",
+  "homepage": "https://github.com/SwarmDo/swarmdo/tree/main/v3/@swarmdo/aidefence#readme",
   "publishConfig": {
     "access": "public",
     "tag": "alpha"

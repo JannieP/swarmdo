@@ -41,10 +41,10 @@
     "hooks"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/JannieP/swarmdo",
+  "homepage": "https://github.com/SwarmDo/swarmdo",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JannieP/swarmdo.git",
+    "url": "https://github.com/SwarmDo/swarmdo.git",
     "directory": "v3/@swarmdo/cli-core"
   },
   "publishConfig": {

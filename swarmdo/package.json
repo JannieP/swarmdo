@@ -1,6 +1,6 @@
 {
   "name": "swarmdo-bridge",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "private": true,
   "description": "Swarmdo MCP-bridge + docker tooling (NOT published \u2014 the canonical `swarmdo` npm package is the repo root). Resolves the post-rename name collision where this wrapper and the root umbrella both became `swarmdo`.",
   "main": "bin/swarmdo.js",
@@ -10,7 +10,7 @@
   },
   "homepage": "https://swarmdo.com",
   "bugs": {
-    "url": "https://github.com/JannieP/swarmdo/issues",
+    "url": "https://github.com/SwarmDo/swarmdo/issues",
     "email": "maintainers@swarmdo.com"
   },
   "files": [
@@ -82,7 +82,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/JannieP/swarmdo.git",
+    "url": "https://github.com/SwarmDo/swarmdo.git",
     "directory": "swarmdo"
   },
   "keywords": [

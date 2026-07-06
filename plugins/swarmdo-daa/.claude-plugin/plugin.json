@@ -6,7 +6,7 @@
     "name": "upstream",
     "url": "https://the upstream project (see NOTICE)"
   },
-  "homepage": "https://github.com/JannieP/swarmdo",
+  "homepage": "https://github.com/SwarmDo/swarmdo",
   "license": "MIT",
   "keywords": [
     "swarmdo",

@@ -42,12 +42,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JannieP/swarmdo.git",
+    "url": "https://github.com/SwarmDo/swarmdo.git",
     "directory": "v3/plugins/agentic-qe"
   },
-  "homepage": "https://github.com/JannieP/swarmdo/tree/main/v3/plugins/agentic-qe",
+  "homepage": "https://github.com/SwarmDo/swarmdo/tree/main/v3/plugins/agentic-qe",
   "bugs": {
-    "url": "https://github.com/JannieP/swarmdo/issues"
+    "url": "https://github.com/SwarmDo/swarmdo/issues"
   },
   "dependencies": {
     "zod": "^3.23.0"

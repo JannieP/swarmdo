@@ -2,7 +2,7 @@
   "name": "@swarmdo/plugin-agent-federation",
   "version": "1.0.0-alpha.16",
   "description": "Cross-installation agent federation with zero-trust security, PII-gated data flow, and compliance-grade audit trails.",
-  "homepage": "https://github.com/JannieP/swarmdo",
+  "homepage": "https://github.com/SwarmDo/swarmdo",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
