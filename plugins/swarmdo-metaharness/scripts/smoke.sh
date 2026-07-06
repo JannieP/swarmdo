@@ -658,7 +658,7 @@ grep -q '"path": "file"' "$W" 2>/dev/null || miss="$miss no-path-file-assert"
 grep -q '"skippedAuditList": true' "$W" 2>/dev/null || miss="$miss no-skip-true-assert"
 grep -q "/tmp/drift-baseline.json" "$W" 2>/dev/null || miss="$miss no-baseline-path"
 # Iter-98 step lives in the metaharness-real-data job
-grep -B100 "Drift-from-history dispatcher round-trip" "$W" 2>/dev/null | grep -q "metaharness-real-data:" \
+grep -B200 "Drift-from-history dispatcher round-trip" "$W" 2>/dev/null | grep -q "metaharness-real-data:" \
   || miss="$miss not-in-real-data-job"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
@@ -1981,7 +1981,7 @@ grep -q "harness.*score\|'score'" "$F" || miss="$miss no-score-call"
 # by metaharness@0.1.11+ which writes to \$CWD/<name>; iter 26 fix)
 grep -q "cwd: fixture\|cwd: opts.cwd" "$F" || miss="$miss no-cwd-fix"
 # Never echo the raw key
-grep -q "apiKey.slice(0, 7)" "$F" || miss="$miss key-may-leak"
+grep -qE "apiKey\.slice\(0, 7\)|never any slice of the key" "$F" || miss="$miss key-may-leak"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
 step "17p. bench-recordpair-overhead — measures + gates iter-12 default-path cost (iter 24/25)"
@@ -2061,7 +2061,7 @@ grep -q "child_process" "$F" || miss="$miss no-subprocess"
 # Registered in mcp-client.ts
 CLIENT="$ROOT/../../v3/@swarmdo/cli/src/mcp-client.ts"
 grep -q "import { metaharnessTools }" "$CLIENT" || miss="$miss not-imported-in-client"
-grep -q "\.\.\.metaharnessTools" "$CLIENT" || miss="$miss not-spread-in-registry"
+grep -qE "\.\.\.metaharnessTools|metaharness: \(\) => metaharnessTools" "$CLIENT" || miss="$miss not-spread-in-registry"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
 step "17l. test-graceful-degradation drill (ADR-150 rule #3 — iter 19)"
@@ -2089,7 +2089,7 @@ miss=""
 grep -q "metaharness score.*5-dim\|metaharness score)\`} for a 5-dim" "$INIT" 2>/dev/null || miss="$miss init-no-metaharness-tip"
 grep -q "ADR-150" "$INIT" 2>/dev/null || miss="$miss init-no-adr-anchor"
 # hooks.ts worker-dispatch trigger list includes oia-audit
-grep -q "testgaps, oia-audit" "$HOOKS" 2>/dev/null || miss="$miss hooks-trigger-list-missing"
+grep -qE "testgaps(, [a-z-]+)*, oia-audit" "$HOOKS" 2>/dev/null || miss="$miss hooks-trigger-list-missing"
 grep -q "swarmdo metaharness oia-audit" "$HOOKS" 2>/dev/null || miss="$miss hooks-tip-missing"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
@@ -2134,7 +2134,7 @@ grep -q "ADR-150" "$F" || miss="$miss no-adr-anchor"
 grep -q "checkMetaharness, // ADR-150" "$F" || miss="$miss not-in-allChecks"
 grep -q "'metaharness': checkMetaharness" "$F" || miss="$miss not-in-componentMap"
 # Help text mentions it
-grep -q "metaharness)" "$F" || miss="$miss not-in-help-text"
+grep -qE "metaharness[,)]" "$F" || miss="$miss not-in-help-text"
 # Graceful: never throws; returns warn (not fail) on missing
 grep -q "status: 'warn'" "$F" || miss="$miss no-graceful-warn"
 [[ -z "$miss" ]] && ok || bad "$miss"

@@ -1,6 +1,6 @@
 {
   "name": "swarmdo",
-  "version": "1.4.29",
+  "version": "1.4.30",
   "description": "Swarmdo - Enterprise AI agent orchestration for Claude Code. Deploy 60+ specialized agents in coordinated swarms with self-learning, fault-tolerant consensus, vector memory, and MCP integration",
   "main": "dist/index.js",
   "type": "module",
@@ -88,7 +88,7 @@
     "@swarmdo/shared": "file:v3/@swarmdo/shared",
     "@swarmvector/rabitq-wasm": "file:v3/@swarmvector/rabitq-wasm",
     "agentic-flow": "file:v3/vendor/agentic-flow",
-    "pg": "^8.22.0",
+    "pg": "8.22.0",
     "swarmvector": "file:v3/vendor/swarmvector",
     "swarmvector-attention-wasm": "file:v3/vendor/swarmvector-attention-wasm",
     "swarmvector-graph-transformer-wasm": "file:v3/vendor/swarmvector-graph-transformer-wasm",
