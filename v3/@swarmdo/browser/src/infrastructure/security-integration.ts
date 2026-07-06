@@ -292,12 +292,12 @@ export class BrowserSecurityScanner {
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#x27;');
 
-    // Remove script tags
-    sanitized = sanitized.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
-
-    // Remove event handlers
-    sanitized = sanitized.replace(/\s*on\w+\s*=\s*["'][^"']*["']/gi, '');
-
+    // The HTML-entity escaping above already replaces every '<', '>', '"' and
+    // "'", so <script> tags and on*="…" handlers are inert in the output. The
+    // regex "strips" that used to follow here were dead code — nothing matches
+    // once the angle brackets and quotes are escaped — and carried a ReDoS
+    // (js/polynomial-redos) plus a bad-tag-filter that never matched
+    // "</script >". Escaping is the complete, linear sanitization.
     return sanitized;
   }
 
