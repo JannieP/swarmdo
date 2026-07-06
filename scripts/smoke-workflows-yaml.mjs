@@ -20,7 +20,10 @@
 
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import yaml from 'js-yaml';
+// js-yaml@4's ESM build exports only named symbols (no default) while the
+// CJS interop provides a default — support both resolutions:
+import * as yamlModule from 'js-yaml';
+const yaml = yamlModule.default ?? yamlModule;
 
 const WORKFLOWS_DIR = '.github/workflows';
 

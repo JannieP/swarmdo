@@ -59,8 +59,7 @@
       "sharp"
     ],
     "overrides": {
-      "@swarmvector/gnn": "0.1.25",
-      "@swarmvector/gnn-linux-x64-gnu": "0.1.25"
+      "@swarmvector/gnn": "file:@swarmvector/gnn"
     }
   }
 }

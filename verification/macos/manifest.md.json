@@ -1,0 +1,61 @@
+{
+  "manifest": {
+    "schema": "swarmdo-witness/v1",
+    "issuedAt": "2026-07-06T23:20:57.525Z",
+    "gitCommit": "5ba64337441a407589b81bd77436a08c5482e511",
+    "branch": "main",
+    "os": "macos",
+    "releases": {
+      "swarmdo": "1.4.35",
+      "@swarmdo/cli": "1.4.35",
+      "@swarmdo/memory": "3.0.0-alpha.22"
+    },
+    "summary": {
+      "totalFixes": 4,
+      "verified": 4,
+      "missing": 0
+    },
+    "fixes": [
+      {
+        "id": "rename-hash-corruption-2026-07",
+        "desc": "Historic ruv→swarm rename sweep ran through base64 data and corrupted accepts@1.3.8's sha512 in the v3 pnpm lock (ERR_PNPM_TARBALL_INTEGRITY). Restored the registry-confirmed hash and audited all 3,012 hashes in both locks against every rename-era token (v1.4.23).",
+        "file": "v3/pnpm-lock.yaml",
+        "sha256": "1ad6bdaab5f731832dab44d14c425f9c7405ab07885112043f59bbd1fc9b9e7c",
+        "marker": "mkmRuvw+NACSaeXEQ",
+        "markerVerified": true
+      },
+      {
+        "id": "subagentstart-dead-hook-2026-07",
+        "desc": "Every generated settings.json shipped a hook on 'SubagentStart' — not a Claude Code event, so it never fired. Caught by the new `swarmdo config lint` on its first run; dead block removed from the generator (v1.4.17).",
+        "file": "v3/@swarmdo/cli/src/init/settings-generator.ts",
+        "sha256": "8b65f9100c11ae57b6974c4861fb05b4d7b7df196a92fad3e46a86304e47ac7b",
+        "marker": "\"SubagentStart\" is NOT a Claude Code hook event",
+        "markerVerified": true
+      },
+      {
+        "id": "cli-standalone-vendoring-2026-07",
+        "desc": "Standalone `npm i @swarmdo/cli` crashed with ERR_MODULE_NOT_FOUND because file:../ siblings never shipped. Publishes now stage a self-contained tree with the 7-package closure vendored inside the tarball (v1.4.12).",
+        "file": "v3/@swarmdo/cli/scripts/build-standalone.mjs",
+        "sha256": "a6bca6bc9380ef23a0943cf59fb933c5c4c7245e37a1a7436b31f5bc8ee5c22d",
+        "marker": "stage a self-contained @swarmdo/cli for npm publish",
+        "markerVerified": true
+      },
+      {
+        "id": "config-lint-shipped-2026-07",
+        "desc": "`swarmdo config lint` (v1.4.6) — static schema/hooks/mcp/layout validation; its first run caught the dead SubagentStart hook. Witnessed in the BUILT artifact so source-only checkouts trip the dist-not-built precondition (#1880) instead of a false regression.",
+        "file": "v3/@swarmdo/cli/dist/src/commands/config.js",
+        "sha256": "80aa62cdf05dca45581f6afa6a7cb00b07829799305f54753c560f5741c19b18",
+        "marker": "config lint: no findings",
+        "markerVerified": true
+      }
+    ]
+  },
+  "integrity": {
+    "manifestHashAlgo": "sha256",
+    "manifestHash": "b07d8f461815d96dfeb8aa28b14953e33ecba9d47d2f4a172dda28b0c1473022",
+    "signatureAlgo": "ed25519",
+    "publicKey": "043e9aa0fe6a64aa70b47688853d9cf8b9b1550d9baf5bd9c2e975e6cb56c036",
+    "signature": "31640c682af63d82118fb3ba8a8dbe6eed002c96b012a674952b44f6b63b36df51fec72b977257149afd573c2e0bf30c8650e02d0b97c2762fdc86ab07dd1206",
+    "seedDerivation": "sha256(gitCommit + ':swarmdo-witness/v1')"
+  }
+}

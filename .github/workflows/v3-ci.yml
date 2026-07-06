@@ -2508,11 +2508,10 @@ jobs:
             || { echo "::error::mcp-generator no longer writes 'swarmdo' server key — #2206 regression"; exit 1; }
           echo "ok: 'swarmdo' key found"
 
-          echo "Checking mcp-generator does NOT use bare 'swarmdo' as the server key..."
-          ! grep -qE "mcpServers\['swarmdo'\]|mcpServers\[\"swarmdo\"\]" \
-            v3/@swarmdo/cli/src/init/mcp-generator.ts \
-            || { echo "::error::mcp-generator writes 'swarmdo' server key — breaks mcp__swarmdo__* tool naming (#2206)"; exit 1; }
-          echo "ok: bare 'swarmdo' server key absent"
+          # (rename note: the historic #2206 second check forbade the OLD bare
+          # key while requiring the prefixed one; after the fork rename both
+          # patterns collapsed to 'swarmdo', making the pair self-contradictory.
+          # The positive check above is the whole contract now.)
 
           echo "Checking command args still invoke swarmdo@latest (must NOT change)..."
           grep -q "swarmdo@latest" v3/@swarmdo/cli/src/init/mcp-generator.ts \

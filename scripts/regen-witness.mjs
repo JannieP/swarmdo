@@ -5,7 +5,7 @@
  *
  * The plugin script is project-agnostic; this wrapper hard-codes swarmdo's
  * paths so contributors can run a one-liner. Add new fix entries by
- * editing `witness-fixes.json` at the repo root.
+ * editing `verification/witness-fixes.json` (this wrapper reads it from the verification dir).
  *
  * Usage:
  *   node scripts/regen-witness.mjs            # regen + append history
