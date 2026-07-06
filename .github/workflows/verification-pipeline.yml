@@ -1,5 +1,8 @@
 name: 🔍 Verification Pipeline
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [main, develop, alpha-*]

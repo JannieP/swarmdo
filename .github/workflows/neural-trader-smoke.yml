@@ -11,6 +11,9 @@ name: neural-trader-smoke
 # *runtime* contract — installs the package fresh, runs the documented
 # CLI flags, asserts the JSON shape.
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [main]

@@ -9,6 +9,9 @@
 # scheduled workflow with a budget guard, not on every PR.
 name: cost-tracker-smoke
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [main]

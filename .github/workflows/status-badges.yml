@@ -1,5 +1,8 @@
 name: 📊 Status Badges Update
 
+permissions:
+  contents: write
+
 on:
   workflow_run:
     workflows: ["🔍 Verification Pipeline", "🎯 Truth Scoring Pipeline", "🔗 Cross-Agent Integration Tests"]

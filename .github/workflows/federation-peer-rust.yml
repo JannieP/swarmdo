@@ -13,6 +13,9 @@ name: federation-peer-rust
 #                   crates.io. Type-checks only (the placeholder impls
 #                   don't yet exercise the upstream APIs).
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [main]

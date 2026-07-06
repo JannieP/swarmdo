@@ -4,6 +4,9 @@
 # and ADR cross-references. Triggers on changes to the plugin or this workflow.
 name: swarmdo-agent-smoke
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [main, develop, v3]

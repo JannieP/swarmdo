@@ -17,6 +17,9 @@
 # continues, and the artifact records the degraded state.
 name: oia-audit-weekly
 
+permissions:
+  contents: read
+
 on:
   schedule:
     - cron: '17 4 * * 0'  # Sundays at 04:17 UTC

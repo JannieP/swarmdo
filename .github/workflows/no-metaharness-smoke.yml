@@ -13,6 +13,9 @@
 # to write a new ADR that supersedes the constraint.
 name: no-metaharness-smoke
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [main]

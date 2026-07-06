@@ -1,5 +1,8 @@
 name: V3 CI/CD Pipeline
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [main, develop, v3]

@@ -10,6 +10,9 @@ name: codex-integration-audit
 # Pure-Node static checks — no install needed. Build + unit tests are
 # covered by the main CI workflow.
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [main]

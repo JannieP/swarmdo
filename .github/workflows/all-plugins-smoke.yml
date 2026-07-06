@@ -11,6 +11,9 @@
 # on the iter-74 baseline) that it can be a required check on PRs.
 name: all-plugins-smoke
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [main]

@@ -13,6 +13,9 @@
 #   - this workflow file
 name: metaharness-ci
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [main]
