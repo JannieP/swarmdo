@@ -3,6 +3,8 @@
  * Task management for Swarmdo
  */
 
+import { execSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 import type { Command, CommandContext, CommandResult } from '../types.js';
 import { output } from '../output.js';
 import { select, confirm, input, multiSelect } from '../prompt.js';
@@ -884,11 +886,142 @@ const graphCommand: Command = {
   }
 };
 
+// parse-prd subcommand — decompose a PRD/spec doc into the task DAG (Task Master
+// parity). The LLM decomposition lives in ../task/parse-prd.ts (injectable +
+// unit-tested); this layer gates the billable call and creates the linked tasks.
+const parsePrdCommand: Command = {
+  name: 'parse-prd',
+  aliases: ['parse', 'from-spec'],
+  description: 'Decompose a PRD/spec markdown file into an ordered, dependency-linked task list (billable claude call; dry-run without --confirm)',
+  options: [
+    { name: 'file', short: 'f', description: 'path to the PRD/spec markdown (or pass as the first argument)', type: 'string' },
+    { name: 'confirm', description: 'actually decompose (billable claude call) and create tasks; omit for a dry-run plan', type: 'boolean', default: false },
+    { name: 'max-tasks', description: 'cap on the number of tasks (default 20)', type: 'number', default: 20 },
+    { name: 'type', short: 't', description: 'task type for created tasks', type: 'string', choices: TASK_TYPES.map(t => t.value), default: 'implementation' },
+    { name: 'model', description: 'model for the decomposition call (default sonnet)', type: 'string', default: 'sonnet' },
+    { name: 'max-budget-usd', description: 'spend ceiling for the decomposition call (default 1)', type: 'number', default: 1 },
+    { name: 'timeout-secs', description: 'decomposition call timeout (default 180)', type: 'number', default: 180 },
+    { name: 'json', description: 'machine-readable output', type: 'boolean', default: false },
+  ],
+  examples: [
+    { command: 'swarmdo task parse-prd spec.md', description: 'Dry-run: show the plan without spending' },
+    { command: 'swarmdo task parse-prd spec.md --confirm', description: 'Decompose the spec and create linked tasks' },
+    { command: 'swarmdo task parse-prd docs/prd.md --max-tasks 12 --confirm', description: 'Cap the decomposition at 12 tasks' },
+  ],
+  action: async (ctx: CommandContext): Promise<CommandResult> => {
+    const file = (ctx.flags.file as string) || ctx.args[0];
+    if (!file) {
+      output.printError('a PRD/spec file is required — pass it as the first argument or via --file');
+      return { success: false, exitCode: 1 };
+    }
+    let prd: string;
+    try {
+      prd = readFileSync(file, 'utf8');
+    } catch {
+      output.printError(`cannot read file: ${file}`);
+      return { success: false, exitCode: 1 };
+    }
+    if (!prd.trim()) {
+      output.printError(`file is empty: ${file}`);
+      return { success: false, exitCode: 1 };
+    }
+
+    const maxTasks = (ctx.flags['max-tasks'] as number) || 20;
+    const taskType = (ctx.flags.type as string) || 'implementation';
+    const model = (ctx.flags.model as string) || 'sonnet';
+    const maxBudgetUsd = (ctx.flags['max-budget-usd'] as number) ?? 1;
+    const timeoutMs = ((ctx.flags['timeout-secs'] as number) || 180) * 1000;
+
+    // Dry-run plan (no billable call) unless --confirm — same gate as `repair`.
+    if (ctx.flags.confirm !== true) {
+      output.writeln(output.bold('task parse-prd — plan (dry-run, nothing executed)'));
+      output.printList([
+        `Spec file: ${file} (${prd.length.toLocaleString()} chars)`,
+        `Model: ${model} · budget ceiling: $${maxBudgetUsd.toFixed(2)} · timeout: ${timeoutMs / 1000}s`,
+        `Will create up to ${maxTasks} '${taskType}' tasks, dependency-linked, into the task DAG`,
+      ]);
+      output.printInfo('re-run with --confirm to decompose (billable claude call) and create tasks');
+      return { success: true, exitCode: 0 };
+    }
+
+    const headlessFlag = (process.env.SWARMDO_HEADLESS ?? '').toLowerCase();
+    if (headlessFlag === '0' || headlessFlag === 'false' || headlessFlag === 'off') {
+      output.printError('SWARMDO_HEADLESS forbids billable headless claude runs on this host');
+      return { success: false, exitCode: 1 };
+    }
+    try {
+      execSync('claude --version', { stdio: 'pipe', timeout: 10_000 });
+    } catch {
+      output.printError('claude CLI not found on PATH — parse-prd needs Claude Code installed');
+      return { success: false, exitCode: 1 };
+    }
+
+    output.printInfo(`Decomposing ${file} with ${model}…`);
+    const { decomposePrd } = await import('../task/parse-prd.js');
+    const result = decomposePrd(prd, { model, maxBudgetUsd, timeoutMs, cwd: ctx.cwd || process.cwd(), maxTasks });
+
+    if (result.tasks.length === 0) {
+      output.printError(`no tasks produced${result.warnings.length ? ` — ${result.warnings.join('; ')}` : ''}`);
+      return { success: false, exitCode: 1 };
+    }
+
+    // Create in topological order, mapping each local ref → its created task id
+    // so dependencies resolve to real ids the DAG can gate on.
+    const refToId = new Map<string, string>();
+    const created: Array<{ ref: string; id: string; title: string; dependsOn: string[] }> = [];
+    for (const t of result.tasks) {
+      const deps = t.dependsOn.map(r => refToId.get(r)).filter((x): x is string => !!x);
+      try {
+        const res = await callMCPTool<{ taskId: string; success?: boolean; error?: string }>('task_create', {
+          type: taskType,
+          description: t.title,
+          priority: t.priority,
+          dependencies: deps,
+          tags: ['parse-prd'],
+          metadata: { source: 'parse-prd', specFile: file, detail: t.description, localRef: t.ref },
+        });
+        const rej = res as unknown as { success?: boolean; error?: string };
+        if (rej.success === false || !res.taskId) {
+          output.printError(`failed to create task '${t.title}': ${rej.error ?? 'unknown error'}`);
+          continue;
+        }
+        refToId.set(t.ref, res.taskId);
+        created.push({ ref: t.ref, id: res.taskId, title: t.title, dependsOn: deps });
+      } catch (e) {
+        output.printError(`failed to create task '${t.title}': ${e instanceof MCPClientError ? e.message : String(e)}`);
+      }
+    }
+
+    if (ctx.flags.json === true) {
+      output.printJson({ created, warnings: result.warnings, costUsd: result.costUsd, specFile: file });
+      return { success: created.length > 0, exitCode: created.length > 0 ? 0 : 1, data: created };
+    }
+
+    output.writeln();
+    output.printSuccess(`Created ${created.length} task(s) from ${file}`);
+    output.printTable({
+      columns: [
+        { key: 'id', header: 'Task ID', width: 24 },
+        { key: 'title', header: 'Title', width: 42 },
+        { key: 'deps', header: 'Depends on', width: 20 },
+      ],
+      data: created.map(c => ({ id: c.id, title: c.title, deps: c.dependsOn.length ? `${c.dependsOn.length} task(s)` : '—' })),
+    });
+    if (result.costUsd != null) output.printInfo(`Decomposition cost: $${result.costUsd.toFixed(4)}`);
+    if (result.warnings.length) {
+      output.writeln(output.dim('Notes:'));
+      for (const w of result.warnings) output.writeln(output.dim(`  • ${w}`));
+    }
+    output.printInfo("Next: 'swarmdo task ready' (what can start now) or 'swarmdo task graph' (the DAG).");
+    return { success: true, data: created };
+  },
+};
+
 // Main task command
 export const taskCommand: Command = {
   name: 'task',
   description: 'Task management commands',
-  subcommands: [createCommand, listCommand, statusCommand, cancelCommand, assignCommand, retryCommand, dispatchCommand, readyCommand, graphCommand],
+  subcommands: [createCommand, parsePrdCommand, listCommand, statusCommand, cancelCommand, assignCommand, retryCommand, dispatchCommand, readyCommand, graphCommand],
   options: [],
   examples: [
     { command: 'swarmdo task create -t implementation -d "Add user auth"', description: 'Create a task' },
