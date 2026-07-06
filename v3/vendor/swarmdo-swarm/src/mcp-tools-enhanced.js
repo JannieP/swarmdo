@@ -4,6 +4,7 @@
  */
 
 import { SwarmdoSwarm } from './index-enhanced.js';
+import { randomBytes } from 'node:crypto';
 import { SwarmPersistencePooled } from './persistence-pooled.js';
 import {
   SwarmdoSwarmError,
@@ -2530,7 +2531,7 @@ class EnhancedMCPTools {
 
       const monitoringData = {
         timestamp: new Date().toISOString(),
-        monitoring_session_id: `monitor_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        monitoring_session_id: `monitor_${Date.now()}_${randomBytes(6).toString('hex')}`,
         swarms: [],
       };
 

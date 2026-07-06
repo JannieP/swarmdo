@@ -4,6 +4,7 @@
  */
 
 import { promises as fs } from 'fs';
+import { randomBytes } from 'node:crypto';
 import path from 'path';
 import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
@@ -1842,7 +1843,7 @@ ${this.sessionData.learnings.slice(-5).map(l =>
    */
   getSessionId() {
     if (!this._sessionId) {
-      this._sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      this._sessionId = `session_${Date.now()}_${randomBytes(6).toString('hex')}`;
     }
     return this._sessionId;
   }

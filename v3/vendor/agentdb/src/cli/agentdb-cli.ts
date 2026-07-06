@@ -10,6 +10,7 @@
  */
 
 import { createDatabase } from '../db-fallback.js';
+import { randomBytes } from 'node:crypto';
 import { parseJsonStrict } from '../security/input-validation.js';
 import { CausalMemoryGraph } from '../controllers/CausalMemoryGraph.js';
 import { CausalRecall } from '../controllers/CausalRecall.js';
@@ -2622,7 +2623,7 @@ async function handleStorePatternCommand(cli: AgentDBCLI, args: string[]) {
   }
 
   // Store as reflexion episode with pattern metadata
-  const sessionId = `pattern-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+  const sessionId = `pattern-${Date.now()}-${randomBytes(6).toString('hex')}`;
   await cli.reflexionStoreEpisode({
     sessionId,
     task: `${type}:${domain}`,

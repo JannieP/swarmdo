@@ -22,6 +22,7 @@
 // Database type from db-fallback
 type Database = any;
 import { EmbeddingService } from './EmbeddingService.js';
+import { randomBytes } from 'node:crypto';
 
 export interface LearningSession {
   id: string;
@@ -147,7 +148,7 @@ export class LearningSystem {
     sessionType: LearningSession['sessionType'],
     config: LearningConfig
   ): Promise<string> {
-    const sessionId = `session-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+    const sessionId = `session-${Date.now()}-${randomBytes(6).toString('hex')}`;
 
     const session: LearningSession = {
       id: sessionId,
