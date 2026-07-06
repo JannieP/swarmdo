@@ -20,6 +20,7 @@ import {
   aggregateUsage,
   collectUsage,
   totalUsage,
+  localDateKey,
   type UsageBlock,
   type UsageCollection,
   type UsageDimension,
@@ -27,6 +28,7 @@ import {
 } from '../usage/transcript-usage.js';
 import { collectToolErrors, type ToolErrorReport } from '../usage/transcript-errors.js';
 import { computeCacheStats, type CacheStats } from '../usage/cache-stats.js';
+import { evaluateGuard, type GuardThreshold, type GuardStatus } from '../usage/spend-guard.js';
 
 const VIEWS: Record<string, { dimension: UsageDimension; label: string }> = {
   daily: { dimension: 'day', label: 'Date' },
@@ -269,6 +271,80 @@ function runCacheView(ctx: CommandContext, collection: UsageCollection): Command
   return { success: true, exitCode: 0 };
 }
 
+/** Build a threshold from a --flag or its SWARMDO_GUARD_* env fallback. */
+function guardThreshold(ctx: CommandContext, flagKey: string, envKey: string, current: number, label: string, unit: 'usd' | 'tokens'): GuardThreshold | null {
+  const raw = ctx.flags[flagKey] ?? process.env[envKey];
+  const limit = typeof raw === 'number' ? raw : typeof raw === 'string' ? parseFloat(raw) : NaN;
+  if (!Number.isFinite(limit) || limit <= 0) return null;
+  return { key: flagKey, label, current, limit, unit };
+}
+
+/** Guard view — compare current spend/burn against budget limits (--strict to
+ * exit non-zero when over). A policy layer on the usage analytics. */
+function runGuardView(ctx: CommandContext, collection: UsageCollection): CommandResult {
+  const nowMs = Date.now();
+  const active = aggregateBlocks(collection.events, { nowMs }).find((b) => b.active);
+  const blockCost = active ? active.totals.costUsd : 0;
+  const blockTokens = active ? active.totals.totalTokens : 0;
+  const todayKey = localDateKey(new Date(nowMs));
+  const monthKey = todayKey.slice(0, 7);
+  const todayCost = aggregateUsage(collection.events, 'day').find((r) => r.key === todayKey)?.totals.costUsd ?? 0;
+  const monthCost = aggregateUsage(collection.events, 'month').find((r) => r.key === monthKey)?.totals.costUsd ?? 0;
+
+  const thresholds: GuardThreshold[] = [];
+  const add = (t: GuardThreshold | null) => { if (t) thresholds.push(t); };
+  add(guardThreshold(ctx, 'block-usd', 'SWARMDO_GUARD_BLOCK_USD', blockCost, 'Active 5h block ($)', 'usd'));
+  add(guardThreshold(ctx, 'block-tokens', 'SWARMDO_GUARD_BLOCK_TOKENS', blockTokens, 'Active 5h block (tokens)', 'tokens'));
+  add(guardThreshold(ctx, 'daily-usd', 'SWARMDO_GUARD_DAILY_USD', todayCost, 'Today ($)', 'usd'));
+  add(guardThreshold(ctx, 'monthly-usd', 'SWARMDO_GUARD_MONTHLY_USD', monthCost, 'This month ($)', 'usd'));
+
+  const warnPct = typeof ctx.flags['warn-pct'] === 'number' ? (ctx.flags['warn-pct'] as number) / 100 : 0.8;
+  const report = evaluateGuard(thresholds, warnPct);
+  const strict = ctx.flags.strict === true;
+  const exitCode = strict && report.status === 'over' ? 1 : 0;
+
+  if (ctx.flags.json === true) {
+    output.writeln(JSON.stringify({ status: report.status, checks: report.checks, snapshot: { blockCost, blockTokens, todayCost, monthCost } }, null, 2));
+    return { success: exitCode === 0, exitCode };
+  }
+
+  if (!report.configured) {
+    output.writeln(output.bold('Spend guard') + output.dim(' — no limits set'));
+    output.printList([
+      `Active 5h block: ${fmtCost(blockCost)} · ${fmtInt(blockTokens)} tokens`,
+      `Today:           ${fmtCost(todayCost)}`,
+      `This month:      ${fmtCost(monthCost)}`,
+    ]);
+    output.writeln(output.dim('set a limit, e.g.:  swarmdo usage guard --block-usd 5 --daily-usd 20 --strict'));
+    output.writeln(output.dim('or via env: SWARMDO_GUARD_BLOCK_USD / _BLOCK_TOKENS / _DAILY_USD / _MONTHLY_USD'));
+    return { success: true, exitCode: 0 };
+  }
+
+  const icon = (s: GuardStatus) => (s === 'over' ? '⛔' : s === 'warn' ? '⚠' : '✅');
+  const fmtVal = (v: number, unit: 'usd' | 'tokens') => (unit === 'usd' ? fmtCost(v) : fmtInt(v));
+  output.writeln(output.bold('Spend guard'));
+  output.printTable({
+    columns: [
+      { key: 'status', header: '', width: 3 },
+      { key: 'label', header: 'Metric', width: 24 },
+      { key: 'current', header: 'Current', width: 14, align: 'right' },
+      { key: 'max', header: 'Limit', width: 14, align: 'right' },
+      { key: 'pct', header: 'Used', width: 7, align: 'right' },
+    ],
+    data: report.checks.map((c) => ({
+      status: icon(c.status),
+      label: c.label,
+      current: fmtVal(c.current, c.unit),
+      max: fmtVal(c.limit, c.unit),
+      pct: `${Math.round(c.pct * 100)}%`,
+    })),
+  });
+  const summary = report.status === 'over' ? output.error('OVER BUDGET') : report.status === 'warn' ? output.warning('approaching limit') : output.info('within budget');
+  output.writeln(`status: ${summary}`);
+  if (strict && report.status === 'over') output.writeln(output.dim('exit 1 (--strict + over budget)'));
+  return { success: exitCode === 0, exitCode };
+}
+
 async function run(ctx: CommandContext): Promise<CommandResult> {
   const viewName = (ctx.args[0] || 'daily').toLowerCase();
 
@@ -296,9 +372,15 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
     return runCacheView(ctx, collectUsage({ dirs, since, until }));
   }
 
+  if (viewName === 'guard') {
+    const dirFlag = ctx.flags.dir;
+    const dirs = typeof dirFlag === 'string' ? [dirFlag] : Array.isArray(dirFlag) ? dirFlag.map(String) : undefined;
+    return runGuardView(ctx, collectUsage({ dirs }));
+  }
+
   const view = VIEWS[viewName];
   if (!view) {
-    output.writeln(output.error(`unknown view: ${viewName} (expected ${Object.keys(VIEWS).join('|')}|blocks|errors|cache)`));
+    output.writeln(output.error(`unknown view: ${viewName} (expected ${Object.keys(VIEWS).join('|')}|blocks|errors|cache|guard)`));
     return { success: false, exitCode: 1 };
   }
 
