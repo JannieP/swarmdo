@@ -7,5 +7,5 @@ structure preserved, tokens cut hard. A human-readable backup is kept as
 `<file>.original.md`. `/sdo-caveman` speaks compressed in-session; `cavecrew`
 runs a compressed multi-agent crew; `caveman-stats` measures savings.
 
-Vendored from [JuliusBrussee/sdo-caveman](https://github.com/JuliusBrussee/sdo-caveman)
+Vendored from [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman)
 under MIT. See NOTICE.

@@ -2,7 +2,7 @@
 
 [![swarmdo](swarmdo/assets/swarmdo-banner.svg)](https://swarmdo.com)
 
-[![npm version (swarmdo)](https://img.shields.io/badge/npx%20swarmdo-v1.3.0-cb3837?style=for-the-badge&logo=npm&logoColor=white)](https://github.com/JannieP/swarmdo/releases)
+[![npm version (swarmdo)](https://img.shields.io/badge/npx%20swarmdo-v1.4.1-cb3837?style=for-the-badge&logo=npm&logoColor=white)](https://github.com/JannieP/swarmdo/releases)
 [![MIT License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](https://github.com/JannieP/swarmdo/blob/main/LICENSE)
 [![Website](https://img.shields.io/badge/swarmdo.com-e2a33c?style=for-the-badge&logoColor=black)](https://swarmdo.com)
 [![Star on GitHub](https://img.shields.io/github/stars/JannieP/swarmdo?style=for-the-badge&logo=github&color=gold)](https://github.com/JannieP/swarmdo)
@@ -190,6 +190,19 @@ claude mcp add swarmdo -- npx swarmdo@latest mcp start
 
 ---
 
+## One Namespace: `/sDo`
+
+Since v1.4.0 every slash surface swarmdo installs is namespaced, so the whole toolkit groups together in Claude Code's `/` menu instead of scattering between built-ins — type `/sDo` and it all surfaces:
+
+```
+/sDo:swarmdo-help        /sDo:swarm:swarm-init     /sDo:sparc:architect
+/sdo-caveman-compress    /sdo-ponytail             /sdo-agentdb-vector-search
+```
+
+Commands use the `sDo:` namespace (`.claude/commands/sDo/…`); skills use the `sdo-` prefix (skill names must be lowercase). Upgrades migrate automatically — `swarmdo init` and `swarmdo efficiency on` remove pre-1.4.0 unprefixed copies so no duplicate menu entries linger.
+
+---
+
 ## Efficiency: Caveman & Ponytail, Built In
 
 Two of the most-loved Claude Code skills ship inside swarmdo as first-class features — vendored MIT forks with attribution in [NOTICE](NOTICE), integrated across the CLI, the agents, and the init wizard.
@@ -232,7 +245,7 @@ Everything is opt-in and reversible — skills are user-invoked, so "on" means *
 | Per agent | `ponytail: true/false` on the spawn call |
 | Globally | `SWARMDO_PONYTAIL=1` env |
 
-Credits: [caveman](https://github.com/JuliusBrussee/sdo-caveman) by Julius Brussee · [ponytail](https://github.com/DietrichGebert/sdo-ponytail) by Dietrich Gebert (both MIT).
+Credits: [caveman](https://github.com/JuliusBrussee/caveman) by Julius Brussee · [ponytail](https://github.com/DietrichGebert/ponytail) by Dietrich Gebert (both MIT).
 
 ## What You Get
 

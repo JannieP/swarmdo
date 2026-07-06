@@ -7,5 +7,5 @@ features before dependencies, one line before fifty. `ponytail-audit` scores a
 codebase for over-engineering, `ponytail-review` applies the lens to diffs,
 `ponytail-debt`/`ponytail-gain` track simplicity debt and wins.
 
-Vendored from [DietrichGebert/sdo-ponytail](https://github.com/DietrichGebert/sdo-ponytail)
+Vendored from [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail)
 under MIT. See NOTICE.
