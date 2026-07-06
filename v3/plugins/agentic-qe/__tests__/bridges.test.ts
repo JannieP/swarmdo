@@ -192,7 +192,8 @@ class MockQESecurityBridge {
     do {
       prev = out;
       out = out
-        .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+        .replace(/<script[^>]*>[\s\S]*?<\/script\s*>/gi, '')
+        .replace(/<\/?script\b[^>]*>?/gi, '')
         .replace(/javascript:/gi, '')
         .replace(/vbscript:/gi, '')
         .replace(/on\w+\s*=/gi, '');
