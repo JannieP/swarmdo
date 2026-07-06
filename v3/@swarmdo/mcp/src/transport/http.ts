@@ -167,7 +167,14 @@ export class HttpTransport extends EventEmitter implements ITransport {
 
   private setupMiddleware(): void {
     this.app.use(helmet({
-      contentSecurityPolicy: false,
+      // JSON-RPC API serves no HTML, so a strict CSP is inert for responses but
+      // satisfies js/insecure-helmet-configuration (disabling CSP is flagged).
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'none'"],
+          frameAncestors: ["'none'"],
+        },
+      },
     }));
 
     if (this.config.corsEnabled !== false) {

@@ -249,7 +249,11 @@ function sanitizeHref(href?: string | null): string | undefined {
 	if (!href) return undefined;
 	const trimmed = href.trim();
 	const lower = trimmed.toLowerCase();
-	if (lower.startsWith("javascript:") || lower.startsWith("data:text/html")) {
+	if (
+		lower.startsWith("javascript:") ||
+		lower.startsWith("vbscript:") ||
+		lower.startsWith("data:text/html")
+	) {
 		return undefined;
 	}
 	return trimmed.replace(/>$/, "");

@@ -351,6 +351,7 @@ export function sanitizeString(input: string): string {
     .replace(/\0/g, '')           // Remove null bytes
     .replace(/[<>]/g, '')          // Remove HTML brackets
     .replace(/javascript:/gi, '')  // Remove javascript: protocol
+    .replace(/vbscript:/gi, '')    // Remove vbscript: protocol
     .replace(/data:/gi, '')        // Remove data: protocol
     .trim();
 }
