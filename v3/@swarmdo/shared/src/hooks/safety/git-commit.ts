@@ -256,7 +256,7 @@ export class GitCommitHook {
     if (result.success && result.modifiedMessage !== message) {
       const modifiedCommand = command.replace(
         /-m\s+["'][^"']+["']/,
-        `-m "${result.modifiedMessage.replace(/"/g, '\\"')}"`
+        `-m "${result.modifiedMessage.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`
       );
 
       return {

@@ -87,7 +87,7 @@ if (!existsSync(GENERATOR_DIST)) {
       require('fs').writeFileSync(${JSON.stringify(CJS_PATH)}, content, 'utf-8');
       process.stdout.write('Generated ' + content.length + ' chars\\n');
     `;
-    execSync(`node -e "${genScript.replace(/"/g, '\\"').replace(/\n/g, ' ')}"`, {
+    execSync(`node -e "${genScript.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, ' ')}"`, {
       encoding: 'utf-8',
       timeout: 10000,
       cwd: REPO_ROOT,

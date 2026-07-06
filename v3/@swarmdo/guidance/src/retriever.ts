@@ -624,11 +624,15 @@ export class ShardRetriever {
   private matchGlob(path: string, glob: string): boolean {
     let re = this.globCache.get(glob);
     if (!re) {
+      // Build the regex by escaping every literal segment. The old chain left
+      // regex metacharacters ('.', '(', '+', …) unescaped, so glob 'a.b' matched
+      // 'axb' (js/incomplete-sanitization). Split on '**' then '*' so the
+      // wildcards survive, escape everything else (including '/').
+      const escapeRe = (s: string): string => s.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&');
       const pattern = glob
-        .replace(/\*\*/g, '{{GLOBSTAR}}')
-        .replace(/\*/g, '[^/]*')
-        .replace(/{{GLOBSTAR}}/g, '.*')
-        .replace(/\//g, '\\/');
+        .split('**')
+        .map(seg => seg.split('*').map(escapeRe).join('[^/]*'))
+        .join('.*');
       re = new RegExp(`^${pattern}$`);
       this.globCache.set(glob, re);
     }

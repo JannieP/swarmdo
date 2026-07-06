@@ -179,8 +179,15 @@ function decodeRawUrl(raw: string): string {
 
 /** Strip HTML tags and decode common entities. */
 function stripHtml(html: string): string {
-  return html
-    .replace(/<[^>]+>/g, '')
+  // Strip tags repeatedly — a single pass on '<<a>script>' would leave
+  // '<script>' (js/incomplete-multi-character-sanitization).
+  let text = html;
+  let prev: string;
+  do {
+    prev = text;
+    text = text.replace(/<[^>]+>/g, '');
+  } while (text !== prev);
+  return text
     // Decode &amp; LAST so a decoded '&' can't re-form another entity (js/double-escaping).
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')

@@ -170,7 +170,7 @@ function table(headers, rows) {
     `|${headers.map(() => '---').join('|')}|`,
   ];
   for (const row of rows) {
-    lines.push(`| ${row.map(c => String(c).replace(/\|/g, '\\|')).join(' | ')} |`);
+    lines.push(`| ${row.map(c => String(c).replace(/\\/g, '\\\\').replace(/\|/g, '\\|')).join(' | ')} |`);
   }
   return lines.join('\n') + '\n';
 }

@@ -158,7 +158,7 @@ for (const f of readdirSync(TOOLS_DIR).filter(n => n.endsWith('.ts') && !n.endsW
       }
       const suffix = suffixFor(name);
       // Need to JS-escape any single-quote in suffix (template is single-quote literal)
-      const safeSuffix = suffix.replace(/'/g, "\\'");
+      const safeSuffix = suffix.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
       const newDesc = desc.replace(/\s+$/, '') + safeSuffix;
       fileChanged++;
       return `${before}${newDesc}${close}`;

@@ -185,11 +185,19 @@ class MockQESecurityBridge {
 
   async sanitizeInput(input: string): Promise<string> {
     // Remove potential XSS/injection patterns
-    return input
-      .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
-      .replace(/javascript:/gi, '')
-      .replace(/vbscript:/gi, '')
-      .replace(/on\w+\s*=/gi, '');
+    // Apply repeatedly until stable — one pass on '<scr<script>ipt>' would
+    // re-form a tag (js/incomplete-multi-character-sanitization).
+    let out = input;
+    let prev: string;
+    do {
+      prev = out;
+      out = out
+        .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+        .replace(/javascript:/gi, '')
+        .replace(/vbscript:/gi, '')
+        .replace(/on\w+\s*=/gi, '');
+    } while (out !== prev);
+    return out;
   }
 
   async generateToken(): Promise<string> {
