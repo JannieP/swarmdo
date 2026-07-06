@@ -406,11 +406,68 @@ const importCommand: Command = {
   }
 };
 
+// Lint command — static shape validation of the project's config surfaces
+// (doctor probes the runtime; this is the pure schema layer + pre-1.4 layout
+// leftover detection). Errors exit 1; --strict makes warnings fail too.
+const lintCommand: Command = {
+  name: 'lint',
+  aliases: ['validate'],
+  description: 'Statically validate swarmdo.config.json, .claude/settings*.json hooks, .mcp.json, and the post-1.4 sDo layout',
+  options: [
+    { name: 'json', type: 'boolean', description: 'machine-readable findings', default: false },
+    { name: 'strict', type: 'boolean', description: 'exit 1 on warnings too (default: errors only)', default: false },
+  ],
+  examples: [
+    { command: 'swarmdo config lint', description: 'Lint the current project' },
+    { command: 'swarmdo config lint --strict', description: 'CI gate — warnings also fail' },
+  ],
+  action: async (ctx: CommandContext): Promise<CommandResult> => {
+    const fs = await import('node:fs');
+    const { lintAll } = await import('../config-lint/lint.js');
+    const cwd = ctx.cwd || process.cwd();
+    const read = (rel: string): { file: string; raw: string | null } => {
+      const abs = path.join(cwd, rel);
+      try { return { file: rel, raw: fs.readFileSync(abs, 'utf8') }; } catch { return { file: rel, raw: null }; }
+    };
+    const list = (rel: string): string[] => {
+      try { return fs.readdirSync(path.join(cwd, rel)).filter((n) => !n.startsWith('.')); } catch { return []; }
+    };
+    const configRel = process.env.SWARMDO_CONFIG && !path.isAbsolute(process.env.SWARMDO_CONFIG)
+      ? process.env.SWARMDO_CONFIG.replace(/^\.\//, '')
+      : 'swarmdo.config.json';
+
+    const report = lintAll({
+      swarmdoConfig: read(configRel),
+      settingsFiles: [read('.claude/settings.json'), read('.claude/settings.local.json')],
+      mcpConfig: read('.mcp.json'),
+      commandsRoot: list('.claude/commands'),
+      skills: list('.claude/skills'),
+    });
+
+    const failed = report.errors > 0 || (ctx.flags.strict === true && report.warnings > 0);
+    if (ctx.flags.json === true) {
+      output.printJson({ ...report, failed });
+      return { success: !failed, exitCode: failed ? 1 : 0 };
+    }
+    if (report.findings.length === 0) {
+      output.printSuccess('config lint: no findings — all surfaces clean');
+      return { success: true, exitCode: 0 };
+    }
+    const icon = (s: string): string => (s === 'error' ? '✖' : s === 'warn' ? '⚠' : '·');
+    for (const x of report.findings) {
+      output.writeln(`  ${icon(x.severity)} ${x.file}  ${output.dim(`[${x.rule}]`)} ${x.message}`);
+    }
+    output.writeln('');
+    output.writeln(`${report.errors} error${report.errors === 1 ? '' : 's'}, ${report.warnings} warning${report.warnings === 1 ? '' : 's'}${failed ? output.dim('  → exit 1') : ''}`);
+    return { success: !failed, exitCode: failed ? 1 : 0 };
+  }
+};
+
 // Main config command
 export const configCommand: Command = {
   name: 'config',
   description: 'Configuration management',
-  subcommands: [initCommand, getCommand, setCommand, providersCommand, resetCommand, exportCommand, importCommand],
+  subcommands: [initCommand, getCommand, setCommand, providersCommand, resetCommand, exportCommand, importCommand, lintCommand],
   options: [],
   examples: [
     { command: 'swarmdo config init --v3', description: 'Initialize V3 config' },

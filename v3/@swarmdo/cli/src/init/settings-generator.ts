@@ -438,18 +438,10 @@ function generateHooksConfig(config: HooksConfig): object {
     ];
   }
 
-  // SubagentStart — status update when a sub-agent is spawned
-  hooks.SubagentStart = [
-    {
-      hooks: [
-        {
-          type: 'command',
-          command: hookHandlerCmd('status'),
-          timeout: 3000,
-        },
-      ],
-    },
-  ];
+  // NOTE: "SubagentStart" is NOT a Claude Code hook event — a block for it
+  // shipped in every generated settings.json as dead config until
+  // `config lint` (v1.4.6) caught it. Spawn-side status pings have no valid
+  // event; SubagentStop below covers completion.
 
   // SubagentStop — track agent completion for metrics
   // NOTE: The valid event is "SubagentStop" (not "SubagentEnd")

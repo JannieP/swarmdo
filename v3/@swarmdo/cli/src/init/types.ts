@@ -34,7 +34,7 @@ export interface InitComponents {
  * Hook configuration options
  * Valid Claude Code hook events (23 total):
  *   PreToolUse, PostToolUse, PostToolUseFailure, UserPromptSubmit,
- *   SessionStart, SessionEnd, Stop, SubagentStart, SubagentStop,
+ *   SessionStart, SessionEnd, Stop, SubagentStop,
  *   PreCompact, PostCompact, Notification, ConfigChange,
  *   InstructionsLoaded, PermissionRequest, WorktreeCreate, WorktreeRemove,
  *   TeammateIdle, TaskCompleted, Elicitation, ElicitationResult
