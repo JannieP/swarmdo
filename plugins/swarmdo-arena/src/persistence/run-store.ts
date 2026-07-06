@@ -9,6 +9,7 @@
 
 import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { randomBytes } from 'node:crypto';
 import type { RunKind, RunRecord } from '../domain/types.js';
 
 export interface RunStore {
@@ -24,7 +25,7 @@ export function newRunId(kind: RunKind): string {
   const uuid =
     typeof globalThis.crypto?.randomUUID === 'function'
       ? globalThis.crypto.randomUUID().slice(0, 8)
-      : `${(counter++).toString(36)}${Math.floor(Math.random() * 1e6).toString(36)}`;
+      : `${(counter++).toString(36)}${randomBytes(4).toString('hex')}`;
   return `${kind}-${uuid}`;
 }
 

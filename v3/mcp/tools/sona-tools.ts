@@ -26,6 +26,7 @@
  */
 
 import { z } from 'zod';
+import { randomBytes } from 'node:crypto';
 import { MCPTool, ToolContext } from '../types.js';
 
 // Lazy-loaded agentic-flow imports for HNSW search optimization
@@ -298,7 +299,7 @@ class SONAState {
   }
 
   generateId(prefix: string): string {
-    return `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+    return `${prefix}_${Date.now().toString(36)}_${randomBytes(6).toString('hex')}`;
   }
 }
 

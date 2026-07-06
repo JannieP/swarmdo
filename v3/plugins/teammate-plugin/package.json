@@ -1,6 +1,6 @@
 {
   "name": "@swarmdo/teammate-plugin",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "description": "Native TeammateTool integration plugin for Swarmdo - bridges Claude Code v2.1.19+ multi-agent capabilities",
   "type": "module",
   "main": "dist/index.js",

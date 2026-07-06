@@ -1,6 +1,6 @@
 {
   "name": "swarmdo-arena",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.2",
   "description": "Competitive ruliology for Swarmdo swarms \u2014 arenas, tournaments, and adaptive co-evolution of program strategies (ADR-147/148).",
   "type": "module",
   "main": "dist/index.js",

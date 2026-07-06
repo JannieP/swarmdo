@@ -21,6 +21,7 @@
  */
 
 import { EventEmitter } from 'events';
+import { randomBytes } from 'node:crypto';
 
 /**
  * Agent status in the system
@@ -776,7 +777,7 @@ export class AgenticFlowAgent extends EventEmitter implements IAgent {
    * Generate a unique ID with prefix
    */
   private generateId(prefix: string): string {
-    return `${prefix}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `${prefix}_${Date.now()}_${randomBytes(6).toString('hex')}`;
   }
 
   /**

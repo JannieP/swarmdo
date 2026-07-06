@@ -17,6 +17,7 @@
 import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
 import { Storage } from '@google-cloud/storage';
 import * as ed from '@noble/ed25519';
+import { randomBytes } from 'node:crypto';
 
 const secretManager = new SecretManagerServiceClient();
 const storage = new Storage();
@@ -369,7 +370,7 @@ export async function publishRegistry(req, res) {
         }
 
         // Generate anonymous user ID if not provided
-        const finalUserId = userId || `anon-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+        const finalUserId = userId || `anon-${Date.now()}-${randomBytes(6).toString('hex')}`;
 
         // Store rating in GCS (JSON file per item)
         const ratingsFile = bucket.file(`ratings/${itemType}/${itemId}.json`);

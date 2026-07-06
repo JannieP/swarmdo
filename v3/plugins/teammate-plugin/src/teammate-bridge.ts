@@ -18,6 +18,7 @@
  */
 
 import { EventEmitter } from 'events';
+import { randomBytes } from 'node:crypto';
 import { execSync } from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -123,7 +124,7 @@ const RESERVED_NAMES = new Set(['..', '.', 'config', 'state', 'mailbox', 'memory
 
 function generateId(prefix: string): string {
   const timestamp = Date.now().toString(36);
-  const random = Math.random().toString(36).slice(2, 10);
+  const random = randomBytes(8).toString('hex');
   return `${prefix}-${timestamp}-${random}`;
 }
 
