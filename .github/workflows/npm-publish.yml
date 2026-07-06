@@ -50,7 +50,7 @@ jobs:
         run: |
           set -e
           # dependency order: hooks needs memory+neural+shared; guidance needs hooks
-          for pkg in shared cli-core mcp memory neural hooks guidance security embeddings codex aidefence plugin-gastown-bridge cli; do
+          for pkg in shared swarm cli-core mcp memory neural hooks guidance security embeddings codex aidefence plugin-gastown-bridge cli; do
             dir="v3/@swarmdo/$pkg"
             if [ -f "$dir/package.json" ]; then
               echo "── build $pkg"
