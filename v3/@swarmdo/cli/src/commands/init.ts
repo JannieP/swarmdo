@@ -17,6 +17,7 @@ import {
   FULL_INIT_OPTIONS,
   type InitOptions,
 } from '../init/index.js';
+import { resolvePreset, presetNames } from '../init/presets.js';
 
 // Codex initialization action
 async function initCodexAction(
@@ -275,7 +276,16 @@ const initAction = async (ctx: CommandContext): Promise<CommandResult> => {
   // Build init options based on flags
   let options: InitOptions;
 
-  if (minimal) {
+  const presetFlag = ctx.flags.preset as string | undefined;
+  if (presetFlag) {
+    const p = resolvePreset(presetFlag);
+    if (!p) {
+      output.printError(`unknown preset '${presetFlag}' (choose: ${presetNames().join(', ')}; details: swarmdo preset list)`);
+      return { success: false, exitCode: 1 };
+    }
+    options = { ...p.options, targetDir: cwd, force };
+    output.printInfo(`Preset: ${p.title} — ${p.summary}`);
+  } else if (minimal) {
     options = { ...MINIMAL_INIT_OPTIONS, targetDir: cwd, force };
   } else if (full) {
     options = { ...FULL_INIT_OPTIONS, targetDir: cwd, force };
@@ -1148,6 +1158,11 @@ export const initCommand: Command = {
       description: 'Create full configuration with all components',
       type: 'boolean',
       default: false,
+    },
+    {
+      name: 'preset',
+      description: 'Apply a named configuration tier: minimal|basic|standard|advanced|max (see: swarmdo preset list)',
+      type: 'string',
     },
     {
       // #2356: under --full, the auth-gated cloud MCP servers (swarmdo-swarm,

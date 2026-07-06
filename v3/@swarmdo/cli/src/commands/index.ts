@@ -73,6 +73,9 @@ const commandLoaders: Record<string, CommandLoader> = {
   // Export Claude Code sessions to Markdown (conversation-exporter demand)
   transcript: () => import('./transcript.js'),
   tx: () => import('./transcript.js'), // alias via loader key
+  // Named configuration tiers for init + efficiency-skills guide
+  preset: () => import('./preset.js'),
+  presets: () => import('./preset.js'), // alias via loader key
   // Q-Learning Routing Commands
   route: () => import('./route.js'),
   // Progress Commands

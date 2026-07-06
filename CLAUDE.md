@@ -345,6 +345,27 @@ This project is configured with Swarmdo V3 (Anti-Drift Defaults):
 - **HNSW Indexing**: Enabled (measured ~1.9x at N=20k, ~3.2x–4.7x at N=5k vs brute force; ANN wins above the crossover)
 - **Neural Learning**: Enabled (SONA)
 
+## Configuration Presets
+
+`swarmdo init` ships a ladder of named capability tiers — pick one word instead of toggling dozens of flags. Apply with `swarmdo init --preset <name>`; browse with `swarmdo preset list` and `swarmdo preset info <name>`.
+
+| Tier | Preset | Agents | Vector intelligence | For |
+|------|--------|--------|---------------------|-----|
+| 0 | `minimal` | 4 | off | Experiments, low-power/offline; smallest footprint |
+| 1 | `basic` ★ | 6 | off | **Default.** Most projects; fast init, no model downloads |
+| 2 | `standard` | 10 | on | Semantic memory + learned routing (HNSW + neural + ONNX embeddings) |
+| 3 | `advanced` | 15 | on | Full skill/agent/command surface; hyperbolic embeddings |
+| 4 | `max` | 20 | on | + Claude⇄Codex dual-mode + swarmdo-swarm MCP; heaviest footprint |
+
+★ recommended default. Aliases: `default`→`basic`, `intermediate`→`standard`, `full`→`max`. Each rung is a superset of the one below; every preset ships the efficiency skills (caveman + ponytail) enabled. Full detail per tier: `swarmdo preset info <name>`.
+
+### Efficiency skills — caveman & ponytail (from Claude Code)
+
+Run `swarmdo preset info efficiency` for the full guide. Both are **user-invoked** skills (available, never automatic), toggled per-project with `swarmdo efficiency on|off|status`:
+
+- **🦴 caveman** — *token compression* (vendored from JuliusBrussee/caveman, MIT). In Claude Code, type `/caveman-compress <file>` to rewrite a memory file (CLAUDE.md, todos, preferences) into caveman-speak — cuts input tokens while preserving all code, URLs, and structure; a human-readable backup is kept as `<file>.original.md`. Also `/caveman` (speak compressed in-session), `cavecrew` (compressed multi-agent crew), `caveman-stats` (measure savings). Reverse by restoring the `.original.md`.
+- **🎯 ponytail** — *anti-over-engineering* (vendored from DietrichGebert/ponytail, MIT). Type `/ponytail [lite|full|ultra]` to channel a lazy senior dev on a coding task (YAGNI, standard library before custom code, native features before dependencies, one line before fifty); stays active every response until you say "stop ponytail". Also `ponytail-audit` (score a codebase), `ponytail-review` (apply to a diff), `ponytail-debt`/`ponytail-gain` (track simplicity debt/wins). For swarm agents, pass `ponytail:true` per `agent_run`/`agent_execute` call, or set `SWARMDO_PONYTAIL=1` to make it the default persona for every agent.
+
 ## V3 CLI Commands (26 Commands, 140+ Subcommands)
 
 ### Core Commands
@@ -380,6 +401,7 @@ This project is configured with Swarmdo V3 (Anti-Drift Defaults):
 | `usage` | 8 | Claude Code token/cost analytics from local transcripts (daily, monthly, models, projects, sessions, 5h `blocks` w/ live burn, `errors` tool-failure analytics, `cache` prompt-cache efficiency + $ saved; alias: `cost`) |
 | `repair` | 1 | Test-Driven Repair — bounded, budget-capped headless claude loop fixes source until a failing test passes (alias: `tdd-repair`; dry-run without `--confirm`) |
 | `hud` | 1 | Single-pane operational HUD: 5h block burn, task readiness, daemon workers, memory snapshots (`--watch`, `--json`) |
+| `preset` | 3 | Named config tiers for init (`list`/`info`/`show`): minimal→basic→standard→advanced→max; `preset info efficiency` documents the caveman + ponytail skills. Apply: `init --preset <name>` |
 | `claims` | 4 | Claims-based authorization (check, grant, revoke, list) |
 | `migrate` | 5 | V2 to V3 migration with rollback support |
 | `process` | 4 | Background process management |
