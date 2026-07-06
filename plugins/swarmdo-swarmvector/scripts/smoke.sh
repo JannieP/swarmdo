@@ -79,9 +79,16 @@ out=$(run rvf examples)
 n=$(grep -cE '^\s+[a-z_]+\s+[0-9]' <<<"$out")
 [[ $n -ge 10 ]] && ok || bad "expected ≥10 RVF examples, got $n"
 
-step "gnn info reports Available"
+step "gnn info reports availability status (platform-aware)"
 out=$(run gnn info)
-grep -q "Status:.*Available" <<<"$out" && ok || bad "gnn info did not report Available"
+# Only the darwin-arm64 native binding is committed — on other platforms the
+# honest expectation is a graceful status line, not 'Available'.
+GNN_BINDING="$SCRIPT_DIR/../../../v3/@swarmvector/gnn/platforms/$(node -p 'process.platform + "-" + process.arch')/swarmvector-gnn.node"
+if [[ -f "$GNN_BINDING" ]]; then
+  grep -q "Status:.*Available" <<<"$out" && ok || bad "binding present but gnn did not report Available"
+else
+  grep -q "Status:" <<<"$out" && ok || bad "gnn info produced no Status line (graceful-unavailable expected)"
+fi
 
 step "info reports the engine CLI version"
 out=$(run info)
