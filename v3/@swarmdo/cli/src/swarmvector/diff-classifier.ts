@@ -145,7 +145,7 @@ export class DiffClassifier {
 
   private parseHunks(block: string): DiffHunk[] {
     const hunks: DiffHunk[] = [];
-    const hunkMatches = block.matchAll(/@@ -(\d+),?(\d*) \+(\d+),?(\d*) @@([^\n]*)\n([\s\S]*?)(?=@@|$)/g);
+    const hunkMatches = block.matchAll(/@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@([^\n]*)\n([\s\S]*?)(?=@@|$)/g);
     for (const match of hunkMatches) {
       const oldStart = parseInt(match[1], 10);
       const oldLines = parseInt(match[2] || '1', 10);

@@ -180,11 +180,20 @@ export class CoverageRouter {
 
   private parseCobertura(data: string): CoverageReport {
     const files: FileCoverage[] = [];
-    const classMatches = data.matchAll(/<class[^>]*filename="([^"]+)"[^>]*line-rate="([^"]+)"[^>]*branch-rate="([^"]+)"[^>]*>/g);
+    // Capture each <class …> tag's attribute run once ([^>]* — bounded), then
+    // pull individual attributes from that short string. Avoids the chained
+    // [^>]*attr="…"[^>]*… form whose overlapping greedy segments backtrack
+    // polynomially (js/polynomial-redos).
+    const classMatches = data.matchAll(/<class\b([^>]*)>/g);
     for (const match of classMatches) {
+      const attrs = match[1];
+      const filename = /filename="([^"]+)"/.exec(attrs);
+      const lineRate = /line-rate="([^"]+)"/.exec(attrs);
+      const branchRate = /branch-rate="([^"]+)"/.exec(attrs);
+      if (!filename || !lineRate || !branchRate) continue;
       files.push({
-        path: match[1], lineCoverage: parseFloat(match[2]) * 100, branchCoverage: parseFloat(match[3]) * 100,
-        functionCoverage: parseFloat(match[2]) * 100, statementCoverage: parseFloat(match[2]) * 100,
+        path: filename[1], lineCoverage: parseFloat(lineRate[1]) * 100, branchCoverage: parseFloat(branchRate[1]) * 100,
+        functionCoverage: parseFloat(lineRate[1]) * 100, statementCoverage: parseFloat(lineRate[1]) * 100,
         uncoveredLines: [], totalLines: 0, coveredLines: 0,
       });
     }

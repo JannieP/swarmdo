@@ -193,9 +193,9 @@ export class ASTAnalyzer {
     if (!pattern) return null;
     const match = line.match(pattern);
     if (match) return { name: match[1], params: match[2] || '' };
-    const arrowMatch = line.match(/(?:const|let|var)\s+(\w+)\s*=\s*(?:async\s+)?\([^)]*\)\s*=>/);
+    const arrowMatch = line.match(/^\s*(?:export\s+)?(?:const|let|var)\s+(\w+)\s*=\s*(?:async\s+)?\([^)]*\)\s*=>/);
     if (arrowMatch) return { name: arrowMatch[1], params: '' };
-    const methodMatch = line.match(/^\s*(?:async\s+)?(\w+)\s*\([^)]*\)\s*(?::\s*\w+)?\s*\{/);
+    const methodMatch = line.match(/^\s*(?:async\s+)?(\w+)\s*\([^)]*\)\s*(?::\s*\w+\s*)?\{/);
     if (methodMatch && methodMatch[1] !== 'if' && methodMatch[1] !== 'while' && methodMatch[1] !== 'for') {
       return { name: methodMatch[1], params: '' };
     }
@@ -274,9 +274,9 @@ export class ASTAnalyzer {
     const exports: string[] = [];
     const lines = code.split('\n');
     for (const line of lines) {
-      const exportMatch = line.match(/export\s+(?:default\s+)?(?:const|let|var|function|class|interface|type|enum)\s+(\w+)/);
+      const exportMatch = line.match(/^\s*export\s+(?:default\s+)?(?:const|let|var|function|class|interface|type|enum)\s+(\w+)/);
       if (exportMatch) exports.push(exportMatch[1]);
-      const namedExportMatch = line.match(/export\s*\{\s*([^}]+)\s*\}/);
+      const namedExportMatch = line.match(/^\s*export\s*\{([^}]+)\}/);
       if (namedExportMatch) {
         const names = namedExportMatch[1].split(',').map(n => n.trim().split(/\s+as\s+/)[0]);
         exports.push(...names);
