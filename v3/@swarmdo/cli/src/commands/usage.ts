@@ -96,7 +96,25 @@ function jsonPayload(
     filesScanned: collection.filesScanned,
     dirsScanned: collection.dirsScanned,
     unpricedModels: collection.unpricedModels,
+    ...unpricedStats(collection.events),
   };
+}
+
+/**
+ * Responses billed as $0 because their model has no price-table entry (e.g. the
+ * Claude 5 tier until Anthropic publishes rates). Surfacing the count/token size
+ * lets the report show how big the cost blind-spot is, not just name the models.
+ */
+function unpricedStats(events: UsageCollection['events']): { unpricedResponses: number; unpricedTokens: number } {
+  let unpricedResponses = 0;
+  let unpricedTokens = 0;
+  for (const e of events) {
+    if (e.costSource === 'unpriced') {
+      unpricedResponses++;
+      unpricedTokens += e.inputTokens + e.outputTokens + e.cacheWriteTokens + e.cacheReadTokens;
+    }
+  }
+  return { unpricedResponses, unpricedTokens };
 }
 
 function fmtClock(ms: number): string {
@@ -121,6 +139,7 @@ function runBlocksView(ctx: CommandContext, collection: UsageCollection): Comman
         ...b.totals,
       })),
       unpricedModels: collection.unpricedModels,
+      ...unpricedStats(collection.events),
     }, null, 2));
     return { success: true, exitCode: 0 };
   }
@@ -220,9 +239,10 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
     ),
   );
   if (collection.unpricedModels.length > 0) {
+    const { unpricedResponses, unpricedTokens } = unpricedStats(collection.events);
     output.writeln(
       output.warning(
-        `no price table for: ${collection.unpricedModels.join(', ')} — tokens counted, cost reported as $0 (transcript costUSD used when present)`,
+        `no price table for: ${collection.unpricedModels.join(', ')} — ${unpricedResponses.toLocaleString()} responses / ${unpricedTokens.toLocaleString()} tokens counted but billed as $0, so real spend is higher (transcript costUSD is used when present)`,
       ),
     );
   }
