@@ -61,7 +61,7 @@ export function validateCommand(command) {
         /\|\s*sh\b/i, // Piping to shell
         /\|\s*bash\b/i, // Piping to bash
         /`[^`]+`/, // Backtick command substitution
-        /\$\([^)]*\beval\b/, // Eval in command substitution
+        /\$\([^)]{0,256}\beval\b/, // Eval in command substitution
         />\s*\/dev\/sd[a-z]/i, // Writing to block devices
         /&&\s*rm\s+-rf/i, // Chained destructive rm
         /\|\|\s*rm\s+-rf/i, // OR chained destructive rm

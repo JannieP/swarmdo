@@ -81,7 +81,7 @@ export class ModelRouter {
     substituteEnvVars(obj) {
         if (typeof obj === 'string') {
             // Replace ${VAR_NAME} with environment variable value
-            return obj.replace(/\$\{([^}]+)\}/g, (_, key) => {
+            return obj.replace(/\$\{([^{}]+)\}/g, (_, key) => {
                 const [varName, defaultValue] = key.split(':-');
                 return process.env[varName] || defaultValue || '';
             });

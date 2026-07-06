@@ -13,7 +13,7 @@ export class OllamaProvider {
     config;
     constructor(config) {
         this.config = config;
-        const baseUrl = (config.baseUrl || DEFAULT_BASE_URL).replace(/\/+$/, '');
+        const baseUrl = (config.baseUrl || DEFAULT_BASE_URL).replace(/\/{1,512}$/, '');
         const headers = {
             'Content-Type': 'application/json',
         };

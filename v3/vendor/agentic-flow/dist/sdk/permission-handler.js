@@ -16,7 +16,7 @@ const DANGEROUS_PATTERNS = [
     /rm\s+--no-preserve-root/,
     // Permission changes
     /chmod\s+777\s+\//,
-    /chown\s+-R.*\s+\//,
+    /chown\s+-R[^/]{0,4096}\//,
     // Remote code execution
     /curl.*\|\s*(bash|sh|zsh)/,
     /wget.*\|\s*(bash|sh|zsh)/,

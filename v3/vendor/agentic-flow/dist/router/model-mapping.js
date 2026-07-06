@@ -57,7 +57,7 @@ export function mapModelId(modelId, targetProvider) {
     // If already in correct format, return as-is
     if (targetProvider === 'anthropic' && modelId.startsWith('claude-')) {
         // Check if it's already an Anthropic API ID (has date like 20250929)
-        if (/claude-.*-\d{8}/.test(modelId)) {
+        if (/claude-.{0,80}-\d{8}/.test(modelId)) {
             return modelId;
         }
     }
