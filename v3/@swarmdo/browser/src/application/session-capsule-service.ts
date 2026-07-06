@@ -277,7 +277,7 @@ export class RiskClassifier {
       return { class: 'financial', autonomousAllowed: false, rationale: 'financial action detected', requiredConsent: ['financial-action'] };
     }
     // Class 6 — account mutation
-    if (/(change.*password|reset.*password|update.*email|change.*account|2fa|two.factor)/.test(haystack)) {
+    if (/(change.{0,80}password|reset.{0,80}password|update.{0,80}email|change.{0,80}account|2fa|two.factor)/.test(haystack)) {
       return { class: 'account-mutation', autonomousAllowed: false, rationale: 'account mutation detected', requiredConsent: ['account-mutation'] };
     }
     // Class 4 — external submission

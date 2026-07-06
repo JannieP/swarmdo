@@ -88,7 +88,7 @@ export class ForbiddenCommandEvaluator implements IEvaluator {
     this.forbiddenPatterns = forbiddenPatterns ?? [
       /\brm\s+-rf\s+\//,
       /\bgit\s+push\s+--force\s+origin\s+(?:main|master)\b/,
-      /\bcurl\s+.*\|\s*(?:sh|bash)\b/,
+      /\bcurl\b[^|]*\|\s*(?:sh|bash)\b/,
       /\beval\s*\(/,
       /\bexec\s*\(/,
     ];

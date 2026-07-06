@@ -175,7 +175,7 @@ export class ProcessExecutor implements ICommandExecutor {
       return ['claude', '-p', prompt, '--output-format', 'json'];
     }
     // Fallback: split on whitespace (safe for commands without shell metacharacters)
-    return command.replace(/\s*2>\/dev\/null\s*$/, '').split(/\s+/);
+    return command.replace(/\s{0,64}2>\/dev\/null\s{0,64}$/, '').split(/\s+/);
   }
 }
 

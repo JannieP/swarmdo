@@ -390,8 +390,8 @@ export class ThreatLearningService {
     // Extract structural patterns
     if (input.includes('```')) patterns.push('code_block');
     if (input.includes('system:')) patterns.push('system_reference');
-    if (/\[.*\]/.test(input)) patterns.push('bracket_notation');
-    if (/<.*>/.test(input)) patterns.push('xml_like');
+    if (/\[[^\[\]]*\]/.test(input)) patterns.push('bracket_notation');
+    if (/<[^<>]*>/.test(input)) patterns.push('xml_like');
     if (input.length > 500) patterns.push('long_input');
     if (input.split('\n').length > 5) patterns.push('multiline');
 

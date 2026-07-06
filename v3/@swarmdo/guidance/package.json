@@ -1,6 +1,6 @@
 {
   "name": "@swarmdo/guidance",
-  "version": "3.0.0-alpha.4",
+  "version": "3.0.0-alpha.5",
   "description": "Guidance Control Plane - Compiles, retrieves, enforces, and evolves guidance rules for Claude Code sessions",
   "type": "module",
   "main": "./dist/index.js",

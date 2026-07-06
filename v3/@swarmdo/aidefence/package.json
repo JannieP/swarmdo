@@ -1,6 +1,6 @@
 {
   "name": "@swarmdo/aidefence",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "AI Manipulation Defense System (AIMDS) with self-learning, prompt injection detection, and vector search integration",
   "type": "module",
   "main": "dist/index.js",
