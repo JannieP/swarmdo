@@ -1,8 +1,8 @@
 # Claude Code Configuration - Swarmdo v1.4
 
-> **Swarmdo v1.4.2** (2026-07-06) — every swarmdo slash command namespaced under `sDo` (`/sDo:swarm:init`, skills `/sdo-ponytail`) so they group together in Claude Code's `/` menu; legacy unprefixed copies auto-migrated on init/upgrade.
+> **Swarmdo v1.4.3** (2026-07-06) — every swarmdo slash command namespaced under `sDo` (`/sDo:swarm:init`, skills `/sdo-ponytail`) so they group together in Claude Code's `/` menu; legacy unprefixed copies auto-migrated on init/upgrade.
 > 6,000+ commits, 314 MCP tools, 16 agent roles + custom types, 19 AgentDB controllers, 21 native plugins.
-> Packages: `swarmdo@1.4.2` (umbrella), `@swarmdo/cli@1.4.2`, `swarmdo-bridge@1.4.2` (wrapper in `swarmdo/`)
+> Packages: `swarmdo@1.4.3` (umbrella), `@swarmdo/cli@1.4.3`, `swarmdo-bridge@1.4.3` (wrapper in `swarmdo/`)
 
 ## Behavioral Rules (Always Enforced)
 
@@ -375,7 +375,7 @@ Run `swarmdo preset info efficiency` for the full guide. Both are **user-invoked
 | `init` | 4 | Project initialization with wizard, presets, skills, hooks |
 | `agent` | 8 | Agent lifecycle (spawn, list, status, stop, metrics, pool, health, logs) |
 | `swarm` | 6 | Multi-agent swarm coordination and orchestration |
-| `memory` | 14 | AgentDB memory with HNSW vector search (measured ~1.9x–4.7x vs brute force above crossover) + WAL-safe `backup` + `revectorize` (repairs hash-era vectors) |
+| `memory` | 14 | AgentDB memory with HNSW vector search (measured ~1.9x–4.7x vs brute force above crossover) + WAL-safe `backup` + `revectorize` (repairs hash-era vectors) + `export -f obsidian` (markdown vault) |
 | `mcp` | 9 | MCP server management and tool execution |
 | `task` | 9 | Task creation, assignment, lifecycle + dependency graph (`--dependencies`, `ready`, `graph`; dispatcher gates on readiness) |
 | `session` | 7 | Session state management and persistence |

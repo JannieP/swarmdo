@@ -1252,9 +1252,9 @@ const exportCommand: Command = {
     {
       name: 'format',
       short: 'f',
-      description: 'Export format (json, csv, binary)',
+      description: 'Export format (json, csv, binary, or obsidian/md — a markdown vault directory)',
       type: 'string',
-      choices: ['json', 'csv', 'binary'],
+      choices: ['json', 'csv', 'binary', 'obsidian', 'md'],
       default: 'json'
     },
     {
@@ -1272,7 +1272,8 @@ const exportCommand: Command = {
   ],
   examples: [
     { command: 'swarmdo memory export -o ./backup.json', description: 'Export all to JSON' },
-    { command: 'swarmdo memory export -o ./data.csv -f csv', description: 'Export to CSV' }
+    { command: 'swarmdo memory export -o ./data.csv -f csv', description: 'Export to CSV' },
+    { command: 'swarmdo memory export -o ./vault -f obsidian', description: 'Export an Obsidian-ready markdown vault (one note per entry + INDEX.md)' }
   ],
   action: async (ctx: CommandContext): Promise<CommandResult> => {
     const outputPath = ctx.flags.output as string;
@@ -1281,6 +1282,37 @@ const exportCommand: Command = {
     if (!outputPath) {
       output.printError('Output path is required. Use --output or -o');
       return { success: false, exitCode: 1 };
+    }
+
+    // Obsidian vault export: fetch the v1 JSON payload via the existing MCP
+    // tool, then render one markdown note per entry (pure renderer) into the
+    // output DIRECTORY. Values keep their [[wikilinks]]; JSON values are
+    // fenced. Serves the dual-plane (vault + vector DB) memory strategy.
+    if (format === 'obsidian' || format === 'md') {
+      const fs = await import('node:fs');
+      const path = await import('node:path');
+      const os = await import('node:os');
+      const { renderVault } = await import('../memory-vault/vault.js');
+      const tmp = path.join(os.tmpdir(), `swarmdo-memexp-${process.pid}-${Math.floor(Math.random() * 1e6)}.json`);
+      try {
+        await callMCPTool('memory_export', { outputPath: tmp, format: 'json', namespace: ctx.flags.namespace });
+        const payload = JSON.parse(fs.readFileSync(tmp, 'utf8'));
+        const files = renderVault(payload);
+        for (const f of files) {
+          const dest = path.join(outputPath, f.relPath);
+          fs.mkdirSync(path.dirname(dest), { recursive: true });
+          fs.writeFileSync(dest, f.content, 'utf8');
+        }
+        output.printSuccess(`Exported ${files.length - 1} notes + INDEX.md → ${outputPath}/`);
+        output.writeln(output.dim('open the folder as (or inside) an Obsidian vault — [[wikilinks]] in values stay live'));
+        return { success: true, data: { outputPath, format: 'obsidian', notes: files.length - 1 } };
+      } catch (error) {
+        const msg = error instanceof MCPClientError ? error.message : String(error);
+        output.printError(`Vault export error: ${msg}`);
+        return { success: false, exitCode: 1 };
+      } finally {
+        try { fs.rmSync(tmp, { force: true }); } catch { /* best-effort */ }
+      }
     }
 
     output.printInfo(`Exporting memory to ${outputPath}...`);
