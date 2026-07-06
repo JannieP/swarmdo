@@ -8,6 +8,7 @@
 import type { Command, CommandContext, CommandResult } from '../types.js';
 import { output } from '../output.js';
 import { execSync } from 'node:child_process';
+import { mkdirSync, writeFileSync } from 'node:fs';
 
 // Scan subcommand
 const scanCommand: Command = {
@@ -188,6 +189,19 @@ const scanCommand: Command = {
       }
 
       spinner.succeed('Scan complete');
+
+      // Persist the summary so the statusline (and future tooling) reflects
+      // real scans instead of the retired V3 CVE tracker (v1.4.17).
+      try {
+        const artifactDir = path.join(process.cwd(), '.swarmdo', 'security');
+        mkdirSync(artifactDir, { recursive: true });
+        writeFileSync(path.join(artifactDir, 'last-scan.json'), JSON.stringify({
+          scannedAt: new Date().toISOString(),
+          target, depth, type: scanType,
+          critical: criticalCount, high: highCount, medium: mediumCount, low: lowCount,
+          total: findings.length,
+        }, null, 2) + '\n');
+      } catch { /* statusline signal is best-effort */ }
 
       // Display results
       output.writeln();

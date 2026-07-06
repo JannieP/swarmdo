@@ -4128,33 +4128,32 @@ const statuslineCommand: Command = {
       return { domainsCompleted, totalDomains, dddProgress, patternsLearned: learning.patterns, sessionsCompleted: learning.sessions };
     }
 
-    // Get security status
+    // Get security status from the last real `security scan` artifact.
+    // (Until v1.4.17 this counted files in never-written directories against a
+    // hardcoded totalCves=3 — the V3-era CVE-1/2/3 tracker — so every install
+    // showed PENDING forever.)
     function getSecurityStatus() {
-      const scanResultsPath = path.join(process.cwd(), '.claude', 'security-scans');
-      let cvesFixed = 0;
-      const totalCves = 3;
-
-      if (fs.existsSync(scanResultsPath)) {
+      const candidates = [
+        path.join(process.cwd(), '.swarmdo', 'security', 'last-scan.json'),
+        path.join(process.cwd(), '.swarm', 'security', 'last-scan.json'), // legacy layout
+      ];
+      for (const p of candidates) {
         try {
-          const scans = fs.readdirSync(scanResultsPath).filter((f: string) => f.endsWith('.json'));
-          cvesFixed = Math.min(totalCves, scans.length);
+          if (!fs.existsSync(p)) continue;
+          const scan = JSON.parse(fs.readFileSync(p, 'utf-8'));
+          const critical = Number(scan.critical) || 0;
+          const high = Number(scan.high) || 0;
+          const total = Number(scan.total) || 0;
+          const scannedAt = typeof scan.scannedAt === 'string' ? scan.scannedAt : null;
+          const ageMs = scannedAt ? Date.now() - new Date(scannedAt).getTime() : Number.POSITIVE_INFINITY;
+          const status = critical + high > 0 ? 'VULN' : ageMs > 7 * 24 * 3600 * 1000 ? 'STALE' : 'CLEAN';
+          return { status, critical, high, total, scannedAt };
         } catch {
-          // Ignore
+          // unreadable artifact — try next candidate
         }
       }
-
-      const auditPath = path.join(process.cwd(), '.swarm', 'security');
-      if (fs.existsSync(auditPath)) {
-        try {
-          const audits = fs.readdirSync(auditPath).filter((f: string) => f.includes('audit'));
-          cvesFixed = Math.min(totalCves, Math.max(cvesFixed, audits.length));
-        } catch {
-          // Ignore
-        }
-      }
-
-      const status = cvesFixed >= totalCves ? 'CLEAN' : cvesFixed > 0 ? 'IN_PROGRESS' : 'PENDING';
-      return { status, cvesFixed, totalCves };
+      // no scan has ever run — nothing is "pending", there is just no data
+      return { status: 'NONE', critical: 0, high: 0, total: 0, scannedAt: null };
     }
 
     // Get swarm status
@@ -4301,7 +4300,7 @@ const statuslineCommand: Command = {
     const terminalCols = process.stdout.columns ?? 80;
     const autoCompact = !ctx.flags.full && terminalCols < COMPACT_WIDTH_THRESHOLD;
     if (ctx.flags.compact || autoCompact) {
-      const line = `DDD:${progress.domainsCompleted}/${progress.totalDomains} CVE:${security.cvesFixed}/${security.totalCves} Swarm:${swarm.activeAgents}/${swarm.maxAgents} Ctx:${system.contextPct}% Int:${system.intelligencePct}%`;
+      const line = `DDD:${progress.domainsCompleted}/${progress.totalDomains} Sec:${security.status} Swarm:${swarm.activeAgents}/${swarm.maxAgents} Ctx:${system.contextPct}% Int:${system.intelligencePct}%`;
       output.writeln(line);
       return { success: true, data: statusData };
     }
@@ -4480,14 +4479,14 @@ const statuslineCommand: Command = {
 
     const swarmIndicator = swarm.coordinationActive ? `${c.brightGreen}◉${c.reset}` : `${c.dim}○${c.reset}`;
     const agentsColor = swarm.activeAgents > 0 ? c.brightGreen : c.red;
-    const securityIcon = security.status === 'CLEAN' ? '🟢' : security.status === 'IN_PROGRESS' ? '🟡' : '🔴';
-    const securityColor = security.status === 'CLEAN' ? c.brightGreen : security.status === 'IN_PROGRESS' ? c.brightYellow : c.brightRed;
+    const securityIcon = security.status === 'CLEAN' ? '🟢' : security.status === 'STALE' ? '🟡' : security.status === 'NONE' ? '⚪' : '🔴';
+    const securityColor = security.status === 'CLEAN' ? c.brightGreen : security.status === 'STALE' ? c.brightYellow : security.status === 'NONE' ? c.dim : c.brightRed;
     const hooksColor = hooksStats.enabled > 0 ? c.brightGreen : c.dim;
 
     const line2 = `${c.brightYellow}🤖 Swarm${c.reset}  ${swarmIndicator} [${agentsColor}${String(swarm.activeAgents).padStart(2)}${c.reset}/${c.brightWhite}${swarm.maxAgents}${c.reset}]  ` +
       `${c.brightPurple}👥 ${system.subAgents}${c.reset}    ` +
       `${c.brightBlue}🪝 ${hooksColor}${hooksStats.enabled}${c.reset}/${c.brightWhite}${hooksStats.total}${c.reset}    ` +
-      `${securityIcon} ${securityColor}CVE ${security.cvesFixed}${c.reset}/${c.brightWhite}${security.totalCves}${c.reset}    ` +
+      `${securityIcon} ${securityColor}sec ${security.status === 'VULN' ? (security.critical + security.high) + '!' : security.status === 'CLEAN' ? '✓' : security.status === 'STALE' ? 'stale' : '—'}${c.reset}    ` +
       `${c.brightCyan}💾 ${system.memoryMB}MB${c.reset}    ` +
       `${c.brightPurple}🧠 ${String(system.intelligencePct).padStart(3)}%${c.reset}`;
 
