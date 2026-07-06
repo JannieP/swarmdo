@@ -186,8 +186,8 @@ importers:
         specifier: ^3.0.0-alpha.17
         version: 3.0.0-alpha.17(@types/node@20.19.27)(zod@3.25.76)
       agentic-flow:
-        specifier: ^2.0.0
-        version: 2.0.13(@types/node@20.19.27)
+        specifier: file:../../vendor/agentic-flow
+        version: link:../../vendor/agentic-flow
       better-sqlite3:
         specifier: ^12.9.0
         version: 12.9.0

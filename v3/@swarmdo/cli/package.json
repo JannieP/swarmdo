@@ -1,6 +1,6 @@
 {
   "name": "@swarmdo/cli",
-  "version": "1.4.18",
+  "version": "1.4.19",
   "type": "module",
   "description": "Swarmdo CLI - Enterprise AI agent orchestration with 60+ specialized agents, swarm coordination, MCP server, self-learning hooks, and vector memory for Claude Code",
   "main": "dist/src/index.js",
@@ -118,7 +118,7 @@
     "@swarmvector/sona": "file:../../@swarmvector/sona",
     "@swarmvector/tiny-dancer": "file:../../@swarmvector/tiny-dancer",
     "agentdb": "^3.0.0-alpha.17",
-    "agentic-flow": "^2.0.0",
+    "agentic-flow": "file:../../vendor/agentic-flow",
     "better-sqlite3": "^12.9.0",
     "metaharness": "~0.2.6",
     "swarmvector": "file:../../vendor/swarmvector",
