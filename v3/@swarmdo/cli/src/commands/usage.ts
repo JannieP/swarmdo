@@ -25,6 +25,7 @@ import {
   type UsageDimension,
   type UsageTotals,
 } from '../usage/transcript-usage.js';
+import { collectToolErrors, type ToolErrorReport } from '../usage/transcript-errors.js';
 
 const VIEWS: Record<string, { dimension: UsageDimension; label: string }> = {
   daily: { dimension: 'day', label: 'Date' },
@@ -184,6 +185,48 @@ function runBlocksView(ctx: CommandContext, collection: UsageCollection): Comman
   return { success: true, exitCode: 0 };
 }
 
+/** Errors view — per-tool failure rates + the most common failure messages,
+ * from the same transcripts (sniffly-style). Complements cost analytics. */
+function runErrorsView(ctx: CommandContext, report: ToolErrorReport): CommandResult {
+  if (ctx.flags.json === true) {
+    output.writeln(JSON.stringify(report, null, 2));
+    return { success: true, exitCode: 0 };
+  }
+  output.writeln(output.bold('Claude Code usage — tool errors'));
+  if (report.totalCalls === 0) {
+    output.writeln(output.info(`no tool calls found in ${report.filesScanned} transcript files`));
+    return { success: true, exitCode: 0 };
+  }
+  output.printTable({
+    columns: [
+      { key: 'tool', header: 'Tool', width: 22 },
+      { key: 'calls', header: 'Calls', width: 12 },
+      { key: 'errors', header: 'Errors', width: 12 },
+      { key: 'rate', header: 'Err %', width: 8 },
+    ],
+    data: report.tools.slice(0, 20).map((t) => ({
+      tool: t.tool,
+      calls: fmtInt(t.calls),
+      errors: t.errors ? fmtInt(t.errors) : '—',
+      rate: t.errors ? `${(t.errorRate * 100).toFixed(1)}%` : '—',
+    })),
+  });
+  const rate = report.totalCalls > 0 ? (report.totalErrors / report.totalCalls) * 100 : 0;
+  output.writeln(
+    output.dim(
+      `${report.filesScanned} files · ${fmtInt(report.totalCalls)} tool calls · ${fmtInt(report.totalErrors)} errors (${rate.toFixed(1)}%) · ${report.sessionsWithErrors} session(s) with errors`,
+    ),
+  );
+  if (report.topErrors.length > 0) {
+    output.writeln();
+    output.writeln(output.bold('Most common failures'));
+    for (const e of report.topErrors) {
+      output.writeln(`  ${output.dim(`×${e.count}`)} ${output.dim(`[${e.tool}]`)} ${e.signature}`);
+    }
+  }
+  return { success: true, exitCode: 0 };
+}
+
 async function run(ctx: CommandContext): Promise<CommandResult> {
   const viewName = (ctx.args[0] || 'daily').toLowerCase();
 
@@ -195,9 +238,17 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
     return runBlocksView(ctx, collectUsage({ dirs, since, until }));
   }
 
+  if (viewName === 'errors') {
+    const since = typeof ctx.flags.since === 'string' ? ctx.flags.since : undefined;
+    const until = typeof ctx.flags.until === 'string' ? ctx.flags.until : undefined;
+    const dirFlag = ctx.flags.dir;
+    const dirs = typeof dirFlag === 'string' ? [dirFlag] : Array.isArray(dirFlag) ? dirFlag.map(String) : undefined;
+    return runErrorsView(ctx, collectToolErrors({ dirs, since, until }));
+  }
+
   const view = VIEWS[viewName];
   if (!view) {
-    output.writeln(output.error(`unknown view: ${viewName} (expected ${Object.keys(VIEWS).join('|')})`));
+    output.writeln(output.error(`unknown view: ${viewName} (expected ${Object.keys(VIEWS).join('|')}|blocks|errors)`));
     return { success: false, exitCode: 1 };
   }
 
