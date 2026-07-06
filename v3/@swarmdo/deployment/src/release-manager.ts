@@ -3,36 +3,31 @@
  * Handles version bumping, changelog generation, and git tagging
  */
 
-import { execSync, execFileSync } from 'child_process';
+import { execFileSync } from 'child_process';
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { join } from 'path';
 
 /**
  * Allowed git commands for security - prevents command injection
  */
-const ALLOWED_GIT_COMMANDS = [
-  'git status --porcelain',
-  'git rev-parse HEAD',
-  'git log',
-  'git tag',
-  'git add',
-  'git commit',
-  'git describe',
-];
+const ALLOWED_GIT_SUBCOMMANDS = new Set([
+  'status', 'rev-parse', 'log', 'tag', 'add', 'commit', 'describe',
+]);
 
 /**
- * Validate command against allowlist to prevent command injection
+ * Validate an argv-form git invocation. The shell-injection class is gone
+ * structurally (execFileSync, no shell — a version like `1.0.0"; rm -rf ~`
+ * is just a byte string to git), so validation only pins the subcommand
+ * surface and rejects NUL bytes.
  */
-function validateCommand(cmd: string): void {
-  // Check for shell metacharacters
-  if (/[;&|`$()<>]/.test(cmd)) {
-    throw new Error(`Invalid command: contains shell metacharacters`);
+function validateGitArgs(args: string[]): void {
+  if (args.length === 0 || !ALLOWED_GIT_SUBCOMMANDS.has(args[0])) {
+    throw new Error(`Git subcommand not allowed: ${args[0] ?? '(none)'}`);
   }
-
-  // Must start with an allowed command prefix
-  const isAllowed = ALLOWED_GIT_COMMANDS.some(prefix => cmd.startsWith(prefix));
-  if (!isAllowed) {
-    throw new Error(`Command not allowed: ${cmd.split(' ')[0]}`);
+  for (const a of args) {
+    if (typeof a !== 'string' || a.includes('\0')) {
+      throw new Error('Invalid git argument');
+    }
   }
 }
 import type {
@@ -87,7 +82,7 @@ export class ReleaseManager {
 
       // Check for uncommitted changes
       if (!skipValidation) {
-        const gitStatus = this.execCommand('git status --porcelain', true);
+        const gitStatus = this.execGit(['status', '--porcelain'], true);
         if (gitStatus && !dryRun) {
           result.warnings?.push('Uncommitted changes detected');
         }
@@ -118,19 +113,19 @@ export class ReleaseManager {
         const commitMessage = `chore(release): ${result.newVersion}`;
 
         // Stage changes
-        this.execCommand(`git add package.json ${changelogPath}`);
+        this.execGit(['add', 'package.json', changelogPath]);
 
         // Commit
-        this.execCommand(`git commit -m "${commitMessage}"`);
+        this.execGit(['commit', '-m', commitMessage]);
 
-        result.commitHash = this.execCommand('git rev-parse HEAD', true).trim();
+        result.commitHash = this.execGit(['rev-parse', 'HEAD'], true).trim();
       }
 
       // Create git tag
       if (createTag && !dryRun) {
         result.tag = `${tagPrefix}${result.newVersion}`;
         const tagMessage = `Release ${result.newVersion}`;
-        this.execCommand(`git tag -a ${result.tag} -m "${tagMessage}"`);
+        this.execGit(['tag', '-a', result.tag, '-m', tagMessage]);
       }
 
       result.success = true;
@@ -205,7 +200,7 @@ export class ReleaseManager {
    */
   private getCommitsSinceLastTag(): GitCommit[] {
     try {
-      const lastTag = this.execCommand('git describe --tags --abbrev=0', true).trim();
+      const lastTag = this.execGit(['describe', '--tags', '--abbrev=0'], true).trim();
       const range = `${lastTag}..HEAD`;
       return this.parseCommits(range);
     } catch {
@@ -219,11 +214,9 @@ export class ReleaseManager {
    */
   private parseCommits(range: string): GitCommit[] {
     const format = '--pretty=format:%H%n%s%n%an%n%ai%n---COMMIT---';
-    const cmd = range
-      ? `git log ${range} ${format}`
-      : `git log ${format}`;
+    const args = range ? ['log', range, format] : ['log', format];
 
-    const output = this.execCommand(cmd, true);
+    const output = this.execGit(args, true);
     const commits: GitCommit[] = [];
 
     const commitBlocks = output.split('---COMMIT---').filter(Boolean);
@@ -344,15 +337,16 @@ export class ReleaseManager {
   }
 
   /**
-   * Execute command safely with validation
-   * Only allows git commands from the allowlist
+   * Execute git with argv-form arguments — execFileSync, never a shell, so
+   * tainted values (versions, tags, changelog paths, commit messages) are
+   * plain byte strings to git regardless of content
+   * (js/shell-command-constructed-from-input).
    */
-  private execCommand(cmd: string, returnOutput = false): string {
-    // Validate command against allowlist
-    validateCommand(cmd);
+  private execGit(args: string[], returnOutput = false): string {
+    validateGitArgs(args);
 
     try {
-      const output = execSync(cmd, {
+      const output = execFileSync('git', args, {
         cwd: this.cwd,
         encoding: 'utf-8',
         stdio: returnOutput ? 'pipe' : 'inherit',

@@ -21,6 +21,18 @@ const isWindows = process.platform === 'win32';
 
 function runNpm(args: string[], timeoutMs: number): Promise<{ stdout: string; stderr: string }> {
   if (isWindows) {
+    // cmd.exe re-tokenizes everything after /c — array-form escaping does
+    // NOT survive the batch layer (js/shell-command-injection-from-
+    // environment; same hazard class as #1852). Package validation upstream
+    // allows > < = for version ranges, which cmd.exe would parse as
+    // redirection, so refuse any arg carrying cmd metacharacters outright
+    // rather than let it be reinterpreted. Exact versions and ^~ ranges
+    // pass; `pkg@>=1.0.0` must be expressed as an exact pin on Windows.
+    for (const a of args) {
+      if (/[&|<>^%!"]/.test(a)) {
+        throw new Error(`npm argument rejected on Windows (cmd.exe metacharacter): ${a}`);
+      }
+    }
     return execFileAsync('cmd.exe', ['/d', '/s', '/c', 'npm', ...args], { timeout: timeoutMs });
   }
   return execFileAsync('npm', args, { timeout: timeoutMs });
