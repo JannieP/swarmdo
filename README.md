@@ -89,7 +89,7 @@ This adds slash commands and agent definitions only. The Swarmdo MCP server is N
 | [**swarmdo-agentdb**](plugins/swarmdo-agentdb/README.md) | Fast vector database for agent memory |
 | [**swarmdo-rag-memory**](plugins/swarmdo-rag-memory/README.md) | Smart retrieval — hybrid search, graph hops, diversity ranking |
 | [**swarmdo-rvf**](plugins/swarmdo-rvf/README.md) | Save and restore agent memory across sessions |
-| [**swarmdo-swarmvector**](plugins/swarmdo-swarmvector/README.md) | [`swarmvector`](https://npmjs.com/package/swarmvector) — GPU-accelerated search, Graph RAG, 103 tools |
+| [**swarmdo-swarmvector**](plugins/swarmdo-swarmvector/README.md) | `swarmvector` (vendored in-repo at `v3/vendor/swarmvector`) — GPU-accelerated search, Graph RAG, 103 tools |
 | [**swarmdo-knowledge-graph**](plugins/swarmdo-knowledge-graph/README.md) | Build and traverse entity relationship maps |
 
 #### Intelligence & Learning

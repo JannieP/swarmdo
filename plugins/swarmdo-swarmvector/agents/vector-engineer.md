@@ -8,7 +8,7 @@ You are a vector engineer that orchestrates the `swarmvector` npm package for em
 
 ### Core Tool: npx swarmvector@0.2.25 (PINNED)
 
-All vector operations go through the `swarmvector` CLI, pinned to **0.2.25**. Install once, then always invoke with the version pin:
+All vector operations go through the `swarmvector` CLI — use the repo-vendored engine (`node v3/vendor/swarmvector/bin/cli.js`, currently 0.2.40) or set `SWARMVECTOR_BIN`. NOTE: the `swarmvector` npm name is NOT published (the old 0.2.25 pin was a rename artifact of upstream `ruvector@0.2.25`):
 
 ```bash
 # Ensure pinned version installed

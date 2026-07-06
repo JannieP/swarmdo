@@ -1,10 +1,19 @@
 #!/usr/bin/env bash
-# Smoke test for swarmdo-swarmvector plugin against swarmvector@0.2.25.
-# Exits non-zero if any contracted CLI surface is missing or behaves
-# differently from documented. Run after `npm install swarmvector@0.2.25`
-# (or rely on the npx fetch).
+# Smoke test for the swarmdo-swarmvector plugin against the swarmvector engine.
+#
+# Engine resolution (in order):
+#   1. $SWARMVECTOR_BIN — explicit override
+#   2. the repo-vendored engine (v3/vendor/swarmvector/bin/cli.js) — the copy
+#      swarmdo actually ships; this is what runs in CI
+#   3. npx swarmvector@$PIN — last resort for a future published fork.
+#      NOTE: the `swarmvector` npm name is NOT published today (the 0.2.25
+#      pin was a rename artifact of upstream ruvector@0.2.25) — resolution 2
+#      is the real path.
 set -u
 PIN="swarmvector@0.2.25"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+VENDOR_CLI="$SCRIPT_DIR/../../../v3/vendor/swarmvector/bin/cli.js"
+VENDOR_PKG="$SCRIPT_DIR/../../../v3/vendor/swarmvector/package.json"
 PASS=0
 FAIL=0
 WORKDIR="$(mktemp -d -t swarmvector-smoke.XXXXXX)"
@@ -15,12 +24,25 @@ step() { printf "→ %s ... " "$1"; }
 ok()   { printf "PASS\n"; PASS=$((PASS+1)); }
 bad()  { printf "FAIL: %s\n" "$1"; FAIL=$((FAIL+1)); }
 
-run() { npx -y "$PIN" "$@" 2>&1; }
+if [[ -n "${SWARMVECTOR_BIN:-}" ]]; then
+  run() { "$SWARMVECTOR_BIN" "$@" 2>&1; }
+  EXPECT_VER=""
+elif [[ -f "$VENDOR_CLI" ]]; then
+  run() { node "$VENDOR_CLI" "$@" 2>&1; }
+  EXPECT_VER="$(node -p "require('$VENDOR_PKG').version" 2>/dev/null || echo "")"
+else
+  run() { npx -y "$PIN" "$@" 2>&1; }
+  EXPECT_VER="0.2.25"
+fi
 
 step "version pin"
 # --version output may include npm warnings; take the last non-empty line.
 ver=$(run --version | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | tail -1)
-[[ "$ver" == "0.2.25" ]] && ok || bad "expected 0.2.25, got '$ver'"
+if [[ -n "$EXPECT_VER" ]]; then
+  [[ "$ver" == "$EXPECT_VER" ]] && ok || bad "expected $EXPECT_VER, got '$ver'"
+else
+  [[ -n "$ver" ]] && ok || bad "engine did not report a semver version"
+fi
 
 step "top-level help mentions hooks/embed/rvf/attention/gnn/brain/sona"
 help=$(run --help)
@@ -56,18 +78,25 @@ step "gnn info reports Available"
 out=$(run gnn info)
 grep -q "Status:.*Available" <<<"$out" && ok || bad "gnn info did not report Available"
 
-step "info reports CLI Version 0.2.25"
+step "info reports the engine CLI version"
 out=$(run info)
-grep -q "CLI Version: 0.2.25" <<<"$out" && ok || bad "info did not report 0.2.25"
+if [[ -n "$EXPECT_VER" ]]; then
+  grep -q "CLI Version: $EXPECT_VER" <<<"$out" && ok || bad "info did not report $EXPECT_VER"
+else
+  grep -qE "CLI Version: [0-9]+\.[0-9]+\.[0-9]+" <<<"$out" && ok || bad "info did not report a version"
+fi
 
 step "doctor exits 0"
 run doctor >/dev/null && ok || bad "doctor returned non-zero"
 
-step "removed surface stays removed (compare/midstream/index)"
+step "removed surface stays removed (compare/index; midstream returned in 0.2.40)"
+# midstream was removed in the 0.2.25 era but the vendored 0.2.40 engine
+# ships it again (real-time inference: attractors/Lyapunov/scheduling) —
+# the contract tracks what we actually ship.
 fail_removed=""
-for c in compare midstream index; do
+for c in compare index; do
   # Don't pass --help — Commander will show top-level help instead of the error.
-  out=$(npx -y "$PIN" "$c" 2>&1)
+  out=$(run "$c")
   grep -q "unknown command '$c'" <<<"$out" || fail_removed="$fail_removed $c"
 done
 [[ -z "$fail_removed" ]] && ok || bad "still present:$fail_removed"
