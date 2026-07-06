@@ -249,11 +249,14 @@ function sanitizeHref(href?: string | null): string | undefined {
 	if (!href) return undefined;
 	const trimmed = href.trim();
 	const lower = trimmed.toLowerCase();
-	if (
-		lower.startsWith("javascript:") ||
-		lower.startsWith("vbscript:") ||
-		lower.startsWith("data:text/html")
-	) {
+	if (lower.startsWith("javascript:") || lower.startsWith("vbscript:")) {
+		return undefined;
+	}
+	// data: URIs are allowed only for non-scriptable raster images. This blocks
+	// data:text/html and data:image/svg+xml (SVG can execute JS) while keeping
+	// legitimate inline raster images working. Considering the bare data: scheme
+	// (not just data:text/html) is what js/incomplete-url-scheme-check requires.
+	if (lower.startsWith("data:") && !/^data:image\/(png|jpe?g|gif|webp|avif|bmp)[;,]/.test(lower)) {
 		return undefined;
 	}
 	return trimmed.replace(/>$/, "");
