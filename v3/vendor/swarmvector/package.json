@@ -1,6 +1,6 @@
 {
   "name": "swarmvector",
-  "version": "0.2.39",
+  "version": "0.2.40",
   "description": "Self-learning vector database for Node.js \u2014 hybrid search, Graph RAG, FlashAttention-3, HNSW, 50+ attention mechanisms",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
