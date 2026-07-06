@@ -76,6 +76,9 @@ const commandLoaders: Record<string, CommandLoader> = {
   // Named configuration tiers for init + efficiency-skills guide
   preset: () => import('./preset.js'),
   presets: () => import('./preset.js'), // alias via loader key
+  // Release notes from conventional commits (git-cliff/conventional-changelog demand)
+  changelog: () => import('./changelog.js'),
+  notes: () => import('./changelog.js'), // alias via loader key
   // Q-Learning Routing Commands
   route: () => import('./route.js'),
   // Progress Commands
