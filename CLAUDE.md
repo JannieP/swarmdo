@@ -1,8 +1,8 @@
 # Claude Code Configuration - Swarmdo v1.4
 
-> **Swarmdo v1.4.36** (2026-07-07) — every swarmdo slash command namespaced under `sDo` (`/sDo:swarm:init`, skills `/sdo-ponytail`) so they group together in Claude Code's `/` menu; legacy unprefixed copies auto-migrated on init/upgrade.
+> **Swarmdo v1.4.37** (2026-07-07) — every swarmdo slash command namespaced under `sDo` (`/sDo:swarm:init`, skills `/sdo-ponytail`) so they group together in Claude Code's `/` menu; legacy unprefixed copies auto-migrated on init/upgrade.
 > 6,000+ commits, 314 MCP tools, 16 agent roles + custom types, 19 AgentDB controllers, 21 native plugins.
-> Packages: `swarmdo@1.4.36` (umbrella), `@swarmdo/cli@1.4.36`, `swarmdo-bridge@1.4.36` (wrapper in `swarmdo/`)
+> Packages: `swarmdo@1.4.37` (umbrella), `@swarmdo/cli@1.4.37`, `swarmdo-bridge@1.4.37` (wrapper in `swarmdo/`)
 
 ## Behavioral Rules (Always Enforced)
 
@@ -977,6 +977,7 @@ memory_search_unified({ query: "authentication security", limit: 5 })
 - `@swarmdo/cli` MUST be published from its self-contained staging dir — its `file:../` siblings don't ship from the package dir, so a plain `npm publish` there produces a broken install (guarded: `prepublishOnly` fails with instructions). `scripts/build-standalone.mjs` vendors cli-core/mcp/neural/shared/memory/sona/rabitq-wasm into `vendor/` and rewrites the specs
 - The `swarmdo` umbrella publishes from the repo root as-is (its tarball vendors all `v3/**` dists; `file:` deps resolve inside the tarball)
 - MUST run verification for BOTH before telling user publishing is complete
+- **MANDATORY docs sync on every deploy/publish** (user rule, 2026-07-07): a version is not "released" until (1) README badge + feature sections reflect it, (2) docs/USERGUIDE.md documents any new commands/flags, (3) website/index.html (working copy) is updated AND deployed to the live site — copy to the SwarmDo/swarmdo.com repo, push, and curl-verify swarmdo.com serves the new content. `swarmdo release` automates the version strings + site deploy; feature-level docs content is your responsibility per release
 - PREFERRED: publish from GitHub — `swarmdo release --skip-publish --confirm` bumps/commits/tags; pushing the v* tag triggers `.github/workflows/npm-publish.yml` (builds workspaces, stages the cli, gates tarball completeness, publishes both with the NPM_TOKEN secret, verifies the registry). `swarmdo release --confirm` without the skip does the same train locally
 
 ```bash

@@ -35,7 +35,10 @@ describe('release: planRelease', () => {
       'tag', 'push tag',
     ]);
     expect(kinds).toContain('verify-npm');
-    expect(kinds[kinds.length - 1]).toBe('gh-release');
+    // docs-sync rule (2026-07-07): the live-site deploy is the FINAL step of
+    // every release unless explicitly skipped
+    expect(kinds[kinds.length - 1]).toBe('deploy-site');
+    expect(kinds[kinds.length - 2]).toBe('gh-release');
   });
 
   it('publishes the cli from INSIDE dist-standalone (guard-safe)', () => {
@@ -51,19 +54,21 @@ describe('release: planRelease', () => {
     expect(files).toEqual(TRIO_FILES);
   });
 
-  it('--skip-publish drops publish+verify but keeps tag/release', () => {
+  it('--skip-publish drops publish+verify but keeps tag/release/site', () => {
     const plan = planRelease({ ...base, bump: 'minor', skipPublish: true });
     const kinds = plan.steps.map((s) => s.kind);
     expect(kinds).not.toContain('verify-npm');
     expect(plan.steps.some((s: any) => s.title === 'publish swarmdo umbrella')).toBe(false);
     expect(plan.steps.some((s: any) => s.title === 'tag')).toBe(true);
-    expect(kinds[kinds.length - 1]).toBe('gh-release');
+    expect(kinds[kinds.length - 1]).toBe('deploy-site');
   });
 
-  it('--skip-gh-release ends at the tag push; notes range starts at current tag', () => {
+  it('--skip-gh-release keeps the site deploy; --skip-site removes it', () => {
     const noGh = planRelease({ ...base, bump: 'patch', skipGhRelease: true });
-    expect(noGh.steps[noGh.steps.length - 1]).toMatchObject({ kind: 'exec', title: 'push tag' });
-    const withGh: any = planRelease({ ...base, bump: 'patch' }).steps.at(-1);
+    expect(noGh.steps[noGh.steps.length - 1]).toMatchObject({ kind: 'deploy-site' });
+    const noSite = planRelease({ ...base, bump: 'patch', skipSite: true });
+    expect(noSite.steps[noSite.steps.length - 1]).toMatchObject({ kind: 'gh-release' });
+    const withGh: any = planRelease({ ...base, bump: 'patch' }).steps.find((s: any) => s.kind === 'gh-release');
     expect(withGh.notesFrom).toBe('v1.4.8');
   });
 

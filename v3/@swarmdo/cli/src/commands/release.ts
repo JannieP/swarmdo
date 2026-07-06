@@ -91,6 +91,43 @@ async function executePlan(plan: ReleasePlan, root: string): Promise<CommandResu
         }
         break;
       }
+      case 'deploy-site': {
+        // user rule 2026-07-07: the live site ships with every release.
+        // Copy the working copy into the SwarmDo/swarmdo.com repo, push,
+        // and verify production actually serves the new version string.
+        const siteDir = fs.mkdtempSync(path.join(os.tmpdir(), 'swarmdo-site-'));
+        execFileSync('gh', ['repo', 'clone', 'SwarmDo/swarmdo.com', siteDir, '--', '-q'], { stdio: 'inherit' });
+        fs.copyFileSync(path.join(root, 'website', 'index.html'), path.join(siteDir, 'index.html'));
+        const smap = path.join(siteDir, 'sitemap.xml');
+        if (fs.existsSync(smap)) {
+          const today = new Date().toISOString().slice(0, 10);
+          fs.writeFileSync(smap, fs.readFileSync(smap, 'utf8').replace(/<lastmod>[^<]*<\/lastmod>/g, `<lastmod>${today}</lastmod>`));
+        }
+        const g = (args: string[]): void => { execFileSync('git', args, { cwd: siteDir, stdio: 'inherit' }); };
+        g(['add', '-A']);
+        try {
+          g(['commit', '-m', `release: sync site for v${plan.next}\n\nCo-Authored-By: Swarmdo <maintainers@swarmdo.com>`]);
+        } catch {
+          output.writeln(output.dim('  site already in sync — nothing to commit'));
+          break;
+        }
+        g(['push', 'origin', 'main']);
+        // poll production (GitHub Pages deploys in ~1min)
+        let live = false;
+        for (let i = 0; i < 30; i++) {
+          try {
+            const body = execFileSync('curl', ['-s', 'https://swarmdo.com'], { encoding: 'utf8' });
+            if (body.includes(`v${plan.next}`)) { live = true; break; }
+          } catch { /* transient */ }
+          execFileSync('sleep', ['10']);
+        }
+        if (!live) {
+          output.printError(`swarmdo.com is not serving v${plan.next} after 5min — check the Pages build`);
+          return { success: false, exitCode: 1 };
+        }
+        output.writeln(output.dim(`  swarmdo.com serves v${plan.next} ✓`));
+        break;
+      }
       case 'gh-release': {
         const notes = path.join(os.tmpdir(), `swarmdo-relnotes-${process.pid}.md`);
         const { changelogCommand } = await import('./changelog.js');
@@ -114,6 +151,7 @@ export const releaseCommand: Command = {
     { name: 'confirm', type: 'boolean', description: 'actually execute (default: print the plan)', default: false },
     { name: 'skip-publish', type: 'boolean', description: 'skip npm publish + registry verify steps', default: false },
     { name: 'skip-gh-release', type: 'boolean', description: 'skip the GitHub release step', default: false },
+    { name: 'skip-site', type: 'boolean', description: 'skip the live-site deploy (docs-sync rule: only for zero-user-facing releases)', default: false },
     { name: 'json', type: 'boolean', description: 'print the plan as JSON', default: false },
   ],
   examples: [
@@ -142,6 +180,7 @@ export const releaseCommand: Command = {
         repoRoot: root,
         skipPublish: ctx.flags['skip-publish'] === true,
         skipGhRelease: ctx.flags['skip-gh-release'] === true,
+        skipSite: ctx.flags['skip-site'] === true,
       });
     } catch (e) {
       output.printError((e as Error).message);

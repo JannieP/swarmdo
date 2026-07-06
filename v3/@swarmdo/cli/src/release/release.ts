@@ -21,6 +21,8 @@ export interface ReleaseInput {
   skipPublish?: boolean;
   /** skip the gh release step */
   skipGhRelease?: boolean;
+  /** skip the live-site deploy (docs-sync rule says DON'T unless the release truly has zero user-facing surface) */
+  skipSite?: boolean;
 }
 
 export type ReleaseStep =
@@ -29,7 +31,10 @@ export type ReleaseStep =
   | { kind: 'sync-docs'; version: string; files: string[] }
   | { kind: 'exec'; title: string; cmd: string; args: string[]; cwd: string }
   | { kind: 'verify-npm'; packages: string[]; version: string }
-  | { kind: 'gh-release'; tag: string; notesFrom: string };
+  | { kind: 'gh-release'; tag: string; notesFrom: string }
+  // user rule 2026-07-07: no release without the live site updated —
+  // copy website/index.html to the SwarmDo/swarmdo.com repo, push, verify
+  | { kind: 'deploy-site'; version: string };
 
 export interface ReleasePlan {
   current: string;
@@ -99,6 +104,9 @@ export function planRelease(input: ReleaseInput): ReleasePlan {
   if (!input.skipGhRelease) {
     steps.push({ kind: 'gh-release', tag, notesFrom: `v${input.current}` });
   }
+  if (!input.skipSite) {
+    steps.push({ kind: 'deploy-site', version: next });
+  }
   return { current: input.current, next, tag, steps };
 }
 
@@ -111,5 +119,6 @@ export function renderStep(s: ReleaseStep): string {
     case 'exec': return `${s.title}:  ${s.cmd} ${s.args.join(' ')}  (${s.cwd})`;
     case 'verify-npm': return `verify npm: ${s.packages.join(', ')} @latest === ${s.version}`;
     case 'gh-release': return `gh release ${s.tag} with \`swarmdo changelog\` notes since ${s.notesFrom}`;
+    case 'deploy-site': return `deploy website → SwarmDo/swarmdo.com (copy working copy, push, curl-verify swarmdo.com serves ${s.version})`;
   }
 }
