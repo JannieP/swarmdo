@@ -562,7 +562,8 @@ export async function executeAgentTask(input: AgentExecuteInput): Promise<AgentE
   const fallbackBudget = Math.max(0, parseInt(process.env.SWARMDO_ROUTER_FALLBACK_MAX_RETRIES ?? '1', 10) || 1);
   const fallbackHistory: Array<{ modelId: string; error: string }> = [];
   if (!result.success && agent.modelId && fallbackBudget > 0) {
-    const isRetryable = /\b(429|500|502|503|504|timeout|ECONNRESET|ETIMEDOUT)\b/i.test(result.error ?? '');
+    const { isRetryableError, computeBackoffMs, sleep } = await import('../resilience/backoff.js');
+    const isRetryable = isRetryableError(result.error);
     if (isRetryable) {
       try {
         const { nextCostOptimalAlternative } = await import('../swarmvector/neural-router.js');
@@ -576,6 +577,9 @@ export async function executeAgentTask(input: AgentExecuteInput): Promise<AgentE
           const excludeIds: string[] = [agent.modelId];
           for (let attempt = 0; attempt < fallbackBudget && !result.success; attempt++) {
             fallbackHistory.push({ modelId: excludeIds[excludeIds.length - 1], error: result.error ?? '' });
+            // full-jitter exponential backoff — a 429 is usually account-wide,
+            // so an instant re-call against the same provider burns the attempt
+            await sleep(computeBackoffMs(attempt));
             const alt = await nextCostOptimalAlternative(embedding, excludeIds);
             if (!alt || !alt.modelId) break;
             excludeIds.push(alt.modelId);
