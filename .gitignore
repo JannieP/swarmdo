@@ -101,6 +101,9 @@ coordination/subtasks/*
 coverage/
 dist-cjs/
 dist/
+# vendored forks ship their build output (CI cannot rebuild them)
+!v3/vendor/agentdb/dist/
+!v3/vendor/agentdb/dist/**
 hive-mind-prompt-*.txt
 init-output.log
 lerna-debug.log*
