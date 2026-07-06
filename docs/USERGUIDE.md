@@ -21,7 +21,49 @@
 - [Architecture & Modules](#%EF%B8%8F-architecture--modules)
 - [Configuration & Reference](#%EF%B8%8F-configuration--reference)
 - [Help & Resources](#-help--resources)
+- [Operational Toolkit (v1.3 to v1.4)](#operational-toolkit-v13-to-v14)
 - [What's new in 3.7](#whats-new-in-37)
+
+---
+
+## Operational Toolkit (v1.3 to v1.4)
+
+The v1.3–v1.4 release train added a day-to-day operations layer around the swarm. Every command below ships in the core CLI — no plugins required.
+
+| Command | Aliases | What it does |
+|---------|---------|-------------|
+| `swarmdo usage` | `cost` | Claude Code spend analytics from local transcripts: `daily`, `monthly`, `models`, `projects`, `sessions`, live 5-hour `blocks` burn, `errors` (tool-failure analytics), `cache` (prompt-cache efficiency + $ saved) |
+| `swarmdo usage guard` | — | Budget policy: `--block-usd/--block-tokens/--daily-usd/--monthly-usd` (or `SWARMDO_GUARD_*` env) → ok / warn / over; `--strict` exits 1 only when over — safe for CI and hooks; `--warn-pct`, `--json` |
+| `swarmdo hud` | — | Single-pane ops HUD: 5h block burn, task readiness, daemon workers, memory snapshots (`--watch`, `--json`) |
+| `swarmdo repair` | `tdd-repair` | Test-Driven Repair — bounded, budget-capped headless `claude` loop fixes source until a failing test passes; dry-run without `--confirm` |
+| `swarmdo task` | — | Task dependency DAG: create with `--dependencies`, list unblocked work with `task ready`, render with `task graph`; the dispatcher gates on readiness |
+| `swarmdo worktree` | `wt` | Git-worktree isolation for parallel agents: `add` / `list` / `diff` / `merge` / `remove` |
+| `swarmdo transcript` | `tx` | Export any Claude Code session transcript to clean markdown (system noise stripped) |
+| `swarmdo changelog` | `notes`, `release-notes` | Release notes from conventional commits; default range is `<lastTag>..HEAD`; `--from/--to/--version/--out/--all/--no-links` |
+| `swarmdo mcp doctor` | — | Static diagnosis of MCP server configs across `.mcp.json` + `~/.claude.json`: missing binaries, bad URLs, malformed entries |
+| `swarmdo hooks notify` | — | OS-native desktop notification (`-d`; macOS `osascript`, Linux `notify-send`) |
+| `swarmdo hooks recipe` | `recipes` | Install ready-made Claude Code hooks (`notify-done` → Stop, `notify-input` → Notification); dry-run by default, `--apply` writes, idempotent additive merge; targets `settings.local.json` (`--shared` / `--global` to retarget) |
+| `swarmdo preset` | `presets` | The 5-tier capability ladder: `minimal` → `basic`★ → `standard` → `advanced` → `max`; `preset list` / `preset info <name>` / `preset info efficiency`; apply with `swarmdo init --preset <name>` |
+| `swarmdo memory export -f obsidian` | `-f md` | Render the memory DB as an Obsidian vault: one note per entry (YAML frontmatter, `[[wikilinks]]` stay live), per-namespace folders, `INDEX.md` map-of-content |
+| `swarmdo memory import -f obsidian` | `-f md` | Sync an edited vault back into the DB (upsert + re-embed); foreign notes in a mixed vault are skipped, never touched |
+| `swarmdo memory backup` / `revectorize` | — | WAL-safe nightly DB snapshots (keep 7) · repair hash-era vectors |
+| `swarmdo compress <file>` | — | Caveman-compress a memory file from any terminal (e2e-verified 33% smaller; `<file>.original.md` backup kept); `--check` for a token-free dry run |
+| `swarmdo efficiency` | — | Toggle the caveman + ponytail skills per project (`on` / `off` / `status`) |
+
+Quick examples:
+
+```bash
+swarmdo usage blocks                              # 5h windows, live burn on the active one
+swarmdo usage guard --block-usd 5 --daily-usd 20 --strict
+swarmdo hud --watch                               # one screen for the whole install
+swarmdo repair --test "npm test -- auth" --confirm
+swarmdo changelog --version v1.4.4 --out NOTES.md # → gh release create --notes-file
+swarmdo hooks recipe notify-done --apply          # desktop ping when Claude finishes
+swarmdo memory export -o ./vault -f obsidian      # DB → Obsidian vault
+swarmdo memory import -i ./vault -f obsidian      # edited vault → DB (re-embedded)
+```
+
+> **Slash-command namespace (v1.4.0):** every Claude Code surface swarmdo installs is namespaced — commands as `/sDo:<category>:<name>` (e.g. `/sDo:swarm:swarm-init`, `/sDo:statusline`), skills with the `sdo-` prefix (e.g. `/sdo-ponytail`, `/sdo-caveman-compress`). Type `/sDo` and the whole toolkit groups together. Legacy unprefixed copies are removed automatically by `init` / upgrades / `efficiency on`.
 
 ---
 
