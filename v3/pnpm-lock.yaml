@@ -8294,8 +8294,6 @@ packages:
       '@metaharness/kernel': 0.1.0
       kolorist: 1.8.0
       prompts: 2.4.2
-    optionalDependencies:
-      '@swarmvector/swarmllm': 2.5.6
     dev: false
     optional: true
 
