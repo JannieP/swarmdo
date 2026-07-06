@@ -67,6 +67,9 @@ const commandLoaders: Record<string, CommandLoader> = {
   'tdd-repair': () => import('./repair.js'), // alias via loader key
   // Single-pane operational HUD (claude-hud demand, swarmdo-native sources)
   hud: () => import('./hud.js'),
+  // Isolated git worktrees for parallel work (claude-squad/vibe-kanban demand)
+  worktree: () => import('./worktree.js'),
+  wt: () => import('./worktree.js'), // alias via loader key
   // Q-Learning Routing Commands
   route: () => import('./route.js'),
   // Progress Commands
