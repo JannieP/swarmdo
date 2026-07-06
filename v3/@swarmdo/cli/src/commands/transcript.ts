@@ -11,6 +11,7 @@
 
 import * as fs from 'node:fs';
 import type { Command, CommandContext, CommandResult } from '../types.js';
+import { parseQuery, searchLines, rankMatches, type SessionMatch } from '../transcript/search.js';
 import { output } from '../output.js';
 import { listSessions, exportSession, type SessionSummary } from '../transcript/export.js';
 
@@ -102,11 +103,77 @@ const exportCommand: Command = {
   },
 };
 
+// Full-text search across session transcripts ("which session did I discuss X in?")
+const searchCommand: Command = {
+  name: 'search',
+  description: 'Search what you and Claude actually said across all session transcripts',
+  options: [
+    { name: 'limit', short: 'n', type: 'number', description: 'sessions to show', default: 10 },
+    { name: 'json', type: 'boolean', description: 'machine-readable output', default: false },
+  ],
+  examples: [
+    { command: 'swarmdo transcript search obsidian vault', description: 'Sessions mentioning both terms (AND)' },
+    { command: 'swarmdo tx search "npm publish" -n 5', description: 'Top 5 sessions about npm publish' },
+  ],
+  action: async (ctx: CommandContext): Promise<CommandResult> => {
+    const fs = await import('node:fs');
+    const { defaultClaudeProjectDirs, findTranscriptFiles } = await import('../usage/transcript-usage.js');
+    const { sessionIdFromFile } = await import('../transcript/export.js');
+    let terms: string[];
+    try {
+      terms = parseQuery(ctx.args.slice(1).join(' '));
+    } catch {
+      output.printError('usage: swarmdo transcript search <terms…>');
+      return { success: false, exitCode: 1 };
+    }
+    const matches: SessionMatch[] = [];
+    let scanned = 0;
+    for (const dir of defaultClaudeProjectDirs()) {
+      for (const { file, project } of findTranscriptFiles(dir)) {
+        scanned++;
+        let raw: string;
+        try { raw = fs.readFileSync(file, 'utf8'); } catch { continue; }
+        const lines = raw.split('\n').flatMap((l) => {
+          if (!l.trim()) return [];
+          try { return [JSON.parse(l)]; } catch { return []; }
+        });
+        const { hits, snippets } = searchLines(lines, terms);
+        if (hits > 0) {
+          let mtimeMs = 0;
+          try { mtimeMs = fs.statSync(file).mtimeMs; } catch { /* keep 0 */ }
+          matches.push({ sessionId: sessionIdFromFile(file), project, mtimeMs, hits, snippets });
+        }
+      }
+    }
+    const ranked = rankMatches(matches).slice(0, Number(ctx.flags.limit) || 10);
+    if (ctx.flags.json === true) {
+      output.printJson({ query: terms, scanned, matched: matches.length, sessions: ranked });
+      return { success: true, data: ranked };
+    }
+    if (ranked.length === 0) {
+      output.writeln(output.dim(`no sessions matched "${terms.join(' ')}" (${scanned} transcripts scanned)`));
+      return { success: true, exitCode: 0 };
+    }
+    output.writeln(output.bold(`${matches.length} session(s) match "${terms.join(' ')}"`) + output.dim(`  — ${scanned} transcripts scanned`));
+    for (const m of ranked) {
+      const when = m.mtimeMs ? new Date(m.mtimeMs).toISOString().slice(0, 16).replace('T', ' ') : '?';
+      output.writeln('');
+      output.writeln(`${output.info(m.sessionId.slice(0, 8))}  ${output.dim(when)}  ${m.hits} hit${m.hits === 1 ? '' : 's'}  ${output.dim(m.project)}`);
+      for (const sn of m.snippets) {
+        output.writeln(`   ${sn.role === 'user' ? '👤' : '🤖'} ${sn.snippet}`);
+      }
+    }
+    output.writeln('');
+    output.writeln(output.dim('open one:  swarmdo transcript export -s <id-prefix>'));
+    return { success: true, data: ranked };
+  },
+};
+
 export const transcriptCommand: Command = {
   name: 'transcript',
   aliases: ['tx'],
   description: 'Export Claude Code sessions to readable Markdown (list/export)',
-  subcommands: [listCommand, exportCommand],
+  subcommands: [listCommand, exportCommand, searchCommand],
   options: [],
   examples: [
     { command: 'swarmdo transcript list', description: 'Recent sessions, newest first' },
