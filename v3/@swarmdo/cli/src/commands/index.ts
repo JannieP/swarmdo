@@ -70,6 +70,9 @@ const commandLoaders: Record<string, CommandLoader> = {
   // Isolated git worktrees for parallel work (claude-squad/vibe-kanban demand)
   worktree: () => import('./worktree.js'),
   wt: () => import('./worktree.js'), // alias via loader key
+  // Export Claude Code sessions to Markdown (conversation-exporter demand)
+  transcript: () => import('./transcript.js'),
+  tx: () => import('./transcript.js'), // alias via loader key
   // Q-Learning Routing Commands
   route: () => import('./route.js'),
   // Progress Commands
