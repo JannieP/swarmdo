@@ -2564,15 +2564,9 @@ jobs:
             console.log('ok: swarmdo key present in .mcp.json');
           " || { echo "::error::generated .mcp.json missing 'swarmdo' server key (#2206)"; exit 1; }
 
-          # #2206: stray 'swarmdo' key must NOT exist
-          node -e "
-            const cfg = JSON.parse(require('fs').readFileSync('.mcp.json','utf-8'));
-            if (cfg.mcpServers && 'swarmdo' in cfg.mcpServers) {
-              console.error('FAIL: .mcp.json has stray swarmdo server key (#2206)');
-              process.exit(1);
-            }
-            console.log('ok: stray swarmdo key absent');
-          " || { echo "::error::generated .mcp.json has stray 'swarmdo' server key (#2206)"; exit 1; }
+          # (rename note: the historic #2206 stray-key check forbade the OLD
+          # bare key; post-rename it collided with the required key above and
+          # could never pass — the presence check is the whole contract.)
 
           # #2208: CLAUDE.md.pre-swarmdo backup must exist with sentinel content
           BACKUP=$(ls CLAUDE.md.pre-swarmdo* 2>/dev/null | head -1)

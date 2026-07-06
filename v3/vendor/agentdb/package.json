@@ -60,7 +60,6 @@
     "build:napi": "bash scripts/optimize-napi.sh",
     "build:wasm": "bash scripts/optimize-wasm.sh",
     "build:optimized": "npm run build:napi && npm run build:wasm && npm run build",
-    "postinstall": "node scripts/postinstall.cjs || true",
     "dev": "tsx src/cli/agentdb-cli.ts",
     "test": "vitest",
     "test:unit": "vitest --run",

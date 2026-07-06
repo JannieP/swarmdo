@@ -24,7 +24,7 @@
     "zod": "^3.22.4"
   },
   "peerDependencies": {
-    "@swarmdo/cli": ">=3.5.0"
+    "@swarmdo/cli": ">=1.4.0"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",

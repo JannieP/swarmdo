@@ -364,14 +364,13 @@ jobs:
   verification-report:
     name: 📊 Verification Report
     runs-on: ubuntu-latest
-    needs: [
-      setup-verification,
-      security-verification,
-      code-quality,
-      test-verification,
-      build-verification,
-      docs-verification
-    ]
+    needs:
+      - setup-verification
+      - security-verification
+      - code-quality
+      - test-verification
+      - build-verification
+      - docs-verification
     if: always()
     steps:
       - name: Checkout repository
