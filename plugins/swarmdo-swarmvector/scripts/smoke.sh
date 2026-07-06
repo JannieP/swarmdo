@@ -87,7 +87,7 @@ GNN_BINDING="$SCRIPT_DIR/../../../v3/@swarmvector/gnn/platforms/$(node -p 'proce
 if [[ -f "$GNN_BINDING" ]]; then
   grep -q "Status:.*Available" <<<"$out" && ok || bad "binding present but gnn did not report Available"
 else
-  grep -q "Status:" <<<"$out" && ok || bad "gnn info produced no Status line (graceful-unavailable expected)"
+  grep -qE "Status:|GNN Module: Not installed" <<<"$out" && ok || bad "gnn info produced neither a Status line nor the graceful not-installed message"
 fi
 
 step "info reports the engine CLI version"
