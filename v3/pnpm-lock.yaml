@@ -183,8 +183,8 @@ importers:
         specifier: file:../../@swarmvector/tiny-dancer
         version: link:../../@swarmvector/tiny-dancer
       agentdb:
-        specifier: ^3.0.0-alpha.17
-        version: 3.0.0-alpha.17(@types/node@20.19.27)(zod@3.25.76)
+        specifier: file:../../vendor/agentdb
+        version: link:../../vendor/agentdb
       agentic-flow:
         specifier: file:../../vendor/agentic-flow
         version: link:../../vendor/agentic-flow
@@ -400,7 +400,7 @@ importers:
     dependencies:
       agentdb:
         specifier: ^3.0.0-alpha.16
-        version: 3.0.0-alpha.17(@types/node@20.19.27)(zod@3.25.76)
+        version: link:../../vendor/agentdb
       sql.js:
         specifier: ^1.10.3
         version: 1.14.1
@@ -430,7 +430,7 @@ importers:
     optionalDependencies:
       agentdb:
         specifier: ^2.0.0 || ^3.0.0-alpha.1
-        version: 3.0.0-alpha.17(@types/node@20.19.27)(zod@3.25.76)
+        version: link:../../vendor/agentdb
 
   '@swarmdo/performance':
     dependencies:
@@ -462,7 +462,7 @@ importers:
         version: link:../shared
       agentic-flow:
         specifier: 2.0.12-fix.8
-        version: 2.0.12-fix.8(@types/node@20.19.27)
+        version: link:../../vendor/agentic-flow
       typescript:
         specifier: ^5.4.0
         version: 5.9.3
@@ -1620,7 +1620,7 @@ packages:
       '@swarmvector/rvf':
         optional: true
     dependencies:
-      '@swarmvector/emergent-time': 0.1.0
+      '@ruvector/emergent-time': 0.1.0
     dev: false
     optional: true
 
@@ -3772,6 +3772,11 @@ packages:
     dev: true
     optional: true
 
+  /@ruvector/emergent-time@0.1.0:
+    resolution: {integrity: sha512-GNy6SSvp44xgWREezVLbnY5F41Wa4AF7hFeE2drYh5MOon+RwxymfNlsjBoAL+osZj44DigPN1lD/yBcv8J8Dg==}
+    dev: false
+    optional: true
+
   /@sec-ant/readable-stream@0.4.1:
     resolution: {integrity: sha512-831qok9r2t8AlxLko40y2ebgSDhenenCatLVeW/uBtnHPyhHOvG0C7TvfgecV+wHzIm5KUICgzmVpWS+IMEAeg==}
 
@@ -5446,7 +5451,6 @@ packages:
       '@swarmvector/rvf-solver': 0.1.8
       '@swarmvector/rvf-wasm': 0.1.6
       '@swarmvector/sona': 0.1.7
-      '@swarmvector/swarmllm': 2.5.6
       '@xenova/transformers': 2.17.2
       argon2: 0.44.0
       better-sqlite3: 11.10.0
@@ -8311,7 +8315,6 @@ packages:
     engines: {node: '>=18.0.0'}
     dependencies:
       '@peculiar/webcrypto': 1.5.0
-      agentic-flow: 2.0.12-fix.8(@types/node@20.19.27)
     transitivePeerDependencies:
       - '@cfworker/json-schema'
       - '@modelcontextprotocol/sdk'
