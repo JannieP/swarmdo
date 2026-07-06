@@ -140,8 +140,9 @@ async function main() {
     console.error('Setup error: cannot proceed without OPENROUTER_API_KEY. Skipping further phases.');
     process.exit(2);
   }
-  // Echo only length+prefix, never the raw key
-  console.log(`  key length: ${apiKey.length}, prefix: ${apiKey.slice(0, 7)}…`);
+  // Echo only the length — never any slice of the key material itself
+  // (js/clear-text-logging: even a prefix is key-derived output).
+  console.log(`  key length: ${apiKey.length} (value redacted)`);
 
   // ── 2. Verify the key authenticates against OpenRouter ────────────
   console.log('\nPhase 2 — verify OpenRouter authentication');

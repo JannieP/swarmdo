@@ -194,7 +194,18 @@ async function analyzeLogs(args, logger) {
     files: {},
   };
 
-  const regex = new RegExp(pattern, 'i');
+  // js/regex-injection hardening: the pattern is an operator-supplied CLI
+  // arg searching the operator's own logs, so regex power is intentional —
+  // but an invalid or pathological pattern must not crash or hang the
+  // diagnostics tool. Cap length and fall back to literal matching when the
+  // pattern doesn't compile.
+  let regex;
+  const bounded = String(pattern).slice(0, 256);
+  try {
+    regex = new RegExp(bounded, 'i');
+  } catch {
+    regex = new RegExp(bounded.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+  }
 
   logFiles.forEach(file => {
     const content = fs.readFileSync(path.join(logDir, file), 'utf8');

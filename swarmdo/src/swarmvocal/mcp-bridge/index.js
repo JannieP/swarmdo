@@ -1077,7 +1077,7 @@ function createMcpHandler(groupName) {
           return res.json({ jsonrpc: "2.0", id, error: { code: -32601, message: `Method not found: ${method}` } });
       }
     } catch (err) {
-      console.error(`MCP error [${groupName}/${method}]:`, err);
+      console.error('MCP error [%s/%s]:', groupName, method, err);
       return res.json({ jsonrpc: "2.0", id, error: { code: -32603, message: err.message } });
     }
   };
@@ -1132,7 +1132,7 @@ app.post("/mcp", async (req, res) => {
         return res.json({ jsonrpc: "2.0", id, error: { code: -32601, message: `Method not found: ${method}` } });
     }
   } catch (err) {
-    console.error(`MCP error [${method}]:`, err);
+    console.error('MCP error [%s]:', method, err);
     return res.json({ jsonrpc: "2.0", id, error: { code: -32603, message: err.message } });
   }
 });
@@ -1819,7 +1819,7 @@ app.post("/chat/completions", async (req, res) => {
       res.send(await upstream.text());
     }
   } catch (err) {
-    console.error(`Proxy error [${providerName}/${model}]:`, err.message);
+    console.error('Proxy error [%s/%s]: %s', providerName, model, err.message);
     res.status(502).json({ error: { message: `Upstream error: ${err.message}` } });
   }
 });
