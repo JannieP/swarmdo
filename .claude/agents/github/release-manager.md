@@ -193,7 +193,7 @@ This release is production-ready with comprehensive validation and testing.
   
   // Update all release-related files
   Write("/tmp/release-v1.0.72/claude-code-flow/claude-code-flow/package.json", "[updated package.json]")
-  Write("/tmp/release-v1.0.72/swarmdo-swarm/npm/package.json", "[updated package.json]")
+  Write("/tmp/release-v1.0.72/sDo:swarmdo-swarm/npm/package.json", "[updated package.json]")
   Write("/tmp/release-v1.0.72/CHANGELOG.md", "[release changelog]")
   Write("/tmp/release-v1.0.72/RELEASE_NOTES.md", "[detailed release notes]")
   
@@ -318,7 +318,7 @@ jobs:
       - name: Install and Test
         run: |
           cd claude-code-flow/claude-code-flow && npm install && npm test
-          cd ../../swarmdo-swarm/npm && npm install && npm test:all
+          cd ../../sDo:swarmdo-swarm/npm && npm install && npm test:all
       - name: Validate Release
         run: npx swarmdo release validate
 ```

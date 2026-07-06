@@ -373,7 +373,7 @@ const initAction = async (ctx: CommandContext): Promise<CommandResult> => {
           options.components.claudeMd ? `CLAUDE.md:   Swarm guidance & configuration` : '',
           options.components.settings ? `Settings:    .claude/settings.json` : '',
           options.components.skills ? `Skills:      .claude/skills/ (${result.summary.skillsCount} skills)` : '',
-          options.components.commands ? `Commands:    .claude/commands/ (${result.summary.commandsCount} commands)` : '',
+          options.components.commands ? `Commands:    .claude/commands/sDo/ (${result.summary.commandsCount} commands)` : '',
           options.components.agents ? `Agents:      .claude/agents/ (${result.summary.agentsCount} agents)` : '',
           options.components.helpers ? `Helpers:     .claude/helpers/` : '',
           options.components.mcp ? `MCP:         .mcp.json` : '',

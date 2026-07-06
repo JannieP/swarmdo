@@ -19,10 +19,10 @@ done
 [[ $n -eq 6 ]] && ok || bad "$n/6 skills valid"
 
 step "3. core skill declares intensity levels"
-grep -q "lite|full|ultra\|lite, full\|lite|full" "$ROOT/skills/ponytail/SKILL.md" && ok || bad "intensity levels missing"
+grep -q "lite|full|ultra\|lite, full\|lite|full" "$ROOT/skills/sdo-ponytail/SKILL.md" && ok || bad "intensity levels missing"
 
 step "4. MIT license declared"
-grep -q "license: MIT" "$ROOT/skills/ponytail/SKILL.md" && ok || bad "license line missing"
+grep -q "license: MIT" "$ROOT/skills/sdo-ponytail/SKILL.md" && ok || bad "license line missing"
 
 printf "\n%d passed, %d failed\n" "$PASS" "$FAIL"
 [[ $FAIL -eq 0 ]]

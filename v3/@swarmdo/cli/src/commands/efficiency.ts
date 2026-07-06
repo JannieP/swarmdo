@@ -14,14 +14,19 @@ import { fileURLToPath } from 'node:url';
 import type { Command, CommandContext, CommandResult } from '../types.js';
 import { output } from '../output.js';
 
-export const EFFICIENCY_SKILLS = ['caveman-compress', 'ponytail'] as const;
+// v1.4.0: all swarmdo skills carry the sdo- prefix so they group together in
+// Claude Code's `/` menu (/sdo-caveman-compress, /sdo-ponytail).
+export const EFFICIENCY_SKILLS = ['sdo-caveman-compress', 'sdo-ponytail'] as const;
+
+/** Pre-1.4.0 unprefixed installs, cleaned up on `on`/`off`. */
+const LEGACY_EFFICIENCY_SKILLS = ['caveman-compress', 'ponytail'] as const;
 
 /** Bundled skill sources: cli package .claude/skills, else monorepo plugins. */
 export function resolveBundledSkill(name: string, cwd: string): string | null {
   const pkgRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
   const candidates = [
     path.join(pkgRoot, '.claude', 'skills', name),
-    path.join(cwd, 'plugins', name === 'ponytail' ? 'swarmdo-ponytail' : 'swarmdo-caveman', 'skills', name),
+    path.join(cwd, 'plugins', name.includes('ponytail') ? 'swarmdo-ponytail' : 'swarmdo-caveman', 'skills', name),
   ];
   for (const c of candidates) if (fs.existsSync(path.join(c, 'SKILL.md'))) return c;
   return null;
@@ -41,6 +46,11 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
   const dest = path.join(cwd, '.claude', 'skills');
 
   if (action === 'on') {
+    for (const legacy of LEGACY_EFFICIENCY_SKILLS) {
+      // v1.4.0 migration: replace pre-namespace installs
+      const old = path.join(dest, legacy);
+      if (fs.existsSync(old)) fs.rmSync(old, { recursive: true, force: true });
+    }
     for (const s of EFFICIENCY_SKILLS) {
       const src = resolveBundledSkill(s, cwd);
       if (!src) {
@@ -50,17 +60,17 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
       fs.cpSync(src, path.join(dest, s), { recursive: true });
       output.writeln(output.success(`✓ ${s} → .claude/skills/${s}`));
     }
-    output.writeln(output.dim('skills are user-invoked (/caveman-compress, /ponytail) — on = available, never automatic'));
+    output.writeln(output.dim('skills are user-invoked (/sdo-caveman-compress, /sdo-ponytail) — on = available, never automatic'));
     return { success: true, exitCode: 0 };
   }
 
   if (action === 'off') {
-    for (const s of EFFICIENCY_SKILLS) {
+    for (const s of [...EFFICIENCY_SKILLS, ...LEGACY_EFFICIENCY_SKILLS]) {
       const dir = path.join(dest, s);
       if (fs.existsSync(dir)) {
         fs.rmSync(dir, { recursive: true, force: true });
         output.writeln(output.success(`✓ removed .claude/skills/${s}`));
-      } else {
+      } else if ((EFFICIENCY_SKILLS as readonly string[]).includes(s)) {
         output.writeln(output.dim(`  ${s}: already off`));
       }
     }

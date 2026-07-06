@@ -293,8 +293,8 @@
       <div class="feat"><svg class="diag" viewBox="0 0 300 96" aria-hidden="true"><circle cx="40" cy="30" r="2.5" fill="#66737f"/><circle cx="58" cy="52" r="2.5" fill="#66737f"/><circle cx="76" cy="24" r="2.5" fill="#66737f"/><circle cx="96" cy="66" r="2.5" fill="#66737f"/><circle cx="118" cy="38" r="2.5" fill="#66737f"/><circle cx="142" cy="58" r="2.5" fill="#66737f"/><circle cx="170" cy="28" r="2.5" fill="#66737f"/><circle cx="196" cy="70" r="2.5" fill="#66737f"/><circle cx="222" cy="44" r="3.2" fill="#83b98a"/><circle cx="238" cy="36" r="3.2" fill="#83b98a"/><circle cx="230" cy="58" r="3.2" fill="#83b98a"/><circle cx="250" cy="50" r="3.2" fill="#83b98a"/><circle cx="236" cy="47" r="22" fill="none" stroke="#e2a33c" stroke-width="1.4" stroke-dasharray="4 4"/><circle cx="236" cy="47" r="3.6" fill="#e2a33c"/><text x="40" y="90" font-family="monospace" font-size="9" fill="#66737f">HNSW query → nearest neighbours</text></svg><h3><span class="fk">⛁</span>Vector memory</h3><p>AgentDB-backed persistent memory with HNSW indexing — semantic search across sessions, namespaces shared by every agent in the swarm.</p></div>
       <div class="feat"><h3><span class="fk">⚡</span>swarmvector for Postgres</h3><p>A pgvector-compatible extension with 230+ SQL functions, SIMD, and quantization. <code style="font-family:var(--mono);font-size:12.5px;color:var(--bright)">CREATE EXTENSION swarmvector</code> — verified on PostgreSQL 16.</p></div>
       <div class="feat"><h3><span class="fk">🪝</span>Self-learning hooks</h3><p>27 lifecycle hooks and 12 background workers record what succeeded, train routing patterns, and preload context before you ask.</p></div>
-      <div class="feat"><h3><span class="fk">🪨</span>Caveman compression</h3><p>Why use many token when few token do trick. <code style="font-family:var(--mono);font-size:12.5px;color:var(--bright)">/caveman-compress</code> rewrites memory files into few-token caveman-speak — substance, code, and URLs preserved, backup kept. Vendored from the 82k-star original (MIT).</p></div>
-      <div class="feat"><h3><span class="fk">💤</span>Ponytail mode</h3><p>The laziest senior dev in the room, on demand. <code style="font-family:var(--mono);font-size:12.5px;color:var(--bright)">/ponytail</code> forces the simplest solution that works: YAGNI, stdlib before dependencies, one line before fifty. Three intensities + audit and review lenses (MIT).</p></div>
+      <div class="feat"><h3><span class="fk">🪨</span>Caveman compression</h3><p>Why use many token when few token do trick. <code style="font-family:var(--mono);font-size:12.5px;color:var(--bright)">/sdo-caveman-compress</code> rewrites memory files into few-token caveman-speak — substance, code, and URLs preserved, backup kept. Vendored from the 82k-star original (MIT).</p></div>
+      <div class="feat"><h3><span class="fk">💤</span>Ponytail mode</h3><p>The laziest senior dev in the room, on demand. <code style="font-family:var(--mono);font-size:12.5px;color:var(--bright)">/sdo-ponytail</code> forces the simplest solution that works: YAGNI, stdlib before dependencies, one line before fifty. Three intensities + audit and review lenses (MIT).</p></div>
       <div class="feat"><h3><span class="fk">▊</span>A statusline you control</h3><p>Eleven segments, three presets, one checklist. Run <code style="font-family:var(--mono);font-size:12.5px;color:var(--bright)">/statusline</code> inside Claude Code and tick exactly what you want to see.</p></div>
     </div>
     <div class="sl-embed" id="statusline">
@@ -347,7 +347,7 @@
     <div class="eff-grid">
       <div class="eff">
         <h3><span class="fk">🪨</span>Caveman compression</h3>
-        <p>Memory files (CLAUDE.md, notes, todos) get re-read every session — and they're written for humans, not token budgets. <code>/caveman-compress</code> rewrites them in few-token caveman-speak: substance, code, and URLs preserved, original backed up.</p>
+        <p>Memory files (CLAUDE.md, notes, todos) get re-read every session — and they're written for humans, not token budgets. <code>/sdo-caveman-compress</code> rewrites them in few-token caveman-speak: substance, code, and URLs preserved, original backed up.</p>
         <div class="eff-term" role="img" aria-label="before and after caveman compression">
           <div class="eff-pane"><span class="eff-tag">before · 891 bytes</span>The team prefers that all new modules are written in TypeScript with strict mode enabled. When you are creating a new API endpoint, please remember to add input validation…</div>
           <div class="eff-arrow">→ 33% smaller</div>
@@ -357,7 +357,7 @@
       </div>
       <div class="eff">
         <h3><span class="fk">💤</span>Ponytail mode</h3>
-        <p>The laziest senior dev in the room, on demand. <code>/ponytail</code> applies one lens to everything: the best code is the code never written.</p>
+        <p>The laziest senior dev in the room, on demand. <code>/sdo-ponytail</code> applies one lens to everything: the best code is the code never written.</p>
         <ul class="eff-rules">
           <li>Question whether the task needs to exist at all (YAGNI)</li>
           <li>Standard library before dependencies</li>
@@ -368,7 +368,7 @@
         <p class="eff-foot">Explicit <code>ponytail: false</code> always wins over the env. Skills are user-invoked: on means available, never automatic.</p>
       </div>
     </div>
-    <p class="eff-credit">Vendored with attribution from the MIT originals: <a href="https://github.com/JuliusBrussee/caveman">caveman</a> by Julius Brussee and <a href="https://github.com/DietrichGebert/ponytail">ponytail</a> by Dietrich Gebert — see <a href="https://github.com/JannieP/swarmdo/blob/main/NOTICE">NOTICE</a>.</p>
+    <p class="eff-credit">Vendored with attribution from the MIT originals: <a href="https://github.com/JuliusBrussee/sdo-caveman">caveman</a> by Julius Brussee and <a href="https://github.com/DietrichGebert/sdo-ponytail">ponytail</a> by Dietrich Gebert — see <a href="https://github.com/JannieP/swarmdo/blob/main/NOTICE">NOTICE</a>.</p>
   </div>
 </section>
 

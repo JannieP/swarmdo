@@ -18,13 +18,15 @@ import { output } from '../output.js';
 
 /** Locate the bundled caveman-compress skill dir (has scripts/__main__.py). */
 export function resolveSkillDir(cwd: string = process.cwd()): string | null {
+  const pkgSkills = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '.claude', 'skills');
   const candidates = [
-    // project initialized with `swarmdo init`
-    path.join(cwd, '.claude', 'skills', 'caveman-compress'),
+    // project initialized with `swarmdo init` (sdo- namespaced since v1.4.0)
+    path.join(cwd, '.claude', 'skills', 'sdo-caveman-compress'),
+    path.join(cwd, '.claude', 'skills', 'caveman-compress'), // pre-1.4.0 install
     // bundled with @swarmdo/cli (dist/src/commands -> package root/.claude)
-    path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '.claude', 'skills', 'caveman-compress'),
+    path.join(pkgSkills, 'sdo-caveman-compress'),
     // monorepo plugin source
-    path.join(cwd, 'plugins', 'swarmdo-caveman', 'skills', 'caveman-compress'),
+    path.join(cwd, 'plugins', 'swarmdo-caveman', 'skills', 'sdo-caveman-compress'),
   ];
   for (const c of candidates) {
     if (fs.existsSync(path.join(c, 'scripts', '__main__.py'))) return c;

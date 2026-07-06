@@ -1,10 +1,10 @@
 {
   "name": "swarmdo-ponytail",
   "version": "1.0.0",
-  "description": "Ponytail for swarmdo — makes agents think like the laziest senior dev in the room: YAGNI, stdlib before dependencies, one line before fifty. Intensity levels lite/full/ultra plus audit, review, debt, and gain sub-skills. Vendored from DietrichGebert/ponytail (MIT).",
+  "description": "Ponytail for swarmdo — makes agents think like the laziest senior dev in the room: YAGNI, stdlib before dependencies, one line before fifty. Intensity levels lite/full/ultra plus audit, review, debt, and gain sub-skills. Vendored from DietrichGebert/sdo-ponytail (MIT).",
   "author": {
-    "name": "swarmdo (vendored from DietrichGebert/ponytail, MIT)",
-    "url": "https://github.com/DietrichGebert/ponytail"
+    "name": "swarmdo (vendored from DietrichGebert/sdo-ponytail, MIT)",
+    "url": "https://github.com/DietrichGebert/sdo-ponytail"
   },
   "license": "MIT",
   "homepage": "https://swarmdo.com",

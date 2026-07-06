@@ -20,7 +20,7 @@ done
 
 step "3. compress pipeline imports (token-free modules)"
 python3 -c "
-import sys; sys.path.insert(0,'$ROOT/skills/caveman-compress')
+import sys; sys.path.insert(0,'$ROOT/skills/sdo-caveman-compress')
 from scripts.detect import detect_file_type, should_compress
 from scripts import validate
 " 2>/dev/null && ok || bad "python imports failed"
@@ -28,7 +28,7 @@ from scripts import validate
 step "4. detect classifies natural language vs config correctly"
 python3 -c "
 import sys, tempfile, os
-sys.path.insert(0,'$ROOT/skills/caveman-compress')
+sys.path.insert(0,'$ROOT/skills/sdo-caveman-compress')
 from pathlib import Path
 from scripts.detect import detect_file_type
 md = tempfile.NamedTemporaryFile(suffix='.md', delete=False, mode='w'); md.write('# Notes\n\nThis is a long natural language document about the project goals and how we should approach the work over time.\n'); md.close()

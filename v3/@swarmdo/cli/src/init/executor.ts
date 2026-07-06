@@ -31,51 +31,73 @@ import {
 import { generateClaudeMd } from './claudemd-generator.js';
 
 /**
+ * All swarmdo slash-command surfaces are namespaced so they group together in
+ * Claude Code's `/` menu instead of scattering between built-ins (v1.4.0):
+ * - commands live under `.claude/commands/sDo/` → invoked as `/sDo:<name>`
+ * - skills are prefixed `sdo-` → `/sdo-<name>` (skill names must be lowercase,
+ *   so the colon form is not available for project skills)
+ */
+export const SDO_COMMANDS_NS = 'sDo';
+export const SDO_SKILL_PREFIX = 'sdo-';
+
+/** Remove a pre-1.4.0 unprefixed copy of a skill/command when installing the
+ * namespaced one, so upgrades don't leave duplicate menu entries behind. */
+function removeLegacyPath(legacyPath: string): boolean {
+  try {
+    if (fs.existsSync(legacyPath)) {
+      fs.rmSync(legacyPath, { recursive: true, force: true });
+      return true;
+    }
+  } catch { /* best-effort migration */ }
+  return false;
+}
+
+/**
  * Skills to copy based on configuration
  */
 const SKILLS_MAP: Record<string, string[]> = {
   core: [
-    'swarm-orchestration',
-    'swarm-advanced',
-    'sparc-methodology',
-    'hooks-automation',
-    'pair-programming',
-    'verification-quality',
-    'stream-chain',
-    'skill-builder',
+    'sdo-swarm-orchestration',
+    'sdo-swarm-advanced',
+    'sdo-sparc-methodology',
+    'sdo-hooks-automation',
+    'sdo-pair-programming',
+    'sdo-verification-quality',
+    'sdo-stream-chain',
+    'sdo-skill-builder',
   ],
-  browser: ['browser'],  // agent-browser integration
-  dualMode: ['dual-mode'],  // Claude Code + Codex hybrid execution
+  browser: ['sdo-browser'],  // agent-browser integration
+  dualMode: ['sdo-dual-mode'],  // Claude Code + Codex hybrid execution
   agentdb: [
-    'agentdb-advanced',
-    'agentdb-learning',
-    'agentdb-memory-patterns',
-    'agentdb-optimization',
-    'agentdb-vector-search',
-    'reasoningbank-agentdb',
-    'reasoningbank-intelligence',
+    'sdo-agentdb-advanced',
+    'sdo-agentdb-learning',
+    'sdo-agentdb-memory-patterns',
+    'sdo-agentdb-optimization',
+    'sdo-agentdb-vector-search',
+    'sdo-reasoningbank-agentdb',
+    'sdo-reasoningbank-intelligence',
   ],
   github: [
-    'github-code-review',
-    'github-multi-repo',
-    'github-project-management',
-    'github-release-management',
-    'github-workflow-automation',
+    'sdo-github-code-review',
+    'sdo-github-multi-repo',
+    'sdo-github-project-management',
+    'sdo-github-release-management',
+    'sdo-github-workflow-automation',
   ],
   efficiency: [
-    'caveman-compress',
-    'ponytail',
+    'sdo-caveman-compress',
+    'sdo-ponytail',
   ],
   v3: [
-    'v3-cli-modernization',
-    'v3-core-implementation',
-    'v3-ddd-architecture',
-    'v3-integration-deep',
-    'v3-mcp-optimization',
-    'v3-memory-unification',
-    'v3-performance-optimization',
-    'v3-security-overhaul',
-    'v3-swarm-coordination',
+    'sdo-v3-cli-modernization',
+    'sdo-v3-core-implementation',
+    'sdo-v3-ddd-architecture',
+    'sdo-v3-integration-deep',
+    'sdo-v3-mcp-optimization',
+    'sdo-v3-memory-unification',
+    'sdo-v3-performance-optimization',
+    'sdo-v3-security-overhaul',
+    'sdo-v3-swarm-coordination',
   ],
 };
 
@@ -149,6 +171,7 @@ const DIRECTORIES = {
     '.claude',
     '.claude/skills',
     '.claude/commands',
+    '.claude/commands/sDo',
     '.claude/agents',
     '.claude/helpers',
   ],
@@ -678,7 +701,8 @@ export async function executeUpgradeWithMissing(targetDir: string, upgradeSettin
     // Ensure target directories exist
     const skillsDir = path.join(targetDir, '.claude', 'skills');
     const agentsDir = path.join(targetDir, '.claude', 'agents');
-    const commandsDir = path.join(targetDir, '.claude', 'commands');
+    const commandsRootDir = path.join(targetDir, '.claude', 'commands');
+    const commandsDir = path.join(commandsRootDir, SDO_COMMANDS_NS);
 
     for (const dir of [skillsDir, agentsDir, commandsDir]) {
       if (!fs.existsSync(dir)) {
@@ -716,10 +740,16 @@ export async function executeUpgradeWithMissing(targetDir: string, upgradeSettin
           console.log(`[DEBUG] Skill '${skillName}': source=${sourceExists}, target=${targetExists}`);
         }
 
-        if (sourceExists && !targetExists) {
-          copyDirRecursive(sourcePath, targetPath);
-          result.addedSkills.push(skillName);
-          result.created.push(`.claude/skills/${skillName}`);
+        if (sourceExists) {
+          // v1.4.0 migration: drop the pre-namespace copy
+          if (skillName.startsWith(SDO_SKILL_PREFIX)) {
+            removeLegacyPath(path.join(skillsDir, skillName.slice(SDO_SKILL_PREFIX.length)));
+          }
+          if (!targetExists) {
+            copyDirRecursive(sourcePath, targetPath);
+            result.addedSkills.push(skillName);
+            result.created.push(`.claude/skills/${skillName}`);
+          }
         }
       }
     }
@@ -739,21 +769,27 @@ export async function executeUpgradeWithMissing(targetDir: string, upgradeSettin
       }
     }
 
-    // Add missing commands
+    // Add missing commands (source nests under sDo/ since v1.4.0)
     if (sourceCommandsDir) {
+      const nsSource = path.join(sourceCommandsDir, SDO_COMMANDS_NS);
+      const effectiveSource = fs.existsSync(nsSource) ? nsSource : sourceCommandsDir;
       const allCommands = Object.values(COMMANDS_MAP).flat();
       for (const cmdName of [...new Set(allCommands)]) {
-        const sourcePath = path.join(sourceCommandsDir, cmdName);
+        const sourcePath = path.join(effectiveSource, cmdName);
         const targetPath = path.join(commandsDir, cmdName);
 
-        if (fs.existsSync(sourcePath) && !fs.existsSync(targetPath)) {
-          if (fs.statSync(sourcePath).isDirectory()) {
-            copyDirRecursive(sourcePath, targetPath);
-          } else {
-            fs.copyFileSync(sourcePath, targetPath);
+        if (fs.existsSync(sourcePath)) {
+          // v1.4.0 migration: drop the pre-namespace flat copy
+          removeLegacyPath(path.join(commandsRootDir, cmdName));
+          if (!fs.existsSync(targetPath)) {
+            if (fs.statSync(sourcePath).isDirectory()) {
+              copyDirRecursive(sourcePath, targetPath);
+            } else {
+              fs.copyFileSync(sourcePath, targetPath);
+            }
+            result.addedCommands.push(cmdName);
+            result.created.push(`.claude/commands/${SDO_COMMANDS_NS}/${cmdName}`);
           }
-          result.addedCommands.push(cmdName);
-          result.created.push(`.claude/commands/${cmdName}`);
         }
       }
     }
@@ -1039,6 +1075,10 @@ async function copySkills(
     const targetPath = path.join(targetSkillsDir, skillName);
 
     if (fs.existsSync(sourcePath)) {
+      // v1.4.0 migration: drop the pre-namespace copy (`ponytail` → `sdo-ponytail`)
+      if (skillName.startsWith(SDO_SKILL_PREFIX)) {
+        removeLegacyPath(path.join(targetSkillsDir, skillName.slice(SDO_SKILL_PREFIX.length)));
+      }
       if (!fs.existsSync(targetPath) || options.force) {
         copyDirRecursive(sourcePath, targetPath);
         result.created.files.push(`.claude/skills/${skillName}`);
@@ -1059,7 +1099,9 @@ async function copyCommands(
   result: InitResult
 ): Promise<void> {
   const commandsConfig = options.commands;
-  const targetCommandsDir = path.join(targetDir, '.claude', 'commands');
+  // v1.4.0: commands install under the sDo/ namespace → invoked as /sDo:<name>
+  const commandsRootDir = path.join(targetDir, '.claude', 'commands');
+  const targetCommandsDir = path.join(commandsRootDir, SDO_COMMANDS_NS);
 
   // Determine which commands to copy
   const commandsToCopy: string[] = [];
@@ -1090,12 +1132,17 @@ async function copyCommands(
     if (commandsConfig.verify) commandsToCopy.push(...(COMMANDS_MAP.verify || []));
   }
 
-  // Find source commands directory
-  const sourceCommandsDir = findSourceDir('commands', options.sourceBaseDir);
-  if (!sourceCommandsDir) {
+  // Find source commands directory (template trees nest under sDo/ since
+  // v1.4.0; fall back to a flat source for older checkouts)
+  const sourceCommandsRoot = findSourceDir('commands', options.sourceBaseDir);
+  if (!sourceCommandsRoot) {
     result.errors.push('Could not find source commands directory');
     return;
   }
+  const nsSource = path.join(sourceCommandsRoot, SDO_COMMANDS_NS);
+  const sourceCommandsDir = fs.existsSync(nsSource) ? nsSource : sourceCommandsRoot;
+
+  fs.mkdirSync(targetCommandsDir, { recursive: true });
 
   // Copy each command/directory
   for (const cmdName of [...new Set(commandsToCopy)]) {
@@ -1103,16 +1150,18 @@ async function copyCommands(
     const targetPath = path.join(targetCommandsDir, cmdName);
 
     if (fs.existsSync(sourcePath)) {
+      // v1.4.0 migration: drop the pre-namespace flat copy (/swarm:* → /sDo:swarm:*)
+      removeLegacyPath(path.join(commandsRootDir, cmdName));
       if (!fs.existsSync(targetPath) || options.force) {
         if (fs.statSync(sourcePath).isDirectory()) {
           copyDirRecursive(sourcePath, targetPath);
         } else {
           fs.copyFileSync(sourcePath, targetPath);
         }
-        result.created.files.push(`.claude/commands/${cmdName}`);
+        result.created.files.push(`.claude/commands/${SDO_COMMANDS_NS}/${cmdName}`);
         result.summary.commandsCount++;
       } else {
-        result.skipped.push(`.claude/commands/${cmdName}`);
+        result.skipped.push(`.claude/commands/${SDO_COMMANDS_NS}/${cmdName}`);
       }
     }
   }

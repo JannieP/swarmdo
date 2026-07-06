@@ -1,8 +1,8 @@
-# Claude Code Configuration - Swarmdo v1.3
+# Claude Code Configuration - Swarmdo v1.4
 
-> **Swarmdo v1.3.0** (2026-07-04) — caveman + ponytail built in, `swarmdo compress`, configurable statusline.
+> **Swarmdo v1.4.0** (2026-07-06) — every swarmdo slash command namespaced under `sDo` (`/sDo:swarm:init`, skills `/sdo-ponytail`) so they group together in Claude Code's `/` menu; legacy unprefixed copies auto-migrated on init/upgrade.
 > 6,000+ commits, 314 MCP tools, 16 agent roles + custom types, 19 AgentDB controllers, 21 native plugins.
-> Packages: `swarmdo@1.3.0` (umbrella), `@swarmdo/cli@1.3.0`, `swarmdo-bridge@1.3.0` (wrapper in `swarmdo/`)
+> Packages: `swarmdo@1.4.0` (umbrella), `@swarmdo/cli@1.4.0`, `swarmdo-bridge@1.4.0` (wrapper in `swarmdo/`)
 
 ## Behavioral Rules (Always Enforced)
 
@@ -363,8 +363,8 @@ This project is configured with Swarmdo V3 (Anti-Drift Defaults):
 
 Run `swarmdo preset info efficiency` for the full guide. Both are **user-invoked** skills (available, never automatic), toggled per-project with `swarmdo efficiency on|off|status`:
 
-- **🦴 caveman** — *token compression* (vendored from JuliusBrussee/caveman, MIT). In Claude Code, type `/caveman-compress <file>` to rewrite a memory file (CLAUDE.md, todos, preferences) into caveman-speak — cuts input tokens while preserving all code, URLs, and structure; a human-readable backup is kept as `<file>.original.md`. Also `/caveman` (speak compressed in-session), `cavecrew` (compressed multi-agent crew), `caveman-stats` (measure savings). Reverse by restoring the `.original.md`.
-- **🎯 ponytail** — *anti-over-engineering* (vendored from DietrichGebert/ponytail, MIT). Type `/ponytail [lite|full|ultra]` to channel a lazy senior dev on a coding task (YAGNI, standard library before custom code, native features before dependencies, one line before fifty); stays active every response until you say "stop ponytail". Also `ponytail-audit` (score a codebase), `ponytail-review` (apply to a diff), `ponytail-debt`/`ponytail-gain` (track simplicity debt/wins). For swarm agents, pass `ponytail:true` per `agent_run`/`agent_execute` call, or set `SWARMDO_PONYTAIL=1` to make it the default persona for every agent.
+- **🦴 caveman** — *token compression* (vendored from JuliusBrussee/sdo-caveman, MIT). In Claude Code, type `/sdo-caveman-compress <file>` to rewrite a memory file (CLAUDE.md, todos, preferences) into caveman-speak — cuts input tokens while preserving all code, URLs, and structure; a human-readable backup is kept as `<file>.original.md`. Also `/sdo-caveman` (speak compressed in-session), `sdo-cavecrew` (compressed multi-agent crew), `sdo-caveman-stats` (measure savings). Reverse by restoring the `.original.md`.
+- **🎯 ponytail** — *anti-over-engineering* (vendored from DietrichGebert/sdo-ponytail, MIT). Type `/sdo-ponytail [lite|full|ultra]` to channel a lazy senior dev on a coding task (YAGNI, standard library before custom code, native features before dependencies, one line before fifty); stays active every response until you say "stop ponytail". Also `sdo-ponytail-audit` (score a codebase), `sdo-ponytail-review` (apply to a diff), `sdo-ponytail-debt`/`sdo-ponytail-gain` (track simplicity debt/wins). For swarm agents, pass `ponytail:true` per `agent_run`/`agent_execute` call, or set `SWARMDO_PONYTAIL=1` to make it the default persona for every agent.
 
 ## V3 CLI Commands (26 Commands, 140+ Subcommands)
 

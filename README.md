@@ -200,7 +200,7 @@ Memory files (CLAUDE.md, notes, todos) get re-read every session — and they're
 
 ```bash
 # Inside Claude Code
-/caveman-compress CLAUDE.md
+/sdo-caveman-compress CLAUDE.md
 
 # From any terminal — no Claude Code session needed
 swarmdo compress CLAUDE.md
@@ -213,7 +213,7 @@ The laziest senior dev in the room, on demand: YAGNI, standard library before de
 
 ```bash
 # Inside Claude Code
-/ponytail            # lite | full | ultra
+/sdo-ponytail            # lite | full | ultra
 
 # For spawned agents — per call:
 #   agent_run / agent_execute with ponytail: true
@@ -232,7 +232,7 @@ Everything is opt-in and reversible — skills are user-invoked, so "on" means *
 | Per agent | `ponytail: true/false` on the spawn call |
 | Globally | `SWARMDO_PONYTAIL=1` env |
 
-Credits: [caveman](https://github.com/JuliusBrussee/caveman) by Julius Brussee · [ponytail](https://github.com/DietrichGebert/ponytail) by Dietrich Gebert (both MIT).
+Credits: [caveman](https://github.com/JuliusBrussee/sdo-caveman) by Julius Brussee · [ponytail](https://github.com/DietrichGebert/sdo-ponytail) by Dietrich Gebert (both MIT).
 
 ## What You Get
 

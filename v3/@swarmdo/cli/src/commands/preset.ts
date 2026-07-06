@@ -101,11 +101,11 @@ function renderEfficiencyGuide(): CommandResult {
   output.writeln('  Cuts INPUT tokens by rewriting memory files into caveman-speak — all code,');
   output.writeln('  URLs, and structure preserved. From Claude Code, type these slash commands:');
   output.printList([
-    '/caveman-compress <file>  — compress a memory file (CLAUDE.md, todos, prefs).',
-    '                            Overwrites it; keeps <file>.original.md as a backup.',
-    '/caveman                  — speak compressed for the rest of the session.',
-    'cavecrew                  — run a compressed multi-agent crew.',
-    'caveman-stats             — measure the tokens saved.',
+    '/sdo-caveman-compress <file>  — compress a memory file (CLAUDE.md, todos, prefs).',
+    '                                Overwrites it; keeps <file>.original.md as a backup.',
+    '/sdo-caveman                  — speak compressed for the rest of the session.',
+    'sdo-cavecrew                  — run a compressed multi-agent crew.',
+    'sdo-caveman-stats             — measure the tokens saved.',
   ]);
   output.writeln(output.dim('  Reverse it by restoring <file>.original.md. Also: swarmdo compress.'));
   output.writeln();
@@ -113,11 +113,11 @@ function renderEfficiencyGuide(): CommandResult {
   output.writeln('  Channels a lazy senior dev on coding tasks: YAGNI, standard library before');
   output.writeln('  custom code, native features before dependencies, one line before fifty.');
   output.printList([
-    '/ponytail [lite|full|ultra]  — engage on the current task (default: full).',
-    '                               Stays active every response until "stop ponytail".',
-    'ponytail-audit               — score a codebase for over-engineering.',
-    'ponytail-review              — apply the lens to a diff.',
-    'ponytail-debt / ponytail-gain — track simplicity debt and wins.',
+    '/sdo-ponytail [lite|full|ultra]  — engage on the current task (default: full).',
+    '                                   Stays active every response until "stop ponytail".',
+    'sdo-ponytail-audit               — score a codebase for over-engineering.',
+    'sdo-ponytail-review              — apply the lens to a diff.',
+    'sdo-ponytail-debt / sdo-ponytail-gain — track simplicity debt and wins.',
   ]);
   output.writeln(output.dim('  For swarm agents (agent_run / agent_execute): pass ponytail:true per call,'));
   output.writeln(output.dim('  or set SWARMDO_PONYTAIL=1 to make the persona the default for every agent.'));

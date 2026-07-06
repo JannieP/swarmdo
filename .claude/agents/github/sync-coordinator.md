@@ -65,7 +65,7 @@ mcp__swarmdo__task_orchestrate {
 ```javascript
 // Synchronize CLAUDE.md files across packages using gh CLI
 // Get file contents
-CLAUDE_CONTENT=$(Bash("gh api repos/:owner/:repo/contents/swarmdo-swarm/docs/CLAUDE.md --jq '.content' | base64 -d"))
+CLAUDE_CONTENT=$(Bash("gh api repos/:owner/:repo/contents/sDo:swarmdo-swarm/docs/CLAUDE.md --jq '.content' | base64 -d"))
 
 // Update claude-code-flow CLAUDE.md to match using gh CLI
 // Create or update branch

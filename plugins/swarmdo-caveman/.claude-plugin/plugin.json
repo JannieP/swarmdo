@@ -1,10 +1,10 @@
 {
   "name": "swarmdo-caveman",
   "version": "1.0.0",
-  "description": "Caveman token compression for swarmdo — compress memory files (CLAUDE.md, todos) into few-token caveman-speak while preserving all technical substance. Vendored from JuliusBrussee/caveman (MIT).",
+  "description": "Caveman token compression for swarmdo — compress memory files (CLAUDE.md, todos) into few-token caveman-speak while preserving all technical substance. Vendored from JuliusBrussee/sdo-caveman (MIT).",
   "author": {
-    "name": "swarmdo (vendored from JuliusBrussee/caveman, MIT)",
-    "url": "https://github.com/JuliusBrussee/caveman"
+    "name": "swarmdo (vendored from JuliusBrussee/sdo-caveman, MIT)",
+    "url": "https://github.com/JuliusBrussee/sdo-caveman"
   },
   "license": "MIT",
   "homepage": "https://swarmdo.com",
