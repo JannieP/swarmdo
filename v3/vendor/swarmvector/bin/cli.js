@@ -8373,8 +8373,8 @@ mcpCmd.command('test')
 
     // Test 2: syntax check
     try {
-      const { execSync } = require('child_process');
-      execSync(`node -c ${mcpServerPath}`, { stdio: 'pipe' });
+      const { execFileSync } = require('child_process');
+      execFileSync('node', ['-c', mcpServerPath], { stdio: 'pipe' });
       console.log(`  ${chalk.green('PASS')} mcp-server.js syntax valid`);
     } catch {
       console.log(`  ${chalk.red('FAIL')} mcp-server.js has syntax errors`);
