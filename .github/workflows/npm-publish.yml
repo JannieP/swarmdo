@@ -1,0 +1,111 @@
+# npm publish — direct from GitHub.
+#
+# Trigger paths:
+#   • push of a v* tag (the normal path: `swarmdo release --skip-publish --confirm`
+#     bumps/commits/tags locally, CI does the publishing)
+#   • workflow_dispatch with dry_run=true — full pipeline rehearsal using
+#     `npm publish --dry-run` (no registry writes); dry_run=false publishes.
+#
+# Auth: NPM_TOKEN repo secret (granular token, read-write packages, Bypass-2FA
+# enabled — the account requires 2FA-or-bypass for publishes).
+#
+# TS dists are NOT committed, so the job builds the workspace packages first.
+# The umbrella tarball is gated on a minimum file count: a partial CI build
+# must fail loudly, never publish a silently-thin package.
+
+name: npm-publish
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Rehearse only (npm publish --dry-run)'
+        type: boolean
+        default: true
+
+concurrency:
+  group: npm-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install workspace deps (no lifecycle scripts)
+        run: npm ci --ignore-scripts
+
+      - name: Build workspace packages (dependency order)
+        run: |
+          set -e
+          for pkg in shared cli-core mcp memory neural security guidance hooks embeddings codex aidefence plugin-gastown-bridge cli; do
+            dir="v3/@swarmdo/$pkg"
+            if [ -f "$dir/package.json" ]; then
+              echo "── build $pkg"
+              (cd "$dir" && npm run build --if-present) || { echo "::error::build failed: $pkg"; exit 1; }
+            fi
+          done
+
+      - name: Stage self-contained @swarmdo/cli
+        run: |
+          cd v3/@swarmdo/cli
+          node scripts/build-standalone.mjs
+          node -e "const m=require('./dist-standalone/package.json'); if(!m.version) process.exit(1); console.log('staged', m.name, m.version)"
+
+      - name: Gate — staged cli completeness
+        run: |
+          count=$(find v3/@swarmdo/cli/dist-standalone -type f | wc -l)
+          echo "staged files: $count"
+          if [ "$count" -lt 1800 ]; then echo "::error::staged cli too small ($count files — expected ≥1800)"; exit 1; fi
+
+      - name: Gate — umbrella tarball completeness
+        run: |
+          files=$(npm pack --dry-run --json | node -e "let d='';process.stdin.on('data',c=>d+=c).on('end',()=>console.log(JSON.parse(d)[0].entryCount))")
+          echo "umbrella entryCount: $files"
+          if [ "$files" -lt 3500 ]; then echo "::error::umbrella tarball too small ($files files — expected ≥3500; a workspace build likely failed silently)"; exit 1; fi
+
+      - name: Publish @swarmdo/cli
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          cd v3/@swarmdo/cli/dist-standalone
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.dry_run }}" = "true" ]; then
+            npm publish --dry-run
+          else
+            npm publish
+          fi
+
+      - name: Publish swarmdo umbrella
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.dry_run }}" = "true" ]; then
+            npm publish --dry-run
+          else
+            npm publish
+          fi
+
+      - name: Verify on registry (skipped on dry-run)
+        if: ${{ github.event_name == 'push' || inputs.dry_run != true }}
+        run: |
+          want=$(node -p "require('./package.json').version")
+          for pkg in @swarmdo/cli swarmdo; do
+            for i in $(seq 1 20); do
+              got=$(npm view "$pkg@latest" version 2>/dev/null || true)
+              [ "$got" = "$want" ] && break
+              sleep 5
+            done
+            echo "$pkg@latest = $got (want $want)"
+            [ "$got" = "$want" ] || { echo "::error::$pkg not at $want on latest"; exit 1; }
+          done

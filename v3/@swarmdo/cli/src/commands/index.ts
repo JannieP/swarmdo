@@ -77,6 +77,8 @@ const commandLoaders: Record<string, CommandLoader> = {
   preset: () => import('./preset.js'),
   presets: () => import('./preset.js'), // alias via loader key
   // Release notes from conventional commits (git-cliff/conventional-changelog demand)
+  release: () => import('./release.js'),
+  ship: () => import('./release.js'), // alias via loader key
   changelog: () => import('./changelog.js'),
   notes: () => import('./changelog.js'), // alias via loader key
   // Q-Learning Routing Commands

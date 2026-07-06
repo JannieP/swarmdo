@@ -1,8 +1,8 @@
 # Claude Code Configuration - Swarmdo v1.4
 
-> **Swarmdo v1.4.8** (2026-07-07) — every swarmdo slash command namespaced under `sDo` (`/sDo:swarm:init`, skills `/sdo-ponytail`) so they group together in Claude Code's `/` menu; legacy unprefixed copies auto-migrated on init/upgrade.
+> **Swarmdo v1.4.9** (2026-07-07) — every swarmdo slash command namespaced under `sDo` (`/sDo:swarm:init`, skills `/sdo-ponytail`) so they group together in Claude Code's `/` menu; legacy unprefixed copies auto-migrated on init/upgrade.
 > 6,000+ commits, 314 MCP tools, 16 agent roles + custom types, 19 AgentDB controllers, 21 native plugins.
-> Packages: `swarmdo@1.4.8` (umbrella), `@swarmdo/cli@1.4.8`, `swarmdo-bridge@1.4.8` (wrapper in `swarmdo/`)
+> Packages: `swarmdo@1.4.9` (umbrella), `@swarmdo/cli@1.4.9`, `swarmdo-bridge@1.4.9` (wrapper in `swarmdo/`)
 
 ## Behavioral Rules (Always Enforced)
 
@@ -977,6 +977,7 @@ memory_search_unified({ query: "authentication security", limit: 5 })
 - `@swarmdo/cli` MUST be published from its self-contained staging dir — its `file:../` siblings don't ship from the package dir, so a plain `npm publish` there produces a broken install (guarded: `prepublishOnly` fails with instructions). `scripts/build-standalone.mjs` vendors cli-core/mcp/neural/shared/memory/sona/rabitq-wasm into `vendor/` and rewrites the specs
 - The `swarmdo` umbrella publishes from the repo root as-is (its tarball vendors all `v3/**` dists; `file:` deps resolve inside the tarball)
 - MUST run verification for BOTH before telling user publishing is complete
+- PREFERRED: publish from GitHub — `swarmdo release --skip-publish --confirm` bumps/commits/tags; pushing the v* tag triggers `.github/workflows/npm-publish.yml` (builds workspaces, stages the cli, gates tarball completeness, publishes both with the NPM_TOKEN secret, verifies the registry). `swarmdo release --confirm` without the skip does the same train locally
 
 ```bash
 # Versions are already bumped in lockstep by the every-commit bump rule
