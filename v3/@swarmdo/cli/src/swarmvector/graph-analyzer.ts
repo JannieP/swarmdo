@@ -219,7 +219,10 @@ function extractImports(content: string, _filePath: string): Array<{ path: strin
   const imports: Array<{ path: string; type: GraphEdge['type'] }> = [];
 
   // ES6 import statements
-  const esImportRegex = /import\s+(?:(?:\{[^}]*\}|\*\s+as\s+\w+|\w+)\s*,?\s*)*\s*from\s*['"]([^'"]+)['"]/g;
+  // Comma-delimited clause list: each repeated clause must be preceded by a
+  // literal comma, so a run of word chars can't be split ambiguously across
+  // iterations (js/polynomial-redos — kept linear).
+  const esImportRegex = /import\s+(?:\{[^}]*\}|\*\s+as\s+\w+|\w+)(?:\s*,\s*(?:\{[^}]*\}|\*\s+as\s+\w+|\w+))*\s+from\s*['"]([^'"]+)['"]/g;
   let match: RegExpExecArray | null;
 
   while ((match = esImportRegex.exec(content)) !== null) {

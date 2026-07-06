@@ -384,7 +384,7 @@ export class CommandParser {
   private isFlagValue(arg: string): boolean {
     if (!arg.startsWith('-')) return true;
     // Negative number: '-' followed by a parseable numeric literal.
-    return /^-\d*\.?\d+(?:[eE][+-]?\d+)?$/.test(arg);
+    return /^-(?:\d+(?:\.\d+)?|\.\d+)(?:[eE][+-]?\d+)?$/.test(arg);
   }
 
   /** True for the literal tokens `true`/`false` (case-insensitive). Used so a

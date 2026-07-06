@@ -374,7 +374,7 @@ function mergeSettingsForUpgrade(existing: Record<string, unknown>): Record<stri
   // load the ONNX model on every fire (~1s); Claude Code times out and hides
   // the status bar (#2450). The migration replaces the whole command with
   // NEW_STATUSLINE_CMD which invokes the local helper directly via `node -e`.
-  const BROKEN_STATUSLINE_RE = /(?:npx\s+(?:--?\S+\s+)*)?@?swarmdo(?:\/cli)?(?:@\S+)?\s+hooks\s+statusline/;
+  const BROKEN_STATUSLINE_RE = /(?:npx\s+(?:\S+\s+)*)?@?swarmdo(?:\/cli)?(?:@\S+)?\s+hooks\s+statusline/;
   const existingStatusLine = existing.statusLine as Record<string, unknown> | undefined;
   if (existingStatusLine) {
     const existingCmd = typeof existingStatusLine.command === 'string' ? existingStatusLine.command : '';
@@ -395,7 +395,7 @@ function mergeSettingsForUpgrade(existing: Record<string, unknown>): Record<stri
   // We walk each hook event's `hooks[]` and swap any command matching the
   // broken pattern for the local-helper form. Idempotent: re-running this
   // migration on already-correct settings is a no-op.
-  const BROKEN_HOOK_RE = /npx\s+(?:--?\S+\s+)*@?swarmdo\/cli@latest\s+hooks\s+(\S+)/;
+  const BROKEN_HOOK_RE = /npx\s+(?:\S+\s+)*@?swarmdo\/cli@latest\s+hooks\s+(\S+)/;
   const localHookCmd = (sub: string): string => {
     // POSIX form mirrors settings-generator.ts::hookCmd() exactly.
     // Windows users hit a separate code path (cmd /c …) — Claude Code on

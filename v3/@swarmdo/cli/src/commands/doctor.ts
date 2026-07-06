@@ -152,7 +152,7 @@ async function checkConfigFile(): Promise<HealthCheck> {
  */
 async function checkStaleSettingsNpx(): Promise<HealthCheck> {
   // Same regex pattern the executor migration uses — kept in sync.
-  const BROKEN_RE = /npx\s+(?:--?\S+\s+)*@?swarmdo\/cli@latest\s+hooks\s+(?:statusline|\S+)/;
+  const BROKEN_RE = /npx\s+(?:\S+\s+)*@?swarmdo\/cli@latest\s+hooks\s+(?:statusline|\S+)/;
 
   // Look in both project-local and home-dir settings.
   const candidates = [
