@@ -1378,18 +1378,83 @@ const importCommand: Command = {
       short: 'n',
       description: 'Import into specific namespace',
       type: 'string'
+    },
+    {
+      name: 'format',
+      short: 'f',
+      description: 'Input format: json (default) or obsidian/md — a vault directory produced by `memory export -f obsidian`',
+      type: 'string',
+      choices: ['json', 'obsidian', 'md'],
+      default: 'json'
     }
   ],
   examples: [
     { command: 'swarmdo memory import -i ./backup.json', description: 'Import from file' },
-    { command: 'swarmdo memory import -i ./data.json -n archive', description: 'Import to namespace' }
+    { command: 'swarmdo memory import -i ./data.json -n archive', description: 'Import to namespace' },
+    { command: 'swarmdo memory import -i ./vault -f obsidian', description: 'Sync an edited Obsidian vault back into memory (re-embeds; foreign notes skipped)' }
   ],
   action: async (ctx: CommandContext): Promise<CommandResult> => {
     const inputPath = ctx.flags.input as string || ctx.args[0];
+    const format = (ctx.flags.format as string) || 'json';
 
     if (!inputPath) {
       output.printError('Input path is required. Use --input or -i');
       return { success: false, exitCode: 1 };
+    }
+
+    // Obsidian vault import: parse the notes back into a v1 payload (pure
+    // mirror of the exporter), then reuse memory_import for the actual
+    // upsert + re-embedding. Foreign notes in a mixed vault are skipped.
+    if (format === 'obsidian' || format === 'md') {
+      const fs = await import('node:fs');
+      const path = await import('node:path');
+      const os = await import('node:os');
+      const { parseVault } = await import('../memory-vault/import.js');
+
+      const collect = (dir: string, base = ''): { relPath: string; content: string }[] => {
+        const out: { relPath: string; content: string }[] = [];
+        for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+          if (e.name.startsWith('.')) continue;
+          const abs = path.join(dir, e.name);
+          const rel = base ? `${base}/${e.name}` : e.name;
+          if (e.isDirectory()) out.push(...collect(abs, rel));
+          else if (e.isFile() && e.name.endsWith('.md')) out.push({ relPath: rel, content: fs.readFileSync(abs, 'utf8') });
+        }
+        return out;
+      };
+
+      const tmp = path.join(os.tmpdir(), `swarmdo-vaultimp-${process.pid}-${Math.floor(Math.random() * 1e6)}.json`);
+      try {
+        if (!fs.existsSync(inputPath) || !fs.statSync(inputPath).isDirectory()) {
+          output.printError(`Vault directory not found: ${inputPath}`);
+          return { success: false, exitCode: 1 };
+        }
+        const { entries, foreign, index } = parseVault(collect(inputPath));
+        if (entries.length === 0) {
+          output.printError(`No swarmdo memory notes found in ${inputPath} (foreign: ${foreign})`);
+          return { success: false, exitCode: 1 };
+        }
+        fs.writeFileSync(tmp, JSON.stringify({ schema: 'swarmdo-memory-export/v1', count: entries.length, entries }), 'utf8');
+        const result = await callMCPTool<{ imported: { entries: number }; skipped: number }>('memory_import', {
+          inputPath: tmp,
+          merge: ctx.flags.merge ?? true,
+          namespace: ctx.flags.namespace,
+        });
+        output.printSuccess(`Synced ${result.imported.entries} notes from ${inputPath}/ back into memory`);
+        output.printList([
+          `Imported: ${result.imported.entries}`,
+          `Skipped (store): ${result.skipped}`,
+          `Foreign notes ignored: ${foreign}`,
+          `Index files ignored: ${index}`,
+        ]);
+        return { success: true, data: { imported: result.imported.entries, foreign, index } };
+      } catch (error) {
+        const msg = error instanceof MCPClientError ? error.message : String(error);
+        output.printError(`Vault import error: ${msg}`);
+        return { success: false, exitCode: 1 };
+      } finally {
+        try { fs.rmSync(tmp, { force: true }); } catch { /* best-effort */ }
+      }
     }
 
     output.printInfo(`Importing memory from ${inputPath}...`);
