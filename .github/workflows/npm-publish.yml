@@ -49,7 +49,8 @@ jobs:
       - name: Build workspace packages (dependency order)
         run: |
           set -e
-          for pkg in shared cli-core mcp memory neural security guidance hooks embeddings codex aidefence plugin-gastown-bridge cli; do
+          # dependency order: hooks needs memory+neural+shared; guidance needs hooks
+          for pkg in shared cli-core mcp memory neural hooks guidance security embeddings codex aidefence plugin-gastown-bridge cli; do
             dir="v3/@swarmdo/$pkg"
             if [ -f "$dir/package.json" ]; then
               echo "── build $pkg"
