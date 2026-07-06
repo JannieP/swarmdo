@@ -146,6 +146,13 @@ jobs:
               echo "FAIL: $skill exited $EXIT but graceful-degradation requires one of: $ACCEPTABLE_EXITS"
               exit 1
             fi
+            # mint runs DRY-RUN here (no --confirm): it plans without ever
+            # fetching metaharness, so nothing degrades — its honest payload
+            # is the plan ("dryRun": true / "willWrite": false).
+            if [[ "$skill" == "mint" ]] && echo "$OUT" | grep -q '"dryRun": true'; then
+              echo "OK: mint dry-run plan payload (no fetch attempted, nothing to degrade)"
+              continue
+            fi
             if ! echo "$OUT" | grep -q '"degraded"'; then
               echo "FAIL: $skill did not emit degraded:true payload"
               exit 1
