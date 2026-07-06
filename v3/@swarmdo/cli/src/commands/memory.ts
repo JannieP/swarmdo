@@ -1386,12 +1386,20 @@ const importCommand: Command = {
       type: 'string',
       choices: ['json', 'obsidian', 'md'],
       default: 'json'
+    },
+    {
+      name: 'watch',
+      short: 'w',
+      description: 'Keep watching the vault directory and sync notes as they change (obsidian format only; Ctrl-C to stop)',
+      type: 'boolean',
+      default: false
     }
   ],
   examples: [
     { command: 'swarmdo memory import -i ./backup.json', description: 'Import from file' },
     { command: 'swarmdo memory import -i ./data.json -n archive', description: 'Import to namespace' },
-    { command: 'swarmdo memory import -i ./vault -f obsidian', description: 'Sync an edited Obsidian vault back into memory (re-embeds; foreign notes skipped)' }
+    { command: 'swarmdo memory import -i ./vault -f obsidian', description: 'Sync an edited Obsidian vault back into memory (re-embeds; foreign notes skipped)' },
+    { command: 'swarmdo memory import -i ./vault -f obsidian --watch', description: 'Live-sync: watch the vault and import notes as you save them in Obsidian' }
   ],
   action: async (ctx: CommandContext): Promise<CommandResult> => {
     const inputPath = ctx.flags.input as string || ctx.args[0];
@@ -1447,6 +1455,40 @@ const importCommand: Command = {
           `Foreign notes ignored: ${foreign}`,
           `Index files ignored: ${index}`,
         ]);
+        if (ctx.flags.watch === true) {
+          const { ChangeCollector } = await import('../memory-vault/watch.js');
+          const { parseVault } = await import('../memory-vault/import.js');
+          output.writeln(output.dim(`watching ${inputPath}/ — save a note in Obsidian to sync it (Ctrl-C to stop)`));
+          const syncBatch = async (rels: string[]): Promise<void> => {
+            const files = rels
+              .filter((rel) => fs.existsSync(path.join(inputPath, rel)))
+              .map((rel) => ({ relPath: rel, content: fs.readFileSync(path.join(inputPath, rel), 'utf8') }));
+            const parsed = parseVault(files);
+            if (parsed.entries.length === 0) return;
+            const btmp = path.join(os.tmpdir(), `swarmdo-vaultwatch-${process.pid}-${Math.floor(Math.random() * 1e6)}.json`);
+            try {
+              fs.writeFileSync(btmp, JSON.stringify({ schema: 'swarmdo-memory-export/v1', entries: parsed.entries }), 'utf8');
+              const r = await callMCPTool<{ imported: { entries: number } }>('memory_import', { inputPath: btmp, merge: true, namespace: ctx.flags.namespace });
+              output.writeln(`  ⇄ synced ${r.imported.entries} note${r.imported.entries === 1 ? '' : 's'}: ${rels.join(', ')}`);
+            } catch (e) {
+              output.printError(`sync failed for ${rels.join(', ')}: ${e instanceof MCPClientError ? e.message : String(e)}`);
+            } finally {
+              try { fs.rmSync(btmp, { force: true }); } catch { /* best-effort */ }
+            }
+          };
+          let syncing = Promise.resolve();
+          const collector = new ChangeCollector((rels) => { syncing = syncing.then(() => syncBatch(rels)); });
+          const watcher = fs.watch(inputPath, { recursive: true }, (_event, filename) => {
+            if (filename) collector.add(String(filename));
+          });
+          await new Promise<void>((resolve) => {
+            const stop = (): void => { watcher.close(); collector.drain(); resolve(); };
+            process.once('SIGINT', stop);
+            process.once('SIGTERM', stop);
+          });
+          await syncing;
+          return { success: true, data: { watched: true } };
+        }
         return { success: true, data: { imported: result.imported.entries, foreign, index } };
       } catch (error) {
         const msg = error instanceof MCPClientError ? error.message : String(error);
