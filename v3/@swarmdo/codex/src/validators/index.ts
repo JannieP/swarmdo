@@ -895,7 +895,7 @@ function checkCommonIssues(
   warnings: ValidationWarning[]
 ): void {
   // Check for broken links
-  const linkPattern = /\[([^\[\]]+)\]\(([^)]+)\)/g;
+  const linkPattern = /\[([^\[\]]{1,256})\]\(([^)]{1,512})\)/g;
   let match;
   while ((match = linkPattern.exec(content)) !== null) {
     const url = match[2]!;

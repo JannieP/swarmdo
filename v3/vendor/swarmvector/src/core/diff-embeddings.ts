@@ -58,7 +58,7 @@ export function parseDiff(diff: string): DiffHunk[] {
   for (const line of lines) {
     // File header
     if (line.startsWith('diff --git')) {
-      const match = line.match(/diff --git a\/(.+) b\/(.+)/);
+      const match = line.match(/^diff --git a\/(.+?) b\/(.+)/);
       if (match) {
         currentFile = match[2];
       }

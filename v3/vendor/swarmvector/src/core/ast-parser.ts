@@ -514,11 +514,11 @@ export class CodeParser {
     const types: string[] = [];
 
     // Regex patterns
-    const importRegex = /import\s+(?:(\w+)\s*,?\s*)?(?:\{([^}]+)\}\s*)?(?:\*\s+as\s+(\w+)\s*)?from\s+['"]([^'"]+)['"]/g;
-    const requireRegex = /(?:const|let|var)\s+(?:(\w+)|\{([^}]+)\})\s*=\s*require\s*\(['"]([^'"]+)['"]\)/g;
+    const importRegex = /import\s{1,32}(?:(\w{1,128})\s{0,32},?\s{0,32})?(?:\{([^}]{1,512})\}\s{0,32})?(?:\*\s{1,32}as\s{1,32}(\w{1,128})\s{0,32})?from\s{1,32}['"]([^'"]{1,512})['"]/g;
+    const requireRegex = /(?:const|let|var)\s{1,32}(?:(\w{1,128})|\{([^}]{1,512})\})\s{0,32}=\s{0,32}require\s{0,32}\(['"]([^'"]{1,512})['"]\)/g;
     const exportRegex = /export\s+(?:(default)\s+)?(?:(class|function|const|let|var|interface|type)\s+)?(\w+)?/g;
-    const functionRegex = /(?:export\s+)?(?:async\s+)?function\s+(\w+)\s*\(([^)]*)\)/g;
-    const arrowRegex = /(?:const|let|var)\s+(\w+)\s*=\s*(?:async\s*)?\([^)]*\)\s*=>/g;
+    const functionRegex = /(?:export\s{1,32})?(?:async\s{1,32})?function\s{1,32}(\w{1,128})\s{0,32}\(([^)]{0,4096})\)/g;
+    const arrowRegex = /(?:const|let|var)\s{1,32}(\w{1,128})\s{0,32}=\s{0,32}(?:async\s{0,32})?\([^)]{0,4096}\)\s{0,32}=>/g;
     const classRegex = /(?:export\s+)?class\s+(\w+)(?:\s+extends\s+(\w+))?/g;
     const typeRegex = /(?:export\s+)?(?:type|interface)\s+(\w+)/g;
 
@@ -528,7 +528,7 @@ export class CodeParser {
       imports.push({
         source: match[4],
         default: match[1],
-        named: match[2] ? match[2].split(',').map(s => s.trim().split(/\s+as\s+/)[0]) : [],
+        named: match[2] ? match[2].split(',').map(s => s.trim().split(/\s{1,32}as\s{1,32}/)[0]) : [],
         namespace: match[3],
         type: 'esm',
       });

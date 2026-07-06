@@ -153,7 +153,7 @@ function extractExports(content) {
         while ((match = regex.exec(content)) !== null) {
             if (match[1]) {
                 // Handle grouped exports: export { a, b, c }
-                const names = match[1].split(',').map(s => s.trim().split(/\s+as\s+/)[0].trim());
+                const names = match[1].split(',').map(s => s.trim().split(/\s{1,32}as\s{1,32}/)[0].trim());
                 exports.push(...names.filter(n => n && /^\w+$/.test(n)));
             }
         }

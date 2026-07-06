@@ -278,7 +278,7 @@ export class ASTAnalyzer {
       if (exportMatch) exports.push(exportMatch[1]);
       const namedExportMatch = line.match(/^\s*export\s*\{([^}]+)\}/);
       if (namedExportMatch) {
-        const names = namedExportMatch[1].split(',').map(n => n.trim().split(/\s+as\s+/)[0]);
+        const names = namedExportMatch[1].split(',').map(n => n.trim().split(/\s{1,32}as\s{1,32}/)[0]);
         exports.push(...names);
       }
     }
