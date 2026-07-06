@@ -8,7 +8,7 @@
  * - Review prioritization
  */
 
-import { execSync } from 'child_process';
+import { execSync, execFileSync } from 'child_process';
 import { embed, embedBatch, isReady, initOnnxEmbedder } from './onnx-embedder';
 
 export interface DiffHunk {
@@ -211,9 +211,10 @@ export async function analyzeFileDiff(file: string, diff: string, message: strin
  */
 export function getCommitDiff(commitHash: string = 'HEAD'): string {
   try {
-    return execSync(`git show ${commitHash} --format="" 2>/dev/null`, {
+    return execFileSync('git', ['show', commitHash, '--format='], {
       encoding: 'utf8',
       maxBuffer: 10 * 1024 * 1024,
+      stdio: ['pipe', 'pipe', 'ignore'],
     });
   } catch {
     return '';
@@ -257,8 +258,9 @@ export async function analyzeCommit(commitHash: string = 'HEAD'): Promise<Commit
   // Get commit metadata
   let message = '', author = '', date = '';
   try {
-    const info = execSync(`git log -1 --format="%s|%an|%aI" ${commitHash} 2>/dev/null`, {
+    const info = execFileSync('git', ['log', '-1', '--format=%s|%an|%aI', commitHash], {
       encoding: 'utf8',
+      stdio: ['pipe', 'pipe', 'ignore'],
     }).trim();
     [message, author, date] = info.split('|');
   } catch {}
@@ -327,8 +329,9 @@ export async function findSimilarCommits(
   // Get recent commits
   let commits: string[] = [];
   try {
-    commits = execSync(`git log -${recentCommits} --format="%H" 2>/dev/null`, {
+    commits = execFileSync('git', ['log', `-${recentCommits}`, '--format=%H'], {
       encoding: 'utf8',
+      stdio: ['pipe', 'pipe', 'ignore'],
     }).trim().split('\n');
   } catch {
     return [];

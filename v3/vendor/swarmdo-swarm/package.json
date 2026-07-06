@@ -1,7 +1,7 @@
 {
   "name": "swarmdo-swarm",
   "mcpName": "io.github.upstream/swarmdo-swarm",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "description": "High-performance neural network swarm orchestration in WebAssembly",
   "main": "src/index.js",
   "module": "src/index.js",

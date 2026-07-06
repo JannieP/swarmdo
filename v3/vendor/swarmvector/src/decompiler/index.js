@@ -109,7 +109,7 @@ function beautify(source) {
  */
 function tryRustDecompiler(filePath, outputDir) {
   try {
-    const { execSync } = require('child_process');
+    const { execFileSync } = require('child_process');
     // Try to find the Rust binary
     const candidates = [
       'cargo run --release -p swarmvector-decompiler --example run_on_cli --',
@@ -117,10 +117,19 @@ function tryRustDecompiler(filePath, outputDir) {
     ];
     for (const bin of candidates) {
       try {
-        const cmd = bin.includes('cargo')
-          ? `${bin} "${filePath}" --output-dir "${outputDir}"`
-          : `"${bin}" "${filePath}" --output-dir "${outputDir}"`;
-        const result = execSync(cmd, {
+        // argv form — filePath/outputDir are passed as arguments and never
+        // shell-parsed (js/shell-command-constructed-from-input). The candidate
+        // commands are hardcoded, so only the split of the cargo command matters.
+        let cmd, args;
+        if (bin.includes('cargo')) {
+          const parts = bin.trim().split(/\s+/);
+          cmd = parts[0];
+          args = [...parts.slice(1), filePath, '--output-dir', outputDir];
+        } else {
+          cmd = bin;
+          args = [filePath, '--output-dir', outputDir];
+        }
+        const result = execFileSync(cmd, args, {
           timeout: 120000,
           stdio: ['pipe', 'pipe', 'pipe'],
           cwd: path.join(__dirname, '../../../..'),

@@ -184,9 +184,10 @@ async function analyzeFileDiff(file, diff, message = '') {
  */
 function getCommitDiff(commitHash = 'HEAD') {
     try {
-        return (0, child_process_1.execSync)(`git show ${commitHash} --format="" 2>/dev/null`, {
+        return (0, child_process_1.execFileSync)('git', ['show', commitHash, '--format='], {
             encoding: 'utf8',
             maxBuffer: 10 * 1024 * 1024,
+            stdio: ['pipe', 'pipe', 'ignore'],
         });
     }
     catch {
@@ -229,8 +230,9 @@ async function analyzeCommit(commitHash = 'HEAD') {
     // Get commit metadata
     let message = '', author = '', date = '';
     try {
-        const info = (0, child_process_1.execSync)(`git log -1 --format="%s|%an|%aI" ${commitHash} 2>/dev/null`, {
+        const info = (0, child_process_1.execFileSync)('git', ['log', '-1', '--format=%s|%an|%aI', commitHash], {
             encoding: 'utf8',
+            stdio: ['pipe', 'pipe', 'ignore'],
         }).trim();
         [message, author, date] = info.split('|');
     }
@@ -287,8 +289,9 @@ async function findSimilarCommits(currentDiff, recentCommits = 50, topK = 5) {
     // Get recent commits
     let commits = [];
     try {
-        commits = (0, child_process_1.execSync)(`git log -${recentCommits} --format="%H" 2>/dev/null`, {
+        commits = (0, child_process_1.execFileSync)('git', ['log', `-${recentCommits}`, '--format=%H'], {
             encoding: 'utf8',
+            stdio: ['pipe', 'pipe', 'ignore'],
         }).trim().split('\n');
     }
     catch {
