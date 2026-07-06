@@ -6,6 +6,7 @@
 
 import { type MCPTool, getProjectCwd } from './types.js';
 import { existsSync } from 'node:fs';
+import { randomBytes } from 'node:crypto';
 import {
   mkdirRestricted,
   readFileMaybeEncrypted,
@@ -110,7 +111,7 @@ export const terminalTools: MCPTool[] = [
       if (!vEnv.valid) return { success: false, error: vEnv.error };
 
       const store = loadTerminalStore();
-      const id = `term-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+      const id = `term-${Date.now()}-${randomBytes(6).toString('hex')}`;
 
       const session: TerminalSession = {
         id,
@@ -168,7 +169,7 @@ export const terminalTools: MCPTool[] = [
 
       if (!session) {
         // Create default session
-        const id = `term-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+        const id = `term-${Date.now()}-${randomBytes(6).toString('hex')}`;
         session = {
           id,
           name: 'Default Terminal',

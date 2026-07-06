@@ -6,6 +6,7 @@
 
 import { existsSync, readFileSync, readdirSync, unlinkSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { randomBytes } from 'node:crypto';
 import { type MCPTool, getProjectCwd } from './types.js';
 import {
   mkdirRestricted,
@@ -162,7 +163,7 @@ export const sessionTools: MCPTool[] = [
         if (!v.valid) return { success: false, error: v.error };
       }
 
-      const sessionId = `session-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+      const sessionId = `session-${Date.now()}-${randomBytes(6).toString('hex')}`;
 
       // Load related data based on options
       const data = loadRelatedStores({
@@ -533,7 +534,7 @@ export const sessionTools: MCPTool[] = [
       let parsed: SessionRecord;
       try { parsed = JSON.parse(readFileSync(inputPath, 'utf-8')); }
       catch (e) { return { error: `Invalid session JSON: ${(e as Error).message}` }; }
-      const newId = `session-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+      const newId = `session-${Date.now()}-${randomBytes(6).toString('hex')}`;
       const stats = parsed.stats || { tasks: 0, agents: 0, memoryEntries: 0, totalSize: 0 };
       const session: SessionRecord = {
         sessionId: newId,
