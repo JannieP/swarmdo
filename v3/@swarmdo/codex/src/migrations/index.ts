@@ -191,7 +191,7 @@ export async function parseClaudeMd(content: string): Promise<ParsedClaudeMd> {
   };
 
   // Extract title (first H1)
-  const titleMatch = content.match(/^#\s+(.+)$/m);
+  const titleMatch = content.match(/^#\s+(\S.*)$/m);
   if (titleMatch && titleMatch[1]) {
     result.title = titleMatch[1].trim();
     result.settings.projectName = result.title;
@@ -242,7 +242,7 @@ export async function parseClaudeMd(content: string): Promise<ParsedClaudeMd> {
  */
 function parseSections(content: string, lines: string[]): ParsedSection[] {
   const sections: ParsedSection[] = [];
-  const sectionRegex = /^(#{1,6})\s+(.+)$/;
+  const sectionRegex = /^(#{1,6})\s+(\S.*)$/;
 
   let currentSection: ParsedSection | null = null;
   let contentLines: string[] = [];
@@ -496,7 +496,7 @@ function extractBehavioralRules(content: string): string[] {
   const rules: string[] = [];
 
   // Look for Behavioral Rules section
-  const behavioralMatch = content.match(/##\s*Behavioral\s*Rules[^\n]*\n([\s\S]*?)(?=\n##|\n#\s|$)/i);
+  const behavioralMatch = content.match(/(?:^|\n)##\s+Behavioral\s+Rules\b[^\n]*\n([\s\S]*?)(?=\n##|\n#\s|$)/i);
   if (behavioralMatch && behavioralMatch[1]) {
     const ruleLines = behavioralMatch[1].split('\n');
     for (const line of ruleLines) {
@@ -510,7 +510,7 @@ function extractBehavioralRules(content: string): string[] {
   }
 
   // Also look for Security Rules
-  const securityMatch = content.match(/##\s*Security\s*Rules?[^\n]*\n([\s\S]*?)(?=\n##|\n#\s|$)/i);
+  const securityMatch = content.match(/(?:^|\n)##\s+Security\s+Rules?\b[^\n]*\n([\s\S]*?)(?=\n##|\n#\s|$)/i);
   if (securityMatch && securityMatch[1]) {
     const securityLines = securityMatch[1].split('\n');
     for (const line of securityLines) {

@@ -1,6 +1,6 @@
 {
   "name": "@swarmdo/codex",
-  "version": "3.0.0-alpha.9",
+  "version": "3.0.0-alpha.10",
   "description": "Codex CLI integration for Swarmdo (swarmdo) - OpenAI Codex platform adapter",
   "type": "module",
   "main": "./dist/index.js",

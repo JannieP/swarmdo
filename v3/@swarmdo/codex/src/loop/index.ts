@@ -60,8 +60,14 @@ export interface LoopCommandResult {
 }
 
 export function normalizeLoopName(name = 'default'): string {
-  const normalized = name.trim().toLowerCase().replace(/[^a-z0-9_.-]+/g, '-').replace(/^-+|-+$/g, '');
-  return normalized || 'default';
+  const slug = name.trim().toLowerCase().replace(/[^a-z0-9_.-]+/g, '-');
+  // Trim leading/trailing '-' by slicing rather than /^-+|-+$/ — the trailing
+  // '-+$' alternative backtracks quadratically on long dash runs
+  // (js/polynomial-redos, the classic trim-regex shape).
+  let a = 0, b = slug.length;
+  while (a < b && slug.charCodeAt(a) === 45) a++;
+  while (b > a && slug.charCodeAt(b - 1) === 45) b--;
+  return slug.slice(a, b) || 'default';
 }
 
 export function resolveLoopPaths(projectPath: string, name = 'default', stateDir?: string): LoopPaths {

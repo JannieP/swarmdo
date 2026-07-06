@@ -677,7 +677,7 @@ function extractSections(content: string): Array<{ level: number; title: string;
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     if (!line) continue;
-    const match = line.match(/^(#{1,6})\s+(.+)$/);
+    const match = line.match(/^(#{1,6})\s+(\S.*)$/);
     if (match && match[1] && match[2]) {
       sections.push({
         level: match[1].length,
@@ -890,7 +890,7 @@ function checkCommonIssues(
   warnings: ValidationWarning[]
 ): void {
   // Check for broken links
-  const linkPattern = /\[([^\]]+)\]\(([^)]+)\)/g;
+  const linkPattern = /\[([^\[\]]+)\]\(([^)]+)\)/g;
   let match;
   while ((match = linkPattern.exec(content)) !== null) {
     const url = match[2]!;
@@ -918,11 +918,11 @@ function checkCommonIssues(
 
   // Check for placeholder content
   const placeholderPatterns = [
-    /\[your[- ].*\]/i,
-    /\[insert[- ].*\]/i,
-    /\[add[- ].*\]/i,
-    /\{your[- ].*\}/i,
-    /<your[- ].*>/i,
+    /\[your[- ][^\]]{0,100}\]/i,
+    /\[insert[- ][^\]]{0,100}\]/i,
+    /\[add[- ][^\]]{0,100}\]/i,
+    /\{your[- ][^}]{0,100}\}/i,
+    /<your[- ][^>]{0,100}>/i,
   ];
 
   for (const pattern of placeholderPatterns) {
@@ -1001,7 +1001,7 @@ function validateMcpServers(
   warnings: ValidationWarning[]
 ): void {
   // Find all MCP server sections
-  const serverRegex = /\[mcp_servers\.([^\]]+)\]/g;
+  const serverRegex = /\[mcp_servers\.([^\[\]]+)\]/g;
   const servers: string[] = [];
   let match;
 
@@ -1047,7 +1047,7 @@ function validateProfiles(
   errors: ValidationError[],
   warnings: ValidationWarning[]
 ): void {
-  const profileRegex = /\[profiles\.([^\]]+)\]/g;
+  const profileRegex = /\[profiles\.([^\[\]]+)\]/g;
   const profiles: string[] = [];
   let match;
 
