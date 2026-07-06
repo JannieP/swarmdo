@@ -438,7 +438,7 @@ export class HottEngine implements IHottEngine {
     let normalized = term;
 
     // Simplify refl compositions
-    normalized = normalized.replace(/trans\(refl\(([^()]+)\),\s*([^()]+)\)/g, '$2');
+    normalized = normalized.replace(/trans\(refl\(([^()]+)\),\s{0,32}([^()]+)\)/g, '$2');
     normalized = normalized.replace(/trans\(([^()]+),\s*refl\(([^()]+)\)\)/g, '$1');
 
     // Simplify sym(sym(p)) = p

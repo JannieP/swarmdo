@@ -104,7 +104,11 @@ export class DiffClassifier {
     const files: FileDiff[] = [];
     const fileBlocks = diffContent.split(/^diff --git/m).filter(Boolean);
     for (const block of fileBlocks) {
-      const pathMatch = block.match(/a\/(.+?)\s+b\/(.+)/);
+      // Anchored to the block start (blocks begin at the `a/… b/…` line after
+      // splitting on `diff --git`) with a single-space separator, so the lazy
+      // group has one start position instead of one per `a/` — kills the
+      // quadratic backtracking CodeQL flags (js/polynomial-redos).
+      const pathMatch = block.match(/^\s{0,4}a\/(.+?) b\/(.+)/);
       if (!pathMatch) continue;
       const path = pathMatch[2];
       const hunks = this.parseHunks(block);
