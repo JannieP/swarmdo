@@ -29,6 +29,7 @@ import {
 import { collectToolErrors, type ToolErrorReport } from '../usage/transcript-errors.js';
 import { computeCacheStats, type CacheStats } from '../usage/cache-stats.js';
 import { evaluateGuard, type GuardThreshold, type GuardStatus } from '../usage/spend-guard.js';
+import { resolvePeriodPair, parseRange, diffPeriods, modelMovers, type DayRow, type ModelRow, type Period, type MetricDelta } from '../usage/diff.js';
 
 const VIEWS: Record<string, { dimension: UsageDimension; label: string }> = {
   daily: { dimension: 'day', label: 'Date' },
@@ -271,6 +272,81 @@ function runCacheView(ctx: CommandContext, collection: UsageCollection): Command
   return { success: true, exitCode: 0 };
 }
 
+/** Diff view — compare two periods (day|week|month presets or explicit
+ * --a/--b YYYY-MM-DD:YYYY-MM-DD ranges): totals, deltas, per-model movers. */
+function runDiffView(ctx: CommandContext, collection: UsageCollection): CommandResult {
+  const kind = (ctx.args[1] || 'week').toLowerCase();
+  let a: Period; let b: Period;
+  try {
+    if (typeof ctx.flags.a === 'string' || typeof ctx.flags.b === 'string') {
+      if (typeof ctx.flags.a !== 'string' || typeof ctx.flags.b !== 'string') {
+        output.printError('explicit ranges need BOTH --a and --b (YYYY-MM-DD:YYYY-MM-DD)');
+        return { success: false, exitCode: 1 };
+      }
+      a = parseRange(ctx.flags.a, 'A');
+      b = parseRange(ctx.flags.b, 'B');
+    } else {
+      ({ a, b } = resolvePeriodPair(kind, localDateKey(new Date())));
+    }
+  } catch (e) {
+    output.printError((e as Error).message);
+    return { success: false, exitCode: 1 };
+  }
+
+  const dayRows: DayRow[] = aggregateUsage(collection.events, 'day').map((r) => ({ key: r.key, totals: r.totals }));
+  const report = diffPeriods(dayRows, a, b);
+
+  // per-(model, day) fold for the movers table
+  const md = new Map<string, ModelRow>();
+  for (const e of collection.events) {
+    const k = `${e.model}\u0000${e.dateKey}`;
+    const row = md.get(k) ?? { key: e.model, day: e.dateKey, totals: { costUsd: 0, inputTokens: 0, outputTokens: 0, cacheReadTokens: 0, cacheWriteTokens: 0, totalTokens: 0 } };
+    row.totals.costUsd += e.costUsd;
+    row.totals.totalTokens += e.inputTokens + e.outputTokens + e.cacheWriteTokens + e.cacheReadTokens;
+    md.set(k, row);
+  }
+  const movers = modelMovers([...md.values()], a, b);
+
+  if (ctx.flags.json === true) {
+    output.printJson({ ...report, movers });
+    return { success: true, data: { ...report, movers } };
+  }
+
+  const pct = (m: MetricDelta): string => (m.pct === null ? 'new' : `${m.pct >= 0 ? '+' : ''}${Math.round(m.pct * 100)}%`);
+  const sign = (n: number, f: (x: number) => string): string => `${n >= 0 ? '+' : '−'}${f(Math.abs(n))}`;
+  output.writeln(output.bold(`Usage diff  ${a.label}  vs  ${b.label}`) + output.dim(`   (${a.from}..${a.to} vs ${b.from}..${b.to})`));
+  output.printTable({
+    columns: [
+      { key: 'metric', header: 'Metric', width: 14 },
+      { key: 'a', header: a.label.slice(0, 14), width: 14, align: 'right' },
+      { key: 'b', header: b.label.slice(0, 14), width: 14, align: 'right' },
+      { key: 'delta', header: 'Δ', width: 14, align: 'right' },
+      { key: 'pct', header: '%', width: 7, align: 'right' },
+    ],
+    data: [
+      { metric: 'Cost', a: fmtCost(report.cost.a), b: fmtCost(report.cost.b), delta: sign(report.cost.delta, fmtCost), pct: pct(report.cost) },
+      { metric: 'Tokens', a: fmtInt(report.totalTokens.a), b: fmtInt(report.totalTokens.b), delta: sign(report.totalTokens.delta, fmtInt), pct: pct(report.totalTokens) },
+      { metric: 'Output tok', a: fmtInt(report.outputTokens.a), b: fmtInt(report.outputTokens.b), delta: sign(report.outputTokens.delta, fmtInt), pct: pct(report.outputTokens) },
+      { metric: 'Cache reads', a: fmtInt(report.cacheReadTokens.a), b: fmtInt(report.cacheReadTokens.b), delta: sign(report.cacheReadTokens.delta, fmtInt), pct: pct(report.cacheReadTokens) },
+      { metric: 'Active days', a: String(report.activeDays.a), b: String(report.activeDays.b), delta: sign(report.activeDays.delta, String), pct: pct(report.activeDays) },
+    ],
+  });
+  if (movers.length > 0) {
+    output.writeln(output.bold('Model movers') + output.dim('  (by |Δ cost|)'));
+    output.printTable({
+      columns: [
+        { key: 'model', header: 'Model', width: 34 },
+        { key: 'a', header: 'A', width: 12, align: 'right' },
+        { key: 'b', header: 'B', width: 12, align: 'right' },
+        { key: 'delta', header: 'Δ', width: 12, align: 'right' },
+        { key: 'pct', header: '%', width: 7, align: 'right' },
+      ],
+      data: movers.map((m) => ({ model: m.model, a: fmtCost(m.cost.a), b: fmtCost(m.cost.b), delta: sign(m.cost.delta, fmtCost), pct: pct(m.cost) })),
+    });
+  }
+  return { success: true, data: { ...report, movers } };
+}
+
 /** Build a threshold from a --flag or its SWARMDO_GUARD_* env fallback. */
 function guardThreshold(ctx: CommandContext, flagKey: string, envKey: string, current: number, label: string, unit: 'usd' | 'tokens'): GuardThreshold | null {
   const raw = ctx.flags[flagKey] ?? process.env[envKey];
@@ -378,9 +454,15 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
     return runGuardView(ctx, collectUsage({ dirs }));
   }
 
+  if (viewName === 'diff') {
+    const dirFlag = ctx.flags.dir;
+    const dirs = typeof dirFlag === 'string' ? [dirFlag] : Array.isArray(dirFlag) ? dirFlag.map(String) : undefined;
+    return runDiffView(ctx, collectUsage({ dirs }));
+  }
+
   const view = VIEWS[viewName];
   if (!view) {
-    output.writeln(output.error(`unknown view: ${viewName} (expected ${Object.keys(VIEWS).join('|')}|blocks|errors|cache|guard)`));
+    output.writeln(output.error(`unknown view: ${viewName} (expected ${Object.keys(VIEWS).join('|')}|blocks|errors|cache|guard|diff)`));
     return { success: false, exitCode: 1 };
   }
 
