@@ -1,8 +1,8 @@
 # Claude Code Configuration - Swarmdo v1.4
 
-> **Swarmdo v1.4.1** (2026-07-06) — every swarmdo slash command namespaced under `sDo` (`/sDo:swarm:init`, skills `/sdo-ponytail`) so they group together in Claude Code's `/` menu; legacy unprefixed copies auto-migrated on init/upgrade.
+> **Swarmdo v1.4.2** (2026-07-06) — every swarmdo slash command namespaced under `sDo` (`/sDo:swarm:init`, skills `/sdo-ponytail`) so they group together in Claude Code's `/` menu; legacy unprefixed copies auto-migrated on init/upgrade.
 > 6,000+ commits, 314 MCP tools, 16 agent roles + custom types, 19 AgentDB controllers, 21 native plugins.
-> Packages: `swarmdo@1.4.1` (umbrella), `@swarmdo/cli@1.4.1`, `swarmdo-bridge@1.4.1` (wrapper in `swarmdo/`)
+> Packages: `swarmdo@1.4.2` (umbrella), `@swarmdo/cli@1.4.2`, `swarmdo-bridge@1.4.2` (wrapper in `swarmdo/`)
 
 ## Behavioral Rules (Always Enforced)
 
@@ -972,38 +972,33 @@ memory_search_unified({ query: "authentication security", limit: 5 })
 
 ### Publishing Rules
 
-- MUST publish ALL THREE packages when publishing CLI changes: `@swarmdo/cli`, `swarmdo` (root umbrella), AND `swarmdo-bridge` (wrapper in `swarmdo/`)
+- Publish BOTH npm packages when publishing CLI changes: `swarmdo` (root umbrella) and `@swarmdo/cli`. `swarmdo-bridge` is `private: true` (version-bumped in lockstep, NEVER published — see its package.json description)
 - Only the `latest` dist-tag exists — npm sets it on publish; nothing else to update
-- Publish order: `@swarmdo/cli` first, then `swarmdo` (root umbrella), then `swarmdo-bridge`
-- MUST run verification for ALL THREE before telling user publishing is complete
+- `@swarmdo/cli` MUST be published from its self-contained staging dir — its `file:../` siblings don't ship from the package dir, so a plain `npm publish` there produces a broken install (guarded: `prepublishOnly` fails with instructions). `scripts/build-standalone.mjs` vendors cli-core/mcp/neural/shared/memory/sona/rabitq-wasm into `vendor/` and rewrites the specs
+- The `swarmdo` umbrella publishes from the repo root as-is (its tarball vendors all `v3/**` dists; `file:` deps resolve inside the tarball)
+- MUST run verification for BOTH before telling user publishing is complete
 
 ```bash
-# Replace 1.4.0 below with your chosen stable version (patch/minor/major per the rules above)
+# Versions are already bumped in lockstep by the every-commit bump rule
 
-# STEP 1: Build and publish @swarmdo/cli
+# STEP 1: Build + stage + publish @swarmdo/cli
 cd v3/@swarmdo/cli
-npm version 1.4.0 --no-git-tag-version
 npm run build
-npm publish                              # default tag is `latest` — no --tag flag
+npm run build:standalone                 # → dist-standalone/ (self-contained)
+npm publish dist-standalone/             # default tag is `latest` — no --tag flag
 
 # STEP 2: Publish swarmdo umbrella (repo root)
 cd "$(git rev-parse --show-toplevel)"
-npm version 1.4.0 --no-git-tag-version
-npm publish
-
-# STEP 3: Publish swarmdo-bridge wrapper
-cd swarmdo
-npm version 1.4.0 --no-git-tag-version
 npm publish
 ```
 
 **Verification (run before telling user publishing is complete):**
 
 ```bash
-for pkg in @swarmdo/cli swarmdo swarmdo-bridge; do
+for pkg in @swarmdo/cli swarmdo; do
   echo "$pkg: $(npm view $pkg@latest version)"
 done
-# All three must show the new version on `latest`
+# Both must show the new version on `latest`
 ```
 
 ### All Tags That Must Be Updated
@@ -1012,7 +1007,7 @@ done
 |---------|-----|-------------------|
 | `swarmdo` | `latest` | `npx swarmdo@latest` |
 | `@swarmdo/cli` | `latest` | `npx @swarmdo/cli@latest` |
-| `swarmdo-bridge` | `latest` | (dependency of the umbrella) |
+| `swarmdo-bridge` | — | private, never published (bumped in lockstep only) |
 
 - The root `swarmdo` package is what users run via `npx swarmdo`; `swarmdo-bridge` lives in `/swarmdo/` and depends on `@swarmdo/cli`
 - Also remember to update `swarmdo/package.json` overrides when adding new pinned transitives (see #2112 lesson — root overrides do NOT propagate to the published `swarmdo` wrapper)

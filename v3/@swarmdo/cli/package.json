@@ -1,6 +1,6 @@
 {
   "name": "@swarmdo/cli",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "type": "module",
   "description": "Swarmdo CLI - Enterprise AI agent orchestration with 60+ specialized agents, swarm coordination, MCP server, self-learning hooks, and vector memory for Claude Code",
   "main": "dist/src/index.js",
@@ -82,9 +82,8 @@
     "test:plugin-store": "npx tsx src/plugins/tests/standalone-test.ts",
     "test:pattern-store": "npx tsx src/transfer/store/tests/standalone-test.ts",
     "postinstall": "node ./scripts/postinstall.cjs",
-    "prepublishOnly": "cp ../../../README.md ./README.md && rm -rf plugins && mkdir -p plugins && cp -r ../../../plugins/swarmdo-metaharness plugins/",
-    "release": "npm version prerelease --preid=alpha && npm run publish:all",
-    "publish:all": "./scripts/publish.sh"
+    "build:standalone": "node scripts/build-standalone.mjs",
+    "prepublishOnly": "node -e \"console.error('\\n@swarmdo/cli must be published from the self-contained staging dir (file:../ siblings do not ship from here):\\n\\n  npm run build && npm run build:standalone && npm publish dist-standalone/\\n'); process.exit(1)\""
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.0",

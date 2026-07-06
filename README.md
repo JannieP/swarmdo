@@ -2,7 +2,7 @@
 
 [![swarmdo](swarmdo/assets/swarmdo-banner.svg)](https://swarmdo.com)
 
-[![npm version (swarmdo)](https://img.shields.io/badge/npx%20swarmdo-v1.4.1-cb3837?style=for-the-badge&logo=npm&logoColor=white)](https://github.com/JannieP/swarmdo/releases)
+[![npm version (swarmdo)](https://img.shields.io/badge/npx%20swarmdo-v1.4.2-cb3837?style=for-the-badge&logo=npm&logoColor=white)](https://github.com/JannieP/swarmdo/releases)
 [![MIT License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](https://github.com/JannieP/swarmdo/blob/main/LICENSE)
 [![Website](https://img.shields.io/badge/swarmdo.com-e2a33c?style=for-the-badge&logoColor=black)](https://swarmdo.com)
 [![Star on GitHub](https://img.shields.io/github/stars/JannieP/swarmdo?style=for-the-badge&logo=github&color=gold)](https://github.com/JannieP/swarmdo)
