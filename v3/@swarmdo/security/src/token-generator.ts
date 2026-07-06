@@ -17,7 +17,7 @@
  * @module v3/security/token-generator
  */
 
-import { randomBytes, createHmac, timingSafeEqual } from 'crypto';
+import { randomBytes, randomInt, createHmac, timingSafeEqual } from 'crypto';
 
 export interface TokenConfig {
   /**
@@ -197,11 +197,13 @@ export class TokenGenerator {
     expirationMinutes = 10,
     maxAttempts = 3
   ): VerificationCode {
-    const buffer = randomBytes(length);
+    // randomInt is uniform over [0,10); `byte % 10` was biased — 256 doesn't
+    // divide by 10, so digits 0-5 were ~4% likelier than 6-9
+    // (js/biased-cryptographic-random). For a guessable-code primitive in
+    // the SECURITY package, uniformity is the entire point.
     let code = '';
-
     for (let i = 0; i < length; i++) {
-      code += (buffer[i] % 10).toString();
+      code += randomInt(10).toString();
     }
 
     const now = new Date();
