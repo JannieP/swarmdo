@@ -13,7 +13,7 @@ name=$(node -e "console.log(JSON.parse(require('fs').readFileSync('$ROOT/.claude
 
 step "2. all six SKILL.md files present with frontmatter name"
 n=0
-for sk in ponytail ponytail-audit ponytail-debt ponytail-gain ponytail-help ponytail-review; do
+for sk in sdo-ponytail sdo-ponytail-audit sdo-ponytail-debt sdo-ponytail-gain sdo-ponytail-help sdo-ponytail-review; do
   grep -q "^name: $sk" "$ROOT/skills/$sk/SKILL.md" 2>/dev/null && n=$((n+1))
 done
 [[ $n -eq 6 ]] && ok || bad "$n/6 skills valid"

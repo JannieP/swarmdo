@@ -13,7 +13,7 @@ name=$(node -e "console.log(JSON.parse(require('fs').readFileSync('$ROOT/.claude
 
 step "2. all four SKILL.md files present with frontmatter"
 n=0
-for sk in caveman caveman-compress cavecrew caveman-stats; do
+for sk in sdo-caveman sdo-caveman-compress sdo-cavecrew sdo-caveman-stats; do
   head -1 "$ROOT/skills/$sk/SKILL.md" 2>/dev/null | grep -q -- "---" && n=$((n+1))
 done
 [[ $n -eq 4 ]] && ok || bad "$n/4 skills valid"

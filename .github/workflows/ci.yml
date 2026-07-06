@@ -170,7 +170,7 @@ jobs:
         timeout-minutes: 15
         shell: pwsh
         run: |
-          # We install the published `@swarmdo/cli@alpha` inside an isolated
+          # We install the published `@swarmdo/cli@latest` inside an isolated
           # temp dir rather than running the source-tree CLI directly, because
           # the source-tree CLI imports the sibling workspace package
           # `@swarmdo/cli-core` (split out in #1764) which isn't always
@@ -183,10 +183,10 @@ jobs:
           New-Item -ItemType Directory -Path $tmp | Out-Null
           Set-Location $tmp
 
-          Write-Host "::group::Phase 1: install @swarmdo/cli@alpha"
+          Write-Host "::group::Phase 1: install @swarmdo/cli@latest"
           $installSw = [System.Diagnostics.Stopwatch]::StartNew()
           npm init -y | Out-Null
-          npm install '@swarmdo/cli@alpha' --no-audit --no-fund --omit=optional --omit=dev
+          npm install '@swarmdo/cli@latest' --no-audit --no-fund --omit=optional --omit=dev
           $installSw.Stop()
           Write-Host "Install took $($installSw.Elapsed.TotalSeconds)s"
           $cli = Join-Path $tmp 'node_modules/@swarmdo/cli/bin/cli.js'

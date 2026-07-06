@@ -35,8 +35,8 @@ importers:
   '@swarmdo/aidefence':
     dependencies:
       agentdb:
-        specifier: '>=2.0.0-alpha.1'
-        version: 2.0.0-alpha.3.7(@types/node@20.19.27)(express@4.22.1)(marked@11.2.0)
+        specifier: file:../../vendor/agentdb
+        version: link:../../vendor/agentdb
     devDependencies:
       '@types/node':
         specifier: ^20.10.0
@@ -57,8 +57,8 @@ importers:
         specifier: ^0.27.0
         version: 0.27.0
       agentic-flow:
-        specifier: ^2.0.13
-        version: 2.0.13(@types/node@20.19.27)
+        specifier: file:../../vendor/agentic-flow
+        version: link:../../vendor/agentic-flow
       zod:
         specifier: ^3.22.4
         version: 3.25.76
@@ -104,20 +104,20 @@ importers:
         specifier: 2.3.0
         version: 2.3.0
       '@swarmdo/cli-core':
-        specifier: workspace:*
+        specifier: file:../cli-core
         version: link:../cli-core
       '@swarmdo/mcp':
-        specifier: workspace:*
+        specifier: file:../mcp
         version: link:../mcp
       '@swarmdo/neural':
-        specifier: workspace:*
+        specifier: file:../neural
         version: link:../neural
       '@swarmdo/shared':
-        specifier: workspace:*
+        specifier: file:../shared
         version: link:../shared
       '@swarmvector/rabitq-wasm':
-        specifier: 0.1.0
-        version: 0.1.0
+        specifier: file:../../@swarmvector/rabitq-wasm
+        version: link:../../@swarmvector/rabitq-wasm
       semver:
         specifier: 7.7.3
         version: 7.7.3
@@ -135,68 +135,71 @@ importers:
         specifier: ~0.3.2
         version: 0.3.2(@swarmvector/tiny-dancer@0.1.22)
       '@swarmdo/aidefence':
-        specifier: workspace:*
+        specifier: file:../aidefence
         version: link:../aidefence
       '@swarmdo/codex':
-        specifier: workspace:*
+        specifier: file:../codex
         version: link:../codex
       '@swarmdo/embeddings':
-        specifier: workspace:*
+        specifier: file:../embeddings
         version: link:../embeddings
       '@swarmdo/guidance':
-        specifier: workspace:*
+        specifier: file:../guidance
         version: link:../guidance
       '@swarmdo/memory':
-        specifier: workspace:*
+        specifier: file:../memory
         version: link:../memory
+      '@swarmdo/plugin-gastown-bridge':
+        specifier: file:../plugin-gastown-bridge
+        version: link:../plugin-gastown-bridge
       '@swarmdo/security':
-        specifier: workspace:*
+        specifier: file:../security
         version: link:../security
       '@swarmvector/attention':
-        specifier: ^0.1.32
-        version: 0.1.32
-      '@swarmvector/attention-darwin-arm64':
-        specifier: 0.1.32
-        version: 0.1.32
+        specifier: file:../../@swarmvector/attention
+        version: link:../../@swarmvector/attention
       '@swarmvector/diskann':
-        specifier: ^0.1.0
-        version: 0.1.0
+        specifier: file:../../@swarmvector/diskann
+        version: link:../../@swarmvector/diskann
       '@swarmvector/learning-wasm':
-        specifier: ^0.1.29
-        version: 0.1.29
+        specifier: file:../../@swarmvector/learning-wasm
+        version: link:../../@swarmvector/learning-wasm
       '@swarmvector/router':
-        specifier: ^0.1.30
-        version: 0.1.30
-      '@swarmvector/swarmllm-wasm':
-        specifier: ^2.0.2
-        version: 2.0.2
+        specifier: file:../../@swarmvector/router
+        version: link:../../@swarmvector/router
       '@swarmvector/rvagent-wasm':
-        specifier: ^0.1.0
-        version: 0.1.0
+        specifier: file:../../@swarmvector/rvagent-wasm
+        version: link:../../@swarmvector/rvagent-wasm
       '@swarmvector/sona':
-        specifier: ^0.1.6
-        version: 0.1.7
+        specifier: file:../../@swarmvector/sona
+        version: link:../../@swarmvector/sona
+      '@swarmvector/swarmllm':
+        specifier: file:../../@swarmvector/swarmllm
+        version: link:../../@swarmvector/swarmllm
+      '@swarmvector/swarmllm-wasm':
+        specifier: file:../../@swarmvector/swarmllm-wasm
+        version: link:../../@swarmvector/swarmllm-wasm
       '@swarmvector/tiny-dancer':
-        specifier: ^0.1.22
-        version: 0.1.22
+        specifier: file:../../@swarmvector/tiny-dancer
+        version: link:../../@swarmvector/tiny-dancer
       agentdb:
         specifier: ^3.0.0-alpha.17
         version: 3.0.0-alpha.17(@types/node@20.19.27)(zod@3.25.76)
       agentic-flow:
-        specifier: ^3.0.0-alpha.1
-        version: 3.0.0-alpha.2
+        specifier: ^2.0.0
+        version: 2.0.13(@types/node@20.19.27)
       better-sqlite3:
         specifier: ^12.9.0
         version: 12.9.0
       metaharness:
         specifier: ~0.2.6
         version: 0.2.6(@metaharness/kernel@0.1.0)
-      swarmvector:
-        specifier: ^0.2.27
-        version: 0.2.27(@swarmvector/diskann@0.1.0)(@swarmvector/router@0.1.30)(zod@3.25.76)
       sql.js:
         specifier: ^1.13.0
         version: 1.14.1
+      swarmvector:
+        specifier: file:../../vendor/swarmvector
+        version: link:../../vendor/swarmvector
     devDependencies:
       '@types/better-sqlite3':
         specifier: ^7.6.0
@@ -216,7 +219,7 @@ importers:
         specifier: ^2.2.5
         version: 2.2.5
       '@swarmdo/cli':
-        specifier: workspace:*
+        specifier: file:../cli
         version: link:../cli
       chalk:
         specifier: ^5.3.0
@@ -272,7 +275,7 @@ importers:
         specifier: ^4.0.0
         version: 4.2.0
       '@swarmdo/shared':
-        specifier: workspace:*
+        specifier: file:../shared
         version: link:../shared
       '@xenova/transformers':
         specifier: ^2.17.0
@@ -297,13 +300,13 @@ importers:
   '@swarmdo/guidance':
     dependencies:
       '@swarmdo/hooks':
-        specifier: workspace:*
+        specifier: file:../hooks
         version: link:../hooks
       '@swarmdo/memory':
-        specifier: workspace:*
+        specifier: file:../memory
         version: link:../memory
       '@swarmdo/shared':
-        specifier: workspace:*
+        specifier: file:../shared
         version: link:../shared
     devDependencies:
       '@types/node':
@@ -319,13 +322,13 @@ importers:
   '@swarmdo/hooks':
     dependencies:
       '@swarmdo/memory':
-        specifier: workspace:*
+        specifier: file:../memory
         version: link:../memory
       '@swarmdo/neural':
-        specifier: workspace:*
+        specifier: file:../neural
         version: link:../neural
       '@swarmdo/shared':
-        specifier: workspace:*
+        specifier: file:../shared
         version: link:../shared
       zod:
         specifier: ^3.23.0
@@ -419,11 +422,11 @@ importers:
   '@swarmdo/neural':
     dependencies:
       '@swarmdo/memory':
-        specifier: workspace:*
+        specifier: file:../memory
         version: link:../memory
       '@swarmvector/sona':
-        specifier: 0.1.5
-        version: 0.1.5
+        specifier: file:../../@swarmvector/sona
+        version: link:../../@swarmvector/sona
     optionalDependencies:
       agentdb:
         specifier: ^2.0.0 || ^3.0.0-alpha.1
@@ -432,11 +435,11 @@ importers:
   '@swarmdo/performance':
     dependencies:
       '@swarmvector/attention':
-        specifier: latest
-        version: 2.2.2
+        specifier: file:../../@swarmvector/attention
+        version: link:../../@swarmvector/attention
       '@swarmvector/sona':
-        specifier: latest
-        version: 0.1.7
+        specifier: file:../../@swarmvector/sona
+        version: link:../../@swarmvector/sona
     devDependencies:
       vitest:
         specifier: ^4.0.16
@@ -495,11 +498,11 @@ importers:
         specifier: workspace:*
         version: link:../memory
       '@swarmvector/learning-wasm':
-        specifier: ^0.1.0
-        version: 0.1.29
+        specifier: file:../../@swarmvector/learning-wasm
+        version: link:../../@swarmvector/learning-wasm
       '@swarmvector/wasm':
-        specifier: ^0.1.0
-        version: 0.1.16
+        specifier: file:../../@swarmvector/wasm
+        version: link:../../@swarmvector/wasm
       events:
         specifier: ^3.3.0
         version: 3.3.0
@@ -517,8 +520,8 @@ importers:
   '@swarmdo/providers':
     dependencies:
       '@swarmvector/swarmllm':
-        specifier: ^0.2.3
-        version: 0.2.4
+        specifier: file:../../@swarmvector/swarmllm
+        version: link:../../@swarmvector/swarmllm
       events:
         specifier: ^3.3.0
         version: 3.3.0
@@ -3771,6 +3774,162 @@ packages:
     dev: true
     optional: true
 
+  /@sec-ant/readable-stream@0.4.1:
+    resolution: {integrity: sha512-831qok9r2t8AlxLko40y2ebgSDhenenCatLVeW/uBtnHPyhHOvG0C7TvfgecV+wHzIm5KUICgzmVpWS+IMEAeg==}
+
+  /@semantic-release/commit-analyzer@13.0.1(semantic-release@25.0.2):
+    resolution: {integrity: sha512-wdnBPHKkr9HhNhXOhZD5a2LNl91+hs8CC2vsAVYxtZH3y0dV3wKn+uZSN61rdJQZ8EGxzWB3inWocBHV9+u/CQ==}
+    engines: {node: '>=20.8.1'}
+    peerDependencies:
+      semantic-release: '>=20.1.0'
+    dependencies:
+      conventional-changelog-angular: 8.1.0
+      conventional-changelog-writer: 8.2.0
+      conventional-commits-filter: 5.0.0
+      conventional-commits-parser: 6.2.1
+      debug: 4.4.3
+      import-from-esm: 2.0.0
+      lodash-es: 4.17.22
+      micromatch: 4.0.8
+      semantic-release: 25.0.2(typescript@5.9.3)
+    transitivePeerDependencies:
+      - supports-color
+
+  /@semantic-release/error@4.0.0:
+    resolution: {integrity: sha512-mgdxrHTLOjOddRVYIYDo0fR3/v61GNN1YGkfbrjuIKg/uMgCd+Qzo3UAXJ+woLQQpos4pl5Esuw5A7AoNlzjUQ==}
+    engines: {node: '>=18'}
+
+  /@semantic-release/github@12.0.2(semantic-release@25.0.2):
+    resolution: {integrity: sha512-qyqLS+aSGH1SfXIooBKjs7mvrv0deg8v+jemegfJg1kq6ji+GJV8CO08VJDEsvjp3O8XJmTTIAjjZbMzagzsdw==}
+    engines: {node: ^22.14.0 || >= 24.10.0}
+    peerDependencies:
+      semantic-release: '>=24.1.0'
+    dependencies:
+      '@octokit/core': 7.0.6
+      '@octokit/plugin-paginate-rest': 14.0.0(@octokit/core@7.0.6)
+      '@octokit/plugin-retry': 8.0.3(@octokit/core@7.0.6)
+      '@octokit/plugin-throttling': 11.0.3(@octokit/core@7.0.6)
+      '@semantic-release/error': 4.0.0
+      aggregate-error: 5.0.0
+      debug: 4.4.3
+      dir-glob: 3.0.1
+      http-proxy-agent: 7.0.2
+      https-proxy-agent: 7.0.6
+      issue-parser: 7.0.1
+      lodash-es: 4.17.22
+      mime: 4.1.0
+      p-filter: 4.1.0
+      semantic-release: 25.0.2(typescript@5.9.3)
+      tinyglobby: 0.2.15
+      undici: 7.16.0
+      url-join: 5.0.0
+    transitivePeerDependencies:
+      - supports-color
+
+  /@semantic-release/npm@13.1.3(semantic-release@25.0.2):
+    resolution: {integrity: sha512-q7zreY8n9V0FIP1Cbu63D+lXtRAVAIWb30MH5U3TdrfXt6r2MIrWCY0whAImN53qNvSGp0Zt07U95K+Qp9GpEg==}
+    engines: {node: ^22.14.0 || >= 24.10.0}
+    peerDependencies:
+      semantic-release: '>=20.1.0'
+    dependencies:
+      '@actions/core': 2.0.1
+      '@semantic-release/error': 4.0.0
+      aggregate-error: 5.0.0
+      env-ci: 11.2.0
+      execa: 9.6.1
+      fs-extra: 11.3.3
+      lodash-es: 4.17.22
+      nerf-dart: 1.0.0
+      normalize-url: 8.1.1
+      npm: 11.7.0
+      rc: 1.2.8
+      read-pkg: 10.0.0
+      registry-auth-token: 5.1.0
+      semantic-release: 25.0.2(typescript@5.9.3)
+      semver: 7.7.3
+      tempy: 3.1.0
+
+  /@semantic-release/release-notes-generator@14.1.0(semantic-release@25.0.2):
+    resolution: {integrity: sha512-CcyDRk7xq+ON/20YNR+1I/jP7BYKICr1uKd1HHpROSnnTdGqOTburi4jcRiTYz0cpfhxSloQO3cGhnoot7IEkA==}
+    engines: {node: '>=20.8.1'}
+    peerDependencies:
+      semantic-release: '>=20.1.0'
+    dependencies:
+      conventional-changelog-angular: 8.1.0
+      conventional-changelog-writer: 8.2.0
+      conventional-commits-filter: 5.0.0
+      conventional-commits-parser: 6.2.1
+      debug: 4.4.3
+      get-stream: 7.0.1
+      import-from-esm: 2.0.0
+      into-stream: 7.0.0
+      lodash-es: 4.17.22
+      read-package-up: 11.0.0
+      semantic-release: 25.0.2(typescript@5.9.3)
+    transitivePeerDependencies:
+      - supports-color
+
+  /@sindresorhus/is@4.6.0:
+    resolution: {integrity: sha512-t09vSN3MdfsyCHoFcTRCH/iUtG7OJ0CsjzB8cjAmKc/va/kIgeDI/TxsigdncE/4be734m0cvIYwNaV4i2XqAw==}
+    engines: {node: '>=10'}
+
+  /@sindresorhus/merge-streams@4.0.0:
+    resolution: {integrity: sha512-tlqY9xq5ukxTUZBmoOp+m61cqwQD5pHJtFY3Mn8CA8ps6yghLH/Hw8UPdqg4OLmFW3IFlcXnQNmo/dh8HzXYIQ==}
+    engines: {node: '>=18'}
+
+  /@standard-schema/spec@1.1.0:
+    resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
+
+  /@supabase/auth-js@2.89.0:
+    resolution: {integrity: sha512-wiWZdz8WMad8LQdJMWYDZ2SJtZP5MwMqzQq3ehtW2ngiI3UTgbKiFrvMUUS3KADiVlk4LiGfODB2mrYx7w2f8w==}
+    engines: {node: '>=20.0.0'}
+    dependencies:
+      tslib: 2.8.1
+
+  /@supabase/functions-js@2.89.0:
+    resolution: {integrity: sha512-XEueaC5gMe5NufNYfBh9kPwJlP5M2f+Ogr8rvhmRDAZNHgY6mI35RCkYDijd92pMcNM7g8pUUJov93UGUnqfyw==}
+    engines: {node: '>=20.0.0'}
+    dependencies:
+      tslib: 2.8.1
+
+  /@supabase/postgrest-js@2.89.0:
+    resolution: {integrity: sha512-/b0fKrxV9i7RNOEXMno/I1862RsYhuUo+Q6m6z3ar1f4ulTMXnDfv0y4YYxK2POcgrOXQOgKYQx1eArybyNvtg==}
+    engines: {node: '>=20.0.0'}
+    dependencies:
+      tslib: 2.8.1
+
+  /@supabase/realtime-js@2.89.0:
+    resolution: {integrity: sha512-aMOvfDb2a52u6PX6jrrjvACHXGV3zsOlWRzZsTIOAJa0hOVvRp01AwC1+nLTGUzxzezejrYeCX+KnnM1xHdl+w==}
+    engines: {node: '>=20.0.0'}
+    dependencies:
+      '@types/phoenix': 1.6.7
+      '@types/ws': 8.18.1
+      tslib: 2.8.1
+      ws: 8.20.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+
+  /@supabase/storage-js@2.89.0:
+    resolution: {integrity: sha512-6zKcXofk/M/4Eato7iqpRh+B+vnxeiTumCIP+Tz26xEqIiywzD9JxHq+udRrDuv6hXE+pmetvJd8n5wcf4MFRQ==}
+    engines: {node: '>=20.0.0'}
+    dependencies:
+      iceberg-js: 0.8.1
+      tslib: 2.8.1
+
+  /@supabase/supabase-js@2.89.0:
+    resolution: {integrity: sha512-KlaRwSfFA0fD73PYVMHj5/iXFtQGCcX7PSx0FdQwYEEw9b2wqM7GxadY+5YwcmuEhalmjFB/YvqaoNVF+sWUlg==}
+    engines: {node: '>=20.0.0'}
+    dependencies:
+      '@supabase/auth-js': 2.89.0
+      '@supabase/functions-js': 2.89.0
+      '@supabase/postgrest-js': 2.89.0
+      '@supabase/realtime-js': 2.89.0
+      '@supabase/storage-js': 2.89.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+
   /@swarmvector/attention-darwin-arm64@0.1.32:
     resolution: {integrity: sha512-CQ/oftq9o9t2EEBwCfUfdZsxuzHRXrHhtdZk05GZfvPxiDbsuw3NLgDQRR3cvg+8xU9lAmzer+8WCGdxbgX7vQ==}
     cpu: [arm64]
@@ -4244,124 +4403,6 @@ packages:
       '@swarmvector/router-linux-x64-gnu': 0.1.30
       '@swarmvector/router-win32-x64-msvc': 0.1.30
 
-  /@swarmvector/swarmllm-darwin-arm64@0.2.0:
-    resolution: {integrity: sha512-3oEMNEoGJqfTJXf1Th49HPTlETMxLzlBc1yBY1RqCMoqSrNKsM66+3Npx0O/GdYfFnKRU2wa/mlLPuBY2lUqYQ==}
-    engines: {node: '>= 18'}
-    cpu: [arm64]
-    os: [darwin]
-    requiresBuild: true
-    optional: true
-
-  /@swarmvector/swarmllm-darwin-arm64@2.0.1:
-    resolution: {integrity: sha512-giZb+TbErKLgURLC3CSmJKJl0bnJn+jFZk488ppyzrR6YGft6kO329Twnd+TiJNDxVOMgZefwVdsbF9jrUIgAQ==}
-    engines: {node: '>= 18'}
-    cpu: [arm64]
-    os: [darwin]
-    requiresBuild: true
-    optional: true
-
-  /@swarmvector/swarmllm-darwin-x64@0.2.0:
-    resolution: {integrity: sha512-Niu9oG9hkbDJ1IpfXluRRfO4vwPwCdISW+ff1H+NjmIk8028CIg2w5iq3qbIaj6WzTQ9YqA68V5aMD9t0w8A6g==}
-    engines: {node: '>= 18'}
-    cpu: [x64]
-    os: [darwin]
-    requiresBuild: true
-    optional: true
-
-  /@swarmvector/swarmllm-darwin-x64@2.0.1:
-    resolution: {integrity: sha512-DpVKFBXFxVPBiCGBw1AeiwsY1YVWfaCh+Eq0+pVLqD4kwwXKhRIWLnTQcuZVE5Gnt1Ku8MxhH2Zs++vKiuq3mA==}
-    engines: {node: '>= 18'}
-    cpu: [x64]
-    os: [darwin]
-    requiresBuild: true
-    optional: true
-
-  /@swarmvector/swarmllm-linux-arm64-gnu@0.2.0:
-    resolution: {integrity: sha512-ykOqwiqRbf29idXYMmuDdZqOsRMbYgzpWhmk/BcSRVBMUsO4W2Q0UkgLZgt6PIKxSf1k2qt8x8uSmO5tYTD8Iw==}
-    engines: {node: '>= 18'}
-    cpu: [arm64]
-    os: [linux]
-    requiresBuild: true
-    optional: true
-
-  /@swarmvector/swarmllm-linux-arm64-gnu@2.0.1:
-    resolution: {integrity: sha512-+u6Fe/Dsy4Y11m9IUmuoUeFtoUWc1ZVXxGB4JYomNDll63D03a0cpeKKaslgwOfFlfXlrFcs/eDrsYr07tQP5g==}
-    engines: {node: '>= 18'}
-    cpu: [arm64]
-    os: [linux]
-    requiresBuild: true
-    optional: true
-
-  /@swarmvector/swarmllm-linux-x64-gnu@0.2.0:
-    resolution: {integrity: sha512-8JHH7ft00rqCRyiP0wuAThOVwSodj0gaTZcG1jBBqtnwApmdmTWN8EpuffrHHhhRO+Uvny6T5r7TiAh+Xu+QuQ==}
-    engines: {node: '>= 18'}
-    cpu: [x64]
-    os: [linux]
-    requiresBuild: true
-    optional: true
-
-  /@swarmvector/swarmllm-linux-x64-gnu@2.0.1:
-    resolution: {integrity: sha512-GH9u/SPUZm9KXjSoQZx5PRtJui0hO/OK+OmRHLZc8+IYrlgona6UQAw6uKHJ3cSEZp9f+XBRYgIrLmsEJW3HXA==}
-    engines: {node: '>= 18'}
-    cpu: [x64]
-    os: [linux]
-    requiresBuild: true
-    optional: true
-
-  /@swarmvector/swarmllm-wasm@2.0.2:
-    resolution: {integrity: sha512-jVu+t710JvEzU6UZZvKrTp+dWsm3hKzOqB+yxrcqFsVaccVfeKyQuvCx13qVENvuntbnfslryErn9QbydH76yQ==}
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@swarmvector/swarmllm-win32-x64-msvc@0.2.0:
-    resolution: {integrity: sha512-ksm+AZVqkkYLVq2Rbc7Rx+gSH7egFWlcH3E5dQpro98Oslc7jUH+uNDRjDVUS3lZXchV+Ot5WPLM4pClRxFm9w==}
-    engines: {node: '>= 18'}
-    cpu: [x64]
-    os: [win32]
-    requiresBuild: true
-    optional: true
-
-  /@swarmvector/swarmllm-win32-x64-msvc@2.0.1:
-    resolution: {integrity: sha512-sRGNOMAcyC5p/nITnR0HLFUEObZ9Mh/T1erNiqhKrNUqIPZM1qAYBgN3xmZp02isdiTilRpxQihz3j4EzGPXIw==}
-    engines: {node: '>= 18'}
-    cpu: [x64]
-    os: [win32]
-    requiresBuild: true
-    optional: true
-
-  /@swarmvector/swarmllm@0.2.4:
-    resolution: {integrity: sha512-cNAkcKZIqqy+3fxOb1z8bS1cJzJgsUpqNIdMk29RDr+a5g/fLgmHTVEzdBW6kHfDTc5tFUr10Juh9K6w0cKufg==}
-    engines: {node: '>= 18'}
-    hasBin: true
-    dependencies:
-      chalk: 4.1.2
-      commander: 12.1.0
-      ora: 5.4.1
-    optionalDependencies:
-      '@swarmvector/swarmllm-darwin-arm64': 0.2.0
-      '@swarmvector/swarmllm-darwin-x64': 0.2.0
-      '@swarmvector/swarmllm-linux-arm64-gnu': 0.2.0
-      '@swarmvector/swarmllm-linux-x64-gnu': 0.2.0
-      '@swarmvector/swarmllm-win32-x64-msvc': 0.2.0
-
-  /@swarmvector/swarmllm@2.5.6:
-    resolution: {integrity: sha512-B29ej1aJCNN7UCiIj0wtDMLCe01UWA7KMPTSAriGeey13aNYnstsTD+lz3tkglLSMSdwf9ozQ+N4lVQXvc96+A==}
-    engines: {node: '>= 18'}
-    hasBin: true
-    requiresBuild: true
-    dependencies:
-      chalk: 4.1.2
-      commander: 12.1.0
-      ora: 5.4.1
-    optionalDependencies:
-      '@swarmvector/swarmllm-darwin-arm64': 2.0.1
-      '@swarmvector/swarmllm-darwin-x64': 2.0.1
-      '@swarmvector/swarmllm-linux-arm64-gnu': 2.0.1
-      '@swarmvector/swarmllm-linux-x64-gnu': 2.0.1
-      '@swarmvector/swarmllm-win32-x64-msvc': 2.0.1
-    optional: true
-
   /@swarmvector/rvagent-wasm@0.1.0:
     resolution: {integrity: sha512-zhcnU7XfBEfDwkDFscehq6qGU/TW4LNr287xHHXCuNsaTBPlb8YSnkuMNWg6BBIK/X+UdWAsyYESN5jbNQEaBQ==}
     requiresBuild: true
@@ -4565,6 +4606,124 @@ packages:
       '@swarmvector/sona-win32-arm64-msvc': 0.1.7
       '@swarmvector/sona-win32-x64-msvc': 0.1.7
 
+  /@swarmvector/swarmllm-darwin-arm64@0.2.0:
+    resolution: {integrity: sha512-3oEMNEoGJqfTJXf1Th49HPTlETMxLzlBc1yBY1RqCMoqSrNKsM66+3Npx0O/GdYfFnKRU2wa/mlLPuBY2lUqYQ==}
+    engines: {node: '>= 18'}
+    cpu: [arm64]
+    os: [darwin]
+    requiresBuild: true
+    optional: true
+
+  /@swarmvector/swarmllm-darwin-arm64@2.0.1:
+    resolution: {integrity: sha512-giZb+TbErKLgURLC3CSmJKJl0bnJn+jFZk488ppyzrR6YGft6kO329Twnd+TiJNDxVOMgZefwVdsbF9jrUIgAQ==}
+    engines: {node: '>= 18'}
+    cpu: [arm64]
+    os: [darwin]
+    requiresBuild: true
+    optional: true
+
+  /@swarmvector/swarmllm-darwin-x64@0.2.0:
+    resolution: {integrity: sha512-Niu9oG9hkbDJ1IpfXluRRfO4vwPwCdISW+ff1H+NjmIk8028CIg2w5iq3qbIaj6WzTQ9YqA68V5aMD9t0w8A6g==}
+    engines: {node: '>= 18'}
+    cpu: [x64]
+    os: [darwin]
+    requiresBuild: true
+    optional: true
+
+  /@swarmvector/swarmllm-darwin-x64@2.0.1:
+    resolution: {integrity: sha512-DpVKFBXFxVPBiCGBw1AeiwsY1YVWfaCh+Eq0+pVLqD4kwwXKhRIWLnTQcuZVE5Gnt1Ku8MxhH2Zs++vKiuq3mA==}
+    engines: {node: '>= 18'}
+    cpu: [x64]
+    os: [darwin]
+    requiresBuild: true
+    optional: true
+
+  /@swarmvector/swarmllm-linux-arm64-gnu@0.2.0:
+    resolution: {integrity: sha512-ykOqwiqRbf29idXYMmuDdZqOsRMbYgzpWhmk/BcSRVBMUsO4W2Q0UkgLZgt6PIKxSf1k2qt8x8uSmO5tYTD8Iw==}
+    engines: {node: '>= 18'}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    optional: true
+
+  /@swarmvector/swarmllm-linux-arm64-gnu@2.0.1:
+    resolution: {integrity: sha512-+u6Fe/Dsy4Y11m9IUmuoUeFtoUWc1ZVXxGB4JYomNDll63D03a0cpeKKaslgwOfFlfXlrFcs/eDrsYr07tQP5g==}
+    engines: {node: '>= 18'}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    optional: true
+
+  /@swarmvector/swarmllm-linux-x64-gnu@0.2.0:
+    resolution: {integrity: sha512-8JHH7ft00rqCRyiP0wuAThOVwSodj0gaTZcG1jBBqtnwApmdmTWN8EpuffrHHhhRO+Uvny6T5r7TiAh+Xu+QuQ==}
+    engines: {node: '>= 18'}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    optional: true
+
+  /@swarmvector/swarmllm-linux-x64-gnu@2.0.1:
+    resolution: {integrity: sha512-GH9u/SPUZm9KXjSoQZx5PRtJui0hO/OK+OmRHLZc8+IYrlgona6UQAw6uKHJ3cSEZp9f+XBRYgIrLmsEJW3HXA==}
+    engines: {node: '>= 18'}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    optional: true
+
+  /@swarmvector/swarmllm-wasm@2.0.2:
+    resolution: {integrity: sha512-jVu+t710JvEzU6UZZvKrTp+dWsm3hKzOqB+yxrcqFsVaccVfeKyQuvCx13qVENvuntbnfslryErn9QbydH76yQ==}
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@swarmvector/swarmllm-win32-x64-msvc@0.2.0:
+    resolution: {integrity: sha512-ksm+AZVqkkYLVq2Rbc7Rx+gSH7egFWlcH3E5dQpro98Oslc7jUH+uNDRjDVUS3lZXchV+Ot5WPLM4pClRxFm9w==}
+    engines: {node: '>= 18'}
+    cpu: [x64]
+    os: [win32]
+    requiresBuild: true
+    optional: true
+
+  /@swarmvector/swarmllm-win32-x64-msvc@2.0.1:
+    resolution: {integrity: sha512-sRGNOMAcyC5p/nITnR0HLFUEObZ9Mh/T1erNiqhKrNUqIPZM1qAYBgN3xmZp02isdiTilRpxQihz3j4EzGPXIw==}
+    engines: {node: '>= 18'}
+    cpu: [x64]
+    os: [win32]
+    requiresBuild: true
+    optional: true
+
+  /@swarmvector/swarmllm@0.2.4:
+    resolution: {integrity: sha512-cNAkcKZIqqy+3fxOb1z8bS1cJzJgsUpqNIdMk29RDr+a5g/fLgmHTVEzdBW6kHfDTc5tFUr10Juh9K6w0cKufg==}
+    engines: {node: '>= 18'}
+    hasBin: true
+    dependencies:
+      chalk: 4.1.2
+      commander: 12.1.0
+      ora: 5.4.1
+    optionalDependencies:
+      '@swarmvector/swarmllm-darwin-arm64': 0.2.0
+      '@swarmvector/swarmllm-darwin-x64': 0.2.0
+      '@swarmvector/swarmllm-linux-arm64-gnu': 0.2.0
+      '@swarmvector/swarmllm-linux-x64-gnu': 0.2.0
+      '@swarmvector/swarmllm-win32-x64-msvc': 0.2.0
+
+  /@swarmvector/swarmllm@2.5.6:
+    resolution: {integrity: sha512-B29ej1aJCNN7UCiIj0wtDMLCe01UWA7KMPTSAriGeey13aNYnstsTD+lz3tkglLSMSdwf9ozQ+N4lVQXvc96+A==}
+    engines: {node: '>= 18'}
+    hasBin: true
+    requiresBuild: true
+    dependencies:
+      chalk: 4.1.2
+      commander: 12.1.0
+      ora: 5.4.1
+    optionalDependencies:
+      '@swarmvector/swarmllm-darwin-arm64': 2.0.1
+      '@swarmvector/swarmllm-darwin-x64': 2.0.1
+      '@swarmvector/swarmllm-linux-arm64-gnu': 2.0.1
+      '@swarmvector/swarmllm-linux-x64-gnu': 2.0.1
+      '@swarmvector/swarmllm-win32-x64-msvc': 2.0.1
+    optional: true
+
   /@swarmvector/tiny-dancer-darwin-arm64@0.1.22:
     resolution: {integrity: sha512-DdCDrjobSyXm4W3Mj8R1R58dxULcLR/F+sw2DItCNly7/vId9+YopB2Jlj31PAnuiPWpGy5fpMm8lov23Cxh4g==}
     engines: {node: '>= 18'}
@@ -4645,162 +4804,6 @@ packages:
   /@swarmvector/wasm@0.1.16:
     resolution: {integrity: sha512-BvtXLvBDxDxsnFVIi7rsRE8AvPxYOWqHvj8PUOEb3TfsCWBEA2gT5VodMJEv+DWx/mVqdongxRkuHGlVcK9pug==}
     dev: false
-
-  /@sec-ant/readable-stream@0.4.1:
-    resolution: {integrity: sha512-831qok9r2t8AlxLko40y2ebgSDhenenCatLVeW/uBtnHPyhHOvG0C7TvfgecV+wHzIm5KUICgzmVpWS+IMEAeg==}
-
-  /@semantic-release/commit-analyzer@13.0.1(semantic-release@25.0.2):
-    resolution: {integrity: sha512-wdnBPHKkr9HhNhXOhZD5a2LNl91+hs8CC2vsAVYxtZH3y0dV3wKn+uZSN61rdJQZ8EGxzWB3inWocBHV9+u/CQ==}
-    engines: {node: '>=20.8.1'}
-    peerDependencies:
-      semantic-release: '>=20.1.0'
-    dependencies:
-      conventional-changelog-angular: 8.1.0
-      conventional-changelog-writer: 8.2.0
-      conventional-commits-filter: 5.0.0
-      conventional-commits-parser: 6.2.1
-      debug: 4.4.3
-      import-from-esm: 2.0.0
-      lodash-es: 4.17.22
-      micromatch: 4.0.8
-      semantic-release: 25.0.2(typescript@5.9.3)
-    transitivePeerDependencies:
-      - supports-color
-
-  /@semantic-release/error@4.0.0:
-    resolution: {integrity: sha512-mgdxrHTLOjOddRVYIYDo0fR3/v61GNN1YGkfbrjuIKg/uMgCd+Qzo3UAXJ+woLQQpos4pl5Esuw5A7AoNlzjUQ==}
-    engines: {node: '>=18'}
-
-  /@semantic-release/github@12.0.2(semantic-release@25.0.2):
-    resolution: {integrity: sha512-qyqLS+aSGH1SfXIooBKjs7mvrv0deg8v+jemegfJg1kq6ji+GJV8CO08VJDEsvjp3O8XJmTTIAjjZbMzagzsdw==}
-    engines: {node: ^22.14.0 || >= 24.10.0}
-    peerDependencies:
-      semantic-release: '>=24.1.0'
-    dependencies:
-      '@octokit/core': 7.0.6
-      '@octokit/plugin-paginate-rest': 14.0.0(@octokit/core@7.0.6)
-      '@octokit/plugin-retry': 8.0.3(@octokit/core@7.0.6)
-      '@octokit/plugin-throttling': 11.0.3(@octokit/core@7.0.6)
-      '@semantic-release/error': 4.0.0
-      aggregate-error: 5.0.0
-      debug: 4.4.3
-      dir-glob: 3.0.1
-      http-proxy-agent: 7.0.2
-      https-proxy-agent: 7.0.6
-      issue-parser: 7.0.1
-      lodash-es: 4.17.22
-      mime: 4.1.0
-      p-filter: 4.1.0
-      semantic-release: 25.0.2(typescript@5.9.3)
-      tinyglobby: 0.2.15
-      undici: 7.16.0
-      url-join: 5.0.0
-    transitivePeerDependencies:
-      - supports-color
-
-  /@semantic-release/npm@13.1.3(semantic-release@25.0.2):
-    resolution: {integrity: sha512-q7zreY8n9V0FIP1Cbu63D+lXtRAVAIWb30MH5U3TdrfXt6r2MIrWCY0whAImN53qNvSGp0Zt07U95K+Qp9GpEg==}
-    engines: {node: ^22.14.0 || >= 24.10.0}
-    peerDependencies:
-      semantic-release: '>=20.1.0'
-    dependencies:
-      '@actions/core': 2.0.1
-      '@semantic-release/error': 4.0.0
-      aggregate-error: 5.0.0
-      env-ci: 11.2.0
-      execa: 9.6.1
-      fs-extra: 11.3.3
-      lodash-es: 4.17.22
-      nerf-dart: 1.0.0
-      normalize-url: 8.1.1
-      npm: 11.7.0
-      rc: 1.2.8
-      read-pkg: 10.0.0
-      registry-auth-token: 5.1.0
-      semantic-release: 25.0.2(typescript@5.9.3)
-      semver: 7.7.3
-      tempy: 3.1.0
-
-  /@semantic-release/release-notes-generator@14.1.0(semantic-release@25.0.2):
-    resolution: {integrity: sha512-CcyDRk7xq+ON/20YNR+1I/jP7BYKICr1uKd1HHpROSnnTdGqOTburi4jcRiTYz0cpfhxSloQO3cGhnoot7IEkA==}
-    engines: {node: '>=20.8.1'}
-    peerDependencies:
-      semantic-release: '>=20.1.0'
-    dependencies:
-      conventional-changelog-angular: 8.1.0
-      conventional-changelog-writer: 8.2.0
-      conventional-commits-filter: 5.0.0
-      conventional-commits-parser: 6.2.1
-      debug: 4.4.3
-      get-stream: 7.0.1
-      import-from-esm: 2.0.0
-      into-stream: 7.0.0
-      lodash-es: 4.17.22
-      read-package-up: 11.0.0
-      semantic-release: 25.0.2(typescript@5.9.3)
-    transitivePeerDependencies:
-      - supports-color
-
-  /@sindresorhus/is@4.6.0:
-    resolution: {integrity: sha512-t09vSN3MdfsyCHoFcTRCH/iUtG7OJ0CsjzB8cjAmKc/va/kIgeDI/TxsigdncE/4be734m0cvIYwNaV4i2XqAw==}
-    engines: {node: '>=10'}
-
-  /@sindresorhus/merge-streams@4.0.0:
-    resolution: {integrity: sha512-tlqY9xq5ukxTUZBmoOp+m61cqwQD5pHJtFY3Mn8CA8ps6yghLH/Hw8UPdqg4OLmFW3IFlcXnQNmo/dh8HzXYIQ==}
-    engines: {node: '>=18'}
-
-  /@standard-schema/spec@1.1.0:
-    resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
-
-  /@supabase/auth-js@2.89.0:
-    resolution: {integrity: sha512-wiWZdz8WMad8LQdJMWYDZ2SJtZP5MwMqzQq3ehtW2ngiI3UTgbKiFrvMUUS3KADiVlk4LiGfODB2mrYx7w2f8w==}
-    engines: {node: '>=20.0.0'}
-    dependencies:
-      tslib: 2.8.1
-
-  /@supabase/functions-js@2.89.0:
-    resolution: {integrity: sha512-XEueaC5gMe5NufNYfBh9kPwJlP5M2f+Ogr8rvhmRDAZNHgY6mI35RCkYDijd92pMcNM7g8pUUJov93UGUnqfyw==}
-    engines: {node: '>=20.0.0'}
-    dependencies:
-      tslib: 2.8.1
-
-  /@supabase/postgrest-js@2.89.0:
-    resolution: {integrity: sha512-/b0fKrxV9i7RNOEXMno/I1862RsYhuUo+Q6m6z3ar1f4ulTMXnDfv0y4YYxK2POcgrOXQOgKYQx1eArybyNvtg==}
-    engines: {node: '>=20.0.0'}
-    dependencies:
-      tslib: 2.8.1
-
-  /@supabase/realtime-js@2.89.0:
-    resolution: {integrity: sha512-aMOvfDb2a52u6PX6jrrjvACHXGV3zsOlWRzZsTIOAJa0hOVvRp01AwC1+nLTGUzxzezejrYeCX+KnnM1xHdl+w==}
-    engines: {node: '>=20.0.0'}
-    dependencies:
-      '@types/phoenix': 1.6.7
-      '@types/ws': 8.18.1
-      tslib: 2.8.1
-      ws: 8.20.0
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
-
-  /@supabase/storage-js@2.89.0:
-    resolution: {integrity: sha512-6zKcXofk/M/4Eato7iqpRh+B+vnxeiTumCIP+Tz26xEqIiywzD9JxHq+udRrDuv6hXE+pmetvJd8n5wcf4MFRQ==}
-    engines: {node: '>=20.0.0'}
-    dependencies:
-      iceberg-js: 0.8.1
-      tslib: 2.8.1
-
-  /@supabase/supabase-js@2.89.0:
-    resolution: {integrity: sha512-KlaRwSfFA0fD73PYVMHj5/iXFtQGCcX7PSx0FdQwYEEw9b2wqM7GxadY+5YwcmuEhalmjFB/YvqaoNVF+sWUlg==}
-    engines: {node: '>=20.0.0'}
-    dependencies:
-      '@supabase/auth-js': 2.89.0
-      '@supabase/functions-js': 2.89.0
-      '@supabase/postgrest-js': 2.89.0
-      '@supabase/realtime-js': 2.89.0
-      '@supabase/storage-js': 2.89.0
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
 
   /@tokenizer/inflate@0.4.1:
     resolution: {integrity: sha512-2mAv+8pkG6GIZiF1kNg1jAjh27IDxEPKwdGul3snfztFerfPGI1LjDezZp3i7BElXompqEtPmoPx6c2wgtWsOA==}
@@ -5375,8 +5378,8 @@ packages:
       '@swarmvector/gnn': 0.1.25
       '@swarmvector/graph-node': 0.1.26
       '@swarmvector/router': 0.1.30
-      '@swarmvector/swarmllm': 0.2.4
       '@swarmvector/sona': 0.1.7
+      '@swarmvector/swarmllm': 0.2.4
       ajv: 8.18.0
       chalk: 5.6.2
       cli-table3: 0.6.5
@@ -5386,9 +5389,9 @@ packages:
       jsonwebtoken: 9.0.3
       marked-terminal: 6.2.0(marked@11.2.0)
       ora: 7.0.1
+      sql.js: 1.14.1
       swarmvector: 0.1.100(zod@3.25.76)
       swarmvector-attention-wasm: 0.1.32
-      sql.js: 1.14.1
       zod: 3.25.76
     optionalDependencies:
       '@opentelemetry/auto-instrumentations-node': 0.47.1(@opentelemetry/api@1.9.1)
@@ -5440,12 +5443,12 @@ packages:
       '@swarmvector/gnn': 0.1.25
       '@swarmvector/graph-node': 2.0.3
       '@swarmvector/router': 0.1.30
-      '@swarmvector/swarmllm': 2.5.6
       '@swarmvector/rvf': 0.1.9
       '@swarmvector/rvf-node': 0.1.8
       '@swarmvector/rvf-solver': 0.1.8
       '@swarmvector/rvf-wasm': 0.1.6
       '@swarmvector/sona': 0.1.7
+      '@swarmvector/swarmllm': 2.5.6
       '@xenova/transformers': 2.17.2
       argon2: 0.44.0
       better-sqlite3: 11.10.0
@@ -5474,12 +5477,12 @@ packages:
       '@anthropic-ai/claude-agent-sdk': 0.1.76(zod@3.25.76)
       '@anthropic-ai/sdk': 0.65.0(zod@3.25.76)
       '@google/genai': 1.44.0
+      '@supabase/supabase-js': 2.89.0
       '@swarmvector/core': 0.1.30
       '@swarmvector/edge-full': 0.1.0
       '@swarmvector/router': 0.1.30
       '@swarmvector/swarmllm': 0.2.4
       '@swarmvector/tiny-dancer': 0.1.22
-      '@supabase/supabase-js': 2.89.0
       '@xenova/transformers': 2.17.2
       axios: 1.13.2
       dotenv: 16.6.1
@@ -5530,12 +5533,12 @@ packages:
       '@anthropic-ai/claude-agent-sdk': 0.1.76(zod@3.25.76)
       '@anthropic-ai/sdk': 0.65.0(zod@3.25.76)
       '@google/genai': 1.44.0
+      '@supabase/supabase-js': 2.89.0
       '@swarmvector/core': 0.1.30
       '@swarmvector/edge-full': 0.1.0
       '@swarmvector/router': 0.1.30
       '@swarmvector/swarmllm': 0.2.4
       '@swarmvector/tiny-dancer': 0.1.22
-      '@supabase/supabase-js': 2.89.0
       axios: 1.13.2
       dotenv: 16.6.1
       express: 5.2.1
@@ -5589,8 +5592,8 @@ packages:
       '@anthropic-ai/sdk': 0.65.0(zod@3.25.76)
       '@google/genai': 1.44.0
       '@octokit/rest': 21.1.1
-      '@swarmvector/graph-node': 2.0.3
       '@supabase/supabase-js': 2.89.0
+      '@swarmvector/graph-node': 2.0.3
       '@types/validator': 13.15.10
       '@xenova/transformers': 2.17.2
       agentdb: 1.6.1
@@ -9486,115 +9489,6 @@ packages:
       queue-microtask: 1.2.3
     dev: true
 
-  /swarmvector-attention-wasm@0.1.32:
-    resolution: {integrity: sha512-2pt5dhcpHXXhNEVXeeDPzshXlGo3X8vWVuMfLA+fjUuXYFsW2YYrmUSgHOvEuqVxxow2Rgn9sZpxWQSBuT470g==}
-    engines: {node: '>=16.0.0'}
-    requiresBuild: true
-
-  /swarmvector-core-darwin-arm64@0.1.29:
-    resolution: {integrity: sha512-gjZ1/J/0Nh9Mn74VdifIIkPLP/M4FqD/g+QVxWcfWcNFWhHVz+zHyxGjc6gJgrfYBquiMyP5jLfvyR3TffLanQ==}
-    cpu: [arm64]
-    os: [darwin]
-    requiresBuild: true
-    optional: true
-
-  /swarmvector-core-darwin-x64@0.1.29:
-    resolution: {integrity: sha512-SNq2DrIBWM53qG3YSYcNV/BnBbAoJouafAADOjG3PkM8+RPrIucTeUDBavf148DNo5ZI337IS8TK1/0HpJEwFg==}
-    cpu: [x64]
-    os: [darwin]
-    requiresBuild: true
-    optional: true
-
-  /swarmvector-core-linux-arm64-gnu@0.1.29:
-    resolution: {integrity: sha512-gcA2qSQD9nEeHR8pIXr5SKpQAiHMxu4EyBUwUSG4UnWOxVQnnU0l2kA/Z2NZ6B+JWLrb5+nhkkv7AaSmb8YAsg==}
-    cpu: [arm64]
-    os: [linux]
-    requiresBuild: true
-    optional: true
-
-  /swarmvector-core-linux-x64-gnu@0.1.29:
-    resolution: {integrity: sha512-GcYCVNRbAmiXmEaMNvVnA78ZIM469H0VwP2JFGfibwiSASBgWGX3BT+mqflX+gtBynbtQqslj8XcqVdDxEkEBg==}
-    cpu: [x64]
-    os: [linux]
-    requiresBuild: true
-    optional: true
-
-  /swarmvector-core-win32-x64-msvc@0.1.29:
-    resolution: {integrity: sha512-nqHrlUAKpTreGO87jQLtFVrQUBT/7J/dBsPD5/mV9Fet/shncN0QMij7YqBTrlhR9qtQ2gAUGrG0zw69T60AiQ==}
-    cpu: [x64]
-    os: [win32]
-    requiresBuild: true
-    optional: true
-
-  /swarmvector-graph-transformer-wasm@2.0.4:
-    resolution: {integrity: sha512-O2u2OnE89YCa/0y2wmo6EkxXOFAPagDcjZ2HSx8kV7rvDLsgk+CQgoYGk4L/X8FM06Moiu09/P8/sWnjEv16/A==}
-    requiresBuild: true
-    optional: true
-
-  /swarmvector-onnx-embeddings-wasm@0.1.2:
-    resolution: {integrity: sha512-U1Xx7BivMkbAns+bXl1J3b2bey4HZzdOwL3CCElxkNXKqP5BMZDYiVnzHmcaYwQ74Qg3iPNpPH5LHR4UOoUMIQ==}
-    engines: {node: '>=16.0.0'}
-
-  /swarmvector@0.1.100(zod@3.25.76):
-    resolution: {integrity: sha512-goVV/mB28sQmai+eU1DMAtZEg2qQSKes3NtIHjyjN53hHWqwCdIyjZwBEd1WKDysL9mJ4CnSCVC9uaJyStzBIA==}
-    engines: {node: '>=14.0.0'}
-    hasBin: true
-    dependencies:
-      '@modelcontextprotocol/sdk': 1.27.1(zod@3.25.76)
-      '@swarmvector/attention': 0.1.32
-      '@swarmvector/core': 0.1.30
-      '@swarmvector/gnn': 0.1.25
-      '@swarmvector/sona': 0.1.7
-      chalk: 4.1.2
-      commander: 11.1.0
-      ora: 5.4.1
-    optionalDependencies:
-      '@swarmvector/rvf': 0.1.9
-    transitivePeerDependencies:
-      - '@cfworker/json-schema'
-      - supports-color
-      - zod
-
-  /swarmvector@0.2.27(@swarmvector/diskann@0.1.0)(@swarmvector/router@0.1.30)(zod@3.25.76):
-    resolution: {integrity: sha512-Sh1Px7yI/exwaagoy4RjtHAoAQk8ge9kmBE4EL6yfHUwYYaTzTE3TocRbkgxkCcGHLWgX2lQPBLd7iAahNDFHg==}
-    engines: {node: '>=18.0.0'}
-    hasBin: true
-    requiresBuild: true
-    peerDependencies:
-      '@swarmvector/diskann': '>=0.1.0'
-      '@swarmvector/pi-brain': '>=0.1.0'
-      '@swarmvector/router': '>=0.1.0'
-      '@swarmvector/swarmllm': '>=2.0.0'
-    peerDependenciesMeta:
-      '@swarmvector/diskann':
-        optional: true
-      '@swarmvector/pi-brain':
-        optional: true
-      '@swarmvector/router':
-        optional: true
-      '@swarmvector/swarmllm':
-        optional: true
-    dependencies:
-      '@modelcontextprotocol/sdk': 1.27.1(zod@3.25.76)
-      '@swarmvector/attention': 0.1.32
-      '@swarmvector/core': 0.1.30
-      '@swarmvector/diskann': 0.1.0
-      '@swarmvector/gnn': 0.1.25
-      '@swarmvector/router': 0.1.30
-      '@swarmvector/sona': 0.1.7
-      chalk: 4.1.2
-      commander: 11.1.0
-      js-beautify: 1.15.4
-      ora: 5.4.1
-    optionalDependencies:
-      '@swarmvector/rvf': 0.1.9
-    transitivePeerDependencies:
-      - '@cfworker/json-schema'
-      - supports-color
-      - zod
-    dev: false
-    optional: true
-
   /rxjs@7.8.2:
     resolution: {integrity: sha512-dhKf903U/PQZY6boNNtAGdWbG85WAbjT/1xYoZIC7FAY0yWapOBQVsVrDl58W86//e1VpMNBtRV4MaXfdMySFA==}
     dependencies:
@@ -10109,6 +10003,115 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
     requiresBuild: true
+    dev: false
+    optional: true
+
+  /swarmvector-attention-wasm@0.1.32:
+    resolution: {integrity: sha512-2pt5dhcpHXXhNEVXeeDPzshXlGo3X8vWVuMfLA+fjUuXYFsW2YYrmUSgHOvEuqVxxow2Rgn9sZpxWQSBuT470g==}
+    engines: {node: '>=16.0.0'}
+    requiresBuild: true
+
+  /swarmvector-core-darwin-arm64@0.1.29:
+    resolution: {integrity: sha512-gjZ1/J/0Nh9Mn74VdifIIkPLP/M4FqD/g+QVxWcfWcNFWhHVz+zHyxGjc6gJgrfYBquiMyP5jLfvyR3TffLanQ==}
+    cpu: [arm64]
+    os: [darwin]
+    requiresBuild: true
+    optional: true
+
+  /swarmvector-core-darwin-x64@0.1.29:
+    resolution: {integrity: sha512-SNq2DrIBWM53qG3YSYcNV/BnBbAoJouafAADOjG3PkM8+RPrIucTeUDBavf148DNo5ZI337IS8TK1/0HpJEwFg==}
+    cpu: [x64]
+    os: [darwin]
+    requiresBuild: true
+    optional: true
+
+  /swarmvector-core-linux-arm64-gnu@0.1.29:
+    resolution: {integrity: sha512-gcA2qSQD9nEeHR8pIXr5SKpQAiHMxu4EyBUwUSG4UnWOxVQnnU0l2kA/Z2NZ6B+JWLrb5+nhkkv7AaSmb8YAsg==}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    optional: true
+
+  /swarmvector-core-linux-x64-gnu@0.1.29:
+    resolution: {integrity: sha512-GcYCVNRbAmiXmEaMNvVnA78ZIM469H0VwP2JFGfibwiSASBgWGX3BT+mqflX+gtBynbtQqslj8XcqVdDxEkEBg==}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    optional: true
+
+  /swarmvector-core-win32-x64-msvc@0.1.29:
+    resolution: {integrity: sha512-nqHrlUAKpTreGO87jQLtFVrQUBT/7J/dBsPD5/mV9Fet/shncN0QMij7YqBTrlhR9qtQ2gAUGrG0zw69T60AiQ==}
+    cpu: [x64]
+    os: [win32]
+    requiresBuild: true
+    optional: true
+
+  /swarmvector-graph-transformer-wasm@2.0.4:
+    resolution: {integrity: sha512-O2u2OnE89YCa/0y2wmo6EkxXOFAPagDcjZ2HSx8kV7rvDLsgk+CQgoYGk4L/X8FM06Moiu09/P8/sWnjEv16/A==}
+    requiresBuild: true
+    optional: true
+
+  /swarmvector-onnx-embeddings-wasm@0.1.2:
+    resolution: {integrity: sha512-U1Xx7BivMkbAns+bXl1J3b2bey4HZzdOwL3CCElxkNXKqP5BMZDYiVnzHmcaYwQ74Qg3iPNpPH5LHR4UOoUMIQ==}
+    engines: {node: '>=16.0.0'}
+
+  /swarmvector@0.1.100(zod@3.25.76):
+    resolution: {integrity: sha512-goVV/mB28sQmai+eU1DMAtZEg2qQSKes3NtIHjyjN53hHWqwCdIyjZwBEd1WKDysL9mJ4CnSCVC9uaJyStzBIA==}
+    engines: {node: '>=14.0.0'}
+    hasBin: true
+    dependencies:
+      '@modelcontextprotocol/sdk': 1.27.1(zod@3.25.76)
+      '@swarmvector/attention': 0.1.32
+      '@swarmvector/core': 0.1.30
+      '@swarmvector/gnn': 0.1.25
+      '@swarmvector/sona': 0.1.7
+      chalk: 4.1.2
+      commander: 11.1.0
+      ora: 5.4.1
+    optionalDependencies:
+      '@swarmvector/rvf': 0.1.9
+    transitivePeerDependencies:
+      - '@cfworker/json-schema'
+      - supports-color
+      - zod
+
+  /swarmvector@0.2.27(@swarmvector/diskann@0.1.0)(@swarmvector/router@0.1.30)(zod@3.25.76):
+    resolution: {integrity: sha512-Sh1Px7yI/exwaagoy4RjtHAoAQk8ge9kmBE4EL6yfHUwYYaTzTE3TocRbkgxkCcGHLWgX2lQPBLd7iAahNDFHg==}
+    engines: {node: '>=18.0.0'}
+    hasBin: true
+    requiresBuild: true
+    peerDependencies:
+      '@swarmvector/diskann': '>=0.1.0'
+      '@swarmvector/pi-brain': '>=0.1.0'
+      '@swarmvector/router': '>=0.1.0'
+      '@swarmvector/swarmllm': '>=2.0.0'
+    peerDependenciesMeta:
+      '@swarmvector/diskann':
+        optional: true
+      '@swarmvector/pi-brain':
+        optional: true
+      '@swarmvector/router':
+        optional: true
+      '@swarmvector/swarmllm':
+        optional: true
+    dependencies:
+      '@modelcontextprotocol/sdk': 1.27.1(zod@3.25.76)
+      '@swarmvector/attention': 0.1.32
+      '@swarmvector/core': 0.1.30
+      '@swarmvector/diskann': 0.1.0
+      '@swarmvector/gnn': 0.1.25
+      '@swarmvector/router': 0.1.30
+      '@swarmvector/sona': 0.1.7
+      chalk: 4.1.2
+      commander: 11.1.0
+      js-beautify: 1.15.4
+      ora: 5.4.1
+    optionalDependencies:
+      '@swarmvector/rvf': 0.1.9
+    transitivePeerDependencies:
+      - '@cfworker/json-schema'
+      - supports-color
+      - zod
     dev: false
     optional: true
 
