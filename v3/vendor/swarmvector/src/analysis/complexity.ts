@@ -61,11 +61,15 @@ export function analyzeFile(filePath: string, content?: string): ComplexityResul
     const cyclomaticComplexity = branches + 1;
 
     // Count functions
+    // Identifier/whitespace runs are length-bounded so a pathological source
+    // file (e.g. 40k repeated '0' or '\t') can't drive quadratic backtracking
+    // (js/polynomial-redos). 64-char identifiers / 32-char gaps cover all real
+    // code; behavior is identical on realistic input (differential-tested).
     const functionPatterns = [
       /function\s+\w+/g,
-      /\w+\s*=\s*(?:async\s*)?\(/g,
-      /\w+\s*:\s*(?:async\s*)?\(/g,
-      /(?:async\s+)?(?:public|private|protected)?\s+\w+\s*\([^)]*\)\s*[:{]/g,
+      /\w{1,64}\s*=\s*(?:async\s*)?\(/g,
+      /\w{1,64}\s*:\s*(?:async\s*)?\(/g,
+      /(?:async\s+)?(?:public|private|protected)?\s{1,32}\w{1,64}\s{0,32}\([^)]*\)\s{0,32}[:{]/g,
     ];
 
     let functions = 0;

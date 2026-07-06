@@ -41,7 +41,7 @@ function parseDiff(diff) {
             if (currentHunk) {
                 hunks.push(currentHunk);
             }
-            const match = line.match(/@@ -(\d+),?(\d*) \+(\d+),?(\d*) @@/);
+            const match = line.match(/@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@/);
             if (match) {
                 currentHunk = {
                     file: currentFile,
