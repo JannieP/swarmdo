@@ -431,18 +431,20 @@ function applyUpdate(doc: Record<string, unknown>, update: Record<string, unknow
 
 function setNestedValue(obj: Record<string, unknown>, path: string, value: unknown): void {
 	const parts = path.split(".");
-	// Reject prototype-polluting path segments before any nested write.
-	for (const part of parts) {
-		if (part === "__proto__" || part === "constructor" || part === "prototype") return;
-	}
 	let current = obj;
 	for (let i = 0; i < parts.length - 1; i++) {
-		if (!(parts[i] in current) || typeof current[parts[i]] !== "object") {
-			current[parts[i]] = {};
+		const key = parts[i];
+		// Guard inline at the write site — CodeQL tracks a literal comparison
+		// immediately before the assignment, not a pre-loop scan.
+		if (key === "__proto__" || key === "constructor" || key === "prototype") return;
+		if (!(key in current) || typeof current[key] !== "object") {
+			current[key] = {};
 		}
-		current = current[parts[i]] as Record<string, unknown>;
+		current = current[key] as Record<string, unknown>;
 	}
-	current[parts[parts.length - 1]] = value;
+	const lastKey = parts[parts.length - 1];
+	if (lastKey === "__proto__" || lastKey === "constructor" || lastKey === "prototype") return;
+	current[lastKey] = value;
 }
 
 function deleteNestedValue(obj: Record<string, unknown>, path: string): void {

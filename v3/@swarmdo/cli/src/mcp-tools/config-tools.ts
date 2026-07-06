@@ -104,22 +104,25 @@ function setNestedValue(obj: Record<string, unknown>, key: string, value: unknow
   if (parts.length > MAX_NESTING_DEPTH) {
     throw new Error(`Key exceeds maximum nesting depth of ${MAX_NESTING_DEPTH}`);
   }
-  for (const part of parts) {
-    // Inline literal comparison — CodeQL recognizes this as a prototype-pollution
-    // barrier, whereas DANGEROUS_KEYS.has(part) is not tracked by its dataflow.
-    if (part === '__proto__' || part === 'constructor' || part === 'prototype') {
-      throw new Error(`Dangerous key segment rejected: ${part}`);
-    }
-  }
+  // Guard each key inline at its write site — CodeQL's prototype-pollution-utility
+  // dataflow tracks a literal comparison immediately preceding the assignment, not a
+  // pre-loop scan (which still left the recursive writes below flagged).
   let current = obj;
   for (let i = 0; i < parts.length - 1; i++) {
     const part = parts[i];
+    if (part === '__proto__' || part === 'constructor' || part === 'prototype') {
+      throw new Error(`Dangerous key segment rejected: ${part}`);
+    }
     if (!(part in current) || typeof current[part] !== 'object') {
       current[part] = {};
     }
     current = current[part] as Record<string, unknown>;
   }
-  current[parts[parts.length - 1]] = value;
+  const lastKey = parts[parts.length - 1];
+  if (lastKey === '__proto__' || lastKey === 'constructor' || lastKey === 'prototype') {
+    throw new Error(`Dangerous key segment rejected: ${lastKey}`);
+  }
+  current[lastKey] = value;
 }
 
 export const configTools: MCPTool[] = [

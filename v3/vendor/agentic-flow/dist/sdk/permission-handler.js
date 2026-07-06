@@ -11,39 +11,39 @@ import { homedir } from "os";
 // Dangerous command patterns to block
 const DANGEROUS_PATTERNS = [
     // Destructive file operations
-    /rm\s+-rf\s+[\/~]/,
-    /rm\s+-rf\s+\*/,
-    /rm\s+--no-preserve-root/,
+    /rm\s{1,32}-rf\s{1,32}[\/~]/,
+    /rm\s{1,32}-rf\s{1,32}\*/,
+    /rm\s{1,32}--no-preserve-root/,
     // Permission changes
-    /chmod\s+777\s+\//,
-    /chown\s+-R[^/]{0,4096}\//,
-    // Remote code execution
-    /curl.*\|\s*(bash|sh|zsh)/,
-    /wget.*\|\s*(bash|sh|zsh)/,
-    /curl.*-o\s*\/tmp.*&&.*bash/,
+    /chmod\s{1,32}777\s{1,32}\//,
+    /chown\s{1,32}-R[^/]{0,4096}\//,
+    // Remote code execution (bounded wildcards — js/polynomial-redos)
+    /curl[^\n]{0,256}\|\s{0,32}(bash|sh|zsh)/,
+    /wget[^\n]{0,256}\|\s{0,32}(bash|sh|zsh)/,
+    /curl[^\n]{0,256}-o\s{0,32}\/tmp[^\n]{0,256}&&[^\n]{0,256}bash/,
     // Dangerous evals (only match explicit eval with strings, not general command substitution)
-    /eval\s+['"`]/,
-    /\$\([^)]*rm\s/, // Only block command substitution containing rm
-    /\$\([^)]*curl.*\|/, // Block curl piped inside substitution
+    /eval\s{1,32}['"`]/,
+    /\$\([^)]{0,256}rm\s/, // Only block command substitution containing rm
+    /\$\([^)]{0,256}curl[^\n]{0,256}\|/, // Block curl piped inside substitution
     // SQL injection patterns
-    /DROP\s+TABLE/i,
-    /DELETE\s+FROM.*WHERE\s+1\s*=\s*1/i,
-    /TRUNCATE\s+TABLE/i,
+    /DROP\s{1,32}TABLE/i,
+    /DELETE\s{1,32}FROM[^\n]{0,256}WHERE\s{1,32}1\s{0,32}=\s{0,32}1/i,
+    /TRUNCATE\s{1,32}TABLE/i,
     // System damage
     /mkfs\./,
-    /dd\s+if=.*of=\/dev/,
+    /dd\s{1,32}if=[^\n]{0,256}of=\/dev/,
     /shutdown\s/,
     /reboot\s/,
     // Dangerous git operations
-    /git\s+push\s+.*--force/,
-    /git\s+push\s+-f\s/,
-    /git\s+reset\s+--hard\s+origin/,
+    /git\s{1,32}push\s{1,32}[^\n]{0,256}--force/,
+    /git\s{1,32}push\s{1,32}-f\s/,
+    /git\s{1,32}reset\s{1,32}--hard\s{1,32}origin/,
     // Package publishing (require explicit confirmation)
-    /npm\s+publish/,
+    /npm\s{1,32}publish/,
     // Credential exposure
-    /cat.*\.env\b/,
-    /cat.*credentials/i,
-    /cat.*\.ssh\/id_/,
+    /cat[^\n]{0,256}\.env\b/,
+    /cat[^\n]{0,256}credentials/i,
+    /cat[^\n]{0,256}\.ssh\/id_/,
 ];
 // File path patterns to block
 const BLOCKED_PATHS = [

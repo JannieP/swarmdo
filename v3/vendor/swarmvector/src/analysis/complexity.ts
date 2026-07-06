@@ -66,10 +66,10 @@ export function analyzeFile(filePath: string, content?: string): ComplexityResul
     // (js/polynomial-redos). 64-char identifiers / 32-char gaps cover all real
     // code; behavior is identical on realistic input (differential-tested).
     const functionPatterns = [
-      /function\s+\w+/g,
-      /\w{1,64}\s*=\s*(?:async\s*)?\(/g,
-      /\w{1,64}\s*:\s*(?:async\s*)?\(/g,
-      /(?:async\s+)?(?:public|private|protected)?\s{1,32}\w{1,64}\s{0,32}\([^)]*\)\s{0,32}[:{]/g,
+      /function\s{1,32}\w{1,64}/g,
+      /\w{1,64}\s{0,32}=\s{0,32}(?:async\s{0,32})?\(/g,
+      /\w{1,64}\s{0,32}:\s{0,32}(?:async\s{0,32})?\(/g,
+      /(?:async\s{1,32})?(?:public|private|protected)?\s{1,32}\w{1,64}\s{0,32}\([^)]{0,512}\)\s{0,32}[:{]/g,
     ];
 
     let functions = 0;

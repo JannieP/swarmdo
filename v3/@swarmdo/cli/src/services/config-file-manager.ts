@@ -207,19 +207,19 @@ function getNestedValue(obj: Record<string, unknown>, key: string): unknown {
 /** Set a nested value by dot-separated key */
 function setNestedValue(obj: Record<string, unknown>, key: string, value: unknown): void {
   const parts = key.split('.');
-  // Reject prototype-polluting path segments before any nested write.
-  for (const part of parts) {
-    if (part === '__proto__' || part === 'constructor' || part === 'prototype') return;
-  }
   let current: Record<string, unknown> = obj;
   for (let i = 0; i < parts.length - 1; i++) {
     const part = parts[i];
+    // Guard inline at the write site (CodeQL prototype-pollution barrier).
+    if (part === '__proto__' || part === 'constructor' || part === 'prototype') return;
     if (!(part in current) || typeof current[part] !== 'object' || current[part] === null) {
       current[part] = {};
     }
     current = current[part] as Record<string, unknown>;
   }
-  current[parts[parts.length - 1]] = value;
+  const lastPart = parts[parts.length - 1];
+  if (lastPart === '__proto__' || lastPart === 'constructor' || lastPart === 'prototype') return;
+  current[lastPart] = value;
 }
 
 /** Parse a string value to the appropriate type */
