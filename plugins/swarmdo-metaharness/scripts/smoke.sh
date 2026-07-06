@@ -738,7 +738,7 @@ for t in $TOOLS; do
     || miss="$miss ${t}-not-in-claude-md"
 done
 # Lock count: 9 MCP tools (mint deliberately excluded — see iter 73)
-[[ "$COUNT" == "9" ]] || miss="$miss mcp-tool-count-stale:$COUNT-expected-9"
+[[ "$COUNT" == "12" ]] || miss="$miss mcp-tool-count-stale:$COUNT-expected-12"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
 step "17z55. MCP enum + SEVERITY_RANK vocabulary aligned (iter 92)"
@@ -814,7 +814,7 @@ for f in $REFS; do
   [[ -f "$SCRIPTS_DIR/$f" ]] || miss="$miss mcp-script-${f}-missing"
 done
 # Should be 9 unique scripts (one per MCP tool; mint deliberately excluded)
-[[ "$COUNT" == "9" ]] || miss="$miss mcp-script-count-stale:$COUNT-expected-9"
+[[ "$COUNT" == "12" ]] || miss="$miss mcp-script-count-stale:$COUNT-expected-12"
 [[ -z "$miss" ]] && ok || bad "$miss"
 
 step "17z52. SUBCOMMANDS map entries point at existing script files (iter 89)"
@@ -1620,7 +1620,7 @@ WRAPPER="$ROOT/../../v3/@swarmdo/cli/src/mcp-tools/metaharness-tools.ts"
 # Success-semantic constant declared + appended to N descriptions = N+1 occurrences.
 # Iter 46 set this at 9 (8 tools); iter 54 added the 9th tool → expect 10.
 COUNT=$(grep -c "MCP_SUCCESS_SEMANTIC" "$WRAPPER" 2>/dev/null; true)
-[[ "$COUNT" == "10" ]] || miss="$miss footnote-count:$COUNT-expected-10"
+[[ "$COUNT" == "13" ]] || miss="$miss footnote-count:$COUNT-expected-13"
 # audit_trend now exposes baselineFile / currentFile
 grep -q "baselineFile" "$WRAPPER" 2>/dev/null || miss="$miss no-baseline-file"
 grep -q "currentFile" "$WRAPPER" 2>/dev/null || miss="$miss no-current-file"
@@ -1659,7 +1659,7 @@ COUNT_OLD=$(grep -c "success: !r.degraded" "$WRAPPER" 2>/dev/null; true)
 [[ "$COUNT_OLD" == "0" ]] || miss="$miss old-pattern-still-present:$COUNT_OLD"
 COUNT_NEW=$(grep -c "success: r.success" "$WRAPPER" 2>/dev/null; true)
 # Iter 54 added a 9th tool. Future iters that add tools should bump this.
-[[ "$COUNT_NEW" == "9" ]] || miss="$miss new-pattern-count:$COUNT_NEW-expected-9"
+[[ "$COUNT_NEW" == "12" ]] || miss="$miss new-pattern-count:$COUNT_NEW-expected-12"
 # Runtime anchors: iter 44 success assertions present
 T="$ROOT/scripts/test-mcp-tools.mjs"
 grep -q "iter 44 fix" "$T" 2>/dev/null || miss="$miss no-iter44-anchors"
@@ -2018,11 +2018,11 @@ grep -q "result has 'data'" "$F" || miss="$miss no-data-assertion"
 grep -q "result has 'degraded'" "$F" || miss="$miss no-degraded-assertion"
 grep -q "result has 'exitCode'" "$F" || miss="$miss no-exitcode-assertion"
 # All 9 tool names enumerated (similarity iter 36, drift_from_history iter 54)
-for tool in metaharness_score metaharness_genome metaharness_mcp_scan metaharness_threat_model metaharness_oia_audit metaharness_audit_list metaharness_audit_trend metaharness_similarity metaharness_drift_from_history; do
+for tool in metaharness_score metaharness_genome metaharness_mcp_scan metaharness_threat_model metaharness_oia_audit metaharness_audit_list metaharness_audit_trend metaharness_similarity metaharness_drift_from_history metaharness_bench metaharness_security_bench metaharness_evolve; do
   grep -q "${tool}" "$F" || miss="$miss missing-${tool}"
 done
 # Count assertion must match iter-54 expansion (8 → 9)
-grep -q "tools.length === 9" "$F" || miss="$miss tool-count-assertion-stale"
+grep -q "tools.length === 12" "$F" || miss="$miss tool-count-assertion-stale"
 # Graceful skip when dist absent (so the script is smoke-runnable pre-build)
 grep -q "SKIPPED" "$F" || miss="$miss no-skip-doc"
 [[ -z "$miss" ]] && ok || bad "$miss"

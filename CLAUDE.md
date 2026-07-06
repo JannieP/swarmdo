@@ -1,8 +1,8 @@
 # Claude Code Configuration - Swarmdo v1.4
 
-> **Swarmdo v1.4.23** (2026-07-07) — every swarmdo slash command namespaced under `sDo` (`/sDo:swarm:init`, skills `/sdo-ponytail`) so they group together in Claude Code's `/` menu; legacy unprefixed copies auto-migrated on init/upgrade.
+> **Swarmdo v1.4.24** (2026-07-07) — every swarmdo slash command namespaced under `sDo` (`/sDo:swarm:init`, skills `/sdo-ponytail`) so they group together in Claude Code's `/` menu; legacy unprefixed copies auto-migrated on init/upgrade.
 > 6,000+ commits, 314 MCP tools, 16 agent roles + custom types, 19 AgentDB controllers, 21 native plugins.
-> Packages: `swarmdo@1.4.23` (umbrella), `@swarmdo/cli@1.4.23`, `swarmdo-bridge@1.4.23` (wrapper in `swarmdo/`)
+> Packages: `swarmdo@1.4.24` (umbrella), `@swarmdo/cli@1.4.24`, `swarmdo-bridge@1.4.24` (wrapper in `swarmdo/`)
 
 ## Behavioral Rules (Always Enforced)
 
@@ -1168,6 +1168,9 @@ mcp__swarmdo__metaharness_audit_list
 mcp__swarmdo__metaharness_audit_trend
 mcp__swarmdo__metaharness_similarity          # iter 36 — ADR-152 §3.1 genome similarity
 mcp__swarmdo__metaharness_drift_from_history  # iter 53 — 1-command drift detection
+mcp__swarmdo__metaharness_bench               # perf bench of harness primitives
+mcp__swarmdo__metaharness_security_bench      # security-posture benchmark
+mcp__swarmdo__metaharness_evolve              # guided harness evolution step
 ```
 
 ### Routing integration (ADR-148/149)

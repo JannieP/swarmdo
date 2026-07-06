@@ -74,7 +74,7 @@ async function main() {
   // ──────────────────────────────────────────────────────────────────
   console.log('Phase 1 — module shape');
   assert(Array.isArray(tools), 'metaharnessTools is an array');
-  assert(tools.length === 9, `9 tools registered (got ${tools.length})`);
+  assert(tools.length === 12, `12 tools registered (got ${tools.length})`);
 
   const expectedNames = new Set([
     'metaharness_score',
@@ -88,6 +88,10 @@ async function main() {
     'metaharness_similarity',
     // iter 54 — one-command drift detection (composes audit-list + oia-audit + audit-trend)
     'metaharness_drift_from_history',
+    // post-iter-98 surface: perf bench, security-posture bench, guided evolution
+    'metaharness_bench',
+    'metaharness_security_bench',
+    'metaharness_evolve',
   ]);
   const actualNames = new Set(tools.map((t) => t.name));
   for (const name of expectedNames) {
@@ -117,7 +121,13 @@ async function main() {
   // without throwing.
   // ──────────────────────────────────────────────────────────────────
   console.log('\nPhase 3 — handler invocations (allow up to 30s each)');
+  // bench / security_bench / evolve are registration-checked in Phase 2 but
+  // NEVER invoked here: bench runs real multi-minute benchmarks and evolve
+  // drives a guided evolution step — both far outside a smoke budget (same
+  // rationale as the deliberate mint exclusion).
+  const INVOCATION_EXCLUDED = new Set(['metaharness_bench', 'metaharness_security_bench', 'metaharness_evolve']);
   for (const tool of tools) {
+    if (INVOCATION_EXCLUDED.has(tool.name)) continue;
     // Construct minimal valid input per tool.
     let input = {};
     if (tool.name === 'metaharness_audit_trend') {
@@ -428,7 +438,11 @@ async function main() {
     for (const f of failures) console.log(`  - ${f}`);
     process.exit(1);
   }
-  console.log('\n✓ All 9 MCP tools satisfy the runtime contract.');
+  console.log('\n✓ All 12 MCP tools satisfy the runtime contract (bench/security_bench/evolve registration-only).');
+  // Explicit exit: tool handlers can leave live AgentDB/ONNX handles behind
+  // (observed: from the repo root the process printed success and then hung
+  // on a session-held memory.db handle — smoke's `node $F` waits on EXIT).
+  process.exit(0);
 }
 
 main().catch((e) => {
