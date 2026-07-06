@@ -52,7 +52,7 @@ function listTs(dir) {
 // but never wired in — #1916).
 function resolveImportPath(spec) {
   // spec like './mcp-tools/agent-tools.js' or '../swarmvector/coverage-tools.js'
-  let p = spec.replace(/^\.\//, '').replace(/^\.\.\//, '../');
+  let p = spec.replace(/^\.\//, ''); // strip leading './'; '../' is kept as-is
   // .js → .ts (source files)
   p = p.replace(/\.js$/, '.ts');
   return p.startsWith('../') ? join(CLI_SRC, p) : join(CLI_SRC, p);

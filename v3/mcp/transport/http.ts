@@ -223,9 +223,13 @@ export class HttpTransport extends EventEmitter implements ITransport {
 
     // CORS
     if (this.config.corsEnabled !== false) {
+      const corsOrigin = this.config.corsOrigins;
       this.app.use(cors({
-        origin: this.config.corsOrigins || '*',
-        credentials: true,
+        // Never pair a wildcard origin with credentials — the CORS spec forbids
+        // it and js/cors-permissive-configuration flags it. Credentials are only
+        // enabled when explicit origins are configured.
+        origin: corsOrigin || '*',
+        credentials: corsOrigin ? true : false,
         maxAge: 86400,
       }));
     }

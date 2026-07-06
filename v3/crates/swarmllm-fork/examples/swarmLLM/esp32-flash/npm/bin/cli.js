@@ -5,7 +5,7 @@
  * Cross-platform installation and flashing tool for SwarmLLM on ESP32
  */
 
-const { spawn, execSync } = require('child_process');
+const { spawn, execSync, execFileSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
@@ -282,12 +282,12 @@ async function flash(port, options = {}) {
             } else {
                 // Fallback
                 const binary = `target\\${rustTarget}\\release\\swarmllm-esp32`;
-                execSync(`espflash flash --monitor --port ${actualPort} ${binary}`, { stdio: 'inherit' });
+                execFileSync('espflash', ['flash', '--monitor', '--port', actualPort, binary], { stdio: 'inherit' });
             }
         } else {
             // Linux/macOS
             const binary = `target/${rustTarget}/release/swarmllm-esp32`;
-            execSync(`espflash flash --monitor --port ${actualPort} ${binary}`, { stdio: 'inherit' });
+            execFileSync('espflash', ['flash', '--monitor', '--port', actualPort, binary], { stdio: 'inherit' });
         }
 
         logSuccess('Flash completed!');
@@ -303,7 +303,7 @@ async function monitor(port) {
     logStep(`Monitoring ${actualPort}...`);
 
     try {
-        execSync(`espflash monitor --port ${actualPort}`, { stdio: 'inherit' });
+        execFileSync('espflash', ['monitor', '--port', actualPort], { stdio: 'inherit' });
     } catch (e) {
         // Monitor exits normally with Ctrl+C
     }
