@@ -216,7 +216,7 @@ export class E2BSandboxManager {
                 };
             }
             else if (this.sandbox.commands?.run) {
-                const result = await this.sandbox.commands.run(`node -e '${code.replace(/'/g, "\\'")}'`);
+                const result = await this.sandbox.commands.run(`node -e '${code.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`);
                 return {
                     success: result.exitCode === 0,
                     output: result.stdout || '',

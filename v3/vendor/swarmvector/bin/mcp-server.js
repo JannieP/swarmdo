@@ -2986,7 +2986,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       case 'workers_dispatch': {
         const prompt = sanitizeShellArg(args.prompt);
         try {
-          const result = execSync(`npx agentic-flow@alpha workers dispatch "${prompt.replace(/"/g, '\\"')}"`, {
+          const result = execSync(`npx agentic-flow@alpha workers dispatch "${prompt.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`, {
             encoding: 'utf-8',
             timeout: 30000,
             stdio: ['pipe', 'pipe', 'pipe']

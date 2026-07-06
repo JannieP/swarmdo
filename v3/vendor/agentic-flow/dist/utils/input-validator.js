@@ -238,13 +238,15 @@ export class InputValidator {
             return '';
         }
         // Strip all HTML tags, keep text only
-        return html
-            .replace(/<[^>]*>/g, '')
-            .replace(/&lt;/g, '<')
-            .replace(/&gt;/g, '>')
-            .replace(/&amp;/g, '&')
-            .replace(/&quot;/g, '"')
-            .replace(/&#x27;/g, "'");
+        // Strip tags in a loop so split/nested tags can't survive, decode
+        // entities in a SINGLE pass (no cascading double-unescape), then strip
+        // again in case decoding reintroduced markup like &lt;script&gt;.
+        let out = html, prev;
+        do { prev = out; out = out.replace(/<[^>]*>/g, ''); } while (out !== prev);
+        const entities = { '&lt;': '<', '&gt;': '>', '&amp;': '&', '&quot;': '"', '&#x27;': "'" };
+        out = out.replace(/&(?:lt|gt|amp|quot|#x27);/g, (m) => entities[m]);
+        do { prev = out; out = out.replace(/<[^>]*>/g, ''); } while (out !== prev);
+        return out;
     }
     /**
      * Validate email address

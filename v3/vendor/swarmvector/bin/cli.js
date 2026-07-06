@@ -6395,7 +6395,9 @@ hooksCmd.command('doctor')
         const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf-8'));
 
         // Check for invalid schema
-        if (settings.$schema && !settings.$schema.includes('schemastore.org')) {
+        let schemaHost = '';
+        try { schemaHost = new URL(settings.$schema).hostname.toLowerCase(); } catch { /* non-URL schema */ }
+        if (settings.$schema && schemaHost !== 'schemastore.org' && !schemaHost.endsWith('.schemastore.org')) {
           issues.push({ severity: 'warning', message: 'Invalid schema URL', fix: 'Will be corrected' });
           if (opts.fix) {
             settings.$schema = 'https://json.schemastore.org/claude-code-settings.json';

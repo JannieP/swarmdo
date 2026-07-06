@@ -148,7 +148,7 @@ registerPhaseExecutor('import-analysis', async (workerContext, phaseContext, opt
             phaseContext.bytes += content.length;
             const importMatches = content.match(/from\s+['"]([^'"]+)['"]/g) || [];
             for (const match of importMatches) {
-                const pkg = match.replace(/from\s+['"]/, '').replace(/['"]/, '');
+                const pkg = match.replace(/from\s+['"]/, '').replace(/['"]/g, '');
                 imports[pkg] = (imports[pkg] || 0) + 1;
             }
         }

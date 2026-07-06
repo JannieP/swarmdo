@@ -17,7 +17,7 @@ const UNPKG_BASE = 'https://unpkg.com';
  * @returns {Promise<{name: string, description: string, versions: string[], latest: string, distTags: object, packageJson: object}>}
  */
 async function fetchPackageInfo(packageName) {
-  const url = `${REGISTRY_BASE}/${encodeURIComponent(packageName).replace('%40', '@')}`;
+  const url = `${REGISTRY_BASE}/${encodeURIComponent(packageName).replace(/%40/g, '@')}`;
   const resp = await fetch(url, {
     headers: { Accept: 'application/json' },
   });
@@ -48,7 +48,7 @@ async function fetchPackageInfo(packageName) {
  * @returns {Promise<Array<{name: string, hash: string, size: number}>>}
  */
 async function fetchPackageFileList(packageName, version) {
-  const encodedName = encodeURIComponent(packageName).replace('%40', '@');
+  const encodedName = encodeURIComponent(packageName).replace(/%40/g, '@');
   const url = `${JSDELIVR_BASE}/${encodedName}@${version}/flat`;
   const resp = await fetch(url);
   if (!resp.ok) {
