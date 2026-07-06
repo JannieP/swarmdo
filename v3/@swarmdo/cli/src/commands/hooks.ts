@@ -5211,15 +5211,18 @@ const taskCompletedCommand: Command = {
 // Notify subcommand
 const notifyCommand: Command = {
   name: 'notify',
-  description: 'Send a notification message (logged to session)',
+  description: 'Send a notification (console + memory; --desktop for an OS-native toast)',
   options: [
     { name: 'message', short: 'm', type: 'string', description: 'Notification message', required: true },
     { name: 'level', short: 'l', type: 'string', description: 'Level: info, warn, error', default: 'info' },
     { name: 'channel', short: 'c', type: 'string', description: 'Notification channel', default: 'console' },
+    { name: 'desktop', short: 'd', type: 'boolean', description: 'Also fire an OS-native desktop notification (macOS/Linux)', default: false },
+    { name: 'title', short: 't', type: 'string', description: 'Desktop notification title', default: 'swarmdo' },
   ],
   examples: [
     { command: 'swarmdo hooks notify -m "Build complete"', description: 'Send info notification' },
     { command: 'swarmdo hooks notify -m "Test failed" -l error', description: 'Send error notification' },
+    { command: 'swarmdo hooks notify -d -m "Task done"', description: 'Desktop toast — wire into a Stop hook to get pinged when Claude finishes' },
   ],
   action: async (ctx: CommandContext): Promise<CommandResult> => {
     const message = (ctx.flags.message as string) || ctx.args[0];
@@ -5246,7 +5249,24 @@ const notifyCommand: Command = {
       await storeEntry({ key: `notify-${Date.now()}`, value: `[${level}] ${message}`, namespace: 'notifications' });
     } catch { /* memory not available */ }
 
-    return { success: true, data: { timestamp, level, message } };
+    // Optional OS-native desktop notification (via --desktop or SWARMDO_NOTIFY_DESKTOP)
+    const wantDesktop = ctx.flags.desktop === true || /^(1|true|on|yes)$/i.test(process.env.SWARMDO_NOTIFY_DESKTOP ?? '');
+    let desktop: { delivered: boolean; reason?: string } | undefined;
+    if (wantDesktop) {
+      try {
+        const { sendDesktopNotification, makeDefaultDeps } = await import('../notify/notify.js');
+        const title = (ctx.flags.title as string) || 'swarmdo';
+        const lvl = level === 'warn' || level === 'error' ? level : 'info';
+        desktop = await sendDesktopNotification({ title, message, level: lvl }, makeDefaultDeps());
+        if (desktop.delivered) output.writeln(output.dim('desktop notification sent'));
+        else output.writeln(output.dim(`desktop notification skipped: ${desktop.reason}`));
+      } catch (e) {
+        desktop = { delivered: false, reason: (e as Error).message };
+        output.writeln(output.dim(`desktop notification error: ${(e as Error).message}`));
+      }
+    }
+
+    return { success: true, data: { timestamp, level, message, desktop } };
   }
 };
 
