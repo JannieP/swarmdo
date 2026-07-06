@@ -28,7 +28,10 @@ export function computeBackoffMs(attempt: number, opts: BackoffOptions = {}): nu
 }
 
 /** Retryable-failure classifier shared with the fallback chain. */
-const RETRYABLE = /\b(429|500|502|503|504|timeout|overloaded|rate.?limit|ECONNRESET|ETIMEDOUT)\b/i;
+// \b only guards the numeric codes ('5031' must not match); the word classes
+// match as substrings because providers emit snake_case ('overloaded_error',
+// 'rate_limited') where \b fails before the underscore
+const RETRYABLE = /\b(429|500|502|503|504)\b|timeout|overloaded|rate.?limit|ECONNRESET|ETIMEDOUT/i;
 
 export function isRetryableError(errText: string | null | undefined): boolean {
   return RETRYABLE.test(errText ?? '');
