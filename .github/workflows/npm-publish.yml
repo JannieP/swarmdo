@@ -50,7 +50,10 @@ jobs:
         run: |
           set -e
           # dependency order: hooks needs memory+neural+shared; guidance needs hooks
-          for pkg in shared swarm cli-core mcp memory neural hooks guidance security embeddings codex aidefence plugin-gastown-bridge providers claims performance deployment browser plugins integration plugin-agent-federation plugin-iot-cognitum testing cli; do
+          for pkg in shared swarm cli-core mcp memory neural hooks guidance security embeddings codex aidefence plugin-gastown-bridge providers claims performance deployment browser plugins integration plugin-agent-federation testing cli; do
+          # plugin-iot-cognitum is EXCLUDED: it imports @cognitum-one/sdk which the
+          # root lockfile never installs (the package is not a declared dependency
+          # of the umbrella — its dist is unreachable in the tarball anyway)
             dir="v3/@swarmdo/$pkg"
             if [ -f "$dir/package.json" ]; then
               echo "── build $pkg"
