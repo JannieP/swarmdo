@@ -85,7 +85,7 @@ jobs:
 
       - name: Upload audit artifact (90-day retention for drift tracking)
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: oia-audit-${{ github.run_id }}
           path: /tmp/oia-audit.json
@@ -192,7 +192,7 @@ jobs:
         # iter 70 — same always() pattern; the trend artifact is most
         # useful for forensics when the workflow has failed.
         if: always() && steps.prior-artifact.outputs.has_prior == 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: drift-trend-${{ github.run_id }}
           path: /tmp/drift-trend.json
