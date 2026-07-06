@@ -27,9 +27,14 @@ bad()  { printf "FAIL: %s\n" "$1"; FAIL=$((FAIL+1)); }
 if [[ -n "${SWARMVECTOR_BIN:-}" ]]; then
   run() { "$SWARMVECTOR_BIN" "$@" 2>&1; }
   EXPECT_VER=""
-elif [[ -f "$VENDOR_CLI" ]]; then
+elif [[ -f "$VENDOR_CLI" ]] && node "$VENDOR_CLI" --version >/dev/null 2>&1; then
   run() { node "$VENDOR_CLI" "$@" 2>&1; }
   EXPECT_VER="$(node -p "require('$VENDOR_PKG').version" 2>/dev/null || echo "")"
+elif [[ -f "$VENDOR_CLI" ]]; then
+  echo "vendored engine present but not runnable (deps missing?) — install them:"
+  echo "  (cd v3/vendor/swarmvector && npm install --omit=dev --ignore-scripts)"
+  run() { npx -y "$PIN" "$@" 2>&1; }
+  EXPECT_VER="0.2.25"
 else
   run() { npx -y "$PIN" "$@" 2>&1; }
   EXPECT_VER="0.2.25"

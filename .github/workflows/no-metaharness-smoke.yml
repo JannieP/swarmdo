@@ -85,6 +85,11 @@ jobs:
             console.log('✓ No metaharness/* in non-optional dependencies anywhere.');
           "
 
+      - name: Install vendored swarmvector runtime deps (engine for the swarmvector plugin smoke)
+        run: |
+          cd v3/vendor/swarmvector
+          npm install --omit=dev --ignore-scripts --no-audit --no-fund
+
       - name: Run meta-smoke (should pass with current optional deps in place)
         # iter 119 — 300s timeout to give swarmdo-metaharness (118 steps,
         # many npx invocations) enough wall time. Same change as
