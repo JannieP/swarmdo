@@ -792,6 +792,50 @@ const restartCommand: Command = {
   }
 };
 
+// Validate configured MCP servers (.mcp.json + ~/.claude.json) — static, no spawning
+const doctorCommand: Command = {
+  name: 'doctor',
+  aliases: ['check', 'validate'],
+  description: 'Validate configured MCP servers (.mcp.json + ~/.claude.json) without spawning them',
+  options: [
+    { name: 'json', type: 'boolean', description: 'machine-readable output', default: false },
+    { name: 'strict', type: 'boolean', description: 'exit non-zero if any server has an issue (for CI)', default: false },
+  ],
+  examples: [
+    { command: 'swarmdo mcp doctor', description: 'Check configured MCP servers' },
+    { command: 'swarmdo mcp doctor --strict', description: 'Fail (exit 1) if any config is broken' },
+  ],
+  action: async (ctx: CommandContext): Promise<CommandResult> => {
+    const { runMcpDoctor, makeDefaultDeps } = await import('../mcp-doctor/mcp-doctor.js');
+    const reports = runMcpDoctor(makeDefaultDeps());
+    if (ctx.flags.json === true) { output.printJson(reports); return { success: true, data: reports }; }
+    if (reports.length === 0) {
+      output.printInfo('no MCP servers configured (looked in ./.mcp.json and ~/.claude.json)');
+      return { success: true, exitCode: 0 };
+    }
+    output.printTable({
+      columns: [
+        { key: 'status', header: '', width: 3 },
+        { key: 'name', header: 'Server', width: 20 },
+        { key: 'transport', header: 'Transport', width: 10 },
+        { key: 'source', header: 'Source', width: 24 },
+        { key: 'detail', header: 'Detail', width: 40 },
+      ],
+      data: reports.map((r) => ({
+        status: r.status === 'ok' ? '✅' : '❌',
+        name: r.name,
+        transport: r.transport,
+        source: r.source,
+        detail: r.status === 'ok' ? output.dim(r.detail) : `${r.status}: ${r.detail}`,
+      })),
+    });
+    const issues = reports.filter((r) => r.status !== 'ok');
+    output.writeln(output.dim(`${reports.length} server(s) · ${reports.length - issues.length} ok · ${issues.length} with issues`));
+    if (issues.length > 0 && ctx.flags.strict === true) return { success: false, exitCode: 1 };
+    return { success: true, data: reports };
+  },
+};
+
 // Main MCP command
 export const mcpCommand: Command = {
   name: 'mcp',
@@ -805,7 +849,8 @@ export const mcpCommand: Command = {
     toolsCommand,
     toggleCommand,
     execCommand,
-    logsCommand
+    logsCommand,
+    doctorCommand
   ],
   options: [],
   examples: [
