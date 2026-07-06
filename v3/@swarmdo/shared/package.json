@@ -1,6 +1,6 @@
 {
   "name": "@swarmdo/shared",
-  "version": "3.0.0-alpha.8",
+  "version": "3.0.0-alpha.9",
   "type": "module",
   "description": "Shared module - common types, events, utilities, core interfaces",
   "main": "dist/index.js",

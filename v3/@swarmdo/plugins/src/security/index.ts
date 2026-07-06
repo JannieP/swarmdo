@@ -357,7 +357,7 @@ const SENSITIVE_PATTERNS = [
   /token[=:]\s*\S+/gi,
   /auth[=:]\s*\S+/gi,
   /bearer\s+\S+/gi,
-  /\/\/[^:]+:[^@]+@/g,  // Credentials in URLs
+  /\/\/[^:/]+:[^@/]+@/g,  // Credentials in URLs (userinfo has no '/', so excluding it keeps this linear)
 ];
 
 /**

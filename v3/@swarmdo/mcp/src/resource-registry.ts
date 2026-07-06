@@ -370,7 +370,7 @@ export class ResourceRegistry extends EventEmitter {
       // First extract placeholders, escape the rest, then add placeholder pattern
       const escaped = this.escapeRegex(template);
       // Replace escaped placeholder braces with the pattern
-      const pattern = escaped.replace(/\\\{[^}]+\\\}/g, '[^/]+');
+      const pattern = escaped.replace(/\\\{[^{}]+\\\}/g, '[^/]+');
       try {
         const regex = new RegExp('^' + pattern + '$');
         return regex.test(uri);
@@ -382,7 +382,7 @@ export class ResourceRegistry extends EventEmitter {
 
     for (const t of this.templates.keys()) {
       const escaped = this.escapeRegex(t);
-      const pattern = escaped.replace(/\\\{[^}]+\\\}/g, '[^/]+');
+      const pattern = escaped.replace(/\\\{[^{}]+\\\}/g, '[^/]+');
       try {
         const regex = new RegExp('^' + pattern + '$');
         if (regex.test(uri)) {

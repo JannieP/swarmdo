@@ -1,6 +1,6 @@
 {
   "name": "@swarmdo/plugins",
-  "version": "3.0.0-alpha.7",
+  "version": "3.0.0-alpha.8",
   "description": "Unified Plugin SDK for Swarmdo V3 - Worker, Hook, and Provider Integration",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

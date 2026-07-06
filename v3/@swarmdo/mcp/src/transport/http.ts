@@ -499,7 +499,7 @@ export class HttpTransport extends EventEmitter implements ITransport {
       return { valid: false, error: 'Authorization header required' };
     }
 
-    const tokenMatch = auth.match(/^Bearer\s+(.+)$/i);
+    const tokenMatch = auth.match(/^Bearer\s+(\S.*)$/i);
     if (!tokenMatch) {
       return { valid: false, error: 'Invalid authorization format' };
     }

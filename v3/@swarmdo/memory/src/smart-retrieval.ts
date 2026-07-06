@@ -126,7 +126,7 @@ export function defaultQueryExpansions(query: string): string[] {
   }
 
   // Context-priming variant — helps when the query is short or imperative.
-  const words = trimmed.toLowerCase().replace(/[?.!]+$/, '');
+  const words = trimmed.toLowerCase().replace(/[?.!]{1,64}$/, '');
   if (words && !words.startsWith('tell me')) {
     variants.add(`tell me about ${words}`);
   }
