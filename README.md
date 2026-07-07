@@ -276,6 +276,7 @@ The recent release train added a full day-to-day operations layer around the swa
 | `swarmdo task … --dependencies` | **Task dependency DAG** — `task ready` lists unblocked work, `task graph` renders the graph, the dispatcher gates on readiness; `task parse-prd <spec.md>` decomposes a PRD straight into the DAG |
 | `swarmdo worktree` (alias `wt`) | **Parallel-agent isolation** on git worktrees — add / list / diff / merge / remove |
 | `swarmdo transcript` (alias `tx`) | **Export any Claude Code session** to clean markdown — system noise stripped, ready to share; `transcript search <query>` full-text-searches every session |
+| `swarmdo compact` | **Compress noisy command output** before it reaches an LLM — strip ANSI, collapse repeats, fold `node_modules` stack frames, window long logs. `npm test 2>&1 \| swarmdo compact` or `swarmdo compact -- npm test` (exit code propagates). Deterministic, zero tokens |
 | `swarmdo integrations` (alias `integrate`) | **Use swarmdo from Codex CLI, GitHub Copilot CLI, and pi** — one command wires AGENTS.md + each CLI's MCP config (idempotent, dry-run first, never touches your Claude Code setup) |
 | OpenRouter model pool | **Let swarms pick from any models you configure** — declare tier-mapped OpenRouter models in `swarmdo.config.json`; the router Thompson-samples among them per task and the execution layer dispatches the winner |
 | `swarmdo changelog` (alias `notes`) | **Release notes from conventional commits** — `--out NOTES.md` feeds `gh release create --notes-file` |
