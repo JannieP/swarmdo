@@ -2,7 +2,7 @@
 
 [![swarmdo](swarmdo/assets/brand/logo-full.svg)](https://swarmdo.com)
 
-[![npm version (swarmdo)](https://img.shields.io/badge/npx%20swarmdo-v1.11.0-cb3837?style=for-the-badge&logo=npm&logoColor=white)](https://github.com/SwarmDo/swarmdo/releases)
+[![npm version (swarmdo)](https://img.shields.io/badge/npx%20swarmdo-v1.12.0-cb3837?style=for-the-badge&logo=npm&logoColor=white)](https://github.com/SwarmDo/swarmdo/releases)
 [![MIT License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](https://github.com/SwarmDo/swarmdo/blob/main/LICENSE)
 [![Website](https://img.shields.io/badge/swarmdo.com-e2a33c?style=for-the-badge&logoColor=black)](https://swarmdo.com)
 [![Star on GitHub](https://img.shields.io/github/stars/SwarmDo/swarmdo?style=for-the-badge&logo=github&color=gold)](https://github.com/SwarmDo/swarmdo)
@@ -280,6 +280,7 @@ The recent release train added a full day-to-day operations layer around the swa
 | `swarmdo codegraph` (alias `cg`) | **Queryable symbol index** — `codegraph index` scans TS/JS for exported symbols; `query <name>` (with `--fuzzy`/`--kind`) and `file <path>` answer "where is X defined / what does this file export" from `.swarm/codegraph.json` instead of grep+read round-trips. `codegraph importers <file>` shows reverse deps ("what breaks if I change this"); `codegraph imports <file>` shows a file's dependencies. 1,786 symbols + import graph across 296 files in <1s. Also MCP tools (`codegraph_query`/`file`/`imports`/`importers`/`index`/`stats`) so agents query the graph in-session |
 | `swarmdo redact` | **Mask secrets before they reach an LLM/log/memory** — detect API keys, tokens, and private keys (gitleaks-style rule catalog + Shannon-entropy fallback) and redact them. Stdin filter (`cat deploy.log \| swarmdo redact`), command-wrap (`swarmdo redact -- npm run deploy`), or `--scan` to fail CI on any secret. Also MCP tools (`redact_text`/`redact_scan`). Deterministic, zero tokens |
 | `swarmdo pack` | **Bundle a repo into one AI-context blob** — walk the tree (respects `.gitignore` + glob `--include`/`--exclude`, skips binaries/node_modules), emit markdown/xml/json/plain with a directory tree and per-file + total token estimates. `swarmdo pack --tokens` for a budget breakdown; `--redact` masks secrets first. Deterministic |
+| `swarmdo env` | **Catch env-var drift before deploy** — statically scan code for `process.env.X` / `import.meta.env.X` / `Deno.env.get` / `os.getenv` references and reconcile against `.env` and `.env.example`: reports **missing** (used but undeclared), **unused**, and **undocumented**. `--ci` exits 1 on missing vars. Also an MCP tool (`env_check`). Deterministic |
 | `swarmdo integrations` (alias `integrate`) | **Use swarmdo from Codex CLI, GitHub Copilot CLI, and pi** — one command wires AGENTS.md + each CLI's MCP config (idempotent, dry-run first, never touches your Claude Code setup) |
 | OpenRouter model pool | **Let swarms pick from any models you configure** — declare tier-mapped OpenRouter models in `swarmdo.config.json`; the router Thompson-samples among them per task and the execution layer dispatches the winner |
 | `swarmdo changelog` (alias `notes`) | **Release notes from conventional commits** — `--out NOTES.md` feeds `gh release create --notes-file` |

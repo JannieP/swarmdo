@@ -27,6 +27,7 @@ const LEAN_GROUPS = [
   'embeddings', // embeddings_generate / search / compare
   'codegraph',  // codegraph_query / file / index — "where is X defined?"
   'redact',     // redact_text / redact_scan — secret guard on the data path
+  'env',        // env_check — env-var drift (missing/unused/undocumented)
 ] as const;
 
 /** Balanced = lean + orchestration/session/system the average user reaches for. */

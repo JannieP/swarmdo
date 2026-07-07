@@ -24,6 +24,7 @@ import { workflowTools } from './mcp-tools/workflow-tools.js';
 import { analyzeTools } from './mcp-tools/analyze-tools.js';
 import { codegraphTools } from './mcp-tools/codegraph-tools.js';
 import { redactTools } from './mcp-tools/redact-tools.js';
+import { envTools } from './mcp-tools/env-tools.js';
 import { progressTools } from './mcp-tools/progress-tools.js';
 import { embeddingsTools } from './mcp-tools/embeddings-tools.js';
 import { claimsTools } from './mcp-tools/claims-tools.js';
@@ -113,6 +114,7 @@ const TOOL_GROUPS: Record<string, () => MCPTool[]> = {
   analyze: () => analyzeTools,
   codegraph: () => codegraphTools,
   redact: () => redactTools,
+  env: () => envTools,
   progress: () => progressTools,
   embeddings: () => embeddingsTools,
   claims: () => claimsTools,
