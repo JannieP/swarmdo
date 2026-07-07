@@ -8,7 +8,7 @@
  */
 
 import type { MCPTool } from './types.js';
-import { queryIndex, symbolsInFile, indexStats, type SymbolKind } from '../codegraph/codegraph.js';
+import { queryIndex, symbolsInFile, indexStats, fileImports, fileImporters, type SymbolKind } from '../codegraph/codegraph.js';
 import { INDEX_REL, scanRepo, saveIndex, loadIndex } from '../codegraph/store.js';
 
 const KINDS = ['function', 'class', 'interface', 'type', 'const', 'enum', 'default'];
@@ -119,9 +119,63 @@ const codegraphStatsTool: MCPTool = {
   },
 };
 
+const codegraphImportsTool: MCPTool = {
+  name: 'codegraph_imports',
+  description:
+    'List what a file imports — each edge as the raw specifier plus the repo file it resolves to (external packages resolve to null). Answers "what does this module depend on" from the index. Requires a prior codegraph_index.',
+  category: 'codegraph',
+  tags: ['code', 'imports', 'dependencies', 'navigation'],
+  inputSchema: {
+    type: 'object',
+    properties: {
+      file: { type: 'string', description: 'Repo-relative file path (as indexed, e.g. src/index.ts)' },
+      internal: { type: 'boolean', description: 'only edges resolved to a repo file (hide external packages)', default: false },
+      root: { type: 'string', description: 'Repo root (default: current working directory)' },
+    },
+    required: ['file'],
+  },
+  handler: async (params: Record<string, unknown>) => {
+    const root = rootOf(params);
+    const file = params.file;
+    if (typeof file !== 'string' || !file) return { error: true, message: 'file is required' };
+    const index = loadIndex(root);
+    if (!index) return { error: true, message: 'no index — run codegraph_index first' };
+    let edges = fileImports(index, file);
+    if (params.internal === true) edges = edges.filter((e) => e.resolved !== null);
+    return { file, count: edges.length, edges };
+  },
+};
+
+const codegraphImportersTool: MCPTool = {
+  name: 'codegraph_importers',
+  description:
+    'List which files import a given file — its reverse dependencies. Use before changing or moving a file to see what depends on it ("what breaks if I change this"). Requires a prior codegraph_index.',
+  category: 'codegraph',
+  tags: ['code', 'imports', 'dependencies', 'impact', 'navigation'],
+  inputSchema: {
+    type: 'object',
+    properties: {
+      file: { type: 'string', description: 'Repo-relative file path whose importers you want' },
+      root: { type: 'string', description: 'Repo root (default: current working directory)' },
+    },
+    required: ['file'],
+  },
+  handler: async (params: Record<string, unknown>) => {
+    const root = rootOf(params);
+    const file = params.file;
+    if (typeof file !== 'string' || !file) return { error: true, message: 'file is required' };
+    const index = loadIndex(root);
+    if (!index) return { error: true, message: 'no index — run codegraph_index first' };
+    const edges = fileImporters(index, file);
+    return { file, count: edges.length, importers: edges };
+  },
+};
+
 export const codegraphTools: MCPTool[] = [
   codegraphIndexTool,
   codegraphQueryTool,
   codegraphFileTool,
+  codegraphImportsTool,
+  codegraphImportersTool,
   codegraphStatsTool,
 ];

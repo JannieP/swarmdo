@@ -19,6 +19,8 @@ import {
   queryIndex,
   symbolsInFile,
   indexStats,
+  fileImports,
+  fileImporters,
   type CodeSymbol,
   type SymbolKind,
 } from '../codegraph/codegraph.js';
@@ -26,6 +28,11 @@ import { INDEX_REL, scanRepo, saveIndex, loadIndex } from '../codegraph/store.js
 
 function fmtSymbol(s: CodeSymbol): string {
   return `${s.file}:${s.line}  ${output.dim(`[${s.kind}]`)} ${s.signature}`;
+}
+
+/** Accept an absolute or cwd-relative path; return the repo-relative key. */
+function relKey(root: string, arg: string): string {
+  return path.relative(root, path.resolve(root, arg)).split(path.sep).join('/');
 }
 
 const indexCommand: Command = {
@@ -102,8 +109,51 @@ const statsCommand: Command = {
     if (!index) { output.printError(`no index — run \`swarmdo codegraph index\` first`); return { success: false, exitCode: 1 }; }
     const stats = indexStats(index);
     if (ctx.flags.json === true) { output.printJson(stats); return { success: true, data: stats }; }
-    output.writeln(output.bold(`codegraph: ${stats.symbols} symbols, ${stats.files} files`));
+    output.writeln(output.bold(`codegraph: ${stats.symbols} symbols, ${stats.files} files, ${stats.imports} imports (${stats.internalImports} internal)`));
     output.printList(Object.entries(stats.byKind).sort((a, b) => b[1] - a[1]).map(([k, n]) => `${k}: ${n}`));
+    return { success: true, exitCode: 0 };
+  },
+};
+
+const importsCommand: Command = {
+  name: 'imports',
+  description: 'What a file imports — resolved repo files + external packages',
+  options: [
+    { name: 'internal', description: 'only edges resolved to a repo file (hide external packages)', type: 'boolean', default: false },
+    { name: 'json', description: 'machine-readable output', type: 'boolean', default: false },
+  ],
+  action: async (ctx: CommandContext): Promise<CommandResult> => {
+    const root = ctx.cwd || process.cwd();
+    const arg = ctx.args[0];
+    if (!arg) { output.printError('Usage: swarmdo codegraph imports <path>'); return { success: false, exitCode: 1 }; }
+    const index = loadIndex(root);
+    if (!index) { output.printError(`no index — run \`swarmdo codegraph index\` first`); return { success: false, exitCode: 1 }; }
+    let edges = fileImports(index, relKey(root, arg));
+    if (ctx.flags.internal === true) edges = edges.filter((e) => e.resolved !== null);
+    if (ctx.flags.json === true) { output.printJson(edges); return { success: true, data: edges }; }
+    if (edges.length === 0) { output.writeln(output.dim(`no imports in ${relKey(root, arg)} (indexed?)`)); return { success: true, exitCode: 0 }; }
+    for (const e of edges) {
+      output.writeln(`  ${e.line}  ${e.spec}${e.resolved ? output.dim(` → ${e.resolved}`) : output.dim(' (external)')}`);
+    }
+    return { success: true, exitCode: 0 };
+  },
+};
+
+const importersCommand: Command = {
+  name: 'importers',
+  aliases: ['rdeps'],
+  description: 'Who imports a file — reverse deps ("what breaks if I change this")',
+  options: [{ name: 'json', description: 'machine-readable output', type: 'boolean', default: false }],
+  action: async (ctx: CommandContext): Promise<CommandResult> => {
+    const root = ctx.cwd || process.cwd();
+    const arg = ctx.args[0];
+    if (!arg) { output.printError('Usage: swarmdo codegraph importers <path>'); return { success: false, exitCode: 1 }; }
+    const index = loadIndex(root);
+    if (!index) { output.printError(`no index — run \`swarmdo codegraph index\` first`); return { success: false, exitCode: 1 }; }
+    const edges = fileImporters(index, relKey(root, arg));
+    if (ctx.flags.json === true) { output.printJson(edges); return { success: true, data: edges }; }
+    if (edges.length === 0) { output.writeln(output.dim(`nothing imports ${relKey(root, arg)} (leaf, entrypoint, or not indexed)`)); return { success: true, exitCode: 0 }; }
+    for (const e of edges) output.writeln(`  ${e.from}:${e.line}  ${output.dim(e.spec)}`);
     return { success: true, exitCode: 0 };
   },
 };
@@ -111,24 +161,27 @@ const statsCommand: Command = {
 export const codegraphCommand: Command = {
   name: 'codegraph',
   aliases: ['cg'],
-  description: 'Queryable index of exported symbols — where things are defined, without grep+read',
-  subcommands: [indexCommand, queryCommand, fileCommand, statsCommand],
+  description: 'Queryable index of exported symbols + import graph — where things are defined and what depends on what, without grep+read',
+  subcommands: [indexCommand, queryCommand, fileCommand, importsCommand, importersCommand, statsCommand],
   options: [],
   examples: [
-    { command: 'swarmdo codegraph index', description: 'Scan the repo and persist the symbol index' },
+    { command: 'swarmdo codegraph index', description: 'Scan the repo and persist the symbol + import index' },
     { command: 'swarmdo codegraph query buildIndex', description: 'Find where a symbol is defined' },
     { command: 'swarmdo codegraph query Handler --fuzzy --kind type', description: 'Fuzzy, kind-filtered lookup' },
     { command: 'swarmdo codegraph file src/index.ts', description: 'What a file exports' },
+    { command: 'swarmdo codegraph importers src/codegraph/store.ts', description: 'What breaks if I change this file' },
   ],
   action: async (): Promise<CommandResult> => {
-    output.writeln(output.bold('swarmdo codegraph — exported-symbol index'));
+    output.writeln(output.bold('swarmdo codegraph — exported-symbol index + import graph'));
     output.printList([
-      'index [path]   scan TS/JS and persist to .swarm/codegraph.json',
-      'query <name>   find a symbol (--fuzzy, --kind)',
-      'file <path>    symbols a file exports',
-      'stats          index summary',
+      'index [path]      scan TS/JS and persist to .swarm/codegraph.json',
+      'query <name>      find a symbol (--fuzzy, --kind)',
+      'file <path>       symbols a file exports',
+      'imports <path>    what a file imports (--internal)',
+      'importers <path>  who imports a file (reverse deps)',
+      'stats             index summary',
     ]);
-    output.writeln(output.dim('MVP: exported top-level symbols. Call-graph edges + watch + MCP tool are follow-ups.'));
+    output.writeln(output.dim('MVP: exported top-level symbols + relative-import edges. Incremental watch is a follow-up.'));
     return { success: true, exitCode: 0 };
   },
 };

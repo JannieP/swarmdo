@@ -100,9 +100,36 @@ describe('codegraph MCP tools', () => {
   });
 });
 
+describe('codegraph_imports / codegraph_importers tools', () => {
+  // b.ts imports a.ts (via ./a); requires an index of files that reference each other
+  async function indexed() {
+    fs.writeFileSync(path.join(root, 'src', 'imp.ts'), "import { alpha } from './a';\nexport const z = 1;\n");
+    await tool('codegraph_index').handler({ root });
+  }
+  it('codegraph_imports lists edges with resolution', async () => {
+    await indexed();
+    const r = (await tool('codegraph_imports').handler({ root, file: 'src/imp.ts' })) as any;
+    expect(r.count).toBe(1);
+    expect(r.edges[0].spec).toBe('./a');
+    expect(r.edges[0].resolved).toBe('src/a.ts');
+  });
+  it('codegraph_importers returns reverse deps', async () => {
+    await indexed();
+    const r = (await tool('codegraph_importers').handler({ root, file: 'src/a.ts' })) as any;
+    expect(r.count).toBe(1);
+    expect(r.importers[0].from).toBe('src/imp.ts');
+  });
+  it('both error before an index exists', async () => {
+    const a = (await tool('codegraph_imports').handler({ root, file: 'src/a.ts' })) as any;
+    const b = (await tool('codegraph_importers').handler({ root, file: 'src/a.ts' })) as any;
+    expect(a.error).toBe(true);
+    expect(b.error).toBe(true);
+  });
+});
+
 describe('tool metadata', () => {
   it('every tool has name, description, schema, handler and codegraph category', () => {
-    expect(codegraphTools).toHaveLength(4);
+    expect(codegraphTools).toHaveLength(6);
     for (const t of codegraphTools) {
       expect(t.name).toMatch(/^codegraph_/);
       expect(t.description.length).toBeGreaterThan(20);

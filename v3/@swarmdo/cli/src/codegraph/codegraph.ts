@@ -31,9 +31,23 @@ export interface CodeSymbol {
   signature: string;
 }
 
+/** A dependency edge: `from` imports module `spec`, resolved to a repo file when relative. */
+export interface ImportEdge {
+  /** repo-relative file containing the import */
+  from: string;
+  /** the raw module specifier as written, e.g. './store.js' or 'node:fs' */
+  spec: string;
+  /** repo-relative file the spec resolves to, or null for external/unresolved */
+  resolved: string | null;
+  /** 1-based line of the import */
+  line: number;
+}
+
 export interface CodeIndex {
   /** Repo-relative file → symbols declared in it. */
   symbols: CodeSymbol[];
+  /** Dependency edges between files (relative imports resolved; externals kept unresolved). */
+  imports: ImportEdge[];
   fileCount: number;
 }
 
@@ -83,15 +97,92 @@ export function extractSymbols(source: string, file: string): CodeSymbol[] {
   return out;
 }
 
+/**
+ * Module specifiers on a line, from any of: `import … from 'x'`,
+ * `export … from 'x'`, side-effect `import 'x'`, `require('x')`, and dynamic
+ * `import('x')`. Line-based like the symbol matchers; captures every spec on
+ * the line (dynamic imports can be mid-line).
+ */
+const IMPORT_RES: RegExp[] = [
+  /\bfrom\s*['"]([^'"]+)['"]/g,          // import/export … from '…'
+  /\bimport\s*['"]([^'"]+)['"]/g,         // side-effect import '…'
+  /\bimport\s*\(\s*['"]([^'"]+)['"]\s*\)/g, // dynamic import('…')
+  /\brequire\s*\(\s*['"]([^'"]+)['"]\s*\)/g, // require('…')
+];
+
+/** Extract the raw import specifiers from one source file. Pure. */
+export function extractImports(source: string, file: string): Array<{ from: string; spec: string; line: number }> {
+  const out: Array<{ from: string; spec: string; line: number }> = [];
+  const lines = source.split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (!/\b(?:from|import|require)\b/.test(line)) continue;
+    const seen = new Set<string>();
+    for (const re of IMPORT_RES) {
+      re.lastIndex = 0;
+      let m: RegExpExecArray | null;
+      while ((m = re.exec(line)) !== null) {
+        const spec = m[1];
+        if (seen.has(spec)) continue; // same spec caught by two patterns on one line
+        seen.add(spec);
+        out.push({ from: file, spec, line: i + 1 });
+      }
+    }
+  }
+  return out;
+}
+
+/** Normalize a relative spec against the importing file's dir → repo-relative POSIX path (no extension). */
+function joinRelative(fromFile: string, spec: string): string {
+  const parts = fromFile.includes('/') ? fromFile.slice(0, fromFile.lastIndexOf('/')).split('/') : [];
+  for (const seg of spec.split('/')) {
+    if (seg === '' || seg === '.') continue;
+    if (seg === '..') parts.pop();
+    else parts.push(seg);
+  }
+  return parts.join('/');
+}
+
+const RESOLVE_EXTS = ['', '.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs', '.mts', '.cts'];
+
+/**
+ * Resolve a spec to a repo-relative file in `fileSet`, or null. Only relative
+ * specs (`.`/`..`) resolve; bare specifiers (packages, aliases, `node:`) are
+ * external → null. Tries the path as-is, common extensions, and `/index.*`,
+ * and rewrites a `.js` spec to its `.ts` sibling (TS ESM convention).
+ */
+export function resolveImport(fromFile: string, spec: string, fileSet: Set<string>): string | null {
+  if (!spec.startsWith('.')) return null;
+  const base = joinRelative(fromFile, spec);
+  const bases = [base];
+  const jsExt = base.match(/\.(js|jsx|mjs|cjs)$/);
+  if (jsExt) bases.push(base.slice(0, -jsExt[0].length)); // ./x.js → try ./x(.ts…)
+  for (const b of bases) {
+    for (const ext of RESOLVE_EXTS) {
+      if (fileSet.has(b + ext)) return b + ext;
+    }
+    for (const ext of RESOLVE_EXTS.slice(1)) {
+      if (fileSet.has(b + '/index' + ext)) return b + '/index' + ext;
+    }
+  }
+  return null;
+}
+
 /** Build an index from already-read files. Pure. */
 export function buildIndex(files: Array<{ file: string; source: string }>): CodeIndex {
   const symbols: CodeSymbol[] = [];
+  const fileSet = new Set(files.map((f) => f.file));
+  const imports: ImportEdge[] = [];
   for (const { file, source } of files) {
     symbols.push(...extractSymbols(source, file));
+    for (const imp of extractImports(source, file)) {
+      imports.push({ ...imp, resolved: resolveImport(imp.from, imp.spec, fileSet) });
+    }
   }
   // Stable order: file, then line.
   symbols.sort((a, b) => (a.file < b.file ? -1 : a.file > b.file ? 1 : a.line - b.line));
-  return { symbols, fileCount: files.length };
+  imports.sort((a, b) => (a.from < b.from ? -1 : a.from > b.from ? 1 : a.line - b.line));
+  return { symbols, imports, fileCount: files.length };
 }
 
 export interface QueryOptions {
@@ -115,15 +206,36 @@ export function symbolsInFile(index: CodeIndex, file: string): CodeSymbol[] {
   return index.symbols.filter((s) => s.file === file);
 }
 
+/** Edges FROM a file — what it imports (resolved repo files + external specs). Pure. */
+export function fileImports(index: CodeIndex, file: string): ImportEdge[] {
+  return (index.imports ?? []).filter((e) => e.from === file);
+}
+
+/** Edges TO a file — who imports it ("what breaks if I change this"). Pure. */
+export function fileImporters(index: CodeIndex, file: string): ImportEdge[] {
+  return (index.imports ?? []).filter((e) => e.resolved === file);
+}
+
 export interface IndexStats {
   files: number;
   symbols: number;
   byKind: Record<string, number>;
+  /** total import edges */
+  imports: number;
+  /** edges resolved to an in-repo file (vs external packages) */
+  internalImports: number;
 }
 
 /** Summary counts for the index. Pure. */
 export function indexStats(index: CodeIndex): IndexStats {
   const byKind: Record<string, number> = {};
   for (const s of index.symbols) byKind[s.kind] = (byKind[s.kind] ?? 0) + 1;
-  return { files: index.fileCount, symbols: index.symbols.length, byKind };
+  const imports = index.imports ?? [];
+  return {
+    files: index.fileCount,
+    symbols: index.symbols.length,
+    byKind,
+    imports: imports.length,
+    internalImports: imports.filter((e) => e.resolved !== null).length,
+  };
 }
