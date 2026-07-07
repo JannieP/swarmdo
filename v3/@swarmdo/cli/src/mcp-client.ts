@@ -30,6 +30,7 @@ import { applyTools } from './mcp-tools/apply-tools.js';
 import { hotspotsTools } from './mcp-tools/hotspots-tools.js';
 import { affectedTools } from './mcp-tools/affected-tools.js';
 import { cyclesTools } from './mcp-tools/cycles-tools.js';
+import { testreportTools } from './mcp-tools/testreport-tools.js';
 import { progressTools } from './mcp-tools/progress-tools.js';
 import { embeddingsTools } from './mcp-tools/embeddings-tools.js';
 import { claimsTools } from './mcp-tools/claims-tools.js';
@@ -125,6 +126,7 @@ const TOOL_GROUPS: Record<string, () => MCPTool[]> = {
   hotspots: () => hotspotsTools,
   affected: () => affectedTools,
   cycles: () => cyclesTools,
+  testreport: () => testreportTools,
   progress: () => progressTools,
   embeddings: () => embeddingsTools,
   claims: () => claimsTools,

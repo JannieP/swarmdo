@@ -32,6 +32,7 @@ const LEAN_GROUPS = [
   'hotspots',   // hotspots — git-history change-risk ranking ("where's the debt?")
   'affected',   // affected — impacted files/tests from a change via the import graph
   'cycles',     // cycles — circular-import detection via the import graph
+  'testreport', // testreport — JUnit/TAP → structured failure digest (pairs w/ repair)
 ] as const;
 
 /** Balanced = lean + orchestration/session/system the average user reaches for. */
