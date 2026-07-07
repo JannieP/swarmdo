@@ -1,8 +1,8 @@
 # Claude Code Configuration - Swarmdo v1.4
 
-> **Swarmdo v1.15.0** (2026-07-07) — every swarmdo slash command namespaced under `sDo` (`/sDo:swarm:init`, skills `/sdo-ponytail`) so they group together in Claude Code's `/` menu; legacy unprefixed copies auto-migrated on init/upgrade.
+> **Swarmdo v1.16.0** (2026-07-07) — every swarmdo slash command namespaced under `sDo` (`/sDo:swarm:init`, skills `/sdo-ponytail`) so they group together in Claude Code's `/` menu; legacy unprefixed copies auto-migrated on init/upgrade.
 > 6,000+ commits, 314 MCP tools, 16 agent roles + custom types, 19 AgentDB controllers, 21 native plugins.
-> Packages: `swarmdo@1.15.0` (umbrella), `@swarmdo/cli@1.15.0`, `swarmdo-bridge@1.15.0` (wrapper in `swarmdo/`)
+> Packages: `swarmdo@1.16.0` (umbrella), `@swarmdo/cli@1.16.0`, `swarmdo-bridge@1.16.0` (wrapper in `swarmdo/`)
 
 ## Behavioral Rules (Always Enforced)
 

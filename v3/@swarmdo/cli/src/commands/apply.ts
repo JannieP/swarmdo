@@ -37,7 +37,10 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
   const root = ctx.cwd || process.cwd();
   const dryRun = ctx.flags['dry-run'] === true;
   const partial = ctx.flags.partial === true;
-  const fuzz = typeof ctx.flags.fuzz === 'string' ? parseInt(ctx.flags.fuzz, 10) : 2;
+  // The parser may deliver --fuzz as a number or a string; accept both.
+  const fuzz = typeof ctx.flags.fuzz === 'number' ? ctx.flags.fuzz
+    : typeof ctx.flags.fuzz === 'string' ? parseInt(ctx.flags.fuzz, 10)
+    : 2;
 
   // Read the patch: a file arg, or stdin.
   let patchText: string;

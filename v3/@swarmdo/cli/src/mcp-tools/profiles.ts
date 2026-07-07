@@ -29,6 +29,7 @@ const LEAN_GROUPS = [
   'redact',     // redact_text / redact_scan — secret guard on the data path
   'env',        // env_check — env-var drift (missing/unused/undocumented)
   'apply',      // apply_patch — fuzzy unified-diff applier for agent edits
+  'hotspots',   // hotspots — git-history change-risk ranking ("where's the debt?")
 ] as const;
 
 /** Balanced = lean + orchestration/session/system the average user reaches for. */
