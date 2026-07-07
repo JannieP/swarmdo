@@ -11,6 +11,11 @@ import path from 'path';
 
 export default defineConfig({
   test: {
+    // forks (not threads): several suites process.chdir() into tmp dirs,
+    // which throws "not supported in workers" under the threads pool. The
+    // per-package configs run forks; the aggregate must match.
+    pool: 'forks',
+
     // Test environment
     environment: 'node',
 

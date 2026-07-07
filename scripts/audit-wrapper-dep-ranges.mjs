@@ -109,7 +109,18 @@ for (const { dep, workspace } of siblingsToCheck) {
   if (!range) continue;
   checks.push(`swarmdo umbrella → ${dep}: range "${range}" — workspace at ${wsPkg.version}`);
 
-  if (!semver.satisfies(wsPkg.version, range, { includePrerelease: true })) {
+  if (range.startsWith('file:')) {
+    // file: specs pointing into the workspace cannot version-drift by
+    // construction — npm resolves the live directory, so the "range" always
+    // matches the workspace's actual version. #2127's failure mode (stale
+    // semver range → Invalid Version dedupe crash) does not apply.
+    const target = resolve(REPO_ROOT, range.slice('file:'.length));
+    let ok = false;
+    try { ok = JSON.parse(readFileSync(join(target, 'package.json'), 'utf8')).name === dep; } catch { ok = false; }
+    if (!ok) {
+      violations.push(`swarmdo's "${dep}": "${range}" does not resolve to a workspace package of that name.`);
+    }
+  } else if (!semver.satisfies(wsPkg.version, range, { includePrerelease: true })) {
     violations.push(
       `swarmdo's "${dep}": "${range}" does NOT include the workspace's actual ` +
       `version ${wsPkg.version}. Bump the range.`
