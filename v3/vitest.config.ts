@@ -36,10 +36,6 @@ export default defineConfig({
       '**/node_modules/**',
       '**/dist/**',
       '**/.git/**',
-      // node:test suites (run via `pnpm run test:appliance`) — vitest
-      // collects them but node:test registers zero vitest suites, which
-      // vitest 4 reports as "No test suite found" errors.
-      '__tests__/appliance/**',
     ],
 
     // Coverage configuration - London School targets
@@ -127,7 +123,6 @@ export default defineConfig({
             '**/node_modules/**',
             '**/dist/**',
             '**/.git/**',
-            '__tests__/appliance/**',
             '**/router-bandit.test.ts',
             '**/*-2245.test.ts',
             '**/issue-2250-2251-regression.test.ts',

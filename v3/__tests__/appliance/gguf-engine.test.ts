@@ -1,11 +1,11 @@
 /**
  * GGUF inference engine tests.
  *
- * Uses the Node.js built-in test runner (node:test).
- * Run: npx tsx --test v3/__tests__/appliance/gguf-engine.test.ts
+ * Runs under vitest (converted from node:test — only describe/it/hooks were used).
+ * Run: npx vitest run __tests__/appliance/gguf-engine.test.ts
  */
 
-import { describe, it, beforeEach, afterEach } from 'node:test';
+import { describe, it, beforeEach, afterEach } from 'vitest';
 import assert from 'node:assert/strict';
 import { writeFileSync, unlinkSync, mkdirSync, existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';

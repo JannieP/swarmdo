@@ -1,11 +1,11 @@
 /**
  * RVFA Distribution & Hot-Patch module tests.
  *
- * Uses the Node.js built-in test runner (node:test).
- * Run: npx tsx --test v3/__tests__/appliance/rvfa-distribution.test.ts
+ * Runs under vitest (converted from node:test — only describe/it/hooks were used).
+ * Run: npx vitest run __tests__/appliance/rvfa-distribution.test.ts
  */
 
-import { describe, it, afterEach } from 'node:test';
+import { describe, it, afterEach } from 'vitest';
 import assert from 'node:assert/strict';
 import { writeFileSync, unlinkSync, existsSync, readFileSync, mkdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';

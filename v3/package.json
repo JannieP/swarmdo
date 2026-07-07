@@ -38,8 +38,7 @@
     "bun:test": "bun test",
     "bun:dev": "bun run --watch src/index.ts",
     "bun:publish:dry": "cd swarmdo && bun publish --dry-run --tag v3alpha",
-    "bun:publish:v3alpha": "cd swarmdo && bun publish --tag v3alpha",
-    "test:appliance": "npx -y tsx@4.21.0 --test __tests__/appliance/*.test.ts"
+    "bun:publish:v3alpha": "cd swarmdo && bun publish --tag v3alpha"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

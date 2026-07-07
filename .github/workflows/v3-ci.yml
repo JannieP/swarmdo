@@ -330,10 +330,6 @@ jobs:
           fi
           exit "$EXIT"
 
-      - name: Run appliance tests (node:test suites, excluded from vitest)
-        working-directory: v3
-        run: pnpm run test:appliance
-
       - name: Upload coverage
         if: always()
         uses: actions/upload-artifact@v7
