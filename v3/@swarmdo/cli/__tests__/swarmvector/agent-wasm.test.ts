@@ -61,12 +61,17 @@ const mockTemplateDetail = {
 };
 
 class MockWasmGallery {
-  list = vi.fn().mockReturnValue(mockTemplates);
-  get = vi.fn().mockImplementation((id: string) => id === 'coder' ? mockTemplateDetail : undefined);
-  search = vi.fn().mockReturnValue([{ ...mockTemplates[0], relevance: 0.7 }]);
-  count = vi.fn().mockReturnValue(2);
-  getCategories = vi.fn().mockReturnValue({ development: 1, testing: 1 });
-  free = vi.fn();
+  // Plain methods, NOT vi.fn() fields: the source module caches ONE gallery
+  // instance across tests (getGallery's _gallery), so any mock-lifecycle
+  // clear/reset between tests strips vi.fn implementations from the cached
+  // instance — which is exactly what surfaced on CI as "Gallery template
+  // not found: coder". No test asserts call-counts on gallery methods.
+  list() { return mockTemplates; }
+  get(id: string) { return id === 'coder' ? mockTemplateDetail : undefined; }
+  search(_q: string) { return [{ ...mockTemplates[0], relevance: 0.7 }]; }
+  count() { return 2; }
+  getCategories() { return { development: 1, testing: 1 }; }
+  free() { /* no-op */ }
 }
 
 class MockWasmMcpServer {
