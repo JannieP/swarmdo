@@ -39,12 +39,11 @@
     "bun:dev": "bun run --watch src/index.ts",
     "bun:publish:dry": "cd swarmdo && bun publish --dry-run --tag v3alpha",
     "bun:publish:v3alpha": "cd swarmdo && bun publish --tag v3alpha",
-    "test:appliance": "tsx --test __tests__/appliance/*.test.ts"
+    "test:appliance": "npx -y tsx@4.21.0 --test __tests__/appliance/*.test.ts"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
     "@vitest/coverage-v8": "^4.0.16",
-    "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vitest": "^4.0.16"
   },
