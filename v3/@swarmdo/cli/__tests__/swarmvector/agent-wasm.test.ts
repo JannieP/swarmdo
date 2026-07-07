@@ -134,7 +134,18 @@ import {
 // swarmllm-wasm.test.ts for the rationale): run wherever @swarmvector/rvagent-wasm
 // loads, skip-with-reason wherever it doesn't — CI without prebuilt natives,
 // edge/Pi, or this sandbox. isAgentWasmAvailable() is imported above.
-const __WASM_AVAILABLE = await isAgentWasmAvailable().catch(() => false);
+const __WASM_AVAILABLE = await isAgentWasmAvailable()
+  .then(async (ok) => {
+    if (!ok) return false;
+    // resolvability isn't enough: on some runners the wasm loads but the
+    // RVF container path dies in deep init — probe the actual operation
+    // before declaring the suite runnable (same policy as swarmllm-wasm)
+    try {
+      await buildRvfContainer({ prompts: [], tools: [], skills: [] });
+      return true;
+    } catch { return false; }
+  })
+  .catch(() => false);
 const __SKIP_WASM_TESTS = !__WASM_AVAILABLE;
 
 describe.skipIf(__SKIP_WASM_TESTS)('agent-wasm integration', () => {

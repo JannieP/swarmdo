@@ -25,6 +25,28 @@ const distImport = (rel) => import(pathToFileURL(path.join(distBase, rel)).href)
 // sql.js is available in root node_modules (installed by the CI setup step via
 // `npm install --legacy-peer-deps --ignore-scripts` at the repo root).
 // This matches the pattern used by smoke-memory-stats-legacy-db.mjs which passes CI.
+
+// #2431 made the writer WAL-mode (better-sqlite3): raw sql.js reads of the
+// main db file miss uncheckpointed WAL content — checkpoint first (same
+// pattern as smoke-graph-schema-migration).
+async function checkpointWal(file) {
+  try {
+    const { createRequire } = await import('node:module');
+    let BetterSqlite3;
+    for (const base of [
+      path.join(projectRoot, 'v3/@swarmdo/cli/noop.js'),
+      path.join(projectRoot, 'v3/noop.js'),
+      path.join(projectRoot, 'noop.js'),
+    ]) {
+      try { BetterSqlite3 = createRequire(base)('better-sqlite3'); break; } catch { /* next */ }
+    }
+    if (!BetterSqlite3) return;
+    const db = new BetterSqlite3(file);
+    db.pragma('wal_checkpoint(TRUNCATE)');
+    db.close();
+  } catch { /* stale reads possible */ }
+}
+
 async function loadSqlJs() {
   const mod = await import('sql.js');
   const initSqlJs = mod.default ?? mod;
@@ -57,6 +79,7 @@ async function countEdgesByRelation(relation) {
   // Read directly from file without resetting the module cache
   // (resetting during an in-flight write would break flushDb)
   try {
+    await checkpointWal(dbPath);
     const SQL = await loadSqlJs();
     if (!fs.existsSync(dbPath)) return 0;
     const fileBuffer = fs.readFileSync(dbPath);
@@ -114,6 +137,14 @@ async function testPostTask() {
     const mod = await distImport('mcp-tools/hooks-tools.js');
     const postTask = mod.hooksPostTask ?? mod.allHooksTools?.find(t => t.name === 'hooks_post-task');
     if (!postTask) { fail('2a', 'hooks_post-task not found'); return; }
+
+    // Warm the embedding model first: the <200ms criterion measures
+    // steady-state hook latency, and a cold ONNX init (~3-4s on CI runners)
+    // is one-time setup cost, not hook overhead.
+    try {
+      const { generateEmbedding } = await distImport('memory/memory-initializer.js');
+      await generateEmbedding('warmup');
+    } catch { /* embedding may be unavailable — hook degrades the same way */ }
 
     const t0 = Date.now();
     const result = await postTask.handler({

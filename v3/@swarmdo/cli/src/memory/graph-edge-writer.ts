@@ -147,6 +147,27 @@ export interface GraphEdgeInput {
   dbPath?: string;
 }
 
+
+/**
+ * Engine-compat read: run a SELECT and return rows in sql.js exec() shape
+ * ([{columns, values}] or [] when no rows). getBridgeDb returned sql.js
+ * historically and better-sqlite3 since #2431 — readers written against the
+ * old shape (agentdb graph query/pathfinder) go through this shim so they
+ * work on either engine. better-sqlite3's own exec() neither binds params
+ * nor returns rows, which surfaced as "datatype mismatch" on every LIMIT ?.
+ */
+export function execRows(db: any, sql: string, params: unknown[] = []): Array<{ columns: string[]; values: unknown[][] }> {
+  if (db && typeof db.prepare === 'function') {
+    const stmt = db.prepare(sql);
+    const values = stmt.raw(true).all(...params) as unknown[][];
+    if (values.length === 0) return [];
+    const columns = stmt.columns().map((c: { name: string }) => c.name);
+    return [{ columns, values }];
+  }
+  // sql.js fallback (legacy)
+  return db.exec(sql, params);
+}
+
 /**
  * Insert a single edge into graph_edges.
  * Fire-and-forget — errors are suppressed.

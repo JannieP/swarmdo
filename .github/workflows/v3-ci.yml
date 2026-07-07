@@ -1569,6 +1569,10 @@ jobs:
     # (D) after building each plugin, every main/module/exports path exists on
     # disk (#1904). The build step is what makes check D live.
     name: Plugin package install-safety (#1902/#1903/#1904)
+    env:
+      # onnxruntime-node's postinstall downloads CUDA/DML extras from a CDN;
+      # flaky on runners and unneeded for install-safety checks — skip it.
+      ONNXRUNTIME_NODE_INSTALL_CUDA: skip
     runs-on: ubuntu-latest
 
     steps:

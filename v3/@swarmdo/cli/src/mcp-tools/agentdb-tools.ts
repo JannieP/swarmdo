@@ -970,11 +970,11 @@ export const agentdbGraphQuery: MCPTool = {
 
         // SQL CTE fallback for k-hop up to depth 3
         try {
-          const { getBridgeDb } = await import('../memory/graph-edge-writer.js');
+          const { getBridgeDb, execRows } = await import('../memory/graph-edge-writer.js');
           const db = await getBridgeDb();
           if (db) {
             const cteSql = buildKHopCTE(nodeId, Math.min(depth, 3), relation, budget.maxNodesVisited);
-            const result = db.exec(cteSql);
+            const result = execRows(db, cteSql);
             const rows = result?.[0]?.values ?? [];
             return {
               success: true, mode, nodeId, depth,
@@ -996,14 +996,15 @@ export const agentdbGraphQuery: MCPTool = {
           const queryEmb = await generateEmbedding(nodeId);
           if (!queryEmb) throw new Error('embedding failed');
 
-          const { getBridgeDb } = await import('../memory/graph-edge-writer.js');
+          const { getBridgeDb, execRows } = await import('../memory/graph-edge-writer.js');
           // #2246 fix: lazy-create memory.db on first pathfinder call so
           // fresh environments work without a pre-existing memory init.
           const db = await getBridgeDb(undefined, { createIfMissing: true });
           if (!db) return { success: false, error: 'graph_edges DB unavailable (sql.js could not load)', hint: 'Check Node version + try `swarmdo memory init` to initialize manually.', mode, nodeId };
 
           // Load all rows with embedding_ref and score by cosine
-          const rowResult = db.exec(
+          const rowResult = execRows(
+            db,
             `SELECT id, source_id, target_id, relation, weight, embedding_ref FROM graph_edges WHERE embedding_ref IS NOT NULL LIMIT ?`,
             [budget.maxNodesVisited],
           );
@@ -1039,13 +1040,14 @@ export const agentdbGraphQuery: MCPTool = {
       // ── pagerank mode ────────────────────────────────────────────────────────
       if (mode === 'pagerank') {
         try {
-          const { getBridgeDb } = await import('../memory/graph-edge-writer.js');
+          const { getBridgeDb, execRows } = await import('../memory/graph-edge-writer.js');
           // #2246 fix: lazy-create memory.db on first pathfinder call so
           // fresh environments work without a pre-existing memory init.
           const db = await getBridgeDb(undefined, { createIfMissing: true });
           if (!db) return { success: false, error: 'graph_edges DB unavailable (sql.js could not load)', hint: 'Check Node version + try `swarmdo memory init` to initialize manually.', mode, nodeId };
 
-          const edgeResult = db.exec(
+          const edgeResult = execRows(
+            db,
             `SELECT source_id, target_id, weight FROM graph_edges LIMIT ?`,
             [budget.maxNodesVisited],
           );
@@ -1244,7 +1246,7 @@ export const agentdbGraphPathfinder: MCPTool = {
       }
 
       // Load edges from graph_edges
-      const { getBridgeDb } = await import('../memory/graph-edge-writer.js');
+      const { getBridgeDb, execRows } = await import('../memory/graph-edge-writer.js');
       // #2246 fix: lazy-create memory.db on first pathfinder call.
       const db = await getBridgeDb(undefined, { createIfMissing: true });
       if (!db) return { success: false, error: 'graph_edges DB unavailable (sql.js could not load)', hint: 'Check Node version + try `swarmdo memory init` to initialize manually.', seedNodeId };
@@ -1255,7 +1257,8 @@ export const agentdbGraphPathfinder: MCPTool = {
         ? 'source_id, target_id, weight, last_reinforced, confidence'
         : 'source_id, target_id, weight';
 
-      const edgeResult = db.exec(
+      const edgeResult = execRows(
+        db,
         `SELECT ${colsSql} FROM graph_edges LIMIT ?`,
         [budget.maxNodesVisited],
       );
