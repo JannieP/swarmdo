@@ -15,6 +15,7 @@ import { spawnSync } from 'node:child_process';
 import type { Command, CommandContext, CommandResult } from '../types.js';
 import { output } from '../output.js';
 import { compactOutput, formatSavings, type CompactOptions } from '../compact/compact.js';
+import { writeStdout } from '../util/stdout.js';
 
 /**
  * Read all of stdin as UTF-8. A stream read (not readFileSync(0)) — the
@@ -65,7 +66,7 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
     }
     const combined = (r.stdout || '') + (r.stderr || '');
     const { text, stats } = compactOutput(combined, opts);
-    process.stdout.write(text);
+    await writeStdout(text);
     if (!quiet) process.stderr.write(formatSavings(stats) + '\n');
     // Propagate the wrapped command's exit code verbatim.
     const code = r.status ?? (r.signal ? 1 : 0);
@@ -84,7 +85,7 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
   } else if (!quiet) {
     process.stderr.write(formatSavings(stats) + '\n');
   }
-  process.stdout.write(text);
+  await writeStdout(text);
   return { success: true, exitCode: 0 };
 }
 

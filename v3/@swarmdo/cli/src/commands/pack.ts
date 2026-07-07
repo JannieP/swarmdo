@@ -19,6 +19,7 @@ import type { Command, CommandContext, CommandResult } from '../types.js';
 import { output } from '../output.js';
 import { packFiles, makeIgnoreMatcher, type PackFile, type PackFormat, type PackOptions } from '../pack/pack.js';
 import { redactText } from '../redact/redact.js';
+import { writeStdout } from '../util/stdout.js';
 
 const SKIP_DIRS = new Set([
   'node_modules', '.git', '.swarm', 'dist', 'dist-standalone', 'build',
@@ -144,8 +145,7 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
     fs.writeFileSync(path.resolve(repoRoot, outFile), bundle);
     output.printSuccess(`packed ${stats.files} files (~${stats.tokens} tokens) → ${outFile}`);
   } else {
-    process.stdout.write(bundle);
-    if (!process.stdout.isTTY) { /* piped: keep stdout clean */ }
+    await writeStdout(bundle);
     process.stderr.write(output.dim(`packed ${stats.files} files (~${stats.tokens} tokens)\n`));
   }
   return { success: true, exitCode: 0 };

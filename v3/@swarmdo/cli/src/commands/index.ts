@@ -44,6 +44,9 @@ const commandLoaders: Record<string, CommandLoader> = {
   // GPL/unknown licenses in the tree, fail CI on a forbidden one.
   license: () => import('./license.js'),
   licenses: () => import('./license.js'), // alias via loader key
+  // Software Bill of Materials from the lockfile (syft/cyclonedx demand) —
+  // CycloneDX/SPDX JSON; completes the env/license/sbom supply-chain trio.
+  sbom: () => import('./sbom.js'),
   // Queryable exported-symbol index (codegraph demand) — where things are
   // defined without grep+read round-trips.
   codegraph: () => import('./codegraph.js'),
@@ -299,7 +302,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
     analyzeCmd, routeCmd, progressCmd, providersCmd,
     pluginsCmd, deploymentCmd, claimsCmd, issuesCmd,
     updateCmd, processCmd, guidanceCmd, applianceCmd,
-    cleanupCmd, autopilotCmd, demoCmd, usageCmd, repairCmd, hudCmd, compactCmd, codegraphCmd, redactCmd, packCmd, envCmd, licenseCmd,
+    cleanupCmd, autopilotCmd, demoCmd, usageCmd, repairCmd, hudCmd, compactCmd, codegraphCmd, redactCmd, packCmd, envCmd, licenseCmd, sbomCmd,
   ] = await Promise.all([
     loadCommand('daemon'), loadCommand('doctor'), loadCommand('embeddings'), loadCommand('neural'),
     loadCommand('performance'), loadCommand('security'), loadCommand('swarmvector'), loadCommand('hive-mind'),
@@ -308,7 +311,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
     loadCommand('analyze'), loadCommand('route'), loadCommand('progress'), loadCommand('providers'),
     loadCommand('plugins'), loadCommand('deployment'), loadCommand('claims'), loadCommand('issues'),
     loadCommand('update'), loadCommand('process'), loadCommand('guidance'), loadCommand('appliance'),
-    loadCommand('cleanup'), loadCommand('autopilot'), loadCommand('demo'), loadCommand('usage'), loadCommand('repair'), loadCommand('hud'), loadCommand('compact'), loadCommand('codegraph'), loadCommand('redact'), loadCommand('pack'), loadCommand('env'), loadCommand('license'),
+    loadCommand('cleanup'), loadCommand('autopilot'), loadCommand('demo'), loadCommand('usage'), loadCommand('repair'), loadCommand('hud'), loadCommand('compact'), loadCommand('codegraph'), loadCommand('redact'), loadCommand('pack'), loadCommand('env'), loadCommand('license'), loadCommand('sbom'),
   ]);
 
   return {
@@ -325,7 +328,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
     utility: [
       configCmd, doctorCmd, daemonCmd, completionsCmd,
       migrateCmd, workflowCmd, demoCmd,
-      statuslineCmd, compressCmd, compactCmd, redactCmd, packCmd, envCmd, licenseCmd, efficiencyCmd,
+      statuslineCmd, compressCmd, compactCmd, redactCmd, packCmd, envCmd, licenseCmd, sbomCmd, efficiencyCmd,
     ].filter(Boolean) as Command[],
     analysis: [
       analyzeCmd, routeCmd, progressCmd, usageCmd, hudCmd, codegraphCmd,

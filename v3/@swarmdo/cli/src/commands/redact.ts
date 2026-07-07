@@ -17,6 +17,7 @@ import { spawnSync } from 'node:child_process';
 import type { Command, CommandContext, CommandResult } from '../types.js';
 import { output } from '../output.js';
 import { redactText, scanText, formatFindingsSummary, type RedactOptions } from '../redact/redact.js';
+import { writeStdout } from '../util/stdout.js';
 
 function readStdin(): Promise<string> {
   return new Promise((resolve) => {
@@ -92,7 +93,7 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
 
   // Redact mode: rewrite and emit.
   const { output: redacted, findings } = redactText(input, opts);
-  process.stdout.write(redacted);
+  await writeStdout(redacted);
   if (asJson) {
     process.stderr.write(JSON.stringify({ count: findings.length, findings }, null, 2) + '\n');
   } else if (!quiet) {
