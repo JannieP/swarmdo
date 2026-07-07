@@ -26,6 +26,9 @@ const PROVIDER_CATALOG: ProviderCatalogEntry[] = [
   // #1725: Ollama Cloud — Tier-2 default per ADR-026 (~$100/mo flat-rate alternative
   // to per-token pricing). OpenAI-compat API at https://ollama.com/v1/chat/completions.
   { name: 'Ollama', type: 'LLM', models: 'gpt-oss:120b-cloud, llama3:70b-cloud, qwen2.5-coder:32b-cloud', envVar: 'OLLAMA_API_KEY', configName: 'ollama' },
+  // Configurable multi-model gateway: swarms select among the models the
+  // user declares in swarmdo.config.json `openrouter.models` (tier-mapped).
+  { name: 'OpenRouter', type: 'LLM', models: 'any OpenRouter slug — pool configured in swarmdo.config.json', envVar: 'OPENROUTER_API_KEY', configName: 'openrouter' },
   { name: 'Transformers.js', type: 'Embedding', models: 'Xenova/all-MiniLM-L6-v2' },
   { name: 'Agentic Flow', type: 'Embedding', models: 'ONNX optimized' },
   { name: 'Mock', type: 'All', models: 'mock-*' },

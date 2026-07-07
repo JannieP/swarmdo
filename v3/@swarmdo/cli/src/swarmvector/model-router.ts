@@ -38,6 +38,7 @@
  */
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { loadOpenRouterConfig, pickOpenRouterModel } from '../providers/openrouter-config.js';
 import { dirname, join } from 'path';
 
 // ----------------------------------------------------------------------------
@@ -115,6 +116,17 @@ function resolveExecutionProvider(model: ClaudeModel): { provider: 'anthropic' |
     explicit === 'openrouter' ||
     (!hasAnthropic && hasOpenRouter && explicit !== 'anthropic');
   if (!wantOR) return { provider: 'anthropic' };
+  // Configurable pool first (swarmdo.config.json `openrouter.models`): when
+  // the user declared tier-mapped models, the swarm selects among them —
+  // Thompson sampling with uniform priors at this layer; per-modelId priors
+  // (ADR-149) refine the pick where callers hold router state.
+  if (model === 'haiku' || model === 'sonnet' || model === 'opus') {
+    try {
+      const { config } = loadOpenRouterConfig();
+      const picked = pickOpenRouterModel({ cfg: config, tier: model });
+      if (picked) return { provider: 'openrouter', openrouterModel: picked.model };
+    } catch { /* pool unavailable — fall through to alts */ }
+  }
   const alts = loadOpenRouterAlts();
   if (!alts) return { provider: 'openrouter' }; // OR provider but no alt slug
   const entry = alts.tiers[model];

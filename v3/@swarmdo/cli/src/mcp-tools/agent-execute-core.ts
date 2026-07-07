@@ -139,16 +139,33 @@ export async function callAnthropicMessages(input: AnthropicCallInput): Promise<
     explicitProvider === 'ollama' || (!anthropicKey && !!ollamaKey && !openrouterKey);
 
   if (useOpenRouter && openrouterKey) {
+    // Configurable model pool: swarmdo.config.json `openrouter` section lets
+    // the swarm draw from user-configured models (explicit slug > tier pick
+    // via Thompson sampling > config defaultModel). Env vars still win for
+    // base URL and as the final default for un-configured projects.
+    let configuredModel: string | undefined;
+    let configuredBaseUrl: string | undefined;
+    try {
+      const { loadOpenRouterConfig, resolveOpenRouterModel } = await import('../providers/openrouter-config.js');
+      const { config } = loadOpenRouterConfig();
+      if (config.enabled) {
+        configuredBaseUrl = config.baseUrl;
+        configuredModel = resolveOpenRouterModel({ requested: input.model, cfg: config })?.model;
+      }
+    } catch { /* config unreadable — env-only behavior */ }
     return callOpenAICompat({
       ...input,
+      // a resolved pool pick replaces tier words / Anthropic ids; explicit
+      // slugs pass through resolveOpenRouterModel unchanged
+      model: configuredModel ?? input.model,
       apiKey: openrouterKey,
-      baseUrl: process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api',
+      baseUrl: process.env.OPENROUTER_BASE_URL || configuredBaseUrl || 'https://openrouter.ai/api',
       providerLabel: 'openrouter',
       // #2357 Finding C: anthropic/claude-3.5-sonnet was retired Oct 2025.
       // Default to the same canonical family the rest of the resolver uses
       // (MODEL_MAP). `OPENROUTER_DEFAULT_MODEL` still wins for callers who
       // want to pin a specific OpenRouter slug.
-      defaultModel: process.env.OPENROUTER_DEFAULT_MODEL || 'anthropic/claude-sonnet-4-6',
+      defaultModel: process.env.OPENROUTER_DEFAULT_MODEL || configuredModel || 'anthropic/claude-sonnet-4-6',
     });
   }
   if (useOllama && ollamaKey) {

@@ -1,8 +1,8 @@
 # Claude Code Configuration - Swarmdo v1.4
 
-> **Swarmdo v1.4.46** (2026-07-07) — every swarmdo slash command namespaced under `sDo` (`/sDo:swarm:init`, skills `/sdo-ponytail`) so they group together in Claude Code's `/` menu; legacy unprefixed copies auto-migrated on init/upgrade.
+> **Swarmdo v1.4.47** (2026-07-07) — every swarmdo slash command namespaced under `sDo` (`/sDo:swarm:init`, skills `/sdo-ponytail`) so they group together in Claude Code's `/` menu; legacy unprefixed copies auto-migrated on init/upgrade.
 > 6,000+ commits, 314 MCP tools, 16 agent roles + custom types, 19 AgentDB controllers, 21 native plugins.
-> Packages: `swarmdo@1.4.46` (umbrella), `@swarmdo/cli@1.4.46`, `swarmdo-bridge@1.4.46` (wrapper in `swarmdo/`)
+> Packages: `swarmdo@1.4.47` (umbrella), `@swarmdo/cli@1.4.47`, `swarmdo-bridge@1.4.47` (wrapper in `swarmdo/`)
 
 ## Behavioral Rules (Always Enforced)
 
@@ -852,6 +852,7 @@ SWARMDO_LOG_LEVEL=info
 ANTHROPIC_API_KEY=sk-ant-...
 OPENAI_API_KEY=sk-...
 GOOGLE_API_KEY=...
+OPENROUTER_API_KEY=sk-or-...   # enables the configurable swarm model pool (swarmdo.config.json `openrouter`)
 
 # MCP Server
 SWARMDO_MCP_PORT=3000

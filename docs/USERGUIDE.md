@@ -72,6 +72,40 @@ What each target gets:
 
 Safety properties: every merge is additive and idempotent (re-running applies 0 writes); an existing `AGENTS.md` is never rewritten; unparseable user configs are never clobbered; and the command hard-refuses any write under `.claude/`, `.mcp.json`, or `CLAUDE.md`.
 
+### OpenRouter model pool (configurable swarm models)
+
+Swarms are not limited to Anthropic tiers. Declare the OpenRouter models you
+want agents to draw from in `swarmdo.config.json`:
+
+```json
+"openrouter": {
+  "enabled": true,
+  "defaultModel": "anthropic/claude-sonnet-4-6",
+  "models": [
+    { "id": "meta-llama/llama-3.3-70b-instruct", "tier": "haiku",  "note": "cheap bulk work" },
+    { "id": "qwen/qwen-2.5-coder-32b-instruct",  "tier": "haiku" },
+    { "id": "deepseek/deepseek-chat",            "tier": "sonnet" },
+    { "id": "anthropic/claude-opus-4-5",         "tier": "opus" }
+  ]
+}
+```
+
+How it behaves:
+
+- **Routing**: when the 3-tier router lands on a tier, it Thompson-samples a
+  concrete model among your tier's candidates (per-model priors refine picks
+  as outcomes accumulate — ADR-149) and the decision carries
+  `openrouterModel` for the execution layer.
+- **Execution precedence**: explicit `org/model` slug from the caller → tier
+  pick from your pool → `openrouter.defaultModel` → `OPENROUTER_DEFAULT_MODEL`
+  env. Auth via `OPENROUTER_API_KEY` (override the env var name with
+  `apiKeyEnv`); provider selection via `SWARMDO_PROVIDER=openrouter` or
+  key-presence, unchanged.
+- **Validation**: `swarmdo config lint` validates the section with the same
+  parser the runtime uses — bad slugs, duplicate ids, and unknown tiers are
+  reported exactly as the runtime would drop them.
+
+
 
 Quick examples:
 

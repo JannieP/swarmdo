@@ -22,7 +22,9 @@ const f = (file: string, severity: Severity, rule: string, message: string): Fin
 
 export const TOPOLOGIES = ['hierarchical', 'mesh', 'hierarchical-mesh', 'ring', 'star', 'hybrid', 'adaptive'];
 export const MEMORY_BACKENDS = ['agentdb', 'sqlite', 'hybrid', 'memory'];
-export const KNOWN_CONFIG_KEYS = ['topology', 'maxAgents', 'strategy', 'consensus', 'memory', 'memoryBackend', 'hnsw', 'neural', 'embeddings', 'providers', 'mcp', 'logging', 'daemon', 'hooks', 'version', '$schema'];
+import { parseOpenRouterConfig } from '../providers/openrouter-config.js';
+
+export const KNOWN_CONFIG_KEYS = ['topology', 'maxAgents', 'strategy', 'consensus', 'memory', 'memoryBackend', 'hnsw', 'neural', 'embeddings', 'providers', 'mcp', 'logging', 'daemon', 'hooks', 'version', 'openrouter', '$schema'];
 export const HOOK_EVENTS = [
   'PreToolUse', 'PostToolUse', 'UserPromptSubmit', 'Notification', 'Stop', 'SubagentStop',
   'SessionStart', 'SessionEnd', 'PreCompact', 'TeammateIdle', 'TaskCompleted', 'PermissionDecision',
@@ -48,6 +50,14 @@ export function lintSwarmdoConfig(file: string, obj: unknown): Finding[] {
   const c = obj as Record<string, unknown>;
   for (const key of Object.keys(c)) {
     if (!KNOWN_CONFIG_KEYS.includes(key)) out.push(f(file, 'warn', 'unknown-key', `unknown key "${key}" (known: ${KNOWN_CONFIG_KEYS.filter(k => k !== '$schema').join(', ')})`));
+    if (key === 'openrouter') {
+      // reuse the runtime parser so lint findings and runtime behavior can't drift
+      const { config: orCfg, warnings } = parseOpenRouterConfig(c.openrouter);
+      for (const w of warnings) out.push(f(file, 'warn', 'openrouter-config', w));
+      if (orCfg.enabled && orCfg.models.length === 0 && !orCfg.defaultModel) {
+        out.push(f(file, 'warn', 'openrouter-config', 'openrouter.enabled=true but no valid models[] or defaultModel — swarms have nothing to select from'));
+      }
+    }
   }
   if (c.topology !== undefined && !TOPOLOGIES.includes(String(c.topology))) {
     out.push(f(file, 'error', 'bad-topology', `topology "${String(c.topology)}" is not one of: ${TOPOLOGIES.join(', ')}`));
