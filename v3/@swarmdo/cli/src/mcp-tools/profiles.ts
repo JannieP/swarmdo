@@ -26,6 +26,7 @@ const LEAN_GROUPS = [
   'agentdb',    // agentdb pattern store/search
   'embeddings', // embeddings_generate / search / compare
   'codegraph',  // codegraph_query / file / index — "where is X defined?"
+  'redact',     // redact_text / redact_scan — secret guard on the data path
 ] as const;
 
 /** Balanced = lean + orchestration/session/system the average user reaches for. */

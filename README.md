@@ -2,7 +2,7 @@
 
 [![swarmdo](swarmdo/assets/swarmdo-banner.svg)](https://swarmdo.com)
 
-[![npm version (swarmdo)](https://img.shields.io/badge/npx%20swarmdo-v1.8.0-cb3837?style=for-the-badge&logo=npm&logoColor=white)](https://github.com/SwarmDo/swarmdo/releases)
+[![npm version (swarmdo)](https://img.shields.io/badge/npx%20swarmdo-v1.9.0-cb3837?style=for-the-badge&logo=npm&logoColor=white)](https://github.com/SwarmDo/swarmdo/releases)
 [![MIT License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](https://github.com/SwarmDo/swarmdo/blob/main/LICENSE)
 [![Website](https://img.shields.io/badge/swarmdo.com-e2a33c?style=for-the-badge&logoColor=black)](https://swarmdo.com)
 [![Star on GitHub](https://img.shields.io/github/stars/SwarmDo/swarmdo?style=for-the-badge&logo=github&color=gold)](https://github.com/SwarmDo/swarmdo)
@@ -278,6 +278,7 @@ The recent release train added a full day-to-day operations layer around the swa
 | `swarmdo transcript` (alias `tx`) | **Export any Claude Code session** to clean markdown — system noise stripped, ready to share; `transcript search <query>` full-text-searches every session |
 | `swarmdo compact` | **Compress noisy command output** before it reaches an LLM — strip ANSI, collapse repeats, fold `node_modules` stack frames, window long logs. `npm test 2>&1 \| swarmdo compact` or `swarmdo compact -- npm test` (exit code propagates). Deterministic, zero tokens |
 | `swarmdo codegraph` (alias `cg`) | **Queryable symbol index** — `codegraph index` scans TS/JS for exported symbols; `query <name>` (with `--fuzzy`/`--kind`) and `file <path>` answer "where is X defined / what does this file export" from `.swarm/codegraph.json` instead of grep+read round-trips. 1,750 symbols across 289 files in <1s. Also exposed as MCP tools (`codegraph_query`/`file`/`index`/`stats`) so agents query the index in-session |
+| `swarmdo redact` | **Mask secrets before they reach an LLM/log/memory** — detect API keys, tokens, and private keys (gitleaks-style rule catalog + Shannon-entropy fallback) and redact them. Stdin filter (`cat deploy.log \| swarmdo redact`), command-wrap (`swarmdo redact -- npm run deploy`), or `--scan` to fail CI on any secret. Also MCP tools (`redact_text`/`redact_scan`). Deterministic, zero tokens |
 | `swarmdo integrations` (alias `integrate`) | **Use swarmdo from Codex CLI, GitHub Copilot CLI, and pi** — one command wires AGENTS.md + each CLI's MCP config (idempotent, dry-run first, never touches your Claude Code setup) |
 | OpenRouter model pool | **Let swarms pick from any models you configure** — declare tier-mapped OpenRouter models in `swarmdo.config.json`; the router Thompson-samples among them per task and the execution layer dispatches the winner |
 | `swarmdo changelog` (alias `notes`) | **Release notes from conventional commits** — `--out NOTES.md` feeds `gh release create --notes-file` |

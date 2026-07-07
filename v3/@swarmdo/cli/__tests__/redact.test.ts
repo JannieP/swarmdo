@@ -1,0 +1,147 @@
+import { describe, it, expect } from 'vitest';
+import {
+  redactText,
+  scanText,
+  shannonEntropy,
+  maskSecret,
+  formatFindingsSummary,
+  RULES,
+} from '../src/redact/redact.ts';
+
+describe('shannonEntropy', () => {
+  it('is 0 for empty and single-char strings', () => {
+    expect(shannonEntropy('')).toBe(0);
+    expect(shannonEntropy('aaaa')).toBe(0);
+  });
+  it('rises with character diversity', () => {
+    expect(shannonEntropy('aabb')).toBeCloseTo(1, 5);
+    expect(shannonEntropy('x8Kf2Qp9Lm3Zv7Nw')).toBeGreaterThan(3.5);
+  });
+});
+
+describe('maskSecret', () => {
+  it('keeps a prefix then appends the token', () => {
+    expect(maskSecret('AKIAIOSFODNN7EXAMPLE')).toBe('AKI[REDACTED]');
+    expect(maskSecret('secret', { keepPrefix: 0 })).toBe('[REDACTED]');
+    expect(maskSecret('sk-abc', { keepPrefix: 2, token: '***' })).toBe('sk***');
+  });
+  it('never keeps more than the secret length', () => {
+    expect(maskSecret('ab', { keepPrefix: 10 })).toBe('ab[REDACTED]');
+  });
+});
+
+describe('rule catalog detection', () => {
+  const cases: Array<[string, string]> = [
+    ['aws-access-key', 'AKIAIOSFODNN7EXAMPLE'],
+    ['github-pat', 'ghp_' + 'a'.repeat(36)],
+    ['github-oauth', 'gho_' + 'b'.repeat(36)],
+    ['github-fine-pat', 'github_pat_' + 'c'.repeat(82)],
+    ['gitlab-pat', 'glpat-' + 'D'.repeat(20)],
+    ['anthropic-key', 'sk-ant-api03-' + 'e'.repeat(20)],
+    ['openai-key', 'sk-proj-' + 'F'.repeat(40)],
+    ['google-api-key', 'AIza' + 'g'.repeat(35)],
+    ['slack-token', 'xoxb-' + '1234567890-abcdefghij'],
+    ['stripe-key', 'sk_live_' + 'h'.repeat(24)],
+    ['npm-token', 'npm_' + 'i'.repeat(36)],
+  ];
+  it.each(cases)('detects %s', (ruleId, secret) => {
+    const findings = scanText(`token=${secret} end`, { entropy: false });
+    expect(findings.map((f) => f.ruleId)).toContain(ruleId);
+    const hit = findings.find((f) => f.ruleId === ruleId)!;
+    expect(hit.match).toBe(secret);
+  });
+
+  it('every rule in the catalog has a unique id', () => {
+    const ids = RULES.map((r) => r.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+});
+
+describe('redactText', () => {
+  it('masks a secret in place, preserving surrounding text', () => {
+    const { output, findings } = redactText('export AWS_KEY=AKIAIOSFODNN7EXAMPLE # prod', { entropy: false });
+    expect(output).toBe('export AWS_KEY=AKI[REDACTED] # prod');
+    expect(findings).toHaveLength(1);
+    expect(findings[0].ruleId).toBe('aws-access-key');
+    expect(findings[0].line).toBe(1);
+  });
+
+  it('redacts multiple secrets across lines with correct line numbers', () => {
+    const text = ['line one', 'gh=ghp_' + 'a'.repeat(36), 'x', 'stripe=sk_live_' + 'z'.repeat(24)].join('\n');
+    const { findings } = redactText(text, { entropy: false });
+    expect(findings).toHaveLength(2);
+    expect(findings[0].line).toBe(2);
+    expect(findings[1].line).toBe(4);
+  });
+
+  it('detects private key block headers', () => {
+    const { findings } = redactText('-----BEGIN RSA PRIVATE KEY-----\nMIIE...\n', { entropy: false });
+    expect(findings.map((f) => f.ruleId)).toContain('private-key');
+  });
+
+  it('leaves clean text untouched', () => {
+    const clean = 'just some normal log output\nno secrets here at all\n';
+    const { output, findings } = redactText(clean);
+    expect(output).toBe(clean);
+    expect(findings).toHaveLength(0);
+  });
+
+  it('does not double-count overlapping specific rules', () => {
+    // anthropic key starts with sk- but must match anthropic-key, not openai-key
+    const { findings } = redactText('key=sk-ant-api03-' + 'e'.repeat(20), { entropy: false });
+    expect(findings).toHaveLength(1);
+    expect(findings[0].ruleId).toBe('anthropic-key');
+  });
+});
+
+describe('entropy fallback', () => {
+  it('flags a high-entropy keyworded assignment', () => {
+    const { findings } = redactText('api_key = "x8Kf2Qp9Lm3Zv7Nw5Rt1Yb4"');
+    expect(findings.some((f) => f.ruleId === 'high-entropy-assignment')).toBe(true);
+  });
+  it('ignores a low-entropy keyworded value', () => {
+    const { findings } = redactText('password = "aaaaaaaaaa"');
+    expect(findings).toHaveLength(0);
+  });
+  it('is off when entropy:false', () => {
+    const { findings } = redactText('api_key = "x8Kf2Qp9Lm3Zv7Nw5Rt1Yb4"', { entropy: false });
+    expect(findings).toHaveLength(0);
+  });
+  it('ignores high-entropy strings with no secret keyword', () => {
+    const { findings } = redactText('commit = "x8Kf2Qp9Lm3Zv7Nw5Rt1Yb4"');
+    expect(findings).toHaveLength(0);
+  });
+});
+
+describe('allowlist', () => {
+  it('leaves an allowlisted secret untouched (string)', () => {
+    const secret = 'AKIAIOSFODNN7EXAMPLE';
+    const { findings } = redactText(`k=${secret}`, { entropy: false, allowlist: [secret] });
+    expect(findings).toHaveLength(0);
+  });
+  it('supports regex allowlist entries', () => {
+    const { findings } = redactText('k=ghp_' + 'a'.repeat(36), { entropy: false, allowlist: [/^ghp_a+$/] });
+    expect(findings).toHaveLength(0);
+  });
+});
+
+describe('scanText vs redactText parity', () => {
+  it('scanText finds the same secrets redactText masks', () => {
+    const text = 'a=AKIAIOSFODNN7EXAMPLE b=ghp_' + 'a'.repeat(36);
+    const scan = scanText(text, { entropy: false });
+    const { findings } = redactText(text, { entropy: false });
+    expect(scan.map((f) => f.ruleId)).toEqual(findings.map((f) => f.ruleId));
+  });
+});
+
+describe('formatFindingsSummary', () => {
+  it('reports none cleanly', () => {
+    expect(formatFindingsSummary([])).toBe('redact: no secrets found');
+  });
+  it('summarises counts by rule', () => {
+    const findings = scanText('a=AKIAIOSFODNN7EXAMPLE\nb=AKIAIOSFODNN7EXAMPLQ', { entropy: false });
+    const s = formatFindingsSummary(findings);
+    expect(s).toMatch(/2 secrets redacted/);
+    expect(s).toMatch(/aws-access-key:2/);
+  });
+});
