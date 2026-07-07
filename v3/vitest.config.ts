@@ -27,11 +27,15 @@ export default defineConfig({
       'mcp/__tests__/**/*.spec.ts',
     ],
 
-    // Exclude patterns
+    // Exclude patterns — MUST be globs: overriding `exclude` REPLACES
+    // vitest's defaults (which include **/node_modules/**). The old bare
+    // strings didn't match nested paths, so pnpm-linked duplicate checkouts
+    // (e.g. cli/node_modules/@swarmdo/codex/node_modules/@swarmdo/cli) had
+    // their __tests__ swept into the run.
     exclude: [
-      'node_modules',
-      'dist',
-      '.git',
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/.git/**',
     ],
 
     // Coverage configuration - London School targets
