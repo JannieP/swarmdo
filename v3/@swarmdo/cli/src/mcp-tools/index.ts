@@ -19,6 +19,7 @@ export { analyzeTools } from './analyze-tools.js';
 export { codegraphTools } from './codegraph-tools.js';
 export { redactTools } from './redact-tools.js';
 export { envTools } from './env-tools.js';
+export { licenseTools } from './license-tools.js';
 export { progressTools } from './progress-tools.js';
 export { transferTools } from './transfer-tools.js';
 export { securityTools } from './security-tools.js';
