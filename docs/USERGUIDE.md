@@ -1,3 +1,7 @@
+<p align="center">
+  <a href="https://swarmdo.com"><img src="../swarmdo/assets/brand/logo-full.svg" alt="swarmdo" width="440"></a>
+</p>
+
 # Swarmdo User Guide
 
 > Complete reference documentation for Swarmdo v3.7. For a quick overview, see the [README](../README.md).
