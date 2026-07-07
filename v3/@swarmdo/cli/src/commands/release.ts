@@ -50,10 +50,13 @@ function syncDocs(root: string, files: string[], current: string, next: string):
     after = after.replaceAll(`**Swarmdo v${current}** (`, `**Swarmdo v${next}** (`);
     after = after.replace(new RegExp(`\\*\\*Swarmdo v${next.replace(/\./g, '\\.')}\\*\\* \\(\\d{4}-\\d{2}-\\d{2}\\)`), `**Swarmdo v${next}** (${today})`);
     after = after.replaceAll(`swarmdo@${current}\` (umbrella), \`@swarmdo/cli@${current}\`, \`swarmdo-bridge@${current}\``, `swarmdo@${next}\` (umbrella), \`@swarmdo/cli@${next}\`, \`swarmdo-bridge@${next}\``);
-    after = after.replaceAll(`npx%20swarmdo-v${current}-cb3837`, `npx%20swarmdo-v${next}-cb3837`);
-    after = after.replaceAll(`"softwareVersion":"${current}"`, `"softwareVersion":"${next}"`);
-    after = after.replaceAll(`<span class="ver">v${current} · MIT</span>`, `<span class="ver">v${next} · MIT</span>`);
-    after = after.replaceAll(`▊ Swarmdo V${current} `, `▊ Swarmdo V${next} `);
+    // README badge + website carry the last PUBLISHED version, which lags
+    // the repo version (`current`) between releases — match any semver in
+    // these swarmdo-specific markers instead of interpolating `current`.
+    after = after.replace(/npx%20swarmdo-v\d+\.\d+\.\d+-cb3837/g, `npx%20swarmdo-v${next}-cb3837`);
+    after = after.replace(/"softwareVersion":"\d+\.\d+\.\d+"/g, `"softwareVersion":"${next}"`);
+    after = after.replace(/<span class="ver">v\d+\.\d+\.\d+ · MIT<\/span>/g, `<span class="ver">v${next} · MIT</span>`);
+    after = after.replace(/▊ Swarmdo V\d+\.\d+\.\d+ /g, `▊ Swarmdo V${next} `);
     if (after !== before) { fs.writeFileSync(abs, after); touched.push(rel); }
   }
   return touched;
@@ -131,7 +134,20 @@ async function executePlan(plan: ReleasePlan, root: string): Promise<CommandResu
       case 'gh-release': {
         const notes = path.join(os.tmpdir(), `swarmdo-relnotes-${process.pid}.md`);
         const { changelogCommand } = await import('./changelog.js');
-        const r = await changelogCommand.action!({ args: [], flags: { from: step.notesFrom, version: plan.tag, out: notes }, cwd: root, interactive: false } as unknown as CommandContext);
+        // step.notesFrom is v<previous repo version>, but the repo
+        // patch-bumps every commit while tags only land per release —
+        // that ref usually isn't a tag. Fall back to the newest real tag
+        // that isn't the one being released.
+        let notesFrom: string | undefined = step.notesFrom;
+        try {
+          execFileSync('git', ['rev-parse', '--verify', `${notesFrom}^{commit}`], { cwd: root, stdio: ['ignore', 'pipe', 'pipe'] });
+        } catch {
+          const { makeGitRunner } = await import('../changelog/changelog.js');
+          const tags = makeGitRunner(root)(['tag', '--sort=-creatordate']).split('\n').map(t => t.trim()).filter(t => t && t !== plan.tag);
+          notesFrom = tags[0];
+          output.writeln(output.dim(`  ${step.notesFrom} is not a ref — notes range falls back to ${notesFrom ?? '(repo start)'}`));
+        }
+        const r = await changelogCommand.action!({ args: [], flags: { ...(notesFrom ? { from: notesFrom } : {}), version: plan.tag, out: notes }, cwd: root, interactive: false } as unknown as CommandContext);
         if (r && r.success === false) return { success: false, exitCode: 1 };
         execFileSync('gh', ['release', 'create', plan.tag, '--title', `${plan.tag}`, '--notes-file', notes], { cwd: root, stdio: 'inherit' });
         try { fs.rmSync(notes, { force: true }); } catch { /* best-effort */ }

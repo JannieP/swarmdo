@@ -110,8 +110,10 @@ export class CLI {
       const parseResult = this.parser.parse(args);
       const { command: commandPath, flags, positional } = parseResult;
 
-      // Handle global flags
-      if (flags.version || flags.V) {
+      // Handle global flags. --version is only global when no command was
+      // resolved — commands may define their own `version` option (e.g.
+      // `changelog --version v1.5.0`), which this used to swallow.
+      if (!commandPath && (flags.version || flags.V)) {
         this.showVersion();
         return;
       }
