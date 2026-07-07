@@ -110,7 +110,18 @@ async function testSchemaCreation() {
 // main db file miss uncheckpointed WAL content — checkpoint first.
 async function checkpointWal(file) {
   try {
-    const BetterSqlite3 = (await import('better-sqlite3')).default;
+    // resolve through package contexts — CI installs better-sqlite3 in the
+    // v3 pnpm store, not root node_modules (same probe pattern as verify.mjs)
+    const { createRequire } = await import('node:module');
+    let BetterSqlite3;
+    for (const base of [
+      path.join(projectRoot, 'v3/@swarmdo/cli/noop.js'),
+      path.join(projectRoot, 'v3/noop.js'),
+      path.join(projectRoot, 'noop.js'),
+    ]) {
+      try { BetterSqlite3 = createRequire(base)('better-sqlite3'); break; } catch { /* next */ }
+    }
+    if (!BetterSqlite3) return;
     const db = new BetterSqlite3(file);
     db.pragma('wal_checkpoint(TRUNCATE)');
     db.close();

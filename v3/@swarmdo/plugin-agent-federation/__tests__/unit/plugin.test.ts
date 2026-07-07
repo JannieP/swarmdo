@@ -94,12 +94,16 @@ describe('AgentFederationPlugin', () => {
       expect(context.services.register).toHaveBeenCalled();
     });
 
-    it('should register 8 services in the container', async () => {
-      // 7 original + federation:transport (ADR-104, registered iff
-      // loadQuicTransport succeeded — succeeds in this env since
-      // agentic-flow's loader has no required peers)
+    it('should register 7 core services (+ transport when its loader succeeds)', async () => {
+      // 7 original + federation:transport (ADR-104) — transport registers
+      // iff loadQuicTransport succeeded, which is ENV-DEPENDENT (fails on
+      // runners without the optional loader deps). Derive the expectation
+      // from what actually registered instead of hardcoding 8.
       await plugin.initialize(context as any);
-      expect(context.services.register).toHaveBeenCalledTimes(8);
+      const registered = (context.services.register as ReturnType<typeof vi.fn>).mock.calls.map((c: unknown[]) => c[0]);
+      const transportRegistered = registered.includes('federation:transport');
+      expect(context.services.register).toHaveBeenCalledTimes(transportRegistered ? 8 : 7);
+      expect(registered.length).toBeGreaterThanOrEqual(7);
     });
 
     it('should register federation:coordinator service', async () => {

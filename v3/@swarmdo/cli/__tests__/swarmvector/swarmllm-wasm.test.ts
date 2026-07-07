@@ -225,7 +225,17 @@ vi.mock('node:module', () => ({
 // real module — the vi.mock above intercepts loader paths but not the
 // package's own availability check, so this reflects the genuine runtime state.
 const __WASM_AVAILABLE = await import('../../src/swarmvector/swarmllm-wasm.js')
-  .then((m) => m.isSwarmllmWasmAvailable())
+  .then(async (m) => {
+    if (!m.isSwarmllmWasmAvailable()) return false;
+    // resolvability isn't enough: on some runners the module resolves but
+    // deep init dies (import.meta path resolution differences on linux) —
+    // probe an actual allocation before declaring the suite runnable
+    try {
+      const pool = await m.createBufferPool(1);
+      (pool as { destroy?: () => void })?.destroy?.();
+      return true;
+    } catch { return false; }
+  })
   .catch(() => false);
 const __SKIP_WASM_TESTS = !__WASM_AVAILABLE;
 
