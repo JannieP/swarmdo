@@ -34,6 +34,9 @@ const commandLoaders: Record<string, CommandLoader> = {
   // Secret detection + redaction on the agent data path (gitleaks/trufflehog
   // demand) — mask API keys/tokens before they reach an LLM/log/memory.
   redact: () => import('./redact.js'),
+  // Repo→AI-context bundle (repomix demand) — one promptable blob with tree +
+  // token counts; swarmdo's context-assembly primitive.
+  pack: () => import('./pack.js'),
   // Queryable exported-symbol index (codegraph demand) — where things are
   // defined without grep+read round-trips.
   codegraph: () => import('./codegraph.js'),
@@ -289,7 +292,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
     analyzeCmd, routeCmd, progressCmd, providersCmd,
     pluginsCmd, deploymentCmd, claimsCmd, issuesCmd,
     updateCmd, processCmd, guidanceCmd, applianceCmd,
-    cleanupCmd, autopilotCmd, demoCmd, usageCmd, repairCmd, hudCmd, compactCmd, codegraphCmd, redactCmd,
+    cleanupCmd, autopilotCmd, demoCmd, usageCmd, repairCmd, hudCmd, compactCmd, codegraphCmd, redactCmd, packCmd,
   ] = await Promise.all([
     loadCommand('daemon'), loadCommand('doctor'), loadCommand('embeddings'), loadCommand('neural'),
     loadCommand('performance'), loadCommand('security'), loadCommand('swarmvector'), loadCommand('hive-mind'),
@@ -298,7 +301,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
     loadCommand('analyze'), loadCommand('route'), loadCommand('progress'), loadCommand('providers'),
     loadCommand('plugins'), loadCommand('deployment'), loadCommand('claims'), loadCommand('issues'),
     loadCommand('update'), loadCommand('process'), loadCommand('guidance'), loadCommand('appliance'),
-    loadCommand('cleanup'), loadCommand('autopilot'), loadCommand('demo'), loadCommand('usage'), loadCommand('repair'), loadCommand('hud'), loadCommand('compact'), loadCommand('codegraph'), loadCommand('redact'),
+    loadCommand('cleanup'), loadCommand('autopilot'), loadCommand('demo'), loadCommand('usage'), loadCommand('repair'), loadCommand('hud'), loadCommand('compact'), loadCommand('codegraph'), loadCommand('redact'), loadCommand('pack'),
   ]);
 
   return {
@@ -315,7 +318,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
     utility: [
       configCmd, doctorCmd, daemonCmd, completionsCmd,
       migrateCmd, workflowCmd, demoCmd,
-      statuslineCmd, compressCmd, compactCmd, redactCmd, efficiencyCmd,
+      statuslineCmd, compressCmd, compactCmd, redactCmd, packCmd, efficiencyCmd,
     ].filter(Boolean) as Command[],
     analysis: [
       analyzeCmd, routeCmd, progressCmd, usageCmd, hudCmd, codegraphCmd,
