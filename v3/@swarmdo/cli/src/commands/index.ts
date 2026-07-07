@@ -31,6 +31,10 @@ const commandLoaders: Record<string, CommandLoader> = {
   // Deterministic command-output compression (rtk/headroom demand) — a
   // zero-token stream filter, distinct from caveman `compress` for files.
   compact: () => import('./compact.js'),
+  // Queryable exported-symbol index (codegraph demand) — where things are
+  // defined without grep+read round-trips.
+  codegraph: () => import('./codegraph.js'),
+  cg: () => import('./codegraph.js'), // alias via loader key
   efficiency: () => import('./efficiency.js'),
   task: () => import('./task.js'),
   session: () => import('./session.js'),
@@ -282,7 +286,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
     analyzeCmd, routeCmd, progressCmd, providersCmd,
     pluginsCmd, deploymentCmd, claimsCmd, issuesCmd,
     updateCmd, processCmd, guidanceCmd, applianceCmd,
-    cleanupCmd, autopilotCmd, demoCmd, usageCmd, repairCmd, hudCmd, compactCmd,
+    cleanupCmd, autopilotCmd, demoCmd, usageCmd, repairCmd, hudCmd, compactCmd, codegraphCmd,
   ] = await Promise.all([
     loadCommand('daemon'), loadCommand('doctor'), loadCommand('embeddings'), loadCommand('neural'),
     loadCommand('performance'), loadCommand('security'), loadCommand('swarmvector'), loadCommand('hive-mind'),
@@ -291,7 +295,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
     loadCommand('analyze'), loadCommand('route'), loadCommand('progress'), loadCommand('providers'),
     loadCommand('plugins'), loadCommand('deployment'), loadCommand('claims'), loadCommand('issues'),
     loadCommand('update'), loadCommand('process'), loadCommand('guidance'), loadCommand('appliance'),
-    loadCommand('cleanup'), loadCommand('autopilot'), loadCommand('demo'), loadCommand('usage'), loadCommand('repair'), loadCommand('hud'), loadCommand('compact'),
+    loadCommand('cleanup'), loadCommand('autopilot'), loadCommand('demo'), loadCommand('usage'), loadCommand('repair'), loadCommand('hud'), loadCommand('compact'), loadCommand('codegraph'),
   ]);
 
   return {
@@ -311,7 +315,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
       statuslineCmd, compressCmd, compactCmd, efficiencyCmd,
     ].filter(Boolean) as Command[],
     analysis: [
-      analyzeCmd, routeCmd, progressCmd, usageCmd, hudCmd,
+      analyzeCmd, routeCmd, progressCmd, usageCmd, hudCmd, codegraphCmd,
     ].filter(Boolean) as Command[],
     management: [
       providersCmd, pluginsCmd, deploymentCmd, claimsCmd,
