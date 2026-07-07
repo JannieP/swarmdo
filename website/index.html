@@ -24,7 +24,7 @@
 <meta name="twitter:image" content="https://swarmdo.com/og-image.png">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
- {"@type":"SoftwareApplication","name":"swarmdo","url":"https://swarmdo.com/","applicationCategory":"DeveloperApplication","operatingSystem":"macOS, Linux, Windows","description":"Agent swarm orchestration for Claude Code: 60+ agent roles, hive-mind consensus, persistent vector memory with HNSW, and the swarmvector Postgres extension.","license":"https://opensource.org/licenses/MIT","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"softwareVersion":"1.16.0","downloadUrl":"https://github.com/SwarmDo/swarmdo/releases"},
+ {"@type":"SoftwareApplication","name":"swarmdo","url":"https://swarmdo.com/","applicationCategory":"DeveloperApplication","operatingSystem":"macOS, Linux, Windows","description":"Agent swarm orchestration for Claude Code: 60+ agent roles, hive-mind consensus, persistent vector memory with HNSW, and the swarmvector Postgres extension.","license":"https://opensource.org/licenses/MIT","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"softwareVersion":"1.17.0","downloadUrl":"https://github.com/SwarmDo/swarmdo/releases"},
  {"@type":"WebSite","name":"swarmdo","url":"https://swarmdo.com/"},
  {"@type":"FAQPage","mainEntity":[
   {"@type":"Question","name":"What is swarmdo?","acceptedAnswer":{"@type":"Answer","text":"swarmdo turns Claude Code into a coordinated multi-agent system. One prompt spawns a swarm of named agents — researcher, architect, coder, tester, reviewer — that coordinate over messages, share persistent vector memory, and learn from what worked."}},
@@ -236,7 +236,7 @@
 <nav>
   <div class="wrap nav-i">
     <span class="brand"><svg class="logo-mark" width="22" height="22" viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="96" fill="#182029"/><g fill="#e2a33c"><circle cx="352" cy="176" r="34"/><circle cx="284" cy="232" r="26" opacity=".92"/><circle cx="330" cy="286" r="24" opacity=".88"/><circle cx="216" cy="280" r="20" opacity=".78"/><circle cx="272" cy="336" r="19" opacity=".74"/><circle cx="156" cy="322" r="15" opacity=".62"/><circle cx="214" cy="382" r="14" opacity=".58"/><circle cx="106" cy="358" r="11" opacity=".46"/><circle cx="162" cy="420" r="10" opacity=".42"/></g></svg> swarmdo</span>
-    <span class="ver">v1.16.0 · MIT</span>
+    <span class="ver">v1.17.0 · MIT</span>
     <div class="nav-links">
       <a href="#statusline">statusline</a>
       <a href="#features">features</a>
@@ -348,6 +348,7 @@
       <div class="feat"><h3><span class="fk">🔗</span>Beyond Claude Code</h3><p><code style="font-family:var(--mono);font-size:12.5px;color:var(--bright)">swarmdo integrations</code> wires swarmdo into Codex CLI, GitHub Copilot CLI, and pi &mdash; AGENTS.md plus each CLI&rsquo;s MCP config, idempotent merges, and your Claude Code setup is never touched.</p></div>
       <div class="feat"><h3><span class="fk">🗒</span>Transcript tools</h3><p><code style="font-family:var(--mono);font-size:12.5px;color:var(--bright)">swarmdo tx export</code> turns any Claude Code session into clean shareable markdown; <code style="font-family:var(--mono);font-size:12.5px;color:var(--bright)">tx search</code> full-text-searches every session you&rsquo;ve ever run.</p></div>
       <div class="feat"><h3><span class="fk">🕸</span>Task DAG from a PRD</h3><p>Tasks carry real dependencies: <code style="font-family:var(--mono);font-size:12.5px;color:var(--bright)">task ready</code> lists unblocked work, <code style="font-family:var(--mono);font-size:12.5px;color:var(--bright)">task graph</code> renders the graph, and <code style="font-family:var(--mono);font-size:12.5px;color:var(--bright)">task parse-prd spec.md</code> decomposes a spec straight into the DAG.</p></div>
+      <div class="feat"><h3><span class="fk">🎯</span>Affected tests</h3><p><code style="font-family:var(--mono);font-size:12.5px;color:var(--bright)">swarmdo affected</code> walks the import graph from your git diff to list every file &mdash; and the minimal set of test files &mdash; a change could break, so you run only the tests your change touches (nx/turbo/<code style="font-family:var(--mono);font-size:12.5px;color:var(--bright)">jest --findRelatedTests</code> style). Pipeable; also an MCP tool.</p></div>
       <div class="feat"><h3><span class="fk">🔥</span>Change-risk hotspots</h3><p><code style="font-family:var(--mono);font-size:12.5px;color:var(--bright)">swarmdo hotspots</code> ranks files by change-risk mined from git history &mdash; churn &times; recency &times; author-spread &mdash; so you (or an agent) can find the technical debt worth refactoring or testing, from data instead of a guess. Pairs with codegraph; also an MCP tool.</p></div>
       <div class="feat"><h3><span class="fk">🩹</span>Fuzzy patch apply</h3><p><code style="font-family:var(--mono);font-size:12.5px;color:var(--bright)">swarmdo apply</code> is a forgiving <code style="font-family:var(--mono);font-size:12.5px;color:var(--bright)">git apply</code> &mdash; it lands an agent&rsquo;s unified diff even when the context lines have drifted, and reports exactly which hunks it couldn&rsquo;t place instead of rejecting the whole patch. Also an MCP tool.</p></div>
       <div class="feat"><h3><span class="fk">📋</span>SBOM</h3><p><code style="font-family:var(--mono);font-size:12.5px;color:var(--bright)">swarmdo sbom</code> emits a CycloneDX or SPDX bill-of-materials from your lockfile &mdash; every dependency with version, package-url, license, and integrity hash, for compliance and vuln tooling. Deterministic (no timestamp), so it diffs cleanly in CI.</p></div>
@@ -564,7 +565,7 @@
     var lines=[];
     var head=[];
     var idBits="";
-    if(has("version")) idBits+=sp("c-pur b","▊ Swarmdo V1.16.0 ");
+    if(has("version")) idBits+=sp("c-pur b","▊ Swarmdo V1.17.0 ");
     if(has("project")) idBits+=sp("c-cy","● my-project");
     if(idBits) head.push(idBits);
     if(has("branch")) head.push(sp("c-bl","⏇ main")+" "+sp("c-gr","+2")+sp("c-ye","~1"));
