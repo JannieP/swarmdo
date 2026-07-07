@@ -88,7 +88,13 @@ const executorSrc = readFileSync(EXECUTOR_TS, 'utf-8');
 const commandsValues = parseMapValues(executorSrc, 'COMMANDS_MAP');
 const agentsValues = parseMapValues(executorSrc, 'AGENTS_MAP');
 
-const commandsDirs = listSubdirs(join(CLI_DOT_CLAUDE, 'commands'));
+// v1.4.0 (sDo namespace): command categories live one level down, under
+// commands/sDo/ — the namespace container itself is not a category.
+// Matches SDO_COMMANDS_NS in src/init/executor.ts.
+const commandsRoot = join(CLI_DOT_CLAUDE, 'commands');
+const commandsDirs = listSubdirs(commandsRoot).flatMap((d) =>
+  d === 'sDo' ? listSubdirs(join(commandsRoot, 'sDo')) : [d]
+);
 const agentsDirs = listSubdirs(join(CLI_DOT_CLAUDE, 'agents'));
 
 const orphanViolations = [];

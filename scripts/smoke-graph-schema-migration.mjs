@@ -75,6 +75,7 @@ async function testSchemaCreation() {
     assert(result.success, '1a: initializeMemoryDatabase succeeds', JSON.stringify(result));
 
     // Verify graph_edges exists via sql.js
+    await checkpointWal(dbPath);
     const SQL = await loadSqlJs();
     const fileBuffer = fs.readFileSync(dbPath);
     const db = new SQL.Database(fileBuffer);
@@ -104,6 +105,18 @@ async function testSchemaCreation() {
 
 // ─── test 2: insert edge with embedding_ref ───────────────────────────────────
 
+
+// #2431 made the writer WAL-mode (better-sqlite3). Raw sql.js reads of the
+// main db file miss uncheckpointed WAL content — checkpoint first.
+async function checkpointWal(file) {
+  try {
+    const BetterSqlite3 = (await import('better-sqlite3')).default;
+    const db = new BetterSqlite3(file);
+    db.pragma('wal_checkpoint(TRUNCATE)');
+    db.close();
+  } catch { /* better-sqlite3 unavailable — reads may be stale */ }
+}
+
 async function testEdgeInsert() {
   console.log('\nTEST 2: insertGraphEdge writes row with embedding_ref');
 
@@ -129,6 +142,7 @@ async function testEdgeInsert() {
     assert(count === 1, `2b: graph_edges has 1 row (found ${count})`);
 
     // Verify embedding_ref is inline-encoded
+    await checkpointWal(dbPath);
     const SQL = await loadSqlJs();
     const fileBuffer = fs.readFileSync(dbPath);
     const db = new SQL.Database(fileBuffer);
@@ -174,6 +188,7 @@ async function testLegacyIdPrefix() {
     assert(ok, '3a: insertGraphEdge with mem:-prefixed IDs succeeds');
 
     // Verify row exists with the prefixed IDs
+    await checkpointWal(dbPath);
     const SQL = await loadSqlJs();
     const fileBuffer = fs.readFileSync(dbPath);
     const db = new SQL.Database(fileBuffer);
@@ -263,6 +278,7 @@ async function testTableAutoCreate() {
     assert(ok, '5a: insertGraphEdge succeeds on DB without graph_edges');
 
     // Verify table was created
+    await checkpointWal(oldDbPath);
     const fileBuffer = fs.readFileSync(oldDbPath);
     const dbCheck = new SQL.Database(fileBuffer);
     const tables = dbCheck.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='graph_edges'");

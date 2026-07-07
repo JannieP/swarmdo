@@ -165,6 +165,17 @@ export async function insertGraphEdge(input: GraphEdgeInput): Promise<boolean> {
     const id = `edge-${crypto.randomUUID()}`;
     const createdAt = new Date().toISOString();
 
+    // ADR-130 §Phase 1 criterion 3: legacy unprefixed node ids (no `kind:`
+    // namespace) are auto-prefixed as `mem:` with a deprecation warning so
+    // old callers keep working while the graph converges on prefixed ids.
+    const normalizeId = (raw: string): string => {
+      if (raw.includes(':')) return raw;
+      console.warn(`[graph-edge-writer] DEPRECATED: unprefixed node id "${raw}" — auto-prefixing as "mem:${raw}" (ADR-130)`);
+      return `mem:${raw}`;
+    };
+    const sourceId = normalizeId(input.sourceId);
+    const targetId = normalizeId(input.targetId);
+
     let embeddingRef: string | null = null;
     if (input.embedding && input.embedding.length > 0) {
       embeddingRef = encodeEmbedding(input.embedding);
@@ -179,8 +190,8 @@ export async function insertGraphEdge(input: GraphEdgeInput): Promise<boolean> {
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     ).run(
       id,
-      input.sourceId,
-      input.targetId,
+      sourceId,
+      targetId,
       input.relation,
       input.weight ?? 1.0,
       input.confidence ?? 1.0,
