@@ -67,7 +67,10 @@ describe('AgenticFlowAgent', () => {
 
       expect(result.success).toBe(true);
       expect(result.taskId).toBe('task-1');
-      expect(result.duration).toBeGreaterThan(0);
+      // ≥0, not >0: a mocked task can complete inside one Date.now() tick on
+      // fast runners — the intent is "duration was measured", not "took time"
+      expect(result.duration).toBeGreaterThanOrEqual(0);
+      expect(typeof result.duration).toBe('number');
       expect(agent.metrics?.tasksCompleted).toBe(1);
     });
 

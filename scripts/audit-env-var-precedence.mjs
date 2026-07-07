@@ -55,6 +55,18 @@ const KNOWN_ESCAPE_HATCHES = new Set([
   'SWARMDO_DISABLE_BRIDGE',   // CI/test: force raw sql.js path — intentionally no CLI flag
   'SWARMDO_HOOK_SKIP_NPX',          // CI: suppress cold-install latency in smoke tests
   'SWARMDO_SUBLINEAR_NATIVE',       // Manual override for native vs WASM sublinear — CI/perf knob
+  // ── boot-time / posture toggles (read before any CLI flag parsing exists) ──
+  'SWARMDO_REPO_ROOT',        // bench-runner only: repo location for benchmark fixtures
+  'SWARMDO_STATUSLINE',       // statusline render toggle — consumed by Claude Code's statusLine hook, no CLI session to flag
+  'SWARMDO_TOOLS_GROUPS',     // MCP server boot: tool-group selection happens before flag parsing
+  'SWARMDO_TOOLS_PROFILE',    // MCP server boot: profile selection happens before flag parsing
+  'SWARMDO_STRICT_GUARDRAIL', // security posture: env-only by design so a session can't flag it off
+  'SWARMDO_REQUIRE_REAL_EMBEDDINGS', // integrity posture: hash-fallback ban must not be flag-disablable mid-session
+  'SWARMDO_PONYTAIL',         // default agent persona for spawned swarms — per-call ponytail:true is the flag path
+  'SWARMDO_QUIET_MIGRATION',  // log-noise suppression during storage migration — cosmetic, env-only
+  'SWARMDO_ROUTER_PARALLEL_LOG_TASK',       // ADR-150 §2 research instrumentation — env-only paired-decision logging knobs
+  'SWARMDO_ROUTER_PARALLEL_LOG_TASK_LIMIT', // ADR-150 §2 research instrumentation
+  'SWARMDO_ROUTER_PARALLEL_LOG_MAX_BYTES',  // ADR-150 §2 research instrumentation
 
   // ── Feature flags (set by init into settings.json, not user-typed CLI) ──────
   'SWARMDO_V3_ENABLED',
