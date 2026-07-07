@@ -38,6 +38,12 @@ env:
   MAX_PARALLEL_AGENTS: 8
   DEFAULT_TIMEOUT: 300000
   INTEGRATION_DB_PATH: './integration-test.db'
+  # Harden all `npm ci` steps against transient registry flakes (this
+  # workflow has repeatedly failed on ECONNRESET / "network aborted" mid
+  # install). npm honours these config env vars and retries with backoff.
+  npm_config_fetch_retries: '5'
+  npm_config_fetch_retry_mintimeout: '10000'
+  npm_config_fetch_retry_maxtimeout: '60000'
 
 jobs:
   # Setup integration test environment
