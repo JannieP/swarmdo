@@ -111,6 +111,11 @@ describe('statusline cost display — committed artifact drift guard', () => {
       '../../../../.claude/helpers/statusline.cjs',
     );
     if (!existsSync(artifact)) return; // package tested in isolation; nothing to guard
-    expect(readFileSync(artifact, 'utf-8')).toBe(SCRIPT);
+    // The generator bakes the cli version into a `let ver = '…'` line at
+    // generation time, so the artifact is always one version-bump behind
+    // within a release commit. The guard protects LOGIC sync, not the
+    // version stamp — normalize it on both sides.
+    const normalizeVer = (src: string): string => src.replace(/let ver = '[^']*'/, "let ver = '<VER>'");
+    expect(normalizeVer(readFileSync(artifact, 'utf-8'))).toBe(normalizeVer(SCRIPT));
   });
 });

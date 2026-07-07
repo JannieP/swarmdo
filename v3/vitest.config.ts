@@ -11,11 +11,6 @@ import path from 'path';
 
 export default defineConfig({
   test: {
-    // forks (not threads): several suites process.chdir() into tmp dirs,
-    // which throws "not supported in workers" under the threads pool. The
-    // per-package configs run forks; the aggregate must match.
-    pool: 'forks',
-
     // Test environment
     environment: 'node',
 
@@ -114,10 +109,45 @@ export default defineConfig({
         isolate: true,
       },
     },
-    // Per-file pool override: tests that need process.chdir() must run
-    // in a forked subprocess (Node's worker threads forbid chdir).
-    poolMatchGlobs: [
-      ['**/router-bandit.test.ts', 'forks'],
+    // Per-file pool override: tests that need process.chdir() must run in a
+    // forked subprocess (Node's worker threads forbid chdir). poolMatchGlobs
+    // did this until vitest 4 REMOVED it (silently ignored since the
+    // upgrade) — `projects` is the v4-native replacement: everything runs in
+    // the default threads pool except the chdir suites, which get forks.
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: 'threads',
+          exclude: [
+            '**/node_modules/**',
+            '**/dist/**',
+            '**/.git/**',
+            '**/router-bandit.test.ts',
+            '**/*-2245.test.ts',
+          ],
+        },
+      },
+      {
+        // deliberately NOT extends:true — inheriting the root config kept
+        // the full include list despite the override (observed: unrelated
+        // suites running in this project). Standalone keeps it to exactly
+        // the chdir files.
+        test: {
+          name: 'chdir-forks',
+          pool: 'forks',
+          globals: true,
+          environment: 'node',
+          setupFiles: ['./__tests__/setup.ts'],
+          include: [
+            '@swarmdo/cli/__tests__/router-bandit.test.ts',
+            '@swarmdo/cli/__tests__/round-b-wiring-2245.test.ts',
+            '@swarmdo/cli/__tests__/unified-stats-2245.test.ts',
+            '@swarmdo/cli/__tests__/self-learning-2245.test.ts',
+          ],
+          exclude: ['**/node_modules/**', '**/dist/**'],
+        },
+      },
     ],
 
     // Globals for easier testing
