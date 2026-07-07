@@ -1,8 +1,8 @@
 # Claude Code Configuration - Swarmdo v1.4
 
-> **Swarmdo v1.4.41** (2026-07-07) — every swarmdo slash command namespaced under `sDo` (`/sDo:swarm:init`, skills `/sdo-ponytail`) so they group together in Claude Code's `/` menu; legacy unprefixed copies auto-migrated on init/upgrade.
+> **Swarmdo v1.4.42** (2026-07-07) — every swarmdo slash command namespaced under `sDo` (`/sDo:swarm:init`, skills `/sdo-ponytail`) so they group together in Claude Code's `/` menu; legacy unprefixed copies auto-migrated on init/upgrade.
 > 6,000+ commits, 314 MCP tools, 16 agent roles + custom types, 19 AgentDB controllers, 21 native plugins.
-> Packages: `swarmdo@1.4.41` (umbrella), `@swarmdo/cli@1.4.41`, `swarmdo-bridge@1.4.41` (wrapper in `swarmdo/`)
+> Packages: `swarmdo@1.4.42` (umbrella), `@swarmdo/cli@1.4.42`, `swarmdo-bridge@1.4.42` (wrapper in `swarmdo/`)
 
 ## Behavioral Rules (Always Enforced)
 
@@ -400,6 +400,7 @@ Run `swarmdo preset info efficiency` for the full guide. Both are **user-invoked
 | `embeddings` | 4 | Vector embeddings (embed, batch, search, init) — agentic-flow ONNX backend (speedup unverified, no benchmark) |
 | `usage` | 8 | Claude Code token/cost analytics from local transcripts (daily, monthly, models, projects, sessions, 5h `blocks` w/ live burn, `errors` tool-failure analytics, `cache` prompt-cache efficiency + $ saved; alias: `cost`) |
 | `repair` | 1 | Test-Driven Repair — bounded, budget-capped headless claude loop fixes source until a failing test passes (alias: `tdd-repair`; dry-run without `--confirm`) |
+| `integrations` | 2 | Wire swarmdo into Codex CLI / Copilot CLI / pi (AGENTS.md + per-CLI MCP config, idempotent merges; alias `integrate`; NEVER touches .claude/.mcp.json/CLAUDE.md) |
 | `hud` | 1 | Single-pane operational HUD: 5h block burn, task readiness, daemon workers, memory snapshots (`--watch`, `--json`) |
 | `preset` | 3 | Named config tiers for init (`list`/`info`/`show`): minimal→basic→standard→advanced→max; `preset info efficiency` documents the caveman + ponytail skills. Apply: `init --preset <name>` |
 | `claims` | 4 | Claims-based authorization (check, grant, revoke, list) |

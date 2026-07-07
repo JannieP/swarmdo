@@ -39,6 +39,7 @@ The v1.3–v1.4 release train added a day-to-day operations layer around the swa
 | `swarmdo task` | — | Task dependency DAG: create with `--dependencies`, list unblocked work with `task ready`, render with `task graph`; the dispatcher gates on readiness |
 | `swarmdo worktree` | `wt` | Git-worktree isolation for parallel agents: `add` / `list` / `diff` / `merge` / `remove` |
 | `swarmdo transcript` | `tx` | Export any Claude Code session transcript to clean markdown (system noise stripped) |
+| `swarmdo integrations` | `integrate` | Wire swarmdo into Codex CLI / Copilot CLI / pi via AGENTS.md + MCP config merges (idempotent; Claude Code surfaces untouched) |
 | `swarmdo changelog` | `notes`, `release-notes` | Release notes from conventional commits; default range is `<lastTag>..HEAD`; `--from/--to/--version/--out/--all/--no-links` |
 | `swarmdo mcp doctor` | — | Static diagnosis of MCP server configs across `.mcp.json` + `~/.claude.json`: missing binaries, bad URLs, malformed entries |
 | `swarmdo hooks notify` | — | OS-native desktop notification (`-d`; macOS `osascript`, Linux `notify-send`) |
@@ -49,6 +50,28 @@ The v1.3–v1.4 release train added a day-to-day operations layer around the swa
 | `swarmdo memory backup` / `revectorize` | — | WAL-safe nightly DB snapshots (keep 7) · repair hash-era vectors |
 | `swarmdo compress <file>` | — | Caveman-compress a memory file from any terminal (e2e-verified 33% smaller; `<file>.original.md` backup kept); `--check` for a token-free dry run |
 | `swarmdo efficiency` | — | Toggle the caveman + ponytail skills per project (`on` / `off` / `status`) |
+
+### Multi-CLI integrations (`swarmdo integrations`)
+
+Swarmdo is not Claude-Code-only. One command wires it into the other agent CLIs:
+
+```bash
+swarmdo integrations                      # status across claude / codex / copilot / pi
+swarmdo integrations install all          # preview (dry-run is the default)
+swarmdo integrations install all --apply  # write
+```
+
+What each target gets:
+
+| Target | Instructions | MCP wiring |
+|--------|-------------|------------|
+| Codex CLI | `AGENTS.md` (created only if absent) | `[mcp_servers.swarmdo]` appended to `~/.codex/config.toml` inside managed markers |
+| Copilot CLI | `AGENTS.md` + `.github/copilot-instructions.md` pointer | `swarmdo` server merged into `~/.copilot/mcp-config.json` (other servers preserved) |
+| pi | `AGENTS.md` (pi reads it natively) | guidance printed — point pi at `npx -y swarmdo@latest mcp start` |
+| Claude Code | read-only status (managed by `swarmdo init`) | never written by this command |
+
+Safety properties: every merge is additive and idempotent (re-running applies 0 writes); an existing `AGENTS.md` is never rewritten; unparseable user configs are never clobbered; and the command hard-refuses any write under `.claude/`, `.mcp.json`, or `CLAUDE.md`.
+
 
 Quick examples:
 

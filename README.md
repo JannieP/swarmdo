@@ -276,6 +276,7 @@ The recent release train added a full day-to-day operations layer around the swa
 | `swarmdo task … --dependencies` | **Task dependency DAG** — `task ready` lists unblocked work, `task graph` renders the graph, the dispatcher gates on readiness |
 | `swarmdo worktree` (alias `wt`) | **Parallel-agent isolation** on git worktrees — add / list / diff / merge / remove |
 | `swarmdo transcript` (alias `tx`) | **Export any Claude Code session** to clean markdown — system noise stripped, ready to share |
+| `swarmdo integrations` (alias `integrate`) | **Use swarmdo from Codex CLI, GitHub Copilot CLI, and pi** — one command wires AGENTS.md + each CLI's MCP config (idempotent, dry-run first, never touches your Claude Code setup) |
 | `swarmdo changelog` (alias `notes`) | **Release notes from conventional commits** — `--out NOTES.md` feeds `gh release create --notes-file` |
 | `swarmdo mcp doctor` | **MCP config diagnosis** — missing binaries, bad URLs, malformed entries across `.mcp.json` + `~/.claude.json` |
 | `swarmdo hooks notify -d` | **Desktop notifications** — OS-native toast (macOS `osascript`, Linux `notify-send`) |
