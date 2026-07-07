@@ -28,6 +28,7 @@ const LEAN_GROUPS = [
   'codegraph',  // codegraph_query / file / index — "where is X defined?"
   'redact',     // redact_text / redact_scan — secret guard on the data path
   'env',        // env_check — env-var drift (missing/unused/undocumented)
+  'apply',      // apply_patch — fuzzy unified-diff applier for agent edits
 ] as const;
 
 /** Balanced = lean + orchestration/session/system the average user reaches for. */
