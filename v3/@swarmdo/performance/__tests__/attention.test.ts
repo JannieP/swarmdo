@@ -6,17 +6,27 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import {
-  FlashAttentionOptimizer,
-  createFlashAttentionOptimizer,
-  quickBenchmark,
-  type AttentionInput,
-  type AttentionOutput,
-  type BenchmarkResult,
-  type PerformanceMetrics,
+import type {
+  AttentionInput,
+  AttentionOutput,
+  BenchmarkResult,
+  PerformanceMetrics,
 } from '../src/attention-integration.js';
 
-describe('FlashAttentionOptimizer', () => {
+// @swarmvector/attention ships native bindings per-platform (none for
+// linux-x64 in CI). attention-integration requires it at module scope,
+// so a static import would throw before any suite registers — probe with
+// a dynamic import and skip every suite when the binding is missing.
+let nativeMod: typeof import('../src/attention-integration.js') | undefined;
+try {
+  nativeMod = await import('../src/attention-integration.js');
+} catch { /* native binding unavailable on this platform */ }
+
+const describeNative = nativeMod ? describe : describe.skip;
+const { FlashAttentionOptimizer, createFlashAttentionOptimizer, quickBenchmark } =
+  (nativeMod ?? {}) as typeof import('../src/attention-integration.js');
+
+describeNative('FlashAttentionOptimizer', () => {
   let optimizer: FlashAttentionOptimizer;
 
   beforeEach(() => {
@@ -366,7 +376,7 @@ describe('FlashAttentionOptimizer', () => {
   });
 });
 
-describe('createFlashAttentionOptimizer', () => {
+describeNative('createFlashAttentionOptimizer', () => {
   it('should create optimizer with default settings', () => {
     const optimizer = createFlashAttentionOptimizer();
     expect(optimizer).toBeInstanceOf(FlashAttentionOptimizer);
@@ -384,7 +394,7 @@ describe('createFlashAttentionOptimizer', () => {
   });
 });
 
-describe('quickBenchmark', () => {
+describeNative('quickBenchmark', () => {
   it('should run quick benchmark with default dimension', () => {
     const result = quickBenchmark();
 
@@ -426,7 +436,7 @@ describe('quickBenchmark', () => {
   });
 });
 
-describe('Performance Validation', () => {
+describeNative('Performance Validation', () => {
   it('should demonstrate speedup improvement', () => {
     const result = quickBenchmark(512);
 
@@ -458,7 +468,7 @@ describe('Performance Validation', () => {
   });
 });
 
-describe('Edge Cases', () => {
+describeNative('Edge Cases', () => {
   it('should handle small dimensions', () => {
     const smallOptimizer = new FlashAttentionOptimizer(32, 8);
     const input: AttentionInput = {

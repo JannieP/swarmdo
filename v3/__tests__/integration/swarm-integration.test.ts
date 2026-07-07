@@ -203,11 +203,12 @@ describe('Swarm Integration Tests', () => {
     const initialCount = (await coordinator.listAgents()).length;
     expect(initialCount).toBe(1);
 
-    // Scale up
+    // Scale up: base-agent is itself a coder, so a target total of 3
+    // coders means 2 new spawns — 3 agents overall, not 1+3.
     await coordinator.scaleAgents({ type: 'coder', count: 3 });
 
     const scaledUpCount = (await coordinator.listAgents()).length;
-    expect(scaledUpCount).toBe(4);
+    expect(scaledUpCount).toBe(3);
 
     // Scale down
     await coordinator.scaleAgents({ type: 'coder', count: 2 });

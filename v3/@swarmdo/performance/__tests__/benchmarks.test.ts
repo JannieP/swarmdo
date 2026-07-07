@@ -6,18 +6,29 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import {
+import type {
+  ComparisonBenchmark,
+  SuiteResult,
+  MemoryProfile,
+} from '../src/attention-benchmarks.js';
+
+// Same native-binding probe as attention.test.ts — attention-benchmarks
+// pulls in @swarmvector/attention transitively at module scope.
+let nativeMod: typeof import('../src/attention-benchmarks.js') | undefined;
+try {
+  nativeMod = await import('../src/attention-benchmarks.js');
+} catch { /* native binding unavailable on this platform */ }
+
+const describeNative = nativeMod ? describe : describe.skip;
+const {
   AttentionBenchmarkRunner,
   quickValidation,
   formatBenchmarkTable,
   formatSuiteReport,
   formatMemoryProfile,
-  type ComparisonBenchmark,
-  type SuiteResult,
-  type MemoryProfile,
-} from '../src/attention-benchmarks.js';
+} = (nativeMod ?? {}) as typeof import('../src/attention-benchmarks.js');
 
-describe('AttentionBenchmarkRunner', () => {
+describeNative('AttentionBenchmarkRunner', () => {
   let runner: AttentionBenchmarkRunner;
 
   beforeEach(() => {
@@ -296,7 +307,7 @@ describe('AttentionBenchmarkRunner', () => {
   });
 });
 
-describe('Formatting Functions', () => {
+describeNative('Formatting Functions', () => {
   describe('formatBenchmarkTable()', () => {
     it('should format benchmark as table', () => {
       const runner = new AttentionBenchmarkRunner();
@@ -400,7 +411,7 @@ describe('Formatting Functions', () => {
   });
 });
 
-describe('quickValidation()', () => {
+describeNative('quickValidation()', () => {
   it('should run quick validation', () => {
     const result = quickValidation();
 
@@ -418,7 +429,7 @@ describe('quickValidation()', () => {
   });
 });
 
-describe('Performance Validation', () => {
+describeNative('Performance Validation', () => {
   it('should demonstrate consistent speedup', () => {
     const runner = new AttentionBenchmarkRunner();
 
@@ -463,7 +474,7 @@ describe('Performance Validation', () => {
   });
 });
 
-describe('Edge Cases', () => {
+describeNative('Edge Cases', () => {
   it('should handle very small dimensions', () => {
     const runner = new AttentionBenchmarkRunner();
     const result = runner.runComparison(32, 10, 50);

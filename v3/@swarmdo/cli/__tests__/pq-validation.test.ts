@@ -6,7 +6,9 @@
  * and pre-training fallback.
  */
 import { describe, it, expect } from 'vitest';
-import { HNSWIndex } from '../../@swarmdo/memory/src/hnsw-index.js';
+// ../../ from __tests__/ already lands inside v3/@swarmdo/ — the memory
+// package is the sibling dir memory/, not @swarmdo/memory/.
+import { HNSWIndex } from '../../memory/src/hnsw-index.js';
 
 const DIM = 384;
 const NUM_SUB = 8;

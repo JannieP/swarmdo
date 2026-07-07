@@ -330,6 +330,10 @@ jobs:
           fi
           exit "$EXIT"
 
+      - name: Run appliance tests (node:test suites, excluded from vitest)
+        working-directory: v3
+        run: pnpm run test:appliance
+
       - name: Upload coverage
         if: always()
         uses: actions/upload-artifact@v7
@@ -2019,6 +2023,17 @@ jobs:
             *)       OS_DIR=linux ;;
           esac
           MANIFEST="verification/$OS_DIR/manifest.md.json"
+          # Bootstrap: only the macos snapshot is committed (the linux/
+          # windows ones were purged in the attribution sweep and the
+          # restoration regen ran on a Mac). The signing seed is derived
+          # from the git commit — regen-on-runner still exercises the full
+          # sign→verify roundtrip this job exists for (canonicalization,
+          # CRLF, path-resolution), per the wrapper's "CI on a new OS
+          # bootstraps cleanly" contract.
+          if [ ! -f "$MANIFEST" ]; then
+            echo "::notice::$MANIFEST not committed — bootstrapping per-OS snapshot via regen-witness"
+            node scripts/regen-witness.mjs
+          fi
           echo "verifying: $MANIFEST"
           set +e
           node plugins/swarmdo-core/scripts/witness/verify.mjs \
