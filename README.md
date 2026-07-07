@@ -2,7 +2,7 @@
 
 [![swarmdo](swarmdo/assets/brand/logo-full.svg)](https://swarmdo.com)
 
-[![npm version (swarmdo)](https://img.shields.io/badge/npx%20swarmdo-v1.17.0-cb3837?style=for-the-badge&logo=npm&logoColor=white)](https://github.com/SwarmDo/swarmdo/releases)
+[![npm version (swarmdo)](https://img.shields.io/badge/npx%20swarmdo-v1.18.0-cb3837?style=for-the-badge&logo=npm&logoColor=white)](https://github.com/SwarmDo/swarmdo/releases)
 [![MIT License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](https://github.com/SwarmDo/swarmdo/blob/main/LICENSE)
 [![Website](https://img.shields.io/badge/swarmdo.com-e2a33c?style=for-the-badge&logoColor=black)](https://swarmdo.com)
 [![Star on GitHub](https://img.shields.io/github/stars/SwarmDo/swarmdo?style=for-the-badge&logo=github&color=gold)](https://github.com/SwarmDo/swarmdo)
@@ -286,6 +286,7 @@ The recent release train added a full day-to-day operations layer around the swa
 | `swarmdo apply` | **A forgiving `git apply`** — apply a unified diff with fuzzy context matching, so an agent's patch lands even when line numbers have drifted or a context line is slightly off, and reports exactly which hunks couldn't. `--dry-run` to preview, `--fuzz N` to tolerate more drift. Also an MCP tool (`apply_patch`). Deterministic |
 | `swarmdo hotspots` | **Change-risk hotspots from git history** — rank files by churn × recency × author-spread to surface the technical debt worth refactoring or testing, answered from data instead of a guess. `--since 90d`, `--by risk\|churn\|commits\|authors`, `--top N`, `--format json`. Pairs with `codegraph`; also an MCP tool (`hotspots`). Deterministic |
 | `swarmdo affected` | **Run only the tests your change touches** — from a git diff, walk `codegraph`'s import graph to list every file (and test file) a change could break (reverse-dependency closure, nx/turbo/`jest --findRelatedTests` style). `--base main`, `--tests` (pipeable list), `--format json`. Also an MCP tool (`affected`). Deterministic |
+| `swarmdo cycles` | **Find circular import dependencies** — an SCC scan over `codegraph`'s import graph surfaces the mutually-importing file groups (and self-imports) that cause temporal-dead-zone and `undefined`-export bugs, `madge --circular` style. `--ci` exits 1 on any cycle to gate a build; `--format json`. Also an MCP tool (`cycles`). Deterministic |
 | `swarmdo integrations` (alias `integrate`) | **Use swarmdo from Codex CLI, GitHub Copilot CLI, and pi** — one command wires AGENTS.md + each CLI's MCP config (idempotent, dry-run first, never touches your Claude Code setup) |
 | OpenRouter model pool | **Let swarms pick from any models you configure** — declare tier-mapped OpenRouter models in `swarmdo.config.json`; the router Thompson-samples among them per task and the execution layer dispatches the winner |
 | `swarmdo changelog` (alias `notes`) | **Release notes from conventional commits** — `--out NOTES.md` feeds `gh release create --notes-file` |

@@ -31,6 +31,7 @@ const LEAN_GROUPS = [
   'apply',      // apply_patch — fuzzy unified-diff applier for agent edits
   'hotspots',   // hotspots — git-history change-risk ranking ("where's the debt?")
   'affected',   // affected — impacted files/tests from a change via the import graph
+  'cycles',     // cycles — circular-import detection via the import graph
 ] as const;
 
 /** Balanced = lean + orchestration/session/system the average user reaches for. */

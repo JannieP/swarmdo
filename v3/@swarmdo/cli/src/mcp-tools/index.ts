@@ -23,6 +23,7 @@ export { licenseTools } from './license-tools.js';
 export { applyTools } from './apply-tools.js';
 export { hotspotsTools } from './hotspots-tools.js';
 export { affectedTools } from './affected-tools.js';
+export { cyclesTools } from './cycles-tools.js';
 export { progressTools } from './progress-tools.js';
 export { transferTools } from './transfer-tools.js';
 export { securityTools } from './security-tools.js';

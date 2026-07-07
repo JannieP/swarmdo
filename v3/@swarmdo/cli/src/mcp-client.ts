@@ -29,6 +29,7 @@ import { licenseTools } from './mcp-tools/license-tools.js';
 import { applyTools } from './mcp-tools/apply-tools.js';
 import { hotspotsTools } from './mcp-tools/hotspots-tools.js';
 import { affectedTools } from './mcp-tools/affected-tools.js';
+import { cyclesTools } from './mcp-tools/cycles-tools.js';
 import { progressTools } from './mcp-tools/progress-tools.js';
 import { embeddingsTools } from './mcp-tools/embeddings-tools.js';
 import { claimsTools } from './mcp-tools/claims-tools.js';
@@ -123,6 +124,7 @@ const TOOL_GROUPS: Record<string, () => MCPTool[]> = {
   apply: () => applyTools,
   hotspots: () => hotspotsTools,
   affected: () => affectedTools,
+  cycles: () => cyclesTools,
   progress: () => progressTools,
   embeddings: () => embeddingsTools,
   claims: () => claimsTools,

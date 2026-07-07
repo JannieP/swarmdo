@@ -56,6 +56,9 @@ const commandLoaders: Record<string, CommandLoader> = {
   // Affected-file/test set from a git diff (nx/turbo/jest --findRelatedTests
   // demand) — reverse-dependency closure over codegraph's import graph.
   affected: () => import('./affected.js'),
+  // Circular-import detector (madge --circular demand) — SCC scan over
+  // codegraph's import graph; catches TDZ/undefined-export bugs.
+  cycles: () => import('./cycles.js'),
   // Queryable exported-symbol index (codegraph demand) — where things are
   // defined without grep+read round-trips.
   codegraph: () => import('./codegraph.js'),
@@ -311,7 +314,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
     analyzeCmd, routeCmd, progressCmd, providersCmd,
     pluginsCmd, deploymentCmd, claimsCmd, issuesCmd,
     updateCmd, processCmd, guidanceCmd, applianceCmd,
-    cleanupCmd, autopilotCmd, demoCmd, usageCmd, repairCmd, hudCmd, compactCmd, codegraphCmd, redactCmd, packCmd, envCmd, licenseCmd, sbomCmd, applyCmd, hotspotsCmd, affectedCmd,
+    cleanupCmd, autopilotCmd, demoCmd, usageCmd, repairCmd, hudCmd, compactCmd, codegraphCmd, redactCmd, packCmd, envCmd, licenseCmd, sbomCmd, applyCmd, hotspotsCmd, affectedCmd, cyclesCmd,
   ] = await Promise.all([
     loadCommand('daemon'), loadCommand('doctor'), loadCommand('embeddings'), loadCommand('neural'),
     loadCommand('performance'), loadCommand('security'), loadCommand('swarmvector'), loadCommand('hive-mind'),
@@ -320,7 +323,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
     loadCommand('analyze'), loadCommand('route'), loadCommand('progress'), loadCommand('providers'),
     loadCommand('plugins'), loadCommand('deployment'), loadCommand('claims'), loadCommand('issues'),
     loadCommand('update'), loadCommand('process'), loadCommand('guidance'), loadCommand('appliance'),
-    loadCommand('cleanup'), loadCommand('autopilot'), loadCommand('demo'), loadCommand('usage'), loadCommand('repair'), loadCommand('hud'), loadCommand('compact'), loadCommand('codegraph'), loadCommand('redact'), loadCommand('pack'), loadCommand('env'), loadCommand('license'), loadCommand('sbom'), loadCommand('apply'), loadCommand('hotspots'), loadCommand('affected'),
+    loadCommand('cleanup'), loadCommand('autopilot'), loadCommand('demo'), loadCommand('usage'), loadCommand('repair'), loadCommand('hud'), loadCommand('compact'), loadCommand('codegraph'), loadCommand('redact'), loadCommand('pack'), loadCommand('env'), loadCommand('license'), loadCommand('sbom'), loadCommand('apply'), loadCommand('hotspots'), loadCommand('affected'), loadCommand('cycles'),
   ]);
 
   return {
@@ -337,7 +340,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
     utility: [
       configCmd, doctorCmd, daemonCmd, completionsCmd,
       migrateCmd, workflowCmd, demoCmd,
-      statuslineCmd, compressCmd, compactCmd, redactCmd, packCmd, envCmd, licenseCmd, sbomCmd, applyCmd, hotspotsCmd, affectedCmd, efficiencyCmd,
+      statuslineCmd, compressCmd, compactCmd, redactCmd, packCmd, envCmd, licenseCmd, sbomCmd, applyCmd, hotspotsCmd, affectedCmd, cyclesCmd, efficiencyCmd,
     ].filter(Boolean) as Command[],
     analysis: [
       analyzeCmd, routeCmd, progressCmd, usageCmd, hudCmd, codegraphCmd,
