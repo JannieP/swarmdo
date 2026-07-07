@@ -16,6 +16,7 @@ export { hiveMindTools } from './hive-mind-tools.js';
 export { workflowTools } from './workflow-tools.js';
 export { coverageRouterTools } from '../swarmvector/coverage-tools.js';
 export { analyzeTools } from './analyze-tools.js';
+export { codegraphTools } from './codegraph-tools.js';
 export { progressTools } from './progress-tools.js';
 export { transferTools } from './transfer-tools.js';
 export { securityTools } from './security-tools.js';

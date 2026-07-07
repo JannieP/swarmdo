@@ -22,6 +22,7 @@ import { sessionTools } from './mcp-tools/session-tools.js';
 import { hiveMindTools } from './mcp-tools/hive-mind-tools.js';
 import { workflowTools } from './mcp-tools/workflow-tools.js';
 import { analyzeTools } from './mcp-tools/analyze-tools.js';
+import { codegraphTools } from './mcp-tools/codegraph-tools.js';
 import { progressTools } from './mcp-tools/progress-tools.js';
 import { embeddingsTools } from './mcp-tools/embeddings-tools.js';
 import { claimsTools } from './mcp-tools/claims-tools.js';
@@ -109,6 +110,7 @@ const TOOL_GROUPS: Record<string, () => MCPTool[]> = {
   'hive-mind': () => hiveMindTools,
   workflow: () => workflowTools,
   analyze: () => analyzeTools,
+  codegraph: () => codegraphTools,
   progress: () => progressTools,
   embeddings: () => embeddingsTools,
   claims: () => claimsTools,

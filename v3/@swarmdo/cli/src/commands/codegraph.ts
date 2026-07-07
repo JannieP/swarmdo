@@ -12,62 +12,17 @@
  * walk and JSON persistence. MVP: exported top-level symbols in TS/JS.
  */
 
-import * as fs from 'node:fs';
 import * as path from 'node:path';
 import type { Command, CommandContext, CommandResult } from '../types.js';
 import { output } from '../output.js';
 import {
-  buildIndex,
   queryIndex,
   symbolsInFile,
   indexStats,
-  type CodeIndex,
   type CodeSymbol,
   type SymbolKind,
 } from '../codegraph/codegraph.js';
-
-const INDEX_REL = path.join('.swarm', 'codegraph.json');
-const SOURCE_EXT = new Set(['.ts', '.tsx', '.js', '.jsx', '.mts', '.cts', '.mjs', '.cjs']);
-const SKIP_DIRS = new Set([
-  'node_modules', '.git', '.swarm', 'dist', 'dist-standalone', 'build',
-  'coverage', '.next', '.turbo', 'out', 'vendor', '.cache',
-]);
-
-function walkSourceFiles(root: string): string[] {
-  const found: string[] = [];
-  const stack = [root];
-  while (stack.length) {
-    const dir = stack.pop()!;
-    let entries: fs.Dirent[];
-    try { entries = fs.readdirSync(dir, { withFileTypes: true }); } catch { continue; }
-    for (const e of entries) {
-      if (e.name.startsWith('.') && e.name !== '.') {
-        if (e.isDirectory() && SKIP_DIRS.has(e.name)) continue;
-      }
-      const full = path.join(dir, e.name);
-      if (e.isDirectory()) {
-        if (SKIP_DIRS.has(e.name)) continue;
-        stack.push(full);
-      } else if (e.isFile()) {
-        const ext = path.extname(e.name);
-        if (SOURCE_EXT.has(ext) && !e.name.endsWith('.d.ts')) found.push(full);
-      }
-    }
-  }
-  return found;
-}
-
-function indexPath(root: string): string {
-  return path.join(root, INDEX_REL);
-}
-
-function loadIndex(root: string): CodeIndex | null {
-  try {
-    return JSON.parse(fs.readFileSync(indexPath(root), 'utf8')) as CodeIndex;
-  } catch {
-    return null;
-  }
-}
+import { INDEX_REL, scanRepo, saveIndex, loadIndex } from '../codegraph/store.js';
 
 function fmtSymbol(s: CodeSymbol): string {
   return `${s.file}:${s.line}  ${output.dim(`[${s.kind}]`)} ${s.signature}`;
@@ -82,12 +37,8 @@ const indexCommand: Command = {
   action: async (ctx: CommandContext): Promise<CommandResult> => {
     const root = ctx.cwd || process.cwd();
     const scanRoot = ctx.args[0] ? path.resolve(root, ctx.args[0]) : root;
-    const files = walkSourceFiles(scanRoot);
-    const read = files.map((abs) => ({ file: path.relative(root, abs), source: safeRead(abs) }));
-    const index = buildIndex(read.filter((f) => f.source !== null) as Array<{ file: string; source: string }>);
-    const dir = path.dirname(indexPath(root));
-    fs.mkdirSync(dir, { recursive: true });
-    fs.writeFileSync(indexPath(root), JSON.stringify(index));
+    const index = scanRepo(root, scanRoot);
+    saveIndex(root, index);
     const stats = indexStats(index);
     if (ctx.flags.json === true) { output.printJson({ ...stats, path: INDEX_REL }); return { success: true, data: stats }; }
     output.printSuccess(`Indexed ${stats.symbols} symbols across ${stats.files} files → ${INDEX_REL}`);
@@ -95,10 +46,6 @@ const indexCommand: Command = {
     return { success: true, exitCode: 0 };
   },
 };
-
-function safeRead(abs: string): string | null {
-  try { return fs.readFileSync(abs, 'utf8'); } catch { return null; }
-}
 
 const queryCommand: Command = {
   name: 'query',

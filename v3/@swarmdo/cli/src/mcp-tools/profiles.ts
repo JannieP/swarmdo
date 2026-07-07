@@ -25,6 +25,7 @@ const LEAN_GROUPS = [
   'hooks',      // hooks_route / pre-task / post-edit / codemod ...
   'agentdb',    // agentdb pattern store/search
   'embeddings', // embeddings_generate / search / compare
+  'codegraph',  // codegraph_query / file / index — "where is X defined?"
 ] as const;
 
 /** Balanced = lean + orchestration/session/system the average user reaches for. */
