@@ -269,13 +269,13 @@ The recent release train added a full day-to-day operations layer around the swa
 
 | Command | What it does |
 |---------|-------------|
-| `swarmdo usage` (alias `cost`) | Claude Code **spend analytics** from your local transcripts — `daily`, `monthly`, `models`, `projects`, `sessions`, live 5-hour `blocks` burn, `errors` (tool-failure analytics), and `cache` (prompt-cache efficiency + $ saved) |
+| `swarmdo usage` (alias `cost`) | Claude Code **spend analytics** from your local transcripts — `daily`, `monthly`, `models`, `projects`, `sessions`, live 5-hour `blocks` burn, `errors` (tool-failure analytics), `cache` (prompt-cache efficiency + $ saved), and `diff` (period-over-period comparison with per-model movers) |
 | `swarmdo usage guard` | **Budget policy** — limits for the active 5h block / today / month via flags or `SWARMDO_GUARD_*` env → ok / warn / over; `--strict` exits 1, safe for CI gates and Stop hooks |
 | `swarmdo hud` | **One-screen ops HUD** — 5h block burn, task readiness, daemon workers, memory snapshots (`--watch`, `--json`) |
 | `swarmdo repair` (alias `tdd-repair`) | **Test-Driven Repair** — a bounded, budget-capped headless `claude` loop that fixes source until a failing test passes; dry-run unless `--confirm` |
-| `swarmdo task … --dependencies` | **Task dependency DAG** — `task ready` lists unblocked work, `task graph` renders the graph, the dispatcher gates on readiness |
+| `swarmdo task … --dependencies` | **Task dependency DAG** — `task ready` lists unblocked work, `task graph` renders the graph, the dispatcher gates on readiness; `task parse-prd <spec.md>` decomposes a PRD straight into the DAG |
 | `swarmdo worktree` (alias `wt`) | **Parallel-agent isolation** on git worktrees — add / list / diff / merge / remove |
-| `swarmdo transcript` (alias `tx`) | **Export any Claude Code session** to clean markdown — system noise stripped, ready to share |
+| `swarmdo transcript` (alias `tx`) | **Export any Claude Code session** to clean markdown — system noise stripped, ready to share; `transcript search <query>` full-text-searches every session |
 | `swarmdo integrations` (alias `integrate`) | **Use swarmdo from Codex CLI, GitHub Copilot CLI, and pi** — one command wires AGENTS.md + each CLI's MCP config (idempotent, dry-run first, never touches your Claude Code setup) |
 | OpenRouter model pool | **Let swarms pick from any models you configure** — declare tier-mapped OpenRouter models in `swarmdo.config.json`; the router Thompson-samples among them per task and the execution layer dispatches the winner |
 | `swarmdo changelog` (alias `notes`) | **Release notes from conventional commits** — `--out NOTES.md` feeds `gh release create --notes-file` |
@@ -283,7 +283,7 @@ The recent release train added a full day-to-day operations layer around the swa
 | `swarmdo hooks notify -d` | **Desktop notifications** — OS-native toast (macOS `osascript`, Linux `notify-send`) |
 | `swarmdo hooks recipe` | **One-command Claude Code hooks** — "ping me when Claude finishes / needs input"; dry-run by default, idempotent merge that never clobbers your settings |
 | `swarmdo preset` + `init --preset` | **5-tier capability ladder** — `minimal` → `basic`★ → `standard` → `advanced` → `max`; one word instead of dozens of flags |
-| `swarmdo memory export/import -f obsidian` | **Obsidian vault roundtrip** — DB → markdown notes (YAML frontmatter, `[[wikilinks]]` stay live) → edit in Obsidian → sync back, re-embedded |
+| `swarmdo memory export/import -f obsidian` | **Obsidian vault roundtrip** — DB → markdown notes (YAML frontmatter, `[[wikilinks]]` stay live) → edit in Obsidian → sync back, re-embedded; `import --watch` keeps the vault live-synced as you edit |
 | `swarmdo memory backup` / `revectorize` | WAL-safe nightly DB snapshots · repair hash-era vectors |
 
 ```bash

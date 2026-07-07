@@ -32,13 +32,13 @@ The v1.3–v1.4 release train added a day-to-day operations layer around the swa
 
 | Command | Aliases | What it does |
 |---------|---------|-------------|
-| `swarmdo usage` | `cost` | Claude Code spend analytics from local transcripts: `daily`, `monthly`, `models`, `projects`, `sessions`, live 5-hour `blocks` burn, `errors` (tool-failure analytics), `cache` (prompt-cache efficiency + $ saved) |
+| `swarmdo usage` | `cost` | Claude Code spend analytics from local transcripts: `daily`, `monthly`, `models`, `projects`, `sessions`, live 5-hour `blocks` burn, `errors` (tool-failure analytics), `cache` (prompt-cache efficiency + $ saved), `diff` (period comparison — day/week/month presets or explicit `--a/--b` ranges, per-model movers) |
 | `swarmdo usage guard` | — | Budget policy: `--block-usd/--block-tokens/--daily-usd/--monthly-usd` (or `SWARMDO_GUARD_*` env) → ok / warn / over; `--strict` exits 1 only when over — safe for CI and hooks; `--warn-pct`, `--json` |
 | `swarmdo hud` | — | Single-pane ops HUD: 5h block burn, task readiness, daemon workers, memory snapshots (`--watch`, `--json`) |
 | `swarmdo repair` | `tdd-repair` | Test-Driven Repair — bounded, budget-capped headless `claude` loop fixes source until a failing test passes; dry-run without `--confirm` |
-| `swarmdo task` | — | Task dependency DAG: create with `--dependencies`, list unblocked work with `task ready`, render with `task graph`; the dispatcher gates on readiness |
+| `swarmdo task` | — | Task dependency DAG: create with `--dependencies`, list unblocked work with `task ready`, render with `task graph`; the dispatcher gates on readiness. `task parse-prd <spec.md>` decomposes a PRD/spec into tasks in topological order (dry-run without `--confirm`) |
 | `swarmdo worktree` | `wt` | Git-worktree isolation for parallel agents: `add` / `list` / `diff` / `merge` / `remove` |
-| `swarmdo transcript` | `tx` | Export any Claude Code session transcript to clean markdown (system noise stripped) |
+| `swarmdo transcript` | `tx` | Export any Claude Code session transcript to clean markdown (system noise stripped); `transcript search <query>` full-text search across all sessions; `transcript list` to browse |
 | `swarmdo integrations` | `integrate` | Wire swarmdo into Codex CLI / Copilot CLI / pi via AGENTS.md + MCP config merges (idempotent; Claude Code surfaces untouched) |
 | `swarmdo changelog` | `notes`, `release-notes` | Release notes from conventional commits; default range is `<lastTag>..HEAD`; `--from/--to/--version/--out/--all/--no-links` |
 | `swarmdo mcp doctor` | — | Static diagnosis of MCP server configs across `.mcp.json` + `~/.claude.json`: missing binaries, bad URLs, malformed entries |
@@ -46,7 +46,7 @@ The v1.3–v1.4 release train added a day-to-day operations layer around the swa
 | `swarmdo hooks recipe` | `recipes` | Install ready-made Claude Code hooks (`notify-done` → Stop, `notify-input` → Notification); dry-run by default, `--apply` writes, idempotent additive merge; targets `settings.local.json` (`--shared` / `--global` to retarget) |
 | `swarmdo preset` | `presets` | The 5-tier capability ladder: `minimal` → `basic`★ → `standard` → `advanced` → `max`; `preset list` / `preset info <name>` / `preset info efficiency`; apply with `swarmdo init --preset <name>` |
 | `swarmdo memory export -f obsidian` | `-f md` | Render the memory DB as an Obsidian vault: one note per entry (YAML frontmatter, `[[wikilinks]]` stay live), per-namespace folders, `INDEX.md` map-of-content |
-| `swarmdo memory import -f obsidian` | `-f md` | Sync an edited vault back into the DB (upsert + re-embed); foreign notes in a mixed vault are skipped, never touched |
+| `swarmdo memory import -f obsidian` | `-f md` | Sync an edited vault back into the DB (upsert + re-embed); foreign notes in a mixed vault are skipped, never touched. `--watch` keeps syncing live as you edit (burst-coalesced) |
 | `swarmdo memory backup` / `revectorize` | — | WAL-safe nightly DB snapshots (keep 7) · repair hash-era vectors |
 | `swarmdo compress <file>` | — | Caveman-compress a memory file from any terminal (e2e-verified 33% smaller; `<file>.original.md` backup kept); `--check` for a token-free dry run |
 | `swarmdo efficiency` | — | Toggle the caveman + ponytail skills per project (`on` / `off` / `status`) |

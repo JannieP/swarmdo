@@ -515,7 +515,7 @@ function getCostFromStdin() {
 // misses, the displayed version is meaningful (matches what the user
 // installed), not a stale hard-coded string.
 function getPkgVersion() {
-  let ver = '1.5.1';
+  let ver = '1.5.2';
   try {
     const home = os.homedir();
     const pkgPaths = [
