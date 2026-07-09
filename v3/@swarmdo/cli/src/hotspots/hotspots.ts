@@ -53,6 +53,38 @@ export interface HotspotOptions {
   top?: number;
 }
 
+/**
+ * Resolve git's rename/copy numstat notation to the file's CURRENT (new) path.
+ *
+ * When rename/copy detection fires (git's default for merges, and often
+ * otherwise), `--numstat` doesn't emit a plain path. It emits either the
+ * compact braces form with a shared prefix/suffix around the changed run:
+ *   `src/{old => new}/file.ts`   ·   `{old => new}/file.ts`   ·   `dir/{old => }/f`
+ * or, when there's no shared prefix/suffix, the full form:
+ *   `old/path.ts => new/path.ts`
+ *
+ * We attribute churn to the file's current identity (the NEW path) so a renamed
+ * file's history folds into one entry instead of splitting across two phantom
+ * names. Plain paths pass through untouched. Pure — no git call.
+ */
+export function resolveRenamePath(raw: string): string {
+  const open = raw.indexOf('{');
+  if (open >= 0) {
+    const arrow = raw.indexOf(' => ', open);
+    const close = arrow >= 0 ? raw.indexOf('}', arrow) : -1;
+    if (arrow >= 0 && close >= 0) {
+      const prefix = raw.slice(0, open);
+      const newPart = raw.slice(arrow + 4, close);
+      const suffix = raw.slice(close + 1);
+      // Collapse the empty-side double slash (e.g. `dir/{old => }/f` → `dir/f`).
+      return (prefix + newPart + suffix).replace(/\/{2,}/g, '/');
+    }
+  }
+  const arrow = raw.indexOf(' => ');
+  if (arrow >= 0) return raw.slice(arrow + 4);
+  return raw;
+}
+
 /** Parse a control-char-delimited `git log --numstat` dump into commits. Pure. */
 export function parseGitLog(raw: string): Commit[] {
   const commits: Commit[] = [];
@@ -73,7 +105,7 @@ export function parseGitLog(raw: string): Commit[] {
     if (tab1 < 0 || tab2 < 0) continue;
     const a = line.slice(0, tab1);
     const d = line.slice(tab1 + 1, tab2);
-    const path = line.slice(tab2 + 1);
+    const path = resolveRenamePath(line.slice(tab2 + 1));
     if (!path) continue;
     cur.files.push({ path, added: a === '-' ? 0 : parseInt(a, 10) || 0, deleted: d === '-' ? 0 : parseInt(d, 10) || 0 });
   }

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseGitLog, computeHotspots, formatHotspots } from '../src/hotspots/hotspots.ts';
+import { parseGitLog, computeHotspots, formatHotspots, resolveRenamePath } from '../src/hotspots/hotspots.ts';
 
 const SOH = '\x01';
 const US = '\x1f';
@@ -40,6 +40,57 @@ describe('parseGitLog', () => {
   });
   it('parses ISO author dates to epoch ms', () => {
     expect(commits[0].date).toBe(Date.parse('2026-07-06T10:00:00Z'));
+  });
+});
+
+describe('resolveRenamePath', () => {
+  it('passes plain paths through unchanged', () => {
+    expect(resolveRenamePath('src/hotspots/hotspots.ts')).toBe('src/hotspots/hotspots.ts');
+  });
+  it('resolves the compact braces form to the new path', () => {
+    // git: file moved from .claude/commands/agents/README.md → .claude/commands/sDo/agents/README.md
+    expect(resolveRenamePath('.claude/commands/{ => sDo}/agents/README.md')).toBe('.claude/commands/sDo/agents/README.md');
+    expect(resolveRenamePath('src/{old => new}/file.ts')).toBe('src/new/file.ts');
+  });
+  it('resolves a braces form with an empty new side (collapsing the double slash)', () => {
+    // dir/old/f.ts → dir/f.ts
+    expect(resolveRenamePath('dir/{old => }/f.ts')).toBe('dir/f.ts');
+  });
+  it('resolves the full-path form (no shared prefix/suffix) to the new path', () => {
+    expect(resolveRenamePath('old/path.ts => new/other/path.ts')).toBe('new/other/path.ts');
+  });
+});
+
+describe('parseGitLog rename handling', () => {
+  it('attributes a rename commit to the file\'s current path, not a phantom', () => {
+    // git log walks newest→oldest: the rename commit (r2) reports the braces
+    // form; a later edit (r1) reports the plain new path. Both must fold into
+    // one entry at the current path — no garbage `src/{old => new}/mod.ts`.
+    const log = [
+      h('r1', 'alice', '2026-07-06T10:00:00Z'),
+      '3\t0\tsrc/new/mod.ts',
+      h('r2', 'bob', '2026-07-05T10:00:00Z'),
+      '4\t1\tsrc/{old => new}/mod.ts', // the rename commit (rename + edit)
+    ].join('\n');
+    const spots = computeHotspots(parseGitLog(log), NOW);
+    // Old naive parser produced the phantom path and split the file in two.
+    expect(spots.map((s) => s.path)).not.toContain('src/{old => new}/mod.ts');
+    const mod = spots.find((s) => s.path === 'src/new/mod.ts')!;
+    expect(mod).toBeDefined();
+    expect(mod.commits).toBe(2); // edit + rename commit, one file
+    expect(mod.churn).toBe(3 + 0 + 4 + 1);
+    expect(mod.authors).toBe(2);
+  });
+  it('resolves the full-path rename form and binary renames in a real numstat mix', () => {
+    const log = [
+      h('m1', 'dev', '2026-07-06T10:00:00Z'),
+      '0\t0\told/logo.png => assets/logo.png', // full-form binary rename (0/0)
+      '2\t2\tsrc/a.ts',
+    ].join('\n');
+    const spots = computeHotspots(parseGitLog(log), NOW);
+    const paths = spots.map((s) => s.path).sort();
+    expect(paths).toEqual(['assets/logo.png', 'src/a.ts']);
+    expect(paths).not.toContain('old/logo.png => assets/logo.png');
   });
 });
 
