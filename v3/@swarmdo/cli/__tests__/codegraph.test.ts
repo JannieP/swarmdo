@@ -57,9 +57,18 @@ describe('extractSymbols', () => {
     expect(syms.find((s) => s.name === 'alsoNot')).toBeUndefined();
   });
 
-  it('ignores re-export and star-export forms', () => {
-    // `export { x }` and `export * from` must not create symbols.
+  it('ignores re-export and bare star-export forms', () => {
+    // `export { x }` and bare `export * from` must not create symbols.
     expect(syms.filter((s) => s.name === 'x')).toHaveLength(0);
+  });
+
+  it('indexes `export * as ns from` as a real named symbol, but not bare `export *`', () => {
+    const s = extractSymbols(
+      ["export * as security from './security.js';", "export * as memory from './memory';", "export * from './bare.js';"].join('\n'),
+      'index.ts',
+    );
+    expect(s.map((x) => x.name).sort()).toEqual(['memory', 'security']); // bare export * adds nothing
+    expect(s.find((x) => x.name === 'security')).toMatchObject({ kind: 'const', line: 1 });
   });
 
   it('records 1-based line numbers and a signature', () => {

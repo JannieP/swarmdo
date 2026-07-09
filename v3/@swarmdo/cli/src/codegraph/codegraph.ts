@@ -85,6 +85,16 @@ export function extractSymbols(source: string, file: string): CodeSymbol[] {
     const raw = lines[i];
     const trimmed = raw.trimStart();
     if (!trimmed.startsWith('export')) continue;
+    // `export * as ns from '…'` (ES2020) creates a real named export `ns` — a
+    // namespace binding — unlike bare `export * from '…'` which adds no local
+    // name. Index it (kind 'const', the closest value-binding kind) before the
+    // blanket `export *` skip below.
+    const nsRe = /^export\s+\*\s+as\s+([A-Za-z_$][\w$]*)\s+from\b/;
+    const nsm = trimmed.match(nsRe);
+    if (nsm) {
+      out.push({ name: nsm[1], kind: 'const', file, line: i + 1, signature: trimmed.slice(0, SIG_MAX).replace(/\s+$/, '') });
+      continue;
+    }
     // Skip re-export / bare forms handled elsewhere: `export {` and `export *`.
     if (/^export\s*[*{]/.test(trimmed)) continue;
     for (const { kind, re } of MATCHERS) {
