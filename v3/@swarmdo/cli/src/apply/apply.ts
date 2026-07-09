@@ -16,6 +16,8 @@ export interface HunkLine {
   /** ' ' context, '-' removal, '+' addition */
   type: ' ' | '-' | '+';
   content: string;
+  /** true if a `\ No newline at end of file` marker immediately followed this line */
+  noEol?: boolean;
 }
 
 export interface Hunk {
@@ -71,7 +73,9 @@ export function parsePatch(text: string): FilePatch[] {
       } else if (line === '') {
         hunk.lines.push({ type: ' ', content: '' }); // blank context line written without the leading space
       } else if (line.startsWith('\\')) {
-        // "\ No newline at end of file" — ignore
+        // "\ No newline at end of file" — attaches to the preceding hunk line,
+        // recording that that side of the diff has no trailing newline.
+        if (hunk.lines.length) hunk.lines[hunk.lines.length - 1].noEol = true;
       } else {
         hunk = null; // end of hunk block
       }
@@ -144,6 +148,9 @@ export function applyPatch(source: string, patch: FilePatch, opts: ApplyOptions 
   if (trailingNewline) lines.pop(); // drop the empty element from a trailing \n
   let offset = 0;
   const results: HunkResult[] = [];
+  // If a hunk that reaches EOF carries an explicit no-newline marker, it — not
+  // the source — decides the output's trailing newline. undefined = no marker.
+  let eofNoEol: boolean | undefined;
 
   for (const hunk of patch.hunks) {
     const { oldBlock, newBlock } = hunkBlocks(hunk);
@@ -177,11 +184,30 @@ export function applyPatch(source: string, patch: FilePatch, opts: ApplyOptions 
     lines.splice(placed, oldBlock.length, ...newBlock);
     offset += newBlock.length - oldBlock.length;
     results.push({ hunk, applied: true, at: placed, fuzzUsed: usedFuzz });
+    // If this hunk's new content is now the tail of the file, its markers
+    // determine whether the file ends with a newline.
+    if (placed + newBlock.length === lines.length) eofNoEol = newSideEndsNoEol(hunk);
   }
 
   let result = lines.join('\n');
-  if (trailingNewline) result += '\n';
+  // The patch's explicit EOF marker wins; absent one, keep the source's state.
+  const endWithNewline = eofNoEol === undefined ? trailingNewline : !eofNoEol;
+  if (endWithNewline) result += '\n';
   return { ok: results.every((r) => r.applied), result, hunks: results };
+}
+
+/**
+ * Whether the NEW side of `hunk` ends without a trailing newline — read from the
+ * last context/addition line's marker. Returns undefined if the hunk carries no
+ * `\ No newline` marker at all (so the source's state should be kept). Pure.
+ */
+function newSideEndsNoEol(hunk: Hunk): boolean | undefined {
+  if (!hunk.lines.some((l) => l.noEol)) return undefined;
+  for (let i = hunk.lines.length - 1; i >= 0; i--) {
+    const l = hunk.lines[i];
+    if (l.type === ' ' || l.type === '+') return !!l.noEol;
+  }
+  return undefined;
 }
 
 function countLeadingContext(hunk: Hunk): number {

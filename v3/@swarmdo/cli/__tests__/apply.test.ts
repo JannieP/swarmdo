@@ -53,6 +53,31 @@ describe('applyPatch — clean', () => {
     expect(r.result).toBe('a\nB\nc');
     expect(r.result.endsWith('\n')).toBe(false);
   });
+
+  it('honors `\\ No newline` to REMOVE a trailing newline the source had', () => {
+    const src = 'a\nb\nc\n'; // source ends with a newline
+    const p = patch(['--- a/f', '+++ b/f', '@@ -1,3 +1,3 @@', ' a', ' b', '-c', '+C', '\\ No newline at end of file'].join('\n'));
+    const r = applyPatch(src, p);
+    expect(r.ok).toBe(true);
+    expect(r.result).toBe('a\nb\nC'); // marker on the new line → no trailing newline
+    expect(r.result.endsWith('\n')).toBe(false);
+  });
+
+  it('honors `\\ No newline` on the OLD side to ADD a trailing newline', () => {
+    const src = 'a\nb\nc'; // source has NO trailing newline
+    // old `c` had no newline (marker after -c); new `+C` has one (no marker)
+    const p = patch(['--- a/f', '+++ b/f', '@@ -1,3 +1,3 @@', ' a', ' b', '-c', '\\ No newline at end of file', '+C'].join('\n'));
+    const r = applyPatch(src, p);
+    expect(r.ok).toBe(true);
+    expect(r.result).toBe('a\nb\nC\n'); // new side has a newline → added
+    expect(r.result.endsWith('\n')).toBe(true);
+  });
+
+  it('records the no-newline marker on the preceding hunk line during parse', () => {
+    const p = patch(['--- a/f', '+++ b/f', '@@ -1 +1 @@', '-c', '+C', '\\ No newline at end of file'].join('\n'));
+    const last = p.hunks[0].lines[p.hunks[0].lines.length - 1];
+    expect(last).toMatchObject({ type: '+', content: 'C', noEol: true });
+  });
 });
 
 describe('applyPatch — fuzzy (the point of the tool)', () => {
