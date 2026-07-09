@@ -111,6 +111,27 @@ export interface BomMeta {
   version: string;
 }
 
+/**
+ * Is this npm `license` string an SPDX *expression* (compound), rather than a
+ * single license identifier? npm permits expressions like `(MIT OR Apache-2.0)`
+ * or `Apache-2.0 WITH LLVM-exception` for dual/multi-licensed packages. SPDX
+ * operators are uppercase and space-delimited, so a single ID (`MIT`,
+ * `BSD-3-Clause`, `CC-BY-SA-4.0`) never matches. Pure.
+ */
+export function isSpdxExpression(license: string): boolean {
+  return / (OR|AND|WITH) /.test(license) || license.includes('(');
+}
+
+/**
+ * A CycloneDX `licenses[]` entry for a license string. CycloneDX requires
+ * `license.id` to be a single valid SPDX identifier, so an expression must use
+ * the sibling `expression` field instead — otherwise strict validators and
+ * scanners (Dependency-Track, Grype) reject or mis-parse the component. Pure.
+ */
+export function cdxLicenseEntry(license: string): Record<string, unknown> {
+  return isSpdxExpression(license) ? { expression: license } : { license: { id: license } };
+}
+
 /** Build a CycloneDX 1.5 BOM object (no timestamp → deterministic). Pure. */
 export function buildCycloneDX(components: Component[], meta: BomMeta): Record<string, unknown> {
   return {
@@ -123,7 +144,7 @@ export function buildCycloneDX(components: Component[], meta: BomMeta): Record<s
     components: components.map((c) => {
       const comp: Record<string, unknown> = { type: 'library', name: c.name, version: c.version, purl: c.purl };
       if (c.hash) comp.hashes = [{ alg: c.hash.alg, content: c.hash.content }];
-      if (c.license) comp.licenses = [{ license: { id: c.license } }];
+      if (c.license) comp.licenses = [cdxLicenseEntry(c.license)];
       return comp;
     }),
   };

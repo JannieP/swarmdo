@@ -6,6 +6,8 @@ import {
   buildCycloneDX,
   buildSpdx,
   buildSbom,
+  isSpdxExpression,
+  cdxLicenseEntry,
 } from '../src/sbom/sbom.ts';
 
 const LOCK = {
@@ -86,6 +88,40 @@ describe('buildCycloneDX', () => {
     const a = JSON.stringify(buildCycloneDX(componentsFromNpmLock(LOCK), { name: 'my-app', version: '1.0.0' }));
     const b = JSON.stringify(buildCycloneDX(componentsFromNpmLock(LOCK), { name: 'my-app', version: '1.0.0' }));
     expect(a).toBe(b);
+  });
+  it('emits license.expression for SPDX expressions, license.id for single IDs', () => {
+    const lock = {
+      name: 'app', version: '1.0.0', lockfileVersion: 3,
+      packages: {
+        '': { name: 'app', version: '1.0.0' },
+        'node_modules/dual': { version: '1.0.0', license: '(MIT OR Apache-2.0)' },
+        'node_modules/excepted': { version: '2.0.0', license: 'Apache-2.0 WITH LLVM-exception' },
+        'node_modules/simple': { version: '3.0.0', license: 'MIT' },
+      },
+    };
+    const comps = buildCycloneDX(componentsFromNpmLock(lock), { name: 'app', version: '1.0.0' }).components as any[];
+    // Compound expressions → { expression }, NOT an invalid license.id
+    expect(comps.find((c) => c.name === 'dual').licenses[0]).toEqual({ expression: '(MIT OR Apache-2.0)' });
+    expect(comps.find((c) => c.name === 'excepted').licenses[0]).toEqual({ expression: 'Apache-2.0 WITH LLVM-exception' });
+    // A single valid SPDX ID still uses license.id
+    expect(comps.find((c) => c.name === 'simple').licenses[0]).toEqual({ license: { id: 'MIT' } });
+  });
+});
+
+describe('isSpdxExpression / cdxLicenseEntry', () => {
+  it('detects compound expressions and leaves single IDs alone', () => {
+    expect(isSpdxExpression('(MIT OR Apache-2.0)')).toBe(true);
+    expect(isSpdxExpression('MIT OR Apache-2.0')).toBe(true);
+    expect(isSpdxExpression('GPL-2.0-only WITH Classpath-exception-2.0')).toBe(true);
+    expect(isSpdxExpression('MIT AND BSD-3-Clause')).toBe(true);
+    // single IDs — must NOT be treated as expressions
+    for (const id of ['MIT', 'Apache-2.0', 'BSD-3-Clause', 'CC-BY-SA-4.0', 'WTFPL', 'ISC']) {
+      expect(isSpdxExpression(id)).toBe(false);
+    }
+  });
+  it('cdxLicenseEntry branches on shape', () => {
+    expect(cdxLicenseEntry('MIT')).toEqual({ license: { id: 'MIT' } });
+    expect(cdxLicenseEntry('(MIT OR Apache-2.0)')).toEqual({ expression: '(MIT OR Apache-2.0)' });
   });
 });
 
