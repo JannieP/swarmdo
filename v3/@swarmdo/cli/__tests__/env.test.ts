@@ -26,6 +26,21 @@ describe('extractEnvRefs', () => {
     const refs = extractEnvRefs('if (import.meta.env.PROD) {} const t = import.meta.env.VITE_X;', 'f.ts');
     expect(refs.map((r) => r.key)).toEqual(['VITE_X']);
   });
+
+  it('captures destructured process.env reads, including rename and default forms', () => {
+    const src = [
+      'const { PORT, DB_URL } = process.env;',
+      'const { API_KEY: key, REGION = "us" } = process.env;',
+      'const { REST, ...others } = process.env;', // ...others is not an env var
+    ].join('\n');
+    const keys = extractEnvRefs(src, 'f.ts').map((r) => r.key).sort();
+    expect(keys).toEqual(['API_KEY', 'DB_URL', 'PORT', 'REGION', 'REST']);
+  });
+  it('does not treat `= process.env.FOO` sub-access as a bare-object destructure', () => {
+    // this is a normal member read of FOO (caught by process.env.X), not a {..}=process.env
+    const refs = extractEnvRefs('const { a } = process.env.FOO;', 'f.ts');
+    expect(refs.map((r) => r.key)).toEqual(['FOO']); // FOO via the member pattern; no phantom `a`
+  });
 });
 
 describe('parseDotenv', () => {

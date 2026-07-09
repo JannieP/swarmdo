@@ -45,6 +45,9 @@ const REF_PATTERNS: RegExp[] = [
   /os\.getenv\(\s*['"]([^'"]+)['"]\s*\)/g,
 ];
 
+/** `const { A, B } = process.env` — the brace body (group 1) holds one or more refs. */
+const DESTRUCTURE_RE = /\{\s*([^}]+)\}\s*=\s*process\.env\b(?![.[])/g;
+
 /** Non-secret prefixes on `import.meta.env` that are Vite builtins, not user vars. */
 const VITE_BUILTINS = new Set(['MODE', 'BASE_URL', 'PROD', 'DEV', 'SSR']);
 
@@ -60,6 +63,20 @@ export function extractEnvRefs(source: string, file: string): EnvRef[] {
       let m: RegExpExecArray | null;
       while ((m = re.exec(line)) !== null) {
         const key = m[1];
+        if (VITE_BUILTINS.has(key)) continue;
+        out.push({ key, file, line: i + 1 });
+      }
+    }
+    // Destructuring reads: `const { PORT, DB_URL } = process.env` (each property
+    // key is an env-var reference). The `(?![.[])` guard keeps it to the bare
+    // `process.env` object, not `= process.env.FOO`. Single-line, like the rest.
+    DESTRUCTURE_RE.lastIndex = 0;
+    let dm: RegExpExecArray | null;
+    while ((dm = DESTRUCTURE_RE.exec(line)) !== null) {
+      for (const part of dm[1].split(',')) {
+        // The env-var name is the property key — left of a rename `:` or default `=`.
+        const key = part.trim().split(/[:=]/)[0].trim();
+        if (!/^[A-Za-z_$][\w$]*$/.test(key)) continue; // skip `...rest`, empties
         if (VITE_BUILTINS.has(key)) continue;
         out.push({ key, file, line: i + 1 });
       }
