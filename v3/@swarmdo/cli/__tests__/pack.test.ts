@@ -137,4 +137,26 @@ describe('makeIgnoreMatcher', () => {
     expect(ig('debug.log')).toBe(true);
     expect(ig('keep.log')).toBe(false);
   });
+  it('matches a middle ** across zero or more directories (gitignore(5))', () => {
+    const ig = makeIgnoreMatcher(['src/**/fixtures']);
+    expect(ig('src/fixtures')).toBe(true);        // zero intermediate dirs
+    expect(ig('src/a/fixtures')).toBe(true);      // one
+    expect(ig('src/a/b/fixtures')).toBe(true);    // two+
+    expect(ig('src/fixtures/data.json')).toBe(true);
+    expect(ig('other/fixtures')).toBe(false);     // must start at src/
+  });
+  it('matches leading **/ in any directory and trailing /** for everything below', () => {
+    const lead = makeIgnoreMatcher(['**/node_modules']);
+    expect(lead('node_modules')).toBe(true);
+    expect(lead('a/b/node_modules/x.js')).toBe(true);
+    const trail = makeIgnoreMatcher(['build/**']);
+    expect(trail('build/x/y.js')).toBe(true);
+    expect(trail('build/x')).toBe(true);
+    expect(trail('src/build.ts')).toBe(false);
+  });
+  it('treats non-segment consecutive stars as regular stars within a segment', () => {
+    const ig = makeIgnoreMatcher(['a**b']);
+    expect(ig('axxb')).toBe(true);   // stays within one segment
+    expect(ig('a/b')).toBe(false);   // does NOT cross a slash
+  });
 });

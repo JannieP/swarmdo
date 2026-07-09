@@ -181,10 +181,35 @@ export function packFiles(input: PackFile[], opts: PackOptions = {}): PackResult
 }
 
 /**
+ * Convert a .gitignore glob body to a regex source (no anchors). Handles a
+ * double-star with correct gitignore(5) depth semantics: a double-star path
+ * segment matches zero or more directories (so `a/[star][star]/b` matches
+ * `a/b`, `a/x/b`, `a/x/y/b`); a leading one matches in any directory; a
+ * trailing one matches everything below. Single `*`/`?` stay within one path
+ * segment; other consecutive asterisks degrade to regular stars, per the spec.
+ * Pure.
+ */
+function globToRegExp(body: string): string {
+  const esc = (s: string) => s.replace(/[.+^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '[^/]*').replace(/\?/g, '[^/]');
+  const parts = body.split('/');
+  let re = '';
+  for (let i = 0; i < parts.length; i++) {
+    const last = i === parts.length - 1;
+    if (parts[i] === '**') {
+      if (last) { re += '.*'; } // trailing /** — everything below
+      else { re += '(?:[^/]*/)*'; continue; } // absorbs the following slash → zero-or-more dirs
+    } else {
+      re += esc(parts[i]);
+    }
+    if (!last) re += '/';
+  }
+  return re;
+}
+
+/**
  * Minimal .gitignore-style matcher. Handles the common cases — plain names,
- * `dir/`, `*.ext` globs, leading `/` anchors, and `!` negation — not the full
- * spec (no `**` depth semantics beyond substring, no nested ignore files).
- * Good enough to keep obvious noise out; full semantics is a follow-up.
+ * `dir/`, `*.ext` globs, `**` depth globs (gitignore(5) semantics), leading `/`
+ * anchors, and `!` negation. Not the full spec (no nested ignore files).
  */
 export function makeIgnoreMatcher(patterns: string[]): (relPath: string) => boolean {
   const rules = patterns
@@ -197,14 +222,7 @@ export function makeIgnoreMatcher(patterns: string[]): (relPath: string) => bool
       if (dirOnly) body = body.slice(0, -1);
       const anchored = body.startsWith('/');
       if (anchored) body = body.slice(1);
-      const re = new RegExp(
-        '^' +
-          body
-            .replace(/[.+^${}()|[\]\\]/g, '\\$&')
-            .replace(/\*/g, '[^/]*')
-            .replace(/\?/g, '[^/]') +
-          (dirOnly ? '(/|$)' : '($|/)'),
-      );
+      const re = new RegExp('^' + globToRegExp(body) + (dirOnly ? '(/|$)' : '($|/)'));
       return { negate, anchored, re };
     });
 
