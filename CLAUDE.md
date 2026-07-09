@@ -1,8 +1,8 @@
 # Claude Code Configuration - Swarmdo v1.4
 
-> **Swarmdo v1.19.0** (2026-07-07) — every swarmdo slash command namespaced under `sDo` (`/sDo:swarm:init`, skills `/sdo-ponytail`) so they group together in Claude Code's `/` menu; legacy unprefixed copies auto-migrated on init/upgrade.
+> **Swarmdo v1.27.0** (2026-07-10) — a large correctness-hardening batch across the deterministic toolkit (sbom/license/redact/testreport/changelog/apply/pack/hotspots/cycles/codegraph/env/usage): SPDX-aware license policy, TTL-aware cache pricing, gitignore(5) parity, CycloneDX component scope, tsconfig-paths import resolution, Bearer/OAuth secret detection, and more — each shipped with fixture tests + evidence.
 > 6,000+ commits, 314 MCP tools, 16 agent roles + custom types, 19 AgentDB controllers, 21 native plugins.
-> Packages: `swarmdo@1.19.0` (umbrella), `@swarmdo/cli@1.19.0`, `swarmdo-bridge@1.19.0` (wrapper in `swarmdo/`)
+> Packages: `swarmdo@1.27.0` (umbrella), `@swarmdo/cli@1.27.0`, `swarmdo-bridge@1.27.0` (wrapper in `swarmdo/`)
 
 ## Behavioral Rules (Always Enforced)
 
