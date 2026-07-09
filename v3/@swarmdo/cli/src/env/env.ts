@@ -70,8 +70,11 @@ export function extractEnvRefs(source: string, file: string): EnvRef[] {
 
 /**
  * Parse a `.env` file into an ordered list of declared keys. Handles `KEY=val`,
- * `export KEY=val`, quoted values, `# comments`, and blank lines. Values are
- * ignored — we only reconcile key presence. Pure.
+ * `export KEY=val`, quoted values, `# comments`, and blank lines. The key
+ * charset + `:` separator mirror the reference `dotenv` package's grammar
+ * (`[\w.-]+` with `=` or `: ` as separator), so dotted/hyphenated keys like
+ * `APP.NAME` aren't silently dropped. Values are ignored — we only reconcile
+ * key presence. Pure.
  */
 export function parseDotenv(text: string): string[] {
   const keys: string[] = [];
@@ -79,7 +82,7 @@ export function parseDotenv(text: string): string[] {
   for (const raw of text.split('\n')) {
     const line = raw.trim();
     if (!line || line.startsWith('#')) continue;
-    const m = line.match(/^(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=/);
+    const m = line.match(/^(?:export\s+)?([\w.-]+)(?:\s*=|:\s)/);
     if (!m) continue;
     if (seen.has(m[1])) continue;
     seen.add(m[1]);

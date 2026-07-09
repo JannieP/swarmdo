@@ -41,6 +41,14 @@ describe('parseDotenv', () => {
     ].join('\n');
     expect(parseDotenv(env)).toEqual(['API_KEY', 'DATABASE_URL', 'PORT']);
   });
+  it('parses dotted/hyphenated keys and the `: ` separator (dotenv grammar)', () => {
+    const env = ['APP.NAME=x', 'feature-flag=on', 'COLON_KEY: value', 'export SVC.URL=y'].join('\n');
+    expect(parseDotenv(env)).toEqual(['APP.NAME', 'feature-flag', 'COLON_KEY', 'SVC.URL']);
+  });
+  it('does not mis-parse a URL value or a YAML list item as a key', () => {
+    expect(parseDotenv('- item')).toEqual([]);       // no separator
+    expect(parseDotenv('KEY=http://x.com/a')).toEqual(['KEY']); // value with a colon
+  });
 });
 
 describe('reconcile', () => {
