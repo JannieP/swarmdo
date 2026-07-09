@@ -103,6 +103,18 @@ describe('computeHotspots', () => {
     expect(hot.authors).toBe(3);
     expect(hot.lastTouched).toBe(Date.parse('2026-07-06T10:00:00Z'));
   });
+  it('folds commits by author name — one person = one author (the command feeds %aN/mailmap-resolved names)', () => {
+    // The command captures `%aN` (mailmap-resolved), so name variants of one
+    // person arrive already-canonical; the engine counts distinct names.
+    const log = [
+      h('m1', 'Jan Pieterse', '2026-07-06T10:00:00Z'), '5\t1\tf.ts',
+      h('m2', 'Jan Pieterse', '2026-07-05T10:00:00Z'), '2\t0\tf.ts',
+      h('m3', 'Jan Pieterse', '2026-07-04T10:00:00Z'), '1\t0\tf.ts',
+    ].join('\n');
+    const f = computeHotspots(parseGitLog(log), NOW).find((s) => s.path === 'f.ts')!;
+    expect(f.commits).toBe(3);
+    expect(f.authors).toBe(1); // was 3 pre-mailmap when names were "Jan P"/"jan-p"/"J. Pieterse"
+  });
   it('ranks the high-churn/multi-author/recent file first', () => {
     expect(spots[0].path).toBe('hot.ts');
     // cold.ts (old, single commit) must rank below warm.ts

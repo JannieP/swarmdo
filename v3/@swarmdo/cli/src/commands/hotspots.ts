@@ -39,8 +39,11 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
   // Global --format (text|json|table); text and table both render the table.
   const asJson = ctx.flags.format === 'json';
 
-  // Capture history: SOH-delimited header + numstat, no merges.
-  const args = ['log', '--no-merges', '--numstat', `--since=${since}`, '--format=format:%x01%H%x1f%an%x1f%aI'];
+  // Capture history: SOH-delimited header + numstat, no merges. `%aN` (not
+  // `%an`) resolves author names through `.mailmap`, so name/email variants of
+  // the same person fold into one identity — otherwise the author-spread factor
+  // in the risk score is silently inflated. Identical to `%an` when no .mailmap.
+  const args = ['log', '--no-merges', '--numstat', `--since=${since}`, '--format=format:%x01%H%x1f%aN%x1f%aI'];
   if (pathArg) args.push('--', pathArg);
   let raw: string;
   try {
