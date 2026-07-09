@@ -41,8 +41,35 @@ describe('evaluateDep', () => {
   it('flags a denied license', () => {
     expect(evaluateDep(dep('GPL-3.0'), { deny: ['GPL-3.0'] })?.reason).toBe('denied');
   });
-  it('deny matches any OR component', () => {
-    expect(evaluateDep(dep('MIT OR GPL-3.0'), { deny: ['GPL-3.0'] })?.reason).toBe('denied');
+  it('OR with a denied branch still PASSES — the other branch is a lawful choice (SPDX OR = choice)', () => {
+    // (MIT OR GPL-3.0) under deny:[GPL-3.0]: the consumer may take MIT → compliant.
+    expect(evaluateDep(dep('MIT OR GPL-3.0'), { deny: ['GPL-3.0'] })).toBeNull();
+  });
+  it('OR denied only when EVERY branch is denied', () => {
+    expect(evaluateDep(dep('GPL-2.0 OR GPL-3.0'), { deny: ['GPL-2.0', 'GPL-3.0'] })?.reason).toBe('denied');
+  });
+  it('AND with a denied license IS denied (both apply concurrently)', () => {
+    expect(evaluateDep(dep('MIT AND GPL-3.0'), { deny: ['GPL-3.0'] })?.reason).toBe('denied');
+  });
+  it('AND fails an allowlist that misses one conjunct — closes the copyleft-slips-through hole', () => {
+    // MIT AND GPL-3.0 under allow:[MIT, Apache-2.0]: GPL-3.0 also applies and is unvetted → violation.
+    expect(evaluateDep(dep('MIT AND GPL-3.0'), { allow: ['MIT', 'Apache-2.0'] })?.reason).toBe('not-allowed');
+  });
+  it('AND passes only when EVERY conjunct is allowed', () => {
+    expect(evaluateDep(dep('MIT AND Apache-2.0'), { allow: ['MIT', 'Apache-2.0'] })).toBeNull();
+  });
+  it('respects AND-over-OR precedence (parenthesized and bare)', () => {
+    // (MIT OR (Apache-2.0 AND GPL-3.0)) under allow:[MIT] → take the MIT branch → pass
+    expect(evaluateDep(dep('MIT OR (Apache-2.0 AND GPL-3.0)'), { allow: ['MIT'] })).toBeNull();
+    // AND binds tighter: `MIT OR Apache-2.0 AND GPL-3.0` = `MIT OR (Apache-2.0 AND GPL-3.0)`.
+    // Deny MIT → the Apache-2.0 AND GPL-3.0 term survives as a lawful choice → pass.
+    expect(evaluateDep(dep('MIT OR Apache-2.0 AND GPL-3.0'), { deny: ['MIT'] })).toBeNull();
+    // …but allow:[Apache-2.0] only (GPL-3.0 unvetted) → neither branch fully allowed → not-allowed
+    expect(evaluateDep(dep('MIT OR Apache-2.0 AND GPL-3.0'), { allow: ['Apache-2.0'] })?.reason).toBe('not-allowed');
+  });
+  it('matches the base license of a WITH-exception expression', () => {
+    expect(evaluateDep(dep('Apache-2.0 WITH LLVM-exception'), { allow: ['Apache-2.0'] })).toBeNull();
+    expect(evaluateDep(dep('GPL-3.0 WITH Classpath-exception-2.0'), { deny: ['GPL-3.0'] })?.reason).toBe('denied');
   });
   it('flags not-allowed when allowlist misses all components', () => {
     expect(evaluateDep(dep('GPL-3.0'), { allow: ['MIT', 'Apache-2.0'] })?.reason).toBe('not-allowed');

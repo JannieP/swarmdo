@@ -74,23 +74,89 @@ export function spdxComponents(expr: string): string[] {
     .filter(Boolean);
 }
 
-/** Evaluate one dep against the policy; null if it passes. Pure. */
+/**
+ * Parse an SPDX license expression into DISJUNCTIVE NORMAL FORM: a list of
+ * conjunctive terms, each a set of license ids. `A OR (B AND C)` →
+ * `[['A'], ['B','C']]`. Precedence per the SPDX spec (Annex D): `WITH` binds
+ * tighter than `AND`, `AND` tighter than `OR`; parentheses override.
+ *
+ * Each DNF term is a set of licenses that ALL apply simultaneously (the AND
+ * conjunction); the terms are the mutually-exclusive CHOICES (the OR). A policy
+ * is satisfied iff SOME term is acceptable — the semantics `evaluateDep` needs.
+ * `A WITH B` contributes the base license `A` (exceptions aren't standalone
+ * licenses in allow/deny lists). Trailing `+` is stripped. Pure.
+ */
+export function parseSpdxDnf(expr: string): string[][] {
+  const tokens = expr.replace(/([()])/g, ' $1 ').split(/\s+/).filter(Boolean);
+  let pos = 0;
+  const peek = () => tokens[pos];
+  const isOp = (t: string | undefined, op: string) => !!t && t.toUpperCase() === op;
+
+  // expr := term (OR term)*  → concatenate the alternatives
+  const parseExpr = (): string[][] => {
+    let terms = parseTerm();
+    while (isOp(peek(), 'OR')) { pos++; terms = terms.concat(parseTerm()); }
+    return terms;
+  };
+  // term := factor (AND factor)*  → cartesian union of the conjuncts
+  const parseTerm = (): string[][] => {
+    let left = parseFactor();
+    while (isOp(peek(), 'AND')) {
+      pos++;
+      const right = parseFactor();
+      const merged: string[][] = [];
+      for (const a of left) for (const b of right) merged.push([...new Set([...a, ...b])]);
+      left = merged;
+    }
+    return left;
+  };
+  // factor := '(' expr ')' | license [WITH exception]
+  const parseFactor = (): string[][] => {
+    if (peek() === '(') {
+      pos++;
+      const inner = parseExpr();
+      if (peek() === ')') pos++;
+      return inner;
+    }
+    const lic = (tokens[pos++] ?? '').replace(/\+$/, '');
+    if (isOp(peek(), 'WITH')) { pos++; pos++; } // consume `WITH <exception>` — base license only
+    return lic ? [[lic]] : [[]];
+  };
+
+  const dnf = parseExpr();
+  // Fall back to treating the whole string as one atomic license if parse yielded nothing.
+  return dnf.length && dnf.some((t) => t.length) ? dnf : [[expr.trim()]];
+}
+
+/**
+ * Evaluate one dep against the policy; null if it passes. Pure.
+ *
+ * SPDX-aware: a dep is acceptable iff SOME DNF term (a lawful realization of the
+ * license) violates nothing — every license in that term is un-denied and (under
+ * an allowlist) allowed. So `(MIT OR GPL-3.0)` with `deny:[GPL-3.0]` PASSES (take
+ * MIT), while `MIT AND GPL-3.0` under `allow:[MIT]` FAILS (GPL-3.0 also applies).
+ */
 export function evaluateDep(dep: DepLicense, policy: LicensePolicy): Violation | null {
   const allow = new Set(policy.allow ?? []);
   const deny = new Set(policy.deny ?? []);
   const isUnknown = dep.license === 'UNKNOWN' || !dep.license;
-  const components = isUnknown ? [] : spdxComponents(dep.license);
 
-  if (components.some((c) => deny.has(c))) {
-    return { name: dep.name, version: dep.version, license: dep.license, reason: 'denied' };
-  }
   if (isUnknown) {
     if (allow.size > 0 && !policy.allowUnknown) {
       return { name: dep.name, version: dep.version, license: 'UNKNOWN', reason: 'unknown' };
     }
     return null;
   }
-  if (allow.size > 0 && !components.some((c) => allow.has(c))) {
+
+  const terms = parseSpdxDnf(dep.license);
+  // Terms that avoid every denied license (a realization the consumer may choose).
+  const undenied = terms.filter((t) => !t.some((c) => deny.has(c)));
+  if (undenied.length === 0) {
+    // No lawful realization avoids a denied license → genuinely denied.
+    return { name: dep.name, version: dep.version, license: dep.license, reason: 'denied' };
+  }
+  if (allow.size > 0 && !undenied.some((t) => t.every((c) => allow.has(c)))) {
+    // A denylist is satisfiable, but no un-denied realization is fully allowed.
     return { name: dep.name, version: dep.version, license: dep.license, reason: 'not-allowed' };
   }
   return null;
