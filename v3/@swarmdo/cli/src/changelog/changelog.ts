@@ -40,6 +40,11 @@ const SUBJECT_RE = /^(\w+)(?:\(([^)]+)\))?(!)?:\s+(.+)$/;
 // The conventional `revert:` type is handled by SUBJECT_RE; this catches the
 // bare git form, which otherwise falls into the hidden `other` bucket.
 const REVERT_RE = /^Revert\s+"(.+)"$/;
+// Conventional Commits: a breaking-change footer MUST be the uppercase token
+// `BREAKING CHANGE` (or `BREAKING-CHANGE`) at the start of a footer line,
+// followed by `: `. Anchoring to a line start avoids a false positive when the
+// phrase merely appears in prose ("this is not a BREAKING CHANGE, just …").
+const BREAKING_RE = /^BREAKING[ -]CHANGE:\s/m;
 
 /** Parse one conventional-commit subject (+ optional body for BREAKING CHANGE). */
 export function parseCommit(hash: string, subject: string, body = ''): ParsedCommit {
@@ -52,21 +57,21 @@ export function parseCommit(hash: string, subject: string, body = ''): ParsedCom
       hash,
       type: 'revert',
       scope: inner ? inner[2] ?? null : null,
-      breaking: /BREAKING[ -]CHANGE/.test(body),
+      breaking: BREAKING_RE.test(body),
       subject: inner ? inner[4].trim() : rev[1].trim(),
       raw: trimmed,
     };
   }
   const m = SUBJECT_RE.exec(trimmed);
   if (!m) {
-    return { hash, type: null, scope: null, breaking: /BREAKING[ -]CHANGE/.test(body), subject: subject.trim(), raw: subject.trim() };
+    return { hash, type: null, scope: null, breaking: BREAKING_RE.test(body), subject: subject.trim(), raw: subject.trim() };
   }
   const [, type, scope, bang, desc] = m;
   return {
     hash,
     type: type.toLowerCase(),
     scope: scope ?? null,
-    breaking: bang === '!' || /BREAKING[ -]CHANGE/.test(body),
+    breaking: bang === '!' || BREAKING_RE.test(body),
     subject: desc.trim(),
     raw: subject.trim(),
   };

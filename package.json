@@ -1,6 +1,6 @@
 {
   "name": "swarmdo",
-  "version": "1.25.0",
+  "version": "1.25.1",
   "description": "Swarmdo - Enterprise AI agent orchestration for Claude Code. Deploy 60+ specialized agents in coordinated swarms with self-learning, fault-tolerant consensus, vector memory, and MCP integration",
   "main": "dist/index.js",
   "type": "module",

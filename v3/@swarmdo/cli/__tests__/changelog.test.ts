@@ -19,9 +19,17 @@ describe('changelog: parseCommit', () => {
   it('parses type with no scope', () => {
     expect(parseCommit('h', 'fix: correct off-by-one')).toMatchObject({ type: 'fix', scope: null, subject: 'correct off-by-one' });
   });
-  it('detects breaking via ! and via BREAKING CHANGE body', () => {
+  it('detects breaking via ! and via a BREAKING CHANGE footer', () => {
     expect(parseCommit('h', 'feat(api)!: drop v1').breaking).toBe(true);
     expect(parseCommit('h', 'feat(api): change', 'BREAKING CHANGE: removed foo').breaking).toBe(true);
+    expect(parseCommit('h', 'feat(api): change', 'body\n\nBREAKING-CHANGE: removed foo').breaking).toBe(true);
+  });
+  it('does NOT flag breaking when the phrase only appears in prose', () => {
+    expect(parseCommit('h', 'refactor: rename', 'Note: this is not a BREAKING CHANGE, just a rename.').breaking).toBe(false);
+    // no colon+space after the token → not a footer
+    expect(parseCommit('h', 'docs: x', 'discusses BREAKING CHANGE handling').breaking).toBe(false);
+    // "BREAKING CHANGES:" (plural) is not the spec token
+    expect(parseCommit('h', 'docs: x', 'BREAKING CHANGES: none').breaking).toBe(false);
   });
   it('treats non-conventional subjects as type null', () => {
     const c = parseCommit('h', 'wip stuff');
