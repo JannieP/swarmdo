@@ -87,6 +87,22 @@ not ok 4 - subtracts`;
   it('captures a bare not-ok without diagnostics', () => {
     expect(s.failures.find((x) => x.name === 'subtracts')).toBeTruthy();
   });
+  it('surfaces a `Bail out!` instead of letting an aborted suite look clean', () => {
+    // suite bails after 1 pass — a naive parser reports "1 passed, 0 failed ✓"
+    const r = parseTAP('TAP version 13\n1..50\nok 1 - a\nBail out! Database unavailable\nok 2 - b');
+    expect(r.bailedOut).toBe(true);
+    expect(r.bailReason).toBe('Database unavailable');
+    expect(r.passed).toBe(1); // counting stops at the bail; the trailing ok 2 is ignored
+    expect(r.failed).toBe(0);
+  });
+  it('handles a bare `Bail out!` with no reason', () => {
+    const r = parseTAP('1..2\nok 1\nBail out!');
+    expect(r.bailedOut).toBe(true);
+    expect(r.bailReason).toBeUndefined();
+  });
+  it('leaves bailedOut unset for a normal run', () => {
+    expect(parseTAP('1..1\nok 1 - a').bailedOut).toBeUndefined();
+  });
 });
 
 describe('extractFileLine', () => {
@@ -131,5 +147,21 @@ describe('formatSummary', () => {
     const out = formatSummary(parseJUnit(JUNIT));
     expect(out).toContain('✗ math › divides');
     expect(out).toContain('src/math.ts:14');
+  });
+  it('marks an aborted (bailed) suite instead of showing a clean ✓', () => {
+    const out = formatSummary({ passed: 1, failed: 0, skipped: 0, total: 1, durationMs: 0, failures: [], bailedOut: true, bailReason: 'DB down' });
+    expect(out).toContain('⚠ suite ABORTED');
+    expect(out).toContain('DB down');
+    expect(out).not.toContain('✓');
+  });
+});
+
+describe('mergeSummaries bail propagation', () => {
+  it('taints the merged run if any file bailed', () => {
+    const clean = { passed: 2, failed: 0, skipped: 0, total: 2, durationMs: 0, failures: [] };
+    const bailed = { passed: 1, failed: 0, skipped: 0, total: 1, durationMs: 0, failures: [], bailedOut: true, bailReason: 'oom' };
+    const m = mergeSummaries([clean, bailed]);
+    expect(m.bailedOut).toBe(true);
+    expect(m.bailReason).toBe('oom');
   });
 });

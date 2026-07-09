@@ -95,7 +95,8 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
     output.writeln(formatSummary(summary, { top: top > 0 ? top : undefined }));
   }
 
-  const code = ci && summary.failed > 0 ? 1 : 0;
+  // A bail-out aborts the suite → results are incomplete → treat as failure in CI.
+  const code = ci && (summary.failed > 0 || summary.bailedOut) ? 1 : 0;
   return { success: code === 0, exitCode: code };
 }
 

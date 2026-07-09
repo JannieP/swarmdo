@@ -31,6 +31,14 @@ export interface TestSummary {
   total: number;
   durationMs: number;
   failures: TestFailure[];
+  /**
+   * True if a TAP `Bail out!` line aborted the run. The counts are then
+   * INCOMPLETE — the suite stopped early, so a "0 failed" here does NOT mean
+   * the suite passed. Callers/CI must treat this as a failure.
+   */
+  bailedOut?: boolean;
+  /** Optional reason text following `Bail out!`. */
+  bailReason?: string;
 }
 
 /** Decode the five predefined XML entities. Pure. */
@@ -130,10 +138,16 @@ export function parseJUnit(xml: string): TestSummary {
 export function parseTAP(text: string): TestSummary {
   const failures: TestFailure[] = [];
   let passed = 0, failed = 0, skipped = 0;
+  let bailedOut = false;
+  let bailReason: string | undefined;
   const lines = text.split('\n');
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
+    // `Bail out!` (column 1, per the TAP spec) aborts the run — stop parsing;
+    // anything after it is not a valid result.
+    const bail = line.match(/^Bail out!(?:\s+(.*))?$/);
+    if (bail) { bailedOut = true; bailReason = bail[1]?.trim() || undefined; break; }
     const m = line.match(/^(ok|not ok)\b\s*(\d+)?\s*-?\s*(.*)$/);
     if (!m) continue;
     const ok = m[1] === 'ok';
@@ -164,7 +178,7 @@ export function parseTAP(text: string): TestSummary {
       failures.push({ suite: '', name: desc || '(unnamed)', message, file, line: lineNo });
     }
   }
-  return { passed, failed, skipped, total: passed + failed + skipped, durationMs: 0, failures };
+  return { passed, failed, skipped, total: passed + failed + skipped, durationMs: 0, failures, ...(bailedOut && { bailedOut, bailReason }) };
 }
 
 /** Sniff the format from a path extension, then content. Pure. */
@@ -185,7 +199,7 @@ export function parseTestReport(content: string, format: TestFormat): TestSummar
 
 /** Merge several summaries (multi-file globs). Pure. */
 export function mergeSummaries(list: TestSummary[]): TestSummary {
-  return list.reduce<TestSummary>(
+  const merged = list.reduce<TestSummary>(
     (acc, s) => ({
       passed: acc.passed + s.passed,
       failed: acc.failed + s.failed,
@@ -196,14 +210,24 @@ export function mergeSummaries(list: TestSummary[]): TestSummary {
     }),
     { passed: 0, failed: 0, skipped: 0, total: 0, durationMs: 0, failures: [] },
   );
+  // Any bailed file taints the whole run; keep the first reason seen.
+  const bailed = list.find((s) => s.bailedOut);
+  if (bailed) { merged.bailedOut = true; merged.bailReason = bailed.bailReason; }
+  return merged;
 }
 
 /** Human-readable digest. Pure. */
 export function formatSummary(s: TestSummary, opts: { top?: number } = {}): string {
   const head = `${s.passed} passed · ${s.failed} failed · ${s.skipped} skipped (${s.total} total, ${s.durationMs}ms)`;
-  if (s.failures.length === 0) return head + (s.failed === 0 ? ' ✓' : '');
+  const bailLine = s.bailedOut
+    ? `⚠ suite ABORTED (Bail out!${s.bailReason ? `: ${s.bailReason}` : ''}) — results incomplete`
+    : '';
+  if (s.failures.length === 0) {
+    if (s.bailedOut) return `${bailLine}\n${head}`;
+    return head + (s.failed === 0 ? ' ✓' : '');
+  }
   const shown = opts.top && opts.top > 0 ? s.failures.slice(0, opts.top) : s.failures;
-  const lines = [head, ''];
+  const lines = s.bailedOut ? [bailLine, head, ''] : [head, ''];
   for (const f of shown) {
     const where = f.file ? `${f.file}${f.line ? `:${f.line}` : ''}` : '';
     lines.push(`✗ ${f.suite ? f.suite + ' › ' : ''}${f.name}${where ? `  (${where})` : ''}`);
