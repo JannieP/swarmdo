@@ -41,6 +41,13 @@ export interface ImportEdge {
   resolved: string | null;
   /** 1-based line of the import */
   line: number;
+  /**
+   * True for a TypeScript type-only import/export (`import type …`,
+   * `export type … from …`). These are erased at compile time (with
+   * isolatedModules/verbatimModuleSyntax) so they create NO runtime dependency
+   * — relevant to cycle detection, where a type-only "cycle" is benign.
+   */
+  isTypeOnly?: boolean;
 }
 
 export interface CodeIndex {
@@ -111,12 +118,15 @@ const IMPORT_RES: RegExp[] = [
 ];
 
 /** Extract the raw import specifiers from one source file. Pure. */
-export function extractImports(source: string, file: string): Array<{ from: string; spec: string; line: number }> {
-  const out: Array<{ from: string; spec: string; line: number }> = [];
+export function extractImports(source: string, file: string): Array<{ from: string; spec: string; line: number; isTypeOnly: boolean }> {
+  const out: Array<{ from: string; spec: string; line: number; isTypeOnly: boolean }> = [];
   const lines = source.split('\n');
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     if (!/\b(?:from|import|require)\b/.test(line)) continue;
+    // A whole-import type-only form: `import type …` / `export type …`. NOT
+    // inline `import { type X }` (mixed with value imports → still a runtime edge).
+    const isTypeOnly = /^\s*(?:import|export)\s+type\b/.test(line);
     const seen = new Set<string>();
     for (const re of IMPORT_RES) {
       re.lastIndex = 0;
@@ -125,7 +135,7 @@ export function extractImports(source: string, file: string): Array<{ from: stri
         const spec = m[1];
         if (seen.has(spec)) continue; // same spec caught by two patterns on one line
         seen.add(spec);
-        out.push({ from: file, spec, line: i + 1 });
+        out.push({ from: file, spec, line: i + 1, isTypeOnly });
       }
     }
   }

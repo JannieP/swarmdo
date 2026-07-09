@@ -18,6 +18,7 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
   const root = ctx.cwd || process.cwd();
   const asJson = ctx.flags.format === 'json';
   const ci = ctx.flags.ci === true;
+  const includeTypeOnly = ctx.flags['include-type-only'] === true;
 
   let index = loadIndex(root);
   if (!index) {
@@ -25,7 +26,7 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
     try { saveIndex(root, index); } catch { /* read-only fs — index is in memory */ }
   }
 
-  const res = findCycles(index);
+  const res = findCycles(index, { includeTypeOnly });
   const count = res.cycles.length + res.selfLoops.length;
 
   if (asJson) {
@@ -44,10 +45,12 @@ export const cyclesCommand: Command = {
   description: 'Find circular import dependencies via the import graph (madge --circular style) — catch the TDZ/undefined-export bugs they cause',
   options: [
     { name: 'ci', description: 'exit 1 if any circular dependency exists (gate a build)', type: 'boolean' },
+    { name: 'include-type-only', description: 'also count TypeScript `import type` edges (excluded by default — they erase at compile time and cause no runtime cycle)', type: 'boolean' },
   ],
   examples: [
     { command: 'swarmdo cycles', description: 'List circular imports in the repo' },
     { command: 'swarmdo cycles --ci', description: 'Fail CI when a cycle is introduced' },
+    { command: 'swarmdo cycles --include-type-only', description: 'Strict view: count type-only imports too' },
   ],
   action: run,
 };

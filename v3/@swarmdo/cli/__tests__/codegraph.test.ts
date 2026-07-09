@@ -156,6 +156,23 @@ describe('extractImports', () => {
     // one line, spec './x' should appear once (per-line dedupe)
     expect(imps.filter((i) => i.spec === './x')).toHaveLength(1);
   });
+  it('flags whole-import type-only forms, not value or inline-type imports', () => {
+    const src = [
+      "import type { A } from './a';",       // type-only
+      "export type { B } from './b';",       // type-only
+      "import type * as C from './c';",      // type-only
+      "import { d } from './d';",            // value
+      "import { type E, f } from './e';",    // inline type + value → NOT type-only (runtime edge)
+      "import typescript from './ts';",      // 'typescript' must not match `type`
+    ].join('\n');
+    const byspec = Object.fromEntries(extractImports(src, 'x.ts').map((i) => [i.spec, i.isTypeOnly]));
+    expect(byspec['./a']).toBe(true);
+    expect(byspec['./b']).toBe(true);
+    expect(byspec['./c']).toBe(true);
+    expect(byspec['./d']).toBe(false);
+    expect(byspec['./e']).toBe(false);
+    expect(byspec['./ts']).toBe(false);
+  });
 });
 
 describe('resolveImport', () => {

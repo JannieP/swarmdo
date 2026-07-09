@@ -14,8 +14,19 @@
 
 import type { CodeIndex } from '../codegraph/codegraph.js';
 
+export interface CycleOptions {
+  /**
+   * Include TypeScript `import type`/`export type` edges. They erase at compile
+   * time so a type-only "cycle" causes none of the runtime bugs this detector
+   * exists to catch — excluded by DEFAULT to avoid false positives. Set true for
+   * a strict structural view. An edge counts as a runtime edge if ANY import
+   * between the two files is a value import (mixed imports keep the edge).
+   */
+  includeTypeOnly?: boolean;
+}
+
 /** Build file → sorted list of internal (resolved) imports. Pure. */
-export function buildAdjacency(index: CodeIndex): Map<string, string[]> {
+export function buildAdjacency(index: CodeIndex, opts: CycleOptions = {}): Map<string, string[]> {
   const adj = new Map<string, string[]>();
   const ensure = (f: string) => {
     let l = adj.get(f);
@@ -24,6 +35,7 @@ export function buildAdjacency(index: CodeIndex): Map<string, string[]> {
   };
   for (const e of index.imports) {
     if (!e.resolved) continue; // external — not part of internal cycles
+    if (e.isTypeOnly && !opts.includeTypeOnly) continue; // type-only → no runtime edge
     const l = ensure(e.from);
     if (!l.includes(e.resolved)) l.push(e.resolved);
     ensure(e.resolved); // make sure the target is a node too
@@ -104,8 +116,8 @@ export interface CycleResult {
  * it has ≥2 files (mutual reachability) or a single file with a self-edge.
  * Deterministic: groups sorted by size desc then first member.
  */
-export function findCycles(index: CodeIndex): CycleResult {
-  const adj = buildAdjacency(index);
+export function findCycles(index: CodeIndex, opts: CycleOptions = {}): CycleResult {
+  const adj = buildAdjacency(index, opts);
   const selfLoops: string[] = [];
   for (const [from, tos] of adj) if (tos.includes(from)) selfLoops.push(from);
   selfLoops.sort();
