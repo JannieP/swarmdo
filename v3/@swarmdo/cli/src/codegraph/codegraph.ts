@@ -202,14 +202,29 @@ function joinRelative(fromFile: string, spec: string): string {
 const RESOLVE_EXTS = ['', '.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs', '.mts', '.cts'];
 
 /**
- * Resolve a spec to a repo-relative file in `fileSet`, or null. Only relative
- * specs (`.`/`..`) resolve; bare specifiers (packages, aliases, `node:`) are
- * external → null. Tries the path as-is, common extensions, and `/index.*`,
- * and rewrites a `.js` spec to its `.ts` sibling (TS ESM convention).
+ * A tsconfig `paths` / workspace alias: a bare-specifier pattern mapped to a
+ * repo-relative target (baseUrl already applied), each optionally containing a
+ * single star wildcard — e.g. pattern `@swarmdo/[star]` → target
+ * `v3/@swarmdo/[star]/src`, where `[star]` captures the remaining spec.
  */
-export function resolveImport(fromFile: string, spec: string, fileSet: Set<string>): string | null {
-  if (!spec.startsWith('.')) return null;
-  const base = joinRelative(fromFile, spec);
+export interface ImportAlias {
+  pattern: string;
+  target: string;
+}
+
+/** Substitute a spec through one alias (with `*` wildcard), or null if no match. Pure. */
+function applyAlias(pattern: string, target: string, spec: string): string | null {
+  const star = pattern.indexOf('*');
+  if (star < 0) return spec === pattern ? target : null;
+  const prefix = pattern.slice(0, star);
+  const suffix = pattern.slice(star + 1);
+  if (spec.length < prefix.length + suffix.length || !spec.startsWith(prefix) || !spec.endsWith(suffix)) return null;
+  const mid = spec.slice(prefix.length, spec.length - suffix.length);
+  return target.includes('*') ? target.replace('*', mid) : target;
+}
+
+/** Resolve a bare repo-relative base path to a file in `fileSet` (exts + /index + .js→.ts). Pure. */
+function resolveInFileSet(base: string, fileSet: Set<string>): string | null {
   const bases = [base];
   const jsExt = base.match(/\.(js|jsx|mjs|cjs)$/);
   if (jsExt) bases.push(base.slice(0, -jsExt[0].length)); // ./x.js → try ./x(.ts…)
@@ -224,15 +239,33 @@ export function resolveImport(fromFile: string, spec: string, fileSet: Set<strin
   return null;
 }
 
-/** Build an index from already-read files. Pure. */
-export function buildIndex(files: Array<{ file: string; source: string }>): CodeIndex {
+/**
+ * Resolve a spec to a repo-relative file in `fileSet`, or null. Relative specs
+ * (`.`/`..`) resolve against the importing file's dir. Bare specifiers resolve
+ * only if they match a tsconfig-`paths`/workspace `alias` — otherwise they're
+ * external (packages, `node:`) → null. Tries common extensions and `/index.*`,
+ * and rewrites a `.js` spec to its `.ts` sibling (TS ESM convention). Pure.
+ */
+export function resolveImport(fromFile: string, spec: string, fileSet: Set<string>, aliases: ImportAlias[] = []): string | null {
+  if (spec.startsWith('.')) return resolveInFileSet(joinRelative(fromFile, spec), fileSet);
+  for (const a of aliases) {
+    const cand = applyAlias(a.pattern, a.target, spec);
+    if (cand == null) continue;
+    const r = resolveInFileSet(cand, fileSet);
+    if (r) return r;
+  }
+  return null;
+}
+
+/** Build an index from already-read files. `aliases` resolve bare-specifier internal imports. Pure. */
+export function buildIndex(files: Array<{ file: string; source: string }>, aliases: ImportAlias[] = []): CodeIndex {
   const symbols: CodeSymbol[] = [];
   const fileSet = new Set(files.map((f) => f.file));
   const imports: ImportEdge[] = [];
   for (const { file, source } of files) {
     symbols.push(...extractSymbols(source, file));
     for (const imp of extractImports(source, file)) {
-      imports.push({ ...imp, resolved: resolveImport(imp.from, imp.spec, fileSet) });
+      imports.push({ ...imp, resolved: resolveImport(imp.from, imp.spec, fileSet, aliases) });
     }
   }
   // Stable order: file, then line.

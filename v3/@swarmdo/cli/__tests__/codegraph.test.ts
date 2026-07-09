@@ -1,4 +1,7 @@
 import { describe, it, expect } from 'vitest';
+import * as fs from 'node:fs';
+import * as os from 'node:os';
+import * as path from 'node:path';
 import {
   extractSymbols,
   extractImports,
@@ -10,6 +13,7 @@ import {
   fileImporters,
   indexStats,
 } from '../src/codegraph/codegraph.ts';
+import { parseTsconfigAliases } from '../src/codegraph/store.ts';
 
 const SAMPLE = `
 import { x } from './x.js';
@@ -213,6 +217,44 @@ describe('resolveImport', () => {
     expect(resolveImport('src/x.ts', 'node:fs', files)).toBeNull();
     expect(resolveImport('src/x.ts', 'lodash', files)).toBeNull();
     expect(resolveImport('src/x.ts', './missing', files)).toBeNull();
+  });
+  it('resolves a bare specifier via a tsconfig-paths alias (exact and wildcard)', () => {
+    const fs2 = new Set(['packages/b/index.ts', 'packages/shared/src/index.ts']);
+    const aliases = [
+      { pattern: '@org/b', target: 'packages/b' }, // exact → dir index
+      { pattern: '@org/*', target: 'packages/*/src' }, // wildcard: @org/shared → packages/shared/src → index
+    ];
+    expect(resolveImport('packages/a/index.ts', '@org/b', fs2, aliases)).toBe('packages/b/index.ts');
+    expect(resolveImport('packages/a/index.ts', '@org/shared', fs2, aliases)).toBe('packages/shared/src/index.ts');
+    // a bare spec matching no alias is still external
+    expect(resolveImport('packages/a/index.ts', 'lodash', fs2, aliases)).toBeNull();
+  });
+});
+
+describe('parseTsconfigAliases', () => {
+  it('derives repo-relative aliases from tsconfig paths + baseUrl (JSONC tolerant)', () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cg-tsconfig-'));
+    fs.writeFileSync(path.join(dir, 'tsconfig.json'), `{
+      // a JSONC comment
+      "compilerOptions": {
+        "baseUrl": "src",
+        "paths": {
+          "@app/shared": ["shared/index.ts"],
+          "@app/*": ["packages/*"],   /* wildcard */
+        },
+      },
+    }`);
+    const aliases = parseTsconfigAliases(dir);
+    expect(aliases).toContainEqual({ pattern: '@app/shared', target: 'src/shared/index.ts' });
+    expect(aliases).toContainEqual({ pattern: '@app/*', target: 'src/packages/*' });
+    fs.rmSync(dir, { recursive: true, force: true });
+  });
+  it('returns [] when there is no tsconfig or no paths', () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cg-nots-'));
+    expect(parseTsconfigAliases(dir)).toEqual([]); // no tsconfig
+    fs.writeFileSync(path.join(dir, 'tsconfig.json'), '{"compilerOptions":{}}');
+    expect(parseTsconfigAliases(dir)).toEqual([]); // no paths
+    fs.rmSync(dir, { recursive: true, force: true });
   });
 });
 
