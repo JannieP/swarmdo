@@ -84,6 +84,21 @@ describe('buildCycloneDX', () => {
     expect(nl.licenses).toBeUndefined();
     expect(nl.hashes).toBeUndefined();
   });
+  it('emits CycloneDX scope: dev → excluded, optional → optional, runtime → omitted', () => {
+    const lock = {
+      name: 'app', version: '1.0.0', lockfileVersion: 3,
+      packages: {
+        '': { name: 'app', version: '1.0.0' },
+        'node_modules/prod': { version: '1.0.0' },
+        'node_modules/devdep': { version: '2.0.0', dev: true },
+        'node_modules/optdep': { version: '3.0.0', optional: true },
+      },
+    };
+    const comps = buildCycloneDX(componentsFromNpmLock(lock), { name: 'app', version: '1.0.0' }).components as any[];
+    expect(comps.find((c) => c.name === 'prod').scope).toBeUndefined(); // implicit required
+    expect(comps.find((c) => c.name === 'devdep').scope).toBe('excluded');
+    expect(comps.find((c) => c.name === 'optdep').scope).toBe('optional');
+  });
   it('is deterministic (no timestamp) — stable across calls', () => {
     const a = JSON.stringify(buildCycloneDX(componentsFromNpmLock(LOCK), { name: 'my-app', version: '1.0.0' }));
     const b = JSON.stringify(buildCycloneDX(componentsFromNpmLock(LOCK), { name: 'my-app', version: '1.0.0' }));

@@ -19,6 +19,7 @@ export interface Component {
   /** hex-encoded integrity, with its algorithm */
   hash?: { alg: string; content: string };
   dev?: boolean;
+  optional?: boolean;
 }
 
 interface NpmLockEntry {
@@ -100,6 +101,7 @@ export function componentsFromNpmLock(lock: NpmLock, opts: ComponentOptions = {}
       if (h) comp.hash = h;
     }
     if (entry.dev) comp.dev = true;
+    if (entry.optional) comp.optional = true;
     out.push(comp);
   }
   out.sort((a, b) => (a.name === b.name ? a.version.localeCompare(b.version) : a.name.localeCompare(b.name)));
@@ -143,6 +145,11 @@ export function buildCycloneDX(components: Component[], meta: BomMeta): Record<s
     },
     components: components.map((c) => {
       const comp: Record<string, unknown> = { type: 'library', name: c.name, version: c.version, purl: c.purl };
+      // CycloneDX 1.5 `scope`: dev-only deps are `excluded` (not shipped),
+      // optional deps are `optional`; a required runtime dep omits it (implicit
+      // `required`), keeping the common case clean. dev wins over optional.
+      const scope = c.dev ? 'excluded' : c.optional ? 'optional' : undefined;
+      if (scope) comp.scope = scope;
       if (c.hash) comp.hashes = [{ alg: c.hash.alg, content: c.hash.content }];
       if (c.license) comp.licenses = [cdxLicenseEntry(c.license)];
       return comp;
