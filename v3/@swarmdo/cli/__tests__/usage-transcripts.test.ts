@@ -150,6 +150,19 @@ describe('claude-pricing', () => {
       transcriptCostUsd(price, { inputTokens: 100, outputTokens: 200, cacheWriteTokens: 1000, cacheReadTokens: 5000 }),
     ).toBeCloseTo(SONNET_COST, 10);
   });
+
+  it('prices 1-hour-TTL cache writes at 2× input, not the 1.25× 5-min rate', () => {
+    const price = resolveTranscriptPrice('claude-sonnet-4-6')!; // in 3, cacheWrite 3.75, cacheWrite1h 6
+    // 1000 write tokens, ALL 1-hour: should cost 1000 × 6/Mtok, not 1000 × 3.75/Mtok
+    const all1h = transcriptCostUsd(price, { inputTokens: 0, outputTokens: 0, cacheWriteTokens: 1000, cacheWrite1hTokens: 1000, cacheReadTokens: 0 });
+    expect(all1h).toBeCloseTo((1000 * 6) / 1_000_000, 12);
+    // split 600 5-min + 400 1-hour
+    const split = transcriptCostUsd(price, { inputTokens: 0, outputTokens: 0, cacheWriteTokens: 1000, cacheWrite1hTokens: 400, cacheReadTokens: 0 });
+    expect(split).toBeCloseTo((600 * 3.75 + 400 * 6) / 1_000_000, 12);
+    // no split field → all priced at the 5-min rate (back-compat with old transcripts)
+    const legacy = transcriptCostUsd(price, { inputTokens: 0, outputTokens: 0, cacheWriteTokens: 1000, cacheReadTokens: 0 });
+    expect(legacy).toBeCloseTo((1000 * 3.75) / 1_000_000, 12);
+  });
 });
 
 describe('collectUsage', () => {

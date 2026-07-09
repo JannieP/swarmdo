@@ -17,7 +17,10 @@
 export interface TranscriptModelPrice {
   in: number;
   out: number;
+  /** 5-minute-TTL cache write (1.25× base input) */
   cacheWrite: number;
+  /** 1-hour-TTL cache write (2× base input) */
+  cacheWrite1h: number;
   cacheRead: number;
 }
 
@@ -29,14 +32,14 @@ export interface TranscriptModelPrice {
  * publishes rates — absent means "unpriced", never "guessed".
  */
 const PRICE_FAMILIES: Record<string, TranscriptModelPrice> = {
-  'claude-opus-4': { in: 15, out: 75, cacheWrite: 18.75, cacheRead: 1.5 },
-  'claude-sonnet-4': { in: 3, out: 15, cacheWrite: 3.75, cacheRead: 0.3 },
-  'claude-haiku-4': { in: 1, out: 5, cacheWrite: 1.25, cacheRead: 0.1 },
-  'claude-3-7-sonnet': { in: 3, out: 15, cacheWrite: 3.75, cacheRead: 0.3 },
-  'claude-3-5-sonnet': { in: 3, out: 15, cacheWrite: 3.75, cacheRead: 0.3 },
-  'claude-3-5-haiku': { in: 0.8, out: 4, cacheWrite: 1, cacheRead: 0.08 },
-  'claude-3-opus': { in: 15, out: 75, cacheWrite: 18.75, cacheRead: 1.5 },
-  'claude-3-haiku': { in: 0.25, out: 1.25, cacheWrite: 0.3, cacheRead: 0.03 },
+  'claude-opus-4': { in: 15, out: 75, cacheWrite: 18.75, cacheWrite1h: 30, cacheRead: 1.5 },
+  'claude-sonnet-4': { in: 3, out: 15, cacheWrite: 3.75, cacheWrite1h: 6, cacheRead: 0.3 },
+  'claude-haiku-4': { in: 1, out: 5, cacheWrite: 1.25, cacheWrite1h: 2, cacheRead: 0.1 },
+  'claude-3-7-sonnet': { in: 3, out: 15, cacheWrite: 3.75, cacheWrite1h: 6, cacheRead: 0.3 },
+  'claude-3-5-sonnet': { in: 3, out: 15, cacheWrite: 3.75, cacheWrite1h: 6, cacheRead: 0.3 },
+  'claude-3-5-haiku': { in: 0.8, out: 4, cacheWrite: 1, cacheWrite1h: 1.6, cacheRead: 0.08 },
+  'claude-3-opus': { in: 15, out: 75, cacheWrite: 18.75, cacheWrite1h: 30, cacheRead: 1.5 },
+  'claude-3-haiku': { in: 0.25, out: 1.25, cacheWrite: 0.3, cacheWrite1h: 0.5, cacheRead: 0.03 },
 };
 
 /**
@@ -74,16 +77,22 @@ export function resolveTranscriptPrice(rawModelId: string): TranscriptModelPrice
 export interface TokenBundle {
   inputTokens: number;
   outputTokens: number;
+  /** TOTAL cache-write tokens (5-min + 1-hour). */
   cacheWriteTokens: number;
+  /** The 1-hour-TTL SUBSET of cacheWriteTokens (≤ cacheWriteTokens). Default 0 → all writes priced at the 5-min rate. */
+  cacheWrite1hTokens?: number;
   cacheReadTokens: number;
 }
 
 /** USD for one response at the given rates. */
 export function transcriptCostUsd(price: TranscriptModelPrice, t: TokenBundle): number {
+  const cacheWrite1h = t.cacheWrite1hTokens ?? 0;
+  const cacheWrite5m = Math.max(0, t.cacheWriteTokens - cacheWrite1h);
   return (
     (t.inputTokens * price.in +
       t.outputTokens * price.out +
-      t.cacheWriteTokens * price.cacheWrite +
+      cacheWrite5m * price.cacheWrite +
+      cacheWrite1h * price.cacheWrite1h +
       t.cacheReadTokens * price.cacheRead) / 1_000_000
   );
 }

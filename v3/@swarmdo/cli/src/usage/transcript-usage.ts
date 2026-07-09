@@ -153,6 +153,11 @@ interface TranscriptLine {
       output_tokens?: number;
       cache_creation_input_tokens?: number;
       cache_read_input_tokens?: number;
+      /** Per-TTL breakdown of cache writes (present on recent transcripts). */
+      cache_creation?: {
+        ephemeral_5m_input_tokens?: number;
+        ephemeral_1h_input_tokens?: number;
+      };
     };
   };
 }
@@ -247,6 +252,9 @@ function toUsageEvent(
     cacheWriteTokens: usage.cache_creation_input_tokens ?? 0,
     cacheReadTokens: usage.cache_read_input_tokens ?? 0,
   };
+  // 1-hour-TTL cache writes cost 2× base input, not the 1.25× 5-min rate. Recent
+  // transcripts split them in `cache_creation`; older ones don't (→ all 5-min).
+  const cacheWrite1hTokens = usage.cache_creation?.ephemeral_1h_input_tokens ?? 0;
 
   let costUsd: number;
   let costSource: UsageEvent['costSource'];
@@ -255,7 +263,7 @@ function toUsageEvent(
     costUsd = line.costUSD;
     costSource = 'transcript';
   } else if (price) {
-    costUsd = transcriptCostUsd(price, tokens);
+    costUsd = transcriptCostUsd(price, { ...tokens, cacheWrite1hTokens });
     costSource = 'computed';
   } else {
     costUsd = 0;

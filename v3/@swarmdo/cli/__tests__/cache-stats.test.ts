@@ -7,7 +7,7 @@ const totals = (o: Partial<UsageTotals>): UsageTotals => ({
   totalTokens: 0, costUsd: 0, entries: 0, ...o,
 });
 // sonnet-like rates: in 3, write 3.75 (1.25×), read 0.3 (0.1×)
-const price = { in: 3, out: 15, cacheWrite: 3.75, cacheRead: 0.3 };
+const price = { in: 3, out: 15, cacheWrite: 3.75, cacheWrite1h: 6, cacheRead: 0.3 };
 const resolver = (m: string) => (m === 'priced' ? price : undefined);
 
 describe('cache-stats: modelCacheSavings', () => {
