@@ -36,10 +36,28 @@ export const SECTIONS: Array<{ type: string; label: string; hidden?: boolean }> 
 ];
 
 const SUBJECT_RE = /^(\w+)(?:\(([^)]+)\))?(!)?:\s+(.+)$/;
+// git's default revert subject: `Revert "<original subject>"` (git-revert(1)).
+// The conventional `revert:` type is handled by SUBJECT_RE; this catches the
+// bare git form, which otherwise falls into the hidden `other` bucket.
+const REVERT_RE = /^Revert\s+"(.+)"$/;
 
 /** Parse one conventional-commit subject (+ optional body for BREAKING CHANGE). */
 export function parseCommit(hash: string, subject: string, body = ''): ParsedCommit {
-  const m = SUBJECT_RE.exec(subject.trim());
+  const trimmed = subject.trim();
+  const rev = REVERT_RE.exec(trimmed);
+  if (rev) {
+    // Recurse into the quoted original subject to lift its scope/description.
+    const inner = SUBJECT_RE.exec(rev[1].trim());
+    return {
+      hash,
+      type: 'revert',
+      scope: inner ? inner[2] ?? null : null,
+      breaking: /BREAKING[ -]CHANGE/.test(body),
+      subject: inner ? inner[4].trim() : rev[1].trim(),
+      raw: trimmed,
+    };
+  }
+  const m = SUBJECT_RE.exec(trimmed);
   if (!m) {
     return { hash, type: null, scope: null, breaking: /BREAKING[ -]CHANGE/.test(body), subject: subject.trim(), raw: subject.trim() };
   }

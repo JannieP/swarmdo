@@ -28,6 +28,17 @@ describe('changelog: parseCommit', () => {
     expect(c.type).toBeNull();
     expect(c.subject).toBe('wip stuff');
   });
+  it('classifies git\'s default `Revert "…"` subject as type revert, lifting inner scope', () => {
+    const c = parseCommit('r1', 'Revert "feat(auth): add OAuth login"', 'This reverts commit deadbeef.');
+    expect(c).toMatchObject({ type: 'revert', scope: 'auth', subject: 'add OAuth login' });
+  });
+  it('handles a revert of a non-conventional subject (no inner scope)', () => {
+    const c = parseCommit('r2', 'Revert "hotfix the thing"');
+    expect(c).toMatchObject({ type: 'revert', scope: null, subject: 'hotfix the thing' });
+  });
+  it('still parses the conventional `revert:` type form', () => {
+    expect(parseCommit('r3', 'revert: undo the change')).toMatchObject({ type: 'revert', subject: 'undo the change' });
+  });
 });
 
 describe('changelog: parseGitLog', () => {
@@ -85,6 +96,12 @@ describe('changelog: renderChangelog', () => {
     const md = renderChangelog([parseCommit('h', 'feat(x)!: big')], {});
     expect(md.indexOf('⚠ Breaking Changes')).toBeGreaterThan(-1);
     expect(md.indexOf('⚠ Breaking Changes')).toBeLessThan(md.indexOf('### Features'));
+  });
+  it('surfaces a git-revert commit in the Reverts section without --all', () => {
+    const md = renderChangelog([parseCommit('r1', 'Revert "feat(auth): add OAuth login"')], {});
+    expect(md).toContain('### Reverts');
+    expect(md).toContain('- **auth:** add OAuth login');
+    expect(md).not.toContain('_No notable changes._');
   });
   it('says so when there are no notable changes', () => {
     expect(renderChangelog([parseCommit('h', 'chore: x')], {})).toContain('_No notable changes._');
