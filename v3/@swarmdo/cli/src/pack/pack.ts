@@ -226,12 +226,33 @@ export function makeIgnoreMatcher(patterns: string[]): (relPath: string) => bool
       return { negate, anchored, re };
     });
 
-  return (relPath: string): boolean => {
+  // Ignored status of a single path (last-match-wins over the ordered rules).
+  const ruleVerdict = (path: string): boolean => {
     let ignored = false;
     for (const r of rules) {
-      const candidates = r.anchored ? [relPath] : [relPath, ...relPath.split('/').map((_, i, a) => a.slice(i).join('/'))];
+      const candidates = r.anchored ? [path] : [path, ...path.split('/').map((_, i, a) => a.slice(i).join('/'))];
       if (candidates.some((c) => r.re.test(c))) ignored = !r.negate;
     }
     return ignored;
+  };
+
+  return (relPath: string): boolean => {
+    // Walk ancestor dirs top-down: once a parent directory is excluded, the file
+    // stays excluded — a negation cannot re-include under an excluded parent
+    // (gitignore(5): "not possible to re-include a file if a parent directory of
+    // that file is excluded").
+    const parts = relPath.split('/').filter(Boolean);
+    let parentIgnored = false;
+    for (let i = 0; i < parts.length; i++) {
+      const isLast = i === parts.length - 1;
+      if (parentIgnored) {
+        if (isLast) return true;
+        continue; // excluded ancestor carries down
+      }
+      const verdict = ruleVerdict(parts.slice(0, i + 1).join('/'));
+      if (isLast) return verdict;
+      parentIgnored = verdict; // this directory prefix carries forward
+    }
+    return false;
   };
 }

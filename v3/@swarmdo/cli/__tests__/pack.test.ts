@@ -159,4 +159,17 @@ describe('makeIgnoreMatcher', () => {
     expect(ig('axxb')).toBe(true);   // stays within one segment
     expect(ig('a/b')).toBe(false);   // does NOT cross a slash
   });
+  it('cannot re-include a file whose parent directory is excluded (gitignore(5))', () => {
+    // git: `git check-ignore build/keep.txt` → still ignored; the negation has no effect
+    const ig = makeIgnoreMatcher(['build/', '!build/keep.txt']);
+    expect(ig('build/keep.txt')).toBe(true);
+    expect(ig('build/other.js')).toBe(true);
+    // but a negation DOES work when the parent dir itself isn't excluded
+    const ig2 = makeIgnoreMatcher(['*.log', '!keep.log']);
+    expect(ig2('keep.log')).toBe(false);
+    // and re-including the dir first, then the file, works (parent not excluded)
+    const ig3 = makeIgnoreMatcher(['dist/*', '!dist/README.md']);
+    expect(ig3('dist/bundle.js')).toBe(true);
+    expect(ig3('dist/README.md')).toBe(false); // dist/ itself not excluded, only its contents
+  });
 });
