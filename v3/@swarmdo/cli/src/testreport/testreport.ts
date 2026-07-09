@@ -32,6 +32,12 @@ export interface TestSummary {
   durationMs: number;
   failures: TestFailure[];
   /**
+   * TAP `# TODO` tests — "not expected to succeed" per the TAP spec, so a
+   * `not ok … # TODO` is a KNOWN-incomplete stub, counted here as a success,
+   * never a failure. Absent (0) for JUnit and TODO-free TAP.
+   */
+  todo?: number;
+  /**
    * True if a TAP `Bail out!` line aborted the run. The counts are then
    * INCOMPLETE — the suite stopped early, so a "0 failed" here does NOT mean
    * the suite passed. Callers/CI must treat this as a failure.
@@ -137,7 +143,7 @@ export function parseJUnit(xml: string): TestSummary {
 /** Parse TAP (Test Anything Protocol) output. Pure. */
 export function parseTAP(text: string): TestSummary {
   const failures: TestFailure[] = [];
-  let passed = 0, failed = 0, skipped = 0;
+  let passed = 0, failed = 0, skipped = 0, todo = 0;
   let bailedOut = false;
   let bailReason: string | undefined;
   const lines = text.split('\n');
@@ -159,6 +165,12 @@ export function parseTAP(text: string): TestSummary {
       skipped++;
       continue;
     }
+    // TODO tests are "not expected to succeed" — a `not ok … # TODO` is a known
+    // stub, not a real failure (TAP spec). Count it as todo, never a failure.
+    if (directive && /todo/i.test(directive[1])) {
+      todo++;
+      continue;
+    }
     if (ok) {
       passed++;
     } else {
@@ -178,7 +190,7 @@ export function parseTAP(text: string): TestSummary {
       failures.push({ suite: '', name: desc || '(unnamed)', message, file, line: lineNo });
     }
   }
-  return { passed, failed, skipped, total: passed + failed + skipped, durationMs: 0, failures, ...(bailedOut && { bailedOut, bailReason }) };
+  return { passed, failed, skipped, total: passed + failed + skipped + todo, durationMs: 0, failures, ...(todo && { todo }), ...(bailedOut && { bailedOut, bailReason }) };
 }
 
 /** Sniff the format from a path extension, then content. Pure. */
@@ -210,6 +222,8 @@ export function mergeSummaries(list: TestSummary[]): TestSummary {
     }),
     { passed: 0, failed: 0, skipped: 0, total: 0, durationMs: 0, failures: [] },
   );
+  const todoSum = list.reduce((n, s) => n + (s.todo ?? 0), 0);
+  if (todoSum > 0) merged.todo = todoSum;
   // Any bailed file taints the whole run; keep the first reason seen.
   const bailed = list.find((s) => s.bailedOut);
   if (bailed) { merged.bailedOut = true; merged.bailReason = bailed.bailReason; }
@@ -218,7 +232,8 @@ export function mergeSummaries(list: TestSummary[]): TestSummary {
 
 /** Human-readable digest. Pure. */
 export function formatSummary(s: TestSummary, opts: { top?: number } = {}): string {
-  const head = `${s.passed} passed · ${s.failed} failed · ${s.skipped} skipped (${s.total} total, ${s.durationMs}ms)`;
+  const todoSeg = s.todo ? ` · ${s.todo} todo` : '';
+  const head = `${s.passed} passed · ${s.failed} failed · ${s.skipped} skipped${todoSeg} (${s.total} total, ${s.durationMs}ms)`;
   const bailLine = s.bailedOut
     ? `⚠ suite ABORTED (Bail out!${s.bailReason ? `: ${s.bailReason}` : ''}) — results incomplete`
     : '';

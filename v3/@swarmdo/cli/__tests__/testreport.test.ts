@@ -103,6 +103,17 @@ not ok 4 - subtracts`;
   it('leaves bailedOut unset for a normal run', () => {
     expect(parseTAP('1..1\nok 1 - a').bailedOut).toBeUndefined();
   });
+  it('counts `# TODO` tests as todo, never as failures (TAP spec)', () => {
+    const r = parseTAP('1..3\nok 1 - works\nnot ok 2 - halting problem # TODO unsolved\nnot ok 3 - real bug');
+    expect(r.passed).toBe(1);
+    expect(r.failed).toBe(1); // only the real not-ok
+    expect(r.todo).toBe(1);
+    expect(r.total).toBe(3);
+    expect(r.failures.map((f) => f.name)).toEqual(['real bug']); // the TODO is NOT a failure
+  });
+  it('counts an unexpectedly-passing `ok # TODO` as todo too', () => {
+    expect(parseTAP('1..1\nok 1 - surprise # TODO not done yet').todo).toBe(1);
+  });
 });
 
 describe('extractFileLine', () => {
