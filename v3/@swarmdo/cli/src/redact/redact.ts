@@ -69,6 +69,7 @@ export const RULES: RedactRule[] = [
   { id: 'anthropic-key', description: 'Anthropic API key', regex: /\bsk-ant-[0-9A-Za-z-]{16,}\b/g },
   { id: 'openai-key', description: 'OpenAI API key', regex: /\bsk-(?:proj-)?[0-9A-Za-z]{20,}\b/g },
   { id: 'google-api-key', description: 'Google API key', regex: /\bAIza[0-9A-Za-z_-]{35}\b/g },
+  { id: 'google-oauth-token', description: 'Google OAuth access token', regex: /\bya29\.[0-9A-Za-z_-]{20,}/g },
   { id: 'slack-token', description: 'Slack token', regex: /\bxox[baprs]-[0-9A-Za-z-]{10,}\b/g },
   { id: 'slack-webhook', description: 'Slack incoming webhook', regex: /https:\/\/hooks\.slack\.com\/services\/T[0-9A-Za-z_]+\/B[0-9A-Za-z_]+\/[0-9A-Za-z_]+/g },
   { id: 'stripe-key', description: 'Stripe secret/restricted key', regex: /\b(?:sk|rk)_live_[0-9A-Za-z]{24,}\b/g },
@@ -76,6 +77,10 @@ export const RULES: RedactRule[] = [
   { id: 'twilio-key', description: 'Twilio API key SID', regex: /\bSK[0-9a-fA-F]{32}\b/g },
   { id: 'npm-token', description: 'npm access token', regex: /\bnpm_[0-9A-Za-z]{36}\b/g },
   { id: 'jwt', description: 'JSON Web Token', regex: /\beyJ[0-9A-Za-z_-]{10,}\.eyJ[0-9A-Za-z_-]{10,}\.[0-9A-Za-z_-]{10,}\b/g },
+  // RFC 6750 Bearer credential. Last (most generic): specific token rules above
+  // claim their range first. 16+ b64token chars keeps prose ("Bearer document")
+  // from matching; only the token (group 1) is masked, not the `Bearer ` prefix.
+  { id: 'bearer-token', description: 'HTTP Bearer token (RFC 6750)', regex: /\bBearer\s+([A-Za-z0-9\-._~+/]{16,}=*)/g, group: 1 },
 ];
 
 /**

@@ -40,6 +40,7 @@ describe('rule catalog detection', () => {
     ['anthropic-key', 'sk-ant-api03-' + 'e'.repeat(20)],
     ['openai-key', 'sk-proj-' + 'F'.repeat(40)],
     ['google-api-key', 'AIza' + 'g'.repeat(35)],
+    ['google-oauth-token', 'ya29.' + 'a0AfH6SMBx'.repeat(3)],
     ['slack-token', 'xoxb-' + '1234567890-abcdefghij'],
     ['stripe-key', 'sk_live_' + 'h'.repeat(24)],
     ['npm-token', 'npm_' + 'i'.repeat(36)],
@@ -54,6 +55,23 @@ describe('rule catalog detection', () => {
   it('every rule in the catalog has a unique id', () => {
     const ids = RULES.map((r) => r.id);
     expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it('redacts a bare `Authorization: Bearer <token>` header (RFC 6750) — masking only the token', () => {
+    const tok = 'abc123DEF456ghi789JKL012';
+    const { output, findings } = redactText(`Authorization: Bearer ${tok}`, { entropy: false });
+    expect(findings.map((f) => f.ruleId)).toContain('bearer-token');
+    expect(findings.find((f) => f.ruleId === 'bearer-token')!.match).toBe(tok);
+    expect(output).toContain('Bearer '); // the scheme word is preserved
+    expect(output).not.toContain(tok);   // only the credential is masked
+  });
+  it('tags a `Bearer ya29.…` token as the more specific google-oauth-token', () => {
+    const { findings } = redactText('curl -H "Authorization: Bearer ya29.a0AfH6SMBxExampleExampleExample"', { entropy: false });
+    expect(findings.map((f) => f.ruleId)).toContain('google-oauth-token');
+    expect(findings.map((f) => f.ruleId)).not.toContain('bearer-token'); // deduped by range
+  });
+  it('does not redact the word "Bearer" in prose (needs a 16+ char token)', () => {
+    expect(redactText('the Bearer of the message', { entropy: false }).findings).toHaveLength(0);
   });
 });
 
