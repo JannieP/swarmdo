@@ -44,6 +44,31 @@ function decodeXml(s: string): string {
     .replace(/&amp;/g, '&'); // last, so &amp;lt; → &lt; not <
 }
 
+/**
+ * Decode an element's text content, honoring CDATA sections. Text OUTSIDE
+ * `<![CDATA[ … ]]>` is entity-decoded; text INSIDE is taken literally (per the
+ * XML spec, CDATA content is never entity-expanded). Maven Surefire/Failsafe
+ * wrap `<failure>`/`<error>` stack traces in CDATA, so without this the raw
+ * `<![CDATA[`/`]]>` markers leak into the failure message. Pure.
+ */
+function decodeXmlContent(s: string): string {
+  const OPEN = '<![CDATA[';
+  const CLOSE = ']]>';
+  if (!s.includes(OPEN)) return decodeXml(s);
+  let out = '';
+  let i = 0;
+  while (i < s.length) {
+    const start = s.indexOf(OPEN, i);
+    if (start < 0) { out += decodeXml(s.slice(i)); break; }
+    out += decodeXml(s.slice(i, start));
+    const end = s.indexOf(CLOSE, start + OPEN.length);
+    if (end < 0) { out += s.slice(start + OPEN.length); break; } // unterminated → rest is literal
+    out += s.slice(start + OPEN.length, end);
+    i = end + CLOSE.length;
+  }
+  return out;
+}
+
 /** Extract key="value" / key='value' attributes from a tag's attribute text. Pure. */
 function parseAttrs(attrText: string): Record<string, string> {
   const out: Record<string, string> = {};
@@ -85,7 +110,7 @@ export function parseJUnit(xml: string): TestSummary {
     if (fail) {
       failed++;
       const fAttrs = parseAttrs(fail[2]);
-      const inner = decodeXml((fail[3] ?? '').trim());
+      const inner = decodeXmlContent(fail[3] ?? '').trim();
       const message = fAttrs.message || inner.split('\n')[0] || undefined;
       // Prefer explicit file/line attrs (pytest, some emitters), else sniff the trace.
       const loc = attrs.file

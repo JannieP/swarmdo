@@ -44,6 +44,24 @@ describe('parseJUnit', () => {
     expect(s3.failures[0].name).toBe('renders <Foo>');
     expect(s3.failures[0].message).toBe('a & b');
   });
+  it('strips CDATA wrappers from a body-only <failure> (Maven Surefire shape)', () => {
+    // Surefire wraps stack traces in CDATA and often omits the message attr.
+    const xml = `<testcase name="t1" classname="Foo"><failure type="AssertionError"><![CDATA[java.lang.AssertionError: expected <2> but was <1>
+	at Foo.bar(Foo.java:42)]]></failure></testcase>`;
+    const f = parseJUnit(xml).failures[0];
+    expect(f.message).toBe('java.lang.AssertionError: expected <2> but was <1>');
+    expect(f.message).not.toMatch(/<!\[CDATA\[|\]\]>/); // no markers leak
+    expect(f).toMatchObject({ file: 'Foo.java', line: 42, type: 'AssertionError' });
+  });
+  it('keeps entities inside CDATA literal (CDATA content is never entity-decoded)', () => {
+    const xml = `<testcase name="t2"><failure><![CDATA[assert a &lt; b failed]]></failure></testcase>`;
+    // &lt; is literal text inside CDATA — must NOT become '<'
+    expect(parseJUnit(xml).failures[0].message).toBe('assert a &lt; b failed');
+  });
+  it('still entity-decodes non-CDATA failure bodies (mixed content)', () => {
+    const xml = `<testcase name="t3"><failure>plain &amp; text<![CDATA[ + literal &amp;]]></failure></testcase>`;
+    expect(parseJUnit(xml).failures[0].message).toBe('plain & text + literal &amp;');
+  });
 });
 
 describe('parseTAP', () => {
