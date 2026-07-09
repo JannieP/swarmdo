@@ -18,6 +18,11 @@ import type { Command, CommandContext, CommandResult } from '../types.js';
 import { output } from '../output.js';
 import { planRelease, renderStep, type ReleasePlan, type ReleaseStep } from '../release/release.js';
 
+/** Escape every regex metacharacter (incl. backslash) so a value is a literal in `new RegExp`. */
+function escapeRegExp(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 function repoRootFrom(cwd: string): string | null {
   try {
     return execFileSync('git', ['rev-parse', '--show-toplevel'], { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
@@ -48,7 +53,7 @@ function syncDocs(root: string, files: string[], current: string, next: string):
     let after = before;
     // exact patterns used by every release since 1.4.x
     after = after.replaceAll(`**Swarmdo v${current}** (`, `**Swarmdo v${next}** (`);
-    after = after.replace(new RegExp(`\\*\\*Swarmdo v${next.replace(/\./g, '\\.')}\\*\\* \\(\\d{4}-\\d{2}-\\d{2}\\)`), `**Swarmdo v${next}** (${today})`);
+    after = after.replace(new RegExp(`\\*\\*Swarmdo v${escapeRegExp(next)}\\*\\* \\(\\d{4}-\\d{2}-\\d{2}\\)`), `**Swarmdo v${next}** (${today})`);
     after = after.replaceAll(`swarmdo@${current}\` (umbrella), \`@swarmdo/cli@${current}\`, \`swarmdo-bridge@${current}\``, `swarmdo@${next}\` (umbrella), \`@swarmdo/cli@${next}\`, \`swarmdo-bridge@${next}\``);
     // README badge + website carry the last PUBLISHED version, which lags
     // the repo version (`current`) between releases — match any semver in

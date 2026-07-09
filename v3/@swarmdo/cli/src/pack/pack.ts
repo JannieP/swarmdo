@@ -113,7 +113,15 @@ function renderMarkdown(files: PackFile[], opts: PackOptions): string {
 }
 
 function escapeXml(s: string): string {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  // All five predefined XML entities — the quote escapes matter because this
+  // value is also interpolated into a double-quoted `path="…"` attribute, where
+  // an unescaped `"` in a file path would break out of the attribute.
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 function renderXml(files: PackFile[], opts: PackOptions): string {

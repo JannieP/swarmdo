@@ -58,6 +58,12 @@ describe('packFiles: formats', () => {
     expect(output).not.toContain('a < b &&');
   });
 
+  it('xml: escapes double quotes in a path so they cannot break out of the attribute', () => {
+    const { output } = packFiles([{ path: 'weird"name.ts', content: 'x' }], { format: 'xml', tree: false });
+    expect(output).toContain('<file path="weird&quot;name.ts">');
+    expect(output).not.toContain('path="weird"name'); // no raw quote inside the attribute value
+  });
+
   it('json: is valid and round-trips file content', () => {
     const { output } = packFiles(FILES, { format: 'json' });
     const parsed = JSON.parse(output);
