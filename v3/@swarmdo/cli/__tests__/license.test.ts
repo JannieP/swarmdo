@@ -5,6 +5,7 @@ import {
   evaluateDep,
   auditLicenses,
   formatLicenseSummary,
+  expandLicenseId,
 } from '../src/license/license.ts';
 
 describe('classifyLicense', () => {
@@ -85,6 +86,28 @@ describe('evaluateDep', () => {
   });
   it('UNKNOWN passes when only a denylist is set', () => {
     expect(evaluateDep(dep('UNKNOWN'), { deny: ['GPL-3.0'] })).toBeNull();
+  });
+
+  it('a deprecated bare GNU id is denied by a modern -only/-or-later policy', () => {
+    // npm dep declares legacy `GPL-2.0`; policy written in current SPDX form
+    expect(evaluateDep(dep('GPL-2.0'), { deny: ['GPL-2.0-only', 'GPL-2.0-or-later'] })?.reason).toBe('denied');
+    expect(evaluateDep(dep('GPL-2.0'), { deny: ['GPL-2.0-or-later'] })?.reason).toBe('denied');
+  });
+  it('the reverse: a policy written with the bare id catches a modern-declared dep', () => {
+    expect(evaluateDep(dep('AGPL-3.0-only'), { deny: ['AGPL-3.0'] })?.reason).toBe('denied');
+  });
+  it('keeps -only and -or-later DISTINCT (bare form bridges, suffixed forms do not)', () => {
+    // deny only the -only variant → an -or-later dep is NOT denied
+    expect(evaluateDep(dep('GPL-2.0-or-later'), { deny: ['GPL-2.0-only'] })).toBeNull();
+  });
+  it('a bare GNU dep passes an allowlist naming its suffixed form', () => {
+    expect(evaluateDep(dep('LGPL-2.1'), { allow: ['LGPL-2.1-only', 'MIT'] })).toBeNull();
+  });
+  it('expandLicenseId expands only the deprecated bare ids', () => {
+    expect(expandLicenseId('GPL-2.0').sort()).toEqual(['GPL-2.0', 'GPL-2.0-only', 'GPL-2.0-or-later']);
+    expect(expandLicenseId('GPL-2.0-only')).toEqual(['GPL-2.0-only']); // suffixed stays exact
+    expect(expandLicenseId('MIT')).toEqual(['MIT']);
+    expect(expandLicenseId('GPL-2.0+')).toEqual(['GPL-2.0+', 'GPL-2.0-or-later']);
   });
 });
 

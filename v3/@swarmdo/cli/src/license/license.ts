@@ -129,16 +129,52 @@ export function parseSpdxDnf(expr: string): string[][] {
 }
 
 /**
+ * SPDX 3.0 deprecated the bare GNU-family ids in favor of explicit `-only` /
+ * `-or-later` variants, but npm packages still declare the bare form en masse.
+ */
+const DEPRECATED_GNU_BARE = new Set([
+  'GPL-1.0', 'GPL-2.0', 'GPL-3.0',
+  'LGPL-2.0', 'LGPL-2.1', 'LGPL-3.0',
+  'AGPL-1.0', 'AGPL-3.0',
+  'GFDL-1.1', 'GFDL-1.2', 'GFDL-1.3',
+]);
+
+/**
+ * Expand a license id to the set of ids it should match for policy comparison.
+ * A DEPRECATED bare GNU id is ambiguous (only? or-later?), so it matches either
+ * suffixed form; the suffixed forms stay exact, so `-only` and `-or-later` never
+ * match each other directly. Trailing `+` is treated as `-or-later`. Pure.
+ */
+export function expandLicenseId(id: string): string[] {
+  if (DEPRECATED_GNU_BARE.has(id)) return [id, `${id}-only`, `${id}-or-later`];
+  const plus = id.replace(/\+$/, '');
+  if (id.endsWith('+') && DEPRECATED_GNU_BARE.has(plus)) return [id, `${plus}-or-later`];
+  return [id];
+}
+
+/** Membership test aware of deprecated-bare-id aliases (both sides expanded). */
+function inPolicySet(c: string, expandedPolicy: Set<string>): boolean {
+  return expandLicenseId(c).some((e) => expandedPolicy.has(e));
+}
+
+function expandPolicy(ids: string[] | undefined): Set<string> {
+  const out = new Set<string>();
+  for (const id of ids ?? []) for (const e of expandLicenseId(id)) out.add(e);
+  return out;
+}
+
+/**
  * Evaluate one dep against the policy; null if it passes. Pure.
  *
  * SPDX-aware: a dep is acceptable iff SOME DNF term (a lawful realization of the
  * license) violates nothing — every license in that term is un-denied and (under
  * an allowlist) allowed. So `(MIT OR GPL-3.0)` with `deny:[GPL-3.0]` PASSES (take
  * MIT), while `MIT AND GPL-3.0` under `allow:[MIT]` FAILS (GPL-3.0 also applies).
+ * Deprecated bare GNU ids (`GPL-2.0`) match either suffixed policy form.
  */
 export function evaluateDep(dep: DepLicense, policy: LicensePolicy): Violation | null {
-  const allow = new Set(policy.allow ?? []);
-  const deny = new Set(policy.deny ?? []);
+  const allow = expandPolicy(policy.allow);
+  const deny = expandPolicy(policy.deny);
   const isUnknown = dep.license === 'UNKNOWN' || !dep.license;
 
   if (isUnknown) {
@@ -150,12 +186,12 @@ export function evaluateDep(dep: DepLicense, policy: LicensePolicy): Violation |
 
   const terms = parseSpdxDnf(dep.license);
   // Terms that avoid every denied license (a realization the consumer may choose).
-  const undenied = terms.filter((t) => !t.some((c) => deny.has(c)));
+  const undenied = terms.filter((t) => !t.some((c) => inPolicySet(c, deny)));
   if (undenied.length === 0) {
     // No lawful realization avoids a denied license → genuinely denied.
     return { name: dep.name, version: dep.version, license: dep.license, reason: 'denied' };
   }
-  if (allow.size > 0 && !undenied.some((t) => t.every((c) => allow.has(c)))) {
+  if (allow.size > 0 && !undenied.some((t) => t.every((c) => inPolicySet(c, allow)))) {
     // A denylist is satisfiable, but no un-denied realization is fully allowed.
     return { name: dep.name, version: dep.version, license: dep.license, reason: 'not-allowed' };
   }
