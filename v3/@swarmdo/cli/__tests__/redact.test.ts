@@ -111,6 +111,17 @@ describe('entropy fallback', () => {
     const { findings } = redactText('commit = "x8Kf2Qp9Lm3Zv7Nw5Rt1Yb4"');
     expect(findings).toHaveLength(0);
   });
+  it('flags bare key / credential / creds assignments (gitleaks generic-api-key parity)', () => {
+    for (const kw of ['PRIVATE_KEY', 'ENCRYPTION_KEY', 'SESSION_KEY', 'DB_CREDENTIAL', 'AWS_CREDS']) {
+      const { findings } = redactText(`${kw}=x8Kf2Qp9Lm3Zv7Nw5Rt1Yb4`);
+      expect(findings.some((f) => f.ruleId === 'high-entropy-assignment'), `${kw} should be flagged`).toBe(true);
+    }
+  });
+  it('does not over-match words that merely end in "key" without a following =', () => {
+    // `keyboard`/`monkey_name` are not `key=` — the `[:=]` anchor protects them
+    expect(redactText('keyboard shortcut = save').findings).toHaveLength(0);
+    expect(redactText('monkey_name = "george"').findings).toHaveLength(0);
+  });
 });
 
 describe('allowlist', () => {

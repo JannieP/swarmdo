@@ -78,9 +78,16 @@ export const RULES: RedactRule[] = [
   { id: 'jwt', description: 'JSON Web Token', regex: /\beyJ[0-9A-Za-z_-]{10,}\.eyJ[0-9A-Za-z_-]{10,}\.[0-9A-Za-z_-]{10,}\b/g },
 ];
 
-/** Keyword-prefixed assignment, e.g. `api_key = "..."` — the value is group 1. */
+/**
+ * Keyword-prefixed assignment, e.g. `api_key = "..."` — the value is group 1.
+ * Keyword set mirrors gitleaks' reference `generic-api-key` rule (adds bare
+ * `key`, `credential`, `creds` so `PRIVATE_KEY=`/`ENCRYPTION_KEY=`/`DB_CREDENTIAL=`
+ * secrets reach the entropy check). The `[:=]` immediately after the keyword
+ * anchors it, so `keyboard=`/`monkey_val=` don't match; the entropy + length
+ * gates keep low-entropy values (paths, short flags) from being flagged.
+ */
 const ASSIGNMENT_RE =
-  /(?:pass(?:word|wd)?|pwd|secret|token|api[_-]?key|apikey|access[_-]?key|auth[_-]?token|client[_-]?secret)["']?\s*[:=]\s*["']?([^\s"'`,;]{8,})/gi;
+  /(?:pass(?:word|wd)?|pwd|secret|token|api[_-]?key|apikey|access[_-]?key|auth[_-]?token|client[_-]?secret|credential|creds|key)["']?\s*[:=]\s*["']?([^\s"'`,;]{8,})/gi;
 
 /** Shannon entropy in bits/char. Pure; used by the assignment fallback. */
 export function shannonEntropy(s: string): number {
