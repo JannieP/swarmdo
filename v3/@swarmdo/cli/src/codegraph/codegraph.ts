@@ -77,6 +77,33 @@ const MATCHERS: Array<{ kind: SymbolKind; re: RegExp }> = [
   { kind: 'const', re: /^export\s+(?:const|let|var)\s+([A-Za-z_$][\w$]*)/ },
 ];
 
+/**
+ * Top-level (comma-separated) simple-identifier declarator names in a
+ * const/let/var declaration list, e.g. `a = 1, b = fn(1, 2), c = 3` → [a,b,c].
+ * Commas inside parens/brackets/braces/strings don't split. Destructuring
+ * patterns (a segment starting with `{`/`[`) yield no name — kept as-is. Pure.
+ */
+function declaratorNames(decl: string): string[] {
+  const names: string[] = [];
+  let depth = 0;
+  let start = 0;
+  let str: string | null = null;
+  const take = (seg: string) => {
+    const m = seg.trim().match(/^([A-Za-z_$][\w$]*)/);
+    if (m) names.push(m[1]);
+  };
+  for (let i = 0; i < decl.length; i++) {
+    const ch = decl[i];
+    if (str) { if (ch === str && decl[i - 1] !== '\\') str = null; continue; }
+    if (ch === '"' || ch === "'" || ch === '`') str = ch;
+    else if (ch === '(' || ch === '[' || ch === '{') depth++;
+    else if (ch === ')' || ch === ']' || ch === '}') depth--;
+    else if (ch === ',' && depth === 0) { take(decl.slice(start, i)); start = i + 1; }
+  }
+  take(decl.slice(start));
+  return names;
+}
+
 /** Extract exported symbols from one source file. Pure. */
 export function extractSymbols(source: string, file: string): CodeSymbol[] {
   const out: CodeSymbol[] = [];
@@ -97,6 +124,15 @@ export function extractSymbols(source: string, file: string): CodeSymbol[] {
     }
     // Skip re-export / bare forms handled elsewhere: `export {` and `export *`.
     if (/^export\s*[*{]/.test(trimmed)) continue;
+    // const/let/var can declare MULTIPLE comma-separated bindings — index each
+    // (`export const a = 1, b = 2` → a AND b). Exclude `const enum` (handled by
+    // the enum matcher) and leave destructuring exports unindexed as before.
+    const declM = trimmed.match(/^export\s+(?:const|let|var)\s+(?!enum\b)(.*)$/);
+    if (declM) {
+      const sig = trimmed.slice(0, SIG_MAX).replace(/\s+$/, '');
+      for (const name of declaratorNames(declM[1])) out.push({ name, kind: 'const', file, line: i + 1, signature: sig });
+      continue;
+    }
     for (const { kind, re } of MATCHERS) {
       const m = trimmed.match(re);
       if (!m) continue;

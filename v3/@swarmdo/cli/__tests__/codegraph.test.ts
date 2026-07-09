@@ -88,6 +88,19 @@ describe('extractSymbols', () => {
     const s = extractSymbols(long, 'x.ts');
     expect(s[0].signature.length).toBeLessThanOrEqual(200);
   });
+  it('indexes every declarator of a comma-separated multi-declarator export', () => {
+    const s = extractSymbols('export const A = 1, B = 2, C = 3;\n', 'x.ts');
+    expect(s.map((x) => x.name)).toEqual(['A', 'B', 'C']);
+    expect(s.every((x) => x.kind === 'const' && x.line === 1)).toBe(true);
+  });
+  it('does not split on commas inside call args / arrays when multi-declaring', () => {
+    const s = extractSymbols('export const a = fn(1, 2), b = [3, 4], c = 5;\n', 'x.ts');
+    expect(s.map((x) => x.name)).toEqual(['a', 'b', 'c']);
+  });
+  it('leaves `export const enum` to the enum matcher, and destructuring unindexed', () => {
+    expect(extractSymbols('export const enum Dir { Up }\n', 'x.ts')).toMatchObject([{ name: 'Dir', kind: 'enum' }]);
+    expect(extractSymbols('export const { x, y } = obj;\n', 'x.ts')).toEqual([]); // unchanged: not indexed
+  });
 });
 
 describe('buildIndex + query', () => {
