@@ -42,18 +42,32 @@ export interface LicenseReport {
 }
 
 /**
+ * npm's documented non-SPDX license sentinels → 'UNKNOWN' (needs human review).
+ * `SEE LICENSE IN <file>` (custom license) and `UNLICENSED` (proprietary) are
+ * NOT SPDX ids; left as-is they'd be tokenized by parseSpdxDnf into a garbage
+ * atom (`"SEE"`), giving a misleading policy verdict. Pure.
+ */
+function normalizeNpmLicense(s: string): string {
+  const t = s.trim();
+  if (!t) return 'UNKNOWN';
+  if (/^SEE LICENSE IN\b/i.test(t) || /^UNLICENSED$/i.test(t)) return 'UNKNOWN';
+  return t;
+}
+
+/**
  * Normalize a package.json `license`/`licenses` field to an SPDX string.
  * Handles the modern string, the legacy `{type}` object, and the legacy
- * `licenses: [{type}]` array (→ `A OR B`). Missing → 'UNKNOWN'.
+ * `licenses: [{type}]` array (→ `A OR B`). npm special values and a missing
+ * field → 'UNKNOWN'.
  */
 export function classifyLicense(pkg: {
   license?: unknown;
   licenses?: unknown;
 }): string {
   const l = pkg.license;
-  if (typeof l === 'string' && l.trim()) return l.trim();
+  if (typeof l === 'string' && l.trim()) return normalizeNpmLicense(l);
   if (l && typeof l === 'object' && typeof (l as { type?: unknown }).type === 'string') {
-    return (l as { type: string }).type.trim() || 'UNKNOWN';
+    return normalizeNpmLicense((l as { type: string }).type);
   }
   const arr = pkg.licenses;
   if (Array.isArray(arr) && arr.length) {

@@ -22,6 +22,24 @@ describe('classifyLicense', () => {
     expect(classifyLicense({})).toBe('UNKNOWN');
     expect(classifyLicense({ license: '' })).toBe('UNKNOWN');
   });
+  it('maps npm special values (SEE LICENSE IN / UNLICENSED) to UNKNOWN', () => {
+    expect(classifyLicense({ license: 'SEE LICENSE IN LICENSE.txt' })).toBe('UNKNOWN');
+    expect(classifyLicense({ license: 'SEE LICENSE IN <filename>' })).toBe('UNKNOWN');
+    expect(classifyLicense({ license: 'UNLICENSED' })).toBe('UNKNOWN');
+    expect(classifyLicense({ license: { type: 'SEE LICENSE IN COPYING' } as any })).toBe('UNKNOWN');
+    // a real SPDX id containing "see" is not mis-caught
+    expect(classifyLicense({ license: 'MIT' })).toBe('MIT');
+  });
+});
+
+describe('SEE LICENSE IN policy handling', () => {
+  it('reports the accurate `unknown` reason under an allowlist, not a garbage not-allowed', () => {
+    const dep = { name: 'x', version: '1.0.0', license: classifyLicense({ license: 'SEE LICENSE IN LICENSE.txt' }) };
+    const v = evaluateDep(dep, { allow: ['MIT'] });
+    // before the fix: license parsed to atom "SEE" → reason 'not-allowed', license text leaked
+    expect(v?.reason).toBe('unknown');
+    expect(v?.license).toBe('UNKNOWN');
+  });
 });
 
 describe('spdxComponents', () => {
