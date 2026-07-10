@@ -152,7 +152,11 @@ describe('ReasoningBank', () => {
       const stats = reasoningBank.getStats();
       // At least 2 new searches should be recorded (internal ops may add more)
       expect(stats.metrics.searchCount).toBeGreaterThanOrEqual(initialSearchCount + 2);
-      expect(stats.metrics.totalSearchTime).toBeGreaterThan(0);
+      // >=0, not >0: performance.now() is monotonic *non-decreasing*, so a
+      // sub-millisecond search over a tiny index can measure exactly 0ms on a
+      // coarse-resolution CI clock. Asserting >0 tests timer precision, not
+      // behavior, and flakes (#12). >=0 still rejects NaN/undefined/negative.
+      expect(stats.metrics.totalSearchTime).toBeGreaterThanOrEqual(0);
     });
   });
 
@@ -171,7 +175,8 @@ describe('ReasoningBank', () => {
       });
 
       expect(guidance.recommendations.length).toBeGreaterThan(0);
-      expect(guidance.searchTimeMs).toBeGreaterThan(0);
+      // >=0, not >0 — sub-ms guidance search can measure 0ms on a coarse CI clock (#12).
+      expect(guidance.searchTimeMs).toBeGreaterThanOrEqual(0);
     });
 
     it('should detect security domain', async () => {
@@ -391,7 +396,8 @@ describe('ReasoningBank', () => {
       expect(stats.metrics.patternsStored).toBe(2);
       // searchCount includes internal searches during storePattern (duplicate detection)
       expect(stats.metrics.searchCount).toBeGreaterThanOrEqual(1);
-      expect(stats.avgSearchTime).toBeGreaterThan(0);
+      // >=0, not >0 — avg of sub-ms searches can be 0 on a coarse CI clock (#12).
+      expect(stats.avgSearchTime).toBeGreaterThanOrEqual(0);
     });
   });
 
