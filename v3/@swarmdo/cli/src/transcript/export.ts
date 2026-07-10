@@ -117,6 +117,14 @@ function renderLine(role: string, content: unknown, opts: Required<RenderOptions
   return sections.join('\n\n');
 }
 
+/** Count the conversational turns in a rendered body by matching only the
+ * exact role-heading lines. Anchored to end-of-line so `### Foo` markdown
+ * headings written *inside* a user/assistant message don't inflate the count.
+ * Pure. */
+export function countRenderedTurns(markdown: string): number {
+  return (markdown.match(/^### (?:🤖 Assistant|👤 User)$/gm) || []).length;
+}
+
 /** Render an ordered list of parsed transcript lines into Markdown. */
 export function renderTranscriptMarkdown(lines: RawTranscriptLine[], opts: RenderOptions = {}): string {
   const resolved: Required<RenderOptions> = {
@@ -228,7 +236,7 @@ export function exportSession(idOrLatest: string, opts: RenderOptions & { dirs?:
   const sessionId = sessionIdFromFile(file);
   const project = path.basename(path.dirname(file));
   const body = renderTranscriptMarkdown(lines, opts);
-  const turns = (body.match(/^### /gm) || []).length;
+  const turns = countRenderedTurns(body);
   const header = `# Claude Code session \`${sessionId}\`\n\n- Project: \`${project}\`\n- Turns: ${turns}\n\n---\n\n`;
   return { markdown: header + body, sessionId, project, turns, file };
 }

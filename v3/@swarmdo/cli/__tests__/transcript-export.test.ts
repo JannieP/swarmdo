@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   cleanUserText,
   contentToText,
+  countRenderedTurns,
   renderTranscriptMarkdown,
   sessionIdFromFile,
   type RawTranscriptLine,
@@ -102,5 +103,30 @@ describe('transcript-export: renderTranscriptMarkdown', () => {
 
   it('returns empty string for a transcript with no conversational lines', () => {
     expect(renderTranscriptMarkdown([{ type: 'system' }, { type: 'ai-title' }])).toBe('');
+  });
+});
+
+describe('transcript-export: countRenderedTurns (#51)', () => {
+  it('counts only role headings, not ### headings inside message text', () => {
+    // 2 real turns; the assistant reply carries its own markdown headings.
+    const md = renderTranscriptMarkdown([
+      userStr('summarize the audit'),
+      asst([{ type: 'text', text: 'Analysis:\n\n### Overview\nok\n\n### Details\nmore\n\n### Conclusion\ndone' }]),
+    ]);
+    // The buggy /^### /gm would have counted 5 (2 headings + 3 embedded).
+    expect(countRenderedTurns(md)).toBe(2);
+  });
+
+  it('does not count a line-start ### that lacks the exact role-heading text', () => {
+    // "### Assistant is a word" begins with "### " (the old buggy regex would
+    // have counted it) but is not the exact "### 🤖 Assistant" heading line.
+    const md = renderTranscriptMarkdown([userStr('intro\n### Assistant is a word')]);
+    expect(md).toMatch(/^### Assistant is a word$/m); // the embedded line is present…
+    expect(countRenderedTurns(md)).toBe(1); // …but only the real 👤 User heading counts
+  });
+
+  it('counts tool-only turns as zero (no heading emitted)', () => {
+    const md = renderTranscriptMarkdown([userBlocks([{ type: 'tool_result', is_error: false, content: 'x' }])]);
+    expect(countRenderedTurns(md)).toBe(0);
   });
 });
