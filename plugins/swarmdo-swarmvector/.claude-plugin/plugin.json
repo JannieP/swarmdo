@@ -3,10 +3,10 @@
   "description": "Self-learning vector database via npx swarmvector@0.2.25 — HNSW, adaptive LoRA embeddings, code-graph clustering, hooks routing, brain/SONA, 103 MCP tools",
   "version": "0.2.1",
   "author": {
-    "name": "upstream",
-    "url": "https://the upstream project (see NOTICE)"
+    "name": "SwarmDo Team",
+    "url": "https://github.com/SwarmDo/swarmdo"
   },
-  "homepage": "the upstream project (see NOTICE)",
+  "homepage": "https://swarmdo.com",
   "license": "MIT",
   "keywords": [
     "swarmdo",

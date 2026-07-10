@@ -3,10 +3,10 @@
   "description": "Neural trading via npx neural-trader — self-learning strategies, Rust/NAPI backtesting, 112+ MCP tools, swarm coordination, and portfolio optimization",
   "version": "0.2.0",
   "author": {
-    "name": "upstream",
-    "url": "https://the upstream project (see NOTICE)"
+    "name": "SwarmDo Team",
+    "url": "https://github.com/SwarmDo/swarmdo"
   },
-  "homepage": "the upstream project (see NOTICE)",
+  "homepage": "https://swarmdo.com",
   "license": "MIT",
   "keywords": [
     "swarmdo",

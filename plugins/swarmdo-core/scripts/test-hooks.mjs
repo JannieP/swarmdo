@@ -9,7 +9,7 @@
  *   - Output records the *intended* value (the file path / command), not a
  *     stray boolean like "true" — the symptom that #1859 reported
  *
- * The script substitutes `npx swarmdo@alpha` → the local CLI binary, so
+ * The script substitutes `npx swarmdo@latest` → the local CLI binary, so
  * we exercise the same flag wiring users hit in production but pinned to
  * the build under test.
  *
@@ -48,8 +48,8 @@ const findHook = (matcher) => {
   const hit = post.find(h => h.matcher === matcher);
   if (!hit) throw new Error(`No PostToolUse hook with matcher=${matcher}`);
   return hit.hooks[0].command
-    // legacy form: `npx swarmdo@alpha hooks …`
-    .replace(/npx swarmdo@alpha/g, cliInvoke)
+    // legacy form: `npx swarmdo@latest hooks …`
+    .replace(/npx swarmdo@latest/g, cliInvoke)
     // #1921 form: hook subcommands go through scripts/swarmdo-hook.sh (which
     // prepends `hooks`). Bypass the shim here and call the built CLI directly
     // so the test exercises the same flag wiring users hit, pinned to the

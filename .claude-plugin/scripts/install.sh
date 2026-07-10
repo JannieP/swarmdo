@@ -137,7 +137,7 @@ if [ "$INSTALL_TYPE" = "1" ] || [ "$INSTALL_TYPE" = "4" ]; then
   "mcpServers": {
     "swarmdo": {
       "command": "npx",
-      "args": ["swarmdo@alpha", "mcp", "start"],
+      "args": ["swarmdo@latest", "mcp", "start"],
       "description": "Core Swarmdo MCP server with 40+ orchestration tools"
     }
   }
@@ -154,7 +154,7 @@ Add to ~/.claude/settings.json:
   "mcpServers": {
     "swarmdo": {
       "command": "npx",
-      "args": ["swarmdo@alpha", "mcp", "start"]
+      "args": ["swarmdo@latest", "mcp", "start"]
     },
     "swarmdo-swarm": {
       "command": "npx",
@@ -174,7 +174,7 @@ MCP_INSTRUCTIONS
 
     if [ "$INSTALL_MCP" = "y" ]; then
         info "Installing swarmdo MCP server..."
-        npx swarmdo@alpha --version 2>/dev/null || npm install -g swarmdo@alpha
+        npx swarmdo@latest --version 2>/dev/null || npm install -g swarmdo@latest
         success "Swarmdo MCP server installed"
 
         read -p "Install optional swarmdo-swarm MCP? (y/n) [n]: " INSTALL_SWARM

@@ -3,8 +3,8 @@
   "description": "Schema migration management — generate, validate, dry-run, and rollback database migrations",
   "version": "0.2.0",
   "author": {
-    "name": "upstream",
-    "url": "https://the upstream project (see NOTICE)"
+    "name": "SwarmDo Team",
+    "url": "https://github.com/SwarmDo/swarmdo"
   },
   "homepage": "https://github.com/SwarmDo/swarmdo",
   "license": "MIT",

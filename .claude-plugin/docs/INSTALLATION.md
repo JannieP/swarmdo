@@ -128,7 +128,7 @@ The plugin defines MCP servers, but you may need to install the packages:
 
 ```bash
 # Core MCP (recommended)
-npm install -g swarmdo@alpha
+npm install -g swarmdo@latest
 
 # Optional enhanced coordination
 npm install -g swarmdo-swarm

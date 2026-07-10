@@ -3,8 +3,8 @@
   "description": "Documentation generation, API docs (JSDoc/TSDoc/OpenAPI), and drift detection — drives the `document` background worker via hooks_worker-dispatch; uses Haiku model for cost-efficient docs work",
   "version": "0.2.0",
   "author": {
-    "name": "upstream",
-    "url": "https://the upstream project (see NOTICE)"
+    "name": "SwarmDo Team",
+    "url": "https://github.com/SwarmDo/swarmdo"
   },
   "homepage": "https://github.com/SwarmDo/swarmdo",
   "license": "MIT",

@@ -297,7 +297,7 @@ Then in Claude Code:
 
 ```bash
 # Add MCP servers to Claude Code
-claude mcp add swarmdo npx swarmdo@alpha mcp start
+claude mcp add swarmdo npx swarmdo@latest mcp start
 claude mcp add swarmdo-swarm npx swarmdo-swarm mcp start  # Optional
 ```
 
@@ -350,7 +350,7 @@ cp -r agents ~/.claude/agents/
 
 ```bash
 # Run setup via npx
-npx swarmdo@alpha init --plugin
+npx swarmdo@latest init --plugin
 
 # This will:
 # 1. Create .claude directory
@@ -499,7 +499,7 @@ Swarmdo integrates with 3 MCP servers providing 110+ tools:
   "mcpServers": {
     "swarmdo": {
       "command": "npx",
-      "args": ["swarmdo@alpha", "mcp", "start"]
+      "args": ["swarmdo@latest", "mcp", "start"]
     }
   }
 }

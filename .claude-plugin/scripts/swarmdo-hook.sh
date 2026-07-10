@@ -27,7 +27,7 @@ if command -v swarmdo >/dev/null 2>&1; then
 elif command -v swarmdo >/dev/null 2>&1; then
   run swarmdo hooks "$@"
 else
-  run npx --prefer-offline --yes swarmdo@alpha hooks "$@"
+  run npx --prefer-offline --yes swarmdo@latest hooks "$@"
 fi
 
 exit 0

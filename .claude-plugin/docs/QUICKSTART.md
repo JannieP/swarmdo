@@ -202,7 +202,7 @@ The swarm automatically:
 
 ```bash
 # Core MCP (required)
-claude mcp add swarmdo npx swarmdo@alpha mcp start
+claude mcp add swarmdo npx swarmdo@latest mcp start
 
 # Enhanced coordination (optional)
 claude mcp add swarmdo-swarm npx swarmdo-swarm mcp start
@@ -296,10 +296,10 @@ ls ~/.claude/commands/
 cat ~/.claude/settings.json
 
 # Verify MCP package
-npx swarmdo@alpha --version
+npx swarmdo@latest --version
 
 # Reinstall if needed
-npm install -g swarmdo@alpha
+npm install -g swarmdo@latest
 ```
 
 ### Agents Not Spawning

@@ -337,7 +337,7 @@ The plugin is configured via `.claude-plugin/plugin.json`:
   "mcpServers": {
     "swarmdo": {
       "command": "npx",
-      "args": ["swarmdo@alpha", "mcp", "start"]
+      "args": ["swarmdo@latest", "mcp", "start"]
     }
   }
 }

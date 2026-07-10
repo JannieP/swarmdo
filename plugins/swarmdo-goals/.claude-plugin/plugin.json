@@ -3,8 +3,8 @@
   "description": "Long-horizon goal planning, deep research orchestration, and adaptive replanning using GOAP algorithms",
   "version": "0.2.0",
   "author": {
-    "name": "upstream",
-    "url": "https://the upstream project (see NOTICE)"
+    "name": "SwarmDo Team",
+    "url": "https://github.com/SwarmDo/swarmdo"
   },
   "homepage": "https://github.com/SwarmDo/swarmdo",
   "license": "MIT",

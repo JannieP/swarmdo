@@ -3,8 +3,8 @@
   "description": "Autonomous /loop-driven task completion with learning, prediction, and progress tracking — wraps 10 autopilot_* MCP tools (status/enable/disable/config/reset/log/progress/learn/history/predict)",
   "version": "0.2.0",
   "author": {
-    "name": "upstream",
-    "url": "https://the upstream project (see NOTICE)"
+    "name": "SwarmDo Team",
+    "url": "https://github.com/SwarmDo/swarmdo"
   },
   "homepage": "https://github.com/SwarmDo/swarmdo",
   "license": "MIT",

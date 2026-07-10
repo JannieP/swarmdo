@@ -69,8 +69,8 @@ fi
 
 # Check MCP packages
 info "Checking MCP packages..."
-if npx swarmdo@alpha --version &> /dev/null; then
-    VERSION=$(npx swarmdo@alpha --version 2>/dev/null || echo "unknown")
+if npx swarmdo@latest --version &> /dev/null; then
+    VERSION=$(npx swarmdo@latest --version 2>/dev/null || echo "unknown")
     success "swarmdo MCP: $VERSION"
 else
     warning "swarmdo MCP not installed"
