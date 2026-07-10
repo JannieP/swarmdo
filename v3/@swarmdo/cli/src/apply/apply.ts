@@ -102,6 +102,14 @@ function blockMatchesAt(source: string[], at: number, block: string[]): boolean 
   return true;
 }
 
+/** How many positions in `source` the `block` matches. Pure. */
+function countMatches(source: string[], block: string[]): number {
+  if (block.length === 0) return 0;
+  let n = 0;
+  for (let i = 0; i + block.length <= source.length; i++) if (blockMatchesAt(source, i, block)) n++;
+  return n;
+}
+
 /**
  * Find where `block` occurs in `source`, preferring the position nearest
  * `expected` (0-based). Returns -1 if not found. Deterministic: on ties the
@@ -132,6 +140,12 @@ export interface HunkResult {
   at?: number;
   /** how many context lines were trimmed to make it fit */
   fuzzUsed?: number;
+  /**
+   * True when the matched block occurs at MORE THAN ONE position in the file —
+   * the hunk landed at the nearest, but a duplicate/boilerplate block elsewhere
+   * means it may have modified the wrong occurrence. Callers should verify.
+   */
+  ambiguous?: boolean;
 }
 
 export interface ApplyResult {
@@ -178,12 +192,15 @@ export function applyPatch(source: string, patch: FilePatch, opts: ApplyOptions 
       results.push({ hunk, applied: false });
       continue;
     }
+    // A hunk is AMBIGUOUS if the block it matched on occurs elsewhere too — the
+    // nearest-match tiebreak may have picked the wrong duplicate. Check the
+    // matched (trimmed) block against the current lines BEFORE splicing.
+    const matchedBlock = oldBlock.slice(trimLead, oldBlock.length - trimTail);
+    const ambiguous = countMatches(lines, matchedBlock) > 1;
     // Splice: remove oldBlock.length lines at `placed`, insert newBlock.
-    // (trimLead/trimTail only affected *matching*, not what we replace.)
-    void trimLead; void trimTail;
     lines.splice(placed, oldBlock.length, ...newBlock);
     offset += newBlock.length - oldBlock.length;
-    results.push({ hunk, applied: true, at: placed, fuzzUsed: usedFuzz });
+    results.push({ hunk, applied: true, at: placed, fuzzUsed: usedFuzz, ...(ambiguous && { ambiguous: true }) });
     // If this hunk's new content is now the tail of the file, its markers
     // determine whether the file ends with a newline.
     if (placed + newBlock.length === lines.length) eofNoEol = newSideEndsNoEol(hunk);

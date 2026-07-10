@@ -99,6 +99,22 @@ describe('applyPatch — fuzzy (the point of the tool)', () => {
     expect(r.hunks[0].fuzzUsed).toBe(1);
     expect(r.result).toContain('LINE3');
   });
+
+  it('flags a hunk as ambiguous when its matched block appears more than once', () => {
+    // Two identical function bodies; a zero-context single-line hunk could land on either.
+    const src = ['function a() {', '  return calc(x, y);', '}', '', 'function b() {', '  return calc(x, y);', '}'].join('\n') + '\n';
+    const p = patch(['--- a/f', '+++ b/f', '@@ -2,1 +2,1 @@', '-  return calc(x, y);', '+  return calc(x, y) + 1;'].join('\n'));
+    const r = applyPatch(src, p);
+    expect(r.ok).toBe(true); // it still applies (at the nearest match)…
+    expect(r.hunks[0].ambiguous).toBe(true); // …but flags that the block is duplicated
+  });
+
+  it('does NOT flag a unique block as ambiguous', () => {
+    const p = patch(['--- a/f', '+++ b/f', '@@ -2,1 +2,1 @@', '-line2', '+LINE2'].join('\n'));
+    const r = applyPatch(SRC, p);
+    expect(r.hunks[0].applied).toBe(true);
+    expect(r.hunks[0].ambiguous).toBeUndefined();
+  });
 });
 
 describe('applyPatch — rejection', () => {

@@ -37,6 +37,7 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
   const root = ctx.cwd || process.cwd();
   const dryRun = ctx.flags['dry-run'] === true;
   const partial = ctx.flags.partial === true;
+  const strict = ctx.flags.strict === true;
   // The parser may deliver --fuzz as a number or a string; accept both.
   const fuzz = typeof ctx.flags.fuzz === 'number' ? ctx.flags.fuzz
     : typeof ctx.flags.fuzz === 'string' ? parseInt(ctx.flags.fuzz, 10)
@@ -63,6 +64,7 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
 
   let totalApplied = 0;
   let totalRejected = 0;
+  let totalAmbiguous = 0;
   const writes: Array<{ file: string; content: string }> = [];
 
   for (const fp of patches) {
@@ -83,8 +85,16 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
     totalRejected += rejected;
 
     const fuzzy = res.hunks.filter((h) => h.applied && (h.fuzzUsed ?? 0) > 0).length;
+    const ambiguous = res.hunks.filter((h) => h.applied && h.ambiguous).length;
+    totalAmbiguous += ambiguous;
     const tag = rejected === 0 ? output.dim('ok') : output.bold(`${rejected} rejected`);
-    output.writeln(`${rel}  ${applied}/${res.hunks.length} hunks${fuzzy ? output.dim(` (${fuzzy} fuzzy)`) : ''}  ${tag}`);
+    const ambTag = ambiguous ? output.error(` ⚠ ${ambiguous} ambiguous`) : '';
+    output.writeln(`${rel}  ${applied}/${res.hunks.length} hunks${fuzzy ? output.dim(` (${fuzzy} fuzzy)`) : ''}  ${tag}${ambTag}`);
+    if (ambiguous) {
+      for (const h of res.hunks.filter((x) => x.applied && x.ambiguous)) {
+        output.writeln(output.dim(`    ⚠ hunk @ line ${(h.at ?? 0) + 1}: matched a block that also appears elsewhere — verify it landed on the intended one`));
+      }
+    }
 
     if (rejected === 0 || partial) {
       if (res.result !== source) writes.push({ file, content: res.result });
@@ -96,10 +106,12 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
   }
 
   const verb = dryRun ? 'would apply' : 'applied';
-  output.writeln(output.dim(`${verb} ${totalApplied} hunks, ${totalRejected} rejected${dryRun ? ' (dry run)' : ''}`));
+  const ambSummary = totalAmbiguous ? `, ${totalAmbiguous} ambiguous` : '';
+  output.writeln(output.dim(`${verb} ${totalApplied} hunks, ${totalRejected} rejected${ambSummary}${dryRun ? ' (dry run)' : ''}`));
 
-  // Exit 1 if anything was rejected — a CI/agent can branch on it.
-  const code = totalRejected > 0 ? 1 : 0;
+  // Exit 1 if anything was rejected — a CI/agent can branch on it. With --strict,
+  // an ambiguous match (possibly landed on the wrong duplicate) also fails.
+  const code = totalRejected > 0 || (strict && totalAmbiguous > 0) ? 1 : 0;
   return { success: code === 0, exitCode: code };
 }
 
@@ -110,6 +122,7 @@ export const applyCommand: Command = {
     { name: 'dry-run', description: 'report what would apply/reject without writing', type: 'boolean' },
     { name: 'fuzz', description: 'max context lines to drop when matching a drifted hunk (default 2)', type: 'string' },
     { name: 'partial', description: 'write files even when some of their hunks are rejected', type: 'boolean' },
+    { name: 'strict', description: 'exit 1 if any hunk matched an ambiguous (duplicated) block, even if it applied', type: 'boolean' },
   ],
   examples: [
     { command: 'swarmdo apply changes.patch', description: 'Apply a patch file' },
