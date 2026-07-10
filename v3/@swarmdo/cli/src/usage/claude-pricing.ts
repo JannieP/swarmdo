@@ -28,11 +28,20 @@ export interface TranscriptModelPrice {
  * Price families, matched by LONGEST normalized-id prefix so dated ids like
  * `claude-sonnet-4-6-20260115` resolve without per-snapshot entries.
  *
- * The Claude 5 tier (fable/mythos) is intentionally absent until Anthropic
- * publishes rates — absent means "unpriced", never "guessed".
+ * Opus pricing split (#41): Opus 4.0/4.1 were $15/$75, but Opus 4.5 dropped
+ * the tier to $5/$25 and 4.6/4.7/4.8 kept it. The bare 'claude-opus-4' entry
+ * stays at legacy rates for 4.0/4.1; the longer per-version prefixes win for
+ * 4.5+ via longest-prefix matching.
  */
 const PRICE_FAMILIES: Record<string, TranscriptModelPrice> = {
+  'claude-fable-5': { in: 10, out: 50, cacheWrite: 12.5, cacheWrite1h: 20, cacheRead: 1 },
+  'claude-mythos-5': { in: 10, out: 50, cacheWrite: 12.5, cacheWrite1h: 20, cacheRead: 1 },
   'claude-opus-4': { in: 15, out: 75, cacheWrite: 18.75, cacheWrite1h: 30, cacheRead: 1.5 },
+  'claude-opus-4-5': { in: 5, out: 25, cacheWrite: 6.25, cacheWrite1h: 10, cacheRead: 0.5 },
+  'claude-opus-4-6': { in: 5, out: 25, cacheWrite: 6.25, cacheWrite1h: 10, cacheRead: 0.5 },
+  'claude-opus-4-7': { in: 5, out: 25, cacheWrite: 6.25, cacheWrite1h: 10, cacheRead: 0.5 },
+  'claude-opus-4-8': { in: 5, out: 25, cacheWrite: 6.25, cacheWrite1h: 10, cacheRead: 0.5 },
+  'claude-sonnet-5': { in: 3, out: 15, cacheWrite: 3.75, cacheWrite1h: 6, cacheRead: 0.3 },
   'claude-sonnet-4': { in: 3, out: 15, cacheWrite: 3.75, cacheWrite1h: 6, cacheRead: 0.3 },
   'claude-haiku-4': { in: 1, out: 5, cacheWrite: 1.25, cacheWrite1h: 2, cacheRead: 0.1 },
   'claude-3-7-sonnet': { in: 3, out: 15, cacheWrite: 3.75, cacheWrite1h: 6, cacheRead: 0.3 },
@@ -41,6 +50,29 @@ const PRICE_FAMILIES: Record<string, TranscriptModelPrice> = {
   'claude-3-opus': { in: 15, out: 75, cacheWrite: 18.75, cacheWrite1h: 30, cacheRead: 1.5 },
   'claude-3-haiku': { in: 0.25, out: 1.25, cacheWrite: 0.3, cacheWrite1h: 0.5, cacheRead: 0.03 },
 };
+
+/**
+ * Date-ranged promotional pricing (#41). A promo applies when the entry's
+ * timestamp falls inside [from, until] — callers pass the transcript entry's
+ * own timestamp so historical spend is priced at what it actually cost.
+ * Without a timestamp the sticker price applies (conservative, clock-free).
+ */
+interface PromoWindow {
+  prefix: string;
+  fromMs: number;
+  untilMs: number;
+  price: TranscriptModelPrice;
+}
+
+const PROMOS: PromoWindow[] = [
+  {
+    // Sonnet 5 introductory pricing: $2/$10 per Mtok through 2026-08-31.
+    prefix: 'claude-sonnet-5',
+    fromMs: Date.UTC(2026, 5, 30), // launched 2026-06-30
+    untilMs: Date.UTC(2026, 7, 31, 23, 59, 59, 999),
+    price: { in: 2, out: 10, cacheWrite: 2.5, cacheWrite1h: 4, cacheRead: 0.2 },
+  },
+];
 
 /**
  * Reduce a transcript/gateway model id to the bare Anthropic id:
@@ -59,9 +91,20 @@ export function normalizeTranscriptModelId(raw: string): string {
   return id;
 }
 
-/** Longest-prefix price lookup; undefined = unpriced (report it, don't guess). */
-export function resolveTranscriptPrice(rawModelId: string): TranscriptModelPrice | undefined {
+/**
+ * Longest-prefix price lookup; undefined = unpriced (report it, don't guess).
+ * Pass the transcript entry's timestamp as `atMs` to get date-ranged promo
+ * rates (e.g. Sonnet 5 intro pricing); omitted → sticker price.
+ */
+export function resolveTranscriptPrice(rawModelId: string, atMs?: number): TranscriptModelPrice | undefined {
   const id = normalizeTranscriptModelId(rawModelId);
+  if (atMs !== undefined) {
+    for (const promo of PROMOS) {
+      if (id.startsWith(promo.prefix) && atMs >= promo.fromMs && atMs <= promo.untilMs) {
+        return promo.price;
+      }
+    }
+  }
   let best: TranscriptModelPrice | undefined;
   let bestLen = 0;
   for (const [prefix, price] of Object.entries(PRICE_FAMILIES)) {

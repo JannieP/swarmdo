@@ -115,12 +115,12 @@ beforeAll(() => {
           message: {
             id: 'msg_3',
             role: 'assistant',
-            model: 'claude-fable-5',
+            model: 'claude-experimental-99',
             usage: { input_tokens: 1000, output_tokens: 2000, cache_creation_input_tokens: 0, cache_read_input_tokens: 0 },
           },
         },
         undefined,
-        'claude-fable-5',
+        'claude-experimental-99',
       ),
     ].join('\n'),
   );
@@ -139,9 +139,40 @@ describe('claude-pricing', () => {
 
   it('resolves families by longest prefix and refuses to guess', () => {
     expect(resolveTranscriptPrice('claude-sonnet-4-6-20260115')?.in).toBe(3);
-    expect(resolveTranscriptPrice('claude-opus-4-8')?.out).toBe(75);
     expect(resolveTranscriptPrice('claude-3-5-haiku-20241022')?.in).toBe(0.8);
-    expect(resolveTranscriptPrice('claude-fable-5')).toBeUndefined();
+    expect(resolveTranscriptPrice('claude-nonexistent-99')).toBeUndefined();
+  });
+
+  it('prices the Opus tier by version: 4.0/4.1 legacy $15/$75, 4.5+ $5/$25 (#41)', () => {
+    expect(resolveTranscriptPrice('claude-opus-4-1-20250805')?.out).toBe(75);
+    expect(resolveTranscriptPrice('claude-opus-4-20250514')?.out).toBe(75);
+    expect(resolveTranscriptPrice('claude-opus-4-5')?.out).toBe(25);
+    expect(resolveTranscriptPrice('claude-opus-4-6')?.out).toBe(25);
+    expect(resolveTranscriptPrice('claude-opus-4-7')?.out).toBe(25);
+    expect(resolveTranscriptPrice('claude-opus-4-8')?.out).toBe(25);
+    expect(resolveTranscriptPrice('claude-opus-4-8')?.cacheRead).toBe(0.5);
+  });
+
+  it('prices the Claude 5 tier: fable/mythos $10/$50, sonnet-5 $3/$15 sticker (#41)', () => {
+    expect(resolveTranscriptPrice('claude-fable-5')?.in).toBe(10);
+    expect(resolveTranscriptPrice('claude-fable-5')?.out).toBe(50);
+    expect(resolveTranscriptPrice('claude-mythos-5')?.out).toBe(50);
+    expect(resolveTranscriptPrice('claude-sonnet-5')?.in).toBe(3);
+    expect(resolveTranscriptPrice('claude-sonnet-5')?.out).toBe(15);
+  });
+
+  it('applies Sonnet 5 intro pricing ($2/$10) only inside the promo window (#41)', () => {
+    const inWindow = Date.UTC(2026, 6, 10); // 2026-07-10
+    const afterWindow = Date.UTC(2026, 8, 1); // 2026-09-01
+    const beforeLaunch = Date.UTC(2026, 5, 1); // 2026-06-01
+    expect(resolveTranscriptPrice('claude-sonnet-5', inWindow)?.in).toBe(2);
+    expect(resolveTranscriptPrice('claude-sonnet-5', inWindow)?.out).toBe(10);
+    expect(resolveTranscriptPrice('claude-sonnet-5', inWindow)?.cacheRead).toBe(0.2);
+    expect(resolveTranscriptPrice('claude-sonnet-5', afterWindow)?.in).toBe(3);
+    expect(resolveTranscriptPrice('claude-sonnet-5', beforeLaunch)?.in).toBe(3);
+    // no timestamp → sticker, and other models ignore the promo table
+    expect(resolveTranscriptPrice('claude-sonnet-5')?.in).toBe(3);
+    expect(resolveTranscriptPrice('claude-opus-4-8', inWindow)?.in).toBe(5);
   });
 
   it('computes cache-aware cost', () => {
@@ -169,10 +200,10 @@ describe('collectUsage', () => {
   it('dedupes (message.id, requestId) across lines and files, skips junk', () => {
     const c = collectUsage({ dirs: [projectsDir] });
     expect(c.filesScanned).toBe(2);
-    // msg_1 counted once despite 3 occurrences; + opus + fable = 3 events
+    // msg_1 counted once despite 3 occurrences; + opus + unknown = 3 events
     expect(c.events).toHaveLength(3);
     const models = c.events.map((e) => e.model).sort();
-    expect(models).toEqual(['claude-fable-5', 'claude-opus-4-8', 'claude-sonnet-4-6']);
+    expect(models).toEqual(['claude-experimental-99', 'claude-opus-4-8', 'claude-sonnet-4-6']);
   });
 
   it('prefers transcript costUSD, computes from table, and never guesses', () => {
@@ -182,9 +213,9 @@ describe('collectUsage', () => {
     expect(byModel['claude-sonnet-4-6'].costUsd).toBeCloseTo(SONNET_COST, 10);
     expect(byModel['claude-opus-4-8'].costSource).toBe('transcript');
     expect(byModel['claude-opus-4-8'].costUsd).toBe(0.5);
-    expect(byModel['claude-fable-5'].costSource).toBe('unpriced');
-    expect(byModel['claude-fable-5'].costUsd).toBe(0);
-    expect(c.unpricedModels).toEqual(['claude-fable-5']);
+    expect(byModel['claude-experimental-99'].costSource).toBe('unpriced');
+    expect(byModel['claude-experimental-99'].costUsd).toBe(0);
+    expect(c.unpricedModels).toEqual(['claude-experimental-99']);
   });
 
   it('uses entry cwd as project identity', () => {

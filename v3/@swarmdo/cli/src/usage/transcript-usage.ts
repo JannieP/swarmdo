@@ -258,7 +258,7 @@ function toUsageEvent(
 
   let costUsd: number;
   let costSource: UsageEvent['costSource'];
-  const price = resolveTranscriptPrice(model);
+  const price = resolveTranscriptPrice(model, ts.getTime());
   if (typeof line.costUSD === 'number') {
     costUsd = line.costUSD;
     costSource = 'transcript';
