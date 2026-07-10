@@ -176,3 +176,28 @@ describe('mergeSummaries bail propagation', () => {
     expect(m.bailReason).toBe('oom');
   });
 });
+
+describe('parseJUnit — numeric character references (#48)', () => {
+  it('decodes hex numeric refs (ANSI escapes in a stack trace)', () => {
+    // &#x1b; is ESC — common when a JUnit emitter preserves colorized output.
+    const xml = '<testcase name="t" classname="C"><failure>&#x1b;[31mBoom&#x1b;[0m at foo.ts:9</failure></testcase>';
+    const f = parseJUnit(xml).failures[0];
+    expect(f.message).not.toMatch(/&#x1b;/); // no literal hex ref leaks
+    expect(f.message).toContain('[31mBoom'); // ESC decoded, its two visible chars remain
+    expect(f.message).toContain('\x1b'); // the actual ESC control char is present
+  });
+
+  it('decodes decimal refs and astral-plane hex via fromCodePoint', () => {
+    const xml = '<testcase name="t"><failure>&#65; &#x1F600; done</failure></testcase>';
+    const f = parseJUnit(xml).failures[0];
+    expect(f.message).toContain('A');
+    expect(f.message).toContain('\u{1F600}'); // needs fromCodePoint, not fromCharCode
+    expect(f.message).not.toMatch(/&#x1F600;/);
+  });
+
+  it('leaves an out-of-range numeric ref literal instead of throwing', () => {
+    const xml = '<testcase name="t"><failure>bad &#xFFFFFFFF; ref</failure></testcase>';
+    expect(() => parseJUnit(xml)).not.toThrow();
+    expect(parseJUnit(xml).failures[0].message).toContain('&#xFFFFFFFF;');
+  });
+});

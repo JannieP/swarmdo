@@ -47,14 +47,24 @@ export interface TestSummary {
   bailReason?: string;
 }
 
-/** Decode the five predefined XML entities. Pure. */
+/** A numeric character reference → its char, or the original ref if the code
+ * point is out of the valid Unicode range (so a malformed entity never throws
+ * and leaks literally instead of aborting the parse). Pure. */
+function fromCodePointSafe(n: number, original: string): string {
+  return Number.isInteger(n) && n >= 0 && n <= 0x10ffff ? String.fromCodePoint(n) : original;
+}
+
+/** Decode the five predefined XML entities plus decimal AND hex numeric
+ * character references (`&#65;`, `&#x1b;`). XML 1.0 allows both numeric forms;
+ * JUnit stack traces with ANSI colouring escape control chars as hex. Pure. */
 function decodeXml(s: string): string {
   return s
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
     .replace(/&quot;/g, '"')
     .replace(/&apos;/g, "'")
-    .replace(/&#(\d+);/g, (_, d) => String.fromCharCode(parseInt(d, 10)))
+    .replace(/&#x([0-9a-fA-F]+);/g, (m, h) => fromCodePointSafe(parseInt(h, 16), m))
+    .replace(/&#(\d+);/g, (m, d) => fromCodePointSafe(parseInt(d, 10), m))
     .replace(/&amp;/g, '&'); // last, so &amp;lt; → &lt; not <
 }
 
