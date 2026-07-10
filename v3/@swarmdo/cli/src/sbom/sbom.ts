@@ -168,8 +168,11 @@ export function buildSpdx(components: Component[], meta: BomMeta): Record<string
     documentNamespace: `https://swarmdo/spdx/${safe(meta.name)}-${meta.version}`,
     packages: [
       { SPDXID: 'SPDXRef-Package-root', name: meta.name, versionInfo: meta.version, downloadLocation: 'NOASSERTION' },
-      ...components.map((c) => ({
-        SPDXID: `SPDXRef-Package-${safe(c.name)}-${safe(c.version)}`,
+      ...components.map((c, i) => ({
+        // Index prefix makes the ID self-delimiting (#11): name and version can
+        // both contain `-` after sanitizing, so `${name}-${version}` alone can
+        // collide across distinct (name, version) pairs.
+        SPDXID: `SPDXRef-Package-${i}-${safe(c.name)}-${safe(c.version)}`,
         name: c.name,
         versionInfo: c.version,
         downloadLocation: 'NOASSERTION',

@@ -164,3 +164,15 @@ describe('buildSbom dispatch', () => {
     expect(buildSbom(comps, { name: 'a', version: '1' }, 'spdx').spdxVersion).toBe('SPDX-2.3');
   });
 });
+
+describe('buildSpdx: SPDXID uniqueness (#11)', () => {
+  it('gives distinct (name, version) pairs distinct SPDXIDs even when the join collides', () => {
+    const comps = [
+      { name: 'foo', version: '1.0-beta', purl: 'pkg:npm/foo@1.0-beta' },
+      { name: 'foo-1.0', version: 'beta', purl: 'pkg:npm/foo-1.0@beta' },
+    ] as never[];
+    const doc = buildSpdx(comps, { name: 'root', version: '1.0.0' }) as { packages: { SPDXID: string }[] };
+    const ids = doc.packages.map((p) => p.SPDXID);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+});
