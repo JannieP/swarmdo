@@ -1,7 +1,7 @@
 {
   "name": "swarmdo-core",
   "description": "Foundation plugin — registers the swarmdo MCP server (300+ tools across memory/agentdb/embeddings/hooks/aidefence/neural/autopilot/browser/agent/swarm), provides 3 generalist agents (coder/researcher/reviewer), 3 first-run skills, and a curated plugin-discovery catalog",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "author": {
     "name": "SwarmDo Team",
     "url": "https://github.com/SwarmDo/swarmdo"

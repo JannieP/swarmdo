@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+# bin/swarmdo — fast-path shim for the swarmdo CLI (#42).
+#
+# While swarmdo-core is enabled, Claude Code prepends this plugin's bin/ to
+# PATH, so a bare `swarmdo …` in any Bash tool call lands here. This shim
+# resolves the REAL swarmdo CLI once and execs it, skipping the npx cold-start
+# tax the codebase already documents fighting (a 23 MB ONNX model download and
+# 60 s+ registry resolve that can SIGTERM under npx/MCP timeout windows).
+#
+# Resolution order:
+#   1. an installed `swarmdo` on PATH that is NOT this shim — the fast path
+#      (no npx, no install); the common case for anyone who `npm i -g swarmdo`.
+#   2. `npx --prefer-offline` so a warm npx cache is reused, not re-resolved.
+#   3. plain `npx swarmdo@latest` as the last resort.
+#
+# Unlike scripts/swarmdo-hook.sh (best-effort telemetry that swallows failures),
+# this is a TRANSPARENT wrapper: stdin, arguments, and the exit code all pass
+# through unchanged — a user's `swarmdo` call must fail loudly if the CLI fails.
+#
+# The self-exclusion (step 1 skips this shim's own path) is load-bearing:
+# without it, `swarmdo` on PATH resolves back to this file and recurses.
+set -eu
+
+# Canonical path of this shim, so PATH resolution can skip it.
+self="${BASH_SOURCE[0]:-$0}"
+if command -v realpath >/dev/null 2>&1; then
+  self="$(realpath "$self" 2>/dev/null || printf '%s' "$self")"
+fi
+
+# Walk PATH for the first `swarmdo` executable that isn't this shim.
+real=""
+saved_ifs="${IFS:-}"
+IFS=:
+for dir in $PATH; do
+  cand="$dir/swarmdo"
+  [ -x "$cand" ] || continue
+  rp="$cand"
+  if command -v realpath >/dev/null 2>&1; then
+    rp="$(realpath "$cand" 2>/dev/null || printf '%s' "$cand")"
+  fi
+  [ "$rp" = "$self" ] && continue
+  real="$cand"
+  break
+done
+IFS="$saved_ifs"
+
+if [ -n "$real" ]; then
+  exec "$real" "$@"
+elif command -v npx >/dev/null 2>&1; then
+  exec npx --prefer-offline --yes swarmdo@latest "$@"
+else
+  echo "swarmdo: no installed CLI and npx is unavailable — install with: npm i -g swarmdo" >&2
+  exit 127
+fi

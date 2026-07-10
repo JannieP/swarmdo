@@ -13,6 +13,7 @@ Foundation plugin. Registers the `swarmdo` MCP server (300+ tools), provides thr
 
 - **MCP Server**: 300+ tools via `@swarmdo/cli` (memory, agentdb, embeddings, hooks, neural, autopilot, browser, aidefence, agent, swarm, system, terminal, github, daa, coordination, performance, workflow, …)
 - **CLI Commands**: 26 commands with 140+ subcommands for agent orchestration
+- **`swarmdo` on PATH**: while this plugin is enabled, Claude Code adds `bin/swarmdo` to the Bash tool's `PATH`, so agents can run `swarmdo memory search …` directly. The shim execs a locally/globally installed `swarmdo` when present (skipping the npx cold-start tax), else falls back to `npx --prefer-offline swarmdo@latest`. It excludes itself from resolution to avoid recursion, and passes args, stdin, and exit codes straight through.
 - **3-Tier Model Routing**: Agent Booster (WASM), Haiku, Sonnet/Opus with automatic cost optimization
 - **Session Management**: Persistent sessions with cross-conversation learning
 - **Hooks**: PreToolUse / PostToolUse / PreCompact / Stop wired to swarmdo's auto-routing + learning loop. Defined at `plugins/swarmdo-core/hooks/hooks.json` so the per-plugin loader picks them up on `/plugin install swarmdo-core@swarmdo` (per-plugin layout — fixes #1748 Issue 1; the marketplace-root copy at `.claude-plugin/hooks/hooks.json` is preserved for `claude --plugin-dir <repo-root>` users).
