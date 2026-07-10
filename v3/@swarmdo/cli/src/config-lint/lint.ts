@@ -25,9 +25,23 @@ export const MEMORY_BACKENDS = ['agentdb', 'sqlite', 'hybrid', 'memory'];
 import { parseOpenRouterConfig } from '../providers/openrouter-config.js';
 
 export const KNOWN_CONFIG_KEYS = ['topology', 'maxAgents', 'strategy', 'consensus', 'memory', 'memoryBackend', 'hnsw', 'neural', 'embeddings', 'providers', 'mcp', 'logging', 'daemon', 'hooks', 'version', 'openrouter', '$schema'];
+// Current Claude Code hook events (source: code.claude.com/docs/en/hooks).
+// Kept in sync with the runtime; a stale list here false-warns on valid hooks.
 export const HOOK_EVENTS = [
-  'PreToolUse', 'PostToolUse', 'UserPromptSubmit', 'Notification', 'Stop', 'SubagentStop',
-  'SessionStart', 'SessionEnd', 'PreCompact', 'TeammateIdle', 'TaskCompleted', 'PermissionDecision',
+  // session lifecycle
+  'SessionStart', 'Setup', 'SessionEnd',
+  // per-turn
+  'UserPromptSubmit', 'UserPromptExpansion', 'Stop', 'StopFailure',
+  // agentic loop
+  'PreToolUse', 'PostToolUse', 'PostToolUseFailure', 'PostToolBatch', 'PermissionRequest', 'PermissionDenied',
+  // subagent & task
+  'SubagentStart', 'SubagentStop', 'TeammateIdle', 'TaskCreated', 'TaskCompleted',
+  // system & file
+  'Notification', 'MessageDisplay', 'CwdChanged', 'FileChanged', 'ConfigChange', 'InstructionsLoaded', 'PreCompact', 'PostCompact',
+  // MCP elicitation
+  'Elicitation', 'ElicitationResult',
+  // worktree
+  'WorktreeCreate', 'WorktreeRemove',
 ];
 
 /** Parse a JSON file's raw text; a null raw means "file absent" (fine). */

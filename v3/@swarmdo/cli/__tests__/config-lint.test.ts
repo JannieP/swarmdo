@@ -47,6 +47,17 @@ describe('config-lint: settings hooks', () => {
   it('no hooks key → nothing to say', () => {
     expect(lintSettingsHooks('s', { model: 'opus' })).toEqual([]);
   });
+  it('recognizes current Claude Code events — no false unknown-event warning (#50)', () => {
+    // These are all valid modern events that the stale allowlist wrongly flagged.
+    const modern = {
+      hooks: Object.fromEntries(
+        ['PostCompact', 'SubagentStart', 'PostToolUseFailure', 'PostToolBatch', 'PermissionRequest', 'PermissionDenied', 'Setup', 'StopFailure', 'TaskCreated', 'UserPromptExpansion', 'CwdChanged', 'FileChanged', 'ConfigChange', 'InstructionsLoaded', 'MessageDisplay', 'Elicitation', 'ElicitationResult', 'WorktreeCreate', 'WorktreeRemove']
+          .map((ev) => [ev, [{ hooks: [{ type: 'command', command: 'x' }] }]]),
+      ),
+    };
+    const out = lintSettingsHooks('s', modern);
+    expect(out.filter((x) => x.rule === 'unknown-hook-event')).toEqual([]);
+  });
 });
 
 describe('config-lint: .mcp.json', () => {
