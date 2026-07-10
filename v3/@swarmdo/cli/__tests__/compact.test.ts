@@ -75,6 +75,14 @@ describe('compactOutput — blank lines', () => {
     const { text } = compactOutput('a\n\n\n\n\nb\n', {});
     expect(text).toBe('a\n\nb\n');
   });
+  it('preserves a run of exactly 2 blank lines (PEP 8 spacing), per the ≥3 threshold', () => {
+    // 2 blanks between top-level defs must survive — only ≥3 collapses.
+    const { text } = compactOutput('def foo():\n    pass\n\n\ndef bar():\n    pass\n', {});
+    expect(text).toBe('def foo():\n    pass\n\n\ndef bar():\n    pass\n');
+  });
+  it('preserves a single blank line', () => {
+    expect(compactOutput('a\n\nb\n', {}).text).toBe('a\n\nb\n');
+  });
 });
 
 describe('compactOutput — windowing', () => {

@@ -118,19 +118,26 @@ function foldNodeFrames(lines: string[]): string[] {
   return out;
 }
 
-/** Collapse ≥3 consecutive blank lines to a single blank. */
+/**
+ * Collapse runs of ≥3 consecutive blank lines to a single blank. Runs of 1 or 2
+ * blanks are preserved (a 2-blank run is meaningful — e.g. PEP 8 spacing between
+ * top-level defs), so the full run length is counted before deciding.
+ */
 function collapseBlankLines(lines: string[]): string[] {
   const out: string[] = [];
   let blanks = 0;
+  const flush = () => {
+    if (blanks === 0) return;
+    const keep = blanks >= 3 ? 1 : blanks; // ≥3 → 1; 1 or 2 → unchanged
+    for (let i = 0; i < keep; i++) out.push('');
+    blanks = 0;
+  };
   for (const line of lines) {
-    if (line.trim() === '') {
-      blanks++;
-      if (blanks <= 1) out.push('');
-    } else {
-      blanks = 0;
-      out.push(line);
-    }
+    if (line.trim() === '') { blanks++; continue; }
+    flush();
+    out.push(line);
   }
+  flush();
   return out;
 }
 
