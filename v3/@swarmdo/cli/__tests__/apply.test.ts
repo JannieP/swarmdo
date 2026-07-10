@@ -137,3 +137,55 @@ describe('applyPatch — rejection', () => {
     expect(r.result).toContain('LINE2');
   });
 });
+
+describe('applyPatch — CRLF sources (#9)', () => {
+  const LF_DIFF = ['--- a/f', '+++ b/f', '@@ -1,3 +1,3 @@', ' line1', '-line2', '+LINE2', ' line3'].join('\n');
+
+  it('applies an LF diff to a CRLF source and preserves CRLF throughout', () => {
+    const src = ['line1', 'line2', 'line3'].join('\r\n') + '\r\n';
+    const r = applyPatch(src, patch(LF_DIFF));
+    expect(r.ok).toBe(true);
+    expect(r.result).toBe(['line1', 'LINE2', 'line3'].join('\r\n') + '\r\n');
+  });
+
+  it('applies a CRLF diff to an LF source and stays LF', () => {
+    const crlfDiff = LF_DIFF.split('\n').join('\r\n');
+    const src = ['line1', 'line2', 'line3'].join('\n') + '\n';
+    const r = applyPatch(src, patch(crlfDiff));
+    expect(r.ok).toBe(true);
+    expect(r.result).toBe(['line1', 'LINE2', 'line3'].join('\n') + '\n');
+  });
+
+  it('applies a CRLF diff to a CRLF source', () => {
+    const crlfDiff = LF_DIFF.split('\n').join('\r\n');
+    const src = ['line1', 'line2', 'line3'].join('\r\n') + '\r\n';
+    const r = applyPatch(src, patch(crlfDiff));
+    expect(r.ok).toBe(true);
+    expect(r.result).toBe(['line1', 'LINE2', 'line3'].join('\r\n') + '\r\n');
+  });
+
+  it('never emits a bare CR when the replaced line is the no-trailing-newline tail', () => {
+    const src = 'line1\r\nline2'; // CRLF file, no trailing newline
+    const d = ['--- a/f', '+++ b/f', '@@ -1,2 +1,2 @@', ' line1', '-line2', '+LINE2'].join('\n');
+    const r = applyPatch(src, patch(d));
+    expect(r.ok).toBe(true);
+    expect(r.result).toBe('line1\r\nLINE2');
+  });
+
+  it('leaves untouched lines of a mixed-EOL source byte-exact', () => {
+    const src = 'a\r\nb\nc\r\nd\n'; // mixed: a,c CRLF; b,d LF
+    const d = ['--- a/f', '+++ b/f', '@@ -2,1 +2,1 @@', '-b', '+B'].join('\n');
+    const r = applyPatch(src, patch(d));
+    expect(r.ok).toBe(true);
+    // CRLF is not dominant (2 of 4), so the inserted line gets LF; a and c keep \r\n
+    expect(r.result).toBe('a\r\nB\nc\r\nd\n');
+  });
+
+  it('still flags ambiguity on CRLF sources', () => {
+    const src = ['dup', 'x', 'dup', 'y'].join('\r\n') + '\r\n';
+    const d = ['--- a/f', '+++ b/f', '@@ -1,1 +1,1 @@', '-dup', '+DUP'].join('\n');
+    const r = applyPatch(src, patch(d));
+    expect(r.ok).toBe(true);
+    expect(r.hunks[0].ambiguous).toBe(true);
+  });
+});

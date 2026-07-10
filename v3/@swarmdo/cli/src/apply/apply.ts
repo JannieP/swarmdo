@@ -42,7 +42,10 @@ export function parsePatch(text: string): FilePatch[] {
   const stripPrefix = (p: string) => p.replace(/^[ab]\//, '').replace(/\t.*$/, '').trim();
 
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
+    // CRLF tolerance (#9): a diff generated on/for CRLF files carries \r on
+    // every line; strip it so hunk content compares EOL-agnostically.
+    const raw = lines[i];
+    const line = raw.endsWith('\r') ? raw.slice(0, -1) : raw;
     if (line.startsWith('diff --git')) {
       cur = null; hunk = null;
       continue;
@@ -158,8 +161,18 @@ export interface ApplyResult {
 export function applyPatch(source: string, patch: FilePatch, opts: ApplyOptions = {}): ApplyResult {
   const fuzz = opts.fuzz ?? 2;
   const trailingNewline = source.endsWith('\n');
+  // CRLF support (#9): match EOL-agnostically, then write inserted lines with
+  // the file's dominant EOL so CRLF sources stay CRLF. `lines` keeps each
+  // line's original bytes (untouched lines round-trip exactly); `matchLines`
+  // is the \r-stripped twin every comparison runs against. The two are spliced
+  // in lockstep so indices stay aligned.
+  const crlfCount = (source.match(/\r\n/g) ?? []).length;
+  const newlineCount = (source.match(/\n/g) ?? []).length;
+  const dominantCrlf = crlfCount > newlineCount - crlfCount;
   const lines = source.split('\n');
   if (trailingNewline) lines.pop(); // drop the empty element from a trailing \n
+  const stripCr = (s: string) => (s.endsWith('\r') ? s.slice(0, -1) : s);
+  const matchLines = lines.map(stripCr);
   let offset = 0;
   const results: HunkResult[] = [];
   // If a hunk that reaches EOF carries an explicit no-newline marker, it — not
@@ -183,7 +196,7 @@ export function applyPatch(source: string, patch: FilePatch, opts: ApplyOptions 
         const tailTrimmable = countTrailingContext(hunk);
         if (lead > leadTrimmable || tail > tailTrimmable) continue;
         const trimmed = oldBlock.slice(lead, oldBlock.length - tail);
-        const at = findBlock(lines, trimmed, expected + lead);
+        const at = findBlock(matchLines, trimmed, expected + lead);
         if (at >= 0) { placed = at - lead; usedFuzz = f; trimLead = lead; trimTail = tail; break outer; }
       }
     }
@@ -196,9 +209,12 @@ export function applyPatch(source: string, patch: FilePatch, opts: ApplyOptions 
     // nearest-match tiebreak may have picked the wrong duplicate. Check the
     // matched (trimmed) block against the current lines BEFORE splicing.
     const matchedBlock = oldBlock.slice(trimLead, oldBlock.length - trimTail);
-    const ambiguous = countMatches(lines, matchedBlock) > 1;
-    // Splice: remove oldBlock.length lines at `placed`, insert newBlock.
-    lines.splice(placed, oldBlock.length, ...newBlock);
+    const ambiguous = countMatches(matchLines, matchedBlock) > 1;
+    // Splice: remove oldBlock.length lines at `placed`, insert newBlock —
+    // raw lines get the file's dominant EOL, the match twin stays stripped.
+    const insertRaw = dominantCrlf ? newBlock.map((l) => l + '\r') : newBlock;
+    lines.splice(placed, oldBlock.length, ...insertRaw);
+    matchLines.splice(placed, oldBlock.length, ...newBlock);
     offset += newBlock.length - oldBlock.length;
     results.push({ hunk, applied: true, at: placed, fuzzUsed: usedFuzz, ...(ambiguous && { ambiguous: true }) });
     // If this hunk's new content is now the tail of the file, its markers
@@ -210,6 +226,10 @@ export function applyPatch(source: string, patch: FilePatch, opts: ApplyOptions 
   // The patch's explicit EOF marker wins; absent one, keep the source's state.
   const endWithNewline = eofNoEol === undefined ? trailingNewline : !eofNoEol;
   if (endWithNewline) result += '\n';
+  // An inserted line that became the no-trailing-newline tail carries the
+  // dominant-EOL \r it was given for joining — a bare CR at EOF is never
+  // meaningful, so drop it.
+  else if (result.endsWith('\r')) result = result.slice(0, -1);
   return { ok: results.every((r) => r.applied), result, hunks: results };
 }
 
