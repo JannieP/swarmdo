@@ -2,6 +2,9 @@
   "name": "swarmdo-goals",
   "description": "Long-horizon goal planning, deep research orchestration, and adaptive replanning using GOAP algorithms",
   "version": "0.2.0",
+  "dependencies": [
+    "swarmdo-core"
+  ],
   "author": {
     "name": "SwarmDo Team",
     "url": "https://github.com/SwarmDo/swarmdo"

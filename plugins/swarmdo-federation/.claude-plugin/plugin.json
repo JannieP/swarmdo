@@ -2,6 +2,9 @@
   "name": "swarmdo-federation",
   "description": "Cross-installation agent federation with zero-trust security, peer discovery, consensus-based task routing, and per-call budget circuit breaker (ADR-097)",
   "version": "0.2.0",
+  "dependencies": [
+    "swarmdo-core"
+  ],
   "author": {
     "name": "SwarmDo Team",
     "url": "https://github.com/SwarmDo/swarmdo"
@@ -22,5 +25,6 @@
     "mcp",
     "pii-pipeline",
     "audit-log"
-  ]
+  ],
+  "defaultEnabled": false
 }

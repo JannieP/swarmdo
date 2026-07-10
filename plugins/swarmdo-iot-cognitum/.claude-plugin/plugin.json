@@ -2,6 +2,9 @@
   "name": "swarmdo-iot-cognitum",
   "description": "IoT device lifecycle, telemetry anomaly detection, fleet management, and witness chain verification for Cognitum Seed hardware",
   "version": "0.2.0",
+  "dependencies": [
+    "swarmdo-core"
+  ],
   "author": {
     "name": "SwarmDo Team",
     "url": "https://github.com/SwarmDo/swarmdo"
@@ -22,5 +25,6 @@
     "mcp",
     "cognitum-seed",
     "5-tier-trust"
-  ]
+  ],
+  "defaultEnabled": false
 }

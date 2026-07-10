@@ -2,6 +2,9 @@
   "name": "swarmdo-adr",
   "description": "ADR lifecycle management — create, index, supersede, check compliance, and link Architecture Decision Records to code via AgentDB hierarchical store + causal edges (supersedes/amends/depends-on/related)",
   "version": "0.3.0",
+  "dependencies": [
+    "swarmdo-core"
+  ],
   "author": {
     "name": "SwarmDo Team",
     "url": "https://github.com/SwarmDo/swarmdo"

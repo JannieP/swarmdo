@@ -2,6 +2,9 @@
   "name": "swarmdo-neural-trader",
   "description": "Neural trading via npx neural-trader — self-learning strategies, Rust/NAPI backtesting, 112+ MCP tools, swarm coordination, and portfolio optimization",
   "version": "0.2.0",
+  "dependencies": [
+    "swarmdo-core"
+  ],
   "author": {
     "name": "SwarmDo Team",
     "url": "https://github.com/SwarmDo/swarmdo"
@@ -22,5 +25,6 @@
     "neural-trader-runtime",
     "walk-forward",
     "monte-carlo"
-  ]
+  ],
+  "defaultEnabled": false
 }

@@ -2,6 +2,9 @@
   "name": "swarmdo-rvf",
   "description": "RVF format for portable agent memory, session persistence, and cross-platform transfer",
   "version": "0.2.0",
+  "dependencies": [
+    "swarmdo-core"
+  ],
   "author": {
     "name": "SwarmDo Team",
     "url": "https://github.com/SwarmDo/swarmdo"

@@ -2,6 +2,9 @@
   "name": "swarmdo-jujutsu",
   "description": "Advanced git workflows with diff analysis, risk scoring, change classification (feature/bugfix/refactor/...), and reviewer recommendations — wraps 6 analyze_* MCP tools (diff, diff-risk, diff-classify, diff-reviewers, file-risk, diff-stats)",
   "version": "0.2.0",
+  "dependencies": [
+    "swarmdo-core"
+  ],
   "author": {
     "name": "SwarmDo Team",
     "url": "https://github.com/SwarmDo/swarmdo"

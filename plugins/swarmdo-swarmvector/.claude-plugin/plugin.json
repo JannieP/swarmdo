@@ -2,6 +2,9 @@
   "name": "swarmdo-swarmvector",
   "description": "Self-learning vector database via npx swarmvector@0.2.25 — HNSW, adaptive LoRA embeddings, code-graph clustering, hooks routing, brain/SONA, 103 MCP tools",
   "version": "0.2.1",
+  "dependencies": [
+    "swarmdo-core"
+  ],
   "author": {
     "name": "SwarmDo Team",
     "url": "https://github.com/SwarmDo/swarmdo"

@@ -2,6 +2,9 @@
   "name": "swarmdo-daa",
   "description": "Dynamic Agentic Architecture — 8 daa_* MCP tools for adaptive agents (create/adapt), cognitive patterns, workflows (create/execute), knowledge sharing, and learning/performance metrics. Feeds the JUDGE phase of the 4-step intelligence pipeline.",
   "version": "0.2.0",
+  "dependencies": [
+    "swarmdo-core"
+  ],
   "author": {
     "name": "SwarmDo Team",
     "url": "https://github.com/SwarmDo/swarmdo"
