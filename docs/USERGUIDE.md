@@ -319,10 +319,10 @@ npx swarmdo@latest hooks intelligence --status
 
 ```bash
 # One-line install (recommended)
-curl -fsSL https://cdn.jsdelivr.net/gh/upstream/swarmdo@main/scripts/install.sh | bash
+curl -fsSL https://cdn.jsdelivr.net/gh/SwarmDo/swarmdo@main/scripts/install.sh | bash
 
 # Or full setup with MCP + diagnostics
-curl -fsSL https://cdn.jsdelivr.net/gh/upstream/swarmdo@main/scripts/install.sh | bash -s -- --full
+curl -fsSL https://cdn.jsdelivr.net/gh/SwarmDo/swarmdo@main/scripts/install.sh | bash -s -- --full
 
 # Or via npx
 npx swarmdo@latest init wizard
@@ -605,10 +605,10 @@ claude --dangerously-skip-permissions
 
 ```bash
 # curl-style installer with progress display
-curl -fsSL https://cdn.jsdelivr.net/gh/upstream/swarmdo@main/scripts/install.sh | bash
+curl -fsSL https://cdn.jsdelivr.net/gh/SwarmDo/swarmdo@main/scripts/install.sh | bash
 
 # Full setup (global + MCP + diagnostics)
-curl -fsSL https://cdn.jsdelivr.net/gh/upstream/swarmdo@main/scripts/install.sh | bash -s -- --full
+curl -fsSL https://cdn.jsdelivr.net/gh/SwarmDo/swarmdo@main/scripts/install.sh | bash -s -- --full
 ```
 
 <details>
@@ -678,7 +678,7 @@ Install Swarmdo as a native Claude Code plugin -- adds skills, commands, agents,
 
 ```bash
 # Add the marketplace (one-time)
-/plugin marketplace add upstream/swarmdo
+/plugin marketplace add SwarmDo/swarmdo
 
 # Install individual plugins
 /plugin install swarmdo-core@swarmdo         # MCP server + base agents
@@ -692,6 +692,8 @@ Install Swarmdo as a native Claude Code plugin -- adds skills, commands, agents,
 ```
 
 After installing, new `/slash-commands` and agent types are available immediately. Run `/reload-plugins` if needed.
+
+> 📦 `swarmdo-core` has been submitted to Anthropic's Claude Code plugin directory (community marketplace, `anthropics/claude-plugins-community`). Once approved it will also be installable via `/plugin install swarmdo-core@claude-community` without adding this marketplace first.
 
 <details>
 <summary>🤖 <strong>OpenAI Codex CLI Support</strong> — Full Codex integration with self-learning</summary>

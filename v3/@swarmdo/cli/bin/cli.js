@@ -93,6 +93,20 @@ console.log = (...args) => {
   _origLog.apply(console, args);
 };
 
+// Claude Code plugin hint (code.claude.com/docs/en/plugin-hints): when a
+// session runs swarmdo through Claude Code's Bash tool, emit the one-line
+// marker so Claude Code can offer to install our plugin. Emitted here in the
+// bin shim — NOT in dist/src/index.js — so it also covers the #2256 fast
+// paths below (--version/--help are exactly the probes Claude runs on an
+// unfamiliar CLI). Claude Code strips the line from all output before it
+// reaches the model and only prompts if/when swarmdo-core is listed in the
+// official Anthropic marketplace; until then it is silently dropped.
+if (process.env.CLAUDECODE) {
+  process.stderr.write(
+    '<claude-code-hint v="1" type="plugin" value="swarmdo-core@claude-plugins-official" />\n'
+  );
+}
+
 // #2256 fast path: --version / -V / --help / -h must NOT trigger heavy
 // imports (agentic-flow, swarmvector ONNX, etc.) — those eagerly download a
 // 23 MB ONNX model on cold cache, blocking 60+ s and causing SIGTERM

@@ -47,17 +47,17 @@ There are **two different install paths** with very different surface areas. Pic
 
 | | **Claude Code Plugin** | **CLI install (`npx swarmdo init`)** |
 |---|---|---|
-| What it gives you | Slash commands + a few skills + agent definitions per-plugin | Full Swarmdo loop — 98 agents, 60+ commands, 30 skills, MCP server, hooks, daemon |
+| What it gives you | Slash commands + skills + agent definitions per-plugin; `swarmdo-core` also registers the swarmdo MCP server | Full Swarmdo loop — 98 agents, 60+ commands, 30 skills, MCP server, hooks, daemon |
 | Files in your workspace | **Zero** | `.claude/`, `.swarmdo/`, `CLAUDE.md`, helpers, settings |
-| MCP server registered | **No** (`memory_store`, `swarm_init`, etc. unavailable to Claude) | Yes |
+| MCP server registered | **Yes with `swarmdo-core`** (via the plugin's `.mcp.json`); other plugins are commands/skills only | Yes |
 | Hooks installed | No | Yes |
-| Best for | Try a single plugin's commands without committing to the full install | Production use — everything works as documented |
+| Best for | Try Swarmdo without committing files to your workspace | Production use — everything works as documented |
 
-### Path A — Claude Code Plugins (lite, slash commands only)
+### Path A — Claude Code Plugins (zero files in your repo)
 
 ```bash
 # Add the marketplace
-/plugin marketplace add upstream/swarmdo
+/plugin marketplace add SwarmDo/swarmdo
 
 # Install core + any plugins you need
 /plugin install swarmdo-core@swarmdo
@@ -66,7 +66,9 @@ There are **two different install paths** with very different surface areas. Pic
 /plugin install swarmdo-neural-trader@swarmdo
 ```
 
-This adds slash commands and agent definitions only. The Swarmdo MCP server is NOT registered, so `memory_store`, `swarm_init`, `agent_spawn`, etc. won't be callable from Claude. For the full loop, use Path B below.
+`swarmdo-core` registers the swarmdo MCP server (300+ tools) plus base agents and setup skills; the other plugins add their slash commands and agent definitions. Hooks and the daemon still require Path B.
+
+> 📦 `swarmdo-core` has been submitted to Anthropic's Claude Code plugin directory (community marketplace). Once approved it will also be installable via `/plugin install swarmdo-core@claude-community` — no marketplace-add needed.
 
 <details>
 <summary><strong>🔌 All 35 plugins</strong></summary>
@@ -159,7 +161,7 @@ This adds slash commands and agent definitions only. The Swarmdo MCP server is N
 
 ```bash
 # One-line install (POSIX shells only — see Windows note below)
-curl -fsSL https://cdn.jsdelivr.net/gh/upstream/swarmdo@main/scripts/install.sh | bash
+curl -fsSL https://cdn.jsdelivr.net/gh/SwarmDo/swarmdo@main/scripts/install.sh | bash
 ```
 
 **All platforms (including native Windows PowerShell / cmd):**
