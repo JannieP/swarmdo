@@ -174,3 +174,24 @@ describe('formatFindingsSummary', () => {
     expect(s).toMatch(/aws-access-key:2/);
   });
 });
+
+describe('passphrase assignment keyword (#49)', () => {
+  const HIGH_ENTROPY = 'x8Kf2Qp9Lm3Zv7Nw5Rt1Yb4';
+  it('redacts a passphrase= assignment (was a false-negative)', () => {
+    const { output, findings } = redactText(`passphrase=${HIGH_ENTROPY}`);
+    expect(findings.some((f) => f.ruleId === 'high-entropy-assignment')).toBe(true);
+    expect(output).not.toContain(HIGH_ENTROPY);
+  });
+  it('redacts PASSPHRASE: too (case-insensitive)', () => {
+    const { findings } = redactText(`PASSPHRASE: ${HIGH_ENTROPY}`);
+    expect(findings.some((f) => f.ruleId === 'high-entropy-assignment')).toBe(true);
+  });
+  it('still redacts password= / passwd= (no regression)', () => {
+    expect(redactText(`password=${HIGH_ENTROPY}`).findings.length).toBeGreaterThan(0);
+    expect(redactText(`passwd=${HIGH_ENTROPY}`).findings.length).toBeGreaterThan(0);
+  });
+  it('does not match a bare phrase= (not a secret keyword)', () => {
+    const { findings } = redactText(`phrase=${HIGH_ENTROPY}`, { entropy: true });
+    expect(findings.some((f) => f.ruleId === 'high-entropy-assignment')).toBe(false);
+  });
+});

@@ -92,7 +92,7 @@ export const RULES: RedactRule[] = [
  * gates keep low-entropy values (paths, short flags) from being flagged.
  */
 const ASSIGNMENT_RE =
-  /(?:pass(?:word|wd)?|pwd|secret|token|api[_-]?key|apikey|access[_-]?key|auth[_-]?token|client[_-]?secret|credential|creds|key)["']?\s*[:=]\s*["']?([^\s"'`,;]{8,})/gi;
+  /(?:pass(?:word|phrase|wd)?|pwd|secret|token|api[_-]?key|apikey|access[_-]?key|auth[_-]?token|client[_-]?secret|credential|creds|key)["']?\s*[:=]\s*["']?([^\s"'`,;]{8,})/gi;
 
 /** Shannon entropy in bits/char. Pure; used by the assignment fallback. */
 export function shannonEntropy(s: string): number {
