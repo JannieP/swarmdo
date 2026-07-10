@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { decodeText } from '../src/commands/pack.ts';
 import {
   packFiles,
   estimateTokens,
@@ -171,5 +172,37 @@ describe('makeIgnoreMatcher', () => {
     const ig3 = makeIgnoreMatcher(['dist/*', '!dist/README.md']);
     expect(ig3('dist/bundle.js')).toBe(true);
     expect(ig3('dist/README.md')).toBe(false); // dist/ itself not excluded, only its contents
+  });
+});
+
+describe('decodeText: BOM-aware text decoding (#10)', () => {
+  it('decodes UTF-16LE files instead of dropping them as binary', () => {
+    const buf = Buffer.concat([Buffer.from([0xff, 0xfe]), Buffer.from('hello utf16', 'utf16le')]);
+    expect(decodeText(buf)).toBe('hello utf16');
+  });
+
+  it('decodes UTF-16BE files', () => {
+    const le = Buffer.from('big endian', 'utf16le');
+    const be = Buffer.from(le).swap16();
+    const buf = Buffer.concat([Buffer.from([0xfe, 0xff]), be]);
+    expect(decodeText(buf)).toBe('big endian');
+  });
+
+  it('strips a UTF-8 BOM instead of leaking it into content', () => {
+    const buf = Buffer.concat([Buffer.from([0xef, 0xbb, 0xbf]), Buffer.from('no bom here', 'utf8')]);
+    expect(decodeText(buf)).toBe('no bom here');
+  });
+
+  it('still rejects genuinely-binary content (NUL, no BOM)', () => {
+    expect(decodeText(Buffer.from([0x50, 0x4b, 0x00, 0x01, 0x02]))).toBeNull();
+  });
+
+  it('passes plain UTF-8 through unchanged', () => {
+    expect(decodeText(Buffer.from('plain text', 'utf8'))).toBe('plain text');
+  });
+
+  it('rejects a truncated (odd-length) UTF-16 body as binary', () => {
+    const buf = Buffer.concat([Buffer.from([0xff, 0xfe]), Buffer.from([0x41])]);
+    expect(decodeText(buf)).toBeNull();
   });
 });

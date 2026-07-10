@@ -38,6 +38,30 @@ function looksBinary(buf: Buffer): boolean {
   return false;
 }
 
+/**
+ * Decode a file buffer to bundle text, honoring BOMs (#10). UTF-16 LE/BE
+ * files decode to text (previously their NUL bytes tripped the binary
+ * heuristic and the file was silently dropped); a UTF-8 BOM is stripped
+ * instead of leaking into the bundle. Returns null for genuinely-binary
+ * content (NUL byte without a text BOM). Exported for tests.
+ */
+export function decodeText(buf: Buffer): string | null {
+  if (buf.length >= 3 && buf[0] === 0xef && buf[1] === 0xbb && buf[2] === 0xbf) {
+    return buf.subarray(3).toString('utf8');
+  }
+  if (buf.length >= 2 && buf[0] === 0xff && buf[1] === 0xfe) {
+    const body = buf.subarray(2);
+    if (body.length % 2 !== 0) return null;
+    return body.toString('utf16le');
+  }
+  if (buf.length >= 2 && buf[0] === 0xfe && buf[1] === 0xff) {
+    const body = Buffer.from(buf.subarray(2)); // copy: swap16 mutates in place
+    if (body.length % 2 !== 0) return null;
+    return body.swap16().toString('utf16le');
+  }
+  return looksBinary(buf) ? null : buf.toString('utf8');
+}
+
 interface WalkOpts {
   root: string;
   include?: (p: string) => boolean;
@@ -70,8 +94,9 @@ function walk(o: WalkOpts): PackFile[] {
         if (stat.size > o.maxBytes) continue;
         let buf: Buffer;
         try { buf = fs.readFileSync(full); } catch { continue; }
-        if (looksBinary(buf)) continue;
-        files.push({ path: rel, content: buf.toString('utf8') });
+        const text = decodeText(buf);
+        if (text === null) continue;
+        files.push({ path: rel, content: text });
       }
     }
   }
