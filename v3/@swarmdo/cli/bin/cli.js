@@ -130,6 +130,30 @@ if (process.env.CLAUDECODE) {
   // loading. The version short-circuit is the only one safe to inline.
 }
 
+// #45 fast path: `compact-snapshot` is wired to UserPromptSubmit (fires on
+// EVERY prompt) and PreCompact, so it must not pay the full-CLI bootstrap
+// (~0.6s incl. the 23 MB ONNX load). Its own module imports only fs/git/output
+// + the pure engine, so dispatch it directly and exit before any heavy import.
+// A bare `--help` still falls through to the rich help path below.
+{
+  const _argv = process.argv.slice(2);
+  if (_argv[0] === 'compact-snapshot' && !_argv.includes('--help') && !_argv.includes('-h')) {
+    try {
+      const mod = await import('../dist/src/commands/compact-snapshot.js');
+      const cmd = mod.default ?? mod.compactSnapshotCommand;
+      const rest = _argv.slice(1);
+      const args = rest.filter((a) => !a.startsWith('-'));
+      const flags = {};
+      for (const a of rest) if (a.startsWith('--')) flags[a.replace(/^--/, '')] = true;
+      const res = await cmd.action({ cwd: process.cwd(), args, flags, rawArgs: rest });
+      process.exit(res && typeof res.exitCode === 'number' ? res.exitCode : 0);
+    } catch (e) {
+      // Best-effort: a failure here must never block a turn (it runs in hooks).
+      process.exit(0);
+    }
+  }
+}
+
 // Check if we should run in MCP server mode
 // Conditions:
 //   1. stdin is being piped AND no CLI arguments provided (auto-detect)

@@ -50,6 +50,10 @@
           {
             "type": "command",
             "command": "/bin/bash -c 'INPUT=$(cat); CUSTOM=$(echo \"$INPUT\" | jq -r \".custom_instructions // \\\"\\\"\"); echo \"🔄 PreCompact Guidance:\"; echo \"📋 IMPORTANT: Review CLAUDE.md in project root for:\"; echo \"   • 54 available agents and concurrent usage patterns\"; echo \"   • Swarm coordination strategies (hierarchical, mesh, adaptive)\"; echo \"   • SPARC methodology workflows with batchtools optimization\"; echo \"   • Critical concurrent execution rules (GOLDEN RULE: 1 MESSAGE = ALL OPERATIONS)\"; if [ -n \"$CUSTOM\" ]; then echo \"🎯 Custom compact instructions: $CUSTOM\"; fi; echo \"✅ Ready for compact operation\"'"
+          },
+          {
+            "type": "command",
+            "command": "/bin/bash -c '\"${CLAUDE_PLUGIN_ROOT}/bin/swarmdo\" compact-snapshot write || true'"
           }
         ]
       },
@@ -59,6 +63,10 @@
           {
             "type": "command",
             "command": "/bin/bash -c 'echo \"🔄 Auto-Compact Guidance (Context Window Full):\"; echo \"📋 CRITICAL: Before compacting, ensure you understand:\"; echo \"   • All 54 agents available in .claude/agents/ directory\"; echo \"   • Concurrent execution patterns from CLAUDE.md\"; echo \"   • Batchtools optimization for 300% performance gains\"; echo \"   • Swarm coordination strategies for complex tasks\"; echo \"⚡ Apply GOLDEN RULE: Always batch operations in single messages\"; echo \"✅ Auto-compact proceeding with full agent context\"'"
+          },
+          {
+            "type": "command",
+            "command": "/bin/bash -c '\"${CLAUDE_PLUGIN_ROOT}/bin/swarmdo\" compact-snapshot write || true'"
           }
         ]
       }
@@ -69,6 +77,16 @@
           {
             "type": "command",
             "command": "/bin/bash -c '\"${CLAUDE_PLUGIN_ROOT}/scripts/swarmdo-hook.sh\" session-end --generate-summary true --persist-state true --export-metrics true || true'"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/bash -c '\"${CLAUDE_PLUGIN_ROOT}/bin/swarmdo\" compact-snapshot read || true'"
           }
         ]
       }
