@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — swarmdo</title>
+<meta name="description" content="Privacy policy for swarmdo — the local-first agent orchestration toolkit for Claude Code. No accounts, no telemetry, no tracking.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22><rect width=%22512%22 height=%22512%22 rx=%2296%22 fill=%22%230f1317%22/><g fill=%22%23e2a33c%22><circle cx=%22352%22 cy=%22176%22 r=%2234%22/><circle cx=%22284%22 cy=%22232%22 r=%2226%22/><circle cx=%22330%22 cy=%22286%22 r=%2224%22/><circle cx=%22216%22 cy=%22280%22 r=%2220%22/><circle cx=%22272%22 cy=%22336%22 r=%2219%22/><circle cx=%22156%22 cy=%22322%22 r=%2215%22/><circle cx=%22214%22 cy=%22382%22 r=%2214%22/><circle cx=%22106%22 cy=%22358%22 r=%2211%22/><circle cx=%22162%22 cy=%22420%22 r=%2210%22/></g></svg>">
+<link rel="canonical" href="https://swarmdo.com/privacy.html">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0f1317">
+<style>
+  :root{--bg:#0f1317;--panel:#161c22;--ink:#e8e4da;--fog:#b8b2a6;--dim:#7d7a72;--gold:#e2a33c;--line:#242c35;--mono:ui-monospace,SFMono-Regular,Menlo,monospace}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:48px 24px 80px}
+  a{color:var(--gold);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .brand{display:inline-flex;align-items:center;gap:8px;font-weight:700;color:var(--ink);margin-bottom:40px}
+  h1{font-size:32px;line-height:1.2;margin-bottom:8px}
+  .meta{color:var(--dim);font-size:14px;margin-bottom:36px}
+  h2{font-size:20px;margin:36px 0 12px;color:var(--ink)}
+  p,li{color:var(--fog);margin-bottom:12px}
+  ul{padding-left:22px;margin-bottom:12px}
+  li{margin-bottom:8px}
+  code{font-family:var(--mono);font-size:13.5px;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1.5px 6px;color:var(--ink)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:20px 0}
+  .card p{margin:0;color:var(--ink)}
+  footer{border-top:1px solid var(--line);margin-top:56px;padding-top:20px;color:var(--dim);font-size:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="brand" href="/"><svg width="20" height="20" viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="96" fill="#182029"/><g fill="#e2a33c"><circle cx="352" cy="176" r="34"/><circle cx="284" cy="232" r="26"/><circle cx="330" cy="286" r="24"/><circle cx="216" cy="280" r="20"/><circle cx="272" cy="336" r="19"/><circle cx="156" cy="322" r="15"/><circle cx="214" cy="382" r="14"/><circle cx="106" cy="358" r="11"/><circle cx="162" cy="420" r="10"/></g></svg> swarmdo</a>
+
+  <h1>Privacy Policy</h1>
+  <p class="meta">Effective 10 July 2026 · applies to swarmdo.com and the swarmdo open-source software</p>
+
+  <div class="card">
+    <p><strong>Short version:</strong> swarmdo is local-first open-source software. We run no servers, require no accounts, set no cookies, and collect no telemetry. Your code, prompts, and agent memory stay on your machine.</p>
+  </div>
+
+  <h2>This website</h2>
+  <p>swarmdo.com is a static site hosted on GitHub Pages. It sets no cookies and includes no analytics, tracking scripts, or third-party embeds. GitHub may log standard web-server request data (such as IP addresses) to operate the service, as described in <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" rel="noopener">GitHub's privacy statement</a>. We do not receive or store that data.</p>
+
+  <h2>The swarmdo software</h2>
+  <p>The swarmdo CLI, MCP server, and Claude Code plugins run entirely on your machine. Everything they produce — agent memory databases, session state, configuration, logs, and the local transcript analytics of <code>swarmdo usage</code> — is written to your local filesystem (typically <code>.swarmdo/</code> and <code>.claude/</code> in your project). None of it is transmitted to us. There is no swarmdo backend.</p>
+
+  <h2>Network requests the software makes</h2>
+  <p>swarmdo only talks to services you invoke it with:</p>
+  <ul>
+    <li><strong>npm registry</strong> — installing packages and a lightweight version check (<code>registry.npmjs.org</code>), subject to <a href="https://docs.npmjs.com/policies/privacy" rel="noopener">npm's privacy policy</a>.</li>
+    <li><strong>AI providers you configure</strong> — when agents run, your prompts and code go directly from your machine to the provider you chose (e.g. Anthropic, OpenAI, OpenRouter) using your own API keys, under that provider's terms. swarmdo never proxies or sees this traffic.</li>
+    <li><strong>GitHub</strong> — only for the git/GitHub operations you ask for.</li>
+    <li><strong>IPFS gateway</strong> — fetching the public, read-only plugin registry when you browse or install optional plugins.</li>
+  </ul>
+  <p>API keys are read from your local environment or config files and are only ever sent to the provider they belong to.</p>
+
+  <h2>What we collect</h2>
+  <p>Nothing. If you email us, we see your email; if you open a GitHub issue, it is public on GitHub. That is the extent of it.</p>
+
+  <h2>Changes</h2>
+  <p>If this policy changes, the updated version will be published at this URL with a new effective date. The version history is available in the site's <a href="https://github.com/SwarmDo/swarmdo.com" rel="noopener">public repository</a>.</p>
+
+  <h2>Contact</h2>
+  <p>Questions: <a href="mailto:maintainers@swarmdo.com">maintainers@swarmdo.com</a></p>
+
+  <footer>MIT-licensed open source · <a href="/">swarmdo.com</a> · <a href="https://github.com/SwarmDo/swarmdo">GitHub</a></footer>
+</div>
+</body>
+</html>
