@@ -42,14 +42,24 @@ export const MODEL_PRICES: Record<string, ModelPrice> = {
   // Mid tier
   'anthropic/claude-haiku-4.5':         { in: 1.00,  out: 5.00 },
   'openai/gpt-4.1':                     { in: 2.00,  out: 8.00 },
-  // Strong tier
+  // Strong tier — current-gen Claude (first-party list prices; OpenRouter
+  // mirrors them for anthropic/* slugs). Opus dropped to $5/$25 at 4.5 and
+  // held there through 4.8 — do NOT price these at the legacy $15/$75.
+  'anthropic/claude-sonnet-5':          { in: 3.00,  out: 15.00 },
   'anthropic/claude-sonnet-4-6':        { in: 3.00,  out: 15.00 },
+  'anthropic/claude-opus-4-8':          { in: 5.00,  out: 25.00 },
+  'anthropic/claude-opus-4-5':          { in: 5.00,  out: 25.00 },
+  'anthropic/claude-fable-5':           { in: 10.00, out: 50.00 },
+  // Legacy Opus 4.0 kept — its $15/$75 is correct for THAT model, still a
+  // valid slug; the current opus tier is priced by claude-opus-4-8 above.
   'anthropic/claude-opus-4':            { in: 15.00, out: 75.00 },
   // Tier-label fallbacks (when the trajectory only carries a coarse tier
   // and not a concrete modelId — happens before iter 13 wiring landed).
+  // "opus tier" today resolves to Opus 4.8-class ($5/$25); pricing it at the
+  // retired $15/$75 made the cost-optimal router avoid opus 3x too eagerly.
   haiku:   { in: 1.00,  out: 5.00 },
   sonnet:  { in: 3.00,  out: 15.00 },
-  opus:    { in: 15.00, out: 75.00 },
+  opus:    { in: 5.00,  out: 25.00 },
   inherit: { in: 3.00,  out: 15.00 },
 };
 
