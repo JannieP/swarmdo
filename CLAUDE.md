@@ -1,8 +1,8 @@
 # Claude Code Configuration - Swarmdo v1.4
 
-> **Swarmdo v1.27.0** (2026-07-10) — a large correctness-hardening batch across the deterministic toolkit (sbom/license/redact/testreport/changelog/apply/pack/hotspots/cycles/codegraph/env/usage): SPDX-aware license policy, TTL-aware cache pricing, gitignore(5) parity, CycloneDX component scope, tsconfig-paths import resolution, Bearer/OAuth secret detection, and more — each shipped with fixture tests + evidence.
+> **Swarmdo v1.29.0** (2026-07-11) — continued correctness-hardening across the deterministic toolkit (config-lint hook-events, transcript export turn-count, apply CRLF + ambiguous-hunk flagging, compact blank-run handling, sbom/pack/redact/testreport) plus memory-system fixes: content-deduped prompt-time injection and a fix for auto-memory store bloat (a search-strategy vs entry-type mismatch that broke import dedup). New this line: **compaction survival** — a working-state digest snapshotted on `PreCompact` and re-injected on the next prompt so the model re-grounds instead of re-exploring; a Claude Code plugin-hint + on-PATH `swarmdo` shim; reasoningbank timing deflake. Each shipped with fixture/regression tests + evidence.
 > 6,000+ commits, 314 MCP tools, 16 agent roles + custom types, 19 AgentDB controllers, 21 native plugins.
-> Packages: `swarmdo@1.27.0` (umbrella), `@swarmdo/cli@1.27.0`, `swarmdo-bridge@1.27.0` (wrapper in `swarmdo/`)
+> Packages: `swarmdo@1.29.0` (umbrella), `@swarmdo/cli@1.29.0`, `swarmdo-bridge@1.29.0` (wrapper in `swarmdo/`)
 
 ## Behavioral Rules (Always Enforced)
 
