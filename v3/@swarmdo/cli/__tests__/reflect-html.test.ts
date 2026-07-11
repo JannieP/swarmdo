@@ -69,4 +69,16 @@ describe('reflect-html: renderReflectionHtml', () => {
     expect(renderReflectionHtml(r, { delegation: { taskCalls: 0, toolCalls: 0, ratio: 0 } })).not.toContain('Delegation');
     expect(renderReflectionHtml(r)).not.toContain('Delegation');
   });
+
+  it('renders a Cache saved card only when caching actually saved money', () => {
+    const withSavings = computeReflection(
+      [day('2026-03-01', { costUsd: 1, totalTokens: 12000 })],
+      [mr('m', '2026-03-01', { inputTokens: 1000, cacheWriteTokens: 1000, cacheReadTokens: 10000, costUsd: 1, totalTokens: 12000 })],
+      '2026-03-01', '2026-03-31',
+      { resolvePrice: () => ({ in: 3, out: 15, cacheWrite: 3.75, cacheRead: 0.3 } as any) },
+    );
+    expect(withSavings.cacheSavingsUsd).toBeGreaterThan(0);
+    expect(renderReflectionHtml(withSavings)).toContain('Cache saved');
+    expect(renderReflectionHtml(r)).not.toContain('Cache saved'); // fixture has no cache savings
+  });
 });

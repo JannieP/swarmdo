@@ -92,6 +92,7 @@ ${stat('Avg / active day', usd(r.avgCostPerActiveDay))}
 ${stat('Longest streak', `${r.longestStreak} day${r.longestStreak === 1 ? '' : 's'}`)}
 ${stat('Peak hour', peak)}
 ${stat('Cache read', pct(r.cacheReadPct))}
+${r.cacheSavingsUsd > 0 ? stat('Cache saved', usd(r.cacheSavingsUsd)) : ''}
 ${stat('Busiest day', busiest)}
 ${stat('Trend', `${arrow} ${pct(r.trend.firstHalfCost > 0 ? (r.trend.secondHalfCost - r.trend.firstHalfCost) / r.trend.firstHalfCost : 0)}`)}
 ${opts.delegation && opts.delegation.toolCalls > 0 ? stat('Delegation', pct(opts.delegation.ratio)) : ''}
