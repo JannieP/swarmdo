@@ -62,3 +62,49 @@ describe('intelligence hook — content injection (#43)', () => {
     expect(helper.getContext('xyzzy plugh quux nonsense')).toBeNull();
   });
 });
+
+describe('intelligence hook — content dedupe (#52)', () => {
+  // The bridge re-imports auto-memory files every session, so the store fills
+  // with many copies of the same memory under DISTINCT ids (observed: 22x each).
+  // An id-only dedupe lets those identical copies occupy all 5 injection slots.
+  let dupRoot: string;
+  let dupCwd: string;
+  let dupHelper: { init: () => void; getContext: (p: string) => string | null };
+
+  beforeAll(() => {
+    dupRoot = mkdtempSync(path.join(tmpdir(), 'swarmdo-dup-'));
+    mkdirSync(path.join(dupRoot, '.swarmdo', 'data'), { recursive: true });
+    const dupContent =
+      'Commit and push in phases: make incremental commits per logical unit, one push per phase.';
+    const entries = [];
+    // 6 identical-content copies with distinct ids (what the store actually holds)…
+    for (let i = 0; i < 6; i++) {
+      entries.push({ id: `dup-${i}`, summary: 'commit-push-in-phases', category: 'auto-memory', confidence: 0.5, content: dupContent });
+    }
+    // …plus one genuinely different memory that shares query terms.
+    entries.push({ id: 'other', summary: 'always-bump-version', category: 'feedback', confidence: 0.9,
+      content: 'Increment the version on every commit and push, no exceptions.' });
+    writeFileSync(path.join(dupRoot, '.swarmdo', 'data', 'auto-memory-store.json'), JSON.stringify({ entries }));
+    const hp = path.join(dupRoot, 'helper.cjs');
+    writeFileSync(hp, generateIntelligenceStub());
+    dupCwd = process.cwd();
+    process.chdir(dupRoot);
+    dupHelper = createRequire(import.meta.url)(hp);
+    dupHelper.init();
+  });
+
+  afterAll(() => {
+    process.chdir(dupCwd);
+    rmSync(dupRoot, { recursive: true, force: true });
+  });
+
+  it('injects each distinct memory once, not N copies of the same one', () => {
+    const out = dupHelper.getContext('commit and push version bump in phases') ?? '';
+    const matched = out.split('\n').filter((l) => l.trim().startsWith('* ('));
+    const dupLines = matched.filter((l) => l.includes('commit-push-in-phases'));
+    // The 6 identical copies collapse to a single injected line…
+    expect(dupLines.length).toBe(1);
+    // …and the distinct second memory still surfaces alongside it.
+    expect(out).toMatch(/increment the version on every commit/i);
+  });
+});
