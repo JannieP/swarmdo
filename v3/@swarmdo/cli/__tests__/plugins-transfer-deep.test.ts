@@ -321,6 +321,16 @@ describe('Plugin Search', () => {
     expect(result.plugins.every(p => p.rating >= 4)).toBe(true);
   });
 
+  it('should filter hasSecurityAudit=false to only UNaudited plugins', () => {
+    const audited: any = { ...registry.plugins[0], id: 'plugin-audited', securityAudit: { passed: true } };
+    const reg: any = { ...registry, plugins: [...registry.plugins, audited] };
+    const noAudit = searchPlugins(reg, { hasSecurityAudit: false });
+    expect(noAudit.plugins.some(p => p.id === 'plugin-audited')).toBe(false);       // audited excluded
+    expect(noAudit.plugins.every(p => p.securityAudit === undefined)).toBe(true);
+    const withAudit = searchPlugins(reg, { hasSecurityAudit: true });
+    expect(withAudit.plugins.map(p => p.id)).toEqual(['plugin-audited']);            // only the audited one
+  });
+
   it('should filter by minDownloads', () => {
     const result = searchPlugins(registry, { minDownloads: 100 });
     expect(result.plugins.every(p => p.downloads >= 100)).toBe(true);

@@ -93,7 +93,7 @@ export function searchPlugins(
   // Security audit filter
   if (options.hasSecurityAudit !== undefined) {
     plugins = plugins.filter(p =>
-      options.hasSecurityAudit ? p.securityAudit !== undefined : true
+      options.hasSecurityAudit ? p.securityAudit !== undefined : p.securityAudit === undefined
     );
   }
 
