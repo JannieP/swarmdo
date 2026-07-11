@@ -15,7 +15,7 @@
 import { execFileSync } from 'node:child_process';
 import type { Command, CommandContext, CommandResult } from '../types.js';
 import { output } from '../output.js';
-import { parseGitLog, computeHotspots, formatHotspots, type SortKey } from '../hotspots/hotspots.js';
+import { parseGitLog, computeHotspots, formatHotspots, hotspotsToCsv, type SortKey } from '../hotspots/hotspots.js';
 
 const SORT_KEYS: SortKey[] = ['risk', 'churn', 'commits', 'authors'];
 
@@ -38,6 +38,7 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
   }
   // Global --format (text|json|table); text and table both render the table.
   const asJson = ctx.flags.format === 'json';
+  const asCsv = ctx.flags.csv === true; // dedicated flag (global --format has no csv choice)
 
   // Capture history: SOH-delimited header + numstat, no merges. `%aN` (not
   // `%an`) resolves author names through `.mailmap`, so name/email variants of
@@ -56,7 +57,9 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
   const now = Date.now();
   const spots = computeHotspots(parseGitLog(raw), now, { by, top: top > 0 ? top : undefined, minCommits });
 
-  if (asJson) {
+  if (asCsv) {
+    process.stdout.write(hotspotsToCsv(spots) + '\n');
+  } else if (asJson) {
     process.stdout.write(JSON.stringify({ generated: new Date(now).toISOString(), by, count: spots.length, hotspots: spots }, null, 2) + '\n');
   } else {
     if (spots.length === 0) {
@@ -77,10 +80,12 @@ export const hotspotsCommand: Command = {
     { name: 'top', description: 'keep only the top N files (default 20; 0 = all)', type: 'string' },
     { name: 'min-commits', description: 'drop files with fewer than N commits (default 1)', type: 'string' },
     { name: 'by', description: `sort key: ${SORT_KEYS.join('|')} (default risk)`, type: 'string' },
+    { name: 'csv', description: 'export the ranking as CSV (for spreadsheets)', type: 'boolean' },
   ],
   examples: [
     { command: 'swarmdo hotspots src --since 90d', description: 'Risk hotspots under src/ in the last 90 days' },
     { command: 'swarmdo hotspots --by churn --top 10 --format json', description: 'Top-10 by churn as JSON' },
+    { command: 'swarmdo hotspots --csv > hotspots.csv', description: 'Export the risk ranking to CSV' },
   ],
   action: run,
 };

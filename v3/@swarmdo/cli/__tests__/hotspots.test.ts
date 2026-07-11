@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseGitLog, computeHotspots, formatHotspots, resolveRenamePath } from '../src/hotspots/hotspots.ts';
+import { parseGitLog, computeHotspots, formatHotspots, hotspotsToCsv, resolveRenamePath } from '../src/hotspots/hotspots.ts';
 
 const SOH = '\x01';
 const US = '\x1f';
@@ -160,5 +160,22 @@ describe('formatHotspots', () => {
   });
   it('handles an empty history', () => {
     expect(formatHotspots([], NOW)).toContain('no hotspots');
+  });
+});
+
+describe('hotspots: hotspotsToCsv', () => {
+  it('exports headers + rows with ISO dates, quoting paths with commas', () => {
+    const spots = [
+      { path: 'src/a.ts', commits: 5, churn: 100, authors: 2, firstTouched: Date.parse('2026-01-15T00:00:00Z'), lastTouched: Date.parse('2026-07-03T12:00:00Z'), risk: 42.5 },
+      { path: 'src/b,c.ts', commits: 1, churn: 0, authors: 1, firstTouched: 0, lastTouched: 0, risk: 0 },
+    ];
+    const lines = hotspotsToCsv(spots).split('\n');
+    expect(lines[0]).toBe('path,risk,commits,churn,authors,firstTouched,lastTouched');
+    expect(lines[1]).toBe('src/a.ts,42.5,5,100,2,2026-01-15,2026-07-03');
+    // comma in path → quoted; zero epochs → empty date fields
+    expect(lines[2]).toBe('"src/b,c.ts",0,1,0,1,,');
+  });
+  it('emits just the header for an empty ranking', () => {
+    expect(hotspotsToCsv([])).toBe('path,risk,commits,churn,authors,firstTouched,lastTouched');
   });
 });

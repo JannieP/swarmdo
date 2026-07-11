@@ -16,6 +16,8 @@
  *   <added>\t<deleted>\t<path> ← one numstat line per file ('-' for binary)
  */
 
+import { toCsv } from '../util/csv.js';
+
 const SOH = '\x01'; // start-of-commit marker (git --format=format:%x01...)
 const US = '\x1f'; // field separator (%x1f)
 
@@ -173,6 +175,15 @@ export function computeHotspots(commits: Commit[], now: number, opts: HotspotOpt
   out.sort((x, y) => (y[by] as number) - (x[by] as number) || (x.path < y.path ? -1 : x.path > y.path ? 1 : 0));
   if (opts.top && opts.top > 0) out = out.slice(0, opts.top);
   return out;
+}
+
+/** Export the ranking as CSV for spreadsheets / tech-debt review. Epoch dates
+ * render as ISO `YYYY-MM-DD` (UTC). Pure. */
+export function hotspotsToCsv(spots: FileHotspot[]): string {
+  const isoDay = (ms: number): string => (ms > 0 ? new Date(ms).toISOString().slice(0, 10) : '');
+  const headers = ['path', 'risk', 'commits', 'churn', 'authors', 'firstTouched', 'lastTouched'];
+  const rows = spots.map((s) => [s.path, s.risk, s.commits, s.churn, s.authors, isoDay(s.firstTouched), isoDay(s.lastTouched)]);
+  return toCsv(headers, rows);
 }
 
 /** Human-readable table. Pure. */
