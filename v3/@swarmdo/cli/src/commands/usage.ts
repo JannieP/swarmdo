@@ -30,6 +30,7 @@ import { collectToolErrors, type ToolErrorReport } from '../usage/transcript-err
 import { computeCacheStats, type CacheStats } from '../usage/cache-stats.js';
 import { evaluateGuard, type GuardThreshold, type GuardStatus } from '../usage/spend-guard.js';
 import { resolvePeriodPair, parseRange, diffPeriods, modelMovers, type DayRow, type ModelRow, type Period, type MetricDelta } from '../usage/diff.js';
+import { computeReflection, monthsBefore, type Reflection } from '../usage/reflect.js';
 
 const VIEWS: Record<string, { dimension: UsageDimension; label: string }> = {
   daily: { dimension: 'day', label: 'Date' },
@@ -421,6 +422,62 @@ function runGuardView(ctx: CommandContext, collection: UsageCollection): Command
   return { success: exitCode === 0, exitCode };
 }
 
+const PERIOD_MONTHS: Record<string, number> = { '1m': 1, '3m': 3, '6m': 6, '12m': 12 };
+
+/** `usage reflect` — a wrapped-style retrospective over the local transcripts (#47). */
+function runReflectView(ctx: CommandContext, collection: ReturnType<typeof collectUsage>): CommandResult {
+  const periodFlag = (typeof ctx.flags.period === 'string' ? ctx.flags.period : '3m').toLowerCase();
+  const months = PERIOD_MONTHS[periodFlag];
+  if (!months) {
+    output.printError(`unknown --period "${periodFlag}" (expected ${Object.keys(PERIOD_MONTHS).join('|')})`);
+    return { success: false, exitCode: 1 };
+  }
+  const to = localDateKey(new Date());
+  const from = monthsBefore(to, months);
+
+  const dayRows: DayRow[] = aggregateUsage(collection.events, 'day').map((r) => ({ key: r.key, totals: r.totals }));
+  const md = new Map<string, ModelRow>();
+  for (const e of collection.events) {
+    const k = `${e.model} ${e.dateKey}`;
+    const row = md.get(k) ?? { key: e.model, day: e.dateKey, totals: { costUsd: 0, inputTokens: 0, outputTokens: 0, cacheReadTokens: 0, cacheWriteTokens: 0, totalTokens: 0 } };
+    row.totals.costUsd += e.costUsd;
+    row.totals.totalTokens += e.inputTokens + e.outputTokens + e.cacheWriteTokens + e.cacheReadTokens;
+    md.set(k, row);
+  }
+
+  const reflection = computeReflection(dayRows, [...md.values()], from, to);
+
+  if (ctx.flags.json === true) {
+    output.printJson(reflection);
+    return { success: true, data: reflection };
+  }
+
+  const r: Reflection = reflection;
+  const pctStr = (x: number): string => `${Math.round(x * 100)}%`;
+  const arrow = r.trend.direction === 'up' ? '↑' : r.trend.direction === 'down' ? '↓' : '→';
+  output.writeln(output.bold(`Usage reflect  ${r.period.from}..${r.period.to}`) + output.dim(`  (${periodFlag}, ${r.period.spanDays} days)`));
+  if (r.totals.activeDays === 0) {
+    output.writeln(output.info('no Claude Code activity in this window'));
+    return { success: true, exitCode: 0 };
+  }
+  output.writeln('');
+  output.writeln(`  Total spend        ${output.bold(fmtCost(r.totals.costUsd))}  ${output.dim(`across ${r.totals.activeDays} active day${r.totals.activeDays === 1 ? '' : 's'} of ${r.period.spanDays}`)}`);
+  output.writeln(`  Total tokens       ${r.totals.totalTokens.toLocaleString()}`);
+  if (r.busiestDay) output.writeln(`  Busiest day        ${r.busiestDay.day}  ${output.dim(`(${fmtCost(r.busiestDay.costUsd)}, ${r.busiestDay.totalTokens.toLocaleString()} tok)`)}`);
+  output.writeln(`  Longest streak     ${r.longestStreak} day${r.longestStreak === 1 ? '' : 's'}`);
+  output.writeln(`  Avg / active day   ${fmtCost(r.avgCostPerActiveDay)}`);
+  output.writeln(`  Cache read share   ${pctStr(r.cacheReadPct)}`);
+  output.writeln(`  Cost trend         ${arrow} ${fmtCost(r.trend.firstHalfCost)} → ${fmtCost(r.trend.secondHalfCost)} ${output.dim(`(${r.trend.direction})`)}`);
+  if (r.topModels.length) {
+    output.writeln('');
+    output.writeln(output.bold('  Top models'));
+    r.topModels.forEach((m, i) => {
+      output.writeln(`    ${i + 1}. ${m.model.padEnd(22)} ${fmtCost(m.costUsd).padStart(9)}  ${output.dim(pctStr(m.pct))}`);
+    });
+  }
+  return { success: true, exitCode: 0 };
+}
+
 async function run(ctx: CommandContext): Promise<CommandResult> {
   const viewName = (ctx.args[0] || 'daily').toLowerCase();
 
@@ -460,9 +517,15 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
     return runDiffView(ctx, collectUsage({ dirs }));
   }
 
+  if (viewName === 'reflect') {
+    const dirFlag = ctx.flags.dir;
+    const dirs = typeof dirFlag === 'string' ? [dirFlag] : Array.isArray(dirFlag) ? dirFlag.map(String) : undefined;
+    return runReflectView(ctx, collectUsage({ dirs }));
+  }
+
   const view = VIEWS[viewName];
   if (!view) {
-    output.writeln(output.error(`unknown view: ${viewName} (expected ${Object.keys(VIEWS).join('|')}|blocks|errors|cache|guard|diff)`));
+    output.writeln(output.error(`unknown view: ${viewName} (expected ${Object.keys(VIEWS).join('|')}|blocks|errors|cache|guard|diff|reflect)`));
     return { success: false, exitCode: 1 };
   }
 

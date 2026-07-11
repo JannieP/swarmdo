@@ -398,7 +398,7 @@ Run `swarmdo preset info efficiency` for the full guide. Both are **user-invoked
 | `plugins` | 5 | Plugin management (list, install, uninstall, enable, disable) |
 | `deployment` | 5 | Deployment management (deploy, rollback, status, environments, release) |
 | `embeddings` | 4 | Vector embeddings (embed, batch, search, init) — agentic-flow ONNX backend (speedup unverified, no benchmark) |
-| `usage` | 8 | Claude Code token/cost analytics from local transcripts (daily, monthly, models, projects, sessions, 5h `blocks` w/ live burn, `errors` tool-failure analytics, `cache` prompt-cache efficiency + $ saved; alias: `cost`) |
+| `usage` | 10 | Claude Code token/cost analytics from local transcripts (daily, monthly, models, projects, sessions, 5h `blocks` w/ live burn, `errors` tool-failure analytics, `cache` prompt-cache efficiency + $ saved, `guard` budget policy, `reflect` wrapped-style retrospective; alias: `cost`) |
 | `repair` | 1 | Test-Driven Repair — bounded, budget-capped headless claude loop fixes source until a failing test passes (alias: `tdd-repair`; dry-run without `--confirm`) |
 | `integrations` | 2 | Wire swarmdo into Codex CLI / Copilot CLI / pi (AGENTS.md + per-CLI MCP config, idempotent merges; alias `integrate`; NEVER touches .claude/.mcp.json/CLAUDE.md) |
 | `hud` | 1 | Single-pane operational HUD: 5h block burn, task readiness, daemon workers, memory snapshots (`--watch`, `--json`) |
