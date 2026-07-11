@@ -36,6 +36,26 @@ export interface ToolErrorReport {
   sessionsWithErrors: number;
 }
 
+export interface Delegation {
+  /** tool_use calls to the `Task` tool (subagent spawns) */
+  taskCalls: number;
+  /** all tool_use calls */
+  toolCalls: number;
+  /** taskCalls / toolCalls, 0..1 (0 when no tool calls) */
+  ratio: number;
+}
+
+/**
+ * Delegation ratio: what fraction of tool calls spawned a subagent (the `Task`
+ * tool), from an already-collected tool report. The report's parsing/counting
+ * is the tested collectToolErrors path — this just extracts the Task share. Pure.
+ */
+export function delegationFromReport(report: Pick<ToolErrorReport, 'tools' | 'totalCalls'>): Delegation {
+  const taskCalls = report.tools.find((t) => t.tool === 'Task')?.calls ?? 0;
+  const toolCalls = report.totalCalls;
+  return { taskCalls, toolCalls, ratio: toolCalls > 0 ? taskCalls / toolCalls : 0 };
+}
+
 interface Block {
   type?: string;
   id?: string;

@@ -63,4 +63,10 @@ describe('reflect-html: renderReflectionHtml', () => {
     expect(renderReflectionHtml(r)).not.toContain('generated ');
     expect(renderReflectionHtml(r, { generatedAt: '2026-03-31' })).toContain('generated 2026-03-31');
   });
+
+  it('renders a delegation stat card when tool calls are present, omits it otherwise', () => {
+    expect(renderReflectionHtml(r, { delegation: { taskCalls: 12, toolCalls: 100, ratio: 0.12 } })).toContain('Delegation');
+    expect(renderReflectionHtml(r, { delegation: { taskCalls: 0, toolCalls: 0, ratio: 0 } })).not.toContain('Delegation');
+    expect(renderReflectionHtml(r)).not.toContain('Delegation');
+  });
 });

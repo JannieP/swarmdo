@@ -5,6 +5,7 @@ import {
   newAccum,
   foldLine,
   finalizeReport,
+  delegationFromReport,
   type ParsedLine,
 } from '../src/usage/transcript-errors.ts';
 
@@ -125,5 +126,19 @@ describe('transcript-errors: fold + finalize', () => {
     expect(r).toMatchObject({ totalCalls: 0, totalErrors: 0, filesScanned: 5, sessionsWithErrors: 0 });
     expect(r.tools).toEqual([]);
     expect(r.topErrors).toEqual([]);
+  });
+});
+
+describe('transcript-errors: delegationFromReport (#47)', () => {
+  const stat = (tool: string, calls: number) => ({ tool, calls, errors: 0, errorRate: 0 });
+  it('computes the Task-call share of all tool calls', () => {
+    const r = delegationFromReport({ tools: [stat('Task', 20), stat('Bash', 60), stat('Read', 20)], totalCalls: 100 });
+    expect(r).toEqual({ taskCalls: 20, toolCalls: 100, ratio: 0.2 });
+  });
+  it('is zero when no subagents were spawned', () => {
+    expect(delegationFromReport({ tools: [stat('Bash', 10)], totalCalls: 10 })).toEqual({ taskCalls: 0, toolCalls: 10, ratio: 0 });
+  });
+  it('avoids divide-by-zero on an empty report', () => {
+    expect(delegationFromReport({ tools: [], totalCalls: 0 })).toEqual({ taskCalls: 0, toolCalls: 0, ratio: 0 });
   });
 });

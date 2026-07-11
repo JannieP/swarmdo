@@ -26,7 +26,7 @@ import {
   type UsageDimension,
   type UsageTotals,
 } from '../usage/transcript-usage.js';
-import { collectToolErrors, type ToolErrorReport } from '../usage/transcript-errors.js';
+import { collectToolErrors, delegationFromReport, type ToolErrorReport } from '../usage/transcript-errors.js';
 import { computeCacheStats, type CacheStats } from '../usage/cache-stats.js';
 import { evaluateGuard, type GuardThreshold, type GuardStatus } from '../usage/spend-guard.js';
 import { resolvePeriodPair, parseRange, diffPeriods, modelMovers, type DayRow, type ModelRow, type Period, type MetricDelta } from '../usage/diff.js';
@@ -459,13 +459,19 @@ function runReflectView(ctx: CommandContext, collection: ReturnType<typeof colle
 
   const reflection = computeReflection(dayRows, [...md.values()], from, to, {}, [...pd.values()], hourHistogram);
 
+  // Delegation ratio (#47): reuse the (windowed) tool-error scan to count Task
+  // (subagent) calls vs all tool calls — the parsing is already tested there.
+  const delDirFlag = ctx.flags.dir;
+  const delDirs = typeof delDirFlag === 'string' ? [delDirFlag] : Array.isArray(delDirFlag) ? delDirFlag.map(String) : undefined;
+  const delegation = delegationFromReport(collectToolErrors({ dirs: delDirs, since: from, until: to }));
+
   if (ctx.flags.json === true) {
-    output.printJson(reflection);
+    output.printJson({ ...reflection, delegation });
     return { success: true, data: reflection };
   }
 
   if (ctx.flags.html === true) {
-    output.writeln(renderReflectionHtml(reflection, { generatedAt: to }));
+    output.writeln(renderReflectionHtml(reflection, { generatedAt: to, delegation }));
     return { success: true, exitCode: 0 };
   }
 
@@ -484,6 +490,9 @@ function runReflectView(ctx: CommandContext, collection: ReturnType<typeof colle
   output.writeln(`  Longest streak     ${r.longestStreak} day${r.longestStreak === 1 ? '' : 's'}`);
   output.writeln(`  Avg / active day   ${fmtCost(r.avgCostPerActiveDay)}`);
   output.writeln(`  Cache read share   ${pctStr(r.cacheReadPct)}`);
+  if (delegation.toolCalls > 0) {
+    output.writeln(`  Delegation         ${pctStr(delegation.ratio)}  ${output.dim(`(${delegation.taskCalls} of ${delegation.toolCalls} tool calls to subagents)`)}`);
+  }
   output.writeln(`  Cost trend         ${arrow} ${fmtCost(r.trend.firstHalfCost)} → ${fmtCost(r.trend.secondHalfCost)} ${output.dim(`(${r.trend.direction})`)}`);
   if (r.peakHour) output.writeln(`  Peak hour          ${String(r.peakHour.hour).padStart(2, '0')}:00  ${output.dim(`(${fmtCost(r.peakHour.value)})`)}`);
   if (r.hourHistogram.some((v) => v > 0)) {

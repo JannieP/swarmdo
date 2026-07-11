@@ -51,7 +51,10 @@ function stat(label: string, value: string): string {
 }
 
 /** Render the retrospective to a complete self-contained HTML document. Pure. */
-export function renderReflectionHtml(r: Reflection, opts: { generatedAt?: string } = {}): string {
+export function renderReflectionHtml(
+  r: Reflection,
+  opts: { generatedAt?: string; delegation?: { taskCalls: number; toolCalls: number; ratio: number } } = {},
+): string {
   const arrow = r.trend.direction === 'up' ? '↑' : r.trend.direction === 'down' ? '↓' : '→';
   const peak = r.peakHour ? `${String(r.peakHour.hour).padStart(2, '0')}:00` : '—';
   const busiest = r.busiestDay ? `${r.busiestDay.day} (${usd(r.busiestDay.costUsd)})` : '—';
@@ -91,6 +94,7 @@ ${stat('Peak hour', peak)}
 ${stat('Cache read', pct(r.cacheReadPct))}
 ${stat('Busiest day', busiest)}
 ${stat('Trend', `${arrow} ${pct(r.trend.firstHalfCost > 0 ? (r.trend.secondHalfCost - r.trend.firstHalfCost) / r.trend.firstHalfCost : 0)}`)}
+${opts.delegation && opts.delegation.toolCalls > 0 ? stat('Delegation', pct(opts.delegation.ratio)) : ''}
 </div>
 <h2>Cost by hour of day</h2>${hourBars(r.hourHistogram)}
 <h2>Top models</h2>${shareBars(r.topModels)}
