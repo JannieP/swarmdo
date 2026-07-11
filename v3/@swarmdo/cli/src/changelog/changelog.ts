@@ -57,7 +57,10 @@ export function parseCommit(hash: string, subject: string, body = ''): ParsedCom
       hash,
       type: 'revert',
       scope: inner ? inner[2] ?? null : null,
-      breaking: BREAKING_RE.test(body),
+      // A revert of a breaking commit is itself breaking — mirror the non-revert
+      // branch and consult the reverted subject's `!` marker (inner group 3),
+      // not just a BREAKING CHANGE footer on the revert body.
+      breaking: (inner ? inner[3] === '!' : false) || BREAKING_RE.test(body),
       subject: inner ? inner[4].trim() : rev[1].trim(),
       raw: trimmed,
     };

@@ -47,6 +47,13 @@ describe('changelog: parseCommit', () => {
   it('still parses the conventional `revert:` type form', () => {
     expect(parseCommit('r3', 'revert: undo the change')).toMatchObject({ type: 'revert', subject: 'undo the change' });
   });
+  it('marks a revert of a breaking (`!`) commit as breaking (so it shows in Breaking Changes)', () => {
+    const c = parseCommit('r4', 'Revert "feat(api)!: drop legacy v1 endpoints"', 'This reverts commit abc123.');
+    expect(c).toMatchObject({ type: 'revert', scope: 'api', breaking: true });
+  });
+  it('does not mark a revert of a non-breaking commit as breaking', () => {
+    expect(parseCommit('r5', 'Revert "feat(api): add endpoint"').breaking).toBe(false);
+  });
 });
 
 describe('changelog: parseGitLog', () => {
