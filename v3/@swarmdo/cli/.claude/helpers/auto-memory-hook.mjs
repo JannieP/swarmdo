@@ -13,7 +13,7 @@
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { fileURLToPath, pathToFileURL } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -52,12 +52,29 @@ async function gracefulExit(signal) {
 process.on('SIGTERM', () => { gracefulExit('SIGTERM'); });
 process.on('SIGINT', () => { gracefulExit('SIGINT'); });
 
-// Ensure data dir
-if (!existsSync(DATA_DIR)) mkdirSync(DATA_DIR, { recursive: true });
-
 // ============================================================================
 // Simple JSON File Backend (implements IMemoryBackend interface)
 // ============================================================================
+
+// Collapse entries that are the SAME memory — identical content signature but
+// distinct ids — keeping the first occurrence. The auto-memory bridge
+// historically re-imported every session with a fresh random id, bloating the
+// store ~22x (#53); this heals already-bloated stores and de-dupes defensively.
+// Keyed by namespace + content hash (or raw content) so genuinely distinct
+// memories are never merged. Pure.
+function dedupeByContentSignature(entries) {
+  const seen = new Set();
+  const out = [];
+  for (const e of entries) {
+    const ns = (e && e.namespace) || 'default';
+    const body = (e && e.metadata && e.metadata.contentHash) || (e && (e.content || e.value)) || '';
+    const sig = ns + '\u0001' + body;
+    if (seen.has(sig)) continue;
+    seen.add(sig);
+    out.push(e);
+  }
+  return out;
+}
 
 class JsonFileBackend {
   constructor(filePath) {
@@ -70,7 +87,12 @@ class JsonFileBackend {
       try {
         const data = JSON.parse(readFileSync(this.filePath, 'utf-8'));
         if (Array.isArray(data)) {
-          for (const entry of data) this.entries.set(entry.id, entry);
+          // Collapse content-duplicates left by the pre-#53 import bug (same
+          // memory re-imported each session under a fresh id). Auto-heals an
+          // already-bloated store by rewriting it once when dupes are dropped.
+          const deduped = dedupeByContentSignature(data);
+          for (const entry of deduped) this.entries.set(entry.id, entry);
+          if (deduped.length < data.length) this._persist();
         }
       } catch { /* start fresh */ }
     }
@@ -371,32 +393,43 @@ async function doStatus() {
 // Main
 // ============================================================================
 
-const command = process.argv[2] || 'status';
+// Only dispatch CLI commands when this file is executed directly
+// (`node auto-memory-hook.mjs …`), NOT when it is imported by a test —
+// importing must not run a command or exit the process (#53 regression test
+// imports JsonFileBackend + dedupeByContentSignature below).
+if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
+  // Ensure data dir (only when actually running a command, not on import)
+  if (!existsSync(DATA_DIR)) mkdirSync(DATA_DIR, { recursive: true });
+  const command = process.argv[2] || 'status';
 
-// Dynamic import() failures can surface as unhandled rejections on a later
-// microtask even when the awaiting call site already caught them, which would
-// otherwise force a non-zero exit. Swallow to keep hooks exit-0, but surface the
-// reason under SWARMDO_DEBUG/DEBUG so genuine async bugs aren't silently hidden
-// (FIX 2 — the previous `() => {}` discarded every rejection process-wide).
-process.on('unhandledRejection', (reason) => {
-  if (DEBUG) {
-    const detail = reason && reason.message ? reason.message : String(reason);
-    process.stderr.write(`[AutoMemory] unhandledRejection (suppressed): ${detail}\n`);
-  }
-});
+  // Dynamic import() failures can surface as unhandled rejections on a later
+  // microtask even when the awaiting call site already caught them, which would
+  // otherwise force a non-zero exit. Swallow to keep hooks exit-0, but surface the
+  // reason under SWARMDO_DEBUG/DEBUG so genuine async bugs aren't silently hidden
+  // (FIX 2 — the previous `() => {}` discarded every rejection process-wide).
+  process.on('unhandledRejection', (reason) => {
+    if (DEBUG) {
+      const detail = reason && reason.message ? reason.message : String(reason);
+      process.stderr.write(`[AutoMemory] unhandledRejection (suppressed): ${detail}\n`);
+    }
+  });
 
-try {
-  switch (command) {
-    case 'import': await doImport(); break;
-    case 'sync': await doSync(); break;
-    case 'status': await doStatus(); break;
-    default:
-      console.log('Usage: auto-memory-hook.mjs <import|sync|status>');
-      break;
+  try {
+    switch (command) {
+      case 'import': await doImport(); break;
+      case 'sync': await doSync(); break;
+      case 'status': await doStatus(); break;
+      default:
+        console.log('Usage: auto-memory-hook.mjs <import|sync|status>');
+        break;
+    }
+  } catch (err) {
+    // Hooks must never crash Claude Code - fail silently
+    try { dim(`Error (non-critical): ${err.message}`); } catch (_) {}
   }
-} catch (err) {
-  // Hooks must never crash Claude Code - fail silently
-  try { dim(`Error (non-critical): ${err.message}`); } catch (_) {}
+  // Force clean exit — process.exitCode alone isn't enough if async errors override it
+  process.exit(0);
 }
-// Force clean exit — process.exitCode alone isn't enough if async errors override it
-process.exit(0);
+
+// Exported for unit tests (the run-guard above keeps import side-effect-free).
+export { JsonFileBackend, dedupeByContentSignature };
