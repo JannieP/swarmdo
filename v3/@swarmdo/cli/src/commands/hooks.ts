@@ -10,6 +10,13 @@ import { callMCPTool, MCPClientError } from '../mcp-client.js';
 import { storeCommand } from './transfer-store.js';
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
+import { bridgeSearchEntries } from '../memory/memory-bridge.js';
+import {
+  selectInjectionMemories,
+  mapSearchResultsToCandidates,
+  extractPromptFromPayload,
+  type SearchRow,
+} from '../memory-inject/select.js';
 
 /**
  * #1686 — `?? 0` only defaults null/undefined; NaN slips through and
@@ -874,6 +881,122 @@ const routeCommand: Command = {
       return { success: false, exitCode: 1 };
     }
   }
+};
+
+/**
+ * Read a Claude Code hook payload from stdin (JSON on UserPromptSubmit), with a
+ * short timeout so it never hangs when stdin isn't closed (a known Windows
+ * failure mode). Returns '' for a TTY or on any error — the caller then simply
+ * injects nothing.
+ */
+async function readHookStdin(timeoutMs = 1500): Promise<string> {
+  if (process.stdin.isTTY) return '';
+  return new Promise<string>((resolve) => {
+    let data = '';
+    const finish = (v: string) => {
+      try { process.stdin.pause(); } catch { /* noop */ }
+      resolve(v);
+    };
+    const timer = setTimeout(() => finish(data), timeoutMs);
+    try {
+      process.stdin.setEncoding('utf8');
+      process.stdin.on('data', (c) => { data += c; });
+      process.stdin.on('end', () => { clearTimeout(timer); finish(data); });
+      process.stdin.on('error', () => { clearTimeout(timer); finish(data); });
+      process.stdin.resume();
+    } catch {
+      clearTimeout(timer);
+      finish('');
+    }
+  });
+}
+
+const DEFAULT_INJECT_NAMESPACES = ['claude-memories', 'auto-memory', 'patterns'];
+
+/**
+ * memory-inject — the #43 prompt-time semantic memory injection hook. Embeds the
+ * submitted prompt, vector-searches AgentDB across the memory namespaces, and
+ * emits the most relevant stored memories as UserPromptSubmit `additionalContext`
+ * under a strict token budget. Wired for the hook path: it NEVER errors out
+ * (that would break the user's prompt) and stays silent when nothing is relevant.
+ */
+const memoryInjectCommand: Command = {
+  name: 'memory-inject',
+  description: 'Inject relevant stored memories into the prompt (UserPromptSubmit hook)',
+  options: [
+    { name: 'prompt', short: 'p', description: 'Prompt text (else read the hook JSON from stdin)', type: 'string' },
+    { name: 'namespaces', description: 'Comma-separated namespaces to search', type: 'string', default: DEFAULT_INJECT_NAMESPACES.join(',') },
+    { name: 'budget', description: 'Max tokens of injected context', type: 'number', default: 800 },
+    { name: 'min-relevance', description: 'Minimum relevance score (0..1)', type: 'number', default: 0.35 },
+    { name: 'top-k', short: 'K', description: 'Max memories to inject', type: 'number', default: 5 },
+    { name: 'limit', description: 'Max search results to rank', type: 'number', default: 20 },
+    { name: 'preview', description: 'Print the block for humans instead of emitting hook JSON', type: 'boolean' },
+    { name: 'db', description: 'Path to the memory database', type: 'string' },
+  ],
+  examples: [
+    { command: 'swarmdo hooks memory-inject -p "refactor the auth module" --preview', description: 'Preview relevant memories for a prompt' },
+    { command: "echo '{\"prompt\":\"fix bug\"}' | swarmdo hooks memory-inject", description: 'Run as a UserPromptSubmit hook' },
+  ],
+  action: async (ctx: CommandContext): Promise<CommandResult> => {
+    const preview = Boolean(ctx.flags.preview);
+    // A hook must NEVER break the user's prompt: swallow every error and emit nothing.
+    try {
+      if (process.env.SWARMDO_MEMORY_INJECT_DISABLE === '1') return { success: true };
+
+      let prompt = ((ctx.flags.prompt as string) || ctx.args.join(' ')).trim();
+      if (!prompt) prompt = extractPromptFromPayload(await readHookStdin());
+      if (!prompt) return { success: true }; // nothing to search on
+
+      const namespaces = String(ctx.flags.namespaces ?? DEFAULT_INJECT_NAMESPACES.join(','))
+        .split(',').map((s) => s.trim()).filter(Boolean);
+      const minRelevance = (ctx.flags.minRelevance as number) ?? 0.35;
+      const topK = (ctx.flags.topK as number) ?? 5;
+      const limit = Math.max((ctx.flags.limit as number) ?? 20, topK);
+
+      const search = await bridgeSearchEntries({
+        query: prompt,
+        namespace: 'all',
+        limit,
+        threshold: minRelevance,
+        fullContent: true,
+        dbPath: ctx.flags.db as string | undefined,
+      });
+
+      const rows = (search && search.success ? search.results : []) as SearchRow[];
+      const candidates = mapSearchResultsToCandidates(rows, namespaces);
+      const result = selectInjectionMemories(candidates, {
+        budgetTokens: (ctx.flags.budget as number) ?? 800,
+        minRelevance,
+        topK,
+      });
+
+      if (preview) {
+        if (!result.block) {
+          output.printInfo('No relevant memories to inject.');
+        } else {
+          output.writeln(result.block);
+          output.writeln();
+          output.printInfo(
+            `Injected ${result.used.length} memor${result.used.length === 1 ? 'y' : 'ies'} ` +
+            `(~${result.tokensUsed} tokens${result.skipped ? `, ${result.skipped} skipped` : ''}).`,
+          );
+        }
+        return { success: true, data: { used: result.used.length, skipped: result.skipped, tokensUsed: result.tokensUsed } };
+      }
+
+      // Hook mode: emit additionalContext JSON ONLY when there's something to add,
+      // so an irrelevant prompt leaves Claude's context untouched.
+      if (result.block) {
+        process.stdout.write(JSON.stringify({
+          hookSpecificOutput: { hookEventName: 'UserPromptSubmit', additionalContext: result.block },
+        }) + '\n');
+      }
+      return { success: true };
+    } catch (err) {
+      if (preview) output.printError(`Memory injection failed: ${String(err)}`);
+      return { success: true }; // never fail the hook
+    }
+  },
 };
 
 // Explain subcommand
@@ -5367,6 +5490,7 @@ export const hooksCommand: Command = {
     sessionEndCommand,
     sessionRestoreCommand,
     routeCommand,
+    memoryInjectCommand,
     explainCommand,
     pretrainCommand,
     buildAgentsCommand,
@@ -5424,6 +5548,7 @@ export const hooksCommand: Command = {
       `${output.highlight('session-end')}     - End current session and persist state`,
       `${output.highlight('session-restore')} - Restore a previous session`,
       `${output.highlight('route')}           - Route tasks to optimal agents`,
+      `${output.highlight('memory-inject')}   - Inject relevant memories into the prompt (UserPromptSubmit)`,
       `${output.highlight('explain')}         - Explain routing decisions`,
       `${output.highlight('pretrain')}        - Bootstrap intelligence from repository`,
       `${output.highlight('build-agents')}    - Generate optimized agent configs`,

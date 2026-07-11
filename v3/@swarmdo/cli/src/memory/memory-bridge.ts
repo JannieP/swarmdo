@@ -759,6 +759,8 @@ export async function bridgeSearchEntries(options: {
   limit?: number;
   threshold?: number;
   dbPath?: string;
+  /** Return full entry content instead of the 60-char preview (for memory injection). */
+  fullContent?: boolean;
 }): Promise<{
   success: boolean;
   results: {
@@ -780,7 +782,7 @@ export async function bridgeSearchEntries(options: {
   if (!ctx) return null;
 
   try {
-    const { query: queryStr, namespace, limit = 10, threshold = 0.3 } = options;
+    const { query: queryStr, namespace, limit = 10, threshold = 0.3, fullContent = false } = options;
     const effectiveNamespace = namespace || 'all';
     const startTime = Date.now();
 
@@ -858,7 +860,9 @@ export async function bridgeSearchEntries(options: {
         results.push({
           id: String(row.id).substring(0, 12),
           key: row.key || String(row.id).substring(0, 15),
-          content: (row.content || '').substring(0, 60) + ((row.content || '').length > 60 ? '...' : ''),
+          content: fullContent
+            ? (row.content || '')
+            : (row.content || '').substring(0, 60) + ((row.content || '').length > 60 ? '...' : ''),
           score,
           namespace: row.namespace || 'default',
           provenance,
