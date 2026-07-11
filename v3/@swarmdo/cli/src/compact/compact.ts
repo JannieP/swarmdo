@@ -87,7 +87,10 @@ function collapseRepeats(lines: string[], minRun: number): string[] {
     while (j < lines.length && lines[j] === lines[i]) j++;
     const run = j - i;
     out.push(lines[i]);
-    if (run >= minRun) out.push(`  … (×${run})`);
+    // `run > 1` guards the degenerate minRun=1 case: a single (non-repeated)
+    // line is a "run of 1" and must never get a `(×1)` marker — only genuine
+    // repeats (2+) collapse.
+    if (run > 1 && run >= minRun) out.push(`  … (×${run})`);
     else for (let k = 1; k < run; k++) out.push(lines[i]);
     i = j;
   }

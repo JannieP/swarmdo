@@ -37,7 +37,12 @@ function optsFromFlags(ctx: CommandContext): CompactOptions {
     collapseBlanks: true,
   };
   if (typeof ctx.flags['min-run'] === 'number') opts.minRun = ctx.flags['min-run'] as number;
-  else if (typeof ctx.flags['min-run'] === 'string') opts.minRun = parseInt(ctx.flags['min-run'] as string, 10) || 3;
+  else if (typeof ctx.flags['min-run'] === 'string') {
+    // Explicit NaN check, NOT `|| 3` — the documented `--min-run 0` ("disables")
+    // is falsy and would otherwise be silently coerced back to the default 3.
+    const parsed = parseInt(ctx.flags['min-run'] as string, 10);
+    opts.minRun = Number.isNaN(parsed) ? 3 : parsed;
+  }
   const win = ctx.flags.window;
   if (typeof win === 'string' && /^\d+:\d+$/.test(win)) {
     const [head, tail] = win.split(':').map((n) => parseInt(n, 10));

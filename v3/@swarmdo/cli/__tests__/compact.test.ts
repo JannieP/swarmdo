@@ -34,6 +34,18 @@ describe('compactOutput — repeats', () => {
     const { text } = compactOutput(input, { minRun: 0, collapseBlanks: false });
     expect(text).toBe('x\nx\nx\nx\n');
   });
+  it('minRun=1 never tags a single non-repeated line with (×1)', () => {
+    // a "run of 1" is just one line — nothing to collapse; the (×1) marker would
+    // double the line count and invert the tool's purpose.
+    const input = 'alpha\nbeta\ngamma\n';
+    const { text } = compactOutput(input, { minRun: 1, collapseBlanks: false });
+    expect(text).toBe('alpha\nbeta\ngamma\n');
+    expect(text).not.toContain('(×1)');
+  });
+  it('minRun=1 still collapses a genuine repeat (run ≥ 2)', () => {
+    const { text } = compactOutput('x\nx\nx\ny\n', { minRun: 1, collapseBlanks: false });
+    expect(text).toBe('x\n  … (×3)\ny\n');
+  });
 });
 
 describe('compactOutput — carriage returns', () => {
