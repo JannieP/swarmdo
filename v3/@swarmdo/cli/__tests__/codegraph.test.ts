@@ -101,6 +101,18 @@ describe('extractSymbols', () => {
     const s = extractSymbols('export const a = fn(1, 2), b = [3, 4], c = 5;\n', 'x.ts');
     expect(s.map((x) => x.name)).toEqual(['a', 'b', 'c']);
   });
+  it('does not split on a comma inside a generic type-arg list (no phantom symbol)', () => {
+    // `new Map<string, number>()` — the comma is inside <…>, not a declarator sep;
+    // it used to fabricate a phantom `number` export (Record<K,V>/Map<K,V> are common).
+    expect(extractSymbols('export const cache = new Map<string, number>();\n', 'x.ts').map((x) => x.name)).toEqual(['cache']);
+    // a real trailing declarator still splits; the generic annotation's comma does not
+    expect(extractSymbols('export const foo: Record<string, number> = {}, bar = 2;\n', 'x.ts').map((x) => x.name)).toEqual(['foo', 'bar']);
+    // nested generics stay balanced
+    expect(extractSymbols('export const m = new Map<string, Array<number>>();\n', 'x.ts').map((x) => x.name)).toEqual(['m']);
+  });
+  it('still splits on a real comma when `<`/`>` are spaced comparisons, not generics', () => {
+    expect(extractSymbols('export const x = a < b, y = c > d;\n', 'x.ts').map((x) => x.name)).toEqual(['x', 'y']);
+  });
   it('leaves `export const enum` to the enum matcher, and destructuring unindexed', () => {
     expect(extractSymbols('export const enum Dir { Up }\n', 'x.ts')).toMatchObject([{ name: 'Dir', kind: 'enum' }]);
     expect(extractSymbols('export const { x, y } = obj;\n', 'x.ts')).toEqual([]); // unchanged: not indexed

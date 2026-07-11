@@ -86,6 +86,7 @@ const MATCHERS: Array<{ kind: SymbolKind; re: RegExp }> = [
 function declaratorNames(decl: string): string[] {
   const names: string[] = [];
   let depth = 0;
+  let angle = 0; // generic type-argument depth: `Map<string, number>`
   let start = 0;
   let str: string | null = null;
   const take = (seg: string) => {
@@ -98,7 +99,14 @@ function declaratorNames(decl: string): string[] {
     if (ch === '"' || ch === "'" || ch === '`') str = ch;
     else if (ch === '(' || ch === '[' || ch === '{') depth++;
     else if (ch === ')' || ch === ']' || ch === '}') depth--;
-    else if (ch === ',' && depth === 0) { take(decl.slice(start, i)); start = i + 1; }
+    // Generic type-args: a comma inside `Map<string, number>` must not split the
+    // declarator list. Only treat `<` as an opener when it directly follows an
+    // identifier char (Map<, Record<, Array<) — so a spaced comparison `a < b`
+    // isn't misread as a generic — and exclude `<<`/`<=`. Close on `>`, skipping
+    // the `>` of an arrow `=>` so `Record<string, () => void>` stays balanced.
+    else if (ch === '<' && i > 0 && /[\w$]/.test(decl[i - 1]) && decl[i - 1] !== '<' && decl[i + 1] !== '<' && decl[i + 1] !== '=') angle++;
+    else if (ch === '>' && angle > 0 && decl[i - 1] !== '=') angle--;
+    else if (ch === ',' && depth === 0 && angle === 0) { take(decl.slice(start, i)); start = i + 1; }
   }
   take(decl.slice(start));
   return names;
