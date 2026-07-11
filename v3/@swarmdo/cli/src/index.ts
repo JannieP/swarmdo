@@ -23,6 +23,7 @@ import { commands, commandsByCategory, getCommandsByCategory, commandRegistry, g
 import { suggestCommand } from './suggest.js';
 import { runStartupUpdateCheck } from './update/index.js';
 import { migrateStorageDir } from './storage-migration.js';
+import { guardStreamEpipe } from './util/stdout.js';
 
 // Read version from package.json at runtime
 function getPackageVersion(): string {
@@ -84,6 +85,14 @@ export class CLI {
    */
   async run(args: string[] = process.argv.slice(2)): Promise<void> {
     try {
+      // #78 — Arm the EPIPE guard on stdout/stderr before ANY write happens, so
+      // `swarmdo <cmd> | head` (reader closes the pipe early) terminates cleanly
+      // instead of crashing with an unhandled 'error' event + raw stack trace.
+      // Covers every write path (output.writeln, console, writeStdout), not just
+      // writeStdout callers. Idempotent per stream.
+      guardStreamEpipe(process.stdout);
+      guardStreamEpipe(process.stderr);
+
       // One-time storage migration: rename a legacy `.claude-flow/` data dir
       // to `.swarmdo/` so users upgrading across the clean-break rename keep
       // their agent registry, swarm state, task store, and sessions. Cheap
