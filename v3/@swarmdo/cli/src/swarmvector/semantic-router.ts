@@ -63,8 +63,13 @@ export class SemanticRouter {
       }
     }
 
-    // Normalize embeddings for cosine similarity
-    const normalizedEmbeddings = embeddings.map(emb => this.normalize(emb));
+    // Normalize ONLY for cosine (cosine = dot product of unit vectors). The
+    // dotProduct and euclidean metrics are magnitude-sensitive, so they must
+    // keep the raw vectors — normalizing them unconditionally silently turned
+    // both into cosine and could flip the ranking.
+    const normalizedEmbeddings = this.metric === 'cosine'
+      ? embeddings.map(emb => this.normalize(emb))
+      : embeddings.map(emb => Float32Array.from(emb));
 
     this.intents.set(name, {
       name,
@@ -82,7 +87,7 @@ export class SemanticRouter {
       throw new Error(`Embedding must be Float32Array of length ${this.dimension}`);
     }
 
-    const normalizedQuery = this.normalize(embedding);
+    const normalizedQuery = this.metric === 'cosine' ? this.normalize(embedding) : embedding;
     const scores: { intent: string; score: number; metadata: Record<string, unknown> }[] = [];
 
     // Calculate best score for each intent
