@@ -1,8 +1,8 @@
 # Claude Code Configuration - Swarmdo v1.4
 
-> **Swarmdo v1.29.0** (2026-07-11) — continued correctness-hardening across the deterministic toolkit (config-lint hook-events, transcript export turn-count, apply CRLF + ambiguous-hunk flagging, compact blank-run handling, sbom/pack/redact/testreport) plus memory-system fixes: content-deduped prompt-time injection and a fix for auto-memory store bloat (a search-strategy vs entry-type mismatch that broke import dedup). New this line: **compaction survival** — a working-state digest snapshotted on `PreCompact` and re-injected on the next prompt so the model re-grounds instead of re-exploring; a Claude Code plugin-hint + on-PATH `swarmdo` shim; reasoningbank timing deflake. Each shipped with fixture/regression tests + evidence.
+> **Swarmdo v1.30.0** (2026-07-11) — a major **usage-analytics** expansion. New `swarmdo usage reflect`: a wrapped-style retrospective (totals, busiest day, longest active-day streak, cost trend, top models + top projects by cost share, a peak-hour sparkline, delegation ratio) with a self-contained shareable **`--html` dashboard**. New `swarmdo usage limits`: an official-quota **exhaustion forecaster** over Claude Code's `rate_limits` payload — projects when the rolling 5h/7d caps hit 100% at the current burn and whether that beats the reset. Plus **`--csv` export** for spreadsheets and a **month-end spend projection** on `usage monthly`. Correctness fixes ride along: config-lint hook-events, transcript-export turn-count, intelligence memory-injection dedup, the auto-memory store-bloat root cause, and a reasoningbank timing deflake. ~90 new tests; every increment engine-first + fixture-tested.
 > 6,000+ commits, 314 MCP tools, 16 agent roles + custom types, 19 AgentDB controllers, 21 native plugins.
-> Packages: `swarmdo@1.29.0` (umbrella), `@swarmdo/cli@1.29.0`, `swarmdo-bridge@1.29.0` (wrapper in `swarmdo/`)
+> Packages: `swarmdo@1.30.0` (umbrella), `@swarmdo/cli@1.30.0`, `swarmdo-bridge@1.30.0` (wrapper in `swarmdo/`)
 
 ## Behavioral Rules (Always Enforced)
 

@@ -2,7 +2,7 @@
 
 [![swarmdo](swarmdo/assets/brand/logo-full.svg)](https://swarmdo.com)
 
-[![npm version (swarmdo)](https://img.shields.io/badge/npx%20swarmdo-v1.29.0-cb3837?style=for-the-badge&logo=npm&logoColor=white)](https://github.com/SwarmDo/swarmdo/releases)
+[![npm version (swarmdo)](https://img.shields.io/badge/npx%20swarmdo-v1.30.0-cb3837?style=for-the-badge&logo=npm&logoColor=white)](https://github.com/SwarmDo/swarmdo/releases)
 [![MIT License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](https://github.com/SwarmDo/swarmdo/blob/main/LICENSE)
 [![Website](https://img.shields.io/badge/swarmdo.com-e2a33c?style=for-the-badge&logoColor=black)](https://swarmdo.com)
 [![Star on GitHub](https://img.shields.io/github/stars/SwarmDo/swarmdo?style=for-the-badge&logo=github&color=gold)](https://github.com/SwarmDo/swarmdo)
@@ -271,7 +271,7 @@ The recent release train added a full day-to-day operations layer around the swa
 
 | Command | What it does |
 |---------|-------------|
-| `swarmdo usage` (alias `cost`) | Claude Code **spend analytics** from your local transcripts — `daily`, `monthly`, `models`, `projects`, `sessions`, live 5-hour `blocks` burn, `errors` (tool-failure analytics), `cache` (prompt-cache efficiency + $ saved), and `diff` (period-over-period comparison with per-model movers) |
+| `swarmdo usage` (alias `cost`) | Claude Code **spend analytics** from your local transcripts — `daily`, `monthly` (with a month-end spend projection), `models`, `projects`, `sessions`, live 5-hour `blocks` burn, `errors` (tool-failure analytics), `cache` (prompt-cache efficiency + $ saved), `diff` (period-over-period comparison with per-model movers), `reflect` (a wrapped-style retrospective — busiest day, streak, top models/projects, peak hour, delegation ratio — with a shareable `--html` dashboard), and `limits` (an official-quota **exhaustion forecaster** over Claude Code's `rate_limits`); the standard views take `--csv` for spreadsheet export |
 | `swarmdo usage guard` | **Budget policy** — limits for the active 5h block / today / month via flags or `SWARMDO_GUARD_*` env → ok / warn / over; `--strict` exits 1, safe for CI gates and Stop hooks |
 | `swarmdo hud` | **One-screen ops HUD** — 5h block burn, task readiness, daemon workers, memory snapshots (`--watch`, `--json`) |
 | `swarmdo repair` (alias `tdd-repair`) | **Test-Driven Repair** — a bounded, budget-capped headless `claude` loop that fixes source until a failing test passes; dry-run unless `--confirm` |
