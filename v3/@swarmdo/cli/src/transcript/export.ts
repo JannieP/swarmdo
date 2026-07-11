@@ -180,18 +180,23 @@ export function summarizeFile(fs_stat: FileStat): SessionSummary {
   let firstPrompt = '';
   try {
     const content = fs.readFileSync(fs_stat.file, 'utf8');
+    const lines: RawTranscriptLine[] = [];
     for (const raw of content.split('\n')) {
       if (!raw.trim()) continue;
       let line: RawTranscriptLine;
       try { line = JSON.parse(raw) as RawTranscriptLine; } catch { continue; }
+      lines.push(line);
       if (line.type && !RENDERABLE.has(line.type)) continue;
-      const role = line.message?.role;
-      if (role === 'user' || role === 'assistant') turns++;
-      if (!firstPrompt && role === 'user') {
+      if (!firstPrompt && line.message?.role === 'user') {
         const txt = cleanUserText(contentToText(line.message?.content) || (typeof line.message?.content === 'string' ? line.message.content : ''));
         if (txt) firstPrompt = txt.replace(/\s+/g, ' ').slice(0, 100);
       }
     }
+    // Count turns EXACTLY as exportSession does — render, then count role
+    // headings — so `transcript list` and `transcript export` can never disagree
+    // (#70). A pure tool-result carrier line renders no heading, so it's not a
+    // turn; the old raw per-line count inflated `list` for any session with tools.
+    turns = countRenderedTurns(renderTranscriptMarkdown(lines));
   } catch { /* unreadable */ }
   return { sessionId: sessionIdFromFile(fs_stat.file), file: fs_stat.file, project: fs_stat.project, turns, firstPrompt, mtimeMs: fs_stat.mtimeMs, sizeBytes: fs_stat.sizeBytes };
 }

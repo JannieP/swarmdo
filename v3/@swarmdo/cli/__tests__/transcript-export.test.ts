@@ -1,10 +1,14 @@
 import { describe, it, expect } from 'vitest';
+import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import {
   cleanUserText,
   contentToText,
   countRenderedTurns,
   renderTranscriptMarkdown,
   sessionIdFromFile,
+  summarizeFile,
   type RawTranscriptLine,
 } from '../src/transcript/export.ts';
 
@@ -128,5 +132,28 @@ describe('transcript-export: countRenderedTurns (#51)', () => {
   it('counts tool-only turns as zero (no heading emitted)', () => {
     const md = renderTranscriptMarkdown([userBlocks([{ type: 'tool_result', is_error: false, content: 'x' }])]);
     expect(countRenderedTurns(md)).toBe(0);
+  });
+});
+
+describe('transcript-export: summarizeFile turn count agrees with export (#70)', () => {
+  it('does not over-count a pure tool-result carrier line (list matches export)', () => {
+    const lines = [
+      userStr('Please read config.json'),
+      asst([{ type: 'text', text: 'Sure.' }, { type: 'tool_use', name: 'Read', input: {} }]),
+      userBlocks([{ type: 'tool_result', is_error: false, content: '{"a":1}' }]), // carrier: no heading
+      asst([{ type: 'text', text: 'It contains a:1.' }]),
+    ];
+    const dir = mkdtempSync(path.join(tmpdir(), 'swarmdo-tx-'));
+    const file = path.join(dir, 'sess.jsonl');
+    writeFileSync(file, lines.map((l) => JSON.stringify(l)).join('\n'), 'utf8');
+    try {
+      const exportCount = countRenderedTurns(renderTranscriptMarkdown(lines));
+      const summary = summarizeFile({ file, project: 'p', mtimeMs: 0, sizeBytes: 0 });
+      expect(exportCount).toBe(3);                 // the carrier line is not a turn
+      expect(summary.turns).toBe(exportCount);     // `list` agrees with `export` (was 4 !== 3)
+      expect(summary.firstPrompt).toBe('Please read config.json');
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 });
