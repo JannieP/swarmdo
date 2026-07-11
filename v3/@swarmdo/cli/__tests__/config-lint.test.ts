@@ -78,10 +78,17 @@ describe('config-lint: pre-1.4 layout', () => {
   it('clean post-1.4 layout → no findings', () => {
     expect(lintLegacyLayout(['sDo'], ['sdo-ponytail', 'sdo-caveman-compress', 'my-own-skill'])).toEqual([]);
   });
-  it('flags flat commands and duplicate legacy skills', () => {
-    const out = lintLegacyLayout(['sDo', 'swarm', 'swarmdo-help.md'], ['ponytail', 'sdo-ponytail', 'my-own-skill']);
+  it('flags flat commands (that have a sDo/ twin) and duplicate legacy skills', () => {
+    // `swarm` and `swarmdo-help.md` are real swarmdo commands (they exist under sDo/) → leftovers
+    const out = lintLegacyLayout(['sDo', 'swarm', 'swarmdo-help.md'], ['ponytail', 'sdo-ponytail', 'my-own-skill'], ['swarm', 'swarmdo-help.md']);
     expect(rules(out).sort()).toEqual(['duplicate-legacy-skill', 'pre-1.4-commands']);
     expect(out.every((x) => x.severity === 'warn')).toBe(true);
+  });
+  it('does NOT flag a non-swarmdo command dir coexisting with sDo/ (#66)', () => {
+    // `.claude/commands/` is Claude Code's shared dir; a user/other-plugin command
+    // with no sDo/ twin must not be called a pre-1.4 swarmdo leftover.
+    expect(lintLegacyLayout(['sDo', 'my-team-commands'], [], ['swarm', 'sparc.md'])).toEqual([]);
+    expect(lintLegacyLayout(['sDo', 'my-org-cmds.md'], [], ['swarmdo-help.md'])).toEqual([]);
   });
   it('does NOT flag unprefixed skills without an sdo- twin (user skills)', () => {
     expect(lintLegacyLayout(['sDo'], ['my-own-skill', 'another'])).toEqual([]);
@@ -95,6 +102,7 @@ describe('config-lint: lintAll', () => {
       settingsFiles: [{ file: '.claude/settings.json', raw: '{"hooks":{"Weird":[]}}' }],
       mcpConfig: { file: '.mcp.json', raw: '{"mcpServers":{"a":{"command":""}}}' },
       commandsRoot: ['sDo', 'sparc.md'],
+      sdoCommands: ['sparc.md'], // sparc.md has a sDo/ twin → flat copy is a leftover
       skills: [],
     });
     expect(report.errors).toBe(2);   // bad-topology + mcp-missing-command

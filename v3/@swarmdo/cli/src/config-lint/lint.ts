@@ -158,12 +158,19 @@ export function lintMcpConfig(file: string, obj: unknown): Finding[] {
 }
 
 /** Pre-1.4 layout leftovers: flat commands / unprefixed skill duplicates. */
-export function lintLegacyLayout(commandsRoot: string[], skills: string[]): Finding[] {
+export function lintLegacyLayout(commandsRoot: string[], skills: string[], sdoCommands: string[] = []): Finding[] {
   const out: Finding[] = [];
-  const flat = commandsRoot.filter((n) => n !== 'sDo');
+  // A flat command is a pre-1.4 swarmdo leftover ONLY if the same command also
+  // exists under sDo/ today (a twin) — mirroring the skill twin-check below.
+  // `.claude/commands/` is Claude Code's shared, ecosystem-wide slash-command
+  // dir, so a user's own command namespace or another plugin's coexisting with
+  // sDo/ must NOT be flagged merely for not being `sDo` (that was #66).
+  const base = (n: string) => n.replace(/\.md$/, '');
+  const sdoBase = new Set(sdoCommands.map(base));
+  const flat = commandsRoot.filter((n) => n !== 'sDo' && sdoBase.has(base(n)));
   if (flat.length > 0) {
     out.push(f('.claude/commands', 'warn', 'pre-1.4-commands',
-      `${flat.length} entr${flat.length === 1 ? 'y' : 'ies'} outside the sDo/ namespace (${flat.slice(0, 5).join(', ')}${flat.length > 5 ? ', …' : ''}) — swarmdo commands moved to /sDo:* in v1.4.0; re-run \`swarmdo init --force\` to migrate swarmdo-owned ones`));
+      `${flat.length} swarmdo command${flat.length === 1 ? '' : 's'} left flat outside the sDo/ namespace (${flat.slice(0, 5).join(', ')}${flat.length > 5 ? ', …' : ''}) — swarmdo commands moved to /sDo:* in v1.4.0; re-run \`swarmdo init --force\` to migrate them`));
   }
   const skillSet = new Set(skills);
   const dupes = skills.filter((s) => !s.startsWith('sdo-') && skillSet.has(`sdo-${s}`));
@@ -179,6 +186,8 @@ export interface LintInput {
   settingsFiles?: { file: string; raw: string | null }[];
   mcpConfig?: { file: string; raw: string | null };
   commandsRoot?: string[];
+  /** entries under `.claude/commands/sDo/` — used to identify flat pre-1.4 twins */
+  sdoCommands?: string[];
   skills?: string[];
 }
 
@@ -203,7 +212,7 @@ export function lintAll(input: LintInput): LintReport {
     const { obj, findings: jf } = lintJson(input.mcpConfig.file, input.mcpConfig.raw);
     findings.push(...jf, ...lintMcpConfig(input.mcpConfig.file, obj));
   }
-  findings.push(...lintLegacyLayout(input.commandsRoot ?? [], input.skills ?? []));
+  findings.push(...lintLegacyLayout(input.commandsRoot ?? [], input.skills ?? [], input.sdoCommands ?? []));
   return {
     findings,
     errors: findings.filter((x) => x.severity === 'error').length,

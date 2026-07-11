@@ -441,6 +441,7 @@ const lintCommand: Command = {
       settingsFiles: [read('.claude/settings.json'), read('.claude/settings.local.json')],
       mcpConfig: read('.mcp.json'),
       commandsRoot: list('.claude/commands'),
+      sdoCommands: list('.claude/commands/sDo'),
       skills: list('.claude/skills'),
     });
 
