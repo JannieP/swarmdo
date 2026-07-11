@@ -217,6 +217,25 @@ describe('reflect: computeReflection — projects + hours (phase 2)', () => {
   });
 });
 
+describe('reflect: computeReflection — cache savings', () => {
+  // in $3/M, cacheWrite $3.75/M, cacheRead $0.30/M (sonnet-like)
+  const price = { in: 3, out: 15, cacheWrite: 3.75, cacheRead: 0.3, cacheWrite1h: 6 } as any;
+  it('sums $ saved by caching per model via the injected price resolver', () => {
+    // noCache = (1000+1000+10000)×3 = 36000; actual = 1000×3 + 1000×3.75 + 10000×0.3 = 9750
+    // savings = (36000 − 9750)/1e6 = 0.02625
+    const rows = [mr('m', '2026-03-01', { inputTokens: 1000, cacheWriteTokens: 1000, cacheReadTokens: 10000, costUsd: 1, totalTokens: 12000 })];
+    const r = computeReflection([day('2026-03-01', { costUsd: 1, totalTokens: 12000 })], rows, '2026-03-01', '2026-03-31', { resolvePrice: () => price });
+    expect(r.cacheSavingsUsd).toBeCloseTo(0.02625, 6);
+  });
+  it('contributes 0 for an unpriced model, and only counts the window', () => {
+    const rows = [
+      mr('m', '2026-03-01', { inputTokens: 1000, cacheReadTokens: 10000, costUsd: 1, totalTokens: 11000 }),
+      mr('m', '2026-02-01', { inputTokens: 9999, cacheReadTokens: 99999, costUsd: 9, totalTokens: 100000 }), // out of window
+    ];
+    expect(computeReflection([day('2026-03-01', { costUsd: 1, totalTokens: 11000 })], rows, '2026-03-01', '2026-03-31', { resolvePrice: () => undefined }).cacheSavingsUsd).toBe(0);
+  });
+});
+
 describe('reflect: computeReflection — edges', () => {
   it('an empty / all-out-of-window period yields zeros, null busiest, streak 0', () => {
     const r = computeReflection([day('2020-01-01', { costUsd: 9, totalTokens: 9 })], [], '2026-03-01', '2026-03-05');
@@ -224,6 +243,7 @@ describe('reflect: computeReflection — edges', () => {
     expect(r.totals.activeDays).toBe(0);
     expect(r.busiestDay).toBeNull();
     expect(r.spikeDays).toEqual([]);
+    expect(r.cacheSavingsUsd).toBe(0);
     expect(r.longestStreak).toBe(0);
     expect(r.topModels).toEqual([]);
     expect(r.topProjects).toEqual([]);

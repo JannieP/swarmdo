@@ -15,6 +15,8 @@
  */
 
 import type { DayRow, ModelRow } from './diff.js';
+import { modelCacheSavings } from './cache-stats.js';
+import { resolveTranscriptPrice, type TranscriptModelPrice } from './claude-pricing.js';
 
 export interface ModelShare {
   model: string;
@@ -59,6 +61,8 @@ export interface Reflection {
   avgCostPerActiveDay: number;
   /** first-half vs second-half spend across the period */
   trend: { firstHalfCost: number; secondHalfCost: number; direction: 'up' | 'down' | 'flat' };
+  /** $ prompt-caching saved this period (vs paying full input rate); 0 if no priced models */
+  cacheSavingsUsd: number;
 }
 
 export interface ReflectOptions {
@@ -66,6 +70,8 @@ export interface ReflectOptions {
   topModels?: number;
   /** relative change below which the trend reads 'flat' (default 0.05 = 5%) */
   flatThreshold?: number;
+  /** price resolver for cache-savings (injected for tests; default = the real table) */
+  resolvePrice?: (model: string) => TranscriptModelPrice | undefined;
 }
 
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
@@ -241,6 +247,24 @@ export function computeReflection(
   const topModels = rankShares(modelRows, from, to, totals.costUsd, topN);
   const topProjects = rankShares(projectRows, from, to, totals.costUsd, topN);
 
+  // $ saved by prompt caching this period: fold windowed per-model token counts,
+  // then price each via the (injected) resolver. Unpriced models contribute 0.
+  const resolvePrice = opts.resolvePrice ?? resolveTranscriptPrice;
+  const cacheTokens = new Map<string, { inputTokens: number; cacheWriteTokens: number; cacheReadTokens: number }>();
+  for (const r of modelRows) {
+    if (!within(r.day, from, to)) continue;
+    const s = cacheTokens.get(r.key) ?? { inputTokens: 0, cacheWriteTokens: 0, cacheReadTokens: 0 };
+    s.inputTokens += r.totals.inputTokens;
+    s.cacheWriteTokens += r.totals.cacheWriteTokens;
+    s.cacheReadTokens += r.totals.cacheReadTokens;
+    cacheTokens.set(r.key, s);
+  }
+  let cacheSavingsUsd = 0;
+  for (const [model, tok] of cacheTokens) {
+    const sv = modelCacheSavings(tok, resolvePrice(model));
+    if (sv !== null) cacheSavingsUsd += sv;
+  }
+
   const inputSide = totals.inputTokens + totals.cacheWriteTokens + totals.cacheReadTokens;
   const relChange = firstHalfCost > 0 ? (secondHalfCost - firstHalfCost) / firstHalfCost : (secondHalfCost > 0 ? 1 : 0);
   const direction: 'up' | 'down' | 'flat' = Math.abs(relChange) < flat ? 'flat' : relChange > 0 ? 'up' : 'down';
@@ -258,5 +282,6 @@ export function computeReflection(
     cacheReadPct: inputSide > 0 ? totals.cacheReadTokens / inputSide : 0,
     avgCostPerActiveDay: totals.activeDays > 0 ? totals.costUsd / totals.activeDays : 0,
     trend: { firstHalfCost, secondHalfCost, direction },
+    cacheSavingsUsd,
   };
 }

@@ -450,6 +450,9 @@ function runReflectView(ctx: CommandContext, collection: ReturnType<typeof colle
     const k = `${e.model}\u0000${e.dateKey}`;
     const row = md.get(k) ?? { key: e.model, day: e.dateKey, totals: { costUsd: 0, inputTokens: 0, outputTokens: 0, cacheReadTokens: 0, cacheWriteTokens: 0, totalTokens: 0 } };
     row.totals.costUsd += e.costUsd;
+    row.totals.inputTokens += e.inputTokens;       // needed for cache-savings pricing
+    row.totals.cacheWriteTokens += e.cacheWriteTokens;
+    row.totals.cacheReadTokens += e.cacheReadTokens;
     row.totals.totalTokens += e.inputTokens + e.outputTokens + e.cacheWriteTokens + e.cacheReadTokens;
     md.set(k, row);
     // per-(project, day) fold (space separator is safe — dateKey is fixed-width)
@@ -498,6 +501,7 @@ function runReflectView(ctx: CommandContext, collection: ReturnType<typeof colle
   output.writeln(`  Longest streak     ${r.longestStreak} day${r.longestStreak === 1 ? '' : 's'}`);
   output.writeln(`  Avg / active day   ${fmtCost(r.avgCostPerActiveDay)}`);
   output.writeln(`  Cache read share   ${pctStr(r.cacheReadPct)}`);
+  if (r.cacheSavingsUsd > 0) output.writeln(`  Cache saved        ${fmtCost(r.cacheSavingsUsd)}  ${output.dim('vs no caching')}`);
   if (delegation.toolCalls > 0) {
     output.writeln(`  Delegation         ${pctStr(delegation.ratio)}  ${output.dim(`(${delegation.taskCalls} of ${delegation.toolCalls} tool calls to subagents)`)}`);
   }
