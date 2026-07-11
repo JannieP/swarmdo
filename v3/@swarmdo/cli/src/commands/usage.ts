@@ -36,6 +36,7 @@ import { forecastWindow, parseRateLimits, worstStatus, formatForecast, formatLim
 import { readFileSync } from 'node:fs';
 import { toCsv } from '../util/csv.js';
 import { projectMonthEnd, daysInMonthOf } from '../usage/spend-forecast.js';
+import { computeModelEfficiency } from '../usage/model-efficiency.js';
 
 const VIEWS: Record<string, { dimension: UsageDimension; label: string }> = {
   daily: { dimension: 'day', label: 'Date' },
@@ -663,6 +664,16 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
 
   output.writeln(output.bold(`Claude Code usage — ${viewName}`) + (since || until ? output.dim(`  (${since ?? '…'} → ${until ?? '…'})`) : ''));
   renderTable(view.label, rows, grand);
+  if (viewName === 'models') {
+    // Effective cost per unit of useful output — surfaces models made expensive
+    // by heavy input/cache overhead, beyond their sticker output price.
+    const eff = computeModelEfficiency(aggregateUsage(collection.events, 'model'));
+    if (eff.length >= 2) {
+      const best = eff[0];
+      const worst = eff[eff.length - 1];
+      output.writeln(output.dim(`effective $/1M output — best ${best.model} ${fmtCost(best.costPerMOutput)}, worst ${worst.model} ${fmtCost(worst.costPerMOutput)}`));
+    }
+  }
   if (viewName === 'monthly') {
     // Month-end pace projection for the current calendar month.
     const today = localDateKey(new Date());
