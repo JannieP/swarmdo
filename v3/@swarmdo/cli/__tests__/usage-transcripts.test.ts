@@ -33,6 +33,7 @@ import {
   resolveTranscriptPrice,
   transcriptCostUsd,
 } from '../src/usage/claude-pricing.js';
+import { detectSpikeDays } from '../src/usage/reflect.js';
 
 // (100×$3 + 200×$15 + 1000×$3.75 + 5000×$0.30) / 1M
 const SONNET_COST = (100 * 3 + 200 * 15 + 1000 * 3.75 + 5000 * 0.3) / 1_000_000; // 0.00855
@@ -304,6 +305,41 @@ describe('aggregateBlocks (5-hour billing windows)', () => {
     );
     expect(blocks).toHaveLength(1);
     expect(new Date(blocks[0].startMs).toISOString()).toBe('2026-07-01T01:00:00.000Z');
+  });
+});
+
+// The `usage sessions` footer composes two engines: it aggregates events by
+// session, then runs the median-ratio spike detector over those rows. A single
+// runaway session (one work unit) is more actionable than a spike day. This
+// pins that exact composition, including the `project · id8` key it surfaces.
+describe('aggregateUsage(session) + detectSpikeDays (outlier-session footer)', () => {
+  // ids must be unique within the first 8 chars — the session key slices to 8.
+  function sev(sessionId: string, costUsd: number): UsageEvent {
+    return {
+      dateKey: '2026-07-01', monthKey: '2026-07', timestampMs: 0,
+      model: 'claude-sonnet-4-6', project: '/p', sessionId,
+      inputTokens: 10, outputTokens: 10, cacheWriteTokens: 0, cacheReadTokens: 0,
+      costUsd, costSource: 'computed',
+    };
+  }
+  const spikeKeys = (events: UsageEvent[]) =>
+    detectSpikeDays(aggregateUsage(events, 'session').map((r) => ({ day: r.key, costUsd: r.totals.costUsd })));
+
+  it('flags a single runaway session as an outlier, keyed by project · id8', () => {
+    const out = spikeKeys([sev('s1', 1), sev('s2', 1), sev('s3', 1), sev('s4', 1), sev('big', 50)]);
+    expect(out.map((s) => s.day)).toEqual(['/p · big']); // median of [1,1,1,1] is 1 → 50×
+    expect(out[0].ratioToMedian).toBe(50);
+  });
+
+  it('flags nothing when session spend is uniform', () => {
+    expect(spikeKeys([sev('s1', 5), sev('s2', 5), sev('s3', 5), sev('s4', 5)])).toEqual([]);
+  });
+
+  it('sums a session across its billed responses before ranking (aggregation, not per-event)', () => {
+    // 'big' is two cheap responses that only add up to a spike once aggregated
+    const out = spikeKeys([sev('s1', 1), sev('s2', 1), sev('s3', 1), sev('big', 30), sev('big', 30)]);
+    expect(out.map((s) => s.day)).toEqual(['/p · big']); // 60 total vs median 1
+    expect(out[0].costUsd).toBe(60);
   });
 });
 

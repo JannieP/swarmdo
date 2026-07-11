@@ -37,6 +37,7 @@ import { readFileSync } from 'node:fs';
 import { toCsv } from '../util/csv.js';
 import { projectMonthEnd, daysInMonthOf } from '../usage/spend-forecast.js';
 import { computeModelEfficiency } from '../usage/model-efficiency.js';
+import { detectSpikeDays } from '../usage/reflect.js';
 
 const VIEWS: Record<string, { dimension: UsageDimension; label: string }> = {
   daily: { dimension: 'day', label: 'Date' },
@@ -691,6 +692,18 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
       output.writeln(
         output.dim(`${curMonth} on pace for ~${fmtCost(p.projectedUsd)}  (${fmtCost(p.monthToDateUsd)} over ${dom}/${p.daysInMonth} days · ~${fmtCost(p.remainingUsd)} to go)`),
       );
+    }
+  }
+  if (viewName === 'sessions') {
+    // Outlier-session detection: a single runaway session (one work unit) is more
+    // actionable than a spike day. Run the same median-ratio detector over ALL
+    // sessions (not the top-N display slice) so the baseline is representative.
+    const spikes = detectSpikeDays(
+      aggregateUsage(collection.events, 'session').map((r) => ({ day: r.key, costUsd: r.totals.costUsd })),
+    );
+    if (spikes.length > 0) {
+      const top = spikes.slice(0, 3).map((s) => `${s.day} ${fmtCost(s.costUsd)} (${s.ratioToMedian.toFixed(1)}× median)`).join(', ');
+      output.writeln(output.dim(`outlier sessions: ${top}`));
     }
   }
   output.writeln(
