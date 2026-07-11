@@ -12,9 +12,14 @@
 
 import type { CodeIndex } from '../codegraph/codegraph.js';
 
-/** Default matcher for test files (Jest/Vitest/Mocha conventions). */
+/**
+ * Default matcher for test files (Jest/Vitest/Mocha conventions). A file under
+ * `__tests__/` counts only if it has a JS/TS extension — matching Jest's default
+ * `testMatch` (`**​/__tests__/**​/*.[jt]s?(x)`); docs/fixtures (`.md`, `.json`)
+ * living beside the tests are NOT test files and must not be fed to the runner.
+ */
 export function isTestFile(path: string): boolean {
-  return /(^|\/)__tests__\//.test(path) || /\.(test|spec)\.[cm]?[jt]sx?$/.test(path);
+  return /(^|\/)__tests__\/.*\.[cm]?[jt]sx?$/.test(path) || /\.(test|spec)\.[cm]?[jt]sx?$/.test(path);
 }
 
 /** file it resolves to → files that import it (reverse of the import edges). Pure. */

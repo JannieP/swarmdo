@@ -31,6 +31,13 @@ describe('isTestFile', () => {
     expect(isTestFile('foo.ts')).toBe(false);
     expect(isTestFile('contest.ts')).toBe(false); // not a *.test.*
   });
+  it('does not classify non-code files under __tests__/ as tests (docs, fixtures)', () => {
+    // these get piped to the test runner as a pathspec — a .md/.json there is a
+    // no-op or "no test files found" failure. Only JS/TS under __tests__/ counts.
+    expect(isTestFile('__tests__/README.md')).toBe(false);
+    expect(isTestFile('__tests__/fixtures/data.json')).toBe(false);
+    expect(isTestFile('src/__tests__/helper.ts')).toBe(true); // a real code helper still counts
+  });
 });
 
 describe('reverseDeps', () => {
