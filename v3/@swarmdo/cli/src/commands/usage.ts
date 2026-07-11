@@ -34,6 +34,7 @@ import { computeReflection, monthsBefore, hourSparkline, type Reflection } from 
 import { renderReflectionHtml } from '../usage/reflect-html.js';
 import { forecastWindow, parseRateLimits, worstStatus, formatForecast, formatLimitSegment } from '../usage/limits.js';
 import { readFileSync } from 'node:fs';
+import { toCsv } from '../util/csv.js';
 
 const VIEWS: Record<string, { dimension: UsageDimension; label: string }> = {
   daily: { dimension: 'day', label: 'Date' },
@@ -642,6 +643,14 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
     return { success: true, exitCode: 0, data: grand };
   }
 
+  if (ctx.flags.csv === true) {
+    // Portable export for spreadsheets / expense reports.
+    const headers = ['key', 'costUsd', 'inputTokens', 'outputTokens', 'cacheReadTokens', 'cacheWriteTokens', 'totalTokens', 'entries'];
+    const csvRows = rows.map((r) => [r.key, r.totals.costUsd, r.totals.inputTokens, r.totals.outputTokens, r.totals.cacheReadTokens, r.totals.cacheWriteTokens, r.totals.totalTokens, r.totals.entries]);
+    output.writeln(toCsv(headers, csvRows));
+    return { success: true, exitCode: 0, data: grand };
+  }
+
   if (collection.events.length === 0) {
     output.writeln(output.info(`no usage entries found in ${collection.filesScanned} transcript files`));
     return { success: true, exitCode: 0 };
@@ -675,11 +684,13 @@ export const usageCommand: Command = {
     { name: 'dir', description: 'explicit Claude projects dir (replaces auto-discovery)', type: 'string' },
     { name: 'limit', description: 'max rows for models/projects/sessions views', type: 'number' },
     { name: 'json', description: 'machine-readable output', type: 'boolean', default: false },
+    { name: 'csv', description: 'CSV export (daily|monthly|models|projects|sessions views)', type: 'boolean', default: false },
   ],
   examples: [
     { command: 'swarmdo usage', description: 'Daily token/cost table across all local Claude Code sessions' },
     { command: 'swarmdo usage models --since 2026-07-01', description: 'Spend per model this month' },
     { command: 'swarmdo usage projects --json', description: 'Per-project totals as JSON' },
+    { command: 'swarmdo usage monthly --csv > usage.csv', description: 'Export monthly spend to CSV' },
     { command: 'swarmdo cost sessions --limit 10', description: 'Ten most expensive sessions (alias)' },
   ],
   action: run,
