@@ -489,6 +489,10 @@ function runReflectView(ctx: CommandContext, collection: ReturnType<typeof colle
   output.writeln(`  Total spend        ${output.bold(fmtCost(r.totals.costUsd))}  ${output.dim(`across ${r.totals.activeDays} active day${r.totals.activeDays === 1 ? '' : 's'} of ${r.period.spanDays}`)}`);
   output.writeln(`  Total tokens       ${r.totals.totalTokens.toLocaleString()}`);
   if (r.busiestDay) output.writeln(`  Busiest day        ${r.busiestDay.day}  ${output.dim(`(${fmtCost(r.busiestDay.costUsd)}, ${r.busiestDay.totalTokens.toLocaleString()} tok)`)}`);
+  if (r.spikeDays.length) {
+    const top = r.spikeDays.slice(0, 3).map((s) => `${s.day} ${fmtCost(s.costUsd)} (${s.ratioToMedian.toFixed(1)}×)`).join(', ');
+    output.writeln(`  Spike days         ${top}  ${output.dim('vs median')}`);
+  }
   output.writeln(`  Longest streak     ${r.longestStreak} day${r.longestStreak === 1 ? '' : 's'}`);
   output.writeln(`  Avg / active day   ${fmtCost(r.avgCostPerActiveDay)}`);
   output.writeln(`  Cache read share   ${pctStr(r.cacheReadPct)}`);

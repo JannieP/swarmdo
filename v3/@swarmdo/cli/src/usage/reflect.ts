@@ -41,6 +41,8 @@ export interface Reflection {
   totals: ReflectionTotals;
   /** highest-cost active day in the period, or null if the period is empty */
   busiestDay: { day: string; costUsd: number; totalTokens: number } | null;
+  /** active days whose cost is an outlier vs the median (possible runaways) */
+  spikeDays: SpikeDay[];
   /** models ranked by cost desc (capped to opts.topModels) */
   topModels: ModelShare[];
   /** projects ranked by cost desc (ModelShare.model holds the project path) */
@@ -113,6 +115,36 @@ export function longestStreakOf(days: string[]): number {
     prev = d;
   }
   return best;
+}
+
+export interface SpikeDay {
+  day: string;
+  costUsd: number;
+  /** costUsd / median active-day cost */
+  ratioToMedian: number;
+}
+
+/**
+ * Days whose cost is an outlier vs the median active-day cost — a heads-up for
+ * runaway sessions. Median (not mean) so the spikes don't inflate the baseline.
+ * Needs ≥3 active days for a meaningful median; a floor keeps trivially-cheap
+ * days from tripping the ratio. Sorted by cost desc. Pure.
+ */
+export function detectSpikeDays(
+  days: Array<{ day: string; costUsd: number }>,
+  opts: { minRatio?: number; minCostUsd?: number } = {},
+): SpikeDay[] {
+  const minRatio = opts.minRatio ?? 2.5;
+  const minCostUsd = opts.minCostUsd ?? 0.5;
+  const costs = days.map((d) => d.costUsd).filter((c) => c > 0).sort((a, b) => a - b);
+  if (costs.length < 3) return [];
+  const mid = costs.length >> 1;
+  const median = costs.length % 2 ? costs[mid] : (costs[mid - 1] + costs[mid]) / 2;
+  if (median <= 0) return [];
+  return days
+    .filter((d) => d.costUsd >= minCostUsd && d.costUsd >= minRatio * median)
+    .map((d) => ({ day: d.day, costUsd: d.costUsd, ratioToMedian: d.costUsd / median }))
+    .sort((a, b) => b.costUsd - a.costUsd);
 }
 
 const within = (key: string, from: string, to: string): boolean => key >= from && key <= to;
@@ -217,6 +249,7 @@ export function computeReflection(
     period: { from, to, spanDays: spanDays(from, to) },
     totals,
     busiestDay,
+    spikeDays: detectSpikeDays(days.map((r) => ({ day: r.key, costUsd: r.totals.costUsd }))),
     topModels,
     topProjects,
     peakHour: peakHourOf(hourHistogram),

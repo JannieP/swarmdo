@@ -6,6 +6,7 @@ import {
   monthsBefore,
   peakHourOf,
   hourSparkline,
+  detectSpikeDays,
   computeReflection,
 } from '../src/usage/reflect.ts';
 import type { DayRow, ModelRow, DayTotals } from '../src/usage/diff.ts';
@@ -135,6 +136,39 @@ describe('reflect: peakHourOf', () => {
   });
 });
 
+describe('reflect: detectSpikeDays', () => {
+  const d = (day: string, costUsd: number) => ({ day, costUsd });
+  it('flags a day well above the median and reports its ratio', () => {
+    // median of [10,10,10,10,50] active costs is 10; 50 is 5× → spike
+    const out = detectSpikeDays([d('d1', 10), d('d2', 10), d('d3', 10), d('d4', 10), d('d5', 50)]);
+    expect(out).toEqual([{ day: 'd5', costUsd: 50, ratioToMedian: 5 }]);
+  });
+  it('flags nothing when spend is uniform', () => {
+    expect(detectSpikeDays([d('a', 12), d('b', 11), d('c', 13), d('d', 12)])).toEqual([]);
+  });
+  it('uses the median so a spike does not inflate the baseline (two spikes both caught)', () => {
+    // costs sorted [5,5,5,50,60] → median 5; 50 and 60 are 10×/12× → both spikes, cost desc
+    const out = detectSpikeDays([d('a', 5), d('b', 5), d('c', 5), d('big', 50), d('huge', 60)]);
+    expect(out.map((s) => s.day)).toEqual(['huge', 'big']);
+  });
+  it('respects the absolute floor (trivially cheap days never spike)', () => {
+    // 0.10 is 5× the 0.02 median but below the $0.50 floor → not a spike
+    expect(detectSpikeDays([d('a', 0.02), d('b', 0.02), d('c', 0.02), d('d', 0.10)])).toEqual([]);
+  });
+  it('needs at least 3 active days for a meaningful median', () => {
+    expect(detectSpikeDays([d('a', 1), d('b', 100)])).toEqual([]);
+  });
+  it('ignores zero-cost days when computing the median', () => {
+    // only [10,10,10,40] are active; median 10; 40 is 4× → spike
+    const out = detectSpikeDays([d('z', 0), d('a', 10), d('b', 10), d('c', 10), d('d', 40)]);
+    expect(out.map((s) => s.day)).toEqual(['d']);
+  });
+  it('honours a custom minRatio', () => {
+    expect(detectSpikeDays([d('a', 10), d('b', 10), d('c', 10), d('d', 25)], { minRatio: 3 })).toEqual([]);
+    expect(detectSpikeDays([d('a', 10), d('b', 10), d('c', 10), d('d', 25)], { minRatio: 2 }).map((s) => s.day)).toEqual(['d']);
+  });
+});
+
 describe('reflect: hourSparkline', () => {
   const BLOCKS = ' ▁▂▃▄▅▆▇█';
   it('renders all-blank for an all-zero series, preserving length', () => {
@@ -189,6 +223,7 @@ describe('reflect: computeReflection — edges', () => {
     expect(r.totals.costUsd).toBe(0);
     expect(r.totals.activeDays).toBe(0);
     expect(r.busiestDay).toBeNull();
+    expect(r.spikeDays).toEqual([]);
     expect(r.longestStreak).toBe(0);
     expect(r.topModels).toEqual([]);
     expect(r.topProjects).toEqual([]);
