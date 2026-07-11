@@ -35,6 +35,7 @@ import { renderReflectionHtml } from '../usage/reflect-html.js';
 import { forecastWindow, parseRateLimits, worstStatus, formatForecast, formatLimitSegment } from '../usage/limits.js';
 import { readFileSync } from 'node:fs';
 import { toCsv } from '../util/csv.js';
+import { projectMonthEnd, daysInMonthOf } from '../usage/spend-forecast.js';
 
 const VIEWS: Record<string, { dimension: UsageDimension; label: string }> = {
   daily: { dimension: 'day', label: 'Date' },
@@ -658,6 +659,20 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
 
   output.writeln(output.bold(`Claude Code usage — ${viewName}`) + (since || until ? output.dim(`  (${since ?? '…'} → ${until ?? '…'})`) : ''));
   renderTable(view.label, rows, grand);
+  if (viewName === 'monthly') {
+    // Month-end pace projection for the current calendar month.
+    const today = localDateKey(new Date());
+    const curMonth = today.slice(0, 7);
+    const dom = Number(today.slice(8, 10));
+    const curRow = rows.find((r) => r.key === curMonth);
+    const dim = daysInMonthOf(curMonth);
+    if (curRow && dom > 0 && Number.isFinite(dim)) {
+      const p = projectMonthEnd(curRow.totals.costUsd, dom, dim);
+      output.writeln(
+        output.dim(`${curMonth} on pace for ~${fmtCost(p.projectedUsd)}  (${fmtCost(p.monthToDateUsd)} over ${dom}/${p.daysInMonth} days · ~${fmtCost(p.remainingUsd)} to go)`),
+      );
+    }
+  }
   output.writeln(
     output.dim(
       `${collection.filesScanned} transcript files · ${grand.entries} billed responses · sources: ${collection.dirsScanned.join(', ')}`,
