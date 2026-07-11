@@ -32,7 +32,7 @@ import { evaluateGuard, type GuardThreshold, type GuardStatus } from '../usage/s
 import { resolvePeriodPair, parseRange, diffPeriods, modelMovers, type DayRow, type ModelRow, type Period, type MetricDelta } from '../usage/diff.js';
 import { computeReflection, monthsBefore, hourSparkline, type Reflection } from '../usage/reflect.js';
 import { renderReflectionHtml } from '../usage/reflect-html.js';
-import { forecastWindow, parseRateLimits, worstStatus, formatForecast } from '../usage/limits.js';
+import { forecastWindow, parseRateLimits, worstStatus, formatForecast, formatLimitSegment } from '../usage/limits.js';
 import { readFileSync } from 'node:fs';
 
 const VIEWS: Record<string, { dimension: UsageDimension; label: string }> = {
@@ -533,6 +533,13 @@ function runLimitsView(ctx: CommandContext): CommandResult {
   if (ctx.flags.json === true) {
     output.printJson(forecasts.map((x) => ({ label: x.label, ...x.f })));
     return { success: true, data: forecasts };
+  }
+
+  if (ctx.flags.oneline === true) {
+    // Compact statusline-ready indicator, e.g. "5h 72%⚠ · 7d 12%".
+    output.writeln(formatLimitSegment(forecasts));
+    const worstOne = worstStatus(forecasts.map((x) => x.f));
+    return { success: true, exitCode: ctx.flags.strict === true && worstOne === 'over' ? 1 : 0 };
   }
 
   const worst = worstStatus(forecasts.map((x) => x.f));

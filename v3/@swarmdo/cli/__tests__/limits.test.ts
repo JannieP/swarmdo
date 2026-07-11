@@ -5,6 +5,7 @@ import {
   bindingWindow,
   humanizeMs,
   formatForecast,
+  formatLimitSegment,
   parseRateLimits,
   FIVE_HOUR_MS,
   SEVEN_DAY_MS,
@@ -157,6 +158,18 @@ describe('limits: humanizeMs', () => {
     expect(humanizeMs(9_000_000)).toBe('2h30m'); // 150 min
     expect(humanizeMs(D7)).toBe('7d');           // 7 days, no hours
     expect(humanizeMs(90_060_000)).toBe('1d1h'); // 1501 min = 1d1h1m → 1d1h
+  });
+});
+
+describe('limits: formatLimitSegment', () => {
+  const mk = (label: string, status: LimitForecast['status'], usedPercentage: number) =>
+    ({ label, f: { usedPercentage, resetsAtMs: 0, msToReset: 0, exhaustionMs: null, willExhaust: false, status } as LimitForecast });
+  it('renders a compact indicator with status marks', () => {
+    expect(formatLimitSegment([mk('5h', 'warn', 72), mk('7d', 'ok', 12)])).toBe('5h 72%⚠ · 7d 12%');
+    expect(formatLimitSegment([mk('5h', 'over', 100)])).toBe('5h 100%!');
+  });
+  it('handles no windows', () => {
+    expect(formatLimitSegment([])).toBe('limits: n/a');
   });
 });
 

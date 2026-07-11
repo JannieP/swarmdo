@@ -138,6 +138,14 @@ export function humanizeMs(ms: number): string {
   return `${m}m`;
 }
 
+/** Ultra-compact one-line indicator for a statusline, e.g. "5h 72%⚠ · 7d 12%".
+ * `!` marks an over-cap window, `⚠` an at-risk one. Pure. */
+export function formatLimitSegment(forecasts: Array<{ label: string; f: LimitForecast }>): string {
+  if (forecasts.length === 0) return 'limits: n/a';
+  const mark = (s: LimitStatus): string => (s === 'over' ? '!' : s === 'warn' ? '⚠' : '');
+  return forecasts.map(({ label, f }) => `${label} ${Math.round(f.usedPercentage)}%${mark(f.status)}`).join(' · ');
+}
+
 /** One-line summary for a window, e.g. "5h window: 42% used, resets in 2h14m —
  * on pace to hit the cap in ~1h20m (before reset)". `label` names the window. */
 export function formatForecast(label: string, f: LimitForecast, nowMs: number): string {
