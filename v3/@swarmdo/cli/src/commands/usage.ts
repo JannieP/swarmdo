@@ -32,6 +32,8 @@ import { evaluateGuard, type GuardThreshold, type GuardStatus } from '../usage/s
 import { resolvePeriodPair, parseRange, diffPeriods, modelMovers, type DayRow, type ModelRow, type Period, type MetricDelta } from '../usage/diff.js';
 import { computeReflection, monthsBefore, hourSparkline, type Reflection } from '../usage/reflect.js';
 import { renderReflectionHtml } from '../usage/reflect-html.js';
+import { forecastWindow, parseRateLimits, worstStatus, formatForecast } from '../usage/limits.js';
+import { readFileSync } from 'node:fs';
 
 const VIEWS: Record<string, { dimension: UsageDimension; label: string }> = {
   daily: { dimension: 'day', label: 'Date' },
@@ -505,6 +507,45 @@ function runReflectView(ctx: CommandContext, collection: ReturnType<typeof colle
   return { success: true, exitCode: 0 };
 }
 
+/** `usage limits` — forecast the official 5h/7d quota windows from the
+ * statusline rate_limits payload (stdin or --payload). #46. */
+function runLimitsView(ctx: CommandContext): CommandResult {
+  const nowMs = Date.now();
+  let raw = typeof ctx.flags.payload === 'string' ? ctx.flags.payload : '';
+  if (!raw && !process.stdin.isTTY) {
+    try { raw = readFileSync(0, 'utf8'); } catch { /* no piped input */ }
+  }
+  if (!raw.trim()) {
+    output.writeln(output.info("no rate_limits payload — pipe Claude Code's statusline JSON in, or pass --payload '<json>'"));
+    output.writeln(output.dim('  e.g. in a statusline command:  … | swarmdo usage limits'));
+    return { success: true, exitCode: 0 };
+  }
+  let payload: unknown;
+  try { payload = JSON.parse(raw); } catch { output.printError('payload is not valid JSON'); return { success: false, exitCode: 1 }; }
+
+  const windows = parseRateLimits(payload);
+  if (windows.length === 0) {
+    output.writeln(output.info('no five_hour / seven_day rate_limits found in the payload'));
+    return { success: true, exitCode: 0 };
+  }
+  const forecasts = windows.map((w) => ({ label: w.label, f: forecastWindow(w.state, nowMs) }));
+
+  if (ctx.flags.json === true) {
+    output.printJson(forecasts.map((x) => ({ label: x.label, ...x.f })));
+    return { success: true, data: forecasts };
+  }
+
+  const worst = worstStatus(forecasts.map((x) => x.f));
+  output.writeln(output.bold('Usage limits') + output.dim(`  (${worst})`));
+  for (const { label, f } of forecasts) {
+    const line = formatForecast(label, f, nowMs);
+    output.writeln('  ' + (f.status === 'over' ? output.error(line) : f.status === 'warn' ? line : output.dim(line)));
+  }
+  const exitCode = ctx.flags.strict === true && worst === 'over' ? 1 : 0;
+  if (exitCode === 1) output.writeln(output.dim('exit 1 (--strict + cap reached)'));
+  return { success: exitCode === 0, exitCode };
+}
+
 async function run(ctx: CommandContext): Promise<CommandResult> {
   const viewName = (ctx.args[0] || 'daily').toLowerCase();
 
@@ -550,9 +591,13 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
     return runReflectView(ctx, collectUsage({ dirs }));
   }
 
+  if (viewName === 'limits') {
+    return runLimitsView(ctx); // reads the rate_limits payload from stdin/--payload, not transcripts
+  }
+
   const view = VIEWS[viewName];
   if (!view) {
-    output.writeln(output.error(`unknown view: ${viewName} (expected ${Object.keys(VIEWS).join('|')}|blocks|errors|cache|guard|diff|reflect)`));
+    output.writeln(output.error(`unknown view: ${viewName} (expected ${Object.keys(VIEWS).join('|')}|blocks|errors|cache|guard|diff|reflect|limits)`));
     return { success: false, exitCode: 1 };
   }
 

@@ -14,6 +14,49 @@
 
 export type LimitStatus = 'ok' | 'warn' | 'over';
 
+/** Rolling-window durations Claude Code reports (5-hour + 7-day caps). */
+export const FIVE_HOUR_MS = 5 * 60 * 60 * 1000;
+export const SEVEN_DAY_MS = 7 * 24 * 60 * 60 * 1000;
+
+export interface NamedWindow {
+  /** short label, '5h' | '7d' */
+  label: string;
+  state: WindowState;
+}
+
+/** Coerce an epoch-seconds, epoch-ms, or ISO-string timestamp to epoch ms. */
+function toEpochMs(v: unknown): number | null {
+  if (typeof v === 'number' && Number.isFinite(v)) return v < 1e12 ? v * 1000 : v; // secs vs ms
+  if (typeof v === 'string') { const t = Date.parse(v); return Number.isNaN(t) ? null : t; }
+  return null;
+}
+
+function pickWindow(obj: unknown, windowMs: number, label: string): NamedWindow | null {
+  if (!obj || typeof obj !== 'object') return null;
+  const o = obj as Record<string, unknown>;
+  const used = (o.used_percentage ?? o.usedPercentage) as unknown;
+  const resetsAtMs = toEpochMs(o.resets_at ?? o.resetsAt);
+  if (typeof used !== 'number' || !Number.isFinite(used) || resetsAtMs === null) return null;
+  return { label, state: { usedPercentage: Math.max(0, Math.min(100, used)), windowMs, resetsAtMs } };
+}
+
+/**
+ * Map Claude Code's statusline `rate_limits` payload to normalized windows.
+ * Tolerant of shape drift: accepts the payload bare or wrapped in `rate_limits`,
+ * snake_case or camelCase keys, and epoch-seconds / epoch-ms / ISO `resets_at`.
+ * Windows missing usage or a reset time are dropped. Pure.
+ */
+export function parseRateLimits(payload: unknown): NamedWindow[] {
+  const p = payload && typeof payload === 'object' ? (payload as Record<string, unknown>) : {};
+  const rl = (p.rate_limits ?? p.rateLimits ?? p) as Record<string, unknown>;
+  const out: NamedWindow[] = [];
+  const w5 = pickWindow(rl.five_hour ?? rl.fiveHour, FIVE_HOUR_MS, '5h');
+  const w7 = pickWindow(rl.seven_day ?? rl.sevenDay, SEVEN_DAY_MS, '7d');
+  if (w5) out.push(w5);
+  if (w7) out.push(w7);
+  return out;
+}
+
 export interface WindowState {
   /** percent of the window's quota consumed, 0..100 */
   usedPercentage: number;

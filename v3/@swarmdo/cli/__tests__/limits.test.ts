@@ -5,6 +5,9 @@ import {
   bindingWindow,
   humanizeMs,
   formatForecast,
+  parseRateLimits,
+  FIVE_HOUR_MS,
+  SEVEN_DAY_MS,
   type LimitForecast,
 } from '../src/usage/limits.ts';
 
@@ -71,6 +74,49 @@ describe('limits: forecastWindow — projection', () => {
     const late = H5 - 50_000;
     expect(forecastWindow(w, late, { warnPct: 50 }).status).toBe('warn'); // 60 >= 50
     expect(forecastWindow(w, late, { warnPct: 90 }).status).toBe('ok');   // 60 < 90, no exhaust
+  });
+});
+
+describe('limits: parseRateLimits', () => {
+  const iso = '2026-07-11T20:00:00Z';
+  const isoMs = Date.parse(iso);
+
+  it('maps snake_case five_hour + seven_day with an ISO reset', () => {
+    const out = parseRateLimits({
+      five_hour: { used_percentage: 42, resets_at: iso },
+      seven_day: { used_percentage: 18, resets_at: iso },
+    });
+    expect(out.map((w) => w.label)).toEqual(['5h', '7d']);
+    expect(out[0].state).toEqual({ usedPercentage: 42, windowMs: FIVE_HOUR_MS, resetsAtMs: isoMs });
+    expect(out[1].state.windowMs).toBe(SEVEN_DAY_MS);
+  });
+
+  it('accepts camelCase keys and a payload wrapped under rate_limits', () => {
+    const out = parseRateLimits({ rate_limits: { fiveHour: { usedPercentage: 10, resetsAt: iso } } });
+    expect(out).toHaveLength(1);
+    expect(out[0].state.usedPercentage).toBe(10);
+  });
+
+  it('coerces epoch-seconds and epoch-ms reset times', () => {
+    const secs = 1_800_000_000; // < 1e12 → seconds
+    const outS = parseRateLimits({ five_hour: { used_percentage: 5, resets_at: secs } });
+    expect(outS[0].state.resetsAtMs).toBe(secs * 1000);
+    const ms = 1_800_000_000_000; // >= 1e12 → already ms
+    const outM = parseRateLimits({ five_hour: { used_percentage: 5, resets_at: ms } });
+    expect(outM[0].state.resetsAtMs).toBe(ms);
+  });
+
+  it('clamps used_percentage into 0..100', () => {
+    expect(parseRateLimits({ five_hour: { used_percentage: 150, resets_at: iso } })[0].state.usedPercentage).toBe(100);
+    expect(parseRateLimits({ five_hour: { used_percentage: -5, resets_at: iso } })[0].state.usedPercentage).toBe(0);
+  });
+
+  it('drops windows missing usage or a valid reset, and tolerates garbage', () => {
+    expect(parseRateLimits({ five_hour: { resets_at: iso } })).toEqual([]);            // no usage
+    expect(parseRateLimits({ five_hour: { used_percentage: 5, resets_at: 'nope' } })).toEqual([]); // bad reset
+    expect(parseRateLimits(null)).toEqual([]);
+    expect(parseRateLimits('garbage')).toEqual([]);
+    expect(parseRateLimits({})).toEqual([]);
   });
 });
 
