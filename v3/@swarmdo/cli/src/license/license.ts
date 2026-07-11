@@ -73,7 +73,10 @@ export function classifyLicense(pkg: {
   if (Array.isArray(arr) && arr.length) {
     const types = arr
       .map((e) => (typeof e === 'string' ? e : (e as { type?: unknown })?.type))
-      .filter((t): t is string => typeof t === 'string' && !!t.trim());
+      .filter((t): t is string => typeof t === 'string' && !!t.trim())
+      // Normalize each entry like the singular `license`/`{type}` branches above,
+      // so npm sentinels (`SEE LICENSE IN …`, `UNLICENSED`) become UNKNOWN here too.
+      .map(normalizeNpmLicense);
     if (types.length) return types.join(' OR ');
   }
   return 'UNKNOWN';

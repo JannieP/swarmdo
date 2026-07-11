@@ -18,6 +18,10 @@ describe('classifyLicense', () => {
   it('joins the legacy licenses[] array with OR', () => {
     expect(classifyLicense({ licenses: [{ type: 'MIT' }, { type: 'Apache-2.0' }] as any })).toBe('MIT OR Apache-2.0');
   });
+  it('normalizes npm special values inside the legacy licenses[] array too (parity with the license field)', () => {
+    expect(classifyLicense({ licenses: [{ type: 'SEE LICENSE IN LICENSE.txt' }] as any })).toBe('UNKNOWN');
+    expect(classifyLicense({ licenses: [{ type: 'UNLICENSED' }] as any })).toBe('UNKNOWN');
+  });
   it('falls back to UNKNOWN', () => {
     expect(classifyLicense({})).toBe('UNKNOWN');
     expect(classifyLicense({ license: '' })).toBe('UNKNOWN');
