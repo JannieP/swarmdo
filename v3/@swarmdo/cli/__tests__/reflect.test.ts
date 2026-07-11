@@ -5,6 +5,7 @@ import {
   longestStreakOf,
   monthsBefore,
   peakHourOf,
+  hourSparkline,
   computeReflection,
 } from '../src/usage/reflect.ts';
 import type { DayRow, ModelRow, DayTotals } from '../src/usage/diff.ts';
@@ -131,6 +132,31 @@ describe('reflect: peakHourOf', () => {
     const h = new Array(24).fill(0);
     h[3] = 2; h[7] = 2; // tie → earliest
     expect(peakHourOf(h)).toEqual({ hour: 3, value: 2 });
+  });
+});
+
+describe('reflect: hourSparkline', () => {
+  const BLOCKS = ' ▁▂▃▄▅▆▇█';
+  it('renders all-blank for an all-zero series, preserving length', () => {
+    expect(hourSparkline([0, 0, 0])).toBe('   ');
+    expect(hourSparkline(new Array(24).fill(0))).toBe(' '.repeat(24));
+  });
+  it('maps the max to █ and leaves a lone peak surrounded by blanks', () => {
+    const h = new Array(24).fill(0);
+    h[5] = 10;
+    const s = hourSparkline(h);
+    expect(s.length).toBe(24);
+    expect(s[5]).toBe('█');
+    expect(s[4]).toBe(' ');
+  });
+  it('scales the smallest non-zero to ▁ and is monotonic with value', () => {
+    const s = hourSparkline([0, 1, 2, 3, 4, 5, 6, 7, 8]);
+    expect(s[0]).toBe(' ');
+    expect(s[1]).toBe('▁');
+    expect(s[8]).toBe('█');
+    for (let i = 2; i < s.length; i++) {
+      expect(BLOCKS.indexOf(s[i])).toBeGreaterThanOrEqual(BLOCKS.indexOf(s[i - 1]));
+    }
   });
 });
 

@@ -117,6 +117,17 @@ export function longestStreakOf(days: string[]): number {
 
 const within = (key: string, from: string, to: string): boolean => key >= from && key <= to;
 
+const SPARK_BLOCKS = ' ▁▂▃▄▅▆▇█'; // index 0 = empty (zero), 1..8 = ▁..█ scaled to max
+
+/** Render a numeric series as a Unicode block sparkline (one char per bucket).
+ * Zero buckets are blank; the rest scale ▁..█ against the max. Pure — used for
+ * the terminal cost-by-hour view (the HTML dashboard draws the same data). */
+export function hourSparkline(hist: number[]): string {
+  const max = Math.max(0, ...hist);
+  if (max <= 0) return ' '.repeat(hist.length);
+  return hist.map((v) => SPARK_BLOCKS[v <= 0 ? 0 : Math.min(8, 1 + Math.floor((v / max) * 7))]).join('');
+}
+
 /** Window + aggregate `{key, day, totals}` rows into cost-ranked shares. Pure.
  * Reused for both models and projects (ModelShare.model carries whichever key). */
 export function rankShares(rows: ModelRow[], from: string, to: string, totalCost: number, topN: number): ModelShare[] {

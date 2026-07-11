@@ -30,7 +30,7 @@ import { collectToolErrors, type ToolErrorReport } from '../usage/transcript-err
 import { computeCacheStats, type CacheStats } from '../usage/cache-stats.js';
 import { evaluateGuard, type GuardThreshold, type GuardStatus } from '../usage/spend-guard.js';
 import { resolvePeriodPair, parseRange, diffPeriods, modelMovers, type DayRow, type ModelRow, type Period, type MetricDelta } from '../usage/diff.js';
-import { computeReflection, monthsBefore, type Reflection } from '../usage/reflect.js';
+import { computeReflection, monthsBefore, hourSparkline, type Reflection } from '../usage/reflect.js';
 import { renderReflectionHtml } from '../usage/reflect-html.js';
 
 const VIEWS: Record<string, { dimension: UsageDimension; label: string }> = {
@@ -484,6 +484,9 @@ function runReflectView(ctx: CommandContext, collection: ReturnType<typeof colle
   output.writeln(`  Cache read share   ${pctStr(r.cacheReadPct)}`);
   output.writeln(`  Cost trend         ${arrow} ${fmtCost(r.trend.firstHalfCost)} → ${fmtCost(r.trend.secondHalfCost)} ${output.dim(`(${r.trend.direction})`)}`);
   if (r.peakHour) output.writeln(`  Peak hour          ${String(r.peakHour.hour).padStart(2, '0')}:00  ${output.dim(`(${fmtCost(r.peakHour.value)})`)}`);
+  if (r.hourHistogram.some((v) => v > 0)) {
+    output.writeln(`  By hour            ${hourSparkline(r.hourHistogram)}  ${output.dim('0…23')}`);
+  }
   if (r.topModels.length) {
     output.writeln('');
     output.writeln(output.bold('  Top models'));
