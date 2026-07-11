@@ -40,6 +40,7 @@ import { computeModelEfficiency } from '../usage/model-efficiency.js';
 
 const VIEWS: Record<string, { dimension: UsageDimension; label: string }> = {
   daily: { dimension: 'day', label: 'Date' },
+  weekly: { dimension: 'week', label: 'ISO week' },
   monthly: { dimension: 'month', label: 'Month' },
   models: { dimension: 'model', label: 'Model' },
   projects: { dimension: 'project', label: 'Project' },
@@ -707,7 +708,7 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
 export const usageCommand: Command = {
   name: 'usage',
   aliases: ['cost'],
-  description: 'Claude Code token & cost analytics from local transcripts (daily|monthly|models|projects|sessions)',
+  description: 'Claude Code token & cost analytics from local transcripts (daily|weekly|monthly|models|projects|sessions)',
   options: [
     { name: 'since', description: 'inclusive start date (YYYY-MM-DD or YYYYMMDD)', type: 'string' },
     { name: 'until', description: 'inclusive end date (YYYY-MM-DD or YYYYMMDD)', type: 'string' },
@@ -718,6 +719,7 @@ export const usageCommand: Command = {
   ],
   examples: [
     { command: 'swarmdo usage', description: 'Daily token/cost table across all local Claude Code sessions' },
+    { command: 'swarmdo usage weekly', description: 'Spend grouped by ISO week' },
     { command: 'swarmdo usage models --since 2026-07-01', description: 'Spend per model this month' },
     { command: 'swarmdo usage projects --json', description: 'Per-project totals as JSON' },
     { command: 'swarmdo usage monthly --csv > usage.csv', description: 'Export monthly spend to CSV' },

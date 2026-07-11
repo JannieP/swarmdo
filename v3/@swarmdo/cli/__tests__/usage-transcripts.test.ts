@@ -25,6 +25,7 @@ import {
   totalUsage,
   localDateKey,
   normalizeDateBound,
+  isoWeekKey,
   type UsageEvent,
 } from '../src/usage/transcript-usage.js';
 import {
@@ -316,5 +317,33 @@ describe('helpers', () => {
     expect(normalizeDateBound('20260701')).toBe('2026-07-01');
     expect(normalizeDateBound('July 1')).toBeUndefined();
     expect(normalizeDateBound(undefined)).toBeUndefined();
+  });
+});
+
+describe('isoWeekKey (ISO-8601 week numbering)', () => {
+  it('numbers a mid-year date', () => {
+    expect(isoWeekKey('2026-07-11')).toBe('2026-W28');
+    expect(isoWeekKey('2026-01-01')).toBe('2026-W01'); // Thursday → week 1
+  });
+  it('assigns a late-December week to the next ISO year', () => {
+    // 2025-12-31 (Wed) is in the week whose Thursday is 2026-01-01 → 2026-W01
+    expect(isoWeekKey('2025-12-31')).toBe('2026-W01');
+    expect(isoWeekKey('2025-12-29')).toBe('2026-W01'); // Monday of that week
+  });
+  it('assigns an early-January date to the previous ISO year (53-week year)', () => {
+    // 2027-01-01 (Fri) belongs to the week whose Thursday is 2026-12-31 → 2026-W53
+    expect(isoWeekKey('2027-01-01')).toBe('2026-W53');
+    expect(isoWeekKey('2026-12-31')).toBe('2026-W53');
+    expect(isoWeekKey('2024-12-30')).toBe('2025-W01'); // Monday → next year's week 1
+  });
+  it('produces chronologically-sortable string keys across a year boundary', () => {
+    // earlier calendar date → earlier sortable week key (the property the
+    // chronological weekly view relies on), robust to exact week numbers
+    const dec = isoWeekKey('2025-12-20');
+    const jan = isoWeekKey('2026-01-05');
+    const jul = isoWeekKey('2026-07-11');
+    expect(dec < jan).toBe(true);
+    expect(jan < jul).toBe(true);
+    expect([jul, dec, jan].sort()).toEqual([dec, jan, jul]);
   });
 });

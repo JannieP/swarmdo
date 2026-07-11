@@ -285,10 +285,31 @@ function toUsageEvent(
   };
 }
 
-export type UsageDimension = 'day' | 'month' | 'model' | 'project' | 'session';
+export type UsageDimension = 'day' | 'week' | 'month' | 'model' | 'project' | 'session';
+
+/**
+ * ISO-8601 week key for a `YYYY-MM-DD` date, e.g. '2026-W28'. The week belongs to
+ * the year of its Thursday, so a late-December / early-January week can carry the
+ * neighbouring ISO year (e.g. 2025-12-31 → 2026-W01, 2027-01-01 → 2026-W53).
+ * Keys sort chronologically as strings. Pure.
+ */
+export function isoWeekKey(iso: string): string {
+  const [y, m, d] = iso.split('-').map(Number);
+  const date = new Date(Date.UTC(y, m - 1, d));
+  const dayNum = (date.getUTCDay() + 6) % 7;        // Mon=0 … Sun=6
+  date.setUTCDate(date.getUTCDate() - dayNum + 3);  // Thursday of this week
+  const isoYear = date.getUTCFullYear();
+  const jan4 = new Date(Date.UTC(isoYear, 0, 4));   // Jan 4 is always in week 1
+  const jan4Day = (jan4.getUTCDay() + 6) % 7;
+  const week1Monday = new Date(jan4);
+  week1Monday.setUTCDate(jan4.getUTCDate() - jan4Day);
+  const week = 1 + Math.round((date.getTime() - week1Monday.getTime()) / (7 * 86_400_000));
+  return `${isoYear}-W${String(week).padStart(2, '0')}`;
+}
 
 const DIMENSION_KEY: Record<UsageDimension, (e: UsageEvent) => string> = {
   day: (e) => e.dateKey,
+  week: (e) => isoWeekKey(e.dateKey),
   month: (e) => e.monthKey,
   model: (e) => e.model,
   project: (e) => e.project,
@@ -337,7 +358,7 @@ export function aggregateUsage(
     addEvent(t, e);
   }
   const rows = Array.from(groups.entries()).map(([key, totals]) => ({ key, totals }));
-  if (dimension === 'day' || dimension === 'month') {
+  if (dimension === 'day' || dimension === 'week' || dimension === 'month') {
     rows.sort((a, b) => a.key.localeCompare(b.key));
   } else {
     rows.sort((a, b) => b.totals.costUsd - a.totals.costUsd || b.totals.totalTokens - a.totals.totalTokens);
