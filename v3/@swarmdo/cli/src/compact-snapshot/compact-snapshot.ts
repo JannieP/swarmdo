@@ -50,9 +50,14 @@ const DEFAULT_MAX_FILES = 12;
  */
 export function porcelainPath(line: string): string | null {
   if (!line || line.length < 4) return null;
+  const status = line.slice(0, 2); // XY status code
   let rest = line.slice(3); // strip the 2 status chars + the separating space
-  const arrow = rest.indexOf(' -> ');
-  if (arrow >= 0) rest = rest.slice(arrow + 4); // rename/copy → destination path
+  // Only a rename/copy (status R or C) uses `<old> -> <new>`; for any other
+  // status a literal ` -> ` is part of the real filename and must NOT be split.
+  if (/[RC]/.test(status)) {
+    const arrow = rest.indexOf(' -> ');
+    if (arrow >= 0) rest = rest.slice(arrow + 4); // destination path
+  }
   rest = rest.trim();
   if (rest.startsWith('"') && rest.endsWith('"') && rest.length >= 2) {
     rest = rest.slice(1, -1); // unwrap git's quoted path (escapes left as-is)

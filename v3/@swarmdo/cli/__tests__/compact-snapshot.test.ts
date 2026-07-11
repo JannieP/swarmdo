@@ -20,6 +20,11 @@ describe('porcelainPath', () => {
   it('takes the destination of a rename/copy', () => {
     expect(porcelainPath('R  old/name.ts -> new/name.ts')).toBe('new/name.ts');
   });
+  it('does NOT split a non-rename path that merely contains " -> "', () => {
+    // status ` M` (modified) / `??` (untracked), not R/C → the arrow is part of the real name
+    expect(porcelainPath(' M docs/v1 -> v2 migration.md')).toBe('docs/v1 -> v2 migration.md');
+    expect(porcelainPath('?? a -> b.txt')).toBe('a -> b.txt');
+  });
   it('unwraps a git-quoted path (special chars)', () => {
     expect(porcelainPath('?? "with space.ts"')).toBe('with space.ts');
   });
