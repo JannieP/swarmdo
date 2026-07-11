@@ -43,6 +43,12 @@ export interface Reflection {
   busiestDay: { day: string; costUsd: number; totalTokens: number } | null;
   /** models ranked by cost desc (capped to opts.topModels) */
   topModels: ModelShare[];
+  /** projects ranked by cost desc (ModelShare.model holds the project path) */
+  topProjects: ModelShare[];
+  /** busiest local hour-of-day by cost (0..23), or null if no activity */
+  peakHour: { hour: number; value: number } | null;
+  /** cost per local hour-of-day, as supplied by the caller (length 24 when set) */
+  hourHistogram: number[];
   /** longest run of consecutive active calendar days */
   longestStreak: number;
   /** cacheRead / (input + cacheWrite + cacheRead), 0..1 */
@@ -111,6 +117,35 @@ export function longestStreakOf(days: string[]): number {
 
 const within = (key: string, from: string, to: string): boolean => key >= from && key <= to;
 
+/** Window + aggregate `{key, day, totals}` rows into cost-ranked shares. Pure.
+ * Reused for both models and projects (ModelShare.model carries whichever key). */
+export function rankShares(rows: ModelRow[], from: string, to: string, totalCost: number, topN: number): ModelShare[] {
+  const per = new Map<string, { costUsd: number; totalTokens: number }>();
+  for (const r of rows) {
+    if (!within(r.day, from, to)) continue;
+    const slot = per.get(r.key) ?? { costUsd: 0, totalTokens: 0 };
+    slot.costUsd += r.totals.costUsd;
+    slot.totalTokens += r.totals.totalTokens;
+    per.set(r.key, slot);
+  }
+  return [...per.entries()]
+    .map(([key, v]) => ({ model: key, costUsd: v.costUsd, totalTokens: v.totalTokens, pct: totalCost > 0 ? v.costUsd / totalCost : 0 }))
+    .filter((m) => m.costUsd > 0 || m.totalTokens > 0)
+    .sort((a, b) => b.costUsd - a.costUsd || b.totalTokens - a.totalTokens || (a.model < b.model ? -1 : 1))
+    .slice(0, topN);
+}
+
+/** Busiest bucket in a per-hour cost histogram (argmax; earliest hour wins ties),
+ * or null when every bucket is empty. Pure. */
+export function peakHourOf(hourHistogram: number[]): { hour: number; value: number } | null {
+  let best = -1;
+  let bestVal = 0;
+  for (let h = 0; h < hourHistogram.length; h++) {
+    if (hourHistogram[h] > bestVal) { bestVal = hourHistogram[h]; best = h; }
+  }
+  return best < 0 ? null : { hour: best, value: bestVal };
+}
+
 /** Fold pre-aggregated usage rows into a retrospective. Pure. */
 export function computeReflection(
   dayRows: DayRow[],
@@ -118,6 +153,8 @@ export function computeReflection(
   from: string,
   to: string,
   opts: ReflectOptions = {},
+  projectRows: ModelRow[] = [],
+  hourHistogram: number[] = [],
 ): Reflection {
   if (!DATE.test(from) || !DATE.test(to)) throw new Error(`bad period bounds: ${from}..${to}`);
   if (from > to) throw new Error(`period "${from}..${to}" is reversed (from > to)`);
@@ -157,20 +194,9 @@ export function computeReflection(
   // A period with zero active days has no meaningful busiest day.
   if (totals.activeDays === 0) busiestDay = null;
 
-  // Per-model aggregation over the same window.
-  const perModel = new Map<string, { costUsd: number; totalTokens: number }>();
-  for (const r of modelRows) {
-    if (!within(r.day, from, to)) continue;
-    const slot = perModel.get(r.key) ?? { costUsd: 0, totalTokens: 0 };
-    slot.costUsd += r.totals.costUsd;
-    slot.totalTokens += r.totals.totalTokens;
-    perModel.set(r.key, slot);
-  }
-  const topModels: ModelShare[] = [...perModel.entries()]
-    .map(([model, v]) => ({ model, costUsd: v.costUsd, totalTokens: v.totalTokens, pct: totals.costUsd > 0 ? v.costUsd / totals.costUsd : 0 }))
-    .filter((m) => m.costUsd > 0 || m.totalTokens > 0)
-    .sort((a, b) => b.costUsd - a.costUsd || b.totalTokens - a.totalTokens || (a.model < b.model ? -1 : 1))
-    .slice(0, topN);
+  // Cost-ranked shares over the same window, for both models and projects.
+  const topModels = rankShares(modelRows, from, to, totals.costUsd, topN);
+  const topProjects = rankShares(projectRows, from, to, totals.costUsd, topN);
 
   const inputSide = totals.inputTokens + totals.cacheWriteTokens + totals.cacheReadTokens;
   const relChange = firstHalfCost > 0 ? (secondHalfCost - firstHalfCost) / firstHalfCost : (secondHalfCost > 0 ? 1 : 0);
@@ -181,6 +207,9 @@ export function computeReflection(
     totals,
     busiestDay,
     topModels,
+    topProjects,
+    peakHour: peakHourOf(hourHistogram),
+    hourHistogram,
     longestStreak: longestStreakOf(activeDayKeys),
     cacheReadPct: inputSide > 0 ? totals.cacheReadTokens / inputSide : 0,
     avgCostPerActiveDay: totals.activeDays > 0 ? totals.costUsd / totals.activeDays : 0,

@@ -4,6 +4,7 @@ import {
   spanDays,
   longestStreakOf,
   monthsBefore,
+  peakHourOf,
   computeReflection,
 } from '../src/usage/reflect.ts';
 import type { DayRow, ModelRow, DayTotals } from '../src/usage/diff.ts';
@@ -121,6 +122,41 @@ describe('reflect: computeReflection — trend', () => {
   });
 });
 
+describe('reflect: peakHourOf', () => {
+  it('returns null for an empty or all-zero histogram', () => {
+    expect(peakHourOf([])).toBeNull();
+    expect(peakHourOf(new Array(24).fill(0))).toBeNull();
+  });
+  it('returns the argmax, choosing the earliest hour on a tie', () => {
+    const h = new Array(24).fill(0);
+    h[3] = 2; h[7] = 2; // tie → earliest
+    expect(peakHourOf(h)).toEqual({ hour: 3, value: 2 });
+  });
+});
+
+describe('reflect: computeReflection — projects + hours (phase 2)', () => {
+  it('ranks projects by windowed cost (ModelShare.model carries the project path)', () => {
+    const dayRows: DayRow[] = [day('2026-03-01', { costUsd: 6, totalTokens: 600 })];
+    const projectRows: ModelRow[] = [
+      mr('/repo/alpha', '2026-03-01', { costUsd: 4, totalTokens: 100 }),
+      mr('/repo/beta', '2026-03-01', { costUsd: 2, totalTokens: 100 }),
+      mr('/repo/alpha', '2026-02-01', { costUsd: 9, totalTokens: 100 }), // out of window — excluded
+      mr('/repo/gamma', '2026-03-01', { costUsd: 0, totalTokens: 0 }),   // zero — filtered
+    ];
+    const r = computeReflection(dayRows, [], '2026-03-01', '2026-03-05', {}, projectRows);
+    expect(r.topProjects.map((p) => p.model)).toEqual(['/repo/alpha', '/repo/beta']);
+    expect(r.topProjects[0].costUsd).toBe(4); // 02-01 not counted
+    expect(r.topProjects[0].pct).toBeCloseTo(4 / 6, 6);
+  });
+  it('passes the hour histogram through and finds the peak (earliest on tie)', () => {
+    const hist = new Array(24).fill(0);
+    hist[9] = 3; hist[14] = 5; hist[22] = 5; // 14 & 22 tie → 14 wins
+    const r = computeReflection([day('2026-03-01', { costUsd: 1, totalTokens: 1 })], [], '2026-03-01', '2026-03-05', {}, [], hist);
+    expect(r.peakHour).toEqual({ hour: 14, value: 5 });
+    expect(r.hourHistogram).toBe(hist);
+  });
+});
+
 describe('reflect: computeReflection — edges', () => {
   it('an empty / all-out-of-window period yields zeros, null busiest, streak 0', () => {
     const r = computeReflection([day('2020-01-01', { costUsd: 9, totalTokens: 9 })], [], '2026-03-01', '2026-03-05');
@@ -129,6 +165,8 @@ describe('reflect: computeReflection — edges', () => {
     expect(r.busiestDay).toBeNull();
     expect(r.longestStreak).toBe(0);
     expect(r.topModels).toEqual([]);
+    expect(r.topProjects).toEqual([]);
+    expect(r.peakHour).toBeNull();
     expect(r.avgCostPerActiveDay).toBe(0);
     expect(r.cacheReadPct).toBe(0);
   });

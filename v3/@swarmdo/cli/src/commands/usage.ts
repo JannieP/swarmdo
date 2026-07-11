@@ -437,15 +437,24 @@ function runReflectView(ctx: CommandContext, collection: ReturnType<typeof colle
 
   const dayRows: DayRow[] = aggregateUsage(collection.events, 'day').map((r) => ({ key: r.key, totals: r.totals }));
   const md = new Map<string, ModelRow>();
+  const pd = new Map<string, ModelRow>();       // per-(project, day) for top projects
+  const hourHistogram = new Array(24).fill(0);  // local-hour cost, windowed to [from,to]
   for (const e of collection.events) {
-    const k = `${e.model} ${e.dateKey}`;
+    const k = `${e.model}\u0000${e.dateKey}`;
     const row = md.get(k) ?? { key: e.model, day: e.dateKey, totals: { costUsd: 0, inputTokens: 0, outputTokens: 0, cacheReadTokens: 0, cacheWriteTokens: 0, totalTokens: 0 } };
     row.totals.costUsd += e.costUsd;
     row.totals.totalTokens += e.inputTokens + e.outputTokens + e.cacheWriteTokens + e.cacheReadTokens;
     md.set(k, row);
+    // per-(project, day) fold (space separator is safe — dateKey is fixed-width)
+    const pk = `${e.project} ${e.dateKey}`;
+    const prow = pd.get(pk) ?? { key: e.project, day: e.dateKey, totals: { costUsd: 0, inputTokens: 0, outputTokens: 0, cacheReadTokens: 0, cacheWriteTokens: 0, totalTokens: 0 } };
+    prow.totals.costUsd += e.costUsd;
+    prow.totals.totalTokens += e.inputTokens + e.outputTokens + e.cacheWriteTokens + e.cacheReadTokens;
+    pd.set(pk, prow);
+    if (e.dateKey >= from && e.dateKey <= to) hourHistogram[new Date(e.timestampMs).getHours()] += e.costUsd;
   }
 
-  const reflection = computeReflection(dayRows, [...md.values()], from, to);
+  const reflection = computeReflection(dayRows, [...md.values()], from, to, {}, [...pd.values()], hourHistogram);
 
   if (ctx.flags.json === true) {
     output.printJson(reflection);
@@ -468,11 +477,20 @@ function runReflectView(ctx: CommandContext, collection: ReturnType<typeof colle
   output.writeln(`  Avg / active day   ${fmtCost(r.avgCostPerActiveDay)}`);
   output.writeln(`  Cache read share   ${pctStr(r.cacheReadPct)}`);
   output.writeln(`  Cost trend         ${arrow} ${fmtCost(r.trend.firstHalfCost)} → ${fmtCost(r.trend.secondHalfCost)} ${output.dim(`(${r.trend.direction})`)}`);
+  if (r.peakHour) output.writeln(`  Peak hour          ${String(r.peakHour.hour).padStart(2, '0')}:00  ${output.dim(`(${fmtCost(r.peakHour.value)})`)}`);
   if (r.topModels.length) {
     output.writeln('');
     output.writeln(output.bold('  Top models'));
     r.topModels.forEach((m, i) => {
       output.writeln(`    ${i + 1}. ${m.model.padEnd(22)} ${fmtCost(m.costUsd).padStart(9)}  ${output.dim(pctStr(m.pct))}`);
+    });
+  }
+  if (r.topProjects.length) {
+    output.writeln('');
+    output.writeln(output.bold('  Top projects'));
+    r.topProjects.forEach((p, i) => {
+      const name = p.model.length > 34 ? '…' + p.model.slice(-33) : p.model;
+      output.writeln(`    ${i + 1}. ${name.padEnd(34)} ${fmtCost(p.costUsd).padStart(9)}  ${output.dim(pctStr(p.pct))}`);
     });
   }
   return { success: true, exitCode: 0 };
