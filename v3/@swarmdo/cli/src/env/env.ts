@@ -55,6 +55,19 @@ const VITE_BUILTINS = new Set(['MODE', 'BASE_URL', 'PROD', 'DEV', 'SSR']);
 export function extractEnvRefs(source: string, file: string): EnvRef[] {
   const out: EnvRef[] = [];
   const lines = source.split('\n');
+  // Map a byte offset in `source` to its 1-based line, for the whole-source
+  // destructure scan below (which can span lines). lineStart[i] = the offset
+  // where line i+1 begins; binary-search for the last start <= offset.
+  const lineStart: number[] = [0];
+  for (let k = 0; k < source.length; k++) if (source[k] === '\n') lineStart.push(k + 1);
+  const lineAt = (index: number): number => {
+    let lo = 0, hi = lineStart.length - 1;
+    while (lo < hi) { const mid = (lo + hi + 1) >> 1; if (lineStart[mid] <= index) lo = mid; else hi = mid - 1; }
+    return lo + 1;
+  };
+
+  // Member-style reads (process.env.X, os.getenv('X'), …) are inherently
+  // single-line — scan line by line so each ref carries its own line number.
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     if (!line.includes('env') && !line.includes('getenv')) continue;
@@ -67,19 +80,28 @@ export function extractEnvRefs(source: string, file: string): EnvRef[] {
         out.push({ key, file, line: i + 1 });
       }
     }
-    // Destructuring reads: `const { PORT, DB_URL } = process.env` (each property
-    // key is an env-var reference). The `(?![.[])` guard keeps it to the bare
-    // `process.env` object, not `= process.env.FOO`. Single-line, like the rest.
-    DESTRUCTURE_RE.lastIndex = 0;
-    let dm: RegExpExecArray | null;
-    while ((dm = DESTRUCTURE_RE.exec(line)) !== null) {
-      for (const part of dm[1].split(',')) {
-        // The env-var name is the property key — left of a rename `:` or default `=`.
-        const key = part.trim().split(/[:=]/)[0].trim();
-        if (!/^[A-Za-z_$][\w$]*$/.test(key)) continue; // skip `...rest`, empties
-        if (VITE_BUILTINS.has(key)) continue;
-        out.push({ key, file, line: i + 1 });
+  }
+
+  // Destructuring reads: `const { PORT, DB_URL } = process.env`. Scanned over the
+  // WHOLE source, not per line — a Prettier-wrapped list spans lines:
+  //   const {\n  PORT,\n  DB_URL,\n} = process.env
+  // The regex's `\s*`/`[^}]+` already match newlines, so running it per line was
+  // exactly what hid multi-line destructures (a false-clean `env --ci`). The
+  // `(?![.[])` guard keeps it to the bare object, not `= process.env.FOO`; each
+  // property key maps back to its own line via its offset.
+  DESTRUCTURE_RE.lastIndex = 0;
+  let dm: RegExpExecArray | null;
+  while ((dm = DESTRUCTURE_RE.exec(source)) !== null) {
+    const bodyStart = dm.index + dm[0].indexOf(dm[1]);
+    let partOffset = 0;
+    for (const part of dm[1].split(',')) {
+      // The env-var name is the property key — left of a rename `:` or default `=`.
+      const key = part.trim().split(/[:=]/)[0].trim();
+      if (/^[A-Za-z_$][\w$]*$/.test(key) && !VITE_BUILTINS.has(key)) { // skip `...rest`, empties, builtins
+        const kOff = part.indexOf(key);
+        out.push({ key, file, line: lineAt(bodyStart + partOffset + (kOff < 0 ? 0 : kOff)) });
       }
+      partOffset += part.length + 1; // + the comma consumed by split
     }
   }
   return out;

@@ -41,6 +41,18 @@ describe('extractEnvRefs', () => {
     const refs = extractEnvRefs('const { a } = process.env.FOO;', 'f.ts');
     expect(refs.map((r) => r.key)).toEqual(['FOO']); // FOO via the member pattern; no phantom `a`
   });
+  it('captures a multi-line (Prettier-wrapped) destructure, mapping each key to its line', () => {
+    // Line-by-line scanning used to miss this entirely → false-clean `env --ci`.
+    const src = ['const {', '  PORT,', '  DB_URL,', '} = process.env;'].join('\n');
+    const refs = extractEnvRefs(src, 'f.ts');
+    expect(refs.map((r) => r.key).sort()).toEqual(['DB_URL', 'PORT']);
+    expect(refs.find((r) => r.key === 'PORT')!.line).toBe(2);   // its own line, not the `= process.env` anchor
+    expect(refs.find((r) => r.key === 'DB_URL')!.line).toBe(3);
+  });
+  it('captures a multi-line destructure with rename / default / rest forms', () => {
+    const src = ['const {', '  API_KEY: key,', '  REGION = "us",', '  ...rest', '} = process.env;'].join('\n');
+    expect(extractEnvRefs(src, 'f.ts').map((r) => r.key).sort()).toEqual(['API_KEY', 'REGION']);
+  });
 });
 
 describe('parseDotenv', () => {
