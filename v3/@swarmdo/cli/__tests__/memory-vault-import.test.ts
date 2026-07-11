@@ -23,6 +23,12 @@ describe('vault-import: parseNote', () => {
     expect(parseNote('# Just my own note\n\nhello')).toBeNull();
     expect(parseNote('---\ntitle: x\n---\nbody')).toBeNull();
   });
+  it('round-trips a raw value that already looks like a ```json fence unchanged (#71)', () => {
+    // renderBody leaves it raw (not a bare object/array), so import must not unfence it
+    const raw = '```json\n{"a":1}\n```';
+    const note = renderNote(entry('raw-fence', 'notes', raw));
+    expect(parseNote(note)!.value).toBe(raw);
+  });
 });
 
 describe('vault-import: unfenceBody', () => {
@@ -30,6 +36,12 @@ describe('vault-import: unfenceBody', () => {
     expect(unfenceBody('```json\n{\n  "a": 1\n}\n```')).toBe('{"a":1}');
     expect(unfenceBody('prose with ```json\ninline\n``` mixed')).toContain('prose');
     expect(unfenceBody('```json\nnot json\n```')).toBe('```json\nnot json\n```');
+  });
+  it('leaves a raw value already shaped like a MINIFIED json fence untouched', () => {
+    // renderBody always pretty-prints (2-space), so a minified-inner fence is a
+    // raw user value, not auto-generated — unfencing it would corrupt data.
+    const raw = '```json\n{"a":1}\n```';
+    expect(unfenceBody(raw)).toBe(raw);
   });
 });
 

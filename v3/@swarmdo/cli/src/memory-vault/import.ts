@@ -41,7 +41,16 @@ export function unfenceBody(body: string): string {
   const t = body.trim();
   const m = /^```json\n([\s\S]*)\n```$/.exec(t);
   if (!m) return body;
-  try { return JSON.stringify(JSON.parse(m[1])); } catch { return body; }
+  let parsed: unknown;
+  try { parsed = JSON.parse(m[1]); } catch { return body; }
+  // Only unfence a block that renderBody itself produced (it always pretty-prints
+  // with 2-space indent). A raw stored value that merely HAPPENS to already be a
+  // ```json fence — renderBody left it untouched because it isn't a bare
+  // object/array — must round-trip byte-for-byte; minifying it would silently
+  // rewrite the user's data on every export→import even with zero edits.
+  const reFenced = '```json\n' + JSON.stringify(parsed, null, 2) + '\n```';
+  if (reFenced !== t) return body;
+  return JSON.stringify(parsed);
 }
 
 /** Parse one note. Returns null unless it carries our frontmatter stamp. */
