@@ -534,6 +534,10 @@ export const taskTools: MCPTool[] = [
         progress: 0,
         assignedTo: [...original.assignedTo],
         tags: [...original.tags, 'retry-of:' + taskId],
+        // Carry the dependency gate — a retried task must stay blocked until its
+        // prerequisites complete, exactly like the original. Dropping it let the
+        // dispatcher run the retry against unfinished/failed deps (a half-built state).
+        ...(original.dependsOn?.length ? { dependsOn: [...original.dependsOn] } : {}),
         createdAt: new Date().toISOString(),
         startedAt: null,
         completedAt: null,

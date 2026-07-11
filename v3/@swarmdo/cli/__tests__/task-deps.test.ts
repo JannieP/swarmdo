@@ -10,10 +10,10 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import type { TaskRecord, TaskStore } from '../src/mcp-tools/task-tools.js';
+import { taskTools, type TaskRecord, type TaskStore } from '../src/mcp-tools/task-tools.js';
 import {
   validateDependencies,
   isReady,
@@ -161,5 +161,33 @@ describe('dispatcher dependency gate', () => {
     const pass2 = await dispatchPendingTasks({ cwd: dir, executor });
     expect(pass2.completed).toBe(1);
     expect(pass2.blocked).toBe(0);
+  });
+});
+
+describe('task_retry preserves the dependency gate', () => {
+  let dir: string;
+  let prev: string | undefined;
+  beforeEach(() => {
+    dir = mkdtempSync(join(tmpdir(), 'swarmdo-retry-'));
+    prev = process.env.SWARMDO_CWD;
+    process.env.SWARMDO_CWD = dir; // the retry handler's loadTaskStore() honors this
+  });
+  afterEach(() => {
+    if (prev === undefined) delete process.env.SWARMDO_CWD; else process.env.SWARMDO_CWD = prev;
+    try { rmSync(dir, { recursive: true, force: true }); } catch { /* ignore */ }
+  });
+
+  it('a retried task keeps dependsOn and stays blocked on an unfinished prerequisite', async () => {
+    mkdirSync(join(dir, '.swarmdo', 'tasks'), { recursive: true });
+    const store = storeOf(task('setup', { status: 'failed' }), task('build', { status: 'failed', dependsOn: ['setup'] }));
+    writeFileSync(join(dir, '.swarmdo', 'tasks', 'store.json'), JSON.stringify(store));
+
+    const retry = taskTools.find((t) => t.name === 'task_retry')!;
+    const res = (await retry.handler({ taskId: 'build' })) as { newTaskId: string };
+    const after: TaskStore = JSON.parse(readFileSync(join(dir, '.swarmdo', 'tasks', 'store.json'), 'utf8'));
+    const retried = after.tasks[res.newTaskId];
+
+    expect(retried.dependsOn).toEqual(['setup']);  // was dropped (undefined) → immediately ready
+    expect(isReady(after, retried)).toBe(false);    // still gated on the failed 'setup'
   });
 });
