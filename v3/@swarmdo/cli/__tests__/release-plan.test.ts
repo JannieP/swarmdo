@@ -41,6 +41,16 @@ describe('release: planRelease', () => {
     expect(kinds[kinds.length - 2]).toBe('gh-release');
   });
 
+  it('does not leak sync-docs.files across independent plans (pure planner)', () => {
+    const a = planRelease({ ...base, bump: 'patch' });
+    const b = planRelease({ ...base, current: '2.0.0', bump: 'patch' });
+    const fa: any = a.steps.find((s) => s.kind === 'sync-docs');
+    const fb: any = b.steps.find((s) => s.kind === 'sync-docs');
+    expect(fa.files).not.toBe(fb.files);          // independent arrays, not the shared constant
+    fa.files.push('mutated.md');
+    expect(fb.files).not.toContain('mutated.md');  // mutating one must not touch the other
+  });
+
   it('publishes the cli from INSIDE dist-standalone (guard-safe)', () => {
     const plan = planRelease({ ...base, bump: 'patch' });
     const pub: any = plan.steps.find((s: any) => s.title === 'publish @swarmdo/cli');

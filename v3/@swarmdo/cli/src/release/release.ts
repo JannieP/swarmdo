@@ -85,7 +85,7 @@ export function planRelease(input: ReleaseInput): ReleasePlan {
 
   for (const f of TRIO_FILES) steps.push({ kind: 'bump-json', file: f, version: next });
   steps.push({ kind: 'bump-lock', file: LOCK_FILE, version: next });
-  steps.push({ kind: 'sync-docs', version: next, files: DOC_FILES });
+  steps.push({ kind: 'sync-docs', version: next, files: [...DOC_FILES] }); // copy — a pure plan must not alias the module constant
   steps.push({ kind: 'exec', title: 'commit release', cmd: 'git', args: ['commit', '-am', `release: ${tag}`], cwd: root });
   steps.push({ kind: 'exec', title: 'push main', cmd: 'git', args: ['push', 'origin', 'main'], cwd: root });
 
