@@ -55,8 +55,13 @@ export function hasRecipe(settings: unknown, r: HookRecipe): boolean {
   const hooks = (settings as { hooks?: Record<string, unknown> } | null)?.hooks;
   const events = hooks?.[r.event];
   if (!Array.isArray(events)) return false;
+  // Match on matcher too: the same command under a DIFFERENT matcher is a
+  // distinct binding, so a matcher-scoped recipe isn't "already installed" just
+  // because its command appears elsewhere (matcher-less recipes compare
+  // undefined === undefined, unchanged).
   return events.some(
-    (e) => e && typeof e === 'object' && Array.isArray((e as HookEntry).hooks) &&
+    (e) => e && typeof e === 'object' && (e as HookEntry).matcher === r.matcher &&
+      Array.isArray((e as HookEntry).hooks) &&
       (e as HookEntry).hooks.some((h) => h?.command === r.command),
   );
 }

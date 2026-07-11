@@ -33,6 +33,14 @@ describe('hooks-recipe: hasRecipe', () => {
     const s = { hooks: { Stop: [{ hooks: [{ type: 'command', command: notifyDone.command }] }] } };
     expect(hasRecipe(s, notifyDone)).toBe(true);
   });
+  it('does not treat a same-command entry under a DIFFERENT matcher as installed', () => {
+    const existing = { hooks: { PostToolUse: [{ matcher: 'Read', hooks: [{ type: 'command', command: 'fmt' }] }] } };
+    const recipe = { name: 'fmt-write', event: 'PostToolUse', matcher: 'Edit|Write', command: 'fmt', title: '', description: '' } as any;
+    expect(hasRecipe(existing, recipe)).toBe(false);            // Edit|Write binding doesn't exist yet
+    const { settings, changed } = applyRecipe(existing, recipe);
+    expect(changed).toBe(true);
+    expect((settings.hooks as any).PostToolUse).toHaveLength(2); // it gets wired, not skipped
+  });
 });
 
 describe('hooks-recipe: applyRecipe', () => {
