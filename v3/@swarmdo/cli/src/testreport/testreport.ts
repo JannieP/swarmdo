@@ -129,8 +129,15 @@ export function parseJUnit(xml: string): TestSummary {
     const suite = attrs.classname ?? attrs.suite ?? '';
     if (attrs.time) durationMs += Math.round(parseFloat(attrs.time) * 1000) || 0;
 
-    const fail = body.match(/<(failure|error)\b([^>]*?)(?:\/>|>([\s\S]*?)<\/\1>)/);
-    const isSkipped = /<skipped\b[^>]*\/?>/.test(body);
+    // Strip captured stdout/stderr before scanning for failure/skip markers: their
+    // text (pytest/jest-junit/gotestsum embed logs, often in CDATA) can contain
+    // literal <failure…>/<error…>-looking content that must NOT be read as a real
+    // failure element on an otherwise-passing test.
+    const scanBody = body
+      .replace(/<system-(out|err)\b[^>]*>[\s\S]*?<\/system-\1>/g, '')
+      .replace(/<system-(out|err)\b[^>]*\/>/g, '');
+    const fail = scanBody.match(/<(failure|error)\b([^>]*?)(?:\/>|>([\s\S]*?)<\/\1>)/);
+    const isSkipped = /<skipped\b[^>]*\/?>/.test(scanBody);
     if (fail) {
       failed++;
       const fAttrs = parseAttrs(fail[2]);

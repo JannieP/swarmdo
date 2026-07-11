@@ -62,6 +62,22 @@ describe('parseJUnit', () => {
     const xml = `<testcase name="t3"><failure>plain &amp; text<![CDATA[ + literal &amp;]]></failure></testcase>`;
     expect(parseJUnit(xml).failures[0].message).toBe('plain & text + literal &amp;');
   });
+  it('does not read a <failure>-lookalike inside captured system-out as a real failure', () => {
+    // pytest/jest-junit/gotestsum embed stdout; text there must not count as a failure
+    const xml = `<testsuite><testcase classname="L" name="p" time="0.01">` +
+      `<system-out><![CDATA[log: <failure message="fake">not real</failure>]]></system-out>` +
+      `</testcase></testsuite>`;
+    const s = parseJUnit(xml);
+    expect([s.passed, s.failed]).toEqual([1, 0]);
+    expect(s.failures).toHaveLength(0);
+  });
+  it('still detects a genuine <failure> sibling next to a system-out block', () => {
+    const xml = `<testcase classname="L" name="q"><system-out>ok</system-out>` +
+      `<failure message="real boom"/></testcase>`;
+    const s = parseJUnit(xml);
+    expect([s.passed, s.failed]).toEqual([0, 1]);
+    expect(s.failures[0].message).toBe('real boom');
+  });
 });
 
 describe('parseTAP', () => {
