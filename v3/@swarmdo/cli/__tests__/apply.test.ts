@@ -91,13 +91,25 @@ describe('applyPatch — fuzzy (the point of the tool)', () => {
     expect(r.result.split('\n')).toEqual(['x', 'y', 'line1', 'line2', 'LINE3', 'line4', 'line5', '']);
   });
 
-  it('tolerates a drifted trailing context line via fuzz', () => {
+  it('tolerates a drifted trailing context line via fuzz WITHOUT overwriting it', () => {
     // The hunk's trailing context is 'line4X' but the source has 'line4' — fuzz trims it.
+    // That drifted line is an ANCHOR, not a change: it must survive as the real 'line4',
+    // never be rewritten to the hunk's stale 'line4X' (that was silent data loss).
     const p = patch(['--- a/f', '+++ b/f', '@@ -2,3 +2,3 @@', ' line2', '-line3', '+LINE3', ' line4X'].join('\n'));
     const r = applyPatch(SRC, p, { fuzz: 2 });
     expect(r.ok).toBe(true);
     expect(r.hunks[0].fuzzUsed).toBe(1);
-    expect(r.result).toContain('LINE3');
+    // full-result assertion (not .toContain): line3→LINE3 applied, real 'line4' preserved
+    expect(r.result).toBe(['line1', 'line2', 'LINE3', 'line4', 'line5'].join('\n') + '\n');
+  });
+
+  it('tolerates a drifted LEADING context line via fuzz WITHOUT overwriting it', () => {
+    // Symmetric case: leading context 'line2X' drifted from the source's 'line2'.
+    const p = patch(['--- a/f', '+++ b/f', '@@ -2,3 +2,3 @@', ' line2X', '-line3', '+LINE3', ' line4'].join('\n'));
+    const r = applyPatch(SRC, p, { fuzz: 2 });
+    expect(r.ok).toBe(true);
+    expect(r.hunks[0].fuzzUsed).toBe(1);
+    expect(r.result).toBe(['line1', 'line2', 'LINE3', 'line4', 'line5'].join('\n') + '\n');
   });
 
   it('flags a hunk as ambiguous when its matched block appears more than once', () => {

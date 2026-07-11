@@ -210,16 +210,27 @@ export function applyPatch(source: string, patch: FilePatch, opts: ApplyOptions 
     // matched (trimmed) block against the current lines BEFORE splicing.
     const matchedBlock = oldBlock.slice(trimLead, oldBlock.length - trimTail);
     const ambiguous = countMatches(matchLines, matchedBlock) > 1;
-    // Splice: remove oldBlock.length lines at `placed`, insert newBlock —
-    // raw lines get the file's dominant EOL, the match twin stays stripped.
-    const insertRaw = dominantCrlf ? newBlock.map((l) => l + '\r') : newBlock;
-    lines.splice(placed, oldBlock.length, ...insertRaw);
-    matchLines.splice(placed, oldBlock.length, ...newBlock);
-    offset += newBlock.length - oldBlock.length;
+    // Splice ONLY the matched middle. When fuzz trimmed leading/trailing context
+    // (trimLead/trimTail > 0) the FULL block matched nowhere, so those trimmed
+    // context lines are unverified anchors — the real source at those positions
+    // may differ (drift). Splicing the whole oldBlock.length at `placed` would
+    // delete a drifted-but-real line and rewrite it with the hunk's stale context
+    // copy — silent data loss on a line the hunk never marked to change. So splice
+    // from the matched position (placed + trimLead) over just the matched span,
+    // inserting newBlock minus the same lead/tail (context is identical on both
+    // sides), leaving the anchor lines exactly as the source has them. For a
+    // non-fuzzy hunk (trimLead = trimTail = 0) this is byte-identical to before.
+    const removeAt = placed + trimLead;
+    const removeCount = oldBlock.length - trimLead - trimTail;
+    const insert = newBlock.slice(trimLead, newBlock.length - trimTail);
+    const insertRaw = dominantCrlf ? insert.map((l) => l + '\r') : insert;
+    lines.splice(removeAt, removeCount, ...insertRaw);
+    matchLines.splice(removeAt, removeCount, ...insert);
+    offset += insert.length - removeCount; // === newBlock.length - oldBlock.length
     results.push({ hunk, applied: true, at: placed, fuzzUsed: usedFuzz, ...(ambiguous && { ambiguous: true }) });
     // If this hunk's new content is now the tail of the file, its markers
     // determine whether the file ends with a newline.
-    if (placed + newBlock.length === lines.length) eofNoEol = newSideEndsNoEol(hunk);
+    if (removeAt + insert.length === lines.length) eofNoEol = newSideEndsNoEol(hunk);
   }
 
   let result = lines.join('\n');
