@@ -140,6 +140,20 @@ describe('entropy fallback', () => {
     expect(redactText('keyboard shortcut = save').findings).toHaveLength(0);
     expect(redactText('monkey_name = "george"').findings).toHaveLength(0);
   });
+  it('stops the value at `&`/`?`/`#` so a query-string secret does not leak', () => {
+    // Regression: the value used to over-capture across `&` into the AWS key;
+    // the inflated span overlapped the key's already-claimed range and was
+    // dropped entirely, leaving `client_secret`'s value unredacted (a real leak).
+    const { output, findings } = redactText('client_secret=zX9pQ2wErT8uI3oP&api_key=AKIAIOSFODNN7EXAMPLE');
+    expect(findings.map((f) => f.ruleId).sort()).toEqual(['aws-access-key', 'high-entropy-assignment']);
+    expect(output).not.toContain('zX9pQ2wErT8uI3oP'); // the first secret is masked, not leaked
+  });
+  it('does not swallow following non-secret data after an `&`', () => {
+    // The redirect_uri is not a secret keyword and must survive intact.
+    const { output } = redactText('client_secret=zX9pQ2wErT8uI3oP&redirect_uri=https://app.example.com/callback');
+    expect(output).toContain('redirect_uri=https://app.example.com/callback');
+    expect(output).not.toContain('zX9pQ2wErT8uI3oP');
+  });
 });
 
 describe('allowlist', () => {

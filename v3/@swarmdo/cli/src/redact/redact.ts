@@ -89,10 +89,15 @@ export const RULES: RedactRule[] = [
  * `key`, `credential`, `creds` so `PRIVATE_KEY=`/`ENCRYPTION_KEY=`/`DB_CREDENTIAL=`
  * secrets reach the entropy check). The `[:=]` immediately after the keyword
  * anchors it, so `keyboard=`/`monkey_val=` don't match; the entropy + length
- * gates keep low-entropy values (paths, short flags) from being flagged.
+ * gates keep low-entropy values (paths, short flags) from being flagged. The
+ * value class also stops at the URL/query delimiters `&`, `?`, `#` (absent from
+ * base64/base64url/hex token alphabets): otherwise a query-string secret like
+ * `client_secret=…&api_key=…` over-captures past the `&` into the next secret,
+ * and that inflated span — overlapping a range the high-confidence RULES pass
+ * already claimed — gets dropped entirely, leaving the first secret unredacted.
  */
 const ASSIGNMENT_RE =
-  /(?:pass(?:word|phrase|wd)?|pwd|secret|token|api[_-]?key|apikey|access[_-]?key|auth[_-]?token|client[_-]?secret|credential|creds|key)["']?\s*[:=]\s*["']?([^\s"'`,;]{8,})/gi;
+  /(?:pass(?:word|phrase|wd)?|pwd|secret|token|api[_-]?key|apikey|access[_-]?key|auth[_-]?token|client[_-]?secret|credential|creds|key)["']?\s*[:=]\s*["']?([^\s"'`,;&?#]{8,})/gi;
 
 /** Shannon entropy in bits/char. Pure; used by the assignment fallback. */
 export function shannonEntropy(s: string): number {
