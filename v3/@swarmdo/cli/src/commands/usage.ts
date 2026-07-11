@@ -31,6 +31,7 @@ import { computeCacheStats, type CacheStats } from '../usage/cache-stats.js';
 import { evaluateGuard, type GuardThreshold, type GuardStatus } from '../usage/spend-guard.js';
 import { resolvePeriodPair, parseRange, diffPeriods, modelMovers, type DayRow, type ModelRow, type Period, type MetricDelta } from '../usage/diff.js';
 import { computeReflection, monthsBefore, type Reflection } from '../usage/reflect.js';
+import { renderReflectionHtml } from '../usage/reflect-html.js';
 
 const VIEWS: Record<string, { dimension: UsageDimension; label: string }> = {
   daily: { dimension: 'day', label: 'Date' },
@@ -459,6 +460,11 @@ function runReflectView(ctx: CommandContext, collection: ReturnType<typeof colle
   if (ctx.flags.json === true) {
     output.printJson(reflection);
     return { success: true, data: reflection };
+  }
+
+  if (ctx.flags.html === true) {
+    output.writeln(renderReflectionHtml(reflection, { generatedAt: to }));
+    return { success: true, exitCode: 0 };
   }
 
   const r: Reflection = reflection;
