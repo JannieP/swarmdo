@@ -99,7 +99,11 @@ class JsonFileBackend {
   async query(opts) {
     let results = [...this.entries.values()];
     if (opts?.namespace) results = results.filter(e => e.namespace === opts.namespace);
-    if (opts?.type) results = results.filter(e => e.type === opts.type);
+    // NOTE: opts.type is the QueryType search STRATEGY (semantic|keyword|hybrid|…),
+    // NOT an entry MemoryType. This JSON backend has no vector search, so the
+    // strategy is moot — filtering entries by it excluded everything (a 'hybrid'
+    // query matched no 'semantic' entries), which zeroed out the bridge's
+    // content-hash dedup and let the store bloat ~22x per re-import (#53).
     if (opts?.limit) results = results.slice(0, opts.limit);
     return results;
   }
