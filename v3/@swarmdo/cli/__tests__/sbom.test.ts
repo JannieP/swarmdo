@@ -63,6 +63,15 @@ describe('componentsFromNpmLock', () => {
     expect(comps.find((c) => c.name === 'dev-tool')).toBeUndefined();
     expect(comps).toHaveLength(3);
   });
+  it('skips npm workspace symlinks (link:true) — no phantom @name@0.0.0 component', () => {
+    const withLink = {
+      ...LOCK,
+      packages: { ...LOCK.packages, 'node_modules/@my/workspace-pkg': { resolved: '@my/workspace-pkg', link: true } },
+    };
+    const comps = componentsFromNpmLock(withLink);
+    expect(comps.find((c) => c.name === '@my/workspace-pkg')).toBeUndefined();
+    expect(comps.some((c) => c.version === '0.0.0')).toBe(false);
+  });
 });
 
 describe('buildCycloneDX', () => {

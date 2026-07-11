@@ -29,6 +29,8 @@ interface NpmLockEntry {
   license?: unknown;
   dev?: boolean;
   optional?: boolean;
+  /** npm workspace symlink — a local monorepo package, not a registry dependency. */
+  link?: boolean;
 }
 interface NpmLock {
   name?: string;
@@ -87,6 +89,10 @@ export function componentsFromNpmLock(lock: NpmLock, opts: ComponentOptions = {}
   for (const [key, entry] of Object.entries(packages)) {
     if (!key) continue; // the root project entry
     if (!key.includes('node_modules/')) continue;
+    // Skip workspace symlinks (`link:true`, no version) — they're the project's
+    // own local packages, not third-party components; emitting them fabricates a
+    // phantom `@name@0.0.0` purl that pollutes vuln scanners / regulators.
+    if (entry.link) continue;
     if (opts.productionOnly && entry.dev) continue;
     const name = nameFromKey(key);
     const version = entry.version ?? '0.0.0';
