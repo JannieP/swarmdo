@@ -155,6 +155,12 @@ describe('makeIgnoreMatcher', () => {
     expect(trail('build/x')).toBe(true);
     expect(trail('src/build.ts')).toBe(false);
   });
+  it('root-anchors an interior-slash pattern (gitignore(5)): matches at root, not nested', () => {
+    const ig = makeIgnoreMatcher(['src/fixtures']);
+    expect(ig('src/fixtures/data.json')).toBe(true);    // root-level → ignored
+    expect(ig('a/src/fixtures/data.json')).toBe(false); // nested → NOT ignored (git check-ignore agrees)
+    expect(makeIgnoreMatcher(['fixtures'])('a/fixtures/x')).toBe(true); // slash-free still matches any depth
+  });
   it('treats non-segment consecutive stars as regular stars within a segment', () => {
     const ig = makeIgnoreMatcher(['a**b']);
     expect(ig('axxb')).toBe(true);   // stays within one segment

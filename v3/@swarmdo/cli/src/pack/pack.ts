@@ -220,8 +220,12 @@ export function makeIgnoreMatcher(patterns: string[]): (relPath: string) => bool
       let body = negate ? p.slice(1) : p;
       const dirOnly = body.endsWith('/');
       if (dirOnly) body = body.slice(0, -1);
-      const anchored = body.startsWith('/');
-      if (anchored) body = body.slice(1);
+      const leadingSlash = body.startsWith('/');
+      if (leadingSlash) body = body.slice(1);
+      // gitignore(5): a slash ANYWHERE (not just leading) anchors the pattern to
+      // the root — `src/fixtures` matches `src/fixtures` but NOT `a/src/fixtures`.
+      // Only a slash-free pattern (`dir`, `*.ext`) matches at any depth.
+      const anchored = leadingSlash || body.includes('/');
       const re = new RegExp('^' + globToRegExp(body) + (dirOnly ? '(/|$)' : '($|/)'));
       return { negate, anchored, re };
     });
