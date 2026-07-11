@@ -59,7 +59,8 @@ The v1.3–v1.4 release train added a day-to-day operations layer around the swa
 | `swarmdo changelog` | `notes`, `release-notes` | Release notes from conventional commits; default range is `<lastTag>..HEAD`; `--from/--to/--version/--out/--all/--no-links`. Recognizes git's default `Revert "…"` subject (not just `revert:`) and surfaces it in the Reverts section with the reverted commit's scope, instead of dropping it into the hidden bucket. A commit is only marked breaking on a real `BREAKING CHANGE:` footer (line-anchored) or a `type!:` bang — a mere mention of the phrase in prose no longer forces the commit into the Breaking Changes section |
 | `swarmdo mcp doctor` | — | Static diagnosis of MCP server configs across `.mcp.json` + `~/.claude.json`: missing binaries, bad URLs, malformed entries |
 | `swarmdo hooks notify` | — | OS-native desktop notification (`-d`; macOS `osascript`, Linux `notify-send`) |
-| `swarmdo hooks recipe` | `recipes` | Install ready-made Claude Code hooks (`notify-done` → Stop, `notify-input` → Notification); dry-run by default, `--apply` writes, idempotent additive merge; targets `settings.local.json` (`--shared` / `--global` to retarget) |
+| `swarmdo hooks memory-inject` | — | Prompt-time semantic memory injection: embeds the prompt, vector-searches AgentDB across `claude-memories`/`auto-memory`/`patterns`, and emits the most relevant stored memories as `UserPromptSubmit` `additionalContext` under a token budget (`--budget`, `--min-relevance`, `--top-k`, `--namespaces`). Hook-safe (never errors, silent when nothing relevant, `SWARMDO_MEMORY_INJECT_DISABLE=1` to disable); `--preview` prints the block for humans instead of hook JSON. Wire it with `hooks recipe memory-inject --apply` |
+| `swarmdo hooks recipe` | `recipes` | Install ready-made Claude Code hooks (`notify-done` → Stop, `notify-input` → Notification, `memory-inject` → UserPromptSubmit); dry-run by default, `--apply` writes, idempotent additive merge; targets `settings.local.json` (`--shared` / `--global` to retarget) |
 | `swarmdo preset` | `presets` | The 5-tier capability ladder: `minimal` → `basic`★ → `standard` → `advanced` → `max`; `preset list` / `preset info <name>` / `preset info efficiency`; apply with `swarmdo init --preset <name>` |
 | `swarmdo memory export -f obsidian` | `-f md` | Render the memory DB as an Obsidian vault: one note per entry (YAML frontmatter, `[[wikilinks]]` stay live), per-namespace folders, `INDEX.md` map-of-content |
 | `swarmdo memory import -f obsidian` | `-f md` | Sync an edited vault back into the DB (upsert + re-embed); foreign notes in a mixed vault are skipped, never touched. `--watch` keeps syncing live as you edit (burst-coalesced) |
@@ -132,6 +133,7 @@ swarmdo hud --watch                               # one screen for the whole ins
 swarmdo repair --test "npm test -- auth" --confirm
 swarmdo changelog --version v1.4.4 --out NOTES.md # → gh release create --notes-file
 swarmdo hooks recipe notify-done --apply          # desktop ping when Claude finishes
+swarmdo hooks recipe memory-inject --apply        # inject relevant memories into every prompt
 swarmdo memory export -o ./vault -f obsidian      # DB → Obsidian vault
 swarmdo memory import -i ./vault -f obsidian      # edited vault → DB (re-embedded)
 ```

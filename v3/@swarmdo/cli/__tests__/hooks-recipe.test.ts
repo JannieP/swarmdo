@@ -12,14 +12,19 @@ import {
 const notifyDone = findRecipe('notify-done')!;
 
 describe('hooks-recipe: catalog', () => {
-  it('exposes the notify recipes by name', () => {
+  it('exposes the recipes by name', () => {
     expect(recipeNames()).toContain('notify-done');
     expect(recipeNames()).toContain('notify-input');
+    expect(recipeNames()).toContain('memory-inject');
     expect(findRecipe('NOTIFY-DONE')!.event).toBe('Stop');
+    expect(findRecipe('memory-inject')!.event).toBe('UserPromptSubmit');
     expect(findRecipe('nope')).toBeUndefined();
   });
-  it('every recipe is a swarmdo notify command', () => {
-    for (const r of RECIPES) expect(r.command).toMatch(/^swarmdo hooks notify/);
+  it('every recipe is a swarmdo hooks command with the required fields', () => {
+    for (const r of RECIPES) {
+      expect(r.command).toMatch(/^swarmdo hooks /);
+      expect(r.name && r.event && r.title && r.description).toBeTruthy();
+    }
   });
 });
 
@@ -88,6 +93,17 @@ describe('hooks-recipe: applyRecipe', () => {
     const toolRecipe: HookRecipe = { name: 't', event: 'PostToolUse', matcher: 'Edit|Write', command: 'fmt', title: '', description: '' };
     const { settings } = applyRecipe({}, toolRecipe);
     expect((settings.hooks as any).PostToolUse[0].matcher).toBe('Edit|Write');
+  });
+
+  it('wires the memory-inject recipe as a matcher-less UserPromptSubmit hook, idempotently', () => {
+    const memInject = findRecipe('memory-inject')!;
+    const { settings, changed } = applyRecipe({}, memInject);
+    expect(changed).toBe(true);
+    const entry = (settings.hooks as any).UserPromptSubmit[0];
+    expect(entry.matcher).toBeUndefined(); // UserPromptSubmit takes no matcher
+    expect(entry.hooks[0]).toEqual({ type: 'command', command: 'swarmdo hooks memory-inject' });
+    expect(hasRecipe(settings, memInject)).toBe(true);
+    expect(applyRecipe(settings, memInject).changed).toBe(false); // idempotent
   });
 });
 

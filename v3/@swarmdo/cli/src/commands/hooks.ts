@@ -5396,7 +5396,7 @@ const notifyCommand: Command = {
 const recipeCommand: Command = {
   name: 'recipe',
   aliases: ['recipes'],
-  description: 'Install ready-made Claude Code hook recipes (desktop notify) into settings — dry-run unless --apply',
+  description: 'Install ready-made Claude Code hook recipes (desktop notify, memory injection) into settings — dry-run unless --apply',
   options: [
     { name: 'apply', type: 'boolean', description: 'write the change (default: preview only)', default: false },
     { name: 'shared', type: 'boolean', description: 'target .claude/settings.json (shared/committed) instead of settings.local.json', default: false },

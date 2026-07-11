@@ -35,6 +35,13 @@ export const RECIPES: HookRecipe[] = [
     title: 'Desktop ping when Claude needs input',
     description: 'Fires a desktop notification when Claude is waiting for input or a permission decision (Notification hook).',
   },
+  {
+    name: 'memory-inject',
+    event: 'UserPromptSubmit',
+    command: 'swarmdo hooks memory-inject',
+    title: 'Inject relevant memories into each prompt',
+    description: 'On every prompt, semantically searches your stored memories (claude-memories/auto-memory/patterns) and injects the most relevant ones as context under a token budget (UserPromptSubmit hook). Powered by `swarmdo hooks memory-inject`. Opt-in: adds a small per-prompt search.',
+  },
 ];
 
 export function findRecipe(name: string): HookRecipe | undefined {
