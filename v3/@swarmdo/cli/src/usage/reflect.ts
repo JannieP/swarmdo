@@ -102,11 +102,21 @@ export function monthsBefore(iso: string, n: number): string {
   return `${yy}-${mm}-${dd}`;
 }
 
-/** Inclusive whole-day span between two ISO dates (from <= to). Pure. */
+/**
+ * Inclusive whole-day span between two ISO dates (from <= to). Pure.
+ *
+ * Counts on the UTC timeline (`Date.UTC`), NOT local midnights: a local
+ * `new Date('…T00:00:00')` is DST-sensitive, so a range crossing a spring-forward
+ * day (only 23h long) would floor-divide to one day short — e.g. under
+ * TZ=America/New_York a full March would read 30. UTC calendar midnights are
+ * always an exact 86.4M ms apart, so this is correct in every process timezone.
+ */
 export function spanDays(from: string, to: string): number {
-  const a = new Date(from + 'T00:00:00');
-  const b = new Date(to + 'T00:00:00');
-  return Math.floor((b.getTime() - a.getTime()) / 86_400_000) + 1;
+  const [ay, am, ad] = from.split('-').map(Number);
+  const [by, bm, bd] = to.split('-').map(Number);
+  const a = Date.UTC(ay, am - 1, ad);
+  const b = Date.UTC(by, bm - 1, bd);
+  return Math.round((b - a) / 86_400_000) + 1;
 }
 
 /** Longest run of consecutive calendar days present in the set. Pure. */

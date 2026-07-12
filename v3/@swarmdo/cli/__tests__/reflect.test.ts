@@ -36,6 +36,22 @@ describe('reflect: spanDays', () => {
     expect(spanDays('2026-03-05', '2026-03-06')).toBe(2);
     expect(spanDays('2026-01-30', '2026-02-02')).toBe(4); // 30,31,1,2
   });
+
+  it('counts calendar days across a spring-forward DST boundary in any timezone (#85)', () => {
+    // Mar 8 2026 is US spring-forward — a 23h local day. A local-midnight
+    // ms-divide undercounts by one; spanDays must fold on the UTC timeline.
+    const saved = process.env.TZ;
+    process.env.TZ = 'America/New_York';
+    try {
+      expect(spanDays('2026-03-08', '2026-03-09')).toBe(2); // was 1 (bug)
+      expect(spanDays('2026-03-07', '2026-03-09')).toBe(3); // was 2
+      expect(spanDays('2026-03-01', '2026-03-31')).toBe(31); // a full March, was 30
+      // fall-back (a 25h day) was never wrong, but confirm it stays correct
+      expect(spanDays('2026-11-01', '2026-11-30')).toBe(30);
+    } finally {
+      process.env.TZ = saved;
+    }
+  });
 });
 
 describe('reflect: monthsBefore', () => {
