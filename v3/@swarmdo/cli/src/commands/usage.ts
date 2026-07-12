@@ -27,6 +27,7 @@ import {
   type UsageTotals,
 } from '../usage/transcript-usage.js';
 import { collectToolErrors, delegationFromReport, type ToolErrorReport } from '../usage/transcript-errors.js';
+import { collectFriction, type FrictionReport } from '../usage/transcript-friction.js';
 import { computeCacheStats, type CacheStats } from '../usage/cache-stats.js';
 import { evaluateGuard, type GuardThreshold, type GuardStatus } from '../usage/spend-guard.js';
 import { resolvePeriodPair, parseRange, diffPeriods, modelMovers, type DayRow, type ModelRow, type Period, type MetricDelta } from '../usage/diff.js';
@@ -236,6 +237,58 @@ function runErrorsView(ctx: CommandContext, report: ToolErrorReport): CommandRes
     for (const e of report.topErrors) {
       output.writeln(`  ${output.dim(`×${e.count}`)} ${output.dim(`[${e.tool}]`)} ${e.signature}`);
     }
+  }
+  return { success: true, exitCode: 0 };
+}
+
+/** Friction view — how often you interrupt Claude (ESC mid-turn), which tool was
+ * running when you did, and what KIND of errors dominate. The sniffly axes that
+ * `usage errors` (error rate) left on the table (#102). */
+function runFrictionView(ctx: CommandContext, report: FrictionReport): CommandResult {
+  if (ctx.flags.json === true) {
+    output.writeln(JSON.stringify(report, null, 2));
+    return { success: true, exitCode: 0 };
+  }
+  const pct = (v: number) => `${(v * 100).toFixed(1)}%`;
+  if (ctx.flags.csv === true) {
+    // Category table export (parity with `usage --csv`).
+    const headers = ['category', 'count', 'share'];
+    const rows = report.categories.map((c) => [c.category, c.count, c.share.toFixed(4)]);
+    output.writeln(toCsv(headers, rows));
+    return { success: true, exitCode: 0 };
+  }
+  output.writeln(output.bold('Claude Code usage — friction'));
+  if (report.interruptions === 0 && report.totalErrors === 0) {
+    output.writeln(output.info(`no friction detected in ${report.filesScanned} transcript files`));
+    return { success: true, exitCode: 0 };
+  }
+  output.writeln(
+    output.dim(
+      `${report.filesScanned} files · ${fmtInt(report.interruptions)} interruption${report.interruptions === 1 ? '' : 's'} across ${fmtInt(report.assistantTurns)} assistant turns (${pct(report.interruptionRate)})`,
+    ),
+  );
+  if (report.byTool.length > 0) {
+    output.writeln('');
+    output.writeln(output.bold('Interrupted while running'));
+    output.printTable({
+      columns: [
+        { key: 'tool', header: 'Tool / context', width: 22 },
+        { key: 'count', header: 'Interrupts', width: 12, align: 'right' },
+      ],
+      data: report.byTool.slice(0, 15).map((t) => ({ tool: t.tool, count: fmtInt(t.interruptions) })),
+    });
+  }
+  if (report.categories.length > 0) {
+    output.writeln('');
+    output.writeln(output.bold('Error categories') + output.dim(`  (${fmtInt(report.totalErrors)} tool errors)`));
+    output.printTable({
+      columns: [
+        { key: 'category', header: 'Category', width: 14 },
+        { key: 'count', header: 'Count', width: 10, align: 'right' },
+        { key: 'share', header: 'Share', width: 8, align: 'right' },
+      ],
+      data: report.categories.map((c) => ({ category: c.category, count: fmtInt(c.count), share: pct(c.share) })),
+    });
   }
   return { success: true, exitCode: 0 };
 }
@@ -594,6 +647,14 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
     return runErrorsView(ctx, collectToolErrors({ dirs, since, until }));
   }
 
+  if (viewName === 'friction') {
+    const since = typeof ctx.flags.since === 'string' ? ctx.flags.since : undefined;
+    const until = typeof ctx.flags.until === 'string' ? ctx.flags.until : undefined;
+    const dirFlag = ctx.flags.dir;
+    const dirs = typeof dirFlag === 'string' ? [dirFlag] : Array.isArray(dirFlag) ? dirFlag.map(String) : undefined;
+    return runFrictionView(ctx, collectFriction({ dirs, since, until }));
+  }
+
   if (viewName === 'cache') {
     const since = typeof ctx.flags.since === 'string' ? ctx.flags.since : undefined;
     const until = typeof ctx.flags.until === 'string' ? ctx.flags.until : undefined;
@@ -626,7 +687,7 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
 
   const view = VIEWS[viewName];
   if (!view) {
-    output.writeln(output.error(`unknown view: ${viewName} (expected ${Object.keys(VIEWS).join('|')}|blocks|errors|cache|guard|diff|reflect|limits)`));
+    output.writeln(output.error(`unknown view: ${viewName} (expected ${Object.keys(VIEWS).join('|')}|blocks|errors|friction|cache|guard|diff|reflect|limits)`));
     return { success: false, exitCode: 1 };
   }
 
@@ -741,6 +802,7 @@ export const usageCommand: Command = {
     { command: 'swarmdo usage projects --json', description: 'Per-project totals as JSON' },
     { command: 'swarmdo usage monthly --csv > usage.csv', description: 'Export monthly spend to CSV' },
     { command: 'swarmdo cost sessions --limit 10', description: 'Ten most expensive sessions (alias)' },
+    { command: 'swarmdo usage friction', description: 'How often you interrupt Claude + which error kinds dominate' },
   ],
   action: run,
 };
