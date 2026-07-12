@@ -17,6 +17,7 @@ import { spawnSync } from 'node:child_process';
 import type { Command, CommandContext, CommandResult } from '../types.js';
 import { output } from '../output.js';
 import { redactText, scanText, formatFindingsSummary, type RedactOptions } from '../redact/redact.js';
+import { toSarif } from '../redact/sarif.js';
 import { writeStdout } from '../util/stdout.js';
 
 function readStdin(): Promise<string> {
@@ -76,6 +77,14 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
   // Scan mode: report findings, never rewrite; exit non-zero if any secret.
   if (scanMode) {
     const findings = scanText(input, opts);
+    if (ctx.flags.sarif === true) {
+      const source = typeof ctx.flags.source === 'string' ? ctx.flags.source : undefined;
+      process.stdout.write(toSarif(findings, { artifactUri: source }) + '\n');
+      // Same gate as text --scan: exit 1 on any secret (a CI author piping to
+      // upload-sarif adds `|| true` so the upload step still runs).
+      const code = findings.length > 0 ? 1 : wrappedCode;
+      return { success: code === 0, exitCode: code };
+    }
     if (asJson) {
       process.stdout.write(JSON.stringify({ count: findings.length, findings }, null, 2) + '\n');
     } else if (findings.length === 0) {
@@ -109,6 +118,8 @@ export const redactCommand: Command = {
   options: [
     { name: 'scan', description: 'scan only: report findings and exit 1 if any secret is present (CI gate), never rewrite', type: 'boolean' },
     { name: 'json', description: 'emit findings as JSON', type: 'boolean' },
+    { name: 'sarif', description: 'scan only: emit findings as a SARIF 2.1.0 report (pipe to github/codeql-action/upload-sarif for code-scanning alerts)', type: 'boolean' },
+    { name: 'source', description: 'with --sarif: artifact URI/path the findings are anchored to (a stream has no file by default)', type: 'string' },
     { name: 'keep', description: 'keep this many leading chars of each secret (default 3; 0 = full mask)', type: 'string' },
     { name: 'token', description: 'replacement token after the kept prefix (default [REDACTED])', type: 'string' },
     { name: 'no-entropy', description: 'disable the high-entropy keyword=value fallback', type: 'boolean' },
