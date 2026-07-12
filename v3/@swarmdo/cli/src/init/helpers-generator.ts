@@ -285,6 +285,31 @@ function routeTask(task) {
   };
 }
 
+// Mirror of src/agent-bridge/bridge.ts classifyPrompt — decides whether a
+// prompt warrants spinning up a bound-agent swarm (and which roles), so the
+// UserPromptSubmit hook can tell the main agent to spawn + bridge agents
+// (making Swarmdo used by default instead of sitting idle).
+const AGENTIC_RE = /\\b(implement|build|create|add(?:ing)?|develop|refactor\\w*|migrat\\w*|redesign|re-?architect\\w*|architect\\w*|feature|integrat\\w*|overhaul|rewrite|port|scaffold|end-to-end|multi-file|test suite|coverage|audit|harden\\w*|vulnerab\\w*|cve|fix\\w*|debug\\w*|optimi[sz]e|performance)\\b/i;
+const TRIVIAL_RE = /\\b(what|why|how|explain|describe|show|list|find|search|where|which|typo|readme|comment|one-?liner|quick question|rename|bump (?:the )?version|status|help)\\b/i;
+const ROLE_SIGNALS = [
+  { re: /\\b(security|vulnerab\\w*|cve|auth\\w*|inject\\w*|xss|ssrf)\\b/i, roles: ['security-auditor', 'coder', 'reviewer'] },
+  { re: /\\b(refactor\\w*|migrat\\w*|redesign|re-?architect\\w*|overhaul|rewrite)\\b/i, roles: ['system-architect', 'coder', 'reviewer'] },
+  { re: /\\b(perf\\w*|optimi[sz]e|benchmark|latency|throughput)\\b/i, roles: ['perf-analyzer', 'coder', 'tester'] },
+  { re: /\\b(test|coverage|tdd|spec)\\b/i, roles: ['tester', 'coder', 'reviewer'] },
+  { re: /\\b(feature|implement|build|integrat\\w*|end-to-end|api)\\b/i, roles: ['researcher', 'system-architect', 'coder', 'tester', 'reviewer'] },
+];
+function classifyAgentic(task) {
+  const p = String(task == null ? '' : task).trim();
+  if (!p) return { requiresAgents: false, roles: [] };
+  if (!AGENTIC_RE.test(p)) return { requiresAgents: false, roles: [] };
+  if (TRIVIAL_RE.test(p) && p.length < 40) return { requiresAgents: false, roles: [] };
+  let roles = ['coder'];
+  for (const s of ROLE_SIGNALS) {
+    if (s.re.test(p)) { roles = s.roles; break; }
+  }
+  return { requiresAgents: true, roles };
+}
+
 // CLI
 const task = process.argv.slice(2).join(' ');
 
@@ -296,7 +321,7 @@ if (task) {
   console.log('\\nAvailable agents:', Object.keys(AGENT_CAPABILITIES).join(', '));
 }
 
-module.exports = { routeTask, AGENT_CAPABILITIES, TASK_PATTERNS, buildPattern };
+module.exports = { routeTask, classifyAgentic, AGENT_CAPABILITIES, TASK_PATTERNS, buildPattern };
 `;
 }
 
@@ -492,6 +517,21 @@ export function generateHookHandler(): string {
     '    } else {',
     "      console.log('[INFO] Router not available, using default routing');",
     '    }',
+    '    // Agentic prompts → remind the main agent to actually USE Swarmdo:',
+    '    // spawn Claude Code agents AND bridge them (auto-forms a swarm).',
+    '    // Advisory + fully guarded — never breaks the prompt.',
+    '    try {',
+    '      if (router && router.classifyAgentic) {',
+    '        var intent = router.classifyAgentic(prompt);',
+    '        if (intent.requiresAgents) {',
+    "          console.log('');",
+    "          console.log('[SWARMDO] Agentic task — use the swarm: after you spawn Claude Code agents,');",
+    "          console.log('  register each so Swarmdo tracks them and auto-forms a swarm from your config:');",
+    "          console.log('    swarmdo agent bridge register -n <agent-name> -t <role> -s <session>');",
+    "          console.log('  suggested roles: ' + intent.roles.join(', ') + '   then: swarmdo agent bridge list / swarm status');",
+    '        }',
+    '      }',
+    '    } catch (e) { /* advisory only — never break the prompt */ }',
     '  },',
     '',
     "  'pre-bash': () => {",

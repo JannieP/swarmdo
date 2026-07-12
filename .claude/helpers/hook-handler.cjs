@@ -143,6 +143,22 @@ const handlers = {
     } else {
       console.log('[INFO] Router not available, using default routing');
     }
+    // Agentic prompts → remind the main agent to actually USE Swarmdo: spawn
+    // Claude Code agents AND bridge them so Swarmdo tracks the work and
+    // auto-forms a swarm. Advisory + fully guarded — never breaks the prompt.
+    try {
+      if (router && router.classifyAgentic) {
+        const intent = router.classifyAgentic(prompt);
+        if (intent.requiresAgents) {
+          const roles = intent.roles.join(', ');
+          console.log('');
+          console.log('[SWARMDO] Agentic task — use the swarm: after you spawn Claude Code agents,');
+          console.log('  register each so Swarmdo tracks them and auto-forms a swarm from your config:');
+          console.log('    swarmdo agent bridge register -n <agent-name> -t <role> -s <session>');
+          console.log('  suggested roles: ' + roles + '   ·   then: swarmdo agent bridge list / swarm status');
+        }
+      }
+    } catch (e) { /* advisory only — never break the prompt */ }
   },
 
   'pre-bash': () => {
