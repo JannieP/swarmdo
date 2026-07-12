@@ -167,6 +167,9 @@ hive-mind-prompt-*.txt
 # Swarmdo runtime data
 .swarmdo/data/
 .swarmdo/logs/
+# AgentDB vector-store runtime files (root + v3/) — data, never committed
+agentdb.rvf
+agentdb.rvf.lock
 
 # Environment variables — block ALL .env variants except .example templates
 .env
