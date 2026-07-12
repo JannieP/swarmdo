@@ -133,6 +133,19 @@ describe('makeIgnoreMatcher', () => {
     expect(igAnchor('config')).toBe(true);
     expect(igAnchor('src/config')).toBe(false);
   });
+  it('dir-only pattern (build/) matches a directory but NOT a same-named file (#96, gitignore(5))', () => {
+    const ig = makeIgnoreMatcher(['build/']);
+    // a regular file named `build` is NOT excluded by a dir-only pattern (git check-ignore agrees)...
+    expect(ig('build', false)).toBe(false);
+    expect(ig('build')).toBe(false); // default isDir=false → treated as a file
+    // ...but a directory named `build` IS excluded, and so is everything under it
+    expect(ig('build', true)).toBe(true);
+    expect(ig('build/x.js')).toBe(true); // ancestor `build` is a directory by construction
+    // a NON-dir-only pattern is unaffected by isDir — it matches file or directory alike
+    const raw = makeIgnoreMatcher(['build']);
+    expect(raw('build', false)).toBe(true);
+    expect(raw('build', true)).toBe(true);
+  });
   it('supports ! negation (last match wins)', () => {
     const ig = makeIgnoreMatcher(['*.log', '!keep.log']);
     expect(ig('debug.log')).toBe(true);

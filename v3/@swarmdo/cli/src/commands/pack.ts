@@ -64,9 +64,9 @@ export function decodeText(buf: Buffer): string | null {
 
 interface WalkOpts {
   root: string;
-  include?: (p: string) => boolean;
-  exclude?: (p: string) => boolean;
-  gitignore?: (p: string) => boolean;
+  include?: (p: string, isDir?: boolean) => boolean;
+  exclude?: (p: string, isDir?: boolean) => boolean;
+  gitignore?: (p: string, isDir?: boolean) => boolean;
   maxBytes: number;
 }
 
@@ -82,10 +82,10 @@ function walk(o: WalkOpts): PackFile[] {
       const rel = path.relative(o.root, full).split(path.sep).join('/');
       if (e.isDirectory()) {
         if (SKIP_DIRS.has(e.name)) continue;
-        if (o.gitignore?.(rel + '/')) continue;
+        if (o.gitignore?.(rel, true)) continue; // isDir=true → dir-only patterns (build/) prune the dir + its contents
         stack.push(full);
       } else if (e.isFile()) {
-        if (o.gitignore?.(rel)) continue;
+        if (o.gitignore?.(rel, false)) continue; // isDir=false → a dir-only pattern (build/) must NOT drop a file named `build`
         if (o.exclude?.(rel)) continue;
         if (o.include && !o.include(rel)) continue;
         if (BINARY_EXT.has(e.name.slice(e.name.lastIndexOf('.') + 1).toLowerCase())) continue;
@@ -125,7 +125,7 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
   const includePats = csv(ctx.flags.include);
   const excludePats = csv(ctx.flags.exclude);
 
-  let gitignore: ((p: string) => boolean) | undefined;
+  let gitignore: ((p: string, isDir?: boolean) => boolean) | undefined;
   if (ctx.flags['no-gitignore'] !== true) {
     try {
       const gi = fs.readFileSync(path.join(scanRoot, '.gitignore'), 'utf8').split('\n');

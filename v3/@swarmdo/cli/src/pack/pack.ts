@@ -211,7 +211,7 @@ function globToRegExp(body: string): string {
  * `dir/`, `*.ext` globs, `**` depth globs (gitignore(5) semantics), leading `/`
  * anchors, and `!` negation. Not the full spec (no nested ignore files).
  */
-export function makeIgnoreMatcher(patterns: string[]): (relPath: string) => boolean {
+export function makeIgnoreMatcher(patterns: string[]): (relPath: string, isDir?: boolean) => boolean {
   const rules = patterns
     .map((p) => p.trim())
     .filter((p) => p && !p.startsWith('#'))
@@ -227,20 +227,24 @@ export function makeIgnoreMatcher(patterns: string[]): (relPath: string) => bool
       // Only a slash-free pattern (`dir`, `*.ext`) matches at any depth.
       const anchored = leadingSlash || body.includes('/');
       const re = new RegExp('^' + globToRegExp(body) + (dirOnly ? '(/|$)' : '($|/)'));
-      return { negate, anchored, re };
+      return { negate, anchored, dirOnly, re };
     });
 
   // Ignored status of a single path (last-match-wins over the ordered rules).
-  const ruleVerdict = (path: string): boolean => {
+  // `isDirComponent` is whether the entry named by the path's LAST segment is a
+  // directory: a trailing-slash (dir-only) pattern matches directories ONLY per
+  // gitignore(5), so `build/` must NOT fire on a regular file named `build`.
+  const ruleVerdict = (path: string, isDirComponent: boolean): boolean => {
     let ignored = false;
     for (const r of rules) {
+      if (r.dirOnly && !isDirComponent) continue; // dir-only pattern can't match a file
       const candidates = r.anchored ? [path] : [path, ...path.split('/').map((_, i, a) => a.slice(i).join('/'))];
       if (candidates.some((c) => r.re.test(c))) ignored = !r.negate;
     }
     return ignored;
   };
 
-  return (relPath: string): boolean => {
+  return (relPath: string, isDir = false): boolean => {
     // Walk ancestor dirs top-down: once a parent directory is excluded, the file
     // stays excluded — a negation cannot re-include under an excluded parent
     // (gitignore(5): "not possible to re-include a file if a parent directory of
@@ -253,7 +257,10 @@ export function makeIgnoreMatcher(patterns: string[]): (relPath: string) => bool
         if (isLast) return true;
         continue; // excluded ancestor carries down
       }
-      const verdict = ruleVerdict(parts.slice(0, i + 1).join('/'));
+      // Ancestor prefixes are directories by construction; only the final entry's
+      // type comes from the caller (a filesystem walker knows dir vs file).
+      const componentIsDir = isLast ? isDir : true;
+      const verdict = ruleVerdict(parts.slice(0, i + 1).join('/'), componentIsDir);
       if (isLast) return verdict;
       parentIgnored = verdict; // this directory prefix carries forward
     }
