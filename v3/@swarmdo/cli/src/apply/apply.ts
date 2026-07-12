@@ -181,7 +181,12 @@ export function applyPatch(source: string, patch: FilePatch, opts: ApplyOptions 
 
   for (const hunk of patch.hunks) {
     const { oldBlock, newBlock } = hunkBlocks(hunk);
-    const expected = hunk.oldStart - 1 + offset;
+    // For a hunk with old lines, oldStart is 1-based → 0-based is oldStart-1.
+    // But a pure INSERTION uses `@@ -L,0 +M @@` where L is the line AFTER which
+    // to insert (what `diff -U0` emits), so the splice index is L (= oldStart),
+    // not L-1 — otherwise every zero-context insertion lands one line too early
+    // and still reports applied:true (silent corruption). (#91)
+    const expected = hunk.oldStart - (oldBlock.length === 0 ? 0 : 1) + offset;
 
     // Try the full block, then progressively trim up to `fuzz` context lines
     // off each end (patch fuzz) to tolerate drift.

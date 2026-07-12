@@ -54,6 +54,23 @@ describe('applyPatch — clean', () => {
     expect(r.result.endsWith('\n')).toBe(false);
   });
 
+  // #91: a zero-context insertion `@@ -L,0 +M @@` (what `diff -U0` emits) inserts
+  // AFTER old line L — the splice index is L, not L-1. Previously it landed one
+  // line too early while still reporting ok:true (silent corruption).
+  it('inserts a zero-context hunk after the declared line, not one line early (#91)', () => {
+    const r = applyPatch('A\nB\nC\n', patch(['--- a/f', '+++ b/f', '@@ -2,0 +3 @@', '+X'].join('\n')));
+    expect(r.ok).toBe(true);
+    expect(r.result).toBe('A\nB\nX\nC\n');
+  });
+  it('appends a zero-context hunk at EOF (#91)', () => {
+    const r = applyPatch('A\nB\nC\n', patch(['--- a/f', '+++ b/f', '@@ -3,0 +4 @@', '+D'].join('\n')));
+    expect(r.result).toBe('A\nB\nC\nD\n');
+  });
+  it('prepends a zero-context hunk at the top (@@ -0,0 @@) (#91)', () => {
+    const r = applyPatch('A\nB\nC\n', patch(['--- a/f', '+++ b/f', '@@ -0,0 +1 @@', '+Z'].join('\n')));
+    expect(r.result).toBe('Z\nA\nB\nC\n');
+  });
+
   it('honors `\\ No newline` to REMOVE a trailing newline the source had', () => {
     const src = 'a\nb\nc\n'; // source ends with a newline
     const p = patch(['--- a/f', '+++ b/f', '@@ -1,3 +1,3 @@', ' a', ' b', '-c', '+C', '\\ No newline at end of file'].join('\n'));
