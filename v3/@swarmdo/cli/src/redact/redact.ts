@@ -107,11 +107,18 @@ const ASSIGNMENT_RE =
 /** Shannon entropy in bits/char. Pure; used by the assignment fallback. */
 export function shannonEntropy(s: string): number {
   if (!s) return 0;
+  // Iterate AND normalize by code points, not UTF-16 code units. `for..of` /
+  // spread yield one symbol per code point, but `s.length` counts an astral
+  // char (emoji, CJK Ext-B, math alphanumerics) as 2 units — so dividing the
+  // per-symbol counts by s.length made the probabilities sum to <1 and
+  // under-counted entropy up to ~2×, letting a high-entropy secret with astral
+  // chars fall under the threshold and pass through UN-redacted (#95).
+  const cps = [...s];
   const freq = new Map<string, number>();
-  for (const ch of s) freq.set(ch, (freq.get(ch) ?? 0) + 1);
+  for (const ch of cps) freq.set(ch, (freq.get(ch) ?? 0) + 1);
   let bits = 0;
   for (const n of freq.values()) {
-    const p = n / s.length;
+    const p = n / cps.length;
     bits -= p * Math.log2(p);
   }
   return bits;

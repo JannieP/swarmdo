@@ -17,6 +17,13 @@ describe('shannonEntropy', () => {
     expect(shannonEntropy('aabb')).toBeCloseTo(1, 5);
     expect(shannonEntropy('x8Kf2Qp9Lm3Zv7Nw')).toBeGreaterThan(3.5);
   });
+  it('normalizes by code points, not UTF-16 units, for astral chars (#95)', () => {
+    // 8 / 16 distinct emoji → true entropy log2(8)=3 / log2(16)=4. The old
+    // impl divided by s.length (2 UTF-16 units per emoji) → 2.0 / 2.5.
+    expect(shannonEntropy('😀😁😂😃😄😅😆😇')).toBeCloseTo(3, 5);
+    expect(shannonEntropy('😀😁😂😃😄😅😆😇😈😉😊😋😌😍😎😏')).toBeCloseTo(4, 5);
+    expect(shannonEntropy('abcdefgh')).toBeCloseTo(3, 5); // ASCII unchanged
+  });
 });
 
 describe('maskSecret', () => {
@@ -219,5 +226,13 @@ describe('passphrase assignment keyword (#49)', () => {
   it('does not match a bare phrase= (not a secret keyword)', () => {
     const { findings } = redactText(`phrase=${HIGH_ENTROPY}`, { entropy: true });
     expect(findings.some((f) => f.ruleId === 'high-entropy-assignment')).toBe(false);
+  });
+  it('redacts a high-entropy value made of astral chars, not just ASCII (#95)', () => {
+    // 16 distinct emoji → true entropy 4.0 (> 3.5). The pre-fix entropy
+    // under-count (2.5) judged it low-entropy and let the secret pass through.
+    const EMOJI = '😀😁😂😃😄😅😆😇😈😉😊😋😌😍😎😏';
+    const { output, findings } = redactText(`passphrase=${EMOJI}`);
+    expect(findings.some((f) => f.ruleId === 'high-entropy-assignment')).toBe(true);
+    expect(output).not.toContain(EMOJI);
   });
 });
