@@ -81,7 +81,7 @@ async function fetchPackageInfo(packageName: string): Promise<NpmPackageInfo | n
   }
 }
 
-function getUpdateType(
+export function getUpdateType(
   current: string,
   latest: string
 ): 'major' | 'minor' | 'patch' | 'none' {
@@ -89,7 +89,12 @@ function getUpdateType(
     return 'none';
   }
 
-  if (semver.eq(current, latest)) {
+  // Only a strictly-NEWER latest is an update. Without this guard the
+  // per-field comparisons below misclassify a same-or-OLDER latest: e.g.
+  // current 1.30.2 vs latest 1.29.5 has patch 5 > 2, so it would report
+  // 'patch' and auto-update could DOWNGRADE. `gt` also subsumes the equality
+  // case (eq → not gt → 'none'). (#79)
+  if (!semver.gt(latest, current)) {
     return 'none';
   }
 
