@@ -18,6 +18,7 @@ import { memoryTools } from './mcp-tools/memory-tools.js';
 import { configTools } from './mcp-tools/config-tools.js';
 import { hooksTools } from './mcp-tools/hooks-tools.js';
 import { taskTools } from './mcp-tools/task-tools.js';
+import { commsTools } from './mcp-tools/comms-tools.js';
 import { sessionTools } from './mcp-tools/session-tools.js';
 import { hiveMindTools } from './mcp-tools/hive-mind-tools.js';
 import { workflowTools } from './mcp-tools/workflow-tools.js';
@@ -114,6 +115,7 @@ const TOOL_GROUPS: Record<string, () => MCPTool[]> = {
   config: () => configTools,
   hooks: () => hooksTools,
   task: () => taskTools,
+  comms: () => commsTools,
   session: () => sessionTools,
   'hive-mind': () => hiveMindTools,
   workflow: () => workflowTools,

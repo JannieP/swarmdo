@@ -11,14 +11,9 @@
  * comms/mailbox.ts engine; this layer is fs persistence + presentation.
  */
 
-import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
-import { join, dirname } from 'node:path';
-import { randomBytes } from 'node:crypto';
-import { hostname } from 'node:os';
 import type { Command, CommandContext, CommandResult } from '../types.js';
 import { output } from '../output.js';
 import {
-  emptyMailbox,
   createMessage,
   addMessage,
   filterInbox,
@@ -26,42 +21,8 @@ import {
   markRead,
   pruneMailbox,
   renderInboxContext,
-  type Mailbox,
 } from '../comms/mailbox.js';
-
-const STORE_REL = join('.swarmdo', 'comms', 'store.json');
-// Retention applied opportunistically on send: keep read messages ≤30d, ≤500 total.
-const RETENTION = { maxAgeMs: 30 * 24 * 3600 * 1000, maxCount: 500 };
-
-function storePath(cwd: string): string {
-  return join(cwd, STORE_REL);
-}
-
-function loadMailbox(cwd: string): Mailbox {
-  try {
-    const p = storePath(cwd);
-    if (existsSync(p)) return JSON.parse(readFileSync(p, 'utf-8')) as Mailbox;
-  } catch {
-    /* corrupt/missing → fresh mailbox */
-  }
-  return emptyMailbox();
-}
-
-function saveMailbox(cwd: string, box: Mailbox): void {
-  const p = storePath(cwd);
-  mkdirSync(dirname(p), { recursive: true });
-  writeFileSync(p, JSON.stringify(box, null, 2) + '\n', 'utf-8');
-}
-
-/** This session's name: --from/-t override → SWARMDO_SESSION → hostname. */
-function resolveSelf(flag?: unknown): string {
-  const f = typeof flag === 'string' ? flag.trim() : '';
-  return f || (process.env.SWARMDO_SESSION || '').trim() || hostname() || 'me';
-}
-
-function newId(): string {
-  return 'msg_' + randomBytes(6).toString('hex');
-}
+import { loadMailbox, saveMailbox, resolveSelf, newMessageId, RETENTION } from '../comms/store.js';
 
 /** Compact relative age, e.g. "3m", "2h", "5d", or "now". */
 function relAge(iso: string, nowMs: number): string {
@@ -104,7 +65,7 @@ const sendCommand: Command = {
     }
     const from = resolveSelf(ctx.flags.from);
     const msg = createMessage({
-      id: newId(),
+      id: newMessageId(),
       from,
       to,
       subject: ctx.flags.subject as string | undefined,
@@ -243,11 +204,59 @@ const readCommand: Command = {
   },
 };
 
+const watchCommand: Command = {
+  name: 'watch',
+  description: 'Live-tail your inbox — print new messages as they arrive (Ctrl-C to stop)',
+  options: [
+    { name: 'to', short: 't', description: 'Whose inbox (default: this session)', type: 'string' },
+    { name: 'from', short: 'f', description: 'Only messages from this sender', type: 'string' },
+    { name: 'interval', short: 'i', description: 'Poll interval in seconds', type: 'number', default: 5 },
+  ],
+  examples: [
+    { command: 'swarmdo comms watch', description: 'Live-tail your inbox' },
+    { command: 'swarmdo comms watch -i 2', description: 'Poll every 2 seconds' },
+  ],
+  action: async (ctx: CommandContext): Promise<CommandResult> => {
+    const cwd = ctx.cwd || process.cwd();
+    const self = resolveSelf(ctx.flags.to);
+    const from = ctx.flags.from as string | undefined;
+    const intervalMs = Math.max(1, Number(ctx.flags.interval ?? 5)) * 1000;
+    // Only surface messages that arrive AFTER watch starts.
+    let cursor = new Date().toISOString();
+    output.printInfo(`Watching ${output.highlight(self)}'s inbox every ${intervalMs / 1000}s (Ctrl-C to stop)…`);
+
+    return await new Promise<CommandResult>((resolve) => {
+      const tick = () => {
+        try {
+          const box = loadMailbox(cwd);
+          // filterInbox is newest-first; reverse to print in arrival order.
+          const fresh = filterInbox(box, { to: self, from, since: cursor }).reverse();
+          for (const m of fresh) {
+            output.writeln(`${output.dim(new Date(m.createdAt).toLocaleTimeString())} ${output.bold(m.from)} › ${m.subject}: ${m.body.replace(/\s+/g, ' ').trim()}`);
+            if (m.createdAt > cursor) cursor = m.createdAt;
+          }
+        } catch {
+          /* keep watching despite a transient read error */
+        }
+      };
+      const timer = setInterval(tick, intervalMs);
+      const stop = () => {
+        clearInterval(timer);
+        output.writeln();
+        output.printInfo('Stopped watching.');
+        resolve({ success: true });
+      };
+      process.once('SIGINT', stop);
+      process.once('SIGTERM', stop);
+    });
+  },
+};
+
 export const commsCommand: Command = {
   name: 'comms',
   aliases: ['mailbox'],
   description: 'Cross-session agent mailbox — message another session by name',
-  subcommands: [sendCommand, inboxCommand, readCommand],
+  subcommands: [sendCommand, inboxCommand, readCommand, watchCommand],
   options: [],
   examples: [
     { command: 'swarmdo comms send -t reviewer -m "PR ready"', description: 'Send a message' },
@@ -264,11 +273,12 @@ export const commsCommand: Command = {
     output.writeln();
     output.writeln(`You are ${output.highlight(self)} — ${unread} unread message${unread === 1 ? '' : 's'}.`);
     output.writeln();
-    output.writeln('Usage: swarmdo comms <send|inbox|read> [options]');
+    output.writeln('Usage: swarmdo comms <send|inbox|read|watch> [options]');
     output.printList([
       `${output.highlight('send')}   - Send a message (\`-t <session> -m "…"\`, \`-t all\` to broadcast)`,
-      `${output.highlight('inbox')}  - List your messages (\`-u\` unread, \`--mark-read\`)`,
+      `${output.highlight('inbox')}  - List your messages (\`-u\` unread, \`--mark-read\`, \`--hook\`)`,
       `${output.highlight('read')}   - Show a full message by id and mark it read`,
+      `${output.highlight('watch')}  - Live-tail your inbox for new messages`,
     ]);
     output.writeln();
     output.writeln(output.dim('Sessions on the same repo share .swarmdo/comms/. Name yourself with $SWARMDO_SESSION.'));

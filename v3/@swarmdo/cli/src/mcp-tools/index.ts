@@ -11,6 +11,7 @@ export { memoryTools } from './memory-tools.js';
 export { configTools } from './config-tools.js';
 export { hooksTools } from './hooks-tools.js';
 export { taskTools } from './task-tools.js';
+export { commsTools } from './comms-tools.js';
 export { sessionTools } from './session-tools.js';
 export { hiveMindTools } from './hive-mind-tools.js';
 export { workflowTools } from './workflow-tools.js';
