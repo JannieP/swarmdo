@@ -24,6 +24,7 @@ export { licenseTools } from './license-tools.js';
 export { applyTools } from './apply-tools.js';
 export { hotspotsTools } from './hotspots-tools.js';
 export { couplingTools } from './coupling-tools.js';
+export { ownershipTools } from './ownership-tools.js';
 export { affectedTools } from './affected-tools.js';
 export { cyclesTools } from './cycles-tools.js';
 export { testreportTools } from './testreport-tools.js';
