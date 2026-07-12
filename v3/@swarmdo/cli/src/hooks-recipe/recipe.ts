@@ -49,6 +49,14 @@ export const RECIPES: HookRecipe[] = [
     title: 'Surface new cross-session messages each prompt',
     description: 'On every prompt, injects any unread messages other sessions sent to this one (multiplayer swarms) as context, then marks them read — so mail surfaces without polling (UserPromptSubmit hook). Powered by `swarmdo comms inbox --hook`. Opt-in.',
   },
+  {
+    name: 'command-guard',
+    event: 'PreToolUse',
+    matcher: 'Bash',
+    command: 'swarmdo hooks guard-bash',
+    title: 'Block dangerous bash commands before they run',
+    description: 'Inspects every Bash tool call and hard-blocks a conservative denylist of destructive commands (rm -rf / , curl|sh, force-push to main, chmod 777, dd to a device, mkfs, fork bombs) via Claude Code’s PreToolUse `permissionDecision: "deny"`. Powered by `swarmdo hooks guard-bash`. Opt-in — the one guardrail that still fires under `--dangerously-skip-permissions`.',
+  },
 ];
 
 export function findRecipe(name: string): HookRecipe | undefined {

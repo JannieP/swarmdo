@@ -17,6 +17,7 @@ import {
   extractPromptFromPayload,
   type SearchRow,
 } from '../memory-inject/select.js';
+import { classifyCommand, extractBashCommand, denyOutput } from '../hooks-recipe/command-guard.js';
 
 /**
  * #1686 — `?? 0` only defaults null/undefined; NaN slips through and
@@ -995,6 +996,56 @@ const memoryInjectCommand: Command = {
     } catch (err) {
       if (preview) output.printError(`Memory injection failed: ${String(err)}`);
       return { success: true }; // never fail the hook
+    }
+  },
+};
+
+/**
+ * guard-bash — the #83 PreToolUse/Bash guardrail. Reads the hook payload from
+ * stdin (or --command), classifies the bash command against a conservative
+ * destructive-command denylist, and on a match emits Claude Code's
+ * `permissionDecision: "deny"` to hard-block it. This is the only safety net
+ * that still fires under headless `claude -p --dangerously-skip-permissions`.
+ * Hook-safe: it NEVER errors and stays silent (allow) for anything not on the
+ * denylist, so it can't break a legitimate command.
+ */
+const guardBashCommand: Command = {
+  name: 'guard-bash',
+  description: 'Block dangerous bash commands (PreToolUse hook): emits permissionDecision:deny on a destructive-command denylist',
+  options: [
+    { name: 'command', short: 'c', description: 'Command to classify (else read the hook JSON from stdin)', type: 'string' },
+    { name: 'preview', description: 'Print the human-readable verdict instead of emitting hook JSON', type: 'boolean' },
+  ],
+  examples: [
+    { command: 'swarmdo hooks guard-bash -c "rm -rf /" --preview', description: 'Check whether a command would be blocked' },
+    { command: 'echo \'{"tool_input":{"command":"rm -rf /"}}\' | swarmdo hooks guard-bash', description: 'Run as a PreToolUse/Bash hook' },
+  ],
+  action: async (ctx: CommandContext): Promise<CommandResult> => {
+    const preview = Boolean(ctx.flags.preview);
+    // A hook must NEVER break a tool call by crashing: swallow everything, default to allow.
+    try {
+      if (process.env.SWARMDO_GUARD_BASH_DISABLE === '1') return { success: true };
+
+      let command = ((ctx.flags.command as string) || ctx.args.join(' ')).trim();
+      if (!command) command = extractBashCommand(await readHookStdin());
+      if (!command) return { success: true }; // nothing to classify → allow
+
+      const verdict = classifyCommand(command);
+
+      if (preview) {
+        if (verdict.block) output.printError(`BLOCK: ${verdict.reason} [${verdict.rule}]`);
+        else output.printSuccess('allow — no destructive pattern matched');
+        return { success: true, data: verdict };
+      }
+
+      // Hook mode: emit the deny JSON only on a block; silence = allow.
+      if (verdict.block) {
+        process.stdout.write(JSON.stringify(denyOutput(verdict.reason as string)) + '\n');
+      }
+      return { success: true };
+    } catch (err) {
+      if (preview) output.printError(`guard-bash failed: ${String(err)}`);
+      return { success: true }; // never fail the hook (fail-open: a broken guard must not block work)
     }
   },
 };
@@ -5491,6 +5542,7 @@ export const hooksCommand: Command = {
     sessionRestoreCommand,
     routeCommand,
     memoryInjectCommand,
+    guardBashCommand,
     explainCommand,
     pretrainCommand,
     buildAgentsCommand,
@@ -5549,6 +5601,7 @@ export const hooksCommand: Command = {
       `${output.highlight('session-restore')} - Restore a previous session`,
       `${output.highlight('route')}           - Route tasks to optimal agents`,
       `${output.highlight('memory-inject')}   - Inject relevant memories into the prompt (UserPromptSubmit)`,
+      `${output.highlight('guard-bash')}      - Block dangerous bash commands (PreToolUse deny)`,
       `${output.highlight('explain')}         - Explain routing decisions`,
       `${output.highlight('pretrain')}        - Bootstrap intelligence from repository`,
       `${output.highlight('build-agents')}    - Generate optimized agent configs`,
