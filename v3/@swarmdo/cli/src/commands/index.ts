@@ -73,6 +73,10 @@ const commandLoaders: Record<string, CommandLoader> = {
   // — commits since your last working day, grouped by day with a diffstat.
   standup: () => import('./standup.js'),
   mine: () => import('./standup.js'), // alias via loader key
+  // Hot/cold/orphan USAGE report for authored .claude/ slash-commands + subagents
+  // — the "dead-code report" for the authoring surface (config lint validates it).
+  commands: () => import('./commands.js'),
+  slash: () => import('./commands.js'), // alias via loader key
   // JUnit/TAP test-result parser (dorny/test-reporter demand) — raw results →
   // failing test + file:line + message; the front-half of the test→fix loop.
   testreport: () => import('./testreport.js'),
@@ -337,7 +341,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
     analyzeCmd, routeCmd, progressCmd, providersCmd,
     pluginsCmd, deploymentCmd, claimsCmd, issuesCmd,
     updateCmd, processCmd, guidanceCmd, applianceCmd,
-    cleanupCmd, autopilotCmd, demoCmd, usageCmd, repairCmd, hudCmd, compactCmd, codegraphCmd, redactCmd, packCmd, envCmd, licenseCmd, sbomCmd, applyCmd, hotspotsCmd, affectedCmd, cyclesCmd, couplingCmd, ownershipCmd, hiddenCouplingCmd, testreportCmd, compactSnapshotCmd, standupCmd,
+    cleanupCmd, autopilotCmd, demoCmd, usageCmd, repairCmd, hudCmd, compactCmd, codegraphCmd, redactCmd, packCmd, envCmd, licenseCmd, sbomCmd, applyCmd, hotspotsCmd, affectedCmd, cyclesCmd, couplingCmd, ownershipCmd, hiddenCouplingCmd, testreportCmd, compactSnapshotCmd, standupCmd, commandsUsageCmd,
   ] = await Promise.all([
     loadCommand('daemon'), loadCommand('doctor'), loadCommand('embeddings'), loadCommand('neural'),
     loadCommand('performance'), loadCommand('security'), loadCommand('swarmvector'), loadCommand('hive-mind'),
@@ -346,7 +350,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
     loadCommand('analyze'), loadCommand('route'), loadCommand('progress'), loadCommand('providers'),
     loadCommand('plugins'), loadCommand('deployment'), loadCommand('claims'), loadCommand('issues'),
     loadCommand('update'), loadCommand('process'), loadCommand('guidance'), loadCommand('appliance'),
-    loadCommand('cleanup'), loadCommand('autopilot'), loadCommand('demo'), loadCommand('usage'), loadCommand('repair'), loadCommand('hud'), loadCommand('compact'), loadCommand('codegraph'), loadCommand('redact'), loadCommand('pack'), loadCommand('env'), loadCommand('license'), loadCommand('sbom'), loadCommand('apply'), loadCommand('hotspots'), loadCommand('affected'), loadCommand('cycles'), loadCommand('coupling'), loadCommand('ownership'), loadCommand('hidden-coupling'), loadCommand('testreport'), loadCommand('compact-snapshot'), loadCommand('standup'),
+    loadCommand('cleanup'), loadCommand('autopilot'), loadCommand('demo'), loadCommand('usage'), loadCommand('repair'), loadCommand('hud'), loadCommand('compact'), loadCommand('codegraph'), loadCommand('redact'), loadCommand('pack'), loadCommand('env'), loadCommand('license'), loadCommand('sbom'), loadCommand('apply'), loadCommand('hotspots'), loadCommand('affected'), loadCommand('cycles'), loadCommand('coupling'), loadCommand('ownership'), loadCommand('hidden-coupling'), loadCommand('testreport'), loadCommand('compact-snapshot'), loadCommand('standup'), loadCommand('commands'),
   ]);
 
   return {
@@ -366,7 +370,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
       statuslineCmd, compressCmd, compactCmd, redactCmd, packCmd, envCmd, licenseCmd, sbomCmd, applyCmd, hotspotsCmd, affectedCmd, cyclesCmd, couplingCmd, ownershipCmd, hiddenCouplingCmd, testreportCmd, compactSnapshotCmd, efficiencyCmd,
     ].filter(Boolean) as Command[],
     analysis: [
-      analyzeCmd, routeCmd, progressCmd, usageCmd, hudCmd, codegraphCmd, standupCmd,
+      analyzeCmd, routeCmd, progressCmd, usageCmd, hudCmd, codegraphCmd, standupCmd, commandsUsageCmd,
     ].filter(Boolean) as Command[],
     management: [
       providersCmd, pluginsCmd, deploymentCmd, claimsCmd,
