@@ -2,7 +2,7 @@
 
 [![swarmdo](swarmdo/assets/brand/logo-full.svg)](https://swarmdo.com)
 
-[![npm version (swarmdo)](https://img.shields.io/badge/npx%20swarmdo-v1.30.0-cb3837?style=for-the-badge&logo=npm&logoColor=white)](https://github.com/SwarmDo/swarmdo/releases)
+[![npm version (swarmdo)](https://img.shields.io/badge/npx%20swarmdo-v1.37.0-cb3837?style=for-the-badge&logo=npm&logoColor=white)](https://github.com/SwarmDo/swarmdo/releases)
 [![MIT License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](https://github.com/SwarmDo/swarmdo/blob/main/LICENSE)
 [![Website](https://img.shields.io/badge/swarmdo.com-e2a33c?style=for-the-badge&logoColor=black)](https://swarmdo.com)
 [![Star on GitHub](https://img.shields.io/github/stars/SwarmDo/swarmdo?style=for-the-badge&logo=github&color=gold)](https://github.com/SwarmDo/swarmdo)
@@ -294,8 +294,11 @@ The recent release train added a full day-to-day operations layer around the swa
 | OpenRouter model pool | **Let swarms pick from any models you configure** — declare tier-mapped OpenRouter models in `swarmdo.config.json`; the router Thompson-samples among them per task and the execution layer dispatches the winner |
 | `swarmdo changelog` (alias `notes`) | **Release notes from conventional commits** — `--out NOTES.md` feeds `gh release create --notes-file` |
 | `swarmdo mcp doctor` | **MCP config diagnosis** — missing binaries, bad URLs, malformed entries across `.mcp.json` + `~/.claude.json` |
+| `swarmdo permissions` (alias `perms`) | **Audit your Claude Code permission rules** — static analysis of `permissions.allow`/`deny`/`ask` in `.claude/settings*.json`: flags allow↔deny conflicts (dead rules), over-broad `Bash(*)` grants, shadowed/redundant rules, duplicates, and malformed entries. `--strict` gates CI. Read-only; the static-safety sibling of `config lint` / `mcp doctor` |
+| `swarmdo comms` (alias `mailbox`) | **Cross-session agent mailbox** — one Claude Code session messages another by name (`send -t <session>`, `-t all` broadcasts, `inbox`, `read`, `watch`); sessions on the same repo share `.swarmdo/comms/`. `inbox --hook` surfaces new mail as prompt context without polling. Also MCP tools (`comms_send`/`comms_inbox`) |
+| `swarmdo hooks memory-inject` | **Prompt-time semantic memory injection** — embeds each prompt, vector-searches your stored memories, and injects the most relevant under a token budget (recall at the moment of need); wire it with `hooks recipe memory-inject` |
 | `swarmdo hooks notify -d` | **Desktop notifications** — OS-native toast (macOS `osascript`, Linux `notify-send`) |
-| `swarmdo hooks recipe` | **One-command Claude Code hooks** — "ping me when Claude finishes / needs input"; dry-run by default, idempotent merge that never clobbers your settings |
+| `swarmdo hooks recipe` | **One-command Claude Code hooks** — install `notify-done`/`notify-input` (desktop pings), `memory-inject` (relevant memories each prompt), or `comms-inbox` (new mail as context); dry-run by default, idempotent merge that never clobbers your settings |
 | `swarmdo preset` + `init --preset` | **5-tier capability ladder** — `minimal` → `basic`★ → `standard` → `advanced` → `max`; one word instead of dozens of flags |
 | `swarmdo memory export/import -f obsidian` | **Obsidian vault roundtrip** — DB → markdown notes (YAML frontmatter, `[[wikilinks]]` stay live) → edit in Obsidian → sync back, re-embedded; `import --watch` keeps the vault live-synced as you edit |
 | `swarmdo memory backup` / `revectorize` | WAL-safe nightly DB snapshots · repair hash-era vectors |
