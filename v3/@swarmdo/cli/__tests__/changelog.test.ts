@@ -7,6 +7,9 @@ import {
   lastTag,
   repoUrlFromGit,
   collectCommits,
+  collectContributors,
+  githubHandle,
+  renderContributors,
   type GitRunner,
 } from '../src/changelog/changelog.ts';
 
@@ -144,5 +147,47 @@ describe('changelog: git helpers (injected)', () => {
     const commits = collectCommits('v1.0.0..HEAD', git);
     expect(commits).toHaveLength(1);
     expect(commits[0].type).toBe('feat');
+  });
+});
+
+describe('changelog: contributors (#81)', () => {
+  const mk = (map: Record<string, string>): GitRunner => (args) => {
+    const key = args.join(' ');
+    for (const [prefix, val] of Object.entries(map)) if (key.startsWith(prefix)) return val;
+    throw new Error(`unexpected git ${key}`);
+  };
+
+  it('githubHandle extracts the login from both no-reply forms, null otherwise', () => {
+    expect(githubHandle('12345+octocat@users.noreply.github.com')).toBe('octocat');
+    expect(githubHandle('octocat@users.noreply.github.com')).toBe('octocat');
+    expect(githubHandle('  49+Jane-Doe@users.noreply.github.com  ')).toBe('Jane-Doe'); // trims
+    expect(githubHandle('jane@example.com')).toBeNull();
+    expect(githubHandle('49+dependabot[bot]@users.noreply.github.com')).toBeNull(); // brackets aren't a valid login
+  });
+
+  it('collectContributors dedupes by name, orders oldest-first, carries the @handle', () => {
+    // git log is newest-first: Bob, then Alice twice
+    const git = mk({ 'log v1.0.0..HEAD': 'Bob\x1fbob@example.com\nAlice\x1f111+alice@users.noreply.github.com\nAlice\x1f111+alice@users.noreply.github.com\n' });
+    const people = collectContributors('v1.0.0..HEAD', git);
+    expect(people).toEqual([
+      { name: 'Alice', handle: 'alice' }, // earliest in range leads (reversed)
+      { name: 'Bob', handle: null },
+    ]);
+  });
+
+  it('collectContributors back-fills a handle from any of an author\'s commits', () => {
+    // newest commit has a plain email, an older one has the no-reply address
+    const git = mk({ 'log a..b': 'Al\x1fal@corp.com\nAl\x1f5+al@users.noreply.github.com\n' });
+    expect(collectContributors('a..b', git)).toEqual([{ name: 'Al', handle: 'al' }]);
+  });
+
+  it('collectContributors returns [] on an empty range', () => {
+    expect(collectContributors('a..b', mk({ 'log a..b': '' }))).toEqual([]);
+  });
+
+  it('renderContributors renders a section (handle when present), empty string when none', () => {
+    expect(renderContributors([{ name: 'Alice', handle: 'alice' }, { name: 'Bob', handle: null }]))
+      .toBe('### Contributors\n\n- Alice (@alice)\n- Bob\n');
+    expect(renderContributors([])).toBe('');
   });
 });

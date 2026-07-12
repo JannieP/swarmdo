@@ -189,3 +189,50 @@ export function collectCommits(range: string, git: GitRunner): ParsedCommit[] {
   const raw = git(['log', range, '--no-merges', '--pretty=format:%h%x1f%s%x1f%b%x1e']);
   return parseGitLog(raw);
 }
+
+// ── contributors (opt-in `### Contributors` section) ─────────────────────────
+
+export interface Contributor { name: string; handle: string | null; }
+
+/**
+ * GitHub no-reply author emails encode the account login:
+ *   `<id>+<login>@users.noreply.github.com`  (current form)
+ *   `<login>@users.noreply.github.com`        (legacy form)
+ * Return the @handle when the email is one of those, else null.
+ */
+export function githubHandle(email: string): string | null {
+  const m = /^(?:\d+\+)?([A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?)@users\.noreply\.github\.com$/.exec(email.trim());
+  return m ? m[1] : null;
+}
+
+/**
+ * Distinct commit authors in a range, oldest-first (git log is newest-first, so
+ * we reverse — the earliest contributor to the range leads). Deduped by author
+ * name (case-insensitive); the GitHub @handle is carried when the author email
+ * is a github no-reply address (back-filled if any of an author's commits has one).
+ * Pure but for the injected git read, mirroring collectCommits.
+ */
+export function collectContributors(range: string, git: GitRunner): Contributor[] {
+  const raw = git(['log', range, '--no-merges', '--format=%aN%x1f%aE']);
+  const seen = new Map<string, Contributor>();
+  const lines = raw.split('\n').map((l) => l.trim()).filter(Boolean);
+  for (const line of lines.reverse()) {
+    const [name, email = ''] = line.split('\x1f');
+    if (!name) continue;
+    const key = name.toLowerCase();
+    const existing = seen.get(key);
+    if (existing) {
+      if (!existing.handle) existing.handle = githubHandle(email); // back-fill
+      continue;
+    }
+    seen.set(key, { name, handle: githubHandle(email) });
+  }
+  return [...seen.values()];
+}
+
+/** Render the `### Contributors` section (empty string when there are none). */
+export function renderContributors(contributors: Contributor[]): string {
+  if (!contributors.length) return '';
+  const items = contributors.map((c) => (c.handle ? `- ${c.name} (@${c.handle})` : `- ${c.name}`));
+  return ['### Contributors', '', ...items, ''].join('\n');
+}

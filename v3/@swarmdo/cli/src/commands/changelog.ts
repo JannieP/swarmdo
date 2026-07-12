@@ -17,7 +17,9 @@ import {
   lastTag,
   repoUrlFromGit,
   collectCommits,
+  collectContributors,
   renderChangelog,
+  renderContributors,
   type GitRunner,
 } from '../changelog/changelog.js';
 
@@ -37,6 +39,7 @@ export const changelogCommand: Command = {
     { name: 'out', short: 'o', type: 'string', description: 'write to this file instead of stdout' },
     { name: 'all', short: 'a', type: 'boolean', description: 'include chore/test/ci/build/style + non-conventional commits', default: false },
     { name: 'no-links', type: 'boolean', description: 'omit GitHub commit links', default: false },
+    { name: 'contributors', short: 'c', type: 'boolean', description: 'append a ### Contributors section (commit authors in the range)', default: false },
     { name: 'date', type: 'string', description: 'override the date shown in the title (default: today)' },
   ],
   examples: [
@@ -68,7 +71,17 @@ export const changelogCommand: Command = {
     const repoUrl = ctx.flags['no-links'] === true ? undefined : (repoUrlFromGit(git) ?? undefined);
     const date = (ctx.flags.date as string) || new Date().toISOString().slice(0, 10);
     const version = (ctx.flags.version as string) || range;
-    const md = renderChangelog(commits, { version, date, repoUrl, includeAll: ctx.flags.all === true });
+    let md = renderChangelog(commits, { version, date, repoUrl, includeAll: ctx.flags.all === true });
+
+    // Opt-in `### Contributors` section — a separate git read over the SAME range,
+    // so the notes credit everyone whose commits shipped in the release.
+    let contributors = 0;
+    if (ctx.flags.contributors === true) {
+      const people = collectContributors(range, git);
+      contributors = people.length;
+      const section = renderContributors(people);
+      if (section) md = `${md.replace(/\n+$/, '\n')}\n${section}`;
+    }
 
     const outFile = ctx.flags.out as string | undefined;
     if (outFile) {
@@ -79,10 +92,10 @@ export const changelogCommand: Command = {
         return { success: false, exitCode: 1 };
       }
       output.printSuccess(`Wrote ${commits.length} commit(s) of release notes → ${outFile}`);
-      return { success: true, data: { file: outFile, commits: commits.length, range } };
+      return { success: true, data: { file: outFile, commits: commits.length, range, contributors } };
     }
     output.writeln(md);
-    return { success: true, data: { commits: commits.length, range } };
+    return { success: true, data: { commits: commits.length, range, contributors } };
   },
 };
 
