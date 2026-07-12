@@ -886,6 +886,63 @@ const graphCommand: Command = {
   }
 };
 
+// Doctor subcommand — classify blocked tasks live vs dead + a global deadlock
+// verdict (task-deps.ts::taskDagHealth). Airflow's upstream_failed + DAG
+// deadlock detection: surfaces a task that can NEVER run because a prerequisite
+// failed/was cancelled/is missing, and a whole-graph stall a dispatch loop would
+// otherwise spin on forever.
+const doctorCommand: Command = {
+  name: 'doctor',
+  aliases: ['health'],
+  description: 'Diagnose the task DAG: which blocked tasks can still run (live) vs are permanently stuck because a dependency failed/was cancelled/is missing (dead), and whether the whole graph is deadlocked',
+  options: [
+    { name: 'json', description: 'Machine-readable output', type: 'boolean', default: false },
+    { name: 'ci', description: 'Exit 1 if the DAG is deadlocked or any task is permanently (dead) blocked — gate a dispatch loop', type: 'boolean', default: false }
+  ],
+  examples: [
+    { command: 'swarmdo task doctor', description: 'Show live-blocked vs dead-blocked tasks and any deadlock' },
+    { command: 'swarmdo task doctor --ci', description: 'Fail (exit 1) when the task graph is stuck' }
+  ],
+  action: async (ctx: CommandContext): Promise<CommandResult> => {
+    const { loadTaskStore } = await import('../mcp-tools/task-tools.js');
+    const { taskDagHealth } = await import('../mcp-tools/task-deps.js');
+    const store = loadTaskStore(ctx.cwd);
+    const health = taskDagHealth(store);
+    const stuck = health.deadlocked || health.deadBlocked.length > 0;
+    const code = ctx.flags.ci === true && stuck ? 1 : 0;
+
+    if (ctx.flags.json === true) {
+      output.printJson({
+        deadlocked: health.deadlocked,
+        liveBlocked: health.liveBlocked.map(t => t.taskId),
+        deadBlocked: health.deadBlocked.map(d => ({ taskId: d.task.taskId, rootCause: d.rootCause })),
+      });
+      return { success: code === 0, exitCode: code, data: health };
+    }
+
+    output.writeln();
+    if (health.deadlocked) {
+      output.writeln(output.error('⚠ DEADLOCKED') + output.dim(' — pending work exists but nothing is ready and nothing is running'));
+      output.writeln();
+    }
+    output.writeln(output.bold(`Live-blocked (${health.liveBlocked.length})`) + output.dim(' — waiting on deps that can still complete'));
+    for (const t of health.liveBlocked) {
+      output.writeln(`  ${output.dim('○')} ${t.taskId}  ${t.description.slice(0, 60)}`);
+    }
+    output.writeln();
+    output.writeln(output.bold(`Dead-blocked (${health.deadBlocked.length})`) + output.dim(' — a prerequisite failed/was cancelled/is missing; will NEVER run without intervention'));
+    for (const d of health.deadBlocked) {
+      output.writeln(`  ${output.error('✗')} ${d.task.taskId} ⇐ dead: ${d.rootCause.join(', ') || '(cycle)'}`);
+    }
+    if (!stuck) {
+      output.writeln();
+      output.printSuccess('task graph healthy — no permanent blocks or deadlock');
+    }
+    output.writeln();
+    return { success: code === 0, exitCode: code, data: health };
+  }
+};
+
 // parse-prd subcommand — decompose a PRD/spec doc into the task DAG (Task Master
 // parity). The LLM decomposition lives in ../task/parse-prd.ts (injectable +
 // unit-tested); this layer gates the billable call and creates the linked tasks.
@@ -1021,7 +1078,7 @@ const parsePrdCommand: Command = {
 export const taskCommand: Command = {
   name: 'task',
   description: 'Task management commands',
-  subcommands: [createCommand, parsePrdCommand, listCommand, statusCommand, cancelCommand, assignCommand, retryCommand, dispatchCommand, readyCommand, graphCommand],
+  subcommands: [createCommand, parsePrdCommand, listCommand, statusCommand, cancelCommand, assignCommand, retryCommand, dispatchCommand, readyCommand, graphCommand, doctorCommand],
   options: [],
   examples: [
     { command: 'swarmdo task create -t implementation -d "Add user auth"', description: 'Create a task' },
@@ -1048,7 +1105,8 @@ export const taskCommand: Command = {
       `${output.highlight('assign')}  - Assign task to agent(s)`,
       `${output.highlight('retry')}   - Retry a failed task`,
       `${output.highlight('ready')}   - List ready vs dependency-blocked tasks`,
-      `${output.highlight('graph')}   - Show the dependency graph`
+      `${output.highlight('graph')}   - Show the dependency graph`,
+      `${output.highlight('doctor')}  - Diagnose live vs dead blocks + deadlock (--ci gates)`
     ]);
     output.writeln();
     output.writeln('Run "swarmdo task <subcommand> --help" for subcommand help');

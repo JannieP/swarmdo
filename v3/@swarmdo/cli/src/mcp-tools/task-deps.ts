@@ -110,6 +110,102 @@ export function unblockedBy(store: TaskStore, completedTaskId: string): TaskReco
   );
 }
 
+export interface DeadBlock {
+  task: TaskRecord;
+  /**
+   * The terminal-dead dependency ids in this task's dependency closure — the
+   * failed, cancelled, or missing tasks that make it permanently unreachable
+   * until a human retries/cancels/creates them. Deterministic (sorted).
+   */
+  rootCause: string[];
+}
+
+export interface TaskDagHealth {
+  /** pending tasks whose unmet deps can STILL complete — a transient wait */
+  liveBlocked: TaskRecord[];
+  /** pending tasks that can NEVER become ready without human intervention */
+  deadBlocked: DeadBlock[];
+  /**
+   * true when pending work exists but nothing is ready AND nothing is
+   * in_progress — the DAG cannot advance on its own. A coordinator looping on
+   * `task dispatch` would otherwise spin forever doing nothing.
+   */
+  deadlocked: boolean;
+}
+
+/**
+ * Classify every blocked task as live- vs dead-blocked and report a global
+ * deadlock verdict. Pure.
+ *
+ * This is Apache Airflow's `upstream_failed` state + DAG-deadlock detection,
+ * ported onto the beads-style task DAG (see the module header): a dependency
+ * that failed / was cancelled / is missing NEVER satisfies (only 'completed'
+ * does), so every task transitively downstream is permanently stuck until a
+ * human intervenes. `blockedTasks()` reports the wait but can't tell a
+ * transient wait from a permanent one — the dispatcher then skips a
+ * failed-dep block every pass, indistinguishable from a normal wait, and the
+ * DAG quietly wedges. This turns that silent stall into a named diagnostic.
+ */
+export function taskDagHealth(store: TaskStore): TaskDagHealth {
+  // canComplete(id): can this task ever reach status 'completed'?
+  //   completed → yes; failed/cancelled/missing → no; pending/in_progress →
+  //   only if EVERY dependency can complete. Memoized; a cycle (the store is
+  //   acyclic by invariant, but guard anyway) resolves to false.
+  const memo = new Map<string, boolean>();
+  const visiting = new Set<string>();
+  const canComplete = (id: string): boolean => {
+    const cached = memo.get(id);
+    if (cached !== undefined) return cached;
+    const task = store.tasks[id];
+    if (!task) return false; // missing id — blocks forever
+    if (task.status === 'completed') return true;
+    if (task.status === 'failed' || task.status === 'cancelled') return false;
+    if (visiting.has(id)) return false; // cycle guard
+    visiting.add(id);
+    const ok = (task.dependsOn ?? []).every((d) => canComplete(d));
+    visiting.delete(id);
+    memo.set(id, ok);
+    return ok;
+  };
+
+  // The terminal-dead ids (failed/cancelled/missing) reachable from a task,
+  // descending THROUGH still-pending intermediates to name the real culprit.
+  const deadRoots = (task: TaskRecord): string[] => {
+    const found = new Set<string>();
+    const seen = new Set<string>();
+    const stack = [...(task.dependsOn ?? [])];
+    while (stack.length) {
+      const id = stack.pop()!;
+      if (seen.has(id)) continue;
+      seen.add(id);
+      const dep = store.tasks[id];
+      if (!dep) { found.add(id); continue; } // missing
+      if (dep.status === 'failed' || dep.status === 'cancelled') { found.add(id); continue; }
+      if (dep.status === 'completed') continue; // satisfied — not a culprit
+      for (const d of dep.dependsOn ?? []) stack.push(d); // pending/in_progress → descend
+    }
+    return [...found].sort();
+  };
+
+  const liveBlocked: TaskRecord[] = [];
+  const deadBlocked: DeadBlock[] = [];
+  for (const task of Object.values(store.tasks)) {
+    if (task.status !== 'pending') continue;
+    const deps = task.dependsOn ?? [];
+    if (deps.length === 0) continue; // ready (dep-free), not blocked
+    if (deps.every((id) => satisfies(store.tasks[id]))) continue; // ready, not blocked
+    if (deps.every((id) => canComplete(id))) liveBlocked.push(task);
+    else deadBlocked.push({ task, rootCause: deadRoots(task) });
+  }
+
+  const all = Object.values(store.tasks);
+  const anyPending = all.some((t) => t.status === 'pending');
+  const anyInProgress = all.some((t) => t.status === 'in_progress');
+  const deadlocked = anyPending && readyTasks(store).length === 0 && !anyInProgress;
+
+  return { liveBlocked, deadBlocked, deadlocked };
+}
+
 const STATUS_MARK: Record<TaskRecord['status'], string> = {
   completed: '✔',
   in_progress: '▶',

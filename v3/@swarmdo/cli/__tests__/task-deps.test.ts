@@ -21,6 +21,7 @@ import {
   blockedTasks,
   unblockedBy,
   renderDepGraph,
+  taskDagHealth,
 } from '../src/mcp-tools/task-deps.js';
 import { dispatchPendingTasks } from '../src/mcp-tools/task-dispatcher.js';
 
@@ -104,6 +105,68 @@ describe('readiness semantics', () => {
     const lines = renderDepGraph(s).join('\n');
     expect(lines).toContain('✔ a');
     expect(lines).toContain('nope (missing)');
+  });
+});
+
+describe('taskDagHealth — live vs dead blocks + deadlock', () => {
+  it('classifies a failed-prerequisite block as dead, leaves a ready sibling out of it', () => {
+    // B dependsOn A(failed); C is pending with no deps (ready).
+    const s = storeOf(
+      task('A', { status: 'failed' }),
+      task('B', { dependsOn: ['A'] }),
+      task('C'),
+    );
+    const h = taskDagHealth(s);
+    expect(h.deadBlocked.map((d) => d.task.taskId)).toEqual(['B']);
+    expect(h.deadBlocked[0].rootCause).toEqual(['A']);
+    expect(h.liveBlocked).toEqual([]);
+    expect(h.deadlocked).toBe(false); // C is ready
+  });
+
+  it('flags global deadlock when nothing is ready and nothing is in progress', () => {
+    // C → B → A(failed): the whole chain is stuck, nothing dep-free is pending.
+    const s = storeOf(
+      task('A', { status: 'failed' }),
+      task('B', { dependsOn: ['A'] }),
+      task('C', { dependsOn: ['B'] }),
+    );
+    const h = taskDagHealth(s);
+    expect(h.deadlocked).toBe(true);
+    expect(h.deadBlocked.map((d) => d.task.taskId).sort()).toEqual(['B', 'C']);
+    // the culprit named for a transitively-dead task is the real failed root
+    expect(h.deadBlocked.find((d) => d.task.taskId === 'C')!.rootCause).toEqual(['A']);
+  });
+
+  it('a healthy pending/in_progress/completed graph has no dead blocks and no deadlock', () => {
+    const s = storeOf(
+      task('a', { status: 'completed' }),
+      task('b', { status: 'in_progress', dependsOn: ['a'] }),
+      task('c', { dependsOn: ['b'] }), // live-blocked: b can still complete
+    );
+    const h = taskDagHealth(s);
+    expect(h.deadBlocked).toEqual([]);
+    expect(h.liveBlocked.map((t) => t.taskId)).toEqual(['c']);
+    expect(h.deadlocked).toBe(false); // b is in progress → work is happening
+  });
+
+  it('treats a missing and a cancelled dependency as terminal-dead', () => {
+    const s = storeOf(
+      task('x', { status: 'cancelled' }),
+      task('m', { dependsOn: ['ghost'] }), // missing id
+      task('n', { dependsOn: ['x'] }),     // cancelled dep
+    );
+    const h = taskDagHealth(s);
+    const dead = Object.fromEntries(h.deadBlocked.map((d) => [d.task.taskId, d.rootCause]));
+    expect(dead['m']).toEqual(['ghost']);
+    expect(dead['n']).toEqual(['x']);
+    expect(h.deadlocked).toBe(true); // no ready, no in_progress, pending exists
+  });
+
+  it('in-progress work alone keeps a no-ready graph out of deadlock', () => {
+    const s = storeOf(task('running', { status: 'in_progress' }), task('after', { dependsOn: ['running'] }));
+    const h = taskDagHealth(s);
+    expect(h.liveBlocked.map((t) => t.taskId)).toEqual(['after']);
+    expect(h.deadlocked).toBe(false);
   });
 });
 
