@@ -30,6 +30,7 @@ const LEAN_GROUPS = [
   'env',        // env_check — env-var drift (missing/unused/undocumented)
   'apply',      // apply_patch — fuzzy unified-diff applier for agent edits
   'hotspots',   // hotspots — git-history change-risk ranking ("where's the debt?")
+  'coupling',   // coupling — files that change together (temporal co-change), complements affected
   'affected',   // affected — impacted files/tests from a change via the import graph
   'cycles',     // cycles — circular-import detection via the import graph
   'testreport', // testreport — JUnit/TAP → structured failure digest (pairs w/ repair)
