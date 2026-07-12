@@ -140,6 +140,18 @@ describe('entropy fallback', () => {
     expect(redactText('keyboard shortcut = save').findings).toHaveLength(0);
     expect(redactText('monkey_name = "george"').findings).toHaveLength(0);
   });
+  it('does not flag a common word that ENDS in a keyword glued to `=` (#86)', () => {
+    // `monkey`/`donkey`/`whiskey`/`turkey` end in `key`; `compass`/`bypass` end in
+    // `pass`. Before the fix the trailing keyword + `=` matched and flagged the
+    // high-entropy value as a secret. The `(?<![A-Za-z])` guard requires the
+    // keyword not be glued to a preceding letter.
+    for (const word of ['monkey', 'donkey', 'whiskey', 'turkey', 'compass', 'bypass']) {
+      expect(redactText(`${word}=x8Kf2Qp9Lm3Zv7Nw5Rt1Yb4`).findings, `${word}= must not be flagged`).toHaveLength(0);
+    }
+    // …while a real key name (start-anchored, or `_`/`-`-separated) still is:
+    expect(redactText('key=x8Kf2Qp9Lm3Zv7Nw5Rt1Yb4').findings.some((f) => f.ruleId === 'high-entropy-assignment')).toBe(true);
+    expect(redactText('x-api-key: x8Kf2Qp9Lm3Zv7Nw5Rt1Yb4').findings.some((f) => f.ruleId === 'high-entropy-assignment')).toBe(true);
+  });
   it('stops the value at `&`/`?`/`#` so a query-string secret does not leak', () => {
     // Regression: the value used to over-capture across `&` into the AWS key;
     // the inflated span overlapped the key's already-claimed range and was

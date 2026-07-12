@@ -88,16 +88,21 @@ export const RULES: RedactRule[] = [
  * Keyword set mirrors gitleaks' reference `generic-api-key` rule (adds bare
  * `key`, `credential`, `creds` so `PRIVATE_KEY=`/`ENCRYPTION_KEY=`/`DB_CREDENTIAL=`
  * secrets reach the entropy check). The `[:=]` immediately after the keyword
- * anchors it, so `keyboard=`/`monkey_val=` don't match; the entropy + length
- * gates keep low-entropy values (paths, short flags) from being flagged. The
- * value class also stops at the URL/query delimiters `&`, `?`, `#` (absent from
- * base64/base64url/hex token alphabets): otherwise a query-string secret like
- * `client_secret=…&api_key=…` over-captures past the `&` into the next secret,
- * and that inflated span — overlapping a range the high-confidence RULES pass
- * already claimed — gets dropped entirely, leaving the first secret unredacted.
+ * anchors it, so `keyboard=`/`monkey_val=` don't match. A `(?<![A-Za-z])` guard
+ * requires the keyword NOT be glued to a preceding letter, so a common word that
+ * merely ENDS in a keyword — `monkey=`/`donkey=`/`whiskey=`/`turkey=` (end in
+ * `key`), `compass=`/`bypass=` (end in `pass`) — is no longer flagged as a
+ * secret, while a `_`/`-`-separated name (`PRIVATE_KEY`, `x-api-key`) still
+ * matches (`_`/`-` aren't letters). The entropy + length gates keep low-entropy
+ * values (paths, short flags) out. The value class also stops at the URL/query
+ * delimiters `&`, `?`, `#` (absent from base64/base64url/hex token alphabets):
+ * otherwise a query-string secret like `client_secret=…&api_key=…` over-captures
+ * past the `&` into the next secret, and that inflated span — overlapping a range
+ * the high-confidence RULES pass already claimed — gets dropped entirely, leaving
+ * the first secret unredacted.
  */
 const ASSIGNMENT_RE =
-  /(?:pass(?:word|phrase|wd)?|pwd|secret|token|api[_-]?key|apikey|access[_-]?key|auth[_-]?token|client[_-]?secret|credential|creds|key)["']?\s*[:=]\s*["']?([^\s"'`,;&?#]{8,})/gi;
+  /(?<![A-Za-z])(?:pass(?:word|phrase|wd)?|pwd|secret|token|api[_-]?key|apikey|access[_-]?key|auth[_-]?token|client[_-]?secret|credential|creds|key)["']?\s*[:=]\s*["']?([^\s"'`,;&?#]{8,})/gi;
 
 /** Shannon entropy in bits/char. Pure; used by the assignment fallback. */
 export function shannonEntropy(s: string): number {
