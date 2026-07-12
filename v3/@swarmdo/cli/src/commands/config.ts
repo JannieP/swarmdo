@@ -412,7 +412,7 @@ const importCommand: Command = {
 const lintCommand: Command = {
   name: 'lint',
   aliases: ['validate'],
-  description: 'Statically validate swarmdo.config.json, .claude/settings*.json hooks, .mcp.json, .claude/agents/*.md subagents, and the post-1.4 sDo layout',
+  description: 'Statically validate swarmdo.config.json, .claude/settings*.json hooks, .mcp.json, .claude/agents/*.md subagents, .claude/commands + skills slash-command frontmatter/body, and the post-1.4 sDo layout',
   options: [
     { name: 'json', type: 'boolean', description: 'machine-readable findings', default: false },
     { name: 'strict', type: 'boolean', description: 'exit 1 on warnings too (default: errors only)', default: false },
@@ -441,6 +441,28 @@ const lintCommand: Command = {
       .map((n) => read(`.claude/agents/${n}`))
       .filter((x): x is { file: string; raw: string } => x.raw !== null);
 
+    // Custom slash commands nest (e.g. `.claude/commands/sDo/*.md`), so walk the
+    // tree; skills live one dir deep as `.claude/skills/<name>/SKILL.md`.
+    const walkMd = (rel: string): { file: string; raw: string }[] => {
+      const acc: { file: string; raw: string }[] = [];
+      let entries: import('node:fs').Dirent[];
+      try { entries = fs.readdirSync(path.join(cwd, rel), { withFileTypes: true }); } catch { return acc; }
+      for (const e of entries) {
+        if (e.name.startsWith('.')) continue;
+        const childRel = `${rel}/${e.name}`;
+        if (e.isDirectory()) acc.push(...walkMd(childRel));
+        else if (e.isFile() && e.name.endsWith('.md')) {
+          const r = read(childRel);
+          if (r.raw !== null) acc.push({ file: childRel, raw: r.raw });
+        }
+      }
+      return acc;
+    };
+    const commandFiles = walkMd('.claude/commands');
+    const skillFiles = list('.claude/skills')
+      .map((dir) => read(`.claude/skills/${dir}/SKILL.md`))
+      .filter((x): x is { file: string; raw: string } => x.raw !== null);
+
     const report = lintAll({
       swarmdoConfig: read(configRel),
       settingsFiles: [read('.claude/settings.json'), read('.claude/settings.local.json')],
@@ -449,6 +471,8 @@ const lintCommand: Command = {
       sdoCommands: list('.claude/commands/sDo'),
       skills: list('.claude/skills'),
       agentFiles,
+      commandFiles,
+      skillFiles,
     });
 
     const failed = report.errors > 0 || (ctx.flags.strict === true && report.warnings > 0);
