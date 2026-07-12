@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { nextVersion, parseVersion, planRelease, renderStep, TRIO_FILES } from '../src/release/release.ts';
+import { nextVersion, parseVersion, planRelease, renderStep, resolveSiteIdentity, siteCommitArgs, TRIO_FILES } from '../src/release/release.ts';
 
 describe('release: version math', () => {
   it('bumps patch/minor/major', () => {
@@ -86,5 +86,29 @@ describe('release: planRelease', () => {
     for (const s of planRelease({ ...base, bump: 'patch' }).steps) {
       expect(renderStep(s).length).toBeGreaterThan(5);
     }
+  });
+});
+
+describe('release: site-deploy identity (#82)', () => {
+  it('uses the operator git identity when configured', () => {
+    const cfg: Record<string, string> = { 'user.name': 'JannieP', 'user.email': 'jannie@pieterse.me' };
+    expect(resolveSiteIdentity((k) => cfg[k])).toEqual({ name: 'JannieP', email: 'jannie@pieterse.me' });
+  });
+
+  it('falls back to the Swarmdo bot when git identity is unset/blank/undefined', () => {
+    // this is the exact v1.37.0 failure mode: no global git user on the machine
+    expect(resolveSiteIdentity(() => '')).toEqual({ name: 'Swarmdo', email: 'maintainers@swarmdo.com' });
+    expect(resolveSiteIdentity(() => undefined)).toEqual({ name: 'Swarmdo', email: 'maintainers@swarmdo.com' });
+  });
+
+  it('trims whitespace and falls back per-field on blank', () => {
+    expect(resolveSiteIdentity((k) => (k === 'user.name' ? '   ' : '  x@y.z  '))).toEqual({ name: 'Swarmdo', email: 'x@y.z' });
+  });
+
+  it('siteCommitArgs injects -c identity ahead of a co-authored commit message', () => {
+    const args = siteCommitArgs('1.37.1', { name: 'Bot', email: 'b@o.t' });
+    expect(args.slice(0, 6)).toEqual(['-c', 'user.name=Bot', '-c', 'user.email=b@o.t', 'commit', '-m']);
+    expect(args[6]).toContain('release: sync site for v1.37.1');
+    expect(args[6]).toContain('Co-Authored-By: Swarmdo <maintainers@swarmdo.com>');
   });
 });

@@ -16,7 +16,7 @@ import * as os from 'node:os';
 import { execFileSync } from 'node:child_process';
 import type { Command, CommandContext, CommandResult } from '../types.js';
 import { output } from '../output.js';
-import { planRelease, renderStep, type ReleasePlan, type ReleaseStep } from '../release/release.js';
+import { planRelease, renderStep, resolveSiteIdentity, siteCommitArgs, type ReleasePlan, type ReleaseStep } from '../release/release.js';
 
 /** Escape every regex metacharacter (incl. backslash) so a value is a literal in `new RegExp`. */
 function escapeRegExp(s: string): string {
@@ -113,12 +113,26 @@ async function executePlan(plan: ReleasePlan, root: string): Promise<CommandResu
         }
         const g = (args: string[]): void => { execFileSync('git', args, { cwd: siteDir, stdio: 'inherit' }); };
         g(['add', '-A']);
-        try {
-          g(['commit', '-m', `release: sync site for v${plan.next}\n\nCo-Authored-By: Swarmdo <maintainers@swarmdo.com>`]);
-        } catch {
+        // Only a genuinely empty index is the benign "in sync" case. Detect it
+        // explicitly — `git diff --cached --quiet` exits 0 iff nothing is staged
+        // — instead of treating EVERY commit failure (a missing git identity, a
+        // rejected hook) as a no-op, which silently skipped the whole deploy. (#82)
+        const nothingStaged = ((): boolean => {
+          try { execFileSync('git', ['diff', '--cached', '--quiet'], { cwd: siteDir, stdio: ['ignore', 'pipe', 'pipe'] }); return true; }
+          catch { return false; }
+        })();
+        if (nothingStaged) {
           output.writeln(output.dim('  site already in sync — nothing to commit'));
           break;
         }
+        // The throwaway clone inherits no git identity; inject the operator's
+        // (falling back to the Swarmdo bot) so the commit doesn't die on a
+        // machine whose git user is configured only per-repo, not globally. (#82)
+        const readCfg = (key: string): string => {
+          try { return execFileSync('git', ['-C', root, 'config', key], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim(); }
+          catch { return ''; }
+        };
+        g(siteCommitArgs(plan.next, resolveSiteIdentity(readCfg)));
         g(['push', 'origin', 'main']);
         // poll production (GitHub Pages deploys in ~1min)
         let live = false;

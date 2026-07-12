@@ -122,3 +122,37 @@ export function renderStep(s: ReleaseStep): string {
     case 'deploy-site': return `deploy website → SwarmDo/swarmdo.com (copy working copy, push, curl-verify swarmdo.com serves ${s.version})`;
   }
 }
+
+// ── site-deploy committer identity (#82) ─────────────────────────────────────
+
+export interface SiteIdentity { name: string; email: string; }
+
+/**
+ * Resolve the committer identity for the throwaway swarmdo.com clone. That
+ * clone inherits no identity, and a machine may have only a *local* (per-repo)
+ * git user — so `git commit` there dies with "Author identity unknown" unless
+ * we inject one. Prefer the operator's configured identity; fall back to the
+ * Swarmdo bot so the site deploy never fails on a missing global git config.
+ * `readConfig` is injected (real: `git -C <root> config <key>`) so this stays
+ * pure and unit-testable.
+ */
+export function resolveSiteIdentity(readConfig: (key: string) => string | undefined): SiteIdentity {
+  const name = (readConfig('user.name') || '').trim();
+  const email = (readConfig('user.email') || '').trim();
+  return {
+    name: name || 'Swarmdo',
+    email: email || 'maintainers@swarmdo.com',
+  };
+}
+
+/**
+ * `git commit` argv for the site sync — injects the identity via `-c` so the
+ * commit succeeds without a global git user, and keeps the bot co-author trailer.
+ */
+export function siteCommitArgs(version: string, id: SiteIdentity): string[] {
+  return [
+    '-c', `user.name=${id.name}`,
+    '-c', `user.email=${id.email}`,
+    'commit', '-m', `release: sync site for v${version}\n\nCo-Authored-By: Swarmdo <maintainers@swarmdo.com>`,
+  ];
+}
