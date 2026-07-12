@@ -23,6 +23,7 @@ const f = (file: string, severity: Severity, rule: string, message: string): Fin
 export const TOPOLOGIES = ['hierarchical', 'mesh', 'hierarchical-mesh', 'ring', 'star', 'hybrid', 'adaptive'];
 export const MEMORY_BACKENDS = ['agentdb', 'sqlite', 'hybrid', 'memory'];
 import { parseOpenRouterConfig } from '../providers/openrouter-config.js';
+import { lintAgents, type AgentFile } from './agents-lint.js';
 
 export const KNOWN_CONFIG_KEYS = ['topology', 'maxAgents', 'strategy', 'consensus', 'memory', 'memoryBackend', 'hnsw', 'neural', 'embeddings', 'providers', 'mcp', 'logging', 'daemon', 'hooks', 'version', 'openrouter', '$schema'];
 // Current Claude Code hook events (source: code.claude.com/docs/en/hooks).
@@ -189,6 +190,8 @@ export interface LintInput {
   /** entries under `.claude/commands/sDo/` — used to identify flat pre-1.4 twins */
   sdoCommands?: string[];
   skills?: string[];
+  /** `.claude/agents/*.md` subagent definitions (raw text per file) */
+  agentFiles?: AgentFile[];
 }
 
 export interface LintReport {
@@ -213,6 +216,7 @@ export function lintAll(input: LintInput): LintReport {
     findings.push(...jf, ...lintMcpConfig(input.mcpConfig.file, obj));
   }
   findings.push(...lintLegacyLayout(input.commandsRoot ?? [], input.skills ?? [], input.sdoCommands ?? []));
+  if (input.agentFiles?.length) findings.push(...lintAgents(input.agentFiles));
   return {
     findings,
     errors: findings.filter((x) => x.severity === 'error').length,

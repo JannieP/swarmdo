@@ -412,7 +412,7 @@ const importCommand: Command = {
 const lintCommand: Command = {
   name: 'lint',
   aliases: ['validate'],
-  description: 'Statically validate swarmdo.config.json, .claude/settings*.json hooks, .mcp.json, and the post-1.4 sDo layout',
+  description: 'Statically validate swarmdo.config.json, .claude/settings*.json hooks, .mcp.json, .claude/agents/*.md subagents, and the post-1.4 sDo layout',
   options: [
     { name: 'json', type: 'boolean', description: 'machine-readable findings', default: false },
     { name: 'strict', type: 'boolean', description: 'exit 1 on warnings too (default: errors only)', default: false },
@@ -436,6 +436,11 @@ const lintCommand: Command = {
       ? process.env.SWARMDO_CONFIG.replace(/^\.\//, '')
       : 'swarmdo.config.json';
 
+    const agentFiles = list('.claude/agents')
+      .filter((n) => n.endsWith('.md'))
+      .map((n) => read(`.claude/agents/${n}`))
+      .filter((x): x is { file: string; raw: string } => x.raw !== null);
+
     const report = lintAll({
       swarmdoConfig: read(configRel),
       settingsFiles: [read('.claude/settings.json'), read('.claude/settings.local.json')],
@@ -443,6 +448,7 @@ const lintCommand: Command = {
       commandsRoot: list('.claude/commands'),
       sdoCommands: list('.claude/commands/sDo'),
       skills: list('.claude/skills'),
+      agentFiles,
     });
 
     const failed = report.errors > 0 || (ctx.flags.strict === true && report.warnings > 0);
