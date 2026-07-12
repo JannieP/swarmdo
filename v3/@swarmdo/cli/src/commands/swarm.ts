@@ -104,6 +104,35 @@ function getSwarmStatus(swarmId?: string) {
     }
   }
 
+  // Canonical-store fallback: the `.swarm/*` paths above are the pre-#2085
+  // layout. The real swarm store written by swarm_init / agent_spawn / the
+  // agent bridge lives at `.swarmdo/swarm/swarm-state.json`. When the legacy
+  // paths are empty, read the canonical store so `swarm status` reflects a
+  // bridge-created (or MCP-created) swarm instead of falsely reporting "none".
+  if (!swarmState) {
+    try {
+      const swFile = path.join(process.cwd(), '.swarmdo', 'swarm', 'swarm-state.json');
+      if (fs.existsSync(swFile)) {
+        const swStore = JSON.parse(fs.readFileSync(swFile, 'utf-8')) as { swarms?: Record<string, Record<string, unknown>> };
+        const running = Object.values(swStore.swarms || {})
+          .filter((s) => s.status === 'running')
+          .sort((a, b) => new Date(String(b.createdAt)).getTime() - new Date(String(a.createdAt)).getTime())[0];
+        if (running) {
+          const cfg = (running.config as Record<string, unknown>) || {};
+          swarmState = {
+            id: running.swarmId,
+            topology: running.topology,
+            strategy: (cfg.strategy as string) || 'specialized',
+          };
+          const enrolled = Array.isArray(running.agents) ? running.agents.length : 0;
+          totalAgents = Math.max(totalAgents, enrolled);
+        }
+      }
+    } catch {
+      // Canonical store unavailable — keep the legacy view.
+    }
+  }
+
   // Calculate dynamic progress based on actual state
   // If no swarm state, show 0%. Otherwise calculate from completed tasks
   const totalTasks = completedTasks + inProgressTasks + pendingTasks;

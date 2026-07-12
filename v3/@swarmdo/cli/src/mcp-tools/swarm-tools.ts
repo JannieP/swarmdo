@@ -141,6 +141,81 @@ const VALID_TOPOLOGIES = new Set([
   'hierarchical', 'mesh', 'hierarchical-mesh', 'ring', 'star', 'hybrid', 'adaptive',
 ]);
 
+export interface CreateSwarmOptions {
+  topology?: string;
+  maxAgents?: number;
+  strategy?: string;
+  config?: Record<string, unknown>;
+  /**
+   * When true, do NOT stamp the host `pid` — the swarm is a persistent logical
+   * coordination record, not tied to one process's lifetime, so it survives
+   * ephemeral CLI invocations (the agent bridge) instead of being reaped by the
+   * #1799 PID-orphan check the instant the creating process exits. Such swarms
+   * still expire via the 24h idle-TTL fallback. Daemon-hosted swarms
+   * (`swarm_init`) leave this false so a dead host IS reaped promptly.
+   */
+  persistent?: boolean;
+}
+
+/**
+ * Create + persist a swarm. Extracted from the `swarm_init` handler so other
+ * subsystems (the Claude-Code agent bridge) can spin up a swarm from config
+ * WITHOUT duplicating the store-write. Throws on an invalid topology. Shared
+ * single source of truth — no parallel swarm creation.
+ */
+export function createSwarm(opts: CreateSwarmOptions): SwarmState {
+  const topology = opts.topology || 'hierarchical-mesh';
+  const maxAgents = Math.min(Math.max(opts.maxAgents || 15, 1), 50);
+  const strategy = opts.strategy || 'specialized';
+  const config = opts.config || {};
+  if (!VALID_TOPOLOGIES.has(topology)) {
+    throw new Error(`Invalid topology: ${topology}. Valid: ${[...VALID_TOPOLOGIES].join(', ')}`);
+  }
+  const swarmId = `swarm-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  const now = new Date().toISOString();
+  const swarmState: SwarmState = {
+    swarmId,
+    topology,
+    maxAgents,
+    status: 'running',
+    agents: [],
+    tasks: [],
+    config: {
+      topology,
+      maxAgents,
+      strategy,
+      communicationProtocol: (config.communicationProtocol as string) || 'message-bus',
+      autoScaling: (config.autoScaling as boolean) ?? true,
+      consensusMechanism: (config.consensusMechanism as string) || 'majority',
+    },
+    createdAt: now,
+    updatedAt: now,
+    // Persistent (bridge) swarms omit the pid so they aren't reaped on process
+    // exit; daemon-hosted swarms record it for prompt orphan reconciliation.
+    ...(opts.persistent ? {} : { pid: process.pid }),
+  };
+  const store = loadSwarmStore();
+  store.swarms[swarmId] = swarmState;
+  saveSwarmStore(store);
+  return swarmState;
+}
+
+/**
+ * Return the most-recent RUNNING swarm, or create one from `defaults` if none
+ * exists. Used by the agent bridge so registering a Claude Code agent
+ * auto-spins-up a swarm (from the project's anti-drift config) and enrolls it,
+ * instead of leaving the agent unattached.
+ */
+export function ensureActiveSwarm(defaults: CreateSwarmOptions): { swarmId: string; topology: string; created: boolean } {
+  const store = loadSwarmStore();
+  const running = Object.values(store.swarms)
+    .filter((s) => s.status === 'running')
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0];
+  if (running) return { swarmId: running.swarmId, topology: running.topology, created: false };
+  const s = createSwarm({ ...defaults, persistent: true });
+  return { swarmId: s.swarmId, topology: s.topology, created: true };
+}
+
 export const swarmTools: MCPTool[] = [
   {
     name: 'swarm_init',
@@ -166,54 +241,26 @@ export const swarmTools: MCPTool[] = [
         if (!v.valid) return { success: false, error: v.error };
       }
 
-      const topology = (input.topology as string) || 'hierarchical-mesh';
-      const maxAgents = Math.min(Math.max((input.maxAgents as number) || 15, 1), 50);
       const strategy = (input.strategy as string) || 'specialized';
-      const config = (input.config || {}) as Record<string, unknown>;
-
-      if (!VALID_TOPOLOGIES.has(topology)) {
-        return {
-          success: false,
-          error: `Invalid topology: ${topology}. Valid: ${[...VALID_TOPOLOGIES].join(', ')}`,
-        };
-      }
-
-      const swarmId = `swarm-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-      const now = new Date().toISOString();
-
-      const swarmState: SwarmState = {
-        swarmId,
-        topology,
-        maxAgents,
-        status: 'running',
-        agents: [],
-        tasks: [],
-        config: {
-          topology,
-          maxAgents,
+      let swarmState: SwarmState;
+      try {
+        swarmState = createSwarm({
+          topology: input.topology as string | undefined,
+          maxAgents: input.maxAgents as number | undefined,
           strategy,
-          communicationProtocol: (config.communicationProtocol as string) || 'message-bus',
-          autoScaling: (config.autoScaling as boolean) ?? true,
-          consensusMechanism: (config.consensusMechanism as string) || 'majority',
-        },
-        createdAt: now,
-        updatedAt: now,
-        // #1799 — record host PID so subsequent loads can detect orphans
-        // when this process exits without a graceful swarm_shutdown.
-        pid: process.pid,
-      };
-
-      const store = loadSwarmStore();
-      store.swarms[swarmId] = swarmState;
-      saveSwarmStore(store);
+          config: (input.config || {}) as Record<string, unknown>,
+        });
+      } catch (e) {
+        return { success: false, error: (e as Error).message };
+      }
 
       return {
         success: true,
-        swarmId,
-        topology,
+        swarmId: swarmState.swarmId,
+        topology: swarmState.topology,
         strategy,
-        maxAgents,
-        initializedAt: now,
+        maxAgents: swarmState.maxAgents,
+        initializedAt: swarmState.createdAt,
         config: swarmState.config,
         persisted: true,
       };

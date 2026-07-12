@@ -8,6 +8,7 @@ import { output } from '../output.js';
 import { select, confirm, input } from '../prompt.js';
 import { callMCPTool, MCPClientError } from '../mcp-client.js';
 import { wasmSubcommands } from './agent-wasm.js';
+import { classifyPrompt } from '../agent-bridge/bridge.js';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -991,11 +992,121 @@ function formatLogLevel(level: string): string {
   }
 }
 
+// Bridge subcommand — link Claude Code Agent-tool agents into Swarmdo's registry
+const bridgeCommand: Command = {
+  name: 'bridge',
+  description:
+    "Link Claude Code Agent-tool agents into Swarmdo's registry so `swarmdo agent list` reflects the agents actually running (register/list/sync/advise). Registering auto-spins-up a swarm from config and enrolls the agent.",
+  options: [
+    { name: 'name', short: 'n', description: 'Claude Code agent name (register)', type: 'string' },
+    { name: 'session', short: 's', description: 'Claude Code session id (register)', type: 'string' },
+    { name: 'type', short: 't', description: 'agent type (register; default general-purpose)', type: 'string' },
+    { name: 'task', description: 'one-line task summary (register)', type: 'string' },
+    { name: 'live', description: 'comma-separated live Claude Code agent names (sync)', type: 'string' },
+    { name: 'format', description: 'output format: text|json', type: 'string' },
+  ],
+  examples: [
+    { command: 'swarmdo agent bridge register -n research-ccgap -s cec69c3c -t general-purpose', description: 'Bind a running Claude Code agent into Swarmdo (auto-creates a swarm)' },
+    { command: 'swarmdo agent bridge list', description: 'Show Claude-Code-bound vs native Swarmdo agents' },
+    { command: 'swarmdo agent bridge sync --live research-ccgap,research-mcp', description: 'Reconcile the live roster against the store' },
+    { command: 'swarmdo agent bridge advise "Refactor the auth module across files"', description: 'Should this prompt spin up a swarm? Which roles?' },
+  ],
+  action: async (ctx: CommandContext): Promise<CommandResult> => {
+    const sub = (ctx.args[0] || 'list').toLowerCase();
+    const asJson = ctx.flags.format === 'json';
+    try {
+      switch (sub) {
+        case 'register': {
+          const name = ctx.flags.name as string;
+          if (!name) {
+            output.printError('bridge register needs --name <claude-agent-name> (the running Claude Code agent)');
+            return { success: false, exitCode: 1 };
+          }
+          const res = await callMCPTool<Record<string, unknown>>('agent_bridge_register', {
+            name,
+            sessionId: ctx.flags.session,
+            agentType: ctx.flags.type || 'general-purpose',
+            task: ctx.flags.task,
+          });
+          if (asJson) { output.printJson(res); return { success: true, data: res }; }
+          output.printSuccess(`Bound Claude Code agent '${name}' → Swarmdo agent ${String(res.agentId)}`);
+          const swarm = res.swarm as { swarmId: string; topology: string; created: boolean } | undefined;
+          if (swarm) {
+            output.writeln(`  swarm: ${swarm.swarmId} [${swarm.topology}] ${swarm.created ? '(created)' : '(joined existing)'}`);
+          }
+          return { success: true, data: res };
+        }
+        case 'list': {
+          const res = await callMCPTool<Record<string, unknown>>('agent_bridge_list', {});
+          if (asJson) { output.printJson(res); return { success: true, data: res }; }
+          const bound = (res.bound as Array<Record<string, any>>) || [];
+          const native = (res.native as Array<Record<string, any>>) || [];
+          output.writeln();
+          output.writeln(output.bold(`Swarmdo agents: ${res.total} (${res.boundCount} Claude-Code-bound, ${res.nativeCount} native)`));
+          if (bound.length) {
+            output.writeln();
+            output.writeln(output.bold('Claude-Code-bound:'));
+            for (const a of bound) {
+              const b = a.binding || {};
+              output.writeln(`  ${a.agentId}  [${a.agentType}]  ⇠ ${b.claudeName}${b.sessionId ? '@' + b.sessionId : ''}`);
+            }
+          }
+          if (native.length) {
+            output.writeln();
+            output.writeln(output.bold('Native Swarmdo:'));
+            for (const a of native) output.writeln(`  ${a.agentId}  [${a.agentType}]  ${a.status ?? ''}`);
+          }
+          if (Number(res.total) === 0) {
+            output.printInfo('No agents registered. Spawn a Claude Code agent, then `swarmdo agent bridge register -n <name>`.');
+          }
+          return { success: true, data: res };
+        }
+        case 'sync': {
+          const live = typeof ctx.flags.live === 'string'
+            ? (ctx.flags.live as string).split(',').map((s) => s.trim()).filter(Boolean)
+            : [];
+          const res = await callMCPTool<Record<string, unknown>>('agent_bridge_list', { live });
+          if (asJson) { output.printJson(res); return { success: true, data: res }; }
+          const rec = (res.reconciliation as { mirrored: string[]; unmirrored: string[]; orphaned: string[] }) || { mirrored: [], unmirrored: [], orphaned: [] };
+          output.writeln();
+          output.writeln(output.bold('Bridge reconciliation'));
+          output.writeln(`  mirrored:   ${rec.mirrored.join(', ') || '(none)'}`);
+          output.writeln(`  unmirrored: ${rec.unmirrored.join(', ') || '(none)'}${rec.unmirrored.length ? '  → run `agent bridge register -n <name>` for each' : ''}`);
+          output.writeln(`  orphaned:   ${rec.orphaned.join(', ') || '(none)'}${rec.orphaned.length ? '  → their Claude agent is gone (stale)' : ''}`);
+          return { success: true, data: res };
+        }
+        case 'advise': {
+          const prompt = ctx.args.slice(1).join(' ').trim();
+          const intent = classifyPrompt(prompt);
+          if (asJson) { output.printJson(intent); return { success: true, data: intent }; }
+          if (!intent.requiresAgents) {
+            output.printInfo(`No swarm needed: ${intent.reason}`);
+          } else {
+            output.writeln(output.bold(`Swarm recommended — ${intent.reason}`));
+            output.writeln(`  roles: ${intent.suggestedRoles.join(', ')}`);
+            output.writeln('  After spawning each Claude Code agent, bind it:');
+            for (const role of intent.suggestedRoles) {
+              output.writeln(`    swarmdo agent bridge register -n <name> -t ${role} -s <session>`);
+            }
+          }
+          return { success: true, data: intent };
+        }
+        default:
+          output.printError(`unknown bridge subcommand '${sub}' (use register|list|sync|advise)`);
+          return { success: false, exitCode: 1 };
+      }
+    } catch (e) {
+      output.printError(`bridge ${sub} failed: ${e instanceof MCPClientError ? e.message : String(e)}`);
+      return { success: false, exitCode: 1 };
+    }
+  },
+};
+
 // Main agent command
 export const agentCommand: Command = {
   name: 'agent',
   description: 'Agent management commands',
-  subcommands: [spawnCommand, listCommand, statusCommand, stopCommand, metricsCommand, poolCommand, healthCommand, logsCommand, ...wasmSubcommands],
+  subcommands: [spawnCommand, listCommand, statusCommand, stopCommand, metricsCommand, poolCommand, healthCommand, logsCommand, bridgeCommand, ...wasmSubcommands],
   options: [],
   examples: [
     { command: 'swarmdo agent spawn -t coder', description: 'Spawn a coder agent' },

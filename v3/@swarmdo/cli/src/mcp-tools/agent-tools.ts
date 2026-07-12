@@ -10,6 +10,7 @@ import { join } from 'node:path';
 import { type MCPTool, getProjectCwd } from './types.js';
 import { validateIdentifier, validateText, validateAgentSpawn } from './validate-input.js';
 import { executeAgentTask } from './agent-execute-core.js';
+import { buildSpawnInput, reconcile, isBound, type SwarmdoAgentLike } from '../agent-bridge/bridge.js';
 
 // Storage paths
 const STORAGE_DIR = '.swarmdo';
@@ -109,6 +110,26 @@ function loadHiveAgents(): Record<string, AgentRecord> {
  */
 function loadAllAgents(): Record<string, AgentRecord> {
   return { ...loadHiveAgents(), ...loadAgentStore().agents };
+}
+
+/**
+ * Read the project's swarm topology defaults from swarmdo.config.json for the
+ * agent bridge's auto-swarm. Defensive — returns {} on any error so the bridge
+ * falls back to the anti-drift defaults (hierarchical / 8 / specialized).
+ * Accepts either a top-level `swarm` block or the root object.
+ */
+function readSwarmConfigDefaults(): { topology?: string; maxAgents?: number; strategy?: string } {
+  try {
+    const p = join(getProjectCwd(), 'swarmdo.config.json');
+    if (!existsSync(p)) return {};
+    const j = JSON.parse(readFileSync(p, 'utf-8')) as Record<string, unknown>;
+    const sw = ((j.swarm as Record<string, unknown>) || j) ?? {};
+    const str = (v: unknown): string | undefined => (typeof v === 'string' ? v : undefined);
+    const num = (v: unknown): number | undefined => (typeof v === 'number' ? v : undefined);
+    return { topology: str(sw.topology), maxAgents: num(sw.maxAgents), strategy: str(sw.strategy) };
+  } catch {
+    return {};
+  }
 }
 
 // Default model mappings for agent types (can be overridden)
@@ -409,6 +430,101 @@ export const agentTools: MCPTool[] = [
             '(4) claude -p — headless background instance.',
       };
       return response;
+    },
+  },
+  {
+    name: 'agent_bridge_register',
+    description:
+      "Register a REAL Claude Code Agent-tool agent into Swarmdo's registry so `swarmdo agent list` and `swarm_status` reflect it. Call this right AFTER you spawn a Claude Code subagent (Task/Agent tool): pass its name, session id, subagent type, and a one-line task. Idempotent — re-registering the same name+session UPDATES the bound record instead of duplicating. This is the bridge that stops Swarmdo sitting empty while real agents run: unlike agent_spawn (which only registers coordination metadata), this binds the record to a worker that actually exists.",
+    category: 'agent',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        name: { type: 'string', description: 'The Claude Code agent name (e.g. "research-ccgap")' },
+        sessionId: { type: 'string', description: 'The Claude Code session id (from name@session-…)' },
+        agentType: { type: 'string', description: 'The subagent_type (e.g. general-purpose, coder). Default general-purpose.' },
+        task: { type: 'string', description: 'One-line task/prompt summary' },
+      },
+      required: ['name'],
+    },
+    handler: async (input) => {
+      const src = input as Record<string, unknown>;
+      const name = String(src.name || '').trim();
+      if (!name) return { success: false, error: 'name is required (the Claude Code agent name)' };
+      const descriptor = {
+        name,
+        sessionId: src.sessionId ? String(src.sessionId) : undefined,
+        agentType: String(src.agentType || 'general-purpose'),
+        task: src.task ? String(src.task) : undefined,
+      };
+      const spawnInput = buildSpawnInput(descriptor, new Date().toISOString());
+
+      // Auto-swarm: registering a Claude Code agent spins up a swarm from the
+      // project config (anti-drift defaults if absent) when none is running, and
+      // enrolls this agent into it — so bridged agents coordinate instead of
+      // floating unattached. registerAgent honors spawnInput.swarmId to join.
+      let swarm: { swarmId: string; topology: string; created: boolean } | undefined;
+      try {
+        const { ensureActiveSwarm } = await import('./swarm-tools.js');
+        const cfg = readSwarmConfigDefaults();
+        swarm = ensureActiveSwarm({
+          topology: cfg.topology || 'hierarchical',
+          maxAgents: cfg.maxAgents || 8,
+          strategy: cfg.strategy || 'specialized',
+        });
+        spawnInput.swarmId = swarm.swarmId;
+      } catch {
+        /* swarm optional — the agent still registers in the global store */
+      }
+
+      const res = await registerAgent(spawnInput);
+      if (!res.success) return res;
+      return {
+        ...res,
+        bound: true,
+        origin: 'claude-code',
+        claudeName: descriptor.name,
+        status: 'registered',
+        ...(swarm ? { swarm } : {}),
+      };
+    },
+  },
+  {
+    name: 'agent_bridge_list',
+    description:
+      'List Swarmdo agent records split into Claude-Code-BOUND (each mirrors a real Task/Agent-tool agent) vs NATIVE, with binding detail. Pass `live` (array of current Claude Code agent names) to also get a reconciliation: which live agents are unmirrored (need agent_bridge_register), and which bound records are orphaned (their Claude agent is gone).',
+    category: 'agent',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        live: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Current live Claude Code agent names, for reconciliation',
+        },
+      },
+    },
+    handler: async (input) => {
+      const all = Object.values(loadAllAgents()) as unknown as SwarmdoAgentLike[];
+      const summarize = (a: SwarmdoAgentLike) => ({
+        agentId: a.agentId,
+        agentType: a.agentType,
+        status: a.status,
+        ...(isBound(a) ? { binding: a.config!.binding } : {}),
+      });
+      const bound = all.filter(isBound).map(summarize);
+      const native = all.filter((a) => !isBound(a)).map(summarize);
+      const liveRaw = (input as Record<string, unknown>).live;
+      const live = Array.isArray(liveRaw) ? liveRaw.map(String) : undefined;
+      const reconciliation = live ? reconcile(all, live) : undefined;
+      return {
+        total: all.length,
+        boundCount: bound.length,
+        nativeCount: native.length,
+        bound,
+        native,
+        ...(reconciliation ? { reconciliation } : {}),
+      };
     },
   },
   {
