@@ -112,6 +112,9 @@ const commandLoaders: Record<string, CommandLoader> = {
   // Cross-session agent mailbox (multiplayer swarms — dorsa_rohani demand)
   comms: () => import('./comms.js'),
   mailbox: () => import('./comms.js'), // alias via loader key
+  // Static audit of Claude Code permission rules (conflicts / dead / over-broad)
+  permissions: () => import('./permissions.js'),
+  perms: () => import('./permissions.js'), // alias via loader key
   // Export Claude Code sessions to Markdown (conversation-exporter demand)
   transcript: () => import('./transcript.js'),
   tx: () => import('./transcript.js'), // alias via loader key
