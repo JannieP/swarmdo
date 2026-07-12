@@ -69,6 +69,10 @@ const commandLoaders: Record<string, CommandLoader> = {
   // Hidden coupling — co-change pairs with NO import edge (logical minus
   // structural coupling); joins `coupling`'s git capture with codegraph's graph.
   'hidden-coupling': () => import('./hidden-coupling.js'),
+  // Weekend-aware "what did I do?" recall from git history (git-standup demand)
+  // — commits since your last working day, grouped by day with a diffstat.
+  standup: () => import('./standup.js'),
+  mine: () => import('./standup.js'), // alias via loader key
   // JUnit/TAP test-result parser (dorny/test-reporter demand) — raw results →
   // failing test + file:line + message; the front-half of the test→fix loop.
   testreport: () => import('./testreport.js'),
@@ -333,7 +337,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
     analyzeCmd, routeCmd, progressCmd, providersCmd,
     pluginsCmd, deploymentCmd, claimsCmd, issuesCmd,
     updateCmd, processCmd, guidanceCmd, applianceCmd,
-    cleanupCmd, autopilotCmd, demoCmd, usageCmd, repairCmd, hudCmd, compactCmd, codegraphCmd, redactCmd, packCmd, envCmd, licenseCmd, sbomCmd, applyCmd, hotspotsCmd, affectedCmd, cyclesCmd, couplingCmd, ownershipCmd, hiddenCouplingCmd, testreportCmd, compactSnapshotCmd,
+    cleanupCmd, autopilotCmd, demoCmd, usageCmd, repairCmd, hudCmd, compactCmd, codegraphCmd, redactCmd, packCmd, envCmd, licenseCmd, sbomCmd, applyCmd, hotspotsCmd, affectedCmd, cyclesCmd, couplingCmd, ownershipCmd, hiddenCouplingCmd, testreportCmd, compactSnapshotCmd, standupCmd,
   ] = await Promise.all([
     loadCommand('daemon'), loadCommand('doctor'), loadCommand('embeddings'), loadCommand('neural'),
     loadCommand('performance'), loadCommand('security'), loadCommand('swarmvector'), loadCommand('hive-mind'),
@@ -342,7 +346,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
     loadCommand('analyze'), loadCommand('route'), loadCommand('progress'), loadCommand('providers'),
     loadCommand('plugins'), loadCommand('deployment'), loadCommand('claims'), loadCommand('issues'),
     loadCommand('update'), loadCommand('process'), loadCommand('guidance'), loadCommand('appliance'),
-    loadCommand('cleanup'), loadCommand('autopilot'), loadCommand('demo'), loadCommand('usage'), loadCommand('repair'), loadCommand('hud'), loadCommand('compact'), loadCommand('codegraph'), loadCommand('redact'), loadCommand('pack'), loadCommand('env'), loadCommand('license'), loadCommand('sbom'), loadCommand('apply'), loadCommand('hotspots'), loadCommand('affected'), loadCommand('cycles'), loadCommand('coupling'), loadCommand('ownership'), loadCommand('hidden-coupling'), loadCommand('testreport'), loadCommand('compact-snapshot'),
+    loadCommand('cleanup'), loadCommand('autopilot'), loadCommand('demo'), loadCommand('usage'), loadCommand('repair'), loadCommand('hud'), loadCommand('compact'), loadCommand('codegraph'), loadCommand('redact'), loadCommand('pack'), loadCommand('env'), loadCommand('license'), loadCommand('sbom'), loadCommand('apply'), loadCommand('hotspots'), loadCommand('affected'), loadCommand('cycles'), loadCommand('coupling'), loadCommand('ownership'), loadCommand('hidden-coupling'), loadCommand('testreport'), loadCommand('compact-snapshot'), loadCommand('standup'),
   ]);
 
   return {
@@ -362,7 +366,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
       statuslineCmd, compressCmd, compactCmd, redactCmd, packCmd, envCmd, licenseCmd, sbomCmd, applyCmd, hotspotsCmd, affectedCmd, cyclesCmd, couplingCmd, ownershipCmd, hiddenCouplingCmd, testreportCmd, compactSnapshotCmd, efficiencyCmd,
     ].filter(Boolean) as Command[],
     analysis: [
-      analyzeCmd, routeCmd, progressCmd, usageCmd, hudCmd, codegraphCmd,
+      analyzeCmd, routeCmd, progressCmd, usageCmd, hudCmd, codegraphCmd, standupCmd,
     ].filter(Boolean) as Command[],
     management: [
       providersCmd, pluginsCmd, deploymentCmd, claimsCmd,
