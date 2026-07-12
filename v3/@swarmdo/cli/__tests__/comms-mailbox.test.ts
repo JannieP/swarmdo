@@ -7,6 +7,7 @@ import {
   unreadCount,
   markRead,
   pruneMailbox,
+  renderInboxContext,
   BROADCAST,
   type Mailbox,
   type Message,
@@ -107,6 +108,28 @@ describe('markRead', () => {
     const { box: next, marked } = markRead(box, ['a', 'missing']);
     expect(marked).toBe(0);
     expect(next).toBe(box);
+  });
+});
+
+describe('renderInboxContext', () => {
+  it('returns empty string for no messages', () => {
+    expect(renderInboxContext([])).toBe('');
+  });
+  it('renders a header, count, and one bullet per message with sender + subject', () => {
+    const block = renderInboxContext([
+      msg({ id: 'a', from: 'alice', subject: 'PR #42', body: 'ready for review' }),
+      msg({ id: 'b', from: 'carol', subject: '(no subject)', body: 'rebasing main' }),
+    ]);
+    expect(block).toContain('## 📬 New messages (swarmdo comms)');
+    expect(block).toContain('You have 2 new messages from other sessions:');
+    expect(block).toContain('- **from alice** — PR #42: ready for review');
+    expect(block).toContain('- **from carol** — (no subject): rebasing main');
+  });
+  it('singularizes and caps body length', () => {
+    const block = renderInboxContext([msg({ from: 'x', subject: 's', body: 'y'.repeat(1000) })], { maxBodyChars: 20 });
+    expect(block).toContain('1 new message from');
+    expect(block).toContain('…');
+    expect(block.length).toBeLessThan(200);
   });
 });
 

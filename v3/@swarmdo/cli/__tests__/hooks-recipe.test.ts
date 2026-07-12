@@ -20,9 +20,9 @@ describe('hooks-recipe: catalog', () => {
     expect(findRecipe('memory-inject')!.event).toBe('UserPromptSubmit');
     expect(findRecipe('nope')).toBeUndefined();
   });
-  it('every recipe is a swarmdo hooks command with the required fields', () => {
+  it('every recipe is a swarmdo command with the required fields', () => {
     for (const r of RECIPES) {
-      expect(r.command).toMatch(/^swarmdo hooks /);
+      expect(r.command).toMatch(/^swarmdo \S/);
       expect(r.name && r.event && r.title && r.description).toBeTruthy();
     }
   });
@@ -104,6 +104,18 @@ describe('hooks-recipe: applyRecipe', () => {
     expect(entry.hooks[0]).toEqual({ type: 'command', command: 'swarmdo hooks memory-inject' });
     expect(hasRecipe(settings, memInject)).toBe(true);
     expect(applyRecipe(settings, memInject).changed).toBe(false); // idempotent
+  });
+
+  it('wires the comms-inbox recipe (UserPromptSubmit → comms inbox --hook) alongside memory-inject', () => {
+    const commsInbox = findRecipe('comms-inbox')!;
+    expect(commsInbox.event).toBe('UserPromptSubmit');
+    expect(commsInbox.command).toBe('swarmdo comms inbox --hook');
+    // Two UserPromptSubmit recipes must coexist as distinct entries, not clobber.
+    const withMem = applyRecipe({}, findRecipe('memory-inject')!).settings;
+    const { settings } = applyRecipe(withMem, commsInbox);
+    expect((settings.hooks as any).UserPromptSubmit).toHaveLength(2);
+    expect(hasRecipe(settings, commsInbox)).toBe(true);
+    expect(hasRecipe(settings, findRecipe('memory-inject')!)).toBe(true);
   });
 });
 

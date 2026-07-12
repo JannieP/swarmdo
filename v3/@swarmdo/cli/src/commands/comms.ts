@@ -25,6 +25,7 @@ import {
   unreadCount,
   markRead,
   pruneMailbox,
+  renderInboxContext,
   type Mailbox,
 } from '../comms/mailbox.js';
 
@@ -133,6 +134,7 @@ const inboxCommand: Command = {
     { name: 'unread', short: 'u', description: 'Only unread messages', type: 'boolean' },
     { name: 'since', description: 'Only messages after this ISO timestamp', type: 'string' },
     { name: 'mark-read', description: 'Mark all shown messages as read', type: 'boolean' },
+    { name: 'hook', description: 'Emit unread messages as UserPromptSubmit additionalContext JSON, then mark them read (for hook delivery)', type: 'boolean' },
     { name: 'json', description: 'Machine-readable output', type: 'boolean' },
   ],
   examples: [
@@ -142,6 +144,29 @@ const inboxCommand: Command = {
   action: async (ctx: CommandContext): Promise<CommandResult> => {
     const cwd = ctx.cwd || process.cwd();
     const self = resolveSelf(ctx.flags.to);
+
+    // --hook: delivery path. Emit unread mail as UserPromptSubmit additionalContext
+    // and mark it read so it surfaces once, without polling. Hook-safe: NEVER
+    // errors (that would break the prompt) and stays silent when there's no mail.
+    if (ctx.flags.hook === true) {
+      try {
+        if (process.env.SWARMDO_COMMS_DISABLE === '1') return { success: true };
+        const box = loadMailbox(cwd);
+        const unread = filterInbox(box, { to: self, unreadOnly: true });
+        if (unread.length > 0) {
+          const block = renderInboxContext(unread);
+          process.stdout.write(JSON.stringify({
+            hookSpecificOutput: { hookEventName: 'UserPromptSubmit', additionalContext: block },
+          }) + '\n');
+          const { box: next, marked } = markRead(box, unread.map((m) => m.id));
+          if (marked > 0) saveMailbox(cwd, next);
+        }
+      } catch {
+        /* never fail a hook */
+      }
+      return { success: true };
+    }
+
     const box = loadMailbox(cwd);
     const inbox = filterInbox(box, {
       to: self,

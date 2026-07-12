@@ -42,6 +42,13 @@ export const RECIPES: HookRecipe[] = [
     title: 'Inject relevant memories into each prompt',
     description: 'On every prompt, semantically searches your stored memories (claude-memories/auto-memory/patterns) and injects the most relevant ones as context under a token budget (UserPromptSubmit hook). Powered by `swarmdo hooks memory-inject`. Opt-in: adds a small per-prompt search.',
   },
+  {
+    name: 'comms-inbox',
+    event: 'UserPromptSubmit',
+    command: 'swarmdo comms inbox --hook',
+    title: 'Surface new cross-session messages each prompt',
+    description: 'On every prompt, injects any unread messages other sessions sent to this one (multiplayer swarms) as context, then marks them read — so mail surfaces without polling (UserPromptSubmit hook). Powered by `swarmdo comms inbox --hook`. Opt-in.',
+  },
 ];
 
 export function findRecipe(name: string): HookRecipe | undefined {

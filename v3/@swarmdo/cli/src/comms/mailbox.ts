@@ -99,6 +99,31 @@ export function unreadCount(box: Mailbox, to?: string): number {
   return filterInbox(box, { to, unreadOnly: true }).length;
 }
 
+/**
+ * Render a set of messages as a compact context block for hook delivery — the
+ * "surface new mail without polling" path. Returns '' for no messages (caller
+ * injects nothing). Each body is whitespace-collapsed and capped at maxBodyChars.
+ */
+export function renderInboxContext(
+  messages: Message[],
+  opts: { header?: string; maxBodyChars?: number } = {},
+): string {
+  if (!messages || messages.length === 0) return '';
+  const header = opts.header ?? '## 📬 New messages (swarmdo comms)';
+  const maxBody = opts.maxBodyChars ?? 500;
+  const lines = [
+    header,
+    `You have ${messages.length} new message${messages.length === 1 ? '' : 's'} from other sessions:`,
+    '',
+  ];
+  for (const m of messages) {
+    const body = (m.body || '').replace(/\s+/g, ' ').trim();
+    const trimmed = body.length > maxBody ? body.slice(0, maxBody).trimEnd() + '…' : body;
+    lines.push(`- **from ${m.from}** — ${m.subject}: ${trimmed}`);
+  }
+  return lines.join('\n');
+}
+
 /** Immutably mark the given ids read. Returns the new box + how many flipped unread→read. */
 export function markRead(box: Mailbox, ids: string[]): { box: Mailbox; marked: number } {
   const idSet = new Set(ids);
