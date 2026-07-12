@@ -167,6 +167,25 @@ describe('entropy fallback', () => {
     expect(findings.map((f) => f.ruleId).sort()).toEqual(['aws-access-key', 'high-entropy-assignment']);
     expect(output).not.toContain('zX9pQ2wErT8uI3oP'); // the first secret is masked, not leaked
   });
+  it('clips (not drops) a value glued to a recognized token by `/ : . =` so the leading secret cannot leak (#100)', () => {
+    // The value class must allow `/ : . = + ~` for base64/base64url secrets, so a
+    // recognized token following one of those over-captures into the entropy
+    // span. That span overlaps the token's already-claimed range; before the fix
+    // the whole entropy finding was DROPPED, leaking the leading secret cleartext.
+    for (const sep of ['/', ':', '.', '=']) {
+      const { output, findings } = redactText(`secret=aXk9Lm2Qp7Rt4Vw${sep}ghp_ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`);
+      expect(findings.map((f) => f.ruleId).sort(), `sep ${sep}`).toEqual(['github-pat', 'high-entropy-assignment']);
+      expect(output, `sep ${sep}`).not.toContain('aXk9Lm2Qp7Rt4Vw'); // leading secret masked, not leaked
+      expect(output, `sep ${sep} keeps separator`).toContain(`${sep}ghp`); // the trailing token keeps its own redaction
+    }
+  });
+  it('leaves a lone base64 value (with / + =) fully redacted — the clip only fires on a following claimed token (#100)', () => {
+    // No recognized token follows → no overlap → the base64 secret (incl. `/ + =`)
+    // is captured and masked as before, not truncated at its internal `/`.
+    const { output, findings } = redactText('secret=aGVsbG8rd29ybGQvc2VjcmV0K3ZhbHVlPQ==');
+    expect(findings.some((f) => f.ruleId === 'high-entropy-assignment')).toBe(true);
+    expect(output).not.toContain('d29ybGQ'); // interior of the base64 body is masked, not left after a `/` split
+  });
   it('does not swallow following non-secret data after an `&`', () => {
     // The redirect_uri is not a secret keyword and must survive intact.
     const { output } = redactText('client_secret=zX9pQ2wErT8uI3oP&redirect_uri=https://app.example.com/callback');

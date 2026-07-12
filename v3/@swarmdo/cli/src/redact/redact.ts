@@ -97,9 +97,11 @@ export const RULES: RedactRule[] = [
  * values (paths, short flags) out. The value class also stops at the URL/query
  * delimiters `&`, `?`, `#` (absent from base64/base64url/hex token alphabets):
  * otherwise a query-string secret like `client_secret=…&api_key=…` over-captures
- * past the `&` into the next secret, and that inflated span — overlapping a range
- * the high-confidence RULES pass already claimed — gets dropped entirely, leaving
- * the first secret unredacted.
+ * past the `&` into the next secret. It CANNOT stop at `/ : . = + ~`, though —
+ * base64/base64url/connection-string secrets contain those — so a recognized
+ * token glued on by one of them still over-captures; the entropy pass in
+ * `collectHits` handles that by CLIPPING the span at the claimed range rather
+ * than dropping the finding (which would leak the leading secret, #100).
  */
 const ASSIGNMENT_RE =
   /(?<![A-Za-z])(?:pass(?:word|phrase|wd)?|pwd|secret|token|api[_-]?key|apikey|access[_-]?key|auth[_-]?token|client[_-]?secret|credential|creds|key)["']?\s*[:=]\s*["']?([^\s"'`,;&?#]{8,})/gi;
@@ -174,12 +176,28 @@ function collectHits(text: string, opts: RedactOptions): RawHit[] {
     while ((m = ASSIGNMENT_RE.exec(text)) !== null) {
       const value = m[1];
       const start = m.index + m[0].indexOf(value);
-      const end = start + value.length;
-      if (overlaps(start, end)) continue;
-      if (isAllowlisted(value, opts.allowlist)) continue;
-      if (shannonEntropy(value) < threshold) continue;
+      let end = start + value.length;
+      let match = value;
+      // The value class must include `/ : . = + ~` for base64/base64url/conn-string
+      // secrets, so a recognized RULES token (GitHub PAT, AWS key, …) glued on by
+      // one of those separators gets over-captured into this span. When that
+      // happens, DON'T drop the finding on overlap — the leading high-entropy
+      // secret would leak in cleartext (only the trailing token got masked, #100).
+      // Instead clip the span to end at the earliest claimed range within it and
+      // re-gate the leading fragment; the trailing token keeps its RULES redaction.
+      const overlapping = claimed.filter(([s, e]) => start < e && end > s);
+      if (overlapping.length > 0) {
+        // value's own start already sits inside a claimed secret → fully covered
+        if (overlapping.some(([s, e]) => s <= start && start < e)) continue;
+        const clipTo = Math.min(...overlapping.map(([s]) => s));
+        match = text.slice(start, clipTo).replace(/[^A-Za-z0-9]+$/, ''); // drop the trailing separator
+        end = start + match.length;
+        if (match.length < 8) continue; // clipped leading fragment too short to be a secret
+      }
+      if (isAllowlisted(match, opts.allowlist)) continue;
+      if (shannonEntropy(match) < threshold) continue;
       claimed.push([start, end]);
-      hits.push({ ruleId: 'high-entropy-assignment', description: 'High-entropy secret assignment', index: start, match: value });
+      hits.push({ ruleId: 'high-entropy-assignment', description: 'High-entropy secret assignment', index: start, match });
     }
   }
 
