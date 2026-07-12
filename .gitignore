@@ -170,6 +170,10 @@ hive-mind-prompt-*.txt
 # AgentDB vector-store runtime files (root + v3/) — data, never committed
 agentdb.rvf
 agentdb.rvf.lock
+# Stale runtime data + local-only dev config — never committed (privacy)
+.rufflo/
+data/clone-data.*
+/CLAUDE.local.md
 
 # Environment variables — block ALL .env variants except .example templates
 .env
