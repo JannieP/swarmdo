@@ -1003,6 +1003,7 @@ const bridgeCommand: Command = {
     { name: 'type', short: 't', description: 'agent type (register; default general-purpose)', type: 'string' },
     { name: 'task', description: 'one-line task summary (register)', type: 'string' },
     { name: 'live', description: 'comma-separated live Claude Code agent names (sync)', type: 'string' },
+    { name: 'prune', description: 'with sync: reap orphaned bound records (their Claude agent is gone)', type: 'boolean' },
     { name: 'format', description: 'output format: text|json', type: 'string' },
   ],
   examples: [
@@ -1072,7 +1073,14 @@ const bridgeCommand: Command = {
           output.writeln(output.bold('Bridge reconciliation'));
           output.writeln(`  mirrored:   ${rec.mirrored.join(', ') || '(none)'}`);
           output.writeln(`  unmirrored: ${rec.unmirrored.join(', ') || '(none)'}${rec.unmirrored.length ? '  → run `agent bridge register -n <name>` for each' : ''}`);
-          output.writeln(`  orphaned:   ${rec.orphaned.join(', ') || '(none)'}${rec.orphaned.length ? '  → their Claude agent is gone (stale)' : ''}`);
+          output.writeln(`  orphaned:   ${rec.orphaned.join(', ') || '(none)'}${rec.orphaned.length ? (ctx.flags.prune ? '' : '  → their Claude agent is gone (pass --prune to reap)') : ''}`);
+          if (ctx.flags.prune) {
+            const pruneRes = await callMCPTool<Record<string, unknown>>('agent_bridge_prune', { live });
+            const pruned = (pruneRes.pruned as string[]) || [];
+            output.writeln();
+            output.printSuccess(`Pruned ${pruned.length} orphaned bound record${pruned.length === 1 ? '' : 's'}${pruned.length ? ': ' + pruned.join(', ') : ''}`);
+            return { success: true, data: { ...res, prune: pruneRes } };
+          }
           return { success: true, data: res };
         }
         case 'advise': {

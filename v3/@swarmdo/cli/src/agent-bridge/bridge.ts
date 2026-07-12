@@ -120,6 +120,21 @@ export function reconcile(swarmdoAgents: SwarmdoAgentLike[], liveClaudeNames: st
   return { mirrored: uniqSort(mirrored), unmirrored: uniqSort(unmirrored), orphaned: uniqSort(orphaned) };
 }
 
+/**
+ * agentIds of Claude-Code-bound records whose bound agent is NOT in the live
+ * roster — the orphans to reap so stale bindings don't accumulate across
+ * sessions. Native (unbound) Swarmdo agents are never selected. Pure; sorted
+ * for deterministic pruning. Complements `reconcile` (which reports orphan
+ * NAMES) by giving the store keys the prune path deletes.
+ */
+export function orphanedAgentIds(swarmdoAgents: SwarmdoAgentLike[], liveClaudeNames: string[]): string[] {
+  const live = new Set(liveClaudeNames);
+  return swarmdoAgents
+    .filter((a) => isBound(a) && !live.has(a.config!.binding!.claudeName))
+    .map((a) => a.agentId)
+    .sort();
+}
+
 // ── prompt → swarm intent ───────────────────────────────────────────────────
 // Encodes the CLAUDE.md "AUTO-INVOKE SWARM" heuristic as a pure classifier so
 // the UserPromptSubmit hook can decide, deterministically, whether a prompt

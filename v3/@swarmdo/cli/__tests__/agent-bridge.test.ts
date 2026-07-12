@@ -4,6 +4,7 @@ import {
   buildSpawnInput,
   isBound,
   reconcile,
+  orphanedAgentIds,
   classifyPrompt,
   type ClaudeAgentDescriptor,
   type SwarmdoAgentLike,
@@ -85,6 +86,32 @@ describe('reconcile', () => {
     const r = reconcile([bound('z'), bound('a')], ['z', 'a', 'm']);
     expect(r.mirrored).toEqual(['a', 'z']);
     expect(r.unmirrored).toEqual(['m']);
+  });
+});
+
+describe('orphanedAgentIds', () => {
+  const bound = (name: string): SwarmdoAgentLike => ({
+    agentId: bridgeAgentId({ name, agentType: 'coder' }),
+    agentType: 'coder',
+    config: { binding: { origin: 'claude-code', claudeName: name, boundAt: NOW } },
+  });
+  const native: SwarmdoAgentLike = { agentId: 'agent-native', agentType: 'coder', config: {} };
+
+  it('returns the store ids of bound records whose Claude agent is gone', () => {
+    const store = [bound('alice'), bound('bob'), native];
+    // only alice is live → bob is orphaned; native is never selected
+    expect(orphanedAgentIds(store, ['alice'])).toEqual([bridgeAgentId({ name: 'bob', agentType: 'coder' })]);
+  });
+  it('selects nothing when every bound agent is live', () => {
+    expect(orphanedAgentIds([bound('a'), bound('b')], ['a', 'b'])).toEqual([]);
+  });
+  it('never selects native (unbound) Swarmdo agents even when live is empty', () => {
+    expect(orphanedAgentIds([native], [])).toEqual([]);
+  });
+  it('is sorted and empty-safe', () => {
+    const ids = orphanedAgentIds([bound('z'), bound('a')], []);
+    expect(ids).toEqual([...ids].sort());
+    expect(orphanedAgentIds([], [])).toEqual([]);
   });
 });
 

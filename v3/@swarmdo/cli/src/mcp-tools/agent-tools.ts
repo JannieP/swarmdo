@@ -10,7 +10,7 @@ import { join } from 'node:path';
 import { type MCPTool, getProjectCwd } from './types.js';
 import { validateIdentifier, validateText, validateAgentSpawn } from './validate-input.js';
 import { executeAgentTask } from './agent-execute-core.js';
-import { buildSpawnInput, reconcile, isBound, type SwarmdoAgentLike } from '../agent-bridge/bridge.js';
+import { buildSpawnInput, reconcile, isBound, orphanedAgentIds, type SwarmdoAgentLike } from '../agent-bridge/bridge.js';
 
 // Storage paths
 const STORAGE_DIR = '.swarmdo';
@@ -525,6 +525,52 @@ export const agentTools: MCPTool[] = [
         native,
         ...(reconciliation ? { reconciliation } : {}),
       };
+    },
+  },
+  {
+    name: 'agent_bridge_prune',
+    description:
+      "Reap orphaned Claude-Code-bound records — bound agents whose Claude Code agent is no longer live. Pass the CURRENT live Claude Code agent names as `live`; any bound record NOT in that list is removed from the agent store and from every swarm roster. Native (unbound) Swarmdo agents are never touched. Idempotent — use it to stop stale bindings accumulating across sessions.",
+    category: 'agent',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        live: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Current live Claude Code agent names; bound records not in this list are pruned',
+        },
+      },
+      required: ['live'],
+    },
+    handler: async (input) => {
+      const liveRaw = (input as Record<string, unknown>).live;
+      const live = Array.isArray(liveRaw) ? liveRaw.map(String) : [];
+      const all = Object.values(loadAllAgents()) as unknown as SwarmdoAgentLike[];
+      const toPrune = orphanedAgentIds(all, live);
+      if (toPrune.length === 0) return { pruned: [], count: 0 };
+      // Remove from the canonical agent store (bound records always live here).
+      const store = loadAgentStore();
+      for (const id of toPrune) delete store.agents[id];
+      saveAgentStore(store);
+      // Remove from any swarm roster so swarm_status doesn't report ghosts.
+      try {
+        const { loadSwarmStore: _loadSwarmStore, saveSwarmStore: _saveSwarmStore } = await import('./swarm-tools.js');
+        const swarmStore = _loadSwarmStore();
+        const pruneSet = new Set(toPrune);
+        let changed = false;
+        for (const swarm of Object.values(swarmStore.swarms)) {
+          if (Array.isArray(swarm.agents)) {
+            const before = swarm.agents.length;
+            swarm.agents = swarm.agents.filter((a: string) => !pruneSet.has(a));
+            if (swarm.agents.length !== before) changed = true;
+          }
+        }
+        if (changed) _saveSwarmStore(swarmStore);
+      } catch {
+        /* swarm store optional — records already removed from the agent store */
+      }
+      return { pruned: toPrune, count: toPrune.length };
     },
   },
   {
