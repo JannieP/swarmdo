@@ -16,6 +16,7 @@ import { execFileSync } from 'node:child_process';
 import type { Command, CommandContext, CommandResult } from '../types.js';
 import { output } from '../output.js';
 import { parseGitLog, computeHotspots, formatHotspots, hotspotsToCsv, type SortKey } from '../hotspots/hotspots.js';
+import { normalizeSince } from '../util/since.js';
 
 const SORT_KEYS: SortKey[] = ['risk', 'churn', 'commits', 'authors'];
 
@@ -44,7 +45,7 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
   // `%an`) resolves author names through `.mailmap`, so name/email variants of
   // the same person fold into one identity — otherwise the author-spread factor
   // in the risk score is silently inflated. Identical to `%an` when no .mailmap.
-  const args = ['log', '--no-merges', '--numstat', `--since=${since}`, '--format=format:%x01%H%x1f%aN%x1f%aI'];
+  const args = ['log', '--no-merges', '--numstat', `--since=${normalizeSince(since)}`, '--format=format:%x01%H%x1f%aN%x1f%aI'];
   if (pathArg) args.push('--', pathArg);
   let raw: string;
   try {
