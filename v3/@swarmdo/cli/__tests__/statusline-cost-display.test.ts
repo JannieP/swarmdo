@@ -53,7 +53,11 @@ function renderHeader(env: Record<string, string> = {}): string {
     const out = execFileSync(process.execPath, [scriptPath], {
       input: payload,
       encoding: 'utf-8',
-      env: { PATH: '/nonexistent', HOME: dir, ...env },
+      // SWARMDO_STATUSLINE_NO_CLI keeps this hermetic: the script probes absolute
+      // global-node_modules paths (/opt/homebrew, /usr/local) that PATH-neutering
+      // can't block, so on a dev box with a global install it would fork the real
+      // CLI (slow + disturbs the stdin cost payload). NO_CLI skips that fork.
+      env: { PATH: '/nonexistent', HOME: dir, SWARMDO_STATUSLINE_NO_CLI: '1', ...env },
       timeout: 15000,
     });
     return stripAnsi(out).split('\n')[0];

@@ -2728,6 +2728,7 @@ Claude Code pipes JSON session data via **stdin** to the statusline script after
 |----------|--------|---------|
 | `SWARMDO_STATUSLINE_COST_SYMBOL` | Overrides the leading `$`. Set to an empty string to show the number alone. | `SWARMDO_STATUSLINE_COST_SYMBOL=⚡` → `⚡1.30` |
 | `SWARMDO_STATUSLINE_HIDE_COST` | `1`/`true`/`yes`/`on` removes the segment entirely. | `SWARMDO_STATUSLINE_HIDE_COST=1` |
+| `SWARMDO_STATUSLINE_NO_CLI` | Skip the per-render CLI delegation (no subprocess fork): render from local reads + Claude Code's stdin only. Faster and fork-free; detail rows use local fallbacks. | `SWARMDO_STATUSLINE_NO_CLI=1` |
 
 Set them in the `env` block of `.claude/settings.json` — Claude Code applies it to every session and to the statusline subprocess, and unlike hand-editing the helper it survives `npx swarmdo@latest init --update`:
 

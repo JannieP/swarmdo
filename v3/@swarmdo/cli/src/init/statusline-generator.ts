@@ -170,7 +170,7 @@ function resolveCliBin() {
     ];
     try {
       const binDir = path.dirname(process.execPath);
-      const globalModuleDirs = [path.join(binDir, '..', 'lib', 'node_modules'), path.join(binDir, 'node_modules')];
+      const globalModuleDirs = [path.join(binDir, '..', 'lib', 'node_modules'), path.join(binDir, 'node_modules'), '/opt/homebrew/lib/node_modules', '/usr/local/lib/node_modules'];
       for (const prefix of [process.env.npm_config_prefix, process.env.PREFIX, path.join(home, '.npm-global')]) {
         if (prefix) globalModuleDirs.push(path.join(prefix, 'lib', 'node_modules'));
       }
@@ -213,6 +213,13 @@ function writeCache(data) {
  * and only counted ADRs in v3/implementation/adrs/ (missed v3/docs/adr/).
  */
 function getStatuslineData() {
+  // SWARMDO_STATUSLINE_NO_CLI: skip the CLI-delegation fork and render from local
+  // reads + stdin only. A cold render otherwise forks the hooks-statusline CLI
+  // (now more reachable via the global-node_modules probes below), and that fork
+  // can disturb the stdin cost payload; skipping it keeps renders fast, hermetic,
+  // and subprocess-free. Set by the statusline tests; usable by anyone who wants
+  // a no-fork statusline.
+  if (process.env.SWARMDO_STATUSLINE_NO_CLI) return buildLocalFallback();
   const cached = readCache();
   if (cached) return cached;
 
@@ -596,7 +603,7 @@ function getPkgVersion() {
     // (bin/node_modules) layouts.
     try {
       const binDir = path.dirname(process.execPath);
-      const globalModuleDirs = [path.join(binDir, '..', 'lib', 'node_modules'), path.join(binDir, 'node_modules')];
+      const globalModuleDirs = [path.join(binDir, '..', 'lib', 'node_modules'), path.join(binDir, 'node_modules'), '/opt/homebrew/lib/node_modules', '/usr/local/lib/node_modules'];
       // #2221 follow-up: a custom npm prefix (e.g. ~/.npm-global) is decoupled from
       // the node binary location, so the binDir-derived probes above all miss. Also
       // probe the npm prefix from the environment and the common ~/.npm-global default.

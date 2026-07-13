@@ -148,6 +148,13 @@ function writeCache(data) {
  * and only counted ADRs in v3/implementation/adrs/ (missed v3/docs/adr/).
  */
 function getStatuslineData() {
+  // SWARMDO_STATUSLINE_NO_CLI: skip the CLI-delegation fork and render from local
+  // reads + stdin only. A cold render otherwise forks the hooks-statusline CLI
+  // (now more reachable via the global-node_modules probes below), and that fork
+  // can disturb the stdin cost payload; skipping it keeps renders fast, hermetic,
+  // and subprocess-free. Set by the statusline tests; usable by anyone who wants
+  // a no-fork statusline.
+  if (process.env.SWARMDO_STATUSLINE_NO_CLI) return buildLocalFallback();
   const cached = readCache();
   if (cached) return cached;
 
@@ -515,7 +522,7 @@ function getCostFromStdin() {
 // misses, the displayed version is meaningful (matches what the user
 // installed), not a stale hard-coded string.
 function getPkgVersion() {
-  let ver = '1.19.0';
+  let ver = '1.58.0';
   try {
     const home = os.homedir();
     const pkgPaths = [
