@@ -105,7 +105,7 @@ function resolveCliBin() {
     ];
     try {
       const binDir = path.dirname(process.execPath);
-      const globalModuleDirs = [path.join(binDir, '..', 'lib', 'node_modules'), path.join(binDir, 'node_modules')];
+      const globalModuleDirs = [path.join(binDir, '..', 'lib', 'node_modules'), path.join(binDir, 'node_modules'), '/opt/homebrew/lib/node_modules', '/usr/local/lib/node_modules'];
       for (const prefix of [process.env.npm_config_prefix, process.env.PREFIX, path.join(home, '.npm-global')]) {
         if (prefix) globalModuleDirs.push(path.join(prefix, 'lib', 'node_modules'));
       }
@@ -531,7 +531,7 @@ function getPkgVersion() {
     // (bin/node_modules) layouts.
     try {
       const binDir = path.dirname(process.execPath);
-      const globalModuleDirs = [path.join(binDir, '..', 'lib', 'node_modules'), path.join(binDir, 'node_modules')];
+      const globalModuleDirs = [path.join(binDir, '..', 'lib', 'node_modules'), path.join(binDir, 'node_modules'), '/opt/homebrew/lib/node_modules', '/usr/local/lib/node_modules'];
       // #2221 follow-up: a custom npm prefix (e.g. ~/.npm-global) is decoupled from
       // the node binary location, so the binDir-derived probes above all miss. Also
       // probe the npm prefix from the environment and the common ~/.npm-global default.
