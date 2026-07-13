@@ -37,10 +37,26 @@ export function saveMailbox(cwd: string, box: Mailbox): void {
   writeFileSync(p, JSON.stringify(box, null, 2) + '\n', 'utf-8');
 }
 
-/** This session's name: explicit override → SWARMDO_SESSION → hostname → "me". */
+/**
+ * This session's name, in precedence order:
+ *   explicit override (flag/param)
+ *   → $SWARMDO_SESSION   (set by Claude Code)
+ *   → $SWARMDO_AGENT     (harness-neutral — Codex/Copilot/pi agents export this)
+ *   → hostname → "me".
+ *
+ * The $SWARMDO_AGENT fallback lets a non-Claude agent declare a stable identity
+ * once (instead of passing `from`/`--self` on every call); without it, every
+ * agent on a host collapses to the shared hostname and direct addressing breaks.
+ */
 export function resolveSelf(flag?: unknown): string {
   const f = typeof flag === 'string' ? flag.trim() : '';
-  return f || (process.env.SWARMDO_SESSION || '').trim() || hostname() || 'me';
+  return (
+    f ||
+    (process.env.SWARMDO_SESSION || '').trim() ||
+    (process.env.SWARMDO_AGENT || '').trim() ||
+    hostname() ||
+    'me'
+  );
 }
 
 /** Crypto-strong message id. */

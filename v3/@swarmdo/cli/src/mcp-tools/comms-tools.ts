@@ -15,7 +15,7 @@ export const commsTools: MCPTool[] = [
   {
     name: 'comms_send',
     description:
-      'Send a message to another Claude Code session working on the same repo (cross-session mailbox). Address "all" to broadcast to every session. Use for multi-session/"multiplayer" coordination; delivery is via a shared file, not the network.',
+      'Send a message to another agent session — Claude Code, Codex, Copilot, pi, or any tool on the same repo (a cross-session/cross-tool mailbox). Address "all" to broadcast to every session. Use for multi-agent "multiplayer" coordination; delivery is via a shared file, not the network.',
     category: 'comms',
     inputSchema: {
       type: 'object',
@@ -23,7 +23,7 @@ export const commsTools: MCPTool[] = [
         to: { type: 'string', description: 'Recipient session name, or "all" to broadcast' },
         message: { type: 'string', description: 'Message body' },
         subject: { type: 'string', description: 'Optional subject line' },
-        from: { type: 'string', description: 'Sender name (default: this session — $SWARMDO_SESSION or hostname)' },
+        from: { type: 'string', description: 'Sender name. Default: this session ($SWARMDO_SESSION, else $SWARMDO_AGENT, else hostname). Non-Claude agents should pass this (or export $SWARMDO_AGENT) so replies address them, not the shared hostname.' },
       },
       required: ['to', 'message'],
     },
@@ -52,12 +52,12 @@ export const commsTools: MCPTool[] = [
   {
     name: 'comms_inbox',
     description:
-      'List messages other sessions have sent to this session (cross-session mailbox), newest first. Includes "all" broadcasts. Set markRead to acknowledge them.',
+      'List messages other agent sessions (Claude Code, Codex, Copilot, pi, …) have sent to this one — a cross-session/cross-tool mailbox — newest first. Includes "all" broadcasts. Set markRead to acknowledge them.',
     category: 'comms',
     inputSchema: {
       type: 'object',
       properties: {
-        to: { type: 'string', description: 'Whose inbox (default: this session)' },
+        to: { type: 'string', description: 'Whose inbox (default: this session — $SWARMDO_SESSION, else $SWARMDO_AGENT, else hostname)' },
         unreadOnly: { type: 'boolean', description: 'Only unread messages' },
         from: { type: 'string', description: 'Only messages from this sender' },
         since: { type: 'string', description: 'Only messages after this ISO-8601 timestamp' },

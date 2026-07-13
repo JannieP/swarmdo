@@ -55,6 +55,17 @@ describe('integrations: generated docs', () => {
       expect(md).toContain(marker);
     }
   });
+  it('AGENTS.md advertises the latest cross-harness features so Codex/Copilot/pi can find them', () => {
+    const md = crossAgentAgentsMd();
+    // cross-agent mailbox (the coordination primitive) + git-analysis suite + standup
+    for (const marker of ['comms_send', 'comms_inbox', 'hotspots', 'coupling', 'ownership', 'standup']) {
+      expect(md).toContain(marker);
+    }
+    // non-Claude agents told how to get a stable identity
+    expect(md).toContain('SWARMDO_AGENT');
+    // framed for every AGENTS.md-aware CLI, not just Claude Code
+    for (const cli of ['Codex', 'Copilot', 'pi']) expect(md).toContain(cli);
+  });
   it('copilot instructions point at AGENTS.md', () => {
     expect(copilotInstructionsMd()).toContain('AGENTS.md');
   });

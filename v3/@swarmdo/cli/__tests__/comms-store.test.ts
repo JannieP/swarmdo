@@ -7,15 +7,20 @@ import { addMessage, createMessage, emptyMailbox } from '../src/comms/mailbox.ts
 
 let dir: string;
 let prevSession: string | undefined;
+let prevAgent: string | undefined;
 
 beforeEach(() => {
   dir = mkdtempSync(join(tmpdir(), 'swarmdo-comms-'));
   prevSession = process.env.SWARMDO_SESSION;
+  prevAgent = process.env.SWARMDO_AGENT;
   delete process.env.SWARMDO_SESSION;
+  delete process.env.SWARMDO_AGENT;
 });
 afterEach(() => {
   if (prevSession === undefined) delete process.env.SWARMDO_SESSION;
   else process.env.SWARMDO_SESSION = prevSession;
+  if (prevAgent === undefined) delete process.env.SWARMDO_AGENT;
+  else process.env.SWARMDO_AGENT = prevAgent;
   try { rmSync(dir, { recursive: true, force: true }); } catch { /* ignore */ }
 });
 
@@ -46,6 +51,16 @@ describe('comms/store: resolveSelf precedence', () => {
     process.env.SWARMDO_SESSION = 'envname';
     expect(resolveSelf(undefined)).toBe('envname');
     expect(resolveSelf('  ')).toBe('envname'); // blank flag ignored
+  });
+  it('falls back to $SWARMDO_AGENT (harness-neutral) when SWARMDO_SESSION is unset', () => {
+    process.env.SWARMDO_AGENT = 'codex-1';
+    expect(resolveSelf()).toBe('codex-1');
+    expect(resolveSelf('  ')).toBe('codex-1'); // blank flag ignored
+  });
+  it('$SWARMDO_SESSION wins over $SWARMDO_AGENT (Claude Code identity preserved)', () => {
+    process.env.SWARMDO_SESSION = 'claude-sess';
+    process.env.SWARMDO_AGENT = 'codex-1';
+    expect(resolveSelf()).toBe('claude-sess');
   });
   it('falls back to hostname when neither flag nor env is set', () => {
     expect(resolveSelf()).toBe(hostname());

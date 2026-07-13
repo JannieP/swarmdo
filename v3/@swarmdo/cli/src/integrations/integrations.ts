@@ -67,23 +67,34 @@ export function crossAgentAgentsMd(): string {
 ## What swarmdo gives you
 
 This project is wired to **swarmdo** — agent orchestration with persistent
-vector memory, swarm coordination, and 300+ MCP tools.
+vector memory, swarm coordination, cross-agent messaging, and 300+ MCP tools.
+Everything below works the same from Codex, Copilot, pi, or a plain shell —
+not just Claude Code.
 
-- **MCP server**: \`swarmdo mcp start\` (stdio). If your CLI supports MCP,
-  \`swarmdo integrations install <your-cli>\` wires it; key tools:
-  \`memory_search\`, \`memory_store\`, \`swarm_init\`, \`agent_spawn\`.
+- **MCP server**: \`swarmdo mcp start\` (stdio; serves every tool by default).
+  If your CLI supports MCP, \`swarmdo integrations install <your-cli>\` wires
+  it. Key tools: \`memory_search\`, \`memory_store\`, \`swarm_init\`,
+  \`agent_spawn\`, \`comms_send\` / \`comms_inbox\` (message other agents),
+  \`hotspots\` / \`coupling\` / \`ownership\` (git-history analysis).
 - **CLI**: \`npx swarmdo@latest <command>\` — \`memory search -q "topic"\`,
-  \`usage\`, \`task\`, \`hud\`, \`security scan\`, \`config lint\`.
+  \`comms send\` / \`comms inbox\`, \`standup\`, \`hotspots\`, \`coupling\`,
+  \`ownership\`, \`hidden-coupling\`, \`task\`, \`hud\`.
 
 ## Working agreement (any agent)
 
 1. **Search memory BEFORE starting**: \`memory_search(query="task keywords")\`
    — patterns with score > 0.7 are load-bearing precedent.
-2. **You are the executor** — swarmdo coordinates and remembers; it never
+2. **Coordinate through the cross-tool mailbox**: announce the files you're
+   about to change with \`comms_send(to="all", message="…")\` and check
+   \`comms_inbox\` before overlapping work. Non-Claude agents: set a stable
+   identity with \`export SWARMDO_AGENT=<your-name>\` (or pass \`from\` /
+   \`--self\`) so replies address you — without it every agent on this host
+   shares the hostname identity.
+3. **You are the executor** — swarmdo coordinates and remembers; it never
    writes your code for you.
-3. **Store what worked AFTER success**:
+4. **Store what worked AFTER success**:
    \`memory_store(key="pattern-…", value="what worked", namespace="patterns")\`.
-4. Claude Code users: the same surfaces are namespaced under \`/sDo:\`
+5. Claude Code users: the same surfaces are namespaced under \`/sDo:\`
    commands and \`/sdo-\` skills.
 
 ## Do not
