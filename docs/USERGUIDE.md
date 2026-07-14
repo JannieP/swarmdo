@@ -2257,16 +2257,17 @@ npx swarmdo@latest worker status
 </details>
 
 <details>
-<summary>☁️ <strong>LLM Providers</strong> — 5 providers (Anthropic, OpenAI, Google, Cohere, Ollama) with automatic failover</summary>
+<summary>☁️ <strong>LLM Providers</strong> — Anthropic, OpenAI, Google, Ollama, and OpenRouter with automatic failover</summary>
 
-| Provider | Models | Features | Cost |
-|----------|--------|----------|------|
-| **Anthropic** | Claude Opus 4, Claude Sonnet 4, Claude Haiku 3.5 | Native, streaming, tool calling, extended thinking | $1-15/1M tokens |
-| **OpenAI** | GPT-4o, o3-mini, o1 | 128K context, reasoning chains, function calling | $0.15-60/1M tokens |
-| **Google** | Gemini 2.0 Flash, Gemini 1.5 Pro | 1M+ context, multimodal, grounding | $0.075-7/1M tokens |
-| **xAI** | Grok 3, Grok 3 Mini | Real-time data, reasoning, large context | $2-10/1M tokens |
-| **Mistral** | Mistral Large 2, Codestral | Open-weight, efficient MoE architecture | $0.50-8/1M tokens |
-| **Meta/Ollama** | Llama 3.3, DeepSeek V3, Qwen 2.5 | Local, free, open-weight | Free |
+> **Model names and pricing move fast**, so this lists the supported *providers* and links each to its live model catalogue rather than hard-coding models (and per-token prices) that go stale. Manage them with `swarmdo providers` (`list`, `add`, `configure`, `test`).
+
+| Provider | Current models | Notes |
+|----------|----------------|-------|
+| **Anthropic** | [Model catalogue →](https://docs.claude.com/en/docs/about-claude/models/overview) | Default. Native Claude Code integration, streaming, tool calling, extended thinking. `ANTHROPIC_API_KEY` |
+| **OpenAI** | [Model catalogue →](https://platform.openai.com/docs/models) | LLM + embeddings, reasoning models, function calling. `OPENAI_API_KEY` |
+| **Google (Gemini)** | [Model catalogue →](https://ai.google.dev/gemini-api/docs/models) | Long context, multimodal, grounding. `GOOGLE_API_KEY` |
+| **Ollama** | [Model library →](https://ollama.com/library) | Local, or Ollama Cloud — run open-weight models (Llama, Qwen, DeepSeek, …). `OLLAMA_API_KEY` for cloud |
+| **OpenRouter** | [Model catalogue →](https://openrouter.ai/models) | One key, any model slug; the pool is tier-mapped in `swarmdo.config.json`. `OPENROUTER_API_KEY` |
 
 <details>
 <summary>⚖️ <strong>Provider Load Balancing</strong> — 4 strategies for optimal cost and performance</summary>
