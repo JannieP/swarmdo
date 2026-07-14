@@ -400,7 +400,7 @@ Run `swarmdo preset info efficiency` for the full guide. Both are **user-invoked
 | `embeddings` | 4 | Vector embeddings (embed, batch, search, init) — agentic-flow ONNX backend (speedup unverified, no benchmark) |
 | `usage` | 10 | Claude Code token/cost analytics from local transcripts (daily, weekly, monthly, models, projects, sessions, 5h `blocks` w/ live burn, `errors` tool-failure analytics, `cache` prompt-cache efficiency + $ saved, `guard` budget policy, `reflect` wrapped-style retrospective, `limits` quota-cap forecaster; alias: `cost`) |
 | `repair` | 1 | Test-Driven Repair — bounded, budget-capped headless claude loop fixes source until a failing test passes (alias: `tdd-repair`; dry-run without `--confirm`) |
-| `integrations` | 2 | Wire swarmdo into Codex CLI / Copilot CLI / pi (AGENTS.md + per-CLI MCP config, idempotent merges; alias `integrate`; NEVER touches .claude/.mcp.json/CLAUDE.md) |
+| `integrations` | 3 | Wire swarmdo into Codex CLI / Copilot CLI / pi (AGENTS.md + per-CLI MCP config, idempotent merges); `integrations skills` deploys a curated ~20 cross-agent SKILL.md skills to `~/.agents` / `~/.codex` / `~/.pi` (idempotent + reversible, manifest-scoped remove); alias `integrate`; NEVER touches .claude/.mcp.json/CLAUDE.md |
 | `hud` | 1 | Single-pane operational HUD: 5h block burn, task readiness, daemon workers, memory snapshots (`--watch`, `--json`) |
 | `preset` | 3 | Named config tiers for init (`list`/`info`/`show`): minimal→basic→standard→advanced→max; `preset info efficiency` documents the caveman + ponytail skills. Apply: `init --preset <name>` |
 | `claims` | 4 | Claims-based authorization (check, grant, revoke, list) |
