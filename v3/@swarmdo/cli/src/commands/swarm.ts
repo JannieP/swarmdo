@@ -354,6 +354,9 @@ const initCommand: Command = {
       }>('swarm_init', {
         topology: topology as 'hierarchical' | 'mesh' | 'adaptive' | 'collective' | 'hierarchical-mesh',
         maxAgents,
+        // A one-shot CLI process is not a lasting host — create a persistent
+        // (pid-less) swarm so it isn't reaped the instant `swarm init` exits.
+        persistent: true,
         config: {
           communicationProtocol: 'message-bus',
           consensusMechanism: 'majority',
@@ -535,6 +538,7 @@ const startCommand: Command = {
         topology: 'hierarchical',
         maxAgents: totalAgents,
         strategy: strategy === 'development' ? 'specialized' : strategy,
+        persistent: true, // CLI process is ephemeral — pid-less swarm survives exit
       });
       spinner.succeed('Swarm initialized via MCP');
     } catch (err) {
@@ -869,6 +873,7 @@ const coordinateCommand: Command = {
         topology: 'hierarchical-mesh',
         maxAgents: agentCount,
         strategy: 'specialized',
+        persistent: true, // CLI process is ephemeral — pid-less swarm survives exit
       });
       output.printSuccess(`Swarm coordination initialized with ${agentCount} agent slots via MCP`);
     } catch {

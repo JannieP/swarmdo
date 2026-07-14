@@ -228,6 +228,7 @@ export const swarmTools: MCPTool[] = [
         maxAgents: { type: 'number', description: 'Maximum number of agents (1-50)' },
         strategy: { type: 'string', description: 'Agent strategy (specialized, balanced, adaptive)' },
         config: { type: 'object', description: 'Additional swarm configuration' },
+        persistent: { type: 'boolean', description: 'Create a persistent (pid-less) swarm that survives the creating process — set by the CLI, whose process is ephemeral. Reaped by the 24h idle-TTL instead of on-exit. Leave unset from a long-lived host (MCP server/daemon) so a dead host is reaped promptly.' },
       },
     },
     handler: async (input) => {
@@ -249,6 +250,7 @@ export const swarmTools: MCPTool[] = [
           maxAgents: input.maxAgents as number | undefined,
           strategy,
           config: (input.config || {}) as Record<string, unknown>,
+          persistent: input.persistent as boolean | undefined,
         });
       } catch (e) {
         return { success: false, error: (e as Error).message };

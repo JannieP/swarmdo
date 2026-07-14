@@ -182,7 +182,7 @@ import { performanceTools } from '../src/mcp-tools/performance-tools.js';
 import { progressTools } from '../src/mcp-tools/progress-tools.js';
 import { securityTools } from '../src/mcp-tools/security-tools.js';
 import { sessionTools } from '../src/mcp-tools/session-tools.js';
-import { swarmTools } from '../src/mcp-tools/swarm-tools.js';
+import { swarmTools, loadSwarmStore } from '../src/mcp-tools/swarm-tools.js';
 import { systemTools } from '../src/mcp-tools/system-tools.js';
 import { taskTools } from '../src/mcp-tools/task-tools.js';
 import { terminalTools } from '../src/mcp-tools/terminal-tools.js';
@@ -580,6 +580,20 @@ describe('MCP Tools Deep Test Suite', () => {
       expect(result.success).toBe(true);
       expect(result.swarmId).toBeDefined();
       expect(result.persisted).toBe(true);
+    });
+
+    it('swarm_init persistent:true omits the host pid (survives ephemeral CLI processes)', async () => {
+      // Regression: a one-shot `swarmdo swarm init` stamped its own (dying) pid,
+      // so the swarm was reaped as an orphan the instant the command exited and
+      // the statusline showed "Swarms 0". persistent:true creates a pid-less
+      // swarm reaped only by the 24h idle-TTL; the long-lived-host path (no flag)
+      // still stamps its pid so a dead host is reaped promptly.
+      const tool = swarmTools.find(t => t.name === 'swarm_init')!;
+      const persistent: any = await tool.handler({ topology: 'star', persistent: true });
+      const hosted: any = await tool.handler({ topology: 'star' });
+      const store = loadSwarmStore();
+      expect(store.swarms[persistent.swarmId].pid).toBeUndefined();
+      expect(store.swarms[hosted.swarmId].pid).toBe(process.pid);
     });
 
     it('swarm_status returns running status after init', async () => {
