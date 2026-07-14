@@ -4,9 +4,9 @@
 
 # Swarmdo User Guide
 
-> Complete reference documentation for Swarmdo v3.7. For a quick overview, see the [README](../README.md).
+> Complete reference documentation for Swarmdo. For a quick overview, see the [README](../README.md).
 >
-> **Latest:** `npx swarmdo@latest --version` → **3.7.0-alpha.8**. See [What's new in 3.7](#whats-new-in-37) below.
+> **Version:** run `npx swarmdo@latest --version` for the installed release. See [What's new](#whats-new) below.
 
 ---
 
@@ -26,7 +26,7 @@
 - [Configuration & Reference](#%EF%B8%8F-configuration--reference)
 - [Help & Resources](#-help--resources)
 - [Operational Toolkit (v1.3 to v1.4)](#operational-toolkit-v13-to-v14)
-- [What's new in 3.7](#whats-new-in-37)
+- [What's new](#whats-new)
 
 ---
 
@@ -154,9 +154,9 @@ swarmdo memory import -i ./vault -f obsidian      # edited vault → DB (re-embe
 
 ---
 
-## What's new in 3.7
+## What's new
 
-Recent releases (3.7.0-alpha.1 through alpha.8) shipped four substantial pieces. End-user CLI surface is unchanged — these are substrate improvements that compound on every existing feature.
+Recent releases (1.58.7 through alpha.8) shipped four substantial pieces. End-user CLI surface is unchanged — these are substrate improvements that compound on every existing feature.
 
 ### `@swarmdo/cli-core` (alpha.5+) — fast lite path for plugin scripts
 
@@ -533,7 +533,7 @@ const config = optimizer.getOptimalConfig(agentCount);
 <details>
 <summary>🛡️ <strong>Anti-Drift Swarm Configuration</strong> — Prevent goal drift in multi-agent work</summary>
 
-Complex swarms can drift from their original goals. Swarmdo V3 includes anti-drift defaults that prevent agents from going off-task.
+Complex swarms can drift from their original goals. Swarmdo includes anti-drift defaults that prevent agents from going off-task.
 
 **Recommended Configuration:**
 
@@ -844,7 +844,7 @@ The **Intelligence Loop** (ADR-050) automates this cycle through hooks. Each ses
 
 | Category | Examples |
 |----------|----------|
-| **V3 Core** | `$v3-security-overhaul`, `$v3-memory-unification`, `$v3-performance-optimization` |
+| **Core** | `$hooks-automation`, `$skill-builder`, `$stream-chain` |
 | **AgentDB** | `$agentdb-vector-search`, `$agentdb-optimization`, `$agentdb-learning` |
 | **Swarm** | `$swarm-orchestration`, `$swarm-advanced`, `$hive-mind-advanced` |
 | **GitHub** | `$github-code-review`, `$github-workflow-automation`, `$github-multi-repo` |
@@ -917,13 +917,13 @@ Once added, Claude Code can use all 313 swarmdo MCP tools directly:
 ## What is it exactly? Agents that learn, build and work perpetually. 
 
 <details>
-<summary>🆚 <strong>Why Swarmdo v3?</strong></summary>
+<summary>🆚 <strong>Why Swarmdo?</strong></summary>
 
-Swarmdo v3 introduces **self-learning neural capabilities** that no other agent orchestration framework offers. While competitors require manual agent configuration and static routing, Swarmdo learns from every task execution, prevents catastrophic forgetting of successful patterns, and intelligently routes work to specialized experts.
+Swarmdo introduces **self-learning neural capabilities** that no other agent orchestration framework offers. While competitors require manual agent configuration and static routing, Swarmdo learns from every task execution, prevents catastrophic forgetting of successful patterns, and intelligently routes work to specialized experts.
 
 #### 🧠 Neural & Learning
 
-| Feature | Swarmdo v3 | CrewAI | LangGraph | AutoGen | Manus |
+| Feature | Swarmdo | CrewAI | LangGraph | AutoGen | Manus |
 |---------|----------------|--------|-----------|---------|-------|
 | **Self-Learning** | ✅ SONA + EWC++ | ⛔ | ⛔ | ⛔ | ⛔ |
 | **Prevents Forgetting** | ✅ EWC++ consolidation | ⛔ | ⛔ | ⛔ | ⛔ |
@@ -934,7 +934,7 @@ Swarmdo v3 introduces **self-learning neural capabilities** that no other agent 
 
 #### 💾 Memory & Embeddings
 
-| Feature | Swarmdo v3 | CrewAI | LangGraph | AutoGen | Manus |
+| Feature | Swarmdo | CrewAI | LangGraph | AutoGen | Manus |
 |---------|----------------|--------|-----------|---------|-------|
 | **Vector Memory** | ✅ HNSW (sub-ms search) | ⛔ | Via plugins | ⛔ | ⛔ |
 | **Knowledge Graph** | ✅ PageRank + communities | ⛔ | ⛔ | ⛔ | ⛔ |
@@ -949,7 +949,7 @@ Swarmdo v3 introduces **self-learning neural capabilities** that no other agent 
 
 #### 🐝 Swarm & Coordination
 
-| Feature | Swarmdo v3 | CrewAI | LangGraph | AutoGen | Manus |
+| Feature | Swarmdo | CrewAI | LangGraph | AutoGen | Manus |
 |---------|----------------|--------|-----------|---------|-------|
 | **Swarm Topologies** | ✅ 4 types | 1 | 1 | 1 | 1 |
 | **Consensus Protocols** | ✅ 5 (Raft, BFT, etc.) | ⛔ | ⛔ | ⛔ | ⛔ |
@@ -959,7 +959,7 @@ Swarmdo v3 introduces **self-learning neural capabilities** that no other agent 
 
 #### 🔧 Developer Experience
 
-| Feature | Swarmdo v3 | CrewAI | LangGraph | AutoGen | Manus |
+| Feature | Swarmdo | CrewAI | LangGraph | AutoGen | Manus |
 |---------|----------------|--------|-----------|---------|-------|
 | **MCP Integration** | ✅ Native (313 tools) | ⛔ | ⛔ | ⛔ | ⛔ |
 | **Skills System** | ✅ 42+ pre-built | ⛔ | ⛔ | ⛔ | Limited |
@@ -969,7 +969,7 @@ Swarmdo v3 introduces **self-learning neural capabilities** that no other agent 
 
 #### 🛡️ Security & Platform
 
-| Feature | Swarmdo v3 | CrewAI | LangGraph | AutoGen | Manus |
+| Feature | Swarmdo | CrewAI | LangGraph | AutoGen | Manus |
 |---------|----------------|--------|-----------|---------|-------|
 | **Threat Detection** | ✅ AIDefence (<10ms) | ⛔ | ⛔ | ⛔ | ⛔ |
 | **Cloud Platform** | ✅ Flow Nexus | ⛔ | ⛔ | ⛔ | ⛔ |
@@ -1226,9 +1226,9 @@ flowchart LR
 </details>
 
 <details>
-<summary>🧠 <strong>AgentDB v3 Controllers</strong> — 20+ intelligent memory controllers</summary>
+<summary>🧠 <strong>AgentDB Controllers</strong> — 20+ intelligent memory controllers</summary>
 
-Swarmdo V3 integrates AgentDB v3 (3.0.0-alpha.13) providing 20+ memory controllers accessible via MCP tools and the CLI. As of `@swarmdo/cli@3.7.0-alpha.8`, the integration includes the new Cypher-routed delete API (`deleteNode`, `deleteEdge`, `deleteEdgesByEndpoints`, `deleteHyperedge`, plus `ReflexionMemory.deleteEpisode`) for full re-index support.
+Swarmdo integrates AgentDB (3.0.0-alpha.13) providing 20+ memory controllers accessible via MCP tools and the CLI. As of `@swarmdo/cli@1.58.7`, the integration includes the new Cypher-routed delete API (`deleteNode`, `deleteEdge`, `deleteEdgesByEndpoints`, `deleteHyperedge`, plus `ReflexionMemory.deleteEpisode`) for full re-index support.
 
 **Core Memory:**
 
@@ -1774,7 +1774,7 @@ Pre-built agents for every development task, from coding to security audits.
 | Category | Agent Count | Key Agents | Purpose |
 |----------|-------------|------------|---------|
 | **Core Development** | 5 | coder, reviewer, tester, planner, researcher | Daily development tasks |
-| **V3 Specialized** | 10 | queen-coordinator, security-architect, memory-specialist | Enterprise orchestration |
+| **Specialized** | 10 | queen-coordinator, security-architect, memory-specialist | Enterprise orchestration |
 | **Swarm Coordination** | 5 | hierarchical-coordinator, mesh-coordinator, adaptive-coordinator | Multi-agent patterns |
 | **Consensus & Distributed** | 7 | byzantine-coordinator, raft-manager, gossip-coordinator | Fault-tolerant coordination |
 | **Performance** | 5 | perf-analyzer, performance-benchmarker, task-orchestrator | Optimization & monitoring |
@@ -1928,7 +1928,7 @@ Full MCP server with tools for coordination, monitoring, memory, and GitHub inte
 | **GitHub** | `github_swarm`, `repo_analyze`, `pr_enhance`, `issue_triage`, `code_review` | Repository integration |
 | **Workers** | `worker/run`, `worker/status`, `worker/alerts`, `worker/history` | Background task management |
 | **Hooks** | `hooks/pre-*`, `hooks/post-*`, `hooks/route`, `hooks/session-*`, `hooks/teammate-*`, `hooks/task-*` | 33 lifecycle hooks |
-| **Progress** | `progress/check`, `progress/sync`, `progress/summary`, `progress/watch` | V3 implementation tracking |
+| **Progress** | `progress/check`, `progress/sync`, `progress/summary`, `progress/watch` | implementation tracking |
 
 </details>
 
@@ -2333,7 +2333,7 @@ npx swarmdo@latest worker status
 | `workflow` | 6 | Workflow execution (run, validate, list, status, stop, template) |
 | `hooks` | 32 | Self-learning hooks (pre/post-edit, pre/post-command, route, explain, pretrain, session-*, intelligence/*, worker/*, progress) |
 | `hive-mind` | 6 | Queen-led coordination (init, spawn, status, task, optimize-memory, shutdown) |
-| `migrate` | 5 | V2→V3 migration (status, run, verify, rollback, breaking) |
+| `migrate` | 5 | Claude-Flow v2 migration (status, run, verify, rollback, breaking) |
 | `neural` | 5 | Neural pattern training (train, status, patterns, predict, optimize) |
 | `security` | 6 | Security scanning (scan, audit, cve, threats, validate, report) |
 | `performance` | 5 | Performance profiling (benchmark, profile, metrics, optimize, report) |
@@ -2342,7 +2342,7 @@ npx swarmdo@latest worker status
 | `deployment` | 5 | Deployment management (deploy, rollback, status, environments, release) |
 | `embeddings` | 13 | Vector embeddings with ONNX, hyperbolic space, neural substrate |
 | `daemon` | 5 | Background workers (start, stop, status, trigger, enable) |
-| `progress` | 4 | V3 implementation progress (check, sync, summary, watch) |
+| `progress` | 4 | implementation progress (check, sync, summary, watch) |
 | `claims` | 4 | Authorization (check, grant, revoke, list) |
 | `analyze` | 6 | Code analysis (diff, risk, classify, reviewers, file-risk, stats) |
 | `issues` | 10 | Human-agent claims (list, claim, release, handoff, status, stealable, steal, load, rebalance, board) |
@@ -2362,13 +2362,13 @@ npx swarmdo@latest worker status
 | **Fixture Library** | Pre-defined test data | Agents, memory, swarm, MCP |
 | **Mock Factory** | Application and service mocks | Auto-reset, state tracking |
 | **Async Utilities** | waitFor, retry, withTimeout | Reliable async testing |
-| **Performance Assertions** | V3 target validation | Speedup, memory, latency checks |
+| **Performance Assertions** | performance target validation | Speedup, memory, latency checks |
 
 | Fixture Type | Contents | Use Case |
 |--------------|----------|----------|
-| `agentConfigs` | 15 V3 agent configurations | Agent testing |
+| `agentConfigs` | 15 agent configurations | Agent testing |
 | `memoryEntries` | Patterns, rules, embeddings | Memory testing |
-| `swarmConfigs` | V3 default, minimal, mesh, hierarchical | Swarm testing |
+| `swarmConfigs` | default, minimal, mesh, hierarchical | Swarm testing |
 | `mcpTools` | 313 tool definitions | MCP testing |
 
 </details>
@@ -2419,7 +2419,7 @@ npx swarmdo@latest worker status
 </details>
 
 <details>
-<summary>📊 <strong>Performance Benchmarking</strong> — Statistical analysis with V3 target validation</summary>
+<summary>📊 <strong>Performance Benchmarking</strong> — Statistical analysis with performance target validation</summary>
 
 | Capability | Description | Output |
 |------------|-------------|--------|
@@ -2427,9 +2427,9 @@ npx swarmdo@latest worker status
 | **Memory Tracking** | Heap, RSS, external, array buffers | Resource monitoring |
 | **Auto-Calibration** | Automatic iteration adjustment | Statistical significance |
 | **Regression Detection** | Baseline comparison | Change detection |
-| **V3 Target Validation** | Built-in performance targets | Pass/fail checking |
+| **Target Validation** | Built-in performance targets | Pass/fail checking |
 
-### V3 Benchmark Targets
+### Benchmark Targets
 
 | Category | Benchmark | Target |
 |----------|-----------|--------|
@@ -2688,7 +2688,7 @@ npx swarmdo hive-mind status                                  # Check status
 </details>
 
 <details>
-<summary>📊 <strong>V3 Statusline</strong> — Real-time development status for Claude Code</summary>
+<summary>📊 <strong>Statusline</strong> — Real-time development status for Claude Code</summary>
 
 Real-time development status display integrated directly into Claude Code's status bar. Shows DDD progress, swarm activity, security status, AgentDB metrics, and live session data (model, context usage, cost).
 
@@ -2698,16 +2698,16 @@ Claude Code pipes JSON session data via **stdin** to the statusline script after
 
 **Output Format:**
 ```
-▊ Swarmdo V3 ● upstream  │  ⎇ main  │  Opus 4.6  | ●42% ctx  | $0.15
+▊ Swarmdo v1.58.7 ● upstream  │  ⎇ main  │  Opus 4.8  | ●42% ctx  | $0.15
 🏗️ DDD [●●●●○] 4/5  ⚡ HNSW ~4.7x  🐝 Swarms 2  🤖 Agents 12  🟢 CVE 3/3  💾 512MB  🧠 15%  📦 AgentDB ●1.2K vectors
 ```
 
 | Indicator | Description | Source |
 |-----------|-------------|--------|
-| `▊ Swarmdo V3` | Project header | Always shown |
+| `▊ Swarmdo v1.58.7` | Project header | Always shown |
 | `● upstream` | GitHub user | `gh api user` CLI |
 | `⎇ main` | Current git branch | `git branch --show-current` |
-| `Opus 4.6` | Claude model name | Stdin JSON `model.display_name` |
+| `Opus 4.8` | Claude model name | Stdin JSON `model.display_name` |
 | `●42% ctx` | Context window usage | Stdin JSON `context_window.used_percentage` |
 | `$0.15` | Session cost | Stdin JSON `cost.total_cost_usd` |
 | `[●●●●○]` | DDD domain progress bar | `.swarmdo/metrics/v3-progress.json` |
@@ -2774,7 +2774,7 @@ This removes invalid config fields and regenerates the statusline helper with st
 Claude Code provides session data via stdin in this format:
 ```json
 {
-  "model": { "display_name": "Opus 4.6" },
+  "model": { "display_name": "Opus 4.8" },
   "context_window": { "used_percentage": 42, "remaining_percentage": 58 },
   "cost": { "total_cost_usd": 0.15, "total_duration_ms": 45000 },
   "workspace": { "current_dir": "/path/to/project" },
@@ -2799,7 +2799,7 @@ The statusline script reads stdin synchronously, falls back to local detection w
 <details>
 <summary>⚙️ <strong>Background Daemons</strong> — Auto-scheduled workers for continuous optimization</summary>
 
-**V3 Node.js Worker Daemon (Recommended)**
+**Node.js Worker Daemon (Recommended)**
 
 Cross-platform TypeScript-based daemon service with auto-scheduling:
 
@@ -2857,7 +2857,7 @@ Shell-based daemons for monitoring (Linux/macOS only):
 | Daemon | Interval | Purpose | Output |
 |--------|----------|---------|--------|
 | **Swarm Monitor** | 3s | Process detection, agent counting | `swarm-activity.json` |
-| **Metrics Daemon** | 30s | V3 progress sync, SQLite metrics | `metrics.db` |
+| **Metrics Daemon** | 30s | progress sync, SQLite metrics | `metrics.db` |
 
 **Commands:**
 ```bash
@@ -2898,7 +2898,7 @@ Shell-based daemons for monitoring (Linux/macOS only):
 </details>
 
 <details>
-<summary>⌨️ <strong>V3 CLI Commands</strong> — 26 commands with 140+ subcommands</summary>
+<summary>⌨️ <strong>CLI Commands</strong> — 26 commands with 140+ subcommands</summary>
 
 Complete command-line interface for all Swarmdo operations.
 
@@ -2933,7 +2933,7 @@ Complete command-line interface for all Swarmdo operations.
 | `deployment` | 5 | Deployment management (deploy, rollback, status, environments, release) |
 | `embeddings` | 4 | Vector embeddings (embed, batch, search, init) - faster with ONNX runtime with agentic-flow |
 | `claims` | 4 | Claims-based authorization (check, grant, revoke, list) |
-| `migrate` | 5 | V2 to V3 migration with rollback support |
+| `migrate` | 5 | Claude-Flow v2 config migration with rollback support |
 | `process` | 4 | Background process management |
 | `doctor` | 1 | System diagnostics with health checks |
 | `completions` | 4 | Shell completions (bash, zsh, fish, powershell) |
@@ -2949,9 +2949,6 @@ npx swarmdo@latest daemon start
 
 # Spawn an agent with specific type
 npx swarmdo@latest agent spawn -t coder --name my-coder
-
-# Initialize swarm with V3 mode
-npx swarmdo@latest swarm init --v3-mode
 
 # Search memory (HNSW-indexed, ~4.7x faster)
 npx swarmdo@latest memory search -q "authentication patterns"
@@ -3004,7 +3001,7 @@ npx swarmdo@latest doctor --verbose
 **Output Example:**
 
 ```
-🩺 Swarmdo Doctor v3.5
+🩺 Swarmdo Doctor
 
 ✅ Node.js      20.11.0 (required: 20+)
 ✅ npm          10.2.4 (required: 9+)
@@ -3022,7 +3019,7 @@ Summary: 9/10 checks passed
 </details>
 
 <details>
-<summary>📦 <strong>Embeddings Package v3</strong> — Cross-platform ONNX with hyperbolic support</summary>
+<summary>📦 <strong>Embeddings Package</strong> — Cross-platform ONNX with hyperbolic support</summary>
 
 The embeddings package (v3.0.0-alpha.12) provides high-performance vector embeddings with multiple backends.
 
@@ -3690,7 +3687,7 @@ npx swarmdo@latest hooks model-route --task "design distributed consensus system
 
 | Command | Output |
 |---------|--------|
-| `hooks progress` | Current V3 implementation % |
+| `hooks progress` | Current implementation % |
 | `hooks progress --detailed` | Breakdown by category |
 | `hooks progress --sync` | Sync and persist to file |
 | `hooks progress --json` | JSON for scripting |
@@ -4046,12 +4043,12 @@ Scripts, coordination systems, and collaborative development features.
 <details>
 <summary>🛠️ <strong>Helper Scripts</strong> — 30+ Development Automation Tools</summary>
 
-The `.claude/helpers/` directory contains **30+ automation scripts** for development, monitoring, learning, and swarm coordination. These scripts integrate with hooks and can be called directly or via the V3 master tool.
+The `.claude/helpers/` directory contains **30+ automation scripts** for development, monitoring, learning, and swarm coordination. These scripts integrate with hooks and can be called directly or via the master helper.
 
 ### Quick Start
 
 ```bash
-# Master V3 tool - access all helpers
+# Master helper - access all helpers
 .claude/helpers/v3.sh help              # Show all commands
 .claude/helpers/v3.sh status            # Quick development status
 .claude/helpers/v3.sh update domain 3   # Update metrics
@@ -4067,7 +4064,7 @@ The `.claude/helpers/` directory contains **30+ automation scripts** for develop
 
 | Script | Purpose | Usage |
 |--------|---------|-------|
-| `v3.sh` | Master CLI for all V3 operations | `.claude/helpers/v3.sh status` |
+| `v3.sh` | Master CLI for all helper operations | `.claude/helpers/v3.sh status` |
 | `update-v3-progress.sh` | Update development metrics | `.claude/helpers/update-v3-progress.sh domain 3` |
 | `v3-quick-status.sh` | Compact progress overview | `.claude/helpers/v3-quick-status.sh` |
 | `sync-v3-metrics.sh` | Sync metrics across systems | `.claude/helpers/sync-v3-metrics.sh` |
@@ -4275,28 +4272,6 @@ Skills are **reusable workflows** that combine agents, hooks, and patterns into 
 </details>
 
 <details>
-<summary>🔧 <strong>V3 Implementation Skills</strong> — Architecture, security, performance</summary>
-
-| Skill | What It Does | When To Use |
-|-------|--------------|-------------|
-| `v3-ddd-architecture` | Bounded contexts, modular design, clean architecture | Large-scale refactoring |
-| `v3-security-overhaul` | CVE fixes, secure-by-default patterns | Security hardening |
-| `v3-memory-unification` | AgentDB unification, HNSW search improvements | Memory optimization |
-| `v3-performance-optimization` | optimized attention (WASM-accelerated when available), memory reduction | Performance tuning |
-| `v3-swarm-coordination` | 15-agent hierarchical mesh, 10 ADRs implementation | Swarm architecture |
-| `v3-mcp-optimization` | Connection pooling, load balancing, <100ms response | MCP performance |
-| `v3-core-implementation` | DDD domains, dependency injection, TypeScript | Core development |
-| `v3-integration-deep` | agentic-flow@alpha deep integration | Framework integration |
-| `v3-cli-modernization` | Interactive prompts, enhanced hooks | CLI enhancement |
-
-```bash
-# Example: Apply security hardening
-/v3-security-overhaul
-```
-
-</details>
-
-<details>
 <summary>🛠️ <strong>Development Workflow Skills</strong> — Pair programming, verification, streaming</summary>
 
 | Skill | What It Does | When To Use |
@@ -4340,7 +4315,6 @@ Skills are **reusable workflows** that combine agents, hooks, and patterns into 
 # In Claude Code - just use the slash command
 /github-code-review
 /pair-programming --mode tdd
-/v3-security-overhaul
 
 # Via CLI
 npx swarmdo@latest skill run github-code-review
@@ -4997,7 +4971,7 @@ Core infrastructure packages powering Swarmdo's intelligence layer.
 [![npm downloads](https://img.shields.io/npm/dm/agentic-flow?color=green)](https://www.npmjs.com/package/agentic-flow)
 [![GitHub](https://img.shields.io/badge/GitHub-upstream%2Fagentic--flow-blue?logo=github)](the upstream project (see NOTICE))
 
-Swarmdo v3 is built on top of **[agentic-flow](the upstream project (see NOTICE))**, a production-ready AI agent orchestration platform. This deep integration provides instant (regex-based, no LLM call) code transformations, learning memory, and geometric intelligence.
+Swarmdo is built on top of **[agentic-flow](the upstream project (see NOTICE))**, a production-ready AI agent orchestration platform. This deep integration provides instant (regex-based, no LLM call) code transformations, learning memory, and geometric intelligence.
 
 ### Quick Start
 
@@ -6334,7 +6308,7 @@ Domain-driven design, performance benchmarks, and testing framework.
 
 Domain-Driven Design with bounded contexts, clean architecture, and measured performance across all topologies.
 
-### V3 Module Structure
+### Module Structure
 
 | Module | Purpose | Key Features |
 |--------|---------|--------------|
@@ -6623,7 +6597,7 @@ npx @swarmdo/deployment release --version 2.0.0 --dry-run
 <details>
 <summary>📊 <strong>Performance Benchmarking</strong> — @swarmdo/performance</summary>
 
-Statistical benchmarking, memory tracking, regression detection, and V3 performance target validation.
+Statistical benchmarking, memory tracking, regression detection, and performance target validation.
 
 ### Features
 
@@ -6633,7 +6607,7 @@ Statistical benchmarking, memory tracking, regression detection, and V3 performa
 | **Memory Tracking** | Heap, RSS, external, array buffers | Per-iteration |
 | **Auto-Calibration** | Adjusts iterations for statistical significance | Automatic |
 | **Regression Detection** | Compare against baselines with significance testing | <10ms |
-| **V3 Targets** | Built-in targets for all performance metrics | Preconfigured |
+| **Targets** | Built-in targets for all performance metrics | Preconfigured |
 | **Flash Attention** | Validate optimized attention (WASM-accelerated when available) targets | Integrated |
 
 ### Quick Start
@@ -6648,13 +6622,13 @@ const result = await benchmark('vector-search', async () => {
 
 console.log(`Mean: ${result.mean}ms, P99: ${result.p99}ms`);
 
-// Check against V3 target
+// Check against the performance target
 if (result.mean <= V3_PERFORMANCE_TARGETS['vector-search']) {
   console.log('✅ Target met!');
 }
 ```
 
-### V3 Performance Targets
+### Performance Targets
 
 ```typescript
 import { V3_PERFORMANCE_TARGETS, meetsTarget } from '@swarmdo/performance';
@@ -6880,7 +6854,7 @@ const customAgent = createAgentConfig('coder', {
   priority: 90,
 });
 
-// Full V3 15-agent swarm
+// Full 15-agent swarm
 const swarmAgents = createV3SwarmAgentConfigs();
 
 // Mock agents with vitest mocks
@@ -7056,7 +7030,7 @@ const duration = perf.endMeasurement('search');
 const stats = perf.getStats('search');
 console.log(`Avg: ${stats.avg}ms, P95: ${stats.p95}ms`);
 
-// V3 targets
+// Performance targets
 console.log(TEST_CONFIG.FLASH_ATTENTION_SPEEDUP_MIN); // 2.49
 console.log(TEST_CONFIG.AGENTDB_SEARCH_IMPROVEMENT_MAX); // 12500
 ```
@@ -7880,13 +7854,13 @@ export SWARMDO_HNSW_EF=100
 ---
 
 <details>
-<summary>🔄 <strong>Migration Guide (V2 → V3)</strong></summary>
+<summary>🔄 <strong>Migration Guide (from Claude-Flow v2)</strong></summary>
 
-### Why Migrate to V3?
+### Why Migrate?
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    V2 → V3 IMPROVEMENTS                     │
+│                    MIGRATION IMPROVEMENTS                     │
 ├───────────────────────┬─────────────────────────────────────┤
 │ Memory Search         │ ~4.7x - ~4.7x faster (HNSW)        │
 │ Pattern Matching      │ Self-learning (ReasoningBank)       │
@@ -7899,7 +7873,7 @@ export SWARMDO_HNSW_EF=100
 
 ### Breaking Changes
 
-| Change | V2 | V3 | Impact |
+| Change | Claude-Flow v2 | Swarmdo | Impact |
 |--------|----|----|--------|
 | **Package Structure** | `swarmdo` | `@swarmdo/*` (scoped) | Update imports |
 | **Memory Backend** | JSON files | AgentDB + HNSW | Faster search |
@@ -7927,14 +7901,14 @@ npx swarmdo@latest migrate run --from v2
 # STEP 5: Verify migration
 npx swarmdo@latest migrate verify
 
-# STEP 6: Initialize V3 learning
+# STEP 6: Initialize learning
 npx swarmdo@latest hooks pretrain
 npx swarmdo@latest doctor --fix
 ```
 
 ### Command Changes Reference
 
-| V2 Command | V3 Command | Notes |
+| Claude-Flow v2 | Swarmdo | Notes |
 |------------|------------|-------|
 | `swarmdo start` | `swarmdo mcp start` | MCP is explicit |
 | `swarmdo init` | `swarmdo init wizard` | Interactive setup (subcommand, not a flag) |
@@ -7958,7 +7932,7 @@ npx swarmdo@latest doctor --fix
 }
 ```
 
-**V3 Config (`swarmdo.config.json`)**:
+**Swarmdo Config (`swarmdo.config.json`)**:
 ```json
 {
   "version": "3.0.0",
@@ -7983,7 +7957,7 @@ npx swarmdo@latest doctor --fix
 // V2 (deprecated)
 import { ClaudeFlow, Agent, Memory } from 'swarmdo';
 
-// V3 (new)
+// Swarmdo (new)
 import { ClaudeFlowClient } from '@swarmdo/cli';
 import { AgentDB } from '@swarmdo/memory';
 import { ThreatDetector } from '@swarmdo/security';
@@ -8033,7 +8007,7 @@ cp -r ./data-backup-v2 ./data
 <summary>📚 <strong>Documentation</strong></summary>
 
 
-### V3 Module Documentation
+### Package Source
 
 | Module | Description | Docs |
 |--------|-------------|------|

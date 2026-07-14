@@ -6,7 +6,7 @@ type: reference
 
 # Agent Capabilities Reference
 
-Matrix of agent capabilities and their specializations for Swarmdo V3.
+Matrix of agent capabilities and their specializations for Swarmdo.
 
 ## Capability Matrix
 

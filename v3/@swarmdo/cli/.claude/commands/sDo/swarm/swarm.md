@@ -1,6 +1,6 @@
 # /swarm
 
-Main swarm orchestration command for Swarmdo V3.
+Main swarm orchestration command for Swarmdo.
 
 ## 🚨 CRITICAL: Background Execution Pattern
 

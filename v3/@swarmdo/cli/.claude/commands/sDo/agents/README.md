@@ -1,6 +1,6 @@
 # Agents Commands
 
-Complete agent management commands for Swarmdo V3.
+Complete agent management commands for Swarmdo.
 
 ## Available Commands
 

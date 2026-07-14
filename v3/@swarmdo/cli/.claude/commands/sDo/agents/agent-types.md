@@ -1,12 +1,12 @@
 ---
 name: agent-types
-description: Complete guide to all 87 available agent types in Swarmdo V3
+description: Complete guide to all 87 available agent types in Swarmdo
 type: reference
 ---
 
 # Agent Types Reference
 
-Complete guide to all 87 available agent types in Swarmdo V3.
+Complete guide to all 87 available agent types in Swarmdo.
 
 ## Core Development (5)
 
