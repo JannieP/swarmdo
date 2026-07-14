@@ -7079,6 +7079,318 @@ console.log(TEST_CONFIG.AGENTDB_SEARCH_IMPROVEMENT_MAX); // 12500
 
 Environment setup, configuration options, and platform support.
 
+### 🔡 Slash Command Reference
+
+Swarmdo ships **145 `/sDo:` slash commands** (installed into `.claude/commands/sDo/` by `swarmdo init`, or user-wide in `~/.claude/commands/sDo/`) plus **38 `/sdo-` skills**. In Claude Code, type `/sDo:` (or `/sdo-`) to browse them; most wrap a `npx swarmdo …` CLI call or an MCP tool, so the same capability also works from a plain shell.
+
+**How to use them**
+
+- **Discover:** type `/sDo:` in Claude Code — the palette lists every command by category.
+- **Namespaced:** commands live in category folders, so you invoke them as `/sDo:<category>/<name>` (e.g. `/sDo:swarm/research`). The five entry-point commands are un-namespaced (e.g. `/sDo:swarmdo-help`).
+- **Start here:** `/sDo:swarmdo-help` (overview) · `/sDo:swarmdo-swarm` (spin up a swarm) · `/sDo:statusline` (configure the statusline) · `/sDo:swarmdo-memory` (memory).
+- **Cross-harness:** the same capabilities are reachable from **Codex, Copilot, and pi** via the Swarmdo MCP tools + `AGENTS.md` (`swarmdo integrations install <codex|copilot|pi>`); Codex and pi can additionally run the commands as native prompt files.
+
+> **Note on legacy stubs.** A handful of scaffolding stubs inherited from the upstream template (e.g. `/sDo:swarm/swarm-status`, `/sDo:swarm/swarm-modes` and other `swarm-*` / `hive-mind-*` duplicates) map to non-existent subcommands and are being cleaned up. Prefer the primary command in each group (e.g. `/sDo:swarm/swarm`, or the CLI `swarmdo swarm status`). Descriptions below come from each command's own source file.
+
+#### `(top-level)` — Entry-point commands — the ones you reach for first.
+
+| Command | What it does |
+|---|---|
+| `/sDo:sparc` | Execute SPARC methodology workflows with Swarmdo |
+| `/sDo:statusline` | Edit the swarmdo statusline — pick segments via checklist or preset |
+| `/sDo:swarmdo-help` | Show Swarmdo commands and usage |
+| `/sDo:swarmdo-memory` | Interact with Swarmdo memory system |
+| `/sDo:swarmdo-swarm` | Coordinate multi-agent swarms for complex tasks |
+
+#### `coordination` — Low-level swarm/agent primitives (each wraps an MCP coordination tool).
+
+| Command | What it does |
+|---|---|
+| `/sDo:coordination/agent-spawn` | Spawn a new agent in the current swarm. |
+| `/sDo:coordination/init` | Initialize swarm coordination for the current task (wraps mcp swarm_init). |
+| `/sDo:coordination/orchestrate` | Orchestrate a task across the swarm (wraps mcp task_orchestrate). |
+| `/sDo:coordination/spawn` | Spawn an agent into the current swarm (wraps mcp agent_spawn). |
+| `/sDo:coordination/swarm-init` | Initialize a Swarmdo swarm with specified topology and configuration. |
+| `/sDo:coordination/task-orchestrate` | Orchestrate complex tasks across the swarm. |
+
+#### `swarm` — High-level swarm strategies — pick a mode and let a team self-organize.
+
+| Command | What it does |
+|---|---|
+| `/sDo:swarm/analysis` | Comprehensive analysis through distributed agent coordination. |
+| `/sDo:swarm/development` | Coordinated development through specialized agent teams. |
+| `/sDo:swarm/examples` | Worked examples and recipes for swarm invocations. |
+| `/sDo:swarm/maintenance` | System maintenance and updates through coordinated agents. |
+| `/sDo:swarm/optimization` | Performance optimization through specialized analysis. |
+| `/sDo:swarm/research` | Deep research through parallel information gathering. |
+| `/sDo:swarm/swarm` | Main swarm orchestration command for Swarmdo. |
+| `/sDo:swarm/swarm-analysis` | Analyze a running swarm’s operations. |
+| `/sDo:swarm/swarm-background` | Launch a swarm to run in the background. |
+| `/sDo:swarm/swarm-init` | Initialize a new swarm with specified topology. |
+| `/sDo:swarm/swarm-modes` | List the available swarm execution modes. |
+| `/sDo:swarm/swarm-monitor` | Monitor live swarm activity. |
+| `/sDo:swarm/swarm-spawn` | Spawn agents in the swarm. |
+| `/sDo:swarm/swarm-status` | Show swarm status. |
+| `/sDo:swarm/swarm-strategies` | List swarm distribution strategies. |
+| `/sDo:swarm/testing` | Comprehensive testing through distributed execution. |
+
+#### `hive-mind` — Queen-led collective-intelligence coordination, sessions, and consensus.
+
+| Command | What it does |
+|---|---|
+| `/sDo:hive-mind/hive-mind` | Hive Mind collective intelligence system for advanced swarm coordination. |
+| `/sDo:hive-mind/hive-mind-consensus` | Run a consensus vote across the hive mind. |
+| `/sDo:hive-mind/hive-mind-init` | Initialize the Hive Mind collective intelligence system. |
+| `/sDo:hive-mind/hive-mind-memory` | Read / write the hive-mind shared memory. |
+| `/sDo:hive-mind/hive-mind-metrics` | Show hive-mind performance metrics. |
+| `/sDo:hive-mind/hive-mind-resume` | Resume a saved hive-mind session. |
+| `/sDo:hive-mind/hive-mind-sessions` | List hive-mind sessions. |
+| `/sDo:hive-mind/hive-mind-spawn` | Spawn a Hive Mind swarm with queen-led coordination. |
+| `/sDo:hive-mind/hive-mind-status` | Show hive-mind status. |
+| `/sDo:hive-mind/hive-mind-stop` | Stop the running hive mind. |
+| `/sDo:hive-mind/hive-mind-wizard` | Interactive wizard to configure & launch a hive mind. |
+
+#### `agents` — Reference guides for agent types, capabilities, and spawning patterns.
+
+| Command | What it does |
+|---|---|
+| `/sDo:agents/agent-capabilities` | Matrix of agent capabilities and their specializations. |
+| `/sDo:agents/agent-coordination` | Coordination patterns for multi-agent collaboration. |
+| `/sDo:agents/agent-spawning` | Guide to spawning agents with Claude Code's Task tool. |
+| `/sDo:agents/agent-types` | Complete guide to all 54 available agent types in Swarmdo. |
+
+#### `automation` — Hands-off spawning, self-healing, and cross-session memory.
+
+| Command | What it does |
+|---|---|
+| `/sDo:automation/auto-agent` | Automatically spawn and manage agents based on task requirements. |
+| `/sDo:automation/self-healing` | Automatically detect and recover from errors without interrupting your flow. |
+| `/sDo:automation/session-memory` | Maintain context and learnings across Claude Code sessions for continuous improvement. |
+| `/sDo:automation/smart-agents` | Automatically spawn the right agents at the right time without manual intervention. |
+| `/sDo:automation/smart-spawn` | Intelligently spawn agents based on workload analysis. |
+| `/sDo:automation/workflow-select` | Automatically select optimal workflow based on task type. |
+
+#### `sparc` — SPARC methodology — 17 specialist modes from spec → pseudocode → architecture → refine → code.
+
+| Command | What it does |
+|---|---|
+| `/sDo:sparc/analyzer` | Deep code and data analysis with batch processing capabilities. |
+| `/sDo:sparc/architect` | System design with Memory-based coordination for scalable architectures. |
+| `/sDo:sparc/ask` | Task-formulation guide — helps you frame and delegate work to the right mode. |
+| `/sDo:sparc/batch-executor` | Parallel task execution specialist using batch operations. |
+| `/sDo:sparc/code` | Auto-Coder — writes clean, modular code from pseudocode + architecture. |
+| `/sDo:sparc/coder` | Autonomous code generation with batch file operations. |
+| `/sDo:sparc/debug` | Debugger — traces and fixes runtime, logic, and integration bugs. |
+| `/sDo:sparc/debugger` | Systematic debugging with TodoWrite and Memory integration. |
+| `/sDo:sparc/designer` | UI/UX design with Memory coordination for consistent experiences. |
+| `/sDo:sparc/devops` | DevOps — deployment, infrastructure, CI/CD, and cloud provisioning. |
+| `/sDo:sparc/docs-writer` | Documentation Writer — concise, modular Markdown docs. |
+| `/sDo:sparc/documenter` | Documentation with batch file operations for comprehensive docs. |
+| `/sDo:sparc/innovator` | Creative problem solving with WebSearch and Memory integration. |
+| `/sDo:sparc/integration` | System Integrator — merges module outputs into a tested, working system. |
+| `/sDo:sparc/mcp` | MCP Integration — connects to and manages external MCP services. |
+| `/sDo:sparc/memory-manager` | Knowledge management with Memory tools for persistent insights. |
+| `/sDo:sparc/optimizer` | Performance optimization with systematic analysis and improvements. |
+| `/sDo:sparc/orchestrator` | Multi-agent task orchestration with TodoWrite/TodoRead/Task/Memory using MCP tools. |
+| `/sDo:sparc/post-deployment-monitoring-mode` | Deployment Monitor — watches post-launch performance, logs, and feedback. |
+| `/sDo:sparc/refinement-optimization-mode` | Optimizer — refactors, modularizes, and enforces file-size limits. |
+| `/sDo:sparc/researcher` | Deep research with parallel WebSearch/WebFetch and Memory coordination. |
+| `/sDo:sparc/reviewer` | Code review using batch file analysis for comprehensive reviews. |
+| `/sDo:sparc/security-review` | Security Reviewer — static/dynamic audits; flags secrets and weak points. |
+| `/sDo:sparc/sparc` | SPARC Orchestrator — breaks large objectives into delegated subtasks. |
+| `/sDo:sparc/sparc-modes` | Overview of all 17 SPARC specialist modes. |
+| `/sDo:sparc/spec-pseudocode` | Specification Writer — captures requirements and writes pseudocode. |
+| `/sDo:sparc/supabase-admin` | Supabase Admin — database, auth, and storage design/management. |
+| `/sDo:sparc/swarm-coordinator` | Specialized swarm management with batch coordination capabilities. |
+| `/sDo:sparc/tdd` | Test-driven development with TodoWrite planning and comprehensive testing. |
+| `/sDo:sparc/tester` | Comprehensive testing with parallel execution capabilities. |
+| `/sDo:sparc/tutorial` | SPARC Tutorial — onboarding guide to the full SPARC workflow. |
+| `/sDo:sparc/workflow-manager` | Process automation with TodoWrite planning and Task execution. |
+
+#### `github` — GitHub-native swarms: PRs, issues, reviews, releases, and multi-repo work.
+
+| Command | What it does |
+|---|---|
+| `/sDo:github/code-review` | Automated code review with swarm intelligence. |
+| `/sDo:github/code-review-swarm` | Deploy specialized AI agents to perform comprehensive, intelligent code reviews that go beyond traditional static analysis. |
+| `/sDo:github/github-modes` | Reference of all GitHub integration modes (swarm-coordinated). |
+| `/sDo:github/github-swarm` | Create a specialized swarm for GitHub repository management. |
+| `/sDo:github/issue-tracker` | Intelligent issue management — tracking, triage, and progress coordination. |
+| `/sDo:github/issue-triage` | Intelligent issue classification and triage. |
+| `/sDo:github/multi-repo-swarm` | Coordinate AI swarms across multiple repositories, enabling organization-wide automation and intelligent cross-project collaboration. |
+| `/sDo:github/pr-enhance` | AI-powered pull request enhancements. |
+| `/sDo:github/pr-manager` | Comprehensive pull request management with swarmdo-swarm coordination for automated reviews, testing, and merge workflows. |
+| `/sDo:github/project-board-sync` | Synchronize AI swarms with GitHub Projects for visual task management, progress tracking, and team coordination. |
+| `/sDo:github/release-manager` | Automated release coordination: versioning, testing, and deployment. |
+| `/sDo:github/release-swarm` | Orchestrate complex software releases using AI swarms that handle everything from changelog generation to multi-platform deployment. |
+| `/sDo:github/repo-analyze` | Deep analysis of GitHub repository with AI insights. |
+| `/sDo:github/repo-architect` | Repository structure optimization and multi-repo management. |
+| `/sDo:github/swarm-issue` | Turn a GitHub issue into a coordinated AI-swarm task. |
+| `/sDo:github/swarm-pr` | Create and manage AI swarms directly from GitHub Pull Requests, enabling seamless integration with your development workflow. |
+| `/sDo:github/sync-coordinator` | Multi-package version alignment and cross-package synchronization. |
+| `/sDo:github/workflow-automation` | Generate a custom swarm-powered GitHub Actions workflow. |
+
+#### `workflows` — Reusable workflow templates and structured dev/research flows.
+
+| Command | What it does |
+|---|---|
+| `/sDo:workflows/development` | Structure Claude Code's approach to complex development tasks for maximum efficiency. |
+| `/sDo:workflows/research` | Coordinate Claude Code's research activities for comprehensive, systematic exploration. |
+| `/sDo:workflows/workflow-create` | Create reusable workflow templates. |
+| `/sDo:workflows/workflow-execute` | Execute saved workflows. |
+| `/sDo:workflows/workflow-export` | Export workflows for sharing. |
+
+#### `memory` — Persistent and semantic memory operations.
+
+| Command | What it does |
+|---|---|
+| `/sDo:memory/memory-persist` | Persist memory across sessions. |
+| `/sDo:memory/memory-search` | Search through stored memory. |
+| `/sDo:memory/memory-usage` | Manage persistent memory storage. |
+| `/sDo:memory/neural` | Train / query neural coordination patterns. |
+
+#### `hooks` — Lifecycle hooks that coordinate and learn from Claude Code operations.
+
+| Command | What it does |
+|---|---|
+| `/sDo:hooks/overview` | Automatically coordinate, format, and learn from Claude Code operations using hooks. |
+| `/sDo:hooks/post-edit` | Execute post-edit processing including formatting, validation, and memory updates. |
+| `/sDo:hooks/post-task` | Execute post-task cleanup, performance analysis, and memory storage. |
+| `/sDo:hooks/pre-edit` | Execute pre-edit validations and agent assignment before file modifications. |
+| `/sDo:hooks/pre-task` | Execute pre-task preparations and context loading. |
+| `/sDo:hooks/session-end` | Cleanup and persist session state before ending work. |
+| `/sDo:hooks/setup` | Install & configure Swarmdo hooks (npx swarmdo init --hooks). |
+
+#### `monitoring` — Live agent/swarm status and metrics.
+
+| Command | What it does |
+|---|---|
+| `/sDo:monitoring/agent-metrics` | View agent performance metrics. |
+| `/sDo:monitoring/agents` | List the active agents and their state. |
+| `/sDo:monitoring/real-time-view` | Real-time view of swarm activity. |
+| `/sDo:monitoring/status` | Show current swarm / system status. |
+| `/sDo:monitoring/swarm-monitor` | Real-time swarm monitoring. |
+
+#### `analysis` — Performance, bottleneck, and token-efficiency analysis.
+
+| Command | What it does |
+|---|---|
+| `/sDo:analysis/bottleneck-detect` | Analyze performance bottlenecks in swarm operations and suggest optimizations. |
+| `/sDo:analysis/performance-bottlenecks` | Identify and resolve performance bottlenecks in your development workflow. |
+| `/sDo:analysis/performance-report` | Generate comprehensive performance reports for swarm operations. |
+| `/sDo:analysis/token-efficiency` | Reduce token consumption while maintaining quality through intelligent coordination. |
+| `/sDo:analysis/token-usage` | Analyze token usage patterns and optimize for efficiency. |
+
+#### `optimization` — Topology selection, caching, and parallel-execution tuning.
+
+| Command | What it does |
+|---|---|
+| `/sDo:optimization/auto-topology` | Automatically select the optimal swarm topology based on task complexity analysis. |
+| `/sDo:optimization/cache-manage` | Manage operation cache for performance. |
+| `/sDo:optimization/parallel-execute` | Execute tasks in parallel for maximum efficiency. |
+| `/sDo:optimization/parallel-execution` | Execute independent subtasks in parallel for maximum efficiency. |
+| `/sDo:optimization/topology-optimize` | Optimize swarm topology for current workload. |
+
+#### `training` — Neural-pattern training and agent specialization.
+
+| Command | What it does |
+|---|---|
+| `/sDo:training/model-update` | Update neural models with new data. |
+| `/sDo:training/neural-patterns` | Continuously improve coordination through neural network learning. |
+| `/sDo:training/neural-train` | Train neural patterns from operations. |
+| `/sDo:training/pattern-learn` | Learn patterns from successful operations. |
+| `/sDo:training/specialization` | Train agents to become experts in specific domains for better performance. |
+
+#### `pair` — AI pair-programming sessions (driver / navigator / switch modes).
+
+| Command | What it does |
+|---|---|
+| `/sDo:pair/commands` | Complete reference for all pair programming session commands. |
+| `/sDo:pair/config` | Complete configuration guide for pair programming sessions. |
+| `/sDo:pair/examples` | Real-world examples and scenarios for pair programming sessions. |
+| `/sDo:pair/modes` | Detailed guide to pair programming modes and their optimal use cases. |
+| `/sDo:pair/session` | Complete guide to managing pair programming sessions. |
+| `/sDo:pair/start` | Start a new pair programming session with AI assistance. |
+
+#### `stream-chain` — Stream-JSON multi-stage agent pipelines.
+
+| Command | What it does |
+|---|---|
+| `/sDo:stream-chain/pipeline` | Execute predefined pipelines for common development workflows. |
+| `/sDo:stream-chain/run` | Execute a custom stream chain with your own prompts. |
+
+#### `verify` — Verification checks against an accuracy threshold.
+
+| Command | What it does |
+|---|---|
+| `/sDo:verify/check` | Run verification checks on code, tasks, or agent outputs. |
+| `/sDo:verify/start` | Truth verification system for ensuring code quality and correctness with a 0.95 accuracy threshold. |
+
+#### `truth` — Truth-scoring and reliability metrics.
+
+| Command | What it does |
+|---|---|
+| `/sDo:truth/start` | View truth scores and reliability metrics for your codebase and agent tasks. |
+
+#### `/sdo-` skills (38)
+
+Skills are model-invoked capabilities — Claude picks one by its description, or you name it (`/sdo-<name>`). Installed to `.claude/skills/` (or `~/.claude/skills/`). Highlights:
+
+- **Efficiency:** `/sdo-ponytail` (anti-over-engineering) · `/sdo-caveman-compress` (token compression). See `swarmdo preset info efficiency`.
+- **Swarms & pairing:** `/sdo-swarm-orchestration` · `/sdo-swarm-advanced` · `/sdo-pair-programming` · `/sdo-stream-chain`.
+- **AgentDB / memory:** `/sdo-agentdb-vector-search` · `/sdo-agentdb-learning` · `/sdo-agentdb-memory-patterns` · `/sdo-agentdb-optimization` · `/sdo-reasoningbank-agentdb`.
+- **GitHub:** `/sdo-github-code-review` · `/sdo-github-release-management` · `/sdo-github-multi-repo` · `/sdo-github-workflow-automation`.
+- **Other:** `/sdo-browser` (web automation) · `/sdo-hooks-automation` · `/sdo-hive-mind-advanced` · `/sdo-skill-builder` · `/sdo-performance-analysis`.
+
+---
+
+### 📊 Statusline Reference
+
+Swarmdo's statusline renders a **header line** plus optional **detail rows**. Choose which segments show with **`/sDo:statusline`** (a checklist, or a preset), or edit `.swarmdo/statusline.json`; the `SWARMDO_STATUSLINE` env var overrides the file. The helper (`.claude/helpers/statusline.cjs`) calls `swarmdo hooks statusline --json` on each refresh.
+
+**Presets**
+
+| Preset | Segments |
+|---|---|
+| `full` | version, project, branch, model, duration, context, cost, domains, swarm, architecture, agentdb |
+| `compact` | version, project, branch, model, context, cost, swarm |
+| `minimal` | project, branch, model, context |
+
+**Header segments** (one line, `│`-separated)
+
+| Segment | Shows | Source |
+|---|---|---|
+| `version` | `▊ Swarmdo Vx.y.z` — the installed version | package version |
+| `project` | `● <name>` — project name (cyan when a swarm is coordinating, dim when idle) | git / directory name |
+| `branch` | `⏇ <branch>` + change indicator + `↑<ahead>` / `↓<behind>` | git |
+| `model` | active Claude model name | Claude Code stdin JSON |
+| `duration` | `⏱ <time>` — session wall-clock | Claude Code stdin JSON |
+| `context` | `● N% ctx` — context-window used (green → yellow → red) | Claude Code stdin JSON |
+| `cost` | `$N.NN` — session cost (hideable) | Claude Code stdin JSON |
+
+**Detail rows** (each is its own line)
+
+| Segment | Shows | Source |
+|---|---|---|
+| `domains` | `🏗️ DDD Domains [▓▓▓░] N/5` + a performance marker | `.swarmdo/metrics/v3-progress.json` |
+| `swarm` | the swarm/agent/health row (broken out below) | multiple |
+| `architecture` | `🔧 ADRs ●impl/total │ DDD ●N% │ Security ●status` | `docs/adr/`, domain progress, security audit |
+| `agentdb` | `📊 Vectors ●N⚡ │ Size │ Tests ●N (~cases) │ MCP ●on/total ◆DB` | AgentDB stats, test files, MCP config |
+
+**The `swarm` row, item by item**
+
+| Item | Meaning |
+|---|---|
+| `🐝 Swarms N` | **Active swarms** — running, non-orphaned entries in `.swarmdo/swarm/swarm-state.json` |
+| `🤖 Agents M` | **Non-terminated agents** in the registry (`.swarmdo/agents/store.json` + hive `.swarmdo/agents.json`) |
+| `🪝 on/total` | Enabled / total Swarmdo hooks |
+| `sec <status>` | Security scan — `✓` clean · `stale` · `N!` open CVEs · `—` none |
+| `💾 <n>MB` | Node process memory (RSS) |
+| `🧠 <n>%` | Intelligence score (learned-pattern density) |
+
+Colors are consistent across the line: **green** = active / healthy, **dim** = idle / none, **yellow** = partial / stale, **red** = needs attention. `🐝 Swarms` and `🤖 Agents` are two *distinct* counts — swarms are coordination containers, agents are the workers inside them.
+
+
 <details>
 <summary>💻 <strong>Cross-Platform Support</strong></summary>
 

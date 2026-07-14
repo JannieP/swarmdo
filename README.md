@@ -493,6 +493,7 @@ User Guide section index:
 | [Security](docs/USERGUIDE.md#%EF%B8%8F-security) | AIDefence, CVE remediation, validation |
 | [Ecosystem](docs/USERGUIDE.md#-ecosystem--integrations) | SwarmVector, agentic-flow, Flow Nexus |
 | [Configuration](docs/USERGUIDE.md#%EF%B8%8F-configuration--reference) | Environment variables, config schema |
+| [Slash Commands & Statusline](docs/USERGUIDE.md#-slash-command-reference) | Every `/sDo:` command + `/sdo-` skill, and every statusline item ([live on swarmdo.com](https://swarmdo.com/#commands)) |
 | [Plugin Marketplace](https://upstream.github.io/swarmdo) | Browse and install plugins |
 
 ---
