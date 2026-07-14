@@ -84,6 +84,43 @@ function resolveSegments() {
 const SEGMENTS = resolveSegments();
 function seg(name) { return SEGMENTS.has(name); }
 
+// ─── Cost slot: plan-aware mode + account display ────────────────────────────
+// Resolution mirrors resolveSegments: env → project config → global config →
+// default. mode: auto|dollars|limits|off (auto → limits for a subscription
+// account, dollars otherwise); showAccount prefixes the account label.
+function resolveCostOptions() {
+  let mode = null;
+  let showAccount = null;
+  const envMode = (process.env.SWARMDO_STATUSLINE_COST_MODE || '').trim().toLowerCase();
+  if (envMode === 'auto' || envMode === 'dollars' || envMode === 'limits' || envMode === 'off') mode = envMode;
+  const envShow = (process.env.SWARMDO_STATUSLINE_SHOW_ACCOUNT || '').trim();
+  if (/^(1|true|yes|on)$/i.test(envShow)) showAccount = true;
+  else if (/^(0|false|no|off)$/i.test(envShow)) showAccount = false;
+  if (mode === null || showAccount === null) {
+    const files = [
+      path.join(CWD, '.swarmdo', 'statusline.json'),
+      path.join(os.homedir(), '.swarmdo', 'statusline.json'),
+    ];
+    for (const f of files) {
+      try {
+        const j = JSON.parse(fs.readFileSync(f, 'utf8'));
+        const cost = j && j.cost;
+        if (cost && typeof cost === 'object') {
+          if (mode === null && typeof cost.mode === 'string') {
+            const m = cost.mode.trim().toLowerCase();
+            if (m === 'auto' || m === 'dollars' || m === 'limits' || m === 'off') mode = m;
+          }
+          if (showAccount === null && typeof cost.showAccount === 'boolean') showAccount = cost.showAccount;
+        }
+      } catch (e) { /* absent/invalid — keep looking */ }
+      if (mode !== null && showAccount !== null) break;
+    }
+  }
+  if (CONFIG.hideCost) mode = 'off'; // legacy SWARMDO_STATUSLINE_HIDE_COST
+  return { mode: mode || 'auto', showAccount: showAccount === true };
+}
+const COST_OPTS = resolveCostOptions();
+
 // #2337: resolve an already-installed @swarmdo/cli (or swarmdo) bin so we
 // can invoke it directly via `node`. The previous version called
 // `npx --yes @swarmdo/cli@latest` on every uncached render, which forces
@@ -516,13 +553,96 @@ function getCostFromStdin() {
   return null;
 }
 
+// ── Account plan + rate-limit windows (for the plan-aware cost slot) ──────────
+// ~/.claude.json holds only the CURRENTLY active account (overwritten on switch),
+// so we read it live each render — that makes the slot correct across account
+// switches without any stored state. We read a few plan fields, never tokens.
+function readClaudeAccount() {
+  try {
+    const j = JSON.parse(fs.readFileSync(path.join(os.homedir(), '.claude.json'), 'utf8'));
+    const a = j && j.oauthAccount;
+    if (a && typeof a === 'object') {
+      return { billingType: a.billingType, organizationType: a.organizationType, displayName: a.displayName, organizationName: a.organizationName };
+    }
+  } catch (e) { /* not logged in / unreadable */ }
+  return null;
+}
+function detectPlan(a) {
+  if (!a || typeof a !== 'object') return 'unknown';
+  const b = typeof a.billingType === 'string' ? a.billingType : '';
+  const o = typeof a.organizationType === 'string' ? a.organizationType : '';
+  if (/subscription/i.test(b) || /claude_(max|team|enterprise|pro)/i.test(o)) return 'subscription';
+  if (b) return 'payg';
+  return 'unknown';
+}
+function accountLabel(a) {
+  if (!a) return '';
+  let raw = (typeof a.displayName === 'string' && a.displayName) || (typeof a.organizationName === 'string' && a.organizationName) || '';
+  raw = String(raw).trim();
+  if (!raw) return '';
+  return raw.length > 16 ? raw.slice(0, 15) + '…' : raw;
+}
+function rlToEpochMs(v) {
+  if (typeof v === 'number' && isFinite(v)) return v < 1e12 ? v * 1000 : v;
+  if (typeof v === 'string') { const t = Date.parse(v); return isNaN(t) ? null : t; }
+  return null;
+}
+function rlPickWindow(obj, windowMs, label) {
+  if (!obj || typeof obj !== 'object') return null;
+  const used = (obj.used_percentage != null ? obj.used_percentage : obj.usedPercentage);
+  const resetsAtMs = rlToEpochMs(obj.resets_at != null ? obj.resets_at : obj.resetsAt);
+  if (typeof used !== 'number' || !isFinite(used) || resetsAtMs === null) return null;
+  return { label: label, used: Math.max(0, Math.min(100, used)), windowMs: windowMs, resetsAtMs: resetsAtMs };
+}
+function getRateLimitWindows() {
+  const data = getStdinData();
+  if (!data) return [];
+  const rl = data.rate_limits || data.rateLimits || data;
+  if (!rl || typeof rl !== 'object') return [];
+  const out = [];
+  const w5 = rlPickWindow(rl.five_hour || rl.fiveHour, 5 * 60 * 60 * 1000, '5h');
+  const w7 = rlPickWindow(rl.seven_day || rl.sevenDay, 7 * 24 * 60 * 60 * 1000, '7d');
+  if (w5) out.push(w5);
+  if (w7) out.push(w7);
+  return out;
+}
+function rlWindowStatus(w, nowMs) {
+  if (w.used >= 100) return 'over';
+  const windowStart = w.resetsAtMs - w.windowMs;
+  const elapsed = nowMs - windowStart;
+  let willExhaust = false;
+  if (w.used > 0 && elapsed > 0) {
+    const msTo100 = ((100 - w.used) * elapsed) / w.used;
+    willExhaust = (nowMs + msTo100) <= w.resetsAtMs;
+  }
+  return (willExhaust || w.used >= 80) ? 'warn' : 'ok';
+}
+// { text, color } for the rate-limit cost slot, or null when Claude Code sent
+// no rate_limits payload (older CC / non-subscription session).
+function renderRateLimitSlot() {
+  const wins = getRateLimitWindows();
+  if (wins.length === 0) return null;
+  const now = Date.now();
+  let worst = 'ok';
+  const parts = [];
+  for (const w of wins) {
+    const st = rlWindowStatus(w, now);
+    if (st === 'over') worst = 'over';
+    else if (st === 'warn' && worst !== 'over') worst = 'warn';
+    const mark = st === 'over' ? '!' : st === 'warn' ? '⚠' : '';
+    parts.push(w.label + ' ' + Math.round(w.used) + '%' + mark);
+  }
+  const color = worst === 'over' ? c.brightRed : worst === 'warn' ? c.brightYellow : c.brightGreen;
+  return { text: parts.join(' · '), color: color };
+}
+
 // Read package version from the first package.json we find. The fallback
 // (`BAKED_CLI_VERSION`) is the version of @swarmdo/cli that generated THIS
 // statusline.cjs at `swarmdo init` time — so even when every probe below
 // misses, the displayed version is meaningful (matches what the user
 // installed), not a stale hard-coded string.
 function getPkgVersion() {
-  let ver = '1.58.4';
+  let ver = '1.58.9';
   try {
     const home = os.homedir();
     const pkgPaths = [
@@ -636,8 +756,24 @@ function generateStatusline() {
     const ctxColor = ctxInfo.usedPct >= 90 ? c.brightRed : ctxInfo.usedPct >= 70 ? c.brightYellow : c.brightGreen;
     header += '  ' + c.dim + '│' + c.reset + '  ' + ctxColor + '● ' + ctxInfo.usedPct + '% ctx' + c.reset;
   }
-  if (seg('cost') && !CONFIG.hideCost && costInfo && costInfo.costUsd > 0) {
-    header += '  ' + c.dim + '│' + c.reset + '  ' + c.brightYellow + CONFIG.costSymbol + costInfo.costUsd.toFixed(2) + c.reset;
+  if (seg('cost') && COST_OPTS.mode !== 'off') {
+    const acct = readClaudeAccount();
+    let eff = COST_OPTS.mode;
+    if (eff === 'auto') eff = detectPlan(acct) === 'subscription' ? 'limits' : 'dollars';
+    let slotText = null;
+    let slotColor = c.brightYellow;
+    if (eff === 'limits') {
+      const rl = renderRateLimitSlot();
+      if (rl) { slotText = rl.text; slotColor = rl.color; }
+      else if (costInfo && costInfo.costUsd > 0) { slotText = CONFIG.costSymbol + costInfo.costUsd.toFixed(2); } // no payload → $ fallback
+    } else if (costInfo && costInfo.costUsd > 0) {
+      slotText = CONFIG.costSymbol + costInfo.costUsd.toFixed(2);
+    }
+    if (slotText) {
+      let prefix = '';
+      if (COST_OPTS.showAccount) { const lbl = accountLabel(acct); if (lbl) prefix = c.dim + lbl + ' · ' + c.reset; }
+      header += '  ' + c.dim + '│' + c.reset + '  ' + prefix + slotColor + slotText + c.reset;
+    }
   }
   if (header) lines.push(header);
 

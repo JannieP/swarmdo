@@ -80,8 +80,20 @@ describe('statusline cost display — generator contract', () => {
     expect(SCRIPT).not.toContain("'$' + costInfo.costUsd.toFixed(2)");
   });
 
-  it('guards the cost segment with the hide toggle', () => {
-    expect(SCRIPT).toContain('!CONFIG.hideCost && costInfo && costInfo.costUsd > 0');
+  it('guards the cost segment with the plan-aware mode (off hides it)', () => {
+    // The legacy SWARMDO_STATUSLINE_HIDE_COST now folds into mode 'off'.
+    expect(SCRIPT).toContain("if (CONFIG.hideCost) mode = 'off'");
+    expect(SCRIPT).toContain("COST_OPTS.mode !== 'off'");
+  });
+
+  it('wires the plan-aware cost mode + account label options', () => {
+    expect(SCRIPT).toContain('SWARMDO_STATUSLINE_COST_MODE');
+    expect(SCRIPT).toContain('SWARMDO_STATUSLINE_SHOW_ACCOUNT');
+    expect(SCRIPT).toContain('function detectPlan');
+    expect(SCRIPT).toContain('function renderRateLimitSlot');
+    // account read is scoped to plan fields — never the OAuth tokens.
+    expect(SCRIPT).toContain('oauthAccount');
+    expect(SCRIPT).not.toContain('accessToken');
   });
 });
 
@@ -105,6 +117,76 @@ describe('statusline cost display — runtime behavior', () => {
     const header = renderHeader({ SWARMDO_STATUSLINE_COST_SYMBOL: '' });
     expect(header).toContain('1.30');
     expect(header).not.toContain('$1.30');
+  });
+});
+
+/**
+ * Plan-aware cost slot. The account lives in ~/.claude.json (HOME points at the
+ * temp dir), so we drop a synthetic oauthAccount there; rate_limits ride in on
+ * the stdin payload like Claude Code sends them. Account switching is handled by
+ * re-reading that file every render, so these are all pure-input renders.
+ */
+function renderPlan(opts: { env?: Record<string, string>; account?: object; rateLimits?: object } = {}): string {
+  const dir = mkdtempSync(path.join(tmpdir(), 'swarmdo-statusline-'));
+  try {
+    writeFileSync(path.join(dir, 'statusline.cjs'), SCRIPT, 'utf-8');
+    if (opts.account) writeFileSync(path.join(dir, '.claude.json'), JSON.stringify({ oauthAccount: opts.account }));
+    const payload: Record<string, unknown> = {
+      model: { display_name: 'Opus 4.8' },
+      context_window: { used_percentage: 34 },
+      cost: { total_cost_usd: 1.3, total_duration_ms: 376000 },
+    };
+    if (opts.rateLimits) payload.rate_limits = opts.rateLimits;
+    const out = execFileSync(process.execPath, [path.join(dir, 'statusline.cjs')], {
+      input: JSON.stringify(payload),
+      encoding: 'utf-8',
+      env: { PATH: '/nonexistent', HOME: dir, SWARMDO_STATUSLINE_NO_CLI: '1', ...opts.env },
+      timeout: 15000,
+    });
+    return stripAnsi(out).split('\n')[0];
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+}
+
+describe('statusline cost display — plan-aware (account switching)', () => {
+  const SUB = { billingType: 'stripe_subscription', organizationType: 'claude_max', displayName: 'work' };
+  const futureRL = (): object => ({
+    five_hour: { used_percentage: 72, resets_at: new Date(Date.now() + 2 * 3600e3).toISOString() },
+    seven_day: { used_percentage: 12, resets_at: new Date(Date.now() + 3 * 86400e3).toISOString() },
+  });
+
+  it('a subscription account (auto) shows rate-limit windows, not the phantom $', () => {
+    const h = renderPlan({ account: SUB, rateLimits: futureRL() });
+    expect(h).toContain('5h 72%');
+    expect(h).toContain('7d 12%');
+    expect(h).not.toContain('$1.30');
+  });
+
+  it('a subscription account with no rate_limits payload falls back to $', () => {
+    const h = renderPlan({ account: SUB });
+    expect(h).toContain('$1.30');
+  });
+
+  it('cost-mode=dollars overrides the plan (subscriber still sees $)', () => {
+    const h = renderPlan({ account: SUB, rateLimits: futureRL(), env: { SWARMDO_STATUSLINE_COST_MODE: 'dollars' } });
+    expect(h).toContain('$1.30');
+    expect(h).not.toContain('5h 72%');
+  });
+
+  it('cost-mode=off hides the slot entirely', () => {
+    const h = renderPlan({ account: SUB, rateLimits: futureRL(), env: { SWARMDO_STATUSLINE_COST_MODE: 'off' } });
+    expect(h).not.toContain('5h 72%');
+    expect(h).not.toContain('1.30');
+  });
+
+  it('the account label is silent by default, shown only with show-account', () => {
+    expect(renderPlan({ account: SUB, rateLimits: futureRL() })).not.toContain('work ·');
+    expect(renderPlan({ account: SUB, rateLimits: futureRL(), env: { SWARMDO_STATUSLINE_SHOW_ACCOUNT: '1' } })).toContain('work ·');
+  });
+
+  it('no logged-in account (unknown plan) defaults to $ — backward compatible', () => {
+    expect(renderPlan({ rateLimits: futureRL() })).toContain('$1.30');
   });
 });
 

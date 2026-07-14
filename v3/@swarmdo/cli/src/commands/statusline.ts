@@ -15,6 +15,7 @@ import { spawnSync } from 'node:child_process';
 import type { Command, CommandContext, CommandResult } from '../types.js';
 import { output } from '../output.js';
 import { select, multiSelect, confirm } from '../prompt.js';
+import { parseCostMode, type CostMode } from '../usage/account-plan.js';
 
 /** Every segment the generated statusline can render, in display order. */
 export const STATUSLINE_SEGMENTS: Array<{ value: string; label: string; hint: string }> = [
@@ -76,15 +77,54 @@ export function resolveCurrentSegments(cwd: string = process.cwd()): { segments:
   return { segments: STATUSLINE_PRESETS.full!, source: 'default (full)' };
 }
 
+export interface CostConfig { mode: CostMode; showAccount: boolean }
+
+/**
+ * Merge a patch into the statusline config, preserving orthogonal keys. Segment
+ * selection (preset XOR segments) and the cost block are independent, so setting
+ * one never wipes the other. A `preset` patch clears an explicit `segments` list
+ * and vice versa (they're mutually exclusive), but `cost` survives both.
+ */
 export function writeStatuslineConfig(
-  value: { preset: string } | { segments: string[] },
+  patch: { preset: string } | { segments: string[] } | { cost: CostConfig },
   global: boolean,
   cwd: string = process.cwd()
 ): string {
   const p = configPath(global, cwd);
   fs.mkdirSync(path.dirname(p), { recursive: true });
-  fs.writeFileSync(p, JSON.stringify(value, null, 2) + '\n');
+  let existing: Record<string, unknown> = {};
+  try { existing = JSON.parse(fs.readFileSync(p, 'utf8')) as Record<string, unknown>; } catch { /* new/invalid → start fresh */ }
+  const merged: Record<string, unknown> = { ...existing, ...patch };
+  if ('preset' in patch) delete merged.segments;
+  if ('segments' in patch) delete merged.preset;
+  fs.writeFileSync(p, JSON.stringify(merged, null, 2) + '\n');
   return p;
+}
+
+/**
+ * Resolve the cost-slot config in effect, mirroring the generated script:
+ * env (SWARMDO_STATUSLINE_COST_MODE / _SHOW_ACCOUNT) → project → global →
+ * default (auto, hidden).
+ */
+export function resolveCurrentCost(cwd: string = process.cwd()): CostConfig & { source: string } {
+  const envMode = parseCostMode(process.env.SWARMDO_STATUSLINE_COST_MODE);
+  const envShow = (process.env.SWARMDO_STATUSLINE_SHOW_ACCOUNT || '').trim();
+  let mode: CostMode | null = envMode;
+  let showAccount: boolean | null = /^(1|true|yes|on)$/i.test(envShow) ? true : /^(0|false|no|off)$/i.test(envShow) ? false : null;
+  let source = mode !== null || showAccount !== null ? 'env' : '';
+  if (mode === null || showAccount === null) {
+    for (const [where, p] of [['project', configPath(false, cwd)], ['global', configPath(true)]] as const) {
+      try {
+        const j = JSON.parse(fs.readFileSync(p, 'utf8')) as { cost?: { mode?: unknown; showAccount?: unknown } };
+        if (j.cost && typeof j.cost === 'object') {
+          if (mode === null) { const m = parseCostMode(j.cost.mode); if (m) { mode = m; source ||= `${where} config`; } }
+          if (showAccount === null && typeof j.cost.showAccount === 'boolean') { showAccount = j.cost.showAccount; source ||= `${where} config`; }
+        }
+      } catch { /* absent/invalid — keep looking */ }
+      if (mode !== null && showAccount !== null) break;
+    }
+  }
+  return { mode: mode ?? 'auto', showAccount: showAccount ?? false, source: source || 'default' };
 }
 
 /** Render a live preview through the generated helper, if the project has one. */
@@ -109,6 +149,27 @@ async function runConfigure(ctx: CommandContext): Promise<CommandResult> {
   const global = Boolean(ctx.flags.global);
   const flagPreset = typeof ctx.flags.preset === 'string' ? ctx.flags.preset.toLowerCase() : '';
   const flagSegments = typeof ctx.flags.segments === 'string' ? ctx.flags.segments : '';
+
+  // Cost slot (mode + account label) — orthogonal to segment selection, so it
+  // can be set alone or alongside --preset/--segments (merged, never clobbered).
+  const rawCostMode = ctx.flags.costMode;
+  const flagCostMode = parseCostMode(rawCostMode);
+  if (typeof rawCostMode === 'string' && !flagCostMode) {
+    output.writeln(output.error(`Unknown --cost-mode "${rawCostMode}". Valid: auto, dollars, limits, off`));
+    return { success: false, exitCode: 1 };
+  }
+  const wantShow = ctx.flags.showAccount === true;
+  const wantHide = ctx.flags.hideAccount === true;
+  if (flagCostMode || wantShow || wantHide) {
+    const cur = resolveCurrentCost(cwd);
+    const cost = { mode: flagCostMode ?? cur.mode, showAccount: wantShow ? true : wantHide ? false : cur.showAccount };
+    const p = writeStatuslineConfig({ cost }, global, cwd);
+    output.writeln(output.success(`Cost slot: mode=${cost.mode}, showAccount=${cost.showAccount} → ${p}`));
+    if (!flagPreset && !flagSegments) {
+      preview(resolveCurrentSegments(cwd).segments, cwd);
+      return { success: true, exitCode: 0 };
+    }
+  }
 
   // Non-interactive paths first: --preset / --segments write directly.
   if (flagPreset) {
@@ -182,13 +243,16 @@ async function runConfigure(ctx: CommandContext): Promise<CommandResult> {
 async function runShow(ctx: CommandContext): Promise<CommandResult> {
   const cwd = ctx.cwd || process.cwd();
   const { segments, source } = resolveCurrentSegments(cwd);
+  const cost = resolveCurrentCost(cwd);
   if (ctx.flags.json) {
-    output.writeln(JSON.stringify({ segments, source }, null, 2));
+    output.writeln(JSON.stringify({ segments, source, cost: { mode: cost.mode, showAccount: cost.showAccount, source: cost.source } }, null, 2));
   } else {
     output.writeln(`Segments (${source}):`);
     for (const s of STATUSLINE_SEGMENTS) {
       output.writeln(`  [${segments.includes(s.value) ? 'x' : ' '}] ${s.value.padEnd(13)} ${output.dim(s.hint)}`);
     }
+    output.writeln(`Cost slot (${cost.source}): mode=${cost.mode}, showAccount=${cost.showAccount}`);
+    output.writeln(output.dim('  auto → rate-limit % on subscription accounts, $ on pay-as-you-go'));
     preview(segments, cwd);
   }
   return { success: true, exitCode: 0 };
@@ -217,6 +281,9 @@ export const statuslineCommand: Command = {
     { name: 'global', short: 'g', description: 'Write to ~/.swarmdo/statusline.json instead of the project', type: 'boolean' },
     { name: 'preset', description: "Write a preset non-interactively: 'full' | 'compact' | 'minimal'", type: 'string' },
     { name: 'segments', description: 'Write a custom comma list non-interactively (e.g. project,model,swarm)', type: 'string' },
+    { name: 'cost-mode', description: "Cost slot: 'auto' (plan-aware) | 'dollars' | 'limits' | 'off'", type: 'string' },
+    { name: 'show-account', description: 'Prefix the cost slot with the active account label', type: 'boolean' },
+    { name: 'hide-account', description: 'Stop showing the account label (the default)', type: 'boolean' },
     { name: 'json', description: 'JSON output (with "show")', type: 'boolean' },
     { name: 'yes', short: 'y', description: 'Skip confirmation (with "reset")', type: 'boolean' },
   ],
@@ -224,6 +291,8 @@ export const statuslineCommand: Command = {
     { command: 'swarmdo statusline', description: 'Interactive: preset or custom checklist' },
     { command: 'swarmdo statusline --segments project,model,swarm', description: 'Write a custom selection directly' },
     { command: 'swarmdo statusline --preset minimal --global', description: 'Minimal statusline for every project' },
+    { command: 'swarmdo statusline --cost-mode auto', description: 'Plan-aware cost: rate-limit % on subscription, $ on API' },
+    { command: 'swarmdo statusline --cost-mode limits --show-account', description: 'Show rate-limit windows + the account label' },
     { command: 'swarmdo statusline show', description: 'Show the active selection and where it comes from' },
     { command: 'swarmdo statusline reset', description: 'Remove the project config' },
   ],

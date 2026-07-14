@@ -2710,7 +2710,7 @@ Claude Code pipes JSON session data via **stdin** to the statusline script after
 | `⎇ main` | Current git branch | `git branch --show-current` |
 | `Opus 4.8` | Claude model name | Stdin JSON `model.display_name` |
 | `●42% ctx` | Context window usage | Stdin JSON `context_window.used_percentage` |
-| `$0.15` | Session cost | Stdin JSON `cost.total_cost_usd` |
+| `5h 72%⚠ · 7d 12%` / `$0.15` | Cost slot — plan-aware (rate-limit % on subscription, $ on pay-as-you-go) | Stdin JSON + `~/.claude.json` |
 | `[●●●●○]` | DDD domain progress bar | `.swarmdo/metrics/v3-progress.json` |
 | `⚡ HNSW ~4.7x` | HNSW search speedup | AgentDB file stats |
 | `🐝 Swarms 2` | Active swarms (running, non-orphaned) | `.swarmdo/swarm/swarm-state.json` |
@@ -2722,12 +2722,14 @@ Claude Code pipes JSON session data via **stdin** to the statusline script after
 
 **Customizing the cost segment:**
 
-`cost.total_cost_usd` is a client-side estimate from Claude Code that *may differ from your actual bill* and, on subscription plans, does not reflect out-of-pocket spend. Two environment variables let you relabel or remove the segment (the default is unchanged):
+`cost.total_cost_usd` is a client-side estimate from Claude Code that *may differ from your actual bill* and, on subscription plans, is a phantom (you pay a flat fee, not per token). So the slot is **plan-aware by default** (`mode: auto`): it reads the active account (`~/.claude.json` → `oauthAccount`, live each render — correct across account switches, only plan fields) and shows rate-limit windows for subscriptions, a `$` figure for pay-as-you-go. Configure it with `swarmdo statusline --cost-mode …` / `.swarmdo/statusline.json` (full detail in the [Statusline Reference](#-statusline-reference)) or these env overrides:
 
 | Variable | Effect | Example |
 |----------|--------|---------|
-| `SWARMDO_STATUSLINE_COST_SYMBOL` | Overrides the leading `$`. Set to an empty string to show the number alone. | `SWARMDO_STATUSLINE_COST_SYMBOL=⚡` → `⚡1.30` |
-| `SWARMDO_STATUSLINE_HIDE_COST` | `1`/`true`/`yes`/`on` removes the segment entirely. | `SWARMDO_STATUSLINE_HIDE_COST=1` |
+| `SWARMDO_STATUSLINE_COST_MODE` | `auto` (plan-aware) · `dollars` · `limits` · `off`. | `SWARMDO_STATUSLINE_COST_MODE=limits` |
+| `SWARMDO_STATUSLINE_SHOW_ACCOUNT` | `1`/`true` prefixes the slot with the account label (default off — screenshare-safe). | `SWARMDO_STATUSLINE_SHOW_ACCOUNT=1` |
+| `SWARMDO_STATUSLINE_COST_SYMBOL` | Overrides the leading `$` (dollars mode). Empty string shows the number alone. | `SWARMDO_STATUSLINE_COST_SYMBOL=⚡` → `⚡1.30` |
+| `SWARMDO_STATUSLINE_HIDE_COST` | `1`/`true`/`yes`/`on` removes the segment entirely (same as `mode: off`). | `SWARMDO_STATUSLINE_HIDE_COST=1` |
 | `SWARMDO_STATUSLINE_NO_CLI` | Skip the per-render CLI delegation (no subprocess fork): render from local reads + Claude Code's stdin only. Faster and fork-free; detail rows use local fallbacks. | `SWARMDO_STATUSLINE_NO_CLI=1` |
 
 Set them in the `env` block of `.claude/settings.json` — Claude Code applies it to every session and to the statusline subprocess, and unlike hand-editing the helper it survives `npx swarmdo@latest init --update`:
@@ -7341,7 +7343,22 @@ Swarmdo's statusline renders a **header line** plus optional **detail rows**. Ch
 | `model` | active Claude model name | Claude Code stdin JSON |
 | `duration` | `⏱ <time>` — session wall-clock | Claude Code stdin JSON |
 | `context` | `● N% ctx` — context-window used (green → yellow → red) | Claude Code stdin JSON |
-| `cost` | `$N.NN` — session cost (hideable) | Claude Code stdin JSON |
+| `cost` | **plan-aware** — rate-limit % on subscription accounts, `$N.NN` on pay-as-you-go | Claude Code stdin JSON + `~/.claude.json` |
+
+**The `cost` slot — plan-aware**
+
+Claude Code's `cost.total_cost_usd` is a *client-side estimate* that reads as a phantom on flat-fee subscription plans (Max/Team/Enterprise/Pro), where you don't pay per token. So the slot is **plan-aware**: it reads the active account (`~/.claude.json` → `oauthAccount`, live on every render so it stays correct across account switches — only plan fields, never tokens) and picks the metric:
+
+- **subscription** → the official rate-limit windows, e.g. `5h 72%⚠ · 7d 12%` (green → yellow when ≥80% or on-pace-to-exhaust-before-reset → red at 100%), parsed from Claude Code's `rate_limits` payload.
+- **pay-as-you-go** (API / console) → the real `$N.NN`.
+
+| Setting | Config (`.swarmdo/statusline.json`) | Env override | Command |
+|---|---|---|---|
+| Mode | `"cost": { "mode": "auto" }` — `auto`·`dollars`·`limits`·`off` | `SWARMDO_STATUSLINE_COST_MODE` | `swarmdo statusline --cost-mode <m>` |
+| Account label | `"cost": { "showAccount": true }` (default `false`, silent) | `SWARMDO_STATUSLINE_SHOW_ACCOUNT` | `swarmdo statusline --show-account` / `--hide-account` |
+| Symbol / hide (legacy) | — | `SWARMDO_STATUSLINE_COST_SYMBOL`, `SWARMDO_STATUSLINE_HIDE_COST` | — |
+
+`auto` is the default; precedence is env → project config → global config → default. `--show-account` prefixes the slot with the account's display name — off by default so it stays screenshare-safe. Set once for every project with `swarmdo statusline --cost-mode auto --global`.
 
 **Detail rows** (each is its own line)
 
