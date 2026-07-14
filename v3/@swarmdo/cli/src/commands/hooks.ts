@@ -20,6 +20,46 @@ import {
 import { classifyCommand, extractBashCommand, denyOutput } from '../hooks-recipe/command-guard.js';
 
 /**
+ * Swarm agent count for the statusline (`🤖 Swarm [N/max]`). Reads Swarmdo's
+ * canonical agent registry — the store that `agent_spawn`, `swarm_init`,
+ * `agent bridge register`, and hive-mind workers all write to
+ * (`.swarmdo/agents/store.json` + the hive `.swarmdo/agents.json`) — and counts
+ * every non-terminated agent.
+ *
+ * Replaces the old `ps aux | grep -c agentic-flow` heuristic, which (a) was
+ * blind to in-process agents — Claude Code Task-tool subagents and bridged
+ * agents never appear as a separate `agentic-flow` OS process — so the count
+ * never moved when a swarm spun up, and (b) false-positived on any process
+ * whose args merely mention "agentic-flow" (a grep, an open editor buffer, the
+ * ONNX embedder), showing phantom agents when none were running.
+ */
+export function computeSwarmStatus(
+  cwd: string = process.cwd(),
+): { activeAgents: number; maxAgents: number; coordinationActive: boolean } {
+  const maxAgents = 15;
+  const agents: Record<string, { status?: string }> = {};
+  // Both stores hold a { agents: { <id>: { status } } } map; merge them.
+  for (const rel of [['.swarmdo', 'agents', 'store.json'], ['.swarmdo', 'agents.json']]) {
+    try {
+      const p = join(cwd, ...rel);
+      if (existsSync(p)) {
+        const data = JSON.parse(readFileSync(p, 'utf-8'));
+        if (data && data.agents && typeof data.agents === 'object') {
+          Object.assign(agents, data.agents as Record<string, { status?: string }>);
+        }
+      }
+    } catch {
+      // unreadable/corrupt store — skip it, count what we can
+    }
+  }
+  let activeAgents = 0;
+  for (const id of Object.keys(agents)) {
+    if (agents[id] && agents[id].status !== 'terminated') activeAgents++;
+  }
+  return { activeAgents, maxAgents, coordinationActive: activeAgents > 0 };
+}
+
+/**
  * #1686 — `?? 0` only defaults null/undefined; NaN slips through and
  * surfaces as `"NaN"` (or earlier crashed `.toFixed`) in the metrics
  * dashboard and pretrain output. Coerce to a finite number, fall back
@@ -4330,25 +4370,9 @@ const statuslineCommand: Command = {
       return { status: 'NONE', critical: 0, high: 0, total: 0, scannedAt: null };
     }
 
-    // Get swarm status
+    // Get swarm status from the canonical agent registry (not `ps | grep agentic-flow`).
     function getSwarmStatus() {
-      let activeAgents = 0;
-      let coordinationActive = false;
-      const maxAgents = 15;
-      const isWindows = process.platform === 'win32';
-
-      try {
-        const psCmd = isWindows
-          ? 'tasklist /FI "IMAGENAME eq node.exe" /NH 2>NUL | find /c /v "" 2>NUL || echo 0'
-          : 'ps aux 2>/dev/null | grep -c agentic-flow || echo "0"';
-        const ps = execSync(psCmd, { encoding: 'utf-8', timeout: 3000 });
-        activeAgents = Math.max(0, parseInt(ps.trim()) - 1);
-        coordinationActive = activeAgents > 0;
-      } catch {
-        // ps/tasklist unavailable or timed out — report zero
-      }
-
-      return { activeAgents, maxAgents, coordinationActive };
+      return computeSwarmStatus(process.cwd());
     }
 
     // Get system metrics
