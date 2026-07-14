@@ -20,7 +20,7 @@ import {
 import { classifyCommand, extractBashCommand, denyOutput } from '../hooks-recipe/command-guard.js';
 
 /**
- * Swarm agent count for the statusline (`🤖 Swarm [N/max]`). Reads Swarmdo's
+ * Live swarm agent count for the statusline (`🤖 Swarm N`). Reads Swarmdo's
  * canonical agent registry — the store that `agent_spawn`, `swarm_init`,
  * `agent bridge register`, and hive-mind workers all write to
  * (`.swarmdo/agents/store.json` + the hive `.swarmdo/agents.json`) — and counts
@@ -32,11 +32,15 @@ import { classifyCommand, extractBashCommand, denyOutput } from '../hooks-recipe
  * never moved when a swarm spun up, and (b) false-positived on any process
  * whose args merely mention "agentic-flow" (a grep, an open editor buffer, the
  * ONNX embedder), showing phantom agents when none were running.
+ *
+ * No `maxAgents` denominator is reported: swarm size is never enforced at spawn
+ * time (the config value is an advisory hint feeding an internal [1,50]
+ * backstop), so a `[N/max]` gauge would imply a live cap that does not exist.
+ * The statusline shows the honest live count instead.
  */
 export function computeSwarmStatus(
   cwd: string = process.cwd(),
-): { activeAgents: number; maxAgents: number; coordinationActive: boolean } {
-  const maxAgents = 15;
+): { activeAgents: number; coordinationActive: boolean } {
   const agents: Record<string, { status?: string }> = {};
   // Both stores hold a { agents: { <id>: { status } } } map; merge them.
   for (const rel of [['.swarmdo', 'agents', 'store.json'], ['.swarmdo', 'agents.json']]) {
@@ -56,7 +60,7 @@ export function computeSwarmStatus(
   for (const id of Object.keys(agents)) {
     if (agents[id] && agents[id].status !== 'terminated') activeAgents++;
   }
-  return { activeAgents, maxAgents, coordinationActive: activeAgents > 0 };
+  return { activeAgents, coordinationActive: activeAgents > 0 };
 }
 
 /**
@@ -4498,7 +4502,7 @@ const statuslineCommand: Command = {
     const terminalCols = process.stdout.columns ?? 80;
     const autoCompact = !ctx.flags.full && terminalCols < COMPACT_WIDTH_THRESHOLD;
     if (ctx.flags.compact || autoCompact) {
-      const line = `DDD:${progress.domainsCompleted}/${progress.totalDomains} Sec:${security.status} Swarm:${swarm.activeAgents}/${swarm.maxAgents} Ctx:${system.contextPct}% Int:${system.intelligencePct}%`;
+      const line = `DDD:${progress.domainsCompleted}/${progress.totalDomains} Sec:${security.status} Swarm:${swarm.activeAgents} Ctx:${system.contextPct}% Int:${system.intelligencePct}%`;
       output.writeln(line);
       return { success: true, data: statusData };
     }
@@ -4681,7 +4685,7 @@ const statuslineCommand: Command = {
     const securityColor = security.status === 'CLEAN' ? c.brightGreen : security.status === 'STALE' ? c.brightYellow : security.status === 'NONE' ? c.dim : c.brightRed;
     const hooksColor = hooksStats.enabled > 0 ? c.brightGreen : c.dim;
 
-    const line2 = `${c.brightYellow}🤖 Swarm${c.reset}  ${swarmIndicator} [${agentsColor}${String(swarm.activeAgents).padStart(2)}${c.reset}/${c.brightWhite}${swarm.maxAgents}${c.reset}]  ` +
+    const line2 = `${c.brightYellow}🤖 Swarm${c.reset}  ${swarmIndicator} ${agentsColor}${String(swarm.activeAgents).padStart(2)}${c.reset}  ` +
       `${c.brightPurple}👥 ${system.subAgents}${c.reset}    ` +
       `${c.brightBlue}🪝 ${hooksColor}${hooksStats.enabled}${c.reset}/${c.brightWhite}${hooksStats.total}${c.reset}    ` +
       `${securityIcon} ${securityColor}sec ${security.status === 'VULN' ? (security.critical + security.high) + '!' : security.status === 'CLEAN' ? '✓' : security.status === 'STALE' ? 'stale' : '—'}${c.reset}    ` +

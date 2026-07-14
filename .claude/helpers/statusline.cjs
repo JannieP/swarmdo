@@ -331,7 +331,7 @@ function buildLocalFallback() {
     user: { name: 'user', gitBranch: '', modelName: 'Claude Code' },
     v3Progress: { domainsCompleted: 0, totalDomains: 5, dddProgress: 0, patternsLearned: 0, sessionsCompleted: 0 },
     security: { status: 'NONE', critical: 0, high: 0, total: 0 },
-    swarm: { activeAgents: 0, maxAgents: CONFIG.maxAgents, coordinationActive: false },
+    swarm: { activeAgents: 0, coordinationActive: false },
     system: { memoryMB: memMB, contextPct: 0, intelligencePct: 0, subAgents: 0 },
     lastUpdated: new Date().toISOString(),
   });
@@ -522,7 +522,7 @@ function getCostFromStdin() {
 // misses, the displayed version is meaningful (matches what the user
 // installed), not a stale hard-coded string.
 function getPkgVersion() {
-  let ver = '1.58.0';
+  let ver = '1.58.2';
   try {
     const home = os.homedir();
     const pkgPaths = [
@@ -593,7 +593,6 @@ function generateStatusline() {
   const dddProgress = progress.dddProgress || 0;
   const patternsLearned = progress.patternsLearned || 0;
   const activeAgents = swarm.activeAgents || 0;
-  const maxAgents = swarm.maxAgents || CONFIG.maxAgents;
   const coordinationActive = swarm.coordinationActive || false;
   const intelligencePct = system.intelligencePct || 0;
   const memoryMB = system.memoryMB || 0;
@@ -672,7 +671,7 @@ function generateStatusline() {
   const intellColor = intelligencePct >= 80 ? c.brightGreen : intelligencePct >= 40 ? c.brightYellow : c.dim;
 
   if (seg('swarm')) lines.push(
-    c.brightYellow + '🤖 Swarm' + c.reset + '  ' + swarmInd + ' [' + agentsColor + String(activeAgents).padStart(2) + c.reset + '/' + c.brightWhite + maxAgents + c.reset + ']  ' +
+    c.brightYellow + '🤖 Swarm' + c.reset + '  ' + swarmInd + ' ' + agentsColor + String(activeAgents).padStart(2) + c.reset + '  ' +
     c.brightPurple + '👥 ' + subAgents + c.reset + '    ' +
     c.brightBlue + '🪝 ' + hooksColor + hooksEnabled + c.reset + '/' + c.brightWhite + hooksTotal + c.reset + '    ' +
     secIcon + ' ' + secColor + secLabel + c.reset + '    ' +

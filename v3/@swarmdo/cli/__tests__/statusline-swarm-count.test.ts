@@ -1,5 +1,5 @@
 /**
- * The statusline `🤖 Swarm [N/max]` count must reflect the canonical agent
+ * The statusline `🤖 Swarm N` live count must reflect the canonical agent
  * registry (what `agent_spawn` / `swarm_init` / `agent bridge register` / the
  * hive-mind write), NOT `ps aux | grep -c agentic-flow`. The old heuristic
  * never moved when a swarm spun up (in-process / bridged agents are not a
@@ -24,7 +24,7 @@ function writeStore(rel: string, obj: unknown): void {
 
 describe('statusline swarm count — reads the agent registry, not ps', () => {
   it('reports zero (no phantom agents) when no registry exists', () => {
-    expect(computeSwarmStatus(dir)).toEqual({ activeAgents: 0, maxAgents: 15, coordinationActive: false });
+    expect(computeSwarmStatus(dir)).toEqual({ activeAgents: 0, coordinationActive: false });
   });
 
   it('counts non-terminated agents from the canonical store', () => {
@@ -58,6 +58,6 @@ describe('statusline swarm count — reads the agent registry, not ps', () => {
     const p = join(dir, '.swarmdo', 'agents', 'store.json');
     mkdirSync(dirname(p), { recursive: true });
     writeFileSync(p, '{not valid json', 'utf-8');
-    expect(computeSwarmStatus(dir)).toEqual({ activeAgents: 0, maxAgents: 15, coordinationActive: false });
+    expect(computeSwarmStatus(dir)).toEqual({ activeAgents: 0, coordinationActive: false });
   });
 });

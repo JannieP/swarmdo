@@ -56,7 +56,7 @@ const BAKED_CLI_VERSION = readBakedCliVersion();
  * ▊ Swarmdo V3.6 ● user  │  ⎇ branch  │  Opus 4.7
  * ─────────────────────────────────────────────────────
  * 🏗️  DDD Domains    [●●○○○]  2/5    ⚡ HNSW 150x
- * 🤖 Swarm  ◉ [ 5/15]  👥 2    🪝 10/17    🟢 CVE 3/3    💾 4MB    🧠  63%
+ * 🤖 Swarm  ◉  5  👥 2    🪝 10/17    🟢 CVE 3/3    💾 4MB    🧠  63%
  * 🔧 Architecture    ADRs ●71%  │  DDD ● 13%  │  Security ●CLEAN
  * 📊 AgentDB    Vectors ●3104⚡  │  Size 216KB  │  Tests ●6 (~24 cases)  │  MCP ●1/1
  */
@@ -396,7 +396,7 @@ function buildLocalFallback() {
     user: { name: 'user', gitBranch: '', modelName: 'Claude Code' },
     v3Progress: { domainsCompleted: 0, totalDomains: 5, dddProgress: 0, patternsLearned: 0, sessionsCompleted: 0 },
     security: { status: 'NONE', critical: 0, high: 0, total: 0 },
-    swarm: { activeAgents: 0, maxAgents: CONFIG.maxAgents, coordinationActive: false },
+    swarm: { activeAgents: 0, coordinationActive: false },
     system: { memoryMB: memMB, contextPct: 0, intelligencePct: 0, subAgents: 0 },
     lastUpdated: new Date().toISOString(),
   });
@@ -658,7 +658,6 @@ function generateStatusline() {
   const dddProgress = progress.dddProgress || 0;
   const patternsLearned = progress.patternsLearned || 0;
   const activeAgents = swarm.activeAgents || 0;
-  const maxAgents = swarm.maxAgents || CONFIG.maxAgents;
   const coordinationActive = swarm.coordinationActive || false;
   const intelligencePct = system.intelligencePct || 0;
   const memoryMB = system.memoryMB || 0;
@@ -737,7 +736,7 @@ function generateStatusline() {
   const intellColor = intelligencePct >= 80 ? c.brightGreen : intelligencePct >= 40 ? c.brightYellow : c.dim;
 
   if (seg('swarm')) lines.push(
-    c.brightYellow + '🤖 Swarm' + c.reset + '  ' + swarmInd + ' [' + agentsColor + String(activeAgents).padStart(2) + c.reset + '/' + c.brightWhite + maxAgents + c.reset + ']  ' +
+    c.brightYellow + '🤖 Swarm' + c.reset + '  ' + swarmInd + ' ' + agentsColor + String(activeAgents).padStart(2) + c.reset + '  ' +
     c.brightPurple + '👥 ' + subAgents + c.reset + '    ' +
     c.brightBlue + '🪝 ' + hooksColor + hooksEnabled + c.reset + '/' + c.brightWhite + hooksTotal + c.reset + '    ' +
     secIcon + ' ' + secColor + secLabel + c.reset + '    ' +
