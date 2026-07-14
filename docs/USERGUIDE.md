@@ -7083,7 +7083,7 @@ Environment setup, configuration options, and platform support.
 
 ### 🔡 Slash Command Reference
 
-Swarmdo ships **145 `/sDo:` slash commands** (installed into `.claude/commands/sDo/` by `swarmdo init`, or user-wide in `~/.claude/commands/sDo/`) plus **38 `/sdo-` skills**. In Claude Code, type `/sDo:` (or `/sdo-`) to browse them; most wrap a `npx swarmdo …` CLI call or an MCP tool, so the same capability also works from a plain shell.
+Swarmdo ships **146 `/sDo:` slash commands** (installed into `.claude/commands/sDo/` by `swarmdo init`, or user-wide in `~/.claude/commands/sDo/`) plus **38 `/sdo-` skills**. In Claude Code, type `/sDo:` (or `/sdo-`) to browse them; most wrap a `npx swarmdo …` CLI call or an MCP tool, so the same capability also works from a plain shell.
 
 **How to use them**
 
@@ -7098,6 +7098,7 @@ Swarmdo ships **145 `/sDo:` slash commands** (installed into `.claude/commands/s
 
 | Command | What it does |
 |---|---|
+| `/sDo:security` | Scan this project's security and refresh the statusline Security segment |
 | `/sDo:sparc` | Execute SPARC methodology workflows with Swarmdo |
 | `/sDo:statusline` | Edit the swarmdo statusline — pick segments via checklist or preset |
 | `/sDo:swarmdo-help` | Show Swarmdo commands and usage |
