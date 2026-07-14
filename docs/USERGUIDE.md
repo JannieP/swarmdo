@@ -2699,7 +2699,7 @@ Claude Code pipes JSON session data via **stdin** to the statusline script after
 **Output Format:**
 ```
 ▊ Swarmdo V3 ● upstream  │  ⎇ main  │  Opus 4.6  | ●42% ctx  | $0.15
-🏗️ DDD [●●●●○] 4/5  ⚡ HNSW ~4.7x  🤖 ◉ [12/8]  👥 3  🟢 CVE 3/3  💾 512MB  🧠 15%  📦 AgentDB ●1.2K vectors
+🏗️ DDD [●●●●○] 4/5  ⚡ HNSW ~4.7x  🐝 Swarms 2  🤖 Agents 12  🟢 CVE 3/3  💾 512MB  🧠 15%  📦 AgentDB ●1.2K vectors
 ```
 
 | Indicator | Description | Source |
@@ -2712,9 +2712,8 @@ Claude Code pipes JSON session data via **stdin** to the statusline script after
 | `$0.15` | Session cost | Stdin JSON `cost.total_cost_usd` |
 | `[●●●●○]` | DDD domain progress bar | `.swarmdo/metrics/v3-progress.json` |
 | `⚡ HNSW ~4.7x` | HNSW search speedup | AgentDB file stats |
-| `◉/○` | Swarm coordination status | Process detection |
-| `[12/8]` | Active agents / max agents | `ps aux` process count |
-| `👥 3` | Sub-agents spawned | Task tool agent count |
+| `🐝 Swarms 2` | Active swarms (running, non-orphaned) | `.swarmdo/swarm/swarm-state.json` |
+| `🤖 Agents 12` | Non-terminated agents | `.swarmdo/agents/store.json` + hive `.swarmdo/agents.json` |
 | `🟢 CVE 3/3` | Security CVE remediation | `.swarmdo/security/audit-status.json` |
 | `💾 512MB` | Memory usage | Node.js process RSS |
 | `🧠 15%` | Intelligence score | Pattern count from AgentDB |
