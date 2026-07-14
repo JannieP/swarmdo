@@ -19,28 +19,41 @@ import {
 } from '../memory-inject/select.js';
 import { classifyCommand, extractBashCommand, denyOutput } from '../hooks-recipe/command-guard.js';
 
+// Read-only liveness probe (does not persist). Mirrors swarm-tools' isPidAlive
+// so the statusline never counts a swarm whose host process has exited.
+function statuslinePidAlive(pid: number): boolean {
+  try {
+    process.kill(pid, 0);
+    return true;
+  } catch (e) {
+    return (e as NodeJS.ErrnoException).code === 'EPERM';
+  }
+}
+
 /**
- * Live swarm agent count for the statusline (`🤖 Swarm N`). Reads Swarmdo's
- * canonical agent registry — the store that `agent_spawn`, `swarm_init`,
- * `agent bridge register`, and hive-mind workers all write to
- * (`.swarmdo/agents/store.json` + the hive `.swarmdo/agents.json`) — and counts
- * every non-terminated agent.
+ * Live swarm + agent counts for the statusline (`🐝 Swarms N   🤖 Agents M`).
+ * These are two distinct numbers, read from two canonical registries:
+ *   - agents: `.swarmdo/agents/store.json` + the hive `.swarmdo/agents.json`
+ *     (what `agent_spawn`, `swarm_init`, `agent bridge register`, and hive-mind
+ *     workers write) — every non-terminated agent is counted.
+ *   - swarms: `.swarmdo/swarm/swarm-state.json` — every `status: 'running'`
+ *     swarm whose host process is still alive; dead-pid / >24h-stale orphans are
+ *     skipped read-only (mirrors reconcileOrphanSwarms without persisting).
  *
- * Replaces the old `ps aux | grep -c agentic-flow` heuristic, which (a) was
- * blind to in-process agents — Claude Code Task-tool subagents and bridged
- * agents never appear as a separate `agentic-flow` OS process — so the count
- * never moved when a swarm spun up, and (b) false-positived on any process
+ * The agent count replaces the old `ps aux | grep -c agentic-flow` heuristic,
+ * which (a) was blind to in-process agents — Claude Code Task-tool subagents and
+ * bridged agents never appear as a separate `agentic-flow` OS process — so the
+ * count never moved when a swarm spun up, and (b) false-positived on any process
  * whose args merely mention "agentic-flow" (a grep, an open editor buffer, the
  * ONNX embedder), showing phantom agents when none were running.
  *
  * No `maxAgents` denominator is reported: swarm size is never enforced at spawn
  * time (the config value is an advisory hint feeding an internal [1,50]
  * backstop), so a `[N/max]` gauge would imply a live cap that does not exist.
- * The statusline shows the honest live count instead.
  */
 export function computeSwarmStatus(
   cwd: string = process.cwd(),
-): { activeAgents: number; coordinationActive: boolean } {
+): { activeSwarms: number; activeAgents: number; coordinationActive: boolean } {
   const agents: Record<string, { status?: string }> = {};
   // Both stores hold a { agents: { <id>: { status } } } map; merge them.
   for (const rel of [['.swarmdo', 'agents', 'store.json'], ['.swarmdo', 'agents.json']]) {
@@ -60,7 +73,41 @@ export function computeSwarmStatus(
   for (const id of Object.keys(agents)) {
     if (agents[id] && agents[id].status !== 'terminated') activeAgents++;
   }
-  return { activeAgents, coordinationActive: activeAgents > 0 };
+
+  // Active swarms — running, non-orphaned entries in swarm-state.json.
+  let activeSwarms = 0;
+  try {
+    const sp = join(cwd, '.swarmdo', 'swarm', 'swarm-state.json');
+    if (existsSync(sp)) {
+      const store = JSON.parse(readFileSync(sp, 'utf-8'));
+      const swarms =
+        store && store.swarms && typeof store.swarms === 'object' ? store.swarms : {};
+      const ORPHAN_TTL_MS = 24 * 60 * 60 * 1000;
+      const nowMs = Date.now();
+      for (const s of Object.values(swarms) as Array<{
+        status?: string;
+        pid?: number;
+        updatedAt?: string;
+      }>) {
+        if (!s || s.status !== 'running') continue;
+        if (typeof s.pid === 'number') {
+          if (!statuslinePidAlive(s.pid)) continue; // host process gone → orphan
+        } else if (s.updatedAt) {
+          const ageMs = nowMs - new Date(s.updatedAt).getTime();
+          if (Number.isFinite(ageMs) && ageMs > ORPHAN_TTL_MS) continue; // heartbeat stale
+        }
+        activeSwarms++;
+      }
+    }
+  } catch {
+    // unreadable/corrupt swarm store — count 0
+  }
+
+  return {
+    activeSwarms,
+    activeAgents,
+    coordinationActive: activeSwarms > 0 || activeAgents > 0,
+  };
 }
 
 /**
@@ -4382,7 +4429,6 @@ const statuslineCommand: Command = {
     // Get system metrics
     function getSystemMetrics() {
       let memoryMB = 0;
-      let subAgents = 0;
       const learning = getLearningStats();
 
       try {
@@ -4443,7 +4489,7 @@ const statuslineCommand: Command = {
 
       const contextPct = Math.min(100, Math.floor(learning.sessions * 5));
 
-      return { memoryMB, contextPct, intelligencePct, subAgents };
+      return { memoryMB, contextPct, intelligencePct };
     }
 
     // Get user info
@@ -4502,7 +4548,7 @@ const statuslineCommand: Command = {
     const terminalCols = process.stdout.columns ?? 80;
     const autoCompact = !ctx.flags.full && terminalCols < COMPACT_WIDTH_THRESHOLD;
     if (ctx.flags.compact || autoCompact) {
-      const line = `DDD:${progress.domainsCompleted}/${progress.totalDomains} Sec:${security.status} Swarm:${swarm.activeAgents} Ctx:${system.contextPct}% Int:${system.intelligencePct}%`;
+      const line = `DDD:${progress.domainsCompleted}/${progress.totalDomains} Sec:${security.status} Swarms:${swarm.activeSwarms} Agents:${swarm.activeAgents} Ctx:${system.contextPct}% Int:${system.intelligencePct}%`;
       output.writeln(line);
       return { success: true, data: statusData };
     }
@@ -4679,14 +4725,14 @@ const statuslineCommand: Command = {
       `${domainsColor}${progress.domainsCompleted}${c.reset}/${c.brightWhite}${progress.totalDomains}${c.reset}    ` +
       perfIndicator;
 
-    const swarmIndicator = swarm.coordinationActive ? `${c.brightGreen}◉${c.reset}` : `${c.dim}○${c.reset}`;
-    const agentsColor = swarm.activeAgents > 0 ? c.brightGreen : c.red;
+    const swarmsColor = swarm.activeSwarms > 0 ? c.brightGreen : c.dim;
+    const agentsColor = swarm.activeAgents > 0 ? c.brightGreen : c.dim;
     const securityIcon = security.status === 'CLEAN' ? '🟢' : security.status === 'STALE' ? '🟡' : security.status === 'NONE' ? '⚪' : '🔴';
     const securityColor = security.status === 'CLEAN' ? c.brightGreen : security.status === 'STALE' ? c.brightYellow : security.status === 'NONE' ? c.dim : c.brightRed;
     const hooksColor = hooksStats.enabled > 0 ? c.brightGreen : c.dim;
 
-    const line2 = `${c.brightYellow}🤖 Swarm${c.reset}  ${swarmIndicator} ${agentsColor}${String(swarm.activeAgents).padStart(2)}${c.reset}  ` +
-      `${c.brightPurple}👥 ${system.subAgents}${c.reset}    ` +
+    const line2 = `${c.brightYellow}🐝 Swarms${c.reset} ${swarmsColor}${swarm.activeSwarms}${c.reset}    ` +
+      `${c.brightYellow}🤖 Agents${c.reset} ${agentsColor}${swarm.activeAgents}${c.reset}    ` +
       `${c.brightBlue}🪝 ${hooksColor}${hooksStats.enabled}${c.reset}/${c.brightWhite}${hooksStats.total}${c.reset}    ` +
       `${securityIcon} ${securityColor}sec ${security.status === 'VULN' ? (security.critical + security.high) + '!' : security.status === 'CLEAN' ? '✓' : security.status === 'STALE' ? 'stale' : '—'}${c.reset}    ` +
       `${c.brightCyan}💾 ${system.memoryMB}MB${c.reset}    ` +

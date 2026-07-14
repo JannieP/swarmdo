@@ -1,10 +1,13 @@
 /**
- * The statusline `🤖 Swarm N` live count must reflect the canonical agent
- * registry (what `agent_spawn` / `swarm_init` / `agent bridge register` / the
- * hive-mind write), NOT `ps aux | grep -c agentic-flow`. The old heuristic
- * never moved when a swarm spun up (in-process / bridged agents are not a
- * separate `agentic-flow` process) and false-positived on any process whose
- * args mention "agentic-flow" (a grep, an editor buffer, the ONNX embedder).
+ * The statusline's second row shows two DISTINCT live counts —
+ * `🐝 Swarms N` and `🤖 Agents M` — from Swarmdo's canonical registries:
+ *   - agents: `.swarmdo/agents/store.json` + hive `.swarmdo/agents.json`
+ *     (what agent_spawn / swarm_init / agent bridge register / hive-mind write)
+ *   - swarms: `.swarmdo/swarm/swarm-state.json` (status=running, non-orphaned)
+ * NOT `ps aux | grep -c agentic-flow`: that heuristic never moved when a swarm
+ * spun up (in-process / bridged agents are not a separate `agentic-flow`
+ * process) and false-positived on any process whose args mention "agentic-flow"
+ * (a grep, an editor buffer, the ONNX embedder).
  */
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { mkdtempSync, rmSync, mkdirSync, writeFileSync } from 'node:fs';
@@ -22,9 +25,9 @@ function writeStore(rel: string, obj: unknown): void {
   writeFileSync(p, JSON.stringify(obj), 'utf-8');
 }
 
-describe('statusline swarm count — reads the agent registry, not ps', () => {
-  it('reports zero (no phantom agents) when no registry exists', () => {
-    expect(computeSwarmStatus(dir)).toEqual({ activeAgents: 0, coordinationActive: false });
+describe('statusline swarm + agent counts — read the canonical registries, not ps', () => {
+  it('reports zero (no phantom agents/swarms) when no registry exists', () => {
+    expect(computeSwarmStatus(dir)).toEqual({ activeSwarms: 0, activeAgents: 0, coordinationActive: false });
   });
 
   it('counts non-terminated agents from the canonical store', () => {
@@ -54,10 +57,28 @@ describe('statusline swarm count — reads the agent registry, not ps', () => {
     expect(computeSwarmStatus(dir).activeAgents).toBe(1);
   });
 
+  it('counts running, non-orphaned swarms from swarm-state.json (distinct from agents)', () => {
+    const recent = new Date().toISOString();
+    const stale = new Date(Date.now() - 25 * 60 * 60 * 1000).toISOString();
+    writeStore(join('.swarmdo', 'swarm', 'swarm-state.json'), {
+      version: '3.0.0',
+      swarms: {
+        live: { swarmId: 'live', status: 'running', pid: process.pid }, // host alive → counted
+        fresh: { swarmId: 'fresh', status: 'running', updatedAt: recent }, // no pid, fresh → counted
+        stale: { swarmId: 'stale', status: 'running', updatedAt: stale }, // no pid, >24h → orphan, skipped
+        done: { swarmId: 'done', status: 'terminated' }, // terminated → skipped
+      },
+    });
+    const s = computeSwarmStatus(dir);
+    expect(s.activeSwarms).toBe(2); // live + fresh
+    expect(s.activeAgents).toBe(0); // swarms counted separately from agents
+    expect(s.coordinationActive).toBe(true);
+  });
+
   it('tolerates a corrupt store without throwing', () => {
     const p = join(dir, '.swarmdo', 'agents', 'store.json');
     mkdirSync(dirname(p), { recursive: true });
     writeFileSync(p, '{not valid json', 'utf-8');
-    expect(computeSwarmStatus(dir)).toEqual({ activeAgents: 0, coordinationActive: false });
+    expect(computeSwarmStatus(dir)).toEqual({ activeSwarms: 0, activeAgents: 0, coordinationActive: false });
   });
 });

@@ -331,8 +331,8 @@ function buildLocalFallback() {
     user: { name: 'user', gitBranch: '', modelName: 'Claude Code' },
     v3Progress: { domainsCompleted: 0, totalDomains: 5, dddProgress: 0, patternsLearned: 0, sessionsCompleted: 0 },
     security: { status: 'NONE', critical: 0, high: 0, total: 0 },
-    swarm: { activeAgents: 0, coordinationActive: false },
-    system: { memoryMB: memMB, contextPct: 0, intelligencePct: 0, subAgents: 0 },
+    swarm: { activeSwarms: 0, activeAgents: 0, coordinationActive: false },
+    system: { memoryMB: memMB, contextPct: 0, intelligencePct: 0 },
     lastUpdated: new Date().toISOString(),
   });
 }
@@ -522,7 +522,7 @@ function getCostFromStdin() {
 // misses, the displayed version is meaningful (matches what the user
 // installed), not a stale hard-coded string.
 function getPkgVersion() {
-  let ver = '1.58.2';
+  let ver = '1.58.4';
   try {
     const home = os.homedir();
     const pkgPaths = [
@@ -592,11 +592,11 @@ function generateStatusline() {
   const totalDomains = progress.totalDomains || 5;
   const dddProgress = progress.dddProgress || 0;
   const patternsLearned = progress.patternsLearned || 0;
+  const activeSwarms = swarm.activeSwarms || 0;
   const activeAgents = swarm.activeAgents || 0;
   const coordinationActive = swarm.coordinationActive || false;
   const intelligencePct = system.intelligencePct || 0;
   const memoryMB = system.memoryMB || 0;
-  const subAgents = system.subAgents || 0;
   const secCritHigh = (security.critical || 0) + (security.high || 0);
   const secStatus = security.status || 'NONE';
   const secLabel = secStatus === 'VULN' ? 'sec ' + secCritHigh + '!' : secStatus === 'CLEAN' ? 'sec ✓' : secStatus === 'STALE' ? 'sec stale' : 'sec —';
@@ -663,16 +663,16 @@ function generateStatusline() {
   );
 
   // Line 2: Swarm + Hooks + CVE + Memory + Intelligence
-  const swarmInd = coordinationActive ? c.brightGreen + '◉' + c.reset : c.dim + '○' + c.reset;
-  const agentsColor = activeAgents > 0 ? c.brightGreen : c.red;
+  const swarmsColor = activeSwarms > 0 ? c.brightGreen : c.dim;
+  const agentsColor = activeAgents > 0 ? c.brightGreen : c.dim;
   const secIcon = secStatus === 'CLEAN' ? '🟢' : secStatus === 'STALE' ? '🟡' : (secStatus === 'NONE' ? '⚪' : '🔴');
   const secColor = secStatus === 'CLEAN' ? c.brightGreen : secStatus === 'STALE' ? c.brightYellow : (secStatus === 'NONE' ? c.dim : c.brightRed);
   const hooksColor = hooksEnabled > 0 ? c.brightGreen : c.dim;
   const intellColor = intelligencePct >= 80 ? c.brightGreen : intelligencePct >= 40 ? c.brightYellow : c.dim;
 
   if (seg('swarm')) lines.push(
-    c.brightYellow + '🤖 Swarm' + c.reset + '  ' + swarmInd + ' ' + agentsColor + String(activeAgents).padStart(2) + c.reset + '  ' +
-    c.brightPurple + '👥 ' + subAgents + c.reset + '    ' +
+    c.brightYellow + '🐝 Swarms' + c.reset + ' ' + swarmsColor + activeSwarms + c.reset + '    ' +
+    c.brightYellow + '🤖 Agents' + c.reset + ' ' + agentsColor + activeAgents + c.reset + '    ' +
     c.brightBlue + '🪝 ' + hooksColor + hooksEnabled + c.reset + '/' + c.brightWhite + hooksTotal + c.reset + '    ' +
     secIcon + ' ' + secColor + secLabel + c.reset + '    ' +
     c.brightCyan + '💾 ' + memoryMB + 'MB' + c.reset + '    ' +
