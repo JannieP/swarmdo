@@ -34,6 +34,7 @@ const router = safeRequire(path.join(helpersDir, 'router.cjs'));
 const session = safeRequire(path.join(helpersDir, 'session.cjs'));
 const memory = safeRequire(path.join(helpersDir, 'memory.cjs'));
 const intelligence = safeRequire(path.join(helpersDir, 'intelligence.cjs'));
+const agentBridge = safeRequire(path.join(helpersDir, 'agent-bridge-hook.cjs'));
 
 // ── Intelligence timeout protection (fixes #1530, #1531) ───────────────────
 var INTELLIGENCE_TIMEOUT_MS = 3000;
@@ -270,6 +271,27 @@ const handlers = {
     console.log('[OK] Status check');
   },
 
+  // SubagentStart — bind the spawned Claude Code subagent into Swarmdo's
+  // canonical registry so `swarmdo agent list` and the statusline's
+  // `🐝 Swarms N   🤖 Agents M` reflect agents that actually exist (#108).
+  // Registering also auto-forms the swarm, so both counters move.
+  'agent-register': () => {
+    if (!agentBridge) return;
+    if (!agentBridge.isSubagentEvent(hookInput)) return; // main-thread call
+    var ok = agentBridge.register(hookInput);
+    console.log(ok
+      ? '[OK] Bridged subagent ' + (hookInput.agent_type || 'agent') + ' into Swarmdo'
+      : '[WARN] Could not bridge subagent (no installed CLI found)');
+  },
+
+  // SubagentStop — mark the bound record terminated so the Agents count
+  // decrements. Same deterministic id the register side derived (#108).
+  'agent-terminate': () => {
+    if (!agentBridge) return;
+    if (!agentBridge.isSubagentEvent(hookInput)) return;
+    agentBridge.terminate(hookInput);
+  },
+
   'stats': () => {
     if (intelligence && intelligence.stats) {
       intelligence.stats(args.includes('--json'));
@@ -288,7 +310,7 @@ if (command && handlers[command]) {
   } else if (command) {
     console.log('[OK] Hook: ' + command);
   } else {
-    console.log('Usage: hook-handler.cjs <route|pre-bash|post-edit|session-restore|session-end|pre-task|post-task|compact-manual|compact-auto|status|stats>');
+    console.log('Usage: hook-handler.cjs <route|pre-bash|post-edit|session-restore|session-end|pre-task|post-task|agent-register|agent-terminate|compact-manual|compact-auto|status|stats>');
   }
 }
 

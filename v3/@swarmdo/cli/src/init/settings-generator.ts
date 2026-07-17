@@ -438,12 +438,35 @@ function generateHooksConfig(config: HooksConfig): object {
     ];
   }
 
-  // NOTE: "SubagentStart" is NOT a Claude Code hook event — a block for it
-  // shipped in every generated settings.json as dead config until
-  // `config lint` (v1.4.6) caught it. Spawn-side status pings have no valid
-  // event; SubagentStop below covers completion.
+  // SubagentStart — bind each spawned Claude Code subagent into Swarmdo's
+  // canonical agent registry (#108). Registering auto-forms the swarm too, so
+  // this one hook is what makes the statusline's `🐝 Swarms N   🤖 Agents M`
+  // move at all.
+  //
+  // HISTORY — read before deleting this block again. A SubagentStart block used
+  // to ship here. It was removed as "dead config" on the belief that
+  // SubagentStart is not a Claude Code hook event; `config lint` (v1.4.6)
+  // flagged it against a HOOK_EVENTS list that was then missing it. The list in
+  // config-lint/lint.ts has since been corrected against
+  // code.claude.com/docs/en/hooks and lists SubagentStart as valid — it fires
+  // "when a subagent is spawned", matches on agent type, and carries
+  // `agent_id` + `agent_type`. The removal was a false positive, and it took
+  // the only spawn-side registration path with it, which is why the agent
+  // count sat at 0 through #105 and its follow-up.
+  hooks.SubagentStart = [
+    {
+      hooks: [
+        {
+          type: 'command',
+          command: hookHandlerCmd('agent-register'),
+          timeout: 5000,
+        },
+      ],
+    },
+  ];
 
-  // SubagentStop — track agent completion for metrics
+  // SubagentStop — track agent completion for metrics, and mark the bound
+  // record terminated so the Agents count decrements (#108).
   // NOTE: The valid event is "SubagentStop" (not "SubagentEnd")
   hooks.SubagentStop = [
     {
@@ -451,6 +474,11 @@ function generateHooksConfig(config: HooksConfig): object {
         {
           type: 'command',
           command: hookHandlerCmd('post-task'),
+          timeout: 5000,
+        },
+        {
+          type: 'command',
+          command: hookHandlerCmd('agent-terminate'),
           timeout: 5000,
         },
       ],
