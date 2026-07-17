@@ -435,7 +435,7 @@ export const agentTools: MCPTool[] = [
   {
     name: 'agent_bridge_register',
     description:
-      "Register a REAL Claude Code Agent-tool agent into Swarmdo's registry so `swarmdo agent list` and `swarm_status` reflect it. Call this right AFTER you spawn a Claude Code subagent (Task/Agent tool): pass its name, session id, subagent type, and a one-line task. Idempotent — re-registering the same name+session UPDATES the bound record instead of duplicating. This is the bridge that stops Swarmdo sitting empty while real agents run: unlike agent_spawn (which only registers coordination metadata), this binds the record to a worker that actually exists.",
+      "Register a REAL Claude Code Agent-tool agent into Swarmdo's registry so `swarmdo agent list` and `swarm_status` reflect it. You usually do NOT need to call this: since #108 the SubagentStart hook installed by `swarmdo init` registers every Claude Code subagent automatically as it spawns, and SubagentStop retires it. Call it by hand only when that hook is not installed (e.g. a bare MCP setup with no `swarmdo init`), or to bind an agent the hook cannot see. Pass its name, session id, subagent type, and a one-line task. Idempotent — re-registering the same name+session UPDATES the bound record instead of duplicating, so it is safe alongside the hook. Unlike agent_spawn (which only registers coordination metadata), this binds the record to a worker that actually exists.",
     category: 'agent',
     inputSchema: {
       type: 'object',

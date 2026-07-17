@@ -13,6 +13,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { createRequire } from 'node:module';
+import { execFileSync } from 'node:child_process';
 import { join } from 'node:path';
 import { bridgeAgentId as engineBridgeAgentId } from '../src/agent-bridge/bridge.ts';
 
@@ -91,6 +92,48 @@ describe('buildRegisterArgs (SubagentStart)', () => {
 
   it('returns null for a non-subagent payload', () => {
     expect(hook.buildRegisterArgs({ session_id: 'abc' })).toBeNull();
+  });
+});
+
+describe('[SWARMDO] UserPromptSubmit advisory', () => {
+  // This banner is injected into context on EVERY agentic prompt, so both its
+  // correctness and its size are load-bearing. It used to spend three of its
+  // four lines telling the main agent to run `agent bridge register` by hand —
+  // advice that #108 made both wrong and redundant work, since SubagentStart
+  // now registers every subagent automatically.
+  const runRoute = (prompt: string): string =>
+    execFileSync(process.execPath, [join(REPO_ROOT, '.claude', 'helpers', 'hook-handler.cjs'), 'route'], {
+      input: JSON.stringify({ prompt }),
+      encoding: 'utf-8',
+      stdio: ['pipe', 'pipe', 'ignore'],
+    });
+
+  const AGENTIC = 'refactor the auth module across files and add tests';
+
+  it('fires on an agentic prompt and names the suggested roles', () => {
+    const out = runRoute(AGENTIC);
+    expect(out).toContain('[SWARMDO]');
+    expect(out).toMatch(/coder|reviewer|architect/);
+  });
+
+  it('does NOT tell the agent to register by hand', () => {
+    // The regression this guards: re-adding manual-registration instructions
+    // would have the main agent duplicate what the SubagentStart hook already
+    // did, on every single agentic prompt.
+    const out = runRoute(AGENTIC);
+    const banner = out.split('\n').filter((l) => l.includes('[SWARMDO]') || l.startsWith('  ')).join('\n');
+    expect(banner).not.toContain('bridge register');
+  });
+
+  it('stays to one line — it is paid for on every agentic prompt', () => {
+    const out = runRoute(AGENTIC);
+    const bannerLines = out.split('\n').filter((l) => l.includes('[SWARMDO]'));
+    expect(bannerLines.length).toBe(1);
+    expect(bannerLines[0].length).toBeLessThan(200);
+  });
+
+  it('stays silent on a trivial prompt', () => {
+    expect(runRoute('what is the version')).not.toContain('[SWARMDO]');
   });
 });
 

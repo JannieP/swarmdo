@@ -144,19 +144,23 @@ const handlers = {
     } else {
       console.log('[INFO] Router not available, using default routing');
     }
-    // Agentic prompts → remind the main agent to actually USE Swarmdo: spawn
-    // Claude Code agents AND bridge them so Swarmdo tracks the work and
-    // auto-forms a swarm. Advisory + fully guarded — never breaks the prompt.
+    // Agentic prompts → suggest spawning a swarm, and which roles. Swarmdo
+    // cannot call Claude Code's Agent tool itself, so this advisory is the only
+    // way it can ask. Fully guarded — never breaks the prompt.
+    //
+    // Deliberately does NOT mention `agent bridge register` (#108): the
+    // SubagentStart hook registers every subagent on spawn, so telling the main
+    // agent to register by hand is both wrong and redundant work. This fires on
+    // every agentic prompt, so it is kept to one line — the three lines of
+    // manual-registration instructions it replaced were pure token cost.
     try {
       if (router && router.classifyAgentic) {
         const intent = router.classifyAgentic(prompt);
         if (intent.requiresAgents) {
           const roles = intent.roles.join(', ');
           console.log('');
-          console.log('[SWARMDO] Agentic task — use the swarm: after you spawn Claude Code agents,');
-          console.log('  register each so Swarmdo tracks them and auto-forms a swarm from your config:');
-          console.log('    swarmdo agent bridge register -n <agent-name> -t <role> -s <session>');
-          console.log('  suggested roles: ' + roles + '   ·   then: swarmdo agent bridge list / swarm status');
+          console.log('[SWARMDO] Agentic task — consider spawning agents: ' + roles
+            + '  (auto-registered on spawn; see `swarmdo swarm status`)');
         }
       }
     } catch (e) { /* advisory only — never break the prompt */ }
