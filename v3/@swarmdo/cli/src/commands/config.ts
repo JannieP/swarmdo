@@ -436,11 +436,6 @@ const lintCommand: Command = {
       ? process.env.SWARMDO_CONFIG.replace(/^\.\//, '')
       : 'swarmdo.config.json';
 
-    const agentFiles = list('.claude/agents')
-      .filter((n) => n.endsWith('.md'))
-      .map((n) => read(`.claude/agents/${n}`))
-      .filter((x): x is { file: string; raw: string } => x.raw !== null);
-
     // Custom slash commands nest (e.g. `.claude/commands/sDo/*.md`), so walk the
     // tree; skills live one dir deep as `.claude/skills/<name>/SKILL.md`.
     const walkMd = (rel: string): { file: string; raw: string }[] => {
@@ -459,6 +454,11 @@ const lintCommand: Command = {
       return acc;
     };
     const commandFiles = walkMd('.claude/commands');
+    // Agents nest too (`.claude/agents/goal/code-goal-planner.md`), and Claude
+    // Code discovers them recursively — but this used a flat readdir, so every
+    // nested agent went unlinted. It reported 1 of 3 malformed files in this
+    // repo; the two it missed were both nested or outside the flat scan.
+    const agentFiles = walkMd('.claude/agents');
     const skillFiles = list('.claude/skills')
       .map((dir) => read(`.claude/skills/${dir}/SKILL.md`))
       .filter((x): x is { file: string; raw: string } => x.raw !== null);
