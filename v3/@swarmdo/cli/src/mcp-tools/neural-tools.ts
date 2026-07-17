@@ -24,6 +24,30 @@ import { join } from 'node:path';
 // Tier 2-3: @swarmdo/embeddings
 let realEmbeddings: { embed: (text: string) => Promise<number[]> } | null = null;
 let embeddingServiceName: string = 'none';
+
+/**
+ * #110 — this tier probe used to run in a TOP-LEVEL await, so merely importing
+ * this module loaded a 600 MB ONNX model. mcp-client.ts imports it eagerly, so
+ * every CLI command paid it: `swarmdo agent bridge register` measured 601 MB RSS
+ * / 0.73s real to write one JSON record, and CLI startup could not reach its
+ * documented <500ms target. Since #108 fires a detached CLI per subagent spawn,
+ * an 8-agent swarm spiked 2.9 GB. It also made the module unloadable under tsx
+ * ("Top-level await is currently not supported with the cjs output format").
+ *
+ * Now memoized and lazy: the probe runs on first actual need, at most once.
+ * The tier order and every fallback below are unchanged — only WHEN they run.
+ *
+ * Callers that merely REPORT the backend (`embeddingProvider`, `_realEmbedding`)
+ * must await this first, or they will honestly report 'none' — nothing has been
+ * loaded yet.
+ */
+let embeddingsInit: Promise<void> | null = null;
+export function ensureEmbeddings(): Promise<void> {
+  if (!embeddingsInit) embeddingsInit = initEmbeddings();
+  return embeddingsInit;
+}
+
+async function initEmbeddings(): Promise<void> {
 try {
   // Tier 0: swarmvector@0.2.27 — bundled all-MiniLM-L6-v2 + parallel worker pool.
   // Probe with isOnnxAvailable() and verify an actual embed succeeds (avoids
@@ -109,6 +133,7 @@ try {
   // dependency from callers — that's the bug ADR-086 was about.
 } catch {
   // No embedding provider available, will use fallback
+}
 }
 
 // Storage paths
@@ -221,7 +246,7 @@ export async function storeNeuralPatterns(items: Array<{
   metadata?: Record<string, unknown>;
 }>): Promise<{ stored: number; total: number }> {
   if (!items || items.length === 0) return { stored: 0, total: 0 };
-  // realEmbeddings is initialised by the top-level IIFE in this module;
+  // realEmbeddings is initialised lazily by ensureEmbeddings() (#110);
   // generateEmbedding() falls back to a hash-based embedding if it isn't.
   const store = loadNeuralStore();
   let stored = 0;
@@ -248,6 +273,11 @@ export async function storeNeuralPatterns(items: Array<{
 
 // Generate embedding - uses real ML embeddings if available, falls back to deterministic hash
 async function generateEmbedding(text?: string, dims: number = 384): Promise<number[]> {
+  // #110 — the only functional consumer of realEmbeddings, so this is where the
+  // 600 MB model is actually worth loading. Memoized: paid once per process, and
+  // only by commands that genuinely embed. Skipped entirely when there is no
+  // text, since the hash path below does not need a backend.
+  if (text) await ensureEmbeddings();
   // If real embeddings available and text provided, use them
   if (realEmbeddings && text) {
     try {
@@ -315,6 +345,10 @@ export const neuralTools: MCPTool[] = [
       required: ['modelType'],
     },
     handler: async (input) => {
+      // #110 — this handler reports the embedding backend, so probe it
+      // deliberately. The tier probe is memoized and lazy now; without this
+      // the report would say 'none' whenever the handler happens not to embed.
+      await ensureEmbeddings();
       if (input.modelId) { const v = validateIdentifier(input.modelId as string, 'modelId'); if (!v.valid) return { success: false, error: v.error }; }
 
       const store = loadNeuralStore();
@@ -430,6 +464,10 @@ export const neuralTools: MCPTool[] = [
       required: ['input'],
     },
     handler: async (input) => {
+      // #110 — this handler reports the embedding backend, so probe it
+      // deliberately. The tier probe is memoized and lazy now; without this
+      // the report would say 'none' whenever the handler happens not to embed.
+      await ensureEmbeddings();
       { const v = validateText(input.input as string, 'input'); if (!v.valid) return { success: false, error: v.error }; }
       if (input.modelId) { const v = validateIdentifier(input.modelId as string, 'modelId'); if (!v.valid) return { success: false, error: v.error }; }
 
@@ -544,6 +582,10 @@ export const neuralTools: MCPTool[] = [
       },
     },
     handler: async (input) => {
+      // #110 — this handler reports the embedding backend, so probe it
+      // deliberately. The tier probe is memoized and lazy now; without this
+      // the report would say 'none' whenever the handler happens not to embed.
+      await ensureEmbeddings();
       if (input.patternId) { const v = validateIdentifier(input.patternId as string, 'patternId'); if (!v.valid) return { success: false, error: v.error }; }
       if (input.name) { const v = validateText(input.name as string, 'name'); if (!v.valid) return { success: false, error: v.error }; }
       if (input.type) { const v = validateIdentifier(input.type as string, 'type'); if (!v.valid) return { success: false, error: v.error }; }
@@ -801,6 +843,10 @@ export const neuralTools: MCPTool[] = [
       },
     },
     handler: async (input) => {
+      // #110 — this handler reports the embedding backend, so probe it
+      // deliberately. The tier probe is memoized and lazy now; without this
+      // the report would say 'none' whenever the handler happens not to embed.
+      await ensureEmbeddings();
       if (input.modelId) { const v = validateIdentifier(input.modelId as string, 'modelId'); if (!v.valid) return { success: false, error: v.error }; }
 
       const store = loadNeuralStore();
@@ -927,6 +973,11 @@ export const neuralTools: MCPTool[] = [
       const models = Object.values(store.models);
       const patterns = Object.values(store.patterns);
 
+      // #110 — reporting the backend is this tool's job, so probe deliberately.
+      // Without this the lazy init would not have run and status would report
+      // 'hash-based' on a machine with a perfectly good ONNX embedder.
+      await ensureEmbeddings();
+
       return {
         _realEmbeddings: !!realEmbeddings,
         embeddingProvider: realEmbeddings ? `@swarmdo/embeddings (${embeddingServiceName})` : 'hash-based (deterministic)',
@@ -979,6 +1030,10 @@ export const neuralTools: MCPTool[] = [
       },
     },
     handler: async (input) => {
+      // #110 — this handler reports the embedding backend, so probe it
+      // deliberately. The tier probe is memoized and lazy now; without this
+      // the report would say 'none' whenever the handler happens not to embed.
+      await ensureEmbeddings();
       if (input.modelId) { const v = validateIdentifier(input.modelId as string, 'modelId'); if (!v.valid) return { success: false, error: v.error }; }
 
       const store = loadNeuralStore();

@@ -66,7 +66,12 @@ describe('demo command behavior (skip-llm path)', () => {
     const r = result as { data: { agentRun: { success: boolean; reason?: string } } };
     expect(r.data.agentRun.success).toBe(false);
     expect(r.data.agentRun.reason).toMatch(/skip-llm/);
-  }, 30_000);
+    // 60s, matching the first case: #110 made the embedding-backend probe lazy,
+    // so the ONNX load these cases trigger via `embeddingBackend` is now paid
+    // inside the call instead of at import time. Same total work — the suite
+    // does not get slower — but it is now billed to the test's clock, which
+    // left ~7s of headroom under a 30s cap and blew it under parallel load.
+  }, 60_000);
 
   it('measures real Ed25519 throughput in-process (when @noble/ed25519 is installed)', async () => {
     const result = await action(makeCtx({ 'skip-llm': true, json: true, 'ed25519-iterations': 20 }));
@@ -80,5 +85,6 @@ describe('demo command behavior (skip-llm path)', () => {
       expect(typeof ed.reason).toBe('string');
       expect(ed.reason!.length).toBeGreaterThan(0);
     }
-  }, 30_000);
+    // 60s — see the note above (#110 moved the ONNX probe into the call).
+  }, 60_000);
 });
