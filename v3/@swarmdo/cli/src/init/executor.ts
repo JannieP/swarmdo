@@ -12,6 +12,30 @@ import { dirname } from 'path';
 // ESM-compatible __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+/**
+ * Helpers force-refreshed on every `swarmdo init`, including re-init over an
+ * existing install (the "upgrade" path). A fresh init bulk-copies the whole
+ * helpers dir, but an upgrade only rewrites these — so any helper that is NEW in
+ * a release, or that hook-handler.cjs newly requires, MUST be listed here or
+ * upgrading users never receive it.
+ *
+ * #111: agent-bridge-hook.cjs shipped as a new require of hook-handler.cjs but
+ * was absent from this list AND from the shipped CLI helper tree, so #108's
+ * SubagentStart registration silently no-op'd for every `swarmdo init` user
+ * (the fix only ever reached this repo's root .claude/helpers). The invariant
+ * "every .cjs hook-handler.cjs requires is listed here AND shipped in the CLI
+ * tree" is enforced by __tests__/init-critical-helpers.test.ts.
+ */
+export const CRITICAL_HELPERS = [
+  'auto-memory-hook.mjs',
+  'hook-handler.cjs',
+  'intelligence.cjs',
+  'router.cjs',
+  'session.cjs',
+  'memory.cjs',
+  'agent-bridge-hook.cjs',
+];
 import type { InitOptions, InitResult, PlatformInfo } from './types.js';
 import { detectPlatform, DEFAULT_INIT_OPTIONS } from './types.js';
 import { generateSettingsJson, generateSettings } from './settings-generator.js';
@@ -515,7 +539,7 @@ export async function executeUpgrade(targetDir: string, upgradeSettings = false)
     // 0. ALWAYS update critical helpers (force overwrite)
     const sourceHelpersForUpgrade = findSourceHelpersDir();
     if (sourceHelpersForUpgrade) {
-      const criticalHelpers = ['auto-memory-hook.mjs', 'hook-handler.cjs', 'intelligence.cjs'];
+      const criticalHelpers = CRITICAL_HELPERS;
       for (const helperName of criticalHelpers) {
         const targetPath = path.join(targetDir, '.claude', 'helpers', helperName);
         const sourcePath = path.join(sourceHelpersForUpgrade, helperName);

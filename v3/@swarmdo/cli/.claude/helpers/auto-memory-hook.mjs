@@ -34,9 +34,9 @@ const dim = (msg) => console.log(`  ${DIM}${msg}${RESET}`);
 const DEBUG = !!(process.env.SWARMDO_DEBUG || process.env.DEBUG);
 
 // ── Graceful shutdown (FIX 3) ───────────────────────────────────────────────
-// Track the backend in use so a SIGTERM/SIGINT mid-run can still flush it
-// (the JSON backend persists; a SQLite-backed one closes/flushes WAL) instead
-// of leaving a half-written store or a stale lock behind.
+// Track the backend currently in use so a SIGTERM/SIGINT mid-run can still
+// flush it (the JSON backend persists, a SQLite-backed one closes/flushes WAL)
+// instead of leaving a half-written store or a stale lock behind.
 let activeBackend = null;
 let shuttingDown = false;
 function trackBackend(b) { activeBackend = b; return b; }
@@ -177,16 +177,77 @@ class JsonFileBackend {
 // Resolve memory package path (local dev or npm installed)
 // ============================================================================
 
+/**
+ * Resolve a bundled package file (`<pkg>/<relativeFile>`) by trying, in order:
+ *   1. PROJECT_ROOT/v3/<pkg>/<relativeFile>           (monorepo dev layout)
+ *   2. CWD/node_modules/<pkg>/<relativeFile>          (user's project deps)
+ *   3. node_modules walk-up from PROJECT_ROOT
+ *   4. node_modules walk-up from CWD
+ *   5. Global npm prefix — checks the swarmdo / swarmdo / @swarmdo/cli
+ *      bundles, AND the package installed globally on its own
+ *
+ * Returns the resolved absolute path, or null. See issue #2285.
+ */
+async function resolveBundledFile(pkg, relativeFile) {
+  const monorepo = join(PROJECT_ROOT, 'v3', pkg, relativeFile);
+  if (existsSync(monorepo)) return monorepo;
+
+  const cwd = process.env.SWARMDO_CWD || process.cwd();
+  const inCwd = join(cwd, 'node_modules', pkg, relativeFile);
+  if (existsSync(inCwd)) return inCwd;
+
+  const walkUp = (start) => {
+    let dir = start;
+    while (dir && dir !== dirname(dir)) {
+      const candidate = join(dir, 'node_modules', pkg, relativeFile);
+      if (existsSync(candidate)) return candidate;
+      dir = dirname(dir);
+    }
+    return null;
+  };
+
+  const fromProject = walkUp(PROJECT_ROOT);
+  if (fromProject) return fromProject;
+
+  const fromCwd = walkUp(cwd);
+  if (fromCwd) return fromCwd;
+
+  // Global npm prefix fallback — handles `npm i -g swarmdo` and friends, where
+  // the marketplace clone (PROJECT_ROOT) has no access to the bundled deps.
+  try {
+    const { execSync } = await import('child_process');
+    const npmPrefix = execSync('npm prefix -g', {
+      encoding: 'utf-8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim();
+    if (npmPrefix) {
+      // Both Unix (<prefix>/lib/node_modules) and Windows (<prefix>/node_modules)
+      const roots = [join(npmPrefix, 'lib', 'node_modules'), join(npmPrefix, 'node_modules')];
+      const wrappers = ['swarmdo', 'swarmdo', join('@swarmdo', 'cli')];
+      for (const root of roots) {
+        for (const wrapper of wrappers) {
+          const candidate = join(root, wrapper, 'node_modules', pkg, relativeFile);
+          if (existsSync(candidate)) return candidate;
+        }
+        const direct = join(root, pkg, relativeFile);
+        if (existsSync(direct)) return direct;
+      }
+    }
+  } catch { /* npm not on PATH or no global install */ }
+
+  return null;
+}
+
 async function loadMemoryPackage() {
-  // Strategy 1: Local dev (built dist)
-  const localDist = join(PROJECT_ROOT, 'v3/@swarmdo/memory/dist/index.js');
-  if (existsSync(localDist)) {
+  // Strategy 1-5: locate dist/index.js across dev/installed/global layouts
+  const resolved = await resolveBundledFile('@swarmdo/memory', 'dist/index.js');
+  if (resolved) {
     try {
-      return await import(`file://${localDist}`);
+      return await import(`file://${resolved}`);
     } catch { /* fall through */ }
   }
 
-  // Strategy 2: Use createRequire for CJS-style resolution (handles nested node_modules
+  // Strategy 6: Use createRequire for CJS-style resolution (handles nested node_modules
   // when installed as a transitive dependency via npx swarmdo / npx swarmdo)
   try {
     const { createRequire } = await import('module');
@@ -194,23 +255,10 @@ async function loadMemoryPackage() {
     return require('@swarmdo/memory');
   } catch { /* fall through */ }
 
-  // Strategy 3: ESM import (works when @swarmdo/memory is a direct dependency)
+  // Strategy 7: ESM import (works when @swarmdo/memory is a direct dependency)
   try {
     return await import('@swarmdo/memory');
   } catch { /* fall through */ }
-
-  // Strategy 4: Walk up from PROJECT_ROOT looking for @swarmdo/memory in any node_modules
-  let searchDir = PROJECT_ROOT;
-  const { parse } = await import('path');
-  while (searchDir !== parse(searchDir).root) {
-    const candidate = join(searchDir, 'node_modules', '@swarmdo', 'memory', 'dist', 'index.js');
-    if (existsSync(candidate)) {
-      try {
-        return await import(`file://${candidate}`);
-      } catch { /* fall through */ }
-    }
-    searchDir = dirname(searchDir);
-  }
 
   return null;
 }
@@ -270,7 +318,10 @@ async function doImport() {
   await backend.initialize();
 
   const bridgeConfig = {
-    workingDir: PROJECT_ROOT,
+    // Use Claude Code's invocation cwd (the user's project), not PROJECT_ROOT
+    // — PROJECT_ROOT resolves to the plugin clone when this hook runs from
+    // ~/.claude/plugins/marketplaces/swarmdo/. See issue #2284.
+    workingDir: process.env.SWARMDO_CWD || process.cwd(),
     syncMode: 'on-session-end',
   };
 
@@ -302,6 +353,36 @@ async function doImport() {
     dim(`├─ Learning: ${config.learningBridge.enabled ? 'active' : 'disabled'}`);
     dim(`├─ Graph: ${config.memoryGraph.enabled ? 'active' : 'disabled'}`);
     dim(`└─ Agent scopes: ${config.agentScopes.enabled ? 'active' : 'disabled'}`);
+
+    // Bridge to AgentDB: store entries with ONNX vector embeddings for semantic search
+    let vectorized = 0;
+    try {
+      const cliDistPath = await resolveBundledFile('@swarmdo/cli', 'dist/src/memory/memory-initializer.js');
+      if (cliDistPath) {
+        const memInit = await import(`file://${cliDistPath}`);
+        await memInit.initializeMemoryDatabase({ force: false, verbose: false });
+
+        const entries = await backend.query({});
+        for (const entry of entries) {
+          if (!entry.content || entry.content.length < 10) continue;
+          try {
+            await memInit.storeEntry({
+              key: entry.key || entry.id,
+              value: entry.content,
+              namespace: entry.namespace || 'auto-memory',
+              generateEmbeddingFlag: true,
+            });
+            vectorized++;
+          } catch { /* skip entries that fail to embed */ }
+        }
+
+        if (vectorized > 0) {
+          success(`Vectorized ${vectorized} entries into AgentDB (ONNX 384-dim)`);
+        }
+      }
+    } catch (vecErr) {
+      dim(`AgentDB vectorization skipped: ${vecErr.message?.slice(0, 60)}`);
+    }
   } catch (err) {
     dim(`Import failed (non-critical): ${err.message}`);
   }
@@ -330,7 +411,8 @@ async function doSync() {
   }
 
   const bridgeConfig = {
-    workingDir: PROJECT_ROOT,
+    // See doImport — must reflect the user's project, not PROJECT_ROOT (#2284)
+    workingDir: process.env.SWARMDO_CWD || process.cwd(),
     syncMode: 'on-session-end',
   };
 
@@ -360,6 +442,21 @@ async function doSync() {
     // Curate MEMORY.md index with graph-aware ordering
     await bridge.curateIndex();
     success('Curated MEMORY.md index');
+
+    // Flush intelligence patterns to disk (SONA + ReasoningBank)
+    try {
+      const intPath = await resolveBundledFile('@swarmdo/cli', 'dist/src/memory/intelligence.js');
+      if (intPath) {
+        const intelligence = await import(`file://${intPath}`);
+        if (intelligence.flushPatterns) {
+          intelligence.flushPatterns();
+          const stats = intelligence.getIntelligenceStats?.();
+          if (stats && stats.patternsLearned > 0) {
+            success(`Flushed ${stats.patternsLearned} learned patterns to disk`);
+          }
+        }
+      }
+    } catch { /* non-critical */ }
   } catch (err) {
     dim(`Sync failed (non-critical): ${err.message}`);
   }
@@ -386,7 +483,156 @@ async function doStatus() {
     } catch { /* ignore */ }
   }
 
+  // AgentDB vector status
+  try {
+    const dbPath = join(PROJECT_ROOT, '.swarmdo', 'memory', 'memory.db');
+    const swarmDbPath = join(PROJECT_ROOT, '.swarm', 'memory.db');
+    const hasDb = existsSync(dbPath) || existsSync(swarmDbPath);
+    console.log(`  AgentDB:        ${hasDb ? '✅ sql.js database exists' : '⏸ Not initialized'}`);
+
+    const intPath = await resolveBundledFile('@swarmdo/cli', 'dist/src/memory/intelligence.js');
+    if (intPath) {
+      const intelligence = await import(`file://${intPath}`);
+      const stats = intelligence.getIntelligenceStats?.();
+      if (stats) {
+        console.log(`  SONA:           ${stats.sonaEnabled ? '✅ Active' : '⏸ Not initialized'}`);
+        console.log(`  Patterns:       ${stats.patternsLearned} learned`);
+        console.log(`  Trajectories:   ${stats.trajectoriesRecorded} recorded`);
+      }
+    }
+  } catch { /* ignore */ }
+
   console.log('');
+}
+
+// ============================================================================
+// Import ALL Claude Code memories from all projects into AgentDB
+// ============================================================================
+
+async function doImportAll() {
+  log('Importing ALL Claude Code memories into AgentDB...');
+
+  const { homedir } = await import('os');
+  const { readdirSync } = await import('fs');
+  const claudeProjectsDir = join(homedir(), '.claude', 'projects');
+
+  if (!existsSync(claudeProjectsDir)) {
+    dim('No Claude Code projects found at ' + claudeProjectsDir);
+    return;
+  }
+
+  // Find all memory files across all projects
+  const memoryFiles = [];
+  try {
+    const projects = readdirSync(claudeProjectsDir, { withFileTypes: true });
+    for (const project of projects) {
+      if (!project.isDirectory()) continue;
+      const memDir = join(claudeProjectsDir, project.name, 'memory');
+      if (!existsSync(memDir)) continue;
+      const files = readdirSync(memDir).filter(f => f.endsWith('.md'));
+      for (const file of files) {
+        memoryFiles.push({
+          path: join(memDir, file),
+          project: project.name,
+          file,
+        });
+      }
+    }
+  } catch (err) {
+    dim('Error scanning projects: ' + err.message);
+    return;
+  }
+
+  if (memoryFiles.length === 0) {
+    dim('No memory files found');
+    return;
+  }
+
+  log(`Found ${memoryFiles.length} memory files across ${new Set(memoryFiles.map(f => f.project)).size} projects`);
+
+  // Load memory-initializer for vectorized storage
+  let memInit = null;
+  try {
+    const cliDistPath = await resolveBundledFile('@swarmdo/cli', 'dist/src/memory/memory-initializer.js');
+    if (cliDistPath) {
+      memInit = await import(`file://${cliDistPath}`);
+      await memInit.initializeMemoryDatabase({ force: false, verbose: false });
+    }
+  } catch (err) {
+    dim('Memory initializer not available: ' + err.message?.slice(0, 60));
+  }
+
+  if (!memInit) {
+    dim('Cannot vectorize without memory-initializer. Run: cd v3/@swarmdo/cli && npm run build');
+    return;
+  }
+
+  let imported = 0;
+  let skipped = 0;
+
+  for (const memFile of memoryFiles) {
+    try {
+      const content = readFileSync(memFile.path, 'utf-8');
+
+      // Parse YAML frontmatter + body
+      const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+      let name = memFile.file.replace('.md', '');
+      let description = '';
+      let type = 'auto-memory';
+      let body = content;
+
+      if (frontmatterMatch) {
+        const yaml = frontmatterMatch[1];
+        body = frontmatterMatch[2].trim();
+        const nameMatch = yaml.match(/^name:\s*(.+)$/m);
+        const descMatch = yaml.match(/^description:\s*(.+)$/m);
+        const typeMatch = yaml.match(/^type:\s*(.+)$/m);
+        if (nameMatch) name = nameMatch[1].trim();
+        if (descMatch) description = descMatch[1].trim();
+        if (typeMatch) type = typeMatch[1].trim();
+      }
+
+      // Split body into sections (## headers) for granular entries
+      const sections = body.split(/^(?=## )/m).filter(s => s.trim().length > 20);
+
+      if (sections.length === 0) {
+        // Store whole file as one entry
+        if (body.length > 10) {
+          await memInit.storeEntry({
+            key: `claude-memory:${memFile.project}:${name}`,
+            value: body.slice(0, 4096),
+            namespace: 'claude-memories',
+            generateEmbeddingFlag: true,
+          });
+          imported++;
+        }
+      } else {
+        // Store each section separately for better search granularity
+        for (const section of sections) {
+          const titleMatch = section.match(/^##\s+(.+)/);
+          const sectionTitle = titleMatch ? titleMatch[1].trim() : name;
+          const sectionBody = section.replace(/^##\s+.+\n/, '').trim();
+          if (sectionBody.length < 10) continue;
+
+          await memInit.storeEntry({
+            key: `claude-memory:${memFile.project}:${name}:${sectionTitle.slice(0, 50)}`,
+            value: sectionBody.slice(0, 4096),
+            namespace: 'claude-memories',
+            generateEmbeddingFlag: true,
+          });
+          imported++;
+        }
+      }
+
+      dim(`  ✓ ${memFile.project}/${memFile.file} (${sections.length || 1} entries)`);
+    } catch (err) {
+      dim(`  ✗ ${memFile.project}/${memFile.file}: ${err.message?.slice(0, 60)}`);
+      skipped++;
+    }
+  }
+
+  success(`Imported ${imported} entries from ${memoryFiles.length} files (${skipped} skipped)`);
+  success('All Claude Code memories now searchable via AgentDB vector search');
 }
 
 // ============================================================================
@@ -417,17 +663,18 @@ if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
   try {
     switch (command) {
       case 'import': await doImport(); break;
+      case 'import-all': await doImportAll(); break;
       case 'sync': await doSync(); break;
       case 'status': await doStatus(); break;
       default:
         console.log('Usage: auto-memory-hook.mjs <import|sync|status>');
-        break;
+        process.exit(1);
     }
   } catch (err) {
     // Hooks must never crash Claude Code - fail silently
-    try { dim(`Error (non-critical): ${err.message}`); } catch (_) {}
+    dim(`Error (non-critical): ${err.message}`);
   }
-  // Force clean exit — process.exitCode alone isn't enough if async errors override it
+  // Ensure clean exit for Claude Code hooks (exit 0 = success, no stderr = no error)
   process.exit(0);
 }
 

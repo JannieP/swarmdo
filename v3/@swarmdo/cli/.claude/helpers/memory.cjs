@@ -70,14 +70,15 @@ const commands = {
   },
 };
 
-// CLI
-const [,, command, key, ...valueParts] = process.argv;
-const value = valueParts.join(' ');
-
-if (command && commands[command]) {
-  commands[command](key, value);
-} else {
-  console.log('Usage: memory.js <get|set|delete|clear|keys> [key] [value]');
-}
-
 module.exports = commands;
+
+// CLI - only run when executed directly
+if (require.main === module) {
+  const [,, command, key, ...valueParts] = process.argv;
+  const value = valueParts.join(' ');
+  if (command && commands[command]) {
+    commands[command](key, value);
+  } else {
+    console.log('Usage: memory.js <get|set|delete|clear|keys> [key] [value]');
+  }
+}
