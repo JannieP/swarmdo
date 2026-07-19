@@ -159,6 +159,33 @@ How it behaves:
   parser the runtime uses — bad slugs, duplicate ids, and unknown tiers are
   reported exactly as the runtime would drop them.
 
+### `route serve` — run Claude Code itself on your model pool
+
+The pool above routes *swarm* execution. `swarmdo route serve` extends it to
+**Claude Code itself**: it starts a local, Anthropic-compatible proxy that
+Claude Code talks to via `ANTHROPIC_BASE_URL`, dispatching every request to a
+model from your pool — so you can run Claude Code on Llama, DeepSeek, Gemini,
+Qwen, or any OpenRouter model, with no vendored proxy or extra process.
+
+```bash
+export OPENROUTER_API_KEY=sk-or-...
+swarmdo route serve                                # → http://127.0.0.1:3456
+ANTHROPIC_BASE_URL=http://127.0.0.1:3456 claude    # Claude Code now runs on your pool
+```
+
+- **Tier routing**: a request's model hint (`…haiku…`/`…sonnet…`/`…opus…`) maps
+  to a pool tier; an explicit `org/model` slug passes straight through.
+- **Streaming**: full Anthropic SSE (`message_start … message_stop`), so the
+  Claude Code TUI streams token-by-token exactly as normal.
+- **Learns your routing**: each request's success/failure updates per-model
+  Beta priors in `.swarm/route-serve-priors.json`; the pool Thompson-samples
+  over them, so models that work well for you get picked more over time.
+- **Resilient**: retryable upstream failures back off and retry.
+
+Needs the same `openrouter` block (`enabled: true` + a model pool) and
+`OPENROUTER_API_KEY`; `swarmdo route serve` prints a clear hint if either is
+missing. Flags: `--port` (default 3456), `--host` (default 127.0.0.1).
+
 
 
 Quick examples:
