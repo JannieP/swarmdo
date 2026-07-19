@@ -822,6 +822,57 @@ const coverageRouteCommand: Command = {
 // Main Route Command
 // ============================================================================
 
+const serveCommand: Command = {
+  name: 'serve',
+  description: 'Start a local Anthropic-compatible model-router proxy (point Claude Code at it via ANTHROPIC_BASE_URL)',
+  options: [
+    { name: 'port', short: 'p', description: 'Port to listen on', type: 'number', default: 3456 },
+    { name: 'host', description: 'Host to bind', type: 'string', default: '127.0.0.1' },
+  ],
+  examples: [
+    { command: 'swarmdo route serve', description: 'Start the router proxy on 127.0.0.1:3456' },
+    { command: 'ANTHROPIC_BASE_URL=http://127.0.0.1:3456 claude', description: 'Point Claude Code at the proxy' },
+  ],
+  action: async (ctx: CommandContext): Promise<CommandResult> => {
+    const { loadOpenRouterConfig } = await import('../providers/openrouter-config.js');
+    const { startProxy } = await import('../route-serve/proxy.js');
+    const { config, warnings } = loadOpenRouterConfig(process.cwd());
+    for (const w of warnings) output.printWarning(w);
+    if (!config.enabled || config.models.length === 0) {
+      output.printError('OpenRouter pool is not configured.');
+      output.writeln(output.dim('  Add an `openrouter` block to swarmdo.config.json — e.g.'));
+      output.writeln(output.dim('  {"openrouter":{"enabled":true,"models":[{"id":"meta-llama/llama-3.3-70b-instruct","tier":"sonnet"}]}}'));
+      return { success: false, exitCode: 1, message: 'openrouter pool not configured' };
+    }
+    const apiKey = process.env[config.apiKeyEnv];
+    if (!apiKey) {
+      output.printError(`Missing API key — set ${config.apiKeyEnv} in the environment.`);
+      return { success: false, exitCode: 1, message: `missing ${config.apiKeyEnv}` };
+    }
+    const port = Number(ctx.flags.port ?? 3456);
+    const host = String(ctx.flags.host ?? '127.0.0.1');
+    const { server, url } = await startProxy({
+      cfg: config,
+      apiKey,
+      port,
+      host,
+      log: (m) => output.writeln(output.dim(`  ${m}`)),
+    });
+    const tiers = [...new Set(config.models.map((m) => m.tier).filter(Boolean))].join('/');
+    output.printSuccess(`swarmdo route serve — listening on ${url}`);
+    output.writeln(`  pool: ${config.models.length} model(s)${tiers ? ` · tiers ${tiers}` : ''}`);
+    output.writeln(output.bold(`  ANTHROPIC_BASE_URL=${url} claude`));
+    output.writeln(output.dim('  Ctrl-C to stop.'));
+    // Run until interrupted (SIGINT/SIGTERM), then close the listener cleanly.
+    await new Promise<void>((resolve) => {
+      const stop = (): void => { server.close(() => resolve()); };
+      process.once('SIGINT', stop);
+      process.once('SIGTERM', stop);
+    });
+    return { success: true };
+  },
+};
+
 export const routeCommand: Command = {
   name: 'route',
   description: 'Intelligent task-to-agent routing using Q-Learning',
@@ -834,6 +885,7 @@ export const routeCommand: Command = {
     exportCommand,
     importCommand,
     coverageRouteCommand,
+    serveCommand,
   ],
   options: [
     {
