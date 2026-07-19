@@ -39,6 +39,16 @@
       "trackingIssue": "the upstream project (see NOTICE)",
       "expiresAt": "2026-09-02",
       "rationale": "devDependency-only + exploit requires `vitest --ui` which is local-dev only. Spec already requires ^4.1.0; only the standalone package-lock graph hasn't refreshed (workspace:* protocol limitation on raw `npm install`). Zero production / CI exposure. Re-audit and remove this entry the next time the browser's package-lock.json is regenerated."
+    },
+    {
+      "package": "plugins/swarmdo-graph-intelligence",
+      "depName": "@swarmdo/cli",
+      "severity": "high",
+      "via": ["agentdb", "agentic-flow"],
+      "tracking": "swarmdo#113 — graph-intelligence depends on @swarmdo/cli, which transitively pulls agentdb/agentic-flow → @xenova/transformers. As of agentic-flow@2.0.12 (upstream PR #154) @xenova/transformers is an OPTIONAL dependency: not installed under `npm install --omit=optional`, and graph-intelligence never invokes embedding code paths at runtime. npm audit still reports it because it reads the full lockfile graph including optionals — a known npm limitation. Same finding class already accepted for v3/@swarmdo/browser.",
+      "trackingIssue": "the upstream project (see NOTICE)",
+      "expiresAt": "2026-11-19",
+      "rationale": "Optional-dep path via @swarmdo/cli → agentic-flow → @xenova/transformers; zero runtime exposure with --omit=optional. Mirrors the accepted browser entry. Re-audit when ADR-121 Phase 4 drops @xenova/transformers or it ships a CVE-clean version."
     }
   ],
   "lockfile": [

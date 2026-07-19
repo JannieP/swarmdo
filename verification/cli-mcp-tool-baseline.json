@@ -1,7 +1,10 @@
 {
   "_comment": "Monotone-decreasing baseline of CLI subcommands that callMCPTool() a tool not registered in src/mcp-tools/*.ts (would fail with `MCP tool not found`). Fix one → re-run with --update-baseline to lock the new floor. NEVER increase.",
-  "danglingCount": 83,
+  "danglingCount": 86,
   "knownDangling": [
+    "agent_bridge_list",
+    "agent_bridge_prune",
+    "agent_bridge_register",
     "agent_health",
     "agent_list",
     "agent_logs",
@@ -86,5 +89,5 @@
     "workflow_stop",
     "workflow_validate"
   ],
-  "updatedAt": "2026-07-06T23:16:21.229Z"
+  "updatedAt": "2026-07-19T14:58:26.264Z"
 }

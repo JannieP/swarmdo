@@ -707,6 +707,10 @@ function renderRateLimitSlot() {
 // misses, the displayed version is meaningful (matches what the user
 // installed), not a stale hard-coded string.
 function getPkgVersion() {
+  // #1951: an explicit SWARMDO_VERSION override (set by the CLI wrapper) wins over
+  // every probe below, so the header can't silently revert to a stale baked default
+  // when a global/npx install layout hides package.json.
+  if (process.env.SWARMDO_VERSION) return process.env.SWARMDO_VERSION;
   let ver = '${BAKED_CLI_VERSION}';
   try {
     const home = os.homedir();
@@ -927,6 +931,10 @@ function generateJSON() {
   return Object.assign({}, d, {
     user: Object.assign({ name: git.name, gitBranch: git.gitBranch }, d.user || {}),
     git: { modified: git.modified, untracked: git.untracked, staged: git.staged, ahead: git.ahead, behind: git.behind },
+    // #2195: surface the baked maxAgents denominator in the swarm object so the
+    // delegation contract (and its smoke) always sees swarm.maxAgents, even though
+    // 'hooks statusline --json' reports only the live activeSwarms/activeAgents.
+    swarm: Object.assign({ maxAgents: CONFIG.maxAgents }, d.swarm || {}),
     lastUpdated: new Date().toISOString(),
   });
 }

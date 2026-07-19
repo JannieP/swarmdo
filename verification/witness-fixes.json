@@ -2,15 +2,15 @@
   "fixes": [
     {
       "id": "rename-hash-corruption-2026-07",
-      "desc": "Historic ruv\u2192swarm rename sweep ran through base64 data and corrupted accepts@1.3.8's sha512 in the v3 pnpm lock (ERR_PNPM_TARBALL_INTEGRITY). Restored the registry-confirmed hash and audited all 3,012 hashes in both locks against every rename-era token (v1.4.23).",
+      "desc": "Historic ruv→swarm rename sweep ran through base64 data and corrupted accepts@1.3.8's sha512 in the v3 pnpm lock (ERR_PNPM_TARBALL_INTEGRITY). Restored the registry-confirmed hash and audited all 3,012 hashes in both locks against every rename-era token (v1.4.23).",
       "file": "v3/pnpm-lock.yaml",
       "marker": "mkmRuvw+NACSaeXEQ"
     },
     {
       "id": "subagentstart-dead-hook-2026-07",
-      "desc": "Every generated settings.json shipped a hook on 'SubagentStart' \u2014 not a Claude Code event, so it never fired. Caught by the new `swarmdo config lint` on its first run; dead block removed from the generator (v1.4.17).",
+      "desc": "SubagentStart IS a valid Claude Code hook event; #108 (re)adds it so each spawned subagent auto-registers into the canonical agent registry — the only spawn-side path, which is what moves the statusline's Swarms/Agents counts. The earlier 'dead hook' removal (v1.4.17) was a config-lint false positive: the HOOK_EVENTS list was missing SubagentStart and has since been corrected.",
       "file": "v3/@swarmdo/cli/src/init/settings-generator.ts",
-      "marker": "\"SubagentStart\" is NOT a Claude Code hook event"
+      "marker": "canonical agent registry (#108)"
     },
     {
       "id": "cli-standalone-vendoring-2026-07",
@@ -20,7 +20,7 @@
     },
     {
       "id": "config-lint-shipped-2026-07",
-      "desc": "`swarmdo config lint` (v1.4.6) \u2014 static schema/hooks/mcp/layout validation; its first run caught the dead SubagentStart hook. Witnessed in the BUILT artifact so source-only checkouts trip the dist-not-built precondition (#1880) instead of a false regression.",
+      "desc": "`swarmdo config lint` (v1.4.6) — static schema/hooks/mcp/layout validation; its first run caught the dead SubagentStart hook. Witnessed in the BUILT artifact so source-only checkouts trip the dist-not-built precondition (#1880) instead of a false regression.",
       "file": "v3/@swarmdo/cli/dist/src/commands/config.js",
       "marker": "config lint: no findings"
     }
