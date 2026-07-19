@@ -222,6 +222,152 @@ export async function handleMessages(
   }
 }
 
+// ── Streaming (increment 2): OpenAI SSE  ->  Anthropic SSE events ─────────────
+export interface SSEEvent {
+  event: string;
+  data: unknown;
+}
+/** Serialize one Anthropic SSE event to the wire format (`event:`/`data:` + blank line). */
+export function serializeSSE(e: SSEEvent): string {
+  return `event: ${e.event}\ndata: ${JSON.stringify(e.data)}\n\n`;
+}
+
+export interface OpenAIStreamChunk {
+  id?: string;
+  choices?: Array<{ delta?: { content?: string; role?: string }; finish_reason?: string | null }>;
+  usage?: { completion_tokens?: number; prompt_tokens?: number };
+}
+
+/** Pure: the opening events for an Anthropic streamed message. */
+export function messageStartEvents(model: string, inputTokens = 0, id = `msg_${model}`): SSEEvent[] {
+  return [
+    {
+      event: 'message_start',
+      data: {
+        type: 'message_start',
+        message: {
+          id, type: 'message', role: 'assistant', model, content: [],
+          stop_reason: null, stop_sequence: null,
+          usage: { input_tokens: inputTokens, output_tokens: 0 },
+        },
+      },
+    },
+    { event: 'content_block_start', data: { type: 'content_block_start', index: 0, content_block: { type: 'text', text: '' } } },
+  ];
+}
+/** Pure: one text delta event. */
+export function textDeltaEvent(text: string): SSEEvent {
+  return { event: 'content_block_delta', data: { type: 'content_block_delta', index: 0, delta: { type: 'text_delta', text } } };
+}
+/** Pure: the closing events, mapping the OpenAI finish_reason to an Anthropic stop_reason. */
+export function messageStopEvents(finishReason: string | null | undefined, outputTokens: number): SSEEvent[] {
+  const stop_reason = STOP_MAP[finishReason ?? 'stop'] ?? 'end_turn';
+  return [
+    { event: 'content_block_stop', data: { type: 'content_block_stop', index: 0 } },
+    { event: 'message_delta', data: { type: 'message_delta', delta: { stop_reason, stop_sequence: null }, usage: { output_tokens: outputTokens } } },
+    { event: 'message_stop', data: { type: 'message_stop' } },
+  ];
+}
+
+/** Pure: a full OpenAI streaming-chunk list -> the ordered Anthropic SSE events. */
+export function translateOpenAIStream(chunks: OpenAIStreamChunk[], model: string): SSEEvent[] {
+  const events: SSEEvent[] = [...messageStartEvents(model, chunks[0]?.usage?.prompt_tokens ?? 0)];
+  let finish: string | null | undefined = 'stop';
+  let outputTokens = 0;
+  for (const c of chunks) {
+    const choice = c.choices?.[0];
+    const text = choice?.delta?.content;
+    if (typeof text === 'string' && text.length) events.push(textDeltaEvent(text));
+    if (choice?.finish_reason) finish = choice.finish_reason;
+    if (c.usage?.completion_tokens != null) outputTokens = c.usage.completion_tokens;
+  }
+  events.push(...messageStopEvents(finish, outputTokens));
+  return events;
+}
+
+/** Pure: pull complete `data:` JSON chunks out of an accumulating SSE buffer, keeping the incomplete tail. */
+export function parseSSEBuffer(buffer: string): { chunks: OpenAIStreamChunk[]; done: boolean; rest: string } {
+  const chunks: OpenAIStreamChunk[] = [];
+  let done = false;
+  const lines = buffer.split('\n');
+  const rest = lines.pop() ?? ''; // possibly-incomplete final line
+  for (const line of lines) {
+    const t = line.trim();
+    if (!t.startsWith('data:')) continue;
+    const payload = t.slice(5).trim();
+    if (payload === '[DONE]') { done = true; continue; }
+    if (!payload) continue;
+    try { chunks.push(JSON.parse(payload) as OpenAIStreamChunk); } catch { /* incomplete/keepalive — skip */ }
+  }
+  return { chunks, done, rest };
+}
+
+/** Forward with `stream:true` and yield decoded OpenAI stream chunks. */
+export async function* forwardChatStream(openaiReq: OpenAIChatRequest, deps: ForwardDeps): AsyncGenerator<OpenAIStreamChunk> {
+  const doFetch = deps.fetchImpl ?? fetch;
+  const url = `${deps.cfg.baseUrl.replace(/\/$/, '')}/v1/chat/completions`;
+  const res = await doFetch(url, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      authorization: `Bearer ${deps.apiKey}`,
+      'HTTP-Referer': 'https://swarmdo.com',
+      'X-Title': 'swarmdo route serve',
+    },
+    body: JSON.stringify({ ...openaiReq, stream: true }),
+  });
+  if (!res.ok || !res.body) {
+    const detail = res.text ? await res.text().catch(() => '') : '';
+    throw new Error(`OpenRouter stream failed: ${res.status} ${detail}`.trim());
+  }
+  const reader = (res.body as ReadableStream<Uint8Array>).getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+  for (;;) {
+    const { value, done } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const parsed = parseSSEBuffer(buffer);
+    buffer = parsed.rest;
+    for (const c of parsed.chunks) yield c;
+    if (parsed.done) return;
+  }
+}
+
+/** Handle a streaming /v1/messages request by writing Anthropic SSE to `res`. */
+export async function handleStreamingMessages(body: AnthropicRequest, opts: ProxyOptions, res: ServerResponse): Promise<void> {
+  const sel = selectModelForRequest(body, opts.cfg, opts.priors);
+  if (!sel) {
+    const json = { type: 'error', error: { type: 'api_error', message: 'no OpenRouter model configured for this request' } };
+    const buf = Buffer.from(JSON.stringify(json));
+    res.writeHead(503, { 'content-type': 'application/json', 'content-length': String(buf.length) });
+    res.end(buf);
+    return;
+  }
+  res.writeHead(200, { 'content-type': 'text/event-stream', 'cache-control': 'no-cache', connection: 'keep-alive' });
+  const write = (e: SSEEvent): void => { res.write(serializeSSE(e)); };
+  try {
+    const openaiReq = anthropicToOpenAI(body, sel.model);
+    let started = false;
+    let finish: string | null | undefined = 'stop';
+    let outputTokens = 0;
+    for await (const chunk of forwardChatStream(openaiReq, { cfg: opts.cfg, apiKey: opts.apiKey, fetchImpl: opts.fetchImpl })) {
+      if (!started) { for (const e of messageStartEvents(sel.model, chunk.usage?.prompt_tokens ?? 0)) write(e); started = true; }
+      const text = chunk.choices?.[0]?.delta?.content;
+      if (typeof text === 'string' && text.length) write(textDeltaEvent(text));
+      if (chunk.choices?.[0]?.finish_reason) finish = chunk.choices[0].finish_reason;
+      if (chunk.usage?.completion_tokens != null) outputTokens = chunk.usage.completion_tokens;
+    }
+    if (!started) for (const e of messageStartEvents(sel.model)) write(e);
+    for (const e of messageStopEvents(finish, outputTokens)) write(e);
+    opts.log?.(`streamed ${body.model ?? '(default)'} → ${sel.model} [${sel.tier}] (${sel.source})`);
+  } catch (e) {
+    write({ event: 'error', data: { type: 'error', error: { type: 'api_error', message: (e as Error).message } } });
+  } finally {
+    res.end();
+  }
+}
+
 function readBody(req: IncomingMessage, limitBytes = 20 * 1024 * 1024): Promise<string> {
   return new Promise((resolve, reject) => {
     let data = '';
@@ -247,6 +393,7 @@ export function createProxyServer(opts: ProxyOptions): Server {
       }
       if (req.method === 'POST' && req.url?.startsWith('/v1/messages')) {
         const body = JSON.parse(await readBody(req)) as AnthropicRequest;
+        if (body.stream) return void (await handleStreamingMessages(body, opts, res));
         const { status, json } = await handleMessages(body, opts);
         return send(status, json);
       }

@@ -13,8 +13,12 @@ import {
   selectModelForRequest,
   forwardChat,
   handleMessages,
+  serializeSSE,
+  translateOpenAIStream,
+  parseSSEBuffer,
   type AnthropicRequest,
   type OpenAIChatResponse,
+  type OpenAIStreamChunk,
   type ProxyOptions,
 } from '../src/route-serve/proxy.ts';
 
@@ -186,5 +190,40 @@ describe('route serve — handleMessages (end to end, injected fetch)', () => {
       { ...opts(fn), cfg, maxRetries: 0 },
     );
     expect(status).toBe(502);
+  });
+});
+
+describe('route serve — streaming translation (increment 2)', () => {
+  it('serializeSSE emits event + data + blank line', () => {
+    expect(serializeSSE({ event: 'ping', data: { type: 'ping' } })).toBe('event: ping\ndata: {"type":"ping"}\n\n');
+  });
+
+  it('translateOpenAIStream produces the full ordered Anthropic event sequence', () => {
+    const chunks: OpenAIStreamChunk[] = [
+      { usage: { prompt_tokens: 9 }, choices: [{ delta: { role: 'assistant' } }] },
+      { choices: [{ delta: { content: 'Hel' } }] },
+      { choices: [{ delta: { content: 'lo' } }] },
+      { choices: [{ delta: {}, finish_reason: 'stop' }], usage: { completion_tokens: 2 } },
+    ];
+    const ev = translateOpenAIStream(chunks, 'openai/gpt-4o');
+    expect(ev.map((e) => e.event)).toEqual([
+      'message_start', 'content_block_start',
+      'content_block_delta', 'content_block_delta',
+      'content_block_stop', 'message_delta', 'message_stop',
+    ]);
+    expect((ev[0].data as any).message.usage.input_tokens).toBe(9);
+    expect((ev[2].data as any).delta.text).toBe('Hel');
+    expect((ev[5].data as any).delta.stop_reason).toBe('end_turn');
+    expect((ev[5].data as any).usage.output_tokens).toBe(2);
+  });
+
+  it('parseSSEBuffer extracts complete data chunks, flags [DONE], keeps the incomplete tail', () => {
+    const buf =
+      'data: {"choices":[{"delta":{"content":"a"}}]}\n\ndata: [DONE]\n\ndata: {"choices":[{"delta":{"content"';
+    const { chunks, done, rest } = parseSSEBuffer(buf);
+    expect(chunks.length).toBe(1);
+    expect(chunks[0].choices?.[0]?.delta?.content).toBe('a');
+    expect(done).toBe(true);
+    expect(rest).toContain('{"delta":{"content"');
   });
 });
