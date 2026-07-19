@@ -4,6 +4,9 @@
  * injected fetch so the whole path is deterministic and fast.
  */
 import { describe, it, expect } from 'vitest';
+import { mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import type { OpenRouterConfig } from '../src/providers/openrouter-config.ts';
 import {
   tierForRequest,
@@ -16,6 +19,10 @@ import {
   serializeSSE,
   translateOpenAIStream,
   parseSSEBuffer,
+  betaUpdate,
+  recordOutcome,
+  loadPriors,
+  savePriors,
   type AnthropicRequest,
   type OpenAIChatResponse,
   type OpenAIStreamChunk,
@@ -225,5 +232,49 @@ describe('route serve — streaming translation (increment 2)', () => {
     expect(chunks[0].choices?.[0]?.delta?.content).toBe('a');
     expect(done).toBe(true);
     expect(rest).toContain('{"delta":{"content"');
+  });
+});
+
+describe('route serve — learned priors (increment 3)', () => {
+  it('betaUpdate bumps α on success, β on failure, seeding from {1,1}', () => {
+    expect(betaUpdate(undefined, true)).toEqual({ alpha: 2, beta: 1 });
+    expect(betaUpdate(undefined, false)).toEqual({ alpha: 1, beta: 2 });
+    expect(betaUpdate({ alpha: 3, beta: 2 }, true)).toEqual({ alpha: 4, beta: 2 });
+  });
+
+  it('recordOutcome folds an outcome into a priors map immutably', () => {
+    const p0 = {};
+    const p1 = recordOutcome(p0, 'openai/gpt-4o', true);
+    expect(p1['openai/gpt-4o']).toEqual({ alpha: 2, beta: 1 });
+    expect(p0).toEqual({}); // original untouched
+    expect(recordOutcome(p1, 'openai/gpt-4o', false)['openai/gpt-4o']).toEqual({ alpha: 2, beta: 2 });
+  });
+
+  it('savePriors → loadPriors round-trips through .swarm/, missing dir → {}', () => {
+    const dir = mkdtempSync(path.join(tmpdir(), 'swarmdo-priors-'));
+    try {
+      const priors = { 'anthropic/claude-3.5-haiku': { alpha: 5, beta: 2 } };
+      savePriors(priors, dir);
+      expect(loadPriors(dir)).toEqual(priors);
+      expect(loadPriors(path.join(tmpdir(), 'nonexistent-swarmdo-xyz-123'))).toEqual({});
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('handleMessages reports success/failure to onOutcome for the picked model', async () => {
+    const okCalls: Array<[string, boolean]> = [];
+    await handleMessages(
+      { model: 'claude-3-5-haiku', messages: [{ role: 'user', content: 'hi' }] },
+      { cfg, apiKey: 'k', fetchImpl: stubFetch({ ok: true, json: OPENAI_OK }).fn, onOutcome: (m, s) => okCalls.push([m, s]) } as ProxyOptions,
+    );
+    expect(okCalls).toEqual([['anthropic/claude-3.5-haiku', true]]);
+
+    const failCalls: Array<[string, boolean]> = [];
+    await handleMessages(
+      { model: 'claude-opus-4', messages: [] },
+      { cfg, apiKey: 'k', fetchImpl: stubFetch({ ok: false, status: 500, text: 'boom' }).fn, maxRetries: 0, onOutcome: (m, s) => failCalls.push([m, s]) } as ProxyOptions,
+    );
+    expect(failCalls).toEqual([['openai/gpt-4o', false]]);
   });
 });

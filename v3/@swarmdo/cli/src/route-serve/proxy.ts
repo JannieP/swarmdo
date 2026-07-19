@@ -22,6 +22,8 @@
  * (buffered), just not token-by-token.
  */
 import { createServer, type Server, type IncomingMessage, type ServerResponse } from 'node:http';
+import fs from 'node:fs';
+import path from 'node:path';
 import type { OpenRouterConfig, RoutingTier } from '../providers/openrouter-config.js';
 import { resolveOpenRouterModel } from '../providers/openrouter-config.js';
 import { computeBackoffMs, isRetryableError, sleep } from '../resilience/backoff.js';
@@ -137,6 +139,44 @@ export function selectModelForRequest(
   return picked ? { ...picked, tier } : null;
 }
 
+// ── Learned routing (increment 3): per-slug Beta priors ───────────────────────
+// resolveOpenRouterModel Thompson-samples over these, so models that succeed
+// more get picked more. Mirrors the α=successes / β=failures scheme in
+// swarmvector/model-router.ts, but keyed by OpenRouter slug (the pool's unit)
+// rather than by tier. Persisted to .swarm/route-serve-priors.json so learning
+// survives restarts.
+
+/** Pure: fold one outcome into a Beta prior (success → α+1, failure → β+1). */
+export function betaUpdate(prior: { alpha: number; beta: number } | undefined, success: boolean): { alpha: number; beta: number } {
+  const p = prior ?? { alpha: 1, beta: 1 };
+  return success ? { alpha: p.alpha + 1, beta: p.beta } : { alpha: p.alpha, beta: p.beta + 1 };
+}
+
+/** Pure: fold one outcome for `model` into a priors map, returning a new map. */
+export function recordOutcome(priors: Priors, model: string, success: boolean): Priors {
+  return { ...priors, [model]: betaUpdate(priors[model], success) };
+}
+
+const PRIORS_REL = path.join('.swarm', 'route-serve-priors.json');
+
+export function loadPriors(cwd: string = process.cwd()): Priors {
+  try {
+    const parsed = JSON.parse(fs.readFileSync(path.join(cwd, PRIORS_REL), 'utf8'));
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? (parsed as Priors) : {};
+  } catch {
+    return {};
+  }
+}
+
+export function savePriors(priors: Priors, cwd: string = process.cwd()): void {
+  try {
+    fs.mkdirSync(path.join(cwd, '.swarm'), { recursive: true });
+    fs.writeFileSync(path.join(cwd, PRIORS_REL), JSON.stringify(priors, null, 2));
+  } catch {
+    /* best-effort — learning is an optimization, never a hard dependency */
+  }
+}
+
 // ── Forward to OpenRouter with jittered backoff on retryable failures ─────────
 export interface ForwardDeps {
   cfg: OpenRouterConfig;
@@ -185,6 +225,8 @@ export interface ProxyOptions {
   fetchImpl?: typeof fetch;
   /** retry budget per upstream call (default 2) */
   maxRetries?: number;
+  /** called after each request with the chosen model + whether it succeeded — drives learned priors */
+  onOutcome?: (model: string, success: boolean) => void;
   log?: (msg: string) => void;
 }
 
@@ -215,9 +257,11 @@ export async function handleMessages(
       fetchImpl: opts.fetchImpl,
       maxRetries: opts.maxRetries,
     });
+    opts.onOutcome?.(sel.model, true);
     opts.log?.(`routed ${body.model ?? '(default)'} → ${sel.model} [${sel.tier}] (${sel.source})`);
     return { status: 200, json: openAIToAnthropic(resp, sel.model) };
   } catch (e) {
+    opts.onOutcome?.(sel.model, false);
     return { status: 502, json: { type: 'error', error: { type: 'api_error', message: (e as Error).message } } };
   }
 }
@@ -360,8 +404,10 @@ export async function handleStreamingMessages(body: AnthropicRequest, opts: Prox
     }
     if (!started) for (const e of messageStartEvents(sel.model)) write(e);
     for (const e of messageStopEvents(finish, outputTokens)) write(e);
+    opts.onOutcome?.(sel.model, true);
     opts.log?.(`streamed ${body.model ?? '(default)'} → ${sel.model} [${sel.tier}] (${sel.source})`);
   } catch (e) {
+    opts.onOutcome?.(sel.model, false);
     write({ event: 'error', data: { type: 'error', error: { type: 'api_error', message: (e as Error).message } } });
   } finally {
     res.end();
