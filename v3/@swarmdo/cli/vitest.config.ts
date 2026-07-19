@@ -26,12 +26,6 @@ export default defineConfig({
   ],
   test: {
     environment: 'node',
-    // Force the forks pool (child processes) rather than threads (worker_threads).
-    // Some suites call process.chdir() (e.g. intelligence-context-injection) and
-    // resolve fixtures via process.cwd(); worker_threads reject chdir ("not
-    // supported in workers") and can start from a different cwd, so those pass
-    // locally (forks is the CLI default) but fail under CI's threads pool. #2195-adjacent.
-    pool: 'forks',
     include: ['__tests__/**/*.test.ts'],
     globals: true,
     coverage: {

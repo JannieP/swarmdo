@@ -58,6 +58,8 @@ const KNOWN_ESCAPE_HATCHES = new Set([
   // ── boot-time / posture toggles (read before any CLI flag parsing exists) ──
   'SWARMDO_REPO_ROOT',        // bench-runner only: repo location for benchmark fixtures
   'SWARMDO_STATUSLINE',       // statusline render toggle — consumed by Claude Code's statusLine hook, no CLI session to flag
+  'SWARMDO_STATUSLINE_COST_MODE', // statusline cost-display mode — consumed by the statusLine hook, no CLI session to flag (same rationale as SWARMDO_STATUSLINE)
+  'SWARMDO_VERSION',          // version override the CLI wrapper injects into the deployed statusline (#1951) — env-only by design; no user-facing set-version flag exists
   'SWARMDO_TOOLS_GROUPS',     // MCP server boot: tool-group selection happens before flag parsing
   'SWARMDO_TOOLS_PROFILE',    // MCP server boot: profile selection happens before flag parsing
   'SWARMDO_STRICT_GUARDRAIL', // security posture: env-only by design so a session can't flag it off
