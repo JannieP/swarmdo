@@ -549,11 +549,15 @@ export class CommandParser {
 
   validateFlags(flags: ParsedFlags, command?: Command): string[] {
     const errors: string[] = [];
-    const allOptions = [...this.globalOptions];
-
-    if (command?.options) {
-      allOptions.push(...command.options);
-    }
+    // A command's option overrides a global one of the SAME name (e.g. `memory
+    // export` redefines --format with obsidian/csv/binary/md choices). Dedupe by
+    // name, command-last, so the command's choices/required/validator win —
+    // otherwise the global --format's [text,json,table] rejects `obsidian`
+    // before the handler ever runs (#2073 / #1425).
+    const byName = new Map<string, CommandOption>();
+    for (const opt of this.globalOptions) byName.set(opt.name, opt);
+    if (command?.options) for (const opt of command.options) byName.set(opt.name, opt);
+    const allOptions = [...byName.values()];
 
     // Check required flags
     for (const opt of allOptions) {

@@ -3441,7 +3441,12 @@ function __wbg_get_imports() {
     };
     return {
         __proto__: null,
+        // The .wasm binary was built pre-rename (ruvllm→swarmllm) and bakes in an
+        // import for "./ruvllm_wasm_bg.js"; this glue is named swarmllm. Expose the
+        // same bindings under BOTH keys so WebAssembly.instantiate resolves the
+        // wasm's import. (Proper fix: rebuild the wasm from the swarmllm crate.)
         "./swarmllm_wasm_bg.js": import0,
+        "./ruvllm_wasm_bg.js": import0,
     };
 }
 

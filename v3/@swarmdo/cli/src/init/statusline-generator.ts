@@ -772,6 +772,7 @@ function generateStatusline() {
   const security = d.security || {};
   const swarm = d.swarm || {};
   const system = d.system || {};
+  const swarmllmOn = !!(d.swarmllm && d.swarmllm.on); // local SwarmLLM backend available → show 🧬 LLM
   const adrs = d.adrs || {};
   const hooks = d.hooks || {};
   const agentdb = d.agentdb || {};
@@ -881,7 +882,9 @@ function generateStatusline() {
     c.brightBlue + '🪝 ' + hooksColor + hooksEnabled + c.reset + '/' + c.brightWhite + hooksTotal + c.reset + '    ' +
     secIcon + ' ' + secColor + secLabel + c.reset + '    ' +
     c.brightCyan + '💾 ' + memoryMB + 'MB' + c.reset + '    ' +
-    intellColor + '🧠 ' + String(intelligencePct).padStart(3) + '%' + c.reset
+    intellColor + '🧠 ' + String(intelligencePct).padStart(3) + '%' + c.reset +
+    // Local LLM indicator — only rendered when the SwarmLLM backend is available.
+    (swarmllmOn ? '    ' + c.brightPurple + '🧬 LLM' + c.reset : '')
   );
 
   // Line 3: Architecture

@@ -4523,12 +4523,22 @@ const statuslineCommand: Command = {
     const system = getSystemMetrics();
     const user = getUserInfo();
 
+    // SwarmLLM local-inference toggle — the statusline's 🧬 LLM icon reflects the
+    // real `swarmdo llm on|off` switch (llm.enabled in swarmdo.config.json): a
+    // cheap config read, not a WASM probe. Off/absent → icon hidden.
+    let swarmllmOn = false;
+    try {
+      const { toggleEnabled } = await import('../config/project-toggles.js');
+      swarmllmOn = toggleEnabled('llm', process.cwd());
+    } catch { /* off */ }
+
     const statusData = {
       user,
       v3Progress: progress,
       security,
       swarm,
       system,
+      swarmllm: { on: swarmllmOn },
       timestamp: new Date().toISOString()
     };
 

@@ -77,6 +77,8 @@ The v1.3–v1.4 release train added a day-to-day operations layer around the swa
 | `swarmdo memory backup` / `revectorize` | — | WAL-safe nightly DB snapshots (keep 7) · repair hash-era vectors |
 | `swarmdo compress <file>` | — | Caveman-compress a memory file from any terminal (e2e-verified 33% smaller; `<file>.original.md` backup kept); `--check` for a token-free dry run |
 | `swarmdo efficiency` | — | Toggle the caveman + ponytail skills per project (`on` / `off` / `status`) |
+| `swarmdo obsidian` | — | Toggle the dual-plane Obsidian memory integration per project — `on` exports a vault + enables sync, `off`, `status`. Slash: `/sDo:obsidian` |
+| `swarmdo llm` | — | Toggle the local SwarmLLM inference backend per project (`on` / `off` / `status`); `on` shows the `🧬 LLM` statusline icon. Slash: `/sDo:llm` |
 
 ### Multi-CLI integrations (`swarmdo integrations`)
 
