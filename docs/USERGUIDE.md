@@ -177,9 +177,12 @@ ANTHROPIC_BASE_URL=http://127.0.0.1:3456 claude    # Claude Code now runs on you
   to a pool tier; an explicit `org/model` slug passes straight through.
 - **Streaming**: full Anthropic SSE (`message_start … message_stop`), so the
   Claude Code TUI streams token-by-token exactly as normal.
-- **Learns your routing**: each request's success/failure updates per-model
-  Beta priors in `.swarm/route-serve-priors.json`; the pool Thompson-samples
-  over them, so models that work well for you get picked more over time.
+- **Learns your routing (shared)**: each request's success/failure updates the
+  per-model Beta priors in swarmdo's shared learned-routing store
+  (`.swarm/model-router-state.json`) — the SAME store your swarms' execution
+  router uses, so route serve and your agents learn from each other. The pool
+  Thompson-samples over the priors, so models that work well for you get picked
+  more over time.
 - **Resilient**: retryable upstream failures back off and retry.
 
 Needs the same `openrouter` block (`enabled: true` + a model pool) and
