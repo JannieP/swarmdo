@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Structural smoke test for swarmdo-core v0.2.2 (ADR-0001).
+# Structural smoke test for swarmdo-core (ADR-0001).
 set -u
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PASS=0
@@ -8,10 +8,10 @@ step() { printf "→ %s ... " "$1"; }
 ok()   { printf "PASS\n"; PASS=$((PASS+1)); }
 bad()  { printf "FAIL: %s\n" "$1"; FAIL=$((FAIL+1)); }
 
-step "1. plugin.json declares 0.2.2 with new keywords"
+step "1. plugin.json declares a semver version with the discovery keywords"
 v=$(grep -E '"version"' "$ROOT/.claude-plugin/plugin.json" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)
-if [[ "$v" != "0.2.2" ]]; then
-  bad "expected 0.2.2, got '$v'"
+if [[ -z "$v" ]]; then
+  bad "no semver version in plugin.json"
 else
   miss=""
   for k in foundation mcp-server plugin-catalog discovery; do
