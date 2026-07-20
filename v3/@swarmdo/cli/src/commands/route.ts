@@ -12,6 +12,7 @@
  */
 
 import type { Command, CommandContext, CommandResult } from '../types.js';
+import type { RouteLearner, AnthropicRequest } from '../route-serve/proxy.js';
 import { output } from '../output.js';
 import {
   createQLearningRouter,
@@ -835,7 +836,8 @@ const serveCommand: Command = {
   ],
   action: async (ctx: CommandContext): Promise<CommandResult> => {
     const { loadOpenRouterConfig } = await import('../providers/openrouter-config.js');
-    const { startProxy, loadPriors, savePriors, recordOutcome } = await import('../route-serve/proxy.js');
+    const { startProxy } = await import('../route-serve/proxy.js');
+    const { ModelRouter } = await import('../swarmvector/model-router.js');
     const { config, warnings } = loadOpenRouterConfig(process.cwd());
     for (const w of warnings) output.printWarning(w);
     if (!config.enabled || config.models.length === 0) {
@@ -851,20 +853,32 @@ const serveCommand: Command = {
     }
     const port = Number(ctx.flags.port ?? 3456);
     const host = String(ctx.flags.host ?? '127.0.0.1');
-    const cwd = process.cwd();
-    const priors = loadPriors(cwd); // learned per-slug Beta priors from prior runs
-    let saveTimer: ReturnType<typeof setTimeout> | null = null;
-    const scheduleSave = (): void => {
-      if (saveTimer) return;
-      saveTimer = setTimeout(() => { saveTimer = null; savePriors(priors, cwd); }, 2000);
+    // Shared learned-routing store: route serve reads/writes the SAME per-modelId
+    // Beta priors (.swarm/model-router-state.json, bucketed by prompt complexity)
+    // as swarmdo's execution router — one store, and route serve's usage matures
+    // the per-modelId shadow state. recordOutcomeByModelId persists on each call.
+    const router = new ModelRouter();
+    const promptOf = (body: AnthropicRequest): string => {
+      const msgs = body.messages ?? [];
+      for (let i = msgs.length - 1; i >= 0; i--) {
+        if (msgs[i].role !== 'user') continue;
+        const c = msgs[i].content;
+        if (typeof c === 'string') return c;
+        if (Array.isArray(c)) return c.map((b) => (typeof b.text === 'string' ? b.text : '')).join(' ');
+      }
+      return '';
+    };
+    const learner: RouteLearner = {
+      priorsFor: (body) => router.getPriorsById(promptOf(body)),
+      record: (body, model, success) =>
+        router.recordOutcomeByModelId(promptOf(body), model, success ? 'success' : 'failure'),
     };
     const { server, url } = await startProxy({
       cfg: config,
       apiKey,
       port,
       host,
-      priors,
-      onOutcome: (model, success) => { Object.assign(priors, recordOutcome(priors, model, success)); scheduleSave(); },
+      learner,
       log: (m) => output.writeln(output.dim(`  ${m}`)),
     });
     const tiers = [...new Set(config.models.map((m) => m.tier).filter(Boolean))].join('/');
@@ -874,7 +888,7 @@ const serveCommand: Command = {
     output.writeln(output.dim('  Ctrl-C to stop.'));
     // Run until interrupted (SIGINT/SIGTERM), then close the listener cleanly.
     await new Promise<void>((resolve) => {
-      const stop = (): void => { savePriors(priors, cwd); server.close(() => resolve()); };
+      const stop = (): void => { server.close(() => resolve()); };
       process.once('SIGINT', stop);
       process.once('SIGTERM', stop);
     });

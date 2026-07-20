@@ -1237,6 +1237,18 @@ export class ModelRouter {
   }
 
   /**
+   * Read the shadow per-modelId priors for a task's complexity bucket, as a
+   * flat { modelId → Beta prior } map. Lets `route serve` Thompson-sample the
+   * OpenRouter pool from the SAME learned state the execution router feeds —
+   * one store, not two — and its usage feeds priorsById toward the per-modelId
+   * selection switch. Empty when nothing has been learned for the bucket.
+   */
+  getPriorsById(task: string): Record<string, BetaPrior> {
+    const bucket = complexityBucket(this.analyzeComplexity(task).score);
+    return { ...(this.state.priorsById?.[bucket] ?? {}) };
+  }
+
+  /**
    * Get router statistics
    */
   getStats(): {
