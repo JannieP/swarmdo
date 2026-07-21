@@ -636,6 +636,8 @@ export async function bridgeStoreEntry(options: {
   ttl?: number;
   dbPath?: string;
   upsert?: boolean;
+  /** Optional structured provenance/metadata persisted to the metadata column (ADR-155). */
+  metadata?: Record<string, unknown>;
 }): Promise<{
   success: boolean;
   id: string;
@@ -653,7 +655,7 @@ export async function bridgeStoreEntry(options: {
   if (!ctx) return null;
 
   try {
-    const { key, value, namespace = 'default', tags = [], ttl } = options;
+    const { key, value, namespace = 'default', tags = [], ttl, metadata } = options;
     const id = generateId('entry');
     const now = Date.now();
 
@@ -720,7 +722,7 @@ export async function bridgeStoreEntry(options: {
       id, key, namespace, value,
       embeddingJson, dimensions || null, model,
       tags.length > 0 ? JSON.stringify(tags) : null,
-      '{}',
+      metadata ? JSON.stringify(metadata) : '{}',
       now, now,
       ttl ? now + (ttl * 1000) : null
     );

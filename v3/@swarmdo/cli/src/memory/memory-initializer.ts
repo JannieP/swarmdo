@@ -2327,6 +2327,8 @@ export async function storeEntry(options: {
   ttl?: number;
   dbPath?: string;
   upsert?: boolean;
+  /** Optional structured provenance/metadata persisted to the metadata column (ADR-155). */
+  metadata?: Record<string, unknown>;
 }): Promise<{
   success: boolean;
   id: string;
@@ -2361,7 +2363,8 @@ export async function storeEntry(options: {
     tags = [],
     ttl,
     dbPath: customPath,
-    upsert = false
+    upsert = false,
+    metadata
   } = options;
 
   const swarmDir = getMemoryRoot();
@@ -2430,7 +2433,7 @@ export async function storeEntry(options: {
       embeddingDimensions,
       embeddingModel,
       tags.length > 0 ? JSON.stringify(tags) : null,
-      '{}',
+      metadata ? JSON.stringify(metadata) : '{}',
       now,
       now,
       ttl ? now + (ttl * 1000) : null

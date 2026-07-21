@@ -7,6 +7,8 @@ import type { Command, CommandContext, CommandResult } from '../types.js';
 import { output } from '../output.js';
 import { select, confirm, input } from '../prompt.js';
 import { callMCPTool, MCPClientError } from '../mcp-client.js';
+import { execSync } from 'node:child_process';
+import * as path from 'node:path';
 
 // Memory backends
 const BACKENDS = [
@@ -1961,11 +1963,111 @@ const revectorizeCommand: Command = {
   }
 };
 
+// ADR-155 — L0→L1 memory distillation: transcript → atomic facts.
+const distillCommand: Command = {
+  name: 'distill',
+  description: 'Distill a session transcript into atomic facts (ADR-155). Opt-in, dry-run by default; --confirm makes one budget-capped headless claude call.',
+  options: [
+    { name: 'session', description: "Session id, or 'latest' for the current session", type: 'string', default: 'latest' },
+    { name: 'model', description: 'Model for extraction (haiku|sonnet|opus or a slug)', type: 'string', default: 'haiku' },
+    { name: 'max-budget-usd', description: 'Budget ceiling for the single claude call', type: 'number', default: 0.5 },
+    { name: 'timeout-secs', description: 'Timeout for the claude call (seconds)', type: 'number', default: 180 },
+    { name: 'max-facts', description: 'Maximum facts to extract', type: 'number', default: 40 },
+    { name: 'namespace', description: 'Namespace to store distilled facts in', type: 'string', default: 'distilled' },
+    { name: 'confirm', description: 'Actually run the billable claude call (default: dry-run plan)', type: 'boolean', default: false },
+    { name: 'json', description: 'Output JSON', type: 'boolean', default: false },
+    DB_PATH_OPTION,
+  ],
+  examples: [
+    { command: 'swarmdo memory distill', description: 'Dry-run: plan for the current session' },
+    { command: 'swarmdo memory distill --confirm', description: 'Distill the current session into facts' },
+    { command: 'swarmdo memory distill --session latest --confirm --model haiku --max-budget-usd 0.50', description: 'Distill with Haiku' },
+  ],
+  action: async (ctx: CommandContext): Promise<CommandResult> => {
+    const sessionArg = (ctx.flags.session as string) || 'latest';
+    const model = (ctx.flags.model as string) || 'haiku';
+    const maxBudgetUsd = (ctx.flags['max-budget-usd'] as number) ?? 0.5;
+    const timeoutMs = ((ctx.flags['timeout-secs'] as number) || 180) * 1000;
+    const maxFacts = (ctx.flags['max-facts'] as number) || 40;
+    const namespace = (ctx.flags.namespace as string) || 'distilled';
+
+    // Resolve the transcript (current session by default via CLAUDE_SESSION_ID).
+    const { resolveSessionFile } = await import('../transcript/export.js');
+    const sessionId = sessionArg === 'latest' ? (process.env.CLAUDE_SESSION_ID ?? 'latest') : sessionArg;
+    const file = resolveSessionFile(sessionId);
+    if (!file) {
+      output.printError(`No transcript found for session '${sessionArg}'.`);
+      return { success: false, exitCode: 1 };
+    }
+
+    const { sessionTurns, extractFacts, storeFacts } = await import('../memory/distill.js');
+    const turns = sessionTurns(file);
+    if (turns.length === 0) {
+      output.printError(`Session transcript has no usable turns: ${file}`);
+      return { success: false, exitCode: 1 };
+    }
+    const resolvedSessionId = path.basename(file, '.jsonl');
+
+    // Dry-run gate (no billable call) unless --confirm — parse-prd's order, so
+    // the plan always prints even where SWARMDO_HEADLESS forbids the real call.
+    if (ctx.flags.confirm !== true) {
+      output.writeln(output.bold('memory distill — plan (dry-run, nothing executed)'));
+      output.printList([
+        `Session: ${resolvedSessionId} (${turns.length} turns)`,
+        `Transcript: ${file}`,
+        `Model: ${model} · budget ceiling: $${maxBudgetUsd.toFixed(2)} · timeout: ${timeoutMs / 1000}s`,
+        `Will extract up to ${maxFacts} atomic facts → namespace '${namespace}'`,
+      ]);
+      output.printInfo('re-run with --confirm to distill (one billable claude call)');
+      return { success: true, exitCode: 0 };
+    }
+
+    // Cost-rule guard (after the dry-run gate).
+    const headlessFlag = (process.env.SWARMDO_HEADLESS ?? '').toLowerCase();
+    if (headlessFlag === '0' || headlessFlag === 'false' || headlessFlag === 'off') {
+      output.printError('SWARMDO_HEADLESS forbids billable headless claude runs on this host');
+      return { success: false, exitCode: 1 };
+    }
+    try {
+      execSync('claude --version', { stdio: 'pipe', timeout: 10_000 });
+    } catch {
+      output.printError('claude CLI not found on PATH — memory distill needs Claude Code installed');
+      return { success: false, exitCode: 1 };
+    }
+
+    output.printInfo(`Distilling ${turns.length} turns from ${resolvedSessionId} with ${model}…`);
+    const { facts, costUsd, warnings } = await extractFacts({ turns, maxFacts, model, budgetUsd: maxBudgetUsd, timeoutMs });
+    if (facts.length === 0) {
+      output.printError(`no facts extracted${warnings.length ? ` — ${warnings.join('; ')}` : ''}`);
+      return { success: false, exitCode: 1 };
+    }
+
+    const dbPath = ctx.flags.path as string | undefined;
+    const { stored, skipped, keys } = await storeFacts({ facts, sessionId: resolvedSessionId, transcript: file, namespace, dbPath });
+
+    if (ctx.flags.json === true) {
+      output.printJson({ session: resolvedSessionId, stored, skipped, facts, costUsd, warnings, namespace });
+      return { success: true, exitCode: 0, data: { stored, skipped, keys } };
+    }
+
+    output.writeln();
+    output.printSuccess(`Distilled ${stored} fact(s) into '${namespace}'${skipped ? `, ${skipped} skipped as duplicates` : ''}`);
+    output.printList(facts.map(f => `[${f.category}] ${f.fact}`));
+    if (costUsd != null) output.printInfo(`Distillation cost: $${costUsd.toFixed(4)}`);
+    if (warnings.length) {
+      output.writeln(output.dim('Notes:'));
+      for (const w of warnings) output.writeln(output.dim(`  • ${w}`));
+    }
+    output.printInfo(`Retrieve: swarmdo memory search --namespace ${namespace} --rerank -q "<query>"`);
+    return { success: true, data: { stored, skipped, keys } };
+  },
+};
+
 // Main memory command
 export const memoryCommand: Command = {
   name: 'memory',
   description: 'Memory management commands',
-  subcommands: [initMemoryCommand, storeCommand, retrieveCommand, searchCommand, listCommand, deleteCommand, statsCommand, configureCommand, cleanupCommand, compressCommand, exportCommand, importCommand, backupCommand, revectorizeCommand],
+  subcommands: [initMemoryCommand, storeCommand, retrieveCommand, searchCommand, listCommand, deleteCommand, statsCommand, configureCommand, cleanupCommand, compressCommand, exportCommand, importCommand, backupCommand, revectorizeCommand, distillCommand],
   options: [],
   examples: [
     { command: 'swarmdo memory store -k "key" -v "value"', description: 'Store data' },
