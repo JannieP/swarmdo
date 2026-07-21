@@ -109,7 +109,7 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
 
 export const compactSnapshotCommand: Command = {
   name: 'compact-snapshot',
-  description: 'Capture/restore a working-state digest that survives context compaction — recent edits, uncommitted changes, branch — so an agent re-grounds instead of re-exploring',
+  description: 'Capture/read a working-state digest that survives context compaction — recent edits, uncommitted changes, branch — so an agent re-grounds instead of re-exploring',
   options: [
     { name: 'keep', description: 'on read, print the digest without consuming it', type: 'boolean' },
   ],

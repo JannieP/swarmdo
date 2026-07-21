@@ -899,6 +899,9 @@ const serveCommand: Command = {
 export const routeCommand: Command = {
   name: 'route',
   description: 'Intelligent task-to-agent routing using Q-Learning',
+  // #126/#131 — `route <task>` treats a bare positional as a task to route (see
+  // the action below), so it must NOT be rejected as an unknown subcommand.
+  acceptsArgs: true,
   subcommands: [
     routeTaskCommand,
     listAgentsCommand,

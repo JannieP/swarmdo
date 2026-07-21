@@ -29,6 +29,13 @@ export interface Command {
   examples?: CommandExample[];
   action?: CommandAction;
   hidden?: boolean;
+  /**
+   * When true, a leading positional that matches no subcommand is passed to
+   * this command's own `action` instead of being rejected as an unknown
+   * subcommand (#126/#131). Set only on hybrid commands whose action treats a
+   * bare positional as an argument (e.g. `route <task>`).
+   */
+  acceptsArgs?: boolean;
 }
 
 export interface CommandOption {

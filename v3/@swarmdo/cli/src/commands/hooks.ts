@@ -2859,12 +2859,12 @@ function formatIntelligenceStatus(status: string): string {
 }
 
 // =============================================================================
-// Worker Commands (12 Background Workers)
+// Worker Commands (13 Background Workers)
 // =============================================================================
 
 const workerListCommand: Command = {
   name: 'list',
-  description: 'List all 12 background workers with capabilities',
+  description: 'List all 13 background workers with capabilities',
   options: [
     { name: 'status', short: 's', type: 'string', description: 'Filter by status (all, running, completed, pending)' },
     { name: 'active', short: 'a', type: 'boolean', description: 'Show active worker instances' },
@@ -2908,7 +2908,7 @@ const workerListCommand: Command = {
       spinner.succeed('Workers loaded');
 
       output.writeln();
-      output.writeln(output.bold('Background Workers (12 Total)'));
+      output.writeln(output.bold(`Background Workers (${result.workers.length} Total)`));
       output.writeln();
 
       output.printTable({
@@ -4246,7 +4246,7 @@ const progressHookCommand: Command = {
 // Worker parent command
 const workerCommand: Command = {
   name: 'worker',
-  description: 'Background worker management (12 workers for analysis/optimization)',
+  description: 'Background worker management (13 workers for analysis/optimization)',
   subcommands: [
     workerListCommand,
     workerDispatchCommand,
@@ -4262,7 +4262,7 @@ const workerCommand: Command = {
   ],
   action: async (): Promise<CommandResult> => {
     output.writeln();
-    output.writeln(output.bold('Background Worker System (12 Workers)'));
+    output.writeln(output.bold('Background Worker System (13 Workers)'));
     output.writeln();
     output.writeln('Manage and dispatch background workers for analysis and optimization tasks.');
     output.writeln();
@@ -5692,7 +5692,7 @@ export const hooksCommand: Command = {
       `${output.highlight('metrics')}         - View learning metrics dashboard`,
       `${output.highlight('transfer')}        - Transfer patterns from another project`,
       `${output.highlight('list')}            - List all registered hooks`,
-      `${output.highlight('worker')}          - Background worker management (12 workers)`,
+      `${output.highlight('worker')}          - Background worker management (13 workers)`,
       `${output.highlight('progress')}        - Check V3 implementation progress`,
       `${output.highlight('statusline')}      - Generate dynamic statusline display`,
       `${output.highlight('coverage-route')}  - Route tasks based on coverage gaps (swarmvector)`,

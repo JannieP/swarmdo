@@ -902,7 +902,13 @@ const statusCommand: Command = {
       const bgRunning = bgPid ? isProcessRunning(bgPid) : false;
 
       const isRunning = status.running || bgRunning;
-      const displayPid = bgPid || status.pid;
+      // #129c: only surface a PID that a LIVE process backs. A PID file can
+      // outlive its process (crash without cleanup), and getStatus().pid is
+      // just this CLI process's own pid — either would print a concrete PID
+      // beside "STOPPED". Prefer the live background pid, else the live
+      // foreground pid, else none; a stale pidfile pid is shown but labelled.
+      const livePid = bgRunning ? bgPid : status.running ? status.pid : null;
+      const stalePid = bgPid && !bgRunning ? bgPid : null;
 
       output.writeln();
 
@@ -914,7 +920,7 @@ const statusCommand: Command = {
       output.printBox(
         [
           `Status: ${statusIcon} ${statusText}${mode}`,
-          `PID: ${displayPid}`,
+          livePid ? `PID: ${livePid}` : stalePid ? `PID: ${output.dim(`${stalePid} (stale pidfile)`)}` : '',
           status.startedAt ? `Started: ${status.startedAt.toISOString()}` : '',
           status.config.ttlMs > 0
             ? `TTL: ${Math.round(status.config.ttlMs / 3600000)}h (self-shutdown)`

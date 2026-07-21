@@ -139,9 +139,6 @@ function getSwarmStatus(swarmId?: string) {
   let progress = 0;
   if (totalTasks > 0) {
     progress = Math.round((completedTasks / totalTasks) * 100);
-  } else if (swarmState) {
-    // Swarm initialized but no tasks yet
-    progress = 5;
   }
 
   // Determine status

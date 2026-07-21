@@ -111,12 +111,17 @@ const listCommand: Command = {
 
       output.writeln();
 
-      // Build search options
+      // Build search options. Pass an explicit limit of the full registry
+      // size so the table renders every plugin: without it, searchPlugins()
+      // defaults to a 20-row page (search.ts) and silently truncates registries
+      // that hold more — e.g. the demo fallback's 21 — leaving the table one
+      // row short of the "<N> plugins available" banner above. (#129b)
       const searchOptions: PluginSearchOptions = {
         category,
         type: type as PluginType,
         sortBy: 'downloads',
         sortOrder: 'desc',
+        limit: result.registry.plugins.length,
       };
 
       let plugins: PluginEntry[];

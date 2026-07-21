@@ -263,6 +263,28 @@ export class CLI {
         }
       }
 
+      // #126/#131 — Unknown-subcommand guard: a group command (one that
+      // exposes subcommands) given a leading positional that matched no
+      // subcommand received a mistyped/unknown subcommand. It previously fell
+      // through to the group's parent action, which merely prints help and
+      // returns success — so `config list` silently showed help and exited 0.
+      // Emit an error to stderr and exit non-zero. A bare group (no leftover
+      // positional) still shows help + exits 0. Hybrid commands whose action
+      // consumes a bare positional (e.g. `route <task>`) opt out via
+      // `acceptsArgs`.
+      if (
+        targetCommand.subcommands &&
+        targetCommand.subcommands.length > 0 &&
+        subcommandArgs.length > 0 &&
+        !targetCommand.acceptsArgs
+      ) {
+        this.output.printError(
+          `Unknown subcommand: ${commandPath.join(' ')} ${subcommandArgs[0]}`,
+          `Run "${this.name} ${commandPath.join(' ')} --help" to list available subcommands`
+        );
+        process.exit(1);
+      }
+
       // Validate flags
       const validationErrors = this.parser.validateFlags(flags, targetCommand);
       if (validationErrors.length > 0) {

@@ -4095,7 +4095,7 @@ function detectWorkerTriggers(text: string): {
 // Worker list tool
 export const hooksWorkerList: MCPTool = {
   name: 'hooks_worker-list',
-  description: 'List all 12 background workers with status and capabilities Use when native Bash hooks (via Claude Code\'s settings.json) are wrong because you need Swarmdo-side state — pattern persistence, neural training signals, model-routing learning, cost tracking, audit chain. For one-off shell commands, plain Bash hooks are fine.',
+  description: 'List all 13 background workers with status and capabilities Use when native Bash hooks (via Claude Code\'s settings.json) are wrong because you need Swarmdo-side state — pattern persistence, neural training signals, model-routing learning, cost tracking, audit chain. For one-off shell commands, plain Bash hooks are fine.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -4121,7 +4121,7 @@ export const hooksWorkerList: MCPTool = {
 
     return {
       workers,
-      total: 12,
+      total: workers.length,
       active: {
         instances: activeList,
         count: activeList.length,

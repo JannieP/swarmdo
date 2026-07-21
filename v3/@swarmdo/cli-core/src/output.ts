@@ -577,6 +577,10 @@ export class Spinner {
   private frames: string[];
   private interval: ReturnType<typeof setInterval> | null = null;
   private frameIndex: number = 0;
+  // #123: when stdout is not a TTY (piped/redirected/logged), '\r' does not
+  // move the cursor, so animating spams a fresh line per frame. Detect once and,
+  // in that case, emit a single static line instead of animating.
+  private readonly isTTY: boolean = process.stdout.isTTY ?? false;
 
   private static readonly SPINNERS: Record<string, string[]> = {
     dots: ['...', '..:' , '.::', ':::',  '::.', ':..' ,],
@@ -595,6 +599,12 @@ export class Spinner {
   start(): void {
     if (this.interval) return;
 
+    // Non-TTY: print one static line and do not animate (#123).
+    if (!this.isTTY) {
+      this.formatter.writeln(this.text);
+      return;
+    }
+
     this.interval = setInterval(() => {
       this.render();
       this.frameIndex = (this.frameIndex + 1) % this.frames.length;
@@ -610,8 +620,11 @@ export class Spinner {
       this.interval = null;
     }
 
-    // Clear the line
-    process.stdout.write('\r' + ' '.repeat(this.text.length + 10) + '\r');
+    // Clear the line — only meaningful on a TTY; on a non-TTY the '\r' clear
+    // sequence would emit stray spaces into piped/redirected output (#123).
+    if (this.isTTY) {
+      process.stdout.write('\r' + ' '.repeat(this.text.length + 10) + '\r');
+    }
 
     if (message) {
       this.formatter.writeln(message);

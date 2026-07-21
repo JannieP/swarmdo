@@ -163,7 +163,12 @@ if (process.env.CLAUDECODE) {
 //      test or non-TTY caller of `mcp start -t http` got force-routed
 //      into stdio mode and never hit the HTTP server (#1874 follow-up).
 const cliArgs = process.argv.slice(2);
-const isExplicitMCP = cliArgs.length >= 1 && cliArgs[0] === 'mcp' && (cliArgs.length === 1 || cliArgs[1] === 'start');
+// #126/#131 — `mcp start --help` (and `mcp -h`) must print help, not boot the
+// server. In a non-TTY (piped/CI/subprocess) `isMCPMode` would otherwise force
+// stdio-server mode and swallow the help request, running the start action.
+// Defer any invocation carrying --help/-h to the normal CLI path below.
+const wantsHelp = cliArgs.includes('--help') || cliArgs.includes('-h');
+const isExplicitMCP = !wantsHelp && cliArgs.length >= 1 && cliArgs[0] === 'mcp' && (cliArgs.length === 1 || cliArgs[1] === 'start');
 const explicitNonStdioTransport = cliArgs.some((a, i) => {
   // -t <value> | --transport <value>
   if ((a === '-t' || a === '--transport') && cliArgs[i + 1] && cliArgs[i + 1] !== 'stdio') return true;

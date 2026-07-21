@@ -206,6 +206,11 @@ const scanCommand: Command = {
       // Display results
       output.writeln();
       if (findings.length > 0) {
+        // Sort by severity (Critical > High > Medium > Low) so the truncated
+        // preview surfaces the most severe findings, not the first-scanned.
+        const severityRank = (s: string): number =>
+          s.includes('CRITICAL') ? 0 : s.includes('HIGH') ? 1 : s.includes('MEDIUM') ? 2 : 3;
+        const sortedFindings = [...findings].sort((a, b) => severityRank(a.severity) - severityRank(b.severity));
         output.printTable({
           columns: [
             { key: 'severity', header: 'Severity', width: 12 },
@@ -213,7 +218,7 @@ const scanCommand: Command = {
             { key: 'location', header: 'Location', width: 25 },
             { key: 'description', header: 'Description', width: 35 },
           ],
-          data: findings.slice(0, 20), // Show first 20
+          data: sortedFindings.slice(0, 20), // Show first 20 by severity
         });
 
         if (findings.length > 20) {

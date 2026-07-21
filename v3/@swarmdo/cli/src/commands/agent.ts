@@ -237,7 +237,7 @@ const listCommand: Command = {
       // Call MCP tool to list agents
       const result = await callMCPTool<{
         agents: Array<{
-          id: string;
+          agentId: string;
           agentType: string;
           status: 'active' | 'idle' | 'terminated';
           createdAt: string;
@@ -266,7 +266,7 @@ const listCommand: Command = {
 
       // Format for display
       const displayAgents = result.agents.map(agent => ({
-        id: agent.id,
+        id: agent.agentId,
         type: agent.agentType,
         status: agent.status,
         created: new Date(agent.createdAt).toLocaleTimeString(),

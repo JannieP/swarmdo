@@ -54,7 +54,7 @@ const listCommand: Command = {
       : await service.getAllClaims();
 
     if (claims.length === 0) {
-      output.printInfo('No claims found');
+      output.printInfo('No issue claims found');
       return { success: true, data: { claims: [] } };
     }
 
