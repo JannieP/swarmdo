@@ -1991,16 +1991,16 @@ const distillCommand: Command = {
     const maxFacts = (ctx.flags['max-facts'] as number) || 40;
     const namespace = (ctx.flags.namespace as string) || 'distilled';
 
-    // Resolve the transcript (current session by default via CLAUDE_SESSION_ID).
-    const { resolveSessionFile } = await import('../transcript/export.js');
+    // Resolve the transcript. 'latest' scopes to the current project's newest
+    // MAIN session — not the mtime-newest transcript machine-wide, which can be
+    // a sibling project's session. An explicit --session id resolves anywhere.
+    const { sessionTurns, extractFacts, storeFacts, resolveDistillSession } = await import('../memory/distill.js');
     const sessionId = sessionArg === 'latest' ? (process.env.CLAUDE_SESSION_ID ?? 'latest') : sessionArg;
-    const file = resolveSessionFile(sessionId);
+    const file = resolveDistillSession(sessionId, ctx.cwd || process.cwd());
     if (!file) {
       output.printError(`No transcript found for session '${sessionArg}'.`);
       return { success: false, exitCode: 1 };
     }
-
-    const { sessionTurns, extractFacts, storeFacts } = await import('../memory/distill.js');
     const turns = sessionTurns(file);
     if (turns.length === 0) {
       output.printError(`Session transcript has no usable turns: ${file}`);
@@ -2043,15 +2043,15 @@ const distillCommand: Command = {
     }
 
     const dbPath = ctx.flags.path as string | undefined;
-    const { stored, skipped, keys } = await storeFacts({ facts, sessionId: resolvedSessionId, transcript: file, namespace, dbPath });
+    const { stored, skipped, redacted, keys } = await storeFacts({ facts, sessionId: resolvedSessionId, transcript: file, namespace, dbPath });
 
     if (ctx.flags.json === true) {
-      output.printJson({ session: resolvedSessionId, stored, skipped, facts, costUsd, warnings, namespace });
-      return { success: true, exitCode: 0, data: { stored, skipped, keys } };
+      output.printJson({ session: resolvedSessionId, stored, skipped, redacted, facts, costUsd, warnings, namespace });
+      return { success: true, exitCode: 0, data: { stored, skipped, redacted, keys } };
     }
 
     output.writeln();
-    output.printSuccess(`Distilled ${stored} fact(s) into '${namespace}'${skipped ? `, ${skipped} skipped as duplicates` : ''}`);
+    output.printSuccess(`Distilled ${stored} fact(s) into '${namespace}'${skipped ? `, ${skipped} skipped as duplicates` : ''}${redacted ? `, ${redacted} had secrets redacted` : ''}`);
     output.printList(facts.map(f => `[${f.category}] ${f.fact}`));
     if (costUsd != null) output.printInfo(`Distillation cost: $${costUsd.toFixed(4)}`);
     if (warnings.length) {

@@ -18,8 +18,11 @@
 
 import { spawnSync } from 'node:child_process';
 import * as fs from 'node:fs';
-import { cleanUserText, contentToText } from '../transcript/export.js';
+import { cleanUserText, contentToText, resolveSessionFile } from '../transcript/export.js';
+import { defaultClaudeProjectDirs, findTranscriptFiles } from '../usage/transcript-usage.js';
+import { encodeProjectDir } from '../command-usage/usage.js';
 import { extractJsonArray } from '../task/parse-prd.js';
+import { redactText } from '../redact/redact.js';
 // Sibling module (both live in src/memory/) — hence `./`, not `../memory/`.
 import { storeEntry, searchEntries } from './memory-initializer.js';
 
@@ -36,7 +39,38 @@ export interface SessionTurn {
   text: string;
 }
 
-// ── L0: read the transcript ──────────────────────────────────────────────────
+// ── L0: resolve + read the transcript ────────────────────────────────────────
+
+/** Resolve which transcript to distill.
+ *
+ * An explicit session id resolves anywhere (via resolveSessionFile). 'latest'/''
+ * resolves to the newest MAIN session IN THE CURRENT PROJECT only. This matters:
+ * resolveSessionFile('latest') picks the mtime-newest transcript machine-wide,
+ * which can belong to an unrelated sibling project (a live demo distilled a
+ * different project's session that way — cross-project bleed). We also prefer a
+ * main-session transcript over a subagent's (`agent-*.jsonl`). Falls back to the
+ * global latest only if the current project has no transcript at all. */
+export function resolveDistillSession(idOrLatest: string, cwd: string): string | null {
+  const id = (idOrLatest || 'latest').trim();
+  if (id && id !== 'latest') return resolveSessionFile(id);
+
+  const wantProject = encodeProjectDir(cwd);
+  const candidates: Array<{ file: string; mtime: number; agent: boolean }> = [];
+  for (const root of defaultClaudeProjectDirs()) {
+    for (const t of findTranscriptFiles(root)) {
+      if (t.project !== wantProject) continue;
+      let mtime = 0;
+      try { mtime = fs.statSync(t.file).mtimeMs; } catch { continue; }
+      const agent = /(^|\/)agent-/.test(t.file.replace(/\\/g, '/'));
+      candidates.push({ file: t.file, mtime, agent });
+    }
+  }
+  if (candidates.length === 0) return resolveSessionFile('latest');
+  const mains = candidates.filter((c) => !c.agent);
+  const pool = mains.length ? mains : candidates;
+  pool.sort((a, b) => b.mtime - a.mtime);
+  return pool[0].file;
+}
 
 /** Parse a Claude Code session .jsonl into conversational turns.
  *
@@ -247,16 +281,25 @@ export interface StoreFactsOptions {
  * provenance rides in `metadata` (ADR-155 WU1 adds `metadata` to storeEntry). */
 export async function storeFacts(
   opts: StoreFactsOptions,
-): Promise<{ stored: number; skipped: number; keys: string[] }> {
+): Promise<{ stored: number; skipped: number; redacted: number; keys: string[] }> {
   const namespace = opts.namespace ?? 'distilled';
   const keys: string[] = [];
   let stored = 0;
   let skipped = 0;
+  let redacted = 0;
 
   for (const fact of opts.facts) {
+    // NEVER persist secrets: scrub the fact text before it is embedded,
+    // dedup-queried, or stored. A distilled transcript can carry API keys /
+    // tokens (a live demo extracted a VAST_API_KEY value); redactText masks
+    // them in place so the value never lands in the memory DB.
+    const scrub = redactText(fact.fact);
+    const factText = scrub.output;
+    if (scrub.findings.length > 0) redacted++;
+
     // Dedup: a near-identical fact already in this namespace → skip.
     const hit = await searchEntries({
-      query: fact.fact,
+      query: factText,
       namespace,
       limit: 1,
       threshold: 0.9,
@@ -267,10 +310,10 @@ export async function storeFacts(
       continue;
     }
 
-    const key = `fact-${opts.sessionId}-${fact.turn}-${shortHash(fact.fact)}`;
+    const key = `fact-${opts.sessionId}-${fact.turn}-${shortHash(factText)}`;
     await storeEntry({
       key,
-      value: fact.fact,
+      value: factText,
       namespace,
       tags: [`src:${opts.sessionId}`, `turn:${fact.turn}`, `cat:${fact.category}`],
       metadata: {
@@ -289,5 +332,5 @@ export async function storeFacts(
     stored++;
   }
 
-  return { stored, skipped, keys };
+  return { stored, skipped, redacted, keys };
 }
