@@ -7,6 +7,11 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { ReasoningBank, type GuidancePattern } from '../reasoningbank/index.js';
 
+// #125: each test re-initializes a REAL AgentDB store; the file runs ~215s and
+// individual tests occasionally cross the 30s default under CI load, flaking
+// release CI. Raise the file-level timeout to give margin.
+vi.setConfig({ testTimeout: 60_000, hookTimeout: 60_000 });
+
 describe('ReasoningBank', () => {
   let reasoningBank: ReasoningBank;
 

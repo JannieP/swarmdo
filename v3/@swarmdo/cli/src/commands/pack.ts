@@ -133,13 +133,28 @@ async function run(ctx: CommandContext): Promise<CommandResult> {
     } catch { /* no .gitignore */ }
   }
 
-  const files = walk({
-    root: scanRoot,
-    include: includePats ? makeIgnoreMatcher(includePats) : undefined,
-    exclude: excludePats ? makeIgnoreMatcher(excludePats) : undefined,
-    gitignore,
-    maxBytes,
-  });
+  // A single-file argument: walk() only descends directories (readdirSync on a
+  // file throws ENOTDIR → caught → empty), so bundle the one file directly (#130).
+  const rootStat = (() => { try { return fs.statSync(scanRoot); } catch { return null; } })();
+  let files: PackFile[];
+  if (rootStat?.isFile()) {
+    files = [];
+    const ext = scanRoot.slice(scanRoot.lastIndexOf('.') + 1).toLowerCase();
+    if (rootStat.size <= maxBytes && !BINARY_EXT.has(ext)) {
+      try {
+        const text = decodeText(fs.readFileSync(scanRoot));
+        if (text !== null) files.push({ path: path.basename(scanRoot), content: text });
+      } catch { /* unreadable */ }
+    }
+  } else {
+    files = walk({
+      root: scanRoot,
+      include: includePats ? makeIgnoreMatcher(includePats) : undefined,
+      exclude: excludePats ? makeIgnoreMatcher(excludePats) : undefined,
+      gitignore,
+      maxBytes,
+    });
+  }
 
   if (files.length === 0) {
     output.printError('no files matched — check the path, --include/--exclude, or .gitignore');
