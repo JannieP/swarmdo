@@ -11,6 +11,7 @@ import {
   getCrossEncoder,
   getCrossEncoderStatus,
   resetCrossEncoder,
+  rerankResults,
 } from '../src/memory/cross-encoder-rerank.js';
 
 describe('crossEncoderRerank — graceful degradation contract', () => {
@@ -63,5 +64,40 @@ describe('crossEncoderRerank — graceful degradation contract', () => {
     const elapsed = Date.now() - tStart;
     expect(second).toBeNull();
     expect(elapsed).toBeLessThan(50); // No retry; instant return.
+  });
+});
+
+describe('rerankResults — mainline-search helper (graceful degradation)', () => {
+  beforeEach(() => {
+    resetCrossEncoder();
+  });
+
+  const rows = () => [
+    { id: 'a', text: 'alpha' },
+    { id: 'b', text: 'beta' },
+    { id: 'c', text: 'gamma' },
+    { id: 'd', text: 'delta' },
+    { id: 'e', text: 'epsilon' },
+  ];
+
+  it('preserves original order and slices to limit when the model is unavailable', async () => {
+    // Force a failed load so the fallback path is deterministic.
+    await getCrossEncoder('does-not-exist/no-such-model-anywhere');
+    const { items, applied } = await rerankResults('q', rows(), (r) => r.text, 3);
+    expect(applied).toBe(false);
+    expect(items.map((r) => r.id)).toEqual(['a', 'b', 'c']); // untouched order, sliced to 3
+  });
+
+  it('is a no-op for a single item (never touches the model)', async () => {
+    const { items, applied } = await rerankResults('q', [{ id: 'x', text: 't' }], (r) => r.text, 5);
+    expect(applied).toBe(false);
+    expect(items.map((r) => r.id)).toEqual(['x']);
+  });
+
+  it('returns the whole pool (original order) when no limit is given and degraded', async () => {
+    await getCrossEncoder('does-not-exist/no-such-model-anywhere');
+    const { items, applied } = await rerankResults('q', rows(), (r) => r.text);
+    expect(applied).toBe(false);
+    expect(items.map((r) => r.id)).toEqual(['a', 'b', 'c', 'd', 'e']);
   });
 });

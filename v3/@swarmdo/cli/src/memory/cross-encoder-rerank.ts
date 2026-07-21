@@ -120,6 +120,32 @@ export async function crossEncoderRerank(
   return topK != null ? ranked.slice(0, topK) : ranked;
 }
 
+/**
+ * Rerank an array of retrieved items by cross-encoder relevance to `query`,
+ * returning a NEW array reordered best-first and sliced to `limit`. `getText`
+ * extracts the document text to score for each item.
+ *
+ * Safe by construction: if the cross-encoder model can't load (no network / no
+ * cache / package missing), the items are returned in their ORIGINAL order
+ * (sliced to `limit`) and `applied` is false — callers surface the fallback.
+ * Never throws for model-availability reasons; a pool of ≤1 item is a no-op.
+ *
+ * This is the mainline-search entry point (ADR-080/083): retrieve a wider
+ * candidate pool, then rerank down to the requested `limit`.
+ */
+export async function rerankResults<T>(
+  query: string,
+  items: T[],
+  getText: (item: T) => string,
+  limit?: number,
+): Promise<{ items: T[]; applied: boolean }> {
+  const cap = limit ?? items.length;
+  if (items.length <= 1) return { items: items.slice(0, cap), applied: false };
+  const ranked = await crossEncoderRerank(query, items.map(getText), cap);
+  const applied = getCrossEncoderStatus().loaded;
+  return { items: ranked.map((r) => items[r.index]), applied };
+}
+
 /** Diagnostic — surface whether the model is loaded and any load error. */
 export function getCrossEncoderStatus(): { loaded: boolean; attempted: boolean; error: string | null } {
   return { loaded: !!singleton, attempted: loadAttempted, error: loadError };

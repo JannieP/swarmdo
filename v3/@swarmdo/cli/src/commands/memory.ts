@@ -325,13 +325,20 @@ const searchCommand: Command = {
       type: 'boolean',
       default: false
     },
+    {
+      name: 'rerank',
+      description: 'Cross-encoder rerank the candidate pool for best top-k (ADR-083). Composes with --smart. Lazy-loads a ~30MB model; falls back to pre-rerank order if unavailable',
+      type: 'boolean',
+      default: false
+    },
     DB_PATH_OPTION
   ],
   examples: [
     { command: 'swarmdo memory search -q "authentication patterns"', description: 'Semantic search' },
     { command: 'swarmdo memory search -q "JWT" -t keyword', description: 'Keyword search' },
     { command: 'swarmdo memory search -q "test" --build-hnsw', description: 'Build HNSW index and search' },
-    { command: 'swarmdo memory search -q "auth patterns" --smart', description: 'SmartRetrieval with RRF + MMR' }
+    { command: 'swarmdo memory search -q "auth patterns" --smart', description: 'SmartRetrieval with RRF + MMR' },
+    { command: 'swarmdo memory search -q "auth patterns" --smart --rerank', description: 'SmartRetrieval + cross-encoder rerank' }
   ],
   action: async (ctx: CommandContext): Promise<CommandResult> => {
     const query = ctx.flags.query as string || ctx.args[0];
@@ -380,6 +387,10 @@ const searchCommand: Command = {
       const { searchEntries, resolveDbPath: _rdbSearch } = await import('../memory/memory-initializer.js');
       const dbPathSearch = _rdbSearch(ctx.flags.path as string | undefined);
       const useSmart = (ctx.flags.smart || ctx.flags.s) as boolean;
+      const wantRerank = ctx.flags.rerank as boolean;
+      // Rerank pulls a wider candidate pool, then scores it down to `limit`.
+      // Off → poolLimit === limit → retrieval behaviour is unchanged.
+      const poolLimit = wantRerank ? Math.min(Math.max(limit * 3, 15), 50) : limit;
 
       let results: { key: string; score: number; namespace: string; preview: string }[];
       let searchTimeMs: number;
@@ -432,7 +443,7 @@ const searchCommand: Command = {
         const smartResult = await smartSearchFn(rawSearch, {
           query,
           namespace,
-          limit,
+          limit: poolLimit,
           threshold,
         });
 
@@ -449,7 +460,7 @@ const searchCommand: Command = {
         const searchResult = await searchEntries({
           query,
           namespace,
-          limit,
+          limit: poolLimit,
           threshold,
           dbPath: dbPathSearch
         });
@@ -466,6 +477,16 @@ const searchCommand: Command = {
           preview: r.content
         }));
         searchTimeMs = searchResult.searchTime;
+      }
+
+      // Cross-encoder rerank (opt-in) — reorder the candidate pool by joint
+      // (query, doc) relevance, then slice to `limit`. Falls back to the
+      // pre-rerank order if the model can't load (never throws).
+      if (wantRerank) {
+        const { rerankResults } = await import('../memory/cross-encoder-rerank.js');
+        const rr = await rerankResults(query, results, (r) => r.preview, limit);
+        results = rr.items;
+        backendLabel += rr.applied ? ' + CrossEncoder rerank' : ' (rerank unavailable — pre-rerank order)';
       }
 
       if (ctx.flags.format === 'json') {

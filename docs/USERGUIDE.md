@@ -4691,6 +4691,13 @@ npx swarmdo@latest memory search --query "authentication" --build-hnsw
 # Semantic search (uses HNSW if built)
 npx swarmdo@latest memory search --query "how to cache data" --limit 5
 
+# Cross-encoder rerank for the best top-k (opt-in; composes with --smart).
+# Retrieves a wider candidate pool, then a cross-encoder (ADR-083) scores each
+# (query, entry) pair jointly and reorders. Lazy-loads a ~30MB model on first
+# use; if it can't load, results fall back to the pre-rerank order (never errors).
+npx swarmdo@latest memory search --query "how to cache data" --rerank
+npx swarmdo@latest memory search --query "auth patterns" --smart --rerank
+
 # List and manage entries
 npx swarmdo@latest memory list --namespace patterns
 npx swarmdo@latest memory stats

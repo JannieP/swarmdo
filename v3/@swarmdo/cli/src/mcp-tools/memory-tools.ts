@@ -447,6 +447,7 @@ export const memoryTools: MCPTool[] = [
         limit: { type: 'number', description: 'Maximum results (default: 10)' },
         threshold: { type: 'number', description: 'Minimum similarity threshold 0-1 (default: 0.3)' },
         smart: { type: 'boolean', description: 'Enable SmartRetrieval pipeline — query expansion, RRF fusion, recency boost, MMR diversity (default: false)' },
+        rerank: { type: 'boolean', description: 'Rerank the candidate pool with a cross-encoder (ADR-083, strongest relevance signal) before returning top-k. Composes with smart. Lazy-loads a ~30MB model on first use; if unavailable, falls back to the pre-rerank order (default: false)' },
       },
       required: ['query'],
     },
@@ -458,6 +459,12 @@ export const memoryTools: MCPTool[] = [
       const namespace = (input.namespace as string) || 'default';
       const limit = (input.limit as number) ?? 10;
       const threshold = (input.threshold as number) ?? 0.3;
+      // Rerank retrieves a wider candidate pool, then the cross-encoder scores
+      // it down to `limit`. When rerank is off, poolLimit === limit → behaviour
+      // is byte-for-byte unchanged (zero regression on the default path).
+      const wantRerank = input.rerank === true || String(input.rerank) === 'true';
+      const poolLimit = wantRerank ? Math.min(Math.max(limit * 3, 15), 50) : limit;
+      const rerankFallbackNote = 'cross-encoder model unavailable — results returned in pre-rerank order';
 
       validateMemoryInput(undefined, undefined, query);
 
@@ -506,13 +513,24 @@ export const memoryTools: MCPTool[] = [
             const smartResult = await smartSearch(rawSearch, {
               query,
               namespace,
-              limit,
+              limit: poolLimit,
               threshold,
             });
 
             const duration = performance.now() - startTime;
 
-            const results = smartResult.results.map((r: { content: string; key: string; namespace: string; score: number }) => {
+            let smartRows = smartResult.results as Array<{ content: string; key: string; namespace: string; score: number }>;
+            let smartReranked = false;
+            if (wantRerank) {
+              const { rerankResults } = await import('../memory/cross-encoder-rerank.js');
+              const rr = await rerankResults(query, smartRows, (r) => r.content, limit);
+              smartRows = rr.items;
+              smartReranked = rr.applied;
+            } else {
+              smartRows = smartRows.slice(0, limit);
+            }
+
+            const results = smartRows.map((r) => {
               let value: unknown = r.content;
               try { value = JSON.parse(r.content); } catch { /* keep as string */ }
               return {
@@ -528,7 +546,8 @@ export const memoryTools: MCPTool[] = [
               results,
               total: results.length,
               searchTime: `${duration.toFixed(2)}ms`,
-              backend: 'SmartRetrieval (RRF + MMR + Recency)',
+              backend: smartReranked ? 'SmartRetrieval + CrossEncoder rerank' : 'SmartRetrieval (RRF + MMR + Recency)',
+              ...(wantRerank && !smartReranked ? { rerankFallback: rerankFallbackNote } : {}),
               stats: smartResult.stats,
             };
           }
@@ -545,14 +564,25 @@ export const memoryTools: MCPTool[] = [
         const result = await searchEntries({
           query,
           namespace,
-          limit,
+          limit: poolLimit,
           threshold,
         });
 
         const duration = performance.now() - startTime;
 
+        let rows = result.results;
+        let plainReranked = false;
+        if (wantRerank) {
+          const { rerankResults } = await import('../memory/cross-encoder-rerank.js');
+          const rr = await rerankResults(query, rows, (r) => r.content, limit);
+          rows = rr.items;
+          plainReranked = rr.applied;
+        } else {
+          rows = rows.slice(0, limit);
+        }
+
         // Parse JSON values in results
-        const results = result.results.map(r => {
+        const results = rows.map(r => {
           let value: unknown = r.content;
           try {
             value = JSON.parse(r.content);
@@ -573,8 +603,9 @@ export const memoryTools: MCPTool[] = [
           results,
           total: results.length,
           searchTime: `${duration.toFixed(2)}ms`,
-          backend: 'HNSW + sql.js',
+          backend: plainReranked ? 'HNSW + sql.js + CrossEncoder rerank' : 'HNSW + sql.js',
           ...(smartFallbackReason ? { smartFallback: smartFallbackReason } : {}),
+          ...(wantRerank && !plainReranked ? { rerankFallback: rerankFallbackNote } : {}),
         };
       } catch (error) {
         return {
