@@ -237,4 +237,22 @@ describe('distill: storeFacts (temp sql.js DB, semantic dedup)', () => {
     expect(second).toMatchObject({ stored: 0, skipped: 1 });
     expect(second.keys).toHaveLength(0);
   }, 60_000);
+
+  it('redacts secrets in fact text before storing (never persists the raw value)', async () => {
+    const secret = 'c613ede23aa28b495c8de1c794c2b20c3be2cbb45e9f3e51c54852b4566a03f7';
+    const r = await storeFacts({
+      facts: [{ fact: `Provisioning uses VAST_API_KEY=${secret} as a fallback`, turn: 1, category: 'constraint' }],
+      sessionId: 's-secret',
+      transcript: '/t.jsonl',
+      namespace: 'distilled-redact',
+      dbPath,
+    });
+    expect(r.redacted).toBe(1);
+    expect(r.stored).toBe(1);
+
+    // The stored content must NOT contain the raw secret.
+    const { getEntry } = await import('../src/memory/memory-initializer.js');
+    const got = await getEntry({ key: r.keys[0], namespace: 'distilled-redact', dbPath });
+    expect(got.entry?.content ?? '').not.toContain(secret);
+  }, 60_000);
 });

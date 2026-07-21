@@ -88,6 +88,14 @@ Defaults: `--model haiku` (extraction/compression is well-suited to Haiku and ke
 - **Measured token reduction** — validate via `swarmdo usage` on before/after sessions (don't inherit Tencent's −61%).
 - **`memory_distill` MCP tool** — deferred (headless-from-MCP is awkward; CLI-first).
 
+## Post-demo hardening (#119, #120, #121)
+
+The first live `--confirm` run surfaced three real issues, two fixed immediately:
+
+- **#119 secret leakage (fixed):** a distilled fact carried a real `VAST_API_KEY` value into the store. `storeFacts` now runs `redactText` (`src/redact/redact.ts`) on every fact **before** it is embedded, dedup-queried, or stored; the masked text is what persists, and the command reports `N had secrets redacted`. A test asserts the raw secret never appears in stored content.
+- **#120 cross-project bleed (fixed):** `resolveSessionFile('latest')` picks the mtime-newest transcript **machine-wide**, so `--confirm` distilled a sibling project's (`SwarmDoLLM`) session. New `resolveDistillSession(idOrLatest, cwd)` scopes 'latest' to the newest **main** session in the **current project** (preferring non-`agent-*` transcripts); explicit `--session <id>` still resolves anywhere.
+- **#121 large-session extraction (open, enhancement):** one `claude` call over a 490-turn / ~75K-token session fails (haiku → no JSON; sonnet → exit 1). Moderate sessions (≤~30K tokens) distill cleanly (60 turns → 20 facts, $0.12). Future work: chunk large transcripts into budget-sized windows, distill each, merge+dedup (the Tencent chunking approach). For now, prefer `--model sonnet` for larger/complex sessions or target a specific shorter `--session <id>`.
+
 ## Honest caveats
 - Fact quality depends on the model; Haiku default trades some fidelity for cost. Bad facts pollute memory → dedup + `--max-facts` cap + provenance (so facts are auditable/removable) mitigate.
 - Tencent's −61% is on their harness; we will measure our own, not claim theirs.

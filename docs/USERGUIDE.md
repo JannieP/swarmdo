@@ -4706,6 +4706,8 @@ npx swarmdo@latest memory distill --confirm --model haiku --max-budget-usd 0.50
 # Facts land in the `distilled` namespace, found by normal search (incl. --rerank):
 npx swarmdo@latest memory search --namespace distilled --rerank --query "caching decisions"
 # Needs the local `claude` CLI and respects SWARMDO_HEADLESS (0/false/off blocks the call).
+# Secrets in facts are redacted before storage; near-duplicates are skipped; 'latest'
+# is scoped to the current project. Full walkthrough: docs/memory-distill-user-guide.md
 
 # List and manage entries
 npx swarmdo@latest memory list --namespace patterns
