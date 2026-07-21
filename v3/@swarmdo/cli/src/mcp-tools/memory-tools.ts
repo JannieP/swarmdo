@@ -742,6 +742,20 @@ export const memoryTools: MCPTool[] = [
           if (entry.hasEmbedding) withEmbeddings++;
         }
 
+        // #122: resolve the db path + on-disk size so `memory stats` fills in
+        // Location and Total Storage instead of blanks.
+        let location = '';
+        let totalSize = '';
+        try {
+          const { resolveDbPath } = await import('../memory/memory-initializer.js');
+          const fsm = await import('node:fs');
+          location = resolveDbPath(undefined);
+          const bytes = fsm.statSync(location).size;
+          totalSize = bytes >= 1024 * 1024
+            ? `${(bytes / 1024 / 1024).toFixed(2)} MB`
+            : `${(bytes / 1024).toFixed(1)} KB`;
+        } catch { /* leave blank on any resolve/stat failure */ }
+
         return {
           initialized: status.initialized,
           totalEntries: allEntries.total,
@@ -751,7 +765,9 @@ export const memoryTools: MCPTool[] = [
             : '0%',
           namespaces,
           backend: 'sql.js + HNSW',
-          version: status.version || '3.0.0',
+          totalSize,
+          location,
+          version: status.version && status.version !== 'unknown' ? status.version : '3.0.0',
           features: status.features || {
             vectorEmbeddings: true,
             hnswIndex: true,
