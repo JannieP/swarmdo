@@ -299,7 +299,7 @@ export const metaharnessTools: MCPTool[] = [
   },
   {
     name: 'metaharness_drift_from_history',
-    description: 'iter 53 — one-command drift detection composing audit-list/oia-audit/audit-trend: finds the newest `metaharness-audit` record (or `baselineKey`/`baselineFile`), diffs a fresh audit via §3.1 similarity, alerts below `threshold`. Doing the 3 by hand loses the alert ladder and the ~14–19x baseline-key/file fastpath. ' + MCP_SUCCESS_SEMANTIC,
+    description: 'iter 53 — one-command drift detection composing audit-list/oia-audit/audit-trend: finds the newest `metaharness-audit` record (or `baselineKey`/`baselineFile`), diffs a fresh audit via §3.1 similarity, alerts below `threshold`. Doing the 3 by hand loses the alert ladder and the fastpath (`baselineKey` ~14x faster, `baselineFile` ~19x faster). ' + MCP_SUCCESS_SEMANTIC,
     category: 'metaharness',
     inputSchema: {
       type: 'object',
