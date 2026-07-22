@@ -392,7 +392,7 @@ async function registerAgent(input: Record<string, unknown>): Promise<RegisterAg
 export const agentTools: MCPTool[] = [
   {
     name: 'agent_spawn',
-    description: 'Spawn a Swarmdo-tracked agent with cost attribution + memory persistence + swarm coordination. Use when native Task tool is wrong because you need (a) cost tracking per agent in the cost-tracking namespace, (b) cross-session learning via the patterns namespace, or (c) coordination with other agents in a swarm topology (hierarchical / mesh / consensus). For one-shot subtasks with no learning loop, native Task is fine. For spawn-and-run in a single call (blocks ~2-5s on LLM), use agent_run instead. Pair with hooks_route to pick the right model first.',
+    description: 'Spawn a Swarmdo-tracked agent with cost attribution, memory persistence, and swarm coordination. Use when native Task is wrong because you need per-agent cost tracking, cross-session learning, or swarm-topology coordination; for one-shot subtasks native Task is fine. For spawn-and-run in one call use agent_run; pair with hooks_route to pick the model first.',
     category: 'agent',
     inputSchema: {
       type: 'object',
@@ -435,7 +435,7 @@ export const agentTools: MCPTool[] = [
   {
     name: 'agent_bridge_register',
     description:
-      "Register a REAL Claude Code Agent-tool agent into Swarmdo's registry so `swarmdo agent list` and `swarm_status` reflect it. You usually do NOT need to call this: since #108 the SubagentStart hook installed by `swarmdo init` registers every Claude Code subagent automatically as it spawns, and SubagentStop retires it. Call it by hand only when that hook is not installed (e.g. a bare MCP setup with no `swarmdo init`), or to bind an agent the hook cannot see. Pass its name, session id, subagent type, and a one-line task. Idempotent — re-registering the same name+session UPDATES the bound record instead of duplicating, so it is safe alongside the hook. Unlike agent_spawn (which only registers coordination metadata), this binds the record to a worker that actually exists.",
+      "Register a REAL Claude Code Agent-tool agent into Swarmdo's registry so `swarmdo agent list` and `swarm_status` reflect it. Usually unnecessary since #108: the SubagentStart hook from `swarmdo init` auto-registers every subagent — call by hand only when that hook isn't installed or to bind an agent it can't see. Unlike agent_spawn (coordination metadata only), this binds the record to a worker that actually exists.",
     category: 'agent',
     inputSchema: {
       type: 'object',
@@ -492,7 +492,7 @@ export const agentTools: MCPTool[] = [
   {
     name: 'agent_bridge_list',
     description:
-      'List Swarmdo agent records split into Claude-Code-BOUND (each mirrors a real Task/Agent-tool agent) vs NATIVE, with binding detail. Pass `live` (array of current Claude Code agent names) to also get a reconciliation: which live agents are unmirrored (need agent_bridge_register), and which bound records are orphaned (their Claude agent is gone).',
+      'List Swarmdo agent records split into Claude-Code-BOUND (each mirrors a real Task/Agent-tool agent) vs NATIVE, with binding detail. Pass `live` (current Claude Code agent names) to also get a reconciliation: which live agents are unmirrored (need agent_bridge_register) and which bound records are orphaned.',
     category: 'agent',
     inputSchema: {
       type: 'object',
@@ -530,7 +530,7 @@ export const agentTools: MCPTool[] = [
   {
     name: 'agent_bridge_prune',
     description:
-      "Reap orphaned Claude-Code-bound records — bound agents whose Claude Code agent is no longer live. Pass the CURRENT live Claude Code agent names as `live`; any bound record NOT in that list is removed from the agent store and from every swarm roster. Native (unbound) Swarmdo agents are never touched. Idempotent — use it to stop stale bindings accumulating across sessions.",
+      "Reap orphaned Claude-Code-bound records — bound agents whose Claude Code agent is no longer live. Pass the current live agent names as `live`; any bound record not in that list is removed from the agent store and every swarm roster. Native (unbound) agents are never touched; idempotent.",
     category: 'agent',
     inputSchema: {
       type: 'object',
@@ -583,7 +583,7 @@ export const agentTools: MCPTool[] = [
     // stays cheap (<100ms) to preserve the swarm coordinator latency budget
     // documented at @swarmdo/swarm/src/unified-coordinator.ts:7-8.
     name: 'agent_run',
-    description: 'Spawn a Swarmdo-tracked agent AND execute a task on it in one call. Reuses the same model routing, cost attribution, swarm registration, and graph-DB record as agent_spawn, then immediately calls the Anthropic Messages API (or OpenRouter / Ollama per SWARMDO_PROVIDER) with the supplied prompt. Use this when you want a one-shot result with full Swarmdo tracking — most common case. Blocks ~2-5s on the LLM round-trip. For cheap registration without execution (preserves <100ms swarm budget for topology setup), use agent_spawn separately. For multi-turn work against an already-registered agent, use agent_execute with the agentId.',
+    description: 'Spawn a Swarmdo-tracked agent and execute a task on it in one call — reuses the same model routing, cost attribution, swarm registration, and graph-DB record as agent_spawn, then calls the Anthropic Messages API (or OpenRouter / Ollama per SWARMDO_PROVIDER). Blocks ~2-5s. For cheap registration without execution use agent_spawn; for multi-turn work on an existing agent use agent_execute.',
     category: 'agent',
     inputSchema: {
       type: 'object',
@@ -666,7 +666,7 @@ export const agentTools: MCPTool[] = [
     // updating the agent record with lastResult / taskCount / status.
     // No mock — actual HTTP request to api.anthropic.com.
     name: 'agent_execute',
-    description: 'Run a task on a previously-spawned agent_spawn record via the Anthropic Messages API with that agent\'s configured model. Use when native Task tool is wrong because (a) you need the spawned agent\'s persistent config (model, instructions, cost-tracking attribution) to apply to this turn, (b) the result needs to feed back into the agent\'s lifecycle (taskCount, lastResult, swarm-coordinated state), or (c) you want explicit model routing via the spawn record\'s `model` field instead of inheriting. For one-shot Claude prompts without a tracked agent, native Task is fine. Requires ANTHROPIC_API_KEY in env.',
+    description: 'Run a task on a previously-spawned agent_spawn record via the Anthropic Messages API with that agent\'s configured model. Use when native Task is wrong because you need the spawned agent\'s persistent config, lifecycle updates (taskCount, lastResult), or explicit model routing; for one-shot prompts without a tracked agent, native Task is fine. Requires ANTHROPIC_API_KEY.',
     category: 'agent',
     inputSchema: {
       type: 'object',
@@ -700,7 +700,7 @@ export const agentTools: MCPTool[] = [
   },
   {
     name: 'agent_terminate',
-    description: 'Remove a Swarmdo-tracked agent from the registry and free its swarm slot. Use when you need to (a) clean up a spawned agent so its cost-tracking row finalizes, (b) reclaim a swarm-topology slot for another agent, or (c) end a stuck agent without restarting the whole swarm. For one-shot Task tool invocations that already self-terminate, this tool is not needed. Pair with agent_list first to confirm the agentId.',
+    description: 'Remove a Swarmdo-tracked agent from the registry and free its swarm slot — finalizes its cost-tracking row, reclaims a topology slot, or ends a stuck agent without restarting the swarm. For one-shot Task invocations that self-terminate, this tool is not needed. Pair with agent_list first to confirm the agentId.',
     category: 'agent',
     inputSchema: {
       type: 'object',
@@ -737,7 +737,7 @@ export const agentTools: MCPTool[] = [
   },
   {
     name: 'agent_status',
-    description: 'Read the lifecycle state of a single tracked agent: idle/running/stopped, current taskCount, lastResult, model, health score. Use when native Task tool is wrong because you need agent-level state (status across turns, accumulated taskCount, last error, swarm coordination) rather than a one-shot response. For inspecting a Task you just ran, native Task output is fine. Pair with agent_list to find the agentId first.',
+    description: 'Read the lifecycle state of a single tracked agent: status, taskCount, lastResult, model, health score. Use when native Task is wrong because you need agent-level state across turns rather than a one-shot response; for inspecting a Task you just ran, native output is fine. Pair with agent_list to find the agentId.',
     category: 'agent',
     inputSchema: {
       type: 'object',
@@ -775,7 +775,7 @@ export const agentTools: MCPTool[] = [
   },
   {
     name: 'agent_list',
-    description: 'List every Swarmdo-tracked agent in the registry with its type, model, status, and taskCount. Use when native Task tool is wrong because you need to see the swarm-wide agent inventory across turns (which agents exist, their roles, their cost-tracking handles) rather than spawn a new one-shot Task. Filter by status/domain/agentType if needed. For starting a fresh single-shot subagent, native Task is fine.',
+    description: 'List every Swarmdo-tracked agent in the registry with its type, model, status, and taskCount. Use when native Task is wrong because you need the swarm-wide agent inventory across turns rather than a new one-shot Task; filter by status/domain/agentType. For a fresh single-shot subagent, native Task is fine.',
     category: 'agent',
     inputSchema: {
       type: 'object',
@@ -830,7 +830,7 @@ export const agentTools: MCPTool[] = [
   },
   {
     name: 'agent_pool',
-    description: 'Manage a fixed-size warm pool of pre-spawned agents to skip cold-start cost on bursty workloads. Use when native Task is wrong because (a) you have a queue of similar tasks and want to amortize spawn latency, (b) cost-tracking wants stable agentIds across requests, or (c) swarm topology requires a known agent count at all times. For one-shot work, just call agent_spawn or native Task. Pool sizes and warm/idle thresholds are set per-pool.',
+    description: 'Manage a fixed-size warm pool of pre-spawned agents to skip cold-start cost on bursty workloads. Use when native Task is wrong because you want to amortize spawn latency, keep stable agentIds across requests, or hold a known agent count for swarm topology. For one-shot work, just call agent_spawn or native Task.',
     category: 'agent',
     inputSchema: {
       type: 'object',
@@ -952,7 +952,7 @@ export const agentTools: MCPTool[] = [
   },
   {
     name: 'agent_health',
-    description: 'Compute an agent\'s rolling health score (0-1) from recent task success ratio + response-latency p50/p95 + error rate. Use when native Task tool is wrong because you\'re running a long-lived agent (autonomous loop / hive-mind worker / federation peer) and need to detect degradation before the breaker trips it. For one-shot Task invocations there is no history to score. Pair with hooks_post-task so the scores stay current.',
+    description: 'Compute an agent\'s rolling health score (0-1) from recent task success ratio, latency p50/p95, and error rate. Use when native Task is wrong because you\'re running a long-lived agent and need to catch degradation before the breaker trips it; one-shot Tasks have no history to score. Pair with hooks_post-task to keep scores current.',
     category: 'agent',
     inputSchema: {
       type: 'object',
@@ -1030,7 +1030,7 @@ export const agentTools: MCPTool[] = [
   },
   {
     name: 'agent_update',
-    description: 'Mutate a tracked agent\'s config (model, instructions, status, health) without re-spawning. Use when native Task tool is wrong because the agent already has accumulated state (taskCount, swarm membership, cost-tracking attribution) and you only need to tweak one field — for example, promoting an idle agent to running on a new task, or rotating its model from haiku to sonnet mid-loop. For a brand-new subagent, agent_spawn (or native Task) is the right call.',
+    description: 'Mutate a tracked agent\'s config (model, instructions, status, health) without re-spawning. Use when native Task is wrong because the agent already has accumulated state (taskCount, swarm membership, cost-tracking) and you only need to tweak one field. For a brand-new subagent, agent_spawn (or native Task) is the right call.',
     category: 'agent',
     inputSchema: {
       type: 'object',
@@ -1095,7 +1095,7 @@ export const agentTools: MCPTool[] = [
     // response. The shape matches what the CLI `logs` subcommand expects:
     // `{ agentId, entries: [{timestamp,level,message,context?}], total }`.
     name: 'agent_logs',
-    description: 'Return recorded activity-log entries for a tracked agent (idle/running history, last task result). Use when native Task tool is wrong because you need the agent\'s log across turns (what it did, last error/result, swarm context) rather than a one-shot Task transcript. For a Task you just ran, native Task output is fine. Pair with agent_list to find the agentId. (Hive-mind-spawned workers are resolved here too.) Today this returns the last task result as a synthetic entry — full per-agent activity logs land with hive worker execution wiring (upstream/swarmdo#1916).',
+    description: 'Return recorded activity-log entries for a tracked agent (idle/running history, last task result). Use when native Task is wrong because you need the agent\'s log across turns rather than a one-shot Task transcript; for a Task you just ran, native output is fine. Pair with agent_list to find the agentId. Today it returns only the last task result as a synthetic entry (full per-agent logs pending, upstream/swarmdo#1916).',
     category: 'agent',
     inputSchema: {
       type: 'object',

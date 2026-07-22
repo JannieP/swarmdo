@@ -19,7 +19,7 @@ import { normalizeSince } from '../util/since.js';
 const couplingTool: MCPTool = {
   name: 'coupling',
   description:
-    'Rank file pairs that change together in git history (temporal/co-change coupling) — the empirical complement to `affected`. Returns ranked JSON so an agent editing one file can see what else historically moves with it and avoid a forgotten co-edit. Pass `file` for a "what changes with X?" query. Runs in a git repository.',
+    'Rank file pairs that change together in git history (co-change coupling) — the empirical complement to `affected`. Returns ranked JSON so an agent editing one file sees what else moves with it, avoiding a forgotten co-edit. Pass `file` for "what changes with X?". Runs in a git repo.',
   category: 'coupling',
   tags: ['git', 'co-change', 'coupling', 'impact', 'refactor'],
   inputSchema: {

@@ -360,7 +360,7 @@ function discoverSkills(): string[] {
 
 const guidanceCapabilities: MCPTool = {
   name: 'guidance_capabilities',
-  description: 'List all capability areas with their tools, commands, agents, and skills. Use this to discover what Swarmdo can do. Use when generic "what tool should I use?" guessing is wrong — Swarmdo\'s guidance system uses the live tool index + your workflow context to recommend. Pair with hooks_route at task start. For trivial native-only tasks, no guidance call is needed.',
+  description: 'List capability areas with their tools, commands, agents, and skills — what Swarmdo can do. Use when guessing which tool fits is wrong; recommends from the live tool index + workflow context. Pair with hooks_route; skip trivial native-only tasks.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -410,7 +410,7 @@ const guidanceCapabilities: MCPTool = {
 
 const guidanceRecommend: MCPTool = {
   name: 'guidance_recommend',
-  description: 'Given a task description, recommend which capability areas, tools, agents, and workflow to use. Use when generic "what tool should I use?" guessing is wrong — Swarmdo\'s guidance system uses the live tool index + your workflow context to recommend. Pair with hooks_route at task start. For trivial native-only tasks, no guidance call is needed.',
+  description: 'Given a task, recommend which capability areas, tools, agents, and workflow to use. Use when guessing which tool fits is wrong; recommends from the live tool index + workflow context. Pair with hooks_route; skip trivial native-only tasks.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -498,7 +498,7 @@ const guidanceRecommend: MCPTool = {
 
 const guidanceDiscover: MCPTool = {
   name: 'guidance_discover',
-  description: 'Discover all available agents and skills from the .claude/ directory. Returns live filesystem data. Use when generic "what tool should I use?" guessing is wrong — Swarmdo\'s guidance system uses the live tool index + your workflow context to recommend. Pair with hooks_route at task start. For trivial native-only tasks, no guidance call is needed.',
+  description: 'Discover all agents and skills from the .claude/ directory (live filesystem data). Use when guessing which tool fits is wrong; recommends from the live tool index + workflow context. Pair with hooks_route; skip trivial native-only tasks.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -530,7 +530,7 @@ const guidanceDiscover: MCPTool = {
 
 const guidanceWorkflow: MCPTool = {
   name: 'guidance_workflow',
-  description: 'Get a recommended workflow template for a task type. Includes steps, agents, and topology. Use when generic "what tool should I use?" guessing is wrong — Swarmdo\'s guidance system uses the live tool index + your workflow context to recommend. Pair with hooks_route at task start. For trivial native-only tasks, no guidance call is needed.',
+  description: 'Get a recommended workflow template for a task type — steps, agents, and topology. Use when guessing which tool fits is wrong; recommends from the live tool index + workflow context. Pair with hooks_route; skip trivial native-only tasks.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -582,7 +582,7 @@ const guidanceWorkflow: MCPTool = {
 
 const guidanceQuickRef: MCPTool = {
   name: 'guidance_quickref',
-  description: 'Quick reference card for common operations. Returns the most useful commands for a given domain. Use when generic "what tool should I use?" guessing is wrong — Swarmdo\'s guidance system uses the live tool index + your workflow context to recommend. Pair with hooks_route at task start. For trivial native-only tasks, no guidance call is needed.',
+  description: 'Quick-reference card of the most useful commands for a given domain. Use when guessing which tool fits is wrong; recommends from the live tool index + workflow context. Pair with hooks_route; skip trivial native-only tasks.',
   inputSchema: {
     type: 'object',
     properties: {

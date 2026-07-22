@@ -969,7 +969,7 @@ export const hooksPostCommand: MCPTool = {
 
 export const hooksRoute: MCPTool = {
   name: 'hooks_route',
-  description: 'Get a 3-tier routing recommendation for a task: Tier 1 (deterministic codemod, ~0ms / $0 — for var-to-const, remove-console, add-logging), Tier 2 (Haiku — simple), Tier 3 (Sonnet/Opus — complex). Use this BEFORE spawning an agent to avoid sending simple transforms to Sonnet. Native tools have no equivalent — Claude Code does not introspect its own model-selection cost. Returns the recommended model + a `[CODEMOD_AVAILABLE]` literal when a deterministic codemod can fully apply the edit (then call hooks_codemod). Use when native Bash hooks (via Claude Code\'s settings.json) are wrong because you need Swarmdo-side state — pattern persistence, neural training signals, model-routing learning, cost tracking, audit chain. For one-off shell commands, plain Bash hooks are fine.',
+  description: 'Get a 3-tier routing recommendation before spawning an agent: Tier 1 (deterministic codemod, ~0ms/$0), Tier 2 (Haiku, simple), Tier 3 (Sonnet/Opus, complex) — keeps simple transforms off Sonnet. Returns a `[CODEMOD_AVAILABLE]` literal when a codemod can fully apply the edit (then call hooks_codemod). Native tools have no equivalent — Claude Code does not introspect its own model-selection cost; for one-off shell commands, plain Bash hooks are fine.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -1265,7 +1265,7 @@ export const hooksList: MCPTool = {
 
 export const hooksPreTask: MCPTool = {
   name: 'hooks_pre-task',
-  description: 'Record task start and get agent suggestions with intelligent model routing (ADR-026) Use when native Bash hooks (via Claude Code\'s settings.json) are wrong because you need Swarmdo-side state — pattern persistence, neural training signals, model-routing learning, cost tracking, audit chain. For one-off shell commands, plain Bash hooks are fine.',
+  description: 'Record task start and get agent suggestions with intelligent model routing (ADR-026). Use over native Bash hooks (settings.json) when you need Swarmdo-side state (routing learning, cost/audit tracking); plain Bash hooks are fine for one-off commands.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -1629,7 +1629,7 @@ export const hooksExplain: MCPTool = {
 // Pretrain hook - repository analysis for intelligence bootstrap
 export const hooksPretrain: MCPTool = {
   name: 'hooks_pretrain',
-  description: 'Analyze repository to bootstrap intelligence (4-step pipeline) Use when native Bash hooks (via Claude Code\'s settings.json) are wrong because you need Swarmdo-side state — pattern persistence, neural training signals, model-routing learning, cost tracking, audit chain. For one-off shell commands, plain Bash hooks are fine.',
+  description: 'Analyze a repository to bootstrap intelligence via the 4-step pipeline. Use over native Bash hooks (settings.json) when you need Swarmdo-side state (routing learning, cost/audit tracking); plain Bash hooks are fine for one-off commands.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -2304,7 +2304,7 @@ export const hooksInit: MCPTool = {
 // Intelligence hook - SwarmVector intelligence system
 export const hooksIntelligence: MCPTool = {
   name: 'hooks_intelligence',
-  description: 'SwarmVector intelligence system status (shows REAL metrics from memory store) Use when native Bash hooks (via Claude Code\'s settings.json) are wrong because you need Swarmdo-side state — pattern persistence, neural training signals, model-routing learning, cost tracking, audit chain. For one-off shell commands, plain Bash hooks are fine.',
+  description: 'SwarmVector intelligence status with real metrics from the memory store. Use over native Bash hooks (settings.json) when you need Swarmdo-side state (routing learning, cost/audit tracking); plain Bash hooks are fine for one-off commands.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -2987,7 +2987,7 @@ export const hooksPatternStore: MCPTool = {
 
 export const hooksPatternSearch: MCPTool = {
   name: 'hooks_intelligence_pattern-search',
-  description: 'Search patterns using REAL vector search (HNSW when available, brute-force fallback) Use when native Bash hooks (via Claude Code\'s settings.json) are wrong because you need Swarmdo-side state — pattern persistence, neural training signals, model-routing learning, cost tracking, audit chain. For one-off shell commands, plain Bash hooks are fine.',
+  description: 'Search patterns via real vector search (HNSW, brute-force fallback). Use over native Bash hooks (settings.json) when you need Swarmdo-side state (routing learning, cost/audit tracking); plain Bash hooks are fine for one-off commands.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -3519,7 +3519,7 @@ export const hooksIntelligenceStats: MCPTool = {
 // Intelligence learn hook
 export const hooksIntelligenceLearn: MCPTool = {
   name: 'hooks_intelligence_learn',
-  description: 'Force immediate SONA learning cycle with EWC++ consolidation Use when native Bash hooks (via Claude Code\'s settings.json) are wrong because you need Swarmdo-side state — pattern persistence, neural training signals, model-routing learning, cost tracking, audit chain. For one-off shell commands, plain Bash hooks are fine.',
+  description: 'Force an immediate SONA learning cycle with EWC++ consolidation. Use over native Bash hooks (settings.json) when you need Swarmdo-side state (routing learning, cost/audit tracking); plain Bash hooks are fine for one-off commands.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -3619,7 +3619,7 @@ export const hooksIntelligenceLearn: MCPTool = {
 // Intelligence attention hook
 export const hooksIntelligenceAttention: MCPTool = {
   name: 'hooks_intelligence_attention',
-  description: 'Compute attention-weighted similarity using MoE/Flash/Hyperbolic Use when native Bash hooks (via Claude Code\'s settings.json) are wrong because you need Swarmdo-side state — pattern persistence, neural training signals, model-routing learning, cost tracking, audit chain. For one-off shell commands, plain Bash hooks are fine.',
+  description: 'Compute attention-weighted similarity using MoE/Flash/Hyperbolic. Use over native Bash hooks (settings.json) when you need Swarmdo-side state (routing learning, cost/audit tracking); plain Bash hooks are fine for one-off commands.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -4095,7 +4095,7 @@ function detectWorkerTriggers(text: string): {
 // Worker list tool
 export const hooksWorkerList: MCPTool = {
   name: 'hooks_worker-list',
-  description: 'List all 13 background workers with status and capabilities Use when native Bash hooks (via Claude Code\'s settings.json) are wrong because you need Swarmdo-side state — pattern persistence, neural training signals, model-routing learning, cost tracking, audit chain. For one-off shell commands, plain Bash hooks are fine.',
+  description: 'List all 13 background workers with status and capabilities. Use over native Bash hooks (settings.json) when you need Swarmdo-side state (routing learning, cost/audit tracking); plain Bash hooks are fine for one-off commands.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -4144,7 +4144,7 @@ export const hooksWorkerList: MCPTool = {
 // Worker dispatch tool
 export const hooksWorkerDispatch: MCPTool = {
   name: 'hooks_worker-dispatch',
-  description: 'Dispatch a background worker for analysis/optimization tasks Use when native Bash hooks (via Claude Code\'s settings.json) are wrong because you need Swarmdo-side state — pattern persistence, neural training signals, model-routing learning, cost tracking, audit chain. For one-off shell commands, plain Bash hooks are fine.',
+  description: 'Dispatch a background worker for analysis/optimization tasks. Use over native Bash hooks (settings.json) when you need Swarmdo-side state (routing learning, cost/audit tracking); plain Bash hooks are fine for one-off commands.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -4341,7 +4341,7 @@ export const hooksWorkerStatus: MCPTool = {
 // Worker detect tool - detect triggers from prompt
 export const hooksWorkerDetect: MCPTool = {
   name: 'hooks_worker-detect',
-  description: 'Detect worker triggers from user prompt (for UserPromptSubmit hook) Use when native Bash hooks (via Claude Code\'s settings.json) are wrong because you need Swarmdo-side state — pattern persistence, neural training signals, model-routing learning, cost tracking, audit chain. For one-off shell commands, plain Bash hooks are fine.',
+  description: 'Detect worker triggers from a user prompt (for the UserPromptSubmit hook). Use over native Bash hooks (settings.json) when you need Swarmdo-side state (routing learning, cost/audit tracking); plain Bash hooks are fine for one-off commands.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -4424,7 +4424,7 @@ async function getModelRouterInstance() {
 // Model route tool - intelligent model selection
 export const hooksModelRoute: MCPTool = {
   name: 'hooks_model-route',
-  description: 'Route task to optimal Claude model (haiku/sonnet/opus) based on complexity Use when native Bash hooks (via Claude Code\'s settings.json) are wrong because you need Swarmdo-side state — pattern persistence, neural training signals, model-routing learning, cost tracking, audit chain. For one-off shell commands, plain Bash hooks are fine.',
+  description: 'Route a task to the optimal Claude model (haiku/sonnet/opus) by complexity. Use over native Bash hooks (settings.json) when you need Swarmdo-side state (routing learning, cost/audit tracking); plain Bash hooks are fine for one-off commands.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -4547,7 +4547,7 @@ function codemodLangForExt(abs: string): 'javascript' | 'typescript' | 'jsx' | '
 // Deterministic codemod execution — the real Tier-1 path (ADR-143)
 export const hooksCodemod: MCPTool = {
   name: 'hooks_codemod',
-  description: 'Apply a deterministic, $0 (no-LLM) code transform — the real Tier-1 execution path (ADR-143). Supported intents: var-to-const, remove-console, add-logging. Uses the TypeScript compiler with formatting-preserving edits (comments/whitespace survive). Targets: raw `code` (returns transformed text, writes nothing) | a single `file` | a `files` array | a `glob` pattern (batch — applies the intent across every match in one $0 call). Files are rewritten in place unless `dryRun`. Intents that need reasoning — add-types, add-error-handling, async-await — are NOT supported here; route those to a model via hooks_model-route. Use when hooks_pre-task / hooks_route returned [CODEMOD_AVAILABLE].',
+  description: 'Apply a deterministic, $0 (no-LLM) code transform via the TypeScript compiler — the real Tier-1 path (ADR-143). Intents: var-to-const, remove-console, add-logging. Targets raw `code`, a `file`, a `files` array, or a `glob` (batch); rewrites in place unless `dryRun`. Intents needing reasoning (add-types, add-error-handling, async-await) are NOT supported — route those to a model via hooks_model-route. Use when hooks_pre-task / hooks_route returned [CODEMOD_AVAILABLE].',
   inputSchema: {
     type: 'object',
     properties: {
@@ -4748,7 +4748,7 @@ export const hooksWorkerCancel: MCPTool = {
 // pipeline (a tracked #1916 follow-up).
 export const hooksTeammateIdle: MCPTool = {
   name: 'hooks_teammate-idle',
-  description: 'Agent Teams hook — fired when a teammate agent finishes its turn; reports whether a pending task can be auto-assigned. Use when native Task is wrong because you have a persistent multi-agent team with a shared task list and want idle workers picked up automatically rather than re-spawning subagents. For a one-shot Task, native Task is fine. (Auto-assignment is delegated to the task-queue consumer — this acknowledges the event today.)',
+  description: 'Agent Teams hook — fired when a teammate finishes its turn; reports whether a pending task can be auto-assigned. Use when native Task is wrong because a persistent multi-agent team with a shared task list should auto-assign idle workers instead of re-spawning subagents. For a one-shot Task, native Task is fine.',
   category: 'hooks',
   inputSchema: {
     type: 'object',
@@ -4774,7 +4774,7 @@ export const hooksTeammateIdle: MCPTool = {
 
 export const hooksTaskCompleted: MCPTool = {
   name: 'hooks_task-completed',
-  description: 'Agent Teams hook — fired when a task is marked complete. Records the completion and, when `trainPatterns:true`, feeds the outcome to the SONA + EWC++ learning pipeline (the same path used by hooks_intelligence trajectory-*). Multiple ways to drive learning exist: (a) call this with trainPatterns:true for a one-step trajectory, (b) use hooks_intelligence trajectory-start/step/end for richer multi-step learning, (c) just record an episode via memory_store if no learning is needed. Each path is honest about what it persists; check the returned `learningPath` field. Use when native TaskUpdate(status:completed) is wrong because the runtime also needs to (i) record the outcome as a learning signal and (ii) emit the standard "task done" pipeline event — TaskUpdate only changes the task row.',
+  description: 'Agent Teams hook — fired when a task is marked complete. Records the completion and, when `trainPatterns:true`, feeds the outcome to the SONA + EWC++ learning pipeline (check the returned `learningPath` field). Use when native TaskUpdate(status:completed) is wrong because the runtime also needs to (i) record the outcome as a learning signal and (ii) emit the standard "task done" pipeline event — TaskUpdate only changes the task row.',
   category: 'hooks',
   inputSchema: {
     type: 'object',
@@ -4866,7 +4866,7 @@ export const hooksTaskCompleted: MCPTool = {
  */
 export const hooksIntelligenceUnifiedStats: MCPTool = {
   name: 'hooks_intelligence_unified-stats',
-  description: 'One honest view across the four learning stat sources: globalStats (`.swarmdo/neural/stats.json`), the in-memory SONA coordinator, memory-bridge AgentDB entries, and the neural-patterns store. Each sub-view names its source path. The `consistency` block notes cross-store drift (e.g. globalStats reports N patterns but neural_patterns is empty). See ADR-075. Use when calling the four narrow aggregators (`hooks_intelligence stats`, `memory_stats`, `neural_status`, the SONA coordinator getter) one at a time is wrong because they each see only their own slice and cross-store drift goes silent — this tool surfaces that drift in the `consistency` block, which the narrow APIs cannot.',
+  description: 'One honest view across the four learning stat sources — globalStats (`.swarmdo/neural/stats.json`), the in-memory SONA coordinator, memory-bridge AgentDB entries, and the neural-patterns store — with a `consistency` block flagging cross-store drift (ADR-075). Use when calling the narrow aggregators (`hooks_intelligence stats`, `memory_stats`, `neural_status`, the SONA getter) one at a time is wrong because each sees only its own slice and drift goes silent.',
   category: 'hooks',
   inputSchema: {
     type: 'object',

@@ -158,7 +158,7 @@ const MCP_SUCCESS_SEMANTIC =
 export const metaharnessTools: MCPTool[] = [
   {
     name: 'metaharness_score',
-    description: 'ADR-150 — 5-dimension harness readiness scorecard from `metaharness score <path>` (harnessFit / compileConfidence / taskCoverage / toolSafety / memoryUsefulness + estCostPerRunUsd). Pure-read subprocess; graceful degradation when metaharness optional dep absent. Use when you need an evidence-based readiness signal before recommending the user run `swarmdo metaharness mint`; reading the repo manually is wrong because the 5-dim score includes signals (cost-per-run, MCP surface safety) that aren\'t obvious from source. ' + MCP_SUCCESS_SEMANTIC,
+    description: 'ADR-150 — 5-dimension readiness scorecard (harnessFit / compileConfidence / taskCoverage / toolSafety / memoryUsefulness + estCostPerRunUsd) via `metaharness score <path>`. Use before recommending `swarmdo metaharness mint`; its cost-per-run and MCP-surface signals aren\'t obvious from source. ' + MCP_SUCCESS_SEMANTIC,
     category: 'metaharness',
     inputSchema: {
       type: 'object',
@@ -177,7 +177,7 @@ export const metaharnessTools: MCPTool[] = [
   },
   {
     name: 'metaharness_genome',
-    description: 'ADR-150 — 7-section categorical readiness report from `metaharness genome <path>` (repo_type / agent_topology / risk_score / mcp_surface / test_confidence / publish_readiness). Use when you need the categorical view (vs numeric score). Pair with metaharness_score for the full readiness picture — score-alone is wrong because two harnesses with the same harnessFit can have very different agent_topology and mcp_surface. ' + MCP_SUCCESS_SEMANTIC,
+    description: 'ADR-150 — 7-section categorical readiness report (repo_type / agent_topology / risk_score / mcp_surface / test_confidence / publish_readiness) via `metaharness genome <path>`. Pair with metaharness_score — same harnessFit can hide different agent_topology and mcp_surface. ' + MCP_SUCCESS_SEMANTIC,
     category: 'metaharness',
     inputSchema: {
       type: 'object',
@@ -196,7 +196,7 @@ export const metaharnessTools: MCPTool[] = [
   },
   {
     name: 'metaharness_mcp_scan',
-    description: 'ADR-150 — static security scan of `.mcp/servers.json` + `.harness/claims.json` via `harness mcp-scan <path>`. Reads only; no dispatch. Use when you are about to expose a new MCP server config to humans/agents. Eyeballing the JSON is wrong because the scan catches policy regressions (capability grants, audit gaps) that humans miss. ' + MCP_SUCCESS_SEMANTIC,
+    description: 'ADR-150 — static security scan of `.mcp/servers.json` + `.harness/claims.json` via `harness mcp-scan <path>`. Run before exposing a new MCP server config; eyeballing the JSON misses policy regressions like capability grants and audit gaps. ' + MCP_SUCCESS_SEMANTIC,
     category: 'metaharness',
     inputSchema: {
       type: 'object',
@@ -214,7 +214,7 @@ export const metaharnessTools: MCPTool[] = [
   },
   {
     name: 'metaharness_threat_model',
-    description: 'ADR-150 — enterprise-grade threat model from `harness threat-model <path>`. Returns worst-severity verdict (clean/low/medium/high) + categorized findings suitable for sharing with infosec. Use when you need a sharable infosec-grade verdict; a one-line summary is wrong because compliance reviewers want the per-category breakdown. ' + MCP_SUCCESS_SEMANTIC,
+    description: 'ADR-150 — enterprise-grade threat model via `harness threat-model <path>`: worst-severity verdict (clean/low/medium/high) + categorized findings to share with infosec. A one-line summary won\'t do — reviewers want the per-category breakdown. ' + MCP_SUCCESS_SEMANTIC,
     category: 'metaharness',
     inputSchema: {
       type: 'object',
@@ -232,7 +232,7 @@ export const metaharnessTools: MCPTool[] = [
   },
   {
     name: 'metaharness_oia_audit',
-    description: 'ADR-150 — composite weekly audit. Bundles oia-manifest + threat-model + mcp-scan into one timestamped record persisted to `metaharness-audit` memory namespace (or --dry-run to skip persistence). Use when you want to seed periodic drift detection (pair with metaharness_drift_from_history). Running the 3 sub-audits separately is wrong because you lose the composite worst-severity rollup and the timestamped record that drift detection needs to compare against. ' + MCP_SUCCESS_SEMANTIC,
+    description: 'ADR-150 — weekly audit bundling oia-manifest + threat-model + mcp-scan into one timestamped `metaharness-audit` record (--dry-run skips it). Seeds drift detection (pair with metaharness_drift_from_history); running the 3 separately loses the composite worst-severity rollup. ' + MCP_SUCCESS_SEMANTIC,
     category: 'metaharness',
     inputSchema: {
       type: 'object',
@@ -253,7 +253,7 @@ export const metaharnessTools: MCPTool[] = [
   },
   {
     name: 'metaharness_audit_list',
-    description: 'ADR-150 iter 16 — list timestamped records from the `metaharness-audit` memory namespace. Use when you need to discover which audit keys exist before running metaharness_audit_trend. Guessing key names is wrong because timestamps include sub-second precision; pair with metaharness_audit_trend by passing the returned key. ' + MCP_SUCCESS_SEMANTIC,
+    description: 'ADR-150 — list timestamped records in the `metaharness-audit` memory namespace to find audit keys before running metaharness_audit_trend. Guessing keys fails (sub-second timestamps); pass a returned key to metaharness_audit_trend. ' + MCP_SUCCESS_SEMANTIC,
     category: 'metaharness',
     inputSchema: {
       type: 'object',
@@ -272,7 +272,7 @@ export const metaharnessTools: MCPTool[] = [
   },
   {
     name: 'metaharness_similarity',
-    description: 'ADR-152 §3.1 — weighted similarity between two harness fingerprints (genome + score JSON). Returns overall ∈ [0,1] plus per-component breakdown (cosine over 9 numerics, categorical over 4 enums, jaccard over agent_topology). Pure-TS, zero `@metaharness/*` dep. Use when you need to (a) rank candidate templates against a target repo, (b) decide fork-vs-scaffold, or (c) feed ADR-151 §3.2 Recommender / §3.3 Drift / §3.5 Plugin Compat. Hand-comparing genome fields is wrong because the weighted blend (cosine + categorical + jaccard) reproduces human judgment on the spike-similarity invariants. ' + MCP_SUCCESS_SEMANTIC,
+    description: 'ADR-152 §3.1 — weighted similarity of two harness fingerprints (genome + score JSON): overall ∈ [0,1] plus per-component (cosine/categorical/jaccard) breakdown. Use to rank templates, pick fork-vs-scaffold, or feed Recommender/Drift; hand-comparing fields misses the weighted blend. ' + MCP_SUCCESS_SEMANTIC,
     category: 'metaharness',
     inputSchema: {
       type: 'object',
@@ -299,7 +299,7 @@ export const metaharnessTools: MCPTool[] = [
   },
   {
     name: 'metaharness_drift_from_history',
-    description: 'iter 53 — one-command drift detection. Composes audit-list + oia-audit + audit-trend: finds the most recent record in `metaharness-audit` namespace (or skips that with `baselineKey`/`baselineFile`), runs a fresh audit against the current path, diffs via ADR-152 §3.1 similarity, alerts when structural similarity falls below `threshold`. Use when you need a structured drift report before recommending the user act on regressions; calling the 3 sub-tools separately is wrong because you lose the composed alert ladder + fastpath optimization (iter 66/67: `baselineKey` ~14x faster, `baselineFile` ~19x faster, ideal for CI artifact pipelines). ' + MCP_SUCCESS_SEMANTIC,
+    description: 'iter 53 — one-command drift detection composing audit-list/oia-audit/audit-trend: finds the newest `metaharness-audit` record (or `baselineKey`/`baselineFile`), diffs a fresh audit via §3.1 similarity, alerts below `threshold`. Doing the 3 by hand loses the alert ladder and the ~14–19x baseline-key/file fastpath. ' + MCP_SUCCESS_SEMANTIC,
     category: 'metaharness',
     inputSchema: {
       type: 'object',
@@ -328,7 +328,7 @@ export const metaharnessTools: MCPTool[] = [
   },
   {
     name: 'metaharness_audit_trend',
-    description: 'ADR-150 iter 15 — diff two oia-audit records (drift detection). Accepts EITHER memory keys (run metaharness_audit_list first to discover them) OR direct file paths (useful for diffing CI artifacts). Surfaces composite worst-severity delta + per-component status change + introduced/cleared findings + (iter 38) ADR-152 §3.1 structural distance when both records carry a fingerprint. Use when you have two specific audits to compare; pair with metaharness_audit_list for key discovery. Skipping this tool and eyeballing two JSONs is wrong because the structural-distance verdict (near-identical / minor-drift / moderate-drift / major-drift) is the operationally-useful summary. ' + MCP_SUCCESS_SEMANTIC,
+    description: 'ADR-150 — diff two oia-audit records (drift) by memory keys (discover via metaharness_audit_list) or file paths (CI artifacts): worst-severity delta, per-component change, finding deltas, §3.1 structural distance. Eyeballing two JSONs misses the distance verdict (near-identical/minor/moderate/major). ' + MCP_SUCCESS_SEMANTIC,
     category: 'metaharness',
     inputSchema: {
       type: 'object',
@@ -363,7 +363,7 @@ export const metaharnessTools: MCPTool[] = [
   // ───────────────────────────────────────────────────────────────────────
   {
     name: 'metaharness_evolve',
-    description: 'ADR-153 — Darwin Mode: mutate one of seven harness policy surfaces (planner/contextBuilder/reviewer/retryPolicy/toolPolicy/memoryPolicy/scorePolicy), sandbox-score each variant, promote only measured wins. The WRITE layer that closes the loop ADR-150 opens (score+genome describe; evolve changes). Use when readiness scores are flat and you want to discover WHICH surface mutation moves them, without retraining the foundation model. Bypassing this tool and hand-tuning is wrong because (a) single-degree-of-freedom mutations keep causal attribution clean, (b) the upstream safety layer catches secret/shell-out/network/dynamic-eval patterns before any variant runs (exit 99 = safety-disqualified, propagated verbatim). REQUIRES --confirm; defaults to dry-run plan output. Long-running: timeout scales with generations×children×sandbox-cost. ' + MCP_SUCCESS_SEMANTIC,
+    description: 'ADR-153 Darwin Mode — mutate one of seven harness policy surfaces, sandbox-score variants, promote only measured wins; the WRITE counterpart to read-only score/genome. Use when scores are flat; hand-tuning loses single-DOF attribution and the safety gate (exit 99). REQUIRES --confirm (else dry-run); long-running. ' + MCP_SUCCESS_SEMANTIC,
     category: 'metaharness',
     inputSchema: {
       type: 'object',
@@ -418,7 +418,7 @@ export const metaharnessTools: MCPTool[] = [
   },
   {
     name: 'metaharness_security_bench',
-    description: 'ADR-153 — upstream Darwin Shield (their own ADR-155): evolves a champion security-detection harness against a 10-vuln/9-decoy ground-truth corpus and grades on TPR/FPR/patch-pass/repro/unsafe vs four baselines (B0 static, B1 LLM-single-pass, B2 fixed-agent, B3 Darwin-champion). Closest reference implementation for swarmdo ADR-155 nightly self-learning security harness (#2417). Use when you need an empirical floor for Loop A reward-signal soundness; running this periodically gives baseline diversity and week-over-week champion-fitness drift. Bypassing this and just running the static MCP scan is wrong because static-only baseline (B0) reaches TPR=0.3/FPR=1 — proving static-alone has a measured detection ceiling. Parses overall PASS/FAIL + per-gate verdicts + baselines table from markdown. ' + MCP_SUCCESS_SEMANTIC,
+    description: 'ADR-153 — upstream Darwin Shield (ADR-155): evolves a champion security-detection harness against a 10-vuln/9-decoy corpus, grading TPR/FPR/patch/repro/unsafe vs four baselines (B0 static … B3 Darwin-champion). The static MCP scan alone hits B0\'s TPR=0.3/FPR=1 detection ceiling. ' + MCP_SUCCESS_SEMANTIC,
     category: 'metaharness',
     inputSchema: {
       type: 'object',
@@ -443,7 +443,7 @@ export const metaharnessTools: MCPTool[] = [
   },
   {
     name: 'metaharness_bench',
-    description: 'ADR-153 supporting verb — create or verify bench suites used by metaharness_evolve --bench. Bench suites are JSON files of {input, expectedOutput, weight} tasks; scoring against a fixed corpus decouples evolution from flaky/slow/undersized `npm test`. Use --op create to scaffold from a repo, --op verify (cheap, ~5s) to gate suite changes in CI. Skipping bench suites is wrong when iterating on the same harness across commits because per-run noise drowns out champion-fitness deltas; bench gives you a stable baseline. ' + MCP_SUCCESS_SEMANTIC,
+    description: 'ADR-153 — create or verify bench suites for metaharness_evolve --bench: JSON files of {input, expectedOutput, weight} tasks that decouple evolution from flaky `npm test`. `--op create` scaffolds from a repo, `--op verify` gates CI; without a bench, per-run noise drowns out champion-fitness deltas. ' + MCP_SUCCESS_SEMANTIC,
     category: 'metaharness',
     inputSchema: {
       type: 'object',

@@ -858,7 +858,7 @@ export const workflowTools: MCPTool[] = [
     // `workflow_stop` tool. Equivalent to workflow_cancel but returns the
     // shape the CLI expects (`{ workflowId, stopped, stoppedAt }`).
     name: 'workflow_stop',
-    description: 'Stop a running/paused workflow and skip its remaining steps. Use when native TodoWrite + sequential Bash is wrong because the work has a real dependency graph that needs persistence, pause/resume, and step-output binding — and you need to halt it cleanly mid-run. For a single linear todo list, native TodoWrite is fine. (Same effect as workflow_cancel; this name is what the CLI `workflow stop` subcommand calls.)',
+    description: 'Stop a running/paused workflow, skipping its remaining steps. Use when native TodoWrite + sequential Bash is wrong because the work is a real dependency graph needing persistence, pause/resume, and step-output binding; for a single linear todo list, native TodoWrite is fine.',
     category: 'workflow',
     inputSchema: {
       type: 'object',
@@ -893,7 +893,7 @@ export const workflowTools: MCPTool[] = [
     // `workflow_validate` tool. Structural sanity check (JSON workflow files);
     // a full schema validator is a follow-up.
     name: 'workflow_validate',
-    description: 'Structurally validate a workflow definition file (JSON) — checks it has a steps/stages/tasks array and that each step names an agent. Use when native Read is wrong because you want a parsed, structured pass/fail with error/warning lists and step/agent counts rather than eyeballing the file. For just reading the file, native Read is fine. (Basic checks today — a full workflow-schema validator is a tracked follow-up.)',
+    description: 'Structurally validate a workflow JSON file: checks for a steps/stages/tasks array and that each step names an agent. Use when native Read is wrong because you want a structured pass/fail with error/warning lists, not eyeballing. For just reading, native Read is fine.',
     category: 'workflow',
     inputSchema: {
       type: 'object',

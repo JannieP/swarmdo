@@ -225,7 +225,7 @@ function saveAgentStore(store: { agents: Record<string, unknown> }): void {
 export const hiveMindTools: MCPTool[] = [
   {
     name: 'hive-mind_spawn',
-    description: 'Spawn workers and automatically join them to the hive-mind (combines agent/spawn + hive-mind/join) Use when native Task is wrong because you need queen-led collective intelligence — Byzantine-FT consensus, broadcast across many worker agents, shared memory with bounded conflict. For a single subagent, native Task is fine. Pair with swarm_init first to set topology.',
+    description: 'Spawn workers and auto-join them to the hive-mind (agent/spawn + hive-mind/join). Use when native Task is wrong because you need queen-led collective intelligence — Byzantine-FT consensus, broadcast, shared memory. For a single subagent, native Task is fine; pair with swarm_init first.',
     category: 'hive-mind',
     inputSchema: {
       type: 'object',
@@ -523,7 +523,7 @@ export const hiveMindTools: MCPTool[] = [
   },
   {
     name: 'hive-mind_consensus',
-    description: 'Propose or vote on consensus with BFT, Raft, or Quorum strategies Use when native Task is wrong because you need queen-led collective intelligence — Byzantine-FT consensus, broadcast across many worker agents, shared memory with bounded conflict. For a single subagent, native Task is fine. Pair with swarm_init first to set topology.',
+    description: 'Propose or vote on consensus with BFT, Raft, or Quorum strategies. Use when native Task is wrong because you need queen-led collective intelligence — Byzantine-FT consensus, broadcast, shared memory. For a single subagent, native Task is fine; pair with swarm_init first.',
     category: 'hive-mind',
     inputSchema: {
       type: 'object',
@@ -1035,7 +1035,7 @@ export const hiveMindTools: MCPTool[] = [
     // quality consolidation is a follow-up (it belongs in the intelligence
     // pipeline / agentdb curator, not here).
     name: 'hive-mind_optimize-memory',
-    description: 'Compact the hive-mind shared-memory store (drops null/empty keys) and report before/after pattern counts. Use when native conversation memory is wrong because you need the queen-led collective\'s persisted shared state cleaned up between phases. For one-shot scratch state, no tool needed. (Pattern-quality consolidation is delegated to the intelligence pipeline — this only does the cheap structural pass for now.)',
+    description: 'Compact the hive-mind shared-memory store (drops null/empty keys), reporting before/after counts. Use when native conversation memory is wrong because the queen-led collective needs its persisted shared state cleaned between phases. For one-shot scratch state, no tool is needed.',
     category: 'hive-mind',
     inputSchema: {
       type: 'object',

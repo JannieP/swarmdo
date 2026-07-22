@@ -13,7 +13,7 @@ import { parseTestReport, detectFormat, type TestFormat } from '../testreport/te
 const testreportTool: MCPTool = {
   name: 'testreport',
   description:
-    'Parse JUnit-XML or TAP test output into a structured summary: {passed, failed, skipped, total, durationMs, failures:[{suite,name,file,line,message}]}. Call this on a results file/string to get the exact failing tests + file:line instead of scanning logs; feed the failures into `repair`. Deterministic; auto-detects the format.',
+    'Parse JUnit-XML or TAP test output into a structured summary: {passed, failed, skipped, total, durationMs, failures:[{suite,name,file,line,message}]}. Gets the exact failing tests + file:line instead of scanning logs; feed the failures into `repair`. Deterministic; auto-detects format.',
   category: 'testreport',
   tags: ['tests', 'junit', 'tap', 'ci', 'failures'],
   inputSchema: {

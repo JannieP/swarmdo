@@ -58,7 +58,7 @@ async function getBridge() {
 
 export const agentdbHealth: MCPTool = {
   name: 'agentdb_health',
-  description: 'Get AgentDB v3 controller health status including cache stats and attestation count Use when generic memory_* tools are wrong because you need AgentDB-specific controllers (HNSW vector search, hierarchical tiers, causal-graph links, pattern store/recall, RaBitQ quantization). For simple key-value persistence, memory_store/memory_retrieve are simpler. For unrelated file work, native Read/Write are fine.',
+  description: 'Get AgentDB v3 controller health (cache stats, attestation count). Use when memory_* is wrong because you need AgentDB controllers (HNSW, hierarchical tiers, causal graph, patterns, RaBitQ); memory_store/memory_retrieve for key-value, native Read/Write for files.',
   inputSchema: {
     type: 'object',
     properties: {},
@@ -79,7 +79,7 @@ export const agentdbHealth: MCPTool = {
 
 export const agentdbControllers: MCPTool = {
   name: 'agentdb_controllers',
-  description: 'List all AgentDB v3 controllers and their initialization status Use when generic memory_* tools are wrong because you need AgentDB-specific controllers (HNSW vector search, hierarchical tiers, causal-graph links, pattern store/recall, RaBitQ quantization). For simple key-value persistence, memory_store/memory_retrieve are simpler. For unrelated file work, native Read/Write are fine.',
+  description: 'List all AgentDB v3 controllers and their initialization status. Use when memory_* is wrong because you need AgentDB controllers (HNSW, hierarchical tiers, causal graph, patterns, RaBitQ); memory_store/memory_retrieve for key-value, native Read/Write for files.',
   inputSchema: {
     type: 'object',
     properties: {},
@@ -105,7 +105,7 @@ export const agentdbControllers: MCPTool = {
 
 export const agentdbPatternStore: MCPTool = {
   name: 'agentdb_pattern-store',
-  description: 'Store a pattern directly via ReasoningBank controller Use when generic memory_* tools are wrong because you need AgentDB-specific controllers (HNSW vector search, hierarchical tiers, causal-graph links, pattern store/recall, RaBitQ quantization). For simple key-value persistence, memory_store/memory_retrieve are simpler. For unrelated file work, native Read/Write are fine.',
+  description: 'Store a pattern via the ReasoningBank controller. Use when memory_* is wrong because you need AgentDB controllers (HNSW, hierarchical tiers, causal graph, patterns, RaBitQ); memory_store/memory_retrieve for key-value, native Read/Write for files.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -169,7 +169,7 @@ export const agentdbPatternStore: MCPTool = {
 
 export const agentdbPatternSearch: MCPTool = {
   name: 'agentdb_pattern-search',
-  description: 'Search patterns via ReasoningBank controller with BM25+semantic hybrid Use when generic memory_* tools are wrong because you need AgentDB-specific controllers (HNSW vector search, hierarchical tiers, causal-graph links, pattern store/recall, RaBitQ quantization). For simple key-value persistence, memory_store/memory_retrieve are simpler. For unrelated file work, native Read/Write are fine.',
+  description: 'Search patterns via the ReasoningBank controller (BM25 + semantic hybrid). Use when memory_* is wrong because you need AgentDB controllers (HNSW, hierarchical tiers, causal graph, patterns, RaBitQ); memory_store/memory_retrieve for key-value, native Read/Write for files.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -292,7 +292,7 @@ export const agentdbPatternSearch: MCPTool = {
 
 export const agentdbFeedback: MCPTool = {
   name: 'agentdb_feedback',
-  description: 'Record task feedback for learning via LearningSystem + ReasoningBank controllers Use when generic memory_* tools are wrong because you need AgentDB-specific controllers (HNSW vector search, hierarchical tiers, causal-graph links, pattern store/recall, RaBitQ quantization). For simple key-value persistence, memory_store/memory_retrieve are simpler. For unrelated file work, native Read/Write are fine.',
+  description: 'Record task feedback for learning via the LearningSystem + ReasoningBank controllers. Use when memory_* is wrong because you need AgentDB controllers (HNSW, hierarchical tiers, causal graph, patterns, RaBitQ); memory_store/memory_retrieve for key-value, native Read/Write for files.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -391,7 +391,7 @@ async function writeGraphEdge(opts: {
 
 export const agentdbCausalEdge: MCPTool = {
   name: 'agentdb_causal-edge',
-  description: 'Record a causal edge between two memory entries via CausalMemoryGraph Use when generic memory_* tools are wrong because you need AgentDB-specific controllers (HNSW vector search, hierarchical tiers, causal-graph links, pattern store/recall, RaBitQ quantization). For simple key-value persistence, memory_store/memory_retrieve are simpler. For unrelated file work, native Read/Write are fine.',
+  description: 'Record a causal edge between two memory entries via CausalMemoryGraph. Use when memory_* is wrong because you need AgentDB controllers (HNSW, hierarchical tiers, causal graph, patterns, RaBitQ); memory_store/memory_retrieve for key-value, native Read/Write for files.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -469,7 +469,7 @@ export const agentdbCausalEdge: MCPTool = {
 
 export const agentdbRoute: MCPTool = {
   name: 'agentdb_route',
-  description: 'Route a task via AgentDB SemanticRouter or LearningSystem recommendAlgorithm Use when generic memory_* tools are wrong because you need AgentDB-specific controllers (HNSW vector search, hierarchical tiers, causal-graph links, pattern store/recall, RaBitQ quantization). For simple key-value persistence, memory_store/memory_retrieve are simpler. For unrelated file work, native Read/Write are fine.',
+  description: 'Route a task via AgentDB SemanticRouter or LearningSystem recommendAlgorithm. Use when memory_* is wrong because you need AgentDB controllers (HNSW, hierarchical tiers, causal graph, patterns, RaBitQ); memory_store/memory_retrieve for key-value, native Read/Write for files.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -501,7 +501,7 @@ export const agentdbRoute: MCPTool = {
 
 export const agentdbSessionStart: MCPTool = {
   name: 'agentdb_session-start',
-  description: 'Start a session with ReflexionMemory episodic replay Use when generic memory_* tools are wrong because you need AgentDB-specific controllers (HNSW vector search, hierarchical tiers, causal-graph links, pattern store/recall, RaBitQ quantization). For simple key-value persistence, memory_store/memory_retrieve are simpler. For unrelated file work, native Read/Write are fine.',
+  description: 'Start a session with ReflexionMemory episodic replay. Use when memory_* is wrong because you need AgentDB controllers (HNSW, hierarchical tiers, causal graph, patterns, RaBitQ); memory_store/memory_retrieve for key-value, native Read/Write for files.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -533,7 +533,7 @@ export const agentdbSessionStart: MCPTool = {
 
 export const agentdbSessionEnd: MCPTool = {
   name: 'agentdb_session-end',
-  description: 'End session, persist to ReflexionMemory, trigger NightlyLearner consolidation Use when generic memory_* tools are wrong because you need AgentDB-specific controllers (HNSW vector search, hierarchical tiers, causal-graph links, pattern store/recall, RaBitQ quantization). For simple key-value persistence, memory_store/memory_retrieve are simpler. For unrelated file work, native Read/Write are fine.',
+  description: 'End a session, persist to ReflexionMemory, and trigger NightlyLearner consolidation. Use when memory_* is wrong because you need AgentDB controllers (HNSW, hierarchical tiers, causal graph, patterns, RaBitQ); memory_store/memory_retrieve for key-value, native Read/Write for files.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -567,7 +567,7 @@ export const agentdbSessionEnd: MCPTool = {
 
 export const agentdbHierarchicalStore: MCPTool = {
   name: 'agentdb_hierarchical-store',
-  description: 'Store to hierarchical memory with tier (working, episodic, semantic) Use when generic memory_* tools are wrong because you need AgentDB-specific controllers (HNSW vector search, hierarchical tiers, causal-graph links, pattern store/recall, RaBitQ quantization). For simple key-value persistence, memory_store/memory_retrieve are simpler. For unrelated file work, native Read/Write are fine.',
+  description: 'Store to hierarchical memory with a tier (working, episodic, semantic). Use when memory_* is wrong because you need AgentDB controllers (HNSW, hierarchical tiers, causal graph, patterns, RaBitQ); memory_store/memory_retrieve for key-value, native Read/Write for files.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -610,7 +610,7 @@ export const agentdbHierarchicalStore: MCPTool = {
 
 export const agentdbHierarchicalRecall: MCPTool = {
   name: 'agentdb_hierarchical-recall',
-  description: 'Recall from hierarchical memory with optional tier filter Use when generic memory_* tools are wrong because you need AgentDB-specific controllers (HNSW vector search, hierarchical tiers, causal-graph links, pattern store/recall, RaBitQ quantization). For simple key-value persistence, memory_store/memory_retrieve are simpler. For unrelated file work, native Read/Write are fine.',
+  description: 'Recall from hierarchical memory with an optional tier filter. Use when memory_* is wrong because you need AgentDB controllers (HNSW, hierarchical tiers, causal graph, patterns, RaBitQ); memory_store/memory_retrieve for key-value, native Read/Write for files.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -648,7 +648,7 @@ export const agentdbHierarchicalRecall: MCPTool = {
 
 export const agentdbConsolidate: MCPTool = {
   name: 'agentdb_consolidate',
-  description: 'Run memory consolidation to promote entries across tiers and compress old data Use when generic memory_* tools are wrong because you need AgentDB-specific controllers (HNSW vector search, hierarchical tiers, causal-graph links, pattern store/recall, RaBitQ quantization). For simple key-value persistence, memory_store/memory_retrieve are simpler. For unrelated file work, native Read/Write are fine.',
+  description: 'Run memory consolidation to promote entries across tiers and compress old data. Use when memory_* is wrong because you need AgentDB controllers (HNSW, hierarchical tiers, causal graph, patterns, RaBitQ); memory_store/memory_retrieve for key-value, native Read/Write for files.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -674,7 +674,7 @@ export const agentdbConsolidate: MCPTool = {
 
 export const agentdbBatch: MCPTool = {
   name: 'agentdb_batch',
-  description: 'Batch operations on AgentDB episodes (insert, update, delete). Note: entries are stored in the AgentDB episodes table, not the memory_search namespace. Use memory_store for entries that should be searchable via memory_search. Use when generic memory_* tools are wrong because you need AgentDB-specific controllers (HNSW vector search, hierarchical tiers, causal-graph links, pattern store/recall, RaBitQ quantization). For simple key-value persistence, memory_store/memory_retrieve are simpler. For unrelated file work, native Read/Write are fine.',
+  description: 'Batch insert/update/delete on AgentDB episodes (written to the episodes table, not searchable via memory_search). Use when memory_* is wrong because you need AgentDB controllers (HNSW, hierarchical tiers, causal graph, patterns, RaBitQ); memory_store/memory_retrieve for key-value, native Read/Write for files.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -741,7 +741,7 @@ export const agentdbBatch: MCPTool = {
 
 export const agentdbContextSynthesize: MCPTool = {
   name: 'agentdb_context-synthesize',
-  description: 'Synthesize context from stored memories for a given query Use when generic memory_* tools are wrong because you need AgentDB-specific controllers (HNSW vector search, hierarchical tiers, causal-graph links, pattern store/recall, RaBitQ quantization). For simple key-value persistence, memory_store/memory_retrieve are simpler. For unrelated file work, native Read/Write are fine.',
+  description: 'Synthesize context from stored memories for a given query. Use when memory_* is wrong because you need AgentDB controllers (HNSW, hierarchical tiers, causal graph, patterns, RaBitQ); memory_store/memory_retrieve for key-value, native Read/Write for files.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -772,7 +772,7 @@ export const agentdbContextSynthesize: MCPTool = {
 
 export const agentdbSemanticRoute: MCPTool = {
   name: 'agentdb_semantic-route',
-  description: 'Route an input via AgentDB SemanticRouter for intent classification Use when generic memory_* tools are wrong because you need AgentDB-specific controllers (HNSW vector search, hierarchical tiers, causal-graph links, pattern store/recall, RaBitQ quantization). For simple key-value persistence, memory_store/memory_retrieve are simpler. For unrelated file work, native Read/Write are fine.',
+  description: 'Route an input via AgentDB SemanticRouter for intent classification. Use when memory_* is wrong because you need AgentDB controllers (HNSW, hierarchical tiers, causal graph, patterns, RaBitQ); memory_store/memory_retrieve for key-value, native Read/Write for files.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -799,7 +799,7 @@ export const agentdbSemanticRoute: MCPTool = {
 
 export const agentdbHierarchicalDelete: MCPTool = {
   name: 'agentdb_hierarchical-delete',
-  description: 'Delete a hierarchical-memory entry by key. Returns controller="native-unsupported" when the entry is in a backend without a public delete API. Use when generic memory_* tools are wrong because you need AgentDB-specific controllers (HNSW vector search, hierarchical tiers, causal-graph links, pattern store/recall, RaBitQ quantization). For simple key-value persistence, memory_store/memory_retrieve are simpler. For unrelated file work, native Read/Write are fine.',
+  description: 'Delete a hierarchical-memory entry by key; returns controller="native-unsupported" when the backend has no delete API. Use when memory_* is wrong because you need AgentDB controllers (HNSW, hierarchical tiers, causal graph, patterns, RaBitQ); memory_store/memory_retrieve for key-value, native Read/Write for files.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -834,7 +834,7 @@ export const agentdbHierarchicalDelete: MCPTool = {
 
 export const agentdbCausalEdgeDelete: MCPTool = {
   name: 'agentdb_causal-edge-delete',
-  description: 'Delete a causal edge between two memory entries. Returns controller="native-unsupported" when the edge lives in graph-node native storage (no public delete API). Use when generic memory_* tools are wrong because you need AgentDB-specific controllers (HNSW vector search, hierarchical tiers, causal-graph links, pattern store/recall, RaBitQ quantization). For simple key-value persistence, memory_store/memory_retrieve are simpler. For unrelated file work, native Read/Write are fine.',
+  description: 'Delete a causal edge between two memory entries; returns controller="native-unsupported" for graph-node native storage. Use when memory_* is wrong because you need AgentDB controllers (HNSW, hierarchical tiers, causal graph, patterns, RaBitQ); memory_store/memory_retrieve for key-value, native Read/Write for files.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -866,7 +866,7 @@ export const agentdbCausalEdgeDelete: MCPTool = {
 
 export const agentdbCausalNodeDelete: MCPTool = {
   name: 'agentdb_causal-node-delete',
-  description: 'Cascade-delete a causal node and all its incident edges from the SQL fallback. Native graph-node entries are unaffected (no delete API in the binding). Use when generic memory_* tools are wrong because you need AgentDB-specific controllers (HNSW vector search, hierarchical tiers, causal-graph links, pattern store/recall, RaBitQ quantization). For simple key-value persistence, memory_store/memory_retrieve are simpler. For unrelated file work, native Read/Write are fine.',
+  description: 'Cascade-delete a causal node and its incident edges from the SQL fallback; native graph-node entries are unaffected. Use when memory_* is wrong because you need AgentDB controllers (HNSW, hierarchical tiers, causal graph, patterns, RaBitQ); memory_store/memory_retrieve for key-value, native Read/Write for files.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -1190,7 +1190,7 @@ function simplePersonalizedPageRank(
 
 export const agentdbGraphPathfinder: MCPTool = {
   name: 'agentdb_graph-pathfinder',
-  description: 'Multi-algorithm native graph pathfinder (ADR-130 Phase 5). Use when agentdb_graph-query k-hop is not enough — pathfinder supports personalized-pagerank, dynamic-mincut, spectral-sparsify, temporal-centrality, connected-component-churn, and witness-chain-divergence. Prefer over prompt-level graph loops in swarmdo-knowledge-graph graph-navigator when you need ranked paths with formal complexityBudget enforcement.',
+  description: 'Multi-algorithm native graph pathfinder (ADR-130 Phase 5) offering 6 ranked-path solvers with formal complexityBudget enforcement. Use when agentdb_graph-query k-hop is not enough; prefer over prompt-level graph loops in swarmdo-knowledge-graph graph-navigator.',
   inputSchema: {
     type: 'object',
     properties: {

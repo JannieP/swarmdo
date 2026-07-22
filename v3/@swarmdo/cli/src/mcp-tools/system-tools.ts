@@ -675,7 +675,7 @@ export const systemTools: MCPTool[] = [
     // responds, MCP is already up. (`swarmdo mcp start` runs a standalone
     // stdio/HTTP server; that's a process command, not an MCP tool.)
     name: 'mcp_start',
-    description: 'Report that the in-process MCP toolset is available (no-op "start" — if this tool responds, MCP is up). Use when native `claude mcp list` is wrong because you want Swarmdo-side confirmation that the in-process registry loaded. For a standalone stdio/HTTP MCP server, run `swarmdo mcp start` (a process command, not this tool). Pair with mcp_status for detail.',
+    description: 'No-op "start" for the in-process MCP toolset — if it responds, MCP is up. Use when native `claude mcp list` is wrong because you want Swarmdo-side confirmation the registry loaded. For a standalone server, run `swarmdo mcp start`. Pair with mcp_status.',
     category: 'system',
     inputSchema: {
       type: 'object',
@@ -700,7 +700,7 @@ export const systemTools: MCPTool[] = [
     // #1916: `swarmdo stop` referenced an unregistered `mcp_stop` tool. Same
     // story as mcp_start — nothing to stop for the in-process registry.
     name: 'mcp_stop',
-    description: 'No-op "stop" for the in-process MCP toolset (there is no separate server process to stop from inside an MCP call). Use when native process-kill is wrong because you mistakenly think Swarmdo runs a daemon — it does not, the tools live in the CLI process. To stop a standalone server run `swarmdo mcp stop` or terminate that process. Pair with mcp_status.',
+    description: 'No-op "stop" for the in-process MCP toolset — nothing to stop from an MCP call. Use when native process-kill is wrong: the tools live in the CLI process, not a daemon. To stop a standalone server, run `swarmdo mcp stop`. Pair with mcp_status.',
     category: 'system',
     inputSchema: {
       type: 'object',

@@ -19,7 +19,7 @@ import { normalizeSince } from '../util/since.js';
 const ownershipTool: MCPTool = {
   name: 'ownership',
   description:
-    'Map per-file authorship concentration + bus factor from git history — "who owns each file, and what breaks if they leave?" (code-maat main-dev / knowledge map). Returns ranked JSON, most-fragile-first, so an agent editing a file knows if it is a single-owner (bus factor 1) key-person risk that needs extra care, and who its main-dev reviewer is. Includes a repo-level truck factor. Runs in a git repository.',
+    'Map per-file authorship concentration and bus factor from git history — who owns each file, what breaks if they leave. Returns ranked JSON (most-fragile-first) so an agent editing a file sees single-owner (bus-factor-1) risk, its main-dev reviewer, and a repo-level truck factor. Git repo only.',
   category: 'ownership',
   tags: ['git', 'ownership', 'bus-factor', 'knowledge-map', 'risk', 'review'],
   inputSchema: {

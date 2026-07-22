@@ -14,7 +14,7 @@ import { extractEnvRefs, parseDotenv, reconcile } from '../env/env.js';
 const envCheckTool: MCPTool = {
   name: 'env_check',
   description:
-    'Reconcile env vars referenced in source code against a .env declaration. Returns missing (referenced, not declared — will break at runtime), unused (declared, never referenced), and undocumented (in .env, not in .env.example). Use before adding a var or approving a deploy. Deterministic; pass the file contents directly.',
+    'Reconcile env vars referenced in source against a .env declaration. Returns missing (referenced, not declared — breaks at runtime), unused (declared, never referenced), and undocumented (in .env, not .env.example). Use before adding a var or approving a deploy. Deterministic.',
   category: 'env',
   tags: ['env', 'dotenv', 'config', 'drift', 'ci'],
   inputSchema: {

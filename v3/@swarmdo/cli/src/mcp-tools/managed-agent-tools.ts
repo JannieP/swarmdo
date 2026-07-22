@@ -144,7 +144,7 @@ export const managedAgentTools: MCPTool[] = [
   {
     name: 'managed_agent_create',
     description:
-      'Spin up an Anthropic-managed cloud agent (Agent + Environment + Session) — the CLOUD counterpart of wasm_agent_create. Use when wasm_agent_create (local WASM sandbox) is wrong because the task is long-running/async (minutes-hours), needs a real cloud container with pre-installed packages + network, or persistent filesystem + transcript across turns. For a fast, free, ephemeral, offline agent use wasm_agent_create (rvagent). Needs ANTHROPIC_API_KEY + Managed Agents beta access. Returns {sessionId, agentId, environmentId}; pair with managed_agent_prompt.',
+      'Spin up an Anthropic-managed cloud agent — the CLOUD counterpart of wasm_agent_create. Use when wasm_agent_create (local WASM sandbox) is wrong: long-running work needing a cloud container, network, or persistent filesystem. For a fast, free, offline agent use wasm_agent_create. Needs ANTHROPIC_API_KEY; pair with managed_agent_prompt.',
     category: 'agent',
     inputSchema: {
       type: 'object',
@@ -214,7 +214,7 @@ export const managedAgentTools: MCPTool[] = [
   {
     name: 'managed_agent_prompt',
     description:
-      'Send a user turn to a managed cloud-agent session and wait for it to go idle, returning the assistant text + a tool-use trace — the CLOUD counterpart of wasm_agent_prompt. Use when wasm_agent_prompt (local WASM) is wrong because the work is long-running, needs the cloud container, or must persist across turns. Polls the session event log up to maxWaitMs (default 180s); for very long tasks raise maxWaitMs or follow up with managed_agent_events. Pair with managed_agent_create (for sessionId).',
+      'Send a user turn to a managed cloud-agent session and wait for idle, returning the assistant text + a tool-use trace — the CLOUD counterpart of wasm_agent_prompt. Use when wasm_agent_prompt (local WASM) is wrong: long-running work needing the cloud container or cross-turn persistence. For long tasks follow up with managed_agent_events; pair with managed_agent_create.',
     category: 'agent',
     inputSchema: {
       type: 'object',
@@ -259,7 +259,7 @@ export const managedAgentTools: MCPTool[] = [
   {
     name: 'managed_agent_status',
     description:
-      'Get the lifecycle state of a managed cloud-agent session: idle/running/error, title, last error. Use when native conversation memory is wrong because you need the cloud session\'s server-side status across turns rather than guessing. For a local WASM agent use wasm_agent_list. Pair with managed_agent_events for the full transcript.',
+      'Get the lifecycle state of a managed cloud-agent session (idle/running/error, title, last error). Use when native conversation memory is wrong because you need the cloud session status server-side across turns. For a local WASM agent use wasm_agent_list; pair with managed_agent_events for the transcript.',
     category: 'agent',
     inputSchema: { type: 'object', properties: { sessionId: { type: 'string', description: 'Session id' } }, required: ['sessionId'] },
     handler: async (input) => {
@@ -274,7 +274,7 @@ export const managedAgentTools: MCPTool[] = [
   {
     name: 'managed_agent_events',
     description:
-      'Fetch the full server-persisted event log of a managed cloud-agent session (user turns, agent thinking, tool_use, tool_result, status) — the transcript/artifact view, the CLOUD counterpart of wasm_agent_files. Use when native Read is wrong because the work happened in Anthropic\'s cloud container, not on disk. For a local WASM agent\'s filesystem use wasm_agent_files. Returns the events plus a summary (assistantText, toolUses).',
+      'Fetch the full server-persisted event log of a managed cloud-agent session (turns, tool_use, tool_result, status) — the transcript/artifact view, the CLOUD counterpart of wasm_agent_files. Use when native Read is wrong because the work ran in the Anthropic cloud container, not on disk. For a local WASM agent filesystem use wasm_agent_files.',
     category: 'agent',
     inputSchema: {
       type: 'object',
@@ -311,7 +311,7 @@ export const managedAgentTools: MCPTool[] = [
   {
     name: 'managed_agent_list',
     description:
-      'List managed cloud-agent sessions on this Anthropic org (id, status, title) — the CLOUD counterpart of wasm_agent_list. Use when native conversation memory is wrong because you need to see which cloud sessions exist (and which are still running / billing) across turns. For local WASM agents use wasm_agent_list. Pair with managed_agent_terminate to clean up idle sessions.',
+      'List managed cloud-agent sessions on this Anthropic org (id, status, title) — the CLOUD counterpart of wasm_agent_list. Use when native conversation memory is wrong because you need to see which cloud sessions still exist and are billing. For local WASM agents use wasm_agent_list; pair with managed_agent_terminate.',
     category: 'agent',
     inputSchema: { type: 'object', properties: { limit: { type: 'number', description: 'Max sessions to return (default 50)' } } },
     handler: async (input) => {
@@ -330,7 +330,7 @@ export const managedAgentTools: MCPTool[] = [
   {
     name: 'managed_agent_terminate',
     description:
-      'Delete a managed cloud-agent session (stops billing for it) — the CLOUD counterpart of wasm_agent_terminate. Use when native nothing applies because a cloud session keeps billing container time + tokens until deleted. For a local WASM agent use wasm_agent_terminate. Optionally also deletes the session\'s environment. Always call this when done with a managed agent.',
+      'Delete a managed cloud-agent session (stops its billing) — the CLOUD counterpart of wasm_agent_terminate. Use when native nothing applies because a cloud session keeps billing until deleted. For a local WASM agent use wasm_agent_terminate. Optionally also deletes the environment; always call when done.',
     category: 'agent',
     inputSchema: {
       type: 'object',

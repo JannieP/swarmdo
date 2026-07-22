@@ -13,7 +13,7 @@ import { parsePatch, applyPatch } from '../apply/apply.js';
 const applyPatchTool: MCPTool = {
   name: 'apply_patch',
   description:
-    'Apply a unified diff to a source string with fuzzy context matching (a forgiving `git apply`). Returns the patched text and per-hunk results — use this when a diff you produced might have drifted line numbers or slightly-off context, instead of hand-editing. Deterministic; pass the file content and the diff for a single file.',
+    'Apply a unified diff to a source string with fuzzy context matching (a forgiving `git apply`); returns patched text and per-hunk results. Use when a diff may have drifted line numbers or off context, instead of hand-editing. Deterministic; one file per call.',
   category: 'apply',
   tags: ['patch', 'diff', 'apply', 'edit'],
   inputSchema: {

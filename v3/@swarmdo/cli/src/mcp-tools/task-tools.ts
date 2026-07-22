@@ -505,7 +505,7 @@ export const taskTools: MCPTool[] = [
     // cloning its spec into a fresh pending task (the original is left intact
     // as history).
     name: 'task_retry',
-    description: 'Re-queue a failed/cancelled/completed task by cloning its spec into a fresh pending task (the original record is kept as history). Use when native TodoWrite is wrong because you need the original task\'s persisted spec (type, priority, assignees, tags) and a stable taskId chain across runs rather than hand-retyping a checklist item. For ad-hoc re-runs, native TodoWrite is fine.',
+    description: 'Re-queue a failed/cancelled/completed task by cloning its spec into a fresh pending task (original kept as history). Use when native TodoWrite is wrong because you need its persisted spec and a stable taskId chain, not a retyped checklist. For ad-hoc re-runs, native TodoWrite is fine.',
     category: 'task',
     inputSchema: {
       type: 'object',

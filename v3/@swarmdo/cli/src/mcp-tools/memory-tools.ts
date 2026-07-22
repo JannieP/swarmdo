@@ -293,7 +293,7 @@ async function ensureInitialized(): Promise<void> {
 export const memoryTools: MCPTool[] = [
   {
     name: 'memory_store',
-    description: 'Persistent key-value store with vector embedding — survives across sessions and is searchable by meaning, not just by file path. Use when native Write is wrong because the data is not a file (e.g. a learned pattern, a decision, a budget config) AND you need to recall it later by semantic query, not by path. Defaults to namespace="default"; pass --upsert=true to update an existing key.',
+    description: 'Persistent, vector-embedded key-value store that survives sessions and is searchable by meaning. Use when native Write is wrong because the data is not a file (a pattern, decision, config) you recall later by semantic query, not by path.',
     category: 'memory',
     inputSchema: {
       type: 'object',
@@ -437,7 +437,7 @@ export const memoryTools: MCPTool[] = [
   },
   {
     name: 'memory_search',
-    description: 'Find stored memories by meaning (vector similarity), not by literal text — finds "JWT auth pattern" when you query "token-based login flow". Use when native Grep is wrong because Grep matches characters and you need to find conceptually-related entries across past sessions. Backed by HNSW index over ONNX embeddings; returns top-k with similarity scores. Pair with smart=true for query expansion + MMR diversity.',
+    description: 'Find stored memories by meaning (vector similarity), not literal text — matches "JWT auth pattern" for a "token-based login flow" query. Use when native Grep is wrong because Grep matches characters, not concepts, across past sessions. Pair with smart=true for query expansion + MMR.',
     category: 'memory',
     inputSchema: {
       type: 'object',
@@ -719,7 +719,7 @@ export const memoryTools: MCPTool[] = [
   },
   {
     name: 'memory_stats',
-    description: 'Get memory storage statistics including HNSW index status Use when native Read/Write is wrong because you need (a) cross-session retrieval by semantic similarity (vector embeddings) not by file path, (b) namespacing across projects without managing directory layout, or (c) the .swarm/memory.db audit trail. For one-shot file I/O, native Read/Write is fine.',
+    description: 'Get memory-store statistics, including HNSW index status. Use when native Read/Write is wrong because the data is memory rows in .swarm/memory.db needing cross-session semantic retrieval, not files. For one-shot file I/O, native Read/Write is fine.',
     category: 'memory',
     inputSchema: {
       type: 'object',
@@ -784,7 +784,7 @@ export const memoryTools: MCPTool[] = [
   },
   {
     name: 'memory_migrate',
-    description: 'Manually trigger migration from legacy JSON store to sql.js Use when native Read/Write is wrong because you need (a) cross-session retrieval by semantic similarity (vector embeddings) not by file path, (b) namespacing across projects without managing directory layout, or (c) the .swarm/memory.db audit trail. For one-shot file I/O, native Read/Write is fine.',
+    description: 'Manually trigger migration from the legacy JSON store to sql.js. Use when native Read/Write is wrong because the data is memory rows in .swarm/memory.db needing cross-session semantic retrieval, not files. For one-shot file I/O, native Read/Write is fine.',
     category: 'memory',
     inputSchema: {
       type: 'object',
@@ -829,7 +829,7 @@ export const memoryTools: MCPTool[] = [
 
   {
     name: 'memory_import_claude',
-    description: 'Import Claude Code auto-memory files into AgentDB with ONNX vector embeddings. Reads ~/.claude/projects/*/memory/*.md files, parses YAML frontmatter, splits into sections, and stores with 384-dim embeddings for semantic search. Use allProjects=true to import from ALL Claude projects. Pass projectPath to override cwd-based detection (#1883 — required when Swarmdo runs in WSL but Claude Code is on Windows). Pass excludeFilePatterns (glob list) or excludeFiles (absolute path list) to skip voice-load-bearing, PII, or persona-restricted files (#1937). Use when native Read/Write is wrong because you need (a) cross-session retrieval by semantic similarity (vector embeddings) not by file path, (b) namespacing across projects without managing directory layout, or (c) the .swarm/memory.db audit trail. For one-shot file I/O, native Read/Write is fine.',
+    description: 'Import Claude Code auto-memory files (~/.claude/projects/*/memory/*.md) into AgentDB as ONNX embeddings for semantic search. Use when native Read/Write is wrong because the data is memory rows in .swarm/memory.db needing cross-session semantic retrieval, not files. For one-shot file I/O, native Read/Write is fine.',
     category: 'memory',
     inputSchema: {
       type: 'object',
@@ -1000,7 +1000,7 @@ export const memoryTools: MCPTool[] = [
 
   {
     name: 'memory_bridge_status',
-    description: 'Show Claude Code memory bridge status — AgentDB vectors, SONA learning, intelligence patterns, and connection health. Use when native Read/Write is wrong because you need (a) cross-session retrieval by semantic similarity (vector embeddings) not by file path, (b) namespacing across projects without managing directory layout, or (c) the .swarm/memory.db audit trail. For one-shot file I/O, native Read/Write is fine.',
+    description: 'Show Claude Code memory bridge status — AgentDB vectors, SONA learning, intelligence patterns, and connection health. Use when native Read/Write is wrong because the data is memory rows in .swarm/memory.db needing cross-session semantic retrieval, not files. For one-shot file I/O, native Read/Write is fine.',
     category: 'memory',
     inputSchema: { type: 'object', properties: {} },
     handler: async () => {
@@ -1096,7 +1096,7 @@ export const memoryTools: MCPTool[] = [
 
   {
     name: 'memory_search_unified',
-    description: 'Search across both Claude Code memories and AgentDB entries using semantic vector similarity. Returns merged, deduplicated results from all namespaces. Use when native Read/Write is wrong because you need (a) cross-session retrieval by semantic similarity (vector embeddings) not by file path, (b) namespacing across projects without managing directory layout, or (c) the .swarm/memory.db audit trail. For one-shot file I/O, native Read/Write is fine.',
+    description: 'Search across both Claude Code memories and AgentDB entries by semantic similarity, returning merged, deduplicated results across namespaces. Use when native Read/Write is wrong because these are memory rows needing cross-session semantic retrieval, not files. For one-shot file I/O, native Read/Write is fine.',
     category: 'memory',
     inputSchema: {
       type: 'object',
@@ -1199,7 +1199,7 @@ export const memoryTools: MCPTool[] = [
     // unregistered `memory_detailed-stats` tool. memory_stats returns a
     // different shape; this returns what the CLI renders.
     name: 'memory_detailed-stats',
-    description: 'Detailed memory-store report — backend, entry count, total bytes, per-namespace counts, and (placeholder) perf metrics. Use when native Read/Glob is wrong because the data lives in .swarm/memory.db, not files, and you want an aggregate health view. For a quick count use memory_stats; for "what is in memory" use memory_list.',
+    description: 'Detailed memory-store report — backend, entry count, total bytes, per-namespace counts, and (placeholder) perf metrics. Use when native Read/Glob is wrong because the data lives in .swarm/memory.db, not files. For a quick count use memory_stats; for "what is in memory" use memory_list.',
     category: 'memory',
     inputSchema: { type: 'object', properties: {} },
     handler: async () => {
@@ -1227,7 +1227,7 @@ export const memoryTools: MCPTool[] = [
     // tool. Removes entries whose TTL has expired. Defaults to a dry run —
     // pass dryRun:false to actually delete.
     name: 'memory_cleanup',
-    description: 'Prune memory entries whose TTL has expired (dry run by default; pass dryRun:false to delete). Use when native rm is wrong because the entries are rows in .swarm/memory.db, not files. For removing a specific known key use memory_delete. Stale/low-quality pruning is delegated to the agentdb consolidation curator (#1916 follow-up).',
+    description: 'Prune memory entries whose TTL has expired (dry run by default; pass dryRun:false to delete). Use when native rm is wrong because the entries are rows in .swarm/memory.db, not files. For removing a specific known key use memory_delete.',
     category: 'memory',
     inputSchema: {
       type: 'object',
@@ -1350,7 +1350,7 @@ export const memoryTools: MCPTool[] = [
     // #1916: `swarmdo memory import <file>` referenced an unregistered tool.
     // Reads a swarmdo-memory-export JSON and re-stores each entry.
     name: 'memory_import',
-    description: 'Import memory entries from a JSON export file (produced by memory_export) into .swarm/memory.db, re-embedding values. Use when native Read is wrong because the data must be re-stored as memory rows (with new embeddings), not just read. For importing Claude Code\'s own memory files use memory_import_claude. Pair with memory_export on the source.',
+    description: 'Import memory entries from a memory_export JSON file into .swarm/memory.db, re-embedding values. Use when native Read is wrong because the data must be re-stored as memory rows with new embeddings, not just read. For Claude Code memory files use memory_import_claude; pair with memory_export on the source.',
     category: 'memory',
     inputSchema: {
       type: 'object',

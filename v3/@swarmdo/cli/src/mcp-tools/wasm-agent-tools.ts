@@ -100,7 +100,7 @@ function extractPluginSkills(manifest: PluginManifest, pluginName: string): Arra
 export const wasmAgentTools: MCPTool[] = [
   {
     name: 'wasm_agent_create',
-    description: 'Create a sandboxed WASM agent with virtual filesystem (no OS access). Optionally use a gallery template. Use when native Task is wrong because the workload needs sandboxed isolation — untrusted code execution, browser-side run, deterministic replay. Pair with wasm_gallery_search to find a published agent, or wasm_agent_create to scaffold a fresh one. For trusted in-process work, native Task is fine.',
+    description: 'Create a sandboxed WASM agent (virtual filesystem, no OS access), optionally from a gallery template. Use when native Task is wrong because the workload needs sandboxed isolation — untrusted code, browser-side run, deterministic replay. For trusted in-process work, use native Task.',
     inputSchema: {
       type: 'object' as const,
       properties: {
@@ -133,7 +133,7 @@ export const wasmAgentTools: MCPTool[] = [
   },
   {
     name: 'wasm_agent_prompt',
-    description: 'Send a prompt to a WASM agent and get a response. Use when native Task is wrong because the workload needs sandboxed isolation — untrusted code execution, browser-side run, deterministic replay. Pair with wasm_gallery_search to find a published agent, or wasm_agent_create to scaffold a fresh one. For trusted in-process work, native Task is fine.',
+    description: 'Send a prompt to a WASM agent and get its response. Use when native Task is wrong because the workload needs sandboxed isolation — untrusted code, browser-side run, deterministic replay. For trusted in-process work, use native Task.',
     inputSchema: {
       type: 'object' as const,
       properties: {
@@ -156,7 +156,7 @@ export const wasmAgentTools: MCPTool[] = [
   },
   {
     name: 'wasm_agent_tool',
-    description: 'Execute a tool on a WASM agent sandbox. Tools: read_file, write_file, edit_file, write_todos, list_files. Use flat format: {tool, path, content, ...}. Use when native Task is wrong because the workload needs sandboxed isolation — untrusted code execution, browser-side run, deterministic replay. Pair with wasm_gallery_search to find a published agent, or wasm_agent_create to scaffold a fresh one. For trusted in-process work, native Task is fine.',
+    description: 'Execute a tool (read_file, write_file, edit_file, write_todos, list_files) on a WASM agent sandbox. Use when native Task is wrong because the workload needs sandboxed isolation — untrusted code, browser-side run, deterministic replay. For trusted in-process work, use native Task.',
     inputSchema: {
       type: 'object' as const,
       properties: {
@@ -185,7 +185,7 @@ export const wasmAgentTools: MCPTool[] = [
   },
   {
     name: 'wasm_agent_list',
-    description: 'List all active WASM agents. Use when native Task is wrong because the workload needs sandboxed isolation — untrusted code execution, browser-side run, deterministic replay. Pair with wasm_gallery_search to find a published agent, or wasm_agent_create to scaffold a fresh one. For trusted in-process work, native Task is fine.',
+    description: 'List all active WASM agents. Use when native Task is wrong because the workload needs sandboxed isolation — untrusted code, browser-side run, deterministic replay. For trusted in-process work, use native Task.',
     inputSchema: { type: 'object' as const, properties: {} },
     handler: async () => {
       try {
@@ -199,7 +199,7 @@ export const wasmAgentTools: MCPTool[] = [
   },
   {
     name: 'wasm_agent_terminate',
-    description: 'Terminate a WASM agent and free resources. Use when native Task is wrong because the workload needs sandboxed isolation — untrusted code execution, browser-side run, deterministic replay. Pair with wasm_gallery_search to find a published agent, or wasm_agent_create to scaffold a fresh one. For trusted in-process work, native Task is fine.',
+    description: 'Terminate a WASM agent and free its resources. Use when native Task is wrong because the workload needs sandboxed isolation — untrusted code, browser-side run, deterministic replay. For trusted in-process work, use native Task.',
     inputSchema: {
       type: 'object' as const,
       properties: {
@@ -220,7 +220,7 @@ export const wasmAgentTools: MCPTool[] = [
   },
   {
     name: 'wasm_agent_files',
-    description: 'Get a WASM agent\'s available tools and info. Use when native Task is wrong because the workload needs sandboxed isolation — untrusted code execution, browser-side run, deterministic replay. Pair with wasm_gallery_search to find a published agent, or wasm_agent_create to scaffold a fresh one. For trusted in-process work, native Task is fine.',
+    description: 'Get a WASM agent\'s available tools and info. Use when native Task is wrong because the workload needs sandboxed isolation — untrusted code, browser-side run, deterministic replay. For trusted in-process work, use native Task.',
     inputSchema: {
       type: 'object' as const,
       properties: {
@@ -242,7 +242,7 @@ export const wasmAgentTools: MCPTool[] = [
   },
   {
     name: 'wasm_agent_export',
-    description: 'Export a WASM agent\'s full state (config, filesystem, conversation) as JSON. Use when native Task is wrong because the workload needs sandboxed isolation — untrusted code execution, browser-side run, deterministic replay. Pair with wasm_gallery_search to find a published agent, or wasm_agent_create to scaffold a fresh one. For trusted in-process work, native Task is fine.',
+    description: 'Export a WASM agent\'s full state (config, filesystem, conversation) as JSON. Use when native Task is wrong because the workload needs sandboxed isolation — untrusted code, browser-side run, deterministic replay. For trusted in-process work, use native Task.',
     inputSchema: {
       type: 'object' as const,
       properties: {
@@ -263,7 +263,7 @@ export const wasmAgentTools: MCPTool[] = [
   },
   {
     name: 'wasm_gallery_list',
-    description: 'List all available WASM agent gallery templates (Coder, Researcher, Tester, Reviewer, Security, Swarm). Use when native Task is wrong because the workload needs sandboxed isolation — untrusted code execution, browser-side run, deterministic replay. Pair with wasm_gallery_search to find a published agent, or wasm_agent_create to scaffold a fresh one. For trusted in-process work, native Task is fine.',
+    description: 'List all WASM agent gallery templates (Coder, Researcher, Tester, Reviewer, Security, Swarm). Use when native Task is wrong because the workload needs sandboxed isolation — untrusted code, browser-side run, deterministic replay. For trusted in-process work, use native Task.',
     inputSchema: { type: 'object' as const, properties: {} },
     handler: async () => {
       try {
@@ -277,7 +277,7 @@ export const wasmAgentTools: MCPTool[] = [
   },
   {
     name: 'wasm_gallery_search',
-    description: 'Search WASM agent gallery templates by query. Use when native Task is wrong because the workload needs sandboxed isolation — untrusted code execution, browser-side run, deterministic replay. Pair with wasm_gallery_search to find a published agent, or wasm_agent_create to scaffold a fresh one. For trusted in-process work, native Task is fine.',
+    description: 'Search WASM agent gallery templates by query. Use when native Task is wrong because the workload needs sandboxed isolation — untrusted code, browser-side run, deterministic replay. For trusted in-process work, use native Task.',
     inputSchema: {
       type: 'object' as const,
       properties: {
@@ -298,7 +298,7 @@ export const wasmAgentTools: MCPTool[] = [
   },
   {
     name: 'wasm_gallery_create',
-    description: 'Create a WASM agent from a gallery template. Use when native Task is wrong because the workload needs sandboxed isolation — untrusted code execution, browser-side run, deterministic replay. Pair with wasm_gallery_search to find a published agent, or wasm_agent_create to scaffold a fresh one. For trusted in-process work, native Task is fine.',
+    description: 'Create a WASM agent from a gallery template. Use when native Task is wrong because the workload needs sandboxed isolation — untrusted code, browser-side run, deterministic replay. For trusted in-process work, use native Task.',
     inputSchema: {
       type: 'object' as const,
       properties: {
@@ -322,14 +322,7 @@ export const wasmAgentTools: MCPTool[] = [
 
   {
     name: 'wasm_agent_compose',
-    description: [
-      'Compose an RVF container with explicit skills, MCP tool descriptors, prompts, and tools.',
-      'Returns base64-encoded RVF bytes + a manifest of what was packed.',
-      'SECURITY: mcpTools accepts only an explicit allowlist — never pass "*".',
-      'Destructive tools (memory_delete, *_shutdown, federation_*, etc.) require',
-      'mcpToolsAllowDestructive: true.',
-      'Use includePlugins to auto-wire skills from plugins that declare rvagent.exposeSkillsAsTools.',
-    ].join(' '),
+    description: 'Compose an RVF container (skills, MCP tool descriptors, prompts, tools) into base64 RVF bytes plus a packed manifest. mcpTools takes an explicit allowlist only (never "*"); destructive tools require mcpToolsAllowDestructive: true. includePlugins auto-wires plugin-declared skills.',
     inputSchema: {
       type: 'object' as const,
       properties: {

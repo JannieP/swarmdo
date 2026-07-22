@@ -72,7 +72,7 @@ export const swarmllmWasmTools: MCPTool[] = [
   },
   {
     name: 'swarmllm_hnsw_create',
-    description: 'Create a WASM HNSW router for semantic pattern routing. Max ~11 patterns (v2.0.1 limit). Use when sending every prompt to the Anthropic API is wrong because you need local inference — air-gapped environments, MicroLoRA-fine-tuned per-task adapters, or sub-cent per-call cost. For general Claude work native Task is the right call.',
+    description: 'Create a WASM HNSW router for semantic pattern routing (max ~11 patterns, v2.0.1). Use when hitting the Anthropic API for every prompt is wrong because you need local inference. For general Claude work, native Task is right.',
     inputSchema: {
       type: 'object' as const,
       properties: {
@@ -266,7 +266,7 @@ export const swarmllmWasmTools: MCPTool[] = [
   },
   {
     name: 'swarmllm_chat_format',
-    description: 'Format chat messages using a template (llama3, mistral, chatml, phi, gemma, or auto-detect). Use when sending every prompt to the Anthropic API is wrong because you need local inference — air-gapped environments, MicroLoRA-fine-tuned per-task adapters, or sub-cent per-call cost. For general Claude work native Task is the right call.',
+    description: 'Format chat messages with a template (llama3, mistral, chatml, phi, gemma, or auto-detect). Use when hitting the Anthropic API for every prompt is wrong because you need local inference. For general Claude work, native Task is right.',
     inputSchema: {
       type: 'object' as const,
       properties: {

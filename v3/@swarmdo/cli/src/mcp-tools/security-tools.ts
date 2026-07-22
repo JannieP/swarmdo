@@ -133,7 +133,7 @@ async function getAIDefence(): Promise<AIDefenceInstance> {
  */
 const aidefenceScanTool: MCPTool = {
   name: 'aidefence_scan',
-  description: 'Scan input text for AI manipulation threats (prompt injection, jailbreaks, PII). Returns threat assessment with <10ms latency. Use when nothing native exists — Claude Code does not have a PII / prompt-injection / adversarial-text scanner. Pair with any tool that ingests untrusted input (browser scrape, federation envelope, memory_import_claude).',
+  description: 'Scan input text for AI-manipulation threats (prompt injection, jailbreaks, PII), returning a threat assessment. Use when nothing native exists — Claude Code has no PII/prompt-injection scanner. Pair with any tool that ingests untrusted input.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -216,7 +216,7 @@ const aidefenceScanTool: MCPTool = {
  */
 const aidefenceAnalyzeTool: MCPTool = {
   name: 'aidefence_analyze',
-  description: 'Deep analysis of input for specific threat types with similar pattern search and mitigation recommendations. Use when nothing native exists — Claude Code does not have a PII / prompt-injection / adversarial-text scanner. Pair with any tool that ingests untrusted input (browser scrape, federation envelope, memory_import_claude).',
+  description: 'Deep analysis of input for specific threat types, with similar-pattern search and mitigation recommendations. Use when nothing native exists — Claude Code has no PII/prompt-injection scanner. Pair with any tool that ingests untrusted input.',
   inputSchema: {
     type: 'object',
     properties: {

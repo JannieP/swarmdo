@@ -487,7 +487,7 @@ export const sessionTools: MCPTool[] = [
     // `session_export` tool. Writes the session JSON to a file (if given) and
     // returns the session payload.
     name: 'session_export',
-    description: 'Export a saved session (agents, tasks, memory snapshot) to a JSON file and/or return the payload. Use when native Write is wrong because the data is the structured session record (not a freeform file) and you want it serialized consistently for transfer/backup. For writing arbitrary content, native Write is fine. Pair with session_import on the other end.',
+    description: 'Export a saved session to a JSON file and/or return the payload. Use when native Write is wrong because this is the structured session record, not freeform content — for arbitrary content, native Write is fine. Pair with session_import.',
     category: 'session',
     inputSchema: {
       type: 'object',
@@ -517,7 +517,7 @@ export const sessionTools: MCPTool[] = [
     // #1916: `swarmdo session import <file>` referenced an unregistered
     // `session_import` tool. Reads a session JSON and re-saves it locally.
     name: 'session_import',
-    description: 'Import a session JSON file (produced by session_export) into the local session store and optionally activate it. Use when native Read is wrong because the file is a structured session record that must be re-registered (new id, stats recomputed) rather than just read. For reading the file, native Read is fine. Pair with session_export on the source.',
+    description: 'Import a session JSON (from session_export) into the local store, optionally activating it. Use when native Read is wrong because the record must be re-registered (new id, recomputed stats), not just read; for reading, native Read is fine.',
     category: 'session',
     inputSchema: {
       type: 'object',
