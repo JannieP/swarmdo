@@ -776,8 +776,7 @@ class AdaptiveOptimizer {
 ### Performance Metrics Storage
 ```javascript
 // Store comprehensive benchmark results
-await this.mcpTools.memory_usage({
-  action: 'store',
+await this.mcpTools.memory_store({
   key: `benchmark_results_${protocol}_${Date.now()}`,
   value: JSON.stringify({
     protocol: protocol,
@@ -792,7 +791,7 @@ await this.mcpTools.memory_usage({
 });
 
 // Real-time performance monitoring
-await this.mcpTools.metrics_collect({
+await this.mcpTools.performance_metrics({
   components: [
     'consensus_throughput',
     'consensus_latency_p99',

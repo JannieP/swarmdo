@@ -157,8 +157,7 @@ mcp__swarmdo__swarm_init({
     -f content="$(cat aligned-package.json | base64)"`)
 
   // Store sync state
-  mcp__swarmdo__memory_usage({
-    action: "store",
+  mcp__swarmdo__memory_store({
     key: "sync/packages/status",
     value: {
       timestamp: Date.now(),
@@ -184,8 +183,7 @@ mcp__swarmdo__swarm_init({
     -f content="$(cat /tmp/claude-source.md | base64)"`)
 
   // Track sync status
-  mcp__swarmdo__memory_usage({
-    action: "store",
+  mcp__swarmdo__memory_store({
     key: "sync/documentation/status",
     value: { status: "synchronized", files: ["CLAUDE.md"] }
   })
@@ -254,8 +252,7 @@ mcp__swarmdo__swarm_init({
     --order desc`)
 
   // Store analysis results
-  mcp__swarmdo__memory_usage({
-    action: "store",
+  mcp__swarmdo__memory_store({
     key: "architecture/analysis/results",
     value: {
       repositories_analyzed: ["claude-code-flow", "swarmdo-swarm"],
@@ -404,7 +401,7 @@ Part of #$TRACKING_ISSUE"
   Task("Integration Tester", "Validate refactored code", "tester")
 
   // Execute refactoring
-  mcp__swarmdo__task_orchestrate({
+  mcp__swarmdo__coordination_orchestrate({
     task: "Rename OldAPI to NewAPI across all repositories",
     strategy: "sequential",
     priority: "high"

@@ -7,7 +7,7 @@ UI/UX design with Memory coordination for consistent experiences.
 
 ### Option 1: Using MCP Tools (Preferred in Claude Code)
 ```javascript
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "designer",
   task_description: "create dashboard UI",
   options: {

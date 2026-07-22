@@ -347,15 +347,14 @@ mcp__swarmdo__agent_spawn {
 }
 
 // Orchestrate development tasks
-mcp__swarmdo__task_orchestrate {
+mcp__swarmdo__coordination_orchestrate {
   task: "implement_oauth_system",
   strategy: "adaptive",
   priority: "high"
 }
 
 // Store successful patterns
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   namespace: "code-patterns",
   key: "oauth_implementation_plan",
   value: JSON.stringify(successful_plan)

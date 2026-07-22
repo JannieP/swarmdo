@@ -120,7 +120,7 @@ Multi-agent task orchestration with TodoWrite/Task/Memory coordination.
 
 **Usage**:
 ```javascript
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "orchestrator",
   task_description: "coordinate feature development",
   options: { parallel: true, monitor: true }
@@ -180,7 +180,7 @@ Autonomous code generation with batch file operations.
 
 **Usage**:
 ```javascript
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "coder",
   task_description: "implement user authentication with JWT",
   options: {
@@ -216,7 +216,7 @@ System design with Memory-based coordination.
 
 **Usage**:
 ```javascript
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "architect",
   task_description: "design scalable e-commerce platform",
   options: {
@@ -253,7 +253,7 @@ Test-driven development with comprehensive testing.
 
 **Usage**:
 ```javascript
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "tdd",
   task_description: "shopping cart feature with payment integration",
   options: {
@@ -292,7 +292,7 @@ Code review using batch file analysis.
 
 **Usage**:
 ```javascript
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "reviewer",
   task_description: "review authentication module PR #123",
   options: {
@@ -333,7 +333,7 @@ Deep research with parallel WebSearch/WebFetch and Memory coordination.
 
 **Usage**:
 ```javascript
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "researcher",
   task_description: "research microservices best practices 2024",
   options: {
@@ -438,7 +438,7 @@ Knowledge management and context preservation.
 
 ```javascript
 // Basic mode execution
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "<mode-name>",
   task_description: "<task description>",
   options: {
@@ -460,7 +460,7 @@ mcp__swarmdo__agent_spawn {
 }
 
 // Monitor execution
-mcp__swarmdo__swarm_monitor {
+mcp__swarmdo__swarm_status {
   swarmId: "current",
   interval: 5000
 }
@@ -568,7 +568,7 @@ mcp__swarmdo__workflow_create {
 **Best for**: Independent tasks that can run concurrently
 
 ```javascript
-mcp__swarmdo__task_orchestrate {
+mcp__swarmdo__coordination_orchestrate {
   task: "build full-stack application",
   strategy: "parallel",
   dependencies: {
@@ -606,19 +606,19 @@ mcp__swarmdo__swarm_init {
 }
 
 // Step 2: Research and planning
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "researcher",
   task_description: "research testing best practices for feature X"
 }
 
 // Step 3: Architecture design
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "architect",
   task_description: "design testable architecture for feature X"
 }
 
 // Step 4: TDD implementation
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "tdd",
   task_description: "implement feature X with 90% coverage",
   options: {
@@ -629,7 +629,7 @@ mcp__swarmdo__sparc_mode {
 }
 
 // Step 5: Code review
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "reviewer",
   task_description: "review feature X implementation",
   options: {
@@ -639,7 +639,7 @@ mcp__swarmdo__sparc_mode {
 }
 
 // Step 6: Optimization
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "optimizer",
   task_description: "optimize feature X performance"
 }
@@ -649,21 +649,21 @@ mcp__swarmdo__sparc_mode {
 
 ```javascript
 // RED: Write failing test
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "tester",
   task_description: "create failing test for shopping cart add item",
   options: { expect_failure: true }
 }
 
 // GREEN: Minimal implementation
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "coder",
   task_description: "implement minimal code to pass test",
   options: { minimal: true }
 }
 
 // REFACTOR: Improve code quality
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "coder",
   task_description: "refactor shopping cart implementation",
   options: { maintain_tests: true }
@@ -680,8 +680,7 @@ mcp__swarmdo__sparc_mode {
 
 ```javascript
 // Store architectural decisions
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   namespace: "architecture",
   key: "api-design-v1",
   value: JSON.stringify(apiDesign),
@@ -689,8 +688,7 @@ mcp__swarmdo__memory_usage {
 }
 
 // Retrieve in subsequent agents
-mcp__swarmdo__memory_usage {
-  action: "retrieve",
+mcp__swarmdo__memory_retrieve {
   namespace: "architecture",
   key: "api-design-v1"
 }
@@ -779,34 +777,34 @@ mcp__swarmdo__swarm_init {
 }
 
 // Architecture phase
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "architect",
   task_description: "design REST API with authentication",
   options: { memory_enabled: true }
 }
 
 // Research phase
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "researcher",
   task_description: "research authentication best practices"
 }
 
 // Implementation phase
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "coder",
   task_description: "implement Express API with JWT auth",
   options: { test_driven: true }
 }
 
 // Testing phase
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "tdd",
   task_description: "comprehensive API tests",
   options: { coverage_target: 90 }
 }
 
 // Review phase
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "reviewer",
   task_description: "security and performance review",
   options: { security_check: true }
@@ -831,7 +829,7 @@ TodoWrite {
 
 ```javascript
 // Research phase
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "researcher",
   task_description: "research AI-powered search implementations",
   options: {
@@ -841,27 +839,27 @@ mcp__swarmdo__sparc_mode {
 }
 
 // Innovation phase
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "innovator",
   task_description: "propose novel search algorithm",
   options: { memory_enabled: true }
 }
 
 // Architecture phase
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "architect",
   task_description: "design scalable search system"
 }
 
 // Implementation phase
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "coder",
   task_description: "implement search algorithm",
   options: { test_driven: true }
 }
 
 // Documentation phase
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "documenter",
   task_description: "document search system architecture and API"
 }
@@ -871,33 +869,33 @@ mcp__swarmdo__sparc_mode {
 
 ```javascript
 // Analysis phase
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "analyzer",
   task_description: "analyze legacy codebase dependencies"
 }
 
 // Planning phase
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "orchestrator",
   task_description: "plan incremental refactoring strategy"
 }
 
 // Testing phase (create safety net)
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "tester",
   task_description: "create comprehensive test suite for legacy code",
   options: { coverage_target: 80 }
 }
 
 // Refactoring phase
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "coder",
   task_description: "refactor module X with modern patterns",
   options: { maintain_tests: true }
 }
 
 // Review phase
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "reviewer",
   task_description: "validate refactoring maintains functionality"
 }
@@ -1024,19 +1022,19 @@ mcp__swarmdo__github_pr_manage {
 
 ```javascript
 // Real-time swarm monitoring
-mcp__swarmdo__swarm_monitor {
+mcp__swarmdo__swarm_status {
   swarmId: "current",
   interval: 5000
 }
 
 // Bottleneck analysis
-mcp__swarmdo__bottleneck_analyze {
+mcp__swarmdo__performance_bottleneck {
   component: "api-layer",
   metrics: ["latency", "throughput", "errors"]
 }
 
 // Token usage tracking
-mcp__swarmdo__token_usage {
+mcp__swarmdo__performance_metrics {
   operation: "feature-development",
   timeframe: "24h"
 }
@@ -1092,13 +1090,13 @@ npx swarmdo sparc batch <modes> "task"
 mcp__swarmdo__swarm_init { topology: "hierarchical" }
 
 // Execute mode
-mcp__swarmdo__sparc_mode { mode: "coder", task_description: "..." }
+mcp__swarmdo__workflow_create { mode: "coder", task_description: "..." }
 
 // Monitor progress
-mcp__swarmdo__swarm_monitor { interval: 5000 }
+mcp__swarmdo__swarm_status { interval: 5000 }
 
 // Store in memory
-mcp__swarmdo__memory_usage { action: "store", key: "...", value: "..." }
+mcp__swarmdo__memory_store { action: "store", key: "...", value: "..." }
 ```
 
 ---

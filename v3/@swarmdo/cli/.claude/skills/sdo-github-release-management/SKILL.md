@@ -155,7 +155,7 @@ gh release create $(npm pkg get version) \
   Bash("gh api repos/:owner/:repo/git/refs --method POST -f ref='refs/heads/release/v2.0.0' -f sha=$(gh api repos/:owner/:repo/git/refs/heads/main --jq '.object.sha')")
 
   // Orchestrate release preparation
-  mcp__swarmdo__task_orchestrate {
+  mcp__swarmdo__coordination_orchestrate {
     task: "Prepare release v2.0.0 with comprehensive testing and validation",
     strategy: "sequential",
     priority: "critical",
@@ -187,8 +187,7 @@ gh release create $(npm pkg get version) \
   ]}
 
   // Store release state
-  mcp__swarmdo__memory_usage {
-    action: "store",
+  mcp__swarmdo__memory_store {
     key: "release/v2.0.0/status",
     value: JSON.stringify({
       version: "2.0.0",
@@ -391,7 +390,7 @@ npx swarmdo github multi-release \
   Bash("gh api repos/org/cli/dispatches --method POST -f event_type='release' -F client_payload[version]=v1.5.0")
 
   // Monitor all releases
-  mcp__swarmdo__swarm_monitor { interval: 5, duration: 300 }
+  mcp__swarmdo__swarm_status { interval: 5, duration: 300 }
 ```
 
 ### Hotfix Emergency Procedures

@@ -44,19 +44,19 @@ Use `new_task` to assign:
 ### Option 1: Using MCP Tools (Preferred in Claude Code)
 ```javascript
 // Run SPARC orchestrator (default)
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "sparc",
   task_description: "build complete authentication system"
 }
 
 // Run a specific mode
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "architect",
   task_description: "design API structure"
 }
 
 // TDD workflow
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "tdd",
   task_description: "implement user authentication",
   options: {workflow: "full"}
@@ -102,16 +102,14 @@ npx swarmdo@alpha sparc run <mode> "your task"
 ### Using MCP Tools (Preferred)
 ```javascript
 // Store specifications
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "spec_auth",
   value: "OAuth2 + JWT requirements",
   namespace: "spec"
 }
 
 // Store architectural decisions
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "arch_decisions",
   value: "Microservices with API Gateway",
   namespace: "architecture"

@@ -40,7 +40,7 @@ mcp__github__create_branch {
 }
 
 // Orchestrate release preparation
-mcp__swarmdo__task_orchestrate {
+mcp__swarmdo__coordination_orchestrate {
   task: "Prepare release v1.0.72 with comprehensive testing and validation",
   strategy: "sequential",
   priority: "critical"
@@ -222,8 +222,7 @@ This release is production-ready with comprehensive validation and testing.
   ]}
   
   // Store release state
-  mcp__swarmdo__memory_usage {
-    action: "store", 
+  mcp__swarmdo__memory_store {
     key: "release/v1.0.72/status",
     value: {
       timestamp: Date.now(),

@@ -102,7 +102,7 @@ plan:
 ### Task Orchestration
 ```javascript
 // Orchestrate complex tasks
-mcp__swarmdo__task_orchestrate {
+mcp__swarmdo__coordination_orchestrate {
   task: "Implement authentication system",
   strategy: "parallel",
   priority: "high",
@@ -110,8 +110,7 @@ mcp__swarmdo__task_orchestrate {
 }
 
 // Share task breakdown
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/planner/task-breakdown",
   namespace: "coordination",
   value: JSON.stringify({
@@ -135,8 +134,7 @@ mcp__swarmdo__task_status {
 ### Memory Coordination
 ```javascript
 // Report planning status
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/planner/status",
   namespace: "coordination",
   value: JSON.stringify({

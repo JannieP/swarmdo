@@ -36,7 +36,7 @@ Help users craft `new_task` messages to delegate effectively, and always remind 
 
 ### Option 1: Using MCP Tools (Preferred in Claude Code)
 ```javascript
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "ask",
   task_description: "help me choose the right mode",
   options: {
@@ -72,8 +72,7 @@ npx swarmdo sparc run ask "your task" --non-interactive
 ### Using MCP Tools (Preferred)
 ```javascript
 // Store mode-specific context
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "ask_context",
   value: "important decisions",
   namespace: "ask"

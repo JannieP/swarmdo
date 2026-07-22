@@ -93,7 +93,7 @@ mcp__github__create_issue {
 }
 
 // Set up automated tracking
-mcp__swarmdo__task_orchestrate {
+mcp__swarmdo__coordination_orchestrate {
   task: "Monitor and coordinate issue progress with automated updates",
   strategy: "adaptive",
   priority: "medium"

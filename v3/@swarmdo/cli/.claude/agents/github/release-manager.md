@@ -24,8 +24,8 @@ tools:
   - mcp__github__create_issue
   - mcp__swarmdo__swarm_init
   - mcp__swarmdo__agent_spawn
-  - mcp__swarmdo__task_orchestrate
-  - mcp__swarmdo__memory_usage
+  - mcp__swarmdo__coordination_orchestrate
+  - mcp__swarmdo__memory_store
   - mcp__agentic-flow__agentdb_pattern_store
   - mcp__agentic-flow__agentdb_pattern_search
   - mcp__agentic-flow__agentdb_pattern_stats
@@ -307,7 +307,7 @@ mcp__github__create_branch {
 }
 
 // Orchestrate release preparation
-mcp__swarmdo__task_orchestrate {
+mcp__swarmdo__coordination_orchestrate {
   task: "Prepare release v1.0.72 with comprehensive testing and validation",
   strategy: "sequential",
   priority: "critical"
@@ -489,8 +489,7 @@ This release is production-ready with comprehensive validation and testing.
   ]}
   
   // Store release state
-  mcp__swarmdo__memory_usage {
-    action: "store", 
+  mcp__swarmdo__memory_store {
     key: "release/v1.0.72/status",
     value: {
       timestamp: Date.now(),

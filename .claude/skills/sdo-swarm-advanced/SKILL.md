@@ -28,7 +28,7 @@ mcp__swarmdo__swarm_init({ topology: "mesh", maxAgents: 6 })
 mcp__swarmdo__agent_spawn({ type: "researcher", name: "Agent 1" })
 
 // 3. Orchestrate tasks
-mcp__swarmdo__task_orchestrate({ task: "...", strategy: "parallel" })
+mcp__swarmdo__coordination_orchestrate({ task: "...", strategy: "parallel" })
 ```
 
 ## Core Concepts
@@ -120,7 +120,7 @@ researchAgents.forEach(agent => {
 #### Phase 1: Information Gathering
 ```javascript
 // Parallel information collection
-mcp__swarmdo__parallel_execute({
+mcp__swarmdo__coordination_orchestrate({
   "tasks": [
     {
       "id": "web-search",
@@ -142,7 +142,7 @@ mcp__swarmdo__parallel_execute({
 })
 
 // Store research findings in memory
-mcp__swarmdo__memory_usage({
+mcp__swarmdo__memory_store({
   "action": "store",
   "key": "research-findings-" + Date.now(),
   "value": JSON.stringify(findings),
@@ -199,7 +199,7 @@ mcp__swarmdo__neural_patterns({
 })
 
 // Store connections for future use
-mcp__swarmdo__memory_usage({
+mcp__swarmdo__memory_store({
   "action": "store",
   "key": "knowledge-graph-X",
   "value": JSON.stringify(knowledgeGraph),
@@ -211,7 +211,7 @@ mcp__swarmdo__memory_usage({
 #### Phase 4: Report Generation
 ```javascript
 // Orchestrate report generation
-mcp__swarmdo__task_orchestrate({
+mcp__swarmdo__coordination_orchestrate({
   "task": "generate comprehensive research report",
   "strategy": "sequential",
   "priority": "high",
@@ -287,7 +287,7 @@ devTeam.forEach(member => {
 #### Phase 1: Architecture and Design
 ```javascript
 // System architecture design
-mcp__swarmdo__task_orchestrate({
+mcp__swarmdo__coordination_orchestrate({
   "task": "design system architecture for REST API",
   "strategy": "sequential",
   "priority": "critical",
@@ -295,7 +295,7 @@ mcp__swarmdo__task_orchestrate({
 })
 
 // Store architecture decisions
-mcp__swarmdo__memory_usage({
+mcp__swarmdo__memory_store({
   "action": "store",
   "key": "architecture-decisions",
   "value": JSON.stringify(architectureDoc),
@@ -306,7 +306,7 @@ mcp__swarmdo__memory_usage({
 #### Phase 2: Parallel Implementation
 ```javascript
 // Parallel development tasks
-mcp__swarmdo__parallel_execute({
+mcp__swarmdo__coordination_orchestrate({
   "tasks": [
     {
       "id": "backend-api",
@@ -332,7 +332,7 @@ mcp__swarmdo__parallel_execute({
 })
 
 // Monitor development progress
-mcp__swarmdo__swarm_monitor({
+mcp__swarmdo__swarm_status({
   "swarmId": "dev-swarm",
   "interval": 5000
 })
@@ -479,7 +479,7 @@ mcp__swarmdo__pattern_recognize({
 })
 
 // Store test plan
-mcp__swarmdo__memory_usage({
+mcp__swarmdo__memory_store({
   "action": "store",
   "key": "test-plan-" + Date.now(),
   "value": JSON.stringify(testPlan),
@@ -490,7 +490,7 @@ mcp__swarmdo__memory_usage({
 #### Phase 2: Parallel Test Execution
 ```javascript
 // Execute all test suites in parallel
-mcp__swarmdo__parallel_execute({
+mcp__swarmdo__coordination_orchestrate({
   "tasks": [
     {
       "id": "unit-tests",
@@ -530,12 +530,12 @@ mcp__swarmdo__batch_process({
 #### Phase 3: Performance and Security
 ```javascript
 // Run performance benchmarks
-mcp__swarmdo__benchmark_run({
+mcp__swarmdo__performance_benchmark({
   "suite": "comprehensive-performance"
 })
 
 // Bottleneck analysis
-mcp__swarmdo__bottleneck_analyze({
+mcp__swarmdo__performance_bottleneck({
   "component": "application",
   "metrics": ["response-time", "throughput", "memory", "cpu"]
 })
@@ -555,7 +555,7 @@ mcp__swarmdo__error_analysis({
 #### Phase 4: Monitoring and Reporting
 ```javascript
 // Real-time test monitoring
-mcp__swarmdo__swarm_monitor({
+mcp__swarmdo__swarm_status({
   "swarmId": "testing-swarm",
   "interval": 2000
 })
@@ -567,12 +567,12 @@ mcp__swarmdo__performance_report({
 })
 
 // Get test results
-mcp__swarmdo__task_results({
+mcp__swarmdo__task_status({
   "taskId": "test-execution-001"
 })
 
 // Trend analysis
-mcp__swarmdo__trend_analysis({
+mcp__swarmdo__performance_report({
   "metric": "test-coverage",
   "period": "30d"
 })
@@ -644,7 +644,7 @@ analysisTeam.forEach(analyst => {
 ### Analysis Workflow
 ```javascript
 // Parallel analysis execution
-mcp__swarmdo__parallel_execute({
+mcp__swarmdo__coordination_orchestrate({
   "tasks": [
     { "id": "analyze-code", "command": "analyze codebase structure and quality" },
     { "id": "analyze-security", "command": "scan for security vulnerabilities" },
@@ -671,14 +671,14 @@ mcp__swarmdo__cost_analysis({
 
 ```javascript
 // Setup fault tolerance for all agents
-mcp__swarmdo__daa_fault_tolerance({
+mcp__swarmdo__coordination_consensus({
   "agentId": "all",
   "strategy": "auto-recovery"
 })
 
 // Error handling pattern
 try {
-  await mcp__swarmdo__task_orchestrate({
+  await mcp__swarmdo__coordination_orchestrate({
     "task": "complex operation",
     "strategy": "parallel",
     "priority": "high"
@@ -694,7 +694,7 @@ try {
 
   // Auto-recovery attempt
   if (status.healthy) {
-    await mcp__swarmdo__task_orchestrate({
+    await mcp__swarmdo__coordination_orchestrate({
       "task": "retry failed operation",
       "strategy": "sequential"
     })
@@ -711,7 +711,7 @@ mcp__swarmdo__memory_persist({
 })
 
 // Namespace management for different swarms
-mcp__swarmdo__memory_namespace({
+mcp__swarmdo__memory_store({
   "namespace": "research-swarm",
   "action": "create"
 })
@@ -776,7 +776,7 @@ mcp__swarmdo__workflow_create({
 })
 
 // Setup automation rules
-mcp__swarmdo__automation_setup({
+mcp__swarmdo__workflow_create({
   "rules": [
     {
       "trigger": "file-changed",
@@ -801,12 +801,12 @@ mcp__swarmdo__trigger_setup({
 
 ```javascript
 // Topology optimization
-mcp__swarmdo__topology_optimize({
+mcp__swarmdo__coordination_topology({
   "swarmId": "current-swarm"
 })
 
 // Load balancing
-mcp__swarmdo__load_balance({
+mcp__swarmdo__coordination_load_balance({
   "swarmId": "development-swarm",
   "tasks": taskQueue
 })
@@ -817,7 +817,7 @@ mcp__swarmdo__coordination_sync({
 })
 
 // Auto-scaling
-mcp__swarmdo__swarm_scale({
+mcp__swarmdo__agent_spawn({
   "swarmId": "development-swarm",
   "targetSize": 12
 })
@@ -827,28 +827,28 @@ mcp__swarmdo__swarm_scale({
 
 ```javascript
 // Real-time swarm monitoring
-mcp__swarmdo__swarm_monitor({
+mcp__swarmdo__swarm_status({
   "swarmId": "active-swarm",
   "interval": 3000
 })
 
 // Collect comprehensive metrics
-mcp__swarmdo__metrics_collect({
+mcp__swarmdo__performance_metrics({
   "components": ["agents", "tasks", "memory", "performance"]
 })
 
 // Health monitoring
-mcp__swarmdo__health_check({
+mcp__swarmdo__swarm_health({
   "components": ["swarm", "agents", "neural", "memory"]
 })
 
 // Usage statistics
-mcp__swarmdo__usage_stats({
+mcp__swarmdo__performance_metrics({
   "component": "swarm-orchestration"
 })
 
 // Trend analysis
-mcp__swarmdo__trend_analysis({
+mcp__swarmdo__performance_report({
   "metric": "agent-performance",
   "period": "7d"
 })

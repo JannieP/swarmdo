@@ -16,7 +16,7 @@ capabilities:
 tools:
   - mcp__swarmdo__swarm_init
   - mcp__swarmdo__agent_spawn
-  - mcp__swarmdo__task_orchestrate
+  - mcp__swarmdo__coordination_orchestrate
   - mcp__agentic-flow__agentdb_pattern_store
   - mcp__agentic-flow__agentdb_pattern_search
   - mcp__agentic-flow__agentdb_pattern_stats

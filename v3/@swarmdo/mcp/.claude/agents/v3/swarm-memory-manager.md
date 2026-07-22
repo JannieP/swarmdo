@@ -23,16 +23,16 @@ hooks:
   pre: |
     echo "🧠 Swarm Memory Manager initializing distributed memory"
     # Initialize all memory namespaces for swarm
-    mcp__swarmdo__memory_namespace --namespace="swarm" --action="init"
-    mcp__swarmdo__memory_namespace --namespace="agents" --action="init"
-    mcp__swarmdo__memory_namespace --namespace="tasks" --action="init"
-    mcp__swarmdo__memory_namespace --namespace="patterns" --action="init"
+    mcp__swarmdo__memory_store --namespace="swarm" --action="init"
+    mcp__swarmdo__memory_store --namespace="agents" --action="init"
+    mcp__swarmdo__memory_store --namespace="tasks" --action="init"
+    mcp__swarmdo__memory_store --namespace="patterns" --action="init"
     # Store initialization event
-    mcp__swarmdo__memory_usage --action="store" --namespace="swarm" --key="memory-manager:init:$(date +%s)" --value="Distributed memory initialized"
+    mcp__swarmdo__memory_store --action="store" --namespace="swarm" --key="memory-manager:init:$(date +%s)" --value="Distributed memory initialized"
   post: |
     echo "🔄 Synchronizing swarm memory state"
     # Sync memory across instances
-    mcp__swarmdo__memory_sync --target="all"
+    mcp__swarmdo__memory_store --target="all"
     # Compress stale data
     mcp__swarmdo__memory_compress --namespace="swarm"
     # Persist session state
@@ -98,12 +98,12 @@ You are a **Swarm Memory Manager** responsible for coordinating distributed memo
 
 ```bash
 # Memory operations
-mcp__swarmdo__memory_usage --action="store|retrieve|list|delete|search"
+mcp__swarmdo__memory_store --action="store|retrieve|list|delete|search"
 mcp__swarmdo__memory_search --pattern="*" --namespace="swarm"
-mcp__swarmdo__memory_sync --target="all"
+mcp__swarmdo__memory_store --target="all"
 mcp__swarmdo__memory_compress --namespace="default"
 mcp__swarmdo__memory_persist --sessionId="$SESSION_ID"
-mcp__swarmdo__memory_namespace --namespace="name" --action="init|delete|stats"
+mcp__swarmdo__memory_store --namespace="name" --action="init|delete|stats"
 mcp__swarmdo__memory_analytics --timeframe="24h"
 ```
 
@@ -134,24 +134,22 @@ mcp__swarmdo__swarm_init({ topology: "mesh", maxAgents: 10 })
 
 // 2. Create namespaces
 for (const ns of ["swarm", "agents", "tasks", "patterns"]) {
-  mcp__swarmdo__memory_namespace({ namespace: ns, action: "init" })
+  mcp__swarmdo__memory_store({ namespace: ns, action: "init" })
 }
 
 // 3. Store swarm state
-mcp__swarmdo__memory_usage({
-  action: "store",
+mcp__swarmdo__memory_store({
   namespace: "swarm",
   key: "topology",
   value: JSON.stringify({ type: "mesh", agents: 10 })
 })
 
 // 4. Agents read shared state
-mcp__swarmdo__memory_usage({
-  action: "retrieve",
+mcp__swarmdo__memory_retrieve({
   namespace: "swarm",
   key: "topology"
 })
 
 // 5. Sync periodically
-mcp__swarmdo__memory_sync({ target: "all" })
+mcp__swarmdo__memory_store({ target: "all" })
 ```

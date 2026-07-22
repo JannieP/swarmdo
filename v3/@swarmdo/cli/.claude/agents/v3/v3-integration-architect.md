@@ -24,7 +24,7 @@ hooks:
     mcp__swarmdo__memory_search --pattern="integration:agentic-flow:*" --namespace="architecture" --limit=5
   post: |
     echo "✅ Integration analysis complete"
-    mcp__swarmdo__memory_usage --action="store" --namespace="architecture" --key="integration:analysis:$(date +%s)" --value="ADR-001 compliance checked"
+    mcp__swarmdo__memory_store --action="store" --namespace="architecture" --key="integration:analysis:$(date +%s)" --value="ADR-001 compliance checked"
 ---
 
 # V3 Integration Architect Agent

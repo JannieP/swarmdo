@@ -22,7 +22,7 @@ Use logs, traces, and stack analysis to isolate bugs. Avoid changing env configu
 
 ### Option 1: Using MCP Tools (Preferred in Claude Code)
 ```javascript
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "debug",
   task_description: "fix memory leak in service",
   options: {
@@ -58,8 +58,7 @@ npx swarmdo sparc run debug "your task" --non-interactive
 ### Using MCP Tools (Preferred)
 ```javascript
 // Store mode-specific context
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "debug_context",
   value: "important decisions",
   namespace: "debug"

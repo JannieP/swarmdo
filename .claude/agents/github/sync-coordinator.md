@@ -2,7 +2,7 @@
 name: sync-coordinator
 description: |
   Multi-repository synchronization coordinator that manages version alignment, dependency synchronization, and cross-package integration with intelligent swarm orchestration
-tools: mcp__github__push_files, mcp__github__create_or_update_file, mcp__github__get_file_contents, mcp__github__create_pull_request, mcp__github__search_repositories, mcp__github__list_repositories, mcp__swarmdo__swarm_init, mcp__swarmdo__agent_spawn, mcp__swarmdo__task_orchestrate, mcp__swarmdo__memory_usage, mcp__swarmdo__coordination_sync, mcp__swarmdo__load_balance, TodoWrite, TodoRead, Bash, Read, Write, Edit, MultiEdit
+tools: mcp__github__push_files, mcp__github__create_or_update_file, mcp__github__get_file_contents, mcp__github__create_pull_request, mcp__github__search_repositories, mcp__github__list_repositories, mcp__swarmdo__swarm_init, mcp__swarmdo__agent_spawn, mcp__swarmdo__coordination_orchestrate, mcp__swarmdo__memory_store, mcp__swarmdo__coordination_sync, mcp__swarmdo__coordination_load_balance, TodoWrite, TodoRead, Bash, Read, Write, Edit, MultiEdit
 ---
 
 # GitHub Sync Coordinator
@@ -54,7 +54,7 @@ Bash(`gh api repos/:owner/:repo/contents/claude-code-flow/claude-code-flow/packa
   -f sha="$(gh api repos/:owner/:repo/contents/claude-code-flow/claude-code-flow/package.json?ref=sync/package-alignment --jq '.sha')")`)
 
 // Orchestrate validation
-mcp__swarmdo__task_orchestrate {
+mcp__swarmdo__coordination_orchestrate {
   task: "Validate package synchronization and run integration tests",
   strategy: "parallel",
   priority: "high"
@@ -80,8 +80,7 @@ Bash(`gh api repos/:owner/:repo/contents/claude-code-flow/claude-code-flow/CLAUD
   -f sha="$(gh api repos/:owner/:repo/contents/claude-code-flow/claude-code-flow/CLAUDE.md?ref=sync/documentation --jq '.sha' 2>/dev/null || echo '')")`)
 
 // Store sync state in memory
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "sync/documentation/status",
   value: { timestamp: Date.now(), status: "synchronized", files: ["CLAUDE.md"] }
 }
@@ -195,8 +194,7 @@ This integration uses swarmdo-swarm agents for:
   ]}
   
   // Store comprehensive sync state
-  mcp__swarmdo__memory_usage {
-    action: "store",
+  mcp__swarmdo__memory_store {
     key: "sync/complete/status",
     value: {
       timestamp: Date.now(),
@@ -309,7 +307,7 @@ mcp__swarmdo__agent_spawn { type: "reviewer", name: "Quality Assurance" }
 mcp__swarmdo__agent_spawn { type: "monitor", name: "Sync Monitor" }
 
 # Orchestrate complex synchronization workflow
-mcp__swarmdo__task_orchestrate {
+mcp__swarmdo__coordination_orchestrate {
   task: "Execute comprehensive multi-repository synchronization with validation",
   strategy: "adaptive",
   priority: "critical",
@@ -317,7 +315,7 @@ mcp__swarmdo__task_orchestrate {
 }
 
 # Load balance synchronization tasks across agents
-mcp__swarmdo__load_balance {
+mcp__swarmdo__coordination_load_balance {
   swarmId: "sync-coordination-swarm",
   tasks: [
     "package_json_sync",
@@ -363,8 +361,7 @@ const syncConflictResolver = async (conflicts) => {
 ### Comprehensive Synchronization Metrics
 ```bash
 # Store detailed synchronization metrics
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "sync/metrics/session",
   value: {
     packages_synchronized: ["claude-code-flow", "swarmdo-swarm"],
@@ -397,8 +394,7 @@ mcp__swarmdo__agent_spawn { type: "coder", name: "Recovery Developer" }
 mcp__swarmdo__coordination_sync { swarmId: "error-recovery-swarm" }
 
 # Store recovery state
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "sync/recovery/state",
   value: {
     error_type: "version_conflict",

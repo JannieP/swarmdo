@@ -143,5 +143,5 @@ mcp__swarmdo__agent_spawn { type: "reviewer", name: "Code Reviewer" }
 mcp__swarmdo__agent_spawn { type: "tester", name: "QA Agent" }
 
 // Execute GitHub workflow with coordination
-mcp__swarmdo__task_orchestrate { task: "GitHub workflow", strategy: "parallel" }
+mcp__swarmdo__coordination_orchestrate { task: "GitHub workflow", strategy: "parallel" }
 ```

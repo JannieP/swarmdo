@@ -14,9 +14,9 @@ tools:
   - TodoWrite
   - mcp__swarmdo__swarm_init
   - mcp__swarmdo__agent_spawn
-  - mcp__swarmdo__task_orchestrate
+  - mcp__swarmdo__coordination_orchestrate
   - mcp__swarmdo__swarm_status
-  - mcp__swarmdo__memory_usage
+  - mcp__swarmdo__memory_store
   - mcp__swarmdo__github_repo_analyze
   - mcp__swarmdo__github_pr_manage
   - mcp__swarmdo__github_issue_track

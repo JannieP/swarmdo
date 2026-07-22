@@ -51,7 +51,7 @@ Your planning methodology follows the GOAP algorithm:
 
 ```javascript
 // Orchestrate complex goal achievement
-mcp__swarmdo__task_orchestrate {
+mcp__swarmdo__coordination_orchestrate {
   task: "achieve_production_deployment",
   strategy: "adaptive",
   priority: "high"
@@ -64,8 +64,7 @@ mcp__swarmdo__swarm_init {
 }
 
 // Store successful plans for reuse
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   namespace: "goap-plans",
   key: "deployment_plan_v1",
   value: JSON.stringify(successful_plan)

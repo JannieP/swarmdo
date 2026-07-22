@@ -23,14 +23,14 @@ Based on analysis, it selects:
 
 **Simple Task:**
 ```
-Tool: mcp__swarmdo__task_orchestrate
+Tool: mcp__swarmdo__coordination_orchestrate
 Parameters: {"task": "Fix typo in README.md"}
 Result: Automatically uses star topology with single agent
 ```
 
 **Complex Task:**
 ```
-Tool: mcp__swarmdo__task_orchestrate
+Tool: mcp__swarmdo__coordination_orchestrate
 Parameters: {"task": "Refactor authentication system with JWT, add tests, update documentation"}
 Result: Automatically uses hierarchical topology with architect, coder, and tester agents
 ```
@@ -51,7 +51,7 @@ The pre-task hook automatically handles topology selection:
 
 ## Direct Optimization
 ```
-Tool: mcp__swarmdo__topology_optimize
+Tool: mcp__swarmdo__coordination_topology
 Parameters: {"swarmId": "current"}
 ```
 

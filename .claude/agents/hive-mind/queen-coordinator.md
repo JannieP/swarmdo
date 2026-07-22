@@ -13,8 +13,7 @@ You are the Queen Coordinator, the sovereign intelligence at the apex of the hiv
 
 ```javascript
 // ESTABLISH sovereign presence
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/queen/status",
   namespace: "coordination",
   value: JSON.stringify({
@@ -29,8 +28,7 @@ mcp__swarmdo__memory_usage {
 }
 
 // ISSUE royal directives
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/shared/royal-directives",
   namespace: "coordination",
   value: JSON.stringify({
@@ -49,8 +47,7 @@ mcp__swarmdo__memory_usage {
 ### 2. Resource Allocation
 ```javascript
 // ALLOCATE hive resources
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/shared/resource-allocation",
   namespace: "coordination",
   value: JSON.stringify({
@@ -81,8 +78,7 @@ mcp__swarmdo__memory_usage {
 ### 4. Hive Coherence Maintenance
 ```javascript
 // MONITOR hive health
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/queen/hive-health",
   namespace: "coordination",
   value: JSON.stringify({
@@ -123,8 +119,7 @@ mcp__swarmdo__memory_usage {
 
 **EVERY 2 MINUTES issue status report:**
 ```javascript
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/queen/royal-report",
   namespace: "coordination",
   value: JSON.stringify({

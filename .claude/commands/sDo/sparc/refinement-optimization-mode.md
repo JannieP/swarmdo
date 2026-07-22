@@ -22,7 +22,7 @@ Audit files for clarity, modularity, and size. Break large components (>500 line
 
 ### Option 1: Using MCP Tools (Preferred in Claude Code)
 ```javascript
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "refinement-optimization-mode",
   task_description: "optimize database queries",
   options: {
@@ -58,8 +58,7 @@ npx swarmdo sparc run refinement-optimization-mode "your task" --non-interactive
 ### Using MCP Tools (Preferred)
 ```javascript
 // Store mode-specific context
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "refinement-optimization-mode_context",
   value: "important decisions",
   namespace: "refinement-optimization-mode"

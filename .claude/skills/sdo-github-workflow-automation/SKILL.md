@@ -531,7 +531,7 @@ mcp__swarmdo__agent_spawn { type: "tester", name: "QA Agent" }
 mcp__swarmdo__agent_spawn { type: "analyst", name: "Security Analyst" }
 
 // Step 3: Orchestrate GitHub workflow
-mcp__swarmdo__task_orchestrate {
+mcp__swarmdo__coordination_orchestrate {
   task: "Complete PR review and merge workflow",
   strategy: "parallel",
   priority: "high"

@@ -22,7 +22,7 @@ Verify interface compatibility, shared modules, and env config standards. Split 
 
 ### Option 1: Using MCP Tools (Preferred in Claude Code)
 ```javascript
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "integration",
   task_description: "connect payment service",
   options: {
@@ -58,8 +58,7 @@ npx swarmdo sparc run integration "your task" --non-interactive
 ### Using MCP Tools (Preferred)
 ```javascript
 // Store mode-specific context
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "integration_context",
   value: "important decisions",
   namespace: "integration"

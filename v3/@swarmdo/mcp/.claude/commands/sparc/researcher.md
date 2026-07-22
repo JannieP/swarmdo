@@ -7,7 +7,7 @@ Deep research with parallel WebSearch/WebFetch and Memory coordination.
 
 ### Option 1: Using MCP Tools (Preferred in Claude Code)
 ```javascript
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "researcher",
   task_description: "research AI trends 2024",
   options: {

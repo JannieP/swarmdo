@@ -15,7 +15,7 @@ mcp__swarmdo__swarm_init({
 })
 
 // Orchestrate maintenance task
-mcp__swarmdo__task_orchestrate({
+mcp__swarmdo__coordination_orchestrate({
   "task": "update dependencies",
   "strategy": "sequential",
   "priority": "medium",
@@ -72,7 +72,7 @@ mcp__swarmdo__state_snapshot({
 })
 
 // Enable fault tolerance
-mcp__swarmdo__daa_fault_tolerance({
+mcp__swarmdo__coordination_consensus({
   "agentId": "all",
   "strategy": "checkpoint-recovery"
 })
@@ -90,12 +90,12 @@ mcp__swarmdo__security_scan({
 ### Monitoring
 ```javascript
 // Health check before/after
-mcp__swarmdo__health_check({
+mcp__swarmdo__swarm_health({
   "components": ["dependencies", "tests", "build"]
 })
 
 // Monitor maintenance progress
-mcp__swarmdo__swarm_monitor({
+mcp__swarmdo__swarm_status({
   "swarmId": "maintenance-swarm",
   "interval": 3000
 })

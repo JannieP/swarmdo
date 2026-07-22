@@ -15,7 +15,7 @@ mcp__swarmdo__swarm_init({
 })
 
 // Orchestrate optimization task
-mcp__swarmdo__task_orchestrate({
+mcp__swarmdo__coordination_orchestrate({
   "task": "optimize performance",
   "strategy": "parallel",
   "priority": "high"
@@ -60,13 +60,13 @@ mcp__swarmdo__agent_spawn({
 ### Performance Analysis
 ```javascript
 // Analyze bottlenecks
-mcp__swarmdo__bottleneck_analyze({
+mcp__swarmdo__performance_bottleneck({
   "component": "all",
   "metrics": ["cpu", "memory", "io", "network"]
 })
 
 // Run benchmarks
-mcp__swarmdo__benchmark_run({
+mcp__swarmdo__performance_benchmark({
   "suite": "performance"
 })
 
@@ -79,7 +79,7 @@ mcp__swarmdo__wasm_optimize({
 ### Optimization Operations
 ```javascript
 // Optimize topology
-mcp__swarmdo__topology_optimize({
+mcp__swarmdo__coordination_topology({
   "swarmId": "optimization-swarm"
 })
 
@@ -90,7 +90,7 @@ mcp__swarmdo__daa_optimization({
 })
 
 // Load balancing
-mcp__swarmdo__load_balance({
+mcp__swarmdo__coordination_load_balance({
   "swarmId": "optimization-swarm",
   "tasks": optimizationTasks
 })
@@ -105,7 +105,7 @@ mcp__swarmdo__performance_report({
 })
 
 // Trend analysis
-mcp__swarmdo__trend_analysis({
+mcp__swarmdo__performance_report({
   "metric": "performance",
   "period": "30d"
 })

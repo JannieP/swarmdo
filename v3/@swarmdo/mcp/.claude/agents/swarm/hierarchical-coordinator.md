@@ -17,15 +17,15 @@ hooks:
     # Initialize swarm topology
     mcp__swarmdo__swarm_init hierarchical --maxAgents=10 --strategy=adaptive
     # Store coordination state
-    mcp__swarmdo__memory_usage store "swarm:hierarchy:${TASK_ID}" "$(date): Hierarchical coordination started" --namespace=swarm
+    mcp__swarmdo__memory_store store "swarm:hierarchy:${TASK_ID}" "$(date): Hierarchical coordination started" --namespace=swarm
     # Set up monitoring
-    mcp__swarmdo__swarm_monitor --interval=5000 --swarmId="${SWARM_ID}"
+    mcp__swarmdo__swarm_status --interval=5000 --swarmId="${SWARM_ID}"
   post: |
     echo "✨ Hierarchical coordination complete"
     # Generate performance report
     mcp__swarmdo__performance_report --format=detailed --timeframe=24h
     # Store completion metrics
-    mcp__swarmdo__memory_usage store "swarm:hierarchy:${TASK_ID}:complete" "$(date): Task completed with $(mcp__swarmdo__swarm_status | jq '.agents.total') agents"
+    mcp__swarmdo__memory_store store "swarm:hierarchy:${TASK_ID}:complete" "$(date): Task completed with $(mcp__swarmdo__swarm_status | jq '.agents.total') agents"
     # Cleanup resources
     mcp__swarmdo__coordination_sync --swarmId="${SWARM_ID}"
 ---
@@ -609,16 +609,16 @@ mcp__swarmdo__agent_spawn coder --capabilities="implementation,testing"
 mcp__swarmdo__agent_spawn analyst --capabilities="data_analysis,reporting"
 
 # Monitor swarm health
-mcp__swarmdo__swarm_monitor --interval=5000
+mcp__swarmdo__swarm_status --interval=5000
 ```
 
 ### Task Orchestration
 ```bash
 # Coordinate complex workflows
-mcp__swarmdo__task_orchestrate "Build authentication service" --strategy=sequential --priority=high
+mcp__swarmdo__coordination_orchestrate "Build authentication service" --strategy=sequential --priority=high
 
 # Load balance across workers
-mcp__swarmdo__load_balance --tasks="auth_api,auth_tests,auth_docs" --strategy=capability_based
+mcp__swarmdo__coordination_load_balance --tasks="auth_api,auth_tests,auth_docs" --strategy=capability_based
 
 # Sync coordination state
 mcp__swarmdo__coordination_sync --namespace=hierarchy
@@ -630,10 +630,10 @@ mcp__swarmdo__coordination_sync --namespace=hierarchy
 mcp__swarmdo__performance_report --format=detailed --timeframe=24h
 
 # Analyze bottlenecks
-mcp__swarmdo__bottleneck_analyze --component=coordination --metrics="throughput,latency,success_rate"
+mcp__swarmdo__performance_bottleneck --component=coordination --metrics="throughput,latency,success_rate"
 
 # Monitor resource usage
-mcp__swarmdo__metrics_collect --components="agents,tasks,coordination"
+mcp__swarmdo__performance_metrics --components="agents,tasks,coordination"
 ```
 
 ## Decision Making Framework

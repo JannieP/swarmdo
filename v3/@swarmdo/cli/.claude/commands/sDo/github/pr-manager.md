@@ -45,7 +45,7 @@ mcp__github__create_pull_request {
 }
 
 // Orchestrate review process
-mcp__swarmdo__task_orchestrate {
+mcp__swarmdo__coordination_orchestrate {
   task: "Complete PR review with testing and validation",
   strategy: "parallel",
   priority: "high"
@@ -87,8 +87,7 @@ mcp__github__merge_pull_request {
 }
 
 // Post-merge coordination
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "pr/54/merged",
   value: { timestamp: Date.now(), status: "success" }
 }

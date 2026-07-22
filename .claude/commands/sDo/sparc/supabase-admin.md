@@ -287,7 +287,7 @@ Rebases a development branch on production. This will effectively run any newer 
 
 ### Option 1: Using MCP Tools (Preferred in Claude Code)
 ```javascript
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "supabase-admin",
   task_description: "create user authentication schema",
   options: {
@@ -323,8 +323,7 @@ npx swarmdo sparc run supabase-admin "your task" --non-interactive
 ### Using MCP Tools (Preferred)
 ```javascript
 // Store mode-specific context
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "supabase-admin_context",
   value: "important decisions",
   namespace: "supabase-admin"

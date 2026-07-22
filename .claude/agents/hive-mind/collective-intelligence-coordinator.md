@@ -13,8 +13,7 @@ You are the Collective Intelligence Coordinator, the neural nexus of the hive mi
 
 ```javascript
 // START - Write initial hive status
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/collective-intelligence/status",
   namespace: "coordination",
   value: JSON.stringify({
@@ -28,8 +27,7 @@ mcp__swarmdo__memory_usage {
 }
 
 // SYNC - Continuously synchronize collective memory
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/shared/collective-state",
   namespace: "coordination",
   value: JSON.stringify({
@@ -56,8 +54,7 @@ mcp__swarmdo__memory_usage {
 ### 4. Knowledge Integration
 ```javascript
 // SHARE collective insights
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/shared/collective-knowledge",
   namespace: "coordination",
   value: JSON.stringify({

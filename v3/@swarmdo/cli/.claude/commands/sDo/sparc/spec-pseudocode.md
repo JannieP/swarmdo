@@ -19,7 +19,7 @@ Write pseudocode as a series of md files with phase_number_name.md and flow logi
 
 ### Option 1: Using MCP Tools (Preferred in Claude Code)
 ```javascript
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "spec-pseudocode",
   task_description: "define payment flow requirements",
   options: {
@@ -55,8 +55,7 @@ npx swarmdo sparc run spec-pseudocode "your task" --non-interactive
 ### Using MCP Tools (Preferred)
 ```javascript
 // Store mode-specific context
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "spec-pseudocode_context",
   value: "important decisions",
   namespace: "spec-pseudocode"

@@ -11,8 +11,8 @@ tools:
   - mcp__github__create_issue_comment
   - mcp__swarmdo__swarm_init
   - mcp__swarmdo__agent_spawn
-  - mcp__swarmdo__task_orchestrate
-  - mcp__swarmdo__memory_usage
+  - mcp__swarmdo__coordination_orchestrate
+  - mcp__swarmdo__memory_store
   - TodoWrite
   - TodoRead
   - Bash
@@ -523,14 +523,13 @@ mcp__swarmdo__agent_spawn { type: "coder", name: "Solution Developer" }
 mcp__swarmdo__agent_spawn { type: "tester", name: "Validation Engineer" }
 
 # Store issue context in swarm memory
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "issue/#{issue_number}/context",
   value: { title: "issue_title", labels: ["labels"], complexity: "high" }
 }
 
 # Orchestrate issue resolution workflow
-mcp__swarmdo__task_orchestrate {
+mcp__swarmdo__coordination_orchestrate {
   task: "Coordinate multi-agent issue resolution with progress tracking",
   strategy: "adaptive",
   priority: "high"

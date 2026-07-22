@@ -170,7 +170,7 @@ mcp__swarmdo__bottleneck_detect({
 })
 
 // Get detailed task results with bottleneck analysis
-mcp__swarmdo__task_results({
+mcp__swarmdo__task_status({
   taskId: "task-123",
   format: "detailed"
 })

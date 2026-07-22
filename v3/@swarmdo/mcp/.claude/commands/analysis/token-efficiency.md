@@ -19,7 +19,7 @@ Reduce token consumption while maintaining quality through intelligent coordinat
 
 ```bash
 # Check token savings after session
-Tool: mcp__swarmdo__token_usage
+Tool: mcp__swarmdo__performance_metrics
 Parameters: {"operation": "session", "timeframe": "24h"}
 
 # Result shows:

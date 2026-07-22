@@ -54,8 +54,8 @@ capabilities:
 tools:
   allowed:
     - mcp__swarmdo__swarm_init
-    - mcp__swarmdo__topology_optimize
-    - mcp__swarmdo__memory_usage
+    - mcp__swarmdo__coordination_topology
+    - mcp__swarmdo__memory_store
     - TodoWrite
   restricted:
     - Bash
@@ -88,7 +88,7 @@ tools:
     - mcp__swarmdo__agent_spawn
     - mcp__swarmdo__daa_agent_create
     - mcp__swarmdo__agent_list
-    - mcp__swarmdo__memory_usage
+    - mcp__swarmdo__memory_store
   restricted:
     - Bash
     - Write
@@ -119,10 +119,10 @@ capabilities:
   - progress-tracking
 tools:
   allowed:
-    - mcp__swarmdo__task_orchestrate
+    - mcp__swarmdo__coordination_orchestrate
     - mcp__swarmdo__task_status
-    - mcp__swarmdo__task_results
-    - mcp__swarmdo__parallel_execute
+    - mcp__swarmdo__task_status
+    - mcp__swarmdo__coordination_orchestrate
     - TodoWrite
     - TodoRead
   restricted:
@@ -160,8 +160,8 @@ tools:
     - Bash  # For gh CLI commands
     - mcp__swarmdo__swarm_init
     - mcp__swarmdo__agent_spawn
-    - mcp__swarmdo__task_orchestrate
-    - mcp__swarmdo__memory_usage
+    - mcp__swarmdo__coordination_orchestrate
+    - mcp__swarmdo__memory_store
     - TodoWrite
     - Read
   restricted:
@@ -198,8 +198,8 @@ tools:
     - Grep
     - mcp__swarmdo__swarm_init
     - mcp__swarmdo__agent_spawn
-    - mcp__swarmdo__github_code_review
-    - mcp__swarmdo__memory_usage
+    - mcp__swarmdo__github_pr_manage
+    - mcp__swarmdo__memory_store
   restricted:
     - Write
     - Edit
@@ -233,7 +233,7 @@ tools:
     - Read
     - mcp__swarmdo__github_release_coord
     - mcp__swarmdo__swarm_init
-    - mcp__swarmdo__task_orchestrate
+    - mcp__swarmdo__coordination_orchestrate
     - TodoWrite
   restricted:
     - Write  # Use version control for releases
@@ -266,13 +266,13 @@ capabilities:
   - result-synthesis
 tools:
   allowed:
-    - mcp__swarmdo__sparc_mode
+    - mcp__swarmdo__workflow_create
     - mcp__swarmdo__swarm_init
     - mcp__swarmdo__agent_spawn
-    - mcp__swarmdo__task_orchestrate
+    - mcp__swarmdo__coordination_orchestrate
     - TodoWrite
     - TodoRead
-    - mcp__swarmdo__memory_usage
+    - mcp__swarmdo__memory_store
   restricted:
     - Bash
     - Write
@@ -308,7 +308,7 @@ tools:
     - Edit
     - MultiEdit
     - Bash
-    - mcp__swarmdo__sparc_mode
+    - mcp__swarmdo__workflow_create
     - TodoWrite
   restricted:
     - mcp__swarmdo__swarm_init  # Focus on implementation
@@ -342,9 +342,9 @@ tools:
     - Write
     - Edit
     - Bash
-    - mcp__swarmdo__sparc_mode
+    - mcp__swarmdo__workflow_create
     - TodoWrite
-    - mcp__swarmdo__parallel_execute
+    - mcp__swarmdo__coordination_orchestrate
   restricted:
     - mcp__swarmdo__swarm_init
 triggers:
@@ -375,10 +375,10 @@ capabilities:
   - optimization-planning
 tools:
   allowed:
-    - mcp__swarmdo__bottleneck_analyze
+    - mcp__swarmdo__performance_bottleneck
     - mcp__swarmdo__performance_report
-    - mcp__swarmdo__metrics_collect
-    - mcp__swarmdo__trend_analysis
+    - mcp__swarmdo__performance_metrics
+    - mcp__swarmdo__performance_report
     - Read
     - Grep
   restricted:
@@ -411,9 +411,9 @@ capabilities:
   - report-generation
 tools:
   allowed:
-    - mcp__swarmdo__token_usage
+    - mcp__swarmdo__performance_metrics
     - mcp__swarmdo__cost_analysis
-    - mcp__swarmdo__usage_stats
+    - mcp__swarmdo__performance_metrics
     - mcp__swarmdo__memory_analytics
     - Read
   restricted:
@@ -448,11 +448,11 @@ capabilities:
   - synchronization
 tools:
   allowed:
-    - mcp__swarmdo__memory_usage
+    - mcp__swarmdo__memory_store
     - mcp__swarmdo__memory_search
-    - mcp__swarmdo__memory_namespace
+    - mcp__swarmdo__memory_store
     - mcp__swarmdo__memory_compress
-    - mcp__swarmdo__memory_sync
+    - mcp__swarmdo__memory_store
   restricted:
     - Write
     - Edit
@@ -523,8 +523,8 @@ tools:
     - mcp__swarmdo__daa_agent_create
     - mcp__swarmdo__daa_capability_match
     - mcp__swarmdo__daa_resource_alloc
-    - mcp__swarmdo__swarm_scale
-    - mcp__swarmdo__agent_metrics
+    - mcp__swarmdo__agent_spawn
+    - mcp__swarmdo__agent_status
   restricted:
     - Write
     - Edit
@@ -555,8 +555,8 @@ capabilities:
   - error-analysis
 tools:
   allowed:
-    - mcp__swarmdo__daa_fault_tolerance
-    - mcp__swarmdo__health_check
+    - mcp__swarmdo__coordination_consensus
+    - mcp__swarmdo__swarm_health
     - mcp__swarmdo__error_analysis
     - mcp__swarmdo__diagnostic_run
     - Bash  # For system commands
@@ -591,8 +591,8 @@ capabilities:
   - bottleneck-removal
 tools:
   allowed:
-    - mcp__swarmdo__parallel_execute
-    - mcp__swarmdo__load_balance
+    - mcp__swarmdo__coordination_orchestrate
+    - mcp__swarmdo__coordination_load_balance
     - mcp__swarmdo__batch_process
     - mcp__swarmdo__performance_report
     - TodoWrite
@@ -625,11 +625,11 @@ capabilities:
   - adaptive-configuration
 tools:
   allowed:
-    - mcp__swarmdo__topology_optimize
-    - mcp__swarmdo__swarm_monitor
+    - mcp__swarmdo__coordination_topology
+    - mcp__swarmdo__swarm_status
     - mcp__swarmdo__coordination_sync
     - mcp__swarmdo__swarm_status
-    - mcp__swarmdo__metrics_collect
+    - mcp__swarmdo__performance_metrics
   restricted:
     - Write
     - Edit
@@ -663,9 +663,9 @@ capabilities:
 tools:
   allowed:
     - mcp__swarmdo__swarm_status
-    - mcp__swarmdo__swarm_monitor
-    - mcp__swarmdo__agent_metrics
-    - mcp__swarmdo__health_check
+    - mcp__swarmdo__swarm_status
+    - mcp__swarmdo__agent_status
+    - mcp__swarmdo__swarm_health
     - mcp__swarmdo__performance_report
   restricted:
     - Write

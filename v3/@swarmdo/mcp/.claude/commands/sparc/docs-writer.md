@@ -19,7 +19,7 @@ Only work in .md files. Use sections, examples, and headings. Keep each file und
 
 ### Option 1: Using MCP Tools (Preferred in Claude Code)
 ```javascript
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "docs-writer",
   task_description: "create API documentation",
   options: {
@@ -55,8 +55,7 @@ npx swarmdo sparc run docs-writer "your task" --non-interactive
 ### Using MCP Tools (Preferred)
 ```javascript
 // Store mode-specific context
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "docs-writer_context",
   value: "important decisions",
   namespace: "docs-writer"

@@ -47,7 +47,7 @@ Each recovery improves future prevention:
 **Pattern Storage:**
 ```javascript
 // Store error patterns
-mcp__swarmdo__memory_usage({
+mcp__swarmdo__memory_store({
   "action": "store",
   "key": "error-pattern-" + Date.now(),
   "value": JSON.stringify(errorData),
@@ -82,7 +82,7 @@ mcp__swarmdo__agent_spawn({
 })
 
 // Orchestrate recovery
-mcp__swarmdo__task_orchestrate({
+mcp__swarmdo__coordination_orchestrate({
   "task": "recover from error",
   "strategy": "sequential",
   "priority": "critical"

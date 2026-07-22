@@ -119,25 +119,25 @@ mcp__swarmdo__neural_patterns learn --operation="topology_switch" --outcome="imp
 mcp__swarmdo__performance_report --format=json --timeframe=1h
 
 # Bottleneck analysis
-mcp__swarmdo__bottleneck_analyze --component="coordination" --metrics="latency,throughput,success_rate"
+mcp__swarmdo__performance_bottleneck --component="coordination" --metrics="latency,throughput,success_rate"
 
 # Automatic optimization
-mcp__swarmdo__topology_optimize --swarmId="${SWARM_ID}"
+mcp__swarmdo__coordination_topology --swarmId="${SWARM_ID}"
 
 # Load balancing optimization
-mcp__swarmdo__load_balance --swarmId="${SWARM_ID}" --strategy="ml_optimized"
+mcp__swarmdo__coordination_load_balance --swarmId="${SWARM_ID}" --strategy="ml_optimized"
 ```
 
 ### Predictive Scaling
 ```bash
 # Analyze usage trends
-mcp__swarmdo__trend_analysis --metric="agent_utilization" --period="7d"
+mcp__swarmdo__performance_report --metric="agent_utilization" --period="7d"
 
 # Predict resource needs
 mcp__swarmdo__neural_predict --modelId="resource-predictor" --input="{\"time_horizon\":\"4h\",\"current_load\":0.7}"
 
 # Auto-scale swarm
-mcp__swarmdo__swarm_scale --swarmId="${SWARM_ID}" --targetSize="12" --strategy="predictive"
+mcp__swarmdo__agent_spawn --swarmId="${SWARM_ID}" --targetSize="12" --strategy="predictive"
 ```
 
 ## Dynamic Adaptation Algorithms

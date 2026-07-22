@@ -7,7 +7,7 @@ Execute independent subtasks in parallel for maximum efficiency.
 
 ### 1. Task Decomposition
 ```
-Tool: mcp__swarmdo__task_orchestrate
+Tool: mcp__swarmdo__coordination_orchestrate
 Parameters: {
   "task": "Build complete REST API with auth, CRUD operations, and tests",
   "strategy": "parallel",
@@ -43,7 +43,7 @@ npx swarmdo parallel "Build REST API" --max-agents 8
 
 ## Monitoring
 ```
-Tool: mcp__swarmdo__swarm_monitor
+Tool: mcp__swarmdo__swarm_status
 Parameters: {"interval": 1000, "swarmId": "current"}
 ```
 

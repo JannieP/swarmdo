@@ -16,7 +16,7 @@ At session end, automatically saves:
 ### 2. Session Restoration
 ```javascript
 // Using MCP tools for memory operations
-mcp__swarmdo__memory_usage({
+mcp__swarmdo__memory_store({
   "action": "retrieve",
   "key": "session-state",
   "namespace": "sessions"
@@ -56,13 +56,13 @@ npx swarmdo hook session-restore --session-id "sess-123"
 ### 4. Privacy & Control
 ```javascript
 // List memory contents
-mcp__swarmdo__memory_usage({
+mcp__swarmdo__memory_store({
   "action": "list",
   "namespace": "sessions"
 })
 
 // Delete specific memory
-mcp__swarmdo__memory_usage({
+mcp__swarmdo__memory_store({
   "action": "delete",
   "key": "session-123",
   "namespace": "sessions"

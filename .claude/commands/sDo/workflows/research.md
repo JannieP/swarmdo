@@ -25,7 +25,7 @@ Sets up different analytical approaches for Claude Code to use.
 
 ### 3. Execute Coordinated Research
 ```
-Tool: mcp__swarmdo__task_orchestrate
+Tool: mcp__swarmdo__coordination_orchestrate
 Parameters: {
   "task": "Research modern web frameworks performance",
   "strategy": "adaptive",
@@ -35,7 +35,7 @@ Parameters: {
 
 ### 4. Store Research Findings
 ```
-Tool: mcp__swarmdo__memory_usage
+Tool: mcp__swarmdo__memory_store
 Parameters: {
   "action": "store",
   "key": "research_findings",

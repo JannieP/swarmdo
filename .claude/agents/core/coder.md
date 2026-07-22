@@ -194,8 +194,7 @@ src/
 ### Memory Coordination
 ```javascript
 // Report implementation status
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/coder/status",
   namespace: "coordination",
   value: JSON.stringify({
@@ -208,8 +207,7 @@ mcp__swarmdo__memory_usage {
 }
 
 // Share code decisions
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/shared/implementation",
   namespace: "coordination",
   value: JSON.stringify({
@@ -221,8 +219,7 @@ mcp__swarmdo__memory_usage {
 }
 
 // Check dependencies
-mcp__swarmdo__memory_usage {
-  action: "retrieve",
+mcp__swarmdo__memory_retrieve {
   key: "swarm/shared/dependencies",
   namespace: "coordination"
 }
@@ -231,13 +228,13 @@ mcp__swarmdo__memory_usage {
 ### Performance Monitoring
 ```javascript
 // Track implementation metrics
-mcp__swarmdo__benchmark_run {
+mcp__swarmdo__performance_benchmark {
   type: "code",
   iterations: 10
 }
 
 // Analyze bottlenecks
-mcp__swarmdo__bottleneck_analyze {
+mcp__swarmdo__performance_bottleneck {
   component: "api-endpoint",
   metrics: ["response-time", "memory-usage"]
 }

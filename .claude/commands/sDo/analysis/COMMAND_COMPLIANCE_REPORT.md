@@ -12,7 +12,7 @@ Reviewed all command files in `.claude/commands/analysis/` directory to ensure p
 **Status**: ✅ Updated
 **Changes Made**:
 - Replaced `npx swarmdo-swarm hook session-end --export-metrics` with proper MCP tool call
-- Updated to: `Tool: mcp__swarmdo__token_usage` with appropriate parameters
+- Updated to: `Tool: mcp__swarmdo__performance_metrics` with appropriate parameters
 - Maintained result format and context
 
 **Before**:
@@ -22,13 +22,13 @@ npx swarmdo-swarm hook session-end --export-metrics
 
 **After**:
 ```
-Tool: mcp__swarmdo__token_usage
+Tool: mcp__swarmdo__performance_metrics
 Parameters: {"operation": "session", "timeframe": "24h"}
 ```
 
 ### 2. performance-bottlenecks.md
 **Status**: ✅ Compliant (No changes needed)
-**Reason**: Already uses proper `mcp__swarmdo__task_results` tool format
+**Reason**: Already uses proper `mcp__swarmdo__task_status` tool format
 
 ## Summary
 

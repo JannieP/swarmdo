@@ -668,8 +668,7 @@ class DeltaStateCRDT {
 ### Memory Coordination for CRDT State
 ```javascript
 // Store CRDT state persistently
-await this.mcpTools.memory_usage({
-  action: 'store',
+await this.mcpTools.memory_store({
   key: `crdt_state_${this.crdtName}`,
   value: JSON.stringify({
     type: this.crdtType,
@@ -682,8 +681,7 @@ await this.mcpTools.memory_usage({
 });
 
 // Coordinate delta synchronization
-await this.mcpTools.memory_usage({
-  action: 'store',
+await this.mcpTools.memory_store({
   key: `deltas_${this.nodeId}_${Date.now()}`,
   value: JSON.stringify(this.getDeltasSince(null)),
   namespace: 'crdt_deltas',
@@ -694,7 +692,7 @@ await this.mcpTools.memory_usage({
 ### Performance Monitoring
 ```javascript
 // Track CRDT synchronization metrics
-await this.mcpTools.metrics_collect({
+await this.mcpTools.performance_metrics({
   components: [
     'crdt_merge_time',
     'delta_generation_time',

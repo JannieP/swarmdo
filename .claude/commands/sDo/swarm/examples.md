@@ -21,7 +21,7 @@ mcp__swarmdo__agent_spawn({
 })
 
 // Orchestrate research
-mcp__swarmdo__task_orchestrate({
+mcp__swarmdo__coordination_orchestrate({
   "task": "research AI trends",
   "strategy": "parallel",
   "priority": "medium"
@@ -70,14 +70,14 @@ devAgents.forEach(agent => {
 })
 
 // Orchestrate development
-mcp__swarmdo__task_orchestrate({
+mcp__swarmdo__coordination_orchestrate({
   "task": "build REST API",
   "strategy": "sequential",
   "dependencies": ["design", "implement", "test", "document"]
 })
 
 // Enable monitoring
-mcp__swarmdo__swarm_monitor({
+mcp__swarmdo__swarm_status({
   "swarmId": "dev-swarm",
   "interval": 5000
 })
@@ -117,7 +117,7 @@ mcp__swarmdo__agent_spawn({
 })
 
 // Parallel analysis execution
-mcp__swarmdo__parallel_execute({
+mcp__swarmdo__coordination_orchestrate({
   "tasks": [
     { "id": "analyze-code", "command": "analyze codebase structure" },
     { "id": "analyze-security", "command": "scan for vulnerabilities" },
@@ -145,14 +145,14 @@ npx swarmdo swarm "analyze codebase" \
 
 ```javascript
 // Setup fault tolerance
-mcp__swarmdo__daa_fault_tolerance({
+mcp__swarmdo__coordination_consensus({
   "agentId": "all",
   "strategy": "auto-recovery"
 })
 
 // Handle errors gracefully
 try {
-  await mcp__swarmdo__task_orchestrate({
+  await mcp__swarmdo__coordination_orchestrate({
     "task": "complex operation",
     "strategy": "parallel"
   })

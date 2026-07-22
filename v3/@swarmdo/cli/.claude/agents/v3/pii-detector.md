@@ -126,8 +126,7 @@ When PII is detected, suggest:
 
 ```javascript
 // Report PII findings to swarm
-mcp__swarmdo__memory_usage({
-  action: "store",
+mcp__swarmdo__memory_store({
   namespace: "pii_findings",
   key: `pii-${Date.now()}`,
   value: JSON.stringify({

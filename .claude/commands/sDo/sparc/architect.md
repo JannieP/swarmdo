@@ -7,7 +7,7 @@ System design with Memory-based coordination for scalable architectures.
 
 ### Option 1: Using MCP Tools (Preferred in Claude Code)
 ```javascript
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "architect",
   task_description: "design microservices architecture",
   options: {

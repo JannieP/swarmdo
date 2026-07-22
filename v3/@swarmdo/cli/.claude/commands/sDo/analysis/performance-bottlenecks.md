@@ -32,7 +32,7 @@ The post-task hook automatically analyzes:
 ### 3. Improvement Suggestions
 
 ```
-Tool: mcp__swarmdo__task_results
+Tool: mcp__swarmdo__task_status
 Parameters: {"taskId": "task-123", "format": "detailed"}
 
 Result includes:

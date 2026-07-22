@@ -34,7 +34,7 @@ SPARC (Specification, Planning, Architecture, Review, Code) is a comprehensive d
 ### Option 1: Using MCP Tools (Preferred in Claude Code)
 ```javascript
 // Execute SPARC mode directly
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "<mode>",
   task_description: "<task>",
   options: {
@@ -56,7 +56,7 @@ mcp__swarmdo__agent_spawn {
 }
 
 // Monitor execution
-mcp__swarmdo__swarm_monitor {
+mcp__swarmdo__swarm_status {
   swarmId: "current",
   interval: 5000
 }
@@ -99,25 +99,25 @@ mcp__swarmdo__swarm_init {
 }
 
 // 2. Architecture design
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "architect",
   task_description: "design microservices"
 }
 
 // 3. Implementation
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "coder",
   task_description: "implement services"
 }
 
 // 4. Testing
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "tdd",
   task_description: "test all services"
 }
 
 // 5. Review
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "reviewer",
   task_description: "review implementation"
 }
@@ -143,19 +143,19 @@ npx swarmdo sparc run reviewer "review implementation"
 #### Using MCP Tools (Preferred)
 ```javascript
 // 1. Research phase
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "researcher",
   task_description: "research best practices"
 }
 
 // 2. Innovation
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "innovator",
   task_description: "propose novel solutions"
 }
 
 // 3. Documentation
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "documenter",
   task_description: "document findings"
 }

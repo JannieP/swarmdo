@@ -7,7 +7,7 @@ Performance optimization with systematic analysis and improvements.
 
 ### Option 1: Using MCP Tools (Preferred in Claude Code)
 ```javascript
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "optimizer",
   task_description: "optimize application performance",
   options: {

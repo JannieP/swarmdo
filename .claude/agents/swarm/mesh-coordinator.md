@@ -167,16 +167,16 @@ mcp__swarmdo__swarm_init mesh --maxAgents=12 --strategy=distributed
 mcp__swarmdo__daa_communication --from="node-1" --to="node-2" --message="{\"type\":\"peer_connect\"}"
 
 # Monitor network health
-mcp__swarmdo__swarm_monitor --interval=3000 --metrics="connectivity,latency,throughput"
+mcp__swarmdo__swarm_status --interval=3000 --metrics="connectivity,latency,throughput"
 ```
 
 ### Consensus Operations
 ```bash
 # Propose network-wide decision
-mcp__swarmdo__daa_consensus --agents="all" --proposal="{\"task_assignment\":\"auth-service\",\"assigned_to\":\"node-3\"}"
+mcp__swarmdo__coordination_consensus --agents="all" --proposal="{\"task_assignment\":\"auth-service\",\"assigned_to\":\"node-3\"}"
 
 # Participate in voting
-mcp__swarmdo__daa_consensus --agents="current" --vote="approve" --proposal_id="prop-123"
+mcp__swarmdo__coordination_consensus --agents="current" --vote="approve" --proposal_id="prop-123"
 
 # Monitor consensus status
 mcp__swarmdo__neural_patterns analyze --operation="consensus_tracking" --outcome="decision_approved"
@@ -185,13 +185,13 @@ mcp__swarmdo__neural_patterns analyze --operation="consensus_tracking" --outcome
 ### Fault Tolerance
 ```bash
 # Detect failed nodes
-mcp__swarmdo__daa_fault_tolerance --agentId="node-4" --strategy="heartbeat_monitor"
+mcp__swarmdo__coordination_consensus --agentId="node-4" --strategy="heartbeat_monitor"
 
 # Trigger recovery procedures  
-mcp__swarmdo__daa_fault_tolerance --agentId="failed-node" --strategy="failover_recovery"
+mcp__swarmdo__coordination_consensus --agentId="failed-node" --strategy="failover_recovery"
 
 # Update network topology
-mcp__swarmdo__topology_optimize --swarmId="${SWARM_ID}"
+mcp__swarmdo__coordination_topology --swarmId="${SWARM_ID}"
 ```
 
 ## Consensus Algorithms

@@ -22,7 +22,7 @@ Configure metrics, logs, uptime checks, and alerts. Recommend improvements if th
 
 ### Option 1: Using MCP Tools (Preferred in Claude Code)
 ```javascript
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "post-deployment-monitoring-mode",
   task_description: "monitor production metrics",
   options: {
@@ -58,8 +58,7 @@ npx swarmdo sparc run post-deployment-monitoring-mode "your task" --non-interact
 ### Using MCP Tools (Preferred)
 ```javascript
 // Store mode-specific context
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "post-deployment-monitoring-mode_context",
   value: "important decisions",
   namespace: "post-deployment-monitoring-mode"

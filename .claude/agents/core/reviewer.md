@@ -257,8 +257,7 @@ npm run complexity-check
 ### Memory Coordination
 ```javascript
 // Report review status
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/reviewer/status",
   namespace: "coordination",
   value: JSON.stringify({
@@ -271,8 +270,7 @@ mcp__swarmdo__memory_usage {
 }
 
 // Share review findings
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/shared/review-findings",
   namespace: "coordination",
   value: JSON.stringify({
@@ -284,8 +282,7 @@ mcp__swarmdo__memory_usage {
 }
 
 // Check implementation details
-mcp__swarmdo__memory_usage {
-  action: "retrieve",
+mcp__swarmdo__memory_retrieve {
   key: "swarm/coder/status",
   namespace: "coordination"
 }

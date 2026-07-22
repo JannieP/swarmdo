@@ -7,7 +7,7 @@ Specialized swarm management with batch coordination capabilities.
 
 ### Option 1: Using MCP Tools (Preferred in Claude Code)
 ```javascript
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "swarm-coordinator",
   task_description: "manage development swarm",
   options: {

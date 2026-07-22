@@ -15,7 +15,7 @@ mcp__swarmdo__swarm_init({
 })
 
 // Orchestrate analysis task
-mcp__swarmdo__task_orchestrate({
+mcp__swarmdo__coordination_orchestrate({
   "task": "analyze system performance",
   "strategy": "parallel",
   "priority": "medium"
@@ -69,7 +69,7 @@ mcp__swarmdo__performance_report({
 })
 
 // Identify bottlenecks
-mcp__swarmdo__bottleneck_analyze({
+mcp__swarmdo__performance_bottleneck({
   "component": "api",
   "metrics": ["response-time", "throughput"]
 })
@@ -89,7 +89,7 @@ mcp__swarmdo__task_status({
 })
 
 // Get analysis results
-mcp__swarmdo__task_results({
+mcp__swarmdo__task_status({
   "taskId": "analysis-task-001"
 })
 ```

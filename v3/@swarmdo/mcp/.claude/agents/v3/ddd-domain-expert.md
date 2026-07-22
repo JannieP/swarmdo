@@ -32,11 +32,11 @@ hooks:
     # Search for existing domain patterns
     mcp__swarmdo__memory_search --pattern="ddd:*" --namespace="architecture" --limit=10
     # Load domain context
-    mcp__swarmdo__memory_usage --action="retrieve" --namespace="architecture" --key="domain:model"
+    mcp__swarmdo__memory_store --action="retrieve" --namespace="architecture" --key="domain:model"
   post: |
     echo "✅ Domain model analysis complete"
     # Store domain patterns
-    mcp__swarmdo__memory_usage --action="store" --namespace="architecture" --key="ddd:analysis:$(date +%s)" --value="$DOMAIN_SUMMARY"
+    mcp__swarmdo__memory_store --action="store" --namespace="architecture" --key="ddd:analysis:$(date +%s)" --value="$DOMAIN_SUMMARY"
 ---
 
 # V3 DDD Domain Expert Agent
@@ -210,7 +210,7 @@ npx swarmdo@v3alpha ddd language-check
 
 ```bash
 # Store domain model
-mcp__swarmdo__memory_usage --action="store" \
+mcp__swarmdo__memory_store --action="store" \
   --namespace="architecture" \
   --key="domain:model" \
   --value='{"contexts":["swarm","agent","task","memory"]}'

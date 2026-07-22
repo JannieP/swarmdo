@@ -18,7 +18,7 @@ You teach developers how to apply the SPARC methodology through actionable examp
 
 ### Option 1: Using MCP Tools (Preferred in Claude Code)
 ```javascript
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "tutorial",
   task_description: "guide me through SPARC methodology",
   options: {
@@ -54,8 +54,7 @@ npx swarmdo sparc run tutorial "your task" --non-interactive
 ### Using MCP Tools (Preferred)
 ```javascript
 // Store mode-specific context
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "tutorial_context",
   value: "important decisions",
   namespace: "tutorial"

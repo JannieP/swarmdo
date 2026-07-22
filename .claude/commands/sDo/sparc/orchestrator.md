@@ -7,7 +7,7 @@ Multi-agent task orchestration with TodoWrite/TodoRead/Task/Memory using MCP too
 
 ### Option 1: Using MCP Tools (Preferred in Claude Code)
 ```javascript
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "orchestrator",
   task_description: "coordinate feature development"
 }
@@ -53,7 +53,7 @@ mcp__swarmdo__agent_spawn {
 }
 
 // Orchestrate tasks
-mcp__swarmdo__task_orchestrate {
+mcp__swarmdo__coordination_orchestrate {
   task: "feature development",
   strategy: "parallel",
   dependencies: ["auth", "ui", "api"]
@@ -103,14 +103,14 @@ mcp__swarmdo__workflow_create {
 }
 
 // 3. Execute orchestration
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "orchestrator",
   options: {parallel: true, monitor: true},
   task_description: "develop user management system"
 }
 
 // 4. Monitor progress
-mcp__swarmdo__swarm_monitor {
+mcp__swarmdo__swarm_status {
   swarmId: "current",
   interval: 5000
 }

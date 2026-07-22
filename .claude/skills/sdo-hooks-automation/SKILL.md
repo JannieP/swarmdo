@@ -606,8 +606,7 @@ mcp__swarmdo__agent_spawn {
   capabilities: ["api", "database", "testing"]
 }
 
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/task/api-build/context",
   namespace: "coordination",
   value: JSON.stringify({
@@ -625,8 +624,7 @@ mcp__swarmdo__memory_usage {
 npx swarmdo hook post-edit --file "api/auth.js"
 
 // Internally calls MCP tools:
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/edits/api/auth.js",
   namespace: "coordination",
   value: JSON.stringify({
@@ -670,8 +668,7 @@ All hooks follow a standardized memory coordination pattern:
 
 **Phase 1: STATUS** - Hook starts
 ```javascript
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/hooks/pre-edit/status",
   namespace: "coordination",
   value: JSON.stringify({
@@ -685,8 +682,7 @@ mcp__swarmdo__memory_usage {
 
 **Phase 2: PROGRESS** - Hook processes
 ```javascript
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/hooks/pre-edit/progress",
   namespace: "coordination",
   value: JSON.stringify({
@@ -699,8 +695,7 @@ mcp__swarmdo__memory_usage {
 
 **Phase 3: COMPLETE** - Hook finishes
 ```javascript
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/hooks/pre-edit/complete",
   namespace: "coordination",
   value: JSON.stringify({

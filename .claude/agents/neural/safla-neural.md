@@ -59,8 +59,7 @@ mcp__swarmdo__neural_train {
 }
 
 // Store learning patterns
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   namespace: "safla-learning",
   key: "pattern_${timestamp}",
   value: JSON.stringify({

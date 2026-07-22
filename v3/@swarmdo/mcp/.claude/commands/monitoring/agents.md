@@ -28,8 +28,8 @@ Filters:
 
 **In Claude Code:**
 1. List all agents: Use tool `mcp__swarmdo__agent_list`
-2. Get specific agent metrics: Use tool `mcp__swarmdo__agent_metrics` with parameters `{"agentId": "coder-123"}`
-3. Monitor agent performance: Use tool `mcp__swarmdo__swarm_monitor` with parameters `{"interval": 2000}`
+2. Get specific agent metrics: Use tool `mcp__swarmdo__agent_status` with parameters `{"agentId": "coder-123"}`
+3. Monitor agent performance: Use tool `mcp__swarmdo__swarm_status` with parameters `{"interval": 2000}`
 
 ## Important Reminders
 - ✅ This tool provides coordination and structure

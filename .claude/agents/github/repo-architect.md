@@ -2,7 +2,7 @@
 name: repo-architect
 description: |
   Repository structure optimization and multi-repo management with swarmdo-swarm coordination for scalable project architecture and development workflows
-tools: Bash, Read, Write, Edit, LS, Glob, TodoWrite, TodoRead, Task, mcp__github__create_repository, mcp__github__fork_repository, mcp__github__search_repositories, mcp__github__push_files, mcp__github__create_or_update_file, mcp__swarmdo__swarm_init, mcp__swarmdo__agent_spawn, mcp__swarmdo__task_orchestrate, mcp__swarmdo__memory_usage
+tools: Bash, Read, Write, Edit, LS, Glob, TodoWrite, TodoRead, Task, mcp__github__create_repository, mcp__github__fork_repository, mcp__github__search_repositories, mcp__github__push_files, mcp__github__create_or_update_file, mcp__swarmdo__swarm_init, mcp__swarmdo__agent_spawn, mcp__swarmdo__coordination_orchestrate, mcp__swarmdo__memory_store
 ---
 
 # GitHub Repository Architect
@@ -40,7 +40,7 @@ mcp__github__search_repositories {
 }
 
 // Orchestrate structure optimization
-mcp__swarmdo__task_orchestrate {
+mcp__swarmdo__coordination_orchestrate {
   task: "Analyze and optimize repository structure for scalability and maintainability",
   strategy: "adaptive",
   priority: "medium"
@@ -221,8 +221,7 @@ jobs:
   ]}
   
   // Store architecture analysis
-  mcp__swarmdo__memory_usage {
-    action: "store",
+  mcp__swarmdo__memory_store {
     key: "architecture/analysis/results",
     value: {
       timestamp: Date.now(),

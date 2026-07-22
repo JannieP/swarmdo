@@ -15,7 +15,7 @@ mcp__swarmdo__swarm_init({
 })
 
 // Orchestrate testing task
-mcp__swarmdo__task_orchestrate({
+mcp__swarmdo__coordination_orchestrate({
   "task": "test application",
   "strategy": "parallel",
   "priority": "high"
@@ -81,7 +81,7 @@ mcp__swarmdo__pattern_recognize({
 ### Test Execution
 ```javascript
 // Parallel test execution
-mcp__swarmdo__parallel_execute({
+mcp__swarmdo__coordination_orchestrate({
   "tasks": [
     { "id": "unit-tests", "command": "npm run test:unit" },
     { "id": "integration-tests", "command": "npm run test:integration" },
@@ -99,7 +99,7 @@ mcp__swarmdo__batch_process({
 ### Performance Testing
 ```javascript
 // Run performance benchmarks
-mcp__swarmdo__benchmark_run({
+mcp__swarmdo__performance_benchmark({
   "suite": "performance-tests"
 })
 
@@ -113,7 +113,7 @@ mcp__swarmdo__security_scan({
 ### Monitoring and Reporting
 ```javascript
 // Monitor test execution
-mcp__swarmdo__swarm_monitor({
+mcp__swarmdo__swarm_status({
   "swarmId": "testing-swarm",
   "interval": 2000
 })
@@ -125,7 +125,7 @@ mcp__swarmdo__performance_report({
 })
 
 // Get test results
-mcp__swarmdo__task_results({
+mcp__swarmdo__task_status({
   "taskId": "test-execution-001"
 })
 ```

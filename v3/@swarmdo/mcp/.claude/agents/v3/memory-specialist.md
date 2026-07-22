@@ -23,11 +23,11 @@ hooks:
   pre: |
     echo "Memory Specialist initializing V3 memory system"
     # Initialize hybrid memory backend
-    mcp__swarmdo__memory_namespace --namespace="${NAMESPACE:-default}" --action="init"
+    mcp__swarmdo__memory_store --namespace="${NAMESPACE:-default}" --action="init"
     # Check HNSW index status
     mcp__swarmdo__memory_analytics --timeframe="1h"
     # Store initialization event
-    mcp__swarmdo__memory_usage --action="store" --namespace="swarm" --key="memory-specialist:init:${TASK_ID}" --value="$(date -Iseconds): Memory specialist session started"
+    mcp__swarmdo__memory_store --action="store" --namespace="swarm" --key="memory-specialist:init:${TASK_ID}" --value="$(date -Iseconds): Memory specialist session started"
   post: |
     echo "Memory optimization complete"
     # Persist memory state
@@ -37,7 +37,7 @@ hooks:
     # Generate memory analytics report
     mcp__swarmdo__memory_analytics --timeframe="24h"
     # Store completion metrics
-    mcp__swarmdo__memory_usage --action="store" --namespace="swarm" --key="memory-specialist:complete:${TASK_ID}" --value="$(date -Iseconds): Memory optimization completed"
+    mcp__swarmdo__memory_store --action="store" --namespace="swarm" --key="memory-specialist:complete:${TASK_ID}" --value="$(date -Iseconds): Memory optimization completed"
 ---
 
 # V3 Memory Specialist Agent
@@ -884,13 +884,13 @@ class PatternDistiller {
 
 ```bash
 # Store with HNSW indexing
-mcp__swarmdo__memory_usage --action="store" --namespace="patterns" --key="auth:jwt-strategy" --value='{"pattern": "jwt-auth", "embedding": [...]}' --ttl=604800000
+mcp__swarmdo__memory_store --action="store" --namespace="patterns" --key="auth:jwt-strategy" --value='{"pattern": "jwt-auth", "embedding": [...]}' --ttl=604800000
 
 # Semantic search with HNSW
 mcp__swarmdo__memory_search --pattern="authentication strategies" --namespace="patterns" --limit=10
 
 # Namespace management
-mcp__swarmdo__memory_namespace --namespace="project:myapp" --action="create"
+mcp__swarmdo__memory_store --namespace="project:myapp" --action="create"
 
 # Memory analytics
 mcp__swarmdo__memory_analytics --timeframe="7d"
@@ -905,7 +905,7 @@ mcp__swarmdo__memory_persist --sessionId="session-12345"
 mcp__swarmdo__memory_backup --path="./backups/memory-$(date +%Y%m%d).bak"
 
 # Distributed sync
-mcp__swarmdo__memory_sync --target="peer-agent-1"
+mcp__swarmdo__memory_store --target="peer-agent-1"
 ```
 
 ### CLI Commands

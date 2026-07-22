@@ -191,8 +191,7 @@ Add to `.claude/settings.json`:
 
 ```javascript
 // Store detection in swarm memory
-mcp__swarmdo__memory_usage({
-  action: "store",
+mcp__swarmdo__memory_store({
   namespace: "security_detections",
   key: `detection-${Date.now()}`,
   value: JSON.stringify({
@@ -235,8 +234,7 @@ if (result.threats.some(t => t.severity === 'critical')) {
     --message "Critical threat blocked by AIDefence Guardian"
 
   // Escalate to security-architect
-  mcp__swarmdo__memory_usage({
-    action: "store",
+  mcp__swarmdo__memory_store({
     namespace: "security_escalations",
     key: `escalation-${Date.now()}`,
     value: JSON.stringify({
@@ -264,8 +262,7 @@ Track guardian effectiveness:
 const stats = await guardian.getStats();
 
 // Report to metrics system
-mcp__swarmdo__memory_usage({
-  action: "store",
+mcp__swarmdo__memory_store({
   namespace: "guardian_metrics",
   key: `metrics-${new Date().toISOString().split('T')[0]}`,
   value: JSON.stringify({

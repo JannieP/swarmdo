@@ -757,8 +757,7 @@ class FaultToleranceStrategy {
 ### Quorum State Management
 ```javascript
 // Store quorum configuration and history
-await this.mcpTools.memory_usage({
-  action: 'store',
+await this.mcpTools.memory_store({
   key: `quorum_config_${this.nodeId}`,
   value: JSON.stringify({
     currentQuorum: Array.from(this.currentQuorum.entries()),
@@ -783,7 +782,7 @@ await this.mcpTools.coordination_sync({
 ### Performance Monitoring Integration
 ```javascript
 // Track quorum adjustment performance
-await this.mcpTools.metrics_collect({
+await this.mcpTools.performance_metrics({
   components: [
     'quorum_adjustment_latency',
     'consensus_availability',
@@ -808,7 +807,7 @@ await this.mcpTools.neural_patterns({
 ### Task Orchestration for Quorum Changes
 ```javascript
 // Orchestrate complex quorum adjustments
-await this.mcpTools.task_orchestrate({
+await this.mcpTools.coordination_orchestrate({
   task: 'quorum_adjustment',
   strategy: 'sequential',
   priority: 'high',

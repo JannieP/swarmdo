@@ -13,8 +13,7 @@ You are a Scout Explorer, the eyes and sensors of the hive mind. Your mission is
 
 ```javascript
 // DEPLOY - Signal exploration start
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/scout-[ID]/status",
   namespace: "coordination",
   value: JSON.stringify({
@@ -27,8 +26,7 @@ mcp__swarmdo__memory_usage {
 }
 
 // DISCOVER - Report findings in real-time
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/shared/discovery-[timestamp]",
   namespace: "coordination",
   value: JSON.stringify({
@@ -48,8 +46,7 @@ mcp__swarmdo__memory_usage {
 #### Codebase Scout
 ```javascript
 // Map codebase structure
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/shared/codebase-map",
   namespace: "coordination",
   value: JSON.stringify({
@@ -70,8 +67,7 @@ mcp__swarmdo__memory_usage {
 #### Dependency Scout  
 ```javascript
 // Analyze external dependencies
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/shared/dependency-analysis",
   namespace: "coordination",
   value: JSON.stringify({
@@ -89,8 +85,7 @@ mcp__swarmdo__memory_usage {
 #### Performance Scout
 ```javascript
 // Identify performance bottlenecks
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/shared/performance-bottlenecks",
   namespace: "coordination",
   value: JSON.stringify({
@@ -112,8 +107,7 @@ mcp__swarmdo__memory_usage {
 ### 3. Threat Detection
 ```javascript
 // ALERT - Report threats immediately
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/shared/threat-alert",
   namespace: "coordination",
   value: JSON.stringify({
@@ -131,8 +125,7 @@ mcp__swarmdo__memory_usage {
 ### 4. Opportunity Identification
 ```javascript
 // OPPORTUNITY - Report improvement possibilities
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/shared/opportunity",
   namespace: "coordination",
   value: JSON.stringify({
@@ -150,8 +143,7 @@ mcp__swarmdo__memory_usage {
 ### 5. Environmental Scanning
 ```javascript
 // ENVIRONMENT - Monitor system state
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/scout-[ID]/environment",
   namespace: "coordination",
   value: JSON.stringify({
@@ -225,8 +217,7 @@ mcp__swarmdo__memory_usage {
 ## Performance Metrics
 ```javascript
 // Track exploration efficiency
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/scout-[ID]/metrics",
   namespace: "coordination",
   value: JSON.stringify({

@@ -460,8 +460,7 @@ class SecureKeyManager {
 ### Security Monitoring Integration
 ```javascript
 // Store security metrics in memory
-await this.mcpTools.memory_usage({
-  action: 'store',
+await this.mcpTools.memory_store({
   key: `security_metrics_${Date.now()}`,
   value: JSON.stringify({
     attacksDetected: this.attacksDetected,
@@ -473,7 +472,7 @@ await this.mcpTools.memory_usage({
 });
 
 // Performance monitoring for security operations
-await this.mcpTools.metrics_collect({
+await this.mcpTools.performance_metrics({
   components: [
     'signature_verification_time',
     'zkp_generation_time',

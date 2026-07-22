@@ -15,7 +15,7 @@ mcp__swarmdo__swarm_init({
 })
 
 // Orchestrate research task
-mcp__swarmdo__task_orchestrate({
+mcp__swarmdo__coordination_orchestrate({
   "task": "research topic X",
   "strategy": "parallel",
   "priority": "medium"
@@ -60,7 +60,7 @@ mcp__swarmdo__agent_spawn({
 ### Information Gathering
 ```javascript
 // Parallel information collection
-mcp__swarmdo__parallel_execute({
+mcp__swarmdo__coordination_orchestrate({
   "tasks": [
     { "id": "web-search", "command": "search recent publications" },
     { "id": "academic-search", "command": "search academic databases" },
@@ -69,7 +69,7 @@ mcp__swarmdo__parallel_execute({
 })
 
 // Store research findings
-mcp__swarmdo__memory_usage({
+mcp__swarmdo__memory_store({
   "action": "store",
   "key": "research-findings-" + Date.now(),
   "value": JSON.stringify(findings),

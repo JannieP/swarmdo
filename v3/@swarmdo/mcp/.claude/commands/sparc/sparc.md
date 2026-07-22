@@ -50,7 +50,7 @@ use new_task for each new task as a sub-task.
 
 ### Option 1: Using MCP Tools (Preferred in Claude Code)
 ```javascript
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "sparc",
   task_description: "orchestrate authentication system",
   options: {
@@ -86,8 +86,7 @@ npx swarmdo sparc run sparc "your task" --non-interactive
 ### Using MCP Tools (Preferred)
 ```javascript
 // Store mode-specific context
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "sparc_context",
   value: "important decisions",
   namespace: "sparc"

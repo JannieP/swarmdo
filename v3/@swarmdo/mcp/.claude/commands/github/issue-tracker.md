@@ -53,7 +53,7 @@ mcp__github__create_issue {
 }
 
 // Set up automated tracking
-mcp__swarmdo__task_orchestrate {
+mcp__swarmdo__coordination_orchestrate {
   task: "Monitor and coordinate issue progress with automated updates",
   strategy: "adaptive",
   priority: "medium"
@@ -63,8 +63,7 @@ mcp__swarmdo__task_orchestrate {
 ### 2. Automated Progress Updates
 ```javascript
 // Update issue with progress from swarm memory
-mcp__swarmdo__memory_usage {
-  action: "retrieve",
+mcp__swarmdo__memory_retrieve {
   key: "issue/54/progress"
 }
 
@@ -92,8 +91,7 @@ mcp__github__add_issue_comment {
 }
 
 // Store progress in swarm memory
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "issue/54/latest_update",
   value: { timestamp: Date.now(), progress: "89%", status: "near_completion" }
 }
@@ -158,8 +156,7 @@ mcp__github__update_issue {
   ]}
   
   // Store initial coordination state
-  mcp__swarmdo__memory_usage {
-    action: "store",
+  mcp__swarmdo__memory_store {
     key: "project/github_integration/issues",
     value: { created: Date.now(), total_issues: 3, status: "initialized" }
   }

@@ -19,7 +19,7 @@ Scan for exposed secrets, env leaks, and monoliths. Recommend mitigations or ref
 
 ### Option 1: Using MCP Tools (Preferred in Claude Code)
 ```javascript
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "security-review",
   task_description: "audit API security",
   options: {
@@ -55,8 +55,7 @@ npx swarmdo sparc run security-review "your task" --non-interactive
 ### Using MCP Tools (Preferred)
 ```javascript
 // Store mode-specific context
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "security-review_context",
   value: "important decisions",
   namespace: "security-review"

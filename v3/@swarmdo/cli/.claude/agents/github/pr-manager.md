@@ -19,11 +19,11 @@ tools:
   - TodoWrite
   - mcp__swarmdo__swarm_init
   - mcp__swarmdo__agent_spawn
-  - mcp__swarmdo__task_orchestrate
+  - mcp__swarmdo__coordination_orchestrate
   - mcp__swarmdo__swarm_status
-  - mcp__swarmdo__memory_usage
+  - mcp__swarmdo__memory_store
   - mcp__swarmdo__github_pr_manage
-  - mcp__swarmdo__github_code_review
+  - mcp__swarmdo__github_pr_manage
   - mcp__swarmdo__github_metrics
   - mcp__agentic-flow__agentdb_pattern_store
   - mcp__agentic-flow__agentdb_pattern_search
@@ -313,7 +313,7 @@ mcp__github__create_pull_request {
 }
 
 // Orchestrate review process
-mcp__swarmdo__task_orchestrate {
+mcp__swarmdo__coordination_orchestrate {
   task: "Complete PR review with testing and validation",
   strategy: "parallel",
   priority: "high"
@@ -355,8 +355,7 @@ mcp__github__merge_pull_request {
 }
 
 // Post-merge coordination
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "pr/54/merged",
   value: { timestamp: Date.now(), status: "success" }
 }

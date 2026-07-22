@@ -35,7 +35,7 @@ mcp__swarmdo__swarm_status({
 })
 
 // Monitor agent performance
-mcp__swarmdo__agent_metrics({
+mcp__swarmdo__agent_status({
   "agentId": "agent-123"
 })
 ```

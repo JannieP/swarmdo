@@ -7,7 +7,7 @@ Autonomous code generation with batch file operations.
 
 ### Option 1: Using MCP Tools (Preferred in Claude Code)
 ```javascript
-mcp__swarmdo__sparc_mode {
+mcp__swarmdo__workflow_create {
   mode: "coder",
   task_description: "implement user authentication",
   options: {

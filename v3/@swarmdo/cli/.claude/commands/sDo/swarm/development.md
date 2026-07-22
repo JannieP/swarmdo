@@ -15,7 +15,7 @@ mcp__swarmdo__swarm_init({
 })
 
 // Orchestrate development task
-mcp__swarmdo__task_orchestrate({
+mcp__swarmdo__coordination_orchestrate({
   "task": "build feature X",
   "strategy": "parallel",
   "priority": "high"
@@ -75,12 +75,12 @@ mcp__swarmdo__swarm_status({
 })
 
 // Monitor agent performance
-mcp__swarmdo__agent_metrics({
+mcp__swarmdo__agent_status({
   "agentId": "architect-001"
 })
 
 // Real-time monitoring
-mcp__swarmdo__swarm_monitor({
+mcp__swarmdo__swarm_status({
   "swarmId": "development-swarm",
   "interval": 5000
 })
@@ -89,7 +89,7 @@ mcp__swarmdo__swarm_monitor({
 ## Error Handling
 ```javascript
 // Enable fault tolerance
-mcp__swarmdo__daa_fault_tolerance({
+mcp__swarmdo__coordination_consensus({
   "agentId": "all",
   "strategy": "auto-recovery"
 })

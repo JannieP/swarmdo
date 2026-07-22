@@ -16,12 +16,12 @@ tools:
   - mcp__github__create_workflow_dispatch
   - mcp__swarmdo__swarm_init
   - mcp__swarmdo__agent_spawn
-  - mcp__swarmdo__task_orchestrate
-  - mcp__swarmdo__memory_usage
+  - mcp__swarmdo__coordination_orchestrate
+  - mcp__swarmdo__memory_store
   - mcp__swarmdo__performance_report
-  - mcp__swarmdo__bottleneck_analyze
+  - mcp__swarmdo__performance_bottleneck
   - mcp__swarmdo__workflow_create
-  - mcp__swarmdo__automation_setup
+  - mcp__swarmdo__workflow_create
   - mcp__agentic-flow__agentdb_pattern_store
   - mcp__agentic-flow__agentdb_pattern_search
   - mcp__agentic-flow__agentdb_pattern_stats
@@ -759,7 +759,7 @@ mcp__swarmdo__agent_spawn { type: "monitor", name: "Automation Monitor" }
 mcp__swarmdo__agent_spawn { type: "analyst", name: "Workflow Analyzer" }
 
 # Create intelligent workflow automation rules
-mcp__swarmdo__automation_setup {
+mcp__swarmdo__workflow_create {
   rules: [
     {
       trigger: "pull_request",
@@ -775,7 +775,7 @@ mcp__swarmdo__automation_setup {
 }
 
 # Orchestrate adaptive workflow management
-mcp__swarmdo__task_orchestrate {
+mcp__swarmdo__coordination_orchestrate {
   task: "Manage intelligent CI/CD pipeline with continuous optimization",
   strategy: "adaptive",
   priority: "high",
@@ -792,14 +792,13 @@ mcp__swarmdo__performance_report {
 }
 
 # Analyze workflow bottlenecks with swarm intelligence
-mcp__swarmdo__bottleneck_analyze {
+mcp__swarmdo__performance_bottleneck {
   component: "github_actions_workflow",
   metrics: ["build_time", "test_duration", "deployment_latency", "resource_utilization"]
 }
 
 # Store performance insights in swarm memory
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "workflow/performance/analysis",
   value: {
     bottlenecks_identified: ["slow_test_suite", "inefficient_caching"],
@@ -870,8 +869,7 @@ const createIntelligentWorkflow = async (repoContext) => {
 ### Continuous Learning and Optimization
 ```bash
 # Implement continuous workflow learning
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "workflow/learning/patterns",
   value: {
     successful_patterns: [
@@ -893,7 +891,7 @@ mcp__swarmdo__memory_usage {
 }
 
 # Generate workflow optimization recommendations
-mcp__swarmdo__task_orchestrate {
+mcp__swarmdo__coordination_orchestrate {
   task: "Analyze workflow performance and generate optimization recommendations",
   strategy: "parallel",
   priority: "medium"

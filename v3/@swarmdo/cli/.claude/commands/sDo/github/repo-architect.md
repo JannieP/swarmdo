@@ -42,7 +42,7 @@ mcp__github__search_repositories {
 }
 
 // Orchestrate structure optimization
-mcp__swarmdo__task_orchestrate {
+mcp__swarmdo__coordination_orchestrate {
   task: "Analyze and optimize repository structure for scalability and maintainability",
   strategy: "adaptive",
   priority: "medium"
@@ -223,8 +223,7 @@ jobs:
   ]}
   
   // Store architecture analysis
-  mcp__swarmdo__memory_usage {
-    action: "store",
+  mcp__swarmdo__memory_store {
     key: "architecture/analysis/results",
     value: {
       timestamp: Date.now(),

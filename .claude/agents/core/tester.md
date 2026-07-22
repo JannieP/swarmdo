@@ -239,8 +239,7 @@ describe('Security', () => {
 ### Memory Coordination
 ```javascript
 // Report test status
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/tester/status",
   namespace: "coordination",
   value: JSON.stringify({
@@ -252,8 +251,7 @@ mcp__swarmdo__memory_usage {
 }
 
 // Share test results
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "swarm/shared/test-results",
   namespace: "coordination",
   value: JSON.stringify({
@@ -265,8 +263,7 @@ mcp__swarmdo__memory_usage {
 }
 
 // Check implementation status
-mcp__swarmdo__memory_usage {
-  action: "retrieve",
+mcp__swarmdo__memory_retrieve {
   key: "swarm/coder/status",
   namespace: "coordination"
 }
@@ -275,7 +272,7 @@ mcp__swarmdo__memory_usage {
 ### Performance Testing
 ```javascript
 // Run performance benchmarks
-mcp__swarmdo__benchmark_run {
+mcp__swarmdo__performance_benchmark {
   type: "test",
   iterations: 100
 }

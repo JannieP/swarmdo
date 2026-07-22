@@ -2,7 +2,7 @@
 name: release-manager
 description: |
   Automated release coordination and deployment with swarmdo-swarm orchestration for seamless version management, testing, and deployment across multiple packages
-tools: Bash, Read, Write, Edit, TodoWrite, TodoRead, Task, mcp__github__create_pull_request, mcp__github__merge_pull_request, mcp__github__create_branch, mcp__github__push_files, mcp__github__create_issue, mcp__swarmdo__swarm_init, mcp__swarmdo__agent_spawn, mcp__swarmdo__task_orchestrate, mcp__swarmdo__memory_usage
+tools: Bash, Read, Write, Edit, TodoWrite, TodoRead, Task, mcp__github__create_pull_request, mcp__github__merge_pull_request, mcp__github__create_branch, mcp__github__push_files, mcp__github__create_issue, mcp__swarmdo__swarm_init, mcp__swarmdo__agent_spawn, mcp__swarmdo__coordination_orchestrate, mcp__swarmdo__memory_store
 ---
 
 # GitHub Release Manager
@@ -38,7 +38,7 @@ mcp__github__create_branch {
 }
 
 // Orchestrate release preparation
-mcp__swarmdo__task_orchestrate {
+mcp__swarmdo__coordination_orchestrate {
   task: "Prepare release v1.0.72 with comprehensive testing and validation",
   strategy: "sequential",
   priority: "critical"
@@ -222,8 +222,7 @@ This release is production-ready with comprehensive validation and testing.
   ]}
   
   // Store release state
-  mcp__swarmdo__memory_usage {
-    action: "store", 
+  mcp__swarmdo__memory_store {
     key: "release/v1.0.72/status",
     value: {
       timestamp: Date.now(),

@@ -1026,12 +1026,12 @@ class V3BenchmarkSuite {
 const performanceMCP = {
   // Run benchmark suite
   async runBenchmarks(suite = 'all') {
-    return await mcp__swarmdo__benchmark_run({ suite });
+    return await mcp__swarmdo__performance_benchmark({ suite });
   },
 
   // Analyze bottlenecks
   async analyzeBottlenecks(component) {
-    return await mcp__swarmdo__bottleneck_analyze({
+    return await mcp__swarmdo__performance_bottleneck({
       component: component,
       metrics: ['latency', 'throughput', 'memory', 'cpu']
     });
@@ -1047,7 +1047,7 @@ const performanceMCP = {
 
   // Token usage analysis
   async analyzeTokenUsage(operation) {
-    return await mcp__swarmdo__token_usage({
+    return await mcp__swarmdo__performance_metrics({
       operation: operation,
       timeframe: '24h'
     });
@@ -1070,8 +1070,7 @@ const performanceMCP = {
 
   // Store performance metrics
   async storeMetrics(key, value) {
-    return await mcp__swarmdo__memory_usage({
-      action: 'store',
+    return await mcp__swarmdo__memory_store({
       key: `performance/${key}`,
       value: JSON.stringify(value),
       namespace: 'v3-performance',

@@ -2,7 +2,7 @@
 name: swarm-pr
 description: |
   Pull request swarm management agent that coordinates multi-agent code review, validation, and integration workflows with automated PR lifecycle management
-tools: mcp__github__get_pull_request, mcp__github__create_pull_request, mcp__github__update_pull_request, mcp__github__list_pull_requests, mcp__github__create_pr_comment, mcp__github__get_pr_diff, mcp__github__merge_pull_request, mcp__swarmdo__swarm_init, mcp__swarmdo__agent_spawn, mcp__swarmdo__task_orchestrate, mcp__swarmdo__memory_usage, mcp__swarmdo__coordination_sync, TodoWrite, TodoRead, Bash, Grep, Read, Write, Edit
+tools: mcp__github__get_pull_request, mcp__github__create_pull_request, mcp__github__update_pull_request, mcp__github__list_pull_requests, mcp__github__create_pr_comment, mcp__github__get_pr_diff, mcp__github__merge_pull_request, mcp__swarmdo__swarm_init, mcp__swarmdo__agent_spawn, mcp__swarmdo__coordination_orchestrate, mcp__swarmdo__memory_store, mcp__swarmdo__coordination_sync, TodoWrite, TodoRead, Bash, Grep, Read, Write, Edit
 ---
 
 # Swarm PR - Managing Swarms through Pull Requests
@@ -305,8 +305,7 @@ mcp__swarmdo__agent_spawn { type: "analyst", name: "Impact Analyzer" }
 mcp__swarmdo__agent_spawn { type: "optimizer", name: "Performance Optimizer" }
 
 # Store PR context for swarm coordination
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "pr/#{pr_number}/analysis",
   value: { 
     diff: "pr_diff_content", 
@@ -317,7 +316,7 @@ mcp__swarmdo__memory_usage {
 }
 
 # Orchestrate comprehensive PR workflow
-mcp__swarmdo__task_orchestrate {
+mcp__swarmdo__coordination_orchestrate {
   task: "Execute multi-agent PR review and validation workflow",
   strategy: "parallel",
   priority: "high",
@@ -380,15 +379,14 @@ const prPostHook = async (results) => {
 mcp__swarmdo__coordination_sync { swarmId: "pr-review-swarm" }
 
 # Analyze merge readiness with multiple agents
-mcp__swarmdo__task_orchestrate {
+mcp__swarmdo__coordination_orchestrate {
   task: "Evaluate PR merge readiness with comprehensive validation",
   strategy: "sequential",
   priority: "critical"
 }
 
 # Store merge decision context
-mcp__swarmdo__memory_usage {
-  action: "store",
+mcp__swarmdo__memory_store {
   key: "pr/merge_decisions/#{pr_number}",
   value: {
     ready_to_merge: true,

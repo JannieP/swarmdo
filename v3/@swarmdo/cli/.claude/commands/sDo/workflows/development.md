@@ -41,7 +41,7 @@ Sets up architectural and implementation thinking patterns.
 
 ### 3. Coordinate Implementation
 ```
-Tool: mcp__swarmdo__task_orchestrate
+Tool: mcp__swarmdo__coordination_orchestrate
 Parameters: {
   "task": "Build REST API with authentication",
   "strategy": "parallel",
