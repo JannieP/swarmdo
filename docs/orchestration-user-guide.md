@@ -106,6 +106,14 @@ const { verified } = await adversarialVerify('the migration is idempotent', { ro
 All primitives take an injectable `executor`, so orchestration logic is unit-testable
 offline with no provider keys.
 
+## ULTRA mode (default-thorough agents)
+
+`SWARMDO_ULTRA=1` makes every swarmdo-executed agent default to thoroughness —
+optimize for correctness over speed, and **self-verify** non-trivial claims via
+`orchestrate_verify` / `orchestrate_panel` before asserting them. It's the
+engine-level analog of Claude Code's "ultracode" mode, composed into the agent
+system prompt (`harness → ULTRA → ponytail → your prompt`). Off by default.
+
 ## Notes & limits
 
 - The engine is deterministic by contract — orchestration scripts must avoid

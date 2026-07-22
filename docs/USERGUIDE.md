@@ -7516,6 +7516,7 @@ export SWARMDO_MEMORY_PATH="./data"
 | `CLAUDE_CODE_HEADLESS` | Claude Code headless mode compatibility | `false` |
 | `SWARMDO_HARNESS` | Default coding-agent harness preamble for executed agents (ground→verify→report); `0`/`false`/`off` disables | `true` |
 | `SWARMDO_PONYTAIL` | Default the anti-over-engineering ponytail persona on for executed agents (per-call `ponytail:false` still wins) | `false` |
+| `SWARMDO_ULTRA` | ULTRA "default-thorough" policy for executed agents: optimize for correctness/coverage over speed, self-verify non-trivial claims via `orchestrate_verify`/`orchestrate_panel` (`1`/`true`/`on`) | `false` |
 
 ### MCP Server
 

@@ -8,15 +8,19 @@ import { composeSystemPrompt } from '../src/mcp-tools/agent-execute-core.ts';
 describe('composeSystemPrompt — harness + ponytail + caller', () => {
   let prevH: string | undefined;
   let prevP: string | undefined;
+  let prevU: string | undefined;
   beforeEach(() => {
     prevH = process.env.SWARMDO_HARNESS;
     prevP = process.env.SWARMDO_PONYTAIL;
+    prevU = process.env.SWARMDO_ULTRA;
     delete process.env.SWARMDO_HARNESS;
     delete process.env.SWARMDO_PONYTAIL;
+    delete process.env.SWARMDO_ULTRA;
   });
   afterEach(() => {
     if (prevH === undefined) delete process.env.SWARMDO_HARNESS; else process.env.SWARMDO_HARNESS = prevH;
     if (prevP === undefined) delete process.env.SWARMDO_PONYTAIL; else process.env.SWARMDO_PONYTAIL = prevP;
+    if (prevU === undefined) delete process.env.SWARMDO_ULTRA; else process.env.SWARMDO_ULTRA = prevU;
   });
 
   it('applies the coding-agent harness by default (no ponytail, no caller prompt)', () => {
@@ -24,6 +28,30 @@ describe('composeSystemPrompt — harness + ponytail + caller', () => {
     expect(out).toBeDefined();
     expect(out).toMatch(/verified-done state/);
     expect(out).toMatch(/Verify by running/);
+  });
+
+  it('SWARMDO_ULTRA=1 injects the ULTRA thoroughness policy', () => {
+    process.env.SWARMDO_ULTRA = '1';
+    const out = composeSystemPrompt({})!;
+    expect(out).toMatch(/ULTRA mode is on/);
+    expect(out).toMatch(/orchestrate_verify/);
+  });
+
+  it('ULTRA is off by default', () => {
+    expect(composeSystemPrompt({})).not.toMatch(/ULTRA mode is on/);
+  });
+
+  it('composes harness → ULTRA → ponytail → caller in order', () => {
+    process.env.SWARMDO_ULTRA = 'true';
+    const out = composeSystemPrompt({ ponytail: true, systemPrompt: 'ROLE: reviewer' })!;
+    const iH = out.indexOf('verified-done');
+    const iU = out.indexOf('ULTRA mode is on');
+    const iP = out.indexOf('lazy senior developer');
+    const iC = out.indexOf('ROLE: reviewer');
+    expect(iH).toBeGreaterThanOrEqual(0);
+    expect(iU).toBeGreaterThan(iH);
+    expect(iP).toBeGreaterThan(iU);
+    expect(iC).toBeGreaterThan(iP);
   });
 
   it('SWARMDO_HARNESS=0 opts out — undefined when nothing else is supplied', () => {

@@ -515,14 +515,27 @@ const SWARMDO_HARNESS_PREAMBLE = `You are a software-engineering agent working i
 - Be proactive within the task, not beyond it: do what's asked and the obvious next step; for anything ambiguous, destructive, or outward-facing, surface it rather than assume.
 - Report honestly and concisely: what you did, what you verified, what's still open — no overclaiming.`;
 
+// SWARMDO_ULTRA — the "default-thorough" policy layer (opt-in, SWARMDO_ULTRA=1).
+// Makes an executed agent optimize for correctness/coverage over speed and default
+// to self-verification via the orchestrate_verify / orchestrate_panel tools. The
+// engine-level analog of Claude Code's "ultracode" mode.
+const SWARMDO_ULTRA_PREAMBLE = `ULTRA mode is on — optimize for correctness and completeness over speed; token cost is not the constraint.
+- Don't assert non-trivial claims on a single pass. Cross-check them — re-derive from the code/evidence, or use the orchestrate_verify tool (an adversarial skeptic panel) before stating them as fact.
+- For open or uncertain answers, weigh multiple approaches and reconcile them (orchestrate_panel) rather than committing to the first.
+- Cover the space: enumerate edge cases and failure modes, and name what you did NOT check. Surface residual uncertainty explicitly instead of hiding it.
+- Prefer exhaustive verification (run the build/tests, read the actual source) over plausible-looking conclusions.`;
+
 /** Compose the effective system prompt: base coding-agent harness (default on,
- * SWARMDO_HARNESS=0 opts out) + optional ponytail persona (opt-in flag/env) +
- * the caller's own instructions, in that order. */
+ * SWARMDO_HARNESS=0 opts out) + optional ULTRA thoroughness policy (SWARMDO_ULTRA=1)
+ * + optional ponytail persona (opt-in flag/env) + the caller's own instructions,
+ * in that order. */
 export function composeSystemPrompt(input: Pick<AgentExecuteInput, 'systemPrompt' | 'ponytail'>): string | undefined {
   const parts: string[] = [];
 
   const harnessEnv = (process.env.SWARMDO_HARNESS || '').toLowerCase();
   if (!/^(0|false|off)$/.test(harnessEnv)) parts.push(SWARMDO_HARNESS_PREAMBLE);
+
+  if (/^(1|true|on)$/.test((process.env.SWARMDO_ULTRA || '').toLowerCase())) parts.push(SWARMDO_ULTRA_PREAMBLE);
 
   const env = (process.env.SWARMDO_PONYTAIL || '').toLowerCase();
   let ponytailOn: boolean;
