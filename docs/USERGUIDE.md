@@ -25,14 +25,14 @@
 - [Architecture & Modules](#%EF%B8%8F-architecture--modules)
 - [Configuration & Reference](#%EF%B8%8F-configuration--reference)
 - [Help & Resources](#-help--resources)
-- [Operational Toolkit (v1.3 to v1.4)](#operational-toolkit-v13-to-v14)
+- [Operational Toolkit](#operational-toolkit)
 - [What's new](#whats-new)
 
 ---
 
-## Operational Toolkit (v1.3 to v1.4)
+## Operational Toolkit
 
-The v1.3–v1.4 release train added a day-to-day operations layer around the swarm. Every command below ships in the core CLI — no plugins required.
+swarmdo ships a day-to-day operations layer around the swarm. Every command below is in the core CLI — no plugins required.
 
 | Command | Aliases | What it does |
 |---------|---------|-------------|
@@ -207,7 +207,7 @@ swarmdo memory export -o ./vault -f obsidian      # DB → Obsidian vault
 swarmdo memory import -i ./vault -f obsidian      # edited vault → DB (re-embedded)
 ```
 
-> **Slash-command namespace (v1.4.0):** every Claude Code surface swarmdo installs is namespaced — commands as `/sDo:<category>:<name>` (e.g. `/sDo:swarm:swarm-init`, `/sDo:statusline`), skills with the `sdo-` prefix (e.g. `/sdo-ponytail`, `/sdo-caveman-compress`). Type `/sDo` and the whole toolkit groups together. Legacy unprefixed copies are removed automatically by `init` / upgrades / `efficiency on`.
+> **Slash-command namespace:** every Claude Code surface swarmdo installs is namespaced — commands as `/sDo:<category>:<name>` (e.g. `/sDo:swarm:swarm-init`, `/sDo:statusline`), skills with the `sdo-` prefix (e.g. `/sdo-ponytail`, `/sdo-caveman-compress`). Type `/sDo` and the whole toolkit groups together. Legacy unprefixed copies are removed automatically by `init` / upgrades / `efficiency on`.
 
 ---
 
@@ -3081,7 +3081,7 @@ Summary: 9/10 checks passed
 <details>
 <summary>📦 <strong>Embeddings Package</strong> — Cross-platform ONNX with hyperbolic support</summary>
 
-The embeddings package (v3.0.0-alpha.12) provides high-performance vector embeddings with multiple backends.
+The embeddings package provides high-performance vector embeddings with multiple backends.
 
 **Key Features:**
 
@@ -8142,11 +8142,10 @@ cp -r ./data-backup-v2 ./data
 
 ## License
 
-MIT - [the upstream author](https://the upstream project (see NOTICE))
+MIT — see [LICENSE](https://github.com/SwarmDo/swarmdo/blob/main/LICENSE). Original lineage is documented in [NOTICE](https://github.com/SwarmDo/swarmdo/blob/main/NOTICE).
 
 
-[![SwarmVector](https://img.shields.io/npm/v/swarmvector?style=for-the-badge&logo=rust&color=orange&label=SwarmVector)](https://www.npmjs.com/package/swarmvector)
-[![Agentic-Flow](https://img.shields.io/npm/v/agentic-flow?style=for-the-badge&logo=typescript&color=3178c6&label=Agentic-Flow)](https://www.npmjs.com/package/agentic-flow)
-[![Reddit](https://img.shields.io/reddit/subreddit-subscribers/aipromptprogramming?style=for-the-badge&logo=reddit&color=FF4500&label=r/aipromptprogramming)](https://www.reddit.com/r/aipromptprogramming/)
-
-[![Crates.io](https://img.shields.io/badge/crates.io-upstream-E6732E?style=for-the-badge&logo=rust&logoColor=white)](https://crates.io/users/upstream)
+[![npm version](https://img.shields.io/npm/v/swarmdo?style=for-the-badge&logo=npm&logoColor=white&label=npx%20swarmdo&color=cb3837)](https://github.com/SwarmDo/swarmdo/releases)
+[![MIT License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](https://github.com/SwarmDo/swarmdo/blob/main/LICENSE)
+[![Website](https://img.shields.io/badge/swarmdo.com-e2a33c?style=for-the-badge&logoColor=black)](https://swarmdo.com)
+[![Star on GitHub](https://img.shields.io/github/stars/SwarmDo/swarmdo?style=for-the-badge&logo=github&color=gold)](https://github.com/SwarmDo/swarmdo)

@@ -267,7 +267,7 @@ Credits: [caveman](https://github.com/JuliusBrussee/caveman) by Julius Brussee �
 
 ### 🧰 The Operational Toolkit (v1.3 → v1.4)
 
-The recent release train added a full day-to-day operations layer around the swarm — spend, safety, releases, and memory portability:
+swarmdo ships a full day-to-day operations layer around the swarm — spend, safety, releases, and memory portability:
 
 | Command | What it does |
 |---------|-------------|
