@@ -29,7 +29,7 @@ export interface VerifyResult {
  */
 export async function adversarialVerify(
   claim: string,
-  opts: { rounds?: number; lenses?: string[]; model?: string; executor?: AgentExecutor } = {},
+  opts: { rounds?: number; lenses?: string[]; model?: string; context?: string; executor?: AgentExecutor } = {},
 ): Promise<VerifyResult> {
   const lenses = opts.lenses ?? ['correctness', 'edge-cases', 'evidence'];
   const rounds = Math.max(1, opts.rounds ?? lenses.length);
@@ -45,6 +45,7 @@ export async function adversarialVerify(
       schema: VERDICT_SCHEMA,
       temperature: 0,
       model: opts.model,
+      systemPrompt: opts.context,
       executor: opts.executor,
     }) as Promise<{ refuted: boolean; reason?: string }>;
   });
@@ -80,6 +81,7 @@ export async function judgePanel(
     personas?: string[];
     normalize?: (s: string) => string;
     model?: string;
+    context?: string;
     executor?: AgentExecutor;
   } = {},
 ): Promise<PanelResult> {
@@ -90,7 +92,9 @@ export async function judgePanel(
   const thunks = Array.from({ length: attempts }, (_unused, i) => async () => {
     const persona = personas[i % personas.length];
     return callAgent(task, {
-      systemPrompt: `Answer as a ${persona} expert. End with the single final answer.`,
+      systemPrompt: [opts.context, `Answer as a ${persona} expert. End with the single final answer.`]
+        .filter(Boolean)
+        .join('\n\n'),
       temperature: 0.4,
       model: opts.model,
       executor: opts.executor,

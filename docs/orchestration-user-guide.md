@@ -41,6 +41,8 @@ swarmdo orchestrate verify "auth uses PKCE" --model anthropic/claude-haiku-4.5
 | `--strict` | verify | Exit non-zero (2) when the claim is **not** verified — for CI gating (`verify … --strict && deploy`). Default is informational (exit 0). |
 | `--demo` | both | Run with the local no-LLM executor (no provider needed). |
 | `--json` | both | Emit the raw structured result. |
+| `--ground` | both | Retrieve relevant memories (ONNX+HNSW) and inject them as context for the fan-out agents. Best-effort + timeout-bounded — a cold first-call model download can't block. |
+| `--ground-namespace`, `--ground-limit`, `--ground-timeout` | both | Tune grounding (defaults: all namespaces, 5 results, 10000 ms). |
 
 ## Cheap by design
 
@@ -49,6 +51,22 @@ which is **stateless** — no agent registry, no shared state — so parallel fa
 has no contention, and `--model` routes to whatever provider that slug implies.
 Running 5 skeptics on a model ~150× cheaper than a frontier model is the point:
 exhaustive verification without exhaustive cost.
+
+## Grounding (memory-aware agents)
+
+`--ground` retrieves the most relevant entries from swarmdo's memory (real
+ONNX+HNSW semantic search) and injects them as context for every skeptic/attempt,
+so the fan-out reasons with your project's prior knowledge instead of cold. It's
+**best-effort and timeout-bounded**: the first-ever call downloads the embedding
+model (one-time, can be slow or offline), so retrieval is capped by
+`--ground-timeout` (default 10s) and the command proceeds *ungrounded* with a
+warning rather than blocking. Once the model is warm, retrieval is sub-second.
+
+```bash
+swarmdo orchestrate verify "auth uses PKCE" --ground --model anthropic/claude-haiku-4.5
+#   Grounded:  4 memories (auth-decisions, oauth-adr, …)
+#   Verdict:   ✓ VERIFIED
+```
 
 ## For agents (MCP tools)
 

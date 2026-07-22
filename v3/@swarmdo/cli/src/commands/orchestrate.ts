@@ -14,6 +14,7 @@ import type { Command, CommandContext, CommandResult } from '../types.js';
 import type { AgentExecutor } from '../orchestration/engine.js';
 import { adversarialVerify, judgePanel } from '../orchestration/patterns.js';
 import { localDemoExecutor, hasProvider } from '../orchestration/demo-executor.js';
+import { retrieveContext } from '../orchestration/grounding.js';
 
 /** Resolve the executor + guard against "no provider and not a demo". */
 function resolveExecutor(ctx: CommandContext): { executor?: AgentExecutor; error?: CommandResult } {
@@ -36,7 +37,29 @@ const COMMON_OPTS = [
   { name: 'model', description: 'Model slug for the fan-out (cheap-routing lever)', type: 'string' as const },
   { name: 'demo', description: 'Run with a local deterministic executor (no LLM/provider needed)', type: 'boolean' as const },
   { name: 'json', description: 'Emit the raw result as JSON', type: 'boolean' as const },
+  { name: 'ground', description: 'Retrieve relevant memories and inject them as context for the agents', type: 'boolean' as const },
+  { name: 'ground-namespace', description: 'Memory namespace to ground from', type: 'string' as const },
+  { name: 'ground-limit', description: 'Max memories to retrieve (default 5)', type: 'number' as const },
+  { name: 'ground-timeout', description: 'Retrieval timeout ms (default 10000; a cold embedder download can exceed it)', type: 'number' as const },
 ];
+
+/** Best-effort grounding: retrieve + print + return injected context (undefined when off/empty/timed-out). */
+async function resolveGrounding(ctx: CommandContext, query: string): Promise<string | undefined> {
+  if (ctx.flags.ground !== true) return undefined;
+  const namespace = typeof ctx.flags['ground-namespace'] === 'string' ? (ctx.flags['ground-namespace'] as string) : undefined;
+  const g = await retrieveContext(query, {
+    namespace,
+    limit: Number(ctx.flags['ground-limit']) || undefined,
+    timeoutMs: Number(ctx.flags['ground-timeout']) || undefined,
+  });
+  if (g) {
+    const names = g.keys.slice(0, 3).map((k) => k.split(':').pop());
+    console.log(`Grounded:  ${g.count} memories (${names.join(', ')}${g.keys.length > 3 ? ', …' : ''})`);
+    return g.context;
+  }
+  console.log('Grounded:  none (empty or retrieval timed out — a cold embedder download warms on first run). Proceeding ungrounded.');
+  return undefined;
+}
 
 export const orchestrateCommand: Command = {
   name: 'orchestrate',
@@ -64,7 +87,8 @@ export const orchestrateCommand: Command = {
         const { executor, error } = resolveExecutor(ctx);
         if (error) return error;
         const rounds = Number(ctx.flags.rounds) || undefined;
-        const result = await adversarialVerify(claim, { rounds, model: modelFlag(ctx), executor });
+        const context = await resolveGrounding(ctx, claim);
+        const result = await adversarialVerify(claim, { rounds, model: modelFlag(ctx), context, executor });
         if (ctx.flags.json === true) {
           console.log(JSON.stringify(result, null, 2));
         } else {
@@ -101,7 +125,8 @@ export const orchestrateCommand: Command = {
         const { executor, error } = resolveExecutor(ctx);
         if (error) return error;
         const attempts = Number(ctx.flags.attempts) || undefined;
-        const result = await judgePanel(task, { attempts, model: modelFlag(ctx), executor });
+        const context = await resolveGrounding(ctx, task);
+        const result = await judgePanel(task, { attempts, model: modelFlag(ctx), context, executor });
         if (ctx.flags.json === true) {
           console.log(JSON.stringify(result, null, 2));
         } else {
