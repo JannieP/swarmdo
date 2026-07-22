@@ -29,7 +29,7 @@ export interface VerifyResult {
  */
 export async function adversarialVerify(
   claim: string,
-  opts: { rounds?: number; lenses?: string[]; executor?: AgentExecutor } = {},
+  opts: { rounds?: number; lenses?: string[]; model?: string; executor?: AgentExecutor } = {},
 ): Promise<VerifyResult> {
   const lenses = opts.lenses ?? ['correctness', 'edge-cases', 'evidence'];
   const rounds = Math.max(1, opts.rounds ?? lenses.length);
@@ -44,6 +44,7 @@ export async function adversarialVerify(
     return callAgent(prompt, {
       schema: VERDICT_SCHEMA,
       temperature: 0,
+      model: opts.model,
       executor: opts.executor,
     }) as Promise<{ refuted: boolean; reason?: string }>;
   });
@@ -78,6 +79,7 @@ export async function judgePanel(
     attempts?: number;
     personas?: string[];
     normalize?: (s: string) => string;
+    model?: string;
     executor?: AgentExecutor;
   } = {},
 ): Promise<PanelResult> {
@@ -90,6 +92,7 @@ export async function judgePanel(
     return callAgent(task, {
       systemPrompt: `Answer as a ${persona} expert. End with the single final answer.`,
       temperature: 0.4,
+      model: opts.model,
       executor: opts.executor,
     }) as Promise<string>;
   });

@@ -7,7 +7,7 @@
  *   - `runPipeline`  — per-item staged flow with NO barrier between stages
  *   - `callAgent`    — schema-validated agent output with one corrective retry
  *
- * All built on the real single-agent wire (`executeAgentTask`) via an
+ * All built on the real single-agent wire (`callAnthropicMessages`) via an
  * INJECTABLE executor, so orchestration logic is unit-testable offline with a
  * mock — no live LLM, no provider keys. This lifts the shapes already proven
  * in the GAIA benchmark harness (parallel attempts + vote, adversarial critic)
@@ -19,22 +19,24 @@
  */
 
 // Type-only import — erased at runtime, so this module has no static dependency
-// on the heavy provider/store stack behind executeAgentTask.
-import type { AgentExecuteInput, AgentExecuteResult } from '../mcp-tools/agent-execute-core.js';
+// on the heavy provider/store stack behind callAnthropicMessages.
+import type { AnthropicCallInput, AnthropicCallResult } from '../mcp-tools/agent-execute-core.js';
 
-export type { AgentExecuteInput, AgentExecuteResult };
+export type { AnthropicCallInput, AnthropicCallResult };
 
-/** A single-agent executor: prompt in, result out. */
-export type AgentExecutor = (input: AgentExecuteInput) => Promise<AgentExecuteResult>;
+/** A stateless single-shot LLM call: prompt (+ optional model) in, result out. */
+export type AgentExecutor = (input: AnthropicCallInput) => Promise<AnthropicCallResult>;
 
 /**
- * Default executor = the real provider-routed single-agent wire, lazily
- * imported only when actually invoked (keeps this module cheap to load and
- * lets tests inject a mock without pulling in the provider stack).
+ * Default executor = the real provider-routed LLM wire (`callAnthropicMessages`),
+ * lazily imported only when invoked. It is STATELESS — no agent store, no spawn —
+ * so parallel fan-out has no shared-record contention, and `input.model` is the
+ * cheap-routing lever (an OpenRouter/Ollama slug routes there per provider env).
+ * Tests inject a mock, so no provider keys are needed offline.
  */
 export const defaultExecutor: AgentExecutor = async (input) => {
   const mod = await import('../mcp-tools/agent-execute-core.js');
-  return mod.executeAgentTask(input);
+  return mod.callAnthropicMessages(input);
 };
 
 /**
@@ -133,8 +135,9 @@ export function extractJson(text: string): unknown {
 }
 
 export interface AgentCallOpts {
-  agentId?: string;
   systemPrompt?: string;
+  /** Cheap-routing lever: a resolved model slug (Anthropic id, or an OpenRouter/Ollama slug). */
+  model?: string;
   /** When set, the output is parsed as JSON, validated, and retried ONCE on failure. */
   schema?: SchemaSpec;
   maxTokens?: number;
@@ -150,15 +153,15 @@ export interface AgentCallOpts {
  */
 export async function callAgent(prompt: string, opts: AgentCallOpts = {}): Promise<unknown> {
   const executor = opts.executor ?? defaultExecutor;
-  const base: AgentExecuteInput = {
-    agentId: opts.agentId ?? 'orchestration-agent',
+  const base: AnthropicCallInput = {
     prompt,
     systemPrompt: opts.systemPrompt,
+    model: opts.model,
     maxTokens: opts.maxTokens,
     temperature: opts.temperature,
   };
 
-  const runOnce = async (input: AgentExecuteInput): Promise<unknown> => {
+  const runOnce = async (input: AnthropicCallInput): Promise<unknown> => {
     const r = await executor(input);
     if (!r.success) throw new Error(r.error ?? 'agent execution failed');
     const text = r.output ?? '';

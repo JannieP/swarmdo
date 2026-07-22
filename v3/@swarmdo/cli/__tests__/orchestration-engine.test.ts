@@ -13,13 +13,13 @@ import {
   extractJson,
   SchemaError,
   type AgentExecutor,
-  type AgentExecuteInput,
+  type AnthropicCallInput,
 } from '../src/orchestration/engine.ts';
 import { adversarialVerify, judgePanel } from '../src/orchestration/patterns.ts';
 
 /** Deterministic mock executor: sees the full input, returns text. */
-function mock(fn: (input: AgentExecuteInput) => string): AgentExecutor {
-  return async (input) => ({ success: true, agentId: input.agentId, output: fn(input) });
+function mock(fn: (input: AnthropicCallInput) => string): AgentExecutor {
+  return async (input) => ({ success: true, output: fn(input) });
 }
 
 describe('runParallel', () => {
@@ -107,9 +107,9 @@ describe('callAgent', () => {
 
   it('retries exactly once on invalid output, then succeeds', async () => {
     let calls = 0;
-    const executor: AgentExecutor = async (input) => {
+    const executor: AgentExecutor = async () => {
       calls += 1;
-      return { success: true, agentId: input.agentId, output: calls === 1 ? 'no json here' : '{"refuted": true}' };
+      return { success: true, output: calls === 1 ? 'no json here' : '{"refuted": true}' };
     };
     const out = await callAgent('x', { schema: { required: ['refuted'] }, executor });
     expect(out).toEqual({ refuted: true });
@@ -117,7 +117,7 @@ describe('callAgent', () => {
   });
 
   it('throws when the executor reports failure', async () => {
-    const executor: AgentExecutor = async (input) => ({ success: false, agentId: input.agentId, error: 'nope' });
+    const executor: AgentExecutor = async () => ({ success: false, error: 'nope' });
     await expect(callAgent('x', { executor })).rejects.toThrow('nope');
   });
 });

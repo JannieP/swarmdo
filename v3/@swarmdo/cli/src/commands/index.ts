@@ -228,6 +228,7 @@ import { swarmCommand } from './swarm.js';
 import { memoryCommand } from './memory.js';
 import { mcpCommand } from './mcp.js';
 import { hooksCommand } from './hooks.js';
+import { orchestrateCommand } from './orchestrate.js';
 
 // Pre-populate cache with core commands only
 loadedCommands.set('init', initCommand);
@@ -300,6 +301,7 @@ export const commands: Command[] = [
   memoryCommand,
   mcpCommand,
   hooksCommand,
+  orchestrateCommand,
 ];
 
 /**
@@ -366,7 +368,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
     advanced: [
       neuralCmd, securityCmd, performanceCmd, embeddingsCmd,
       hiveMindCmd, swarmvectorCmd, guidanceCmd, autopilotCmd,
-      repairCmd,
+      repairCmd, orchestrateCommand,
     ].filter(Boolean) as Command[],
     utility: [
       configCmd, doctorCmd, daemonCmd, completionsCmd,
