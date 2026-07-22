@@ -502,15 +502,38 @@ The best code is the code never written. On every task:
 - No speculative abstraction, no configuration for imagined futures, no wrappers around wrappers.
 If a simpler approach exists, propose it instead of building the requested complexity.`;
 
-/** Compose the effective system prompt, honoring the ponytail flag/env. */
+// Base coding-agent harness applied to every executed agent (default on; opt out
+// with SWARMDO_HARNESS=0/false/off). Original to swarmdo — the working discipline
+// a model needs to take a task to a *verified-done* state in a real codebase.
+// "Verify by running" is both swarmdo's ethos and SwarmDo-A1's core thesis
+// (selecting patches that pass the project's own tests). Principles distilled from
+// how strong coding agents are instructed; the wording is our own.
+const SWARMDO_HARNESS_PREAMBLE = `You are a software-engineering agent working inside a real codebase through tools. Take the task to a verified-done state, not a plausible-looking one.
+- Ground before acting: read the relevant code before changing it; match the surrounding conventions, style, and existing libraries rather than introducing new ones.
+- Use tools deliberately: pick the tool that fits, check assumptions against the code instead of guessing, and cite code as file:line.
+- Verify by running: a change isn't done until the build and the project's own tests pass — run them and report the real outcome, failures included.
+- Be proactive within the task, not beyond it: do what's asked and the obvious next step; for anything ambiguous, destructive, or outward-facing, surface it rather than assume.
+- Report honestly and concisely: what you did, what you verified, what's still open — no overclaiming.`;
+
+/** Compose the effective system prompt: base coding-agent harness (default on,
+ * SWARMDO_HARNESS=0 opts out) + optional ponytail persona (opt-in flag/env) +
+ * the caller's own instructions, in that order. */
 export function composeSystemPrompt(input: Pick<AgentExecuteInput, 'systemPrompt' | 'ponytail'>): string | undefined {
+  const parts: string[] = [];
+
+  const harnessEnv = (process.env.SWARMDO_HARNESS || '').toLowerCase();
+  if (!/^(0|false|off)$/.test(harnessEnv)) parts.push(SWARMDO_HARNESS_PREAMBLE);
+
   const env = (process.env.SWARMDO_PONYTAIL || '').toLowerCase();
-  let on: boolean;
-  if (typeof input.ponytail === 'boolean') on = input.ponytail;
-  else if (typeof input.ponytail === 'string') on = !/^(off|false|0)$/i.test(input.ponytail);
-  else on = /^(1|true|lite|full|ultra|on)$/.test(env);
-  if (!on) return input.systemPrompt;
-  return input.systemPrompt ? PONYTAIL_PREAMBLE + '\n\n' + input.systemPrompt : PONYTAIL_PREAMBLE;
+  let ponytailOn: boolean;
+  if (typeof input.ponytail === 'boolean') ponytailOn = input.ponytail;
+  else if (typeof input.ponytail === 'string') ponytailOn = !/^(off|false|0)$/i.test(input.ponytail);
+  else ponytailOn = /^(1|true|lite|full|ultra|on)$/.test(env);
+  if (ponytailOn) parts.push(PONYTAIL_PREAMBLE);
+
+  if (input.systemPrompt) parts.push(input.systemPrompt);
+
+  return parts.length ? parts.join('\n\n') : undefined;
 }
 
 export async function executeAgentTask(input: AgentExecuteInput): Promise<AgentExecuteResult> {
