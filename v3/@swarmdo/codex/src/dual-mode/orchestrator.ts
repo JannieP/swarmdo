@@ -77,7 +77,7 @@ export class DualModeOrchestrator extends EventEmitter {
     // Initialize memory database
     await this.runCommand(
       'npx',
-      ['swarmdo@alpha', 'memory', 'init', '--force'],
+      ['swarmdo@latest', 'memory', 'init', '--force'],
       projectPath
     );
 
@@ -85,7 +85,7 @@ export class DualModeOrchestrator extends EventEmitter {
     await this.runCommand(
       'npx',
       [
-        'swarmdo@alpha', 'memory', 'store',
+        'swarmdo@latest', 'memory', 'store',
         '--key', 'task-context',
         '--value', taskContext,
         '--namespace', sharedNamespace
@@ -219,9 +219,9 @@ Working Directory: ${projectPath}
 Shared Memory Namespace: ${sharedNamespace}
 
 COLLABORATION PROTOCOL:
-1. Search shared memory for context: npx swarmdo@alpha memory search --query "<relevant terms>" --namespace ${sharedNamespace}
+1. Search shared memory for context: npx swarmdo@latest memory search --query "<relevant terms>" --namespace ${sharedNamespace}
 2. Complete your assigned task
-3. Store your results: npx swarmdo@alpha memory store --key "${config.id}-result" --value "<your summary>" --namespace ${sharedNamespace}
+3. Store your results: npx swarmdo@latest memory store --key "${config.id}-result" --value "<your summary>" --namespace ${sharedNamespace}
 
 YOUR TASK:
 ${config.prompt}
@@ -338,7 +338,7 @@ Remember: Other agents depend on your results in shared memory. Be concise and s
     try {
       const output = await this.runCommand(
         'npx',
-        ['swarmdo@alpha', 'memory', 'list', '--namespace', sharedNamespace, '--format', 'json'],
+        ['swarmdo@latest', 'memory', 'list', '--namespace', sharedNamespace, '--format', 'json'],
         projectPath
       );
       return JSON.parse(output);
