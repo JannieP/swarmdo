@@ -254,6 +254,7 @@ Credits: [caveman](https://github.com/JuliusBrussee/caveman) by Julius Brussee �
 | Capability | Description |
 |------------|-------------|
 | 🤖 **100+ Agents** | Specialized agents for coding, testing, security, docs, architecture |
+| 🧭 **Coding-Agent Harness** | Executed agents ship with a built-in ground→verify-by-running→report-honestly discipline preamble (opt out: `SWARMDO_HARNESS=0`) |
 | 📡 **Comms Layer** | Zero-trust federation — agents across machines/orgs discover, authenticate, and exchange work securely |
 | 🐝 **Swarm Coordination** | Hierarchical, mesh, and adaptive topologies with consensus |
 | 🧠 **Self-Learning** | SONA neural patterns, ReasoningBank, trajectory learning |

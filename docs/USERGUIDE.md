@@ -7513,6 +7513,8 @@ export SWARMDO_MEMORY_PATH="./data"
 | `SWARMDO_TOPOLOGY` | Default swarm topology (`hierarchical`, `mesh`, `ring`, `star`) | `hierarchical` |
 | `SWARMDO_HEADLESS` | Run in headless mode (no interactive prompts) | `false` |
 | `CLAUDE_CODE_HEADLESS` | Claude Code headless mode compatibility | `false` |
+| `SWARMDO_HARNESS` | Default coding-agent harness preamble for executed agents (ground→verify→report); `0`/`false`/`off` disables | `true` |
+| `SWARMDO_PONYTAIL` | Default the anti-over-engineering ponytail persona on for executed agents (per-call `ponytail:false` still wins) | `false` |
 
 ### MCP Server
 
