@@ -50,6 +50,18 @@ has no contention, and `--model` routes to whatever provider that slug implies.
 Running 5 skeptics on a model ~150× cheaper than a frontier model is the point:
 exhaustive verification without exhaustive cost.
 
+## For agents (MCP tools)
+
+The same patterns are exposed as MCP tools so agents can orchestrate directly:
+
+| Tool | Args | Returns |
+|------|------|---------|
+| `orchestrate_verify` | `claim`, `rounds?`, `model?`, `demo?` | `{ verified, refutations, rounds, votes }` |
+| `orchestrate_panel` | `task`, `attempts?`, `model?`, `demo?` | `{ winner, agreement, cast }` |
+
+Use `orchestrate_verify` before acting on a claim; `orchestrate_panel` when one
+answer is too unreliable. `demo:true` runs the local no-LLM heuristic.
+
 ## Programmatic API
 
 The primitives are exported for building your own orchestration flows:

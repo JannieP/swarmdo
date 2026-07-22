@@ -13,37 +13,7 @@
 import type { Command, CommandContext, CommandResult } from '../types.js';
 import type { AgentExecutor } from '../orchestration/engine.js';
 import { adversarialVerify, judgePanel } from '../orchestration/patterns.js';
-
-/**
- * Deterministic local "agent" — a real heuristic, not an LLM and not a test
- * mock. Refutes claims carrying absolutist red-flags; otherwise answers with a
- * task-derived string. Lets `orchestrate` (and its demonstration) run offline.
- */
-const localDemoExecutor: AgentExecutor = async (input) => {
-  const text = input.prompt.toLowerCase();
-  if (text.includes('refuted')) {
-    const redFlags = ['always', 'never', 'guaranteed', '100%', 'everyone', 'no one', 'impossible', 'certainly'];
-    const refuted = redFlags.some((w) => text.includes(w));
-    return {
-      success: true,
-      output: JSON.stringify({
-        refuted,
-        reason: refuted ? 'claim uses an absolutist / unfalsifiable phrasing' : 'no obvious flaw found',
-      }),
-    };
-  }
-  const answer = input.prompt.replace(/\s+/g, ' ').trim().slice(0, 60);
-  return { success: true, output: `demo-answer: ${answer}` };
-};
-
-function hasProvider(): boolean {
-  return !!(
-    process.env.ANTHROPIC_API_KEY ||
-    process.env.OPENROUTER_API_KEY ||
-    process.env.OLLAMA_API_KEY ||
-    process.env.SWARMDO_PROVIDER
-  );
-}
+import { localDemoExecutor, hasProvider } from '../orchestration/demo-executor.js';
 
 /** Resolve the executor + guard against "no provider and not a demo". */
 function resolveExecutor(ctx: CommandContext): { executor?: AgentExecutor; error?: CommandResult } {

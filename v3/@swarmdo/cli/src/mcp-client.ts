@@ -26,6 +26,7 @@ import { analyzeTools } from './mcp-tools/analyze-tools.js';
 import { codegraphTools } from './mcp-tools/codegraph-tools.js';
 import { redactTools } from './mcp-tools/redact-tools.js';
 import { envTools } from './mcp-tools/env-tools.js';
+import { orchestrationTools } from './mcp-tools/orchestration-tools.js';
 import { licenseTools } from './mcp-tools/license-tools.js';
 import { applyTools } from './mcp-tools/apply-tools.js';
 import { hotspotsTools } from './mcp-tools/hotspots-tools.js';
@@ -121,6 +122,7 @@ const TOOL_GROUPS: Record<string, () => MCPTool[]> = {
   session: () => sessionTools,
   'hive-mind': () => hiveMindTools,
   workflow: () => workflowTools,
+  orchestrate: () => orchestrationTools,
   analyze: () => analyzeTools,
   codegraph: () => codegraphTools,
   redact: () => redactTools,
