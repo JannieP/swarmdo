@@ -65,6 +65,7 @@ const KNOWN_ESCAPE_HATCHES = new Set([
   'SWARMDO_STRICT_GUARDRAIL', // security posture: env-only by design so a session can't flag it off
   'SWARMDO_REQUIRE_REAL_EMBEDDINGS', // integrity posture: hash-fallback ban must not be flag-disablable mid-session
   'SWARMDO_PONYTAIL',         // default agent persona for spawned swarms — per-call ponytail:true is the flag path
+  'SWARMDO_AGENT_TTL_MS',     // stale-agent count backstop (computeSwarmStatus) — env-only tuning knob, no per-call config or CLI flag
   'SWARMDO_QUIET_MIGRATION',  // log-noise suppression during storage migration — cosmetic, env-only
   'SWARMDO_ROUTER_PARALLEL_LOG_TASK',       // ADR-150 §2 research instrumentation — env-only paired-decision logging knobs
   'SWARMDO_ROUTER_PARALLEL_LOG_TASK_LIMIT', // ADR-150 §2 research instrumentation

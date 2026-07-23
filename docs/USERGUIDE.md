@@ -7517,7 +7517,7 @@ export SWARMDO_MEMORY_PATH="./data"
 | `SWARMDO_HARNESS` | Default coding-agent harness preamble for executed agents (ground→verify→report); `0`/`false`/`off` disables | `true` |
 | `SWARMDO_PONYTAIL` | Default the anti-over-engineering ponytail persona on for executed agents (per-call `ponytail:false` still wins) | `false` |
 | `SWARMDO_ULTRA` | ULTRA "default-thorough" policy for executed agents: optimize for correctness/coverage over speed, self-verify non-trivial claims via `orchestrate_verify`/`orchestrate_panel` (`1`/`true`/`on`) | `false` |
-| `SWARMDO_AGENT_TTL_MS` | Age after which an un-reaped agent record is treated as stale — excluded from the "active agents" count and reaped on load (prevents phantom "N agents alive" from prior sessions) | `21600000` (6h) |
+| `SWARMDO_AGENT_TTL_MS` | Age after which an agent record is treated as stale and excluded from the "active agents" count (prevents phantom "N agents alive" from prior sessions; records are kept for `agent_logs`/`agent_status` lookups, not deleted) | `21600000` (6h) |
 
 ### MCP Server
 

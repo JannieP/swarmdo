@@ -65,39 +65,17 @@ function ensureAgentDir(): void {
   }
 }
 
-// Reap stale/terminated agent records on load. Subagent records have no live
-// process or heartbeat and are never cleaned up when a session ends (crash, or
-// agents made via agent_spawn outside the subagent lifecycle), so a fresh
-// session would otherwise inherit phantom "alive" agents — a reporter saw 6
-// month-old idle records still counted as active. An agent older than the TTL
-// cannot be live: no real subagent runs for hours. Override: SWARMDO_AGENT_TTL_MS.
-const AGENT_TTL_MS = Number(process.env.SWARMDO_AGENT_TTL_MS) || 6 * 60 * 60 * 1000; // 6h backstop
-function isStaleAgent(a: { status?: string; createdAt?: string } | undefined, now: number): boolean {
-  if (!a || a.status === 'terminated') return true;
-  if (!a.createdAt) return false; // undateable — keep, don't reap what we can't age
-  const age = now - Date.parse(a.createdAt);
-  return Number.isFinite(age) && age > AGENT_TTL_MS;
-}
-
+// NOTE: agent records are intentionally NOT reaped here — loadAgentStore is on
+// the lookup path for agent_logs / agent_status, which must resolve older and
+// terminated records (querying a past agent's logs). The phantom-"N agents
+// alive" bug (#137) is fixed at the *count* only (computeSwarmStatus excludes
+// past-TTL records), not by deleting records. See agent-staleness.test.ts.
 function loadAgentStore(): AgentStore {
   try {
     const path = getAgentPath();
     if (existsSync(path)) {
-      const store = JSON.parse(readFileSync(path, 'utf-8')) as AgentStore;
-      if (store && store.agents && typeof store.agents === 'object') {
-        const now = Date.now();
-        let reaped = 0;
-        for (const id of Object.keys(store.agents)) {
-          if (isStaleAgent(store.agents[id] as { status?: string; createdAt?: string }, now)) {
-            delete store.agents[id];
-            reaped++;
-          }
-        }
-        if (reaped > 0) {
-          try { saveAgentStore(store); } catch { /* best-effort self-clean */ }
-        }
-      }
-      return store;
+      const data = readFileSync(path, 'utf-8');
+      return JSON.parse(data);
     }
   } catch {
     // Return empty store on error
