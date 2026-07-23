@@ -323,7 +323,7 @@ export interface UpgradeResult {
  * Preserves user customizations while adding new features like Agent Teams
  * Uses platform-specific commands for Mac, Linux, and Windows
  */
-function mergeSettingsForUpgrade(existing: Record<string, unknown>): Record<string, unknown> {
+export function mergeSettingsForUpgrade(existing: Record<string, unknown>): Record<string, unknown> {
   const merged = { ...existing };
   const platform = detectPlatform();
   const isWindows = platform.os === 'windows';
@@ -468,6 +468,36 @@ function mergeSettingsForUpgrade(existing: Record<string, unknown>): Record<stri
         }
       }
     }
+  }
+
+  // 3b. Repair the pre-#108 subagent-bridge wiring. Projects init'd before the
+  // bridge landed have `SubagentStart → hook-handler.cjs status` — a no-op that
+  // only prints `[OK] Status check` — instead of `agent-register`, and a
+  // `SubagentStop` with no `agent-terminate`. The hook merge above copies
+  // existing hooks verbatim (`{ ...existingHooks }`), so every `init --upgrade`
+  // faithfully preserved the dead wiring: Claude Code Task-tool subagents were
+  // never bound into the registry, `.swarmdo/agents/store.json` stayed `{}`, and
+  // the statusline's `🐝 Swarms N   🤖 Agents M` sat at 0/0 no matter how many
+  // agents actually ran. Same class of bug as the #2448 statusLine repair above
+  // (a stale command the merge would otherwise keep forever). Detect the missing
+  // canonical command and overwrite to the generator's form. Idempotent: a
+  // project already on `agent-register` / `agent-terminate` is left untouched.
+  const subagentHooks = merged.hooks as Record<string, Array<{ hooks?: Array<{ type?: string; command?: string; timeout?: number }> }>>;
+  const eventHasSub = (event: string, sub: string): boolean =>
+    (subagentHooks[event] || []).some(g =>
+      (g.hooks || []).some(h => typeof h.command === 'string' && h.command.includes(sub)));
+  if (!eventHasSub('SubagentStart', 'agent-register')) {
+    subagentHooks.SubagentStart = [
+      { hooks: [{ type: 'command', command: localHookCmd('agent-register'), timeout: 5000 }] },
+    ];
+  }
+  if (!eventHasSub('SubagentStop', 'agent-terminate')) {
+    subagentHooks.SubagentStop = [
+      { hooks: [
+        { type: 'command', command: localHookCmd('post-task'), timeout: 5000 },
+        { type: 'command', command: localHookCmd('agent-terminate'), timeout: 5000 },
+      ] },
+    ];
   }
 
   // 4. Merge claudeFlow settings (preserve existing, add agentTeams + memory)

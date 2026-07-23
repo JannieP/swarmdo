@@ -18,6 +18,7 @@ import { generateSettings } from '../src/init/settings-generator.ts';
 import type { InitOptions } from '../src/init/types.js';
 import { DEFAULT_INIT_OPTIONS } from '../src/init/types.js';
 import { HOOK_EVENTS } from '../src/config-lint/lint.ts';
+import { mergeSettingsForUpgrade } from '../src/init/executor.ts';
 
 type HookBlock = { matcher?: string; hooks: Array<{ command: string }> };
 type Settings = { hooks?: Record<string, HookBlock[]> };
@@ -66,5 +67,55 @@ describe('#108 generated subagent hooks', () => {
 
   it('SubagentStart is a valid Claude Code hook event', () => {
     expect(HOOK_EVENTS).toContain('SubagentStart');
+  });
+});
+
+/**
+ * Generating the correct block on a FRESH init (above) was never enough: a
+ * project init'd BEFORE #108 carries `SubagentStart → hook-handler.cjs status`
+ * (a no-op) and a `SubagentStop` with no `agent-terminate`, and the upgrade
+ * merge copied existing hooks verbatim — so `swarmdo init --upgrade` faithfully
+ * preserved the dead wiring and the statusline sat at 0/0 no matter how many
+ * Task-tool subagents ran. This guards the repair in mergeSettingsForUpgrade.
+ */
+describe('upgrade merge repairs stale pre-#108 subagent wiring', () => {
+  const staleCmd = (sub: string): string =>
+    `sh -c 'D="\${CLAUDE_PROJECT_DIR:-.}"; [ -f "$D/.claude/helpers/hook-handler.cjs" ] || D="\${HOME}"; exec node "$D/.claude/helpers/hook-handler.cjs" ${sub}'`;
+  const staleSettings = (): Record<string, unknown> => ({
+    hooks: {
+      SubagentStart: [{ hooks: [{ type: 'command', command: staleCmd('status'), timeout: 5000 }] }],
+      SubagentStop: [{ hooks: [{ type: 'command', command: staleCmd('post-task'), timeout: 5000 }] }],
+    },
+  });
+  const cmdsFor = (s: Record<string, unknown>, event: string): string[] => {
+    const hooks = (s.hooks ?? {}) as Record<string, Array<{ hooks?: Array<{ command?: string }> }>>;
+    return (hooks[event] ?? []).flatMap((b) => (b.hooks ?? []).map((h) => h.command ?? ''));
+  };
+
+  it('rewires the no-op SubagentStart status hook to agent-register', () => {
+    const merged = mergeSettingsForUpgrade(staleSettings());
+    const cmds = cmdsFor(merged, 'SubagentStart');
+    expect(cmds.some((c) => c.includes('agent-register'))).toBe(true);
+    // the dead `status` no-op must be gone, not left running alongside
+    expect(cmds.some((c) => /hook-handler\.cjs" status'/.test(c))).toBe(false);
+  });
+
+  it('adds agent-terminate to SubagentStop while keeping post-task metrics', () => {
+    const cmds = cmdsFor(mergeSettingsForUpgrade(staleSettings()), 'SubagentStop');
+    expect(cmds.some((c) => c.includes('agent-terminate'))).toBe(true);
+    expect(cmds.some((c) => c.includes('post-task'))).toBe(true);
+  });
+
+  it('is idempotent — a project already on the correct wiring is untouched', () => {
+    const once = mergeSettingsForUpgrade(staleSettings());
+    const twice = mergeSettingsForUpgrade(once);
+    expect(cmdsFor(twice, 'SubagentStart').filter((c) => c.includes('agent-register'))).toHaveLength(1);
+    expect(cmdsFor(twice, 'SubagentStop').filter((c) => c.includes('agent-terminate'))).toHaveLength(1);
+  });
+
+  it('emits the repaired wiring even when the project had no Subagent hooks at all', () => {
+    const merged = mergeSettingsForUpgrade({ hooks: {} });
+    expect(cmdsFor(merged, 'SubagentStart').some((c) => c.includes('agent-register'))).toBe(true);
+    expect(cmdsFor(merged, 'SubagentStop').some((c) => c.includes('agent-terminate'))).toBe(true);
   });
 });
