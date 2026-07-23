@@ -54,7 +54,7 @@ function statuslinePidAlive(pid: number): boolean {
 export function computeSwarmStatus(
   cwd: string = process.cwd(),
 ): { activeSwarms: number; activeAgents: number; coordinationActive: boolean } {
-  const agents: Record<string, { status?: string }> = {};
+  const agents: Record<string, { status?: string; createdAt?: string }> = {};
   // Both stores hold a { agents: { <id>: { status } } } map; merge them.
   for (const rel of [['.swarmdo', 'agents', 'store.json'], ['.swarmdo', 'agents.json']]) {
     try {
@@ -69,9 +69,19 @@ export function computeSwarmStatus(
       // unreadable/corrupt store — skip it, count what we can
     }
   }
+  // Exclude stale records: a subagent from an ended session isn't live. Records
+  // are never reaped on session-end, so without this a fresh session shows
+  // phantom "alive" agents (reporter saw 6 month-old idle records). Age-based —
+  // no real subagent runs for hours. Override: SWARMDO_AGENT_TTL_MS.
+  const AGENT_TTL_MS = Number(process.env.SWARMDO_AGENT_TTL_MS) || 6 * 60 * 60 * 1000;
+  const now = Date.now();
   let activeAgents = 0;
   for (const id of Object.keys(agents)) {
-    if (agents[id] && agents[id].status !== 'terminated') activeAgents++;
+    const a = agents[id];
+    if (!a || a.status === 'terminated') continue;
+    const age = a.createdAt ? now - Date.parse(a.createdAt) : NaN;
+    if (Number.isFinite(age) && age > AGENT_TTL_MS) continue;
+    activeAgents++;
   }
 
   // Active swarms — running, non-orphaned entries in swarm-state.json.
