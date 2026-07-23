@@ -15,6 +15,7 @@
 - ALWAYS read a file before editing it
 - NEVER commit secrets, credentials, or .env files
 - For EVERY feature you build, ship a **guide** AND a **live demonstration** (run it end-to-end against the real thing, not just unit tests) before calling it done — demonstrating is how real bugs surface
+- Before removing or neutering "dead"/stale code, **double- and triple-check it's truly unreferenced** — grep the whole repo (dynamic requires, generated code, docs, tests, ALL shipped copies) and confirm no caller/test depends on it; when in doubt, neuter reversibly rather than delete
 
 ## File Organization
 
