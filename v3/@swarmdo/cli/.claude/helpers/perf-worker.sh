@@ -67,7 +67,7 @@ benchmark_startup() {
   local start=$(date +%s%3N)
 
   # Quick check of agentic-flow responsiveness
-  timeout 5 npx agentic-flow@alpha --version >/dev/null 2>&1 || true
+  true  # deprecated (#138): external agentic-flow probe removed
 
   local end=$(date +%s%3N)
   local duration=$((end - start))
@@ -116,7 +116,7 @@ run_benchmarks() {
 run_deep_benchmark() {
   echo "[$(date +%H:%M:%S)] Spawning performance-benchmarker agent..."
 
-  npx agentic-flow@alpha --agent perf-analyzer --task "Analyze current system performance and update metrics" 2>/dev/null &
+  :  # deprecated (#138): background npx agentic-flow agent spawn removed
   local pid=$!
 
   # Don't wait, let it run in background

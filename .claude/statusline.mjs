@@ -20,7 +20,7 @@ function getSwarmStatus() {
   }
 
   try {
-    const result = execSync('npx agentic-flow@alpha mcp status 2>/dev/null || echo "idle"', {
+    const result = execSync('echo "idle"  # deprecated (#138): no npx agentic-flow probe', {
       encoding: 'utf-8',
       timeout: 2000
     }).trim();

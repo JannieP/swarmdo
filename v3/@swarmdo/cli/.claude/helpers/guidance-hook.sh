@@ -5,9 +5,9 @@ mkdir -p .swarmdo
 
 case "$1" in
   "route")
-    npx agentic-flow@alpha hooks route "$2" 2>&1 | tee "$GUIDANCE_FILE"
+    echo "" > "$GUIDANCE_FILE"  # deprecated (#138): agentic-flow guidance removed
     ;;
   "pre-edit")
-    npx agentic-flow@alpha hooks pre-edit "$2" 2>&1 | tee "$GUIDANCE_FILE"
+    echo "" > "$GUIDANCE_FILE"  # deprecated (#138): agentic-flow guidance removed
     ;;
 esac
