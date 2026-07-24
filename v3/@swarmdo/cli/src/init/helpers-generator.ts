@@ -1321,6 +1321,44 @@ export function generateHelpers(options: InitOptions): Record<string, string> {
 }
 
 /**
+ * Generate profile-hook.cjs — the SessionStart nudge that prompts the user to
+ * choose a swarmdo capability profile (ultra/smart/light/minimal) when none is
+ * set. Standalone CJS: pure fs, no CLI boot, always exits 0 so it can never
+ * block a session start. Goes silent once `swarmdo profile use <name>` records
+ * `profile.active` in swarmdo.config.json. Content is deliberately drift-proof —
+ * it tells the agent to run `swarmdo profile list` rather than enumerating the
+ * ladder here, so the CLI stays the single source of truth.
+ */
+export function generateProfileHook(): string {
+  return `#!/usr/bin/env node
+/**
+ * profile-hook.cjs — SessionStart nudge to pick a swarmdo capability profile.
+ *
+ * Deployed by \`swarmdo init\`. Emits a one-time SessionStart additionalContext
+ * asking the agent to offer a profile choice when swarmdo.config.json has no
+ * \`profile.active\`. Pure fs, no CLI boot, always exits 0 (never blocks a
+ * session). Silent once a profile is chosen. See \`swarmdo profile\`.
+ */
+const fs = require('fs');
+const path = require('path');
+try {
+  const dir = process.env.CLAUDE_PROJECT_DIR || process.cwd();
+  let cfg = {};
+  try { cfg = JSON.parse(fs.readFileSync(path.join(dir, 'swarmdo.config.json'), 'utf8')); } catch (_e) { /* no config yet */ }
+  const active = cfg && cfg.profile && cfg.profile.active;
+  if (!active) {
+    const msg = '[SWARMDO] No session capability profile is set for this project. '
+      + 'Run \`swarmdo profile list\` and offer the user a one-time choice (recommended: smart). '
+      + 'Apply their pick with \`swarmdo profile use <name>\` (accepts \`default\`). '
+      + 'Present it with AskUserQuestion near the top of your first reply; once chosen it will not ask again.';
+    process.stdout.write(JSON.stringify({ hookSpecificOutput: { hookEventName: 'SessionStart', additionalContext: msg } }) + '\\n');
+  }
+} catch (_e) { /* never block session start */ }
+process.exit(0);
+`;
+}
+
+/**
  * Generate cross-platform Node.js port of swarmdo-hook.sh (#2132).
  *
  * The bash shim works on Mac/Linux but fails on native Windows (exit 126).

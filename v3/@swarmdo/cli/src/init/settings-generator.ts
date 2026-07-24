@@ -369,6 +369,12 @@ function generateHooksConfig(config: HooksConfig): object {
             command: autoMemoryCmd('import'),
             timeout: 8000,
           },
+          {
+            // Nudge to pick a capability profile when none is set (silent once chosen).
+            type: 'command',
+            command: hookCmd('.claude/helpers/profile-hook.cjs', ''),
+            timeout: 5000,
+          },
         ],
       },
     ];

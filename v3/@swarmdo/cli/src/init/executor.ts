@@ -35,6 +35,9 @@ export const CRITICAL_HELPERS = [
   'session.cjs',
   'memory.cjs',
   'agent-bridge-hook.cjs',
+  // SessionStart nudge to pick a capability profile — wired into settings.json
+  // SessionStart, so upgrading users must force-receive it (#111 lesson).
+  'profile-hook.cjs',
 ];
 import type { InitOptions, InitResult, PlatformInfo } from './types.js';
 import { detectPlatform, DEFAULT_INIT_OPTIONS } from './types.js';
@@ -51,6 +54,7 @@ import {
   generateIntelligenceStub,
   generateAutoMemoryHook,
   generateSwarmdoHookCjs,
+  generateProfileHook,
 } from './helpers-generator.js';
 import { generateClaudeMd } from './claudemd-generator.js';
 
@@ -589,6 +593,7 @@ export async function executeUpgrade(targetDir: string, upgradeSettings = false)
         'hook-handler.cjs': generateHookHandler(),
         'intelligence.cjs': generateIntelligenceStub(),
         'auto-memory-hook.mjs': generateAutoMemoryHook(),
+        'profile-hook.cjs': generateProfileHook(),
       };
       for (const [helperName, content] of Object.entries(generatedCritical)) {
         const targetPath = path.join(targetDir, '.claude', 'helpers', helperName);
