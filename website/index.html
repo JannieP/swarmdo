@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>swarmdo — agent swarms for Claude Code</title>
-<meta name="description" content="swarmdo — agent swarm orchestration for Claude Code. 60+ agent roles, hive-mind consensus, vector memory, and a Postgres vector extension.">
+<meta name="description" content="swarmdo — agent swarm orchestration for Claude Code, plus SwarmDo-A1: an open, self-hostable, execution-verified multimodal coding model. 60+ agent roles, hive-mind consensus, vector memory, and a Postgres vector extension.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22><rect width=%22512%22 height=%22512%22 rx=%2296%22 fill=%22%230f1317%22/><g fill=%22%23e2a33c%22><circle cx=%22352%22 cy=%22176%22 r=%2234%22/><circle cx=%22284%22 cy=%22232%22 r=%2226%22/><circle cx=%22330%22 cy=%22286%22 r=%2224%22/><circle cx=%22216%22 cy=%22280%22 r=%2220%22/><circle cx=%22272%22 cy=%22336%22 r=%2219%22/><circle cx=%22156%22 cy=%22322%22 r=%2215%22/><circle cx=%22214%22 cy=%22382%22 r=%2214%22/><circle cx=%22106%22 cy=%22358%22 r=%2211%22/><circle cx=%22162%22 cy=%22420%22 r=%2210%22/></g></svg>">
 <link rel="canonical" href="https://swarmdo.com/">
 <meta name="robots" content="index, follow, max-image-preview:large">
@@ -241,6 +241,7 @@
       <a href="#statusline">statusline</a>
       <a href="#features">features</a>
       <a href="#toolkit">toolkit</a>
+      <a href="#model">model</a>
       <a href="#engines">engines</a>
       <a href="#efficiency">efficiency</a>
       <a href="#install">install</a>
@@ -269,7 +270,7 @@
         <span><b>26</b> commands</span>
         <span><b>60+</b> agent types</span>
         <span><b>27</b> hooks · <b>12</b> workers</span>
-        <span><b>0</b> external engine deps</span>
+        <span>🇦🇺 <b>Built in Australia</b></span>
       </div>
     </div>
 
@@ -326,6 +327,28 @@
         <p class="config-foot">Live: <code id="seg-cmd">swarmdo statusline --preset full</code></p>
       </div>
     </div>
+    </div>
+  </div>
+</section>
+
+
+<section id="model">
+  <div class="wrap">
+    <p class="sec-label">The model · new</p>
+    <h2>SwarmDo-A1 — the open coding model behind the swarm.</h2>
+    <p class="sec-lede">swarmdo isn't only orchestration. <b style="color:var(--bright)">SwarmDo-A1</b> is our open, self-hostable coding <em>model</em> — a strong open base rebuilt for agentic software engineering, where every gain is proven by <em>running the project's own tests</em>, plus a differentiated visual-coding capability. It ships in parallel with the plugin, and — like everything here — it's measured honestly, negatives included.</p>
+    <div class="feat-grid">
+      <div class="feat"><h3><span class="fk">▲</span>The base matters most <span class="num">+25pp</span></h3><p>The single biggest measured win was re-basing onto a stronger open model (Qwen3.6-27B). On a contamination-controlled held-out set that beat the prior base by <span class="num">≈25 points</span> — paired McNemar <span class="num">p&nbsp;=&nbsp;0.013</span>. Capability dominates cleverness.</p></div>
+      <div class="feat"><h3><span class="fk">✓</span>Verify by running the tests <span class="num">36 vs 24</span></h3><p>The system samples several candidate patches and keeps the ones that <em>pass</em>. Base + execution-verified selection solved <span class="num">50% more</span> issues than the base alone — <span class="num">p&nbsp;=&nbsp;0.0005</span>, regression-free. No LLM-as-judge.</p></div>
+      <div class="feat"><h3><span class="fk">🖼</span>Exec-grounded visual coding <span class="num">p=6e-05</span></h3><p>Show it a chart; it writes the code to reproduce it; we <em>render that code and compare to the image</em> — an objective reward you can't bluff. The image genuinely drives the output (<span class="num">p&nbsp;=&nbsp;6e-05</span>), and the model self-generates its own render-verified training data.</p></div>
+      <div class="feat"><h3><span class="fk">⎋</span>Open &amp; self-hostable</h3><p>Apache-2.0, fits a single 80GB GPU, no API lock-in. Multimodal (text&nbsp;+&nbsp;vision). Serves through vLLM as an OpenAI-compatible endpoint; on-device paths via MLX / GGUF / GPTQ-Int4.</p></div>
+      <div class="feat"><h3><span class="fk">◐</span>Honest about limits</h3><p>Single-model fine-tuning <em>alone</em> gave no significant gain (a "churn wall") — which is exactly why A1 is a <em>system</em>, not a magic checkpoint. We publish the null results too. No number is rounded up.</p></div>
+      <div class="feat"><h3><span class="fk">⌁</span>Release candidate</h3><p>The adapter is <a href="https://huggingface.co/SwarmDo/SwarmDo-A1">on Hugging Face</a> now (LoRA on Qwen3.6-27B); the full model card, reproduce guides, and results live in the <a href="https://github.com/SwarmDo/models">models repo</a>.</p></div>
+    </div>
+    <div class="cta-row" style="margin-top:32px">
+      <a class="cmd" href="/a1.html"><span class="ps">→</span> the full SwarmDo-A1 page</a>
+      <a class="cmd" href="https://huggingface.co/SwarmDo/SwarmDo-A1"><span class="ps">⤓</span> weights on 🤗</a>
+      <a class="gh" href="https://github.com/SwarmDo/models">model cards &amp; results →</a>
     </div>
   </div>
 </section>
@@ -962,6 +985,50 @@
     /* static constellation for reduced motion */
     for(var k=0;k<boids.length;k++){var b2=boids[k];ctx.beginPath();ctx.arc(b2.x,b2.y,1.6,0,6.2832);ctx.fillStyle="rgba(226,163,60,.4)";ctx.fill();}
   } else { step(); }
+})();
+</script>
+
+<!-- first-visit announcement popup -->
+<div id="a1pop" class="a1pop" role="dialog" aria-modal="true" aria-labelledby="a1pop-h" hidden>
+  <div class="a1pop-card">
+    <button class="a1pop-x" type="button" aria-label="Dismiss">×</button>
+    <p class="a1pop-eyebrow">🇦🇺 New · open weights · built in Australia</p>
+    <h3 id="a1pop-h">SwarmDo-<span class="h-accent">A1</span> is live.</h3>
+    <p class="a1pop-body">An open, self-hostable, <b>multimodal</b> coding model — where every gain is proven by <em>running the tests</em>. Re-base +25pp (p=0.013), exec-verified selection +50% (p=0.0005), exec-grounded visual coding (p=6e-05). Measured honestly, negatives included.</p>
+    <div class="a1pop-cta">
+      <a class="a1pop-b1" href="/a1.html">Meet the model →</a>
+      <a class="a1pop-b2" href="https://huggingface.co/SwarmDo/SwarmDo-A1">Weights on 🤗</a>
+    </div>
+  </div>
+</div>
+<style>
+  .a1pop{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;background:rgba(9,12,15,.66);backdrop-filter:blur(4px);padding:20px;animation:a1fade .35s ease}
+  .a1pop.show{display:flex}
+  @keyframes a1fade{from{opacity:0}to{opacity:1}}
+  .a1pop-card{position:relative;max-width:460px;width:100%;background:linear-gradient(180deg,var(--panel),var(--ink-2));border:1px solid var(--honey-dim);border-radius:14px;padding:30px 30px 26px;box-shadow:0 24px 70px rgba(0,0,0,.5);animation:a1rise .4s cubic-bezier(.2,.7,.2,1)}
+  @keyframes a1rise{from{transform:translateY(14px);opacity:0}to{transform:translateY(0);opacity:1}}
+  .a1pop-x{position:absolute;top:12px;right:14px;background:none;border:none;color:var(--mute);font-size:24px;line-height:1;cursor:pointer;padding:4px}
+  .a1pop-x:hover{color:var(--bright)}
+  .a1pop-eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--honey);margin:0 0 12px}
+  .a1pop-card h3{font-family:var(--mono);font-weight:600;color:var(--bright);font-size:26px;letter-spacing:-.02em;margin:0 0 12px}
+  .a1pop-card h3 .h-accent{color:var(--honey)}
+  .a1pop-body{font-size:15px;color:var(--fog);margin:0 0 22px;line-height:1.6}
+  .a1pop-cta{display:flex;gap:12px;flex-wrap:wrap}
+  .a1pop-b1{font-family:var(--mono);font-size:14px;background:var(--honey);color:#1a1206;padding:10px 16px;border-radius:8px;font-weight:600}
+  .a1pop-b1:hover{text-decoration:none;filter:brightness(1.06)}
+  .a1pop-b2{font-family:var(--mono);font-size:14px;background:var(--panel-2);color:var(--bright);border:1px solid var(--line);padding:10px 16px;border-radius:8px}
+  .a1pop-b2:hover{text-decoration:none;border-color:var(--honey-dim)}
+</style>
+<script>
+(function(){
+  try{ if(localStorage.getItem("a1pop_seen")==="1") return; }catch(e){}
+  var pop=document.getElementById("a1pop"); if(!pop) return;
+  function close(){ pop.classList.remove("show"); try{localStorage.setItem("a1pop_seen","1");}catch(e){} }
+  function open(){ pop.hidden=false; pop.classList.add("show"); }
+  pop.querySelector(".a1pop-x").addEventListener("click",close);
+  pop.addEventListener("click",function(e){ if(e.target===pop) close(); });
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") close(); });
+  setTimeout(open, 1400);
 })();
 </script>
 
