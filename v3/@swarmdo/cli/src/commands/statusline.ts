@@ -28,6 +28,7 @@ export const STATUSLINE_SEGMENTS: Array<{ value: string; label: string; hint: st
   { value: 'cost',         label: 'Session cost',       hint: 'accumulated $ for the session' },
   { value: 'domains',      label: 'DDD domains row',    hint: 'domain progress bar + perf indicator' },
   { value: 'swarm',        label: 'Swarm row',          hint: 'agents, sub-agents, hooks, CVE, memory, intelligence' },
+  { value: 'profile',      label: 'Profile',            hint: 'active capability profile (swarmdo profile) — 🦾/🧠/🪶/🔩' },
   { value: 'architecture', label: 'Architecture row',   hint: 'ADRs, DDD %, security status' },
   { value: 'agentdb',      label: 'AgentDB row',        hint: 'vectors, DB size, tests, MCP/DB integration' },
 ];
@@ -35,7 +36,7 @@ export const STATUSLINE_SEGMENTS: Array<{ value: string; label: string; hint: st
 /** Must mirror SEGMENT_PRESETS in init/statusline-generator.ts. */
 export const STATUSLINE_PRESETS: Record<string, string[]> = {
   full: STATUSLINE_SEGMENTS.map((s) => s.value),
-  compact: ['version', 'project', 'branch', 'model', 'context', 'cost', 'swarm'],
+  compact: ['version', 'project', 'branch', 'model', 'context', 'cost', 'swarm', 'profile'],
   minimal: ['project', 'branch', 'model', 'context'],
 };
 

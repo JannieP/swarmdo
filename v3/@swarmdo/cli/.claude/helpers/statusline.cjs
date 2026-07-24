@@ -57,8 +57,8 @@ const CACHE_TTL_MS = 60000;
 // segment names: version,project,branch,model,duration,context,cost,
 // domains,swarm,architecture,agentdb
 const SEGMENT_PRESETS = {
-  full: ['version','project','branch','model','duration','context','cost','domains','swarm','architecture','agentdb'],
-  compact: ['version','project','branch','model','context','cost','swarm'],
+  full: ['version','project','branch','model','duration','context','cost','domains','swarm','profile','architecture','agentdb'],
+  compact: ['version','project','branch','model','context','cost','swarm','profile'],
   minimal: ['project','branch','model','context'],
 };
 function resolveSegments() {
@@ -646,7 +646,7 @@ function getPkgVersion() {
   // every probe below, so the header can't silently revert to a stale baked default
   // when a global/npx install layout hides package.json.
   if (process.env.SWARMDO_VERSION) return process.env.SWARMDO_VERSION;
-  let ver = '1.58.33';
+  let ver = '1.63.0';
   try {
     const home = os.homedir();
     const pkgPaths = [
@@ -708,6 +708,15 @@ function generateStatusline() {
   const swarm = d.swarm || {};
   const system = d.system || {};
   const swarmllmOn = !!(d.swarmllm && d.swarmllm.on); // local SwarmLLM backend available → show 🧬 LLM
+  // Active capability profile (swarmdo profile use <name>) → show 🦾/🧠/🪶/🔩 <name>.
+  const profileSeg = seg('profile') ? (function () {
+    try {
+      const cfg = JSON.parse(fs.readFileSync(path.join(CWD, 'swarmdo.config.json'), 'utf8'));
+      const a = cfg && cfg.profile && cfg.profile.active;
+      if (!a) return null;
+      return { name: a, emoji: ({ ultra: '🦾', smart: '🧠', light: '🪶', minimal: '🔩' })[a] || '🎚️' };
+    } catch (e) { return null; }
+  })() : null;
   const adrs = d.adrs || {};
   const hooks = d.hooks || {};
   const agentdb = d.agentdb || {};
@@ -819,7 +828,9 @@ function generateStatusline() {
     c.brightCyan + '💾 ' + memoryMB + 'MB' + c.reset + '    ' +
     intellColor + '🧠 ' + String(intelligencePct).padStart(3) + '%' + c.reset +
     // Local LLM indicator — only rendered when the SwarmLLM backend is available.
-    (swarmllmOn ? '    ' + c.brightPurple + '🧬 LLM' + c.reset : '')
+    (swarmllmOn ? '    ' + c.brightPurple + '🧬 LLM' + c.reset : '') +
+    // Active capability profile (swarmdo profile) — rendered when the segment is on + a profile is set.
+    (profileSeg ? '    ' + c.brightBlue + profileSeg.emoji + ' ' + profileSeg.name + c.reset : '')
   );
 
   // Line 3: Architecture
