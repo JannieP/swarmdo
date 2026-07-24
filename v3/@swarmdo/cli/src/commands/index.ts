@@ -87,6 +87,10 @@ const commandLoaders: Record<string, CommandLoader> = {
   efficiency: () => import('./efficiency.js'),
   obsidian: () => import('./obsidian.js'),
   llm: () => import('./llm.js'),
+  // Session capability profiles — one word for how much swarmdo you want
+  // (ultra/smart/light/minimal + `default`); switchable, prompts on new session.
+  profile: () => import('./profile.js'),
+  profiles: () => import('./profile.js'), // alias via loader key
   task: () => import('./task.js'),
   session: () => import('./session.js'),
   // Original Commands
@@ -346,7 +350,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
     pluginsCmd, deploymentCmd, claimsCmd, issuesCmd,
     updateCmd, processCmd, guidanceCmd, applianceCmd,
     cleanupCmd, autopilotCmd, demoCmd, usageCmd, repairCmd, hudCmd, compactCmd, codegraphCmd, redactCmd, packCmd, envCmd, licenseCmd, sbomCmd, applyCmd, hotspotsCmd, affectedCmd, cyclesCmd, couplingCmd, ownershipCmd, hiddenCouplingCmd, testreportCmd, compactSnapshotCmd, standupCmd, commandsUsageCmd,
-    obsidianCmd, llmCmd,
+    obsidianCmd, llmCmd, profileCmd,
   ] = await Promise.all([
     loadCommand('daemon'), loadCommand('doctor'), loadCommand('embeddings'), loadCommand('neural'),
     loadCommand('performance'), loadCommand('security'), loadCommand('swarmvector'), loadCommand('hive-mind'),
@@ -356,7 +360,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
     loadCommand('plugins'), loadCommand('deployment'), loadCommand('claims'), loadCommand('issues'),
     loadCommand('update'), loadCommand('process'), loadCommand('guidance'), loadCommand('appliance'),
     loadCommand('cleanup'), loadCommand('autopilot'), loadCommand('demo'), loadCommand('usage'), loadCommand('repair'), loadCommand('hud'), loadCommand('compact'), loadCommand('codegraph'), loadCommand('redact'), loadCommand('pack'), loadCommand('env'), loadCommand('license'), loadCommand('sbom'), loadCommand('apply'), loadCommand('hotspots'), loadCommand('affected'), loadCommand('cycles'), loadCommand('coupling'), loadCommand('ownership'), loadCommand('hidden-coupling'), loadCommand('testreport'), loadCommand('compact-snapshot'), loadCommand('standup'), loadCommand('commands'),
-    loadCommand('obsidian'), loadCommand('llm'),
+    loadCommand('obsidian'), loadCommand('llm'), loadCommand('profile'),
   ]);
 
   return {
@@ -373,7 +377,7 @@ export async function getCommandsByCategory(): Promise<Record<string, Command[]>
     utility: [
       configCmd, doctorCmd, daemonCmd, completionsCmd,
       migrateCmd, workflowCmd, demoCmd,
-      statuslineCmd, compressCmd, compactCmd, redactCmd, packCmd, envCmd, licenseCmd, sbomCmd, applyCmd, hotspotsCmd, affectedCmd, cyclesCmd, couplingCmd, ownershipCmd, hiddenCouplingCmd, testreportCmd, compactSnapshotCmd, efficiencyCmd, obsidianCmd, llmCmd,
+      statuslineCmd, compressCmd, compactCmd, redactCmd, packCmd, envCmd, licenseCmd, sbomCmd, applyCmd, hotspotsCmd, affectedCmd, cyclesCmd, couplingCmd, ownershipCmd, hiddenCouplingCmd, testreportCmd, compactSnapshotCmd, efficiencyCmd, obsidianCmd, llmCmd, profileCmd,
     ].filter(Boolean) as Command[],
     analysis: [
       analyzeCmd, routeCmd, progressCmd, usageCmd, hudCmd, codegraphCmd, standupCmd, commandsUsageCmd,
