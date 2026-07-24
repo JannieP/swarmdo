@@ -8,6 +8,14 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { GuidanceProvider, type ClaudeHookOutput } from '../reasoningbank/guidance-provider.js';
 import { ReasoningBank } from '../reasoningbank/index.js';
 
+// Every test here spins up a real ReasoningBank (native AgentDB + HNSW init in
+// beforeEach), which takes several seconds and, under the V3 pipeline's parallel
+// `threads` run, contends enough to blow the package-default 30s hookTimeout
+// (CI flake: "Hook timed out in 30000ms" at the generatePromptContext beforeEach).
+// The sibling reasoningbank.test.ts already raises this for the same init; match
+// it here so the heavy setup has headroom instead of racing the default budget.
+vi.setConfig({ testTimeout: 60_000, hookTimeout: 60_000 });
+
 describe('GuidanceProvider', () => {
   let provider: GuidanceProvider;
   let reasoningBank: ReasoningBank;
