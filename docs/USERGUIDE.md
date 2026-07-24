@@ -73,6 +73,7 @@ swarmdo ships a day-to-day operations layer around the swarm. Every command belo
 | `swarmdo hooks guard-bash` | — | PreToolUse/Bash guardrail: reads the hook payload (or `-c "<cmd>"`), classifies the command against a conservative destructive-command denylist (`rm -rf /` `~` or a system path, `curl`/`wget` piped to a shell, force-push to `main`/`master`, `chmod 777`, `dd` to a device, `mkfs`, `> /dev/sd…`, fork bombs) and emits `permissionDecision: "deny"` to hard-block it — the one guardrail that still fires under `--dangerously-skip-permissions`. Conservative: `rm -rf ./build`, `rm -rf node_modules`, and feature-branch/`--force-with-lease` pushes are allowed. Hook-safe (fail-open, never errors, `SWARMDO_GUARD_BASH_DISABLE=1` to disable); `--preview` shows the verdict. Wire it with `hooks recipe command-guard --apply` |
 | `swarmdo hooks recipe` | `recipes` | Install ready-made Claude Code hooks (`notify-done` → Stop, `notify-input` → Notification, `memory-inject` + `comms-inbox` → UserPromptSubmit, `command-guard` → PreToolUse/Bash); dry-run by default, `--apply` writes, idempotent additive merge; targets `settings.local.json` (`--shared` / `--global` to retarget) |
 | `swarmdo preset` | `presets` | The 5-tier capability ladder: `minimal` → `basic`★ → `standard` → `advanced` → `max`; `preset list` / `preset info <name>` / `preset info efficiency`; apply with `swarmdo init --preset <name>` |
+| `swarmdo profile` | `profiles` | **Session capability profiles**: `ultra` 🦾 / `smart` 🧠★ / `light` 🪶 / `minimal` 🔩. `profile use <name>` (accepts `default`) sets the session levers (`SWARMDO_ULTRA`/`HARNESS`/`ROUTER_NEURAL`/`PONYTAIL`) in `.claude/settings.json` env, flips the local-LLM + efficiency skills, and writes a sourceable `.swarmdo/profile.env` for Codex/Copilot/pi; `list` / `info` / `status` / `clear`. A brand-new session with none set is prompted to pick one. Slash: `/sDo:profile`. See [Session profiles](#session-profiles) |
 | `swarmdo memory export -f obsidian` | `-f md` | Render the memory DB as an Obsidian vault: one note per entry (YAML frontmatter, `[[wikilinks]]` stay live), per-namespace folders, `INDEX.md` map-of-content |
 | `swarmdo memory import -f obsidian` | `-f md` | Sync an edited vault back into the DB (upsert + re-embed); foreign notes in a mixed vault are skipped, never touched. `--watch` keeps syncing live as you edit (burst-coalesced) |
 | `swarmdo memory backup` / `revectorize` | — | WAL-safe nightly DB snapshots (keep 7) · repair hash-era vectors |
@@ -80,6 +81,30 @@ swarmdo ships a day-to-day operations layer around the swarm. Every command belo
 | `swarmdo efficiency` | — | Toggle the caveman + ponytail skills per project (`on` / `off` / `status`) |
 | `swarmdo obsidian` | — | Toggle the dual-plane Obsidian memory integration per project — `on` exports a vault + enables sync, `off`, `status`. Slash: `/sDo:obsidian` |
 | `swarmdo llm` | — | Toggle the local SwarmLLM inference backend per project (`on` / `off` / `status`); `on` shows the `🧬 LLM` statusline icon. Slash: `/sDo:llm` |
+
+### Session profiles
+
+A **profile** is a one-word answer to "how much swarmdo do you want this session?" It bundles the levers that are otherwise scattered across env vars, config toggles, and skill installs into a named tier you switch on demand — distinct from `swarmdo init --preset`, which is the one-time project *scaffold*. A profile names a base preset for the deeper setup, but applying one is fast and non-destructive.
+
+| | Profile | Base preset | Session levers | What you get |
+|---|---------|------------|----------------|--------------|
+| 🦾 | `ultra` | `max` | `SWARMDO_ULTRA=1 HARNESS=1 ROUTER_NEURAL=1` + local LLM + efficiency | Everything on — correctness/completeness over speed. Highest cost. |
+| 🧠 | `smart` ★ | `standard` | `SWARMDO_HARNESS=1 ROUTER_NEURAL=1` + efficiency | The intelligence layer without the heaviest fan-out. **Recommended.** |
+| 🪶 | `light` | `basic` | `SWARMDO_HARNESS=1 PONYTAIL=1` + efficiency | Just the light tools — lean, fast, cheap (minimal-by-default agents). |
+| 🔩 | `minimal` | `minimal` | `SWARMDO_HARNESS=0` | Bare — plain Claude, no swarmdo flavor injected. Air-gapped / low-power. |
+
+```bash
+swarmdo profile list                 # the ladder + which is active
+swarmdo profile info ultra           # what a profile turns on + when to use it
+swarmdo profile use default          # apply the recommended (smart) profile
+swarmdo profile use ultra            # switch — accepts a name or `default`
+swarmdo profile status               # the active profile + what's live
+swarmdo profile clear                # unset (the next new session offers to pick again)
+```
+
+`profile use <name>` writes four things: (1) `swarmdo.config.json` `profile.active` (+ the `llm.enabled` toggle it implies), (2) the profile's `SWARMDO_*` levers into `.claude/settings.json` `env` — dropping any owned lever the new profile doesn't want, so switches are clean, (3) a sourceable **`.swarmdo/profile.env`** so Codex CLI / Copilot CLI / pi that drive the swarmdo MCP server can `source` the same mode, and (4) the caveman + ponytail efficiency skills, present or not. Because Claude Code caches `settings.json` at session start, **env-gated levers take effect next session**; the statusline profile segment and efficiency skills are live immediately.
+
+**New-session prompt.** A brand-new session (or project) with no profile set is nudged once — a `SessionStart` hook (`.claude/helpers/profile-hook.cjs`, deployed by `swarmdo init`) asks the agent to offer you a one-word choice, recommending **smart**. Pick one and it never asks again; `swarmdo profile clear` re-arms it. Also available as the `/sDo:profile` slash command, which opens the chooser interactively.
 
 ### Multi-CLI integrations (`swarmdo integrations`)
 
