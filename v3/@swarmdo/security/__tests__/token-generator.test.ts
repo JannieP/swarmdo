@@ -310,8 +310,13 @@ describe('TokenGenerator', () => {
       // This test verifies the comparison takes consistent time
       // regardless of where the mismatch occurs
       const token = generator.generate();
-      const mismatchEarly = 'X' + token.slice(1);
-      const mismatchLate = token.slice(0, -1) + 'X';
+      // Flip each end to a char guaranteed different from the original. A fixed
+      // 'X' flaked ~3%/run: base64url tokens include 'X', so a token that began
+      // (or ended) with 'X' made the "mismatch" identical to the original and
+      // compare() correctly returned true → "expected true to be false".
+      const flip = (c: string): string => (c === 'X' ? 'Y' : 'X');
+      const mismatchEarly = flip(token[0]) + token.slice(1);
+      const mismatchLate = token.slice(0, -1) + flip(token[token.length - 1]);
 
       // Both comparisons should work (timing consistency is internal)
       expect(generator.compare(token, mismatchEarly)).toBe(false);
